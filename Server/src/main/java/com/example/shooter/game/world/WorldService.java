@@ -82,13 +82,13 @@ public class WorldService {
         List<World> worlds;
         switch (order) {
             case NAME -> {
-                worlds = worldRepository.findByWorldIdsNameOrder(preferredWorldIds, pageable);
+                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyNameOrder(preferredWorldIds, preferredWorldIds == null ? WorldVisibilityPolicy.PUBLIC : null, pageable);
             }
             case CREATED_AT -> {
-                worlds = worldRepository.findByWorldIdsCreatedAtOrder(preferredWorldIds, pageable);
+                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyCreatedAtOrder(preferredWorldIds, preferredWorldIds == null ? WorldVisibilityPolicy.PUBLIC : null, pageable);
             }
             case ACCESSED_AT -> {
-                worlds = worldRepository.findByWorldIdsAccessedAtOrder(preferredWorldIds, pageable);
+                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyAccessedAtOrder(preferredWorldIds, preferredWorldIds == null ? WorldVisibilityPolicy.PUBLIC : null, pageable);
             }
             default -> {
                 log.warn("user {} sent unexpected world order {}", userId, order);
