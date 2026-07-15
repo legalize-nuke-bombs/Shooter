@@ -52,7 +52,8 @@ public class NetworkClient : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        localPlayer = FindFirstObjectByType<PlayerController>();
+        Application.runInBackground = true;
+        localPlayer = FindAnyObjectByType<PlayerController>();
         _ = Connect();
     }
 
@@ -62,10 +63,10 @@ public class NetworkClient : MonoBehaviour
         cancellation = new CancellationTokenSource();
         try
         {
-            await socket.ConnectAsync(new Uri(ConnectionConfig.WsUrl), cancellation.Token);
+            await socket.ConnectAsync(new Uri(ConnectionConfig.WsUrl), cancellation.Token).ConfigureAwait(false);
             Debug.Log("net: connected " + ConnectionConfig.WsUrl);
             _ = ReceiveLoop();
-            await Send(new HelloMsg { name = ConnectionConfig.DisplayName });
+            await Send(new HelloMsg { name = ConnectionConfig.DisplayName }).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -81,7 +82,7 @@ public class NetworkClient : MonoBehaviour
         {
             while (socket.State == WebSocketState.Open && !cancellation.IsCancellationRequested)
             {
-                var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation.Token);
+                var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation.Token).ConfigureAwait(false);
                 if (result.MessageType == WebSocketMessageType.Close)
                 {
                     Debug.LogWarning("net: closed by server");
@@ -107,10 +108,10 @@ public class NetworkClient : MonoBehaviour
         if (socket is not { State: WebSocketState.Open }) return;
 
         byte[] bytes = Encoding.UTF8.GetBytes(NetJson.Serialize(msg));
-        await sendLock.WaitAsync(cancellation.Token);
+        await sendLock.WaitAsync(cancellation.Token).ConfigureAwait(false);
         try
         {
-            await socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, cancellation.Token);
+            await socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, cancellation.Token).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -150,6 +151,7 @@ public class NetworkClient : MonoBehaviour
                 var joined = NetJson.Parse<RoomJoinedMsg>(json);
                 InRoom = true;
                 Debug.Log("net: room " + joined.roomId + ", players " + joined.players.Length);
+                MoveLocalPlayerToSpawn(joined);
                 RoomJoined?.Invoke(joined);
                 break;
             case "snapshot":
@@ -164,6 +166,20 @@ public class NetworkClient : MonoBehaviour
             default:
                 Debug.LogWarning("net: unknown message: " + json);
                 break;
+        }
+    }
+
+    private void MoveLocalPlayerToSpawn(RoomJoinedMsg joined)
+    {
+        if (localPlayer == null) return;
+        foreach (PlayerStateMsg p in joined.players)
+        {
+            if (p.id != PlayerId) continue;
+            var controller = localPlayer.GetComponent<CharacterController>();
+            controller.enabled = false;
+            localPlayer.transform.position = new Vector3(p.x, p.y, p.z);
+            controller.enabled = true;
+            break;
         }
     }
 
