@@ -11,6 +11,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     @Query("SELECT p FROM Player p JOIN FETCH p.world WHERE p.user.id = ?1 AND p.role = ?2")
     List<Player> findAllByUserIdAndRoleWithWorlds(Long userId, PlayerRole role);
 
-    @Query("SELECT p FROM Player p JOIN FETCH p.world WHERE p.world.id in ?1")
-    List<Player> findAllByWorldIdsWithWorlds(Set<UUID> worldIds);
+    @Query("SELECT p FROM Player p JOIN FETCH p.world JOIN FETCH p.user WHERE p.world.id in ?1")
+    List<Player> findAllByWorldIdsWithWorldsAndUsers(Set<UUID> worldIds);
 }
