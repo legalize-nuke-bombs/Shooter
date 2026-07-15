@@ -25,7 +25,7 @@ public class WorldMetricService {
 
     @Scheduled(fixedDelay = 60 * 1000)
     public void updateCache() {
-        log.info("updating world metric cache...");
+        log.info("updating world metric cache 📦...");
         Instant now = Instant.now();
         long since24h = now.minus(Duration.ofHours(24)).getEpochSecond();
         long since3d = now.minus(Duration.ofHours(24 * 3)).getEpochSecond();
