@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private float verticalVelocity;
     private float lastMoveX;
     private float lastMoveZ;
+    private bool lastSprint;
     private bool jumpPending;
 
     private void Awake()
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
         float z = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f);
         lastMoveX = x;
         lastMoveZ = z;
+        lastSprint = kb.leftShiftKey.isPressed;
         if (kb.spaceKey.wasPressedThisFrame)
             jumpPending = true;
 
@@ -76,6 +78,7 @@ public class PlayerController : MonoBehaviour
             moveX = lastMoveX,
             moveZ = lastMoveZ,
             jump = jumpPending,
+            sprint = lastSprint,
             yaw = transform.eulerAngles.y,
             pitch = pitch
         };

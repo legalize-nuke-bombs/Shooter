@@ -45,6 +45,7 @@ public class InputMsg
     public float moveX;
     public float moveZ;
     public bool jump;
+    public bool sprint;
     public float yaw;
     public float pitch;
 }
