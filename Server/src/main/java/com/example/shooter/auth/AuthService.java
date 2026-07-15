@@ -51,7 +51,7 @@ public class AuthService {
 
         log.info("registration successful: user {}", user.getId());
         return new RegisterResponse(
-                jwtTokenProvider.generateToken(user.getId())
+                jwtTokenProvider.generateToken(String.valueOf(user.getId()))
         );
     }
 
@@ -66,6 +66,6 @@ public class AuthService {
         }
 
         log.info("login successful: user {}", user.getId());
-        return new LoginResponse(jwtTokenProvider.generateToken(user.getId()));
+        return new LoginResponse(jwtTokenProvider.generateToken(String.valueOf(user.getId())));
     }
 }

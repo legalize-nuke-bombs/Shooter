@@ -30,7 +30,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = jwtTokenResolveService.resolve(request);
 
         if (token != null) {
-            Long userId = jwtTokenProvider.getUserIdFromToken(token).orElse(null);
+            String payload = jwtTokenProvider.getPayloadFromToken(token).orElse(null);
+            Long userId = null;
+            try {
+                if (payload != null) {
+                    userId = Long.parseLong(payload);
+                }
+            }
+            catch (Exception ignored) {}
 
             if (userId != null) {
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userId, null, List.of());
