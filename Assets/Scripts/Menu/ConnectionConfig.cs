@@ -3,6 +3,7 @@ public static class ConnectionConfig
     public static string Username = "";
     public static string DisplayName = "";
     public static string Token = "";
+    public static string WorldToken = "";
     public static string ServerAddress = "localhost:8080";
     public static string RoomCode = "";
 
@@ -10,5 +11,5 @@ public static class ConnectionConfig
 
     public static string HttpBase => "http://" + ServerAddress;
     public static string Host => ServerAddress.Contains(":") ? ServerAddress.Substring(0, ServerAddress.IndexOf(':')) : ServerAddress;
-    public static string WsUrl => "ws://" + Host + ":" + GamePort + "/ws?token=" + Token;
+    public static string WsUrl => "ws://" + Host + ":" + GamePort + "/ws?token=" + (string.IsNullOrEmpty(WorldToken) ? Token : WorldToken);
 }

@@ -1,0 +1,263 @@
+.root {
+    flex-grow: 1;
+    background-color: #141418;
+    color: #e8e8ec;
+    -unity-font-style: normal;
+}
+
+.screen {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font-size: 42px;
+    -unity-font-style: bold;
+    color: #e8e8ec;
+    letter-spacing: 6px;
+    margin-bottom: 24px;
+}
+
+.panel {
+    background-color: #1d1d24;
+    border-radius: 10px;
+    padding: 28px;
+    width: 380px;
+    max-width: 90%;
+}
+
+.field-label {
+    color: #9a9aa4;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+.text-input {
+    height: 34px;
+}
+
+.text-input > .unity-base-text-field__input {
+    background-color: #141418;
+    border-color: #2c2c36;
+    border-radius: 6px;
+    color: #e8e8ec;
+    padding-left: 8px;
+}
+
+.text-input:focus > .unity-base-text-field__input {
+    border-color: #ff6b47;
+}
+
+.btn {
+    height: 38px;
+    border-radius: 6px;
+    background-color: #2c2c36;
+    color: #e8e8ec;
+    border-width: 0;
+    -unity-font-style: bold;
+    margin-top: 6px;
+}
+
+.btn:hover {
+    background-color: #3a3a46;
+}
+
+.btn-primary {
+    background-color: #ff6b47;
+    color: #141418;
+}
+
+.btn-primary:hover {
+    background-color: #ff8264;
+}
+
+.btn-link {
+    background-color: rgba(0, 0, 0, 0);
+    color: #9a9aa4;
+    border-width: 0;
+    margin-top: 10px;
+}
+
+.btn-link:hover {
+    color: #ff6b47;
+}
+
+.status-line {
+    color: #ff6b47;
+    font-size: 12px;
+    margin-top: 10px;
+    white-space: normal;
+    min-height: 16px;
+}
+
+.server-info {
+    color: #9a9aa4;
+    font-size: 11px;
+    margin-top: 4px;
+    min-height: 14px;
+}
+
+.worlds-root {
+    flex-grow: 1;
+    padding: 20px 40px;
+}
+
+.topbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.topbar-title {
+    font-size: 24px;
+    -unity-font-style: bold;
+    letter-spacing: 4px;
+}
+
+.topbar-user {
+    color: #9a9aa4;
+}
+
+.controls-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.tab {
+    background-color: rgba(0, 0, 0, 0);
+    color: #9a9aa4;
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(0, 0, 0, 0);
+    height: 30px;
+    margin-right: 12px;
+    -unity-font-style: bold;
+}
+
+.tab-active {
+    color: #e8e8ec;
+    border-bottom-color: #ff6b47;
+}
+
+.sort-dropdown {
+    width: 170px;
+    margin-left: auto;
+}
+
+.worlds-scroll {
+    flex-grow: 1;
+    margin-bottom: 12px;
+}
+
+.world-card {
+    background-color: #1d1d24;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.world-card:hover {
+    background-color: #24242e;
+}
+
+.world-info {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.world-name {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: #e8e8ec;
+}
+
+.world-desc {
+    color: #9a9aa4;
+    font-size: 12px;
+    margin-top: 2px;
+    white-space: normal;
+}
+
+.world-meta {
+    color: #6a6a74;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.role-badge {
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    margin-left: 8px;
+    align-self: center;
+}
+
+.role-creator {
+    background-color: #b8860b;
+    color: #141418;
+}
+
+.role-moderator {
+    background-color: #3a6ea5;
+    color: #e8e8ec;
+}
+
+.role-member {
+    background-color: #2c2c36;
+    color: #9a9aa4;
+}
+
+.join-btn {
+    width: 90px;
+    margin-left: 14px;
+}
+
+.bottom-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.world-id-input {
+    width: 300px;
+    margin-right: 8px;
+}
+
+.modal-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(10, 10, 12, 0.75);
+    align-items: center;
+    justify-content: center;
+}
+
+.desc-input {
+    height: 80px;
+}
+
+.desc-input > .unity-base-text-field__input {
+    background-color: #141418;
+    border-color: #2c2c36;
+    border-radius: 6px;
+    color: #e8e8ec;
+    padding-left: 8px;
+    white-space: normal;
+}
+
+.radio-row {
+    flex-direction: row;
+    margin-top: 6px;
+}
+
+.hidden {
+    display: none;
+}

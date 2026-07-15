@@ -30,6 +30,7 @@ sysinfo.txt
 .gradle/
 shooter-logs/
 *.log
+.env
 
 # Builds
 *.apk
