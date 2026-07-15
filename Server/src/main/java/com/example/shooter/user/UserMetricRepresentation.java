@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserStatRepresentation {
+public class UserMetricRepresentation {
     private final Long totalUsers;
     private final Long totalUsers24h;
 }

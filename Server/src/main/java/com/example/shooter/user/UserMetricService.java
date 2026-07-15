@@ -9,25 +9,25 @@ import java.time.Instant;
 
 @Service
 @Slf4j
-public class UserStatService {
+public class UserMetricService {
 
     private final UserRepository userRepository;
-    private volatile UserStatRepresentation cache;
+    private volatile UserMetricRepresentation cache;
 
-    public UserStatService(UserRepository userRepository) {
+    public UserMetricService(UserRepository userRepository) {
         this.userRepository = userRepository;
         this.cache = null;
     }
 
-    public UserStatRepresentation get() {
+    public UserMetricRepresentation get() {
         return cache;
     }
 
     @Scheduled(fixedDelay = 60 * 1000)
     public void updateCache() {
-        log.info("updating user platform stat cache...");
+        log.info("updating user platform metric cache...");
         long since24h = Instant.now().minus(Duration.ofHours(24)).getEpochSecond();
-        cache = new UserStatRepresentation(
+        cache = new UserMetricRepresentation(
                 userRepository.countAll(),
                 userRepository.countSince(since24h)
         );

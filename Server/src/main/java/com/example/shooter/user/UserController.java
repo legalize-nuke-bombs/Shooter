@@ -5,19 +5,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
-    private final UserStatService userStatService;
+    private final UserMetricService userMetricService;
 
-    public UserController(UserService userService, UserStatService userStatService) {
+    public UserController(UserService userService, UserMetricService userMetricService) {
         this.userService = userService;
-        this.userStatService = userStatService;
+        this.userMetricService = userMetricService;
     }
 
     @GetMapping("/me")
@@ -51,8 +48,8 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/stats")
-    public ResponseEntity<UserStatRepresentation> stats() {
-        return ResponseEntity.ok(userStatService.get());
+    @GetMapping("/metrics")
+    public ResponseEntity<UserMetricRepresentation> metrics() {
+        return ResponseEntity.ok(userMetricService.get());
     }
 }
