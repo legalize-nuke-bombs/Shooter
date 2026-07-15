@@ -65,16 +65,22 @@ public class WorldService {
     }
 
     public List<WorldRepresentation> get(Long userId, PlayerRole playerRole, WorldOrder order, Integer page, Integer size) {
-        Set<UUID> preferredWorldIds;
+        Set<UUID> requiredWorldIds;
+        WorldVisibilityPolicy requiredVisibilityPolicy;
+        WorldJoinPolicy requiredJoinPolicy;
         if (playerRole == null) {
-            preferredWorldIds = null;
+            requiredWorldIds = null;
+            requiredVisibilityPolicy = WorldVisibilityPolicy.PUBLIC;
+            requiredJoinPolicy = WorldJoinPolicy.EVERYONE;
         }
         else {
-            preferredWorldIds = playerRepository.findAllByUserIdAndRoleWithWorlds(userId, playerRole)
+            requiredWorldIds = playerRepository.findAllByUserIdAndRoleWithWorlds(userId, playerRole)
                     .stream()
                     .map(Player::getWorld)
                     .map(World::getId)
                     .collect(Collectors.toSet());
+            requiredVisibilityPolicy = null;
+            requiredJoinPolicy = null;
         }
 
         Pageable pageable = PageRequest.of(page, size);
@@ -82,13 +88,13 @@ public class WorldService {
         List<World> worlds;
         switch (order) {
             case NAME -> {
-                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyNameOrder(preferredWorldIds, preferredWorldIds == null ? WorldVisibilityPolicy.PUBLIC : null, pageable);
+                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyNameOrder(requiredWorldIds, requiredVisibilityPolicy, requiredJoinPolicy, pageable);
             }
             case CREATED_AT -> {
-                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyCreatedAtOrder(preferredWorldIds, preferredWorldIds == null ? WorldVisibilityPolicy.PUBLIC : null, pageable);
+                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyCreatedAtOrder(requiredWorldIds, requiredVisibilityPolicy, requiredJoinPolicy, pageable);
             }
             case ACCESSED_AT -> {
-                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyAccessedAtOrder(preferredWorldIds, preferredWorldIds == null ? WorldVisibilityPolicy.PUBLIC : null, pageable);
+                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyAccessedAtOrder(requiredWorldIds, requiredVisibilityPolicy, requiredJoinPolicy, pageable);
             }
             default -> {
                 log.warn("user {} sent unexpected world order {}", userId, order);
