@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/worlds")
@@ -29,6 +30,11 @@ public class WorldController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 worldService.create(userId, request)
         );
+    }
+
+    @PostMapping("/{worldId}/join")
+    public WorldJoinResponse join(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId) {
+        return worldService.join(userId, worldId);
     }
 
     @GetMapping

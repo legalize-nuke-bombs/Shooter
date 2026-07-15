@@ -6,6 +6,7 @@ import com.example.shooter.game.player.Player;
 import com.example.shooter.game.player.PlayerRepository;
 import com.example.shooter.game.player.PlayerRepresentation;
 import com.example.shooter.game.player.PlayerRole;
+import com.example.shooter.jwt.UnityServerTokenProvider;
 import com.example.shooter.user.User;
 import com.example.shooter.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +26,13 @@ public class WorldService {
     private final UserRepository userRepository;
     private final WorldRepository worldRepository;
     private final PlayerRepository playerRepository;
+    private final UnityServerTokenProvider unityServerTokenProvider;
 
-    public WorldService(UserRepository userRepository, WorldRepository worldRepository, PlayerRepository playerRepository) {
+    public WorldService(UserRepository userRepository, WorldRepository worldRepository, PlayerRepository playerRepository, UnityServerTokenProvider unityServerTokenProvider) {
         this.userRepository = userRepository;
         this.worldRepository = worldRepository;
         this.playerRepository = playerRepository;
+        this.unityServerTokenProvider = unityServerTokenProvider;
     }
 
     @Transactional
@@ -59,6 +62,46 @@ public class WorldService {
         return new WorldRepresentation(
                 world,
                 List.of(new PlayerRepresentation(player))
+        );
+    }
+
+    @Transactional
+    public WorldJoinResponse join(Long userId, UUID worldId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_AUTHENTICATED));
+        Long now = Instant.now().getEpochSecond();
+
+        World world = worldRepository.findByIdForPessimisticWrite(worldId).orElseThrow(() -> new ApiException(ErrorCode.WORLD_NOT_FOUND));
+        world.setAccessedAt(now);
+        worldRepository.save(world);
+
+        Player player = playerRepository.findByUserIdAndWorldId(userId, worldId).orElse(null);
+
+        if (player != null) {
+            log.info("user {} came back to world {}", userId, worldId);
+            return new WorldJoinResponse(
+                    unityServerTokenProvider.generateToken(userId + ":" + worldId)
+            );
+        }
+
+        if (world.getJoinPolicy() != WorldJoinPolicy.EVERYONE) {
+            log.info("user {} couldn't join world {}: closen world join policy", userId, worldId);
+            // smart shit
+            if (world.getVisibilityPolicy() == WorldVisibilityPolicy.PUBLIC) {
+                throw new ApiException(ErrorCode.WORLD_DOES_NOT_ACCEPT_NEW_MEMBERS);
+            }
+            throw new ApiException(ErrorCode.WORLD_NOT_FOUND);
+        }
+
+        player = new Player();
+        player.setWorld(world);
+        player.setUser(user);
+        player.setMemberSince(now);
+        player.setRole(PlayerRole.MEMBER);
+        playerRepository.save(player);
+
+        log.info("user {} joined world {} for the first time!", userId, worldId);
+        return new WorldJoinResponse(
+                unityServerTokenProvider.generateToken(userId + ":" + worldId)
         );
     }
 
