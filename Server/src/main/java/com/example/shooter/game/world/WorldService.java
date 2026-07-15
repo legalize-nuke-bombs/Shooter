@@ -39,6 +39,7 @@ public class WorldService {
         World world = new World();
         world.setName(request.getName());
         world.setCreatedAt(now);
+        world.setAccessedAt(now);
         world.setVisibilityPolicy(request.getVisibilityPolicy());
         world.setJoinPolicy(request.getJoinPolicy());
         world.setDescription(request.getDescription());
