@@ -98,7 +98,7 @@ public class WorldService {
 
         Set<UUID> worldIds = worlds.stream().map(World::getId).collect(Collectors.toSet());
 
-        List<Player> players = playerRepository.findAllByWorldIdsWithWorlds(worldIds);
+        List<Player> players = playerRepository.findAllByWorldIdsWithWorldsAndUsers(worldIds);
 
         Map<UUID, WorldRepresentation> resultMap = new HashMap<>();
         for (World w : worlds) {
