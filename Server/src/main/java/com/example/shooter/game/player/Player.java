@@ -1,6 +1,5 @@
 package com.example.shooter.game.player;
 
-import com.example.shooter.game.util.Vector3d;
 import com.example.shooter.game.world.World;
 import com.example.shooter.user.User;
 import jakarta.persistence.*;
@@ -40,7 +39,4 @@ public class Player {
 
     @Column(nullable = false)
     private Long memberSince;
-
-    @Column(nullable = false)
-    private Vector3d position;
 }
