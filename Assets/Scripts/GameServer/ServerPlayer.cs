@@ -5,6 +5,7 @@ public class ServerPlayer
     public int ConnId;
     public long UserId = -1;
     public string DisplayName = "";
+    public string WorldId = "";
     public bool Authed;
     public bool InRoom;
     public GameObject Body;
