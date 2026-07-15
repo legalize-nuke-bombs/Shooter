@@ -7,7 +7,9 @@ import lombok.Setter;
 @Entity
 @Table(name = "worlds", indexes = {
         @Index(name = "idx_worlds_name", columnList = "name"),
-        @Index(name = "idx_worlds_created_at", columnList = "created_at")
+        @Index(name = "idx_worlds_created_at", columnList = "created_at"),
+        @Index(name = "idx_worlds_visibility_policy", columnList = "visibility_policy"),
+        @Index(name = "idx_worlds_join_policy", columnList = "join_policy")
 })
 @Getter
 @Setter
@@ -21,6 +23,14 @@ public class World {
 
     @Column(nullable = false)
     private Long createdAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private WorldVisibilityPolicy visibilityPolicy;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private WorldJoinPolicy joinPolicy;
 
     @Column(nullable = false, length = WorldConstants.MAX_DESCRIPTION_LENGTH)
     private String description;
