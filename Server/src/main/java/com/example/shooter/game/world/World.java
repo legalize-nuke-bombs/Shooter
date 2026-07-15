@@ -8,8 +8,6 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "worlds", indexes = {
-        @Index(name = "idx_worlds_name", columnList = "name"),
-        @Index(name = "idx_worlds_created_at", columnList = "created_at"),
         @Index(name = "idx_worlds_accessed_at", columnList = "accessed_at"),
         @Index(name = "idx_worlds_visibility_policy", columnList = "visibility_policy"),
         @Index(name = "idx_worlds_join_policy", columnList = "join_policy")
