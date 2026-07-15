@@ -1,6 +1,5 @@
 package com.example.shooter.game.player;
 
-import com.example.shooter.game.util.AccessLevel;
 import com.example.shooter.game.util.Vector3d;
 import com.example.shooter.game.world.World;
 import com.example.shooter.user.User;
@@ -15,7 +14,7 @@ import org.hibernate.annotations.OnDeleteAction;
         @Index(name = "idx_players_world_id", columnList = "world_id"),
         @Index(name = "idx_players_user_id", columnList = "user_id"),
         @Index(name = "idx_players_member_since", columnList = "member_since"),
-        @Index(name = "idx_players_access_level", columnList = "access_level")
+        @Index(name = "idx_players_role", columnList = "role")
 }, uniqueConstraints = {
         @UniqueConstraint(columnNames = {"world_id", "user_id"})
 })
@@ -38,7 +37,7 @@ public class Player {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AccessLevel accessLevel;
+    private PlayerRole role;
 
     @Column(nullable = false)
     private Long memberSince;
