@@ -1,4 +1,4 @@
-package com.example.shooter.world;
+package com.example.shooter.game.world;
 
 public class WorldConstants {
     public static final int MAX_NAME_LENGTH = 1000;

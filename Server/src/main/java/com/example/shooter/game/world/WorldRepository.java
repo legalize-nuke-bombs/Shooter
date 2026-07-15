@@ -1,4 +1,4 @@
-package com.example.shooter.world;
+package com.example.shooter.game.world;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
