@@ -105,7 +105,7 @@ public class WorldService {
         );
     }
 
-    public List<WorldRepresentation> get(Long userId, PlayerRole playerRole, WorldOrder order, Integer page, Integer size) {
+    public List<WorldRepresentation> get(Long userId, PlayerRole playerRole, Integer page, Integer size) {
         Set<UUID> requiredWorldIds;
         WorldVisibilityPolicy requiredVisibilityPolicy;
         WorldJoinPolicy requiredJoinPolicy;
@@ -126,23 +126,7 @@ public class WorldService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        List<World> worlds;
-        switch (order) {
-            case NAME -> {
-                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyNameOrder(requiredWorldIds, requiredVisibilityPolicy, requiredJoinPolicy, pageable);
-            }
-            case CREATED_AT -> {
-                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyCreatedAtOrder(requiredWorldIds, requiredVisibilityPolicy, requiredJoinPolicy, pageable);
-            }
-            case ACCESSED_AT -> {
-                worlds = worldRepository.findByWorldIdsAndVisibilityPolicyAccessedAtOrder(requiredWorldIds, requiredVisibilityPolicy, requiredJoinPolicy, pageable);
-            }
-            default -> {
-                log.warn("user {} sent unexpected world order {}", userId, order);
-                worlds = List.of();
-            }
-        }
-
+        List<World> worlds = worlds = worldRepository.findByWorldIdsAndVisibilityPolicyAccessedAtOrder(requiredWorldIds, requiredVisibilityPolicy, requiredJoinPolicy, pageable);
         Set<UUID> worldIds = worlds.stream().map(World::getId).collect(Collectors.toSet());
 
         List<Player> players = playerRepository.findAllByWorldIdsWithWorldsAndUsers(worldIds);
