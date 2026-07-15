@@ -74,7 +74,7 @@ public class WorldService {
             requiredJoinPolicy = WorldJoinPolicy.EVERYONE;
         }
         else {
-            requiredWorldIds = playerRepository.findAllByUserIdAndRoleWithWorlds(userId, playerRole)
+            requiredWorldIds = playerRepository.findAllByUserIdAndPlayerRoleWithWorlds(userId, playerRole)
                     .stream()
                     .map(Player::getWorld)
                     .map(World::getId)

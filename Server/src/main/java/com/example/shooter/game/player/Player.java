@@ -35,7 +35,6 @@ public class Player {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PlayerRole role;
 
