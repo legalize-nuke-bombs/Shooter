@@ -13,7 +13,9 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "players", indexes = {
         @Index(name = "idx_players_world_id", columnList = "world_id"),
-        @Index(name = "idx_players_user_id", columnList = "user_id")
+        @Index(name = "idx_players_user_id", columnList = "user_id"),
+        @Index(name = "idx_players_member_since", columnList = "member_since"),
+        @Index(name = "idx_players_access_level", columnList = "access_level")
 }, uniqueConstraints = {
         @UniqueConstraint(columnNames = {"world_id", "user_id"})
 })
