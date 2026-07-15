@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     private Transform cameraTransform;
     private float pitch;
     private float verticalVelocity;
+    private float lastMoveX;
+    private float lastMoveZ;
+    private bool jumpPending;
 
     private void Awake()
     {
@@ -45,6 +48,11 @@ public class PlayerController : MonoBehaviour
         Keyboard kb = Keyboard.current;
         float x = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f);
         float z = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f);
+        lastMoveX = x;
+        lastMoveZ = z;
+        if (kb.spaceKey.wasPressedThisFrame)
+            jumpPending = true;
+
         Vector3 direction = Vector3.ClampMagnitude(transform.right * x + transform.forward * z, 1f);
         float speed = kb.leftShiftKey.isPressed ? sprintSpeed : walkSpeed;
 
@@ -59,5 +67,19 @@ public class PlayerController : MonoBehaviour
 
         Vector3 velocity = direction * speed + Vector3.up * verticalVelocity;
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    public InputMsg BuildInputMessage()
+    {
+        var msg = new InputMsg
+        {
+            moveX = lastMoveX,
+            moveZ = lastMoveZ,
+            jump = jumpPending,
+            yaw = transform.eulerAngles.y,
+            pitch = pitch
+        };
+        jumpPending = false;
+        return msg;
     }
 }
