@@ -41,11 +41,10 @@ public class WorldController {
     public List<WorldRepresentation> get(
             @AuthenticationPrincipal Long userId,
             @RequestParam(required = false) PlayerRole playerRole,
-            @RequestParam(defaultValue = "ACCESSED_AT") WorldOrder order,
             @RequestParam(defaultValue = "0") @Min(0) Integer page,
             @RequestParam(defaultValue = "100") @Min(0) @Max(100) Integer size
             ) {
-        return worldService.get(userId, playerRole, order, page, size);
+        return worldService.get(userId, playerRole, page, size);
     }
 
     @GetMapping("/metrics")
