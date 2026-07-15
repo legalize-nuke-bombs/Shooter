@@ -17,9 +17,11 @@ import java.util.List;
 public class WorldController {
 
     private final WorldService worldService;
+    private final WorldMetricService worldMetricService;
 
-    public WorldController(WorldService worldService) {
+    public WorldController(WorldService worldService, WorldMetricService worldMetricService) {
         this.worldService = worldService;
+        this.worldMetricService = worldMetricService;
     }
 
     @PostMapping
@@ -38,5 +40,10 @@ public class WorldController {
             @RequestParam(defaultValue = "100") @Min(0) @Max(100) Integer size
             ) {
         return worldService.get(userId, playerRole, order, page, size);
+    }
+
+    @GetMapping("/metrics")
+    public WorldMetricRepresentation getMetrics() {
+        return worldMetricService.get();
     }
 }
