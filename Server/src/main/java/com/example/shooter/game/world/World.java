@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "worlds", indexes = {
         @Index(name = "idx_worlds_name", columnList = "name"),
@@ -15,8 +17,8 @@ import lombok.Setter;
 @Setter
 public class World {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, length = WorldConstants.MAX_NAME_LENGTH)
     private String name;
