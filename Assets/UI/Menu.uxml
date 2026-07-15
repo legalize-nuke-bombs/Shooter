@@ -2,67 +2,78 @@
     <ui:Style src="Menu.uss" />
     <ui:VisualElement name="root" class="root">
         <ui:VisualElement name="login-screen" class="screen">
-            <ui:Label text="SHOOTER" class="title" />
+            <ui:Label text="SHOOTER" class="brand px" />
             <ui:VisualElement class="panel">
-                <ui:Label text="SERVER" class="field-label" />
-                <ui:TextField name="server-field" class="text-input" />
-                <ui:Label name="server-info" class="server-info" />
-                <ui:Label text="USERNAME" class="field-label" />
+                <ui:Label name="form-title" text="РЕГИСТРАЦИЯ" class="form-title px" />
+                <ui:Label text="ИМЯ ПОЛЬЗОВАТЕЛЯ" class="field-label" />
                 <ui:TextField name="username-field" class="text-input" />
-                <ui:Label text="PASSWORD" class="field-label" />
-                <ui:TextField name="password-field" password="true" class="text-input" />
                 <ui:VisualElement name="displayname-block">
-                    <ui:Label text="DISPLAY NAME" class="field-label" />
+                    <ui:Label text="ОТОБРАЖАЕМОЕ ИМЯ" class="field-label" />
                     <ui:TextField name="displayname-field" class="text-input" />
                 </ui:VisualElement>
-                <ui:Button name="submit-btn" text="LOGIN" class="btn btn-primary" />
-                <ui:Button name="mode-btn" text="Need an account? Register" class="btn-link" />
+                <ui:Label text="ПАРОЛЬ" class="field-label" />
+                <ui:TextField name="password-field" password="true" class="text-input" />
+                <ui:VisualElement name="confirm-block">
+                    <ui:Label text="ПОВТОРИТЕ ПАРОЛЬ" class="field-label" />
+                    <ui:TextField name="confirm-field" password="true" class="text-input" />
+                </ui:VisualElement>
+                <ui:Button name="submit-btn" text="СОЗДАТЬ АККАУНТ" class="btn btn-primary px" />
+                <ui:Button name="mode-link" text="Уже есть аккаунт? Войти" class="link-btn" />
                 <ui:Label name="login-status" class="status-line" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="server-error-screen" class="screen hidden">
+            <ui:Label text="SHOOTER" class="brand px" />
+            <ui:VisualElement class="panel server-error-panel">
+                <ui:Label text="СЕРВЕР НЕ ОТВЕЧАЕТ" class="server-error-title px" />
+                <ui:Label name="server-error-detail" class="server-error-text" />
+                <ui:Button name="retry-btn" text="ПОВТОРИТЬ" class="btn btn-primary px" style="width: 100%;" />
             </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="worlds-screen" class="worlds-root hidden">
             <ui:VisualElement class="topbar">
-                <ui:Label text="SHOOTER" class="topbar-title" />
-                <ui:VisualElement style="flex-direction: row; align-items: center;">
+                <ui:Label text="SHOOTER" class="topbar-brand px" />
+                <ui:VisualElement class="topbar-right">
                     <ui:Label name="user-label" class="topbar-user" />
-                    <ui:Button name="quit-btn" text="QUIT" class="btn" style="margin-left: 16px; width: 80px;" />
+                    <ui:Button name="quit-btn" text="ВЫХОД" class="btn px" style="width: 92px; height: 30px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement class="controls-row">
-                <ui:Button name="tab-public" text="PUBLIC" class="tab tab-active" />
-                <ui:Button name="tab-mine" text="MY WORLDS" class="tab" />
-                <ui:Button name="refresh-btn" text="↻" class="btn" style="width: 40px; margin-top: 0;" />
-                <ui:DropdownField name="sort-dropdown" class="sort-dropdown" />
+                <ui:Button name="tab-mine" text="МОИ МИРЫ" class="list-tab list-tab-active px" />
+                <ui:Button name="tab-public" text="ПУБЛИЧНЫЕ" class="list-tab px" />
+                <ui:VisualElement class="controls-spacer" />
+                <ui:Button name="refresh-btn" text="↻" class="btn icon-btn" />
             </ui:VisualElement>
             <ui:ScrollView name="worlds-scroll" class="worlds-scroll" />
-            <ui:Label name="worlds-status" class="status-line" />
+            <ui:Button name="load-more-btn" text="ПОКАЗАТЬ ЕЩЁ" class="btn load-more px" />
+            <ui:Label name="worlds-status" class="status-line" style="-unity-text-align: middle-left;" />
             <ui:VisualElement class="bottom-row">
+                <ui:Button name="create-btn" text="+ СОЗДАТЬ НОВЫЙ МИР" class="btn btn-primary create-world-btn px" />
+                <ui:VisualElement class="controls-spacer" />
                 <ui:TextField name="world-id-field" class="text-input world-id-input" />
-                <ui:Button name="join-id-btn" text="JOIN BY ID" class="btn" style="margin-top: 0;" />
-                <ui:Button name="load-more-btn" text="LOAD MORE" class="btn" style="margin-top: 0; margin-left: 8px;" />
-                <ui:Button name="create-btn" text="CREATE WORLD" class="btn btn-primary" style="margin-top: 0; margin-left: auto; width: 160px;" />
+                <ui:Button name="join-id-btn" text="ВОЙТИ ПО ID" class="btn px" style="height: 36px;" />
             </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="create-modal" class="modal-overlay hidden">
             <ui:VisualElement class="panel">
-                <ui:Label text="NEW WORLD" class="title" style="font-size: 22px; letter-spacing: 3px; margin-bottom: 8px;" />
-                <ui:Label text="NAME" class="field-label" />
+                <ui:Label text="НОВЫЙ МИР" class="modal-title px" />
+                <ui:Label text="НАЗВАНИЕ" class="field-label" />
                 <ui:TextField name="create-name" class="text-input" />
-                <ui:Label text="DESCRIPTION" class="field-label" />
+                <ui:Label text="ОПИСАНИЕ" class="field-label" />
                 <ui:TextField name="create-desc" multiline="true" class="desc-input" />
-                <ui:Label text="VISIBILITY" class="field-label" />
-                <ui:VisualElement class="radio-row">
-                    <ui:Toggle name="vis-public" text="PUBLIC" value="true" />
-                    <ui:Toggle name="vis-private" text="PRIVATE" style="margin-left: 16px;" />
-                </ui:VisualElement>
-                <ui:Label text="JOIN POLICY" class="field-label" />
-                <ui:DropdownField name="create-policy" />
-                <ui:Button name="create-confirm" text="CREATE" class="btn btn-primary" />
-                <ui:Button name="create-cancel" text="CANCEL" class="btn" />
+                <ui:Label text="ВИДИМОСТЬ" class="field-label" />
+                <ui:DropdownField name="create-visibility" class="theme-dropdown" />
+                <ui:Label text="ДОСТУП" class="field-label" />
+                <ui:DropdownField name="create-policy" class="theme-dropdown" />
+                <ui:Button name="create-confirm" text="СОЗДАТЬ" class="btn btn-primary px" />
+                <ui:Button name="create-cancel" text="ОТМЕНА" class="btn px" style="margin-top: 8px;" />
                 <ui:Label name="create-status" class="status-line" />
             </ui:VisualElement>
         </ui:VisualElement>
+
+        <ui:Label name="corner-status" class="corner-status" text="" />
     </ui:VisualElement>
 </ui:UXML>

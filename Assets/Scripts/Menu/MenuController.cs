@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -14,43 +15,65 @@ public class MenuController : MonoBehaviour
     private const string GameSceneName = "SampleScene";
     private const int PageSize = 20;
 
-    private static readonly string[] SortLabels = { "Last active", "Newest", "Name" };
-    private static readonly string[] SortOrders = { "ACCESSED_AT", "CREATED_AT", "NAME" };
+    private static readonly Dictionary<string, string> ErrorTexts = new Dictionary<string, string>
+    {
+        { "NOT_AUTHENTICATED", "Сессия протухла — войди заново" },
+        { "INVALID_PASSWORD", "Неверный пароль" },
+        { "WEAK_PASSWORD", "Пароль: 8-40 символов, заглавная, строчная и цифра" },
+        { "USERNAME_TAKEN", "Имя пользователя занято — попробуй другое" },
+        { "USER_NOT_FOUND", "Такого пользователя нет" },
+        { "EMPTY_REQUEST", "Пустой запрос — попробуй ещё раз" },
+        { "MALFORMED_REQUEST", "Запрос не понравился серверу — попробуй ещё раз" },
+        { "WORLD_NOT_FOUND", "Мир не найден — проверь ID" },
+        { "WORLD_DOES_NOT_ACCEPT_NEW_MEMBERS", "Этот мир не принимает новых игроков" },
+        { "INTERNAL_ERROR", "Ошибка на сервере — попробуй ещё раз" }
+    };
 
-    private VisualElement root;
+    private static readonly string[] VisibilityLabels = { "Скрытый", "Публичный" };
+    private static readonly string[] VisibilityValues = { "PRIVATE", "PUBLIC" };
+    private static readonly string[] PolicyLabels = { "Закрытый", "Открытый" };
+    private static readonly string[] PolicyValues = { "NOBODY", "EVERYONE" };
+
     private VisualElement loginScreen;
+    private VisualElement serverErrorScreen;
     private VisualElement worldsScreen;
     private VisualElement createModal;
+    private VisualElement confirmBlock;
     private VisualElement displayNameBlock;
-    private TextField serverField;
     private TextField usernameField;
     private TextField passwordField;
+    private TextField confirmField;
     private TextField displayNameField;
     private TextField worldIdField;
     private TextField createNameField;
     private TextField createDescField;
-    private Toggle visPublic;
-    private Toggle visPrivate;
+    private DropdownField createVisibility;
     private DropdownField createPolicy;
-    private DropdownField sortDropdown;
     private ScrollView worldsScroll;
     private Button submitBtn;
-    private Button modeBtn;
+    private Button modeLink;
     private Button tabPublic;
     private Button tabMine;
+    private Button loadMoreBtn;
+    private Label formTitle;
     private Label loginStatus;
     private Label worldsStatus;
     private Label createStatus;
-    private Label serverInfo;
+    private Label cornerStatus;
+    private Label serverErrorDetail;
     private Label userLabel;
 
-    private bool registerMode;
-    private bool mineTab;
+    private string serverAddress = "localhost:8080";
+    private bool registerMode = true;
+    private bool mineTab = true;
     private bool busy;
+    private bool serverOk;
     private int page;
     private long myUserId = -1;
 
+    [Serializable] private class ConfigFile { public string serverAddress; }
     [Serializable] private class TokenResponse { public string token; }
+    [Serializable] private class ProblemResponse { public string code; public string detail; }
     [Serializable] private class ServerInfoResponse { public string name; public int major; public int minor; public int patch; }
     [Serializable] private class UserDto { public long id; public string displayName; }
     [Serializable] private class PlayerDto { public long id; public UserDto user; public string role; public long memberSince; }
@@ -65,54 +88,57 @@ public class MenuController : MonoBehaviour
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;
 
-        root = GetComponent<UIDocument>().rootVisualElement;
+        LoadConfig();
+
+        var root = GetComponent<UIDocument>().rootVisualElement;
+        var rootBox = root.Q<VisualElement>("root");
+        rootBox.Insert(0, new MenuBackground());
+
         loginScreen = root.Q<VisualElement>("login-screen");
+        serverErrorScreen = root.Q<VisualElement>("server-error-screen");
         worldsScreen = root.Q<VisualElement>("worlds-screen");
         createModal = root.Q<VisualElement>("create-modal");
+        confirmBlock = root.Q<VisualElement>("confirm-block");
         displayNameBlock = root.Q<VisualElement>("displayname-block");
-        serverField = root.Q<TextField>("server-field");
         usernameField = root.Q<TextField>("username-field");
         passwordField = root.Q<TextField>("password-field");
+        confirmField = root.Q<TextField>("confirm-field");
         displayNameField = root.Q<TextField>("displayname-field");
         worldIdField = root.Q<TextField>("world-id-field");
         createNameField = root.Q<TextField>("create-name");
         createDescField = root.Q<TextField>("create-desc");
-        visPublic = root.Q<Toggle>("vis-public");
-        visPrivate = root.Q<Toggle>("vis-private");
+        createVisibility = root.Q<DropdownField>("create-visibility");
         createPolicy = root.Q<DropdownField>("create-policy");
-        sortDropdown = root.Q<DropdownField>("sort-dropdown");
         worldsScroll = root.Q<ScrollView>("worlds-scroll");
         submitBtn = root.Q<Button>("submit-btn");
-        modeBtn = root.Q<Button>("mode-btn");
+        modeLink = root.Q<Button>("mode-link");
         tabPublic = root.Q<Button>("tab-public");
         tabMine = root.Q<Button>("tab-mine");
+        loadMoreBtn = root.Q<Button>("load-more-btn");
+        formTitle = root.Q<Label>("form-title");
         loginStatus = root.Q<Label>("login-status");
         worldsStatus = root.Q<Label>("worlds-status");
         createStatus = root.Q<Label>("create-status");
-        serverInfo = root.Q<Label>("server-info");
+        cornerStatus = root.Q<Label>("corner-status");
+        serverErrorDetail = root.Q<Label>("server-error-detail");
         userLabel = root.Q<Label>("user-label");
 
-        serverField.value = PlayerPrefs.GetString("serverAddress", "localhost:8080");
         usernameField.value = PlayerPrefs.GetString("username", "");
-        displayNameBlock.AddToClassList("hidden");
 
-        sortDropdown.choices = new List<string>(SortLabels);
-        sortDropdown.index = 0;
-        sortDropdown.RegisterValueChangedCallback(_ => ReloadWorlds());
-
-        createPolicy.choices = new List<string> { "EVERYONE" };
+        createVisibility.choices = new List<string>(VisibilityLabels);
+        createVisibility.index = 0;
+        createPolicy.choices = new List<string>(PolicyLabels);
         createPolicy.index = 0;
-        createPolicy.SetEnabled(false);
 
-        visPublic.RegisterValueChangedCallback(e => { if (e.newValue) visPrivate.SetValueWithoutNotify(false); else if (!visPrivate.value) visPublic.SetValueWithoutNotify(true); });
-        visPrivate.RegisterValueChangedCallback(e => { if (e.newValue) visPublic.SetValueWithoutNotify(false); else if (!visPublic.value) visPrivate.SetValueWithoutNotify(true); });
-
+        modeLink.clicked += () => SetRegisterMode(!registerMode);
         submitBtn.clicked += Submit;
-        modeBtn.clicked += ToggleMode;
-        passwordField.RegisterCallback<KeyDownEvent>(e => { if (e.keyCode == KeyCode.Return) Submit(); });
+        passwordField.RegisterCallback<KeyDownEvent>(e => { if (e.keyCode == KeyCode.Return && !registerMode) Submit(); });
+        confirmField.RegisterCallback<KeyDownEvent>(e => { if (e.keyCode == KeyCode.Return) Submit(); });
+
+        root.Q<Button>("retry-btn").clicked += () => StartCoroutine(CheckServer());
         root.Q<Button>("quit-btn").clicked += Application.Quit;
         root.Q<Button>("refresh-btn").clicked += ReloadWorlds;
-        root.Q<Button>("load-more-btn").clicked += () => { page++; StartCoroutine(LoadWorlds(false)); };
+        loadMoreBtn.clicked += () => { page++; StartCoroutine(LoadWorlds(false)); };
         root.Q<Button>("join-id-btn").clicked += () => { string id = worldIdField.value.Trim(); if (id.Length > 0) StartCoroutine(Join(id)); };
         root.Q<Button>("create-btn").clicked += () => { createStatus.text = ""; createModal.RemoveFromClassList("hidden"); };
         root.Q<Button>("create-cancel").clicked += () => createModal.AddToClassList("hidden");
@@ -120,43 +146,91 @@ public class MenuController : MonoBehaviour
         tabPublic.clicked += () => SwitchTab(false);
         tabMine.clicked += () => SwitchTab(true);
 
+        if (usernameField.value.Length > 0)
+            SetRegisterMode(false);
+
         StartCoroutine(CheckServer());
     }
 
-    private void ToggleMode()
+    private void LoadConfig()
     {
-        registerMode = !registerMode;
-        submitBtn.text = registerMode ? "REGISTER" : "LOGIN";
-        modeBtn.text = registerMode ? "Have an account? Login" : "Need an account? Register";
-        if (registerMode) displayNameBlock.RemoveFromClassList("hidden");
-        else displayNameBlock.AddToClassList("hidden");
+        try
+        {
+            string path = Path.Combine(Application.streamingAssetsPath, "config.json");
+            if (File.Exists(path))
+            {
+                var config = JsonUtility.FromJson<ConfigFile>(File.ReadAllText(path));
+                if (!string.IsNullOrEmpty(config.serverAddress))
+                    serverAddress = config.serverAddress.Trim();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("menu: config read failed, using default: " + e.Message);
+        }
+        ConnectionConfig.ServerAddress = serverAddress;
     }
 
-    private void SwitchTab(bool mine)
+    private void SetRegisterMode(bool register)
     {
-        mineTab = mine;
-        if (mine) { tabMine.AddToClassList("tab-active"); tabPublic.RemoveFromClassList("tab-active"); }
-        else { tabPublic.AddToClassList("tab-active"); tabMine.RemoveFromClassList("tab-active"); }
-        ReloadWorlds();
+        registerMode = register;
+        formTitle.text = register ? "РЕГИСТРАЦИЯ" : "ВХОД";
+        submitBtn.text = register ? "СОЗДАТЬ АККАУНТ" : "ВОЙТИ";
+        modeLink.text = register ? "Уже есть аккаунт? Войти" : "Нет аккаунта? Создать";
+        if (register)
+        {
+            confirmBlock.RemoveFromClassList("hidden");
+            displayNameBlock.RemoveFromClassList("hidden");
+        }
+        else
+        {
+            confirmBlock.AddToClassList("hidden");
+            displayNameBlock.AddToClassList("hidden");
+        }
+        loginStatus.text = "";
     }
 
-    private void ReloadWorlds()
+    private IEnumerator CheckServer()
     {
-        page = 0;
-        StartCoroutine(LoadWorlds(true));
+        serverOk = false;
+        cornerStatus.text = "";
+
+        yield return Request("GET", "/api/server", null, false, (code, text) =>
+        {
+            if (code == 200)
+            {
+                ServerInfoResponse info = null;
+                try { info = JsonUtility.FromJson<ServerInfoResponse>(text); } catch { }
+                if (info != null && !string.IsNullOrEmpty(info.name))
+                {
+                    serverOk = true;
+                    cornerStatus.text = info.name + " v" + info.major + "." + info.minor + "." + info.patch;
+                    serverErrorScreen.AddToClassList("hidden");
+                    if (worldsScreen.ClassListContains("hidden"))
+                        loginScreen.RemoveFromClassList("hidden");
+                    return;
+                }
+            }
+
+            cornerStatus.text = "";
+            serverErrorDetail.text = "По адресу " + serverAddress + " никто не ответил — или это не сервер Shooter. Адрес лежит в StreamingAssets/config.json.";
+            loginScreen.AddToClassList("hidden");
+            worldsScreen.AddToClassList("hidden");
+            serverErrorScreen.RemoveFromClassList("hidden");
+        });
     }
 
     private void Submit()
     {
-        if (busy) return;
+        if (busy || !serverOk) return;
         loginStatus.text = "";
 
         string username = usernameField.value.Trim();
         string password = passwordField.value;
         string displayName = registerMode ? displayNameField.value.Trim() : username;
 
-        if (!Regex.IsMatch(username, "^[a-zA-Z0-9_]{4,20}$")) { loginStatus.text = "username: 4-20 chars, letters/digits/underscore"; return; }
-        if (password.Length < 8 || password.Length > 40) { loginStatus.text = "password: 8-40 chars"; return; }
+        if (!Regex.IsMatch(username, "^[a-zA-Z0-9_]{4,20}$")) { loginStatus.text = "Имя пользователя: 4-20 символов, латиница, цифры, подчёркивание"; return; }
+        if (password.Length < 8 || password.Length > 40) { loginStatus.text = "Пароль: 8-40 символов"; return; }
         bool upper = false, lower = false, digit = false;
         foreach (char c in password)
         {
@@ -164,31 +238,20 @@ public class MenuController : MonoBehaviour
             else if (char.IsLower(c)) lower = true;
             else if (char.IsDigit(c)) digit = true;
         }
-        if (!upper || !lower || !digit) { loginStatus.text = "password needs upper, lower and digit"; return; }
-        if (registerMode && (displayName.Length < 1 || displayName.Length > 40)) { loginStatus.text = "display name: 1-40 chars"; return; }
+        if (!upper || !lower || !digit) { loginStatus.text = "В пароле нужны заглавная, строчная и цифра"; return; }
+        if (registerMode)
+        {
+            if (passwordField.value != confirmField.value) { loginStatus.text = "Пароли не совпадают"; return; }
+            if (displayName.Length < 1 || displayName.Length > 40) { loginStatus.text = "Отображаемое имя: 1-40 символов"; return; }
+        }
 
         StartCoroutine(Authenticate(username, displayName, password));
-    }
-
-    private IEnumerator CheckServer()
-    {
-        serverInfo.text = "";
-        yield return Request("GET", "/api/server", null, false, (code, text) =>
-        {
-            if (code == 200)
-            {
-                var info = JsonUtility.FromJson<ServerInfoResponse>(text);
-                serverInfo.text = info.name + " · v" + info.major + "." + info.minor + "." + info.patch;
-            }
-            else serverInfo.text = "server unreachable";
-        });
     }
 
     private IEnumerator Authenticate(string username, string displayName, string password)
     {
         busy = true;
         submitBtn.SetEnabled(false);
-        loginStatus.text = registerMode ? "registering..." : "logging in...";
 
         string path = registerMode ? "/api/auth/register" : "/api/auth/login";
         string body = registerMode
@@ -200,19 +263,17 @@ public class MenuController : MonoBehaviour
             busy = false;
             submitBtn.SetEnabled(true);
 
-            if (code != 200 && code != 201) { loginStatus.text = "error " + code + ": " + text; return; }
+            if (code != 200 && code != 201) { loginStatus.text = HumanError(code, text); return; }
 
             string token = JsonUtility.FromJson<TokenResponse>(text).token;
-            if (string.IsNullOrEmpty(token)) { loginStatus.text = "no token in response"; return; }
+            if (string.IsNullOrEmpty(token)) { loginStatus.text = "Сервер не прислал токен"; return; }
 
             ConnectionConfig.Username = username;
             ConnectionConfig.DisplayName = displayName;
             ConnectionConfig.Token = token;
-            ConnectionConfig.ServerAddress = serverField.value.Trim();
             myUserId = ExtractUserId(token);
 
             PlayerPrefs.SetString("username", username);
-            PlayerPrefs.SetString("serverAddress", ConnectionConfig.ServerAddress);
             PlayerPrefs.Save();
 
             loginStatus.text = "";
@@ -223,6 +284,23 @@ public class MenuController : MonoBehaviour
         });
     }
 
+    private static string HumanError(long code, string text)
+    {
+        if (code == 0) return "Нет соединения с сервером";
+        try
+        {
+            var problem = JsonUtility.FromJson<ProblemResponse>(text);
+            if (!string.IsNullOrEmpty(problem.code))
+            {
+                if (ErrorTexts.TryGetValue(problem.code, out string human)) return human;
+                if (!string.IsNullOrEmpty(problem.detail)) return problem.detail;
+                return problem.code;
+            }
+        }
+        catch { }
+        return "Ошибка " + code;
+    }
+
     private static long ExtractUserId(string token)
     {
         try
@@ -231,28 +309,52 @@ public class MenuController : MonoBehaviour
             string payload = parts[1].Replace('-', '+').Replace('_', '/');
             switch (payload.Length % 4) { case 2: payload += "=="; break; case 3: payload += "="; break; }
             var claims = JsonUtility.FromJson<JwtClaims>(Encoding.UTF8.GetString(Convert.FromBase64String(payload)));
-            return long.Parse(claims.sub);
+            return long.Parse(claims.sub.Split(':')[0]);
         }
         catch { return -1; }
+    }
+
+    private void SwitchTab(bool mine)
+    {
+        mineTab = mine;
+        if (mine) { tabMine.AddToClassList("list-tab-active"); tabPublic.RemoveFromClassList("list-tab-active"); }
+        else { tabPublic.AddToClassList("list-tab-active"); tabMine.RemoveFromClassList("list-tab-active"); }
+        ReloadWorlds();
+    }
+
+    private void ReloadWorlds()
+    {
+        page = 0;
+        StartCoroutine(LoadWorlds(true));
     }
 
     private IEnumerator LoadWorlds(bool reset)
     {
         if (reset) worldsScroll.Clear();
-        worldsStatus.text = "loading...";
+        worldsStatus.text = "";
 
-        string path = "/api/worlds?order=" + SortOrders[Mathf.Max(0, sortDropdown.index)] + "&page=" + page + "&size=" + PageSize;
+        string path = "/api/worlds?page=" + page + "&size=" + PageSize;
         if (mineTab) path += "&playerRole=CREATOR";
 
         yield return Request("GET", path, null, true, (code, text) =>
         {
-            if (code != 200) { worldsStatus.text = "error " + code + ": " + text; return; }
+            if (code != 200) { worldsStatus.text = HumanError(code, text); return; }
 
-            WorldDto[] worlds = JsonUtility.FromJson<WorldsWrap>("{\"items\":" + text + "}").items;
+            WorldDto[] worlds;
+            try { worlds = JsonUtility.FromJson<WorldsWrap>("{\"items\":" + text + "}").items; }
+            catch { worldsStatus.text = "Не смог прочитать список миров"; return; }
+
             foreach (WorldDto world in worlds)
                 worldsScroll.Add(BuildCard(world));
 
-            worldsStatus.text = worlds.Length == 0 ? (page == 0 ? "no worlds yet — create one" : "no more worlds") : "";
+            loadMoreBtn.style.display = worlds.Length < PageSize ? DisplayStyle.None : DisplayStyle.Flex;
+
+            if (worlds.Length == 0 && page == 0)
+            {
+                var empty = new Label(mineTab ? "Пока пусто — создай свой первый мир" : "Публичных миров пока нет");
+                empty.AddToClassList("empty-note");
+                worldsScroll.Add(empty);
+            }
         });
     }
 
@@ -260,30 +362,26 @@ public class MenuController : MonoBehaviour
     {
         var card = new VisualElement();
         card.AddToClassList("world-card");
+        if (world.visibilityPolicy == "PRIVATE")
+            card.AddToClassList("world-card-private");
 
         var info = new VisualElement();
         info.AddToClassList("world-info");
 
-        var nameRow = new VisualElement { style = { flexDirection = FlexDirection.Row } };
+        var nameRow = new VisualElement();
+        nameRow.AddToClassList("world-name-row");
         var name = new Label(world.name);
         name.AddToClassList("world-name");
         nameRow.Add(name);
 
-        string myRole = FindMyRole(world);
-        if (myRole != null)
-        {
-            var badge = new Label(myRole);
-            badge.AddToClassList("role-badge");
-            badge.AddToClassList("role-" + myRole.ToLowerInvariant());
-            nameRow.Add(badge);
-        }
         if (world.visibilityPolicy == "PRIVATE")
-        {
-            var priv = new Label("PRIVATE");
-            priv.AddToClassList("role-badge");
-            priv.AddToClassList("role-member");
-            nameRow.Add(priv);
-        }
+            nameRow.Add(MakeBadge("СКРЫТЫЙ", "badge-private"));
+
+        string myRole = FindMyRole(world);
+        if (myRole == "CREATOR") nameRow.Add(MakeBadge("СОЗДАТЕЛЬ", "badge-creator"));
+        else if (myRole == "MODERATOR") nameRow.Add(MakeBadge("МОДЕРАТОР", "badge-moderator"));
+        else if (myRole == "MEMBER") nameRow.Add(MakeBadge("УЧАСТНИК", "badge-member"));
+
         info.Add(nameRow);
 
         if (!string.IsNullOrEmpty(world.description))
@@ -299,13 +397,22 @@ public class MenuController : MonoBehaviour
         info.Add(meta);
         card.Add(info);
 
-        var joinBtn = new Button(() => StartCoroutine(Join(world.id))) { text = "JOIN" };
+        var joinBtn = new Button(() => StartCoroutine(Join(world.id))) { text = "ИГРАТЬ" };
         joinBtn.AddToClassList("btn");
-        joinBtn.AddToClassList("btn-primary");
-        joinBtn.AddToClassList("join-btn");
+        joinBtn.AddToClassList("px");
+        joinBtn.AddToClassList("play-btn");
         card.Add(joinBtn);
 
         return card;
+    }
+
+    private static Label MakeBadge(string text, string styleClass)
+    {
+        var badge = new Label(text);
+        badge.AddToClassList("badge");
+        badge.AddToClassList("px");
+        badge.AddToClassList(styleClass);
+        return badge;
     }
 
     private string FindMyRole(WorldDto world)
@@ -323,26 +430,27 @@ public class MenuController : MonoBehaviour
         string creator = "";
         if (world.players != null)
             foreach (PlayerDto p in world.players)
-                if (p.role == "CREATOR" && p.user != null) { creator = " · by " + p.user.displayName; break; }
+                if (p.role == "CREATOR" && p.user != null) { creator = " · создал " + p.user.displayName; break; }
 
         long age = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - world.createdAt;
-        string ago = age < 3600 ? (age / 60) + "m ago" : age < 86400 ? (age / 3600) + "h ago" : (age / 86400) + "d ago";
-        return count + (count == 1 ? " player" : " players") + " · " + ago + creator;
+        string ago = age < 3600 ? Math.Max(1, age / 60) + " мин назад" : age < 86400 ? (age / 3600) + " ч назад" : (age / 86400) + " дн назад";
+        string players = count + (count % 10 == 1 && count % 100 != 11 ? " игрок" : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14) ? " игрока" : " игроков"));
+        return players + " · " + ago + creator;
     }
 
     private IEnumerator Join(string worldId)
     {
         if (busy) yield break;
         busy = true;
-        worldsStatus.text = "joining...";
+        worldsStatus.text = "";
 
         yield return Request("POST", "/api/worlds/" + worldId + "/join", "{}", true, (code, text) =>
         {
             busy = false;
-            if (code != 200 && code != 201) { worldsStatus.text = "join failed " + code + ": " + text; return; }
+            if (code != 200 && code != 201) { worldsStatus.text = HumanError(code, text); return; }
 
             string worldToken = JsonUtility.FromJson<TokenResponse>(text).token;
-            if (string.IsNullOrEmpty(worldToken)) { worldsStatus.text = "no token in response"; return; }
+            if (string.IsNullOrEmpty(worldToken)) { worldsStatus.text = "Сервер не прислал токен мира"; return; }
 
             ConnectionConfig.WorldToken = worldToken;
             ConnectionConfig.RoomCode = worldId;
@@ -354,30 +462,31 @@ public class MenuController : MonoBehaviour
     {
         string name = createNameField.value.Trim();
         string desc = createDescField.value ?? "";
-        if (name.Length < 1) { createStatus.text = "name required"; yield break; }
+        if (name.Length < 1) { createStatus.text = "Сначала назови мир"; yield break; }
 
-        createStatus.text = "creating...";
+        createStatus.text = "";
         string body = JsonUtility.ToJson(new CreateWorldRequest
         {
             name = name,
             description = desc,
-            visibilityPolicy = visPrivate.value ? "PRIVATE" : "PUBLIC",
-            joinPolicy = "EVERYONE"
+            visibilityPolicy = VisibilityValues[Mathf.Clamp(createVisibility.index, 0, VisibilityValues.Length - 1)],
+            joinPolicy = PolicyValues[Mathf.Clamp(createPolicy.index, 0, PolicyValues.Length - 1)]
         });
 
         yield return Request("POST", "/api/worlds", body, true, (code, text) =>
         {
-            if (code != 200 && code != 201) { createStatus.text = "error " + code + ": " + text; return; }
+            if (code != 200 && code != 201) { createStatus.text = HumanError(code, text); return; }
             createModal.AddToClassList("hidden");
             createNameField.value = "";
             createDescField.value = "";
-            ReloadWorlds();
+            if (!mineTab) SwitchTab(true);
+            else ReloadWorlds();
         });
     }
 
     private IEnumerator Request(string method, string path, string body, bool auth, Action<long, string> onDone)
     {
-        string url = "http://" + serverField.value.Trim() + path;
+        string url = "http://" + serverAddress + path;
         using var request = new UnityWebRequest(url, method);
         if (body != null)
         {
