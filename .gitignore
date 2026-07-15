@@ -26,6 +26,11 @@
 sysinfo.txt
 *.stackdump
 
+# Server
+.gradle/
+shooter-logs/
+*.log
+
 # Builds
 *.apk
 *.aab
