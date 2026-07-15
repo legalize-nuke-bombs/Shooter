@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/metrics")
-    public ResponseEntity<UserMetricRepresentation> metrics() {
+    public ResponseEntity<UserMetricRepresentation> getMetrics() {
         return ResponseEntity.ok(userMetricService.get());
     }
 }
