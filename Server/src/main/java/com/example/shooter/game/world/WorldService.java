@@ -6,7 +6,6 @@ import com.example.shooter.game.player.Player;
 import com.example.shooter.game.player.PlayerRepository;
 import com.example.shooter.game.player.PlayerRepresentation;
 import com.example.shooter.game.player.PlayerRole;
-import com.example.shooter.game.util.Vector3d;
 import com.example.shooter.user.User;
 import com.example.shooter.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +52,6 @@ public class WorldService {
         player.setUser(user);
         player.setRole(PlayerRole.CREATOR);
         player.setMemberSince(now);
-        player.setPosition(new Vector3d(0, 0, 0));
         player = playerRepository.save(player);
 
         log.info("user {} created new world {} player {}", userId, world.getId(), player.getId());
