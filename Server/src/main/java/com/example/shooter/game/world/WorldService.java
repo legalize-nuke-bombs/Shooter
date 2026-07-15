@@ -104,7 +104,7 @@ public class WorldService {
 
         List<Player> players = playerRepository.findAllByWorldIdsWithWorldsAndUsers(worldIds);
 
-        Map<UUID, WorldRepresentation> resultMap = new HashMap<>();
+        Map<UUID, WorldRepresentation> resultMap = new LinkedHashMap<>();
         for (World w : worlds) {
             resultMap.put(w.getId(), new WorldRepresentation(w, new ArrayList<>()));
         }
