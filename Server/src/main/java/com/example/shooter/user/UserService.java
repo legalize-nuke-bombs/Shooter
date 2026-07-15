@@ -52,7 +52,7 @@ public class UserService {
 
         user = userRepository.save(user);
 
-        log.info("user {} patched themselves", userId);
+        log.info("user {} patched themselves 🔪", userId);
         return new UserRepresentation(user);
     }
 
@@ -69,7 +69,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_AUTHENTICATED));
 
         if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
-            log.info("secure patch rejected: invalid password for user {}", user.getId());
+            log.info("secure patch rejected: invalid password for user {} ❌", user.getId());
             throw new ApiException(ErrorCode.INVALID_PASSWORD);
         }
 
@@ -86,7 +86,7 @@ public class UserService {
             throw new ApiException(ErrorCode.USERNAME_TAKEN);
         }
 
-        log.info("secure patch successful: user {}", user.getId());
+        log.info("secure patch successful: user {} 🔪", user.getId());
         return new UserRepresentation(user);
     }
 
@@ -97,11 +97,11 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_AUTHENTICATED));
 
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
-            log.info("delete rejected: invalid password for user {}", user.getId());
+            log.info("delete rejected: invalid password for user {} ❌", user.getId());
             throw new ApiException(ErrorCode.INVALID_PASSWORD);
         }
 
         userRepository.delete(user);
-        log.info("delete done successful: goodbye, user {}", userId);
+        log.info("delete done successful: goodbye, user {} 🫡", userId);
     }
 }
