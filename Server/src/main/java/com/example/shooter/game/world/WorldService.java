@@ -10,11 +10,14 @@ import com.example.shooter.game.util.Vector3d;
 import com.example.shooter.user.User;
 import com.example.shooter.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -59,5 +62,52 @@ public class WorldService {
                 world,
                 List.of(new PlayerRepresentation(player))
         );
+    }
+
+    public List<WorldRepresentation> get(Long userId, PlayerRole playerRole, WorldOrder order, Integer page, Integer size) {
+        Set<UUID> preferredWorldIds;
+        if (playerRole == null) {
+            preferredWorldIds = null;
+        }
+        else {
+            preferredWorldIds = playerRepository.findAllByUserIdAndRoleWithWorlds(userId, playerRole)
+                    .stream()
+                    .map(Player::getWorld)
+                    .map(World::getId)
+                    .collect(Collectors.toSet());
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        List<World> worlds;
+        switch (order) {
+            case NAME -> {
+                worlds = worldRepository.findByWorldIdsNameOrder(preferredWorldIds, pageable);
+            }
+            case CREATED_AT -> {
+                worlds = worldRepository.findByWorldIdsCreatedAtOrder(preferredWorldIds, pageable);
+            }
+            case ACCESSED_AT -> {
+                worlds = worldRepository.findByWorldIdsAccessedAtOrder(preferredWorldIds, pageable);
+            }
+            default -> {
+                log.warn("user {} sent unexpected world order {}", userId, order);
+                worlds = List.of();
+            }
+        }
+
+        Set<UUID> worldIds = worlds.stream().map(World::getId).collect(Collectors.toSet());
+
+        List<Player> players = playerRepository.findAllByWorldIdsWithWorlds(worldIds);
+
+        Map<UUID, WorldRepresentation> resultMap = new HashMap<>();
+        for (World w : worlds) {
+            resultMap.put(w.getId(), new WorldRepresentation(w, new ArrayList<>()));
+        }
+        for (Player p : players) {
+            resultMap.get(p.getWorld().getId()).getPlayers().add(new PlayerRepresentation(p));
+        }
+
+        return resultMap.values().stream().toList();
     }
 }
