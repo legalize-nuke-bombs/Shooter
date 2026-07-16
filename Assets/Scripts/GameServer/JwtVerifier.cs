@@ -9,6 +9,7 @@ public class JwtClaims
     public string sub;
     public string name;
     public string worldId;
+    public long iat;
     public long exp;
 }
 
