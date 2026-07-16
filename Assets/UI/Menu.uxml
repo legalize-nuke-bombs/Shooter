@@ -2,7 +2,10 @@
     <ui:Style src="Menu.uss" />
     <ui:VisualElement name="root" class="root">
         <ui:VisualElement name="login-screen" class="screen">
-            <ui:Label text="SHOOTER" class="brand px" />
+            <ui:VisualElement class="brand-wrap">
+                <ui:Label text="SHOOTER" class="brand px" />
+                <ui:Label text="alpha" class="brand-splash px" />
+            </ui:VisualElement>
             <ui:VisualElement class="panel">
                 <ui:Label name="form-title" text="РЕГИСТРАЦИЯ" class="form-title px" />
                 <ui:Label text="ИМЯ ПОЛЬЗОВАТЕЛЯ" class="field-label" />
@@ -24,7 +27,9 @@
         </ui:VisualElement>
 
         <ui:VisualElement name="server-error-screen" class="screen hidden">
-            <ui:Label text="SHOOTER" class="brand px" />
+            <ui:VisualElement class="brand-wrap">
+                <ui:Label text="SHOOTER" class="brand px" />
+            </ui:VisualElement>
             <ui:VisualElement class="panel server-error-panel">
                 <ui:Label text="СЕРВЕР НЕ ОТВЕЧАЕТ" class="server-error-title px" />
                 <ui:Label name="server-error-detail" class="server-error-text" />
