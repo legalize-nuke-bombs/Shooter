@@ -122,7 +122,6 @@ public class WorldService {
         worldUnityHookService.registerTask(new UnityHook(userId, worldId));
     }
 
-    @Transactional
     public void kick(Long userId, UUID worldId, Long targetId) {
         if (Objects.equals(userId, targetId)) {
             log.info("user {} tried to kick themselves from the world {}", userId, worldId);
@@ -137,9 +136,7 @@ public class WorldService {
             throw new ApiException(ErrorCode.CANT_KICK_THIS_USER);
         }
 
-        playerRepository.delete(target);
         log.info("user {} kicked target {} from the world {}", userId, targetId, worldId);
-        worldSupportService.fix(worldId);
         worldUnityHookService.registerTask(new UnityHook(targetId, worldId));
     }
 
