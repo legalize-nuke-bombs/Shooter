@@ -45,17 +45,20 @@ public class WorldUnityHookService {
         }
 
         try {
-            restClient.post()
+            UnityHookResponse resp = restClient.post()
                     .header("Authorization", "Bearer " + unityServerTokenProvider.generateToken("hook"))
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(new UnityHookBatch(batch))
                     .retrieve()
-                    .toBodilessEntity();
-            log.info("delivered {} unity hooks", batch.size());
+                    .body(UnityHookResponse.class);
+            if (resp == null || !resp.isAccepted()) {
+                throw new IllegalStateException("unity server did not ack the batch");
+            }
+            log.info("delivered {} unity hooks, ack ok", batch.size());
         }
         catch (Exception e) {
             tasks.addAll(batch);
-            log.warn("unity hook delivery failed, {} tasks requested: {}", batch.size(), e.getMessage());
+            log.error("delivery of {} unity hooks failed: {}", batch.size(), e.getMessage());
         }
     }
 }
