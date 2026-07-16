@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Shooter.Shared;
 
 namespace Shooter.Menu
 {
@@ -50,7 +51,7 @@ namespace Shooter.Menu
 
         public void Show()
         {
-            userLabel.text = ConnectionConfig.DisplayName;
+            userLabel.text = Session.DisplayName;
             screen.RemoveFromClassList("hidden");
             Reload();
         }
@@ -180,9 +181,9 @@ namespace Shooter.Menu
 
         private static string FindMyRole(WorldDto world)
         {
-            if (world.players == null || ConnectionConfig.UserId < 0) return null;
+            if (world.players == null || Session.UserId < 0) return null;
             foreach (PlayerDto p in world.players)
-                if (p.user != null && p.user.id == ConnectionConfig.UserId)
+                if (p.user != null && p.user.id == Session.UserId)
                     return p.role;
             return null;
         }
@@ -217,8 +218,7 @@ namespace Shooter.Menu
                 busy = false;
                 if (error != null) { status.text = error; return; }
 
-                ConnectionConfig.WorldToken = worldToken;
-                ConnectionConfig.WorldId = worldId;
+                Session.WorldToken = worldToken;
                 onJoined();
             });
         }

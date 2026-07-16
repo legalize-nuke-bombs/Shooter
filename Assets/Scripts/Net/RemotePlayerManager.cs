@@ -7,9 +7,14 @@ namespace Shooter.Net
     {
         private const float LerpFactor = 15f;
 
-        private readonly Dictionary<long, Transform> remotes = new Dictionary<long, Transform>();
-        private readonly Dictionary<long, Vector3> targets = new Dictionary<long, Vector3>();
-        private readonly Dictionary<long, float> targetYaws = new Dictionary<long, float>();
+        private class RemoteAvatar
+        {
+            public Transform Transform;
+            public Vector3 TargetPosition;
+            public float TargetYaw;
+        }
+
+        private readonly Dictionary<long, RemoteAvatar> remotes = new Dictionary<long, RemoteAvatar>();
 
         private void Start()
         {
@@ -23,39 +28,40 @@ namespace Shooter.Net
             {
                 if (player.id == NetworkClient.Instance.PlayerId) continue;
 
-                if (!remotes.ContainsKey(player.id))
-                    Spawn(player);
+                if (!remotes.TryGetValue(player.id, out RemoteAvatar avatar))
+                    avatar = Spawn(player);
 
-                targets[player.id] = new Vector3(player.x, player.y, player.z);
-                targetYaws[player.id] = player.yaw;
+                avatar.TargetPosition = new Vector3(player.x, player.y, player.z);
+                avatar.TargetYaw = player.yaw;
             }
         }
 
         private void OnLeft(LeftMsg msg)
         {
-            if (!remotes.TryGetValue(msg.id, out Transform remote)) return;
-            Destroy(remote.gameObject);
+            if (!remotes.TryGetValue(msg.id, out RemoteAvatar avatar)) return;
+            Destroy(avatar.Transform.gameObject);
             remotes.Remove(msg.id);
-            targets.Remove(msg.id);
-            targetYaws.Remove(msg.id);
         }
 
-        private void Spawn(PlayerStateMsg player)
+        private RemoteAvatar Spawn(PlayerStateMsg player)
         {
             GameObject capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             capsule.name = "Remote_" + player.id + "_" + player.name;
             capsule.transform.position = new Vector3(player.x, player.y, player.z);
             capsule.GetComponent<Renderer>().material.color = new Color(0.9f, 0.4f, 0.3f);
-            remotes[player.id] = capsule.transform;
+
+            var avatar = new RemoteAvatar { Transform = capsule.transform };
+            remotes[player.id] = avatar;
+            return avatar;
         }
 
         private void Update()
         {
             float t = 1f - Mathf.Exp(-LerpFactor * Time.deltaTime);
-            foreach (KeyValuePair<long, Transform> pair in remotes)
+            foreach (RemoteAvatar avatar in remotes.Values)
             {
-                pair.Value.position = Vector3.Lerp(pair.Value.position, targets[pair.Key], t);
-                pair.Value.rotation = Quaternion.Slerp(pair.Value.rotation, Quaternion.Euler(0f, targetYaws[pair.Key], 0f), t);
+                avatar.Transform.position = Vector3.Lerp(avatar.Transform.position, avatar.TargetPosition, t);
+                avatar.Transform.rotation = Quaternion.Slerp(avatar.Transform.rotation, Quaternion.Euler(0f, avatar.TargetYaw, 0f), t);
             }
         }
 
