@@ -27,15 +27,13 @@ public class WorldService {
     private final WorldRepository worldRepository;
     private final PlayerRepository playerRepository;
     private final UnityServerTokenProvider unityServerTokenProvider;
-    private final WorldSupportService worldSupportService;
     private final WorldUnityHookService worldUnityHookService;
 
-    public WorldService(UserRepository userRepository, WorldRepository worldRepository, PlayerRepository playerRepository, UnityServerTokenProvider unityServerTokenProvider, WorldSupportService worldSupportService, WorldUnityHookService worldUnityHookService) {
+    public WorldService(UserRepository userRepository, WorldRepository worldRepository, PlayerRepository playerRepository, UnityServerTokenProvider unityServerTokenProvider, WorldUnityHookService worldUnityHookService) {
         this.userRepository = userRepository;
         this.worldRepository = worldRepository;
         this.playerRepository = playerRepository;
         this.unityServerTokenProvider = unityServerTokenProvider;
-        this.worldSupportService = worldSupportService;
         this.worldUnityHookService = worldUnityHookService;
     }
 
@@ -101,25 +99,12 @@ public class WorldService {
         player.setUser(user);
         player.setMemberSince(now);
         player.setRole(PlayerRole.MEMBER);
-        playerRepository.save(player);
+        player = playerRepository.save(player);
 
-        log.info("user {} joined world {} for the first time!", userId, worldId);
+        log.info("user {} joined world {} as player {} for the first time!", userId, worldId, player.getId());
         return new WorldJoinResponse(
                 unityServerTokenProvider.generateToken(userId + ":" + worldId)
         );
-    }
-
-    @Transactional
-    public void leave(Long userId, UUID worldId) {
-        if (playerRepository.deleteByUserIdAndWorldId(userId, worldId) > 0) {
-            log.info("user {} left the world {}", userId, worldId);
-        }
-        else {
-            log.info("user {} tried to leave the world {} where they are not a member", userId, worldId);
-            throw new ApiException(ErrorCode.NOT_A_MEMBER);
-        }
-        worldSupportService.fix(worldId);
-        worldUnityHookService.registerTask(new UnityHook(userId, worldId));
     }
 
     public void kick(Long userId, UUID worldId, Long targetId) {

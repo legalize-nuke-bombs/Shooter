@@ -37,12 +37,6 @@ public class WorldController {
         return worldService.join(userId, worldId);
     }
 
-    @DeleteMapping("/{worldId}/players/me")
-    public ResponseEntity<Void> leave(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId) {
-        worldService.leave(userId, worldId);
-        return ResponseEntity.noContent().build();
-    }
-
     @DeleteMapping("/{worldId}/players/{targetId}")
     public ResponseEntity<Void> kick(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId, @PathVariable Long targetId) {
         worldService.kick(userId, worldId, targetId);
