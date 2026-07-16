@@ -2,6 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Shooter.Shared;
 
 namespace Shooter.Menu
 {
@@ -110,10 +111,10 @@ namespace Shooter.Menu
 
                 if (error != null) { status.text = error; return; }
 
-                ConnectionConfig.Username = username;
-                ConnectionConfig.DisplayName = displayName;
-                ConnectionConfig.Token = token;
-                ConnectionConfig.UserId = ClientJwt.ExtractUserId(token);
+                Session.Username = username;
+                Session.DisplayName = displayName;
+                Session.Token = token;
+                Session.UserId = Jwt.TryGetUserId(token, out long userId) ? userId : -1;
 
                 PlayerPrefs.SetString("username", username);
                 PlayerPrefs.Save();

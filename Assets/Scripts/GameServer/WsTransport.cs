@@ -38,9 +38,17 @@ namespace Shooter.GameServer
             public volatile bool Closed;
         }
 
+        private enum EventKind
+        {
+            Connected,
+            Message,
+            Disconnected,
+            Hook
+        }
+
         private struct TransportEvent
         {
-            public int Kind;
+            public EventKind Kind;
             public int ConnId;
             public string Payload;
         }
@@ -73,10 +81,10 @@ namespace Shooter.GameServer
             {
                 switch (e.Kind)
                 {
-                    case 0: ClientConnected?.Invoke(e.ConnId, e.Payload); break;
-                    case 1: MessageReceived?.Invoke(e.ConnId, e.Payload); break;
-                    case 2: ClientDisconnected?.Invoke(e.ConnId); break;
-                    case 3: HookReceived?.Invoke(e.Payload); break;
+                    case EventKind.Connected: ClientConnected?.Invoke(e.ConnId, e.Payload); break;
+                    case EventKind.Message: MessageReceived?.Invoke(e.ConnId, e.Payload); break;
+                    case EventKind.Disconnected: ClientDisconnected?.Invoke(e.ConnId); break;
+                    case EventKind.Hook: HookReceived?.Invoke(e.Payload); break;
                 }
             }
         }
@@ -166,7 +174,7 @@ namespace Shooter.GameServer
                 client.Tcp.ReceiveTimeout = 0;
                 ServerLog.Info("conn " + connId + " ws handshake ok, path " + request.Path);
 
-                events.Enqueue(new TransportEvent { Kind = 0, ConnId = connId, Payload = query });
+                events.Enqueue(new TransportEvent { Kind = EventKind.Connected, ConnId = connId, Payload = query });
 
                 var messageBuffer = new MemoryStream();
                 while (running && !client.Closed)
@@ -208,7 +216,7 @@ namespace Shooter.GameServer
                             {
                                 string text = Encoding.UTF8.GetString(messageBuffer.ToArray());
                                 messageBuffer.SetLength(0);
-                                events.Enqueue(new TransportEvent { Kind = 1, ConnId = connId, Payload = text });
+                                events.Enqueue(new TransportEvent { Kind = EventKind.Message, ConnId = connId, Payload = text });
                             }
                             break;
                         case 0x8:
@@ -307,7 +315,7 @@ namespace Shooter.GameServer
             }
 
             string body = Encoding.UTF8.GetString(ReadExact(client.Stream, length));
-            events.Enqueue(new TransportEvent { Kind = 3, ConnId = 0, Payload = body });
+            events.Enqueue(new TransportEvent { Kind = EventKind.Hook, ConnId = 0, Payload = body });
             ServerLog.Info("hook post accepted, " + length + " bytes");
             WriteHttpResponse(client.Stream, "200 OK", "{\"accepted\":true}");
         }
@@ -365,7 +373,7 @@ namespace Shooter.GameServer
             try { client.Outbox.CompleteAdding(); } catch { }
             try { client.Tcp.Close(); } catch { }
             if (clients.TryRemove(connId, out _))
-                events.Enqueue(new TransportEvent { Kind = 2, ConnId = connId });
+                events.Enqueue(new TransportEvent { Kind = EventKind.Disconnected, ConnId = connId });
         }
 
         private static byte ReadByte(NetworkStream stream)

@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Shooter.Shared;
 
 namespace Shooter.Menu
 {
@@ -47,7 +48,7 @@ namespace Shooter.Menu
                 {
                     var config = JsonUtility.FromJson<ConfigFile>(File.ReadAllText(path));
                     if (!string.IsNullOrEmpty(config.serverAddress))
-                        ConnectionConfig.ServerAddress = config.serverAddress.Trim();
+                        Session.ServerAddress = config.serverAddress.Trim();
                 }
             }
             catch (Exception e)
@@ -66,7 +67,7 @@ namespace Shooter.Menu
                 {
                     login.Hide();
                     worlds.Hide();
-                    serverError.Show("По адресу " + ConnectionConfig.ServerAddress + " никто не ответил — или это не сервер Shooter. Адрес лежит в StreamingAssets/config.json.");
+                    serverError.Show("По адресу " + Session.ServerAddress + " никто не ответил — или это не сервер Shooter. Адрес лежит в StreamingAssets/config.json.");
                     return;
                 }
 

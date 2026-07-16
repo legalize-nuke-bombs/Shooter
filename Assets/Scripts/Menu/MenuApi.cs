@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using Shooter.Shared;
 
 namespace Shooter.Menu
 {
@@ -92,7 +93,7 @@ namespace Shooter.Menu
 
         private static IEnumerator RequestRoutine(string method, string path, string body, bool auth, Action<long, string> onDone)
         {
-            string url = ConnectionConfig.HttpBase + path;
+            string url = Session.HttpBase + path;
             using var request = new UnityWebRequest(url, method);
             if (body != null)
             {
@@ -100,7 +101,7 @@ namespace Shooter.Menu
                 request.SetRequestHeader("Content-Type", "application/json");
             }
             request.downloadHandler = new DownloadHandlerBuffer();
-            if (auth) request.SetRequestHeader("Authorization", "Bearer " + ConnectionConfig.Token);
+            if (auth) request.SetRequestHeader("Authorization", "Bearer " + Session.Token);
             request.timeout = 10;
 
             yield return request.SendWebRequest();

@@ -9,8 +9,7 @@ namespace Shooter.GameServer
         public long UserId = -1;
         public string DisplayName = "";
         public string WorldId = "";
-        public bool Authed;
-        public bool InRoom;
+        public bool InWorld;
         public GameObject Body;
         public CharacterController Controller;
         public InputMsg LastInput = new InputMsg();

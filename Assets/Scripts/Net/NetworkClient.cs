@@ -6,21 +6,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Menu;
-using Shooter.Player;
+using Shooter.Shared;
 
 namespace Shooter.Net
 {
     public class NetworkClient : MonoBehaviour
     {
-        private const float InputSendRate = 30f;
+        public const float InputSendRate = 30f;
 
         public static NetworkClient Instance { get; private set; }
 
         public long PlayerId { get; private set; } = -1;
-        public bool InRoom { get; private set; }
+        public bool InWorld { get; private set; }
 
-        public event Action<RoomJoinedMsg> RoomJoined;
+        public event Action<WorldJoinedMsg> WorldJoined;
         public event Action<SnapshotMsg> SnapshotReceived;
         public event Action<JoinedMsg> PlayerJoined;
         public event Action<LeftMsg> PlayerLeft;
@@ -30,9 +29,7 @@ namespace Shooter.Net
         private readonly ConcurrentQueue<string> inbound = new ConcurrentQueue<string>();
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
 
-        private PlayerController localPlayer;
         private int inputSeq;
-        private float nextInputTime;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -44,7 +41,7 @@ namespace Shooter.Net
         private static void TrySpawn(string sceneName)
         {
             if (sceneName != "Game") return;
-            if (string.IsNullOrEmpty(ConnectionConfig.Token)) return;
+            if (string.IsNullOrEmpty(Session.WorldToken)) return;
             if (Instance != null) return;
 
             var go = new GameObject("Net");
@@ -56,8 +53,13 @@ namespace Shooter.Net
         {
             Instance = this;
             Application.runInBackground = true;
-            localPlayer = FindAnyObjectByType<PlayerController>();
             _ = Connect();
+        }
+
+        public void SendInput(InputMsg input)
+        {
+            input.seq = ++inputSeq;
+            _ = Send(input);
         }
 
         private async Task Connect()
@@ -66,10 +68,10 @@ namespace Shooter.Net
             cancellation = new CancellationTokenSource();
             try
             {
-                await socket.ConnectAsync(new Uri(ConnectionConfig.WsUrl), cancellation.Token).ConfigureAwait(false);
-                Debug.Log("net: connected " + ConnectionConfig.WsUrl);
+                await socket.ConnectAsync(new Uri(Session.WsUrl), cancellation.Token).ConfigureAwait(false);
+                Debug.Log("net: connected " + Session.WsUrl);
                 _ = ReceiveLoop();
-                await Send(new HelloMsg { name = ConnectionConfig.DisplayName }).ConfigureAwait(false);
+                await Send(new HelloMsg { name = Session.DisplayName }).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -130,14 +132,6 @@ namespace Shooter.Net
         {
             while (inbound.TryDequeue(out string json))
                 Dispatch(json);
-
-            if (InRoom && localPlayer != null && Time.time >= nextInputTime)
-            {
-                nextInputTime = Time.time + 1f / InputSendRate;
-                InputMsg input = localPlayer.BuildInputMessage();
-                input.seq = ++inputSeq;
-                _ = Send(input);
-            }
         }
 
         private void Dispatch(string json)
@@ -148,14 +142,13 @@ namespace Shooter.Net
                     var welcome = NetJson.Parse<WelcomeMsg>(json);
                     PlayerId = welcome.playerId;
                     Debug.Log("net: welcome, playerId " + PlayerId + ", tickRate " + welcome.tickRate);
-                    _ = Send(new JoinRoomMsg { code = ConnectionConfig.WorldId });
+                    _ = Send(new JoinWorldMsg());
                     break;
-                case "roomJoined":
-                    var joined = NetJson.Parse<RoomJoinedMsg>(json);
-                    InRoom = true;
-                    Debug.Log("net: room " + joined.roomId + ", players " + joined.players.Length);
-                    MoveLocalPlayerToSpawn(joined);
-                    RoomJoined?.Invoke(joined);
+                case "worldJoined":
+                    var joined = NetJson.Parse<WorldJoinedMsg>(json);
+                    InWorld = true;
+                    Debug.Log("net: world " + joined.worldId + ", players " + joined.players.Length);
+                    WorldJoined?.Invoke(joined);
                     break;
                 case "snapshot":
                     SnapshotReceived?.Invoke(NetJson.Parse<SnapshotMsg>(json));
@@ -169,20 +162,6 @@ namespace Shooter.Net
                 default:
                     Debug.LogWarning("net: unknown message: " + json);
                     break;
-            }
-        }
-
-        private void MoveLocalPlayerToSpawn(RoomJoinedMsg joined)
-        {
-            if (localPlayer == null) return;
-            foreach (PlayerStateMsg p in joined.players)
-            {
-                if (p.id != PlayerId) continue;
-                var controller = localPlayer.GetComponent<CharacterController>();
-                controller.enabled = false;
-                localPlayer.transform.position = new Vector3(p.x, p.y, p.z);
-                controller.enabled = true;
-                break;
             }
         }
 
