@@ -12,7 +12,6 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class MenuController : MonoBehaviour
 {
-    private const string GameSceneName = "SampleScene";
     private const int PageSize = 20;
 
     private static readonly Dictionary<string, string> ErrorTexts = new Dictionary<string, string>
@@ -454,7 +453,7 @@ public class MenuController : MonoBehaviour
 
             ConnectionConfig.WorldToken = worldToken;
             ConnectionConfig.RoomCode = worldId;
-            SceneManager.LoadScene(GameSceneName);
+            SceneManager.LoadScene("Game");
         });
     }
 
