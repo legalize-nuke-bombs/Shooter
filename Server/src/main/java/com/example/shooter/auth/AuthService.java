@@ -49,7 +49,7 @@ public class AuthService {
             throw new ApiException(ErrorCode.USERNAME_TAKEN);
         }
 
-        log.info("registration successful: user {} 👋", user.getId());
+        log.info("registration successful: user {}", user.getId());
         return new RegisterResponse(
                 jwtTokenProvider.generateToken(String.valueOf(user.getId()))
         );
@@ -61,11 +61,11 @@ public class AuthService {
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
-            log.info("login rejected: invalid password for user {} ❌", user.getId());
+            log.info("login rejected: invalid password for user {}", user.getId());
             throw new ApiException(ErrorCode.INVALID_PASSWORD);
         }
 
-        log.info("login successful: user {} 👋", user.getId());
+        log.info("login successful: user {}", user.getId());
         return new LoginResponse(jwtTokenProvider.generateToken(String.valueOf(user.getId())));
     }
 }
