@@ -57,7 +57,7 @@ public class WorldService {
         player.setMemberSince(now);
         player = playerRepository.save(player);
 
-        log.info("user {} created new world {} player {} 🦄", userId, world.getId(), player.getId());
+        log.info("user {} created new world {} player {}", userId, world.getId(), player.getId());
 
         return new WorldRepresentation(
                 world,
@@ -77,14 +77,14 @@ public class WorldService {
         Player player = playerRepository.findByUserIdAndWorldId(userId, worldId).orElse(null);
 
         if (player != null) {
-            log.info("user {} came back to world {} 👋", userId, worldId);
+            log.info("user {} came back to world {}", userId, worldId);
             return new WorldJoinResponse(
                     unityServerTokenProvider.generateToken(userId + ":" + worldId)
             );
         }
 
         if (world.getJoinPolicy() != WorldJoinPolicy.EVERYONE) {
-            log.info("user {} couldn't join world {}: closen world join policy ❌", userId, worldId);
+            log.info("user {} couldn't join world {}: closen world join policy", userId, worldId);
             // smart shit
             if (world.getVisibilityPolicy() == WorldVisibilityPolicy.PUBLIC) {
                 throw new ApiException(ErrorCode.WORLD_DOES_NOT_ACCEPT_NEW_MEMBERS);
@@ -99,7 +99,7 @@ public class WorldService {
         player.setRole(PlayerRole.MEMBER);
         playerRepository.save(player);
 
-        log.info("user {} joined world {} for the first time! 👋", userId, worldId);
+        log.info("user {} joined world {} for the first time!", userId, worldId);
         return new WorldJoinResponse(
                 unityServerTokenProvider.generateToken(userId + ":" + worldId)
         );

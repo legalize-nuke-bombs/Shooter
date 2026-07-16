@@ -25,7 +25,7 @@ public class UserMetricService {
 
     @Scheduled(fixedDelay = 60 * 1000)
     public void updateCache() {
-        log.info("updating user metric cache 📦...");
+        log.info("updating user metric cache...");
         long since24h = Instant.now().minus(Duration.ofHours(24)).getEpochSecond();
         cache = new UserMetricRepresentation(
                 userRepository.countAll(),

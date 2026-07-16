@@ -23,7 +23,7 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MultipartException.class)
     public ProblemDetail handleMultipart(MultipartException e) {
-        log.warn("multipart upload exception ⬇️: {}", e.getMessage());
+        log.warn("multipart upload exception: {}", e.getMessage());
         ProblemDetail problem = ProblemDetail.forStatus(ErrorCode.MALFORMED_REQUEST.status);
         problem.setProperty("code", ErrorCode.MALFORMED_REQUEST.name());
         return problem;
@@ -31,7 +31,7 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleUnexpected(Exception e) {
-        log.error("unhandled exception 🤯", e);
+        log.error("unhandled exception", e);
         ProblemDetail problem = ProblemDetail.forStatus(ErrorCode.INTERNAL_ERROR.status);
         problem.setProperty("code", ErrorCode.INTERNAL_ERROR.name());
         return problem;

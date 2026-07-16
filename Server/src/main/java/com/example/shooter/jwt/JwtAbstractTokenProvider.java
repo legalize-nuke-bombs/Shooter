@@ -15,7 +15,7 @@ public class JwtAbstractTokenProvider {
     private final long expirationMs;
 
     public JwtAbstractTokenProvider(String secret, long expirationMs) {
-        log.info("initialization 🔨: jwt secret length {} expiration ms {}", secret.length(), expirationMs);
+        log.info("initialization: jwt secret length {} expiration ms {}", secret.length(), expirationMs);
         this.key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret));
         this.expirationMs = expirationMs;
     }
@@ -44,7 +44,7 @@ public class JwtAbstractTokenProvider {
             );
         }
         catch (Exception e) {
-            log.info("access rejected ❌: {}", e.getMessage());
+            log.info("access rejected: {}", e.getMessage());
             return Optional.empty();
         }
     }
