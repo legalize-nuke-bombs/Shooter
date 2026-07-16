@@ -1,5 +1,6 @@
 package com.example.shooter.game.world;
 
+import com.example.shooter.game.player.PlayerRole;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,7 @@ public interface WorldRepository extends JpaRepository<World, UUID> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT w FROM World w WHERE w.id = ?1")
     Optional<World> findByIdForPessimisticWrite(UUID worldId);
+
+    @Query("SELECT w.id FROM World w WHERE NOT EXISTS (SELECT 1 FROM Player p WHERE p.world = w AND p.role = ?1)")
+    List<UUID> findWorldIdsWithoutRole(PlayerRole playerRole);
 }
