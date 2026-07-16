@@ -297,17 +297,61 @@ public class WsTransport : INetTransport
             return;
         }
 
-        if (!int.TryParse(request.Header("Content-Length"), out int length) || length < 0 || length > MaxFrameBytes)
+        string body;
+        string transferEncoding = request.Header("Transfer-Encoding");
+        if (transferEncoding != null && transferEncoding.IndexOf("chunked", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            ServerLog.Warn("hook post rejected: bad content length");
+            body = ReadChunkedBody(client.Stream);
+        }
+        else if (int.TryParse(request.Header("Content-Length"), out int length) && length >= 0 && length <= MaxFrameBytes)
+        {
+            body = Encoding.UTF8.GetString(ReadExact(client.Stream, length));
+        }
+        else
+        {
+            ServerLog.Warn("hook post rejected: no content length and not chunked");
             WriteHttpResponse(client.Stream, "411 Length Required");
             return;
         }
-
-        string body = Encoding.UTF8.GetString(ReadExact(client.Stream, length));
         events.Enqueue(new TransportEvent { Kind = 3, ConnId = 0, Payload = body });
         ServerLog.Info("hook post accepted, " + length + " bytes");
         WriteHttpResponse(client.Stream, "200 OK", "{\"accepted\":true}");
+    }
+
+    private static string ReadChunkedBody(NetworkStream stream)
+    {
+        var total = new MemoryStream();
+        while (true)
+        {
+            string sizeLine = ReadLine(stream);
+            int semicolon = sizeLine.IndexOf(';');
+            if (semicolon >= 0) sizeLine = sizeLine.Substring(0, semicolon);
+            int size = Convert.ToInt32(sizeLine.Trim(), 16);
+            if (size == 0)
+            {
+                ReadLine(stream);
+                break;
+            }
+            if (total.Length + size > MaxFrameBytes) throw new IOException("chunked body too large");
+            byte[] chunk = ReadExact(stream, size);
+            total.Write(chunk, 0, chunk.Length);
+            ReadLine(stream);
+        }
+        return Encoding.UTF8.GetString(total.ToArray());
+    }
+
+    private static string ReadLine(NetworkStream stream)
+    {
+        var sb = new StringBuilder();
+        while (true)
+        {
+            int b = stream.ReadByte();
+            if (b < 0) throw new IOException("eof in http line");
+            if (b == '\n') break;
+            if (b != '\r') sb.Append((char)b);
+            if (sb.Length > 4096) throw new IOException("http line too long");
+        }
+        return sb.ToString();
     }
 
     private static void WriteHttpResponse(NetworkStream stream, string status, string body = null)
