@@ -1,19 +1,23 @@
 using System;
 using System.Text;
 using UnityEngine;
+using Shooter.GameServer;
 
-public static class ClientJwt
+namespace Shooter.Menu
 {
-    public static long ExtractUserId(string token)
+    public static class ClientJwt
     {
-        try
+        public static long ExtractUserId(string token)
         {
-            string[] parts = token.Split('.');
-            string payload = parts[1].Replace('-', '+').Replace('_', '/');
-            switch (payload.Length % 4) { case 2: payload += "=="; break; case 3: payload += "="; break; }
-            var claims = JsonUtility.FromJson<JwtClaims>(Encoding.UTF8.GetString(Convert.FromBase64String(payload)));
-            return long.Parse(claims.sub.Split(':')[0]);
+            try
+            {
+                string[] parts = token.Split('.');
+                string payload = parts[1].Replace('-', '+').Replace('_', '/');
+                switch (payload.Length % 4) { case 2: payload += "=="; break; case 3: payload += "="; break; }
+                var claims = JsonUtility.FromJson<JwtClaims>(Encoding.UTF8.GetString(Convert.FromBase64String(payload)));
+                return long.Parse(claims.sub.Split(':')[0]);
+            }
+            catch { return -1; }
         }
-        catch { return -1; }
     }
 }

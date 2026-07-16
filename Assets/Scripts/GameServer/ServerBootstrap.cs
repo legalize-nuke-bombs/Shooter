@@ -1,18 +1,21 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public static class ServerBootstrap
+namespace Shooter.GameServer
 {
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void Init()
+    public static class ServerBootstrap
     {
-        if (!Application.isBatchMode) return;
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void Init()
+        {
+            if (!Application.isBatchMode) return;
 
-        var go = new GameObject("GameServer");
-        Object.DontDestroyOnLoad(go);
-        go.AddComponent<GameServer>();
+            var go = new GameObject("GameServer");
+            Object.DontDestroyOnLoad(go);
+            go.AddComponent<GameServer>();
 
-        if (SceneManager.GetActiveScene().name != "Game")
-            SceneManager.LoadScene("Game");
+            if (SceneManager.GetActiveScene().name != "Game")
+                SceneManager.LoadScene("Game");
+        }
     }
 }

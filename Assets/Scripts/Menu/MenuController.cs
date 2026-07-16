@@ -4,86 +4,89 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(UIDocument))]
-public class MenuController : MonoBehaviour
+namespace Shooter.Menu
 {
-    private MenuApi api;
-    private LoginScreen login;
-    private ServerErrorScreen serverError;
-    private WorldsScreen worlds;
-    private CreateWorldModal createModal;
-    private Label cornerStatus;
-
-    private bool loggedIn;
-
-    private void Start()
+    [RequireComponent(typeof(UIDocument))]
+    public class MenuController : MonoBehaviour
     {
-        UnityEngine.Cursor.lockState = CursorLockMode.None;
-        UnityEngine.Cursor.visible = true;
+        private MenuApi api;
+        private LoginScreen login;
+        private ServerErrorScreen serverError;
+        private WorldsScreen worlds;
+        private CreateWorldModal createModal;
+        private Label cornerStatus;
 
-        LoadConfig();
+        private bool loggedIn;
 
-        var root = GetComponent<UIDocument>().rootVisualElement;
-        root.Q<VisualElement>("root").Insert(0, new MenuBackground());
-        cornerStatus = root.Q<Label>("corner-status");
-
-        api = new MenuApi(this);
-        serverError = new ServerErrorScreen(root, CheckServer);
-        login = new LoginScreen(root, api, OnLoggedIn);
-        worlds = new WorldsScreen(root, api, onCreateClick: () => createModal.Show(), onJoined: OnJoined);
-        createModal = new CreateWorldModal(root, api, onCreated: () => worlds.ShowMineAndReload());
-
-        CheckServer();
-    }
-
-    private void LoadConfig()
-    {
-        try
+        private void Start()
         {
-            string path = Path.Combine(Application.streamingAssetsPath, "config.json");
-            if (File.Exists(path))
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
+
+            LoadConfig();
+
+            var root = GetComponent<UIDocument>().rootVisualElement;
+            root.Q<VisualElement>("root").Insert(0, new MenuBackground());
+            cornerStatus = root.Q<Label>("corner-status");
+
+            api = new MenuApi(this);
+            serverError = new ServerErrorScreen(root, CheckServer);
+            login = new LoginScreen(root, api, OnLoggedIn);
+            worlds = new WorldsScreen(root, api, onCreateClick: () => createModal.Show(), onJoined: OnJoined);
+            createModal = new CreateWorldModal(root, api, onCreated: () => worlds.ShowMineAndReload());
+
+            CheckServer();
+        }
+
+        private void LoadConfig()
+        {
+            try
             {
-                var config = JsonUtility.FromJson<ConfigFile>(File.ReadAllText(path));
-                if (!string.IsNullOrEmpty(config.serverAddress))
-                    ConnectionConfig.ServerAddress = config.serverAddress.Trim();
+                string path = Path.Combine(Application.streamingAssetsPath, "config.json");
+                if (File.Exists(path))
+                {
+                    var config = JsonUtility.FromJson<ConfigFile>(File.ReadAllText(path));
+                    if (!string.IsNullOrEmpty(config.serverAddress))
+                        ConnectionConfig.ServerAddress = config.serverAddress.Trim();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("menu: config read failed, using default: " + e.Message);
             }
         }
-        catch (Exception e)
-        {
-            Debug.LogWarning("menu: config read failed, using default: " + e.Message);
-        }
-    }
 
-    private void CheckServer()
-    {
-        cornerStatus.text = "";
-
-        api.CheckServer(info =>
+        private void CheckServer()
         {
-            if (info == null)
+            cornerStatus.text = "";
+
+            api.CheckServer(info =>
             {
-                login.Hide();
-                worlds.Hide();
-                serverError.Show("По адресу " + ConnectionConfig.ServerAddress + " никто не ответил — или это не сервер Shooter. Адрес лежит в StreamingAssets/config.json.");
-                return;
-            }
+                if (info == null)
+                {
+                    login.Hide();
+                    worlds.Hide();
+                    serverError.Show("По адресу " + ConnectionConfig.ServerAddress + " никто не ответил — или это не сервер Shooter. Адрес лежит в StreamingAssets/config.json.");
+                    return;
+                }
 
-            cornerStatus.text = info.name + " v" + info.major + "." + info.minor + "." + info.patch;
-            serverError.Hide();
-            if (loggedIn) worlds.Show();
-            else login.Show();
-        });
-    }
+                cornerStatus.text = info.name + " v" + info.major + "." + info.minor + "." + info.patch;
+                serverError.Hide();
+                if (loggedIn) worlds.Show();
+                else login.Show();
+            });
+        }
 
-    private void OnLoggedIn()
-    {
-        loggedIn = true;
-        login.Hide();
-        worlds.Show();
-    }
+        private void OnLoggedIn()
+        {
+            loggedIn = true;
+            login.Hide();
+            worlds.Show();
+        }
 
-    private void OnJoined()
-    {
-        SceneManager.LoadScene("Game");
+        private void OnJoined()
+        {
+            SceneManager.LoadScene("Game");
+        }
     }
 }
