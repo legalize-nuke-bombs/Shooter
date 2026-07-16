@@ -30,39 +30,45 @@ public class WorldSupportService {
         World world = worldRepository.findByIdForPessimisticWrite(worldId).orElse(null);
         if (world == null) return;
 
+        log.info("fixing {}...", worldId);
+
         List<Player> players = playerRepository.findAllByWorldId(worldId);
 
-        if (players.isEmpty()) {
+        long oldPlayersNumber = world.getPlayers();
+        long playersNumber = players.size();
+
+        if (oldPlayersNumber != playersNumber) {
+            world.setPlayers(playersNumber);
+            worldRepository.save(world);
+            log.info("fix {}: number of players {} => {}", worldId, oldPlayersNumber, playersNumber);
+        }
+
+        if (playersNumber == 0) {
             worldRepository.delete(world);
-            log.info("fix: deleted abandoned world {}", worldId);
-            return;
+            log.info("fix {}: deleted because it was abandoned", worldId);
         }
 
-        if (players.stream().anyMatch(p -> p.getRole() == PlayerRole.CREATOR)) {
-            log.info("fix: world {} no action required", worldId);
-            return;
+        if (playersNumber != 0 && players.stream().noneMatch(p -> p.getRole() == PlayerRole.CREATOR)) {
+            Player successor = players.stream()
+                    .min(Comparator.comparing((Player p) -> p.getRole().ordinal()).reversed()
+                            .thenComparing(Player::getMemberSince)
+                            .thenComparing(Player::getId))
+                    .orElseThrow();
+            successor.setRole(PlayerRole.CREATOR);
+            playerRepository.save(successor);
+            log.info("fix {}: creator passed to user {}", worldId, successor.getUser().getId());
         }
-
-        Player successor = players.stream()
-                .min(Comparator.comparing((Player p) -> p.getRole().ordinal()).reversed()
-                        .thenComparing(Player::getMemberSince)
-                        .thenComparing(Player::getId))
-                .orElseThrow();
-        successor.setRole(PlayerRole.CREATOR);
-        playerRepository.save(successor);
-        log.info("fix: world {} creator passed to user {}", worldId, successor.getUser().getId());
     }
 
     @Scheduled(fixedDelay = 8, timeUnit = TimeUnit.HOURS)
     @Transactional
     public void fixAll() {
+        // Really inefficient but it's ok for fixedDelay 8h
         log.info("fixing worlds...");
-        List<UUID> worldIds = worldRepository.findWorldIdsWithoutRole(PlayerRole.CREATOR);
+        List<UUID> worldIds = worldRepository.findAllIds();
         for (UUID worldId : worldIds) {
             fix(worldId);
         }
-        if (!worldIds.isEmpty()) {
-            log.info("fixAll: processed {} worlds", worldIds.size());
-        }
+        log.info("fixing: processed {} worlds", worldIds.size());
     }
 }
