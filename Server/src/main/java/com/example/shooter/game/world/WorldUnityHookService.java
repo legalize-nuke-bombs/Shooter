@@ -36,6 +36,8 @@ public class WorldUnityHookService {
 
     @Scheduled(fixedDelay = 100)
     public void drain() {
+        if (tasks.isEmpty()) return;
+
         List<UnityHook> batch = new ArrayList<>();
         UnityHook task;
         while (batch.size() < MAX_BATCH_SIZE && (task = tasks.poll()) != null) {
