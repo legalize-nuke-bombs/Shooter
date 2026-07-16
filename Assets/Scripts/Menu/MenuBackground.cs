@@ -44,12 +44,36 @@ public class MenuBackground : VisualElement
         {
             for (int x = 0; x <= cols; x++)
             {
-                int hash = ((x + baseCol) * 73856093) ^ (y * 19349663);
-                hash = (hash >> 13) ^ hash;
-                float variation = ((hash & 0xFF) / 255f - 0.5f) * 0.018f;
+                int hash = Hash(x + baseCol, y);
+                float variation = ((hash & 0xFF) / 255f - 0.5f) * 0.025f;
 
-                painter.fillColor = new Color(0.075f + variation, 0.070f + variation, 0.062f + variation);
-                FillRect(painter, new Rect(x * Cell - shift, y * Cell, Cell, Cell));
+                float cellX = x * Cell - shift;
+                float cellY = y * Cell;
+                painter.fillColor = new Color(0.052f + variation, 0.048f + variation, 0.042f + variation);
+                FillRect(painter, new Rect(cellX, cellY, Cell - 1f, Cell - 1f));
+
+                int detail = (hash >> 8) & 0xFF;
+                if (detail < 46)
+                {
+                    int count = 2 + detail % 3;
+                    for (int i = 0; i < count; i++)
+                    {
+                        int h = Hash(hash, i + 1);
+                        float px = cellX + 3f + (h & 0xFFF) % (Cell - 13f);
+                        float py = cellY + 3f + ((h >> 12) & 0xFFF) % (Cell - 13f);
+                        float size = 4f + ((h >> 24) & 0x3);
+                        painter.fillColor = new Color(0.033f, 0.030f, 0.026f);
+                        FillRect(painter, new Rect(px, py, size, size));
+                    }
+                }
+                else if (detail >= 250)
+                {
+                    int h = Hash(hash, 7);
+                    float px = cellX + 6f + (h & 0xFFF) % (Cell - 16f);
+                    float py = cellY + 6f + ((h >> 12) & 0xFFF) % (Cell - 16f);
+                    painter.fillColor = new Color(0.13f, 0.19f, 0.23f);
+                    FillRect(painter, new Rect(px, py, 4f, 4f));
+                }
             }
         }
 
@@ -68,6 +92,12 @@ public class MenuBackground : VisualElement
             FillRect(painter, new Rect(inset, inset + band, band, rect.height - (inset + band) * 2f));
             FillRect(painter, new Rect(rect.width - inset - band, inset + band, band, rect.height - (inset + band) * 2f));
         }
+    }
+
+    private static int Hash(int a, int b)
+    {
+        int hash = (a * 73856093) ^ (b * 19349663);
+        return (hash >> 13) ^ hash;
     }
 
     private static void FillRect(Painter2D painter, Rect r)
