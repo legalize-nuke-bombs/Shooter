@@ -57,9 +57,9 @@ public class WorldController {
     @GetMapping
     public List<WorldRepresentation> get(
             @AuthenticationPrincipal Long userId,
-            @RequestParam(required = false) PlayerRole playerRole,
+            @RequestParam PlayerRole playerRole,
             @RequestParam(defaultValue = "0") @Min(0) Integer page,
-            @RequestParam(defaultValue = "100") @Min(0) @Max(100) Integer size
+            @RequestParam(defaultValue = "20") @Min(0) @Max(20) Integer size
             ) {
         return worldService.get(userId, playerRole, page, size);
     }

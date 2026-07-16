@@ -10,6 +10,5 @@ import lombok.extern.slf4j.Slf4j;
 public enum PlayerRole {
     // Order is important here
     MEMBER,
-    MODERATOR,
     CREATOR;
 }

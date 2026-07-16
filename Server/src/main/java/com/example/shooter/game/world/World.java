@@ -7,12 +7,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "worlds", indexes = {
-        @Index(name = "idx_worlds_accessed_at", columnList = "accessed_at"),
-        @Index(name = "idx_worlds_visibility_policy", columnList = "visibility_policy"),
-        @Index(name = "idx_worlds_join_policy", columnList = "join_policy"),
-        @Index(name = "idx_worlds_players", columnList = "players")
-})
+@Table(name = "worlds")
 @Getter
 @Setter
 public class World {
@@ -31,14 +26,7 @@ public class World {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WorldVisibilityPolicy visibilityPolicy;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private WorldJoinPolicy joinPolicy;
-
-    @Column(nullable = false, length = WorldConstants.MAX_DESCRIPTION_LENGTH)
-    private String description;
 
     @Column(nullable = false)
     private Long players;
