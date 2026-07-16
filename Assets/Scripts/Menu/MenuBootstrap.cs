@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class MenuBootstrap : MonoBehaviour
 {
-    private const string GameSceneName = "SampleScene";
 
     private string username;
     private string password = "";
@@ -137,6 +136,6 @@ public class MenuBootstrap : MonoBehaviour
         PlayerPrefs.SetString("roomCode", ConnectionConfig.RoomCode);
         PlayerPrefs.Save();
 
-        SceneManager.LoadScene(GameSceneName);
+        SceneManager.LoadScene("Game");
     }
 }
