@@ -13,12 +13,5 @@ public class CreateWorldRequest {
     private String name;
 
     @NotNull
-    @Size(min = WorldConstants.MIN_DESCRIPTION_LENGTH, max = WorldConstants.MAX_DESCRIPTION_LENGTH)
-    private String description;
-
-    @NotNull
-    private WorldVisibilityPolicy visibilityPolicy;
-
-    @NotNull
     private WorldJoinPolicy joinPolicy;
 }

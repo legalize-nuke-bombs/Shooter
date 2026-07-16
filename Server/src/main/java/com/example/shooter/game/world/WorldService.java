@@ -47,9 +47,7 @@ public class WorldService {
         world.setName(request.getName());
         world.setCreatedAt(now);
         world.setAccessedAt(now);
-        world.setVisibilityPolicy(request.getVisibilityPolicy());
         world.setJoinPolicy(request.getJoinPolicy());
-        world.setDescription(request.getDescription());
         world.setPlayers(1L);
         world = worldRepository.save(world);
 
@@ -91,18 +89,15 @@ public class WorldService {
 
         if (world.getJoinPolicy() != WorldJoinPolicy.EVERYONE) {
             log.info("user {} couldn't join world {}: closen world join policy", userId, worldId);
-            if (world.getVisibilityPolicy() == WorldVisibilityPolicy.PUBLIC) {
-                throw new ApiException(ErrorCode.WORLD_DOES_NOT_ACCEPT_NEW_MEMBERS);
-            }
-            throw new ApiException(ErrorCode.WORLD_NOT_FOUND);
+            throw new ApiException(ErrorCode.WORLD_DOES_NOT_ACCEPT_NEW_MEMBERS);
         }
 
         player = new Player();
         player.setWorld(world);
         player.setUser(user);
+        player.setRole(PlayerRole.MEMBER);
         player.setMemberSince(now);
         player.setLastSeen(now);
-        player.setRole(PlayerRole.MEMBER);
         player = playerRepository.save(player);
 
         world.setPlayers(world.getPlayers() + 1);
@@ -113,7 +108,7 @@ public class WorldService {
                 unityServerTokenProvider.generateToken(userId + ":" + worldId)
         );
     }
-    
+
     public void kick(Long userId, UUID worldId, Long targetId) {
         if (Objects.equals(userId, targetId)) {
             log.info("user {} tried to kick themselves from the world {}", userId, worldId);
@@ -134,8 +129,7 @@ public class WorldService {
 
     @Transactional
     public WorldRepresentation patch(Long userId, UUID worldId, PatchWorldRequest request) {
-        if (request.getName() == null && request.getDescription() == null
-                && request.getVisibilityPolicy() == null && request.getJoinPolicy() == null) {
+        if (request.getName() == null && request.getJoinPolicy() == null) {
             throw new ApiException(ErrorCode.EMPTY_REQUEST);
         }
 
@@ -143,8 +137,6 @@ public class WorldService {
         requireCreator(userId, world);
 
         if (request.getName() != null) world.setName(request.getName());
-        if (request.getDescription() != null) world.setDescription(request.getDescription());
-        if (request.getVisibilityPolicy() != null) world.setVisibilityPolicy(request.getVisibilityPolicy());
         if (request.getJoinPolicy() != null) world.setJoinPolicy(request.getJoinPolicy());
         world = worldRepository.save(world);
 
@@ -169,26 +161,20 @@ public class WorldService {
 
     private void requireCreator(Long userId, World world) {
         Player player = playerRepository.findByUserIdAndWorldIdForPessimisticWrite(userId, world.getId()).orElse(null);
-        if (player != null && player.getRole() == PlayerRole.CREATOR) return;
-
-        if (player == null && world.getVisibilityPolicy() != WorldVisibilityPolicy.PUBLIC) {
-            log.info("user {} tried to manage hidden world {} not being a member", userId, world.getId());
-            throw new ApiException(ErrorCode.WORLD_NOT_FOUND);
+        if (player == null) {
+            log.info("user {} tried to manage the world {} while not being a member", userId, world.getId());
+            throw new ApiException(ErrorCode.NOT_A_MEMBER);
         }
-
-        log.info("user {} tried to manage world {} not being a creator", userId, world.getId());
-        throw new ApiException(ErrorCode.NOT_A_CREATOR);
+        if (player.getRole().ordinal() < PlayerRole.CREATOR.ordinal()) {
+            log.info("user {} tried to manage the world {} while not being a creator", userId, world.getId());
+            throw new ApiException(ErrorCode.NOT_A_CREATOR);
+        }
     }
 
     public List<WorldRepresentation> get(Long userId, PlayerRole playerRole, Integer page, Integer size) {
-        boolean publicSearch = (playerRole == null);
-
         Pageable pageable = PageRequest.of(page, size);
 
-        List<World> worlds = publicSearch
-                        ? worldRepository.findByVisibilityPolicyAndJoinPolicyOrderedByPlayers(WorldVisibilityPolicy.PUBLIC, WorldJoinPolicy.EVERYONE, pageable)
-                        : worldRepository.findByUserIdAndPlayerRoleOrderedByLastSeen(userId, playerRole, pageable);
-
+        List<World> worlds = worldRepository.findByUserIdAndPlayerRoleOrderedByLastSeen(userId, playerRole, pageable);
         Set<UUID> worldIds = worlds.stream().map(World::getId).collect(Collectors.toSet());
 
         List<Player> players = playerRepository.findAllByWorldIdsWithWorldsAndUsers(worldIds);
@@ -200,7 +186,6 @@ public class WorldService {
         for (Player p : players) {
             resultMap.get(p.getWorld().getId()).getPlayers().add(new PlayerRepresentation(p));
         }
-
         return resultMap.values().stream().toList();
     }
 }

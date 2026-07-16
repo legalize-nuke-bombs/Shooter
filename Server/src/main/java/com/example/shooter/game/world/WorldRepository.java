@@ -19,13 +19,6 @@ public interface WorldRepository extends JpaRepository<World, UUID> {
     long countAccessedSince(Long timestamp);
 
     @Query("""
-SELECT w FROM World w
-WHERE w.visibilityPolicy = ?1 AND w.joinPolicy = ?2
-ORDER BY w.players DESC, w.accessedAt DESC, w.id
-""")
-    List<World> findByVisibilityPolicyAndJoinPolicyOrderedByPlayers(WorldVisibilityPolicy visibilityPolicy, WorldJoinPolicy joinPolicy, Pageable pageable);
-
-    @Query("""
 SELECT w FROM Player p JOIN p.world w
 WHERE p.user.id = ?1 AND p.role >= ?2
 ORDER BY p.lastSeen DESC, w.id
