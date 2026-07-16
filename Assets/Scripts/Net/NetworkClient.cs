@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 
 public class NetworkClient : MonoBehaviour
 {
-    private const string GameSceneName = "SampleScene";
     private const float InputSendRate = 30f;
 
     public static NetworkClient Instance { get; private set; }
@@ -40,7 +39,7 @@ public class NetworkClient : MonoBehaviour
 
     private static void TrySpawn(string sceneName)
     {
-        if (sceneName != GameSceneName) return;
+        if (sceneName != "Game") return;
         if (string.IsNullOrEmpty(ConnectionConfig.Token)) return;
         if (Instance != null) return;
 

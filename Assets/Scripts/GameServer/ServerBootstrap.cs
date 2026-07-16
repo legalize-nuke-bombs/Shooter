@@ -3,8 +3,6 @@ using UnityEngine.SceneManagement;
 
 public static class ServerBootstrap
 {
-    private const string GameSceneName = "SampleScene";
-
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Init()
     {
@@ -14,7 +12,7 @@ public static class ServerBootstrap
         Object.DontDestroyOnLoad(go);
         go.AddComponent<GameServer>();
 
-        if (SceneManager.GetActiveScene().name != GameSceneName)
-            SceneManager.LoadScene(GameSceneName);
+        if (SceneManager.GetActiveScene().name != "Game")
+            SceneManager.LoadScene("Game");
     }
 }
