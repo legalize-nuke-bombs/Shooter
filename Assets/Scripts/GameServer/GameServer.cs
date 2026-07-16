@@ -13,11 +13,18 @@ public class GameServer : MonoBehaviour
     private const string DefaultWorldId = "default";
     private const float WorldSpacing = 1000f;
 
+    private const float BanSweepInterval = 60f;
+    private const long BanRetentionSeconds = 180;
+
     private INetTransport transport;
     private readonly Dictionary<int, ServerPlayer> players = new Dictionary<int, ServerPlayer>();
     private readonly Dictionary<string, int> worldIndices = new Dictionary<string, int>();
+    private readonly Dictionary<string, long> pairBans = new Dictionary<string, long>();
+    private readonly Dictionary<long, long> userBans = new Dictionary<long, long>();
+    private readonly Dictionary<string, long> worldBans = new Dictionary<string, long>();
     private byte[] jwtSecret;
     private float tickTimer;
+    private float banSweepTimer;
     private long tick;
 
     private void OnEnable()
@@ -49,6 +56,8 @@ public class GameServer : MonoBehaviour
         transport.ClientConnected += OnClientConnected;
         transport.MessageReceived += OnMessageReceived;
         transport.ClientDisconnected += OnClientDisconnected;
+        transport.HookReceived += OnHookReceived;
+        transport.HookAuthorizer = token => JwtVerifier.TryVerify(token, jwtSecret, out JwtClaims claims) && claims.sub == "hook";
         transport.Start(port);
         Debug.Log("server: ws listening on " + port);
     }
@@ -74,6 +83,13 @@ public class GameServer : MonoBehaviour
             tick++;
             BroadcastSnapshots();
         }
+
+        banSweepTimer += Time.deltaTime;
+        if (banSweepTimer >= BanSweepInterval)
+        {
+            banSweepTimer = 0f;
+            SweepBans();
+        }
     }
 
     private void OnClientConnected(int connId, string query)
@@ -94,12 +110,21 @@ public class GameServer : MonoBehaviour
             return;
         }
 
+        string worldId = subject.Length > 1 && subject[1].Length > 0 ? subject[1] : DefaultWorldId;
+
+        if (IsBanned(userId, worldId, claims.iat))
+        {
+            Debug.Log("server: conn " + connId + " user " + userId + " world " + worldId + " with pre-kick token, kicking");
+            transport.Kick(connId);
+            return;
+        }
+
         var player = new ServerPlayer
         {
             ConnId = connId,
             UserId = userId,
             DisplayName = "player" + userId,
-            WorldId = subject.Length > 1 && subject[1].Length > 0 ? subject[1] : DefaultWorldId,
+            WorldId = worldId,
             Authed = true
         };
         players[connId] = player;
@@ -245,6 +270,66 @@ public class GameServer : MonoBehaviour
             yaw = p.Body.transform.eulerAngles.y,
             pitch = p.LastInput.pitch
         };
+    }
+
+    private void OnHookReceived(string json)
+    {
+        HookBatchMsg batch = NetJson.Parse<HookBatchMsg>(json);
+        if (batch == null || batch.hooks == null) return;
+
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        foreach (UnityHookMsg hook in batch.hooks)
+            ApplyHook(hook, now);
+    }
+
+    private void ApplyHook(UnityHookMsg hook, long now)
+    {
+        bool hasUser = hook.userIdToKick != 0;
+        bool hasWorld = !string.IsNullOrEmpty(hook.worldIdToKick);
+
+        if (hasUser && hasWorld) pairBans[hook.userIdToKick + ":" + hook.worldIdToKick] = now;
+        else if (hasUser) userBans[hook.userIdToKick] = now;
+        else if (hasWorld) worldBans[hook.worldIdToKick] = now;
+        else return;
+
+        var toKick = new List<int>();
+        foreach (ServerPlayer p in players.Values)
+        {
+            bool userMatch = !hasUser || p.UserId == hook.userIdToKick;
+            bool worldMatch = !hasWorld || p.WorldId == hook.worldIdToKick;
+            if (userMatch && worldMatch)
+                toKick.Add(p.ConnId);
+        }
+        foreach (int connId in toKick)
+            transport.Kick(connId);
+
+        Debug.Log("server: hook user " + hook.userIdToKick + " world " + hook.worldIdToKick + " kicked " + toKick.Count);
+    }
+
+    private bool IsBanned(long userId, string worldId, long tokenIat)
+    {
+        if (pairBans.TryGetValue(userId + ":" + worldId, out long banTime) && tokenIat < banTime) return true;
+        if (userBans.TryGetValue(userId, out banTime) && tokenIat < banTime) return true;
+        if (worldBans.TryGetValue(worldId, out banTime) && tokenIat < banTime) return true;
+        return false;
+    }
+
+    private void SweepBans()
+    {
+        long cutoff = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - BanRetentionSeconds;
+        SweepBanMap(pairBans, cutoff);
+        SweepBanMap(userBans, cutoff);
+        SweepBanMap(worldBans, cutoff);
+    }
+
+    private static void SweepBanMap<TKey>(Dictionary<TKey, long> bans, long cutoff)
+    {
+        var expired = new List<TKey>();
+        foreach (KeyValuePair<TKey, long> pair in bans)
+            if (pair.Value < cutoff)
+                expired.Add(pair.Key);
+        foreach (TKey key in expired)
+            bans.Remove(key);
     }
 
     private void OnClientDisconnected(int connId)
