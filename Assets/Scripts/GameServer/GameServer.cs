@@ -39,6 +39,8 @@ public class GameServer : MonoBehaviour
 
     private void Start()
     {
+        Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+        Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
         Application.runInBackground = true;
         Application.targetFrameRate = (int)TickRate * 2;
 
@@ -46,7 +48,7 @@ public class GameServer : MonoBehaviour
         string secret = ParseStringArg("-jwtSecret", Environment.GetEnvironmentVariable("UNITY_SERVER_SECRET") ?? "");
         if (string.IsNullOrEmpty(secret))
         {
-            Debug.LogError("server: no JWT secret (-jwtSecret arg or UNITY_SERVER_SECRET env), refusing to start");
+            ServerLog.Error("no JWT secret (-jwtSecret arg or UNITY_SERVER_SECRET env), refusing to start");
             Application.Quit(1);
             return;
         }
@@ -59,7 +61,7 @@ public class GameServer : MonoBehaviour
         transport.HookReceived += OnHookReceived;
         transport.HookAuthorizer = token => JwtVerifier.TryVerify(token, jwtSecret, out JwtClaims claims) && claims.sub == "hook";
         transport.Start(port);
-        Debug.Log("server: ws listening on " + port);
+        ServerLog.Info("ws listening on " + port + ", tick rate " + TickRate + ", ban retention " + BanRetentionSeconds + "s");
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -67,7 +69,7 @@ public class GameServer : MonoBehaviour
         PlayerController localPlayer = FindAnyObjectByType<PlayerController>();
         if (localPlayer != null)
             Destroy(localPlayer.gameObject);
-        Debug.Log("server: scene " + scene.name + " ready");
+        ServerLog.Info("scene " + scene.name + " ready");
     }
 
     private void Update()
@@ -97,7 +99,7 @@ public class GameServer : MonoBehaviour
         string token = ExtractQueryParam(query, "token");
         if (!JwtVerifier.TryVerify(token, jwtSecret, out JwtClaims claims))
         {
-            Debug.Log("server: conn " + connId + " with invalid token, kicking");
+            ServerLog.Warn("conn " + connId + " token rejected, kicking");
             transport.Kick(connId);
             return;
         }
@@ -105,7 +107,7 @@ public class GameServer : MonoBehaviour
         string[] subject = claims.sub.Split(new[] { ':' }, 2);
         if (!long.TryParse(subject[0], out long userId))
         {
-            Debug.Log("server: conn " + connId + " with malformed subject, kicking");
+            ServerLog.Warn("conn " + connId + " malformed token subject, kicking");
             transport.Kick(connId);
             return;
         }
@@ -114,7 +116,7 @@ public class GameServer : MonoBehaviour
 
         if (IsBanned(userId, worldId, claims.iat))
         {
-            Debug.Log("server: conn " + connId + " user " + userId + " world " + worldId + " with pre-kick token, kicking");
+            ServerLog.Warn("conn " + connId + " user " + userId + " world " + worldId + " pre-kick token (iat " + claims.iat + "), kicking");
             transport.Kick(connId);
             return;
         }
@@ -129,7 +131,7 @@ public class GameServer : MonoBehaviour
         };
         players[connId] = player;
 
-        Debug.Log("server: conn " + connId + " authed as " + player.UserId + " (" + player.DisplayName + ") world " + player.WorldId);
+        ServerLog.Info("conn " + connId + " authed: user " + player.UserId + " (" + player.DisplayName + ") world " + player.WorldId + ", token iat " + claims.iat);
         transport.Send(connId, NetJson.Serialize(new WelcomeMsg { type = "welcome", playerId = player.UserId, tickRate = (int)TickRate }));
     }
 
@@ -143,6 +145,7 @@ public class GameServer : MonoBehaviour
                 var hello = NetJson.Parse<HelloMsg>(json);
                 if (!string.IsNullOrEmpty(hello.name))
                     player.DisplayName = hello.name.Length > 40 ? hello.name.Substring(0, 40) : hello.name;
+                ServerLog.Info("conn " + connId + " hello: user " + player.UserId + " name '" + player.DisplayName + "'");
                 break;
             case "joinRoom":
                 if (player.Authed && !player.InRoom)
@@ -178,7 +181,7 @@ public class GameServer : MonoBehaviour
             if (p.InRoom && p.WorldId == player.WorldId && p.ConnId != player.ConnId)
                 transport.Send(p.ConnId, joined);
 
-        Debug.Log("server: player " + player.UserId + " joined world " + player.WorldId + ", players there " + states.Count);
+        ServerLog.Info("user " + player.UserId + " joined world " + player.WorldId + ", players there now " + states.Count);
     }
 
     private float WorldOffsetX(string worldId)
@@ -196,11 +199,12 @@ public class GameServer : MonoBehaviour
         var body = new GameObject("Sim_" + player.UserId);
 
         float angle = (player.ConnId * 137f) % 360f;
-        Vector3 offset = Quaternion.Euler(0f, angle, 0f) * Vector3.forward * 3f;
+        Vector3 offset = Quaternion.Euler(0f, angle, 0f) * Vector3.forward * 16f;
         body.transform.position = new Vector3(WorldOffsetX(player.WorldId) + offset.x, 1.1f, offset.z);
 
         player.Body = body;
         player.Controller = body.AddComponent<CharacterController>();
+        ServerLog.Info("spawned user " + player.UserId + " world " + player.WorldId + " at " + body.transform.position);
     }
 
     private void Simulate(float dt)
@@ -290,7 +294,11 @@ public class GameServer : MonoBehaviour
         if (hasUser && hasWorld) pairBans[hook.userIdToKick + ":" + hook.worldIdToKick] = now;
         else if (hasUser) userBans[hook.userIdToKick] = now;
         else if (hasWorld) worldBans[hook.worldIdToKick] = now;
-        else return;
+        else
+        {
+            ServerLog.Warn("hook with no user and no world, ignoring");
+            return;
+        }
 
         var toKick = new List<int>();
         foreach (ServerPlayer p in players.Values)
@@ -303,7 +311,7 @@ public class GameServer : MonoBehaviour
         foreach (int connId in toKick)
             transport.Kick(connId);
 
-        Debug.Log("server: hook user " + hook.userIdToKick + " world " + hook.worldIdToKick + " kicked " + toKick.Count);
+        ServerLog.Info("hook applied: user " + hook.userIdToKick + " world " + hook.worldIdToKick + ", banned since now, kicked online " + toKick.Count);
     }
 
     private bool IsBanned(long userId, string worldId, long tokenIat)
@@ -317,12 +325,12 @@ public class GameServer : MonoBehaviour
     private void SweepBans()
     {
         long cutoff = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - BanRetentionSeconds;
-        SweepBanMap(pairBans, cutoff);
-        SweepBanMap(userBans, cutoff);
-        SweepBanMap(worldBans, cutoff);
+        int swept = SweepBanMap(pairBans, cutoff) + SweepBanMap(userBans, cutoff) + SweepBanMap(worldBans, cutoff);
+        if (swept > 0)
+            ServerLog.Info("swept " + swept + " expired bans");
     }
 
-    private static void SweepBanMap<TKey>(Dictionary<TKey, long> bans, long cutoff)
+    private static int SweepBanMap<TKey>(Dictionary<TKey, long> bans, long cutoff)
     {
         var expired = new List<TKey>();
         foreach (KeyValuePair<TKey, long> pair in bans)
@@ -330,6 +338,7 @@ public class GameServer : MonoBehaviour
                 expired.Add(pair.Key);
         foreach (TKey key in expired)
             bans.Remove(key);
+        return expired.Count;
     }
 
     private void OnClientDisconnected(int connId)
@@ -345,7 +354,7 @@ public class GameServer : MonoBehaviour
             if (p.InRoom && p.WorldId == player.WorldId)
                 transport.Send(p.ConnId, left);
 
-        Debug.Log("server: player " + player.UserId + " left world " + player.WorldId);
+        ServerLog.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", players total " + players.Count);
     }
 
     private void OnDestroy()

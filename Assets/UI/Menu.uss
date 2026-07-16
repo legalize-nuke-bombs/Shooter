@@ -1,6 +1,6 @@
 .root {
     flex-grow: 1;
-    background-color: #131210;
+    background-color: #0b0a09;
     color: #d8d5cd;
     font-size: 14px;
     -unity-font-definition: url("Fonts/PTSans-Regular.ttf");
@@ -341,14 +341,11 @@
     color: #918d82;
 }
 
-.bottom-row {
-    flex-direction: row;
-    align-items: center;
-}
-
 .world-id-input {
-    width: 320px;
+    width: 200px;
     margin-right: 8px;
+    margin-left: 8px;
+    height: 32px;
 }
 
 .modal-overlay {
@@ -443,9 +440,38 @@
 }
 
 .create-world-btn {
-    height: 36px;
+    height: 32px;
     margin-top: 0;
-    width: 280px;
+    margin-left: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.players-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.player-chip {
+    padding: 2px 6px 1px 6px;
+    margin-right: 6px;
+    margin-top: 4px;
+    font-size: 11px;
+    border-width: 1px;
+    border-color: #2a2723;
+    color: #918d82;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.player-chip-creator {
+    border-color: #74b9d6;
+    color: #74b9d6;
+}
+
+.player-chip-moderator {
+    border-color: #4f7d94;
+    color: #8fcbe4;
 }
 
 .empty-note {
