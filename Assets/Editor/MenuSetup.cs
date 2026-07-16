@@ -54,14 +54,6 @@ public static class MenuSetup
         if (menuUi.GetComponent<MenuController>() == null)
             menuUi.AddComponent<MenuController>();
 
-        GameObject oldMenu = GameObject.Find("Menu");
-        if (oldMenu != null)
-        {
-            var bootstrap = oldMenu.GetComponent<MenuBootstrap>();
-            if (bootstrap != null)
-                bootstrap.enabled = false;
-        }
-
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
         AssetDatabase.SaveAssets();

@@ -144,7 +144,7 @@ public class NetworkClient : MonoBehaviour
                 var welcome = NetJson.Parse<WelcomeMsg>(json);
                 PlayerId = welcome.playerId;
                 Debug.Log("net: welcome, playerId " + PlayerId + ", tickRate " + welcome.tickRate);
-                _ = Send(new JoinRoomMsg { code = ConnectionConfig.RoomCode });
+                _ = Send(new JoinRoomMsg { code = ConnectionConfig.WorldId });
                 break;
             case "roomJoined":
                 var joined = NetJson.Parse<RoomJoinedMsg>(json);
