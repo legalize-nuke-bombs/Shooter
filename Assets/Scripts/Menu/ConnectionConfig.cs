@@ -2,10 +2,11 @@ public static class ConnectionConfig
 {
     public static string Username = "";
     public static string DisplayName = "";
+    public static long UserId = -1;
     public static string Token = "";
     public static string WorldToken = "";
     public static string ServerAddress = "localhost:8080";
-    public static string RoomCode = "";
+    public static string WorldId = "";
 
     public const int GamePort = 9090;
 
