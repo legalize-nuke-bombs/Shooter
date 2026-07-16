@@ -444,7 +444,7 @@ public class MenuController : MonoBehaviour
         busy = true;
         worldsStatus.text = "";
 
-        yield return Request("POST", "/api/worlds/" + worldId + "/join", "{}", true, (code, text) =>
+        yield return Request("POST", "/api/worlds/" + worldId + "/players", "{}", true, (code, text) =>
         {
             busy = false;
             if (code != 200 && code != 201) { worldsStatus.text = HumanError(code, text); return; }

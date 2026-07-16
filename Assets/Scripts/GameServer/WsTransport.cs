@@ -16,6 +16,9 @@ public class WsTransport : INetTransport
     public event Action<int, string> ClientConnected;
     public event Action<int, string> MessageReceived;
     public event Action<int> ClientDisconnected;
+    public event Action<string> HookReceived;
+
+    public Func<string, bool> HookAuthorizer { get; set; }
 
     private TcpListener listener;
     private Thread acceptThread;
@@ -39,6 +42,19 @@ public class WsTransport : INetTransport
         public string Payload;
     }
 
+    private class HttpRequest
+    {
+        public string Method;
+        public string Path;
+        public string Query;
+        public readonly Dictionary<string, string> Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        public string Header(string name)
+        {
+            return Headers.TryGetValue(name, out string value) ? value : null;
+        }
+    }
+
     public void Start(int port)
     {
         running = true;
@@ -57,6 +73,7 @@ public class WsTransport : INetTransport
                 case 0: ClientConnected?.Invoke(e.ConnId, e.Payload); break;
                 case 1: MessageReceived?.Invoke(e.ConnId, e.Payload); break;
                 case 2: ClientDisconnected?.Invoke(e.ConnId); break;
+                case 3: HookReceived?.Invoke(e.Payload); break;
             }
         }
     }
@@ -131,7 +148,15 @@ public class WsTransport : INetTransport
         try
         {
             client.Tcp.ReceiveTimeout = 5000;
-            string query = DoHandshake(client.Stream);
+            HttpRequest request = ReadHttpRequest(client.Stream);
+
+            if (request.Method == "POST" && request.Path == "/hooks")
+            {
+                HandleHookRequest(client, request);
+                return;
+            }
+
+            string query = CompleteWsHandshake(client.Stream, request);
             client.Tcp.ReceiveTimeout = 0;
 
             events.Enqueue(new TransportEvent { Kind = 0, ConnId = connId, Payload = query });
@@ -197,7 +222,7 @@ public class WsTransport : INetTransport
         }
     }
 
-    private string DoHandshake(NetworkStream stream)
+    private static HttpRequest ReadHttpRequest(NetworkStream stream)
     {
         var headerBytes = new MemoryStream();
         int sequence = 0;
@@ -215,23 +240,28 @@ public class WsTransport : INetTransport
         string header = Encoding.ASCII.GetString(headerBytes.ToArray());
         string[] lines = header.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-        string requestLine = lines[0];
-        string query = "";
-        int qIndex = requestLine.IndexOf('?');
-        if (qIndex >= 0)
+        string[] requestParts = lines[0].Split(' ');
+        if (requestParts.Length < 2) throw new IOException("malformed request line");
+
+        var request = new HttpRequest { Method = requestParts[0] };
+        string target = requestParts[1];
+        int qIndex = target.IndexOf('?');
+        request.Path = qIndex >= 0 ? target.Substring(0, qIndex) : target;
+        request.Query = qIndex >= 0 ? target.Substring(qIndex + 1) : "";
+
+        for (int i = 1; i < lines.Length; i++)
         {
-            int end = requestLine.IndexOf(' ', qIndex);
-            query = requestLine.Substring(qIndex + 1, end - qIndex - 1);
+            int colon = lines[i].IndexOf(':');
+            if (colon < 0) continue;
+            request.Headers[lines[i].Substring(0, colon).Trim()] = lines[i].Substring(colon + 1).Trim();
         }
 
-        string key = null;
-        foreach (string line in lines)
-        {
-            int colon = line.IndexOf(':');
-            if (colon < 0) continue;
-            if (line.Substring(0, colon).Trim().Equals("Sec-WebSocket-Key", StringComparison.OrdinalIgnoreCase))
-                key = line.Substring(colon + 1).Trim();
-        }
+        return request;
+    }
+
+    private static string CompleteWsHandshake(NetworkStream stream, HttpRequest request)
+    {
+        string key = request.Header("Sec-WebSocket-Key");
         if (key == null) throw new IOException("no websocket key");
 
         string accept;
@@ -244,7 +274,39 @@ public class WsTransport : INetTransport
             "Connection: Upgrade\r\n" +
             "Sec-WebSocket-Accept: " + accept + "\r\n\r\n");
         stream.Write(response, 0, response.Length);
-        return query;
+        return request.Query;
+    }
+
+    private void HandleHookRequest(Client client, HttpRequest request)
+    {
+        string auth = request.Header("Authorization") ?? "";
+        string token = auth.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase) ? auth.Substring(7).Trim() : null;
+        Func<string, bool> authorizer = HookAuthorizer;
+
+        if (token == null || authorizer == null || !authorizer(token))
+        {
+            WriteHttpResponse(client.Stream, "401 Unauthorized");
+            return;
+        }
+
+        if (!int.TryParse(request.Header("Content-Length"), out int length) || length < 0 || length > MaxFrameBytes)
+        {
+            WriteHttpResponse(client.Stream, "411 Length Required");
+            return;
+        }
+
+        string body = Encoding.UTF8.GetString(ReadExact(client.Stream, length));
+        events.Enqueue(new TransportEvent { Kind = 3, ConnId = 0, Payload = body });
+        WriteHttpResponse(client.Stream, "204 No Content");
+    }
+
+    private static void WriteHttpResponse(NetworkStream stream, string status)
+    {
+        byte[] response = Encoding.ASCII.GetBytes(
+            "HTTP/1.1 " + status + "\r\n" +
+            "Content-Length: 0\r\n" +
+            "Connection: close\r\n\r\n");
+        stream.Write(response, 0, response.Length);
     }
 
     private static byte[] BuildTextFrame(byte[] payload)

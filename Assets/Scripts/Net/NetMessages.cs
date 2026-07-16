@@ -85,6 +85,19 @@ public class LeftMsg
     public long id;
 }
 
+[Serializable]
+public class UnityHookMsg
+{
+    public long userIdToKick;
+    public string worldIdToKick;
+}
+
+[Serializable]
+public class HookBatchMsg
+{
+    public UnityHookMsg[] hooks;
+}
+
 public static class NetJson
 {
     public static string PeekType(string json)
