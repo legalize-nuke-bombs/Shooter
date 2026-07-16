@@ -40,6 +40,7 @@ public class WorldSupportService {
 
         if (players.stream().anyMatch(p -> p.getRole() == PlayerRole.CREATOR)) {
             log.info("fix: world {} no action required", worldId);
+            return;
         }
 
         Player successor = players.stream()
