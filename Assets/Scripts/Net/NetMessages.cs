@@ -25,17 +25,16 @@ namespace Shooter.Net
     }
 
     [Serializable]
-    public class JoinRoomMsg
+    public class JoinWorldMsg
     {
-        public string type = "joinRoom";
-        public string code;
+        public string type = "joinWorld";
     }
 
     [Serializable]
-    public class RoomJoinedMsg
+    public class WorldJoinedMsg
     {
         public string type;
-        public string roomId;
+        public string worldId;
         public PlayerStateMsg[] players;
     }
 

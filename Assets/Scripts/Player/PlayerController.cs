@@ -7,20 +7,16 @@ namespace Shooter.Player
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private float walkSpeed = 5f;
-        [SerializeField] private float sprintSpeed = 8f;
-        [SerializeField] private float jumpHeight = 1.2f;
-        [SerializeField] private float gravity = -20f;
         [SerializeField] private float lookSensitivity = 0.1f;
 
         private CharacterController controller;
         private Transform cameraTransform;
         private float pitch;
         private float verticalVelocity;
-        private float lastMoveX;
-        private float lastMoveZ;
-        private bool lastSprint;
-        private bool jumpPending;
+
+        private NetworkClient net;
+        private bool jumpPendingForNet;
+        private float nextInputSendTime;
 
         private void Awake()
         {
@@ -37,6 +33,7 @@ namespace Shooter.Player
         {
             Look();
             Move();
+            SyncWithNet();
         }
 
         private void Look()
@@ -50,43 +47,61 @@ namespace Shooter.Player
         private void Move()
         {
             Keyboard kb = Keyboard.current;
-            float x = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f);
-            float z = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f);
-            lastMoveX = x;
-            lastMoveZ = z;
-            lastSprint = kb.leftShiftKey.isPressed;
-            if (kb.spaceKey.wasPressedThisFrame)
-                jumpPending = true;
-
-            Vector3 direction = Vector3.ClampMagnitude(transform.right * x + transform.forward * z, 1f);
-            float speed = kb.leftShiftKey.isPressed ? sprintSpeed : walkSpeed;
-
-            if (controller.isGrounded)
+            var input = new MotorInput
             {
-                verticalVelocity = -2f;
-                if (kb.spaceKey.wasPressedThisFrame)
-                    verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            }
+                MoveX = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f),
+                MoveZ = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f),
+                Sprint = kb.leftShiftKey.isPressed,
+                Jump = kb.spaceKey.wasPressedThisFrame,
+                Yaw = transform.eulerAngles.y
+            };
+            if (kb.spaceKey.wasPressedThisFrame)
+                jumpPendingForNet = true;
 
-            verticalVelocity += gravity * Time.deltaTime;
-
-            Vector3 velocity = direction * speed + Vector3.up * verticalVelocity;
-            controller.Move(velocity * Time.deltaTime);
+            PlayerMotor.Step(controller, ref verticalVelocity, input, Time.deltaTime);
         }
 
-        public InputMsg BuildInputMessage()
+        private void SyncWithNet()
         {
-            var msg = new InputMsg
+            if (net == null)
             {
-                moveX = lastMoveX,
-                moveZ = lastMoveZ,
-                jump = jumpPending,
-                sprint = lastSprint,
+                if (NetworkClient.Instance == null) return;
+                net = NetworkClient.Instance;
+                net.WorldJoined += OnWorldJoined;
+            }
+
+            if (!net.InWorld || Time.time < nextInputSendTime) return;
+
+            nextInputSendTime = Time.time + 1f / NetworkClient.InputSendRate;
+            Keyboard kb = Keyboard.current;
+            net.SendInput(new InputMsg
+            {
+                moveX = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f),
+                moveZ = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f),
+                jump = jumpPendingForNet,
+                sprint = kb.leftShiftKey.isPressed,
                 yaw = transform.eulerAngles.y,
                 pitch = pitch
-            };
-            jumpPending = false;
-            return msg;
+            });
+            jumpPendingForNet = false;
+        }
+
+        private void OnWorldJoined(WorldJoinedMsg joined)
+        {
+            foreach (PlayerStateMsg p in joined.players)
+            {
+                if (p.id != net.PlayerId) continue;
+                controller.enabled = false;
+                transform.position = new Vector3(p.x, p.y, p.z);
+                controller.enabled = true;
+                break;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (net != null)
+                net.WorldJoined -= OnWorldJoined;
         }
     }
 }

@@ -4,28 +4,21 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Net;
 using Shooter.Player;
+using Shooter.Shared;
 
 namespace Shooter.GameServer
 {
     public class GameServer : MonoBehaviour
     {
         private const float TickRate = 30f;
-        private const float WalkSpeed = 5f;
-        private const float SprintSpeed = 8f;
-        private const float JumpHeight = 1.2f;
-        private const float Gravity = -20f;
-        private const string DefaultWorldId = "default";
         private const float WorldSpacing = 1000f;
-
         private const float BanSweepInterval = 60f;
         private const long BanRetentionSeconds = 180;
 
         private INetTransport transport;
         private readonly Dictionary<int, ServerPlayer> players = new Dictionary<int, ServerPlayer>();
         private readonly Dictionary<string, int> worldIndices = new Dictionary<string, int>();
-        private readonly Dictionary<string, long> pairBans = new Dictionary<string, long>();
-        private readonly Dictionary<long, long> userBans = new Dictionary<long, long>();
-        private readonly Dictionary<string, long> worldBans = new Dictionary<string, long>();
+        private readonly BanList bans = new BanList();
         private byte[] jwtSecret;
         private float tickTimer;
         private float banSweepTimer;
@@ -48,8 +41,8 @@ namespace Shooter.GameServer
             Application.runInBackground = true;
             Application.targetFrameRate = (int)TickRate * 2;
 
-            int port = ParseIntArg("-port", 9090);
-            string secret = ParseStringArg("-jwtSecret", Environment.GetEnvironmentVariable("UNITY_SERVER_SECRET") ?? "");
+            int port = ServerCli.IntArg("-port", 9090);
+            string secret = ServerCli.StringArg("-jwtSecret", Environment.GetEnvironmentVariable("UNITY_SERVER_SECRET") ?? "");
             if (string.IsNullOrEmpty(secret))
             {
                 ServerLog.Error("no JWT secret (-jwtSecret arg or UNITY_SERVER_SECRET env), refusing to start");
@@ -94,7 +87,9 @@ namespace Shooter.GameServer
             if (banSweepTimer >= BanSweepInterval)
             {
                 banSweepTimer = 0f;
-                SweepBans();
+                int swept = bans.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - BanRetentionSeconds);
+                if (swept > 0)
+                    ServerLog.Info("swept " + swept + " expired bans");
             }
         }
 
@@ -109,16 +104,16 @@ namespace Shooter.GameServer
             }
 
             string[] subject = claims.sub.Split(new[] { ':' }, 2);
-            if (!long.TryParse(subject[0], out long userId))
+            if (subject.Length != 2 || subject[1].Length == 0 || !long.TryParse(subject[0], out long userId))
             {
-                ServerLog.Warn("conn " + connId + " malformed token subject, kicking");
+                ServerLog.Warn("conn " + connId + " not a world token (sub '" + claims.sub + "'), kicking");
                 transport.Kick(connId);
                 return;
             }
 
-            string worldId = subject.Length > 1 && subject[1].Length > 0 ? subject[1] : DefaultWorldId;
+            string worldId = subject[1];
 
-            if (IsBanned(userId, worldId, claims.iat))
+            if (bans.IsBanned(userId, worldId, claims.iat))
             {
                 ServerLog.Warn("conn " + connId + " user " + userId + " world " + worldId + " pre-kick token (iat " + claims.iat + "), kicking");
                 transport.Kick(connId);
@@ -130,12 +125,11 @@ namespace Shooter.GameServer
                 ConnId = connId,
                 UserId = userId,
                 DisplayName = "player" + userId,
-                WorldId = worldId,
-                Authed = true
+                WorldId = worldId
             };
             players[connId] = player;
 
-            ServerLog.Info("conn " + connId + " authed: user " + player.UserId + " (" + player.DisplayName + ") world " + player.WorldId + ", token iat " + claims.iat);
+            ServerLog.Info("conn " + connId + " authed: user " + player.UserId + " world " + player.WorldId + ", token iat " + claims.iat);
             transport.Send(connId, NetJson.Serialize(new WelcomeMsg { type = "welcome", playerId = player.UserId, tickRate = (int)TickRate }));
         }
 
@@ -151,8 +145,8 @@ namespace Shooter.GameServer
                         player.DisplayName = hello.name.Length > 40 ? hello.name.Substring(0, 40) : hello.name;
                     ServerLog.Info("conn " + connId + " hello: user " + player.UserId + " name '" + player.DisplayName + "'");
                     break;
-                case "joinRoom":
-                    if (player.Authed && !player.InRoom)
+                case "joinWorld":
+                    if (!player.InWorld)
                         JoinWorld(player);
                     break;
                 case "input":
@@ -165,24 +159,24 @@ namespace Shooter.GameServer
 
         private void JoinWorld(ServerPlayer player)
         {
-            player.InRoom = true;
+            player.InWorld = true;
             SpawnBody(player);
 
             var states = new List<PlayerStateMsg>();
             foreach (ServerPlayer p in players.Values)
-                if (p.InRoom && p.WorldId == player.WorldId)
+                if (p.InWorld && p.WorldId == player.WorldId)
                     states.Add(BuildState(p));
 
-            transport.Send(player.ConnId, NetJson.Serialize(new RoomJoinedMsg
+            transport.Send(player.ConnId, NetJson.Serialize(new WorldJoinedMsg
             {
-                type = "roomJoined",
-                roomId = player.WorldId,
+                type = "worldJoined",
+                worldId = player.WorldId,
                 players = states.ToArray()
             }));
 
             string joined = NetJson.Serialize(new JoinedMsg { type = "joined", id = player.UserId, name = player.DisplayName });
             foreach (ServerPlayer p in players.Values)
-                if (p.InRoom && p.WorldId == player.WorldId && p.ConnId != player.ConnId)
+                if (p.InWorld && p.WorldId == player.WorldId && p.ConnId != player.ConnId)
                     transport.Send(p.ConnId, joined);
 
             ServerLog.Info("user " + player.UserId + " joined world " + player.WorldId + ", players there now " + states.Count);
@@ -215,25 +209,20 @@ namespace Shooter.GameServer
         {
             foreach (ServerPlayer p in players.Values)
             {
-                if (!p.InRoom || p.Controller == null) continue;
+                if (!p.InWorld || p.Controller == null) continue;
 
-                InputMsg input = p.LastInput;
-                p.Body.transform.rotation = Quaternion.Euler(0f, input.yaw, 0f);
-
-                Vector3 direction = Vector3.ClampMagnitude(
-                    p.Body.transform.right * input.moveX + p.Body.transform.forward * input.moveZ, 1f);
-                float speed = input.sprint ? SprintSpeed : WalkSpeed;
-
-                if (p.Controller.isGrounded)
+                var input = new MotorInput
                 {
-                    p.VerticalVelocity = -2f;
-                    if (p.JumpQueued)
-                        p.VerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-                }
+                    MoveX = p.LastInput.moveX,
+                    MoveZ = p.LastInput.moveZ,
+                    Sprint = p.LastInput.sprint,
+                    Jump = p.JumpQueued,
+                    Yaw = p.LastInput.yaw
+                };
+                float verticalVelocity = p.VerticalVelocity;
+                PlayerMotor.Step(p.Controller, ref verticalVelocity, input, dt);
+                p.VerticalVelocity = verticalVelocity;
                 p.JumpQueued = false;
-
-                p.VerticalVelocity += Gravity * dt;
-                p.Controller.Move((direction * speed + Vector3.up * p.VerticalVelocity) * dt);
             }
         }
 
@@ -242,7 +231,7 @@ namespace Shooter.GameServer
             var statesByWorld = new Dictionary<string, List<PlayerStateMsg>>();
             foreach (ServerPlayer p in players.Values)
             {
-                if (!p.InRoom) continue;
+                if (!p.InWorld) continue;
                 if (!statesByWorld.TryGetValue(p.WorldId, out List<PlayerStateMsg> list))
                 {
                     list = new List<PlayerStateMsg>();
@@ -261,7 +250,7 @@ namespace Shooter.GameServer
                 });
 
             foreach (ServerPlayer p in players.Values)
-                if (p.InRoom)
+                if (p.InWorld)
                     transport.Send(p.ConnId, jsonByWorld[p.WorldId]);
         }
 
@@ -295,9 +284,9 @@ namespace Shooter.GameServer
             bool hasUser = hook.userIdToKick != 0;
             bool hasWorld = !string.IsNullOrEmpty(hook.worldIdToKick);
 
-            if (hasUser && hasWorld) pairBans[hook.userIdToKick + ":" + hook.worldIdToKick] = now;
-            else if (hasUser) userBans[hook.userIdToKick] = now;
-            else if (hasWorld) worldBans[hook.worldIdToKick] = now;
+            if (hasUser && hasWorld) bans.BanPair(hook.userIdToKick, hook.worldIdToKick, now);
+            else if (hasUser) bans.BanUser(hook.userIdToKick, now);
+            else if (hasWorld) bans.BanWorld(hook.worldIdToKick, now);
             else
             {
                 ServerLog.Warn("hook with no user and no world, ignoring");
@@ -318,44 +307,17 @@ namespace Shooter.GameServer
             ServerLog.Info("hook applied: user " + hook.userIdToKick + " world " + hook.worldIdToKick + ", banned since now, kicked online " + toKick.Count);
         }
 
-        private bool IsBanned(long userId, string worldId, long tokenIat)
-        {
-            if (pairBans.TryGetValue(userId + ":" + worldId, out long banTime) && tokenIat < banTime) return true;
-            if (userBans.TryGetValue(userId, out banTime) && tokenIat < banTime) return true;
-            if (worldBans.TryGetValue(worldId, out banTime) && tokenIat < banTime) return true;
-            return false;
-        }
-
-        private void SweepBans()
-        {
-            long cutoff = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - BanRetentionSeconds;
-            int swept = SweepBanMap(pairBans, cutoff) + SweepBanMap(userBans, cutoff) + SweepBanMap(worldBans, cutoff);
-            if (swept > 0)
-                ServerLog.Info("swept " + swept + " expired bans");
-        }
-
-        private static int SweepBanMap<TKey>(Dictionary<TKey, long> bans, long cutoff)
-        {
-            var expired = new List<TKey>();
-            foreach (KeyValuePair<TKey, long> pair in bans)
-                if (pair.Value < cutoff)
-                    expired.Add(pair.Key);
-            foreach (TKey key in expired)
-                bans.Remove(key);
-            return expired.Count;
-        }
-
         private void OnClientDisconnected(int connId)
         {
             if (!players.TryGetValue(connId, out ServerPlayer player)) return;
             players.Remove(connId);
 
             if (player.Body != null) Destroy(player.Body);
-            if (!player.InRoom) return;
+            if (!player.InWorld) return;
 
             string left = NetJson.Serialize(new LeftMsg { type = "left", id = player.UserId });
             foreach (ServerPlayer p in players.Values)
-                if (p.InRoom && p.WorldId == player.WorldId)
+                if (p.InWorld && p.WorldId == player.WorldId)
                     transport.Send(p.ConnId, left);
 
             ServerLog.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", players total " + players.Count);
@@ -376,24 +338,6 @@ namespace Shooter.GameServer
                     return Uri.UnescapeDataString(pair.Substring(eq + 1));
             }
             return "";
-        }
-
-        private static int ParseIntArg(string name, int fallback)
-        {
-            string[] args = Environment.GetCommandLineArgs();
-            for (int i = 0; i < args.Length - 1; i++)
-                if (args[i] == name && int.TryParse(args[i + 1], out int value))
-                    return value;
-            return fallback;
-        }
-
-        private static string ParseStringArg(string name, string fallback)
-        {
-            string[] args = Environment.GetCommandLineArgs();
-            for (int i = 0; i < args.Length - 1; i++)
-                if (args[i] == name)
-                    return args[i + 1];
-            return fallback;
         }
     }
 }

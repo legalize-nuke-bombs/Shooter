@@ -22,10 +22,10 @@ namespace Shooter.GameServer
 
         private static string Line(string level, string message)
         {
-            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + level + " [" + Thread() + "] " + message;
+            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + level + " [" + ThreadName() + "] " + message;
         }
 
-        private static string Thread()
+        private static string ThreadName()
         {
             return System.Threading.Thread.CurrentThread.Name ?? "main";
         }
