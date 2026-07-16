@@ -32,9 +32,32 @@ public class WorldController {
         );
     }
 
-    @PostMapping("/{worldId}/join")
+    @PostMapping("/{worldId}/players")
     public WorldJoinResponse join(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId) {
         return worldService.join(userId, worldId);
+    }
+
+    @DeleteMapping("/{worldId}/players/me")
+    public ResponseEntity<Void> leave(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId) {
+        worldService.leave(userId, worldId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{worldId}/players/{targetId}")
+    public ResponseEntity<Void> kick(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId, @PathVariable Long targetId) {
+        worldService.kick(userId, worldId, targetId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{worldId}")
+    public WorldRepresentation patch(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId, @RequestBody @Validated PatchWorldRequest request) {
+        return worldService.patch(userId, worldId, request);
+    }
+
+    @DeleteMapping("/{worldId}")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId) {
+        worldService.delete(userId, worldId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
