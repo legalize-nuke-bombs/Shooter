@@ -135,7 +135,6 @@ public class MenuController : MonoBehaviour
         confirmField.RegisterCallback<KeyDownEvent>(e => { if (e.keyCode == KeyCode.Return) Submit(); });
 
         root.Q<Button>("retry-btn").clicked += () => StartCoroutine(CheckServer());
-        root.Q<Button>("quit-btn").clicked += Application.Quit;
         root.Q<Button>("refresh-btn").clicked += ReloadWorlds;
         loadMoreBtn.clicked += () => { page++; StartCoroutine(LoadWorlds(false)); };
         root.Q<Button>("join-id-btn").clicked += () => { string id = worldIdField.value.Trim(); if (id.Length > 0) StartCoroutine(Join(id)); };
@@ -333,7 +332,7 @@ public class MenuController : MonoBehaviour
         worldsStatus.text = "";
 
         string path = "/api/worlds?page=" + page + "&size=" + PageSize;
-        if (mineTab) path += "&playerRole=CREATOR";
+        if (mineTab) path += "&playerRole=MEMBER";
 
         yield return Request("GET", path, null, true, (code, text) =>
         {
@@ -394,6 +393,26 @@ public class MenuController : MonoBehaviour
         var meta = new Label(BuildMeta(world));
         meta.AddToClassList("world-meta");
         info.Add(meta);
+
+        if (world.players != null && world.players.Length > 0)
+        {
+            var playersRow = new VisualElement();
+            playersRow.AddToClassList("players-row");
+            var sorted = (PlayerDto[])world.players.Clone();
+            Array.Sort(sorted, (a, b) => RoleRank(a.role) != RoleRank(b.role)
+                ? RoleRank(a.role) - RoleRank(b.role)
+                : a.memberSince.CompareTo(b.memberSince));
+            foreach (PlayerDto p in sorted)
+            {
+                string chipName = p.user != null ? p.user.displayName : "игрок " + p.id;
+                var chip = new Label(p.role == "CREATOR" ? "★ " + chipName : chipName);
+                chip.AddToClassList("player-chip");
+                chip.AddToClassList("player-chip-" + (p.role ?? "MEMBER").ToLowerInvariant());
+                playersRow.Add(chip);
+            }
+            info.Add(playersRow);
+        }
+
         card.Add(info);
 
         var joinBtn = new Button(() => StartCoroutine(Join(world.id))) { text = "ИГРАТЬ" };
@@ -426,15 +445,20 @@ public class MenuController : MonoBehaviour
     private static string BuildMeta(WorldDto world)
     {
         int count = world.players?.Length ?? 0;
-        string creator = "";
-        if (world.players != null)
-            foreach (PlayerDto p in world.players)
-                if (p.role == "CREATOR" && p.user != null) { creator = " · создал " + p.user.displayName; break; }
-
         long age = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - world.createdAt;
         string ago = age < 3600 ? Math.Max(1, age / 60) + " мин назад" : age < 86400 ? (age / 3600) + " ч назад" : (age / 86400) + " дн назад";
         string players = count + (count % 10 == 1 && count % 100 != 11 ? " игрок" : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14) ? " игрока" : " игроков"));
-        return players + " · " + ago + creator;
+        return players + " · " + ago;
+    }
+
+    private static int RoleRank(string role)
+    {
+        switch (role)
+        {
+            case "CREATOR": return 0;
+            case "MODERATOR": return 1;
+            default: return 2;
+        }
     }
 
     private IEnumerator Join(string worldId)

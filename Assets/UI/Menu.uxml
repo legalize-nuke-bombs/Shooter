@@ -40,26 +40,20 @@
         <ui:VisualElement name="worlds-screen" class="worlds-root hidden">
             <ui:VisualElement class="topbar">
                 <ui:Label text="SHOOTER" class="topbar-brand px" />
-                <ui:VisualElement class="topbar-right">
-                    <ui:Label name="user-label" class="topbar-user" />
-                    <ui:Button name="quit-btn" text="ВЫХОД" class="btn px" style="width: 92px; height: 30px;" />
-                </ui:VisualElement>
+                <ui:Label name="user-label" class="topbar-user" />
             </ui:VisualElement>
             <ui:VisualElement class="controls-row">
                 <ui:Button name="tab-mine" text="МОИ МИРЫ" class="list-tab list-tab-active px" />
                 <ui:Button name="tab-public" text="ПУБЛИЧНЫЕ" class="list-tab px" />
                 <ui:VisualElement class="controls-spacer" />
                 <ui:Button name="refresh-btn" text="↻" class="btn icon-btn" />
+                <ui:TextField name="world-id-field" class="text-input world-id-input" />
+                <ui:Button name="join-id-btn" text="ПО ID" class="btn px" style="height: 32px;" />
+                <ui:Button name="create-btn" text="+ СОЗДАТЬ МИР" class="btn btn-primary create-world-btn px" />
             </ui:VisualElement>
             <ui:ScrollView name="worlds-scroll" class="worlds-scroll" />
             <ui:Button name="load-more-btn" text="ПОКАЗАТЬ ЕЩЁ" class="btn load-more px" />
             <ui:Label name="worlds-status" class="status-line" style="-unity-text-align: middle-left;" />
-            <ui:VisualElement class="bottom-row">
-                <ui:Button name="create-btn" text="+ СОЗДАТЬ НОВЫЙ МИР" class="btn btn-primary create-world-btn px" />
-                <ui:VisualElement class="controls-spacer" />
-                <ui:TextField name="world-id-field" class="text-input world-id-input" />
-                <ui:Button name="join-id-btn" text="ВОЙТИ ПО ID" class="btn px" style="height: 36px;" />
-            </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="create-modal" class="modal-overlay hidden">
