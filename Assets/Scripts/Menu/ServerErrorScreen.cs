@@ -1,23 +1,26 @@
 using System;
 using UnityEngine.UIElements;
 
-public class ServerErrorScreen
+namespace Shooter.Menu
 {
-    private readonly VisualElement screen;
-    private readonly Label detail;
-
-    public ServerErrorScreen(VisualElement root, Action onRetry)
+    public class ServerErrorScreen
     {
-        screen = root.Q<VisualElement>("server-error-screen");
-        detail = root.Q<Label>("server-error-detail");
-        root.Q<Button>("retry-btn").clicked += onRetry;
-    }
+        private readonly VisualElement screen;
+        private readonly Label detail;
 
-    public void Show(string detailText)
-    {
-        detail.text = detailText;
-        screen.RemoveFromClassList("hidden");
-    }
+        public ServerErrorScreen(VisualElement root, Action onRetry)
+        {
+            screen = root.Q<VisualElement>("server-error-screen");
+            detail = root.Q<Label>("server-error-detail");
+            root.Q<Button>("retry-btn").clicked += onRetry;
+        }
 
-    public void Hide() => screen.AddToClassList("hidden");
+        public void Show(string detailText)
+        {
+            detail.text = detailText;
+            screen.RemoveFromClassList("hidden");
+        }
+
+        public void Hide() => screen.AddToClassList("hidden");
+    }
 }
