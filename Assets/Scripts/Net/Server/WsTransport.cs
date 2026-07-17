@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
-namespace Shooter.GameServer
+namespace Shooter.Net
 {
     public class WsTransport : INetTransport
     {
