@@ -11,6 +11,7 @@ namespace Shooter.Server
     public class GameServer : MonoBehaviour
     {
         private const float TickRate = 30f;
+        private const int Port = 9090;
         private const float WorldSpacing = 1000f;
         private const float AllowSweepInterval = 60f;
         private const long AllowTtlSeconds = 60;
@@ -41,11 +42,10 @@ namespace Shooter.Server
             Application.runInBackground = true;
             Application.targetFrameRate = (int)TickRate * 2;
 
-            int port = ServerCli.IntArg("-port", 9090);
-            string secret = ServerCli.StringArg("-jwtSecret", Environment.GetEnvironmentVariable("JWT_SECRET") ?? "");
+            string secret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? "";
             if (string.IsNullOrEmpty(secret))
             {
-                ServerLog.Error("no JWT secret (-jwtSecret arg or JWT_SECRET env), refusing to start");
+                ServerLog.Error("no JWT_SECRET env, refusing to start");
                 Application.Quit(1);
                 return;
             }
@@ -57,8 +57,8 @@ namespace Shooter.Server
             transport.ClientDisconnected += OnClientDisconnected;
             transport.HookReceived += OnHookReceived;
             transport.HookAuthorizer = token => Jwt.TryVerify(token, jwtSecret, out string subject) && subject == "hook";
-            transport.Start(port);
-            ServerLog.Info("ws listening on " + port + ", tick rate " + TickRate + ", allow ttl " + AllowTtlSeconds + "s");
+            transport.Start(Port);
+            ServerLog.Info("ws listening on " + Port + ", tick rate " + TickRate + ", allow ttl " + AllowTtlSeconds + "s");
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
