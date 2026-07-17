@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Net;
 using Shooter.Player;
-using Shooter.Shared;
+using Shooter.Auth;
 
 namespace Shooter.GameServer
 {
@@ -56,7 +56,7 @@ namespace Shooter.GameServer
             transport.MessageReceived += OnMessageReceived;
             transport.ClientDisconnected += OnClientDisconnected;
             transport.HookReceived += OnHookReceived;
-            transport.HookAuthorizer = token => JwtVerifier.TryVerify(token, jwtSecret, out JwtClaims claims) && claims.sub == "hook";
+            transport.HookAuthorizer = token => Jwt.TryVerify(token, jwtSecret, out JwtClaims claims) && claims.sub == "hook";
             transport.Start(port);
             ServerLog.Info("ws listening on " + port + ", tick rate " + TickRate + ", ban retention " + BanRetentionSeconds + "s");
         }
@@ -96,7 +96,7 @@ namespace Shooter.GameServer
         private void OnClientConnected(int connId, string query)
         {
             string token = ExtractQueryParam(query, "token");
-            if (!JwtVerifier.TryVerify(token, jwtSecret, out JwtClaims claims))
+            if (!Jwt.TryVerify(token, jwtSecret, out JwtClaims claims))
             {
                 ServerLog.Warn("conn " + connId + " token rejected, kicking");
                 transport.Kick(connId);
