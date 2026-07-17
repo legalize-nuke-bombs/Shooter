@@ -1,11 +1,7 @@
-using System;
-
 namespace Shooter.Net.Msgs
 {
-    [Serializable]
-    public class InputMsg
+    public class InputMsg : Msg
     {
-        public string type = "input";
         public float moveX;
         public float moveZ;
         public bool jump;

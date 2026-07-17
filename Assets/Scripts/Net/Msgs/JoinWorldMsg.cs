@@ -1,10 +1,6 @@
-using System;
-
 namespace Shooter.Net.Msgs
 {
-    [Serializable]
-    public class JoinWorldMsg
+    public class JoinWorldMsg : Msg
     {
-        public string type = "joinWorld";
     }
 }
