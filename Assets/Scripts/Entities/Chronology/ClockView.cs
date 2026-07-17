@@ -1,5 +1,6 @@
 using UnityEngine;
 using Shooter.Net;
+using Shooter.Net.Msgs;
 using Shooter.Logging;
 
 namespace Shooter.Entities.Chronology
@@ -19,6 +20,12 @@ namespace Shooter.Entities.Chronology
         private void Start()
         {
             sun = FindSun();
+            if (sun == null)
+            {
+                Log.Warn("no directional light in scene, sky won't move");
+                enabled = false;
+                return;
+            }
             NetworkClient.Instance.SnapshotReceived += OnSnapshot;
         }
 
@@ -30,7 +37,7 @@ namespace Shooter.Entities.Chronology
 
         private void OnSnapshot(SnapshotMsg snapshot)
         {
-            Apply(Clock.Fraction(snapshot.clock.timestamp));
+            Apply(snapshot.clock.Fraction());
         }
 
         private void Apply(float dayFraction)
@@ -38,21 +45,17 @@ namespace Shooter.Entities.Chronology
             float pitch = dayFraction * 360f - 90f;
             float daylight = Mathf.Clamp01(Mathf.Sin((dayFraction - 0.25f) * Mathf.PI * 2f));
 
-            if (sun != null)
-            {
-                sun.transform.rotation = Quaternion.Euler(pitch, SunYaw, 0f);
-                sun.intensity = Mathf.Lerp(nightIntensity, dayIntensity, daylight);
-                sun.color = Color.Lerp(nightColor, dayColor, daylight);
-            }
+            sun.transform.rotation = Quaternion.Euler(pitch, SunYaw, 0f);
+            sun.intensity = Mathf.Lerp(nightIntensity, dayIntensity, daylight);
+            sun.color = Color.Lerp(nightColor, dayColor, daylight);
             RenderSettings.ambientIntensity = Mathf.Lerp(nightAmbient, dayAmbient, daylight);
         }
 
         private static Light FindSun()
         {
-            foreach (Light l in FindObjectsByType<Light>(FindObjectsInactive.Exclude))
-                if (l.type == LightType.Directional)
-                    return l;
-            Log.Warn("no directional light in scene, sky won't move");
+            foreach (Light light in FindObjectsByType<Light>(FindObjectsInactive.Exclude))
+                if (light.type == LightType.Directional)
+                    return light;
             return null;
         }
     }
