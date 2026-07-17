@@ -350,6 +350,14 @@
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
 }
 
+.error-modal-text {
+    color: #c8d6ea;
+    font-size: 14px;
+    white-space: normal;
+    margin-bottom: 14px;
+    -unity-text-align: middle-center;
+}
+
 .server-error-panel {
     align-items: center;
 }

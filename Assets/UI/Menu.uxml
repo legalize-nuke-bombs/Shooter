@@ -71,6 +71,14 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
+        <ui:VisualElement name="error-modal" class="modal-overlay hidden">
+            <ui:VisualElement class="panel">
+                <ui:Label text="ОШИБКА" class="modal-title" />
+                <ui:Label name="error-modal-text" class="error-modal-text" />
+                <ui:Button name="error-modal-ok" text="ОК" class="btn btn-primary submit-btn" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
         <ui:Label name="corner-status" class="corner-status" text="" />
     </ui:VisualElement>
 </ui:UXML>
