@@ -1,7 +1,7 @@
 using UnityEngine;
-using Shooter.Net;
+using Shooter.Server;
 
-namespace Shooter.Player
+namespace Shooter.Entities.Player
 {
     public static class ServerPlayerSim
     {

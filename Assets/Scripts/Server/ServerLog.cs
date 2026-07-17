@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Shooter.Net
+namespace Shooter.Server
 {
     public static class ServerLog
     {
