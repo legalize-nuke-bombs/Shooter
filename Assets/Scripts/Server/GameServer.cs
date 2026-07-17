@@ -38,8 +38,6 @@ namespace Shooter.Server
 
         private void Start()
         {
-            Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
-            Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
             Application.runInBackground = true;
             Application.targetFrameRate = (int)TickRate * 2;
 
