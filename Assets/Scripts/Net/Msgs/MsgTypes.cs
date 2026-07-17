@@ -3,18 +3,13 @@ using System.Collections.Generic;
 
 namespace Shooter.Net.Msgs
 {
-    // Single source of truth for the wire discriminator <-> message type.
-    // Register a message here once and it routes in both directions; nothing else
-    // touches "type". This is the C# analogue of Jackson's @JsonSubTypes list.
     public static class MsgTypes
     {
         private static readonly Dictionary<string, Type> ByTag = new Dictionary<string, Type>
         {
-            // client -> server
             { "hello", typeof(HelloMsg) },
             { "joinWorld", typeof(JoinWorldMsg) },
             { "input", typeof(InputMsg) },
-            // server -> client
             { "welcome", typeof(WelcomeMsg) },
             { "worldJoined", typeof(WorldJoinedMsg) },
             { "snapshot", typeof(SnapshotMsg) },
