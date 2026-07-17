@@ -41,7 +41,7 @@ namespace Shooter.Net
         private static void TrySpawn(string sceneName)
         {
             if (sceneName != "Game") return;
-            if (string.IsNullOrEmpty(Session.WorldToken)) return;
+            if (string.IsNullOrEmpty(Session.Token)) return;
             if (Instance != null) return;
 
             var go = new GameObject("Net");
