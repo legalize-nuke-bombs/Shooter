@@ -1,5 +1,6 @@
 package com.example.shooter.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,15 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn("multipart upload exception: {}", e.getMessage());
         ProblemDetail problem = ProblemDetail.forStatus(ErrorCode.MALFORMED_REQUEST.status);
         problem.setProperty("code", ErrorCode.MALFORMED_REQUEST.name());
+        return problem;
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ProblemDetail handleConstraintViolation(ConstraintViolationException e) {
+        log.warn("constraint violation: {}", e.getMessage());
+        ProblemDetail problem = ProblemDetail.forStatus(ErrorCode.MALFORMED_REQUEST.status);
+        problem.setProperty("code", ErrorCode.MALFORMED_REQUEST.name());
+        problem.setDetail(e.getMessage());
         return problem;
     }
 
