@@ -1,4 +1,4 @@
-using Shooter.Entities.Characters;
+using Shooter.Server.Characters;
 
 namespace Shooter.Net.Msgs
 {

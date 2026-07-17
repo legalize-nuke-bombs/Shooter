@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Shooter.Net;
 using Shooter.Net.Msgs;
-using Shooter.Entities.Characters;
+using Shooter.Server.Characters;
 
-namespace Shooter.Controls
+namespace Shooter.Client
 {
     public class InputController : MonoBehaviour
     {

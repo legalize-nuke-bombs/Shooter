@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Shooter.Auth;
 using Shooter.Net;
-using Shooter.Entities.Characters;
+using Shooter.Server.Characters;
 using Shooter.Logging;
 using Shooter.Net.Msgs;
 

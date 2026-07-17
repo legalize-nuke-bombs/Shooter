@@ -3,7 +3,6 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using Shooter.Auth;
 using Shooter.Logging;
 
 namespace Shooter.Client.Menu

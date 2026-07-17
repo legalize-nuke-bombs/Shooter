@@ -1,4 +1,4 @@
-namespace Shooter.Auth
+namespace Shooter.Client
 {
     public static class Session
     {

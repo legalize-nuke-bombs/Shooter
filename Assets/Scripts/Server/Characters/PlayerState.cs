@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Shooter.Entities.Characters
+namespace Shooter.Server.Characters
 {
     [Serializable]
     public class PlayerState

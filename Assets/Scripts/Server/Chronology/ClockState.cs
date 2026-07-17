@@ -1,6 +1,6 @@
 using System;
 
-namespace Shooter.Entities.Chronology
+namespace Shooter.Server.Chronology
 {
     [Serializable]
     public class ClockState
