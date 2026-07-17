@@ -4,10 +4,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Shooter.Net.Msgs
 {
-    // Read side of the discriminated union: reads "type", resolves the concrete message
-    // via MsgTypes and deserializes into it. Writing is left to the default serializer,
-    // which emits "type" from Msg.Type - so there is no write path here, and resolving
-    // into a concrete type (for which CanConvert is false) cannot recurse.
     public class MsgConverter : JsonConverter
     {
         public override bool CanWrite => false;
