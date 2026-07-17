@@ -14,13 +14,11 @@ namespace Shooter.Server
         private const float TickRate = 30f;
         private const int Port = 9090;
         private const float WorldSpacing = 1000f;
-        private const float AllowSweepInterval = 60f;
 
-        private INetTransport transport;
-        private SessionGate sessions;
-        private readonly Dictionary<string, World> worlds = new Dictionary<string, World>();
+        private IServerTransport transport;
+        private ServerSessionGate sessions;
+        private readonly Dictionary<string, ServerWorld> worlds = new Dictionary<string, ServerWorld>();
         private float tickTimer;
-        private float allowSweepTimer;
         private long tick;
 
         private void OnEnable()
@@ -45,9 +43,9 @@ namespace Shooter.Server
                 Application.Quit(1);
                 return;
             }
-            sessions = new SessionGate(Convert.FromBase64String(secret));
+            sessions = new ServerSessionGate(Convert.FromBase64String(secret));
 
-            transport = new WsTransport();
+            transport = new ServerWsTransport();
             transport.ClientConnected += OnClientConnected;
             transport.MessageReceived += OnMessageReceived;
             transport.ClientDisconnected += OnClientDisconnected;
@@ -79,14 +77,7 @@ namespace Shooter.Server
                 BroadcastSnapshots();
             }
 
-            allowSweepTimer += Time.deltaTime;
-            if (allowSweepTimer >= AllowSweepInterval)
-            {
-                allowSweepTimer = 0f;
-                int swept = sessions.Sweep();
-                if (swept > 0)
-                    Log.Info("swept " + swept + " expired allows");
-            }
+            sessions.Tick(Time.deltaTime);
         }
 
         private void OnClientConnected(int connId, string query)
@@ -125,7 +116,7 @@ namespace Shooter.Server
 
         private void JoinWorld(ServerPlayer player)
         {
-            World world = WorldFor(player.WorldId);
+            ServerWorld world = WorldFor(player.WorldId);
             world.Add(player);
             player.InWorld = true;
             ServerPlayerSim.SpawnBody(player, world.OffsetX);
@@ -145,25 +136,26 @@ namespace Shooter.Server
             Log.Info("user " + player.UserId + " joined world " + world.Id + ", players there now " + world.Players.Count);
         }
 
-        private World WorldFor(string worldId)
+        private ServerWorld WorldFor(string worldId)
         {
-            if (!worlds.TryGetValue(worldId, out World world))
+            if (!worlds.TryGetValue(worldId, out ServerWorld world))
             {
-                world = new World(worldId, worlds.Count * WorldSpacing);
+                world = new ServerWorld(worldId, worlds.Count * WorldSpacing);
                 worlds[worldId] = world;
+                Log.Info("world " + worldId + " created at offset x=" + world.OffsetX + ", total worlds " + worlds.Count);
             }
             return world;
         }
 
         private void Simulate(float dt)
         {
-            foreach (World world in worlds.Values)
+            foreach (ServerWorld world in worlds.Values)
                 world.Step(dt);
         }
 
         private void BroadcastSnapshots()
         {
-            foreach (World world in worlds.Values)
+            foreach (ServerWorld world in worlds.Values)
             {
                 if (world.Players.Count == 0) continue;
                 string json = NetJson.Serialize(world.BuildSnapshot(tick));
@@ -186,7 +178,7 @@ namespace Shooter.Server
             if (player.Body != null) Destroy(player.Body);
             if (!player.InWorld) return;
 
-            if (worlds.TryGetValue(player.WorldId, out World world))
+            if (worlds.TryGetValue(player.WorldId, out ServerWorld world))
             {
                 world.Remove(connId);
                 string left = NetJson.Serialize(new LeftMsg { type = "left", id = player.UserId });

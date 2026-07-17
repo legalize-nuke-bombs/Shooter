@@ -5,7 +5,7 @@ using Shooter.Entities.Chronology;
 
 namespace Shooter.Server
 {
-    public class World
+    public class ServerWorld
     {
         public string Id { get; }
         public float OffsetX { get; }
@@ -13,7 +13,7 @@ namespace Shooter.Server
         private readonly Clock clock = new Clock();
         private readonly Dictionary<int, ServerPlayer> players = new Dictionary<int, ServerPlayer>();
 
-        public World(string id, float offsetX)
+        public ServerWorld(string id, float offsetX)
         {
             Id = id;
             OffsetX = offsetX;
