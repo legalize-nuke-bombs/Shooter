@@ -56,7 +56,7 @@ namespace Shooter.GameServer
             transport.MessageReceived += OnMessageReceived;
             transport.ClientDisconnected += OnClientDisconnected;
             transport.HookReceived += OnHookReceived;
-            transport.HookAuthorizer = token => Jwt.TryVerify(token, jwtSecret, out JwtClaims claims) && claims.sub == "hook";
+            transport.HookAuthorizer = token => Jwt.TryVerify(token, jwtSecret, out string subject) && subject == "hook";
             transport.Start(port);
             ServerLog.Info("ws listening on " + port + ", tick rate " + TickRate + ", allow ttl " + AllowTtlSeconds + "s");
         }
@@ -96,16 +96,16 @@ namespace Shooter.GameServer
         private void OnClientConnected(int connId, string query)
         {
             string token = ExtractQueryParam(query, "token");
-            if (!Jwt.TryVerify(token, jwtSecret, out JwtClaims claims))
+            if (!Jwt.TryVerify(token, jwtSecret, out string subject))
             {
                 ServerLog.Warn("conn " + connId + " token rejected, kicking");
                 transport.Kick(connId);
                 return;
             }
 
-            if (!long.TryParse(claims.sub, out long userId))
+            if (!long.TryParse(subject, out long userId))
             {
-                ServerLog.Warn("conn " + connId + " not a user token (sub '" + claims.sub + "'), kicking");
+                ServerLog.Warn("conn " + connId + " not a user token (sub '" + subject + "'), kicking");
                 transport.Kick(connId);
                 return;
             }

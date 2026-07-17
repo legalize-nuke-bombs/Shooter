@@ -5,49 +5,18 @@ using UnityEngine;
 
 namespace Shooter.Auth
 {
-    [Serializable]
-    public class JwtClaims
-    {
-        public string sub;
-        public long iat;
-        public long exp;
-    }
-
     public static class Jwt
     {
-        public static bool TryParsePayload(string token, out JwtClaims claims)
+        [Serializable]
+        private class JwtClaims
         {
-            claims = null;
-
-            string[] parts = token.Split('.');
-            if (parts.Length != 3) return false;
-
-            string payloadJson;
-            try { payloadJson = Encoding.UTF8.GetString(Base64UrlDecode(parts[1])); }
-            catch { return false; }
-
-            JwtClaims parsed = JsonUtility.FromJson<JwtClaims>(payloadJson);
-            if (parsed == null || string.IsNullOrEmpty(parsed.sub)) return false;
-
-            claims = parsed;
-            return true;
+            public string sub;
+            public long exp;
         }
 
-        public static bool TryGetUserId(string token, out long userId)
+        public static bool TryVerify(string token, byte[] secret, out string subject)
         {
-            userId = -1;
-            if (!TryParsePayload(token, out JwtClaims claims)) return false;
-            if (!long.TryParse(claims.sub, out userId))
-            {
-                userId = -1;
-                return false;
-            }
-            return true;
-        }
-
-        public static bool TryVerify(string token, byte[] secret, out JwtClaims claims)
-        {
-            claims = null;
+            subject = null;
 
             string[] parts = token.Split('.');
             if (parts.Length != 3) return false;
@@ -57,21 +26,27 @@ namespace Shooter.Auth
                 expectedSignature = hmac.ComputeHash(Encoding.ASCII.GetBytes(parts[0] + "." + parts[1]));
 
             byte[] actualSignature;
-            try { actualSignature = Base64UrlDecode(parts[2]); }
+            string payloadJson;
+            try
+            {
+                actualSignature = Base64UrlDecode(parts[2]);
+                payloadJson = Encoding.UTF8.GetString(Base64UrlDecode(parts[1]));
+            }
             catch { return false; }
 
             if (!CryptographicOperations.FixedTimeEquals(expectedSignature, actualSignature)) return false;
 
-            if (!TryParsePayload(token, out JwtClaims parsed)) return false;
+            JwtClaims claims = JsonUtility.FromJson<JwtClaims>(payloadJson);
+            if (claims == null || string.IsNullOrEmpty(claims.sub)) return false;
 
             long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            if (parsed.exp != 0 && parsed.exp < now) return false;
+            if (claims.exp != 0 && claims.exp < now) return false;
 
-            claims = parsed;
+            subject = claims.sub;
             return true;
         }
 
-        public static byte[] Base64UrlDecode(string input)
+        private static byte[] Base64UrlDecode(string input)
         {
             string padded = input.Replace('-', '+').Replace('_', '/');
             switch (padded.Length % 4)
