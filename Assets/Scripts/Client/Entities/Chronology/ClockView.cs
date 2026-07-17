@@ -2,7 +2,7 @@ using UnityEngine;
 using Shooter.Server.Worlds;
 using Shooter.Logging;
 
-namespace Shooter.Client.Chronology
+namespace Shooter.Client.Entities.Chronology
 {
     public class ClockView : MonoBehaviour
     {

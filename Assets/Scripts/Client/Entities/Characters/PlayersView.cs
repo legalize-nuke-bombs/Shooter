@@ -4,7 +4,7 @@ using Shooter.Server.Worlds;
 using Shooter.Server.Entities.Characters.Player;
 using Shooter.Logging;
 
-namespace Shooter.Client.Characters
+namespace Shooter.Client.Entities.Characters
 {
     public class PlayersView : MonoBehaviour
     {
