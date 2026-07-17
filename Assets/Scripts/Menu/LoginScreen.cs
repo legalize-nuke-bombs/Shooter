@@ -1,5 +1,4 @@
 using System;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Auth;
@@ -43,15 +42,10 @@ namespace Shooter.Menu
             formTitle = root.Q<Label>("form-title");
             status = root.Q<Label>("login-status");
 
-            usernameField.value = PlayerPrefs.GetString("username", "");
-
             modeLink.clicked += () => SetRegisterMode(!registerMode);
             submitBtn.clicked += Submit;
             passwordField.RegisterCallback<KeyDownEvent>(e => { if (e.keyCode == KeyCode.Return && !registerMode) Submit(); });
             confirmField.RegisterCallback<KeyDownEvent>(e => { if (e.keyCode == KeyCode.Return) Submit(); });
-
-            if (usernameField.value.Length > 0)
-                SetRegisterMode(false);
         }
 
         public void Show() => screen.RemoveFromClassList("hidden");
@@ -85,21 +79,13 @@ namespace Shooter.Menu
             string password = passwordField.value;
             string displayName = registerMode ? displayNameField.value.Trim() : username;
 
-            if (!Regex.IsMatch(username, "^[a-zA-Z0-9_]{4,20}$")) { status.text = "Имя пользователя: 4-20 символов, латиница, цифры, подчёркивание"; return; }
-            if (password.Length < 8 || password.Length > 40) { status.text = "Пароль: 8-40 символов"; return; }
-            bool upper = false, lower = false, digit = false;
-            foreach (char c in password)
+            string invalid = AccountRules.ValidateUsername(username) ?? AccountRules.ValidatePassword(password);
+            if (invalid == null && registerMode)
             {
-                if (char.IsUpper(c)) upper = true;
-                else if (char.IsLower(c)) lower = true;
-                else if (char.IsDigit(c)) digit = true;
+                if (passwordField.value != confirmField.value) invalid = "Пароли не совпадают";
+                else invalid = AccountRules.ValidateDisplayName(displayName);
             }
-            if (!upper || !lower || !digit) { status.text = "Пароль должен содержать заглавную и строчную буквы и цифру"; return; }
-            if (registerMode)
-            {
-                if (passwordField.value != confirmField.value) { status.text = "Пароли не совпадают"; return; }
-                if (displayName.Length < 1 || displayName.Length > 40) { status.text = "Отображаемое имя: 1-40 символов"; return; }
-            }
+            if (invalid != null) { status.text = invalid; return; }
 
             busy = true;
             submitBtn.SetEnabled(false);
@@ -130,9 +116,6 @@ namespace Shooter.Menu
                     Session.Username = username;
                     Session.DisplayName = me.displayName;
                     Session.UserId = me.id;
-
-                    PlayerPrefs.SetString("username", username);
-                    PlayerPrefs.Save();
 
                     status.text = "";
                     onLoggedIn();
