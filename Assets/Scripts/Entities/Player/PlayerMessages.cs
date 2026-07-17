@@ -1,6 +1,6 @@
 using System;
 
-namespace Shooter.Player
+namespace Shooter.Entities.Player
 {
     [Serializable]
     public class InputMsg

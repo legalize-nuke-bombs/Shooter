@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Player
+namespace Shooter.Entities.Player
 {
     public struct MotorInput
     {
