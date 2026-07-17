@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Shared;
 
@@ -11,8 +10,6 @@ namespace Shooter.Menu
 
         private readonly VisualElement screen;
         private readonly ScrollView scroll;
-        private readonly Button tabPublic;
-        private readonly Button tabMine;
         private readonly Button loadMoreBtn;
         private readonly TextField worldIdField;
         private readonly Label status;
@@ -22,7 +19,6 @@ namespace Shooter.Menu
         private readonly Action onCreateClick;
         private readonly Action onJoined;
 
-        private bool mineTab = true;
         private bool busy;
         private int page;
 
@@ -34,8 +30,6 @@ namespace Shooter.Menu
 
             screen = root.Q<VisualElement>("worlds-screen");
             scroll = root.Q<ScrollView>("worlds-scroll");
-            tabPublic = root.Q<Button>("tab-public");
-            tabMine = root.Q<Button>("tab-mine");
             loadMoreBtn = root.Q<Button>("load-more-btn");
             worldIdField = root.Q<TextField>("world-id-field");
             status = root.Q<Label>("worlds-status");
@@ -43,10 +37,9 @@ namespace Shooter.Menu
 
             root.Q<Button>("refresh-btn").clicked += Reload;
             root.Q<Button>("create-btn").clicked += () => onCreateClick();
-            root.Q<Button>("join-id-btn").clicked += () => { string id = worldIdField.value.Trim(); if (id.Length > 0) Join(id); };
+            root.Q<Button>("join-id-btn").clicked += JoinById;
+            worldIdField.RegisterCallback<KeyDownEvent>(e => { if (e.keyCode == UnityEngine.KeyCode.Return) JoinById(); });
             loadMoreBtn.clicked += () => { page++; LoadWorlds(false); };
-            tabPublic.clicked += () => SwitchTab(false);
-            tabMine.clicked += () => SwitchTab(true);
         }
 
         public void Show()
@@ -58,21 +51,7 @@ namespace Shooter.Menu
 
         public void Hide() => screen.AddToClassList("hidden");
 
-        public void ShowMineAndReload()
-        {
-            if (!mineTab) SwitchTab(true);
-            else Reload();
-        }
-
-        private void SwitchTab(bool mine)
-        {
-            mineTab = mine;
-            if (mine) { tabMine.AddToClassList("list-tab-active"); tabPublic.RemoveFromClassList("list-tab-active"); }
-            else { tabPublic.AddToClassList("list-tab-active"); tabMine.RemoveFromClassList("list-tab-active"); }
-            Reload();
-        }
-
-        private void Reload()
+        public void Reload()
         {
             page = 0;
             LoadWorlds(true);
@@ -84,30 +63,28 @@ namespace Shooter.Menu
             status.text = "";
 
             int requestedPage = page;
-            api.LoadWorlds(requestedPage, PageSize, mineTab, (worlds, error) =>
+            api.LoadWorlds(requestedPage, PageSize, (worlds, error) =>
             {
                 if (error != null) { status.text = error; return; }
 
                 foreach (WorldDto world in worlds)
-                    scroll.Add(BuildCard(world));
+                    scroll.Add(BuildSlot(world));
 
                 loadMoreBtn.style.display = worlds.Length < PageSize ? DisplayStyle.None : DisplayStyle.Flex;
 
                 if (worlds.Length == 0 && requestedPage == 0)
                 {
-                    var empty = new Label(mineTab ? "Пока пусто — создай свой первый мир" : "Публичных миров пока нет");
+                    var empty = new Label("Сохранённых миров нет.\nСоздайте новый мир или войдите по идентификатору.");
                     empty.AddToClassList("empty-note");
                     scroll.Add(empty);
                 }
             });
         }
 
-        private VisualElement BuildCard(WorldDto world)
+        private VisualElement BuildSlot(WorldDto world)
         {
-            var card = new VisualElement();
-            card.AddToClassList("world-card");
-            if (world.visibilityPolicy == "PRIVATE")
-                card.AddToClassList("world-card-private");
+            var slot = new VisualElement();
+            slot.AddToClassList("world-slot");
 
             var info = new VisualElement();
             info.AddToClassList("world-info");
@@ -118,23 +95,12 @@ namespace Shooter.Menu
             name.AddToClassList("world-name");
             nameRow.Add(name);
 
-            if (world.visibilityPolicy == "PRIVATE")
-                nameRow.Add(MakeBadge("СКРЫТЫЙ", "badge-private"));
-
-            string myRole = FindMyRole(world);
-            if (myRole == "CREATOR") nameRow.Add(MakeBadge("СОЗДАТЕЛЬ", "badge-creator"));
-            else if (myRole == "MODERATOR") nameRow.Add(MakeBadge("МОДЕРАТОР", "badge-moderator"));
-            else if (myRole == "MEMBER") nameRow.Add(MakeBadge("УЧАСТНИК", "badge-member"));
+            if (FindMyRole(world) == "CREATOR")
+                nameRow.Add(MakeBadge("ВЛАДЕЛЕЦ"));
+            if (world.joinPolicy == "NOBODY")
+                nameRow.Add(MakeBadge("ЗАКРЫТ ДЛЯ ВХОДА"));
 
             info.Add(nameRow);
-
-            if (!string.IsNullOrEmpty(world.description))
-            {
-                string desc = world.description.Length > 120 ? world.description.Substring(0, 120) + "…" : world.description;
-                var descLabel = new Label(desc);
-                descLabel.AddToClassList("world-desc");
-                info.Add(descLabel);
-            }
 
             var meta = new Label(BuildMeta(world));
             meta.AddToClassList("world-meta");
@@ -153,29 +119,26 @@ namespace Shooter.Menu
                     string chipName = p.user != null ? p.user.displayName : "игрок " + p.id;
                     var chip = new Label(p.role == "CREATOR" ? "★ " + chipName : chipName);
                     chip.AddToClassList("player-chip");
-                    chip.AddToClassList("player-chip-" + (p.role ?? "MEMBER").ToLowerInvariant());
+                    if (p.role == "CREATOR") chip.AddToClassList("player-chip-creator");
                     playersRow.Add(chip);
                 }
                 info.Add(playersRow);
             }
 
-            card.Add(info);
+            slot.Add(info);
 
-            var joinBtn = new Button(() => Join(world.id)) { text = "ИГРАТЬ" };
+            var joinBtn = new Button(() => Join(world.id)) { text = "ВОЙТИ" };
             joinBtn.AddToClassList("btn");
-            joinBtn.AddToClassList("px");
-            joinBtn.AddToClassList("play-btn");
-            card.Add(joinBtn);
+            joinBtn.AddToClassList("enter-btn");
+            slot.Add(joinBtn);
 
-            return card;
+            return slot;
         }
 
-        private static Label MakeBadge(string text, string styleClass)
+        private static Label MakeBadge(string text)
         {
             var badge = new Label(text);
             badge.AddToClassList("badge");
-            badge.AddToClassList("px");
-            badge.AddToClassList(styleClass);
             return badge;
         }
 
@@ -193,18 +156,17 @@ namespace Shooter.Menu
             int count = world.players?.Length ?? 0;
             long age = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - world.createdAt;
             string ago = age < 3600 ? Math.Max(1, age / 60) + " мин назад" : age < 86400 ? (age / 3600) + " ч назад" : (age / 86400) + " дн назад";
-            string players = count + (count % 10 == 1 && count % 100 != 11 ? " игрок" : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14) ? " игрока" : " игроков"));
-            return players + " · " + ago;
+            string members = count + (count % 10 == 1 && count % 100 != 11 ? " участник" : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14) ? " участника" : " участников"));
+            return members + " · создан " + ago;
         }
 
-        private static int RoleRank(string role)
+        private static int RoleRank(string role) => role == "CREATOR" ? 0 : 1;
+
+        private void JoinById()
         {
-            switch (role)
-            {
-                case "CREATOR": return 0;
-                case "MODERATOR": return 1;
-                default: return 2;
-            }
+            string id = worldIdField.value.Trim();
+            if (id.Length == 0) { status.text = "Укажите идентификатор мира."; return; }
+            Join(id);
         }
 
         private void Join(string worldId)
