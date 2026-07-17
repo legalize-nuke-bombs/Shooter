@@ -89,14 +89,9 @@ namespace Shooter.Net
     [Serializable]
     public class UnityHookMsg
     {
-        public long userIdToKick;
-        public string worldIdToKick;
-    }
-
-    [Serializable]
-    public class HookBatchMsg
-    {
-        public UnityHookMsg[] hooks;
+        public string action;
+        public long userId;
+        public string worldId;
     }
 
     public static class NetJson

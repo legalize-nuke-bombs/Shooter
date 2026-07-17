@@ -23,6 +23,8 @@ namespace Shooter.Menu
             { "WORLD_DOES_NOT_ACCEPT_NEW_MEMBERS", "Этот мир не принимает новых участников." },
             { "NOT_A_MEMBER", "Вы не состоите в этом мире." },
             { "NOT_A_CREATOR", "Действие доступно только владельцу мира." },
+            { "BLACKLISTED", "Вы в чёрном списке этого мира." },
+            { "GAME_SERVER_UNAVAILABLE", "Игровой сервер недоступен. Попробуйте ещё раз." },
             { "INTERNAL_ERROR", "Внутренняя ошибка сервера." }
         };
 
@@ -68,9 +70,10 @@ namespace Shooter.Menu
             });
         }
 
-        public void Join(string worldId, Action<string, string> onDone)
+        public void Join(string worldId, Action<string> onDone)
         {
-            Request("POST", "/api/worlds/" + worldId + "/players", "{}", true, (code, text) => OnTokenResponse(code, text, onDone));
+            Request("POST", "/api/worlds/" + worldId + "/players", "{}", true, (code, text) =>
+                onDone(code == 200 || code == 201 ? null : HumanError(code, text)));
         }
 
         public void CreateWorld(CreateWorldRequest request, Action<string> onDone)

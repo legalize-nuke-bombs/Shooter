@@ -175,12 +175,11 @@ namespace Shooter.Menu
             busy = true;
             status.text = "";
 
-            api.Join(worldId, (worldToken, error) =>
+            api.Join(worldId, error =>
             {
                 busy = false;
                 if (error != null) { status.text = error; return; }
 
-                Session.WorldToken = worldToken;
                 onJoined();
             });
         }
