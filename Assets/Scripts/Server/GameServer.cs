@@ -36,14 +36,13 @@ namespace Shooter.Server
             Application.runInBackground = true;
             Application.targetFrameRate = (int)TickRate * 2;
 
-            string secret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? "";
-            if (string.IsNullOrEmpty(secret))
+            if (!TryLoadSecret(out byte[] secret))
             {
-                Log.Error("no JWT_SECRET env, refusing to start");
+                enabled = false;
                 Application.Quit(1);
                 return;
             }
-            serverSessionGate = new ServerSessionGate(Convert.FromBase64String(secret));
+            serverSessionGate = new ServerSessionGate(secret);
 
             serverTransport = new ServerWsTransport();
             serverTransport.ClientConnected += OnClientConnected;
@@ -53,6 +52,27 @@ namespace Shooter.Server
             serverTransport.HookAuthorizer = serverSessionGate.AuthorizeHook;
             serverTransport.Start(Port);
             Log.Info("ws listening on " + Port + ", tick rate " + TickRate);
+        }
+
+        private static bool TryLoadSecret(out byte[] secret)
+        {
+            secret = null;
+            string raw = Environment.GetEnvironmentVariable("JWT_SECRET");
+            if (string.IsNullOrEmpty(raw))
+            {
+                Log.Error("no JWT_SECRET env, refusing to start");
+                return false;
+            }
+            try
+            {
+                secret = Convert.FromBase64String(raw);
+            }
+            catch (FormatException)
+            {
+                Log.Error("JWT_SECRET is not valid base64, refusing to start");
+                return false;
+            }
+            return true;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
