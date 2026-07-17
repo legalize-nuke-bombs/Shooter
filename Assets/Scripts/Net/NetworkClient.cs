@@ -110,7 +110,7 @@ namespace Shooter.Net
             }
         }
 
-        private async Task Send(object msg)
+        private async Task Send(Msg msg)
         {
             if (socket is not { State: WebSocketState.Open }) return;
 
@@ -138,31 +138,26 @@ namespace Shooter.Net
 
         private void Dispatch(string json)
         {
-            switch (NetJson.PeekType(json))
+            switch (NetJson.Deserialize(json))
             {
-                case "welcome":
-                    var welcome = NetJson.Parse<WelcomeMsg>(json);
+                case WelcomeMsg welcome:
                     PlayerId = welcome.playerId;
                     Log.Info("net: welcome, playerId " + PlayerId + ", tickRate " + welcome.tickRate);
                     _ = Send(new JoinWorldMsg());
                     break;
-                case "worldJoined":
-                    var joined = NetJson.Parse<WorldJoinedMsg>(json);
+                case WorldJoinedMsg worldJoined:
                     InWorld = true;
-                    Log.Info("net: world " + joined.worldId + ", players " + joined.players.Length);
-                    WorldJoined?.Invoke(joined);
+                    Log.Info("net: world " + worldJoined.worldId + ", players " + worldJoined.players.Length);
+                    WorldJoined?.Invoke(worldJoined);
                     break;
-                case "snapshot":
-                    SnapshotReceived?.Invoke(NetJson.Parse<SnapshotMsg>(json));
+                case SnapshotMsg snapshot:
+                    SnapshotReceived?.Invoke(snapshot);
                     break;
-                case "joined":
-                    PlayerJoined?.Invoke(NetJson.Parse<JoinedMsg>(json));
+                case JoinedMsg joined:
+                    PlayerJoined?.Invoke(joined);
                     break;
-                case "left":
-                    PlayerLeft?.Invoke(NetJson.Parse<LeftMsg>(json));
-                    break;
-                default:
-                    Log.Warn("net: unknown message: " + json);
+                case LeftMsg left:
+                    PlayerLeft?.Invoke(left);
                     break;
             }
         }

@@ -1,8 +1,7 @@
 namespace Shooter.Net.Msgs
 {
-    public class JoinedMsg : Msg
+    public class LeftMsg : Msg
     {
         public long id;
-        public string name;
     }
 }

@@ -107,27 +107,26 @@ namespace Shooter.Server
                 serverTransport.Kick(connId);
                 return;
             }
-            serverTransport.Send(connId, NetJson.Serialize(new WelcomeMsg { type = "welcome", playerId = player.UserId, tickRate = (int)TickRate }));
+            serverTransport.Send(connId, NetJson.Serialize(new WelcomeMsg { playerId = player.UserId, tickRate = (int)TickRate }));
         }
 
         private void OnMessageReceived(int connId, string json)
         {
             if (!serverSessionGate.TryGet(connId, out Player player)) return;
 
-            switch (NetJson.PeekType(json))
+            switch (NetJson.Deserialize(json))
             {
-                case "hello":
-                    var hello = NetJson.Parse<HelloMsg>(json);
+                case HelloMsg hello:
                     if (!string.IsNullOrEmpty(hello.name))
                         player.DisplayName = hello.name.Length > 40 ? hello.name.Substring(0, 40) : hello.name;
                     Log.Info("conn " + connId + " hello: user " + player.UserId + " name '" + player.DisplayName + "'");
                     break;
-                case "joinWorld":
+                case JoinWorldMsg:
                     if (!player.InWorld)
                         JoinWorld(player);
                     break;
-                case "input":
-                    player.ApplyInput(NetJson.Parse<InputMsg>(json));
+                case InputMsg input:
+                    player.ApplyInput(input);
                     break;
             }
         }
@@ -140,12 +139,11 @@ namespace Shooter.Server
 
             serverTransport.Send(player.ConnId, NetJson.Serialize(new WorldJoinedMsg
             {
-                type = "worldJoined",
                 worldId = world.Id,
                 players = world.BuildStates()
             }));
 
-            string joined = NetJson.Serialize(new JoinedMsg { type = "joined", id = player.UserId, name = player.DisplayName });
+            string joined = NetJson.Serialize(new JoinedMsg { id = player.UserId, name = player.DisplayName });
             foreach (Player other in world.Players)
                 if (other.ConnId != player.ConnId)
                     serverTransport.Send(other.ConnId, joined);
@@ -198,7 +196,7 @@ namespace Shooter.Server
             if (worlds.TryGetValue(player.WorldId, out ServerWorld world))
             {
                 world.Remove(connId);
-                string left = NetJson.Serialize(new LeftMsg { type = "left", id = player.UserId });
+                string left = NetJson.Serialize(new LeftMsg { id = player.UserId });
                 foreach (Player other in world.Players)
                     serverTransport.Send(other.ConnId, left);
             }

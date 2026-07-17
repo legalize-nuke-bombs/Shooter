@@ -69,7 +69,7 @@ namespace Shooter.Server
 
         public IReadOnlyList<int> HandleHook(string json)
         {
-            UnityHookMsg hook = NetJson.Parse<UnityHookMsg>(json);
+            UnityHookMsg hook = NetJson.Deserialize<UnityHookMsg>(json);
             if (hook == null || string.IsNullOrEmpty(hook.action) || string.IsNullOrEmpty(hook.worldId))
             {
                 Log.Warn("malformed hook, ignoring");
