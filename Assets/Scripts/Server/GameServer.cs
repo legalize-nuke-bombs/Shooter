@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Net;
-using Shooter.Entities.Player;
-using Shooter.Entities.Chronology;
+using Shooter.Controls;
+using Shooter.Entities.Characters;
 using Shooter.Logging;
+using Shooter.Net.Msgs;
 
 namespace Shooter.Server
 {
@@ -13,10 +14,9 @@ namespace Shooter.Server
     {
         private const float TickRate = 30f;
         private const int Port = 9090;
-        private const float WorldSpacing = 1000f;
 
-        private IServerTransport transport;
-        private ServerSessionGate sessions;
+        private IServerTransport serverTransport;
+        private ServerSessionGate serverSessionGate;
         private readonly Dictionary<string, ServerWorld> worlds = new Dictionary<string, ServerWorld>();
         private float tickTimer;
         private long tick;
@@ -43,21 +43,21 @@ namespace Shooter.Server
                 Application.Quit(1);
                 return;
             }
-            sessions = new ServerSessionGate(Convert.FromBase64String(secret));
+            serverSessionGate = new ServerSessionGate(Convert.FromBase64String(secret));
 
-            transport = new ServerWsTransport();
-            transport.ClientConnected += OnClientConnected;
-            transport.MessageReceived += OnMessageReceived;
-            transport.ClientDisconnected += OnClientDisconnected;
-            transport.HookReceived += OnHookReceived;
-            transport.HookAuthorizer = sessions.AuthorizeHook;
-            transport.Start(Port);
+            serverTransport = new ServerWsTransport();
+            serverTransport.ClientConnected += OnClientConnected;
+            serverTransport.MessageReceived += OnMessageReceived;
+            serverTransport.ClientDisconnected += OnClientDisconnected;
+            serverTransport.HookReceived += OnHookReceived;
+            serverTransport.HookAuthorizer = serverSessionGate.AuthorizeHook;
+            serverTransport.Start(Port);
             Log.Info("ws listening on " + Port + ", tick rate " + TickRate);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            PlayerController localPlayer = FindAnyObjectByType<PlayerController>();
+            InputController localPlayer = FindAnyObjectByType<InputController>();
             if (localPlayer != null)
                 Destroy(localPlayer.gameObject);
             Log.Info("scene " + scene.name + " ready");
@@ -65,7 +65,7 @@ namespace Shooter.Server
 
         private void Update()
         {
-            transport.Poll();
+            serverTransport.Poll();
 
             tickTimer += Time.deltaTime;
             float tickInterval = 1f / TickRate;
@@ -77,22 +77,22 @@ namespace Shooter.Server
                 BroadcastSnapshots();
             }
 
-            sessions.Tick(Time.deltaTime);
+            serverSessionGate.Tick(Time.deltaTime);
         }
 
         private void OnClientConnected(int connId, string query)
         {
-            if (!sessions.TryAdmit(connId, query, out ServerPlayer player))
+            if (!serverSessionGate.TryAdmit(connId, query, out Player player))
             {
-                transport.Kick(connId);
+                serverTransport.Kick(connId);
                 return;
             }
-            transport.Send(connId, NetJson.Serialize(new WelcomeMsg { type = "welcome", playerId = player.UserId, tickRate = (int)TickRate }));
+            serverTransport.Send(connId, NetJson.Serialize(new WelcomeMsg { type = "welcome", playerId = player.UserId, tickRate = (int)TickRate }));
         }
 
         private void OnMessageReceived(int connId, string json)
         {
-            if (!sessions.TryGet(connId, out ServerPlayer player)) return;
+            if (!serverSessionGate.TryGet(connId, out Player player)) return;
 
             switch (NetJson.PeekType(json))
             {
@@ -107,21 +107,18 @@ namespace Shooter.Server
                         JoinWorld(player);
                     break;
                 case "input":
-                    var input = NetJson.Parse<InputMsg>(json);
-                    player.LastInput = input;
-                    if (input.jump) player.JumpQueued = true;
+                    player.ApplyInput(NetJson.Parse<InputMsg>(json));
                     break;
             }
         }
 
-        private void JoinWorld(ServerPlayer player)
+        private void JoinWorld(Player player)
         {
             ServerWorld world = WorldFor(player.WorldId);
             world.Add(player);
             player.InWorld = true;
-            ServerPlayerSim.SpawnBody(player, world.OffsetX);
 
-            transport.Send(player.ConnId, NetJson.Serialize(new WorldJoinedMsg
+            serverTransport.Send(player.ConnId, NetJson.Serialize(new WorldJoinedMsg
             {
                 type = "worldJoined",
                 worldId = world.Id,
@@ -129,9 +126,9 @@ namespace Shooter.Server
             }));
 
             string joined = NetJson.Serialize(new JoinedMsg { type = "joined", id = player.UserId, name = player.DisplayName });
-            foreach (ServerPlayer p in world.Players)
-                if (p.ConnId != player.ConnId)
-                    transport.Send(p.ConnId, joined);
+            foreach (Player other in world.Players)
+                if (other.ConnId != player.ConnId)
+                    serverTransport.Send(other.ConnId, joined);
 
             Log.Info("user " + player.UserId + " joined world " + world.Id + ", players there now " + world.Players.Count);
         }
@@ -140,9 +137,9 @@ namespace Shooter.Server
         {
             if (!worlds.TryGetValue(worldId, out ServerWorld world))
             {
-                world = new ServerWorld(worldId, worlds.Count * WorldSpacing);
+                world = new ServerWorld(worldId);
                 worlds[worldId] = world;
-                Log.Info("world " + worldId + " created at offset x=" + world.OffsetX + ", total worlds " + worlds.Count);
+                Log.Info("world " + worldId + " created, total worlds " + worlds.Count);
             }
             return world;
         }
@@ -159,21 +156,21 @@ namespace Shooter.Server
             {
                 if (world.Players.Count == 0) continue;
                 string json = NetJson.Serialize(world.BuildSnapshot(tick));
-                foreach (ServerPlayer p in world.Players)
-                    transport.Send(p.ConnId, json);
+                foreach (Player player in world.Players)
+                    serverTransport.Send(player.ConnId, json);
             }
         }
 
         private void OnHookReceived(string json)
         {
-            foreach (int connId in sessions.HandleHook(json))
-                transport.Kick(connId);
+            foreach (int connId in serverSessionGate.HandleHook(json))
+                serverTransport.Kick(connId);
         }
 
         private void OnClientDisconnected(int connId)
         {
-            if (!sessions.TryGet(connId, out ServerPlayer player)) return;
-            sessions.Remove(connId);
+            if (!serverSessionGate.TryGet(connId, out Player player)) return;
+            serverSessionGate.Remove(connId);
 
             if (player.Body != null) Destroy(player.Body);
             if (!player.InWorld) return;
@@ -182,16 +179,16 @@ namespace Shooter.Server
             {
                 world.Remove(connId);
                 string left = NetJson.Serialize(new LeftMsg { type = "left", id = player.UserId });
-                foreach (ServerPlayer p in world.Players)
-                    transport.Send(p.ConnId, left);
+                foreach (Player other in world.Players)
+                    serverTransport.Send(other.ConnId, left);
             }
 
-            Log.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", sessions total " + sessions.Count);
+            Log.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", sessions total " + serverSessionGate.Count);
         }
 
         private void OnDestroy()
         {
-            transport?.Stop();
+            serverTransport?.Stop();
         }
     }
 }

@@ -8,8 +8,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Auth;
 using Shooter.Logging;
-using Shooter.Entities.Player;
+using Shooter.Entities.Characters;
 using Shooter.Entities.Chronology;
+using Shooter.Net.Msgs;
 
 namespace Shooter.Net
 {
@@ -32,8 +33,6 @@ namespace Shooter.Net
         private readonly ConcurrentQueue<string> inbound = new ConcurrentQueue<string>();
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
 
-        private int inputSeq;
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
         {
@@ -49,7 +48,7 @@ namespace Shooter.Net
 
             var go = new GameObject("Net");
             go.AddComponent<NetworkClient>();
-            go.AddComponent<RemotePlayerManager>();
+            go.AddComponent<PlayerView>();
             go.AddComponent<ClockView>();
         }
 
@@ -62,7 +61,6 @@ namespace Shooter.Net
 
         public void SendInput(InputMsg input)
         {
-            input.seq = ++inputSeq;
             _ = Send(input);
         }
 
