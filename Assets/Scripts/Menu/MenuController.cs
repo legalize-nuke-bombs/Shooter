@@ -34,7 +34,7 @@ namespace Shooter.Menu
             serverError = new ServerErrorScreen(root, CheckServer);
             login = new LoginScreen(root, api, OnLoggedIn);
             worlds = new WorldsScreen(root, api, onCreateClick: () => createModal.Show(), onJoined: OnJoined);
-            createModal = new CreateWorldModal(root, api, onCreated: () => worlds.ShowMineAndReload());
+            createModal = new CreateWorldModal(root, api, onCreated: () => worlds.Reload());
 
             CheckServer();
         }
@@ -67,7 +67,7 @@ namespace Shooter.Menu
                 {
                     login.Hide();
                     worlds.Hide();
-                    serverError.Show("По адресу " + Session.ServerAddress + " никто не ответил — или это не сервер Shooter. Адрес лежит в StreamingAssets/config.json.");
+                    serverError.Show("Сервер по адресу " + Session.ServerAddress + " недоступен. Адрес задаётся в файле StreamingAssets/config.json.");
                     return;
                 }
 

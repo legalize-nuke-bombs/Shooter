@@ -3,11 +3,11 @@
     <ui:VisualElement name="root" class="root">
         <ui:VisualElement name="login-screen" class="screen">
             <ui:VisualElement class="brand-wrap">
-                <ui:Label text="SHOOTER" class="brand px" />
-                <ui:Label text="alpha" class="brand-splash px" />
+                <ui:Label text="SHOOTER" class="brand" />
+                <ui:Label text="ALPHA BUILD" class="brand-sub" />
             </ui:VisualElement>
             <ui:VisualElement class="panel">
-                <ui:Label name="form-title" text="РЕГИСТРАЦИЯ" class="form-title px" />
+                <ui:Label name="form-title" text="РЕГИСТРАЦИЯ" class="form-title" />
                 <ui:Label text="ИМЯ ПОЛЬЗОВАТЕЛЯ" class="field-label" />
                 <ui:TextField name="username-field" class="text-input" />
                 <ui:VisualElement name="displayname-block">
@@ -20,7 +20,7 @@
                     <ui:Label text="ПОВТОРИТЕ ПАРОЛЬ" class="field-label" />
                     <ui:TextField name="confirm-field" password="true" class="text-input" />
                 </ui:VisualElement>
-                <ui:Button name="submit-btn" text="СОЗДАТЬ АККАУНТ" class="btn btn-primary px" />
+                <ui:Button name="submit-btn" text="СОЗДАТЬ АККАУНТ" class="btn btn-primary submit-btn" />
                 <ui:Button name="mode-link" text="Уже есть аккаунт? Войти" class="link-btn" />
                 <ui:Label name="login-status" class="status-line" />
             </ui:VisualElement>
@@ -28,47 +28,45 @@
 
         <ui:VisualElement name="server-error-screen" class="screen hidden">
             <ui:VisualElement class="brand-wrap">
-                <ui:Label text="SHOOTER" class="brand px" />
+                <ui:Label text="SHOOTER" class="brand" />
             </ui:VisualElement>
             <ui:VisualElement class="panel server-error-panel">
-                <ui:Label text="СЕРВЕР НЕ ОТВЕЧАЕТ" class="server-error-title px" />
+                <ui:Label text="СЕРВЕР НЕ ОТВЕЧАЕТ" class="server-error-title" />
                 <ui:Label name="server-error-detail" class="server-error-text" />
-                <ui:Button name="retry-btn" text="ПОВТОРИТЬ" class="btn btn-primary px" style="width: 100%;" />
+                <ui:Button name="retry-btn" text="ПОВТОРИТЬ" class="btn btn-primary retry-btn" />
             </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="worlds-screen" class="worlds-root hidden">
             <ui:VisualElement class="topbar">
-                <ui:Label text="SHOOTER" class="topbar-brand px" />
+                <ui:Label text="SHOOTER" class="topbar-brand" />
                 <ui:Label name="user-label" class="topbar-user" />
             </ui:VisualElement>
-            <ui:VisualElement class="controls-row">
-                <ui:Button name="tab-mine" text="МОИ МИРЫ" class="list-tab list-tab-active px" />
-                <ui:Button name="tab-public" text="ПУБЛИЧНЫЕ" class="list-tab px" />
+            <ui:VisualElement class="section-row">
+                <ui:Label text="МОИ МИРЫ" class="section-title" />
                 <ui:VisualElement class="controls-spacer" />
-                <ui:Button name="refresh-btn" text="↻" class="btn icon-btn" />
-                <ui:TextField name="world-id-field" class="text-input world-id-input" />
-                <ui:Button name="join-id-btn" text="ПО ID" class="btn px" style="height: 32px;" />
-                <ui:Button name="create-btn" text="+ СОЗДАТЬ МИР" class="btn btn-primary create-world-btn px" />
+                <ui:Button name="refresh-btn" text="ОБНОВИТЬ" class="btn" />
+                <ui:Button name="create-btn" text="СОЗДАТЬ МИР" class="btn btn-primary create-world-btn" />
             </ui:VisualElement>
             <ui:ScrollView name="worlds-scroll" class="worlds-scroll" />
-            <ui:Button name="load-more-btn" text="ПОКАЗАТЬ ЕЩЁ" class="btn load-more px" />
-            <ui:Label name="worlds-status" class="status-line" style="-unity-text-align: middle-left;" />
+            <ui:Button name="load-more-btn" text="ПОКАЗАТЬ ЕЩЁ" class="btn load-more" />
+            <ui:VisualElement class="joinbar">
+                <ui:Label text="ВХОД ПО ИДЕНТИФИКАТОРУ" class="joinbar-label" />
+                <ui:TextField name="world-id-field" class="text-input world-id-input" />
+                <ui:Button name="join-id-btn" text="ПРИСОЕДИНИТЬСЯ" class="btn btn-primary joinbar-btn" />
+            </ui:VisualElement>
+            <ui:Label name="worlds-status" class="status-line status-left" />
         </ui:VisualElement>
 
         <ui:VisualElement name="create-modal" class="modal-overlay hidden">
             <ui:VisualElement class="panel">
-                <ui:Label text="НОВЫЙ МИР" class="modal-title px" />
+                <ui:Label text="НОВЫЙ МИР" class="modal-title" />
                 <ui:Label text="НАЗВАНИЕ" class="field-label" />
                 <ui:TextField name="create-name" class="text-input" />
-                <ui:Label text="ОПИСАНИЕ" class="field-label" />
-                <ui:TextField name="create-desc" multiline="true" class="desc-input" />
-                <ui:Label text="ВИДИМОСТЬ" class="field-label" />
-                <ui:DropdownField name="create-visibility" class="theme-dropdown" />
                 <ui:Label text="ДОСТУП" class="field-label" />
                 <ui:DropdownField name="create-policy" class="theme-dropdown" />
-                <ui:Button name="create-confirm" text="СОЗДАТЬ" class="btn btn-primary px" />
-                <ui:Button name="create-cancel" text="ОТМЕНА" class="btn px" style="margin-top: 8px;" />
+                <ui:Button name="create-confirm" text="СОЗДАТЬ" class="btn btn-primary submit-btn" />
+                <ui:Button name="create-cancel" text="ОТМЕНА" class="btn cancel-btn" />
                 <ui:Label name="create-status" class="status-line" />
             </ui:VisualElement>
         </ui:VisualElement>

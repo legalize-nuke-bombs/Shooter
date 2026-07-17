@@ -8,9 +8,9 @@ namespace Shooter.Menu
     [Serializable] public class ServerInfoResponse { public string name; public int major; public int minor; public int patch; }
     [Serializable] public class UserDto { public long id; public string displayName; }
     [Serializable] public class PlayerDto { public long id; public UserDto user; public string role; public long memberSince; }
-    [Serializable] public class WorldDto { public string id; public string name; public string description; public long createdAt; public string visibilityPolicy; public string joinPolicy; public PlayerDto[] players; }
+    [Serializable] public class WorldDto { public string id; public string name; public long createdAt; public string joinPolicy; public PlayerDto[] players; }
     [Serializable] public class WorldsWrap { public WorldDto[] items; }
     [Serializable] public class LoginRequest { public string username; public string password; }
     [Serializable] public class RegisterRequest { public string username; public string displayName; public string password; }
-    [Serializable] public class CreateWorldRequest { public string name; public string description; public string visibilityPolicy; public string joinPolicy; }
+    [Serializable] public class CreateWorldRequest { public string name; public string joinPolicy; }
 }
