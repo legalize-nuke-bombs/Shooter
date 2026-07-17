@@ -37,7 +37,7 @@ namespace Shooter.Auth
         {
             userId = -1;
             if (!TryParsePayload(token, out JwtClaims claims)) return false;
-            if (!long.TryParse(claims.sub.Split(':')[0], out userId))
+            if (!long.TryParse(claims.sub, out userId))
             {
                 userId = -1;
                 return false;

@@ -12,16 +12,16 @@ namespace Shooter.GameServer
     {
         private const float TickRate = 30f;
         private const float WorldSpacing = 1000f;
-        private const float BanSweepInterval = 60f;
-        private const long BanRetentionSeconds = 180;
+        private const float AllowSweepInterval = 60f;
+        private const long AllowTtlSeconds = 60;
 
         private INetTransport transport;
         private readonly Dictionary<int, ServerPlayer> players = new Dictionary<int, ServerPlayer>();
         private readonly Dictionary<string, int> worldIndices = new Dictionary<string, int>();
-        private readonly BanList bans = new BanList();
+        private readonly AllowList allows = new AllowList();
         private byte[] jwtSecret;
         private float tickTimer;
-        private float banSweepTimer;
+        private float allowSweepTimer;
         private long tick;
 
         private void OnEnable()
@@ -42,10 +42,10 @@ namespace Shooter.GameServer
             Application.targetFrameRate = (int)TickRate * 2;
 
             int port = ServerCli.IntArg("-port", 9090);
-            string secret = ServerCli.StringArg("-jwtSecret", Environment.GetEnvironmentVariable("UNITY_SERVER_SECRET") ?? "");
+            string secret = ServerCli.StringArg("-jwtSecret", Environment.GetEnvironmentVariable("JWT_SECRET") ?? "");
             if (string.IsNullOrEmpty(secret))
             {
-                ServerLog.Error("no JWT secret (-jwtSecret arg or UNITY_SERVER_SECRET env), refusing to start");
+                ServerLog.Error("no JWT secret (-jwtSecret arg or JWT_SECRET env), refusing to start");
                 Application.Quit(1);
                 return;
             }
@@ -58,7 +58,7 @@ namespace Shooter.GameServer
             transport.HookReceived += OnHookReceived;
             transport.HookAuthorizer = token => Jwt.TryVerify(token, jwtSecret, out JwtClaims claims) && claims.sub == "hook";
             transport.Start(port);
-            ServerLog.Info("ws listening on " + port + ", tick rate " + TickRate + ", ban retention " + BanRetentionSeconds + "s");
+            ServerLog.Info("ws listening on " + port + ", tick rate " + TickRate + ", allow ttl " + AllowTtlSeconds + "s");
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -83,13 +83,13 @@ namespace Shooter.GameServer
                 BroadcastSnapshots();
             }
 
-            banSweepTimer += Time.deltaTime;
-            if (banSweepTimer >= BanSweepInterval)
+            allowSweepTimer += Time.deltaTime;
+            if (allowSweepTimer >= AllowSweepInterval)
             {
-                banSweepTimer = 0f;
-                int swept = bans.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - BanRetentionSeconds);
+                allowSweepTimer = 0f;
+                int swept = allows.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 if (swept > 0)
-                    ServerLog.Info("swept " + swept + " expired bans");
+                    ServerLog.Info("swept " + swept + " expired allows");
             }
         }
 
@@ -103,19 +103,16 @@ namespace Shooter.GameServer
                 return;
             }
 
-            string[] subject = claims.sub.Split(new[] { ':' }, 2);
-            if (subject.Length != 2 || subject[1].Length == 0 || !long.TryParse(subject[0], out long userId))
+            if (!long.TryParse(claims.sub, out long userId))
             {
-                ServerLog.Warn("conn " + connId + " not a world token (sub '" + claims.sub + "'), kicking");
+                ServerLog.Warn("conn " + connId + " not a user token (sub '" + claims.sub + "'), kicking");
                 transport.Kick(connId);
                 return;
             }
 
-            string worldId = subject[1];
-
-            if (bans.IsBanned(userId, worldId, claims.iat))
+            if (!allows.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out string worldId))
             {
-                ServerLog.Warn("conn " + connId + " user " + userId + " world " + worldId + " pre-kick token (iat " + claims.iat + "), kicking");
+                ServerLog.Warn("conn " + connId + " user " + userId + " has no open session, kicking");
                 transport.Kick(connId);
                 return;
             }
@@ -129,7 +126,7 @@ namespace Shooter.GameServer
             };
             players[connId] = player;
 
-            ServerLog.Info("conn " + connId + " authed: user " + player.UserId + " world " + player.WorldId + ", token iat " + claims.iat);
+            ServerLog.Info("conn " + connId + " authed: user " + player.UserId + " world " + player.WorldId);
             transport.Send(connId, NetJson.Serialize(new WelcomeMsg { type = "welcome", playerId = player.UserId, tickRate = (int)TickRate }));
         }
 
@@ -271,40 +268,42 @@ namespace Shooter.GameServer
 
         private void OnHookReceived(string json)
         {
-            HookBatchMsg batch = NetJson.Parse<HookBatchMsg>(json);
-            if (batch == null || batch.hooks == null) return;
-
-            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            foreach (UnityHookMsg hook in batch.hooks)
-                ApplyHook(hook, now);
-        }
-
-        private void ApplyHook(UnityHookMsg hook, long now)
-        {
-            bool hasUser = hook.userIdToKick != 0;
-            bool hasWorld = !string.IsNullOrEmpty(hook.worldIdToKick);
-
-            if (hasUser && hasWorld) bans.BanPair(hook.userIdToKick, hook.worldIdToKick, now);
-            else if (hasUser) bans.BanUser(hook.userIdToKick, now);
-            else if (hasWorld) bans.BanWorld(hook.worldIdToKick, now);
-            else
+            UnityHookMsg hook = NetJson.Parse<UnityHookMsg>(json);
+            if (hook == null || string.IsNullOrEmpty(hook.action) || string.IsNullOrEmpty(hook.worldId))
             {
-                ServerLog.Warn("hook with no user and no world, ignoring");
+                ServerLog.Warn("malformed hook, ignoring");
                 return;
             }
 
+            switch (hook.action)
+            {
+                case "OPEN_SESSION":
+                    allows.Open(hook.userId, hook.worldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
+                    ServerLog.Info("session opened: user " + hook.userId + " world " + hook.worldId);
+                    break;
+                case "CLOSE_SESSION":
+                    CloseSessions(hook.userId, hook.worldId);
+                    break;
+                default:
+                    ServerLog.Warn("unknown hook action " + hook.action + ", ignoring");
+                    break;
+            }
+        }
+
+        private void CloseSessions(long userId, string worldId)
+        {
+            bool wholeWorld = userId == 0;
+            if (wholeWorld) allows.CloseWorld(worldId);
+            else allows.Close(userId, worldId);
+
             var toKick = new List<int>();
             foreach (ServerPlayer p in players.Values)
-            {
-                bool userMatch = !hasUser || p.UserId == hook.userIdToKick;
-                bool worldMatch = !hasWorld || p.WorldId == hook.worldIdToKick;
-                if (userMatch && worldMatch)
+                if (p.WorldId == worldId && (wholeWorld || p.UserId == userId))
                     toKick.Add(p.ConnId);
-            }
             foreach (int connId in toKick)
                 transport.Kick(connId);
 
-            ServerLog.Info("hook applied: user " + hook.userIdToKick + " world " + hook.worldIdToKick + ", banned since now, kicked online " + toKick.Count);
+            ServerLog.Info("session closed: user " + (wholeWorld ? "*" : userId.ToString()) + " world " + worldId + ", kicked online " + toKick.Count);
         }
 
         private void OnClientDisconnected(int connId)
