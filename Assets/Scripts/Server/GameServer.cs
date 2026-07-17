@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Net;
-using Shooter.Controls;
-using Shooter.Entities.Characters;
+using Shooter.Client;
+using Shooter.Server.Characters;
 using Shooter.Logging;
 using Shooter.Net.Msgs;
 

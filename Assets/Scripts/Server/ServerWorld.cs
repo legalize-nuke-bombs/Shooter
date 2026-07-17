@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Entities.Characters;
-using Shooter.Entities.Chronology;
+using Shooter.Server.Characters;
+using Shooter.Server.Chronology;
 using Shooter.Net.Msgs;
 using Shooter.Logging;
 

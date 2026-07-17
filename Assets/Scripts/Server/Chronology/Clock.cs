@@ -1,10 +1,10 @@
-namespace Shooter.Entities.Chronology
+namespace Shooter.Server.Chronology
 {
     public class Clock
     {
         private const float DayRealSeconds = 120f;
 
-        public double Timestamp { get; private set;  }
+        public double Timestamp { get; private set; }
 
         public void Advance(float dt)
         {

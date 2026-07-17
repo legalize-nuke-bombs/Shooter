@@ -1,5 +1,5 @@
-using Shooter.Entities.Characters;
-using Shooter.Entities.Chronology;
+using Shooter.Server.Characters;
+using Shooter.Server.Chronology;
 
 namespace Shooter.Net.Msgs
 {

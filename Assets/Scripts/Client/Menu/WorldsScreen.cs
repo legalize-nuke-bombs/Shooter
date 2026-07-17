@@ -1,6 +1,5 @@
 using System;
 using UnityEngine.UIElements;
-using Shooter.Auth;
 
 namespace Shooter.Client.Menu
 {
