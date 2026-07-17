@@ -58,6 +58,18 @@ namespace Shooter.Menu
             Request("POST", "/api/auth/register", body, false, (code, text) => OnTokenResponse(code, text, onDone));
         }
 
+        public void Me(Action<UserDto, string> onDone)
+        {
+            Request("GET", "/api/users/me", null, true, (code, text) =>
+            {
+                if (code != 200) { onDone(null, HumanError(code, text)); return; }
+                UserDto me = null;
+                try { me = JsonUtility.FromJson<UserDto>(text); } catch { }
+                if (me == null || me.id <= 0) { onDone(null, "Не удалось получить профиль."); return; }
+                onDone(me, null);
+            });
+        }
+
         public void LoadWorlds(int page, int size, Action<WorldDto[], string> onDone)
         {
             string path = "/api/worlds?playerRole=MEMBER&page=" + page + "&size=" + size;
