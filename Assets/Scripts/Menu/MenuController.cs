@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Auth;
+using Shooter.Logging;
 
 namespace Shooter.Menu
 {
@@ -55,7 +56,7 @@ namespace Shooter.Menu
             }
             catch (Exception e)
             {
-                Debug.LogWarning("menu: config read failed, using default: " + e.Message);
+                Log.Warn("menu: config read failed, using default: " + e.Message);
             }
         }
 

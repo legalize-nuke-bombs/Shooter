@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace Shooter.Server
+namespace Shooter.Logging
 {
-    public static class ServerLog
+    public static class Log
     {
         public static void Info(string message)
         {
