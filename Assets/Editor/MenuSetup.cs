@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Menu;
+using Shooter.Logging;
 
 namespace Shooter.Editor
 {
@@ -60,7 +61,7 @@ namespace Shooter.Editor
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             AssetDatabase.SaveAssets();
-            Debug.Log("menu setup: done");
+            Log.Info("menu setup: done");
         }
     }
 }

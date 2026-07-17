@@ -1,5 +1,5 @@
 using UnityEngine;
-using Shooter.Server;
+using Shooter.Logging;
 
 namespace Shooter.Entities.Player
 {
@@ -15,7 +15,7 @@ namespace Shooter.Entities.Player
 
             player.Body = body;
             player.Controller = body.AddComponent<CharacterController>();
-            ServerLog.Info("spawned user " + player.UserId + " world " + player.WorldId + " at " + body.transform.position);
+            Log.Info("spawned user " + player.UserId + " world " + player.WorldId + " at " + body.transform.position);
         }
 
         public static void Step(ServerPlayer p, float dt)

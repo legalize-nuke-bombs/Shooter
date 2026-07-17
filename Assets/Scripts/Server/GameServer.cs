@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using Shooter.Net;
 using Shooter.Entities.Player;
 using Shooter.Auth;
+using Shooter.Logging;
 
 namespace Shooter.Server
 {
@@ -45,7 +46,7 @@ namespace Shooter.Server
             string secret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? "";
             if (string.IsNullOrEmpty(secret))
             {
-                ServerLog.Error("no JWT_SECRET env, refusing to start");
+                Log.Error("no JWT_SECRET env, refusing to start");
                 Application.Quit(1);
                 return;
             }
@@ -58,7 +59,7 @@ namespace Shooter.Server
             transport.HookReceived += OnHookReceived;
             transport.HookAuthorizer = token => Jwt.TryVerify(token, jwtSecret, out string subject) && subject == "hook";
             transport.Start(Port);
-            ServerLog.Info("ws listening on " + Port + ", tick rate " + TickRate + ", allow ttl " + AllowTtlSeconds + "s");
+            Log.Info("ws listening on " + Port + ", tick rate " + TickRate + ", allow ttl " + AllowTtlSeconds + "s");
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -66,7 +67,7 @@ namespace Shooter.Server
             PlayerController localPlayer = FindAnyObjectByType<PlayerController>();
             if (localPlayer != null)
                 Destroy(localPlayer.gameObject);
-            ServerLog.Info("scene " + scene.name + " ready");
+            Log.Info("scene " + scene.name + " ready");
         }
 
         private void Update()
@@ -89,7 +90,7 @@ namespace Shooter.Server
                 allowSweepTimer = 0f;
                 int swept = allows.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 if (swept > 0)
-                    ServerLog.Info("swept " + swept + " expired allows");
+                    Log.Info("swept " + swept + " expired allows");
             }
         }
 
@@ -98,21 +99,21 @@ namespace Shooter.Server
             string token = ExtractQueryParam(query, "token");
             if (!Jwt.TryVerify(token, jwtSecret, out string subject))
             {
-                ServerLog.Warn("conn " + connId + " token rejected, kicking");
+                Log.Warn("conn " + connId + " token rejected, kicking");
                 transport.Kick(connId);
                 return;
             }
 
             if (!long.TryParse(subject, out long userId))
             {
-                ServerLog.Warn("conn " + connId + " not a user token (sub '" + subject + "'), kicking");
+                Log.Warn("conn " + connId + " not a user token (sub '" + subject + "'), kicking");
                 transport.Kick(connId);
                 return;
             }
 
             if (!allows.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out string worldId))
             {
-                ServerLog.Warn("conn " + connId + " user " + userId + " has no open session, kicking");
+                Log.Warn("conn " + connId + " user " + userId + " has no open session, kicking");
                 transport.Kick(connId);
                 return;
             }
@@ -126,7 +127,7 @@ namespace Shooter.Server
             };
             players[connId] = player;
 
-            ServerLog.Info("conn " + connId + " authed: user " + player.UserId + " world " + player.WorldId);
+            Log.Info("conn " + connId + " authed: user " + player.UserId + " world " + player.WorldId);
             transport.Send(connId, NetJson.Serialize(new WelcomeMsg { type = "welcome", playerId = player.UserId, tickRate = (int)TickRate }));
         }
 
@@ -140,7 +141,7 @@ namespace Shooter.Server
                     var hello = NetJson.Parse<HelloMsg>(json);
                     if (!string.IsNullOrEmpty(hello.name))
                         player.DisplayName = hello.name.Length > 40 ? hello.name.Substring(0, 40) : hello.name;
-                    ServerLog.Info("conn " + connId + " hello: user " + player.UserId + " name '" + player.DisplayName + "'");
+                    Log.Info("conn " + connId + " hello: user " + player.UserId + " name '" + player.DisplayName + "'");
                     break;
                 case "joinWorld":
                     if (!player.InWorld)
@@ -176,7 +177,7 @@ namespace Shooter.Server
                 if (p.InWorld && p.WorldId == player.WorldId && p.ConnId != player.ConnId)
                     transport.Send(p.ConnId, joined);
 
-            ServerLog.Info("user " + player.UserId + " joined world " + player.WorldId + ", players there now " + states.Count);
+            Log.Info("user " + player.UserId + " joined world " + player.WorldId + ", players there now " + states.Count);
         }
 
         private float WorldOffsetX(string worldId)
@@ -228,7 +229,7 @@ namespace Shooter.Server
             UnityHookMsg hook = NetJson.Parse<UnityHookMsg>(json);
             if (hook == null || string.IsNullOrEmpty(hook.action) || string.IsNullOrEmpty(hook.worldId))
             {
-                ServerLog.Warn("malformed hook, ignoring");
+                Log.Warn("malformed hook, ignoring");
                 return;
             }
 
@@ -236,13 +237,13 @@ namespace Shooter.Server
             {
                 case "OPEN_SESSION":
                     allows.Open(hook.userId, hook.worldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
-                    ServerLog.Info("session opened: user " + hook.userId + " world " + hook.worldId);
+                    Log.Info("session opened: user " + hook.userId + " world " + hook.worldId);
                     break;
                 case "CLOSE_SESSION":
                     CloseSessions(hook.userId, hook.worldId);
                     break;
                 default:
-                    ServerLog.Warn("unknown hook action " + hook.action + ", ignoring");
+                    Log.Warn("unknown hook action " + hook.action + ", ignoring");
                     break;
             }
         }
@@ -260,7 +261,7 @@ namespace Shooter.Server
             foreach (int connId in toKick)
                 transport.Kick(connId);
 
-            ServerLog.Info("session closed: user " + (wholeWorld ? "*" : userId.ToString()) + " world " + worldId + ", kicked online " + toKick.Count);
+            Log.Info("session closed: user " + (wholeWorld ? "*" : userId.ToString()) + " world " + worldId + ", kicked online " + toKick.Count);
         }
 
         private void OnClientDisconnected(int connId)
@@ -276,7 +277,7 @@ namespace Shooter.Server
                 if (p.InWorld && p.WorldId == player.WorldId)
                     transport.Send(p.ConnId, left);
 
-            ServerLog.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", players total " + players.Count);
+            Log.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", players total " + players.Count);
         }
 
         private void OnDestroy()

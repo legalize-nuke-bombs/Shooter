@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Auth;
+using Shooter.Logging;
 using Shooter.Entities.Player;
 
 namespace Shooter.Net
@@ -70,13 +71,13 @@ namespace Shooter.Net
             try
             {
                 await socket.ConnectAsync(new Uri(Session.WsUrl), cancellation.Token).ConfigureAwait(false);
-                Debug.Log("net: connected " + Session.WsUrl);
+                Log.Info("net: connected " + Session.WsUrl);
                 _ = ReceiveLoop();
                 await Send(new HelloMsg { name = Session.DisplayName }).ConfigureAwait(false);
             }
             catch (Exception e)
             {
-                Debug.LogWarning("net: connect failed: " + e.Message);
+                Log.Warn("net: connect failed: " + e.Message);
             }
         }
 
@@ -91,7 +92,7 @@ namespace Shooter.Net
                     var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation.Token).ConfigureAwait(false);
                     if (result.MessageType == WebSocketMessageType.Close)
                     {
-                        Debug.LogWarning("net: closed by server");
+                        Log.Warn("net: closed by server");
                         break;
                     }
 
@@ -105,7 +106,7 @@ namespace Shooter.Net
             catch (Exception e)
             {
                 if (!cancellation.IsCancellationRequested)
-                    Debug.LogWarning("net: receive loop ended: " + e.Message);
+                    Log.Warn("net: receive loop ended: " + e.Message);
             }
         }
 
@@ -121,7 +122,7 @@ namespace Shooter.Net
             }
             catch (Exception e)
             {
-                Debug.LogWarning("net: send failed: " + e.Message);
+                Log.Warn("net: send failed: " + e.Message);
             }
             finally
             {
@@ -142,13 +143,13 @@ namespace Shooter.Net
                 case "welcome":
                     var welcome = NetJson.Parse<WelcomeMsg>(json);
                     PlayerId = welcome.playerId;
-                    Debug.Log("net: welcome, playerId " + PlayerId + ", tickRate " + welcome.tickRate);
+                    Log.Info("net: welcome, playerId " + PlayerId + ", tickRate " + welcome.tickRate);
                     _ = Send(new JoinWorldMsg());
                     break;
                 case "worldJoined":
                     var joined = NetJson.Parse<WorldJoinedMsg>(json);
                     InWorld = true;
-                    Debug.Log("net: world " + joined.worldId + ", players " + joined.players.Length);
+                    Log.Info("net: world " + joined.worldId + ", players " + joined.players.Length);
                     WorldJoined?.Invoke(joined);
                     break;
                 case "snapshot":
@@ -161,7 +162,7 @@ namespace Shooter.Net
                     PlayerLeft?.Invoke(NetJson.Parse<LeftMsg>(json));
                     break;
                 default:
-                    Debug.LogWarning("net: unknown message: " + json);
+                    Log.Warn("net: unknown message: " + json);
                     break;
             }
         }

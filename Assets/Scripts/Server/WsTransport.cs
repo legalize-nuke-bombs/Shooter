@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using Shooter.Logging;
 
 namespace Shooter.Server
 {
@@ -132,7 +133,7 @@ namespace Shooter.Server
                 int connId = Interlocked.Increment(ref nextId);
                 var client = new Client { Tcp = tcp, Stream = tcp.GetStream() };
                 clients[connId] = client;
-                ServerLog.Info("tcp conn " + connId + " accepted from " + tcp.Client.RemoteEndPoint);
+                Log.Info("tcp conn " + connId + " accepted from " + tcp.Client.RemoteEndPoint);
 
                 new Thread(() => WriterLoop(connId, client)) { IsBackground = true, Name = "ws-write-" + connId }.Start();
                 new Thread(() => ClientLoop(connId, client)) { IsBackground = true, Name = "ws-read-" + connId }.Start();
@@ -172,7 +173,7 @@ namespace Shooter.Server
 
                 string query = CompleteWsHandshake(client.Stream, request);
                 client.Tcp.ReceiveTimeout = 0;
-                ServerLog.Info("conn " + connId + " ws handshake ok, path " + request.Path);
+                Log.Info("conn " + connId + " ws handshake ok, path " + request.Path);
 
                 events.Enqueue(new TransportEvent { Kind = EventKind.Connected, ConnId = connId, Payload = query });
 
@@ -234,7 +235,7 @@ namespace Shooter.Server
             }
             finally
             {
-                ServerLog.Info("conn " + connId + " closed: " + closeReason);
+                Log.Info("conn " + connId + " closed: " + closeReason);
                 CloseClient(connId, client);
             }
         }
@@ -302,21 +303,21 @@ namespace Shooter.Server
 
             if (token == null || authorizer == null || !authorizer(token))
             {
-                ServerLog.Warn("hook post rejected: bad or missing bearer token");
+                Log.Warn("hook post rejected: bad or missing bearer token");
                 WriteHttpResponse(client.Stream, "401 Unauthorized");
                 return;
             }
 
             if (!int.TryParse(request.Header("Content-Length"), out int length) || length < 0 || length > MaxFrameBytes)
             {
-                ServerLog.Warn("hook post rejected: bad content length");
+                Log.Warn("hook post rejected: bad content length");
                 WriteHttpResponse(client.Stream, "411 Length Required");
                 return;
             }
 
             string body = Encoding.UTF8.GetString(ReadExact(client.Stream, length));
             events.Enqueue(new TransportEvent { Kind = EventKind.Hook, ConnId = 0, Payload = body });
-            ServerLog.Info("hook post accepted, " + length + " bytes");
+            Log.Info("hook post accepted, " + length + " bytes");
             WriteHttpResponse(client.Stream, "200 OK", "{\"accepted\":true}");
         }
 
