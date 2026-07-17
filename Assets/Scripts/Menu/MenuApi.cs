@@ -129,7 +129,7 @@ namespace Shooter.Menu
                 onDone(request.responseCode, text);
         }
 
-        public static string HumanError(long code, string text)
+        private static string HumanError(long code, string text)
         {
             if (code == 0) return "Нет соединения с сервером.";
             try
