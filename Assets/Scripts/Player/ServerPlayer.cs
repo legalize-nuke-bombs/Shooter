@@ -1,7 +1,6 @@
 using UnityEngine;
-using Shooter.Net;
 
-namespace Shooter.GameServer
+namespace Shooter.Player
 {
     public class ServerPlayer
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Shooter.GameServer
+namespace Shooter.Net
 {
     public class AllowList
     {

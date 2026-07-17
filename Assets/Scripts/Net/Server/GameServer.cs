@@ -6,7 +6,7 @@ using Shooter.Net;
 using Shooter.Player;
 using Shooter.Auth;
 
-namespace Shooter.GameServer
+namespace Shooter.Net
 {
     public class GameServer : MonoBehaviour
     {
@@ -157,12 +157,12 @@ namespace Shooter.GameServer
         private void JoinWorld(ServerPlayer player)
         {
             player.InWorld = true;
-            SpawnBody(player);
+            ServerPlayerSim.SpawnBody(player, WorldOffsetX(player.WorldId));
 
             var states = new List<PlayerStateMsg>();
             foreach (ServerPlayer p in players.Values)
                 if (p.InWorld && p.WorldId == player.WorldId)
-                    states.Add(BuildState(p));
+                    states.Add(ServerPlayerSim.BuildState(p));
 
             transport.Send(player.ConnId, NetJson.Serialize(new WorldJoinedMsg
             {
@@ -189,38 +189,10 @@ namespace Shooter.GameServer
             return index * WorldSpacing;
         }
 
-        private void SpawnBody(ServerPlayer player)
-        {
-            var body = new GameObject("Sim_" + player.UserId);
-
-            float angle = (player.ConnId * 137f) % 360f;
-            Vector3 offset = Quaternion.Euler(0f, angle, 0f) * Vector3.forward * 16f;
-            body.transform.position = new Vector3(WorldOffsetX(player.WorldId) + offset.x, 1.1f, offset.z);
-
-            player.Body = body;
-            player.Controller = body.AddComponent<CharacterController>();
-            ServerLog.Info("spawned user " + player.UserId + " world " + player.WorldId + " at " + body.transform.position);
-        }
-
         private void Simulate(float dt)
         {
             foreach (ServerPlayer p in players.Values)
-            {
-                if (!p.InWorld || p.Controller == null) continue;
-
-                var input = new MotorInput
-                {
-                    MoveX = p.LastInput.moveX,
-                    MoveZ = p.LastInput.moveZ,
-                    Sprint = p.LastInput.sprint,
-                    Jump = p.JumpQueued,
-                    Yaw = p.LastInput.yaw
-                };
-                float verticalVelocity = p.VerticalVelocity;
-                PlayerMotor.Step(p.Controller, ref verticalVelocity, input, dt);
-                p.VerticalVelocity = verticalVelocity;
-                p.JumpQueued = false;
-            }
+                ServerPlayerSim.Step(p, dt);
         }
 
         private void BroadcastSnapshots()
@@ -234,7 +206,7 @@ namespace Shooter.GameServer
                     list = new List<PlayerStateMsg>();
                     statesByWorld[p.WorldId] = list;
                 }
-                list.Add(BuildState(p));
+                list.Add(ServerPlayerSim.BuildState(p));
             }
 
             var jsonByWorld = new Dictionary<string, string>();
@@ -249,21 +221,6 @@ namespace Shooter.GameServer
             foreach (ServerPlayer p in players.Values)
                 if (p.InWorld)
                     transport.Send(p.ConnId, jsonByWorld[p.WorldId]);
-        }
-
-        private PlayerStateMsg BuildState(ServerPlayer p)
-        {
-            Vector3 pos = p.Body.transform.position;
-            return new PlayerStateMsg
-            {
-                id = p.UserId,
-                name = p.DisplayName,
-                x = pos.x,
-                y = pos.y,
-                z = pos.z,
-                yaw = p.Body.transform.eulerAngles.y,
-                pitch = p.LastInput.pitch
-            };
         }
 
         private void OnHookReceived(string json)

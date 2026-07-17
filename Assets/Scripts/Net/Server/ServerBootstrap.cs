@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Shooter.GameServer
+namespace Shooter.Net
 {
     public static class ServerBootstrap
     {
