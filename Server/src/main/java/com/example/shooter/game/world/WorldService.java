@@ -57,6 +57,7 @@ public class WorldService {
         player.setRole(PlayerRole.CREATOR);
         player.setMemberSince(now);
         player.setLastSeen(now);
+        player.setBlacklisted(false);
         player = playerRepository.save(player);
 
         log.info("user {} created new world {} player {}", userId, world.getId(), player.getId());
@@ -79,6 +80,10 @@ public class WorldService {
         Player player = playerRepository.findByUserIdAndWorldIdForPessimisticWrite(userId, worldId).orElse(null);
 
         if (player != null) {
+            if (player.getBlacklisted()) {
+                log.info("user {} tried to come back to the world {} where he is in the blacklist", userId, worldId);
+                throw new ApiException(ErrorCode.BLACKLISTED);
+            }
             player.setLastSeen(now);
             playerRepository.save(player);
             log.info("user {} came back to world {} as player {}", userId, worldId, player.getId());
@@ -98,6 +103,7 @@ public class WorldService {
         player.setRole(PlayerRole.MEMBER);
         player.setMemberSince(now);
         player.setLastSeen(now);
+        player.setBlacklisted(false);
         player = playerRepository.save(player);
 
         world.setPlayers(world.getPlayers() + 1);
@@ -109,7 +115,7 @@ public class WorldService {
         );
     }
 
-    public void kick(Long userId, UUID worldId, Long targetId) {
+    public Map<String, String> kick(Long userId, UUID worldId, Long targetId) {
         if (Objects.equals(userId, targetId)) {
             log.info("user {} tried to kick themselves from the world {}", userId, worldId);
             throw new ApiException(ErrorCode.CANT_SELF_KICK);
@@ -125,6 +131,42 @@ public class WorldService {
 
         log.info("user {} kicked target {} from the world {}", userId, targetId, worldId);
         worldUnityHookService.registerTask(new UnityHook(targetId, worldId));
+        return Map.of("status", "ok");
+    }
+
+    @Transactional
+    public Map<String, String> blacklist(Long userId, UUID worldId, Long targetId) {
+        if (Objects.equals(userId, targetId)) {
+            log.info("user {} tried to blacklist themselves in world {}", userId, worldId);
+            throw new ApiException(ErrorCode.CANT_SELF_BLACKLIST);
+        }
+        requireCreator(userId, worldId);
+
+        Player target = playerRepository.findByUserIdAndWorldIdForPessimisticWrite(targetId, worldId).orElseThrow(() -> new ApiException(ErrorCode.PLAYER_NOT_FOUND));
+        if (target.getBlacklisted()) {
+            log.info("user {} tried to blacklist already blacklisted target {} in the world {}", userId, targetId, worldId);
+            throw new ApiException(ErrorCode.ALREADY_BLACKLISTED);
+        }
+        target.setBlacklisted(true);
+        playerRepository.save(target);
+        worldUnityHookService.registerTask(new UnityHook(targetId, worldId));
+        log.info("user {} blacklisted target {} in the world {}", userId, targetId, worldId);
+        return Map.of("status", "ok");
+    }
+
+    @Transactional
+    public Map<String, String> unblacklist(Long userId, UUID worldId, Long targetId) {
+        requireCreator(userId, worldId);
+
+        Player target = playerRepository.findByUserIdAndWorldIdForPessimisticWrite(targetId, worldId).orElseThrow(() -> new ApiException(ErrorCode.PLAYER_NOT_FOUND));
+        if (!target.getBlacklisted()) {
+            log.info("user {} tried to unblacklist not blacklisted target {} in the world {}", userId, targetId, worldId);
+            throw new ApiException(ErrorCode.NOT_BLACKLISTED);
+        }
+        target.setBlacklisted(false);
+        playerRepository.save(target);
+        log.info("user {} unblacklisted target {} in the world {}", userId, targetId, worldId);
+        return Map.of("status", "ok");
     }
 
     @Transactional
@@ -134,7 +176,7 @@ public class WorldService {
         }
 
         World world = worldRepository.findByIdForPessimisticWrite(worldId).orElseThrow(() -> new ApiException(ErrorCode.WORLD_NOT_FOUND));
-        requireCreator(userId, world);
+        requireCreator(userId, world.getId());
 
         if (request.getName() != null) world.setName(request.getName());
         if (request.getJoinPolicy() != null) world.setJoinPolicy(request.getJoinPolicy());
@@ -151,22 +193,21 @@ public class WorldService {
 
     @Transactional
     public void delete(Long userId, UUID worldId) {
-        World world = worldRepository.findByIdForPessimisticWrite(worldId).orElseThrow(() -> new ApiException(ErrorCode.WORLD_NOT_FOUND));
-        requireCreator(userId, world);
+        requireCreator(userId, worldId);
 
-        worldRepository.delete(world);
+        worldRepository.deleteById(worldId);
         log.info("user {} deleted world {}", userId, worldId);
         worldUnityHookService.registerTask(new UnityHook(null, worldId));
     }
 
-    private void requireCreator(Long userId, World world) {
-        Player player = playerRepository.findByUserIdAndWorldIdForPessimisticWrite(userId, world.getId()).orElse(null);
+    private void requireCreator(Long userId, UUID worldId) {
+        Player player = playerRepository.findByUserIdAndWorldId(userId, worldId).orElse(null);
         if (player == null) {
-            log.info("user {} tried to manage the world {} while not being a member", userId, world.getId());
+            log.info("user {} tried to manage the world {} while not being a member", userId, worldId);
             throw new ApiException(ErrorCode.NOT_A_MEMBER);
         }
         if (player.getRole().ordinal() < PlayerRole.CREATOR.ordinal()) {
-            log.info("user {} tried to manage the world {} while not being a creator", userId, world.getId());
+            log.info("user {} tried to manage the world {} while not being a creator", userId, worldId);
             throw new ApiException(ErrorCode.NOT_A_CREATOR);
         }
     }
