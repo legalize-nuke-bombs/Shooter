@@ -15,6 +15,7 @@ namespace Shooter.Menu
         private ServerErrorScreen serverError;
         private WorldsScreen worlds;
         private CreateWorldModal createModal;
+        private ErrorModal errorModal;
         private Label cornerStatus;
 
         private bool loggedIn;
@@ -31,9 +32,10 @@ namespace Shooter.Menu
             cornerStatus = root.Q<Label>("corner-status");
 
             api = new MenuApi(this);
+            errorModal = new ErrorModal(root);
             serverError = new ServerErrorScreen(root, CheckServer);
             login = new LoginScreen(root, api, OnLoggedIn);
-            worlds = new WorldsScreen(root, api, onCreateClick: () => createModal.Show(), onJoined: OnJoined);
+            worlds = new WorldsScreen(root, api, errorModal, onCreateClick: () => createModal.Show(), onJoined: OnJoined);
             createModal = new CreateWorldModal(root, api, onCreated: () => worlds.Reload());
 
             CheckServer();

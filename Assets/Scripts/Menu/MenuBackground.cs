@@ -29,7 +29,7 @@ namespace Shooter.Menu
             style.right = 0;
             style.bottom = 0;
             generateVisualContent += OnGenerate;
-            schedule.Execute(Tick).Every(33);
+            schedule.Execute(Tick).Every(16);
         }
 
         private void Tick(TimerState timer)
