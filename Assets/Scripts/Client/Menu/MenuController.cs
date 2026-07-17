@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Logging;
+using Shooter.Client.Account;
 
 namespace Shooter.Client.Menu
 {

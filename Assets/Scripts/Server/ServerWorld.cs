@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Characters;
 using Shooter.Server.Chronology;
-using Shooter.Net.Msgs;
+using Shooter.Server.Session;
 using Shooter.Logging;
 
 namespace Shooter.Server

@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Auth;
-using Shooter.Net;
+using Shooter.Serialization;
 using Shooter.Server.Characters;
 using Shooter.Logging;
-using Shooter.Net.Msgs;
-
 namespace Shooter.Server
 {
     public class ServerSessionGate
@@ -69,7 +67,7 @@ namespace Shooter.Server
 
         public IReadOnlyList<int> HandleHook(string json)
         {
-            UnityHookMsg hook = NetJson.Deserialize<UnityHookMsg>(json);
+            UnityHookMsg hook = Json.Deserialize<UnityHookMsg>(json);
             if (hook == null || string.IsNullOrEmpty(hook.action) || string.IsNullOrEmpty(hook.worldId))
             {
                 Log.Warn("malformed hook, ignoring");

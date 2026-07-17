@@ -10,9 +10,9 @@ namespace Shooter.Server
         {
             if (!Application.isBatchMode) return;
 
-            var go = new GameObject("GameServer");
+            var go = new GameObject("ServerHost");
             Object.DontDestroyOnLoad(go);
-            go.AddComponent<GameServer>();
+            go.AddComponent<ServerHost>();
 
             if (SceneManager.GetActiveScene().name != "Game")
                 SceneManager.LoadScene("Game");
