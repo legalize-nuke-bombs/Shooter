@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,8 +9,6 @@ namespace Shooter.Serialization
         {
             NullValueHandling = NullValueHandling.Ignore,
         };
-
-        private static readonly Dictionary<string, Type> polymorphic = Discover();
 
         public static string Serialize(object value)
         {
@@ -31,28 +27,16 @@ namespace Shooter.Serialization
             }
         }
 
-        public static Serializable Deserialize(string json)
+        public static string TypeOf(string json)
         {
             try
             {
-                JObject o = JObject.Parse(json);
-                string tag = (string)o["type"];
-                if (tag == null || !polymorphic.TryGetValue(tag, out Type type)) return null;
-                return (Serializable)o.ToObject(type);
+                return (string)JObject.Parse(json)["type"];
             }
             catch (JsonException)
             {
                 return null;
             }
-        }
-
-        private static Dictionary<string, Type> Discover()
-        {
-            var byName = new Dictionary<string, Type>();
-            foreach (Type type in typeof(Serializable).Assembly.GetTypes())
-                if (type.IsSubclassOf(typeof(Serializable)) && !type.IsAbstract)
-                    byName[type.Name] = type;
-            return byName;
         }
     }
 }

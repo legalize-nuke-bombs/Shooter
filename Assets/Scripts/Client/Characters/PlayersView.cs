@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Shooter.Server.Session;
-using Shooter.Server.Characters;
+using Shooter.Server.Worlds;
+using Shooter.Server.Entities.Characters.Player;
 using Shooter.Logging;
 
 namespace Shooter.Client.Characters
@@ -22,17 +22,17 @@ namespace Shooter.Client.Characters
         private void Start()
         {
             NetworkClient.Instance.SnapshotReceived += OnSnapshot;
-            NetworkClient.Instance.PlayerLeft += OnLeft;
+            NetworkClient.Instance.PeerLeft += OnLeft;
         }
 
         private void OnDestroy()
         {
             if (NetworkClient.Instance == null) return;
             NetworkClient.Instance.SnapshotReceived -= OnSnapshot;
-            NetworkClient.Instance.PlayerLeft -= OnLeft;
+            NetworkClient.Instance.PeerLeft -= OnLeft;
         }
 
-        private void OnSnapshot(SnapshotMsg snapshot)
+        private void OnSnapshot(Snapshot snapshot)
         {
             foreach (PlayerState state in snapshot.players)
             {
@@ -46,7 +46,7 @@ namespace Shooter.Client.Characters
             }
         }
 
-        private void OnLeft(LeftMsg left)
+        private void OnLeft(PlayerLeft left)
         {
             if (!avatars.TryGetValue(left.id, out Avatar avatar)) return;
             Destroy(avatar.Transform.gameObject);
