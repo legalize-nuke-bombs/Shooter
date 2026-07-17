@@ -1,4 +1,4 @@
-package com.example.shooter.game.world;
+package com.example.shooter.game.world.metric;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,8 +1,10 @@
-package com.example.shooter.game.world;
+package com.example.shooter.game.world.support;
 
 import com.example.shooter.game.player.Player;
 import com.example.shooter.game.player.PlayerRepository;
 import com.example.shooter.game.player.PlayerRole;
+import com.example.shooter.game.world.World;
+import com.example.shooter.game.world.WorldRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

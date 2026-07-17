@@ -1,4 +1,4 @@
-package com.example.shooter.game.world;
+package com.example.shooter.game.world.unity;
 
 import lombok.Getter;
 import lombok.Setter;

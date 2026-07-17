@@ -6,7 +6,9 @@ import com.example.shooter.game.player.Player;
 import com.example.shooter.game.player.PlayerRepository;
 import com.example.shooter.game.player.PlayerRepresentation;
 import com.example.shooter.game.player.PlayerRole;
-import com.example.shooter.jwt.UnityServerTokenProvider;
+import com.example.shooter.game.world.unity.UnityHook;
+import com.example.shooter.game.world.unity.UnityHookAction;
+import com.example.shooter.game.world.unity.WorldUnityHookService;
 import com.example.shooter.user.User;
 import com.example.shooter.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Instant;
 import java.util.*;
@@ -26,15 +29,15 @@ public class WorldService {
     private final UserRepository userRepository;
     private final WorldRepository worldRepository;
     private final PlayerRepository playerRepository;
-    private final UnityServerTokenProvider unityServerTokenProvider;
     private final WorldUnityHookService worldUnityHookService;
+    private final TransactionTemplate transactionTemplate;
 
-    public WorldService(UserRepository userRepository, WorldRepository worldRepository, PlayerRepository playerRepository, UnityServerTokenProvider unityServerTokenProvider, WorldUnityHookService worldUnityHookService) {
+    public WorldService(UserRepository userRepository, WorldRepository worldRepository, PlayerRepository playerRepository, WorldUnityHookService worldUnityHookService, TransactionTemplate transactionTemplate) {
         this.userRepository = userRepository;
         this.worldRepository = worldRepository;
         this.playerRepository = playerRepository;
-        this.unityServerTokenProvider = unityServerTokenProvider;
         this.worldUnityHookService = worldUnityHookService;
+        this.transactionTemplate = transactionTemplate;
     }
 
     @Transactional
@@ -68,8 +71,13 @@ public class WorldService {
         );
     }
 
-    @Transactional
-    public WorldJoinResponse join(Long userId, UUID worldId) {
+    public Map<String, String> join(Long userId, UUID worldId) {
+        transactionTemplate.executeWithoutResult(status -> joinTx(userId, worldId));
+        worldUnityHookService.deliver(new UnityHook(UnityHookAction.OPEN_SESSION, userId, worldId));
+        return Map.of("status", "ok");
+    }
+
+    private void joinTx(Long userId, UUID worldId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_AUTHENTICATED));
         Long now = Instant.now().getEpochSecond();
 
@@ -87,9 +95,7 @@ public class WorldService {
             player.setLastSeen(now);
             playerRepository.save(player);
             log.info("user {} came back to world {} as player {}", userId, worldId, player.getId());
-            return new WorldJoinResponse(
-                    unityServerTokenProvider.generateToken(userId + ":" + worldId)
-            );
+            return;
         }
 
         if (world.getJoinPolicy() != WorldJoinPolicy.EVERYONE) {
@@ -110,9 +116,6 @@ public class WorldService {
         worldRepository.save(world);
 
         log.info("user {} joined world {} as player {} for the first time!", userId, worldId, player.getId());
-        return new WorldJoinResponse(
-                unityServerTokenProvider.generateToken(userId + ":" + worldId)
-        );
     }
 
     public Map<String, String> kick(Long userId, UUID worldId, Long targetId) {
@@ -130,16 +133,21 @@ public class WorldService {
         }
 
         log.info("user {} kicked target {} from the world {}", userId, targetId, worldId);
-        worldUnityHookService.registerTask(new UnityHook(targetId, worldId));
+        worldUnityHookService.deliver(new UnityHook(UnityHookAction.CLOSE_SESSION, targetId, worldId));
         return Map.of("status", "ok");
     }
 
-    @Transactional
     public Map<String, String> blacklist(Long userId, UUID worldId, Long targetId) {
         if (Objects.equals(userId, targetId)) {
             log.info("user {} tried to blacklist themselves in world {}", userId, worldId);
             throw new ApiException(ErrorCode.CANT_SELF_BLACKLIST);
         }
+        transactionTemplate.executeWithoutResult(status -> blacklistTx(userId, worldId, targetId));
+        worldUnityHookService.tryDeliver(new UnityHook(UnityHookAction.CLOSE_SESSION, targetId, worldId));
+        return Map.of("status", "ok");
+    }
+
+    private void blacklistTx(Long userId, UUID worldId, Long targetId) {
         requireCreator(userId, worldId);
 
         Player target = playerRepository.findByUserIdAndWorldIdForPessimisticWrite(targetId, worldId).orElseThrow(() -> new ApiException(ErrorCode.PLAYER_NOT_FOUND));
@@ -149,9 +157,7 @@ public class WorldService {
         }
         target.setBlacklisted(true);
         playerRepository.save(target);
-        worldUnityHookService.registerTask(new UnityHook(targetId, worldId));
         log.info("user {} blacklisted target {} in the world {}", userId, targetId, worldId);
-        return Map.of("status", "ok");
     }
 
     @Transactional
@@ -191,13 +197,12 @@ public class WorldService {
         return new WorldRepresentation(world, players);
     }
 
-    @Transactional
     public void delete(Long userId, UUID worldId) {
         requireCreator(userId, worldId);
 
         worldRepository.deleteById(worldId);
         log.info("user {} deleted world {}", userId, worldId);
-        worldUnityHookService.registerTask(new UnityHook(null, worldId));
+        worldUnityHookService.tryDeliver(new UnityHook(UnityHookAction.CLOSE_SESSION, null, worldId));
     }
 
     private void requireCreator(Long userId, UUID worldId) {
