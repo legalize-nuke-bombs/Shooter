@@ -6,16 +6,17 @@ namespace Shooter.Menu
     public class MenuBackground : VisualElement
     {
         private const int GradientBands = 44;
-        private const int DustCount = 70;
-        private const int HazePatches = 7;
+        private const int StarCount = 90;
+        private const int HazePatches = 5;
+        private const float SkyDriftSpeed = 1.6f;
 
-        private static readonly Color TopColor = new Color(0.020f, 0.024f, 0.016f);
-        private static readonly Color MidColor = new Color(0.058f, 0.065f, 0.048f);
-        private static readonly Color BottomColor = new Color(0.027f, 0.031f, 0.022f);
-        private static readonly Color HazeColor = new Color(0.60f, 0.63f, 0.54f);
-        private static readonly Color DustColor = new Color(0.79f, 0.78f, 0.73f);
+        private static readonly Color ZenithColor = new Color(0.014f, 0.018f, 0.036f);
+        private static readonly Color MidSkyColor = new Color(0.036f, 0.050f, 0.086f);
+        private static readonly Color HorizonColor = new Color(0.062f, 0.088f, 0.140f);
+        private static readonly Color HazeColor = new Color(0.54f, 0.61f, 0.72f);
+        private static readonly Color StarColor = new Color(0.85f, 0.89f, 0.96f);
 
-        private static readonly float[] VignetteAlphas = { 0.30f, 0.22f, 0.15f, 0.09f, 0.045f };
+        private static readonly float[] VignetteAlphas = { 0.26f, 0.19f, 0.13f, 0.08f, 0.04f };
 
         private float time;
 
@@ -43,21 +44,21 @@ namespace Shooter.Menu
             if (rect.width <= 0f || rect.height <= 0f) return;
 
             var painter = mgc.painter2D;
-            DrawGradient(painter, rect);
+            DrawSky(painter, rect);
             DrawHaze(painter, rect);
-            DrawDust(painter, rect);
+            DrawStars(painter, rect);
             DrawVignette(painter, rect);
         }
 
-        private static void DrawGradient(Painter2D painter, Rect rect)
+        private static void DrawSky(Painter2D painter, Rect rect)
         {
             float bandHeight = rect.height / GradientBands;
             for (int i = 0; i < GradientBands; i++)
             {
                 float t = (i + 0.5f) / GradientBands;
-                painter.fillColor = t < 0.42f
-                    ? Color.Lerp(TopColor, MidColor, t / 0.42f)
-                    : Color.Lerp(MidColor, BottomColor, (t - 0.42f) / 0.58f);
+                painter.fillColor = t < 0.60f
+                    ? Color.Lerp(ZenithColor, MidSkyColor, t / 0.60f)
+                    : Color.Lerp(MidSkyColor, HorizonColor, (t - 0.60f) / 0.40f);
                 FillRect(painter, new Rect(0f, i * bandHeight, rect.width, bandHeight + 1f));
             }
         }
@@ -68,12 +69,12 @@ namespace Shooter.Menu
             {
                 int hash = Hash(i, 613);
                 float width = rect.width * (0.25f + ((hash >> 4) & 0xFF) / 255f * 0.30f);
-                float height = rect.height * (0.10f + ((hash >> 12) & 0xFF) / 255f * 0.10f);
+                float height = rect.height * (0.08f + ((hash >> 12) & 0xFF) / 255f * 0.08f);
                 float y = rect.height * (((hash >> 20) & 0xFF) / 255f);
-                float speed = 6f + (hash & 0xF);
+                float speed = 3f + (hash & 0x7);
                 float x = Wrap(((hash >> 8) & 0xFFF) + time * speed, rect.width + width) - width;
 
-                float alpha = 0.014f + ((hash >> 16) & 0x7) * 0.003f;
+                float alpha = 0.012f + ((hash >> 16) & 0x7) * 0.0025f;
                 for (int layer = 0; layer < 3; layer++)
                 {
                     float grow = layer * 0.22f;
@@ -84,23 +85,35 @@ namespace Shooter.Menu
             }
         }
 
-        private void DrawDust(Painter2D painter, Rect rect)
+        private void DrawStars(Painter2D painter, Rect rect)
         {
-            for (int i = 0; i < DustCount; i++)
+            for (int i = 0; i < StarCount; i++)
             {
                 int hash = Hash(i, 27);
                 float baseX = (hash & 0xFFF) / 4095f * rect.width;
-                float baseY = ((hash >> 12) & 0xFFF) / 4095f * rect.height;
-                float riseSpeed = 3f + ((hash >> 24) & 0x7) * 1.6f;
-                float sway = 8f + ((hash >> 27) & 0x3) * 6f;
+                // звёзды гуще к зениту: квадрат прижимает распределение вверх
+                float yNorm = ((hash >> 12) & 0xFFF) / 4095f;
+                float y = yNorm * yNorm * rect.height;
 
-                float x = baseX + Mathf.Sin(time * 0.3f + i) * sway;
-                float y = Wrap(baseY - time * riseSpeed, rect.height + 8f) - 4f;
-                float size = 1f + ((hash >> 20) & 0x3);
-                float alpha = 0.035f + ((hash >> 16) & 0xF) / 15f * 0.085f;
+                float x = Wrap(baseX + time * SkyDriftSpeed, rect.width + 4f) - 2f;
 
-                painter.fillColor = new Color(DustColor.r, DustColor.g, DustColor.b, alpha);
-                FillRect(painter, new Rect(x, y, size, size));
+                float twinkleSpeed = 0.4f + ((hash >> 24) & 0x7) * 0.25f;
+                float phase = ((hash >> 8) & 0xFF) / 255f * 6.2832f;
+                float twinkle = 0.62f + 0.38f * Mathf.Sin(time * twinkleSpeed + phase);
+
+                bool bright = (hash & 0x3F) < 5;
+                float size = bright ? 2.6f : 1f + ((hash >> 20) & 0x1);
+                float alpha = (bright ? 0.30f : 0.05f + ((hash >> 16) & 0xF) / 15f * 0.12f) * twinkle;
+
+                painter.fillColor = new Color(StarColor.r, StarColor.g, StarColor.b, alpha);
+                FillRect(painter, new Rect(x - size * 0.5f, y - size * 0.5f, size, size));
+
+                if (bright)
+                {
+                    painter.fillColor = new Color(StarColor.r, StarColor.g, StarColor.b, alpha * 0.35f);
+                    FillRect(painter, new Rect(x - size * 1.6f, y - 0.5f, size * 3.2f, 1f));
+                    FillRect(painter, new Rect(x - 0.5f, y - size * 1.6f, 1f, size * 3.2f));
+                }
             }
         }
 
@@ -110,7 +123,7 @@ namespace Shooter.Menu
             for (int i = 0; i < VignetteAlphas.Length; i++)
             {
                 float inset = i * band;
-                painter.fillColor = new Color(0f, 0f, 0f, VignetteAlphas[i]);
+                painter.fillColor = new Color(0f, 0f, 0.005f, VignetteAlphas[i]);
                 FillRect(painter, new Rect(inset, inset, rect.width - inset * 2f, band));
                 FillRect(painter, new Rect(inset, rect.height - inset - band, rect.width - inset * 2f, band));
                 FillRect(painter, new Rect(inset, inset + band, band, rect.height - (inset + band) * 2f));
