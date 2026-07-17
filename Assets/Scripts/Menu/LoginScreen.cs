@@ -106,21 +106,37 @@ namespace Shooter.Menu
 
             Action<string, string> onDone = (token, error) =>
             {
-                busy = false;
-                submitBtn.SetEnabled(true);
+                if (error != null)
+                {
+                    busy = false;
+                    submitBtn.SetEnabled(true);
+                    status.text = error;
+                    return;
+                }
 
-                if (error != null) { status.text = error; return; }
-
-                Session.Username = username;
-                Session.DisplayName = displayName;
                 Session.Token = token;
-                Session.UserId = Jwt.TryGetUserId(token, out long userId) ? userId : -1;
+                api.Me((me, meError) =>
+                {
+                    busy = false;
+                    submitBtn.SetEnabled(true);
 
-                PlayerPrefs.SetString("username", username);
-                PlayerPrefs.Save();
+                    if (meError != null)
+                    {
+                        Session.Token = "";
+                        status.text = meError;
+                        return;
+                    }
 
-                status.text = "";
-                onLoggedIn();
+                    Session.Username = username;
+                    Session.DisplayName = me.displayName;
+                    Session.UserId = me.id;
+
+                    PlayerPrefs.SetString("username", username);
+                    PlayerPrefs.Save();
+
+                    status.text = "";
+                    onLoggedIn();
+                });
             };
 
             if (registerMode) api.Register(username, displayName, password, onDone);
