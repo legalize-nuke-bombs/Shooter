@@ -94,7 +94,7 @@ namespace Shooter.Menu
                 else if (char.IsLower(c)) lower = true;
                 else if (char.IsDigit(c)) digit = true;
             }
-            if (!upper || !lower || !digit) { status.text = "В пароле нужны заглавная, строчная и цифра"; return; }
+            if (!upper || !lower || !digit) { status.text = "Пароль должен содержать заглавную и строчную буквы и цифру"; return; }
             if (registerMode)
             {
                 if (passwordField.value != confirmField.value) { status.text = "Пароли не совпадают"; return; }

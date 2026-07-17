@@ -12,16 +12,18 @@ namespace Shooter.Menu
     {
         private static readonly Dictionary<string, string> ErrorTexts = new Dictionary<string, string>
         {
-            { "NOT_AUTHENTICATED", "Сессия протухла — войди заново" },
-            { "INVALID_PASSWORD", "Неверный пароль" },
-            { "WEAK_PASSWORD", "Пароль: 8-40 символов, заглавная, строчная и цифра" },
-            { "USERNAME_TAKEN", "Имя пользователя занято — попробуй другое" },
-            { "USER_NOT_FOUND", "Такого пользователя нет" },
-            { "EMPTY_REQUEST", "Пустой запрос — попробуй ещё раз" },
-            { "MALFORMED_REQUEST", "Запрос не понравился серверу — попробуй ещё раз" },
-            { "WORLD_NOT_FOUND", "Мир не найден — проверь ID" },
-            { "WORLD_DOES_NOT_ACCEPT_NEW_MEMBERS", "Этот мир не принимает новых игроков" },
-            { "INTERNAL_ERROR", "Ошибка на сервере — попробуй ещё раз" }
+            { "NOT_AUTHENTICATED", "Сессия истекла. Выполните вход заново." },
+            { "INVALID_PASSWORD", "Неверный пароль." },
+            { "WEAK_PASSWORD", "Пароль: 8-40 символов, заглавная и строчная буквы, цифра." },
+            { "USERNAME_TAKEN", "Это имя пользователя уже занято." },
+            { "USER_NOT_FOUND", "Пользователь не найден." },
+            { "EMPTY_REQUEST", "Пустой запрос." },
+            { "MALFORMED_REQUEST", "Сервер отклонил запрос как некорректный." },
+            { "WORLD_NOT_FOUND", "Мир не найден. Проверьте идентификатор." },
+            { "WORLD_DOES_NOT_ACCEPT_NEW_MEMBERS", "Этот мир не принимает новых участников." },
+            { "NOT_A_MEMBER", "Вы не состоите в этом мире." },
+            { "NOT_A_CREATOR", "Действие доступно только владельцу мира." },
+            { "INTERNAL_ERROR", "Внутренняя ошибка сервера." }
         };
 
         private readonly MonoBehaviour runner;
@@ -54,16 +56,15 @@ namespace Shooter.Menu
             Request("POST", "/api/auth/register", body, false, (code, text) => OnTokenResponse(code, text, onDone));
         }
 
-        public void LoadWorlds(int page, int size, bool mine, Action<WorldDto[], string> onDone)
+        public void LoadWorlds(int page, int size, Action<WorldDto[], string> onDone)
         {
-            string path = "/api/worlds?page=" + page + "&size=" + size;
-            if (mine) path += "&playerRole=MEMBER";
+            string path = "/api/worlds?playerRole=MEMBER&page=" + page + "&size=" + size;
 
             Request("GET", path, null, true, (code, text) =>
             {
                 if (code != 200) { onDone(null, HumanError(code, text)); return; }
                 try { onDone(JsonUtility.FromJson<WorldsWrap>("{\"items\":" + text + "}").items, null); }
-                catch { onDone(null, "Не смог прочитать список миров"); }
+                catch { onDone(null, "Не удалось получить список миров."); }
             });
         }
 
@@ -82,7 +83,7 @@ namespace Shooter.Menu
         {
             if (code != 200 && code != 201) { onDone(null, HumanError(code, text)); return; }
             string token = JsonUtility.FromJson<TokenResponse>(text).token;
-            if (string.IsNullOrEmpty(token)) { onDone(null, "Сервер не прислал токен"); return; }
+            if (string.IsNullOrEmpty(token)) { onDone(null, "Сервер не вернул токен."); return; }
             onDone(token, null);
         }
 
@@ -115,7 +116,7 @@ namespace Shooter.Menu
 
         public static string HumanError(long code, string text)
         {
-            if (code == 0) return "Нет соединения с сервером";
+            if (code == 0) return "Нет соединения с сервером.";
             try
             {
                 var problem = JsonUtility.FromJson<ProblemResponse>(text);
@@ -127,7 +128,7 @@ namespace Shooter.Menu
                 }
             }
             catch { }
-            return "Ошибка " + code;
+            return "Ошибка " + code + ".";
         }
     }
 }

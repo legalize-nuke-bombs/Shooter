@@ -5,12 +5,19 @@ namespace Shooter.Menu
 {
     public class MenuBackground : VisualElement
     {
-        private const float Cell = 48f;
-        private const float DriftSpeed = 5f;
+        private const int GradientBands = 44;
+        private const int DustCount = 70;
+        private const int HazePatches = 7;
 
-        private static readonly float[] VignetteAlphas = { 0.16f, 0.115f, 0.08f, 0.05f, 0.025f };
+        private static readonly Color TopColor = new Color(0.020f, 0.024f, 0.016f);
+        private static readonly Color MidColor = new Color(0.058f, 0.065f, 0.048f);
+        private static readonly Color BottomColor = new Color(0.027f, 0.031f, 0.022f);
+        private static readonly Color HazeColor = new Color(0.60f, 0.63f, 0.54f);
+        private static readonly Color DustColor = new Color(0.79f, 0.78f, 0.73f);
 
-        private float offset;
+        private static readonly float[] VignetteAlphas = { 0.30f, 0.22f, 0.15f, 0.09f, 0.045f };
+
+        private float time;
 
         public MenuBackground()
         {
@@ -21,12 +28,12 @@ namespace Shooter.Menu
             style.right = 0;
             style.bottom = 0;
             generateVisualContent += OnGenerate;
-            schedule.Execute(Drift).Every(33);
+            schedule.Execute(Tick).Every(33);
         }
 
-        private void Drift(TimerState timer)
+        private void Tick(TimerState timer)
         {
-            offset += DriftSpeed * timer.deltaTime / 1000f;
+            time += timer.deltaTime / 1000f;
             MarkDirtyRepaint();
         }
 
@@ -36,55 +43,70 @@ namespace Shooter.Menu
             if (rect.width <= 0f || rect.height <= 0f) return;
 
             var painter = mgc.painter2D;
-            int baseCol = Mathf.FloorToInt(offset / Cell);
-            float shift = offset - baseCol * Cell;
+            DrawGradient(painter, rect);
+            DrawHaze(painter, rect);
+            DrawDust(painter, rect);
+            DrawVignette(painter, rect);
+        }
 
-            int cols = Mathf.CeilToInt((rect.width + shift) / Cell);
-            int rows = Mathf.CeilToInt(rect.height / Cell);
-
-            for (int y = 0; y < rows; y++)
+        private static void DrawGradient(Painter2D painter, Rect rect)
+        {
+            float bandHeight = rect.height / GradientBands;
+            for (int i = 0; i < GradientBands; i++)
             {
-                for (int x = 0; x <= cols; x++)
+                float t = (i + 0.5f) / GradientBands;
+                painter.fillColor = t < 0.42f
+                    ? Color.Lerp(TopColor, MidColor, t / 0.42f)
+                    : Color.Lerp(MidColor, BottomColor, (t - 0.42f) / 0.58f);
+                FillRect(painter, new Rect(0f, i * bandHeight, rect.width, bandHeight + 1f));
+            }
+        }
+
+        private void DrawHaze(Painter2D painter, Rect rect)
+        {
+            for (int i = 0; i < HazePatches; i++)
+            {
+                int hash = Hash(i, 613);
+                float width = rect.width * (0.25f + ((hash >> 4) & 0xFF) / 255f * 0.30f);
+                float height = rect.height * (0.10f + ((hash >> 12) & 0xFF) / 255f * 0.10f);
+                float y = rect.height * (((hash >> 20) & 0xFF) / 255f);
+                float speed = 6f + (hash & 0xF);
+                float x = Wrap(((hash >> 8) & 0xFFF) + time * speed, rect.width + width) - width;
+
+                float alpha = 0.014f + ((hash >> 16) & 0x7) * 0.003f;
+                for (int layer = 0; layer < 3; layer++)
                 {
-                    int hash = Hash(x + baseCol, y);
-                    float variation = ((hash & 0xFF) / 255f - 0.5f) * 0.025f;
-
-                    float cellX = x * Cell - shift;
-                    float cellY = y * Cell;
-                    painter.fillColor = new Color(0.052f + variation, 0.048f + variation, 0.042f + variation);
-                    FillRect(painter, new Rect(cellX, cellY, Cell - 1f, Cell - 1f));
-
-                    int detail = (hash >> 8) & 0xFF;
-                    if (detail < 46)
-                    {
-                        int count = 2 + detail % 3;
-                        for (int i = 0; i < count; i++)
-                        {
-                            int h = Hash(hash, i + 1);
-                            float px = cellX + 3f + (h & 0xFFF) % (Cell - 13f);
-                            float py = cellY + 3f + ((h >> 12) & 0xFFF) % (Cell - 13f);
-                            float size = 4f + ((h >> 24) & 0x3);
-                            painter.fillColor = new Color(0.033f, 0.030f, 0.026f);
-                            FillRect(painter, new Rect(px, py, size, size));
-                        }
-                    }
-                    else if (detail >= 250)
-                    {
-                        int h = Hash(hash, 7);
-                        float px = cellX + 6f + (h & 0xFFF) % (Cell - 16f);
-                        float py = cellY + 6f + ((h >> 12) & 0xFFF) % (Cell - 16f);
-                        painter.fillColor = new Color(0.13f, 0.19f, 0.23f);
-                        FillRect(painter, new Rect(px, py, 4f, 4f));
-                    }
+                    float grow = layer * 0.22f;
+                    painter.fillColor = new Color(HazeColor.r, HazeColor.g, HazeColor.b, alpha * (1f - layer * 0.3f));
+                    FillRect(painter, new Rect(x - width * grow * 0.5f, y - height * grow * 0.5f,
+                        width * (1f + grow), height * (1f + grow)));
                 }
             }
+        }
 
-            DrawVignette(painter, rect);
+        private void DrawDust(Painter2D painter, Rect rect)
+        {
+            for (int i = 0; i < DustCount; i++)
+            {
+                int hash = Hash(i, 27);
+                float baseX = (hash & 0xFFF) / 4095f * rect.width;
+                float baseY = ((hash >> 12) & 0xFFF) / 4095f * rect.height;
+                float riseSpeed = 3f + ((hash >> 24) & 0x7) * 1.6f;
+                float sway = 8f + ((hash >> 27) & 0x3) * 6f;
+
+                float x = baseX + Mathf.Sin(time * 0.3f + i) * sway;
+                float y = Wrap(baseY - time * riseSpeed, rect.height + 8f) - 4f;
+                float size = 1f + ((hash >> 20) & 0x3);
+                float alpha = 0.035f + ((hash >> 16) & 0xF) / 15f * 0.085f;
+
+                painter.fillColor = new Color(DustColor.r, DustColor.g, DustColor.b, alpha);
+                FillRect(painter, new Rect(x, y, size, size));
+            }
         }
 
         private static void DrawVignette(Painter2D painter, Rect rect)
         {
-            float band = Mathf.Min(rect.width, rect.height) * 0.035f;
+            float band = Mathf.Min(rect.width, rect.height) * 0.05f;
             for (int i = 0; i < VignetteAlphas.Length; i++)
             {
                 float inset = i * band;
@@ -94,6 +116,12 @@ namespace Shooter.Menu
                 FillRect(painter, new Rect(inset, inset + band, band, rect.height - (inset + band) * 2f));
                 FillRect(painter, new Rect(rect.width - inset - band, inset + band, band, rect.height - (inset + band) * 2f));
             }
+        }
+
+        private static float Wrap(float value, float range)
+        {
+            float wrapped = value % range;
+            return wrapped < 0f ? wrapped + range : wrapped;
         }
 
         private static int Hash(int a, int b)
