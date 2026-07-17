@@ -1,5 +1,5 @@
 using UnityEngine;
-using Shooter.Net.Msgs;
+using Shooter.Server.Session;
 using Shooter.Logging;
 
 namespace Shooter.Client.Chronology

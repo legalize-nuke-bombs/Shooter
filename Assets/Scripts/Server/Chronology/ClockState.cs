@@ -1,8 +1,5 @@
-using System;
-
 namespace Shooter.Server.Chronology
 {
-    [Serializable]
     public class ClockState
     {
         public const long DayLengthSeconds = 86400;

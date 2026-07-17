@@ -1,5 +1,4 @@
 using UnityEngine;
-using Shooter.Net.Msgs;
 using Shooter.Logging;
 
 namespace Shooter.Server.Characters

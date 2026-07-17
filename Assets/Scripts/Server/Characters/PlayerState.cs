@@ -1,9 +1,7 @@
-using System;
 using UnityEngine;
 
 namespace Shooter.Server.Characters
 {
-    [Serializable]
     public class PlayerState
     {
         public long id;
