@@ -11,8 +11,8 @@ using Shooter.Server.Entities.Characters.Player;
 using Shooter.Server.Sessions;
 using Shooter.Server.Worlds;
 using Shooter.Client.Account;
-using Shooter.Client.Characters;
-using Shooter.Client.Chronology;
+using Shooter.Client.Entities.Characters;
+using Shooter.Client.Entities.Chronology;
 using Shooter.Logging;
 
 namespace Shooter.Client

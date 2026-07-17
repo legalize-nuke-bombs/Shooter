@@ -1,4 +1,4 @@
-namespace Shooter.Server.Chronology
+namespace Shooter.Server.Entities.Chronology
 {
     public class Clock
     {
