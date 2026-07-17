@@ -1,15 +1,9 @@
 using System;
-using UnityEngine;
 using Shooter.Entities.Player;
+using Shooter.Entities.Chronology;
 
 namespace Shooter.Net
 {
-    [Serializable]
-    public class Envelope
-    {
-        public string type;
-    }
-
     [Serializable]
     public class HelloMsg
     {
@@ -40,14 +34,6 @@ namespace Shooter.Net
     }
 
     [Serializable]
-    public class SnapshotMsg
-    {
-        public string type;
-        public long tick;
-        public PlayerStateMsg[] players;
-    }
-
-    [Serializable]
     public class JoinedMsg
     {
         public string type;
@@ -63,28 +49,11 @@ namespace Shooter.Net
     }
 
     [Serializable]
-    public class UnityHookMsg
+    public class SnapshotMsg
     {
-        public string action;
-        public long userId;
-        public string worldId;
-    }
-
-    public static class NetJson
-    {
-        public static string PeekType(string json)
-        {
-            return JsonUtility.FromJson<Envelope>(json).type;
-        }
-
-        public static T Parse<T>(string json)
-        {
-            return JsonUtility.FromJson<T>(json);
-        }
-
-        public static string Serialize(object msg)
-        {
-            return JsonUtility.ToJson(msg);
-        }
+        public string type;
+        public long tick;
+        public PlayerStateMsg[] players;
+        public ClockState clock;
     }
 }

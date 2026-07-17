@@ -23,6 +23,13 @@ namespace Shooter.Entities.Player
             NetworkClient.Instance.PlayerLeft += OnLeft;
         }
 
+        private void OnDestroy()
+        {
+            if (NetworkClient.Instance == null) return;
+            NetworkClient.Instance.SnapshotReceived -= OnSnapshot;
+            NetworkClient.Instance.PlayerLeft -= OnLeft;
+        }
+
         private void OnSnapshot(SnapshotMsg snapshot)
         {
             foreach (PlayerStateMsg player in snapshot.players)
@@ -64,13 +71,6 @@ namespace Shooter.Entities.Player
                 avatar.Transform.position = Vector3.Lerp(avatar.Transform.position, avatar.TargetPosition, t);
                 avatar.Transform.rotation = Quaternion.Slerp(avatar.Transform.rotation, Quaternion.Euler(0f, avatar.TargetYaw, 0f), t);
             }
-        }
-
-        private void OnDestroy()
-        {
-            if (NetworkClient.Instance == null) return;
-            NetworkClient.Instance.SnapshotReceived -= OnSnapshot;
-            NetworkClient.Instance.PlayerLeft -= OnLeft;
         }
     }
 }
