@@ -5,6 +5,13 @@ namespace Shooter.Logging
 {
     public static class Log
     {
+        static Log()
+        {
+            if (!Application.isBatchMode) return;
+            Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+            Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+        }
+
         public static void Info(string message)
         {
             Debug.Log(Line("INFO ", message));
