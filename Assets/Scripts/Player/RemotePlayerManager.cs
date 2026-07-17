@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Shooter.Net;
 
-namespace Shooter.Net
+namespace Shooter.Player
 {
     public class RemotePlayerManager : MonoBehaviour
     {

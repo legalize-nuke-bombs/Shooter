@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Auth;
+using Shooter.Player;
 
 namespace Shooter.Net
 {
