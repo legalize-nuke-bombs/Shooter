@@ -1,11 +1,7 @@
-using System;
-
 namespace Shooter.Net.Msgs
 {
-    [Serializable]
-    public class HelloMsg
+    public class HelloMsg : Msg
     {
-        public string type = "hello";
         public string name;
     }
 }

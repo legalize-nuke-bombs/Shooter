@@ -56,7 +56,6 @@ namespace Shooter.Server
         {
             return new SnapshotMsg
             {
-                type = "snapshot",
                 tick = tick,
                 players = BuildStates(),
                 clock = new ClockState(clock)
