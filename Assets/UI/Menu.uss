@@ -1,7 +1,7 @@
 .root {
     flex-grow: 1;
-    background-color: #0a0b09;
-    color: #c9c7ba;
+    background-color: #070910;
+    color: #c3c9d3;
     font-size: 15px;
     -unity-font-definition: url("Fonts/PTSans-Regular.ttf");
 }
@@ -19,27 +19,27 @@
 
 .brand {
     font-size: 52px;
-    color: #d3d1c6;
+    color: #ccd3de;
     letter-spacing: 24px;
     padding-left: 24px;
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
     -unity-text-align: middle-center;
-    text-shadow: 0 0 32px rgba(201, 161, 69, 0.25);
+    text-shadow: 0 0 32px rgba(150, 180, 220, 0.22);
 }
 
 .brand-sub {
     margin-top: 6px;
     font-size: 12px;
-    color: #63655a;
+    color: #566070;
     letter-spacing: 9px;
     padding-left: 9px;
     -unity-text-align: middle-center;
 }
 
 .panel {
-    background-color: rgba(13, 15, 12, 0.92);
+    background-color: rgba(11, 13, 18, 0.92);
     border-width: 1px;
-    border-color: #2c2f27;
+    border-color: #262b36;
     padding: 30px 34px 26px 34px;
     width: 440px;
     max-width: 92%;
@@ -47,14 +47,14 @@
 
 .form-title {
     font-size: 15px;
-    color: #c9a145;
+    color: #9db8d6;
     letter-spacing: 6px;
     margin-bottom: 14px;
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
 }
 
 .field-label {
-    color: #8a8c7d;
+    color: #7d8594;
     font-size: 12px;
     letter-spacing: 2px;
     margin-top: 14px;
@@ -67,40 +67,40 @@
 }
 
 .text-input > .unity-base-text-field__input {
-    background-color: #0c0d0b;
+    background-color: #0b0d12;
     border-width: 1px;
-    border-color: #33362d;
+    border-color: #2c3340;
     border-radius: 0;
-    color: #c9c7ba;
+    color: #c3c9d3;
     padding-left: 12px;
     font-size: 15px;
 }
 
 .text-input:focus > .unity-base-text-field__input {
-    border-color: #c9a145;
+    border-color: #7f9cc4;
 }
 
 .btn {
     height: 42px;
     border-radius: 0;
     border-width: 1px;
-    border-color: #3a3d33;
+    border-color: #363d4c;
     background-color: rgba(0, 0, 0, 0.25);
-    color: #b0aea2;
+    color: #a9b1bf;
     font-size: 13px;
     letter-spacing: 3px;
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
 }
 
 .btn:hover {
-    border-color: #c9a145;
-    background-color: rgba(201, 161, 69, 0.06);
-    color: #e0b95c;
+    border-color: #9db8d6;
+    background-color: rgba(157, 184, 214, 0.06);
+    color: #cfdcf0;
 }
 
 .btn:active {
-    background-color: rgba(201, 161, 69, 0.12);
-    color: #e0b95c;
+    background-color: rgba(157, 184, 214, 0.12);
+    color: #cfdcf0;
 }
 
 .btn:disabled {
@@ -108,21 +108,21 @@
 }
 
 .btn-primary {
-    border-color: #8a7134;
-    background-color: rgba(201, 161, 69, 0.10);
-    color: #d8b45c;
+    border-color: #5a7398;
+    background-color: rgba(157, 184, 214, 0.10);
+    color: #b8cce8;
 }
 
 .btn-primary:hover {
-    border-color: #c9a145;
-    background-color: #c9a145;
-    color: #0c0d0b;
+    border-color: #9db8d6;
+    background-color: #9db8d6;
+    color: #0a0c12;
 }
 
 .btn-primary:active {
-    background-color: #a98736;
-    border-color: #a98736;
-    color: #0c0d0b;
+    background-color: #7f9cc4;
+    border-color: #7f9cc4;
+    color: #0a0c12;
 }
 
 .submit-btn {
@@ -141,13 +141,13 @@
 .link-btn {
     background-color: rgba(0, 0, 0, 0);
     border-width: 0;
-    color: #8a8c7d;
+    color: #7d8594;
     margin-top: 14px;
     font-size: 14px;
 }
 
 .link-btn:hover {
-    color: #e0b95c;
+    color: #b8cce8;
 }
 
 .status-line {
@@ -178,12 +178,12 @@
 .topbar-brand {
     font-size: 18px;
     letter-spacing: 8px;
-    color: #d3d1c6;
+    color: #ccd3de;
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
 }
 
 .topbar-user {
-    color: #8a8c7d;
+    color: #7d8594;
     font-size: 14px;
     letter-spacing: 1px;
 }
@@ -197,7 +197,7 @@
 .section-title {
     font-size: 14px;
     letter-spacing: 5px;
-    color: #8a8c7d;
+    color: #7d8594;
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
 }
 
@@ -216,11 +216,11 @@
 }
 
 .world-slot {
-    background-color: rgba(17, 19, 15, 0.85);
+    background-color: rgba(13, 16, 23, 0.85);
     border-width: 1px;
-    border-color: #272a22;
+    border-color: #232937;
     border-left-width: 2px;
-    border-left-color: #6b5a2c;
+    border-left-color: #3d4d66;
     padding: 16px 18px;
     margin-bottom: 10px;
     flex-direction: row;
@@ -228,9 +228,9 @@
 }
 
 .world-slot:hover {
-    background-color: rgba(24, 26, 21, 0.92);
-    border-color: #3a3d33;
-    border-left-color: #c9a145;
+    background-color: rgba(19, 23, 32, 0.92);
+    border-color: #363d4c;
+    border-left-color: #9db8d6;
 }
 
 .world-info {
@@ -245,12 +245,12 @@
 
 .world-name {
     font-size: 18px;
-    color: #d3d1c6;
+    color: #ccd3de;
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
 }
 
 .world-meta {
-    color: #63655a;
+    color: #566070;
     font-size: 12px;
     letter-spacing: 1px;
     margin-top: 4px;
@@ -262,9 +262,9 @@
     letter-spacing: 2px;
     margin-left: 12px;
     border-width: 1px;
-    border-color: #6b5a2c;
-    color: #c9a145;
-    background-color: rgba(201, 161, 69, 0.07);
+    border-color: #5a7398;
+    color: #9db8d6;
+    background-color: rgba(157, 184, 214, 0.07);
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
 }
 
@@ -280,14 +280,14 @@
     margin-top: 4px;
     font-size: 12px;
     border-width: 1px;
-    border-color: #2c2f27;
-    color: #8a8c7d;
+    border-color: #262b36;
+    color: #7d8594;
     background-color: rgba(0, 0, 0, 0.3);
 }
 
 .player-chip-creator {
-    border-color: #6b5a2c;
-    color: #c9a145;
+    border-color: #5a7398;
+    color: #9db8d6;
 }
 
 .enter-btn {
@@ -306,14 +306,14 @@
     flex-direction: row;
     align-items: center;
     border-width: 1px;
-    border-color: #2c2f27;
-    background-color: rgba(13, 15, 12, 0.75);
+    border-color: #262b36;
+    background-color: rgba(11, 13, 18, 0.75);
     padding: 12px 16px;
     margin-top: 4px;
 }
 
 .joinbar-label {
-    color: #8a8c7d;
+    color: #7d8594;
     font-size: 12px;
     letter-spacing: 3px;
     margin-right: 16px;
@@ -337,14 +337,14 @@
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(6, 7, 5, 0.88);
+    background-color: rgba(4, 5, 9, 0.88);
     align-items: center;
     justify-content: center;
 }
 
 .modal-title {
     font-size: 15px;
-    color: #c9a145;
+    color: #9db8d6;
     letter-spacing: 6px;
     margin-bottom: 10px;
     -unity-font-definition: url("Fonts/PTSans-Bold.ttf");
@@ -363,7 +363,7 @@
 }
 
 .server-error-text {
-    color: #8a8c7d;
+    color: #7d8594;
     font-size: 14px;
     white-space: normal;
     -unity-text-align: middle-center;
@@ -371,7 +371,7 @@
 }
 
 .empty-note {
-    color: #8a8c7d;
+    color: #7d8594;
     font-size: 15px;
     white-space: normal;
     -unity-text-align: middle-center;
@@ -382,7 +382,7 @@
     position: absolute;
     left: 16px;
     top: 12px;
-    color: #63655a;
+    color: #566070;
     font-size: 12px;
     letter-spacing: 1px;
 }
@@ -393,33 +393,33 @@
 }
 
 .theme-dropdown > .unity-base-popup-field__input {
-    background-color: #0c0d0b;
+    background-color: #0b0d12;
     border-width: 1px;
-    border-color: #33362d;
+    border-color: #2c3340;
     border-radius: 0;
-    color: #c9c7ba;
+    color: #c3c9d3;
     padding-left: 10px;
 }
 
 .theme-dropdown:focus > .unity-base-popup-field__input {
-    border-color: #c9a145;
+    border-color: #7f9cc4;
 }
 
 .unity-base-dropdown__container-outer {
-    background-color: #12140f;
+    background-color: #10131b;
     border-width: 1px;
-    border-color: #33362d;
+    border-color: #2c3340;
     border-radius: 0;
 }
 
 .unity-base-dropdown__item {
-    background-color: #12140f;
-    color: #c9c7ba;
+    background-color: #10131b;
+    color: #c3c9d3;
 }
 
 .unity-base-dropdown__item:hover {
-    background-color: #c9a145;
-    color: #0c0d0b;
+    background-color: #9db8d6;
+    color: #0a0c12;
 }
 
 .hidden {
