@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Entities.Characters.Player;
-using Shooter.Server.Chronology;
+using Shooter.Server.Entities.Chronology;
 using Shooter.Logging;
 
 namespace Shooter.Server.Worlds
