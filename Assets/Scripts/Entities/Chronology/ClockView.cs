@@ -52,7 +52,7 @@ namespace Shooter.Entities.Chronology
             foreach (Light l in FindObjectsByType<Light>(FindObjectsInactive.Exclude))
                 if (l.type == LightType.Directional)
                     return l;
-            Log.Warn("ClockView: no directional light in scene, sky won't move");
+            Log.Warn("no directional light in scene, sky won't move");
             return null;
         }
     }

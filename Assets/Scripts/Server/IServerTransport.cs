@@ -2,7 +2,7 @@ using System;
 
 namespace Shooter.Server
 {
-    public interface INetTransport
+    public interface IServerTransport
     {
         event Action<int, string> ClientConnected;
         event Action<int, string> MessageReceived;

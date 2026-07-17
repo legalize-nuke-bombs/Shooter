@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Shooter.Server
 {
-    public class AllowList
+    public class ServerSessionGrants
     {
         private class Entry
         {

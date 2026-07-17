@@ -11,7 +11,7 @@ using Shooter.Logging;
 
 namespace Shooter.Server
 {
-    public class WsTransport : INetTransport
+    public class ServerWsTransport : IServerTransport
     {
         private const string WsGuid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
         private const int MaxFrameBytes = 1024 * 1024;

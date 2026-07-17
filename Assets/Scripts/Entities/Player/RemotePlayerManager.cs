@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Shooter.Net;
+using Shooter.Logging;
 
 namespace Shooter.Entities.Player
 {
@@ -49,6 +50,7 @@ namespace Shooter.Entities.Player
             if (!remotes.TryGetValue(msg.id, out RemoteAvatar avatar)) return;
             Destroy(avatar.Transform.gameObject);
             remotes.Remove(msg.id);
+            Log.Info("remote avatar removed: player " + msg.id + ", remotes now " + remotes.Count);
         }
 
         private RemoteAvatar Spawn(PlayerStateMsg player)
@@ -60,6 +62,7 @@ namespace Shooter.Entities.Player
 
             var avatar = new RemoteAvatar { Transform = capsule.transform };
             remotes[player.id] = avatar;
+            Log.Info("remote avatar spawned: player " + player.id + " '" + player.name + "', remotes now " + remotes.Count);
             return avatar;
         }
 
