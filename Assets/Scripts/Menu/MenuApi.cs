@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using Shooter.Shared;
+using Shooter.Auth;
 
 namespace Shooter.Menu
 {

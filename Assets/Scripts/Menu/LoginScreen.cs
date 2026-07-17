@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Shared;
+using Shooter.Auth;
 
 namespace Shooter.Menu
 {
