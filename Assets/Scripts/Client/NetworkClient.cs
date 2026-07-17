@@ -6,8 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Net;
-using Shooter.Net.Msgs;
+using Shooter.Serialization;
+using Shooter.Server.Characters;
+using Shooter.Server.Session;
+using Shooter.Client.Account;
 using Shooter.Client.Characters;
 using Shooter.Client.Chronology;
 using Shooter.Logging;
@@ -110,11 +112,11 @@ namespace Shooter.Client
             }
         }
 
-        private async Task Send(Msg msg)
+        private async Task Send(Serializable msg)
         {
             if (socket is not { State: WebSocketState.Open }) return;
 
-            byte[] bytes = Encoding.UTF8.GetBytes(NetJson.Serialize(msg));
+            byte[] bytes = Encoding.UTF8.GetBytes(Json.Serialize(msg));
             await sendLock.WaitAsync(cancellation.Token).ConfigureAwait(false);
             try
             {
@@ -138,7 +140,7 @@ namespace Shooter.Client
 
         private void Dispatch(string json)
         {
-            switch (NetJson.Deserialize(json))
+            switch (Json.Deserialize(json))
             {
                 case WelcomeMsg welcome:
                     PlayerId = welcome.playerId;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Shooter.Net.Msgs;
+using Shooter.Server.Session;
 using Shooter.Server.Characters;
 using Shooter.Logging;
 
