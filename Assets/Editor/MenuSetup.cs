@@ -3,7 +3,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using Shooter.Menu;
+using Shooter.Client.Menu;
 using Shooter.Logging;
 
 namespace Shooter.Editor

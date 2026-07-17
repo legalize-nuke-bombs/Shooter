@@ -16,11 +16,11 @@ namespace Shooter.Auth
             if (password.Length < 8 || password.Length > 40) return "Пароль: 8-40 символов";
 
             bool upper = false, lower = false, digit = false;
-            foreach (char c in password)
+            foreach (char character in password)
             {
-                if (char.IsUpper(c)) upper = true;
-                else if (char.IsLower(c)) lower = true;
-                else if (char.IsDigit(c)) digit = true;
+                if (char.IsUpper(character)) upper = true;
+                else if (char.IsLower(character)) lower = true;
+                else if (char.IsDigit(character)) digit = true;
             }
             return upper && lower && digit ? null : "Пароль должен содержать заглавную и строчную буквы и цифру";
         }

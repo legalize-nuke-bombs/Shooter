@@ -1,29 +1,35 @@
 using System.Collections.Generic;
-using Shooter.Net;
-using Shooter.Entities.Player;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using Shooter.Entities.Characters;
 using Shooter.Entities.Chronology;
+using Shooter.Net.Msgs;
+using Shooter.Logging;
 
 namespace Shooter.Server
 {
     public class ServerWorld
     {
         public string Id { get; }
-        public float OffsetX { get; }
 
+        private readonly Scene scene;
         private readonly Clock clock = new Clock();
-        private readonly Dictionary<int, ServerPlayer> players = new Dictionary<int, ServerPlayer>();
+        private readonly Dictionary<int, Player> players = new Dictionary<int, Player>();
 
-        public ServerWorld(string id, float offsetX)
+        public ServerWorld(string id)
         {
             Id = id;
-            OffsetX = offsetX;
+            scene = SceneManager.LoadScene("Map", new LoadSceneParameters(LoadSceneMode.Additive, LocalPhysicsMode.Physics3D));
+            Log.Info("world " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
         }
 
-        public IReadOnlyCollection<ServerPlayer> Players => players.Values;
+        public IReadOnlyCollection<Player> Players => players.Values;
 
-        public void Add(ServerPlayer player)
+        public void Add(Player player)
         {
             players[player.ConnId] = player;
+            player.Spawn();
+            SceneManager.MoveGameObjectToScene(player.Body, scene);
         }
 
         public void Remove(int connId)
@@ -33,16 +39,16 @@ namespace Shooter.Server
 
         public void Step(float dt)
         {
-            foreach (ServerPlayer p in players.Values)
-                ServerPlayerSim.Step(p, dt);
+            foreach (Player player in players.Values)
+                player.Step(dt);
             clock.Advance(dt);
         }
 
-        public PlayerStateMsg[] BuildStates()
+        public PlayerState[] BuildStates()
         {
-            var states = new List<PlayerStateMsg>(players.Count);
-            foreach (ServerPlayer p in players.Values)
-                states.Add(ServerPlayerSim.BuildState(p));
+            var states = new List<PlayerState>(players.Count);
+            foreach (Player player in players.Values)
+                states.Add(new PlayerState(player));
             return states.ToArray();
         }
 
@@ -53,7 +59,7 @@ namespace Shooter.Server
                 type = "snapshot",
                 tick = tick,
                 players = BuildStates(),
-                clock = clock.BuildState()
+                clock = new ClockState(clock)
             };
         }
     }
