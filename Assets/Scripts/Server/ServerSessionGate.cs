@@ -7,15 +7,17 @@ using Shooter.Logging;
 
 namespace Shooter.Server
 {
-    public class SessionGate
+    public class ServerSessionGate
     {
         private const long AllowTtlSeconds = 60;
+        private const float SweepInterval = 60f;
 
         private readonly byte[] jwtSecret;
-        private readonly AllowList allows = new AllowList();
+        private readonly ServerSessionGrants grants = new ServerSessionGrants();
         private readonly Dictionary<int, ServerPlayer> sessions = new Dictionary<int, ServerPlayer>();
+        private float sweepTimer;
 
-        public SessionGate(byte[] jwtSecret)
+        public ServerSessionGate(byte[] jwtSecret)
         {
             this.jwtSecret = jwtSecret;
         }
@@ -42,7 +44,7 @@ namespace Shooter.Server
                 Log.Warn("conn " + connId + " not a user token (sub '" + subject + "')");
                 return false;
             }
-            if (!allows.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out string worldId))
+            if (!grants.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out string worldId))
             {
                 Log.Warn("conn " + connId + " user " + userId + " has no open session");
                 return false;
@@ -82,7 +84,7 @@ namespace Shooter.Server
             switch (hook.action)
             {
                 case "OPEN_SESSION":
-                    allows.Open(hook.userId, hook.worldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
+                    grants.Open(hook.userId, hook.worldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
                     Log.Info("session opened: user " + hook.userId + " world " + hook.worldId);
                     return Array.Empty<int>();
                 case "CLOSE_SESSION":
@@ -96,8 +98,8 @@ namespace Shooter.Server
         private IReadOnlyList<int> CloseSessions(long userId, string worldId)
         {
             bool wholeWorld = userId == 0;
-            if (wholeWorld) allows.CloseWorld(worldId);
-            else allows.Close(userId, worldId);
+            if (wholeWorld) grants.CloseWorld(worldId);
+            else grants.Close(userId, worldId);
 
             var toKick = new List<int>();
             foreach (ServerPlayer p in sessions.Values)
@@ -108,9 +110,14 @@ namespace Shooter.Server
             return toKick;
         }
 
-        public int Sweep()
+        public void Tick(float dt)
         {
-            return allows.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            sweepTimer += dt;
+            if (sweepTimer < SweepInterval) return;
+            sweepTimer = 0f;
+            int swept = grants.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            if (swept > 0)
+                Log.Info("swept " + swept + " expired session grants");
         }
 
         private static string ExtractQueryParam(string query, string name)
