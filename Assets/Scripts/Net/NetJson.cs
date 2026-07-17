@@ -4,9 +4,6 @@ using Shooter.Net.Msgs;
 
 namespace Shooter.Net
 {
-    // JSON codec for the network protocol - the control channel and the thin *State
-    // projections it carries. Persisting the full domain types to disk will be its own
-    // codec later; this one stays client-facing.
     public static class NetJson
     {
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
@@ -21,7 +18,6 @@ namespace Shooter.Net
             return JsonConvert.SerializeObject(msg, Settings);
         }
 
-        // A protocol message, or null if the json is malformed or its "type" is unknown.
         public static Msg Deserialize(string json)
         {
             try
@@ -35,7 +31,6 @@ namespace Shooter.Net
             }
         }
 
-        // A plain payload outside the Msg union (e.g. the server-to-server hook).
         public static T Deserialize<T>(string json) where T : class
         {
             try
