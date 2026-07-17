@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -37,10 +38,19 @@ public class WorldController {
         return worldService.join(userId, worldId);
     }
 
-    @DeleteMapping("/{worldId}/players/{targetId}")
-    public ResponseEntity<Void> kick(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId, @PathVariable Long targetId) {
-        worldService.kick(userId, worldId, targetId);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/{worldId}/players/{targetId}/kick")
+    public Map<String, String> kick(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId, @PathVariable Long targetId) {
+        return worldService.kick(userId, worldId, targetId);
+    }
+
+    @PostMapping("/{worldId}/players/{targetId}/blacklist")
+    public Map<String, String> blacklist(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId, @PathVariable Long targetId) {
+        return worldService.blacklist(userId, worldId, targetId);
+    }
+
+    @PostMapping("/{worldId}/players/{targetId}/unblacklist")
+    public Map<String, String> unblacklist(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId, @PathVariable Long targetId) {
+        return worldService.unblacklist(userId, worldId, targetId);
     }
 
     @PatchMapping("/{worldId}")

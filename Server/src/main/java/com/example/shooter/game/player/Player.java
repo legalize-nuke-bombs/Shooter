@@ -41,4 +41,7 @@ public class Player {
 
     @Column(nullable = false)
     private Long lastSeen;
+
+    @Column(nullable = false)
+    private Boolean blacklisted;
 }
