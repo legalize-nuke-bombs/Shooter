@@ -1,6 +1,8 @@
 package com.example.shooter.game.world;
 
 import com.example.shooter.game.player.PlayerRole;
+import com.example.shooter.game.world.metric.WorldMetricRepresentation;
+import com.example.shooter.game.world.metric.WorldMetricService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
@@ -34,7 +36,7 @@ public class WorldController {
     }
 
     @PostMapping("/{worldId}/players")
-    public WorldJoinResponse join(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId) {
+    public Map<String, String> join(@AuthenticationPrincipal Long userId, @PathVariable UUID worldId) {
         return worldService.join(userId, worldId);
     }
 
