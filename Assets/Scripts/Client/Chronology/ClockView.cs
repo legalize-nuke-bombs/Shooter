@@ -1,5 +1,5 @@
 using UnityEngine;
-using Shooter.Server.Session;
+using Shooter.Server.Worlds;
 using Shooter.Logging;
 
 namespace Shooter.Client.Chronology
@@ -34,7 +34,7 @@ namespace Shooter.Client.Chronology
             NetworkClient.Instance.SnapshotReceived -= OnSnapshot;
         }
 
-        private void OnSnapshot(SnapshotMsg snapshot)
+        private void OnSnapshot(Snapshot snapshot)
         {
             Apply(snapshot.clock.Fraction());
         }

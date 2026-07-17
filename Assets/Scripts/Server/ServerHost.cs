@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Serialization;
 using Shooter.Client.Input;
-using Shooter.Server.Characters;
-using Shooter.Server.Session;
+using Shooter.Server.Entities.Characters.Player;
+using Shooter.Server.Sessions;
+using Shooter.Server.Transport;
+using Shooter.Server.Worlds;
 using Shooter.Logging;
 
 namespace Shooter.Server
@@ -107,43 +109,44 @@ namespace Shooter.Server
                 serverTransport.Kick(connId);
                 return;
             }
-            serverTransport.Send(connId, Json.Serialize(new WelcomeMsg { playerId = player.UserId, tickRate = (int)TickRate }));
+            serverTransport.Send(connId, Json.Serialize(new Welcome { playerId = player.UserId, tickRate = (int)TickRate }));
         }
 
         private void OnMessageReceived(int connId, string json)
         {
             if (!serverSessionGate.TryGet(connId, out Player player)) return;
 
-            switch (Json.Deserialize(json))
+            switch (Json.TypeOf(json))
             {
-                case HelloMsg hello:
+                case nameof(Hello):
+                    Hello hello = Json.Deserialize<Hello>(json);
                     if (!string.IsNullOrEmpty(hello.name))
                         player.DisplayName = hello.name.Length > 40 ? hello.name.Substring(0, 40) : hello.name;
                     Log.Info("conn " + connId + " hello: user " + player.UserId + " name '" + player.DisplayName + "'");
                     break;
-                case JoinWorldMsg:
+                case nameof(JoinWorld):
                     if (!player.InWorld)
-                        JoinWorld(player);
+                        EnterWorld(player);
                     break;
-                case InputMsg input:
-                    player.ApplyInput(input);
+                case nameof(PlayerIntent):
+                    player.ApplyInput(Json.Deserialize<PlayerIntent>(json));
                     break;
             }
         }
 
-        private void JoinWorld(Player player)
+        private void EnterWorld(Player player)
         {
             ServerWorld world = WorldFor(player.WorldId);
             world.Add(player);
             player.InWorld = true;
 
-            serverTransport.Send(player.ConnId, Json.Serialize(new WorldJoinedMsg
+            serverTransport.Send(player.ConnId, Json.Serialize(new WorldJoined
             {
                 worldId = world.Id,
                 players = world.BuildStates()
             }));
 
-            string joined = Json.Serialize(new JoinedMsg { id = player.UserId, name = player.DisplayName });
+            string joined = Json.Serialize(new PlayerJoined { id = player.UserId, name = player.DisplayName });
             foreach (Player other in world.Players)
                 if (other.ConnId != player.ConnId)
                     serverTransport.Send(other.ConnId, joined);
@@ -196,7 +199,7 @@ namespace Shooter.Server
             if (worlds.TryGetValue(player.WorldId, out ServerWorld world))
             {
                 world.Remove(connId);
-                string left = Json.Serialize(new LeftMsg { id = player.UserId });
+                string left = Json.Serialize(new PlayerLeft { id = player.UserId });
                 foreach (Player other in world.Players)
                     serverTransport.Send(other.ConnId, left);
             }
