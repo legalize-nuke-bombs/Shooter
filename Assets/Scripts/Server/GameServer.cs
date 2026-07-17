@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Net;
 using Shooter.Entities.Player;
-using Shooter.Auth;
+using Shooter.Entities.Chronology;
 using Shooter.Logging;
 
 namespace Shooter.Server
@@ -15,13 +15,10 @@ namespace Shooter.Server
         private const int Port = 9090;
         private const float WorldSpacing = 1000f;
         private const float AllowSweepInterval = 60f;
-        private const long AllowTtlSeconds = 60;
 
         private INetTransport transport;
-        private readonly Dictionary<int, ServerPlayer> players = new Dictionary<int, ServerPlayer>();
-        private readonly Dictionary<string, int> worldIndices = new Dictionary<string, int>();
-        private readonly AllowList allows = new AllowList();
-        private byte[] jwtSecret;
+        private SessionGate sessions;
+        private readonly Dictionary<string, World> worlds = new Dictionary<string, World>();
         private float tickTimer;
         private float allowSweepTimer;
         private long tick;
@@ -48,16 +45,16 @@ namespace Shooter.Server
                 Application.Quit(1);
                 return;
             }
-            jwtSecret = Convert.FromBase64String(secret);
+            sessions = new SessionGate(Convert.FromBase64String(secret));
 
             transport = new WsTransport();
             transport.ClientConnected += OnClientConnected;
             transport.MessageReceived += OnMessageReceived;
             transport.ClientDisconnected += OnClientDisconnected;
             transport.HookReceived += OnHookReceived;
-            transport.HookAuthorizer = token => Jwt.TryVerify(token, jwtSecret, out string subject) && subject == "hook";
+            transport.HookAuthorizer = sessions.AuthorizeHook;
             transport.Start(Port);
-            Log.Info("ws listening on " + Port + ", tick rate " + TickRate + ", allow ttl " + AllowTtlSeconds + "s");
+            Log.Info("ws listening on " + Port + ", tick rate " + TickRate);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -86,7 +83,7 @@ namespace Shooter.Server
             if (allowSweepTimer >= AllowSweepInterval)
             {
                 allowSweepTimer = 0f;
-                int swept = allows.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                int swept = sessions.Sweep();
                 if (swept > 0)
                     Log.Info("swept " + swept + " expired allows");
             }
@@ -94,44 +91,17 @@ namespace Shooter.Server
 
         private void OnClientConnected(int connId, string query)
         {
-            string token = ExtractQueryParam(query, "token");
-            if (!Jwt.TryVerify(token, jwtSecret, out string subject))
+            if (!sessions.TryAdmit(connId, query, out ServerPlayer player))
             {
-                Log.Warn("conn " + connId + " token rejected, kicking");
                 transport.Kick(connId);
                 return;
             }
-
-            if (!long.TryParse(subject, out long userId))
-            {
-                Log.Warn("conn " + connId + " not a user token (sub '" + subject + "'), kicking");
-                transport.Kick(connId);
-                return;
-            }
-
-            if (!allows.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out string worldId))
-            {
-                Log.Warn("conn " + connId + " user " + userId + " has no open session, kicking");
-                transport.Kick(connId);
-                return;
-            }
-
-            var player = new ServerPlayer
-            {
-                ConnId = connId,
-                UserId = userId,
-                DisplayName = "player" + userId,
-                WorldId = worldId
-            };
-            players[connId] = player;
-
-            Log.Info("conn " + connId + " authed: user " + player.UserId + " world " + player.WorldId);
             transport.Send(connId, NetJson.Serialize(new WelcomeMsg { type = "welcome", playerId = player.UserId, tickRate = (int)TickRate }));
         }
 
         private void OnMessageReceived(int connId, string json)
         {
-            if (!players.TryGetValue(connId, out ServerPlayer player)) return;
+            if (!sessions.TryGet(connId, out ServerPlayer player)) return;
 
             switch (NetJson.PeekType(json))
             {
@@ -155,144 +125,81 @@ namespace Shooter.Server
 
         private void JoinWorld(ServerPlayer player)
         {
+            World world = WorldFor(player.WorldId);
+            world.Add(player);
             player.InWorld = true;
-            ServerPlayerSim.SpawnBody(player, WorldOffsetX(player.WorldId));
-
-            var states = new List<PlayerStateMsg>();
-            foreach (ServerPlayer p in players.Values)
-                if (p.InWorld && p.WorldId == player.WorldId)
-                    states.Add(ServerPlayerSim.BuildState(p));
+            ServerPlayerSim.SpawnBody(player, world.OffsetX);
 
             transport.Send(player.ConnId, NetJson.Serialize(new WorldJoinedMsg
             {
                 type = "worldJoined",
-                worldId = player.WorldId,
-                players = states.ToArray()
+                worldId = world.Id,
+                players = world.BuildStates()
             }));
 
             string joined = NetJson.Serialize(new JoinedMsg { type = "joined", id = player.UserId, name = player.DisplayName });
-            foreach (ServerPlayer p in players.Values)
-                if (p.InWorld && p.WorldId == player.WorldId && p.ConnId != player.ConnId)
+            foreach (ServerPlayer p in world.Players)
+                if (p.ConnId != player.ConnId)
                     transport.Send(p.ConnId, joined);
 
-            Log.Info("user " + player.UserId + " joined world " + player.WorldId + ", players there now " + states.Count);
+            Log.Info("user " + player.UserId + " joined world " + world.Id + ", players there now " + world.Players.Count);
         }
 
-        private float WorldOffsetX(string worldId)
+        private World WorldFor(string worldId)
         {
-            if (!worldIndices.TryGetValue(worldId, out int index))
+            if (!worlds.TryGetValue(worldId, out World world))
             {
-                index = worldIndices.Count;
-                worldIndices[worldId] = index;
+                world = new World(worldId, worlds.Count * WorldSpacing);
+                worlds[worldId] = world;
             }
-            return index * WorldSpacing;
+            return world;
         }
 
         private void Simulate(float dt)
         {
-            foreach (ServerPlayer p in players.Values)
-                ServerPlayerSim.Step(p, dt);
+            foreach (World world in worlds.Values)
+                world.Step(dt);
         }
 
         private void BroadcastSnapshots()
         {
-            var statesByWorld = new Dictionary<string, List<PlayerStateMsg>>();
-            foreach (ServerPlayer p in players.Values)
+            foreach (World world in worlds.Values)
             {
-                if (!p.InWorld) continue;
-                if (!statesByWorld.TryGetValue(p.WorldId, out List<PlayerStateMsg> list))
-                {
-                    list = new List<PlayerStateMsg>();
-                    statesByWorld[p.WorldId] = list;
-                }
-                list.Add(ServerPlayerSim.BuildState(p));
+                if (world.Players.Count == 0) continue;
+                string json = NetJson.Serialize(world.BuildSnapshot(tick));
+                foreach (ServerPlayer p in world.Players)
+                    transport.Send(p.ConnId, json);
             }
-
-            var jsonByWorld = new Dictionary<string, string>();
-            foreach (KeyValuePair<string, List<PlayerStateMsg>> pair in statesByWorld)
-                jsonByWorld[pair.Key] = NetJson.Serialize(new SnapshotMsg
-                {
-                    type = "snapshot",
-                    tick = tick,
-                    players = pair.Value.ToArray()
-                });
-
-            foreach (ServerPlayer p in players.Values)
-                if (p.InWorld)
-                    transport.Send(p.ConnId, jsonByWorld[p.WorldId]);
         }
 
         private void OnHookReceived(string json)
         {
-            UnityHookMsg hook = NetJson.Parse<UnityHookMsg>(json);
-            if (hook == null || string.IsNullOrEmpty(hook.action) || string.IsNullOrEmpty(hook.worldId))
-            {
-                Log.Warn("malformed hook, ignoring");
-                return;
-            }
-
-            switch (hook.action)
-            {
-                case "OPEN_SESSION":
-                    allows.Open(hook.userId, hook.worldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
-                    Log.Info("session opened: user " + hook.userId + " world " + hook.worldId);
-                    break;
-                case "CLOSE_SESSION":
-                    CloseSessions(hook.userId, hook.worldId);
-                    break;
-                default:
-                    Log.Warn("unknown hook action " + hook.action + ", ignoring");
-                    break;
-            }
-        }
-
-        private void CloseSessions(long userId, string worldId)
-        {
-            bool wholeWorld = userId == 0;
-            if (wholeWorld) allows.CloseWorld(worldId);
-            else allows.Close(userId, worldId);
-
-            var toKick = new List<int>();
-            foreach (ServerPlayer p in players.Values)
-                if (p.WorldId == worldId && (wholeWorld || p.UserId == userId))
-                    toKick.Add(p.ConnId);
-            foreach (int connId in toKick)
+            foreach (int connId in sessions.HandleHook(json))
                 transport.Kick(connId);
-
-            Log.Info("session closed: user " + (wholeWorld ? "*" : userId.ToString()) + " world " + worldId + ", kicked online " + toKick.Count);
         }
 
         private void OnClientDisconnected(int connId)
         {
-            if (!players.TryGetValue(connId, out ServerPlayer player)) return;
-            players.Remove(connId);
+            if (!sessions.TryGet(connId, out ServerPlayer player)) return;
+            sessions.Remove(connId);
 
             if (player.Body != null) Destroy(player.Body);
             if (!player.InWorld) return;
 
-            string left = NetJson.Serialize(new LeftMsg { type = "left", id = player.UserId });
-            foreach (ServerPlayer p in players.Values)
-                if (p.InWorld && p.WorldId == player.WorldId)
+            if (worlds.TryGetValue(player.WorldId, out World world))
+            {
+                world.Remove(connId);
+                string left = NetJson.Serialize(new LeftMsg { type = "left", id = player.UserId });
+                foreach (ServerPlayer p in world.Players)
                     transport.Send(p.ConnId, left);
+            }
 
-            Log.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", players total " + players.Count);
+            Log.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", sessions total " + sessions.Count);
         }
 
         private void OnDestroy()
         {
             transport?.Stop();
-        }
-
-        private static string ExtractQueryParam(string query, string name)
-        {
-            foreach (string pair in query.Split('&'))
-            {
-                int eq = pair.IndexOf('=');
-                if (eq <= 0) continue;
-                if (pair.Substring(0, eq) == name)
-                    return Uri.UnescapeDataString(pair.Substring(eq + 1));
-            }
-            return "";
         }
     }
 }
