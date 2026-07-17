@@ -16,15 +16,17 @@ namespace Shooter.Menu
         private readonly Label userLabel;
 
         private readonly MenuApi api;
+        private readonly ErrorModal errors;
         private readonly Action onCreateClick;
         private readonly Action onJoined;
 
         private bool busy;
         private int page;
 
-        public WorldsScreen(VisualElement root, MenuApi api, Action onCreateClick, Action onJoined)
+        public WorldsScreen(VisualElement root, MenuApi api, ErrorModal errors, Action onCreateClick, Action onJoined)
         {
             this.api = api;
+            this.errors = errors;
             this.onCreateClick = onCreateClick;
             this.onJoined = onJoined;
 
@@ -165,7 +167,7 @@ namespace Shooter.Menu
         private void JoinById()
         {
             string id = worldIdField.value.Trim();
-            if (id.Length == 0) { status.text = "Укажите идентификатор мира."; return; }
+            if (id.Length == 0) { errors.Show("Укажите идентификатор мира."); return; }
             Join(id);
         }
 
@@ -173,12 +175,11 @@ namespace Shooter.Menu
         {
             if (busy) return;
             busy = true;
-            status.text = "";
 
             api.Join(worldId, error =>
             {
                 busy = false;
-                if (error != null) { status.text = error; return; }
+                if (error != null) { errors.Show(error); return; }
 
                 onJoined();
             });
