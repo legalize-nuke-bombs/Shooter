@@ -1,6 +1,6 @@
 using System;
 using UnityEngine.UIElements;
-using Shooter.Shared;
+using Shooter.Auth;
 
 namespace Shooter.Menu
 {
