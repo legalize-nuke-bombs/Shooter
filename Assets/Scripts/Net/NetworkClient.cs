@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using Shooter.Auth;
 using Shooter.Logging;
 using Shooter.Entities.Player;
+using Shooter.Entities.Chronology;
 
 namespace Shooter.Net
 {
@@ -49,6 +50,7 @@ namespace Shooter.Net
             var go = new GameObject("Net");
             go.AddComponent<NetworkClient>();
             go.AddComponent<RemotePlayerManager>();
+            go.AddComponent<ClockView>();
         }
 
         private void Awake()
