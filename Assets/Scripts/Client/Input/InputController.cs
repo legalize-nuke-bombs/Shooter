@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Shooter.Server.Characters;
-using Shooter.Server.Session;
+using Shooter.Server.Entities.Characters.Player;
+using Shooter.Server.Worlds;
 
 namespace Shooter.Client.Input
 {
@@ -63,7 +63,7 @@ namespace Shooter.Client.Input
 
             nextInputSendTime = Time.time + 1f / NetworkClient.InputSendRate;
             Keyboard keyboard = Keyboard.current;
-            networkClient.SendInput(new InputMsg
+            networkClient.SendInput(new PlayerIntent
             {
                 moveX = (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
                 moveZ = (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f),
@@ -75,7 +75,7 @@ namespace Shooter.Client.Input
             jumpPending = false;
         }
 
-        private void OnSnapshot(SnapshotMsg snapshot)
+        private void OnSnapshot(Snapshot snapshot)
         {
             foreach (PlayerState playerState in snapshot.players)
             {
