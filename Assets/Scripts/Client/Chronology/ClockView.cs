@@ -1,9 +1,8 @@
 using UnityEngine;
-using Shooter.Net;
 using Shooter.Net.Msgs;
 using Shooter.Logging;
 
-namespace Shooter.Entities.Chronology
+namespace Shooter.Client.Chronology
 {
     public class ClockView : MonoBehaviour
     {

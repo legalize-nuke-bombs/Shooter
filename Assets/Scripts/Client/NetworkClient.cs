@@ -6,13 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Auth;
-using Shooter.Logging;
-using Shooter.Entities.Characters;
-using Shooter.Entities.Chronology;
+using Shooter.Net;
 using Shooter.Net.Msgs;
+using Shooter.Client.Characters;
+using Shooter.Client.Chronology;
+using Shooter.Logging;
 
-namespace Shooter.Net
+namespace Shooter.Client
 {
     public class NetworkClient : MonoBehaviour
     {
@@ -48,7 +48,7 @@ namespace Shooter.Net
 
             var go = new GameObject("Net");
             go.AddComponent<NetworkClient>();
-            go.AddComponent<PlayerView>();
+            go.AddComponent<PlayersView>();
             go.AddComponent<ClockView>();
         }
 

@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Shooter.Auth
+namespace Shooter.Client
 {
     public static class AccountRules
     {

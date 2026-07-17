@@ -2,7 +2,7 @@ using UnityEngine;
 using Shooter.Net.Msgs;
 using Shooter.Logging;
 
-namespace Shooter.Entities.Characters
+namespace Shooter.Server.Characters
 {
     public class Player
     {

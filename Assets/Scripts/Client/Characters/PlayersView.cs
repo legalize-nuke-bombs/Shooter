@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Shooter.Net;
 using Shooter.Net.Msgs;
+using Shooter.Server.Characters;
 using Shooter.Logging;
 
-namespace Shooter.Entities.Characters
+namespace Shooter.Client.Characters
 {
-    public class PlayerView : MonoBehaviour
+    public class PlayersView : MonoBehaviour
     {
         private const float LerpFactor = 15f;
 
@@ -34,36 +34,36 @@ namespace Shooter.Entities.Characters
 
         private void OnSnapshot(SnapshotMsg snapshot)
         {
-            foreach (PlayerState player in snapshot.players)
+            foreach (PlayerState state in snapshot.players)
             {
-                if (player.id == NetworkClient.Instance.PlayerId) continue;
+                if (state.id == NetworkClient.Instance.PlayerId) continue;
 
-                if (!avatars.TryGetValue(player.id, out Avatar avatar))
-                    avatar = Spawn(player);
+                if (!avatars.TryGetValue(state.id, out Avatar avatar))
+                    avatar = Spawn(state);
 
-                avatar.TargetPosition = new Vector3(player.x, player.y, player.z);
-                avatar.TargetYaw = player.yaw;
+                avatar.TargetPosition = new Vector3(state.x, state.y, state.z);
+                avatar.TargetYaw = state.yaw;
             }
         }
 
-        private void OnLeft(LeftMsg msg)
+        private void OnLeft(LeftMsg left)
         {
-            if (!avatars.TryGetValue(msg.id, out Avatar avatar)) return;
+            if (!avatars.TryGetValue(left.id, out Avatar avatar)) return;
             Destroy(avatar.Transform.gameObject);
-            avatars.Remove(msg.id);
-            Log.Info("avatar removed: player " + msg.id + ", avatars now " + avatars.Count);
+            avatars.Remove(left.id);
+            Log.Info("avatar removed for player " + left.id + ", avatars now " + avatars.Count);
         }
 
-        private Avatar Spawn(PlayerState player)
+        private Avatar Spawn(PlayerState state)
         {
             GameObject capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            capsule.name = "Avatar_" + player.id + "_" + player.name;
-            capsule.transform.position = new Vector3(player.x, player.y, player.z);
+            capsule.name = "Avatar_" + state.id + "_" + state.name;
+            capsule.transform.position = new Vector3(state.x, state.y, state.z);
             capsule.GetComponent<Renderer>().material.color = new Color(0.9f, 0.4f, 0.3f);
 
             var avatar = new Avatar { Transform = capsule.transform };
-            avatars[player.id] = avatar;
-            Log.Info("avatar spawned: player " + player.id + " '" + player.name + "', avatars now " + avatars.Count);
+            avatars[state.id] = avatar;
+            Log.Info("avatar spawned for player " + state.id + " '" + state.name + "', avatars now " + avatars.Count);
             return avatar;
         }
 
