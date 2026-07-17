@@ -51,6 +51,12 @@ namespace Shooter.Menu
         public void Show() => screen.RemoveFromClassList("hidden");
         public void Hide() => screen.AddToClassList("hidden");
 
+        private void SetBusy(bool value)
+        {
+            busy = value;
+            submitBtn.SetEnabled(!value);
+        }
+
         private void SetRegisterMode(bool register)
         {
             registerMode = register;
@@ -87,15 +93,13 @@ namespace Shooter.Menu
             }
             if (invalid != null) { status.text = invalid; return; }
 
-            busy = true;
-            submitBtn.SetEnabled(false);
+            SetBusy(true);
 
             Action<string, string> onDone = (token, error) =>
             {
                 if (error != null)
                 {
-                    busy = false;
-                    submitBtn.SetEnabled(true);
+                    SetBusy(false);
                     status.text = error;
                     return;
                 }
@@ -103,8 +107,7 @@ namespace Shooter.Menu
                 Session.Token = token;
                 api.Me((me, meError) =>
                 {
-                    busy = false;
-                    submitBtn.SetEnabled(true);
+                    SetBusy(false);
 
                     if (meError != null)
                     {
