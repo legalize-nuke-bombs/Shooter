@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Net;
-using Shooter.Player;
+using Shooter.Entities.Player;
 using Shooter.Auth;
 
-namespace Shooter.Net
+namespace Shooter.Server
 {
     public class GameServer : MonoBehaviour
     {

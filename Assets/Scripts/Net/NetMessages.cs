@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Shooter.Player;
+using Shooter.Entities.Player;
 
 namespace Shooter.Net
 {

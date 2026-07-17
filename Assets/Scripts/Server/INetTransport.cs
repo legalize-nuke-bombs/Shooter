@@ -1,6 +1,6 @@
 using System;
 
-namespace Shooter.Net
+namespace Shooter.Server
 {
     public interface INetTransport
     {
