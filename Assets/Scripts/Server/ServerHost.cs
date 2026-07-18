@@ -53,7 +53,12 @@ namespace Shooter.Server
             serverTransport.HookReceived += OnHookReceived;
             serverTransport.HookAuthorizer = serverSessionGate.AuthorizeHook;
             serverTransport.Start(Port);
-            Log.Info("ws listening on " + Port + ", tick rate " + TickRate);
+            Log.Info("WS listening on " + Port + ", tick rate " + TickRate);
+        }
+
+        private void OnDestroy()
+        {
+            serverTransport?.Stop();
         }
 
         private static bool TryLoadSecret(out byte[] secret)
@@ -62,7 +67,7 @@ namespace Shooter.Server
             string raw = Environment.GetEnvironmentVariable("JWT_SECRET");
             if (string.IsNullOrEmpty(raw))
             {
-                Log.Error("no JWT_SECRET env, refusing to start");
+                Log.Error("No JWT_SECRET env, refusing to start");
                 return false;
             }
             try
@@ -82,7 +87,7 @@ namespace Shooter.Server
             InputController localPlayer = FindAnyObjectByType<InputController>();
             if (localPlayer != null)
                 Destroy(localPlayer.gameObject);
-            Log.Info("scene " + scene.name + " ready");
+            Log.Info("Scene " + scene.name + " ready");
         }
 
         private void Update()
@@ -109,7 +114,7 @@ namespace Shooter.Server
                 serverTransport.Kick(connId);
                 return;
             }
-            serverTransport.Send(connId, Message.Encode(MessageType.Welcome, new Welcome { PlayerId = session.Player.UserId, TickRate = (int)TickRate }));
+            serverTransport.Send(connId, Message.Encode(MessageType.Welcome, new Welcome { PlayerId = session.UserId, TickRate = (int)TickRate }));
         }
 
         private void OnMessageReceived(int connId, string json)
@@ -124,15 +129,16 @@ namespace Shooter.Server
                 case MessageType.Hello:
                     Hello hello = message.Read<Hello>();
                     if (!string.IsNullOrEmpty(hello.Name))
-                        session.Player.DisplayName = hello.Name.Length > 40 ? hello.Name.Substring(0, 40) : hello.Name;
-                    Log.Info("conn " + connId + " hello: user " + session.Player.UserId + " name '" + session.Player.DisplayName + "'");
+                        session.DisplayName = hello.Name.Length > 40 ? hello.Name.Substring(0, 40) : hello.Name;
+                    Log.Info("Conn " + connId + " hello: user " + session.UserId + " name '" + session.DisplayName + "'");
                     break;
                 case MessageType.JoinWorld:
                     if (!session.InWorld)
                         EnterWorld(session);
                     break;
                 case MessageType.PlayerIntent:
-                    session.Player.ApplyInput(message.Read<PlayerIntent>());
+                    if (session.InWorld && worlds.TryGetValue(session.WorldId, out ServerWorld world))
+                        world.ApplyInput(session.UserId, message.Read<PlayerIntent>());
                     break;
             }
         }
@@ -140,7 +146,7 @@ namespace Shooter.Server
         private void EnterWorld(ServerSession session)
         {
             ServerWorld world = WorldFor(session.WorldId);
-            world.AddPlayer(session.Player);
+            world.AddPlayer(session.UserId, session.DisplayName);
             session.InWorld = true;
 
             serverTransport.Send(session.ConnId, Message.Encode(MessageType.WorldJoined, new WorldJoined
@@ -149,12 +155,12 @@ namespace Shooter.Server
                 Players = world.BuildPlayerStates()
             }));
 
-            string joined = Message.Encode(MessageType.PlayerJoined, new PlayerJoined { Id = session.Player.UserId, Name = session.Player.DisplayName });
+            string joined = Message.Encode(MessageType.PlayerJoined, new PlayerJoined { Id = session.UserId, Name = session.DisplayName });
             foreach (int connId in serverSessionGate.ConnIdsInWorld(world.Id))
                 if (connId != session.ConnId)
                     serverTransport.Send(connId, joined);
 
-            Log.Info("user " + session.Player.UserId + " joined world " + world.Id + ", players there now " + world.Players.Count);
+            Log.Info("User " + session.UserId + " joined world " + world.Id + ", players there now " + world.Players.Count);
         }
 
         private ServerWorld WorldFor(string worldId)
@@ -163,7 +169,7 @@ namespace Shooter.Server
             {
                 world = new ServerWorld(worldId);
                 worlds[worldId] = world;
-                Log.Info("world " + worldId + " created, total worlds " + worlds.Count);
+                Log.Info("World " + worldId + " created, total worlds " + worlds.Count);
             }
             return world;
         }
@@ -196,23 +202,17 @@ namespace Shooter.Server
             if (!serverSessionGate.TryGet(connId, out ServerSession session)) return;
             serverSessionGate.Remove(connId);
 
-            if (session.Player.Body != null) Destroy(session.Player.Body);
             if (!session.InWorld) return;
 
             if (worlds.TryGetValue(session.WorldId, out ServerWorld world))
             {
-                world.RemovePlayer(session.Player.UserId);
-                string left = Message.Encode(MessageType.PlayerLeft, new PlayerLeft { Id = session.Player.UserId });
+                world.RemovePlayer(session.UserId);
+                string left = Message.Encode(MessageType.PlayerLeft, new PlayerLeft { Id = session.UserId });
                 foreach (int otherConnId in serverSessionGate.ConnIdsInWorld(session.WorldId))
                     serverTransport.Send(otherConnId, left);
             }
 
-            Log.Info("user " + session.Player.UserId + " disconnected from world " + session.WorldId + ", sessions total " + serverSessionGate.Count);
-        }
-
-        private void OnDestroy()
-        {
-            serverTransport?.Stop();
+            Log.Info("User " + session.UserId + " disconnected from world " + session.WorldId + ", sessions total " + serverSessionGate.Count);
         }
     }
 }
