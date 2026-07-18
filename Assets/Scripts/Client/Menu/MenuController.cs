@@ -39,7 +39,22 @@ namespace Shooter.Client.Menu
             worlds = new WorldsScreen(root, api, errorModal, onCreateClick: () => createModal.Show(), onJoined: OnJoined);
             createModal = new CreateWorldModal(root, api, onCreated: () => worlds.Reload());
 
+            ShowHome();
             CheckServer();
+        }
+
+        private void ShowHome()
+        {
+            if (string.IsNullOrEmpty(Session.Token))
+            {
+                worlds.Hide();
+                login.Show();
+            }
+            else
+            {
+                login.Hide();
+                worlds.Show();
+            }
         }
 
         private void LoadConfig()
@@ -76,16 +91,7 @@ namespace Shooter.Client.Menu
 
                 cornerStatus.text = info.Name + " v" + info.Major + "." + info.Minor + "." + info.Patch;
                 serverError.Hide();
-                if (string.IsNullOrEmpty(Session.Token))
-                {
-                    worlds.Hide();
-                    login.Show();
-                }
-                else
-                {
-                    login.Hide();
-                    worlds.Show();
-                }
+                ShowHome();
             });
         }
 
