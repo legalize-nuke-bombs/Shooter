@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Serialization;
-using Shooter.Server.Entities.Characters.Player;
+using Shooter.Server.Entities.Players;
 using Shooter.Server.Sessions;
 using Shooter.Server.Worlds;
 using Shooter.Client.Account;
-using Shooter.Client.Entities.Characters;
+using Shooter.Client.Entities.Players;
 using Shooter.Client.Entities.Chronology;
 using Shooter.Logging;
 
