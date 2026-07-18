@@ -69,7 +69,7 @@ namespace Shooter.Client.Menu
             });
         }
 
-        public void LoadWorlds(int page, int size, Action<WorldDto[], string> onDone)
+        public void LoadWorlds(int page, int size, Action<List<WorldDto>, string> onDone)
         {
             string path = "/api/worlds?playerRole=MEMBER&page=" + page + "&size=" + size;
 

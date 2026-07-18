@@ -166,7 +166,7 @@ namespace Shooter.Client
                 case MessageType.WorldJoined:
                     WorldJoined worldJoined = message.Read<WorldJoined>();
                     InWorld = true;
-                    Log.Info("Net: world " + worldJoined.WorldId + ", players " + worldJoined.Players.Length);
+                    Log.Info("Net: world " + worldJoined.WorldId + ", players " + worldJoined.Players.Count);
                     WorldEntered?.Invoke(worldJoined);
                     break;
                 case MessageType.Snapshot:
