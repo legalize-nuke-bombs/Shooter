@@ -1,10 +1,8 @@
-using Shooter.Serialization;
-
 namespace Shooter.Server.Sessions
 {
-    public class Welcome : Serializable
+    public class Welcome
     {
-        public long playerId;
-        public int tickRate;
+        public long PlayerId { get; set; }
+        public int TickRate { get; set; }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Serialization;
+using Shooter.Protocol;
 using Shooter.Client.Input;
 using Shooter.Server.Entities.Players;
 using Shooter.Server.Sessions;
@@ -109,27 +109,30 @@ namespace Shooter.Server
                 serverTransport.Kick(connId);
                 return;
             }
-            serverTransport.Send(connId, Json.Serialize(new Welcome { playerId = player.UserId, tickRate = (int)TickRate }));
+            serverTransport.Send(connId, Message.Encode(MessageType.Welcome, new Welcome { PlayerId = player.UserId, TickRate = (int)TickRate }));
         }
 
         private void OnMessageReceived(int connId, string json)
         {
             if (!serverSessionGate.TryGet(connId, out Player player)) return;
 
-            switch (Json.TypeOf(json))
+            Message message = Message.Decode(json);
+            if (message == null) return;
+
+            switch (message.Type)
             {
-                case nameof(Hello):
-                    Hello hello = Json.Deserialize<Hello>(json);
-                    if (!string.IsNullOrEmpty(hello.name))
-                        player.DisplayName = hello.name.Length > 40 ? hello.name.Substring(0, 40) : hello.name;
+                case MessageType.Hello:
+                    Hello hello = message.Read<Hello>();
+                    if (!string.IsNullOrEmpty(hello.Name))
+                        player.DisplayName = hello.Name.Length > 40 ? hello.Name.Substring(0, 40) : hello.Name;
                     Log.Info("conn " + connId + " hello: user " + player.UserId + " name '" + player.DisplayName + "'");
                     break;
-                case nameof(JoinWorld):
+                case MessageType.JoinWorld:
                     if (!player.InWorld)
                         EnterWorld(player);
                     break;
-                case nameof(PlayerIntent):
-                    player.ApplyInput(Json.Deserialize<PlayerIntent>(json));
+                case MessageType.PlayerIntent:
+                    player.ApplyInput(message.Read<PlayerIntent>());
                     break;
             }
         }
@@ -140,13 +143,13 @@ namespace Shooter.Server
             world.AddPlayer(player);
             player.InWorld = true;
 
-            serverTransport.Send(player.ConnId, Json.Serialize(new WorldJoined
+            serverTransport.Send(player.ConnId, Message.Encode(MessageType.WorldJoined, new WorldJoined
             {
-                worldId = world.Id,
-                players = world.BuildPlayerStates()
+                WorldId = world.Id,
+                Players = world.BuildPlayerStates()
             }));
 
-            string joined = Json.Serialize(new PlayerJoined { id = player.UserId, name = player.DisplayName });
+            string joined = Message.Encode(MessageType.PlayerJoined, new PlayerJoined { Id = player.UserId, Name = player.DisplayName });
             foreach (Player other in world.Players)
                 if (other.ConnId != player.ConnId)
                     serverTransport.Send(other.ConnId, joined);
@@ -176,7 +179,7 @@ namespace Shooter.Server
             foreach (ServerWorld world in worlds.Values)
             {
                 if (world.Players.Count == 0) continue;
-                string json = Json.Serialize(new Snapshot(tick, world));
+                string json = Message.Encode(MessageType.Snapshot, world.BuildSnapshot(tick));
                 foreach (Player player in world.Players)
                     serverTransport.Send(player.ConnId, json);
             }
@@ -199,7 +202,7 @@ namespace Shooter.Server
             if (worlds.TryGetValue(player.WorldId, out ServerWorld world))
             {
                 world.RemovePlayer(connId);
-                string left = Json.Serialize(new PlayerLeft { id = player.UserId });
+                string left = Message.Encode(MessageType.PlayerLeft, new PlayerLeft { Id = player.UserId });
                 foreach (Player other in world.Players)
                     serverTransport.Send(other.ConnId, left);
             }

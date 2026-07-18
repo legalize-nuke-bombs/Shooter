@@ -69,22 +69,22 @@ namespace Shooter.Server.Sessions
         public IReadOnlyList<int> HandleHook(string json)
         {
             SessionHook hook = Json.Deserialize<SessionHook>(json);
-            if (hook == null || string.IsNullOrEmpty(hook.action) || string.IsNullOrEmpty(hook.worldId))
+            if (hook == null || string.IsNullOrEmpty(hook.Action) || string.IsNullOrEmpty(hook.WorldId))
             {
                 Log.Warn("malformed hook, ignoring");
                 return Array.Empty<int>();
             }
 
-            switch (hook.action)
+            switch (hook.Action)
             {
                 case "OPEN_SESSION":
-                    serverSessionGrants.Open(hook.userId, hook.worldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
-                    Log.Info("session opened: user " + hook.userId + " world " + hook.worldId);
+                    serverSessionGrants.Open(hook.UserId, hook.WorldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
+                    Log.Info("session opened: user " + hook.UserId + " world " + hook.WorldId);
                     return Array.Empty<int>();
                 case "CLOSE_SESSION":
-                    return CloseSessions(hook.userId, hook.worldId);
+                    return CloseSessions(hook.UserId, hook.WorldId);
                 default:
-                    Log.Warn("unknown hook action " + hook.action + ", ignoring");
+                    Log.Warn("unknown hook action " + hook.Action + ", ignoring");
                     return Array.Empty<int>();
             }
         }

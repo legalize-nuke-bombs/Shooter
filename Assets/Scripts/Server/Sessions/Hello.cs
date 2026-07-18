@@ -1,9 +1,7 @@
-using Shooter.Serialization;
-
 namespace Shooter.Server.Sessions
 {
-    public class Hello : Serializable
+    public class Hello
     {
-        public string name;
+        public string Name { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Logging;
+using Shooter.Serialization;
 using Shooter.Client.Account;
 
 namespace Shooter.Client.Menu
@@ -49,9 +50,9 @@ namespace Shooter.Client.Menu
                 string path = Path.Combine(Application.streamingAssetsPath, "config.json");
                 if (File.Exists(path))
                 {
-                    var config = JsonUtility.FromJson<ConfigFile>(File.ReadAllText(path));
-                    if (!string.IsNullOrEmpty(config.serverAddress))
-                        Session.ServerAddress = config.serverAddress.Trim();
+                    var config = Json.Deserialize<ConfigFile>(File.ReadAllText(path));
+                    if (!string.IsNullOrEmpty(config.ServerAddress))
+                        Session.ServerAddress = config.ServerAddress.Trim();
                 }
             }
             catch (Exception e)
@@ -74,7 +75,7 @@ namespace Shooter.Client.Menu
                     return;
                 }
 
-                cornerStatus.text = info.name + " v" + info.major + "." + info.minor + "." + info.patch;
+                cornerStatus.text = info.Name + " v" + info.Major + "." + info.Minor + "." + info.Patch;
                 serverError.Hide();
                 if (loggedIn) worlds.Show();
                 else login.Show();

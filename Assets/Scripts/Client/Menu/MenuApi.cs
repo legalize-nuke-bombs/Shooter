@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using Shooter.Serialization;
 using Shooter.Client.Account;
 
 namespace Shooter.Client.Menu
@@ -40,21 +41,20 @@ namespace Shooter.Client.Menu
             Request("GET", "/api/server", null, false, (code, text) =>
             {
                 if (code != 200) { onDone(null); return; }
-                ServerInfoResponse info = null;
-                try { info = JsonUtility.FromJson<ServerInfoResponse>(text); } catch { }
-                onDone(info != null && !string.IsNullOrEmpty(info.name) ? info : null);
+                ServerInfoResponse info = Json.Deserialize<ServerInfoResponse>(text);
+                onDone(info != null && !string.IsNullOrEmpty(info.Name) ? info : null);
             });
         }
 
         public void Login(string username, string password, Action<string, string> onDone)
         {
-            string body = JsonUtility.ToJson(new LoginRequest { username = username, password = password });
+            string body = Json.Serialize(new LoginRequest { Username = username, Password = password });
             Request("POST", "/api/auth/login", body, false, (code, text) => OnTokenResponse(code, text, onDone));
         }
 
         public void Register(string username, string displayName, string password, Action<string, string> onDone)
         {
-            string body = JsonUtility.ToJson(new RegisterRequest { username = username, displayName = displayName, password = password });
+            string body = Json.Serialize(new RegisterRequest { Username = username, DisplayName = displayName, Password = password });
             Request("POST", "/api/auth/register", body, false, (code, text) => OnTokenResponse(code, text, onDone));
         }
 
@@ -63,9 +63,8 @@ namespace Shooter.Client.Menu
             Request("GET", "/api/users/me", null, true, (code, text) =>
             {
                 if (code != 200) { onDone(null, HumanError(code, text)); return; }
-                UserDto me = null;
-                try { me = JsonUtility.FromJson<UserDto>(text); } catch { }
-                if (me == null || me.id <= 0) { onDone(null, "Не удалось получить профиль."); return; }
+                UserDto me = Json.Deserialize<UserDto>(text);
+                if (me == null || me.Id <= 0) { onDone(null, "Не удалось получить профиль."); return; }
                 onDone(me, null);
             });
         }
@@ -77,8 +76,9 @@ namespace Shooter.Client.Menu
             Request("GET", path, null, true, (code, text) =>
             {
                 if (code != 200) { onDone(null, HumanError(code, text)); return; }
-                try { onDone(JsonUtility.FromJson<WorldsWrap>("{\"items\":" + text + "}").items, null); }
-                catch { onDone(null, "Не удалось получить список миров."); }
+                WorldsWrap wrap = Json.Deserialize<WorldsWrap>("{\"items\":" + text + "}");
+                if (wrap?.Items == null) { onDone(null, "Не удалось получить список миров."); return; }
+                onDone(wrap.Items, null);
             });
         }
 
@@ -90,16 +90,16 @@ namespace Shooter.Client.Menu
 
         public void CreateWorld(CreateWorldRequest request, Action<string> onDone)
         {
-            Request("POST", "/api/worlds", JsonUtility.ToJson(request), true, (code, text) =>
+            Request("POST", "/api/worlds", Json.Serialize(request), true, (code, text) =>
                 onDone(code == 200 || code == 201 ? null : HumanError(code, text)));
         }
 
         private static void OnTokenResponse(long code, string text, Action<string, string> onDone)
         {
             if (code != 200 && code != 201) { onDone(null, HumanError(code, text)); return; }
-            string token = JsonUtility.FromJson<TokenResponse>(text).token;
-            if (string.IsNullOrEmpty(token)) { onDone(null, "Сервер не вернул токен."); return; }
-            onDone(token, null);
+            TokenResponse response = Json.Deserialize<TokenResponse>(text);
+            if (response == null || string.IsNullOrEmpty(response.Token)) { onDone(null, "Сервер не вернул токен."); return; }
+            onDone(response.Token, null);
         }
 
         private void Request(string method, string path, string body, bool auth, Action<long, string> onDone)
@@ -132,17 +132,13 @@ namespace Shooter.Client.Menu
         private static string HumanError(long code, string text)
         {
             if (code == 0) return "Нет соединения с сервером.";
-            try
+            ProblemResponse problem = Json.Deserialize<ProblemResponse>(text);
+            if (problem != null && !string.IsNullOrEmpty(problem.Code))
             {
-                var problem = JsonUtility.FromJson<ProblemResponse>(text);
-                if (!string.IsNullOrEmpty(problem.code))
-                {
-                    if (ErrorTexts.TryGetValue(problem.code, out string human)) return human;
-                    if (!string.IsNullOrEmpty(problem.detail)) return problem.detail;
-                    return problem.code;
-                }
+                if (ErrorTexts.TryGetValue(problem.Code, out string human)) return human;
+                if (!string.IsNullOrEmpty(problem.Detail)) return problem.Detail;
+                return problem.Code;
             }
-            catch { }
             return "Ошибка " + code + ".";
         }
     }

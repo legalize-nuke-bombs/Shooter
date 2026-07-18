@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Entities.Players;
 using Shooter.Server.Entities.Chronology;
@@ -46,13 +47,38 @@ namespace Shooter.Server.Worlds
         {
             var states = new List<PlayerState>(players.Count);
             foreach (Player player in players.Values)
-                states.Add(new PlayerState(player));
+                states.Add(ToState(player));
             return states.ToArray();
+        }
+
+        private static PlayerState ToState(Player player)
+        {
+            Vector3 position = player.Body.transform.position;
+            return new PlayerState
+            {
+                Id = player.UserId,
+                Name = player.DisplayName,
+                X = position.x,
+                Y = position.y,
+                Z = position.z,
+                Yaw = player.Body.transform.eulerAngles.y,
+                Pitch = player.LastInput.Pitch
+            };
         }
 
         public ClockState BuildClockState()
         {
-            return new ClockState(clock);
+            return new ClockState { Timestamp = (long)clock.Timestamp };
+        }
+
+        public Snapshot BuildSnapshot(long tick)
+        {
+            return new Snapshot
+            {
+                Tick = tick,
+                Players = BuildPlayerStates(),
+                Clock = BuildClockState()
+            };
         }
     }
 }

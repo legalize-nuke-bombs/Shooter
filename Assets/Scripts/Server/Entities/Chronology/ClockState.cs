@@ -4,23 +4,16 @@ namespace Shooter.Server.Entities.Chronology
     {
         public const long DayLengthSeconds = 86400;
 
-        public long timestamp;
-
-        public ClockState() { }
-
-        public ClockState(Clock clock)
-        {
-            timestamp = (long)clock.Timestamp;
-        }
+        public long Timestamp { get; set; }
 
         public float Fraction()
         {
-            return (timestamp % DayLengthSeconds) / (float)DayLengthSeconds;
+            return (Timestamp % DayLengthSeconds) / (float)DayLengthSeconds;
         }
 
         public int Day()
         {
-            return (int)(timestamp / DayLengthSeconds);
+            return (int)(Timestamp / DayLengthSeconds);
         }
     }
 }

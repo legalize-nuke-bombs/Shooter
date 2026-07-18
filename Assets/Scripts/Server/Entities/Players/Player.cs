@@ -33,10 +33,10 @@ namespace Shooter.Server.Entities.Players
         public void Tick(float dt)
         {
             Transform body = Body.transform;
-            body.rotation = Quaternion.Euler(0f, LastInput.yaw, 0f);
+            body.rotation = Quaternion.Euler(0f, LastInput.Yaw, 0f);
 
-            Vector3 direction = Vector3.ClampMagnitude(body.right * LastInput.moveX + body.forward * LastInput.moveZ, 1f);
-            float speed = LastInput.sprint ? SprintSpeed : WalkSpeed;
+            Vector3 direction = Vector3.ClampMagnitude(body.right * LastInput.MoveX + body.forward * LastInput.MoveZ, 1f);
+            float speed = LastInput.Sprint ? SprintSpeed : WalkSpeed;
 
             if (controller.isGrounded)
             {
@@ -52,12 +52,12 @@ namespace Shooter.Server.Entities.Players
 
         public void ApplyInput(PlayerIntent input)
         {
-            input.moveX = Finite(input.moveX);
-            input.moveZ = Finite(input.moveZ);
-            input.yaw = Finite(input.yaw);
-            input.pitch = Finite(input.pitch);
+            input.MoveX = Finite(input.MoveX);
+            input.MoveZ = Finite(input.MoveZ);
+            input.Yaw = Finite(input.Yaw);
+            input.Pitch = Finite(input.Pitch);
             LastInput = input;
-            if (input.jump) jumpQueued = true;
+            if (input.Jump) jumpQueued = true;
         }
 
         private static float Finite(float value)

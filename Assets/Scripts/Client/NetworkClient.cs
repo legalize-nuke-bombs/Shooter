@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Serialization;
+using Shooter.Protocol;
 using Shooter.Server.Entities.Players;
 using Shooter.Server.Sessions;
 using Shooter.Server.Worlds;
@@ -64,7 +64,7 @@ namespace Shooter.Client
 
         public void SendInput(PlayerIntent input)
         {
-            _ = Send(input);
+            _ = Send(MessageType.PlayerIntent, input);
         }
 
         private async Task Connect()
@@ -76,7 +76,7 @@ namespace Shooter.Client
                 await socket.ConnectAsync(new Uri(Session.WsUrl), cancellation.Token).ConfigureAwait(false);
                 Log.Info("net: connected " + Session.WsUrl);
                 _ = ReceiveLoop();
-                await Send(new Hello { name = Session.DisplayName }).ConfigureAwait(false);
+                await Send(MessageType.Hello, new Hello { Name = Session.DisplayName }).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -113,11 +113,11 @@ namespace Shooter.Client
             }
         }
 
-        private async Task Send(Serializable msg)
+        private async Task Send(MessageType type, object payload)
         {
             if (socket is not { State: WebSocketState.Open }) return;
 
-            byte[] bytes = Encoding.UTF8.GetBytes(Json.Serialize(msg));
+            byte[] bytes = Encoding.UTF8.GetBytes(Message.Encode(type, payload));
             await sendLock.WaitAsync(cancellation.Token).ConfigureAwait(false);
             try
             {
@@ -141,28 +141,31 @@ namespace Shooter.Client
 
         private void Dispatch(string json)
         {
-            switch (Json.TypeOf(json))
+            Message message = Message.Decode(json);
+            if (message == null) return;
+
+            switch (message.Type)
             {
-                case nameof(Welcome):
-                    Welcome welcome = Json.Deserialize<Welcome>(json);
-                    PlayerId = welcome.playerId;
-                    Log.Info("net: welcome, playerId " + PlayerId + ", tickRate " + welcome.tickRate);
-                    _ = Send(new JoinWorld());
+                case MessageType.Welcome:
+                    Welcome welcome = message.Read<Welcome>();
+                    PlayerId = welcome.PlayerId;
+                    Log.Info("net: welcome, playerId " + PlayerId + ", tickRate " + welcome.TickRate);
+                    _ = Send(MessageType.JoinWorld, new JoinWorld());
                     break;
-                case nameof(WorldJoined):
-                    WorldJoined worldJoined = Json.Deserialize<WorldJoined>(json);
+                case MessageType.WorldJoined:
+                    WorldJoined worldJoined = message.Read<WorldJoined>();
                     InWorld = true;
-                    Log.Info("net: world " + worldJoined.worldId + ", players " + worldJoined.players.Length);
+                    Log.Info("net: world " + worldJoined.WorldId + ", players " + worldJoined.Players.Length);
                     WorldEntered?.Invoke(worldJoined);
                     break;
-                case nameof(Snapshot):
-                    SnapshotReceived?.Invoke(Json.Deserialize<Snapshot>(json));
+                case MessageType.Snapshot:
+                    SnapshotReceived?.Invoke(message.Read<Snapshot>());
                     break;
-                case nameof(PlayerJoined):
-                    PeerJoined?.Invoke(Json.Deserialize<PlayerJoined>(json));
+                case MessageType.PlayerJoined:
+                    PeerJoined?.Invoke(message.Read<PlayerJoined>());
                     break;
-                case nameof(PlayerLeft):
-                    PeerLeft?.Invoke(Json.Deserialize<PlayerLeft>(json));
+                case MessageType.PlayerLeft:
+                    PeerLeft?.Invoke(message.Read<PlayerLeft>());
                     break;
             }
         }
