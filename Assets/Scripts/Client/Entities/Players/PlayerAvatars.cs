@@ -37,7 +37,7 @@ namespace Shooter.Client.Entities.Players
                 {
                     avatar = new PlayerAvatar(state.Id, position);
                     avatars[state.Id] = avatar;
-                    Log.Info("Player avatar spawned " + state.Id + ". total: " + avatars.Count);
+                    Log.Info("Player avatar spawned " + state.Id + ". Total: " + avatars.Count);
                 }
                 avatar.SetTarget(position, state.Yaw);
             }
@@ -48,7 +48,7 @@ namespace Shooter.Client.Entities.Players
             if (!avatars.TryGetValue(left.Id, out PlayerAvatar avatar)) return;
             avatar.Destroy();
             avatars.Remove(left.Id);
-            Log.Info("Player avatar removed " + left.Id + ". total: " + avatars.Count);
+            Log.Info("Player avatar removed " + left.Id + ". Total: " + avatars.Count);
         }
 
         private void Update()
