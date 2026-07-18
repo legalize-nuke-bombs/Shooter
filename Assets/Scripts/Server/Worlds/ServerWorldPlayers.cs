@@ -19,7 +19,7 @@ namespace Shooter.Server.Worlds
 
         public void Add(long userId, string displayName)
         {
-            players[userId] = new Player(userId, displayName, scene, clock);
+            players[userId] = new Player(userId, displayName, scene, clock, this);
         }
 
         public void Remove(long userId)
