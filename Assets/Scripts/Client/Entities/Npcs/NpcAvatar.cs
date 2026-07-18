@@ -1,10 +1,13 @@
 using UnityEngine;
+using Shooter.Server.Entities.Npcs;
 
 namespace Shooter.Client.Entities.Npcs
 {
     public class NpcAvatar
     {
         private const float LerpFactor = 15f;
+
+        public string Name { get; private set; }
 
         private readonly Transform body;
         private Vector3 targetPosition;
@@ -16,6 +19,7 @@ namespace Shooter.Client.Entities.Npcs
             capsule.name = "Npc_" + id;
             capsule.transform.position = position;
             capsule.GetComponent<Renderer>().material.color = new Color(0.9f, 0.4f, 0.3f);
+            NpcBody.Attach(capsule, this);
             body = capsule.transform;
             targetPosition = position;
         }
@@ -25,10 +29,11 @@ namespace Shooter.Client.Entities.Npcs
             Object.Destroy(body.gameObject);
         }
 
-        public void SetTarget(Vector3 position, float yaw)
+        public void Apply(NpcState state)
         {
-            targetPosition = position;
-            targetYaw = yaw;
+            Name = state.Name;
+            targetPosition = new Vector3(state.X, state.Y, state.Z);
+            targetYaw = state.Yaw;
         }
 
         public void Interpolate(float dt)

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Logging;
@@ -19,8 +20,6 @@ namespace Shooter.Client.Menu
         private CreateWorldModal createModal;
         private ErrorModal errorModal;
         private Label cornerStatus;
-
-        private bool loggedIn;
 
         private void Start()
         {
@@ -77,14 +76,24 @@ namespace Shooter.Client.Menu
 
                 cornerStatus.text = info.Name + " v" + info.Major + "." + info.Minor + "." + info.Patch;
                 serverError.Hide();
-                if (loggedIn) worlds.Show();
-                else login.Show();
+                if (string.IsNullOrEmpty(Session.Token)) login.Show();
+                else worlds.Show();
             });
+        }
+
+        private void Update()
+        {
+            if (!Keyboard.current.escapeKey.wasPressedThisFrame) return;
+            Log.Info("Menu: Escape pressed, quitting");
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.ExitPlaymode();
+#else
+            Application.Quit();
+#endif
         }
 
         private void OnLoggedIn()
         {
-            loggedIn = true;
             login.Hide();
             worlds.Show();
         }
