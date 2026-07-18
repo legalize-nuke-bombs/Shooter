@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Protocol;
+using Shooter.Server.Protocol;
 using Shooter.Client.Input;
 using Shooter.Server.Entities.Players;
 using Shooter.Server.Sessions;
