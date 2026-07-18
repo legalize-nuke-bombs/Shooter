@@ -14,6 +14,7 @@ namespace Shooter.Server.Worlds.Entities.Sleeping
 
         private readonly Clock clock;
         private readonly ServerWorldPlayers players;
+        private bool wasNight;
 
         public static bool IsBed(string objectName)
         {
@@ -43,8 +44,14 @@ namespace Shooter.Server.Worlds.Entities.Sleeping
 
         public void Tick()
         {
-            if (!WorldAsleep() || clock.IsNight()) return;
-            Log.Info("Dawn broke, waking " + players.Count() + " players");
+            if (clock.IsNight())
+            {
+                wasNight = true;
+                return;
+            }
+            if (!wasNight) return;
+            wasNight = false;
+            Log.Info("Dawn broke, waking sleepers");
             players.WakeAll();
         }
     }

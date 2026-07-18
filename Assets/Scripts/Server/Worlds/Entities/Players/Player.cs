@@ -23,14 +23,16 @@ namespace Shooter.Server.Worlds.Entities.Players
         private readonly CharacterController controller;
         private readonly Clock clock;
         private readonly PhysicsScene physics;
+        private readonly ServerWorldPlayers worldPlayers;
         private float verticalVelocity;
         private bool jumpQueued;
 
-        public Player(long userId, string displayName, Scene scene, Clock clock)
+        public Player(long userId, string displayName, Scene scene, Clock clock, ServerWorldPlayers worldPlayers)
         {
             UserId = userId;
             DisplayName = displayName;
             this.clock = clock;
+            this.worldPlayers = worldPlayers;
             physics = scene.GetPhysicsScene();
 
             Body = new GameObject("Player_" + userId);
@@ -50,6 +52,7 @@ namespace Shooter.Server.Worlds.Entities.Players
 
         public void WakeUp()
         {
+            if (!Sleeping) return;
             Sleeping = false;
             Log.Info("User " + UserId + " woke up");
         }
@@ -86,7 +89,7 @@ namespace Shooter.Server.Worlds.Entities.Players
 
             if (Sleeping)
             {
-                if (input.Use || input.Jump) WakeUp();
+                if ((input.Use || input.Jump) && !worldPlayers.AllAsleep()) WakeUp();
                 return;
             }
             if (input.Use)
