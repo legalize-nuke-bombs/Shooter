@@ -22,7 +22,8 @@ namespace Shooter.Server.Worlds
             Id = id;
             scene = SceneManager.LoadScene("Map", new LoadSceneParameters(LoadSceneMode.Additive, LocalPhysicsMode.Physics3D));
             Log.Info("World " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
-            AddNpc(0, new DefaultNameable("npc 0"));
+            //npcs.Add(new Npc(0, new DefaultNameable("npc 0"), scene));
+            npcs.Add(new Npc(1, new CorruptedNameable(), scene));
         }
 
         public IReadOnlyCollection<Player> Players => players.Values;
@@ -45,11 +46,6 @@ namespace Shooter.Server.Worlds
         {
             if (players.TryGetValue(userId, out Player player))
                 player.ApplyInput(intent);
-        }
-
-        public void AddNpc(long id, INameable nameable)
-        {
-            npcs.Add(new Npc(id, nameable, scene));
         }
 
         public void Tick(float dt)
