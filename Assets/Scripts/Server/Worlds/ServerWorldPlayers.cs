@@ -31,11 +31,6 @@ namespace Shooter.Server.Worlds
             }
         }
 
-        public bool TryGet(long userId, out Player player)
-        {
-            return players.TryGetValue(userId, out player);
-        }
-
         public void ApplyInput(long userId, PlayerIntent intent)
         {
             if (players.TryGetValue(userId, out Player player))
