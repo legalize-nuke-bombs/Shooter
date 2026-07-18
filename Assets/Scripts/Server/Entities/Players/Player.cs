@@ -1,7 +1,7 @@
 using UnityEngine;
 using Shooter.Logging;
 
-namespace Shooter.Server.Entities.Characters.Player
+namespace Shooter.Server.Entities.Players
 {
     public class Player
     {

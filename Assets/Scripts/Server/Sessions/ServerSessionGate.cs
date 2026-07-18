@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Shooter.Auth;
 using Shooter.Serialization;
-using Shooter.Server.Entities.Characters.Player;
+using Shooter.Server.Entities.Players;
 using Shooter.Logging;
 
 namespace Shooter.Server.Sessions

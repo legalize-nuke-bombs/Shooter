@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using Shooter.Server.Entities.Characters.Player;
+using Shooter.Server.Entities.Players;
 using Shooter.Server.Entities.Chronology;
 using Shooter.Logging;
 
@@ -50,14 +50,9 @@ namespace Shooter.Server.Worlds
             return states.ToArray();
         }
 
-        public Snapshot BuildSnapshot(long tick)
+        public ClockState BuildClockState()
         {
-            return new Snapshot
-            {
-                tick = tick,
-                players = BuildPlayerStates(),
-                clock = new ClockState(clock)
-            };
+            return new ClockState(clock);
         }
     }
 }

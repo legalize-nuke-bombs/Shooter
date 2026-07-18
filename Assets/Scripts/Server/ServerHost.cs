@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Serialization;
 using Shooter.Client.Input;
-using Shooter.Server.Entities.Characters.Player;
+using Shooter.Server.Entities.Players;
 using Shooter.Server.Sessions;
 using Shooter.Server.Transport;
 using Shooter.Server.Worlds;
@@ -176,7 +176,7 @@ namespace Shooter.Server
             foreach (ServerWorld world in worlds.Values)
             {
                 if (world.Players.Count == 0) continue;
-                string json = Json.Serialize(world.BuildSnapshot(tick));
+                string json = Json.Serialize(new Snapshot(tick, world));
                 foreach (Player player in world.Players)
                     serverTransport.Send(player.ConnId, json);
             }
