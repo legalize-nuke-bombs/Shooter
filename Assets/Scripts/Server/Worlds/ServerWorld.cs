@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Entities.Characters.Player;
 using Shooter.Server.Entities.Chronology;
@@ -24,26 +23,26 @@ namespace Shooter.Server.Worlds
 
         public IReadOnlyCollection<Player> Players => players.Values;
 
-        public void Add(Player player)
+        public void AddPlayer(Player player)
         {
             players[player.ConnId] = player;
             player.Spawn();
             SceneManager.MoveGameObjectToScene(player.Body, scene);
         }
 
-        public void Remove(int connId)
+        public void RemovePlayer(int connId)
         {
             players.Remove(connId);
         }
 
-        public void Step(float dt)
+        public void Tick(float dt)
         {
             foreach (Player player in players.Values)
-                player.Step(dt);
-            clock.Advance(dt);
+                player.Tick(dt);
+            clock.Tick(dt);
         }
 
-        public PlayerState[] BuildStates()
+        public PlayerState[] BuildPlayerStates()
         {
             var states = new List<PlayerState>(players.Count);
             foreach (Player player in players.Values)
@@ -56,7 +55,7 @@ namespace Shooter.Server.Worlds
             return new Snapshot
             {
                 tick = tick,
-                players = BuildStates(),
+                players = BuildPlayerStates(),
                 clock = new ClockState(clock)
             };
         }

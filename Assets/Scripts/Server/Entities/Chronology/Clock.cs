@@ -6,7 +6,7 @@ namespace Shooter.Server.Entities.Chronology
 
         public double Timestamp { get; private set; }
 
-        public void Advance(float dt)
+        public void Tick(float dt)
         {
             Timestamp += dt * (ClockState.DayLengthSeconds / DayRealSeconds);
         }
