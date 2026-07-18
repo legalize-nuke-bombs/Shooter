@@ -60,7 +60,17 @@ namespace Shooter.Server.Entities.Players
             return float.IsFinite(value) ? value : 0f;
         }
 
-        public PlayerState ToState()
+        public void Spawn()
+        {
+            Body = new GameObject("Sim_" + UserId);
+            float angle = (UserId * 137f) % 360f;
+            Vector3 spread = Quaternion.Euler(0f, angle, 0f) * Vector3.forward * 16f;
+            Body.transform.position = new Vector3(spread.x, 1.1f, spread.z);
+            controller = Body.AddComponent<CharacterController>();
+            Log.Info("spawned body for user " + UserId + " at " + Body.transform.position);
+        }
+
+        public PlayerState State()
         {
             Vector3 position = Body.transform.position;
             return new PlayerState
@@ -73,16 +83,6 @@ namespace Shooter.Server.Entities.Players
                 Yaw = Body.transform.eulerAngles.y,
                 Pitch = LastInput.Pitch
             };
-        }
-
-        public void Spawn()
-        {
-            Body = new GameObject("Sim_" + UserId);
-            float angle = (UserId * 137f) % 360f;
-            Vector3 spread = Quaternion.Euler(0f, angle, 0f) * Vector3.forward * 16f;
-            Body.transform.position = new Vector3(spread.x, 1.1f, spread.z);
-            controller = Body.AddComponent<CharacterController>();
-            Log.Info("spawned body for user " + UserId + " at " + Body.transform.position);
         }
     }
 }

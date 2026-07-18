@@ -6,18 +6,12 @@ using Shooter.Logging;
 
 namespace Shooter.Client.Entities.Players
 {
-    public class PlayersView : MonoBehaviour
+    public class PlayerAvatars : MonoBehaviour
     {
+
         private const float LerpFactor = 15f;
 
-        private class Avatar
-        {
-            public Transform Transform;
-            public Vector3 TargetPosition;
-            public float TargetYaw;
-        }
-
-        private readonly Dictionary<long, Avatar> avatars = new Dictionary<long, Avatar>();
+        private readonly Dictionary<long, PlayerAvatar> dict = new Dictionary<long, PlayerAvatar>();
 
         private void Start()
         {
@@ -36,9 +30,7 @@ namespace Shooter.Client.Entities.Players
         {
             foreach (PlayerState state in snapshot.Players)
             {
-                if (state.Id == NetworkClient.Instance.PlayerId) continue;
-
-                if (!avatars.TryGetValue(state.Id, out Avatar avatar))
+                if (!dict.TryGetValue(state.Id, out PlayerAvatar avatar))
                     avatar = Spawn(state);
 
                 avatar.TargetPosition = new Vector3(state.X, state.Y, state.Z);
@@ -46,31 +38,34 @@ namespace Shooter.Client.Entities.Players
             }
         }
 
-        private void OnLeft(PlayerLeft left)
+        private PlayerAvatar Spawn(PlayerState state)
         {
-            if (!avatars.TryGetValue(left.Id, out Avatar avatar)) return;
-            Destroy(avatar.Transform.gameObject);
-            avatars.Remove(left.Id);
-            Log.Info("avatar removed for player " + left.Id + ", avatars now " + avatars.Count);
-        }
-
-        private Avatar Spawn(PlayerState state)
-        {
-            GameObject capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            capsule.name = "Avatar_" + state.Id + "_" + state.Name;
+            var capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            capsule.name = "Player_" + state.Id;
             capsule.transform.position = new Vector3(state.X, state.Y, state.Z);
             capsule.GetComponent<Renderer>().material.color = new Color(0.9f, 0.4f, 0.3f);
 
-            var avatar = new Avatar { Transform = capsule.transform };
-            avatars[state.Id] = avatar;
-            Log.Info("avatar spawned for player " + state.Id + " '" + state.Name + "', avatars now " + avatars.Count);
+            var avatar = new PlayerAvatar { Transform = capsule.transform };
+            dict[state.Id] = avatar;
+            Log.Info("player avatar spawned " + state.Id + ". total: " + dict.Count);
+
             return avatar;
+        }
+
+        private void OnLeft(PlayerLeft left)
+        {
+            if (!dict.TryGetValue(left.Id, out PlayerAvatar avatar)) return;
+
+            Destroy(avatar.Transform.gameObject);
+
+            dict.Remove(left.Id);
+            Log.Info("player avatar removed " + left.Id + ". total: " + dict.Count);
         }
 
         private void Update()
         {
             float t = 1f - Mathf.Exp(-LerpFactor * Time.deltaTime);
-            foreach (Avatar avatar in avatars.Values)
+            foreach (PlayerAvatar avatar in dict.Values)
             {
                 avatar.Transform.position = Vector3.Lerp(avatar.Transform.position, avatar.TargetPosition, t);
                 avatar.Transform.rotation = Quaternion.Slerp(avatar.Transform.rotation, Quaternion.Euler(0f, avatar.TargetYaw, 0f), t);

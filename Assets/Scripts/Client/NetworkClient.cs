@@ -51,7 +51,7 @@ namespace Shooter.Client
 
             var go = new GameObject("Net");
             go.AddComponent<NetworkClient>();
-            go.AddComponent<PlayersView>();
+            go.AddComponent<PlayerAvatars>();
             go.AddComponent<ClockView>();
         }
 

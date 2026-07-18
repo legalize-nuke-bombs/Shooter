@@ -21,7 +21,7 @@ namespace Shooter.Client.Entities.Chronology
             sun = FindSun();
             if (sun == null)
             {
-                Log.Warn("no directional light in scene, sky won't move");
+                Log.Warn("sun not found");
                 enabled = false;
                 return;
             }
@@ -36,11 +36,7 @@ namespace Shooter.Client.Entities.Chronology
 
         private void OnSnapshot(Snapshot snapshot)
         {
-            Apply(snapshot.Clock.Fraction());
-        }
-
-        private void Apply(float dayFraction)
-        {
+            float dayFraction = snapshot.Clock.Fraction();
             float pitch = dayFraction * 360f - 90f;
             float daylight = Mathf.Clamp01(Mathf.Sin((dayFraction - 0.25f) * Mathf.PI * 2f));
 
