@@ -33,7 +33,7 @@ namespace Shooter.Client.Entities.Npcs
                 {
                     avatar = new NpcAvatar(state.Id, position);
                     avatars[state.Id] = avatar;
-                    Log.Info("Npc avatar spawned " + state.Id + ". total: " + avatars.Count);
+                    Log.Info("Npc avatar spawned " + state.Id + ". Total: " + avatars.Count);
                 }
                 avatar.SetTarget(position, state.Yaw);
             }
