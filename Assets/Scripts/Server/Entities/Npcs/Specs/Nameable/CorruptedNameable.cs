@@ -1,15 +1,19 @@
 using UnityEngine;
-using System.Linq;
 
 namespace Shooter.Server.Entities.Npcs.Specs.Nameable
 {
     public class CorruptedNameable : INameable
     {
+        private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        private const int Length = 8;
+
+        private readonly char[] noise = new char[Length];
+
         public string Name()
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, 8)
-                .Select(s => s[Random.Range(0, s.Length)]).ToArray());
+            for (int i = 0; i < Length; i++)
+                noise[i] = Alphabet[Random.Range(0, Alphabet.Length)];
+            return new string(noise);
         }
     }
 }
