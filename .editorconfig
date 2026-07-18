@@ -40,3 +40,6 @@ dotnet_naming_rule.static_readonly_pascal.severity = warning
 dotnet_naming_rule.private_fields_camel.symbols = private_fields
 dotnet_naming_rule.private_fields_camel.style = camel_style
 dotnet_naming_rule.private_fields_camel.severity = warning
+
+# Rider/ReSharper Unity: "expensive method invocation" в Update-хот-пасах — не подсвечивать
+resharper_unity_performance_critical_code_invocation_highlighting = none
