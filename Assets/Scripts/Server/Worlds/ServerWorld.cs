@@ -4,6 +4,7 @@ using Shooter.Server.Entities.Players;
 using Shooter.Server.Entities.Chronology;
 using Shooter.Logging;
 using Shooter.Server.Entities.Npcs;
+using Shooter.Server.Entities.Npcs.Specs.Nameable;
 
 namespace Shooter.Server.Worlds
 {
@@ -20,21 +21,35 @@ namespace Shooter.Server.Worlds
         {
             Id = id;
             scene = SceneManager.LoadScene("Map", new LoadSceneParameters(LoadSceneMode.Additive, LocalPhysicsMode.Physics3D));
-            Log.Info("world " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
+            Log.Info("World " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
+            AddNpc(0, new DefaultNameable("npc 0"));
         }
 
         public IReadOnlyCollection<Player> Players => players.Values;
 
-        public void AddPlayer(Player player)
+        public void AddPlayer(long userId, string displayName)
         {
-            players[player.UserId] = player;
-            player.Spawn();
-            SceneManager.MoveGameObjectToScene(player.Body, scene);
+            players[userId] = new Player(userId, displayName, scene);
         }
 
         public void RemovePlayer(long userId)
         {
-            players.Remove(userId);
+            if (players.TryGetValue(userId, out Player player))
+            {
+                player.Destroy();
+                players.Remove(userId);
+            }
+        }
+
+        public void ApplyInput(long userId, PlayerIntent intent)
+        {
+            if (players.TryGetValue(userId, out Player player))
+                player.ApplyInput(intent);
+        }
+
+        public void AddNpc(long id, INameable nameable)
+        {
+            npcs.Add(new Npc(id, nameable, scene));
         }
 
         public void Tick(float dt)
@@ -59,12 +74,9 @@ namespace Shooter.Server.Worlds
 
         public NpcState[] BuildNpcStates()
         {
-            var states = new List<NpcState>();
+            var states = new List<NpcState>(npcs.Count);
             foreach (Npc npc in npcs)
-            {
                 states.Add(npc.State());
-            }
-
             return states.ToArray();
         }
 

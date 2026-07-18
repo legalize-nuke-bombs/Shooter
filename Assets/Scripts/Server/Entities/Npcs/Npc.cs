@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Entities.Npcs.Specs.Nameable;
 
@@ -6,29 +7,26 @@ namespace Shooter.Server.Entities.Npcs
 {
     public class Npc
     {
-
-        public long Id { get; private set; }
+        public long Id { get; }
         public GameObject Body { get; private set; }
 
         private readonly INameable nameable;
 
-        public Npc(long id, INameable nameable)
+        public Npc(long id, INameable nameable, Scene scene)
         {
             Id = id;
             this.nameable = nameable;
+
+            Body = new GameObject("Npc_" + id);
+            Vector3 spread = Quaternion.Euler(0f, 0f, 0f) * Vector3.forward * 16f;
+            Body.transform.position = new Vector3(spread.x, 1.1f, spread.z);
+            SceneManager.MoveGameObjectToScene(Body, scene);
+            Log.Info("Npc " + id + " body spawned at " + Body.transform.position);
         }
 
         public void Tick(float dt)
         {
 
-        }
-
-        public void Spawn()
-        {
-            Body = new GameObject("Npc_" + Id);
-            Vector3 spread = Quaternion.Euler(0f, 0f, 0f) * Vector3.forward * 16f;
-            Body.transform.position = new Vector3(spread.x, 1.1f, spread.z);
-            Log.Info("spawned body for npc at " + Body.transform.position);
         }
 
         public string Name()
@@ -45,7 +43,8 @@ namespace Shooter.Server.Entities.Npcs
                 Name = Name(),
                 X = position.x,
                 Y = position.y,
-                Z = position.z
+                Z = position.z,
+                Yaw = Body.transform.eulerAngles.y
             };
         }
     }
