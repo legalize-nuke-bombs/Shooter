@@ -32,6 +32,7 @@ namespace Shooter.Client.Entities.Players
         {
             foreach (PlayerState state in snapshot.Players)
             {
+                if (state.Id == NetworkClient.Instance.PlayerId) continue;
                 if (!avatars.TryGetValue(state.Id, out PlayerAvatar avatar))
                 {
                     avatar = new PlayerAvatar(state.Id, new Vector3(state.X, state.Y, state.Z));
