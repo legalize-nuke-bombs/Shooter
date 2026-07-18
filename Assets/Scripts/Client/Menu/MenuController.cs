@@ -76,8 +76,16 @@ namespace Shooter.Client.Menu
 
                 cornerStatus.text = info.Name + " v" + info.Major + "." + info.Minor + "." + info.Patch;
                 serverError.Hide();
-                if (string.IsNullOrEmpty(Session.Token)) login.Show();
-                else worlds.Show();
+                if (string.IsNullOrEmpty(Session.Token))
+                {
+                    worlds.Hide();
+                    login.Show();
+                }
+                else
+                {
+                    login.Hide();
+                    worlds.Show();
+                }
             });
         }
 
