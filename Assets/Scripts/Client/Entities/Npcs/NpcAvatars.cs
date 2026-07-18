@@ -28,14 +28,13 @@ namespace Shooter.Client.Entities.Npcs
         {
             foreach (NpcState state in snapshot.Npcs)
             {
-                var position = new Vector3(state.X, state.Y, state.Z);
                 if (!avatars.TryGetValue(state.Id, out NpcAvatar avatar))
                 {
-                    avatar = new NpcAvatar(state.Id, position);
+                    avatar = new NpcAvatar(state.Id, new Vector3(state.X, state.Y, state.Z));
                     avatars[state.Id] = avatar;
                     Log.Info("Npc avatar spawned " + state.Id + ". Total: " + avatars.Count);
                 }
-                avatar.SetTarget(position, state.Yaw);
+                avatar.Apply(state);
             }
         }
 
