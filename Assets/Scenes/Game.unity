@@ -397,6 +397,7 @@ GameObject:
   - component: {fileID: 543501073}
   - component: {fileID: 543501072}
   - component: {fileID: 900000006}
+  - component: {fileID: 900000007}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -639,6 +640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HudController
   font: {fileID: 12800000, guid: 98dc4eac98d324438ac9d4665ee97705, type: 3}
   aim: {fileID: 900000006}
+  sleepSense: {fileID: 900000007}
 --- !u!114 &900000005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,6 +665,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e59ba23fdc93f482a95bdffc27626711, type: 3}
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Aim
+--- !u!114 &900000007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543501067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4d4478cf01c455ea6e2e0186c56b66, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::SleepSense
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

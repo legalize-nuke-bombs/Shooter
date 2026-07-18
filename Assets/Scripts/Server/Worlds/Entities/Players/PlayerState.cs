@@ -1,4 +1,4 @@
-namespace Shooter.Server.Entities.Players
+namespace Shooter.Server.Worlds.Entities.Players
 {
     public class PlayerState
     {
@@ -9,5 +9,6 @@ namespace Shooter.Server.Entities.Players
         public float Z { get; set; }
         public float Yaw { get; set; }
         public float Pitch { get; set; }
+        public bool Sleeping { get; set; }
     }
 }

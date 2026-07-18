@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Shooter.Server.Entities.Players;
+using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds;
 
 namespace Shooter.Client.Input
@@ -16,6 +16,7 @@ namespace Shooter.Client.Input
         private NetworkClient networkClient;
         private bool netHooked;
         private bool jumpPending;
+        private bool usePending;
         private float nextInputSendTime;
 
         private bool positioned;
@@ -53,6 +54,8 @@ namespace Shooter.Client.Input
             cameraTransform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
             if (Keyboard.current.spaceKey.wasPressedThisFrame)
                 jumpPending = true;
+            if (Keyboard.current.eKey.wasPressedThisFrame)
+                usePending = true;
         }
 
         private void SyncWithNet()
@@ -75,10 +78,12 @@ namespace Shooter.Client.Input
                 MoveZ = (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f),
                 Jump = jumpPending,
                 Sprint = keyboard.leftShiftKey.isPressed,
+                Use = usePending,
                 Yaw = transform.eulerAngles.y,
                 Pitch = pitch
             });
             jumpPending = false;
+            usePending = false;
         }
 
         private void OnSnapshot(Snapshot snapshot)

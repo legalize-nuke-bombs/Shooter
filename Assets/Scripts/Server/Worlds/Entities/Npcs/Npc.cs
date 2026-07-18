@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
-using Shooter.Server.Entities.Npcs.Specs.Nameable;
+using Shooter.Server.Worlds.Entities.Npcs.Specs.Nameable;
 
-namespace Shooter.Server.Entities.Npcs
+namespace Shooter.Server.Worlds.Entities.Npcs
 {
     public class Npc
     {
