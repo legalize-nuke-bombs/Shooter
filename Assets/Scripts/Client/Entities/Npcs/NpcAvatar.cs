@@ -1,5 +1,5 @@
 using UnityEngine;
-using Shooter.Server.Entities.Npcs;
+using Shooter.Server.Worlds.Entities.Npcs;
 
 namespace Shooter.Client.Entities.Npcs
 {

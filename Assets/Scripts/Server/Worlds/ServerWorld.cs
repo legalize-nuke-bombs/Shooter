@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using Shooter.Server.Entities.Players;
-using Shooter.Server.Entities.Chronology;
+using Shooter.Server.Worlds.Entities.Players;
+using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Logging;
-using Shooter.Server.Entities.Npcs;
-using Shooter.Server.Entities.Npcs.Specs.Nameable;
+using Shooter.Server.Worlds.Entities.Npcs;
+using Shooter.Server.Worlds.Entities.Npcs.Specs.Nameable;
+using Shooter.Server.Worlds.Entities.Sleeping;
 
 namespace Shooter.Server.Worlds
 {
@@ -14,7 +15,8 @@ namespace Shooter.Server.Worlds
 
         private readonly Scene scene;
         private readonly Clock clock = new Clock();
-        private readonly Dictionary<long, Player> players = new Dictionary<long, Player>();
+        private readonly ServerWorldPlayers players;
+        private readonly Sleep sleep;
         private readonly List<Npc> npcs = new List<Npc>();
 
         public ServerWorld(string id)
@@ -22,37 +24,37 @@ namespace Shooter.Server.Worlds
             Id = id;
             scene = SceneManager.LoadScene("Map", new LoadSceneParameters(LoadSceneMode.Additive, LocalPhysicsMode.Physics3D));
             Log.Info("World " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
+            players = new ServerWorldPlayers(scene, clock);
+            sleep = new Sleep(clock, players);
             //npcs.Add(new Npc(0, new DefaultNameable("npc 0"), scene));
             npcs.Add(new Npc(1, new CorruptedNameable(), scene));
         }
 
-        public IReadOnlyCollection<Player> Players => players.Values;
+        public int Online()
+        {
+            return players.Count();
+        }
 
         public void AddPlayer(long userId, string displayName)
         {
-            players[userId] = new Player(userId, displayName, scene);
+            players.Add(userId, displayName);
         }
 
         public void RemovePlayer(long userId)
         {
-            if (players.TryGetValue(userId, out Player player))
-            {
-                player.Destroy();
-                players.Remove(userId);
-            }
+            players.Remove(userId);
         }
 
         public void ApplyInput(long userId, PlayerIntent intent)
         {
-            if (players.TryGetValue(userId, out Player player))
-                player.ApplyInput(intent);
+            players.ApplyInput(userId, intent);
         }
 
         public void Tick(float dt)
         {
-            foreach (Player player in players.Values)
-                player.Tick(dt);
-            clock.Tick(dt);
+            players.Tick(dt);
+            clock.Tick(dt * sleep.ClockScale());
+            sleep.Tick();
         }
 
         public ClockState BuildClockState()
@@ -62,10 +64,7 @@ namespace Shooter.Server.Worlds
 
         public List<PlayerState> BuildPlayerStates()
         {
-            var states = new List<PlayerState>(players.Count);
-            foreach (Player player in players.Values)
-                states.Add(player.State());
-            return states;
+            return players.BuildStates();
         }
 
         public List<NpcState> BuildNpcStates()
@@ -83,7 +82,8 @@ namespace Shooter.Server.Worlds
                 Tick = tick,
                 Clock = BuildClockState(),
                 Players = BuildPlayerStates(),
-                Npcs = BuildNpcStates()
+                Npcs = BuildNpcStates(),
+                Sleep = sleep.State()
             };
         }
     }

@@ -1,4 +1,4 @@
-namespace Shooter.Server.Entities.Npcs
+namespace Shooter.Server.Worlds.Entities.Npcs
 {
     public class NpcState
     {

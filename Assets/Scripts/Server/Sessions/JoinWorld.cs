@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds
+namespace Shooter.Server.Sessions
 {
     public class JoinWorld
     {

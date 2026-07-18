@@ -1,4 +1,4 @@
-namespace Shooter.Server.Entities.Players
+namespace Shooter.Server.Worlds.Entities.Players
 {
     public class PlayerJoined
     {

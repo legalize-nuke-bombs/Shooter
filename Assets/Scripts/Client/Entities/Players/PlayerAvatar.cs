@@ -1,4 +1,5 @@
 using UnityEngine;
+using Shooter.Server.Worlds.Entities.Players;
 
 namespace Shooter.Client.Entities.Players
 {
@@ -9,6 +10,7 @@ namespace Shooter.Client.Entities.Players
         private readonly Transform body;
         private Vector3 targetPosition;
         private float targetYaw;
+        private bool sleeping;
 
         public PlayerAvatar(long id, Vector3 position)
         {
@@ -25,17 +27,20 @@ namespace Shooter.Client.Entities.Players
             Object.Destroy(body.gameObject);
         }
 
-        public void SetTarget(Vector3 position, float yaw)
+        public void Apply(PlayerState state)
         {
-            targetPosition = position;
-            targetYaw = yaw;
+            targetPosition = new Vector3(state.X, state.Y, state.Z);
+            targetYaw = state.Yaw;
+            sleeping = state.Sleeping;
         }
 
         public void Interpolate(float dt)
         {
             float t = 1f - Mathf.Exp(-LerpFactor * dt);
+            var targetRotation = Quaternion.Euler(0f, targetYaw, 0f);
+            if (sleeping) targetRotation *= Quaternion.Euler(0f, 0f, 90f);
             body.position = Vector3.Lerp(body.position, targetPosition, t);
-            body.rotation = Quaternion.Slerp(body.rotation, Quaternion.Euler(0f, targetYaw, 0f), t);
+            body.rotation = Quaternion.Slerp(body.rotation, targetRotation, t);
         }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Shooter.Server.Worlds;
-using Shooter.Server.Entities.Players;
+using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Logging;
 
 namespace Shooter.Client.Entities.Players
@@ -32,14 +32,13 @@ namespace Shooter.Client.Entities.Players
         {
             foreach (PlayerState state in snapshot.Players)
             {
-                var position = new Vector3(state.X, state.Y, state.Z);
                 if (!avatars.TryGetValue(state.Id, out PlayerAvatar avatar))
                 {
-                    avatar = new PlayerAvatar(state.Id, position);
+                    avatar = new PlayerAvatar(state.Id, new Vector3(state.X, state.Y, state.Z));
                     avatars[state.Id] = avatar;
                     Log.Info("Player avatar spawned " + state.Id + ". Total: " + avatars.Count);
                 }
-                avatar.SetTarget(position, state.Yaw);
+                avatar.Apply(state);
             }
         }
 
