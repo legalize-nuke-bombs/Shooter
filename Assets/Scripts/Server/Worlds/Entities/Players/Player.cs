@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
+using Shooter.Server.Worlds.Entities.Chronology;
+using Shooter.Server.Worlds.Entities.Sleeping;
 
-namespace Shooter.Server.Entities.Players
+namespace Shooter.Server.Worlds.Entities.Players
 {
     public class Player
     {
@@ -10,20 +12,26 @@ namespace Shooter.Server.Entities.Players
         private const float SprintSpeed = 8f;
         private const float JumpHeight = 1.2f;
         private const float Gravity = -20f;
+        private const float EyeHeight = 0.75f;
 
         public long UserId { get; }
         public string DisplayName { get; }
+        public bool Sleeping { get; private set; }
         public GameObject Body { get; private set; }
         public PlayerIntent LastInput { get; private set; } = new PlayerIntent();
 
         private readonly CharacterController controller;
+        private readonly Clock clock;
+        private readonly PhysicsScene physics;
         private float verticalVelocity;
         private bool jumpQueued;
 
-        public Player(long userId, string displayName, Scene scene)
+        public Player(long userId, string displayName, Scene scene, Clock clock)
         {
             UserId = userId;
             DisplayName = displayName;
+            this.clock = clock;
+            physics = scene.GetPhysicsScene();
 
             Body = new GameObject("Player_" + userId);
             float angle = (userId * 137f) % 360f;
@@ -40,8 +48,16 @@ namespace Shooter.Server.Entities.Players
             Body = null;
         }
 
+        public void WakeUp()
+        {
+            Sleeping = false;
+            Log.Info("User " + UserId + " woke up");
+        }
+
         public void Tick(float dt)
         {
+            if (Sleeping) return;
+
             Transform body = Body.transform;
             body.rotation = Quaternion.Euler(0f, LastInput.Yaw, 0f);
 
@@ -67,7 +83,48 @@ namespace Shooter.Server.Entities.Players
             input.Yaw = Finite(input.Yaw);
             input.Pitch = Finite(input.Pitch);
             LastInput = input;
+
+            if (Sleeping)
+            {
+                if (input.Use || input.Jump) WakeUp();
+                return;
+            }
+            if (input.Use)
+            {
+                TrySleep();
+                if (Sleeping) return;
+            }
             if (input.Jump) jumpQueued = true;
+        }
+
+        private void TrySleep()
+        {
+            if (!clock.IsNight())
+            {
+                Log.Info("User " + UserId + " tried to sleep in daytime, ignored");
+                return;
+            }
+            if (!LookingAtBed())
+            {
+                Log.Info("User " + UserId + " tried to sleep with no bed in sight, ignored");
+                return;
+            }
+            Sleeping = true;
+            Log.Info("User " + UserId + " fell asleep at " + Body.transform.position);
+        }
+
+        private bool LookingAtBed()
+        {
+            Ray look = LookRay();
+            return physics.Raycast(look.origin, look.direction, out RaycastHit hit, Sleep.UseReach)
+                   && Sleep.IsBed(hit.transform.name);
+        }
+
+        private Ray LookRay()
+        {
+            Vector3 eyes = Body.transform.position + Vector3.up * EyeHeight;
+            Quaternion look = Quaternion.Euler(LastInput.Pitch, LastInput.Yaw, 0f);
+            return new Ray(eyes, look * Vector3.forward);
         }
 
         private static float Finite(float value)
@@ -86,7 +143,8 @@ namespace Shooter.Server.Entities.Players
                 Y = position.y,
                 Z = position.z,
                 Yaw = Body.transform.eulerAngles.y,
-                Pitch = LastInput.Pitch
+                Pitch = LastInput.Pitch,
+                Sleeping = Sleeping
             };
         }
     }

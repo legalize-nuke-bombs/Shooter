@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Shooter.Server.Entities.Players;
+using Shooter.Server.Worlds.Entities.Players;
 
-namespace Shooter.Server.Worlds
+namespace Shooter.Server.Sessions
 {
     public class WorldJoined
     {

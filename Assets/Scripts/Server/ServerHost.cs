@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Protocol;
 using Shooter.Client.Input;
-using Shooter.Server.Entities.Players;
+using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Sessions;
 using Shooter.Server.Transport;
 using Shooter.Server.Worlds;
@@ -160,7 +160,7 @@ namespace Shooter.Server
                 if (connId != session.ConnId)
                     serverTransport.Send(connId, joined);
 
-            Log.Info("User " + session.UserId + " joined world " + world.Id + ", players there now " + world.Players.Count);
+            Log.Info("User " + session.UserId + " joined world " + world.Id + ", players there now " + world.Online());
         }
 
         private ServerWorld WorldFor(string worldId)
@@ -184,7 +184,7 @@ namespace Shooter.Server
         {
             foreach (ServerWorld world in worlds.Values)
             {
-                if (world.Players.Count == 0) continue;
+                if (world.Online() == 0) continue;
                 string json = Message.Encode(MessageType.Snapshot, world.BuildSnapshot(tick));
                 foreach (int connId in serverSessionGate.ConnIdsInWorld(world.Id))
                     serverTransport.Send(connId, json);

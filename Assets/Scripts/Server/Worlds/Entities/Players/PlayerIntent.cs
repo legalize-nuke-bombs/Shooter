@@ -1,4 +1,4 @@
-namespace Shooter.Server.Entities.Players
+namespace Shooter.Server.Worlds.Entities.Players
 {
     public class PlayerIntent
     {
@@ -6,6 +6,7 @@ namespace Shooter.Server.Entities.Players
         public float MoveZ { get; set; }
         public bool Jump { get; set; }
         public bool Sprint { get; set; }
+        public bool Use { get; set; }
         public float Yaw { get; set; }
         public float Pitch { get; set; }
     }

@@ -1,4 +1,4 @@
-namespace Shooter.Server.Entities.Npcs.Specs.Nameable
+namespace Shooter.Server.Worlds.Entities.Npcs.Specs.Nameable
 {
     public interface INameable
     {

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Shooter.Client.Entities.Npcs;
+using Shooter.Server.Worlds.Entities.Sleeping;
 
 namespace Shooter.Client.Aiming
 {
@@ -8,6 +9,7 @@ namespace Shooter.Client.Aiming
         private const float Reach = 12f;
 
         public NpcAvatar Target { get; private set; }
+        public float BedDistance { get; private set; } = float.PositiveInfinity;
 
         private Transform cameraTransform;
 
@@ -23,14 +25,16 @@ namespace Shooter.Client.Aiming
 
         private void Update()
         {
-            Target = Probe();
-        }
+            Target = null;
+            BedDistance = float.PositiveInfinity;
 
-        private NpcAvatar Probe()
-        {
             if (!Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, Reach))
-                return null;
-            return hit.transform.TryGetComponent(out NpcBody body) ? body.Avatar : null;
+                return;
+
+            if (hit.transform.TryGetComponent(out NpcBody body))
+                Target = body.Avatar;
+            else if (Sleep.IsBed(hit.transform.name))
+                BedDistance = hit.distance;
         }
     }
 }

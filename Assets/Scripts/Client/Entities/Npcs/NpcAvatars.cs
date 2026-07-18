@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Shooter.Server.Worlds;
-using Shooter.Server.Entities.Npcs;
+using Shooter.Server.Worlds.Entities.Npcs;
 using Shooter.Logging;
 
 namespace Shooter.Client.Entities.Npcs

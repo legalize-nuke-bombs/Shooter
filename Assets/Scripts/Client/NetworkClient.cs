@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Protocol;
-using Shooter.Server.Entities.Players;
+using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Sessions;
 using Shooter.Server.Worlds;
 using Shooter.Client.Account;
