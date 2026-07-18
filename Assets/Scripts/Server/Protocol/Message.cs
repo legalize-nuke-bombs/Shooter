@@ -1,7 +1,7 @@
 using Newtonsoft.Json.Linq;
 using Shooter.Serialization;
 
-namespace Shooter.Protocol
+namespace Shooter.Server.Protocol
 {
     public sealed class Message
     {

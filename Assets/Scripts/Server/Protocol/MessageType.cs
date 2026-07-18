@@ -1,4 +1,4 @@
-namespace Shooter.Protocol
+namespace Shooter.Server.Protocol
 {
     public enum MessageType
     {
