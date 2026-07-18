@@ -12,6 +12,7 @@ using Shooter.Server.Sessions;
 using Shooter.Server.Worlds;
 using Shooter.Client.Account;
 using Shooter.Client.Entities.Players;
+using Shooter.Client.Entities.Npcs;
 using Shooter.Client.Entities.Chronology;
 using Shooter.Logging;
 
@@ -52,6 +53,7 @@ namespace Shooter.Client
             var go = new GameObject("Net");
             go.AddComponent<NetworkClient>();
             go.AddComponent<PlayerAvatars>();
+            go.AddComponent<NpcAvatars>();
             go.AddComponent<ClockView>();
         }
 
@@ -60,6 +62,15 @@ namespace Shooter.Client
             Instance = this;
             Application.runInBackground = true;
             _ = Connect();
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+            cancellation?.Cancel();
+            if (socket is { State: WebSocketState.Open })
+                _ = socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "bye", CancellationToken.None);
+            socket?.Dispose();
         }
 
         public void SendInput(PlayerIntent input)
@@ -74,13 +85,13 @@ namespace Shooter.Client
             try
             {
                 await socket.ConnectAsync(new Uri(Session.WsUrl), cancellation.Token).ConfigureAwait(false);
-                Log.Info("net: connected " + Session.WsUrl);
+                Log.Info("Net: connected " + Session.WsUrl);
                 _ = ReceiveLoop();
                 await Send(MessageType.Hello, new Hello { Name = Session.DisplayName }).ConfigureAwait(false);
             }
             catch (Exception e)
             {
-                Log.Warn("net: connect failed: " + e.Message);
+                Log.Warn("Net: connect failed: " + e.Message);
             }
         }
 
@@ -95,7 +106,7 @@ namespace Shooter.Client
                     var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation.Token).ConfigureAwait(false);
                     if (result.MessageType == WebSocketMessageType.Close)
                     {
-                        Log.Warn("net: closed by server");
+                        Log.Warn("Net: closed by server");
                         break;
                     }
 
@@ -109,7 +120,7 @@ namespace Shooter.Client
             catch (Exception e)
             {
                 if (!cancellation.IsCancellationRequested)
-                    Log.Warn("net: receive loop ended: " + e.Message);
+                    Log.Warn("Net: receive loop ended: " + e.Message);
             }
         }
 
@@ -125,7 +136,7 @@ namespace Shooter.Client
             }
             catch (Exception e)
             {
-                Log.Warn("net: send failed: " + e.Message);
+                Log.Warn("Net: send failed: " + e.Message);
             }
             finally
             {
@@ -149,13 +160,13 @@ namespace Shooter.Client
                 case MessageType.Welcome:
                     Welcome welcome = message.Read<Welcome>();
                     PlayerId = welcome.PlayerId;
-                    Log.Info("net: welcome, playerId " + PlayerId + ", tickRate " + welcome.TickRate);
+                    Log.Info("Net: welcome, playerId " + PlayerId + ", tickRate " + welcome.TickRate);
                     _ = Send(MessageType.JoinWorld, new JoinWorld());
                     break;
                 case MessageType.WorldJoined:
                     WorldJoined worldJoined = message.Read<WorldJoined>();
                     InWorld = true;
-                    Log.Info("net: world " + worldJoined.WorldId + ", players " + worldJoined.Players.Length);
+                    Log.Info("Net: world " + worldJoined.WorldId + ", players " + worldJoined.Players.Length);
                     WorldEntered?.Invoke(worldJoined);
                     break;
                 case MessageType.Snapshot:
@@ -168,15 +179,6 @@ namespace Shooter.Client
                     PeerLeft?.Invoke(message.Read<PlayerLeft>());
                     break;
             }
-        }
-
-        private void OnDestroy()
-        {
-            if (Instance == this) Instance = null;
-            cancellation?.Cancel();
-            if (socket is { State: WebSocketState.Open })
-                _ = socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "bye", CancellationToken.None);
-            socket?.Dispose();
         }
     }
 }

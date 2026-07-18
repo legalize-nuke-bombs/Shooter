@@ -21,7 +21,7 @@ namespace Shooter.Client.Entities.Chronology
             sun = FindSun();
             if (sun == null)
             {
-                Log.Warn("sun not found");
+                Log.Warn("Sun not found");
                 enabled = false;
                 return;
             }

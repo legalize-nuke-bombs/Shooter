@@ -57,7 +57,7 @@ namespace Shooter.Client.Menu
             }
             catch (Exception e)
             {
-                Log.Warn("menu: config read failed, using default: " + e.Message);
+                Log.Warn("Menu: config read failed, using default: " + e.Message);
             }
         }
 
