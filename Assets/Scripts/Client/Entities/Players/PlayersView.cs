@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Shooter.Server.Worlds;
-using Shooter.Server.Entities.Characters.Player;
+using Shooter.Server.Entities.Players;
 using Shooter.Logging;
 
-namespace Shooter.Client.Entities.Characters
+namespace Shooter.Client.Entities.Players
 {
     public class PlayersView : MonoBehaviour
     {

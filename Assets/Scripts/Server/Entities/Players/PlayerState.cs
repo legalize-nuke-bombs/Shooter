@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Server.Entities.Characters.Player
+namespace Shooter.Server.Entities.Players
 {
     public class PlayerState
     {

@@ -1,5 +1,5 @@
 using Shooter.Serialization;
-using Shooter.Server.Entities.Characters.Player;
+using Shooter.Server.Entities.Players;
 
 namespace Shooter.Server.Worlds
 {

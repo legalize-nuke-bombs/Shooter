@@ -1,6 +1,6 @@
 using Shooter.Serialization;
 
-namespace Shooter.Server.Entities.Characters.Player
+namespace Shooter.Server.Entities.Players
 {
     public class PlayerIntent : Serializable
     {
