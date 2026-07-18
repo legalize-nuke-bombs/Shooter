@@ -30,6 +30,26 @@ namespace Shooter.Server.Entities.Characters.Player
             DisplayName = "player" + userId;
         }
 
+        public void Tick(float dt)
+        {
+            Transform body = Body.transform;
+            body.rotation = Quaternion.Euler(0f, LastInput.yaw, 0f);
+
+            Vector3 direction = Vector3.ClampMagnitude(body.right * LastInput.moveX + body.forward * LastInput.moveZ, 1f);
+            float speed = LastInput.sprint ? SprintSpeed : WalkSpeed;
+
+            if (controller.isGrounded)
+            {
+                verticalVelocity = -2f;
+                if (jumpQueued)
+                    verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            }
+            jumpQueued = false;
+
+            verticalVelocity += Gravity * dt;
+            controller.Move((direction * speed + Vector3.up * verticalVelocity) * dt);
+        }
+
         public void ApplyInput(PlayerIntent input)
         {
             input.moveX = Finite(input.moveX);
@@ -53,26 +73,6 @@ namespace Shooter.Server.Entities.Characters.Player
             Body.transform.position = new Vector3(spread.x, 1.1f, spread.z);
             controller = Body.AddComponent<CharacterController>();
             Log.Info("spawned body for user " + UserId + " world " + WorldId + " at " + Body.transform.position);
-        }
-
-        public void Step(float dt)
-        {
-            Transform body = Body.transform;
-            body.rotation = Quaternion.Euler(0f, LastInput.yaw, 0f);
-
-            Vector3 direction = Vector3.ClampMagnitude(body.right * LastInput.moveX + body.forward * LastInput.moveZ, 1f);
-            float speed = LastInput.sprint ? SprintSpeed : WalkSpeed;
-
-            if (controller.isGrounded)
-            {
-                verticalVelocity = -2f;
-                if (jumpQueued)
-                    verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-            }
-            jumpQueued = false;
-
-            verticalVelocity += Gravity * dt;
-            controller.Move((direction * speed + Vector3.up * verticalVelocity) * dt);
         }
     }
 }
