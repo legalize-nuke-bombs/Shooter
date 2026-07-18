@@ -61,7 +61,7 @@ namespace Shooter.Editor
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             AssetDatabase.SaveAssets();
-            Log.Info("menu setup: done");
+            Log.Info("Menu setup: done");
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Shooter.Client
         {
             if (SceneManager.GetSceneByName("Map").isLoaded) return;
             SceneManager.LoadScene("Map", LoadSceneMode.Additive);
-            Log.Info("client: Map loaded additively for render");
+            Log.Info("Client: Map loaded additively for render");
         }
     }
 }

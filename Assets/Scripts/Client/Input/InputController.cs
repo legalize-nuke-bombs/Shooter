@@ -31,6 +31,12 @@ namespace Shooter.Client.Input
             Cursor.lockState = CursorLockMode.Locked;
         }
 
+        private void OnDestroy()
+        {
+            if (netHooked)
+                networkClient.SnapshotReceived -= OnSnapshot;
+        }
+
         private void Update()
         {
             Look();
@@ -84,12 +90,6 @@ namespace Shooter.Client.Input
                 positioned = true;
                 break;
             }
-        }
-
-        private void OnDestroy()
-        {
-            if (netHooked)
-                networkClient.SnapshotReceived -= OnSnapshot;
         }
     }
 }
