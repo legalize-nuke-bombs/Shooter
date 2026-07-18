@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using Shooter.Server.Entities.Players;
 using Shooter.Server.Entities.Chronology;
 using Shooter.Logging;
+using Shooter.Server.Entities.Npcs;
 
 namespace Shooter.Server.Worlds
 {
@@ -13,6 +14,7 @@ namespace Shooter.Server.Worlds
         private readonly Scene scene;
         private readonly Clock clock = new Clock();
         private readonly Dictionary<long, Player> players = new Dictionary<long, Player>();
+        private readonly List<Npc> npcs = new List<Npc>();
 
         public ServerWorld(string id)
         {
@@ -42,11 +44,27 @@ namespace Shooter.Server.Worlds
             clock.Tick(dt);
         }
 
+        public ClockState BuildClockState()
+        {
+            return clock.State();
+        }
+
         public PlayerState[] BuildPlayerStates()
         {
             var states = new List<PlayerState>(players.Count);
             foreach (Player player in players.Values)
-                states.Add(player.ToState());
+                states.Add(player.State());
+            return states.ToArray();
+        }
+
+        public NpcState[] BuildNpcStates()
+        {
+            var states = new List<NpcState>();
+            foreach (Npc npc in npcs)
+            {
+                states.Add(npc.State());
+            }
+
             return states.ToArray();
         }
 
@@ -55,8 +73,9 @@ namespace Shooter.Server.Worlds
             return new Snapshot
             {
                 Tick = tick,
+                Clock = BuildClockState(),
                 Players = BuildPlayerStates(),
-                Clock = clock.ToState()
+                Npcs = BuildNpcStates()
             };
         }
     }

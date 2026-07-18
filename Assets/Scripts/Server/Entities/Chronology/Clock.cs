@@ -11,7 +11,7 @@ namespace Shooter.Server.Entities.Chronology
             Timestamp += dt * (ClockState.DayLengthSeconds / DayRealSeconds);
         }
 
-        public ClockState ToState()
+        public ClockState State()
         {
             return new ClockState { Timestamp = (long)Timestamp };
         }
