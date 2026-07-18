@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Shooter.Server.Entities.Players;
 using Shooter.Server.Entities.Chronology;
 using Shooter.Server.Entities.Npcs;
@@ -8,7 +9,7 @@ namespace Shooter.Server.Worlds
     {
         public long Tick { get; set; }
         public ClockState Clock { get; set; }
-        public PlayerState[] Players { get; set; }
-        public NpcState[] Npcs { get; set; }
+        public List<PlayerState> Players { get; set; }
+        public List<NpcState> Npcs { get; set; }
     }
 }

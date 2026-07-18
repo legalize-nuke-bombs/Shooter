@@ -64,20 +64,20 @@ namespace Shooter.Server.Worlds
             return clock.State();
         }
 
-        public PlayerState[] BuildPlayerStates()
+        public List<PlayerState> BuildPlayerStates()
         {
             var states = new List<PlayerState>(players.Count);
             foreach (Player player in players.Values)
                 states.Add(player.State());
-            return states.ToArray();
+            return states;
         }
 
-        public NpcState[] BuildNpcStates()
+        public List<NpcState> BuildNpcStates()
         {
             var states = new List<NpcState>(npcs.Count);
             foreach (Npc npc in npcs)
                 states.Add(npc.State());
-            return states.ToArray();
+            return states;
         }
 
         public Snapshot BuildSnapshot(long tick)

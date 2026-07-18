@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine.UIElements;
 using Shooter.Client.Account;
 
@@ -72,9 +73,9 @@ namespace Shooter.Client.Menu
                 foreach (WorldDto world in worlds)
                     scroll.Add(BuildSlot(world));
 
-                loadMoreBtn.style.display = worlds.Length < PageSize ? DisplayStyle.None : DisplayStyle.Flex;
+                loadMoreBtn.style.display = worlds.Count < PageSize ? DisplayStyle.None : DisplayStyle.Flex;
 
-                if (worlds.Length == 0 && requestedPage == 0)
+                if (worlds.Count == 0 && requestedPage == 0)
                 {
                     var empty = new Label("Сохранённых миров нет.\nСоздайте новый мир или войдите по идентификатору.");
                     empty.AddToClassList("empty-note");
@@ -108,12 +109,12 @@ namespace Shooter.Client.Menu
             meta.AddToClassList("world-meta");
             info.Add(meta);
 
-            if (world.Players != null && world.Players.Length > 0)
+            if (world.Players != null && world.Players.Count > 0)
             {
                 var playersRow = new VisualElement();
                 playersRow.AddToClassList("players-row");
-                var sorted = (PlayerDto[])world.Players.Clone();
-                Array.Sort(sorted, (a, b) => RoleRank(a.Role) != RoleRank(b.Role)
+                var sorted = new List<PlayerDto>(world.Players);
+                sorted.Sort((a, b) => RoleRank(a.Role) != RoleRank(b.Role)
                     ? RoleRank(a.Role) - RoleRank(b.Role)
                     : a.MemberSince.CompareTo(b.MemberSince));
                 foreach (PlayerDto player in sorted)
@@ -155,7 +156,7 @@ namespace Shooter.Client.Menu
 
         private static string BuildMeta(WorldDto world)
         {
-            int count = world.Players?.Length ?? 0;
+            int count = world.Players?.Count ?? 0;
             long age = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - world.CreatedAt;
             string ago = age < 3600 ? Math.Max(1, age / 60) + " мин назад" : age < 86400 ? (age / 3600) + " ч назад" : (age / 86400) + " дн назад";
             string members = count + (count % 10 == 1 && count % 100 != 11 ? " участник" : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14) ? " участника" : " участников"));
