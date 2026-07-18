@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Shooter.Auth;
 using Shooter.Serialization;
-using Shooter.Server.Entities.Players;
 using Shooter.Logging;
 
 namespace Shooter.Server.Sessions
@@ -36,23 +35,23 @@ namespace Shooter.Server.Sessions
             string token = ExtractQueryParam(query, "token");
             if (!Jwt.TryVerify(token, jwtSecret, out string subject))
             {
-                Log.Warn("conn " + connId + " token rejected");
+                Log.Warn("Conn " + connId + " token rejected");
                 return false;
             }
             if (!long.TryParse(subject, out long userId))
             {
-                Log.Warn("conn " + connId + " not a user token (sub '" + subject + "')");
+                Log.Warn("Conn " + connId + " not a user token (sub '" + subject + "')");
                 return false;
             }
             if (!serverSessionGrants.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out string worldId))
             {
-                Log.Warn("conn " + connId + " user " + userId + " has no open session");
+                Log.Warn("Conn " + connId + " user " + userId + " has no open session");
                 return false;
             }
 
-            session = new ServerSession(connId, new Player(userId), worldId);
+            session = new ServerSession(connId, userId, worldId);
             sessions[connId] = session;
-            Log.Info("conn " + connId + " authed: user " + userId + " world " + worldId);
+            Log.Info("Conn " + connId + " authed: user " + userId + " world " + worldId);
             return true;
         }
 
@@ -78,7 +77,7 @@ namespace Shooter.Server.Sessions
             SessionHook hook = Json.Deserialize<SessionHook>(json);
             if (hook == null || string.IsNullOrEmpty(hook.Action) || string.IsNullOrEmpty(hook.WorldId))
             {
-                Log.Warn("malformed hook, ignoring");
+                Log.Warn("Malformed hook, ignoring");
                 return Array.Empty<int>();
             }
 
@@ -86,12 +85,12 @@ namespace Shooter.Server.Sessions
             {
                 case "OPEN_SESSION":
                     serverSessionGrants.Open(hook.UserId, hook.WorldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
-                    Log.Info("session opened: user " + hook.UserId + " world " + hook.WorldId);
+                    Log.Info("Session opened: user " + hook.UserId + " world " + hook.WorldId);
                     return Array.Empty<int>();
                 case "CLOSE_SESSION":
                     return CloseSessions(hook.UserId, hook.WorldId);
                 default:
-                    Log.Warn("unknown hook action " + hook.Action + ", ignoring");
+                    Log.Warn("Unknown hook action " + hook.Action + ", ignoring");
                     return Array.Empty<int>();
             }
         }
@@ -104,10 +103,10 @@ namespace Shooter.Server.Sessions
 
             var toKick = new List<int>();
             foreach (ServerSession session in sessions.Values)
-                if (session.WorldId == worldId && (wholeWorld || session.Player.UserId == userId))
+                if (session.WorldId == worldId && (wholeWorld || session.UserId == userId))
                     toKick.Add(session.ConnId);
 
-            Log.Info("session closed: user " + (wholeWorld ? "*" : userId.ToString()) + " world " + worldId + ", kicking online " + toKick.Count);
+            Log.Info("Session closed: user " + (wholeWorld ? "*" : userId.ToString()) + " world " + worldId + ", kicking online " + toKick.Count);
             return toKick;
         }
 
@@ -118,7 +117,7 @@ namespace Shooter.Server.Sessions
             sweepTimer = 0f;
             int swept = serverSessionGrants.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             if (swept > 0)
-                Log.Info("swept " + swept + " expired session grants");
+                Log.Info("Swept " + swept + " expired session grants");
         }
 
         private static string ExtractQueryParam(string query, string name)

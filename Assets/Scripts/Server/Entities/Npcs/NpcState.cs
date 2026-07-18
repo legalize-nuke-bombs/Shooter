@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Shooter.Server.Entities.Npcs
 {
     public class NpcState
@@ -10,5 +8,7 @@ namespace Shooter.Server.Entities.Npcs
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
+
+        public float Yaw { get; set; }
     }
 }
