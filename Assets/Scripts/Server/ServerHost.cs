@@ -137,13 +137,13 @@ namespace Shooter.Server
         private void EnterWorld(Player player)
         {
             ServerWorld world = WorldFor(player.WorldId);
-            world.Add(player);
+            world.AddPlayer(player);
             player.InWorld = true;
 
             serverTransport.Send(player.ConnId, Json.Serialize(new WorldJoined
             {
                 worldId = world.Id,
-                players = world.BuildStates()
+                players = world.BuildPlayerStates()
             }));
 
             string joined = Json.Serialize(new PlayerJoined { id = player.UserId, name = player.DisplayName });
@@ -168,7 +168,7 @@ namespace Shooter.Server
         private void Simulate(float dt)
         {
             foreach (ServerWorld world in worlds.Values)
-                world.Step(dt);
+                world.Tick(dt);
         }
 
         private void BroadcastSnapshots()
@@ -198,7 +198,7 @@ namespace Shooter.Server
 
             if (worlds.TryGetValue(player.WorldId, out ServerWorld world))
             {
-                world.Remove(connId);
+                world.RemovePlayer(connId);
                 string left = Json.Serialize(new PlayerLeft { id = player.UserId });
                 foreach (Player other in world.Players)
                     serverTransport.Send(other.ConnId, left);
