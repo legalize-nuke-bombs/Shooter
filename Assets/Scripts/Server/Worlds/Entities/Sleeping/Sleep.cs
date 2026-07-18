@@ -6,7 +6,7 @@ namespace Shooter.Server.Worlds.Entities.Sleeping
 {
     public class Sleep
     {
-        public const float UseReach = 2.5f;
+        public const float UseReach = 4f;
 
         private const string BedName = "Bed";
 

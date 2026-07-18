@@ -5,9 +5,6 @@ namespace Shooter.Client.Hud.Sleeping
 {
     public class CalmDream : Dream
     {
-        private const float BreathPeriod = 6f;
-        private const float BaseAlpha = 0.97f;
-        private const float BreathDepth = 0.02f;
         private const int StarCount = 10;
         private const float StarDrift = 4f;
 
@@ -36,9 +33,7 @@ namespace Shooter.Client.Hud.Sleeping
             if (rect.width <= 0f || rect.height <= 0f) return;
 
             var painter = mgc.painter2D;
-
-            float breath = Mathf.Sin(time * 2f * Mathf.PI / BreathPeriod);
-            painter.fillColor = new Color(VeilColor.r, VeilColor.g, VeilColor.b, BaseAlpha + breath * BreathDepth);
+            painter.fillColor = VeilColor;
             FillRect(painter, new Rect(0f, 0f, rect.width, rect.height));
 
             for (int i = 0; i < StarCount; i++)
