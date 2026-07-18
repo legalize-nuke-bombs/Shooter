@@ -6,7 +6,7 @@ namespace Shooter.Client.Aiming
 {
     public class Aim : MonoBehaviour
     {
-        private const float Reach = 12f;
+        private const float Reach = 20f;
 
         public NpcAvatar Target { get; private set; }
         public float BedDistance { get; private set; } = float.PositiveInfinity;

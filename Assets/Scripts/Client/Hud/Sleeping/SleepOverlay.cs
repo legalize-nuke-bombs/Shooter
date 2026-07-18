@@ -11,10 +11,10 @@ namespace Shooter.Client.Hud.Sleeping
         private readonly Dream[] dreams;
         private Dream tonight;
 
-        public SleepOverlay(SleepSense sleepSense, Font font)
+        public SleepOverlay(SleepSense sleepSense)
         {
             this.sleepSense = sleepSense;
-            dreams = new Dream[] { waiting, new AnxiousDream(font) };
+            dreams = new Dream[] { waiting, new AnxiousDream() };
 
             pickingMode = PickingMode.Ignore;
             style.position = Position.Absolute;

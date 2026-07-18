@@ -24,7 +24,7 @@ namespace Shooter.Client.Hud
             root.pickingMode = PickingMode.Ignore;
             root.Add(new Crosshair());
             root.Add(new TargetNameLabel(font, aim));
-            root.Add(new SleepOverlay(sleepSense, font));
+            root.Add(new SleepOverlay(sleepSense));
             root.Add(new SleepHintLabel(font, sleepSense));
         }
     }
