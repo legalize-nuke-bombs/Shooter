@@ -1,17 +1,16 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using UnityEngine;
+using Shooter.Serialization;
 
 namespace Shooter.Auth
 {
     public static class Jwt
     {
-        [Serializable]
         private class JwtClaims
         {
-            public string sub;
-            public long exp;
+            public string Sub { get; set; }
+            public long Exp { get; set; }
         }
 
         public static bool TryVerify(string token, byte[] secret, out string subject)
@@ -36,13 +35,13 @@ namespace Shooter.Auth
 
             if (!CryptographicOperations.FixedTimeEquals(expectedSignature, actualSignature)) return false;
 
-            JwtClaims claims = JsonUtility.FromJson<JwtClaims>(payloadJson);
-            if (claims == null || string.IsNullOrEmpty(claims.sub)) return false;
+            JwtClaims claims = Json.Deserialize<JwtClaims>(payloadJson);
+            if (claims == null || string.IsNullOrEmpty(claims.Sub)) return false;
 
             long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            if (claims.exp != 0 && claims.exp < now) return false;
+            if (claims.Exp != 0 && claims.Exp < now) return false;
 
-            subject = claims.sub;
+            subject = claims.Sub;
             return true;
         }
 

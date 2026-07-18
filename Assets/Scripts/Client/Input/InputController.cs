@@ -65,22 +65,22 @@ namespace Shooter.Client.Input
             Keyboard keyboard = Keyboard.current;
             networkClient.SendInput(new PlayerIntent
             {
-                moveX = (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
-                moveZ = (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f),
-                jump = jumpPending,
-                sprint = keyboard.leftShiftKey.isPressed,
-                yaw = transform.eulerAngles.y,
-                pitch = pitch
+                MoveX = (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
+                MoveZ = (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f),
+                Jump = jumpPending,
+                Sprint = keyboard.leftShiftKey.isPressed,
+                Yaw = transform.eulerAngles.y,
+                Pitch = pitch
             });
             jumpPending = false;
         }
 
         private void OnSnapshot(Snapshot snapshot)
         {
-            foreach (PlayerState playerState in snapshot.players)
+            foreach (PlayerState playerState in snapshot.Players)
             {
-                if (playerState.id != networkClient.PlayerId) continue;
-                targetPosition = new Vector3(playerState.x, playerState.y, playerState.z);
+                if (playerState.Id != networkClient.PlayerId) continue;
+                targetPosition = new Vector3(playerState.X, playerState.Y, playerState.Z);
                 positioned = true;
                 break;
             }

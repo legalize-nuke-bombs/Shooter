@@ -93,13 +93,13 @@ namespace Shooter.Client.Menu
 
             var nameRow = new VisualElement();
             nameRow.AddToClassList("world-name-row");
-            var name = new Label(world.name);
+            var name = new Label(world.Name);
             name.AddToClassList("world-name");
             nameRow.Add(name);
 
             if (FindMyRole(world) == "CREATOR")
                 nameRow.Add(MakeBadge("ВЛАДЕЛЕЦ"));
-            if (world.joinPolicy == "NOBODY")
+            if (world.JoinPolicy == "NOBODY")
                 nameRow.Add(MakeBadge("ЗАКРЫТ ДЛЯ ВХОДА"));
 
             info.Add(nameRow);
@@ -108,20 +108,20 @@ namespace Shooter.Client.Menu
             meta.AddToClassList("world-meta");
             info.Add(meta);
 
-            if (world.players != null && world.players.Length > 0)
+            if (world.Players != null && world.Players.Length > 0)
             {
                 var playersRow = new VisualElement();
                 playersRow.AddToClassList("players-row");
-                var sorted = (PlayerDto[])world.players.Clone();
-                Array.Sort(sorted, (a, b) => RoleRank(a.role) != RoleRank(b.role)
-                    ? RoleRank(a.role) - RoleRank(b.role)
-                    : a.memberSince.CompareTo(b.memberSince));
+                var sorted = (PlayerDto[])world.Players.Clone();
+                Array.Sort(sorted, (a, b) => RoleRank(a.Role) != RoleRank(b.Role)
+                    ? RoleRank(a.Role) - RoleRank(b.Role)
+                    : a.MemberSince.CompareTo(b.MemberSince));
                 foreach (PlayerDto player in sorted)
                 {
-                    string chipName = player.user != null ? player.user.displayName : "игрок " + player.id;
-                    var chip = new Label(player.role == "CREATOR" ? "★ " + chipName : chipName);
+                    string chipName = player.User != null ? player.User.DisplayName : "игрок " + player.Id;
+                    var chip = new Label(player.Role == "CREATOR" ? "★ " + chipName : chipName);
                     chip.AddToClassList("player-chip");
-                    if (player.role == "CREATOR") chip.AddToClassList("player-chip-creator");
+                    if (player.Role == "CREATOR") chip.AddToClassList("player-chip-creator");
                     playersRow.Add(chip);
                 }
                 info.Add(playersRow);
@@ -129,7 +129,7 @@ namespace Shooter.Client.Menu
 
             slot.Add(info);
 
-            var joinBtn = new Button(() => Join(world.id)) { text = "ВОЙТИ" };
+            var joinBtn = new Button(() => Join(world.Id)) { text = "ВОЙТИ" };
             joinBtn.AddToClassList("btn");
             joinBtn.AddToClassList("enter-btn");
             slot.Add(joinBtn);
@@ -146,17 +146,17 @@ namespace Shooter.Client.Menu
 
         private static string FindMyRole(WorldDto world)
         {
-            if (world.players == null || Session.UserId < 0) return null;
-            foreach (PlayerDto player in world.players)
-                if (player.user != null && player.user.id == Session.UserId)
-                    return player.role;
+            if (world.Players == null || Session.UserId < 0) return null;
+            foreach (PlayerDto player in world.Players)
+                if (player.User != null && player.User.Id == Session.UserId)
+                    return player.Role;
             return null;
         }
 
         private static string BuildMeta(WorldDto world)
         {
-            int count = world.players?.Length ?? 0;
-            long age = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - world.createdAt;
+            int count = world.Players?.Length ?? 0;
+            long age = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - world.CreatedAt;
             string ago = age < 3600 ? Math.Max(1, age / 60) + " мин назад" : age < 86400 ? (age / 3600) + " ч назад" : (age / 86400) + " дн назад";
             string members = count + (count % 10 == 1 && count % 100 != 11 ? " участник" : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14) ? " участника" : " участников"));
             return members + " · создан " + ago;

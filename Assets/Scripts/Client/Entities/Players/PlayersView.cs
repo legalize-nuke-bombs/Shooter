@@ -34,36 +34,36 @@ namespace Shooter.Client.Entities.Players
 
         private void OnSnapshot(Snapshot snapshot)
         {
-            foreach (PlayerState state in snapshot.players)
+            foreach (PlayerState state in snapshot.Players)
             {
-                if (state.id == NetworkClient.Instance.PlayerId) continue;
+                if (state.Id == NetworkClient.Instance.PlayerId) continue;
 
-                if (!avatars.TryGetValue(state.id, out Avatar avatar))
+                if (!avatars.TryGetValue(state.Id, out Avatar avatar))
                     avatar = Spawn(state);
 
-                avatar.TargetPosition = new Vector3(state.x, state.y, state.z);
-                avatar.TargetYaw = state.yaw;
+                avatar.TargetPosition = new Vector3(state.X, state.Y, state.Z);
+                avatar.TargetYaw = state.Yaw;
             }
         }
 
         private void OnLeft(PlayerLeft left)
         {
-            if (!avatars.TryGetValue(left.id, out Avatar avatar)) return;
+            if (!avatars.TryGetValue(left.Id, out Avatar avatar)) return;
             Destroy(avatar.Transform.gameObject);
-            avatars.Remove(left.id);
-            Log.Info("avatar removed for player " + left.id + ", avatars now " + avatars.Count);
+            avatars.Remove(left.Id);
+            Log.Info("avatar removed for player " + left.Id + ", avatars now " + avatars.Count);
         }
 
         private Avatar Spawn(PlayerState state)
         {
             GameObject capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            capsule.name = "Avatar_" + state.id + "_" + state.name;
-            capsule.transform.position = new Vector3(state.x, state.y, state.z);
+            capsule.name = "Avatar_" + state.Id + "_" + state.Name;
+            capsule.transform.position = new Vector3(state.X, state.Y, state.Z);
             capsule.GetComponent<Renderer>().material.color = new Color(0.9f, 0.4f, 0.3f);
 
             var avatar = new Avatar { Transform = capsule.transform };
-            avatars[state.id] = avatar;
-            Log.Info("avatar spawned for player " + state.id + " '" + state.name + "', avatars now " + avatars.Count);
+            avatars[state.Id] = avatar;
+            Log.Info("avatar spawned for player " + state.Id + " '" + state.Name + "', avatars now " + avatars.Count);
             return avatar;
         }
 
