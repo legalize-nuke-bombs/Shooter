@@ -1,10 +1,8 @@
-using Shooter.Serialization;
-
 namespace Shooter.Server.Entities.Players
 {
-    public class PlayerJoined : Serializable
+    public class PlayerJoined
     {
-        public long id;
-        public string name;
+        public long Id { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -1,11 +1,10 @@
-using Shooter.Serialization;
 using Shooter.Server.Entities.Players;
 
 namespace Shooter.Server.Worlds
 {
-    public class WorldJoined : Serializable
+    public class WorldJoined
     {
-        public string worldId;
-        public PlayerState[] players;
+        public string WorldId { get; set; }
+        public PlayerState[] Players { get; set; }
     }
 }

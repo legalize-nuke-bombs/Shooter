@@ -57,8 +57,8 @@ namespace Shooter.Client.Menu
 
             api.CreateWorld(new CreateWorldRequest
             {
-                name = name,
-                joinPolicy = PolicyValues[Mathf.Clamp(policy.index, 0, PolicyValues.Length - 1)]
+                Name = name,
+                JoinPolicy = PolicyValues[Mathf.Clamp(policy.index, 0, PolicyValues.Length - 1)]
             }, error =>
             {
                 busy = false;

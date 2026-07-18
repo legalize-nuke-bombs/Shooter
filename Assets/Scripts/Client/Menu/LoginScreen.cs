@@ -117,8 +117,8 @@ namespace Shooter.Client.Menu
                     }
 
                     Session.Username = username;
-                    Session.DisplayName = me.displayName;
-                    Session.UserId = me.id;
+                    Session.DisplayName = me.DisplayName;
+                    Session.UserId = me.Id;
 
                     status.text = "";
                     onLoggedIn();

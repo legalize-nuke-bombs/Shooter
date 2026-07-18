@@ -9,10 +9,10 @@ namespace Shooter.Client.Entities.Chronology
         private const float SunYaw = 170f;
         private readonly Color dayColor = new Color(1f, 0.96f, 0.84f);
         private readonly Color nightColor = new Color(0.45f, 0.55f, 0.9f);
-        private float dayIntensity = 1.1f;
-        private float nightIntensity = 0.04f;
-        private float dayAmbient = 1f;
-        private float nightAmbient = 0.08f;
+        private readonly float dayIntensity = 1.1f;
+        private readonly float nightIntensity = 0.04f;
+        private readonly float dayAmbient = 1f;
+        private readonly float nightAmbient = 0.08f;
 
         private Light sun;
 
@@ -36,7 +36,7 @@ namespace Shooter.Client.Entities.Chronology
 
         private void OnSnapshot(Snapshot snapshot)
         {
-            Apply(snapshot.clock.Fraction());
+            Apply(snapshot.Clock.Fraction());
         }
 
         private void Apply(float dayFraction)
