@@ -104,17 +104,17 @@ namespace Shooter.Server
 
         private void OnClientConnected(int connId, string query)
         {
-            if (!serverSessionGate.TryAdmit(connId, query, out Player player))
+            if (!serverSessionGate.TryAdmit(connId, query, out ServerSession session))
             {
                 serverTransport.Kick(connId);
                 return;
             }
-            serverTransport.Send(connId, Message.Encode(MessageType.Welcome, new Welcome { PlayerId = player.UserId, TickRate = (int)TickRate }));
+            serverTransport.Send(connId, Message.Encode(MessageType.Welcome, new Welcome { PlayerId = session.Player.UserId, TickRate = (int)TickRate }));
         }
 
         private void OnMessageReceived(int connId, string json)
         {
-            if (!serverSessionGate.TryGet(connId, out Player player)) return;
+            if (!serverSessionGate.TryGet(connId, out ServerSession session)) return;
 
             Message message = Message.Decode(json);
             if (message == null) return;
@@ -124,37 +124,37 @@ namespace Shooter.Server
                 case MessageType.Hello:
                     Hello hello = message.Read<Hello>();
                     if (!string.IsNullOrEmpty(hello.Name))
-                        player.DisplayName = hello.Name.Length > 40 ? hello.Name.Substring(0, 40) : hello.Name;
-                    Log.Info("conn " + connId + " hello: user " + player.UserId + " name '" + player.DisplayName + "'");
+                        session.Player.DisplayName = hello.Name.Length > 40 ? hello.Name.Substring(0, 40) : hello.Name;
+                    Log.Info("conn " + connId + " hello: user " + session.Player.UserId + " name '" + session.Player.DisplayName + "'");
                     break;
                 case MessageType.JoinWorld:
-                    if (!player.InWorld)
-                        EnterWorld(player);
+                    if (!session.InWorld)
+                        EnterWorld(session);
                     break;
                 case MessageType.PlayerIntent:
-                    player.ApplyInput(message.Read<PlayerIntent>());
+                    session.Player.ApplyInput(message.Read<PlayerIntent>());
                     break;
             }
         }
 
-        private void EnterWorld(Player player)
+        private void EnterWorld(ServerSession session)
         {
-            ServerWorld world = WorldFor(player.WorldId);
-            world.AddPlayer(player);
-            player.InWorld = true;
+            ServerWorld world = WorldFor(session.WorldId);
+            world.AddPlayer(session.Player);
+            session.InWorld = true;
 
-            serverTransport.Send(player.ConnId, Message.Encode(MessageType.WorldJoined, new WorldJoined
+            serverTransport.Send(session.ConnId, Message.Encode(MessageType.WorldJoined, new WorldJoined
             {
                 WorldId = world.Id,
                 Players = world.BuildPlayerStates()
             }));
 
-            string joined = Message.Encode(MessageType.PlayerJoined, new PlayerJoined { Id = player.UserId, Name = player.DisplayName });
-            foreach (Player other in world.Players)
-                if (other.ConnId != player.ConnId)
-                    serverTransport.Send(other.ConnId, joined);
+            string joined = Message.Encode(MessageType.PlayerJoined, new PlayerJoined { Id = session.Player.UserId, Name = session.Player.DisplayName });
+            foreach (int connId in serverSessionGate.ConnIdsInWorld(world.Id))
+                if (connId != session.ConnId)
+                    serverTransport.Send(connId, joined);
 
-            Log.Info("user " + player.UserId + " joined world " + world.Id + ", players there now " + world.Players.Count);
+            Log.Info("user " + session.Player.UserId + " joined world " + world.Id + ", players there now " + world.Players.Count);
         }
 
         private ServerWorld WorldFor(string worldId)
@@ -180,8 +180,8 @@ namespace Shooter.Server
             {
                 if (world.Players.Count == 0) continue;
                 string json = Message.Encode(MessageType.Snapshot, world.BuildSnapshot(tick));
-                foreach (Player player in world.Players)
-                    serverTransport.Send(player.ConnId, json);
+                foreach (int connId in serverSessionGate.ConnIdsInWorld(world.Id))
+                    serverTransport.Send(connId, json);
             }
         }
 
@@ -193,21 +193,21 @@ namespace Shooter.Server
 
         private void OnClientDisconnected(int connId)
         {
-            if (!serverSessionGate.TryGet(connId, out Player player)) return;
+            if (!serverSessionGate.TryGet(connId, out ServerSession session)) return;
             serverSessionGate.Remove(connId);
 
-            if (player.Body != null) Destroy(player.Body);
-            if (!player.InWorld) return;
+            if (session.Player.Body != null) Destroy(session.Player.Body);
+            if (!session.InWorld) return;
 
-            if (worlds.TryGetValue(player.WorldId, out ServerWorld world))
+            if (worlds.TryGetValue(session.WorldId, out ServerWorld world))
             {
-                world.RemovePlayer(connId);
-                string left = Message.Encode(MessageType.PlayerLeft, new PlayerLeft { Id = player.UserId });
-                foreach (Player other in world.Players)
-                    serverTransport.Send(other.ConnId, left);
+                world.RemovePlayer(session.Player.UserId);
+                string left = Message.Encode(MessageType.PlayerLeft, new PlayerLeft { Id = session.Player.UserId });
+                foreach (int otherConnId in serverSessionGate.ConnIdsInWorld(session.WorldId))
+                    serverTransport.Send(otherConnId, left);
             }
 
-            Log.Info("user " + player.UserId + " disconnected from world " + player.WorldId + ", sessions total " + serverSessionGate.Count);
+            Log.Info("user " + session.Player.UserId + " disconnected from world " + session.WorldId + ", sessions total " + serverSessionGate.Count);
         }
 
         private void OnDestroy()
