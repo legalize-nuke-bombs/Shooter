@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Entities.Players;
 using Shooter.Server.Entities.Chronology;
@@ -13,7 +12,7 @@ namespace Shooter.Server.Worlds
 
         private readonly Scene scene;
         private readonly Clock clock = new Clock();
-        private readonly Dictionary<int, Player> players = new Dictionary<int, Player>();
+        private readonly Dictionary<long, Player> players = new Dictionary<long, Player>();
 
         public ServerWorld(string id)
         {
@@ -26,14 +25,14 @@ namespace Shooter.Server.Worlds
 
         public void AddPlayer(Player player)
         {
-            players[player.ConnId] = player;
+            players[player.UserId] = player;
             player.Spawn();
             SceneManager.MoveGameObjectToScene(player.Body, scene);
         }
 
-        public void RemovePlayer(int connId)
+        public void RemovePlayer(long userId)
         {
-            players.Remove(connId);
+            players.Remove(userId);
         }
 
         public void Tick(float dt)
@@ -47,28 +46,8 @@ namespace Shooter.Server.Worlds
         {
             var states = new List<PlayerState>(players.Count);
             foreach (Player player in players.Values)
-                states.Add(ToState(player));
+                states.Add(player.ToState());
             return states.ToArray();
-        }
-
-        private static PlayerState ToState(Player player)
-        {
-            Vector3 position = player.Body.transform.position;
-            return new PlayerState
-            {
-                Id = player.UserId,
-                Name = player.DisplayName,
-                X = position.x,
-                Y = position.y,
-                Z = position.z,
-                Yaw = player.Body.transform.eulerAngles.y,
-                Pitch = player.LastInput.Pitch
-            };
-        }
-
-        public ClockState BuildClockState()
-        {
-            return new ClockState { Timestamp = (long)clock.Timestamp };
         }
 
         public Snapshot BuildSnapshot(long tick)
@@ -77,7 +56,7 @@ namespace Shooter.Server.Worlds
             {
                 Tick = tick,
                 Players = BuildPlayerStates(),
-                Clock = BuildClockState()
+                Clock = clock.ToState()
             };
         }
     }

@@ -14,7 +14,7 @@ namespace Shooter.Server.Sessions
 
         private readonly byte[] jwtSecret;
         private readonly ServerSessionGrants serverSessionGrants = new ServerSessionGrants();
-        private readonly Dictionary<int, Player> sessions = new Dictionary<int, Player>();
+        private readonly Dictionary<int, ServerSession> sessions = new Dictionary<int, ServerSession>();
         private float sweepTimer;
 
         public ServerSessionGate(byte[] jwtSecret)
@@ -29,9 +29,9 @@ namespace Shooter.Server.Sessions
             return Jwt.TryVerify(token, jwtSecret, out string subject) && subject == "hook";
         }
 
-        public bool TryAdmit(int connId, string query, out Player player)
+        public bool TryAdmit(int connId, string query, out ServerSession session)
         {
-            player = null;
+            session = null;
 
             string token = ExtractQueryParam(query, "token");
             if (!Jwt.TryVerify(token, jwtSecret, out string subject))
@@ -50,20 +50,27 @@ namespace Shooter.Server.Sessions
                 return false;
             }
 
-            player = new Player(connId, userId, worldId);
-            sessions[connId] = player;
+            session = new ServerSession(connId, new Player(userId), worldId);
+            sessions[connId] = session;
             Log.Info("conn " + connId + " authed: user " + userId + " world " + worldId);
             return true;
         }
 
-        public bool TryGet(int connId, out Player player)
+        public bool TryGet(int connId, out ServerSession session)
         {
-            return sessions.TryGetValue(connId, out player);
+            return sessions.TryGetValue(connId, out session);
         }
 
         public void Remove(int connId)
         {
             sessions.Remove(connId);
+        }
+
+        public IEnumerable<int> ConnIdsInWorld(string worldId)
+        {
+            foreach (ServerSession session in sessions.Values)
+                if (session.InWorld && session.WorldId == worldId)
+                    yield return session.ConnId;
         }
 
         public IReadOnlyList<int> HandleHook(string json)
@@ -96,9 +103,9 @@ namespace Shooter.Server.Sessions
             else serverSessionGrants.Close(userId, worldId);
 
             var toKick = new List<int>();
-            foreach (Player player in sessions.Values)
-                if (player.WorldId == worldId && (wholeWorld || player.UserId == userId))
-                    toKick.Add(player.ConnId);
+            foreach (ServerSession session in sessions.Values)
+                if (session.WorldId == worldId && (wholeWorld || session.Player.UserId == userId))
+                    toKick.Add(session.ConnId);
 
             Log.Info("session closed: user " + (wholeWorld ? "*" : userId.ToString()) + " world " + worldId + ", kicking online " + toKick.Count);
             return toKick;
