@@ -7,8 +7,6 @@ namespace Shooter.Server.Protocol
         JoinWorld,
         WorldJoined,
         Snapshot,
-        PlayerIntent,
-        PlayerJoined,
-        PlayerLeft
+        PlayerIntent
     }
 }
