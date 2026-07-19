@@ -12,11 +12,6 @@ namespace Shooter.Client.Hud
         [SerializeField] private Aim aim;
         [SerializeField] private SleepSense sleepSense;
 
-        private void Awake()
-        {
-            if (Application.isBatchMode) enabled = false;
-        }
-
         private void Start()
         {
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
