@@ -9,10 +9,10 @@ public class ServerConfig {
     @Bean
     public ServerRepresentation serverRepresentation() {
         return new ServerRepresentation(
-            "Shooter Server 0",
+            "Shooter Server Main",
                 0,
                 0,
-                0
+                1
         );
     }
 }
