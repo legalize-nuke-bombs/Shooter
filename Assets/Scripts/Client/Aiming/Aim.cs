@@ -4,6 +4,8 @@ namespace Shooter.Client.Aiming
 {
     public class Aim : MonoBehaviour
     {
+        private const float Range = 1000f;
+
         public RaycastHit? Target { get; private set; }
 
         private Transform cameraTransform;
@@ -20,9 +22,9 @@ namespace Shooter.Client.Aiming
 
         private void Update()
         {
-            if (!Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, 1000))
-                Target = null;
-            Target = hit;
+            Target = Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, Range)
+                ? hit
+                : (RaycastHit?)null;
         }
     }
 }
