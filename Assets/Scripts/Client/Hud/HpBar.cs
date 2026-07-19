@@ -1,56 +1,47 @@
-using UnityEngine.UIElements;
-using Shooter.Client.Worlds;
-using Shooter.Server.Worlds.Entities.Players;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Shooter.Client.Ui;
+using Shooter.Server.Worlds.Entities.Players;
 
 namespace Shooter.Client.Hud
 {
-    public class HpBar : VisualElement
+    public class HpBar : Overlay
     {
-
-        private static readonly Color Color = new Color(0, 0, 0);
-        private static readonly Color FillColor = new Color(0.5f, 0, 0);
-        private const float Thickness = 15;
+        private const long RefreshMs = 16;
+        private const float Thickness = 15f;
         private const float RelOffsetX = 0.2f;
-        private const float RelOffsetY = 0.80f;
+        private const float RelOffsetY = 0.8f;
         private const float RelWidth = 0.2f;
+
+        private static readonly Color TrackColor = new Color(0f, 0f, 0f);
+        private static readonly Color FillColor = new Color(0.5f, 0f, 0f);
 
         public HpBar()
         {
-            pickingMode = PickingMode.Ignore;
-            style.position = Position.Absolute;
-            style.left = 0;
-            style.top = 0;
-            style.right = 0;
-            style.bottom = 0;
-            generateVisualContent += OnGenerate;
+            Animate(RefreshMs);
         }
 
-        private static void OnGenerate(MeshGenerationContext mgc)
+        protected override void Draw(Painter2D painter, Rect rect)
         {
-            Rect rect = mgc.visualElement.contentRect;
-            if (rect.width <= 0f || rect.height <= 0f) return;
+            PlayerState me = NetworkClient.Instance?.World?.Me;
+            if (me == null) return;
 
-            ClientWorld world = NetworkClient.Instance?.World;
-            if (world?.Players == null) return;
+            float left = rect.width * RelOffsetX;
+            float y = rect.height * RelOffsetY;
+            float width = rect.width * RelWidth;
 
-            PlayerState playerState = world.Players[world.PlayerId];
-            float fraction = playerState.Hp / (float)playerState.MaxHp;
-
-            var painter = mgc.painter2D;
-
-            painter.strokeColor = Color;
             painter.lineWidth = Thickness;
-            painter.BeginPath();
-            painter.MoveTo(new Vector2(rect.width * RelOffsetX, rect.height * RelOffsetY));
-            painter.LineTo(new Vector2(rect.width * (RelOffsetX + RelWidth), rect.height * RelOffsetY));
-            painter.Stroke();
+            DrawSegment(painter, TrackColor, left, y, width);
+            DrawSegment(painter, FillColor, left, y, width * me.Hp / me.MaxHp);
+        }
 
-            painter.strokeColor = FillColor;
-            painter.lineWidth = Thickness;
+        private static void DrawSegment(Painter2D painter, Color color, float left, float y, float width)
+        {
+            if (width <= 0f) return;
+            painter.strokeColor = color;
             painter.BeginPath();
-            painter.MoveTo(new Vector2(rect.width * RelOffsetX, rect.height * RelOffsetY));
-            painter.LineTo(new Vector2(rect.width * (RelOffsetX + RelWidth * fraction), rect.height * RelOffsetY));
+            painter.MoveTo(new Vector2(left, y));
+            painter.LineTo(new Vector2(left + width, y));
             painter.Stroke();
         }
     }

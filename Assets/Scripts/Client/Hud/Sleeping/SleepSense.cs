@@ -12,7 +12,14 @@ namespace Shooter.Client.Hud.Sleeping
     {
         private Aim aim;
 
-        public bool MySleeping => Local(out PlayerState me) && me.Sleeping;
+        public bool MySleeping
+        {
+            get
+            {
+                PlayerState me = NetworkClient.Instance?.World?.Me;
+                return me != null && me.Sleeping;
+            }
+        }
 
         public bool WorldAsleep
         {
@@ -40,13 +47,6 @@ namespace Shooter.Client.Hud.Sleeping
         private void Awake()
         {
             aim = GetComponent<Aim>();
-        }
-
-        private bool Local(out PlayerState me)
-        {
-            me = null;
-            ClientWorld world = NetworkClient.Instance?.World;
-            return world?.Players != null && world.Players.TryGetValue(world.PlayerId, out me);
         }
     }
 }
