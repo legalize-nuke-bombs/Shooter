@@ -23,6 +23,7 @@ namespace Shooter.Client.Menu
 
         private bool busy;
         private int page;
+        private int loadRequest;
 
         public WorldsScreen(VisualElement root, MenuApi api, ErrorModal errors, Action onCreateClick, Action onJoined)
         {
@@ -66,8 +67,10 @@ namespace Shooter.Client.Menu
             status.text = "";
 
             int requestedPage = page;
+            int token = ++loadRequest;
             api.LoadWorlds(requestedPage, PageSize, (worlds, error) =>
             {
+                if (token != loadRequest) return;
                 if (error != null) { status.text = error; return; }
 
                 foreach (WorldDto world in worlds)
@@ -157,10 +160,10 @@ namespace Shooter.Client.Menu
         private static string BuildMeta(WorldDto world)
         {
             int count = world.Players?.Count ?? 0;
-            long age = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - world.CreatedAt;
+            long age = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - world.AccessedAt;
             string ago = age < 3600 ? Math.Max(1, age / 60) + " мин назад" : age < 86400 ? (age / 3600) + " ч назад" : (age / 86400) + " дн назад";
             string members = count + (count % 10 == 1 && count % 100 != 11 ? " участник" : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14) ? " участника" : " участников"));
-            return members + " · создан " + ago;
+            return members + " · активность " + ago;
         }
 
         private static int RoleRank(string role) => role == "CREATOR" ? 0 : 1;
