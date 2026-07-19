@@ -43,7 +43,7 @@ namespace Shooter.Server.Worlds.Entities.Players
 
             inventoryKeeper = new DefaultInventoryKeeper();
             inventoryKeeper.Take(StackableItem.Currency, 1000);
-            inventoryKeeper.Take(StackableItem.Ammo762x39, 100);
+            inventoryKeeper.Take(StackableItem.Ammo762X39, 100);
 
             Body = new GameObject("Player_" + userId);
             float angle = (userId * 137f) % 360f;
