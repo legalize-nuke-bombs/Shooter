@@ -8,12 +8,12 @@ namespace Shooter.Server.Worlds.Entities.Chronology
 
         public void Tick(float dt)
         {
-            Timestamp += dt * (ClockState.DayLengthSeconds / DayRealSeconds);
+            Timestamp += dt * (DayCycle.DayLengthSeconds / DayRealSeconds);
         }
 
         public bool IsNight()
         {
-            return ClockState.IsNight(ClockState.FractionOf((long)Timestamp));
+            return DayCycle.IsNight(DayCycle.FractionOf((long)Timestamp));
         }
 
         public ClockState State()
