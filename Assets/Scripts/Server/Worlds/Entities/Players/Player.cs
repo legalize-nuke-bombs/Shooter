@@ -23,11 +23,11 @@ namespace Shooter.Server.Worlds.Entities.Players
         private readonly CharacterController controller;
         private readonly Clock clock;
         private readonly PhysicsScene physics;
-        private readonly ServerWorldPlayers worldPlayers;
+        private readonly Worlds.Players worldPlayers;
         private float verticalVelocity;
         private bool jumpQueued;
 
-        public Player(long userId, string displayName, Scene scene, Clock clock, ServerWorldPlayers worldPlayers)
+        public Player(long userId, string displayName, Scene scene, Clock clock, Worlds.Players worldPlayers)
         {
             UserId = userId;
             DisplayName = displayName;

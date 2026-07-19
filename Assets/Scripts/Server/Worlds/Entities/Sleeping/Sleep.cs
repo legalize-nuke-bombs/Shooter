@@ -12,7 +12,7 @@ namespace Shooter.Server.Worlds.Entities.Sleeping
         private const float SkipTimeScale = 6f;
 
         private readonly Clock clock;
-        private readonly ServerWorldPlayers players;
+        private readonly Worlds.Players players;
         private bool wasNight;
 
         public static bool IsBed(string objectName)
@@ -20,7 +20,7 @@ namespace Shooter.Server.Worlds.Entities.Sleeping
             return objectName.Contains(BedName, System.StringComparison.OrdinalIgnoreCase);
         }
 
-        public Sleep(Clock clock, ServerWorldPlayers players)
+        public Sleep(Clock clock, Worlds.Players players)
         {
             this.clock = clock;
             this.players = players;
