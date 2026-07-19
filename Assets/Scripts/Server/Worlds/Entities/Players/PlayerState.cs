@@ -1,3 +1,5 @@
+using Shooter.Server.Worlds.Utils.Inventories;
+
 namespace Shooter.Server.Worlds.Entities.Players
 {
     public class PlayerState
@@ -7,6 +9,8 @@ namespace Shooter.Server.Worlds.Entities.Players
 
         public int Hp { get; set; }
         public int MaxHp { get; set; }
+
+        public InventoryState InventoryState { get; set; }
 
         public float X { get; set; }
         public float Y { get; set; }
