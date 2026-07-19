@@ -42,7 +42,7 @@ namespace Shooter.Client.Hud.Sleeping
 
         private void OnSnapshot(Snapshot snapshot)
         {
-            night = ClockState.IsNight(snapshot.Clock.Fraction());
+            night = DayCycle.IsNight(DayCycle.FractionOf(snapshot.Clock.Timestamp));
             WorldAsleep = snapshot.Sleep.WorldAsleep;
             if (snapshot.Players.TryGetValue(networkClient.PlayerId, out PlayerState me))
                 MySleeping = me.Sleeping;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Shooter.Server.Worlds;
+using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Logging;
 
 namespace Shooter.Client.Entities.Chronology
@@ -36,7 +37,7 @@ namespace Shooter.Client.Entities.Chronology
 
         private void OnSnapshot(Snapshot snapshot)
         {
-            float dayFraction = snapshot.Clock.Fraction();
+            float dayFraction = DayCycle.FractionOf(snapshot.Clock.Timestamp);
             float pitch = dayFraction * 360f - 90f;
             float daylight = Mathf.Clamp01(Mathf.Sin((dayFraction - 0.25f) * Mathf.PI * 2f));
 
