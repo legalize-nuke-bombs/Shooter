@@ -5,14 +5,15 @@ using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Entities.Sleeping;
 using Shooter.Server.Worlds;
 
-namespace Shooter.Client.Sleeping
+namespace Shooter.Client.Hud.Sleeping
 {
     [RequireComponent(typeof(Aim))]
     public class SleepSense : MonoBehaviour
     {
         public bool MySleeping { get; private set; }
         public bool WorldAsleep { get; private set; }
-        public bool CanSleep => !MySleeping && night && aim.BedDistance <= Sleep.UseReach;
+        public bool CanSleep => !MySleeping && night &&
+                                (aim.Target != null) && aim.Target.Value.distance <= Sleep.UseReach && Sleep.IsBed(aim.Target.Value.collider.name);
 
         private Aim aim;
         private bool night;

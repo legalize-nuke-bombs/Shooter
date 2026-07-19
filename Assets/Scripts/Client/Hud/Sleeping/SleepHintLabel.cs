@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Client.Sleeping;
 
 namespace Shooter.Client.Hud.Sleeping
 {

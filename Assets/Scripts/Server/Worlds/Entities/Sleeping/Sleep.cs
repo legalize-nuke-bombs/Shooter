@@ -1,6 +1,5 @@
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Chronology;
-using Shooter.Server.Worlds;
 
 namespace Shooter.Server.Worlds.Entities.Sleeping
 {

@@ -7,6 +7,8 @@ namespace Shooter.Client.Hud
 {
     public class TargetNameLabel : Label
     {
+        private const float Reach = 20;
+
         private readonly Aim aim;
 
         public TargetNameLabel(Font font, Aim aim)
@@ -36,10 +38,23 @@ namespace Shooter.Client.Hud
 
         private void Refresh()
         {
-            NpcAvatar target = aim.Target;
-            bool targeted = target != null && !string.IsNullOrEmpty(target.Name);
-            style.display = targeted ? DisplayStyle.Flex : DisplayStyle.None;
-            if (targeted) text = target.Name;
+            style.display = DisplayStyle.None;
+
+            RaycastHit? target = aim.Target;
+
+            if (target == null || target.Value.distance > Reach)
+            {
+                return;
+            }
+
+            if (target.Value.collider.TryGetComponent(out NpcBody npcBody))
+            {
+                if (!string.IsNullOrEmpty(npcBody.Avatar.Name))
+                {
+                    style.display = DisplayStyle.Flex;
+                    text = npcBody.Avatar.Name;
+                }
+            }
         }
     }
 }
