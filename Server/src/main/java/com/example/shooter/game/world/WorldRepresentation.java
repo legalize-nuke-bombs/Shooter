@@ -11,6 +11,7 @@ public class WorldRepresentation {
     private final UUID id;
     private final String name;
     private final Long createdAt;
+    private final Long accessedAt;
     private final WorldJoinPolicy joinPolicy;
     private final List<PlayerRepresentation> players;
 
@@ -18,6 +19,7 @@ public class WorldRepresentation {
         this.id = world.getId();
         this.name = world.getName();
         this.createdAt = world.getCreatedAt();
+        this.accessedAt = world.getAccessedAt();
         this.joinPolicy = world.getJoinPolicy();
         this.players = players;
     }
