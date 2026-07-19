@@ -27,11 +27,6 @@ namespace Shooter.Client
         public bool InWorld { get; private set; }
         public ClientWorld World { get; private set; }
 
-        public event Action<WorldJoined> WorldEntered;
-        public event Action<Snapshot> SnapshotReceived;
-        public event Action<PlayerJoined> PeerJoined;
-        public event Action<PlayerLeft> PeerLeft;
-
         private ClientWebSocket socket;
         private CancellationTokenSource cancellation;
         private readonly ConcurrentQueue<string> inbound = new ConcurrentQueue<string>();
@@ -168,18 +163,9 @@ namespace Shooter.Client
                     InWorld = true;
                     World = new ClientWorld(PlayerId);
                     Log.Info("Net: world " + worldJoined.WorldId + ", players " + worldJoined.Players.Count);
-                    WorldEntered?.Invoke(worldJoined);
                     break;
                 case MessageType.Snapshot:
-                    Snapshot snapshot = message.Read<Snapshot>();
-                    World?.Apply(snapshot);
-                    SnapshotReceived?.Invoke(snapshot);
-                    break;
-                case MessageType.PlayerJoined:
-                    PeerJoined?.Invoke(message.Read<PlayerJoined>());
-                    break;
-                case MessageType.PlayerLeft:
-                    PeerLeft?.Invoke(message.Read<PlayerLeft>());
+                    World?.Apply(message.Read<Snapshot>());
                     break;
             }
         }
