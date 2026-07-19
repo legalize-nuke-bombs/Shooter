@@ -30,6 +30,16 @@ namespace Shooter.Server.Worlds
             npcs.Add(new Npc(1, new CorruptedNameable(), scene));
         }
 
+        public void Destroy()
+        {
+            players.DestroyAll();
+            foreach (Npc npc in npcs)
+                npc.Destroy();
+            npcs.Clear();
+            SceneManager.UnloadSceneAsync(scene);
+            Log.Info("World {} destroyed, scene unloaded", Id);
+        }
+
         public int Online()
         {
             return players.Count();
