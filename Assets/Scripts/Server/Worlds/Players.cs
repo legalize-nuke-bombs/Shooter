@@ -5,13 +5,13 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Server.Worlds
 {
-    public class ServerWorldPlayers
+    public class Players
     {
         private readonly Dictionary<long, Player> players = new Dictionary<long, Player>();
         private readonly Scene scene;
         private readonly Clock clock;
 
-        public ServerWorldPlayers(Scene scene, Clock clock)
+        public Players(Scene scene, Clock clock)
         {
             this.scene = scene;
             this.clock = clock;

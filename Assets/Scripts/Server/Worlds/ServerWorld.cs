@@ -15,7 +15,7 @@ namespace Shooter.Server.Worlds
 
         private readonly Scene scene;
         private readonly Clock clock = new Clock();
-        private readonly ServerWorldPlayers players;
+        private readonly Players players;
         private readonly Sleep sleep;
         private readonly List<Npc> npcs = new List<Npc>();
 
@@ -24,7 +24,7 @@ namespace Shooter.Server.Worlds
             Id = id;
             scene = SceneManager.LoadScene("Map", new LoadSceneParameters(LoadSceneMode.Additive, LocalPhysicsMode.Physics3D));
             Log.Info("World " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
-            players = new ServerWorldPlayers(scene, clock);
+            players = new Players(scene, clock);
             sleep = new Sleep(clock, players);
             //npcs.Add(new Npc(0, new DefaultNameable("npc 0"), scene));
             npcs.Add(new Npc(1, new CorruptedNameable(), scene));
