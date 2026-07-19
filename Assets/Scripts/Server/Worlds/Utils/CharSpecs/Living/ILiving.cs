@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Entities.CharSpecs.Living
+namespace Shooter.Server.Worlds.Utils.CharSpecs.Living
 {
     public interface ILiving
     {

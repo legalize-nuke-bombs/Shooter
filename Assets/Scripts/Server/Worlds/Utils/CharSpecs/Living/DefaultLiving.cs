@@ -1,6 +1,6 @@
 using System;
 
-namespace Shooter.Server.Worlds.Entities.CharSpecs.Living
+namespace Shooter.Server.Worlds.Utils.CharSpecs.Living
 {
     public class DefaultLiving : ILiving
     {

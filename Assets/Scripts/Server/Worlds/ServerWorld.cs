@@ -4,8 +4,8 @@ using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Npcs;
-using Shooter.Server.Worlds.Entities.CharSpecs.Nameable;
-using Shooter.Server.Worlds.Entities.CharSpecs.Living;
+using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
+using Shooter.Server.Worlds.Utils.CharSpecs.Living;
 using Shooter.Server.Worlds.Entities.Sleeping;
 
 namespace Shooter.Server.Worlds
