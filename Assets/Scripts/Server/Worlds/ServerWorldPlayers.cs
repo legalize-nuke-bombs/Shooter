@@ -58,11 +58,14 @@ namespace Shooter.Server.Worlds
                 player.WakeUp();
         }
 
-        public List<PlayerState> BuildStates()
+        public Dictionary<long, PlayerState> BuildStates()
         {
-            var states = new List<PlayerState>(players.Count);
+            var states = new Dictionary<long, PlayerState>(players.Count);
             foreach (Player player in players.Values)
-                states.Add(player.State());
+            {
+                PlayerState state = player.State();
+                states[state.Id] = state;
+            }
             return states;
         }
 

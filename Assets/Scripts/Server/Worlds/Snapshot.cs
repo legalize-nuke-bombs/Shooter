@@ -10,7 +10,7 @@ namespace Shooter.Server.Worlds
     {
         public long Tick { get; set; }
         public ClockState Clock { get; set; }
-        public List<PlayerState> Players { get; set; }
+        public Dictionary<long, PlayerState> Players { get; set; }
         public List<NpcState> Npcs { get; set; }
         public SleepState Sleep { get; set; }
     }
