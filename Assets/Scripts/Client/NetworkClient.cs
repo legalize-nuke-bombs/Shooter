@@ -11,9 +11,8 @@ using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Sessions;
 using Shooter.Server.Worlds;
 using Shooter.Client.Account;
-using Shooter.Client.Entities.Players;
-using Shooter.Client.Entities.Npcs;
 using Shooter.Client.Entities.Chronology;
+using Shooter.Client.Worlds;
 using Shooter.Logging;
 
 namespace Shooter.Client
@@ -26,6 +25,7 @@ namespace Shooter.Client
 
         public long PlayerId { get; private set; } = -1;
         public bool InWorld { get; private set; }
+        public ClientWorld World { get; private set; }
 
         public event Action<WorldJoined> WorldEntered;
         public event Action<Snapshot> SnapshotReceived;
@@ -52,8 +52,6 @@ namespace Shooter.Client
 
             var go = new GameObject("Net");
             go.AddComponent<NetworkClient>();
-            go.AddComponent<PlayerAvatars>();
-            go.AddComponent<NpcAvatars>();
             go.AddComponent<ClockView>();
         }
 
@@ -67,6 +65,7 @@ namespace Shooter.Client
         private void OnDestroy()
         {
             if (Instance == this) Instance = null;
+            World?.Destroy();
             cancellation?.Cancel();
             if (socket is { State: WebSocketState.Open })
                 _ = socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "bye", CancellationToken.None);
@@ -148,6 +147,7 @@ namespace Shooter.Client
         {
             while (inbound.TryDequeue(out string json))
                 Dispatch(json);
+            World?.Interpolate(Time.deltaTime);
         }
 
         private void Dispatch(string json)
@@ -166,11 +166,14 @@ namespace Shooter.Client
                 case MessageType.WorldJoined:
                     WorldJoined worldJoined = message.Read<WorldJoined>();
                     InWorld = true;
+                    World = new ClientWorld(PlayerId);
                     Log.Info("Net: world " + worldJoined.WorldId + ", players " + worldJoined.Players.Count);
                     WorldEntered?.Invoke(worldJoined);
                     break;
                 case MessageType.Snapshot:
-                    SnapshotReceived?.Invoke(message.Read<Snapshot>());
+                    Snapshot snapshot = message.Read<Snapshot>();
+                    World?.Apply(snapshot);
+                    SnapshotReceived?.Invoke(snapshot);
                     break;
                 case MessageType.PlayerJoined:
                     PeerJoined?.Invoke(message.Read<PlayerJoined>());
