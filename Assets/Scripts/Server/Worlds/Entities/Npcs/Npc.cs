@@ -18,8 +18,7 @@ namespace Shooter.Server.Worlds.Entities.Npcs
             this.nameable = nameable;
 
             Body = new GameObject("Npc_" + id);
-            Vector3 spread = Quaternion.Euler(0f, 0f, 0f) * Vector3.forward * 16f;
-            Body.transform.position = new Vector3(spread.x, 1.1f, spread.z);
+            Body.transform.position = new Vector3(0f, 1.1f, 16f);
             SceneManager.MoveGameObjectToScene(Body, scene);
             Log.Info("Npc " + id + " body spawned at " + Body.transform.position);
         }
