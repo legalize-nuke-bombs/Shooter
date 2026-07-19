@@ -1,20 +1,20 @@
-namespace Shooter.Server.Worlds.Utils.CharSpecs.Living
+namespace Shooter.Server.Worlds.Entities.CharSpecs.Living
 {
-    public class ImmortalLiving : ILiving
+    public class DeadLiving : ILiving
     {
         public int Hp()
         {
-            return 1;
+            return 0;
         }
 
         public int MaxHp()
         {
-            return 1;
+            return 0;
         }
 
         public bool Alive()
         {
-            return true;
+            return false;
         }
 
         public void Damage(int amount)

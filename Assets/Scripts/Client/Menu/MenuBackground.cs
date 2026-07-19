@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using Shooter.Client.Ui;
 
 namespace Shooter.Client.Menu
 {
-    public class MenuBackground : VisualElement
+    public class MenuBackground : Overlay
     {
+        private const long TickMs = 16;
         private const int GradientBands = 44;
         private const int StarCount = 90;
         private const int HazePatches = 5;
@@ -18,32 +20,13 @@ namespace Shooter.Client.Menu
 
         private static readonly float[] VignetteAlphas = { 0.26f, 0.19f, 0.13f, 0.08f, 0.04f };
 
-        private float time;
-
         public MenuBackground()
         {
-            pickingMode = PickingMode.Ignore;
-            style.position = Position.Absolute;
-            style.left = 0;
-            style.top = 0;
-            style.right = 0;
-            style.bottom = 0;
-            generateVisualContent += OnGenerate;
-            schedule.Execute(Tick).Every(16);
+            Animate(TickMs);
         }
 
-        private void Tick(TimerState timer)
+        protected override void Draw(Painter2D painter, Rect rect)
         {
-            time += timer.deltaTime / 1000f;
-            MarkDirtyRepaint();
-        }
-
-        private void OnGenerate(MeshGenerationContext mgc)
-        {
-            Rect rect = mgc.visualElement.contentRect;
-            if (rect.width <= 0f || rect.height <= 0f) return;
-
-            var painter = mgc.painter2D;
             DrawSky(painter, rect);
             DrawHaze(painter, rect);
             DrawStars(painter, rect);
@@ -67,12 +50,12 @@ namespace Shooter.Client.Menu
         {
             for (int i = 0; i < HazePatches; i++)
             {
-                int hash = Hash(i, 613);
+                int hash = Noise.Hash(i, 613);
                 float width = rect.width * (0.25f + ((hash >> 4) & 0xFF) / 255f * 0.30f);
                 float height = rect.height * (0.08f + ((hash >> 12) & 0xFF) / 255f * 0.08f);
                 float y = rect.height * (((hash >> 20) & 0xFF) / 255f);
                 float speed = 3f + (hash & 0x7);
-                float x = Wrap(((hash >> 8) & 0xFFF) + time * speed, rect.width + width) - width;
+                float x = Noise.Wrap(((hash >> 8) & 0xFFF) + Seconds * speed, rect.width + width) - width;
 
                 float alpha = 0.012f + ((hash >> 16) & 0x7) * 0.0025f;
                 for (int layer = 0; layer < 3; layer++)
@@ -89,17 +72,16 @@ namespace Shooter.Client.Menu
         {
             for (int i = 0; i < StarCount; i++)
             {
-                int hash = Hash(i, 27);
+                int hash = Noise.Hash(i, 27);
                 float baseX = (hash & 0xFFF) / 4095f * rect.width;
-                // звёзды гуще к зениту: квадрат прижимает распределение вверх
                 float yNorm = ((hash >> 12) & 0xFFF) / 4095f;
                 float y = yNorm * yNorm * rect.height;
 
-                float x = Wrap(baseX + time * SkyDriftSpeed, rect.width + 4f) - 2f;
+                float x = Noise.Wrap(baseX + Seconds * SkyDriftSpeed, rect.width + 4f) - 2f;
 
                 float twinkleSpeed = 0.4f + ((hash >> 24) & 0x7) * 0.25f;
                 float phase = ((hash >> 8) & 0xFF) / 255f * 6.2832f;
-                float twinkle = 0.62f + 0.38f * Mathf.Sin(time * twinkleSpeed + phase);
+                float twinkle = 0.62f + 0.38f * Mathf.Sin(Seconds * twinkleSpeed + phase);
 
                 bool bright = (hash & 0x3F) < 5;
                 float size = bright ? 2.6f : 1f + ((hash >> 20) & 0x1);
@@ -131,28 +113,5 @@ namespace Shooter.Client.Menu
             }
         }
 
-        private static float Wrap(float value, float range)
-        {
-            float wrapped = value % range;
-            return wrapped < 0f ? wrapped + range : wrapped;
-        }
-
-        private static int Hash(int a, int b)
-        {
-            int hash = (a * 73856093) ^ (b * 19349663);
-            return (hash >> 13) ^ hash;
-        }
-
-        private static void FillRect(Painter2D painter, Rect r)
-        {
-            if (r.width <= 0f || r.height <= 0f) return;
-            painter.BeginPath();
-            painter.MoveTo(new Vector2(r.x, r.y));
-            painter.LineTo(new Vector2(r.xMax, r.y));
-            painter.LineTo(new Vector2(r.xMax, r.yMax));
-            painter.LineTo(new Vector2(r.x, r.yMax));
-            painter.ClosePath();
-            painter.Fill();
-        }
     }
 }
