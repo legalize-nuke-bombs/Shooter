@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Server.Worlds.Entities.Sleeping;
+using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
+using Shooter.Server.Worlds.Utils.CharSpecs.Living;
 
 namespace Shooter.Server.Worlds.Entities.Players
 {
@@ -15,25 +17,25 @@ namespace Shooter.Server.Worlds.Entities.Players
         private const float EyeHeight = 0.75f;
 
         public long UserId { get; }
-        public string DisplayName { get; }
         public bool Sleeping { get; private set; }
         public GameObject Body { get; private set; }
         public PlayerIntent LastInput { get; private set; } = new PlayerIntent();
 
         private readonly CharacterController controller;
+        private readonly INameable nameable;
+        private readonly ILiving living;
+        private float verticalVelocity;
+        private bool jumpQueued;
+
         private readonly Clock clock;
         private readonly PhysicsScene physics;
         private readonly Worlds.Players worldPlayers;
-        private float verticalVelocity;
-        private bool jumpQueued;
 
         public Player(long userId, string displayName, Scene scene, Clock clock, Worlds.Players worldPlayers)
         {
             UserId = userId;
-            DisplayName = displayName;
-            this.clock = clock;
-            this.worldPlayers = worldPlayers;
-            physics = scene.GetPhysicsScene();
+            nameable = new DefaultNameable(displayName);
+            living = new DefaultLiving(1000);
 
             Body = new GameObject("Player_" + userId);
             float angle = (userId * 137f) % 360f;
@@ -42,6 +44,10 @@ namespace Shooter.Server.Worlds.Entities.Players
             controller = Body.AddComponent<CharacterController>();
             SceneManager.MoveGameObjectToScene(Body, scene);
             Log.Info("User " + userId + " body spawned at " + Body.transform.position);
+
+            this.clock = clock;
+            this.worldPlayers = worldPlayers;
+            physics = scene.GetPhysicsScene();
         }
 
         public void Destroy()
@@ -141,12 +147,18 @@ namespace Shooter.Server.Worlds.Entities.Players
             return new PlayerState
             {
                 Id = UserId,
-                Name = DisplayName,
+                Name = nameable.Name(),
+
+                Alive = living.Alive(),
+                Hp = living.Hp(),
+                MaxHp = living.MaxHp(),
+
                 X = position.x,
                 Y = position.y,
                 Z = position.z,
                 Yaw = Body.transform.eulerAngles.y,
                 Pitch = LastInput.Pitch,
+
                 Sleeping = Sleeping
             };
         }
