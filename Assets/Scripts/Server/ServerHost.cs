@@ -151,11 +151,6 @@ namespace Shooter.Server
                 Players = world.BuildPlayerStates()
             }));
 
-            string joined = Message.Encode(MessageType.PlayerJoined, new PlayerJoined { Id = session.UserId, Name = session.DisplayName });
-            foreach (int connId in serverSessionGate.ConnIdsInWorld(world.Id))
-                if (connId != session.ConnId)
-                    serverTransport.Send(connId, joined);
-
             Log.Info("User " + session.UserId + " joined world " + world.Id + ", players there now " + world.Online());
         }
 
@@ -203,9 +198,6 @@ namespace Shooter.Server
             if (worlds.TryGetValue(session.WorldId, out ServerWorld world))
             {
                 world.RemovePlayer(session.UserId);
-                string left = Message.Encode(MessageType.PlayerLeft, new PlayerLeft { Id = session.UserId });
-                foreach (int otherConnId in serverSessionGate.ConnIdsInWorld(session.WorldId))
-                    serverTransport.Send(otherConnId, left);
 
                 if (world.Online() == 0)
                 {
