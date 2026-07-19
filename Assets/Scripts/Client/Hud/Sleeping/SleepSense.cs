@@ -1,51 +1,52 @@
 using UnityEngine;
 using Shooter.Client.Aiming;
+using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Entities.Sleeping;
-using Shooter.Server.Worlds;
 
 namespace Shooter.Client.Hud.Sleeping
 {
     [RequireComponent(typeof(Aim))]
     public class SleepSense : MonoBehaviour
     {
-        public bool MySleeping { get; private set; }
-        public bool WorldAsleep { get; private set; }
-        public bool CanSleep => !MySleeping && night &&
-                                (aim.Target != null) && aim.Target.Value.distance <= Sleep.UseReach && Sleep.IsBed(aim.Target.Value.collider.name);
-
         private Aim aim;
-        private bool night;
-        private NetworkClient networkClient;
-        private bool netHooked;
+
+        public bool MySleeping => Local(out PlayerState me) && me.Sleeping;
+
+        public bool WorldAsleep
+        {
+            get
+            {
+                ClientWorld world = NetworkClient.Instance?.World;
+                return world?.Sleep != null && world.Sleep.WorldAsleep;
+            }
+        }
+
+        public bool CanSleep => !MySleeping && Night
+                                && aim.Target != null
+                                && aim.Target.Value.distance <= Sleep.UseReach
+                                && Sleep.IsBed(aim.Target.Value.collider.name);
+
+        private bool Night
+        {
+            get
+            {
+                ClientWorld world = NetworkClient.Instance?.World;
+                return world?.Clock != null && DayCycle.IsNight(DayCycle.FractionOf(world.Clock.Timestamp));
+            }
+        }
 
         private void Awake()
         {
             aim = GetComponent<Aim>();
         }
 
-        private void OnDisable()
+        private bool Local(out PlayerState me)
         {
-            if (netHooked)
-                networkClient.SnapshotReceived -= OnSnapshot;
-            netHooked = false;
-        }
-
-        private void Update()
-        {
-            if (netHooked || NetworkClient.Instance == null) return;
-            networkClient = NetworkClient.Instance;
-            networkClient.SnapshotReceived += OnSnapshot;
-            netHooked = true;
-        }
-
-        private void OnSnapshot(Snapshot snapshot)
-        {
-            night = DayCycle.IsNight(DayCycle.FractionOf(snapshot.Clock.Timestamp));
-            WorldAsleep = snapshot.Sleep.WorldAsleep;
-            if (snapshot.Players.TryGetValue(networkClient.PlayerId, out PlayerState me))
-                MySleeping = me.Sleeping;
+            me = null;
+            ClientWorld world = NetworkClient.Instance?.World;
+            return world?.Players != null && world.Players.TryGetValue(world.PlayerId, out me);
         }
     }
 }
