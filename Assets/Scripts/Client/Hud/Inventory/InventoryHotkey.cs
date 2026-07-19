@@ -20,9 +20,9 @@ namespace Shooter.Client.Hud.Inventory
 
         private void Update()
         {
-            if (!Keyboard.current.tabKey.wasPressedThisFrame) return;
+            if (!Keyboard.current.iKey.wasPressedThisFrame) return;
             overlay.Toggle();
-            Log.Info("Inventory: Tab pressed, panel toggled");
+            Log.Info("Inventory: I pressed, panel toggled");
         }
     }
 }
