@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Protocol;
-using Shooter.Client.Input;
 using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Sessions;
 using Shooter.Server.Transport;
@@ -84,9 +83,6 @@ namespace Shooter.Server
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            InputController localPlayer = FindAnyObjectByType<InputController>();
-            if (localPlayer != null)
-                Destroy(localPlayer.gameObject);
             Log.Info("Scene " + scene.name + " ready");
         }
 
