@@ -1,5 +1,5 @@
 using UnityEngine;
-using Shooter.Server.Worlds;
+using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Logging;
 
@@ -24,20 +24,15 @@ namespace Shooter.Client.Entities.Chronology
             {
                 Log.Warn("Sun not found");
                 enabled = false;
-                return;
             }
-            NetworkClient.Instance.SnapshotReceived += OnSnapshot;
         }
 
-        private void OnDestroy()
+        private void Update()
         {
-            if (NetworkClient.Instance == null) return;
-            NetworkClient.Instance.SnapshotReceived -= OnSnapshot;
-        }
+            ClientWorld world = NetworkClient.Instance?.World;
+            if (world?.Clock == null) return;
 
-        private void OnSnapshot(Snapshot snapshot)
-        {
-            float dayFraction = DayCycle.FractionOf(snapshot.Clock.Timestamp);
+            float dayFraction = DayCycle.FractionOf(world.Clock.Timestamp);
             float pitch = dayFraction * 360f - 90f;
             float daylight = Mathf.Clamp01(Mathf.Sin((dayFraction - 0.25f) * Mathf.PI * 2f));
 
