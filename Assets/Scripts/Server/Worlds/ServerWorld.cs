@@ -62,7 +62,7 @@ namespace Shooter.Server.Worlds
             return clock.State();
         }
 
-        public List<PlayerState> BuildPlayerStates()
+        public Dictionary<long, PlayerState> BuildPlayerStates()
         {
             return players.BuildStates();
         }

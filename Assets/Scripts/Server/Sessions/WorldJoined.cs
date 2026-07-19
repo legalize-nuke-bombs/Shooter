@@ -6,6 +6,6 @@ namespace Shooter.Server.Sessions
     public class WorldJoined
     {
         public string WorldId { get; set; }
-        public List<PlayerState> Players { get; set; }
+        public Dictionary<long, PlayerState> Players { get; set; }
     }
 }

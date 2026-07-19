@@ -88,12 +88,10 @@ namespace Shooter.Client.Input
 
         private void OnSnapshot(Snapshot snapshot)
         {
-            foreach (PlayerState playerState in snapshot.Players)
+            if (snapshot.Players.TryGetValue(networkClient.PlayerId, out PlayerState me))
             {
-                if (playerState.Id != networkClient.PlayerId) continue;
-                targetPosition = new Vector3(playerState.X, playerState.Y, playerState.Z);
+                targetPosition = new Vector3(me.X, me.Y, me.Z);
                 positioned = true;
-                break;
             }
         }
     }
