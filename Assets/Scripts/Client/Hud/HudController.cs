@@ -16,6 +16,7 @@ namespace Shooter.Client.Hud
         {
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
             root.pickingMode = PickingMode.Ignore;
+            root.Add(new HpBar());
             root.Add(new Crosshair());
             root.Add(new TargetNameLabel(font, aim));
             root.Add(new SleepOverlay(sleepSense));

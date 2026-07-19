@@ -4,7 +4,8 @@ using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Npcs;
-using Shooter.Server.Worlds.Entities.Npcs.Specs.Nameable;
+using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
+using Shooter.Server.Worlds.Utils.CharSpecs.Living;
 using Shooter.Server.Worlds.Entities.Sleeping;
 
 namespace Shooter.Server.Worlds
@@ -27,7 +28,7 @@ namespace Shooter.Server.Worlds
             players = new Players(scene, clock);
             sleep = new Sleep(clock, players);
             //npcs.Add(new Npc(0, new DefaultNameable("npc 0"), scene));
-            npcs.Add(new Npc(1, new CorruptedNameable(), scene));
+            npcs.Add(new Npc(1, new CorruptedNameable(), new DefaultLiving(1000), scene));
         }
 
         public void Destroy()

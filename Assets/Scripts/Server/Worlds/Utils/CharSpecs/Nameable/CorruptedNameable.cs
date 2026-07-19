@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Server.Worlds.Entities.Npcs.Specs.Nameable
+namespace Shooter.Server.Worlds.Utils.CharSpecs.Nameable
 {
     public class CorruptedNameable : INameable
     {
