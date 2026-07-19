@@ -18,7 +18,7 @@ namespace Shooter.Client.Entities.Npcs
             var capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             capsule.name = "Npc_" + id;
             capsule.transform.position = position;
-            capsule.GetComponent<Renderer>().material.color = new Color(0.9f, 0.4f, 0.3f);
+            capsule.GetComponent<Renderer>().material.color = new Color(0.5f, 0.55f, 0.5f);
             NpcBody.Attach(capsule, this);
             body = capsule.transform;
             targetPosition = position;
