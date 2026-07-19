@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Server.Worlds.Entities.Sleeping;
-using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
-using Shooter.Server.Worlds.Utils.CharSpecs.Living;
+using Shooter.Server.Worlds.Entities.CharSpecs.Nameable;
+using Shooter.Server.Worlds.Entities.CharSpecs.Living;
 
 namespace Shooter.Server.Worlds.Entities.Players
 {
@@ -15,6 +15,7 @@ namespace Shooter.Server.Worlds.Entities.Players
         private const float JumpHeight = 1.2f;
         private const float Gravity = -20f;
         private const float EyeHeight = 0.75f;
+        private const int MaxHp = 1000;
 
         public long UserId { get; }
         public bool Sleeping { get; private set; }
@@ -35,7 +36,7 @@ namespace Shooter.Server.Worlds.Entities.Players
         {
             UserId = userId;
             nameable = new DefaultNameable(displayName);
-            living = new DefaultLiving(1000);
+            living = new DefaultLiving(MaxHp);
 
             Body = new GameObject("Player_" + userId);
             float angle = (userId * 137f) % 360f;
@@ -149,7 +150,6 @@ namespace Shooter.Server.Worlds.Entities.Players
                 Id = UserId,
                 Name = nameable.Name(),
 
-                Alive = living.Alive(),
                 Hp = living.Hp(),
                 MaxHp = living.MaxHp(),
 

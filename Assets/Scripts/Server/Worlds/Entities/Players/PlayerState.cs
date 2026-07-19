@@ -5,7 +5,6 @@ namespace Shooter.Server.Worlds.Entities.Players
         public long Id { get; set; }
         public string Name { get; set; }
 
-        public bool Alive { get; set; }
         public int Hp { get; set; }
         public int MaxHp { get; set; }
 

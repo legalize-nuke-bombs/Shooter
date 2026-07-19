@@ -18,6 +18,15 @@ namespace Shooter.Client.Worlds
         public SleepState Sleep { get; private set; }
         public Dictionary<long, PlayerState> Players { get; private set; }
 
+        public PlayerState Me
+        {
+            get
+            {
+                if (Players == null) return null;
+                return Players.TryGetValue(PlayerId, out PlayerState me) ? me : null;
+            }
+        }
+
         private readonly Dictionary<long, PlayerAvatar> peers = new Dictionary<long, PlayerAvatar>();
         private readonly Dictionary<long, NpcAvatar> npcs = new Dictionary<long, NpcAvatar>();
         private readonly List<long> departed = new List<long>();

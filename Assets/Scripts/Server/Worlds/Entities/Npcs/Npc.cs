@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
-using Shooter.Server.Worlds.Utils.CharSpecs.Living;
+using Shooter.Server.Worlds.Entities.CharSpecs.Nameable;
+using Shooter.Server.Worlds.Entities.CharSpecs.Living;
 
 namespace Shooter.Server.Worlds.Entities.Npcs
 {
@@ -17,8 +17,8 @@ namespace Shooter.Server.Worlds.Entities.Npcs
         public Npc(long id, INameable nameable, ILiving living, Scene scene)
         {
             Id = id;
-            this.nameable = (nameable == null) ? new Nameless() : nameable;
-            this.living = (living == null) ? new DeadLiving() : living;
+            this.nameable = nameable;
+            this.living = living;
 
             Body = new GameObject("Npc_" + id);
             Body.transform.position = new Vector3(0f, 1.1f, 16f);

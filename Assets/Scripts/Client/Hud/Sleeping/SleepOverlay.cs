@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Client.Hud.Sleeping;
+using Shooter.Client.Ui;
 
 namespace Shooter.Client.Hud.Sleeping
 {
-    public class SleepOverlay : VisualElement
+    public class SleepOverlay : Overlay
     {
         private readonly SleepSense sleepSense;
         private readonly CalmDream waiting = new CalmDream();
@@ -16,12 +16,6 @@ namespace Shooter.Client.Hud.Sleeping
             this.sleepSense = sleepSense;
             dreams = new Dream[] { waiting, new AnxiousDream() };
 
-            pickingMode = PickingMode.Ignore;
-            style.position = Position.Absolute;
-            style.left = 0;
-            style.top = 0;
-            style.right = 0;
-            style.bottom = 0;
             style.display = DisplayStyle.None;
 
             foreach (Dream dream in dreams)
