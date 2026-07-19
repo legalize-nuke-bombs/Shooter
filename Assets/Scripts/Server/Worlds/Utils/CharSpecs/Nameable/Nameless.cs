@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Entities.CharSpecs.Nameable
+namespace Shooter.Server.Worlds.Utils.CharSpecs.Nameable
 {
     public class Nameless : INameable
     {
