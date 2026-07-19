@@ -22,6 +22,7 @@ namespace Shooter.Client.Hud
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
             root.pickingMode = PickingMode.Ignore;
             root.Add(new Crosshair());
+            root.Add(new ClockLabel(font));
             root.Add(new TargetNameLabel(font, aim));
             root.Add(new SleepOverlay(sleepSense));
             root.Add(new SleepHintLabel(font, sleepSense));
