@@ -162,6 +162,7 @@ namespace Shooter.Client
                     WorldJoined worldJoined = message.Read<WorldJoined>();
                     InWorld = true;
                     World = new ClientWorld(PlayerId);
+                    Instantiate(Resources.Load<GameObject>("PlayerRig"));
                     Log.Info("Net: world " + worldJoined.WorldId + ", players " + worldJoined.Players.Count);
                     break;
                 case MessageType.Snapshot:

@@ -23,11 +23,6 @@ namespace Shooter.Client.Input
 
         private void Awake()
         {
-            if (Application.isBatchMode)
-            {
-                Destroy(gameObject);
-                return;
-            }
             cameraTransform = GetComponentInChildren<Camera>().transform;
         }
 

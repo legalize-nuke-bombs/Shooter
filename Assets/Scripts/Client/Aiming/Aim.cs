@@ -10,11 +10,6 @@ namespace Shooter.Client.Aiming
 
         private Transform cameraTransform;
 
-        private void Awake()
-        {
-            if (Application.isBatchMode) enabled = false;
-        }
-
         private void Start()
         {
             cameraTransform = GetComponentInChildren<Camera>().transform;
