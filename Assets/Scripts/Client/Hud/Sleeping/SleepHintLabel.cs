@@ -35,8 +35,15 @@ namespace Shooter.Client.Hud.Sleeping
         {
             if (sleepSense.MySleeping)
             {
-                text = "[E] Встать";
-                style.display = DisplayStyle.Flex;
+                if (sleepSense.WorldAsleep)
+                {
+                    style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    text = "[E] Встать";
+                    style.display = DisplayStyle.Flex;
+                }
             }
             else if (sleepSense.CanSleep)
             {
