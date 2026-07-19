@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Aiming;
+using Shooter.Client.Hud.Inventory;
 using Shooter.Client.Hud.Sleeping;
 
 namespace Shooter.Client.Hud
@@ -22,6 +23,10 @@ namespace Shooter.Client.Hud
             root.Add(new SleepOverlay(sleepSense));
             root.Add(new ClockLabel(font));
             root.Add(new SleepHintLabel(font, sleepSense));
+
+            var inventory = new InventoryOverlay(font);
+            root.Add(inventory);
+            gameObject.AddComponent<InventoryHotkey>().Bind(inventory);
         }
     }
 }
