@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Shooter.Server.Worlds.Entities.Players;
-using Shooter.Server.Worlds;
+using Shooter.Client.Worlds;
 
 namespace Shooter.Client.Input
 {
@@ -14,7 +14,6 @@ namespace Shooter.Client.Input
         private float pitch;
 
         private NetworkClient networkClient;
-        private bool netHooked;
         private bool jumpPending;
         private bool usePending;
         private float nextInputSendTime;
@@ -32,16 +31,11 @@ namespace Shooter.Client.Input
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        private void OnDestroy()
-        {
-            if (netHooked)
-                networkClient.SnapshotReceived -= OnSnapshot;
-        }
-
         private void Update()
         {
             Look();
             SyncWithNet();
+            Reconcile();
             if (positioned)
                 transform.position = Vector3.Lerp(transform.position, targetPosition, 1f - Mathf.Exp(-LerpFactor * Time.deltaTime));
         }
@@ -60,12 +54,10 @@ namespace Shooter.Client.Input
 
         private void SyncWithNet()
         {
-            if (!netHooked)
+            if (networkClient == null)
             {
                 if (NetworkClient.Instance == null) return;
                 networkClient = NetworkClient.Instance;
-                networkClient.SnapshotReceived += OnSnapshot;
-                netHooked = true;
             }
 
             if (!networkClient.InWorld || Time.time < nextInputSendTime) return;
@@ -86,9 +78,11 @@ namespace Shooter.Client.Input
             usePending = false;
         }
 
-        private void OnSnapshot(Snapshot snapshot)
+        private void Reconcile()
         {
-            if (snapshot.Players.TryGetValue(networkClient.PlayerId, out PlayerState me))
+            ClientWorld world = networkClient?.World;
+            if (world?.Players == null) return;
+            if (world.Players.TryGetValue(world.PlayerId, out PlayerState me))
             {
                 targetPosition = new Vector3(me.X, me.Y, me.Z);
                 positioned = true;
