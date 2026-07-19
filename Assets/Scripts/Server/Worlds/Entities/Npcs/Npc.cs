@@ -24,6 +24,12 @@ namespace Shooter.Server.Worlds.Entities.Npcs
             Log.Info("Npc " + id + " body spawned at " + Body.transform.position);
         }
 
+        public void Destroy()
+        {
+            Object.Destroy(Body);
+            Body = null;
+        }
+
         public void Tick(float dt)
         {
 

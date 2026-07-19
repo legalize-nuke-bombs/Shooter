@@ -210,6 +210,13 @@ namespace Shooter.Server
                 string left = Message.Encode(MessageType.PlayerLeft, new PlayerLeft { Id = session.UserId });
                 foreach (int otherConnId in serverSessionGate.ConnIdsInWorld(session.WorldId))
                     serverTransport.Send(otherConnId, left);
+
+                if (world.Online() == 0)
+                {
+                    world.Destroy();
+                    worlds.Remove(session.WorldId);
+                    Log.Info("World {} evicted, empty", session.WorldId);
+                }
             }
 
             Log.Info("User " + session.UserId + " disconnected from world " + session.WorldId + ", sessions total " + serverSessionGate.Count);

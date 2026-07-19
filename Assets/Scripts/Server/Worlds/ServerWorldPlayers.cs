@@ -58,6 +58,13 @@ namespace Shooter.Server.Worlds
                 player.WakeUp();
         }
 
+        public void DestroyAll()
+        {
+            foreach (Player player in players.Values)
+                player.Destroy();
+            players.Clear();
+        }
+
         public Dictionary<long, PlayerState> BuildStates()
         {
             var states = new Dictionary<long, PlayerState>(players.Count);
