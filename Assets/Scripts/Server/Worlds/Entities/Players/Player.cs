@@ -3,8 +3,10 @@ using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Server.Worlds.Entities.Sleeping;
+using Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper;
 using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
 using Shooter.Server.Worlds.Utils.CharSpecs.Living;
+using Shooter.Server.Worlds.Utils.Items;
 
 namespace Shooter.Server.Worlds.Entities.Players
 {
@@ -25,6 +27,7 @@ namespace Shooter.Server.Worlds.Entities.Players
         private readonly CharacterController controller;
         private readonly INameable nameable;
         private readonly ILiving living;
+        private readonly IInventoryKeeper inventoryKeeper;
         private float verticalVelocity;
         private bool jumpQueued;
 
@@ -37,6 +40,10 @@ namespace Shooter.Server.Worlds.Entities.Players
             UserId = userId;
             nameable = new DefaultNameable(displayName);
             living = new DefaultLiving(MaxHp);
+
+            inventoryKeeper = new DefaultInventoryKeeper();
+            inventoryKeeper.Take(StackableItem.Currency, 1000);
+            inventoryKeeper.Take(StackableItem.Ammo762x39, 100);
 
             Body = new GameObject("Player_" + userId);
             float angle = (userId * 137f) % 360f;
@@ -152,6 +159,8 @@ namespace Shooter.Server.Worlds.Entities.Players
 
                 Hp = living.Hp(),
                 MaxHp = living.MaxHp(),
+
+                InventoryState = inventoryKeeper.State(),
 
                 X = position.x,
                 Y = position.y,
