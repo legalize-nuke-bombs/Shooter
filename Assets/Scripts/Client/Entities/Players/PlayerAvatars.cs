@@ -30,7 +30,7 @@ namespace Shooter.Client.Entities.Players
 
         private void OnSnapshot(Snapshot snapshot)
         {
-            foreach (PlayerState state in snapshot.Players)
+            foreach (PlayerState state in snapshot.Players.Values)
             {
                 if (state.Id == NetworkClient.Instance.PlayerId) continue;
                 if (!avatars.TryGetValue(state.Id, out PlayerAvatar avatar))

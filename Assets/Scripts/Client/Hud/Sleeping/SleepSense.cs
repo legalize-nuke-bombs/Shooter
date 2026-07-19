@@ -44,12 +44,8 @@ namespace Shooter.Client.Hud.Sleeping
         {
             night = ClockState.IsNight(snapshot.Clock.Fraction());
             WorldAsleep = snapshot.Sleep.WorldAsleep;
-            foreach (PlayerState state in snapshot.Players)
-            {
-                if (state.Id != networkClient.PlayerId) continue;
-                MySleeping = state.Sleeping;
-                break;
-            }
+            if (snapshot.Players.TryGetValue(networkClient.PlayerId, out PlayerState me))
+                MySleeping = me.Sleeping;
         }
     }
 }
