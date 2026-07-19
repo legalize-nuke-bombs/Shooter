@@ -4,6 +4,7 @@ namespace Shooter.Server.Worlds.Entities.Npcs
     {
         public long Id { get; set; }
         public string Name { get; set; }
+        public bool Alive { get; set; }
 
         public float X { get; set; }
         public float Y { get; set; }
