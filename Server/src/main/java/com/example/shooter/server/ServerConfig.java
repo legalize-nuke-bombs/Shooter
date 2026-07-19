@@ -12,7 +12,7 @@ public class ServerConfig {
             "Shooter Server Main",
                 0,
                 0,
-                1
+                2
         );
     }
 }
