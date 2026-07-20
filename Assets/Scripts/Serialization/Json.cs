@@ -11,6 +11,7 @@ namespace Shooter.Serialization
         {
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            TypeNameHandling = TypeNameHandling.Auto,
             Converters = { new StringEnumConverter() }
         };
 
