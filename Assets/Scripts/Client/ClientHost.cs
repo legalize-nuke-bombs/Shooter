@@ -103,7 +103,7 @@ namespace Shooter.Client
             clientTransport.Connected += OnConnected;
             clientTransport.MessageReceived += OnMessageReceived;
             clientTransport.Connect(Session.WsUrl);
-            Log.Info("Client: connecting to " + Session.WsUrl);
+            Log.Info("Client: connecting to {}", Session.WsUrl);
         }
 
         private static void LoadMap()
@@ -117,7 +117,7 @@ namespace Shooter.Client
         private void OnConnected()
         {
             clientTransport.Send(Message.Encode(MessageType.Hello, new Hello { Name = Session.DisplayName }));
-            Log.Info("Client: hello sent as '" + Session.DisplayName + "'");
+            Log.Info("Client: hello sent as '{}'", Session.DisplayName);
         }
 
         private void OnMessageReceived(string json)
@@ -130,13 +130,13 @@ namespace Shooter.Client
                 case MessageType.Welcome:
                     Welcome welcome = message.Read<Welcome>();
                     playerId = welcome.PlayerId;
-                    Log.Info("Client: welcome, player " + playerId + ", tick rate " + welcome.TickRate);
+                    Log.Info("Client: welcome, player {}, tick rate {}", playerId, welcome.TickRate);
                     clientTransport.Send(Message.Encode(MessageType.JoinWorld, new JoinWorld()));
                     break;
                 case MessageType.WorldJoined:
                     WorldJoined worldJoined = message.Read<WorldJoined>();
                     BuildWorld();
-                    Log.Info("Client: joined world " + worldJoined.WorldId + ", players there " + worldJoined.Players.Count);
+                    Log.Info("Client: joined world {}, players there {}", worldJoined.WorldId, worldJoined.Players.Count);
                     break;
                 case MessageType.Snapshot:
                     world?.Apply(message.Read<Snapshot>());
@@ -153,7 +153,7 @@ namespace Shooter.Client
             sky = new ClockView(world);
 
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            Log.Info("Client: rig, hud and sky built for player " + playerId);
+            Log.Info("Client: rig, hud and sky built for player {}", playerId);
         }
 
         private void Teardown()

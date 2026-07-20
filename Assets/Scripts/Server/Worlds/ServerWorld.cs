@@ -24,7 +24,7 @@ namespace Shooter.Server.Worlds
         {
             Id = id;
             scene = SceneManager.LoadScene("Map", new LoadSceneParameters(LoadSceneMode.Additive, LocalPhysicsMode.Physics3D));
-            Log.Info("World " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
+            Log.Info("World {} built: additive physics copy of Map, scene handle {}", id, scene.handle);
             players = new Players(scene, clock);
             sleep = new Sleep(clock, players);
             npcs.Add(Npc.Spawn(1, "npc 0", new Vector3(0f, 1.1f, 16f), scene));
