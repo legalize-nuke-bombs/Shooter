@@ -2,181 +2,68 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Chronology;
-using Shooter.Server.Worlds.Entities.Sleeping;
-using Shooter.Server.Worlds.Utils.Specs.InventoryKeeper;
-using Shooter.Server.Worlds.Utils.Specs.Nameable;
-using Shooter.Server.Worlds.Utils.Specs.Living;
-using Shooter.Server.Worlds.Utils.Specs.Shooter;
+using Shooter.Server.Worlds.Entities.Parts;
 using Shooter.Server.Worlds.Utils.Inventories;
 using Shooter.Server.Worlds.Utils.Items;
 using Shooter.Server.Worlds.Utils.Items.Firearm;
 
 namespace Shooter.Server.Worlds.Entities.Players
 {
-    public class Player
+    public static class Player
     {
-        private const float WalkSpeed = 5f;
-        private const float SprintSpeed = 8f;
-        private const float JumpHeight = 1.2f;
-        private const float Gravity = -20f;
-        private const float EyeHeight = 0.75f;
         private const int MaxHp = 1000;
 
-        public long UserId { get; }
-        public bool Sleeping { get; private set; }
-        public GameObject Body { get; private set; }
-        public PlayerIntent LastInput { get; private set; } = new PlayerIntent();
-
-        private readonly CharacterController controller;
-        private readonly INameable nameable;
-        private readonly ILiving living;
-        private readonly IInventoryKeeper inventoryKeeper;
-        private readonly IShooter shooter;
-        private float verticalVelocity;
-        private bool jumpQueued;
-
-        private readonly Clock clock;
-        private readonly PhysicsScene physics;
-        private readonly Worlds.Players worldPlayers;
-
-        public Player(long userId, string displayName, Scene scene, Clock clock, Worlds.Players worldPlayers)
+        public static Entity Spawn(long userId, string displayName, Scene scene, Clock clock, Worlds.Players worldPlayers)
         {
-            UserId = userId;
-            nameable = new DefaultNameable(displayName);
-            living = new DefaultLiving(MaxHp);
-
-            inventoryKeeper = new DefaultInventoryKeeper(new Inventory());
-            inventoryKeeper.Take(StackableItem.Currency, 1000);
-            inventoryKeeper.Take(StackableItem.Ammo762X39, 100);
-            inventoryKeeper.Take(new Ak47(0, 30));
-            inventoryKeeper.Equip(0);
-
-            shooter = new DefaultShooter();
-
-            Body = new GameObject("Player_" + userId);
+            var body = new GameObject("Player_" + userId);
             float angle = (userId * 137f) % 360f;
             Vector3 spread = Quaternion.Euler(0f, angle, 0f) * Vector3.forward * 16f;
-            Body.transform.position = new Vector3(spread.x, 1.1f, spread.z);
-            controller = Body.AddComponent<CharacterController>();
-            SceneManager.MoveGameObjectToScene(Body, scene);
-            Log.Info("User " + userId + " body spawned at " + Body.transform.position);
+            body.transform.position = new Vector3(spread.x, 1.1f, spread.z);
+            CharacterController controller = body.AddComponent<CharacterController>();
+            SceneManager.MoveGameObjectToScene(body, scene);
 
-            this.clock = clock;
-            this.worldPlayers = worldPlayers;
-            physics = scene.GetPhysicsScene();
+            var player = new Entity(userId, body);
+            player.Add(new Nameable(displayName));
+            player.Add(new Health(MaxHp));
+
+            var inventory = new Inventory();
+            inventory.Add(StackableItem.Currency, 1000);
+            inventory.Add(StackableItem.Ammo762X39, 100);
+            inventory.Add(new Ak47(0, 30));
+            inventory.Equip(0);
+            player.Add(inventory);
+
+            player.Add(new Pilot(controller, clock, scene.GetPhysicsScene(), worldPlayers));
+            EntityBody.Bind(body, userId);
+
+            Log.Info("Player {} '{}' spawned at {}", userId, displayName, body.transform.position);
+            return player;
         }
 
-        public void Destroy()
+        public static PlayerState StateOf(Entity player)
         {
-            if (Body != null) Object.Destroy(Body);
-            Body = null;
-        }
-
-        public void WakeUp()
-        {
-            if (!Sleeping) return;
-            Sleeping = false;
-            Log.Info("User " + UserId + " woke up");
-        }
-
-        public void Tick(float dt)
-        {
-            if (Sleeping) return;
-
-            Transform body = Body.transform;
-            body.rotation = Quaternion.Euler(0f, LastInput.Yaw, 0f);
-
-            Vector3 direction = Vector3.ClampMagnitude(body.right * LastInput.MoveX + body.forward * LastInput.MoveZ, 1f);
-            float speed = LastInput.Sprint ? SprintSpeed : WalkSpeed;
-
-            if (controller.isGrounded)
-            {
-                verticalVelocity = -2f;
-                if (jumpQueued)
-                    verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-            }
-            jumpQueued = false;
-
-            verticalVelocity += Gravity * dt;
-            controller.Move((direction * speed + Vector3.up * verticalVelocity) * dt);
-        }
-
-        public void ApplyInput(PlayerIntent input)
-        {
-            input.MoveX = Finite(input.MoveX);
-            input.MoveZ = Finite(input.MoveZ);
-            input.Yaw = Finite(input.Yaw);
-            input.Pitch = Finite(input.Pitch);
-            LastInput = input;
-
-            if (Sleeping)
-            {
-                if ((input.Use || input.Jump) && !worldPlayers.AllAsleep()) WakeUp();
-                return;
-            }
-            if (input.Use)
-            {
-                TrySleep();
-                if (Sleeping) return;
-            }
-            if (input.Jump) jumpQueued = true;
-        }
-
-        private void TrySleep()
-        {
-            if (!clock.IsNight())
-            {
-                Log.Info("User " + UserId + " tried to sleep in daytime, ignored");
-                return;
-            }
-            if (!LookingAtBed())
-            {
-                Log.Info("User " + UserId + " tried to sleep with no bed in sight, ignored");
-                return;
-            }
-            Sleeping = true;
-            Log.Info("User " + UserId + " fell asleep at " + Body.transform.position);
-        }
-
-        private bool LookingAtBed()
-        {
-            Ray look = LookRay();
-            return physics.Raycast(look.origin, look.direction, out RaycastHit hit, Sleep.UseReach)
-                   && Sleep.IsBed(hit.transform.name);
-        }
-
-        private Ray LookRay()
-        {
-            Vector3 eyes = Body.transform.position + Vector3.up * EyeHeight;
-            Quaternion look = Quaternion.Euler(LastInput.Pitch, LastInput.Yaw, 0f);
-            return new Ray(eyes, look * Vector3.forward);
-        }
-
-        private static float Finite(float value)
-        {
-            return float.IsFinite(value) ? value : 0f;
-        }
-
-        public PlayerState State()
-        {
-            Vector3 position = Body.transform.position;
+            Vector3 position = player.Body.transform.position;
+            Pilot pilot = player.Get<Pilot>();
+            Health health = player.Get<Health>();
+            Nameable nameable = player.Get<Nameable>();
+            Inventory inventory = player.Get<Inventory>();
             return new PlayerState
             {
-                Id = UserId,
-                Name = nameable.Name(),
+                Id = player.Id,
+                Name = nameable == null ? "" : nameable.Name,
 
-                Hp = living.Hp(),
-                MaxHp = living.MaxHp(),
+                Hp = health == null ? 0 : health.Hp,
+                MaxHp = health == null ? 0 : health.MaxHp,
 
-                InventoryState = inventoryKeeper.State(),
+                InventoryState = inventory == null ? null : inventory.State(),
 
                 X = position.x,
                 Y = position.y,
                 Z = position.z,
-                Yaw = Body.transform.eulerAngles.y,
-                Pitch = LastInput.Pitch,
+                Yaw = player.Body.transform.eulerAngles.y,
+                Pitch = pilot == null ? 0f : pilot.LastInput.Pitch,
 
-                Sleeping = Sleeping
+                Sleeping = pilot != null && pilot.Sleeping
             };
         }
     }
