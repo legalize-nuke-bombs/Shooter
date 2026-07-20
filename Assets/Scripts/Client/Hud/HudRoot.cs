@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Shooter.Client.Aiming;
+using Shooter.Client.Hud.Hands;
 using Shooter.Client.Hud.Inventory;
 using Shooter.Client.Hud.Sleeping;
 using Shooter.Client.Worlds;
@@ -21,6 +22,7 @@ namespace Shooter.Client.Hud
             var sleepSense = new SleepSense(world, aim);
 
             root.pickingMode = PickingMode.Ignore;
+            root.Add(new HandsOverlay(world));
             root.Add(new HpBar(world));
             root.Add(new Crosshair());
             root.Add(new TargetNameLabel(font, aim));

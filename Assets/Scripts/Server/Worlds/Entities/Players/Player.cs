@@ -49,6 +49,7 @@ namespace Shooter.Server.Worlds.Entities.Players
             inventoryKeeper.Take(StackableItem.Currency, 1000);
             inventoryKeeper.Take(StackableItem.Ammo762X39, 100);
             inventoryKeeper.Take(new Ak47(0, 30));
+            inventoryKeeper.Equip(0);
 
             shooter = new DefaultShooter();
 

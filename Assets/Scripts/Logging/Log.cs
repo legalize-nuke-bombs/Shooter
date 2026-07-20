@@ -9,23 +9,23 @@ namespace Shooter.Logging
 {
     public static class Log
     {
+        private static readonly bool BatchMode;
+
         static Log()
         {
-            if (!Application.isBatchMode) return;
-            Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
-            Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+            BatchMode = Application.isBatchMode;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Info(string template, params object[] args)
         {
-            Debug.Log(Line("INFO ", Caller(), template, args));
+            Debug.Log(Line("INFO", Caller(), template, args));
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Warn(string template, params object[] args)
         {
-            Debug.LogWarning(Line("WARN ", Caller(), template, args));
+            Debug.LogWarning(Line("WARN", Caller(), template, args));
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -36,7 +36,7 @@ namespace Shooter.Logging
 
         private static string Line(string level, string caller, string template, object[] args)
         {
-            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + level + " [" + ThreadName() + "] " + caller + ": " + Format(template, args);
+            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + level + " [" + (BatchMode ? "Server" : "Client") + "] [" + ThreadName() + "] " + caller + ": " + Format(template, args);
         }
 
         private static string Format(string template, object[] args)
