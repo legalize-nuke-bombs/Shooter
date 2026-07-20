@@ -6,6 +6,8 @@ using Shooter.Server.Worlds.Entities.Sleeping;
 using Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper;
 using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
 using Shooter.Server.Worlds.Utils.CharSpecs.Living;
+using Shooter.Server.Worlds.Utils.CharSpecs.Shooter;
+using Shooter.Server.Worlds.Utils.Inventories;
 using Shooter.Server.Worlds.Utils.Items;
 
 namespace Shooter.Server.Worlds.Entities.Players
@@ -28,6 +30,7 @@ namespace Shooter.Server.Worlds.Entities.Players
         private readonly INameable nameable;
         private readonly ILiving living;
         private readonly IInventoryKeeper inventoryKeeper;
+        private readonly IShooter shooter;
         private float verticalVelocity;
         private bool jumpQueued;
 
@@ -41,9 +44,11 @@ namespace Shooter.Server.Worlds.Entities.Players
             nameable = new DefaultNameable(displayName);
             living = new DefaultLiving(MaxHp);
 
-            inventoryKeeper = new DefaultInventoryKeeper();
+            inventoryKeeper = new DefaultInventoryKeeper(new Inventory());
             inventoryKeeper.Take(StackableItem.Currency, 1000);
             inventoryKeeper.Take(StackableItem.Ammo762X39, 100);
+
+            shooter = new DefaultShooter();
 
             Body = new GameObject("Player_" + userId);
             float angle = (userId * 137f) % 360f;

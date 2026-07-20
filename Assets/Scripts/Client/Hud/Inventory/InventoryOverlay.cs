@@ -67,7 +67,7 @@ namespace Shooter.Client.Hud.Inventory
 
             if (state?.Unique != null)
             {
-                foreach (UniqueItemState item in state.Unique)
+                foreach (UniqueItemState item in state.Unique.Values)
                     frame.Add(Line(item.GetType().Name + "   #" + item.Id));
             }
         }

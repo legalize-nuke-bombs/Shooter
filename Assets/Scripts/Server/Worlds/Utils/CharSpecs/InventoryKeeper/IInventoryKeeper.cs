@@ -9,6 +9,12 @@ namespace Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper
 
         void Take(UniqueItem item);
 
+        UniqueItem Equipted();
+
+        int Amount(StackableItem item);
+
+        int Drop(StackableItem item, int amount, InventoryOnConflictAction action);
+
         InventoryState State();
     }
 }

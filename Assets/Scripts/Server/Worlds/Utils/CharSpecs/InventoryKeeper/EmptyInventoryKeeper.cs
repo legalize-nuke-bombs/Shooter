@@ -15,6 +15,21 @@ namespace Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper
 
         }
 
+        public UniqueItem Equipted()
+        {
+            return null;
+        }
+
+        public int Amount(StackableItem item)
+        {
+            return 0;
+        }
+
+        public int Drop(StackableItem item, int amount, InventoryOnConflictAction action)
+        {
+            return 0;
+        }
+
         public InventoryState State()
         {
             return new InventoryState();
