@@ -8,7 +8,7 @@ using Shooter.Server.Worlds.Entities.Parts.Inventory;
 
 namespace Shooter.Server.Worlds.Entities.Spawning
 {
-    public static class Npc
+    public static class NpcSpawner
     {
         private const int MaxHp = 1000;
 

@@ -12,7 +12,7 @@ using Shooter.Server.Worlds.Items.Firearm;
 
 namespace Shooter.Server.Worlds.Entities.Spawning
 {
-    public static class Player
+    public static class PlayerSpawner
     {
         private const int MaxHp = 1000;
 
