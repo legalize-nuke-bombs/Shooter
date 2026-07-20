@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Parts.Health;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
-using Shooter.Server.Worlds.Utils.Inventories;
+using Shooter.Server.Worlds.Entities.Parts.Inventory;
 
-namespace Shooter.Server.Worlds.Entities.Npcs
+namespace Shooter.Server.Worlds.Entities.Spawning
 {
     public static class Npc
     {

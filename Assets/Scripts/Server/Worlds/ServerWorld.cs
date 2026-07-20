@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Players;
-using Shooter.Server.Worlds.Entities.Chronology;
+using Shooter.Server.Worlds.Entities.Parts;
+using Shooter.Server.Worlds.Time;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Npcs;
-using Shooter.Server.Worlds.Entities.Sleeping;
+using Shooter.Server.Worlds.Sleeping;
 
 namespace Shooter.Server.Worlds
 {

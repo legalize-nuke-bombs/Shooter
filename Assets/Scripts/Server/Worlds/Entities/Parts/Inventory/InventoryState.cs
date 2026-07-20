@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Utils.Items;
+using Shooter.Server.Worlds.Items;
 
-namespace Shooter.Server.Worlds.Utils.Inventories
+namespace Shooter.Server.Worlds.Entities.Parts.Inventory
 {
     public class InventoryState : PartState
     {

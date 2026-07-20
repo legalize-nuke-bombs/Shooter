@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Entities.Chronology
+namespace Shooter.Server.Worlds.Time
 {
     public static class DayCycle
     {

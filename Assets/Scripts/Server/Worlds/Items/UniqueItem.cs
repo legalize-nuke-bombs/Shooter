@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Utils.Items
+namespace Shooter.Server.Worlds.Items
 {
     public abstract class UniqueItem
     {

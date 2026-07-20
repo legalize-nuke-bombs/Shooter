@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Protocol;
-using Shooter.Server.Worlds.Entities.Players;
+using Shooter.Server.Worlds.Entities.Parts;
 using Shooter.Server.Sessions;
 using Shooter.Server.Transport;
 using Shooter.Server.Worlds;

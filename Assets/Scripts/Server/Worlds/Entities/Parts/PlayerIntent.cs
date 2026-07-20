@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Entities.Players
+namespace Shooter.Server.Worlds.Entities.Parts
 {
     public class PlayerIntent
     {

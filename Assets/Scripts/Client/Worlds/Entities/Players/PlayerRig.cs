@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Shooter.Client.Aiming;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Players;
+using Shooter.Server.Worlds.Entities.Parts;
 
 namespace Shooter.Client.Worlds.Entities.Players
 {
