@@ -7,8 +7,11 @@ namespace Shooter.Client.Hud
 {
     public class ClockLabel : HudLabel
     {
-        public ClockLabel(Font font) : base(font)
+        private readonly ClientWorld world;
+
+        public ClockLabel(Font font, ClientWorld world) : base(font)
         {
+            this.world = world;
             style.top = 12;
             style.right = 16;
             style.unityTextAlign = TextAnchor.MiddleRight;
@@ -17,8 +20,7 @@ namespace Shooter.Client.Hud
 
         protected override void Refresh()
         {
-            ClientWorld world = NetworkClient.Instance?.World;
-            if (world?.Clock == null)
+            if (world.Clock == null)
             {
                 style.display = DisplayStyle.None;
                 return;

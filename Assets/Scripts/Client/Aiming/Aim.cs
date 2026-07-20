@@ -2,20 +2,20 @@ using UnityEngine;
 
 namespace Shooter.Client.Aiming
 {
-    public class Aim : MonoBehaviour
+    public class Aim
     {
         private const float Range = 1000f;
 
         public RaycastHit? Target { get; private set; }
 
-        private Transform cameraTransform;
+        private readonly Transform cameraTransform;
 
-        private void Start()
+        public Aim(Transform cameraTransform)
         {
-            cameraTransform = GetComponentInChildren<Camera>().transform;
+            this.cameraTransform = cameraTransform;
         }
 
-        private void Update()
+        public void Tick()
         {
             Target = Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, Range)
                 ? hit
