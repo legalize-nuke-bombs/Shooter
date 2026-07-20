@@ -1,5 +1,3 @@
-using Shooter.Server.Worlds.Utils.Specs.InventoryKeeper;
-
 namespace Shooter.Server.Worlds.Utils.Items.Firearm
 {
     public abstract class Firearm : UniqueItem
