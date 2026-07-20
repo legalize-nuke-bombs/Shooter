@@ -1,29 +1,29 @@
 using System;
 
-namespace Shooter.Server.Worlds.Entities.Parts
+namespace Shooter.Server.Worlds.Entities.Parts.Health
 {
-    public sealed class Health : Part
+    public sealed class DefaultHealth : Health
     {
         private readonly int max;
         private int hp;
 
-        public Health(int max)
+        public DefaultHealth(int max)
         {
             this.max = Math.Max(max, 1);
             hp = this.max;
         }
 
-        public int Hp => hp;
-        public int MaxHp => max;
-        public bool Alive => hp > 0;
+        public override int Hp => hp;
+        public override int MaxHp => max;
+        public override bool Alive => hp > 0;
 
-        public void Damage(int amount)
+        public override void Damage(int amount)
         {
             if (Alive && amount > 0)
                 hp = Math.Max(hp - amount, 0);
         }
 
-        public void Heal(int amount)
+        public override void Heal(int amount)
         {
             if (Alive && amount > 0)
                 hp = Math.Min(hp + amount, max);

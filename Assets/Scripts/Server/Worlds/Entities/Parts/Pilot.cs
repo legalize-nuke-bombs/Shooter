@@ -61,6 +61,11 @@ namespace Shooter.Server.Worlds.Entities.Parts
             Log.Info("Pilot at {} woke up", controller.transform.position);
         }
 
+        public override PartState State()
+        {
+            return new PilotState { Pitch = LastInput.Pitch, Sleeping = Sleeping };
+        }
+
         public override void Tick(Entity self, float dt)
         {
             if (Sleeping) return;
