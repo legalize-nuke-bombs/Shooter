@@ -7,13 +7,14 @@ using Shooter.Server.Worlds.Entities.Npcs;
 using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
 using Shooter.Server.Worlds.Utils.CharSpecs.Living;
 using Shooter.Server.Worlds.Entities.Sleeping;
+using Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper;
+using Shooter.Server.Worlds.Utils.CharSpecs.Shooter;
+using Shooter.Server.Worlds.Utils.Inventories;
 
 namespace Shooter.Server.Worlds
 {
     public class ServerWorld
     {
-        private const int NpcMaxHp = 1000;
-
         public string Id { get; }
 
         private readonly Scene scene;
@@ -29,7 +30,15 @@ namespace Shooter.Server.Worlds
             Log.Info("World " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
             players = new Players(scene, clock);
             sleep = new Sleep(clock, players);
-            npcs.Add(new Npc(1, new CorruptedNameable(), new DefaultLiving(NpcMaxHp), scene));
+            npcs.Add(
+                new Npc(
+                    1,
+                    new DefaultNameable("npc 0"),
+                    new DefaultLiving(1000),
+                    new DefaultInventoryKeeper(new Inventory()),
+                    new DefaultShooter(),
+                    scene)
+                );
         }
 
         public void Destroy()

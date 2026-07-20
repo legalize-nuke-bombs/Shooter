@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
+using Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper;
 using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
 using Shooter.Server.Worlds.Utils.CharSpecs.Living;
+using Shooter.Server.Worlds.Utils.CharSpecs.Shooter;
 
 namespace Shooter.Server.Worlds.Entities.Npcs
 {
@@ -13,12 +15,16 @@ namespace Shooter.Server.Worlds.Entities.Npcs
 
         private readonly INameable nameable;
         private readonly ILiving living;
+        private readonly IInventoryKeeper inventoryKeeper;
+        private readonly IShooter shooter;
 
-        public Npc(long id, INameable nameable, ILiving living, Scene scene)
+        public Npc(long id, INameable nameable, ILiving living, IInventoryKeeper inventoryKeeper, IShooter shooter, Scene scene)
         {
             Id = id;
             this.nameable = nameable;
             this.living = living;
+            this.inventoryKeeper = inventoryKeeper;
+            this.shooter = shooter;
 
             Body = new GameObject("Npc_" + id);
             Body.transform.position = new Vector3(0f, 1.1f, 16f);
@@ -43,8 +49,11 @@ namespace Shooter.Server.Worlds.Entities.Npcs
             return new NpcState
             {
                 Id = Id,
+
                 Name = nameable.Name(),
                 Alive = living.Alive(),
+                InventoryState = inventoryKeeper.State(),
+
                 X = position.x,
                 Y = position.y,
                 Z = position.z,
