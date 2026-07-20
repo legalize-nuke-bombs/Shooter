@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Logging;
+using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Utils.Items;
 
 namespace Shooter.Server.Worlds.Utils.Inventories
 {
-    public class Inventory
+    public class Inventory : Part
     {
         private readonly Dictionary<StackableItem, int> stacks = new Dictionary<StackableItem, int>();
         private readonly Dictionary<long, UniqueItem> unique = new Dictionary<long, UniqueItem>();
@@ -28,7 +29,7 @@ namespace Shooter.Server.Worlds.Utils.Inventories
 
         public int Remove(StackableItem item, int amount, InventoryOnConflictAction action)
         {
-            int current = stacks.GetValueOrDefault(item, 0) + amount;
+            int current = stacks.GetValueOrDefault(item, 0);
 
             switch (action)
             {
@@ -81,7 +82,8 @@ namespace Shooter.Server.Worlds.Utils.Inventories
             return new InventoryState
             {
                 Stacks = new Dictionary<StackableItem, int>(stacks),
-                Unique = uniqueStates
+                Unique = uniqueStates,
+                EquiptedId = equiptedId
             };
         }
     }
