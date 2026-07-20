@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Ui;
+using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities.Players;
 
 namespace Shooter.Client.Hud
@@ -16,14 +17,17 @@ namespace Shooter.Client.Hud
         private static readonly Color TrackColor = new Color(0f, 0f, 0f);
         private static readonly Color FillColor = new Color(0.5f, 0f, 0f);
 
-        public HpBar()
+        private readonly ClientWorld world;
+
+        public HpBar(ClientWorld world)
         {
+            this.world = world;
             Animate(RefreshMs);
         }
 
         protected override void Draw(Painter2D painter, Rect rect)
         {
-            PlayerState me = NetworkClient.Instance?.World?.Me;
+            PlayerState me = world.Me;
             if (me == null) return;
 
             float left = rect.width * RelOffsetX;

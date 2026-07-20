@@ -1,4 +1,3 @@
-using UnityEngine;
 using Shooter.Client.Aiming;
 using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities.Chronology;
@@ -7,46 +6,33 @@ using Shooter.Server.Worlds.Entities.Sleeping;
 
 namespace Shooter.Client.Hud.Sleeping
 {
-    [RequireComponent(typeof(Aim))]
-    public class SleepSense : MonoBehaviour
+    public class SleepSense
     {
-        private Aim aim;
+        private readonly ClientWorld world;
+        private readonly Aim aim;
+
+        public SleepSense(ClientWorld world, Aim aim)
+        {
+            this.world = world;
+            this.aim = aim;
+        }
 
         public bool MySleeping
         {
             get
             {
-                PlayerState me = NetworkClient.Instance?.World?.Me;
+                PlayerState me = world.Me;
                 return me != null && me.Sleeping;
             }
         }
 
-        public bool WorldAsleep
-        {
-            get
-            {
-                ClientWorld world = NetworkClient.Instance?.World;
-                return world?.Sleep != null && world.Sleep.WorldAsleep;
-            }
-        }
+        public bool WorldAsleep => world.Sleep != null && world.Sleep.WorldAsleep;
 
         public bool CanSleep => !MySleeping && Night
                                 && aim.Target != null
                                 && aim.Target.Value.distance <= Sleep.UseReach
                                 && Sleep.IsBed(aim.Target.Value.collider.name);
 
-        private bool Night
-        {
-            get
-            {
-                ClientWorld world = NetworkClient.Instance?.World;
-                return world?.Clock != null && DayCycle.IsNight(DayCycle.FractionOf(world.Clock.Timestamp));
-            }
-        }
-
-        private void Awake()
-        {
-            aim = GetComponent<Aim>();
-        }
+        private bool Night => world.Clock != null && DayCycle.IsNight(DayCycle.FractionOf(world.Clock.Timestamp));
     }
 }

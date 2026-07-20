@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Shooter.Logging;
 
 namespace Shooter.Client
 {
@@ -11,22 +9,9 @@ namespace Shooter.Client
         {
             if (Application.isBatchMode) return;
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            if (SceneManager.GetActiveScene().name == "Game")
-                LoadMap();
-        }
-
-        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (scene.name == "Game")
-                LoadMap();
-        }
-
-        private static void LoadMap()
-        {
-            if (SceneManager.GetSceneByName("Map").isLoaded) return;
-            SceneManager.LoadScene("Map", LoadSceneMode.Additive);
-            Log.Info("Client: Map loaded additively for render");
+            var go = new GameObject("ClientHost");
+            Object.DontDestroyOnLoad(go);
+            go.AddComponent<ClientHost>();
         }
     }
 }

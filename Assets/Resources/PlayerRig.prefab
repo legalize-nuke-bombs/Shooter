@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5563014706874718404}
   - component: {fileID: 7101866738405288734}
-  - component: {fileID: 814197832995006856}
-  - component: {fileID: 1235526216280385133}
   m_Layer: 0
   m_Name: Hud
   m_TagString: Untagged
@@ -32,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8352987925532858944}
+  m_Father: {fileID: 6421989431526714725}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7101866738405288734
 MonoBehaviour:
@@ -57,33 +55,6 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!114 &814197832995006856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5116063093166295646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00c293adecbad472ea83a542f3ed4141, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HudController
-  font: {fileID: 12800000, guid: 98dc4eac98d324438ac9d4665ee97705, type: 3}
-  aim: {fileID: 4286486631522900381}
-  sleepSense: {fileID: 3959317403798885014}
---- !u!114 &1235526216280385133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5116063093166295646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13d0245911ed044cb9a514ce87440dd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExitHotkey
 --- !u!1 &5805658997319109991
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,11 +204,8 @@ GameObject:
   - component: {fileID: 3709876423714564932}
   - component: {fileID: 4525290822501031935}
   - component: {fileID: 4479816247867117038}
-  - component: {fileID: 2864270586907729987}
-  - component: {fileID: 4286486631522900381}
-  - component: {fileID: 3959317403798885014}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: PlayerRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -257,7 +225,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 758330243299291762}
-  m_Father: {fileID: 8352987925532858944}
+  - {fileID: 5563014706874718404}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3709876423714564932
 MeshFilter:
@@ -341,73 +310,3 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2864270586907729987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6544013047620133980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6c202414c315486594e0136789ff231, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  lookSensitivity: 0.1
---- !u!114 &4286486631522900381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6544013047620133980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e59ba23fdc93f482a95bdffc27626711, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Aim
---- !u!114 &3959317403798885014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6544013047620133980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da4d4478cf01c455ea6e2e0186c56b66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SleepSense
---- !u!1 &9115520205672583885
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8352987925532858944}
-  m_Layer: 0
-  m_Name: PlayerRig
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8352987925532858944
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9115520205672583885}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6421989431526714725}
-  - {fileID: 5563014706874718404}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
