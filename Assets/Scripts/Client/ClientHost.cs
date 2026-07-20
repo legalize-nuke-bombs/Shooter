@@ -23,6 +23,7 @@ namespace Shooter.Client
         private const string MenuScene = "Menu";
         private const string MapScene = "Map";
         private const string RigPrefab = "PlayerRig";
+        private const string MenuPrefab = "MenuRoot";
 
         private IClientTransport clientTransport;
         private GameObject rigObject;
@@ -49,8 +50,7 @@ namespace Shooter.Client
             Application.runInBackground = true;
             Log.Info("ClientHost starting...");
 
-            if (SceneManager.GetActiveScene().name == GameScene)
-                EnterGameScene();
+            EnterScene(SceneManager.GetActiveScene().name);
         }
 
         private void OnDestroy()
@@ -86,8 +86,21 @@ namespace Shooter.Client
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name == GameScene)
+            EnterScene(scene.name);
+        }
+
+        private void EnterScene(string sceneName)
+        {
+            if (sceneName == MenuScene)
+                EnterMenuScene();
+            else if (sceneName == GameScene)
                 EnterGameScene();
+        }
+
+        private void EnterMenuScene()
+        {
+            Instantiate(Resources.Load<GameObject>(MenuPrefab));
+            Log.Info("menu built");
         }
 
         private void EnterGameScene()
