@@ -6,7 +6,7 @@ using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Parts;
 using Shooter.Server.Worlds.Time;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Entities.Npcs;
+using Shooter.Server.Worlds.Entities.Spawning;
 using Shooter.Server.Worlds.Sleeping;
 
 namespace Shooter.Server.Worlds

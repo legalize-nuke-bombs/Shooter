@@ -4,8 +4,8 @@ using UnityEngine.UIElements;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Utils.Inventories;
-using Shooter.Server.Worlds.Utils.Items;
+using Shooter.Server.Worlds.Entities.Parts.Inventory;
+using Shooter.Server.Worlds.Items;
 
 namespace Shooter.Client.Hud.Inventory
 {

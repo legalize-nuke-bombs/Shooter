@@ -5,9 +5,9 @@ using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Utils.Inventories;
-using Shooter.Server.Worlds.Utils.Items;
-using Shooter.Server.Worlds.Utils.Items.Firearm;
+using Shooter.Server.Worlds.Entities.Parts.Inventory;
+using Shooter.Server.Worlds.Items;
+using Shooter.Server.Worlds.Items.Firearm;
 
 namespace Shooter.Client.Hud.Hands
 {
