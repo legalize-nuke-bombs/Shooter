@@ -1,6 +1,6 @@
 using UnityEngine;
 using Shooter.Client.Worlds;
-using Shooter.Server.Worlds.Entities.Chronology;
+using Shooter.Server.Worlds.Time;
 using Shooter.Logging;
 
 namespace Shooter.Client.Worlds.Entities.Chronology

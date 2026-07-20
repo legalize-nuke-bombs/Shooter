@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Entities.Sleeping
+namespace Shooter.Server.Worlds.Sleeping
 {
     public class SleepState
     {

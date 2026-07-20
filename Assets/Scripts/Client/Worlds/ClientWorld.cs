@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using Shooter.Server.Worlds;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Chronology;
-using Shooter.Server.Worlds.Entities.Sleeping;
+using Shooter.Server.Worlds.Time;
+using Shooter.Server.Worlds.Sleeping;
 using Shooter.Client.Worlds.Entities;
 using Shooter.Logging;
 

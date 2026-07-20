@@ -66,7 +66,7 @@ namespace Shooter.Client
 
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                Log.Info("Client: Escape pressed, leaving world for menu");
+                Log.Info("Escape pressed, leaving world for menu");
                 Teardown();
                 SceneManager.LoadScene(MenuScene);
                 return;
@@ -96,7 +96,7 @@ namespace Shooter.Client
 
             if (string.IsNullOrEmpty(Session.Token))
             {
-                Log.Warn("Client: no session token, game scene stays offline");
+                Log.Warn("no session token, game scene stays offline");
                 return;
             }
 
@@ -104,7 +104,7 @@ namespace Shooter.Client
             clientTransport.Connected += OnConnected;
             clientTransport.MessageReceived += OnMessageReceived;
             clientTransport.Connect(Session.WsUrl);
-            Log.Info("Client: connecting to {}", Session.WsUrl);
+            Log.Info("connecting to {}", Session.WsUrl);
         }
 
         private static void LoadMap()
@@ -112,13 +112,13 @@ namespace Shooter.Client
             if (SceneManager.GetSceneByName(MapScene).isLoaded) return;
 
             SceneManager.LoadScene(MapScene, LoadSceneMode.Additive);
-            Log.Info("Client: map loaded additively for render");
+            Log.Info("map loaded additively for render");
         }
 
         private void OnConnected()
         {
             clientTransport.Send(Message.Encode(MessageType.Hello, new Hello { Name = Session.DisplayName }));
-            Log.Info("Client: hello sent as '{}'", Session.DisplayName);
+            Log.Info("hello sent as '{}'", Session.DisplayName);
         }
 
         private void OnMessageReceived(string json)
@@ -130,14 +130,14 @@ namespace Shooter.Client
             {
                 case MessageType.Welcome:
                     Welcome welcome = message.Read<Welcome>();
-                    Log.Info("Client: welcome, user {}, tick rate {}", welcome.PlayerId, welcome.TickRate);
+                    Log.Info("welcome, user {}, tick rate {}", welcome.PlayerId, welcome.TickRate);
                     clientTransport.Send(Message.Encode(MessageType.JoinWorld, new JoinWorld()));
                     break;
                 case MessageType.WorldJoined:
                     WorldJoined worldJoined = message.Read<WorldJoined>();
                     myId = worldJoined.You;
                     BuildWorld();
-                    Log.Info("Client: joined world {} as entity {}", worldJoined.WorldId, myId);
+                    Log.Info("joined world {} as entity {}", worldJoined.WorldId, myId);
                     break;
                 case MessageType.Snapshot:
                     world?.Apply(message.Read<Snapshot>());
@@ -154,7 +154,7 @@ namespace Shooter.Client
             sky = new ClockView(world);
 
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            Log.Info("Client: rig, hud and sky built for entity {}", myId);
+            Log.Info("rig, hud and sky built for entity {}", myId);
         }
 
         private void Teardown()
@@ -175,7 +175,7 @@ namespace Shooter.Client
             myId = Guid.Empty;
 
             UnityEngine.Cursor.lockState = CursorLockMode.None;
-            Log.Info("Client: world torn down");
+            Log.Info("world torn down");
         }
     }
 }

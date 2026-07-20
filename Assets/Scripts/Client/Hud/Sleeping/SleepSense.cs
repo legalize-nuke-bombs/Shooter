@@ -1,9 +1,9 @@
 using Shooter.Client.Aiming;
 using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Chronology;
+using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Entities.Parts;
-using Shooter.Server.Worlds.Entities.Sleeping;
+using Shooter.Server.Worlds.Sleeping;
 
 namespace Shooter.Client.Hud.Sleeping
 {

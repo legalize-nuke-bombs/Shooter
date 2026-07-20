@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Chronology;
+using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Entities.Parts;
 using Shooter.Server.Worlds.Entities.Players;
 using UnityEngine.SceneManagement;
