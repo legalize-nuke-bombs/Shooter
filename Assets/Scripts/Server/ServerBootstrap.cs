@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Shooter.Logging;
 
 namespace Shooter.Server
 {
@@ -9,6 +10,8 @@ namespace Shooter.Server
         private static void Init()
         {
             if (!Application.isBatchMode) return;
+
+            Log.Info("Bootstrapping server...");
 
             var go = new GameObject("ServerHost");
             Object.DontDestroyOnLoad(go);

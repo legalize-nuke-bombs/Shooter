@@ -46,6 +46,7 @@ namespace Shooter.Client
         private void Start()
         {
             Application.runInBackground = true;
+            Log.Info("ClientHost starting...");
 
             if (SceneManager.GetActiveScene().name == GameScene)
                 EnterGameScene();

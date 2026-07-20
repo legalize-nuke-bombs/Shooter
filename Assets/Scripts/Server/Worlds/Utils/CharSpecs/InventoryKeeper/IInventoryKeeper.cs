@@ -11,6 +11,8 @@ namespace Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper
 
         UniqueItem Equipted();
 
+        bool Equip(long uniqueItemId);
+
         int Amount(StackableItem item);
 
         int Drop(StackableItem item, int amount, InventoryOnConflictAction action);

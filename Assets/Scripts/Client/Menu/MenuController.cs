@@ -23,6 +23,7 @@ namespace Shooter.Client.Menu
 
         private void Start()
         {
+            Log.Info("MenuController starting...");
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
 

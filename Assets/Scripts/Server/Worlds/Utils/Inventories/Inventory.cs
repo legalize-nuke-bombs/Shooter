@@ -59,6 +59,17 @@ namespace Shooter.Server.Worlds.Utils.Inventories
             return unique.GetValueOrDefault(equiptedId.Value, null);
         }
 
+        public bool Equip(long uniqueItemId)
+        {
+            if (unique.ContainsKey(uniqueItemId))
+            {
+                equiptedId = uniqueItemId;
+                return true;
+            }
+
+            return false;
+        }
+
         public InventoryState State()
         {
             var uniqueStates = new Dictionary<long, UniqueItemState>();

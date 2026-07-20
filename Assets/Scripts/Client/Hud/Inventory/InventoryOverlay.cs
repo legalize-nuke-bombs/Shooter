@@ -11,7 +11,7 @@ namespace Shooter.Client.Hud.Inventory
 {
     public class InventoryOverlay : Overlay
     {
-        private const long RefreshMs = 250;
+        private const long RefreshMs = 16;
 
         private static readonly Color FrameColor = new Color(0.02f, 0.03f, 0.05f, 0.92f);
         private static readonly Color TextColor = new Color(0.76f, 0.79f, 0.83f);
@@ -26,6 +26,7 @@ namespace Shooter.Client.Hud.Inventory
         {
             this.font = font;
             this.world = world;
+
             style.display = DisplayStyle.None;
 
             frame.style.position = Position.Absolute;

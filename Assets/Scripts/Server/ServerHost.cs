@@ -34,6 +34,7 @@ namespace Shooter.Server
 
         private void Start()
         {
+            Log.Info("ServerHost starting...");
             Application.runInBackground = true;
             Application.targetFrameRate = (int)TickRate * 2;
 
