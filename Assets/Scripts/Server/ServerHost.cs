@@ -53,7 +53,7 @@ namespace Shooter.Server
             serverTransport.HookReceived += OnHookReceived;
             serverTransport.HookAuthorizer = serverSessionGate.AuthorizeHook;
             serverTransport.Start(Port);
-            Log.Info("WS listening on " + Port + ", tick rate " + TickRate);
+            Log.Info("WS listening on {}, tick rate {}", Port, TickRate);
         }
 
         private void OnDestroy()
@@ -84,7 +84,7 @@ namespace Shooter.Server
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            Log.Info("Scene " + scene.name + " ready");
+            Log.Info("Scene {} ready", scene.name);
         }
 
         private void Update()
@@ -127,7 +127,7 @@ namespace Shooter.Server
                     Hello hello = message.Read<Hello>();
                     if (!string.IsNullOrEmpty(hello.Name))
                         session.DisplayName = hello.Name.Length > 40 ? hello.Name.Substring(0, 40) : hello.Name;
-                    Log.Info("Conn " + connId + " hello: user " + session.UserId + " name '" + session.DisplayName + "'");
+                    Log.Info("Conn {} hello: user {} name '{}'", connId, session.UserId, session.DisplayName);
                     break;
                 case MessageType.JoinWorld:
                     if (!session.InWorld)
@@ -152,7 +152,7 @@ namespace Shooter.Server
                 Players = world.BuildPlayerStates()
             }));
 
-            Log.Info("User " + session.UserId + " joined world " + world.Id + ", players there now " + world.Online());
+            Log.Info("User {} joined world {}, players there now {}", session.UserId, world.Id, world.Online());
         }
 
         private ServerWorld WorldFor(string worldId)
@@ -161,7 +161,7 @@ namespace Shooter.Server
             {
                 world = new ServerWorld(worldId);
                 worlds[worldId] = world;
-                Log.Info("World " + worldId + " created, total worlds " + worlds.Count);
+                Log.Info("World {} created, total worlds {}", worldId, worlds.Count);
             }
             return world;
         }
@@ -208,7 +208,7 @@ namespace Shooter.Server
                 }
             }
 
-            Log.Info("User " + session.UserId + " disconnected from world " + session.WorldId + ", sessions total " + serverSessionGate.Count);
+            Log.Info("User {} disconnected from world {}, sessions total {}", session.UserId, session.WorldId, serverSessionGate.Count);
         }
     }
 }

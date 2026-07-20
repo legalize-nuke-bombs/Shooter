@@ -9,6 +9,8 @@ namespace Shooter.Client
         private static void Init()
         {
             if (Application.isBatchMode) return;
+
+            Log.ToFile(System.IO.Path.Combine(Application.persistentDataPath, "shooter-client.log"));
             Log.Info("Bootstrapping client...");
 
             var go = new GameObject("ClientHost");

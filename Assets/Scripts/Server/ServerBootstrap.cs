@@ -11,6 +11,7 @@ namespace Shooter.Server
         {
             if (!Application.isBatchMode) return;
 
+            Log.ToFile(System.IO.Path.Combine(Application.persistentDataPath, "shooter-server.log"));
             Log.Info("Bootstrapping server...");
 
             var go = new GameObject("ServerHost");
