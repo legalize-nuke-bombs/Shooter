@@ -1,8 +1,8 @@
-using Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper;
+using Shooter.Server.Worlds.Utils.Specs.InventoryKeeper;
 using Shooter.Server.Worlds.Utils.Items;
 using Shooter.Server.Worlds.Utils.Items.Firearm;
 
-namespace Shooter.Server.Worlds.Utils.CharSpecs.Shooter
+namespace Shooter.Server.Worlds.Utils.Specs.Shooter
 {
     public class DefaultShooter : IShooter
     {

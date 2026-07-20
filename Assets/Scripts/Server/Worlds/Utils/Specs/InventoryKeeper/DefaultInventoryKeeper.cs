@@ -2,7 +2,7 @@ using Shooter.Logging;
 using Shooter.Server.Worlds.Utils.Inventories;
 using Shooter.Server.Worlds.Utils.Items;
 
-namespace Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper
+namespace Shooter.Server.Worlds.Utils.Specs.InventoryKeeper
 {
     public class DefaultInventoryKeeper : IInventoryKeeper
     {

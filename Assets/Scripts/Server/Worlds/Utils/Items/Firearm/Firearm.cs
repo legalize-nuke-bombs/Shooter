@@ -1,4 +1,4 @@
-using Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper;
+using Shooter.Server.Worlds.Utils.Specs.InventoryKeeper;
 
 namespace Shooter.Server.Worlds.Utils.Items.Firearm
 {

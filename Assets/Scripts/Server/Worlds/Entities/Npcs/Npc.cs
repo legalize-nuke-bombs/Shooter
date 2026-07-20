@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper;
-using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
-using Shooter.Server.Worlds.Utils.CharSpecs.Living;
-using Shooter.Server.Worlds.Utils.CharSpecs.Shooter;
+using Shooter.Server.Worlds.Utils.Specs.InventoryKeeper;
+using Shooter.Server.Worlds.Utils.Specs.Nameable;
+using Shooter.Server.Worlds.Utils.Specs.Living;
+using Shooter.Server.Worlds.Utils.Specs.Shooter;
 
 namespace Shooter.Server.Worlds.Entities.Npcs
 {

@@ -4,11 +4,11 @@ using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Npcs;
-using Shooter.Server.Worlds.Utils.CharSpecs.Nameable;
-using Shooter.Server.Worlds.Utils.CharSpecs.Living;
+using Shooter.Server.Worlds.Utils.Specs.Nameable;
+using Shooter.Server.Worlds.Utils.Specs.Living;
 using Shooter.Server.Worlds.Entities.Sleeping;
-using Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper;
-using Shooter.Server.Worlds.Utils.CharSpecs.Shooter;
+using Shooter.Server.Worlds.Utils.Specs.InventoryKeeper;
+using Shooter.Server.Worlds.Utils.Specs.Shooter;
 using Shooter.Server.Worlds.Utils.Inventories;
 
 namespace Shooter.Server.Worlds
