@@ -20,6 +20,11 @@ namespace Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper
             return null;
         }
 
+        public bool Equip(long uniqueItemId)
+        {
+            return false;
+        }
+
         public int Amount(StackableItem item)
         {
             return 0;
