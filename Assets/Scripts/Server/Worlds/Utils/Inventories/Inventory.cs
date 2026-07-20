@@ -71,7 +71,7 @@ namespace Shooter.Server.Worlds.Utils.Inventories
             return false;
         }
 
-        public InventoryState State()
+        public override InventoryState State()
         {
             var uniqueStates = new Dictionary<long, UniqueItemState>();
             foreach (UniqueItem item in unique.Values)

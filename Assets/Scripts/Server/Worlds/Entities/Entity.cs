@@ -19,7 +19,7 @@ namespace Shooter.Server.Worlds.Entities
 
         public void Add(Part part)
         {
-            parts[part.GetType()] = part;
+            parts[part.Slot] = part;
         }
 
         public T Get<T>() where T : Part

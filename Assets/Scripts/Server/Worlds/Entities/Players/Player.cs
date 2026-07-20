@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Server.Worlds.Entities.Parts;
+using Shooter.Server.Worlds.Entities.Parts.Health;
+using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Utils.Inventories;
 using Shooter.Server.Worlds.Utils.Items;
 using Shooter.Server.Worlds.Utils.Items.Firearm;
@@ -23,8 +25,8 @@ namespace Shooter.Server.Worlds.Entities.Players
             SceneManager.MoveGameObjectToScene(body, scene);
 
             var player = new Entity(userId, body);
-            player.Add(new Nameable(displayName));
-            player.Add(new Health(MaxHp));
+            player.Add(new DefaultNameable(displayName));
+            player.Add(new DefaultHealth(MaxHp));
 
             var inventory = new Inventory();
             inventory.Add(StackableItem.Currency, 1000);

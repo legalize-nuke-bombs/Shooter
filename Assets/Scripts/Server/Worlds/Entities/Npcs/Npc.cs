@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Parts;
+using Shooter.Server.Worlds.Entities.Parts.Health;
+using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Utils.Inventories;
 
 namespace Shooter.Server.Worlds.Entities.Npcs
@@ -17,8 +19,8 @@ namespace Shooter.Server.Worlds.Entities.Npcs
             SceneManager.MoveGameObjectToScene(body, scene);
 
             var npc = new Entity(id, body);
-            npc.Add(new Nameable(name));
-            npc.Add(new Health(MaxHp));
+            npc.Add(new DefaultNameable(name));
+            npc.Add(new DefaultHealth(MaxHp));
             npc.Add(new Inventory());
             EntityBody.Bind(body, id);
 
