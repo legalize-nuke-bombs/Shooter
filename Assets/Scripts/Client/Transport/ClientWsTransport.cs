@@ -71,13 +71,13 @@ namespace Shooter.Client.Transport
             try
             {
                 await socket.ConnectAsync(new Uri(url), cancellation.Token).ConfigureAwait(false);
-                Log.Info("Net: connected " + url);
+                Log.Info("Net: connected {}", url);
                 events.Enqueue(new TransportEvent { Kind = EventKind.Connected });
                 _ = ReceiveLoop();
             }
             catch (Exception e)
             {
-                Log.Warn("Net: connect failed: " + e.Message);
+                Log.Warn("Net: connect failed: {}", e.Message);
             }
         }
 
@@ -106,7 +106,7 @@ namespace Shooter.Client.Transport
             catch (Exception e)
             {
                 if (!cancellation.IsCancellationRequested)
-                    Log.Warn("Net: receive loop ended: " + e.Message);
+                    Log.Warn("Net: receive loop ended: {}", e.Message);
             }
         }
 
@@ -122,7 +122,7 @@ namespace Shooter.Client.Transport
             }
             catch (Exception e)
             {
-                Log.Warn("Net: send failed: " + e.Message);
+                Log.Warn("Net: send failed: {}", e.Message);
             }
             finally
             {

@@ -35,23 +35,23 @@ namespace Shooter.Server.Sessions
             string token = ExtractQueryParam(query, "token");
             if (!Jwt.TryVerify(token, jwtSecret, out string subject))
             {
-                Log.Warn("Conn " + connId + " token rejected");
+                Log.Warn("Conn {} token rejected", connId);
                 return false;
             }
             if (!long.TryParse(subject, out long userId))
             {
-                Log.Warn("Conn " + connId + " not a user token (sub '" + subject + "')");
+                Log.Warn("Conn {} not a user token (sub '{}')", connId, subject);
                 return false;
             }
             if (!serverSessionGrants.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out string worldId))
             {
-                Log.Warn("Conn " + connId + " user " + userId + " has no open session");
+                Log.Warn("Conn {} user {} has no open session", connId, userId);
                 return false;
             }
 
             session = new ServerSession(connId, userId, worldId);
             sessions[connId] = session;
-            Log.Info("Conn " + connId + " authed: user " + userId + " world " + worldId);
+            Log.Info("Conn {} authed: user {} world {}", connId, userId, worldId);
             return true;
         }
 
@@ -85,12 +85,12 @@ namespace Shooter.Server.Sessions
             {
                 case "OPEN_SESSION":
                     serverSessionGrants.Open(hook.UserId, hook.WorldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
-                    Log.Info("Session opened: user " + hook.UserId + " world " + hook.WorldId);
+                    Log.Info("Session opened: user {} world {}", hook.UserId, hook.WorldId);
                     return Array.Empty<int>();
                 case "CLOSE_SESSION":
                     return CloseSessions(hook.UserId, hook.WorldId);
                 default:
-                    Log.Warn("Unknown hook action " + hook.Action + ", ignoring");
+                    Log.Warn("Unknown hook action {}, ignoring", hook.Action);
                     return Array.Empty<int>();
             }
         }
@@ -106,7 +106,7 @@ namespace Shooter.Server.Sessions
                 if (session.WorldId == worldId && (wholeWorld || session.UserId == userId))
                     toKick.Add(session.ConnId);
 
-            Log.Info("Session closed: user " + (wholeWorld ? "*" : userId.ToString()) + " world " + worldId + ", kicking online " + toKick.Count);
+            Log.Info("Session closed: user {} world {}, kicking online {}", wholeWorld ? "*" : userId.ToString(), worldId, toKick.Count);
             return toKick;
         }
 
@@ -117,7 +117,7 @@ namespace Shooter.Server.Sessions
             sweepTimer = 0f;
             int swept = serverSessionGrants.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             if (swept > 0)
-                Log.Info("Swept " + swept + " expired session grants");
+                Log.Info("Swept {} expired session grants", swept);
         }
 
         private static string ExtractQueryParam(string query, string name)
