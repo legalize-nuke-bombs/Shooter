@@ -37,5 +37,10 @@ namespace Shooter.Server.Worlds.Entities
             foreach (Part part in parts.Values)
                 part.Tick(this, dt);
         }
+
+        public void Destroy()
+        {
+            if (Body != null) UnityEngine.Object.Destroy(Body);
+        }
     }
 }
