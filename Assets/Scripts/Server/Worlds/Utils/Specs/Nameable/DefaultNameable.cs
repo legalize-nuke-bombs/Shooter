@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Utils.CharSpecs.Nameable
+namespace Shooter.Server.Worlds.Utils.Specs.Nameable
 {
     public class DefaultNameable : INameable
     {
