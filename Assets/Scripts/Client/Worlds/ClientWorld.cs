@@ -5,8 +5,8 @@ using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Entities.Npcs;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Server.Worlds.Entities.Sleeping;
-using Shooter.Client.Entities.Players;
-using Shooter.Client.Entities.Npcs;
+using Shooter.Client.Worlds.Entities.Players;
+using Shooter.Client.Worlds.Entities.Npcs;
 using Shooter.Logging;
 
 namespace Shooter.Client.Worlds
@@ -45,12 +45,12 @@ namespace Shooter.Client.Worlds
             ReconcileNpcs(snapshot.Npcs);
         }
 
-        public void Interpolate(float dt)
+        public void Tick(float dt)
         {
             foreach (PlayerAvatar peer in peers.Values)
-                peer.Interpolate(dt);
+                peer.Tick(dt);
             foreach (NpcAvatar npc in npcs.Values)
-                npc.Interpolate(dt);
+                npc.Tick(dt);
         }
 
         public void Destroy()

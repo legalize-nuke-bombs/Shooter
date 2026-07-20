@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Aiming;
-using Shooter.Client.Entities.Npcs;
+using Shooter.Client.Worlds.Entities.Npcs;
 
 namespace Shooter.Client.Hud
 {
