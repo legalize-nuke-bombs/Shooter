@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Client.Entities.Npcs
+namespace Shooter.Client.Worlds.Entities.Npcs
 {
     public class NpcBody : MonoBehaviour
     {

@@ -3,7 +3,7 @@ using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Logging;
 
-namespace Shooter.Client.Entities.Chronology
+namespace Shooter.Client.Worlds.Entities.Chronology
 {
     public class ClockView
     {

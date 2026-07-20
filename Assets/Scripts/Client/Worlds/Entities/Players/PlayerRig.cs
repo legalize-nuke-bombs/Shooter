@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Shooter.Client.Aiming;
-using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities.Players;
 
-namespace Shooter.Client.Entities.Players
+namespace Shooter.Client.Worlds.Entities.Players
 {
     public class PlayerRig
     {
