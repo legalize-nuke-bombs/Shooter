@@ -22,7 +22,7 @@ namespace Shooter.Server.Worlds
 
         public Guid Add(long userId, string displayName)
         {
-            Entity player = Player.Spawn(userId, displayName, scene, clock, this);
+            Entity player = PlayerSpawner.Spawn(userId, displayName, scene, clock, this);
             players[userId] = player;
             return player.Id;
         }

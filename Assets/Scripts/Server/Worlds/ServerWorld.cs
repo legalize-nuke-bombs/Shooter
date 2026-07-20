@@ -28,7 +28,7 @@ namespace Shooter.Server.Worlds
             Log.Info("World {} built: additive physics copy of Map, scene handle {}", id, scene.handle);
             players = new Players(scene, clock);
             sleep = new Sleep(clock, players);
-            npcs.Add(Npc.Spawn("npc 0", new Vector3(0f, 1.1f, 16f), scene));
+            npcs.Add(NpcSpawner.Spawn("npc 0", new Vector3(0f, 1.1f, 16f), scene));
         }
 
         public void Destroy()
