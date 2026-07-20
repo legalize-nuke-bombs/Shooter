@@ -19,17 +19,17 @@ namespace Shooter.Server.Worlds.Entities.Parts
         private readonly CharacterController controller;
         private readonly Clock clock;
         private readonly PhysicsScene physics;
-        private readonly Worlds.Players worldPlayers;
+        private readonly Worlds.WorldEntities worldEntities;
 
         private float verticalVelocity;
         private bool jumpQueued;
 
-        public Pilot(CharacterController controller, Clock clock, PhysicsScene physics, Worlds.Players worldPlayers)
+        public Pilot(CharacterController controller, Clock clock, PhysicsScene physics, Worlds.WorldEntities worldEntities)
         {
             this.controller = controller;
             this.clock = clock;
             this.physics = physics;
-            this.worldPlayers = worldPlayers;
+            this.worldEntities = worldEntities;
         }
 
         public void Apply(PlayerIntent input)
@@ -42,7 +42,7 @@ namespace Shooter.Server.Worlds.Entities.Parts
 
             if (Sleeping)
             {
-                if ((input.Use || input.Jump) && !worldPlayers.AllAsleep()) WakeUp();
+                if ((input.Use || input.Jump) && !worldEntities.AllAsleep()) WakeUp();
                 return;
             }
             if (input.Use)
