@@ -1,15 +1,12 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Entities.Chronology;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Npcs;
-using Shooter.Server.Worlds.Utils.Specs.Nameable;
-using Shooter.Server.Worlds.Utils.Specs.Living;
 using Shooter.Server.Worlds.Entities.Sleeping;
-using Shooter.Server.Worlds.Utils.Specs.InventoryKeeper;
-using Shooter.Server.Worlds.Utils.Specs.Shooter;
-using Shooter.Server.Worlds.Utils.Inventories;
 
 namespace Shooter.Server.Worlds
 {
@@ -21,7 +18,7 @@ namespace Shooter.Server.Worlds
         private readonly Clock clock = new Clock();
         private readonly Players players;
         private readonly Sleep sleep;
-        private readonly List<Npc> npcs = new List<Npc>();
+        private readonly List<Entity> npcs = new List<Entity>();
 
         public ServerWorld(string id)
         {
@@ -30,21 +27,13 @@ namespace Shooter.Server.Worlds
             Log.Info("World " + id + " built: additive physics copy of Map, scene handle " + scene.handle);
             players = new Players(scene, clock);
             sleep = new Sleep(clock, players);
-            npcs.Add(
-                new Npc(
-                    1,
-                    new DefaultNameable("npc 0"),
-                    new DefaultLiving(1000),
-                    new DefaultInventoryKeeper(new Inventory()),
-                    new DefaultShooter(),
-                    scene)
-                );
+            npcs.Add(Npc.Spawn(1, "npc 0", new Vector3(0f, 1.1f, 16f), scene));
         }
 
         public void Destroy()
         {
             players.DestroyAll();
-            foreach (Npc npc in npcs)
+            foreach (Entity npc in npcs)
                 npc.Destroy();
             npcs.Clear();
             SceneManager.UnloadSceneAsync(scene);
@@ -91,8 +80,8 @@ namespace Shooter.Server.Worlds
         public List<NpcState> BuildNpcStates()
         {
             var states = new List<NpcState>(npcs.Count);
-            foreach (Npc npc in npcs)
-                states.Add(npc.State());
+            foreach (Entity npc in npcs)
+                states.Add(Npc.StateOf(npc));
             return states;
         }
 
