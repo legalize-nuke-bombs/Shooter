@@ -5,7 +5,12 @@ namespace Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper
 {
     public class DefaultInventoryKeeper : IInventoryKeeper
     {
-        private readonly Inventory inventory = new Inventory();
+        private readonly Inventory inventory;
+
+        public DefaultInventoryKeeper(Inventory inventory)
+        {
+            this.inventory = inventory;
+        }
 
         public void Take(StackableItem item, int amount)
         {
@@ -15,6 +20,21 @@ namespace Shooter.Server.Worlds.Utils.CharSpecs.InventoryKeeper
         public void Take(UniqueItem item)
         {
             inventory.Add(item);
+        }
+
+        public UniqueItem Equipted()
+        {
+            return inventory.Equipted();
+        }
+
+        public int Amount(StackableItem item)
+        {
+            return inventory.Amount(item);
+        }
+
+        public int Drop(StackableItem item, int amount, InventoryOnConflictAction action)
+        {
+            return inventory.Remove(item, amount, action);
         }
 
         public InventoryState State()
