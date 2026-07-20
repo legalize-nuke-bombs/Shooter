@@ -6,12 +6,12 @@ namespace Shooter.Server.Worlds.Entities
 {
     public sealed class Entity
     {
-        public long Id { get; }
+        public Guid Id { get; }
         public GameObject Body { get; }
 
         private readonly Dictionary<Type, Part> parts = new Dictionary<Type, Part>();
 
-        public Entity(long id, GameObject body)
+        public Entity(Guid id, GameObject body)
         {
             Id = id;
             Body = body;
@@ -36,6 +36,27 @@ namespace Shooter.Server.Worlds.Entities
         {
             foreach (Part part in parts.Values)
                 part.Tick(this, dt);
+        }
+
+        public EntityState State()
+        {
+            var states = new List<PartState>();
+            foreach (Part part in parts.Values)
+            {
+                PartState state = part.State();
+                if (state != null) states.Add(state);
+            }
+
+            Vector3 position = Body.transform.position;
+            return new EntityState
+            {
+                Id = Id,
+                X = position.x,
+                Y = position.y,
+                Z = position.z,
+                Yaw = Body.transform.eulerAngles.y,
+                Parts = states
+            };
         }
 
         public void Destroy()

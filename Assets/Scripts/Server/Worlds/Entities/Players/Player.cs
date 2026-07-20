@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
@@ -24,7 +25,7 @@ namespace Shooter.Server.Worlds.Entities.Players
             CharacterController controller = body.AddComponent<CharacterController>();
             SceneManager.MoveGameObjectToScene(body, scene);
 
-            var player = new Entity(userId, body);
+            var player = new Entity(Guid.NewGuid(), body);
             player.Add(new DefaultNameable(displayName));
             player.Add(new DefaultHealth(MaxHp));
 
@@ -36,37 +37,10 @@ namespace Shooter.Server.Worlds.Entities.Players
             player.Add(inventory);
 
             player.Add(new Pilot(controller, clock, scene.GetPhysicsScene(), worldPlayers));
-            EntityBody.Bind(body, userId);
+            EntityBody.Bind(body, player.Id);
 
-            Log.Info("Player {} '{}' spawned at {}", userId, displayName, body.transform.position);
+            Log.Info("Player {} '{}' spawned as entity {} at {}", userId, displayName, player.Id, body.transform.position);
             return player;
-        }
-
-        public static PlayerState StateOf(Entity player)
-        {
-            Vector3 position = player.Body.transform.position;
-            Pilot pilot = player.Get<Pilot>();
-            Health health = player.Get<Health>();
-            Nameable nameable = player.Get<Nameable>();
-            Inventory inventory = player.Get<Inventory>();
-            return new PlayerState
-            {
-                Id = player.Id,
-                Name = nameable == null ? "" : nameable.Name,
-
-                Hp = health == null ? 0 : health.Hp,
-                MaxHp = health == null ? 0 : health.MaxHp,
-
-                InventoryState = inventory == null ? null : inventory.State(),
-
-                X = position.x,
-                Y = position.y,
-                Z = position.z,
-                Yaw = player.Body.transform.eulerAngles.y,
-                Pitch = pilot == null ? 0f : pilot.LastInput.Pitch,
-
-                Sleeping = pilot != null && pilot.Sleeping
-            };
         }
     }
 }

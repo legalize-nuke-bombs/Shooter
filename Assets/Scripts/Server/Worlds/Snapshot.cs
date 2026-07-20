@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
-using Shooter.Server.Worlds.Entities.Players;
+using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Chronology;
-using Shooter.Server.Worlds.Entities.Npcs;
 using Shooter.Server.Worlds.Entities.Sleeping;
 
 namespace Shooter.Server.Worlds
@@ -10,8 +10,7 @@ namespace Shooter.Server.Worlds
     {
         public long Tick { get; set; }
         public ClockState Clock { get; set; }
-        public Dictionary<long, PlayerState> Players { get; set; }
-        public List<NpcState> Npcs { get; set; }
         public SleepState Sleep { get; set; }
+        public Dictionary<Guid, EntityState> Entities { get; set; }
     }
 }

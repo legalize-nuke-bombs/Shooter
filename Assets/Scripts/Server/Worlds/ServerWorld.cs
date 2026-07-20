@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,7 +28,7 @@ namespace Shooter.Server.Worlds
             Log.Info("World {} built: additive physics copy of Map, scene handle {}", id, scene.handle);
             players = new Players(scene, clock);
             sleep = new Sleep(clock, players);
-            npcs.Add(Npc.Spawn(1, "npc 0", new Vector3(0f, 1.1f, 16f), scene));
+            npcs.Add(Npc.Spawn("npc 0", new Vector3(0f, 1.1f, 16f), scene));
         }
 
         public void Destroy()
@@ -45,9 +46,9 @@ namespace Shooter.Server.Worlds
             return players.Count();
         }
 
-        public void AddPlayer(long userId, string displayName)
+        public Guid AddPlayer(long userId, string displayName)
         {
-            players.Add(userId, displayName);
+            return players.Add(userId, displayName);
         }
 
         public void RemovePlayer(long userId)
@@ -67,33 +68,19 @@ namespace Shooter.Server.Worlds
             sleep.Tick();
         }
 
-        public ClockState BuildClockState()
-        {
-            return clock.State();
-        }
-
-        public Dictionary<long, PlayerState> BuildPlayerStates()
-        {
-            return players.BuildStates();
-        }
-
-        public List<NpcState> BuildNpcStates()
-        {
-            var states = new List<NpcState>(npcs.Count);
-            foreach (Entity npc in npcs)
-                states.Add(Npc.StateOf(npc));
-            return states;
-        }
-
         public Snapshot BuildSnapshot(long tick)
         {
+            var entities = new Dictionary<Guid, EntityState>();
+            foreach (Entity npc in npcs)
+                entities[npc.Id] = npc.State();
+            players.CollectStates(entities);
+
             return new Snapshot
             {
                 Tick = tick,
-                Clock = BuildClockState(),
-                Players = BuildPlayerStates(),
-                Npcs = BuildNpcStates(),
-                Sleep = sleep.State()
+                Clock = clock.State(),
+                Sleep = sleep.State(),
+                Entities = entities
             };
         }
     }

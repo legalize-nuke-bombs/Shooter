@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -30,7 +31,7 @@ namespace Shooter.Client
         private HudRoot hud;
         private ClockView sky;
 
-        private long playerId = -1;
+        private Guid myId = Guid.Empty;
         private float nextInputTime;
 
         private void OnEnable()
@@ -129,14 +130,14 @@ namespace Shooter.Client
             {
                 case MessageType.Welcome:
                     Welcome welcome = message.Read<Welcome>();
-                    playerId = welcome.PlayerId;
-                    Log.Info("Client: welcome, player {}, tick rate {}", playerId, welcome.TickRate);
+                    Log.Info("Client: welcome, user {}, tick rate {}", welcome.PlayerId, welcome.TickRate);
                     clientTransport.Send(Message.Encode(MessageType.JoinWorld, new JoinWorld()));
                     break;
                 case MessageType.WorldJoined:
                     WorldJoined worldJoined = message.Read<WorldJoined>();
+                    myId = worldJoined.You;
                     BuildWorld();
-                    Log.Info("Client: joined world {}, players there {}", worldJoined.WorldId, worldJoined.Players.Count);
+                    Log.Info("Client: joined world {} as entity {}", worldJoined.WorldId, myId);
                     break;
                 case MessageType.Snapshot:
                     world?.Apply(message.Read<Snapshot>());
@@ -146,14 +147,14 @@ namespace Shooter.Client
 
         private void BuildWorld()
         {
-            world = new ClientWorld(playerId);
+            world = new ClientWorld(myId);
             rigObject = Instantiate(Resources.Load<GameObject>(RigPrefab));
             rig = new PlayerRig(rigObject.transform, world);
             hud = new HudRoot(rigObject.GetComponentInChildren<UIDocument>().rootVisualElement, world, rig.Aim);
             sky = new ClockView(world);
 
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            Log.Info("Client: rig, hud and sky built for player {}", playerId);
+            Log.Info("Client: rig, hud and sky built for entity {}", myId);
         }
 
         private void Teardown()
@@ -171,7 +172,7 @@ namespace Shooter.Client
             rig = null;
             hud = null;
             sky = null;
-            playerId = -1;
+            myId = Guid.Empty;
 
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             Log.Info("Client: world torn down");
