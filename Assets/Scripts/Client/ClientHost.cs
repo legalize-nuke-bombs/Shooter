@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Client.Account;
-using Shooter.Client.Entities.Chronology;
-using Shooter.Client.Entities.Players;
+using Shooter.Client.Worlds.Entities.Chronology;
+using Shooter.Client.Worlds.Entities.Players;
 using Shooter.Client.Hud;
 using Shooter.Client.Transport;
 using Shooter.Client.Worlds;
@@ -74,7 +74,7 @@ namespace Shooter.Client
             rig.Tick(deltaTime);
             hud.Tick();
             sky.Tick();
-            world.Interpolate(deltaTime);
+            world.Tick(deltaTime);
 
             if (Time.time < nextInputTime) return;
 
