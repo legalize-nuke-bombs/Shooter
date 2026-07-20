@@ -9,6 +9,7 @@ using Shooter.Server.Worlds.Utils.CharSpecs.Living;
 using Shooter.Server.Worlds.Utils.CharSpecs.Shooter;
 using Shooter.Server.Worlds.Utils.Inventories;
 using Shooter.Server.Worlds.Utils.Items;
+using Shooter.Server.Worlds.Utils.Items.Firearm;
 
 namespace Shooter.Server.Worlds.Entities.Players
 {
@@ -47,6 +48,7 @@ namespace Shooter.Server.Worlds.Entities.Players
             inventoryKeeper = new DefaultInventoryKeeper(new Inventory());
             inventoryKeeper.Take(StackableItem.Currency, 1000);
             inventoryKeeper.Take(StackableItem.Ammo762X39, 100);
+            inventoryKeeper.Take(new Ak47(0, 30));
 
             shooter = new DefaultShooter();
 
