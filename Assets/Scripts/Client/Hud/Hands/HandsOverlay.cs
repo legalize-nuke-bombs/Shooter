@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Entities.Players;
+using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Utils.Inventories;
 using Shooter.Server.Worlds.Utils.Items;
 using Shooter.Server.Worlds.Utils.Items.Firearm;
@@ -24,13 +24,13 @@ namespace Shooter.Client.Hud.Hands
         }
         protected override void Draw(Painter2D painter, Rect rect)
         {
-            PlayerState playerState = world.Players.GetValueOrDefault(world.PlayerId, null);
-            if (playerState == null)
+            EntityState me = world.Me;
+            if (me == null)
             {
                 return;
             }
 
-            InventoryState inventoryState = playerState.InventoryState;
+            InventoryState inventoryState = me.Part<InventoryState>();
             if (inventoryState == null || inventoryState.EquiptedId == null)
             {
                 return;
