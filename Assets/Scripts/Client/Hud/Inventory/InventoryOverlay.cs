@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Ui;
+using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Utils.Inventories;
 using Shooter.Server.Worlds.Utils.Items;
@@ -16,13 +17,15 @@ namespace Shooter.Client.Hud.Inventory
         private static readonly Color TextColor = new Color(0.76f, 0.79f, 0.83f);
 
         private readonly Font font;
+        private readonly ClientWorld world;
         private readonly VisualElement frame = new VisualElement();
 
         private bool open;
 
-        public InventoryOverlay(Font font)
+        public InventoryOverlay(Font font, ClientWorld world)
         {
             this.font = font;
+            this.world = world;
             style.display = DisplayStyle.None;
 
             frame.style.position = Position.Absolute;
@@ -50,7 +53,7 @@ namespace Shooter.Client.Hud.Inventory
         {
             if (!open) return;
 
-            PlayerState me = NetworkClient.Instance?.World?.Me;
+            PlayerState me = world.Me;
             InventoryState state = me?.InventoryState;
 
             frame.Clear();

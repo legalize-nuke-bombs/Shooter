@@ -3,7 +3,7 @@
     background-color: #070910;
     color: #c3c9d3;
     font-size: 15px;
-    -unity-font-definition: url("Fonts/PTSans-Regular.ttf");
+    -unity-font-definition: url("../Resources/Fonts/PTSans-Regular.ttf");
 }
 
 .screen {
