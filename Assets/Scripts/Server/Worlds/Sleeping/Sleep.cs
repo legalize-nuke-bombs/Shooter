@@ -12,7 +12,7 @@ namespace Shooter.Server.Worlds.Sleeping
         private const float SkipTimeScale = 6f;
 
         private readonly Clock clock;
-        private readonly Worlds.Players players;
+        private readonly Worlds.WorldEntities entities;
         private bool wasNight;
 
         public static bool IsBed(string objectName)
@@ -20,15 +20,15 @@ namespace Shooter.Server.Worlds.Sleeping
             return objectName.Contains(BedName, System.StringComparison.OrdinalIgnoreCase);
         }
 
-        public Sleep(Clock clock, Worlds.Players players)
+        public Sleep(Clock clock, Worlds.WorldEntities entities)
         {
             this.clock = clock;
-            this.players = players;
+            this.entities = entities;
         }
 
         public bool WorldAsleep()
         {
-            return players.AllAsleep();
+            return entities.AllAsleep();
         }
 
         public SleepState State()
@@ -51,7 +51,7 @@ namespace Shooter.Server.Worlds.Sleeping
             if (!wasNight) return;
             wasNight = false;
             Log.Info("Dawn broke, waking sleepers");
-            players.WakeAll();
+            entities.WakeAll();
         }
     }
 }
