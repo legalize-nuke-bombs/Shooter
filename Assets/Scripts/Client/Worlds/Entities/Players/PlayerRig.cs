@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Shooter.Client.Aiming;
+using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Players;
 
 namespace Shooter.Client.Worlds.Entities.Players
@@ -75,7 +76,7 @@ namespace Shooter.Client.Worlds.Entities.Players
 
         private void Reconcile()
         {
-            PlayerState me = world.Me;
+            EntityState me = world.Me;
             if (me == null) return;
 
             targetPosition = new Vector3(me.X, me.Y, me.Z);

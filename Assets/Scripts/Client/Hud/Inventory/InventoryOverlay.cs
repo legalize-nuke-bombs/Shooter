@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
-using Shooter.Server.Worlds.Entities.Players;
+using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Utils.Inventories;
 using Shooter.Server.Worlds.Utils.Items;
 
@@ -54,8 +54,8 @@ namespace Shooter.Client.Hud.Inventory
         {
             if (!open) return;
 
-            PlayerState me = world.Me;
-            InventoryState state = me?.InventoryState;
+            EntityState me = world.Me;
+            InventoryState state = me?.Part<InventoryState>();
 
             frame.Clear();
             frame.Add(Line("ИНВЕНТАРЬ"));

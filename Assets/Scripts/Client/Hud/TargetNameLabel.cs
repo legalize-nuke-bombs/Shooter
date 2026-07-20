@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Aiming;
-using Shooter.Client.Worlds.Entities.Npcs;
+using Shooter.Client.Worlds.Entities;
 
 namespace Shooter.Client.Hud
 {
@@ -33,13 +33,11 @@ namespace Shooter.Client.Hud
                 return;
             }
 
-            if (target.Value.collider.TryGetComponent(out NpcBody npcBody))
+            EntityBody bridge = target.Value.collider.GetComponentInParent<EntityBody>();
+            if (bridge != null && !string.IsNullOrEmpty(bridge.View.Name))
             {
-                if (!string.IsNullOrEmpty(npcBody.Avatar.Name))
-                {
-                    style.display = DisplayStyle.Flex;
-                    text = npcBody.Avatar.Name;
-                }
+                style.display = DisplayStyle.Flex;
+                text = bridge.View.Name;
             }
         }
     }

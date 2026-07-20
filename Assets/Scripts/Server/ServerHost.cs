@@ -143,16 +143,16 @@ namespace Shooter.Server
         private void EnterWorld(ServerSession session)
         {
             ServerWorld world = WorldFor(session.WorldId);
-            world.AddPlayer(session.UserId, session.DisplayName);
+            Guid you = world.AddPlayer(session.UserId, session.DisplayName);
             session.InWorld = true;
 
             serverTransport.Send(session.ConnId, Message.Encode(MessageType.WorldJoined, new WorldJoined
             {
                 WorldId = world.Id,
-                Players = world.BuildPlayerStates()
+                You = you
             }));
 
-            Log.Info("User {} joined world {}, players there now {}", session.UserId, world.Id, world.Online());
+            Log.Info("User {} joined world {} as entity {}, players there now {}", session.UserId, world.Id, you, world.Online());
         }
 
         private ServerWorld WorldFor(string worldId)

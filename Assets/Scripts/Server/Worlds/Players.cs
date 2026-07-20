@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Chronology;
@@ -19,9 +20,11 @@ namespace Shooter.Server.Worlds
             this.clock = clock;
         }
 
-        public void Add(long userId, string displayName)
+        public Guid Add(long userId, string displayName)
         {
-            players[userId] = Player.Spawn(userId, displayName, scene, clock, this);
+            Entity player = Player.Spawn(userId, displayName, scene, clock, this);
+            players[userId] = player;
+            return player.Id;
         }
 
         public void Remove(long userId)
@@ -70,15 +73,10 @@ namespace Shooter.Server.Worlds
             players.Clear();
         }
 
-        public Dictionary<long, PlayerState> BuildStates()
+        public void CollectStates(Dictionary<Guid, EntityState> into)
         {
-            var states = new Dictionary<long, PlayerState>(players.Count);
             foreach (Entity player in players.Values)
-            {
-                PlayerState state = Player.StateOf(player);
-                states[state.Id] = state;
-            }
-            return states;
+                into[player.Id] = player.State();
         }
 
         public int Count()

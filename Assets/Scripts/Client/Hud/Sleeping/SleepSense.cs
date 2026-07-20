@@ -1,7 +1,8 @@
 using Shooter.Client.Aiming;
 using Shooter.Client.Worlds;
+using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Chronology;
-using Shooter.Server.Worlds.Entities.Players;
+using Shooter.Server.Worlds.Entities.Parts;
 using Shooter.Server.Worlds.Entities.Sleeping;
 
 namespace Shooter.Client.Hud.Sleeping
@@ -21,8 +22,9 @@ namespace Shooter.Client.Hud.Sleeping
         {
             get
             {
-                PlayerState me = world.Me;
-                return me != null && me.Sleeping;
+                EntityState me = world.Me;
+                PilotState pilot = me?.Part<PilotState>();
+                return pilot != null && pilot.Sleeping;
             }
         }
 
