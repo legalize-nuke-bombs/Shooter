@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Utils.Items.Firearm
+namespace Shooter.Server.Worlds.Items.Firearm
 {
     public abstract class Firearm : UniqueItem
     {

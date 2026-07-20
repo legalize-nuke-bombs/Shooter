@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Utils.Inventories
+namespace Shooter.Server.Worlds.Entities.Parts.Inventory
 {
     public enum InventoryOnConflictAction
     {

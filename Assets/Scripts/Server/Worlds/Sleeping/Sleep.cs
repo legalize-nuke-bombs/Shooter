@@ -1,7 +1,7 @@
 using Shooter.Logging;
-using Shooter.Server.Worlds.Entities.Chronology;
+using Shooter.Server.Worlds.Time;
 
-namespace Shooter.Server.Worlds.Entities.Sleeping
+namespace Shooter.Server.Worlds.Sleeping
 {
     public class Sleep
     {

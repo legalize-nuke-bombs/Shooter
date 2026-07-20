@@ -2,15 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Entities.Chronology;
+using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Entities.Parts;
 using Shooter.Server.Worlds.Entities.Parts.Health;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
-using Shooter.Server.Worlds.Utils.Inventories;
-using Shooter.Server.Worlds.Utils.Items;
-using Shooter.Server.Worlds.Utils.Items.Firearm;
+using Shooter.Server.Worlds.Entities.Parts.Inventory;
+using Shooter.Server.Worlds.Items;
+using Shooter.Server.Worlds.Items.Firearm;
 
-namespace Shooter.Server.Worlds.Entities.Players
+namespace Shooter.Server.Worlds.Entities.Spawning
 {
     public static class Player
     {

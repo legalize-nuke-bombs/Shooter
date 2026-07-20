@@ -1,8 +1,7 @@
 using UnityEngine;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Entities.Chronology;
-using Shooter.Server.Worlds.Entities.Players;
-using Shooter.Server.Worlds.Entities.Sleeping;
+using Shooter.Server.Worlds.Time;
+using Shooter.Server.Worlds.Sleeping;
 
 namespace Shooter.Server.Worlds.Entities.Parts
 {
