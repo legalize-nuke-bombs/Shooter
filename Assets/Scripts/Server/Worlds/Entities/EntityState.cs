@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Shooter.Server.Worlds.Entities.Parts;
 
 namespace Shooter.Server.Worlds.Entities
 {
