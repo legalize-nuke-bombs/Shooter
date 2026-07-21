@@ -1,3 +1,4 @@
+using System;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -10,11 +11,11 @@ namespace Shooter.Client
         {
             if (Application.isBatchMode) return;
 
-            Log.ToFile(System.IO.Path.Combine(Application.persistentDataPath, "shooter-client.log"));
+            Log.ToFile(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "shooter-client.log"));
             Log.Info("Bootstrapping client...");
 
             var go = new GameObject("ClientHost");
-            Object.DontDestroyOnLoad(go);
+            UnityEngine.Object.DontDestroyOnLoad(go);
             go.AddComponent<ClientHost>();
         }
     }
