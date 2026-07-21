@@ -9,6 +9,7 @@ using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Entities.Parts.Inventory;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
 using Shooter.Server.Worlds.Entities.Parts.Shooter;
+using Shooter.Server.Worlds.Entities.Parts.Hands;
 using Shooter.Server.Worlds.Items;
 using Shooter.Server.Worlds.Items.Firearm;
 
@@ -41,10 +42,13 @@ namespace Shooter.Server.Worlds.Entities.Spawning
             var speaker = new Speaker();
             player.Add(speaker);
 
-            var shooter = new Parts.Shooter.Shooter(inventory, speaker, sight, worldEntities);
+            var hands = new Hands();
+            player.Add(hands);
+
+            var shooter = new Parts.Shooter.Shooter(inventory, speaker, sight, worldEntities, hands);
             player.Add(shooter);
 
-            player.Add(new Pilot(controller, speaker, shooter, clock, sight, worldEntities));
+            player.Add(new Pilot(controller, speaker, shooter, hands, clock, sight, worldEntities));
             EntityBody.Bind(body, player.Id);
 
             Log.Info("Player {} '{}' spawned as entity {} at {}", userId, displayName, player.Id, body.transform.position);

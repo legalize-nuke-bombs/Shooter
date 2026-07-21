@@ -20,6 +20,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private readonly CharacterController controller;
         private readonly Speaker.Speaker speaker;
         private readonly Shooter.Shooter shooter;
+        private readonly Hands.Hands hands;
 
         private readonly Clock clock;
         private readonly Sight sight;
@@ -29,11 +30,12 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private bool jumpQueued;
         private float strideProgress;
 
-        public Pilot(CharacterController controller, Speaker.Speaker speaker, Shooter.Shooter shooter, Clock clock, Sight sight, WorldEntities worldEntities)
+        public Pilot(CharacterController controller, Speaker.Speaker speaker, Shooter.Shooter shooter, Hands.Hands hands, Clock clock, Sight sight, WorldEntities worldEntities)
         {
             this.controller = controller;
             this.speaker = speaker;
             this.shooter = shooter;
+            this.hands = hands;
             this.clock = clock;
             this.sight = sight;
             this.worldEntities = worldEntities;
@@ -66,6 +68,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             if (input.Shoot)
             {
                 TryToShoot();
+            }
+
+            if (input.Reload)
+            {
+                TryToReload();
             }
         }
 
@@ -117,6 +124,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         private bool TryToSleep()
         {
+            if (!hands.Free)
+            {
+                Log.Info("Pilot tried to sleep with busy hands, ignored");
+                return false;
+            }
             if (!clock.IsNight())
             {
                 Log.Info("Pilot tried to sleep in daytime, ignored");
@@ -135,6 +147,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private bool TryToShoot()
         {
             return shooter.TryToShoot(controller.transform.position, LastInput.Pitch, LastInput.Yaw);
+        }
+
+        private bool TryToReload()
+        {
+            return shooter.TryToReload();
         }
 
         private bool LookingAtBed()

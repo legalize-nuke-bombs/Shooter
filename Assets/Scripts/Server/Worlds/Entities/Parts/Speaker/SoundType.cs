@@ -4,6 +4,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Speaker
     {
         Footsteps,
         Ak47Shot,
-        Ak47Misfire
+        Ak47Misfire,
+        Ak47Reload
     }
 }

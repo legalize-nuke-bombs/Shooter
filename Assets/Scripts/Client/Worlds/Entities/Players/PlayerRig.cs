@@ -25,6 +25,7 @@ namespace Shooter.Client.Worlds.Entities.Players
         private float pitch;
         private bool jumpPending;
         private bool usePending;
+        private bool reloadPending;
         private bool positioned;
         private Vector3 targetPosition;
 
@@ -60,11 +61,13 @@ namespace Shooter.Client.Worlds.Entities.Players
                 Sprint = keyboard.leftShiftKey.isPressed,
                 Use = usePending,
                 Shoot = mouse.leftButton.isPressed,
+                Reload = reloadPending,
                 Yaw = body.eulerAngles.y,
                 Pitch = pitch
             };
             jumpPending = false;
             usePending = false;
+            reloadPending = false;
             return intent;
         }
 
@@ -80,6 +83,8 @@ namespace Shooter.Client.Worlds.Entities.Players
                 jumpPending = true;
             if (keyboard.eKey.wasPressedThisFrame)
                 usePending = true;
+            if (keyboard.rKey.wasPressedThisFrame)
+                reloadPending = true;
         }
 
         private void Reconcile()

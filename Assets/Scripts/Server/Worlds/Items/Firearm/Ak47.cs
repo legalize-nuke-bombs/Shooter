@@ -39,6 +39,11 @@ namespace Shooter.Server.Worlds.Items.Firearm
             return 0.1f;
         }
 
+        public override float ReloadTime()
+        {
+            return 2.5f;
+        }
+
         public override SoundType ShotSound()
         {
             return SoundType.Ak47Shot;
@@ -47,6 +52,11 @@ namespace Shooter.Server.Worlds.Items.Firearm
         public override SoundType MisfireSound()
         {
             return SoundType.Ak47Misfire;
+        }
+
+        public override SoundType ReloadSound()
+        {
+            return SoundType.Ak47Reload;
         }
     }
 }
