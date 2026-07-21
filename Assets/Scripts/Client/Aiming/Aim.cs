@@ -1,4 +1,5 @@
 using UnityEngine;
+using Shooter.Server.Worlds;
 
 namespace Shooter.Client.Aiming
 {
@@ -8,16 +9,12 @@ namespace Shooter.Client.Aiming
 
         public RaycastHit? Target { get; private set; }
 
-        private readonly Transform cameraTransform;
+        private readonly Sight sight = new Sight(Physics.defaultPhysicsScene);
 
-        public Aim(Transform cameraTransform)
+        public void Tick(Vector3 position, float pitch, float yaw)
         {
-            this.cameraTransform = cameraTransform;
-        }
-
-        public void Tick()
-        {
-            Target = Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, Range)
+            Ray look = Sight.LookRay(position, pitch, yaw);
+            Target = sight.Cast(look, Range, out RaycastHit hit)
                 ? hit
                 : (RaycastHit?)null;
         }

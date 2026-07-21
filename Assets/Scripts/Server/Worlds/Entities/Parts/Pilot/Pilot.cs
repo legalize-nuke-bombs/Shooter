@@ -12,7 +12,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private const float SprintSpeed = 8f;
         private const float JumpHeight = 1.2f;
         private const float Gravity = -20f;
-        private const float EyeHeight = 0.75f;
         private const float StrideLength = 2f;
 
         public bool Sleeping { get; private set; }
@@ -20,7 +19,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         private readonly CharacterController controller;
         private readonly Clock clock;
-        private readonly PhysicsScene physics;
+        private readonly Sight sight;
         private readonly WorldEntities worldEntities;
         private readonly Speaker.Speaker speaker;
 
@@ -28,11 +27,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private bool jumpQueued;
         private float strideProgress;
 
-        public Pilot(CharacterController controller, Clock clock, PhysicsScene physics, WorldEntities worldEntities, Speaker.Speaker speaker)
+        public Pilot(CharacterController controller, Clock clock, Sight sight, WorldEntities worldEntities, Speaker.Speaker speaker)
         {
             this.controller = controller;
             this.clock = clock;
-            this.physics = physics;
+            this.sight = sight;
             this.worldEntities = worldEntities;
             this.speaker = speaker;
         }
@@ -122,16 +121,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         private bool LookingAtBed()
         {
-            Ray look = LookRay();
-            return physics.Raycast(look.origin, look.direction, out RaycastHit hit, Sleep.UseReach)
-                   && Sleep.IsBed(hit.transform.name);
-        }
-
-        private Ray LookRay()
-        {
-            Vector3 eyes = controller.transform.position + Vector3.up * EyeHeight;
-            Quaternion look = Quaternion.Euler(LastInput.Pitch, LastInput.Yaw, 0f);
-            return new Ray(eyes, look * Vector3.forward);
+            Ray look = Sight.LookRay(controller.transform.position, LastInput.Pitch, LastInput.Yaw);
+            return sight.Cast(look, Sleep.UseReach, out RaycastHit hit) && Sleep.IsBed(hit);
         }
 
         private static float Finite(float value)

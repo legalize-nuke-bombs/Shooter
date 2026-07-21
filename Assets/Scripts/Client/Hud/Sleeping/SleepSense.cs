@@ -33,7 +33,7 @@ namespace Shooter.Client.Hud.Sleeping
         public bool CanSleep => !MySleeping && Night
                                 && aim.Target != null
                                 && aim.Target.Value.distance <= Sleep.UseReach
-                                && Sleep.IsBed(aim.Target.Value.collider.name);
+                                && Sleep.IsBed(aim.Target.Value);
 
         private bool Night => world.Clock != null && DayCycle.IsNight(DayCycle.FractionOf(world.Clock.Timestamp));
     }

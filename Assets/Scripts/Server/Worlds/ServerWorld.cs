@@ -19,12 +19,14 @@ namespace Shooter.Server.Worlds
         private readonly Clock clock = new Clock();
         private readonly WorldEntities entities = new WorldEntities();
         private readonly Sleep sleep;
+        private readonly Sight sight;
 
         public ServerWorld(string id)
         {
             Id = id;
             scene = SceneManager.LoadScene("Map", new LoadSceneParameters(LoadSceneMode.Additive, LocalPhysicsMode.Physics3D));
             Log.Info("World {} built: additive physics copy of Map, scene handle {}", id, scene.handle);
+            sight = new Sight(scene.GetPhysicsScene());
             sleep = new Sleep(clock, entities);
             entities.Add(NpcSpawner.Spawn("npc 0", new Vector3(0f, 1.1f, 16f), scene));
         }
@@ -43,7 +45,7 @@ namespace Shooter.Server.Worlds
 
         public Guid AddPlayer(long userId, string displayName)
         {
-            Entity player = PlayerSpawner.Spawn(userId, displayName, scene, clock, entities);
+            Entity player = PlayerSpawner.Spawn(userId, displayName, scene, sight, clock, entities);
             entities.AddPlayer(userId, player);
             return player.Id;
         }
