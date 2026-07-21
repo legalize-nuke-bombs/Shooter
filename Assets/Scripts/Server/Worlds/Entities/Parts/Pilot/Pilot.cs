@@ -18,22 +18,25 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         public PlayerIntent LastInput { get; private set; } = new PlayerIntent();
 
         private readonly CharacterController controller;
+        private readonly Speaker.Speaker speaker;
+        private readonly Shooter.Shooter shooter;
+
         private readonly Clock clock;
         private readonly Sight sight;
         private readonly WorldEntities worldEntities;
-        private readonly Speaker.Speaker speaker;
 
         private float verticalVelocity;
         private bool jumpQueued;
         private float strideProgress;
 
-        public Pilot(CharacterController controller, Clock clock, Sight sight, WorldEntities worldEntities, Speaker.Speaker speaker)
+        public Pilot(CharacterController controller, Speaker.Speaker speaker, Shooter.Shooter shooter, Clock clock, Sight sight, WorldEntities worldEntities)
         {
             this.controller = controller;
+            this.speaker = speaker;
+            this.shooter = shooter;
             this.clock = clock;
             this.sight = sight;
             this.worldEntities = worldEntities;
-            this.speaker = speaker;
         }
 
         public void Apply(PlayerIntent input)
@@ -49,12 +52,21 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
                 if ((input.Use || input.Jump) && !worldEntities.AllAsleep()) WakeUp();
                 return;
             }
+
+            if (input.Jump) jumpQueued = true;
+
             if (input.Use)
             {
-                TrySleep();
-                if (Sleeping) return;
+                if (TryToSleep())
+                {
+                    return;
+                }
             }
-            if (input.Jump) jumpQueued = true;
+
+            if (input.Shoot)
+            {
+                TryToShoot();
+            }
         }
 
         public void WakeUp()
@@ -103,20 +115,26 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             speaker.Play(SoundType.Footsteps);
         }
 
-        private void TrySleep()
+        private bool TryToSleep()
         {
             if (!clock.IsNight())
             {
                 Log.Info("Pilot tried to sleep in daytime, ignored");
-                return;
+                return false;
             }
             if (!LookingAtBed())
             {
                 Log.Info("Pilot tried to sleep with no bed in sight, ignored");
-                return;
+                return false;
             }
             Sleeping = true;
             Log.Info("Pilot fell asleep at {}", controller.transform.position);
+            return true;
+        }
+
+        private bool TryToShoot()
+        {
+            return shooter.TryToShoot(controller.transform.position, LastInput.Pitch, LastInput.Yaw);
         }
 
         private bool LookingAtBed()

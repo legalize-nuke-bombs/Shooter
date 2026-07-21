@@ -10,7 +10,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
     {
         private readonly Dictionary<StackableItem, int> stacks = new Dictionary<StackableItem, int>();
         private readonly Dictionary<long, UniqueItem> unique = new Dictionary<long, UniqueItem>();
-        private long? equiptedId = null;
+        private long? equippedId = null;
 
         public void Add(StackableItem item, int amount)
         {
@@ -50,21 +50,21 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
             return 0;
         }
 
-        public UniqueItem Equipted()
+        public UniqueItem Equipped()
         {
-            if (equiptedId == null)
+            if (equippedId == null)
             {
                 return null;
             }
 
-            return unique.GetValueOrDefault(equiptedId.Value, null);
+            return unique.GetValueOrDefault(equippedId.Value, null);
         }
 
         public bool Equip(long uniqueItemId)
         {
             if (unique.ContainsKey(uniqueItemId))
             {
-                equiptedId = uniqueItemId;
+                equippedId = uniqueItemId;
                 return true;
             }
 
@@ -83,7 +83,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
             {
                 Stacks = new Dictionary<StackableItem, int>(stacks),
                 Unique = uniqueStates,
-                EquiptedId = equiptedId
+                EquippedId = equippedId
             };
         }
     }

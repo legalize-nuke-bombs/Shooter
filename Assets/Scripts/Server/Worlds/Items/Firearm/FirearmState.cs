@@ -6,5 +6,7 @@ namespace Shooter.Server.Worlds.Items.Firearm
         public FirearmType FirearmType { get; set; }
         public int MagazineSize { get; set; }
         public StackableItem AmmoType { get; set; }
+        public float Distance { get; set; }
+        public int Damage { get; set; }
     }
 }
