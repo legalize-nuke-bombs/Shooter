@@ -1,3 +1,4 @@
+using UnityEngine;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Time;
 
@@ -15,9 +16,9 @@ namespace Shooter.Server.Worlds.Sleeping
         private readonly Worlds.WorldEntities entities;
         private bool wasNight;
 
-        public static bool IsBed(string objectName)
+        public static bool IsBed(RaycastHit hit)
         {
-            return objectName.Contains(BedName, System.StringComparison.OrdinalIgnoreCase);
+            return hit.collider.name.Contains(BedName, System.StringComparison.OrdinalIgnoreCase);
         }
 
         public Sleep(Clock clock, Worlds.WorldEntities entities)
