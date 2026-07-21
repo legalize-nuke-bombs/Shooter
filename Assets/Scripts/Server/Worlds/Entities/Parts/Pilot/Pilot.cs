@@ -13,6 +13,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private const float JumpHeight = 1.2f;
         private const float Gravity = -20f;
         private const float EyeHeight = 0.75f;
+        private const float StrideLength = 2f;
 
         public bool Sleeping { get; private set; }
         public PlayerIntent LastInput { get; private set; } = new PlayerIntent();
@@ -25,6 +26,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         private float verticalVelocity;
         private bool jumpQueued;
+        private float strideProgress;
 
         public Pilot(CharacterController controller, Clock clock, PhysicsScene physics, WorldEntities worldEntities, Speaker.Speaker speaker)
         {
@@ -87,8 +89,19 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             jumpQueued = false;
 
             verticalVelocity += Gravity * dt;
+            Vector3 before = body.position;
             controller.Move((direction * speed + Vector3.up * verticalVelocity) * dt);
-            if (speaker != null) speaker.Play(SoundType.Footsteps);
+            Step(body.position - before);
+        }
+
+        private void Step(Vector3 moved)
+        {
+            if (!controller.isGrounded) return;
+            moved.y = 0f;
+            strideProgress += moved.magnitude;
+            if (strideProgress < StrideLength) return;
+            strideProgress -= StrideLength;
+            speaker.Play(SoundType.Footsteps);
         }
 
         private void TrySleep()
