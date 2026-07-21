@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Time;
-using Shooter.Server.Worlds.Entities.Parts;
+using Shooter.Server.Worlds.Entities.Parts.Pilot;
 using Shooter.Server.Worlds.Entities.Parts.Health;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Entities.Parts.Inventory;

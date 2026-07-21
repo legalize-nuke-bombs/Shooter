@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Parts;
+using Shooter.Server.Worlds.Entities.Parts.Pilot;
 using Shooter.Server.Worlds.Entities.Spawning;
 using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Sleeping;
