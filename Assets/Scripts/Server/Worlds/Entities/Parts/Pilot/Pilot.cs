@@ -2,6 +2,7 @@ using UnityEngine;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Sleeping;
+using Shooter.Server.Worlds.Entities.Parts.Speaker;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 {
@@ -19,17 +20,19 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private readonly CharacterController controller;
         private readonly Clock clock;
         private readonly PhysicsScene physics;
-        private readonly Worlds.WorldEntities worldEntities;
+        private readonly WorldEntities worldEntities;
+        private readonly Speaker.Speaker speaker;
 
         private float verticalVelocity;
         private bool jumpQueued;
 
-        public Pilot(CharacterController controller, Clock clock, PhysicsScene physics, Worlds.WorldEntities worldEntities)
+        public Pilot(CharacterController controller, Clock clock, PhysicsScene physics, WorldEntities worldEntities, Speaker.Speaker speaker)
         {
             this.controller = controller;
             this.clock = clock;
             this.physics = physics;
             this.worldEntities = worldEntities;
+            this.speaker = speaker;
         }
 
         public void Apply(PlayerIntent input)
@@ -85,6 +88,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
             verticalVelocity += Gravity * dt;
             controller.Move((direction * speed + Vector3.up * verticalVelocity) * dt);
+            if (speaker != null) speaker.Play(SoundType.Footsteps);
         }
 
         private void TrySleep()

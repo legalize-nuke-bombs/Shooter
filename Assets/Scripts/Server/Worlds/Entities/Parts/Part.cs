@@ -1,6 +1,6 @@
 using System;
 
-namespace Shooter.Server.Worlds.Entities
+namespace Shooter.Server.Worlds.Entities.Parts
 {
     public abstract class Part
     {
