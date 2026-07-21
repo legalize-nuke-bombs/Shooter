@@ -10,18 +10,12 @@ namespace Shooter.Logging
 {
     public static class Log
     {
-        private static readonly bool BatchMode;
-        private static readonly object gate = new object();
+        private static readonly object Gate = new object();
         private static StreamWriter file;
-
-        static Log()
-        {
-            BatchMode = Application.isBatchMode;
-        }
 
         public static void ToFile(string path)
         {
-            lock (gate)
+            lock (Gate)
             {
                 file?.Dispose();
                 string dir = Path.GetDirectoryName(path);
@@ -31,40 +25,24 @@ namespace Shooter.Logging
             Info("Log file opened at {}", path);
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Info(string template, params object[] args)
         {
-            Emit(LogType.Log, Line("INFO", Caller(), template, args));
+            Emit(Line("INFO", Caller(), template, args));
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Warn(string template, params object[] args)
         {
-            Emit(LogType.Warning, Line("WARN", Caller(), template, args));
+            Emit(Line("WARN", Caller(), template, args));
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Error(string template, params object[] args)
         {
-            Emit(LogType.Error, Line("ERROR", Caller(), template, args));
+            Emit(Line("ERROR", Caller(), template, args));
         }
 
-        private static void Emit(LogType type, string line)
+        private static void Emit(string line)
         {
-            switch (type)
-            {
-                case LogType.Warning:
-                    Debug.LogWarning(line);
-                    break;
-                case LogType.Error:
-                    Debug.LogError(line);
-                    break;
-                default:
-                    Debug.Log(line);
-                    break;
-            }
-
-            lock (gate)
+            lock (Gate)
             {
                 file?.WriteLine(line);
             }
@@ -72,7 +50,7 @@ namespace Shooter.Logging
 
         private static string Line(string level, string caller, string template, object[] args)
         {
-            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + level + " [" + (BatchMode ? "Server" : "Client") + "] [" + ThreadName() + "] " + caller + ": " + Format(template, args);
+            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + level + " [" + ThreadName() + "] " + caller + ": " + Format(template, args);
         }
 
         private static string Format(string template, object[] args)
