@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Shooter.Client.Aiming;
 using Shooter.Client.Sounds;
+using Shooter.Server.Worlds;
 using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Parts.Pilot;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
@@ -32,14 +33,15 @@ namespace Shooter.Client.Worlds.Entities.Players
             this.body = body;
             this.world = world;
             cameraTransform = body.GetComponentInChildren<Camera>().transform;
-            Aim = new Aim(cameraTransform);
+            cameraTransform.localPosition = Vector3.up * Sight.EyeHeight;
+            Aim = new Aim();
             speaker = new SpeakerView(body.gameObject);
         }
 
         public void Tick(float deltaTime)
         {
             Look();
-            Aim.Tick();
+            Aim.Tick(body.position, pitch, body.eulerAngles.y);
             Reconcile();
 
             if (positioned)

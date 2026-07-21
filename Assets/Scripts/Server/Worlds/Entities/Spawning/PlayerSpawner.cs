@@ -17,7 +17,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
     {
         private const int MaxHp = 1000;
 
-        public static Entity Spawn(long userId, string displayName, Scene scene, Clock clock, Worlds.WorldEntities worldEntities)
+        public static Entity Spawn(long userId, string displayName, Scene scene, Sight sight, Clock clock, Worlds.WorldEntities worldEntities)
         {
             var body = new GameObject("Player_" + userId);
             float angle = (userId * 137f) % 360f;
@@ -40,7 +40,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
             var speaker = new Speaker();
             player.Add(speaker);
 
-            player.Add(new Pilot(controller, clock, scene.GetPhysicsScene(), worldEntities, speaker));
+            player.Add(new Pilot(controller, clock, sight, worldEntities, speaker));
             EntityBody.Bind(body, player.Id);
 
             Log.Info("Player {} '{}' spawned as entity {} at {}", userId, displayName, player.Id, body.transform.position);
