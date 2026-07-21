@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Shooter.Client.Aiming;
+using Shooter.Client.Sounds;
 using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Parts.Pilot;
+using Shooter.Server.Worlds.Entities.Parts.Speaker;
 
 namespace Shooter.Client.Worlds.Entities.Players
 {
@@ -17,6 +19,7 @@ namespace Shooter.Client.Worlds.Entities.Players
         private readonly ClientWorld world;
         private readonly Transform body;
         private readonly Transform cameraTransform;
+        private readonly SpeakerView speaker;
 
         private float pitch;
         private bool jumpPending;
@@ -30,6 +33,7 @@ namespace Shooter.Client.Worlds.Entities.Players
             this.world = world;
             cameraTransform = body.GetComponentInChildren<Camera>().transform;
             Aim = new Aim(cameraTransform);
+            speaker = new SpeakerView(body.gameObject);
         }
 
         public void Tick(float deltaTime)
@@ -81,6 +85,7 @@ namespace Shooter.Client.Worlds.Entities.Players
 
             targetPosition = new Vector3(me.X, me.Y, me.Z);
             positioned = true;
+            speaker.Apply(me.Part<SpeakerState>());
         }
     }
 }
