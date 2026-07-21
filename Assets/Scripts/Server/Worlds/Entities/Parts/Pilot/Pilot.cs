@@ -3,7 +3,7 @@ using Shooter.Logging;
 using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Sleeping;
 
-namespace Shooter.Server.Worlds.Entities.Parts
+namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 {
     public sealed class Pilot : Part
     {

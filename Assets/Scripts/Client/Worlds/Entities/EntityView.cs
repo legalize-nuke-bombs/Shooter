@@ -1,6 +1,6 @@
 using UnityEngine;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Parts;
+using Shooter.Server.Worlds.Entities.Parts.Pilot;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
 
 namespace Shooter.Client.Worlds.Entities
