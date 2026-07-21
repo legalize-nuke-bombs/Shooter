@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Shooter.Server.Worlds.Entities.Parts;
 
 namespace Shooter.Server.Worlds.Entities
 {
