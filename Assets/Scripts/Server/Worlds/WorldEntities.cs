@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Parts;
+using Shooter.Server.Worlds.Entities.Parts.Pilot;
 
 namespace Shooter.Server.Worlds
 {
