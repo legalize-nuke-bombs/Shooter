@@ -2,6 +2,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Speaker
 {
     public enum SoundType
     {
-        Footsteps
+        Footsteps,
+        Ak47Shot,
+        Ak47Misfire
     }
 }

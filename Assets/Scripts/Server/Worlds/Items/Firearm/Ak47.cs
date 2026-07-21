@@ -1,3 +1,5 @@
+using Shooter.Server.Worlds.Entities.Parts.Speaker;
+
 namespace Shooter.Server.Worlds.Items.Firearm
 {
     public class Ak47 : Firearm
@@ -7,19 +9,44 @@ namespace Shooter.Server.Worlds.Items.Firearm
 
         }
 
-        protected override FirearmType FirearmType()
+        public override FirearmType FirearmType()
         {
             return Items.Firearm.FirearmType.Ak47;
         }
 
-        protected override int MagazineSize()
+        public override int MagazineSize()
         {
             return 30;
         }
 
-        protected override StackableItem AmmoType()
+        public override StackableItem AmmoType()
         {
             return StackableItem.Ammo762X39;
+        }
+
+        public override float Distance()
+        {
+            return 100;
+        }
+
+        public override int Damage()
+        {
+            return 25;
+        }
+
+        public override float FireInterval()
+        {
+            return 0.1f;
+        }
+
+        public override SoundType ShotSound()
+        {
+            return SoundType.Ak47Shot;
+        }
+
+        public override SoundType MisfireSound()
+        {
+            return SoundType.Ak47Misfire;
         }
     }
 }

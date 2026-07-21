@@ -31,12 +31,12 @@ namespace Shooter.Client.Hud.Hands
             }
 
             InventoryState inventoryState = me.Part<InventoryState>();
-            if (inventoryState == null || inventoryState.EquiptedId == null)
+            if (inventoryState == null || inventoryState.EquippedId == null)
             {
                 return;
             }
 
-            UniqueItemState equipted = inventoryState.Unique.GetValueOrDefault(inventoryState.EquiptedId.Value, null);
+            UniqueItemState equipted = inventoryState.Unique.GetValueOrDefault(inventoryState.EquippedId.Value, null);
             if (equipted != null && equipted is FirearmState firearmState)
             {
                 switch (firearmState.FirearmType)

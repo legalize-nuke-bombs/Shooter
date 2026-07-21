@@ -51,6 +51,7 @@ namespace Shooter.Client.Worlds.Entities.Players
         public PlayerIntent BuildIntent()
         {
             Keyboard keyboard = Keyboard.current;
+            Mouse mouse = Mouse.current;
             var intent = new PlayerIntent
             {
                 MoveX = (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
@@ -58,6 +59,7 @@ namespace Shooter.Client.Worlds.Entities.Players
                 Jump = jumpPending,
                 Sprint = keyboard.leftShiftKey.isPressed,
                 Use = usePending,
+                Shoot = mouse.leftButton.isPressed,
                 Yaw = body.eulerAngles.y,
                 Pitch = pitch
             };

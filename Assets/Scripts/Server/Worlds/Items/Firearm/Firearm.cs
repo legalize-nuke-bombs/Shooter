@@ -1,3 +1,5 @@
+using Shooter.Server.Worlds.Entities.Parts.Speaker;
+
 namespace Shooter.Server.Worlds.Items.Firearm
 {
     public abstract class Firearm : UniqueItem
@@ -13,7 +15,7 @@ namespace Shooter.Server.Worlds.Items.Firearm
             return (magazine > 0);
         }
 
-        public bool TryToShot()
+        public bool TryToShoot()
         {
             if (magazine == 0)
             {
@@ -25,9 +27,14 @@ namespace Shooter.Server.Worlds.Items.Firearm
             return true;
         }
 
-        protected abstract FirearmType FirearmType();
-        protected abstract int MagazineSize();
-        protected abstract StackableItem AmmoType();
+        public abstract FirearmType FirearmType();
+        public abstract int MagazineSize();
+        public abstract StackableItem AmmoType();
+        public abstract float Distance();
+        public abstract int Damage();
+        public abstract float FireInterval();
+        public abstract SoundType ShotSound();
+        public abstract SoundType MisfireSound();
 
         public override UniqueItemState State()
         {
@@ -37,7 +44,9 @@ namespace Shooter.Server.Worlds.Items.Firearm
                 Magazine = magazine,
                 FirearmType = FirearmType(),
                 MagazineSize = MagazineSize(),
-                AmmoType = AmmoType()
+                AmmoType = AmmoType(),
+                Distance = Distance(),
+                Damage = Damage()
             };
         }
     }
