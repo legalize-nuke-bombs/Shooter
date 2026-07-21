@@ -10,17 +10,18 @@ namespace Shooter.Server.Worlds.Entities.Spawning
 {
     public static class NpcSpawner
     {
-        private const int MaxHp = 1000;
-
         public static Entity Spawn(string name, Vector3 position, Scene scene)
         {
+            Log.Info("Spawning npc...");
+
             var body = new GameObject("Npc_" + name);
             body.transform.position = position;
+            body.AddComponent<CapsuleCollider>();
             SceneManager.MoveGameObjectToScene(body, scene);
 
             var npc = new Entity(Guid.NewGuid(), body);
             npc.Add(new DefaultNameable(name));
-            npc.Add(new DefaultHealth(MaxHp));
+            npc.Add(new DefaultHealth(100));
             npc.Add(new Inventory());
             EntityBody.Bind(body, npc.Id);
 

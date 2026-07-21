@@ -1,4 +1,5 @@
 using System;
+using Shooter.Logging;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Health
 {
@@ -20,13 +21,27 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
         public override void Damage(int amount)
         {
             if (Alive && amount > 0)
+            {
+                Log.Info("DefaultHealth part damaged amount {}", amount);
                 hp = Math.Max(hp - amount, 0);
+            }
+            else
+            {
+                Log.Info("DefaultHealth part can not be damaged because it is already dead");
+            }
         }
 
         public override void Heal(int amount)
         {
             if (Alive && amount > 0)
+            {
+                Log.Info("DefaultHealth part healed amount {}", amount);
                 hp = Math.Min(hp + amount, max);
+            }
+            else
+            {
+                Log.Info("DefaultHealth part can not be healed because it is dead");
+            }
         }
     }
 }

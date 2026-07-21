@@ -8,6 +8,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
     {
         public Dictionary<StackableItem, int> Stacks { get; set; }
         public Dictionary<long, UniqueItemState> Unique { get; set; }
-        public long? EquiptedId { get; set; }
+        public long? EquippedId { get; set; }
     }
 }
