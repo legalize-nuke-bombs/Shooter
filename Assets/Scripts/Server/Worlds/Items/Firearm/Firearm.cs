@@ -1,3 +1,4 @@
+using System;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
 
 namespace Shooter.Server.Worlds.Items.Firearm
@@ -15,6 +16,11 @@ namespace Shooter.Server.Worlds.Items.Firearm
             return (magazine > 0);
         }
 
+        public bool MagazineFull()
+        {
+            return (magazine == MagazineSize());
+        }
+
         public bool TryToShoot()
         {
             if (magazine == 0)
@@ -27,14 +33,24 @@ namespace Shooter.Server.Worlds.Items.Firearm
             return true;
         }
 
+        public int Reload(int toAddRequested)
+        {
+            int absent = MagazineSize() - magazine;
+            int toAdd = Math.Min(absent, toAddRequested);
+            magazine += toAdd;
+            return toAdd;
+        }
+
         public abstract FirearmType FirearmType();
         public abstract int MagazineSize();
         public abstract StackableItem AmmoType();
         public abstract float Distance();
         public abstract int Damage();
         public abstract float FireInterval();
+        public abstract float ReloadTime();
         public abstract SoundType ShotSound();
         public abstract SoundType MisfireSound();
+        public abstract SoundType ReloadSound();
 
         public override UniqueItemState State()
         {
