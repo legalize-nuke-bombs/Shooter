@@ -1,12 +1,16 @@
+using System.Collections.Generic;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using UnityEngine;
 
 namespace Shooter.Client.Worlds.Entities.Parts.Nameable
 {
-    public static class NameMapper
+    public class NameMapper
     {
-        public static string NameOf(NameableState nameable)
+
+        private readonly HashSet<NameableType> unknown = new HashSet<NameableType>();
+
+        public string NameOf(NameableState nameable)
         {
             if (nameable == null)
             {
@@ -26,12 +30,15 @@ namespace Shooter.Client.Worlds.Entities.Parts.Nameable
 
 
                 default:
-                    Log.Warn("Unexpected nameable type {}", nameable.Type);
+                    if (unknown.Add(nameable.Type))
+                    {
+                        Log.Warn("Unexpected nameable type {}", nameable.Type);
+                    }
                     return nameable.Type.ToString();
             }
         }
 
-        private static string Corrupted()
+        private string Corrupted()
         {
             const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             const int length = 8;
