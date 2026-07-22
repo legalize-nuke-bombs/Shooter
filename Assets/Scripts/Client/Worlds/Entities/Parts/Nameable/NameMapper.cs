@@ -40,14 +40,25 @@ namespace Shooter.Client.Worlds.Entities.Parts.Nameable
 
         private string Corrupted()
         {
-            const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            const int length = 8;
+            const string glitchAlphabet = "017XREVID#$@%?!&";
+            string[] metaMessages = { "I_SEE_YOU", "WAKE_UP", "THE_END_IS_NEAR" };
 
-            char[] noise = new char[length];
+            if (Random.Range(0f, 1f) < 0.15f)
+            {
+                return metaMessages[Random.Range(0, metaMessages.Length)];
+            }
 
+            int length = Random.Range(10, 20);
+
+            var sb = new System.Text.StringBuilder();
             for (int i = 0; i < length; i++)
-                noise[i] = alphabet[Random.Range(0, alphabet.Length)];
-            return new string(noise);
+            {
+                char c = glitchAlphabet[Random.Range(0, glitchAlphabet.Length)];
+                sb.Append(c);
+            }
+
+            return sb.ToString();
         }
+
     }
 }
