@@ -8,6 +8,7 @@ using Shooter.Server.Worlds.Entities.Spawning;
 using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Sleeping;
 using Shooter.Logging;
+using Shooter.Server.Worlds.Entities.Parts.Nameable;
 
 namespace Shooter.Server.Worlds
 {
@@ -28,7 +29,8 @@ namespace Shooter.Server.Worlds
             Log.Info("World {} built: additive physics copy of Map, scene handle {}", id, scene.handle);
             sight = new Sight(scene.GetPhysicsScene());
             sleep = new Sleep(clock, entities);
-            entities.Add(NpcSpawner.Spawn("npc 0", new Vector3(0f, 1.1f, 16f), scene));
+            entities.Add(NpcSpawner.Spawn(NameableType.Capsule, "", new Vector3(0f, 1.1f, 16f), scene));
+            entities.Add(NpcSpawner.Spawn(NameableType.SpecialCorrupted, "", new Vector3(5f, 1.1f, 16f), scene));
         }
 
         public void Destroy()
