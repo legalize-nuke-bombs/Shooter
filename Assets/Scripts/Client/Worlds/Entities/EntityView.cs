@@ -20,6 +20,8 @@ namespace Shooter.Client.Worlds.Entities
         private float targetYaw;
         private bool sleeping;
 
+        private readonly NameMapper nameMapper = new NameMapper();
+
         public EntityView(EntityState state)
         {
             var capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
@@ -40,7 +42,7 @@ namespace Shooter.Client.Worlds.Entities
             targetPosition = new Vector3(state.X, state.Y, state.Z);
             targetYaw = state.Yaw;
             NameableState nameable = state.Part<NameableState>();
-            Name = NameMapper.NameOf(nameable);
+            Name = nameMapper.NameOf(nameable);
             PilotState pilot = state.Part<PilotState>();
             sleeping = pilot != null && pilot.Sleeping;
             speaker.Apply(state.Part<SpeakerState>());
