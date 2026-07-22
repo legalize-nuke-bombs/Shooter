@@ -29,7 +29,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
             SceneManager.MoveGameObjectToScene(body, scene);
 
             var player = new Entity(Guid.NewGuid(), body);
-            player.Add(new DefaultNameable(displayName));
+            player.Add(new Nameable(NameableType.SpecialAbsolute, displayName));
             player.Add(new DefaultHealth(100));
 
             var inventory = new Inventory();

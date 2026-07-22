@@ -10,22 +10,24 @@ namespace Shooter.Server.Worlds.Entities.Spawning
 {
     public static class NpcSpawner
     {
-        public static Entity Spawn(string name, Vector3 position, Scene scene)
+        public static Entity Spawn(NameableType nameableType, string nameablePayload, Vector3 position, Scene scene)
         {
-            Log.Info("Spawning npc...");
+            Guid id = Guid.NewGuid();
 
-            var body = new GameObject("Npc_" + name);
+            Log.Info("Spawning npc {}...", id);
+
+            var body = new GameObject("Npc_" + id);
             body.transform.position = position;
             body.AddComponent<CapsuleCollider>();
             SceneManager.MoveGameObjectToScene(body, scene);
 
-            var npc = new Entity(Guid.NewGuid(), body);
-            npc.Add(new DefaultNameable(name));
+            var npc = new Entity(id, body);
+            npc.Add(new Nameable(nameableType, nameablePayload));
             npc.Add(new DefaultHealth(100));
             npc.Add(new Inventory());
             EntityBody.Bind(body, npc.Id);
 
-            Log.Info("Npc '{}' spawned as entity {} at {}", name, npc.Id, position);
+            Log.Info("Npc spawned as entity {} at {}", npc.Id, position);
             return npc;
         }
     }

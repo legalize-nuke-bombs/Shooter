@@ -1,16 +1,28 @@
-using System;
-
 namespace Shooter.Server.Worlds.Entities.Parts.Nameable
 {
-    public abstract class Nameable : Part
+    public class Nameable : Part
     {
-        public sealed override Type Slot => typeof(Nameable);
+        private readonly NameableType type;
+        private readonly string payload;
 
-        public abstract string Name { get; }
+        public Nameable(NameableType type, string payload)
+        {
+            this.type = type;
+            this.payload = payload;
+        }
+
+        public Nameable(NameableType type)
+        {
+            this.type = type;
+        }
 
         public override PartState State()
         {
-            return new NameState { Name = Name };
+            return new NameableState
+            {
+                Type = type,
+                Payload = payload
+            };
         }
     }
 }

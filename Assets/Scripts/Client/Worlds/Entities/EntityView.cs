@@ -1,5 +1,6 @@
 using UnityEngine;
 using Shooter.Client.Sounds;
+using Shooter.Client.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Parts.Pilot;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
@@ -38,8 +39,8 @@ namespace Shooter.Client.Worlds.Entities
         {
             targetPosition = new Vector3(state.X, state.Y, state.Z);
             targetYaw = state.Yaw;
-            NameState name = state.Part<NameState>();
-            Name = name == null ? "" : name.Name;
+            NameableState nameable = state.Part<NameableState>();
+            Name = NameMapper.NameOf(nameable);
             PilotState pilot = state.Part<PilotState>();
             sleeping = pilot != null && pilot.Sleeping;
             speaker.Apply(state.Part<SpeakerState>());
