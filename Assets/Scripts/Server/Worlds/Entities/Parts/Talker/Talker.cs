@@ -58,12 +58,12 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
                 Message last = Conversations[userId].Last();
                 if (last == null || last.Author == MessageAuthor.Talker)
                 {
-                    return;
+                    continue;
                 }
 
                 if (!CanTalkTo(userId))
                 {
-                    return;
+                    continue;
                 }
 
                 StartTalking(userId);
