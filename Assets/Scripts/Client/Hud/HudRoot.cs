@@ -5,6 +5,7 @@ using Shooter.Client.Aiming;
 using Shooter.Client.Hud.Hands;
 using Shooter.Client.Hud.Inventory;
 using Shooter.Client.Hud.Sleeping;
+using Shooter.Client.Hud.Talking;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Logging;
@@ -22,7 +23,9 @@ namespace Shooter.Client.Hud
         {
             this.root = root;
             var font = Resources.Load<Font>(FontPath);
+
             var sleepSense = new SleepSense(world, aim);
+            var talkSense = new TalkSense(world, aim);
 
             root.pickingMode = PickingMode.Ignore;
             root.Add(new HandsOverlay(world));
@@ -32,6 +35,7 @@ namespace Shooter.Client.Hud
             root.Add(new SleepOverlay(sleepSense));
             root.Add(new ClockLabel(font, world));
             root.Add(new SleepHintLabel(font, sleepSense));
+            root.Add(new TalkHintLabel(font, talkSense));
             root.Add(new DeadScreen(font, world));
 
             inventory = new InventoryOverlay(font, world);

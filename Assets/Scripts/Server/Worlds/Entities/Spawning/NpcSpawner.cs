@@ -5,12 +5,13 @@ using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Parts.Health;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Entities.Parts.Inventory;
+using Shooter.Server.Worlds.Entities.Parts.Talker;
 
 namespace Shooter.Server.Worlds.Entities.Spawning
 {
     public static class NpcSpawner
     {
-        public static Entity Spawn(Nameable nameable, Health health, Inventory inventory, Vector3 position, Scene scene)
+        public static Entity Spawn(Nameable nameable, Health health, Inventory inventory, Talker talker, Vector3 position, Scene scene)
         {
             Guid id = Guid.NewGuid();
 
@@ -25,6 +26,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
             npc.Add(nameable);
             npc.Add(health);
             npc.Add(inventory);
+            if (talker != null) npc.Add(talker);
             EntityBody.Bind(body, npc.Id);
 
             Log.Info("Npc spawned as entity {} at {}", npc.Id, position);

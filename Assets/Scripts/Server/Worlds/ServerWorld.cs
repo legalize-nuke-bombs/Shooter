@@ -11,6 +11,8 @@ using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Parts.Health;
 using Shooter.Server.Worlds.Entities.Parts.Inventory;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
+using Shooter.Server.Worlds.Entities.Parts.Talker;
+using Shooter.Server.Worlds.Entities.Parts.Talker.Gemini;
 
 namespace Shooter.Server.Worlds
 {
@@ -31,8 +33,12 @@ namespace Shooter.Server.Worlds
             Log.Info("World {} built: additive physics copy of Map, scene handle {}", id, scene.handle);
             sight = new Sight(scene.GetPhysicsScene());
             sleep = new Sleep(clock, entities);
-            entities.Add(NpcSpawner.Spawn(new Nameable(NameableType.Capsule), new DefaultHealth(100), new Inventory(), new Vector3(0f, 1.1f, 16f), scene));
-            entities.Add(NpcSpawner.Spawn(new Nameable(NameableType.SpecialCorrupted), new DefaultHealth(100), new Inventory(), new Vector3(5f, 1.1f, 16f), scene));
+
+            Health capsuleHealth = new DefaultHealth(100);
+            entities.Add(NpcSpawner.Spawn(new Nameable(NameableType.Capsule), capsuleHealth, new Inventory(), new GeminiTalker(GeminiModel.Flash35Lite, "Тебя зовут Капсул. Ты первый NPC добавленный в игру. Ты дружелюбный и эмпатичный. Ты помогаешь игроку.", capsuleHealth), new Vector3(0f, 1.1f, 16f), scene));
+
+            Health corruptedHealth = new DefaultHealth(100);
+            entities.Add(NpcSpawner.Spawn(new Nameable(NameableType.SpecialCorrupted), corruptedHealth, new Inventory(), new RefusiveTalker(corruptedHealth), new Vector3(5f, 1.1f, 16f), scene));
         }
 
         public void Destroy()

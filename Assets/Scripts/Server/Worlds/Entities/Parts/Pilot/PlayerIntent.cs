@@ -9,6 +9,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         public bool Use { get; set; }
         public bool Shoot { get; set; }
         public bool Reload { get; set; }
+        public string Speech { get; set; }
         public float Yaw { get; set; }
         public float Pitch { get; set; }
     }
