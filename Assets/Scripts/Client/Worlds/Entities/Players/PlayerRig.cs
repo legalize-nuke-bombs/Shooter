@@ -64,14 +64,14 @@ namespace Shooter.Client.Worlds.Entities.Players
             {
                 MoveX = UiCaptured ? 0f : (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
                 MoveZ = UiCaptured ? 0f : (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f),
-                Jump = jumpPending,
                 Sprint = !UiCaptured && keyboard.leftShiftKey.isPressed,
+                Yaw = body.eulerAngles.y,
+                Pitch = pitch,
+                Jump = jumpPending,
                 Use = usePending,
                 Shoot = !UiCaptured && mouse.leftButton.isPressed,
                 Reload = reloadPending,
-                Speech = speechPending,
-                Yaw = body.eulerAngles.y,
-                Pitch = pitch
+                Speech = speechPending
             };
             jumpPending = false;
             usePending = false;
