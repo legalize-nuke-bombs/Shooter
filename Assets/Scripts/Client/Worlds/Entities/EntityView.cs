@@ -5,6 +5,7 @@ using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Parts.Pilot;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
+using Shooter.Server.Worlds.Entities.Parts.Health;
 
 namespace Shooter.Client.Worlds.Entities
 {
@@ -19,6 +20,7 @@ namespace Shooter.Client.Worlds.Entities
         private Vector3 targetPosition;
         private float targetYaw;
         private bool sleeping;
+        private bool dead;
 
         private readonly NameMapper nameMapper = new NameMapper();
 
@@ -41,18 +43,24 @@ namespace Shooter.Client.Worlds.Entities
         {
             targetPosition = new Vector3(state.X, state.Y, state.Z);
             targetYaw = state.Yaw;
+
             NameableState nameable = state.Part<NameableState>();
             Name = nameMapper.NameOf(nameable);
+
             PilotState pilot = state.Part<PilotState>();
             sleeping = pilot != null && pilot.Sleeping;
+
+            HealthState health = state.Part<HealthState>();
+            dead = health != null && (health.Hp == 0);
+
             speaker.Apply(state.Part<SpeakerState>());
         }
 
         public void Tick(float dt)
         {
             float t = 1f - Mathf.Exp(-LerpFactor * dt);
-            Quaternion targetRotation = Quaternion.Euler(0f, targetYaw, 0f);
-            if (sleeping) targetRotation *= Quaternion.Euler(0f, 0f, 90f);
+            var targetRotation = Quaternion.Euler(0f, targetYaw, 0f);
+            if (sleeping || dead) targetRotation *= Quaternion.Euler(0f, 0f, 90f);
             body.position = Vector3.Lerp(body.position, targetPosition, t);
             body.rotation = Quaternion.Slerp(body.rotation, targetRotation, t);
         }
