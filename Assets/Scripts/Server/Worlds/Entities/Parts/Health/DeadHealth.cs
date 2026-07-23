@@ -13,5 +13,9 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
         public override void Heal(int amount)
         {
         }
+
+        public override void Resurrect()
+        {
+        }
     }
 }

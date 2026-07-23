@@ -1,8 +1,12 @@
 using UnityEngine;
 using Shooter.Logging;
+using Shooter.Server.Worlds.Entities.Parts.Health;
+using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Sleeping;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
+using Shooter.Server.Worlds.Entities.Spawning;
+using UnityEngine.SceneManagement;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 {
@@ -18,27 +22,35 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         public PlayerIntent LastInput { get; private set; } = new PlayerIntent();
 
         private readonly CharacterController controller;
+        private readonly Health.Health health;
+        private readonly Inventory.Inventory inventory;
         private readonly Speaker.Speaker speaker;
         private readonly Shooter.Shooter shooter;
         private readonly Hands.Hands hands;
+        private Vector3 spawnPoint = new Vector3(0, 0, 0);
 
         private readonly Clock clock;
         private readonly Sight sight;
         private readonly WorldEntities worldEntities;
+        private readonly Scene scene;
 
         private float verticalVelocity;
         private bool jumpQueued;
         private float strideProgress;
 
-        public Pilot(CharacterController controller, Speaker.Speaker speaker, Shooter.Shooter shooter, Hands.Hands hands, Clock clock, Sight sight, WorldEntities worldEntities)
+        public Pilot(CharacterController controller, Health.Health health, Inventory.Inventory inventory, Speaker.Speaker speaker, Shooter.Shooter shooter, Hands.Hands hands, Clock clock, Sight sight, WorldEntities worldEntities, Scene scene)
         {
             this.controller = controller;
+            this.health = health;
+            this.inventory = inventory;
             this.speaker = speaker;
             this.shooter = shooter;
             this.hands = hands;
+
             this.clock = clock;
             this.sight = sight;
             this.worldEntities = worldEntities;
+            this.scene = scene;
         }
 
         public void Apply(PlayerIntent input)
@@ -48,6 +60,16 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             input.Yaw = Finite(input.Yaw);
             input.Pitch = Finite(input.Pitch);
             LastInput = input;
+
+            if (!health.Alive)
+            {
+                if (input.Use || input.Jump)
+                {
+                    Resurrect();
+                }
+
+                return;
+            }
 
             if (Sleeping)
             {
@@ -59,6 +81,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
             if (input.Use)
             {
+                // TODO remove this shit, damage test
+                health.Damage(10);
                 if (TryToSleep())
                 {
                     return;
@@ -90,12 +114,17 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         public override void Tick(Entity self, float dt)
         {
-            if (Sleeping) return;
+            TickMovement(dt);
+        }
+
+        private void TickMovement(float dt)
+        {
+            if (Sleeping || !health.Alive) return;
 
             Transform body = controller.transform;
             body.rotation = Quaternion.Euler(0f, LastInput.Yaw, 0f);
 
-            Vector3 direction = Vector3.ClampMagnitude(body.right * LastInput.MoveX + body.forward * LastInput.MoveZ, 1f);
+            var direction = Vector3.ClampMagnitude(body.right * LastInput.MoveX + body.forward * LastInput.MoveZ, 1f);
             float speed = LastInput.Sprint ? SprintSpeed : WalkSpeed;
 
             if (controller.isGrounded)
@@ -122,6 +151,19 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             speaker.Play(SoundType.Footsteps);
         }
 
+        private void Resurrect()
+        {
+            Log.Info("Pilot at {} will be resurrected", controller.transform.position);
+
+            worldEntities.Add(NpcSpawner.Spawn(new Nameable.Nameable(NameableType.SpecialDeadPlayer), new DeadHealth(), new Inventory.Inventory(inventory), controller.transform.position, scene));
+
+            controller.enabled = false;
+            controller.transform.position = spawnPoint;
+            controller.enabled = true;
+            health.Resurrect();
+            inventory.Clear();
+        }
+
         private bool TryToSleep()
         {
             if (!hands.Free)
@@ -140,6 +182,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
                 return false;
             }
             Sleeping = true;
+            spawnPoint = controller.transform.position;
             Log.Info("Pilot fell asleep at {}", controller.transform.position);
             return true;
         }

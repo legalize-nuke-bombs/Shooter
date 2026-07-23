@@ -11,6 +11,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
         public abstract bool Alive { get; }
         public abstract void Damage(int amount);
         public abstract void Heal(int amount);
+        public abstract void Resurrect();
 
         public override PartState State()
         {
