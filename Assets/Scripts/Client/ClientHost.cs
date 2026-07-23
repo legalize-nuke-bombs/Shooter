@@ -74,7 +74,7 @@ namespace Shooter.Client
 
             float deltaTime = Time.deltaTime;
             rig.Tick(deltaTime);
-            hud.Tick();
+            hud.Tick(deltaTime);
             sky.Tick();
             world.Tick(deltaTime);
 

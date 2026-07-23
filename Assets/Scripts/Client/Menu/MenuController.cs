@@ -14,6 +14,7 @@ namespace Shooter.Client.Menu
     public class MenuController : MonoBehaviour
     {
         private MenuApi api;
+        private MenuBackground background;
         private LoginScreen login;
         private ServerErrorScreen serverError;
         private WorldsScreen worlds;
@@ -30,7 +31,8 @@ namespace Shooter.Client.Menu
             LoadConfig();
 
             var root = GetComponent<UIDocument>().rootVisualElement;
-            root.Q<VisualElement>("root").Insert(0, new MenuBackground());
+            background = new MenuBackground();
+            root.Q<VisualElement>("root").Insert(0, background);
             cornerStatus = root.Q<Label>("corner-status");
 
             api = new MenuApi(this);
@@ -98,6 +100,8 @@ namespace Shooter.Client.Menu
 
         private void Update()
         {
+            background.Tick(Time.deltaTime);
+
             if (!Keyboard.current.escapeKey.wasPressedThisFrame) return;
             Log.Info("Menu: Escape pressed, quitting");
 #if UNITY_EDITOR

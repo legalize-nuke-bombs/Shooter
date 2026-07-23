@@ -1,35 +1,38 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Client.Hud
 {
-    public class ClockLabel : HudLabel
+    public class ClockLabel : UiElement
     {
         private readonly ClientWorld world;
+        private readonly TextLine line;
 
-        public ClockLabel(Font font, ClientWorld world) : base(font)
+        public ClockLabel(Font font, ClientWorld world)
         {
             this.world = world;
             style.top = 12;
             style.right = 16;
-            style.unityTextAlign = TextAnchor.MiddleRight;
-            style.fontSize = 15;
+
+            line = new TextLine(font, 15);
+            line.style.unityTextAlign = TextAnchor.MiddleRight;
+            Add(line);
         }
 
-        protected override void Refresh()
+        protected override void OnTick(float dt)
         {
             if (world.Clock == null)
             {
-                style.display = DisplayStyle.None;
+                Visible = false;
                 return;
             }
 
             long timestamp = world.Clock.Timestamp;
             int minutes = (int)(DayCycle.FractionOf(timestamp) * 1440f);
-            style.display = DisplayStyle.Flex;
-            text = $"День {DayCycle.DayOf(timestamp) + 1}, {minutes / 60:D2}:{minutes % 60:D2}";
+            Visible = true;
+            line.text = $"День {DayCycle.DayOf(timestamp) + 1}, {minutes / 60:D2}:{minutes % 60:D2}";
         }
     }
 }

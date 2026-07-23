@@ -4,9 +4,8 @@ using Shooter.Client.Ui;
 
 namespace Shooter.Client.Menu
 {
-    public class MenuBackground : Overlay
+    public class MenuBackground : UiElement
     {
-        private const long TickMs = 16;
         private const int GradientBands = 44;
         private const int StarCount = 90;
         private const int HazePatches = 5;
@@ -22,7 +21,12 @@ namespace Shooter.Client.Menu
 
         public MenuBackground()
         {
-            Animate(TickMs);
+            Fullscreen();
+        }
+
+        protected override void OnTick(float dt)
+        {
+            MarkDirtyRepaint();
         }
 
         protected override void Draw(Painter2D painter, Rect rect)
