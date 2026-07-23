@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using Shooter.Logging;
 using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Parts.Pilot;
 
@@ -23,6 +24,7 @@ namespace Shooter.Server.Worlds
         {
             all[entity.Id] = entity;
             SceneManager.MoveGameObjectToScene(entity.Body, scene);
+            Log.Info("{} spawned at {}", entity.Body.name, entity.Body.transform.position);
         }
 
         public void AddPlayer(long userId, Entity player)

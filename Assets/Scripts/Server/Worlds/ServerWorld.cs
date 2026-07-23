@@ -36,10 +36,10 @@ namespace Shooter.Server.Worlds
             sleep = new Sleep(clock, entities);
 
             Health capsuleHealth = new DefaultHealth(100);
-            entities.Add(NpcSpawner.Spawn(new Nameable(NameableType.Capsule), capsuleHealth, new Inventory(), new GeminiTalker(GeminiModel.Flash35Lite, "Тебя зовут Капсул. Ты первый NPC добавленный в игру. Ты дружелюбный и эмпатичный. Ты помогаешь игроку.", capsuleHealth), new Vector3(0f, 1.1f, 16f)));
+            entities.Add(NpcCreator.Create(new Nameable(NameableType.Capsule), capsuleHealth, new Inventory(), new GeminiTalker(GeminiModel.Flash35Lite, "Тебя зовут Капсул. Ты первый NPC добавленный в игру. Ты дружелюбный и эмпатичный. Ты помогаешь игроку.", capsuleHealth), new Vector3(0f, 1.1f, 16f)));
 
             Health corruptedHealth = new DefaultHealth(100);
-            entities.Add(NpcSpawner.Spawn(new Nameable(NameableType.SpecialCorrupted), corruptedHealth, new Inventory(), new RefusiveTalker(corruptedHealth), new Vector3(5f, 1.1f, 16f)));
+            entities.Add(NpcCreator.Create(new Nameable(NameableType.SpecialCorrupted), corruptedHealth, new Inventory(), new RefusiveTalker(corruptedHealth), new Vector3(5f, 1.1f, 16f)));
         }
 
         public void Destroy()
@@ -56,7 +56,7 @@ namespace Shooter.Server.Worlds
 
         public Guid AddPlayer(long userId, string displayName)
         {
-            Entity player = PlayerSpawner.Spawn(userId, displayName, sight, clock, entities);
+            Entity player = PlayerCreator.Create(userId, displayName, sight, clock, entities);
             entities.AddPlayer(userId, player);
             return player.Id;
         }
