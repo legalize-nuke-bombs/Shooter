@@ -8,7 +8,6 @@ using Shooter.Server.Worlds.Entities.Parts.Health;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Entities.Parts.Inventory;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
-using Shooter.Server.Worlds.Entities.Parts.Shooter;
 using Shooter.Server.Worlds.Entities.Parts.Hands;
 using Shooter.Server.Worlds.Items;
 using Shooter.Server.Worlds.Items.Firearm;
@@ -17,7 +16,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
 {
     public static class PlayerSpawner
     {
-        public static Entity Spawn(long userId, string displayName, Scene scene, Sight sight, Clock clock, Worlds.WorldEntities worldEntities)
+        public static Entity Spawn(long userId, string displayName, Scene scene, Sight sight, Clock clock, WorldEntities worldEntities)
         {
             Log.Info("Spawning Player {} '{}'...", userId, displayName);
 
@@ -29,8 +28,11 @@ namespace Shooter.Server.Worlds.Entities.Spawning
             SceneManager.MoveGameObjectToScene(body, scene);
 
             var player = new Entity(Guid.NewGuid(), body);
+
             player.Add(new Nameable(NameableType.SpecialAbsolute, displayName));
-            player.Add(new DefaultHealth(100));
+
+            var health = new DefaultHealth(100);
+            player.Add(health);
 
             var inventory = new Inventory();
             inventory.Add(StackableItem.Currency, 1000);
@@ -48,7 +50,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
             var shooter = new Parts.Shooter.Shooter(inventory, speaker, sight, worldEntities, hands);
             player.Add(shooter);
 
-            player.Add(new Pilot(controller, speaker, shooter, hands, clock, sight, worldEntities));
+            player.Add(new Pilot(controller, health, inventory, speaker, shooter, hands, clock, sight, worldEntities, scene));
             EntityBody.Bind(body, player.Id);
 
             Log.Info("Player {} '{}' spawned as entity {} at {}", userId, displayName, player.Id, body.transform.position);

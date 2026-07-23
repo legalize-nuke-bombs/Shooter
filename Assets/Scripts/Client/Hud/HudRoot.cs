@@ -29,6 +29,7 @@ namespace Shooter.Client.Hud
             root.Add(new SleepOverlay(sleepSense));
             root.Add(new ClockLabel(font, world));
             root.Add(new SleepHintLabel(font, sleepSense));
+            root.Add(new DeadScreen(font, world));
 
             inventory = new InventoryOverlay(font, world);
             root.Add(inventory);

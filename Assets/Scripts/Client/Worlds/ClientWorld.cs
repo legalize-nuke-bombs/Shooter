@@ -39,6 +39,7 @@ namespace Shooter.Client.Worlds
             Sleep = snapshot.Sleep;
             Entities = snapshot.Entities;
             Reconcile(snapshot.Entities);
+            Log.Info("{}", snapshot.Entities.Count);
         }
 
         public void Tick(float dt)

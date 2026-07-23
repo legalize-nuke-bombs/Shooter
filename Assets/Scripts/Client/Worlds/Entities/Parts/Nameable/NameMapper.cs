@@ -23,6 +23,8 @@ namespace Shooter.Client.Worlds.Entities.Parts.Nameable
                     return nameable.Payload;
                 case NameableType.SpecialCorrupted:
                     return Corrupted();
+                case NameableType.SpecialDeadPlayer:
+                    return "Пропавший странник";
 
 
                 case NameableType.Capsule:

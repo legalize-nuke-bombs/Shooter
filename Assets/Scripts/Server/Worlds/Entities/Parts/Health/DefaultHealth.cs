@@ -22,12 +22,12 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
         {
             if (Alive && amount > 0)
             {
-                Log.Info("DefaultHealth part damaged amount {}", amount);
+                Log.Info("Damaged amount {}", amount);
                 hp = Math.Max(hp - amount, 0);
             }
             else
             {
-                Log.Info("DefaultHealth part can not be damaged because it is already dead");
+                Log.Info("Can not be damaged because it is already dead");
             }
         }
 
@@ -35,12 +35,24 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
         {
             if (Alive && amount > 0)
             {
-                Log.Info("DefaultHealth part healed amount {}", amount);
+                Log.Info("Healed amount {}", amount);
                 hp = Math.Min(hp + amount, max);
             }
             else
             {
-                Log.Info("DefaultHealth part can not be healed because it is dead");
+                Log.Info("Can not be healed because it is dead");
+            }
+        }
+
+        public override void Resurrect()
+        {
+            if (Alive)
+            {
+                Log.Info("Can not be resurrected because it is already alive");
+            }
+            else
+            {
+                hp = MaxHp;
             }
         }
     }

@@ -4,7 +4,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Nameable
     {
         SpecialAbsolute,
         SpecialCorrupted,
-
+        SpecialDeadPlayer,
 
         Capsule
     }
