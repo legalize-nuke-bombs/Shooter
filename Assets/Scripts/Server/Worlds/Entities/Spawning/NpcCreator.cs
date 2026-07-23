@@ -7,9 +7,9 @@ using Shooter.Server.Worlds.Entities.Parts.Talker;
 
 namespace Shooter.Server.Worlds.Entities.Spawning
 {
-    public static class NpcSpawner
+    public static class NpcCreator
     {
-        public static Entity Spawn(Nameable nameable, Health health, Inventory inventory, Talker talker, Vector3 position)
+        public static Entity Create(Nameable nameable, Health health, Inventory inventory, Talker talker, Vector3 position)
         {
             var npc = new Entity("Npc", position);
             npc.Body.AddComponent<CapsuleCollider>();
@@ -19,7 +19,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
             npc.Add(inventory);
             if (talker != null) npc.Add(talker);
 
-            Log.Info("Npc {} assembled at {}", npc.Id, position);
+            Log.Info("Npc {} created at {}", npc.Id, position);
             return npc;
         }
     }
