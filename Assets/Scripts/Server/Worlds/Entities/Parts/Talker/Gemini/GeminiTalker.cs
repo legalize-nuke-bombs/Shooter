@@ -93,10 +93,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
 
             const string path = "v1beta/models";
             const string action = "generateContent";
-            const string domainPart1 = "generative";
-            const string domainPart2 = "language";
-            const string domainPart3 = "google" + "apis" + "." + "com";
-            const string host = domainPart1 + domainPart2 + "." + domainPart3;
+            const string host = "generativelanguage.googleapis.com";
 
             var uriBuilder = new UriBuilder
             {

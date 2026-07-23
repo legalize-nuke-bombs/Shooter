@@ -26,7 +26,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
         {
             var settings = new JsonSerializerSettings();
             settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-            return JsonConvert.SerializeObject(messages);
+            return JsonConvert.SerializeObject(messages, settings);
         }
 
         public ConversationState State()
