@@ -5,53 +5,27 @@ using System.Threading.Tasks;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Shooter.Logging;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
+namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
 {
-    public class GeminiTalker : Talker
+    public class GeminiTalker : AITalker
     {
         private const string Host = "generativelanguage.googleapis.com";
-        private const string FallbackAnswer = "Not now.";
 
         private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
         private readonly string model;
-        private readonly string characterSystemPrompt;
-        private readonly GeminiSettings settings = new GeminiSettings();
+
         private readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public GeminiTalker(GeminiModel model, string characterSystemPrompt, Health.Health health) : base(health)
+        public GeminiTalker(GeminiModel model, string characterSystemPrompt, Health.Health health) : base(characterSystemPrompt, health)
         {
             this.model = model.ToRaw();
-            this.characterSystemPrompt = characterSystemPrompt;
         }
 
-        protected override void StartTalking(long userId)
-        {
-            _ = AnswerAsync(userId);
-        }
-
-        private async Task AnswerAsync(long userId)
-        {
-            string answer;
-            try
-            {
-                Log.Info("Requesting {} answer for user {}...", model, userId);
-                answer = await RequestAnswer(Conversations[userId].ToString());
-            }
-            catch (Exception e)
-            {
-                Log.Error("Gemini request for user {} failed: {}", userId, e.Message);
-                answer = FallbackAnswer;
-            }
-
-            Say(userId, answer);
-        }
-
-        private async Task<string> RequestAnswer(string conversation)
+        protected override async Task<string> RequestAnswer(string systemPrompt, string conversation)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
@@ -66,7 +40,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
                 },
                 SystemInstruction = new Content
                 {
-                    Parts = new[] { new Part { Text = settings.BaseSystemPrompt + "\n" + characterSystemPrompt } }
+                    Parts = new[] { new Part { Text = systemPrompt } }
                 }
             };
 

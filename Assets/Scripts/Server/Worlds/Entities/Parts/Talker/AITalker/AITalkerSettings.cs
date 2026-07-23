@@ -1,6 +1,6 @@
-namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
+namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
 {
-    public class GeminiSettings
+    public class AITalkerSettings
     {
         public string BaseSystemPrompt { get; private set; } =
             "You are an NPC in a 3D meta horror game with an optional cooperative mode.\n" +
