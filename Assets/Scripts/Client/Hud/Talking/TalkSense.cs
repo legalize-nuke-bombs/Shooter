@@ -2,6 +2,7 @@ using Shooter.Client.Aiming;
 using Shooter.Client.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Parts.Talker;
 using UnityEngine;
+using Shooter.Server.Worlds.Entities.Parts.Health;
 
 namespace Shooter.Client.Hud.Talking
 {
@@ -33,7 +34,18 @@ namespace Shooter.Client.Hud.Talking
                 return null;
             }
 
-            return bridge.View.State.Part<TalkerState>() == null ? null : bridge.View;
+            if (bridge.View.State.Part<TalkerState>() == null)
+            {
+                return null;
+            }
+
+            HealthState health = bridge.View.State.Part<HealthState>();
+            if (health != null && health.Hp == 0)
+            {
+                return null;
+            }
+
+            return bridge.View;
         }
 
         public bool TalkerTargeted()
