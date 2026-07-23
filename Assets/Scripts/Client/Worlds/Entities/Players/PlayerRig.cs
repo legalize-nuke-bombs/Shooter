@@ -62,6 +62,7 @@ namespace Shooter.Client.Worlds.Entities.Players
                 Use = usePending,
                 Shoot = mouse.leftButton.isPressed,
                 Reload = reloadPending,
+                Speech = (keyboard.pKey.isPressed ? "Привет" : null),
                 Yaw = body.eulerAngles.y,
                 Pitch = pitch
             };

@@ -21,6 +21,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         public bool Sleeping { get; private set; }
         public PlayerIntent LastInput { get; private set; } = new PlayerIntent();
 
+        private readonly long userId;
         private readonly CharacterController controller;
         private readonly Health.Health health;
         private readonly Inventory.Inventory inventory;
@@ -38,8 +39,9 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private bool jumpQueued;
         private float strideProgress;
 
-        public Pilot(CharacterController controller, Health.Health health, Inventory.Inventory inventory, Speaker.Speaker speaker, Shooter.Shooter shooter, Hands.Hands hands, Clock clock, Sight sight, WorldEntities worldEntities, Scene scene)
+        public Pilot(long userId, CharacterController controller, Health.Health health, Inventory.Inventory inventory, Speaker.Speaker speaker, Shooter.Shooter shooter, Hands.Hands hands, Clock clock, Sight sight, WorldEntities worldEntities, Scene scene)
         {
+            this.userId = userId;
             this.controller = controller;
             this.health = health;
             this.inventory = inventory;
@@ -98,6 +100,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             {
                 TryToReload();
             }
+
+            if (input.Speech != null && input.Speech.Length > 0)
+            {
+                TryToTalk(input.Speech);
+            }
         }
 
         public void WakeUp()
@@ -155,7 +162,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         {
             Log.Info("Pilot at {} will be resurrected", controller.transform.position);
 
-            worldEntities.Add(NpcSpawner.Spawn(new Nameable.Nameable(NameableType.SpecialDeadPlayer), new DeadHealth(), new Inventory.Inventory(inventory), controller.transform.position, scene));
+            worldEntities.Add(NpcSpawner.Spawn(new Nameable.Nameable(NameableType.SpecialDeadPlayer), new DeadHealth(), new Inventory.Inventory(inventory), null, controller.transform.position, scene));
 
             controller.enabled = false;
             controller.transform.position = spawnPoint;
@@ -197,10 +204,51 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             return shooter.TryToReload();
         }
 
+        private bool TryToTalk(string speech)
+        {
+            RaycastHit lookHit = LookHit(Talker.Talker.TalkReach);
+
+            if (lookHit.collider == null)
+            {
+                Log.Info("Pilot tried to talk with no visible target, ignored");
+                return false;
+            }
+
+            EntityBody entityBody = lookHit.collider.GetComponentInChildren<EntityBody>();
+            if (entityBody == null)
+            {
+                Log.Info("Pilot tried to talk with game object with no entity body component, ignored");
+                return false;
+            }
+
+            Entity entity = worldEntities.ById(entityBody.Id);
+            if (entity == null)
+            {
+                Log.Warn("Failed to find entity by id encoded in entity body {}", entityBody.Id);
+                return false;
+            }
+
+            Talker.Talker talker = entity.Get<Talker.Talker>();
+            if (talker == null)
+            {
+                Log.Info("Pilot tried to talk with an entity that is not a talker, ignored");
+                return false;
+            }
+
+            return talker.TryToListen(userId, speech);
+        }
+
         private bool LookingAtBed()
         {
-            Ray look = Sight.LookRay(controller.transform.position, LastInput.Pitch, LastInput.Yaw);
-            return sight.Cast(look, Sleep.UseReach, out RaycastHit hit) && Sleep.IsBed(hit);
+            RaycastHit lookHit = LookHit(Sleep.UseReach);
+            return (lookHit.collider != null && Sleep.IsBed(lookHit));
+        }
+
+        private RaycastHit LookHit(float reach)
+        {
+            Ray ray = Sight.LookRay(controller.transform.position, LastInput.Pitch, LastInput.Yaw);
+            sight.Cast(ray, reach, out RaycastHit hit);
+            return hit;
         }
 
         private static float Finite(float value)

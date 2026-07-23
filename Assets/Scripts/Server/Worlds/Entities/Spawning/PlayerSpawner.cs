@@ -50,7 +50,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
             var shooter = new Parts.Shooter.Shooter(inventory, speaker, sight, worldEntities, hands);
             player.Add(shooter);
 
-            player.Add(new Pilot(controller, health, inventory, speaker, shooter, hands, clock, sight, worldEntities, scene));
+            player.Add(new Pilot(userId, controller, health, inventory, speaker, shooter, hands, clock, sight, worldEntities, scene));
             EntityBody.Bind(body, player.Id);
 
             Log.Info("Player {} '{}' spawned as entity {} at {}", userId, displayName, player.Id, body.transform.position);
