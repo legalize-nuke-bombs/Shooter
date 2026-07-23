@@ -14,6 +14,7 @@ namespace Shooter.Client.Worlds.Entities
         private const float LerpFactor = 15f;
 
         public string Name { get; private set; }
+        public EntityState State { get; private set; }
 
         private readonly Transform body;
         private readonly SpeakerView speaker;
@@ -41,6 +42,7 @@ namespace Shooter.Client.Worlds.Entities
 
         public void Apply(EntityState state)
         {
+            State = state;
             targetPosition = new Vector3(state.X, state.Y, state.Z);
             targetYaw = state.Yaw;
 
