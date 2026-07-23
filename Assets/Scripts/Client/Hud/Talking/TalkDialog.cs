@@ -16,8 +16,6 @@ namespace Shooter.Client.Hud.Talking
 {
     public class TalkDialog : UiElement
     {
-        private const float LeaveDistance = Talker.TalkReach * 1.25f;
-
         private static readonly Color FrameColor = new Color(0.02f, 0.03f, 0.05f, 0.92f);
         private static readonly Color MyColor = new Color(0.85f, 0.62f, 0.45f);
         private static readonly Color MutedColor = new Color(0.45f, 0.48f, 0.53f);
@@ -25,6 +23,7 @@ namespace Shooter.Client.Hud.Talking
         private readonly Font font;
         private readonly ClientWorld world;
         private readonly PlayerRig rig;
+        private readonly TalkSense talkSense;
         private readonly VisualElement frame = new VisualElement();
         private readonly TextLine title;
         private readonly ScrollView history = new ScrollView(ScrollViewMode.Vertical);
@@ -37,11 +36,12 @@ namespace Shooter.Client.Hud.Talking
         private bool renderedWaiting;
         private bool scrollPending;
 
-        public TalkDialog(Font font, ClientWorld world, PlayerRig rig)
+        public TalkDialog(Font font, ClientWorld world, PlayerRig rig, TalkSense talkSense)
         {
             this.font = font;
             this.world = world;
             this.rig = rig;
+            this.talkSense = talkSense;
 
             Fullscreen();
             Visible = false;
@@ -114,14 +114,14 @@ namespace Shooter.Client.Hud.Talking
                 return;
             }
 
-            EntityState target = TargetState();
-            if (target == null || OutOfReach(target))
+            EntityView talker = talkSense.TargetTalker();
+            if (talker == null || talker.State.Id != targetId)
             {
                 Hide();
                 return;
             }
 
-            List<Message> messages = MyConversation(target)?.Messages;
+            List<Message> messages = MyConversation(talker.State)?.Messages;
             int count = messages?.Count ?? 0;
             bool waiting = count > 0 && messages[count - 1].Author == MessageAuthor.Player;
 
@@ -140,29 +140,6 @@ namespace Shooter.Client.Hud.Talking
                 history.scrollOffset = new Vector2(0f, history.contentContainer.worldBound.height);
                 scrollPending = false;
             }
-        }
-
-        private EntityState TargetState()
-        {
-            Dictionary<Guid, EntityState> entities = world.Entities;
-            if (entities == null)
-            {
-                return null;
-            }
-
-            return entities.TryGetValue(targetId, out EntityState target) ? target : null;
-        }
-
-        private bool OutOfReach(EntityState target)
-        {
-            EntityState me = world.Me;
-            if (me == null)
-            {
-                return true;
-            }
-
-            var offset = new Vector3(target.X - me.X, target.Y - me.Y, target.Z - me.Z);
-            return offset.magnitude > LeaveDistance;
         }
 
         private ConversationState MyConversation(EntityState target)
