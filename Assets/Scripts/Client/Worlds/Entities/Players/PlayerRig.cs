@@ -16,6 +16,7 @@ namespace Shooter.Client.Worlds.Entities.Players
         private const float MaxPitch = 89f;
 
         public Aim Aim { get; }
+        public bool UiCaptured { get; set; }
 
         private readonly ClientWorld world;
         private readonly Transform body;
@@ -26,6 +27,7 @@ namespace Shooter.Client.Worlds.Entities.Players
         private bool jumpPending;
         private bool usePending;
         private bool reloadPending;
+        private string speechPending;
         private bool positioned;
         private Vector3 targetPosition;
 
@@ -39,9 +41,14 @@ namespace Shooter.Client.Worlds.Entities.Players
             speaker = new SpeakerView(body.gameObject);
         }
 
+        public void Say(string speech)
+        {
+            speechPending = speech;
+        }
+
         public void Tick(float deltaTime)
         {
-            Look();
+            if (!UiCaptured) Look();
             Aim.Tick(body.position, pitch, body.eulerAngles.y);
             Reconcile();
 
@@ -55,20 +62,21 @@ namespace Shooter.Client.Worlds.Entities.Players
             Mouse mouse = Mouse.current;
             var intent = new PlayerIntent
             {
-                MoveX = (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
-                MoveZ = (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f),
+                MoveX = UiCaptured ? 0f : (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
+                MoveZ = UiCaptured ? 0f : (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f),
                 Jump = jumpPending,
-                Sprint = keyboard.leftShiftKey.isPressed,
+                Sprint = !UiCaptured && keyboard.leftShiftKey.isPressed,
                 Use = usePending,
-                Shoot = mouse.leftButton.isPressed,
+                Shoot = !UiCaptured && mouse.leftButton.isPressed,
                 Reload = reloadPending,
-                Speech = (keyboard.pKey.isPressed ? "Привет" : null),
+                Speech = speechPending,
                 Yaw = body.eulerAngles.y,
                 Pitch = pitch
             };
             jumpPending = false;
             usePending = false;
             reloadPending = false;
+            speechPending = null;
             return intent;
         }
 

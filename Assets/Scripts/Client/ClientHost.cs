@@ -64,7 +64,7 @@ namespace Shooter.Client
 
             if (world == null) return;
 
-            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+            if (Keyboard.current.escapeKey.wasPressedThisFrame && !hud.HandleEscape())
             {
                 Log.Info("Escape pressed, leaving world for menu");
                 Teardown();
@@ -163,7 +163,7 @@ namespace Shooter.Client
             world = new ClientWorld(myId);
             rigObject = Instantiate(Resources.Load<GameObject>(RigPrefab));
             rig = new PlayerRig(rigObject.transform, world);
-            hud = new HudRoot(rigObject.GetComponentInChildren<UIDocument>().rootVisualElement, world, rig.Aim);
+            hud = new HudRoot(rigObject.GetComponentInChildren<UIDocument>().rootVisualElement, world, rig);
             sky = new ClockView(world);
 
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
