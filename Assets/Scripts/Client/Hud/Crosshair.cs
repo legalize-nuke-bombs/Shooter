@@ -4,13 +4,18 @@ using Shooter.Client.Ui;
 
 namespace Shooter.Client.Hud
 {
-    public class Crosshair : Overlay
+    public class Crosshair : UiElement
     {
         private const float ArmLength = 5f;
         private const float ArmGap = 3f;
         private const float ArmThickness = 1.5f;
 
         private static readonly Color ArmColor = new Color(0.85f, 0.89f, 0.96f, 0.7f);
+
+        public Crosshair()
+        {
+            Fullscreen();
+        }
 
         protected override void Draw(Painter2D painter, Rect rect)
         {

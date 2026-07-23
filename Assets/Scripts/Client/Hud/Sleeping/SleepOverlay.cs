@@ -4,7 +4,7 @@ using Shooter.Client.Ui;
 
 namespace Shooter.Client.Hud.Sleeping
 {
-    public class SleepOverlay : Overlay
+    public class SleepOverlay : UiElement
     {
         private readonly SleepSense sleepSense;
         private readonly CalmDream waiting = new CalmDream();
@@ -16,24 +16,23 @@ namespace Shooter.Client.Hud.Sleeping
             this.sleepSense = sleepSense;
             dreams = new Dream[] { waiting, new AnxiousDream() };
 
-            style.display = DisplayStyle.None;
+            Fullscreen();
+            Visible = false;
 
             foreach (Dream dream in dreams)
                 Add(dream);
-
-            schedule.Execute(Refresh).Every(16);
         }
 
-        private void Refresh()
+        protected override void OnTick(float dt)
         {
             if (!sleepSense.MySleeping)
             {
-                style.display = DisplayStyle.None;
+                Visible = false;
                 tonight = null;
                 return;
             }
 
-            style.display = DisplayStyle.Flex;
+            Visible = true;
 
             if (!sleepSense.WorldAsleep)
             {

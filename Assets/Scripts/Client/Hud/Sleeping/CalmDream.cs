@@ -6,7 +6,6 @@ namespace Shooter.Client.Hud.Sleeping
 {
     public class CalmDream : Dream
     {
-        private const long TickMs = 33;
         private const int StarCount = 10;
         private const float StarDrift = 4f;
 
@@ -15,9 +14,9 @@ namespace Shooter.Client.Hud.Sleeping
 
         public override float Weight => 1f;
 
-        public CalmDream()
+        protected override void OnTick(float dt)
         {
-            Animate(TickMs);
+            MarkDirtyRepaint();
         }
 
         protected override void Draw(Painter2D painter, Rect rect)

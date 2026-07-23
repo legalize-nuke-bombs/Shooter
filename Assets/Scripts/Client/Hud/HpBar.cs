@@ -7,9 +7,8 @@ using Shooter.Server.Worlds.Entities.Parts.Health;
 
 namespace Shooter.Client.Hud
 {
-    public class HpBar : Overlay
+    public class HpBar : UiElement
     {
-        private const long RefreshMs = 16;
         private const float Thickness = 15f;
         private const float RelOffsetX = 0.2f;
         private const float RelOffsetY = 0.8f;
@@ -23,7 +22,12 @@ namespace Shooter.Client.Hud
         public HpBar(ClientWorld world)
         {
             this.world = world;
-            Animate(RefreshMs);
+            Fullscreen();
+        }
+
+        protected override void OnTick(float dt)
+        {
+            MarkDirtyRepaint();
         }
 
         protected override void Draw(Painter2D painter, Rect rect)

@@ -1,32 +1,32 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Entities.Parts.Health;
 
 namespace Shooter.Client.Hud
 {
-    public class DeadScreen : HudLabel
+    public class DeadScreen : UiElement
     {
         private readonly ClientWorld world;
 
-        public DeadScreen(Font font, ClientWorld world) : base(font)
+        public DeadScreen(Font font, ClientWorld world)
         {
             this.world = world;
-            style.unityTextAlign = TextAnchor.MiddleCenter;
-            style.fontSize = 30;
+            style.left = 0;
+            style.right = 0;
+            style.top = Length.Percent(45);
+
+            var line = new TextLine(font, 30);
+            line.style.unityTextAlign = TextAnchor.MiddleCenter;
+            line.text = "Вы мертвы";
+            Add(line);
         }
 
-        protected override void Refresh()
+        protected override void OnTick(float dt)
         {
-            HealthState health = world.Me.Part<HealthState>();
-            if (health == null || (health.Hp > 0))
-            {
-                style.display = DisplayStyle.None;
-                return;
-            }
-
-            style.display = DisplayStyle.Flex;
-            text = $"Вы мертвы";
+            HealthState health = world.Me?.Part<HealthState>();
+            Visible = health != null && health.Hp == 0;
         }
     }
 }

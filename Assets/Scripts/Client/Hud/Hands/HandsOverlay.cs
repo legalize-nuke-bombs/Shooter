@@ -11,17 +11,21 @@ using Shooter.Server.Worlds.Items.Firearm;
 
 namespace Shooter.Client.Hud.Hands
 {
-    public class HandsOverlay : Overlay
+    public class HandsOverlay : UiElement
     {
-        private const long RefreshMs = 16;
-
         private readonly ClientWorld world;
 
         public HandsOverlay(ClientWorld world)
         {
             this.world = world;
-            Animate(RefreshMs);
+            Fullscreen();
         }
+
+        protected override void OnTick(float dt)
+        {
+            MarkDirtyRepaint();
+        }
+
         protected override void Draw(Painter2D painter, Rect rect)
         {
             EntityState me = world.Me;
