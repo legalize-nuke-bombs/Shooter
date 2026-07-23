@@ -12,10 +12,12 @@ namespace Shooter.Server.Worlds.Entities
 
         private readonly Dictionary<Type, Part> parts = new Dictionary<Type, Part>();
 
-        public Entity(Guid id, GameObject body)
+        public Entity(string kind, Vector3 position)
         {
-            Id = id;
-            Body = body;
+            Id = Guid.NewGuid();
+            Body = new GameObject(kind + "_" + Id);
+            Body.transform.position = position;
+            EntityBody.Bind(Body, Id);
         }
 
         public void Add(Part part)
