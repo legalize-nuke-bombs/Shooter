@@ -28,7 +28,7 @@ namespace Shooter.Client.Worlds.Entities.Parts.Nameable
 
 
                 case NameableType.Capsule:
-                    return "Капсула";
+                    return "Капсул";
 
 
                 default:
