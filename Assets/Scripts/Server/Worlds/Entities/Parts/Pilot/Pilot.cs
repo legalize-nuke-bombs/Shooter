@@ -18,7 +18,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private const float StrideLength = 2f;
 
         public bool Sleeping { get; private set; }
-        public PlayerIntent LastInput { get; private set; } = new PlayerIntent();
 
         private readonly long userId;
         private readonly CharacterController controller;
@@ -33,9 +32,16 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private readonly Sight sight;
         private readonly WorldEntities worldEntities;
 
+        private float moveX;
+        private float moveZ;
+        private bool sprint;
+        private float yaw;
+        private float pitch;
+
         private float verticalVelocity;
         private bool jumpQueued;
         private float strideProgress;
+        private bool wasAlive = true;
 
         public Pilot(long userId, CharacterController controller, Health.Health health, Inventory.Inventory inventory, Speaker.Speaker speaker, Shooter.Shooter shooter, Hands.Hands hands, Clock clock, Sight sight, WorldEntities worldEntities)
         {
@@ -54,28 +60,70 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         public void Apply(PlayerIntent input)
         {
-            input.MoveX = Finite(input.MoveX);
-            input.MoveZ = Finite(input.MoveZ);
-            input.Yaw = Finite(input.Yaw);
-            input.Pitch = Finite(input.Pitch);
-            LastInput = input;
+            Steer(input);
 
             if (!health.Alive)
             {
-                if (input.Use || input.Jump)
-                {
-                    Resurrect();
-                }
-
+                ApplyDead(input);
                 return;
             }
 
             if (Sleeping)
             {
-                if ((input.Use || input.Jump) && !worldEntities.AllAsleep()) WakeUp();
+                ApplySleeping(input);
                 return;
             }
 
+            ApplyAwake(input);
+        }
+
+        public void WakeUp()
+        {
+            if (!Sleeping) return;
+            Sleeping = false;
+            Log.Info("Pilot at {} woke up", controller.transform.position);
+        }
+
+        public override PartState State()
+        {
+            return new PilotState { UserId = userId, Pitch = pitch, Sleeping = Sleeping };
+        }
+
+        public override void Tick(Entity self, float dt)
+        {
+            if (wasAlive && !health.Alive) hands.Interrupt();
+            wasAlive = health.Alive;
+
+            TickMovement(dt);
+        }
+
+        private void Steer(PlayerIntent input)
+        {
+            moveX = Finite(input.MoveX);
+            moveZ = Finite(input.MoveZ);
+            sprint = input.Sprint;
+            yaw = Finite(input.Yaw);
+            pitch = Finite(input.Pitch);
+        }
+
+        private void ApplyDead(PlayerIntent input)
+        {
+            if (input.Use || input.Jump)
+            {
+                Resurrect();
+            }
+        }
+
+        private void ApplySleeping(PlayerIntent input)
+        {
+            if ((input.Use || input.Jump) && !worldEntities.AllAsleep())
+            {
+                WakeUp();
+            }
+        }
+
+        private void ApplyAwake(PlayerIntent input)
+        {
             if (input.Jump) jumpQueued = true;
 
             if (input.Use)
@@ -98,27 +146,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
                 TryToReload();
             }
 
-            if (input.Speech != null && input.Speech.Length > 0)
+            if (!string.IsNullOrEmpty(input.Speech))
             {
                 TryToTalk(input.Speech);
             }
-        }
-
-        public void WakeUp()
-        {
-            if (!Sleeping) return;
-            Sleeping = false;
-            Log.Info("Pilot at {} woke up", controller.transform.position);
-        }
-
-        public override PartState State()
-        {
-            return new PilotState { UserId = userId, Pitch = LastInput.Pitch, Sleeping = Sleeping };
-        }
-
-        public override void Tick(Entity self, float dt)
-        {
-            TickMovement(dt);
         }
 
         private void TickMovement(float dt)
@@ -126,10 +157,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             if (Sleeping || !health.Alive) return;
 
             Transform body = controller.transform;
-            body.rotation = Quaternion.Euler(0f, LastInput.Yaw, 0f);
+            body.rotation = Quaternion.Euler(0f, yaw, 0f);
 
-            var direction = Vector3.ClampMagnitude(body.right * LastInput.MoveX + body.forward * LastInput.MoveZ, 1f);
-            float speed = LastInput.Sprint ? SprintSpeed : WalkSpeed;
+            var direction = Vector3.ClampMagnitude(body.right * moveX + body.forward * moveZ, 1f);
+            float speed = sprint ? SprintSpeed : WalkSpeed;
 
             if (controller.isGrounded)
             {
@@ -193,7 +224,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         private bool TryToShoot()
         {
-            return shooter.TryToShoot(controller.transform.position, LastInput.Pitch, LastInput.Yaw);
+            return shooter.TryToShoot(controller.transform.position, pitch, yaw);
         }
 
         private bool TryToReload()
@@ -243,7 +274,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         private RaycastHit LookHit(float reach)
         {
-            Ray ray = Sight.LookRay(controller.transform.position, LastInput.Pitch, LastInput.Yaw);
+            Ray ray = Sight.LookRay(controller.transform.position, pitch, yaw);
             sight.Cast(ray, reach, out RaycastHit hit);
             return hit;
         }

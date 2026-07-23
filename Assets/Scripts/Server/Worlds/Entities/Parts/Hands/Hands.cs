@@ -27,6 +27,15 @@ namespace Shooter.Server.Worlds.Entities.Parts.Hands
             return true;
         }
 
+        public void Interrupt()
+        {
+            if (Free) return;
+            Log.Info("Hands action {} interrupted", Action);
+            Action = HandsAction.None;
+            complete = null;
+            remaining = 0f;
+        }
+
         public override void Tick(Entity self, float dt)
         {
             if (Free) return;
