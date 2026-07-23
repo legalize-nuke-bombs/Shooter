@@ -1,16 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Items;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Inventory
 {
     public class Inventory : Part
     {
-        private readonly Dictionary<StackableItem, int> stacks = new Dictionary<StackableItem, int>();
-        private readonly Dictionary<long, UniqueItem> unique = new Dictionary<long, UniqueItem>();
-        private long? equippedId = null;
+        private readonly Dictionary<StackableItem, int> stacks;
+        private readonly Dictionary<long, UniqueItem> unique;
+        private long? equippedId;
+
+        public Inventory()
+        {
+            stacks = new Dictionary<StackableItem, int>();
+            unique = new Dictionary<long, UniqueItem>();
+            equippedId = null;
+        }
+
+        public Inventory(Inventory inventory)
+        {
+            stacks = inventory.stacks.ToDictionary(entry => entry.Key, entry => entry.Value);
+            unique = inventory.unique.ToDictionary(entry => entry.Key, entry => entry.Value);
+            equippedId = inventory.equippedId;
+        }
 
         public void Add(StackableItem item, int amount)
         {
@@ -48,6 +62,13 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
 
             Log.Error("Unexpected InventoryOnConflictAction {}", action);
             return 0;
+        }
+
+        public void Clear()
+        {
+            stacks.Clear();
+            unique.Clear();
+            equippedId = null;
         }
 
         public UniqueItem Equipped()
