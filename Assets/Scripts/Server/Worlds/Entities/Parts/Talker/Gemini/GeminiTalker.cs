@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -12,124 +11,75 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
 {
     public class GeminiTalker : Talker
     {
-        private readonly string apiKey;
-        private readonly string model;
-        private readonly GeminiSettings settings = new GeminiSettings();
-        private readonly string characterSystemPrompt;
+        private const string Host = "generativelanguage.googleapis.com";
+        private const string FallbackAnswer = "Не сейчас.";
 
-        private readonly JsonSerializerSettings jsonSettings;
-        private readonly ConcurrentDictionary<long, SemaphoreSlim> userLocks = new ConcurrentDictionary<long, SemaphoreSlim>();
+        private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+        private readonly string model;
+        private readonly string characterSystemPrompt;
+        private readonly GeminiSettings settings = new GeminiSettings();
+        private readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
         public GeminiTalker(GeminiModel model, string characterSystemPrompt, Health.Health health) : base(health)
         {
             this.model = model.ToRaw();
             this.characterSystemPrompt = characterSystemPrompt;
-            apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-            jsonSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
         }
 
-        public override void StartTalking(long userId)
+        protected override void StartTalking(long userId)
         {
-            _ = StartTalkingAsync(userId);
+            _ = AnswerAsync(userId);
         }
 
-        private async Task StartTalkingAsync(long userId)
+        private async Task AnswerAsync(long userId)
         {
-            var semaphore = userLocks.GetOrAdd(userId, _ => new SemaphoreSlim(1, 1));
-
-            if (!await semaphore.WaitAsync(0))
-            {
-                return;
-            }
-
-            string aiResponseText = "";
-
+            string answer;
             try
             {
-                string systemPrompt = settings.BaseSystemPrompt + "\n" + characterSystemPrompt;
-                string userPrompt = Conversations[userId].ToString();
-
-                Log.Info("Requesting Gemini response for user {} system prompt {} user prompt {}...", userId, systemPrompt, userPrompt); // TODO remove messages from logs
-
-                aiResponseText = await SendGeminiRequestAsync(
-                    systemPrompt,
-                    userPrompt
-                );
-
-                if (string.IsNullOrEmpty(aiResponseText))
-                {
-                    throw new Exception("AI Response Text is null");
-                }
+                Log.Info("Requesting {} answer for user {}...", model, userId);
+                answer = await RequestAnswer(Conversations[userId].ToString());
             }
             catch (Exception e)
             {
-                aiResponseText = "I can't talk right now.";
-                Log.Error("Critical error in StartTalking for user {}: {}", userId, e.Message);
+                Log.Error("Gemini request for user {} failed: {}", userId, e.Message);
+                answer = FallbackAnswer;
             }
-            finally
-            {
-                semaphore.Release();
 
-                var message = new Message
-                {
-                    Author = MessageAuthor.Talker,
-                    Content = aiResponseText
-                };
-
-                Conversations[userId].Add(message);
-                Log.Info("Talking to {}: {}", userId, message.Content); // TODO remove message Content
-            }
+            Say(userId, answer);
         }
 
-        private async Task<string> SendGeminiRequestAsync(string systemPrompt, string userPrompt)
+        private async Task<string> RequestAnswer(string conversation)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
-                Log.Error("API key is missing in environment variables.");
-                return null;
+                throw new InvalidOperationException("GEMINI_API_KEY environment variable is not set");
             }
 
-            const string path = "v1beta/models";
-            const string action = "generateContent";
-            const string host = "generativelanguage.googleapis.com";
-
-            var uriBuilder = new UriBuilder
-            {
-                Scheme = "https",
-                Host = host,
-                Path = $"{path}/{model}:{action}",
-                Query = $"key={apiKey}"
-            };
-
-            Uri uri = uriBuilder.Uri;
-
-            var requestData = new GeminiRequest
+            var request = new GeminiRequest
             {
                 Contents = new[]
                 {
-                    new Content
-                    {
-                        Parts = new[] { new Part { Text = userPrompt } }
-                    }
+                    new Content { Parts = new[] { new Part { Text = conversation } } }
                 },
                 SystemInstruction = new Content
                 {
-                    Parts = new[] { new Part { Text = systemPrompt } }
+                    Parts = new[] { new Part { Text = settings.BaseSystemPrompt + "\n" + characterSystemPrompt } }
                 }
             };
 
-            string jsonBody = JsonConvert.SerializeObject(requestData, jsonSettings);
-            byte[] rawBody = Encoding.UTF8.GetBytes(jsonBody);
+            var uri = new Uri($"https://{Host}/v1beta/models/{model}:generateContent");
 
             using (var webRequest = new UnityWebRequest(uri, "POST"))
             {
-                webRequest.uploadHandler = new UploadHandlerRaw(rawBody);
+                webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(request, jsonSettings)));
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.SetRequestHeader("Content-Type", "application/json");
+                webRequest.SetRequestHeader("x-goog-api-key", apiKey);
 
-                var operation = webRequest.SendWebRequest();
+                UnityWebRequestAsyncOperation operation = webRequest.SendWebRequest();
                 while (!operation.isDone)
                 {
                     await Task.Yield();
@@ -137,24 +87,17 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
 
                 if (webRequest.result != UnityWebRequest.Result.Success)
                 {
-                    Log.Error("HTTP Error {} for user request: {}. Response: {}", webRequest.responseCode, webRequest.error, webRequest.downloadHandler?.text);
-                    return null;
+                    throw new Exception($"HTTP {webRequest.responseCode} {webRequest.error}: {webRequest.downloadHandler?.text}");
                 }
 
-                string responseJson = webRequest.downloadHandler.text;
-                var responseData = JsonConvert.DeserializeObject<GeminiResponse>(responseJson);
-
-                if (responseData?.Candidates != null &&
-                    responseData.Candidates.Length > 0 &&
-                    responseData.Candidates[0]?.Content?.Parts != null &&
-                    responseData.Candidates[0].Content.Parts.Length > 0 &&
-                    responseData.Candidates[0].Content.Parts[0]?.Text != null)
+                var response = JsonConvert.DeserializeObject<GeminiResponse>(webRequest.downloadHandler.text);
+                string text = response?.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text;
+                if (string.IsNullOrEmpty(text))
                 {
-                    return responseData.Candidates[0].Content.Parts[0].Text.Trim();
+                    throw new Exception("Response has no candidate text: " + webRequest.downloadHandler.text);
                 }
 
-                Log.Error("Incomplete JSON response layout from Gemini API. Response: {}", responseJson);
-                return null;
+                return text.Trim();
             }
         }
     }

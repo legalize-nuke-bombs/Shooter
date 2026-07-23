@@ -116,7 +116,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         public override PartState State()
         {
-            return new PilotState { Pitch = LastInput.Pitch, Sleeping = Sleeping };
+            return new PilotState { UserId = userId, Pitch = LastInput.Pitch, Sleeping = Sleeping };
         }
 
         public override void Tick(Entity self, float dt)
