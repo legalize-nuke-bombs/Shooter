@@ -6,7 +6,6 @@ using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Sleeping;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
 using Shooter.Server.Worlds.Entities.Spawning;
-using UnityEngine.SceneManagement;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 {
@@ -33,13 +32,12 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         private readonly Clock clock;
         private readonly Sight sight;
         private readonly WorldEntities worldEntities;
-        private readonly Scene scene;
 
         private float verticalVelocity;
         private bool jumpQueued;
         private float strideProgress;
 
-        public Pilot(long userId, CharacterController controller, Health.Health health, Inventory.Inventory inventory, Speaker.Speaker speaker, Shooter.Shooter shooter, Hands.Hands hands, Clock clock, Sight sight, WorldEntities worldEntities, Scene scene)
+        public Pilot(long userId, CharacterController controller, Health.Health health, Inventory.Inventory inventory, Speaker.Speaker speaker, Shooter.Shooter shooter, Hands.Hands hands, Clock clock, Sight sight, WorldEntities worldEntities)
         {
             this.userId = userId;
             this.controller = controller;
@@ -52,7 +50,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             this.clock = clock;
             this.sight = sight;
             this.worldEntities = worldEntities;
-            this.scene = scene;
         }
 
         public void Apply(PlayerIntent input)
@@ -162,7 +159,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         {
             Log.Info("Pilot at {} will be resurrected", controller.transform.position);
 
-            worldEntities.Add(NpcSpawner.Spawn(new Nameable.Nameable(NameableType.SpecialDeadPlayer), new DeadHealth(), new Inventory.Inventory(inventory), null, controller.transform.position, scene));
+            worldEntities.Add(NpcSpawner.Spawn(new Nameable.Nameable(NameableType.SpecialDeadPlayer), new DeadHealth(), new Inventory.Inventory(inventory), null, controller.transform.position));
 
             controller.enabled = false;
             controller.transform.position = spawnPoint;
