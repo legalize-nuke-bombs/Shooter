@@ -44,7 +44,7 @@ namespace Shooter.Client.Hud
             inventory = new InventoryOverlay(font, world);
             root.Add(inventory);
 
-            dialog = new TalkDialog(font, world, rig);
+            dialog = new TalkDialog(font, world, rig, talkSense);
             root.Add(dialog);
         }
 
