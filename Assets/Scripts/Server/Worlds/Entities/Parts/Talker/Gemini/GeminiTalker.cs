@@ -12,7 +12,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
     public class GeminiTalker : Talker
     {
         private const string Host = "generativelanguage.googleapis.com";
-        private const string FallbackAnswer = "Не сейчас.";
+        private const string FallbackAnswer = "Not now.";
 
         private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
         private readonly string model;
