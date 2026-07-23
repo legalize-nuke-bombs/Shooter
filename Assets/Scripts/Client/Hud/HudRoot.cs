@@ -25,7 +25,7 @@ namespace Shooter.Client.Hud
             var font = Resources.Load<Font>(FontPath);
 
             var sleepSense = new SleepSense(world, aim);
-            var talkSense = new TalkSense(world, aim);
+            var talkSense = new TalkSense(aim);
 
             root.pickingMode = PickingMode.Ignore;
             root.Add(new HandsOverlay(world));

@@ -18,7 +18,7 @@ namespace Shooter.Server.Worlds.Sleeping
 
         public static bool IsBed(RaycastHit hit)
         {
-            return hit.collider.name.Contains(BedName, System.StringComparison.OrdinalIgnoreCase);
+            return hit.collider.name.StartsWith(BedName, System.StringComparison.OrdinalIgnoreCase);
         }
 
         public Sleep(Clock clock, Worlds.WorldEntities entities)
