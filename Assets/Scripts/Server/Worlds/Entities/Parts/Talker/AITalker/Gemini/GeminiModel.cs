@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
+namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
 {
     public enum GeminiModel
     {
