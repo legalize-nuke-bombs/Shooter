@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Entities.Parts.Pilot;
 
@@ -7,19 +8,26 @@ namespace Shooter.Server.Worlds
 {
     public class WorldEntities
     {
+        private readonly Scene scene;
         private readonly Dictionary<Guid, Entity> all = new Dictionary<Guid, Entity>();
         private readonly Dictionary<long, Entity> byUser = new Dictionary<long, Entity>();
 
         public int PlayerCount => byUser.Count;
 
+        public WorldEntities(Scene scene)
+        {
+            this.scene = scene;
+        }
+
         public void Add(Entity entity)
         {
             all[entity.Id] = entity;
+            SceneManager.MoveGameObjectToScene(entity.Body, scene);
         }
 
         public void AddPlayer(long userId, Entity player)
         {
-            all[player.Id] = player;
+            Add(player);
             byUser[userId] = player;
         }
 
