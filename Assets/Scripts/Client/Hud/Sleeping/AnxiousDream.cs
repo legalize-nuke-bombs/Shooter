@@ -7,9 +7,12 @@ namespace Shooter.Client.Hud.Sleeping
     {
         private const int NoiseWidth = 192;
         private const int NoiseHeight = 108;
+        private const float RegenInterval = 0.05f;
 
         private readonly Texture2D noise;
         private readonly Color32[] pixels = new Color32[NoiseWidth * NoiseHeight];
+
+        private float sinceRegen;
 
         public override float Weight => 1f;
 
@@ -18,7 +21,15 @@ namespace Shooter.Client.Hud.Sleeping
             noise = new Texture2D(NoiseWidth, NoiseHeight, TextureFormat.RGBA32, false);
             noise.filterMode = FilterMode.Point;
             style.backgroundImage = new StyleBackground(noise);
-            schedule.Execute(Regenerate).Every(50);
+            Regenerate();
+        }
+
+        protected override void OnTick(float dt)
+        {
+            sinceRegen += dt;
+            if (sinceRegen < RegenInterval) return;
+            sinceRegen = 0f;
+            Regenerate();
         }
 
         private void Regenerate()

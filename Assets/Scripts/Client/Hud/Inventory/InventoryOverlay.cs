@@ -9,12 +9,9 @@ using Shooter.Server.Worlds.Items;
 
 namespace Shooter.Client.Hud.Inventory
 {
-    public class InventoryOverlay : Overlay
+    public class InventoryOverlay : UiElement
     {
-        private const long RefreshMs = 16;
-
         private static readonly Color FrameColor = new Color(0.02f, 0.03f, 0.05f, 0.92f);
-        private static readonly Color TextColor = new Color(0.76f, 0.79f, 0.83f);
 
         private readonly Font font;
         private readonly ClientWorld world;
@@ -27,7 +24,8 @@ namespace Shooter.Client.Hud.Inventory
             this.font = font;
             this.world = world;
 
-            style.display = DisplayStyle.None;
+            Fullscreen();
+            Visible = false;
 
             frame.style.position = Position.Absolute;
             frame.style.left = Length.Percent(35);
@@ -39,15 +37,18 @@ namespace Shooter.Client.Hud.Inventory
             frame.style.paddingBottom = 12;
             frame.style.backgroundColor = FrameColor;
             Add(frame);
-
-            schedule.Execute(Refresh).Every(RefreshMs);
         }
 
         public void Toggle()
         {
             open = !open;
-            style.display = open ? DisplayStyle.Flex : DisplayStyle.None;
+            Visible = open;
             if (open) Refresh();
+        }
+
+        protected override void OnTick(float dt)
+        {
+            Refresh();
         }
 
         private void Refresh()
@@ -75,10 +76,8 @@ namespace Shooter.Client.Hud.Inventory
 
         private Label Line(string text)
         {
-            var line = new Label(text);
-            line.style.color = TextColor;
-            line.style.fontSize = 14;
-            line.style.unityFontDefinition = new StyleFontDefinition(FontDefinition.FromFont(font));
+            var line = new TextLine(font, 14);
+            line.text = text;
             return line;
         }
     }

@@ -3,28 +3,45 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Ui
 {
-    public abstract class Overlay : VisualElement
+    public abstract class UiElement : VisualElement
     {
         protected float Seconds { get; private set; }
 
-        protected Overlay()
+        protected UiElement()
         {
             pickingMode = PickingMode.Ignore;
             style.position = Position.Absolute;
-            style.left = 0;
-            style.top = 0;
-            style.right = 0;
-            style.bottom = 0;
             generateVisualContent += Generate;
+        }
+
+        public void Tick(float dt)
+        {
+            Seconds += dt;
+            OnTick(dt);
+            foreach (VisualElement child in Children())
+                if (child is UiElement element)
+                    element.Tick(dt);
+        }
+
+        protected virtual void OnTick(float dt)
+        {
         }
 
         protected virtual void Draw(Painter2D painter, Rect rect)
         {
         }
 
-        protected void Animate(long intervalMs)
+        protected bool Visible
         {
-            schedule.Execute(Advance).Every(intervalMs);
+            set => style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        protected void Fullscreen()
+        {
+            style.left = 0;
+            style.top = 0;
+            style.right = 0;
+            style.bottom = 0;
         }
 
         protected static void FillRect(Painter2D painter, Rect rect)
@@ -37,12 +54,6 @@ namespace Shooter.Client.Ui
             painter.LineTo(new Vector2(rect.x, rect.yMax));
             painter.ClosePath();
             painter.Fill();
-        }
-
-        private void Advance(TimerState timer)
-        {
-            Seconds += timer.deltaTime / 1000f;
-            MarkDirtyRepaint();
         }
 
         private void Generate(MeshGenerationContext context)

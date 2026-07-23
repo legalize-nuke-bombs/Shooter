@@ -1,44 +1,48 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using Shooter.Client.Ui;
 
 namespace Shooter.Client.Hud.Sleeping
 {
-    public class SleepHintLabel : HudLabel
+    public class SleepHintLabel : UiElement
     {
         private readonly SleepSense sleepSense;
+        private readonly TextLine line;
 
-        public SleepHintLabel(Font font, SleepSense sleepSense) : base(font)
+        public SleepHintLabel(Font font, SleepSense sleepSense)
         {
             this.sleepSense = sleepSense;
             style.left = 0;
             style.right = 0;
             style.bottom = Length.Percent(18);
-            style.unityTextAlign = TextAnchor.MiddleCenter;
-            style.fontSize = 14;
+
+            line = new TextLine(font, 14);
+            line.style.unityTextAlign = TextAnchor.MiddleCenter;
+            Add(line);
         }
 
-        protected override void Refresh()
+        protected override void OnTick(float dt)
         {
             if (sleepSense.MySleeping)
             {
                 if (sleepSense.WorldAsleep)
                 {
-                    style.display = DisplayStyle.None;
+                    Visible = false;
                 }
                 else
                 {
-                    text = "[E] Встать";
-                    style.display = DisplayStyle.Flex;
+                    line.text = "[E] Встать";
+                    Visible = true;
                 }
             }
             else if (sleepSense.CanSleep)
             {
-                text = "[E] Спать";
-                style.display = DisplayStyle.Flex;
+                line.text = "[E] Спать";
+                Visible = true;
             }
             else
             {
-                style.display = DisplayStyle.None;
+                Visible = false;
             }
         }
     }

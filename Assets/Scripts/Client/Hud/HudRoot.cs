@@ -5,6 +5,7 @@ using Shooter.Client.Aiming;
 using Shooter.Client.Hud.Hands;
 using Shooter.Client.Hud.Inventory;
 using Shooter.Client.Hud.Sleeping;
+using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Logging;
 
@@ -14,10 +15,12 @@ namespace Shooter.Client.Hud
     {
         private const string FontPath = "Fonts/PTSans-Regular";
 
+        private readonly VisualElement root;
         private readonly InventoryOverlay inventory;
 
         public HudRoot(VisualElement root, ClientWorld world, Aim aim)
         {
+            this.root = root;
             var font = Resources.Load<Font>(FontPath);
             var sleepSense = new SleepSense(world, aim);
 
@@ -35,8 +38,12 @@ namespace Shooter.Client.Hud
             root.Add(inventory);
         }
 
-        public void Tick()
+        public void Tick(float dt)
         {
+            foreach (VisualElement child in root.Children())
+                if (child is UiElement element)
+                    element.Tick(dt);
+
             if (!Keyboard.current.iKey.wasPressedThisFrame) return;
 
             inventory.Toggle();
