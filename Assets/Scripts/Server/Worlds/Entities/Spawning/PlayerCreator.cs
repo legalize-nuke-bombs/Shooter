@@ -12,11 +12,11 @@ using Shooter.Server.Worlds.Items.Firearm;
 
 namespace Shooter.Server.Worlds.Entities.Spawning
 {
-    public static class PlayerSpawner
+    public static class PlayerCreator
     {
-        public static Entity Spawn(long userId, string displayName, Sight sight, Clock clock, WorldEntities worldEntities)
+        public static Entity Create(long userId, string displayName, Sight sight, Clock clock, WorldEntities worldEntities)
         {
-            Log.Info("Spawning Player {} '{}'...", userId, displayName);
+            Log.Info("Creating Player {} '{}'...", userId, displayName);
 
             float angle = (userId * 137f) % 360f;
             Vector3 spread = Quaternion.Euler(0f, angle, 0f) * Vector3.forward * 16f;
@@ -47,7 +47,7 @@ namespace Shooter.Server.Worlds.Entities.Spawning
 
             player.Add(new Pilot(userId, controller, health, inventory, speaker, shooter, hands, clock, sight, worldEntities));
 
-            Log.Info("Player {} '{}' assembled as entity {} at {}", userId, displayName, player.Id, player.Body.transform.position);
+            Log.Info("Player {} '{}' created as entity {} at {}", userId, displayName, player.Id, player.Body.transform.position);
             return player;
         }
     }
