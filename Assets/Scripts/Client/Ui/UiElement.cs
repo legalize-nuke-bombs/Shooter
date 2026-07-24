@@ -23,13 +23,9 @@ namespace Shooter.Client.Ui
                     element.Tick(dt);
         }
 
-        protected virtual void OnTick(float dt)
-        {
-        }
+        protected abstract void OnTick(float dt);
 
-        protected virtual void Draw(Painter2D painter, Rect rect)
-        {
-        }
+        protected abstract void Draw(Painter2D painter, Rect rect);
 
         protected bool Visible
         {

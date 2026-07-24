@@ -45,5 +45,9 @@ namespace Shooter.Client.Hud.Sleeping
                 Visible = false;
             }
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

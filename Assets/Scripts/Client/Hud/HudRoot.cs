@@ -77,5 +77,9 @@ namespace Shooter.Client.Hud
             foreach (Overlay overlay in overlays)
                 overlay.Close();
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

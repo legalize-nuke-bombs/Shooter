@@ -65,5 +65,9 @@ namespace Shooter.Client.Hud.Sleeping
             foreach (Dream dream in dreams)
                 dream.style.display = dream == active ? DisplayStyle.Flex : DisplayStyle.None;
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

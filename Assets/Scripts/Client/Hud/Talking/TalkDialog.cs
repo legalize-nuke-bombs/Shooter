@@ -171,5 +171,9 @@ namespace Shooter.Client.Hud.Talking
             input.value = "";
             Log.Info("Speech sent to entity {}", targetId);
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

@@ -34,5 +34,9 @@ namespace Shooter.Client.Hud
             Visible = named;
             if (named) line.text = target.Name;
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

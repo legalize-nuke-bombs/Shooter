@@ -42,5 +42,9 @@ namespace Shooter.Client.Hud.Sleeping
             noise.SetPixels32(pixels);
             noise.Apply();
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

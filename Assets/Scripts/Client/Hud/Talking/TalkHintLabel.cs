@@ -33,5 +33,9 @@ namespace Shooter.Client.Hud.Talking
                 Visible = false;
             }
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

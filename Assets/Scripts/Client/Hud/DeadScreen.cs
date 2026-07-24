@@ -28,5 +28,9 @@ namespace Shooter.Client.Hud
             EntityView me = world.Me;
             Visible = me != null && !me.Alive;
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

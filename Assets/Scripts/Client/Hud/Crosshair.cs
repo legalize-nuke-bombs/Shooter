@@ -35,5 +35,9 @@ namespace Shooter.Client.Hud
             painter.LineTo(center + direction * (ArmGap + ArmLength));
             painter.Stroke();
         }
+
+        protected override void OnTick(float dt)
+        {
+        }
     }
 }
