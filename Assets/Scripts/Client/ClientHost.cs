@@ -58,20 +58,20 @@ namespace Shooter.Client
             Teardown();
         }
 
-        public void OnWelcome(Welcome welcome)
+        private void OnWelcome(Welcome welcome)
         {
             myUserId = welcome.UserId;
             Log.Info("Welcome, user {}, tick rate {}", welcome.UserId, welcome.TickRate);
             Send(new JoinWorld());
         }
 
-        public void OnWorldJoined(WorldJoined worldJoined)
+        private void OnWorldJoined(WorldJoined worldJoined)
         {
             BuildWorld(worldJoined.You);
             Log.Info("Joined world {} as entity {}", worldJoined.WorldId, worldJoined.You);
         }
 
-        public void OnSnapshot(Snapshot snapshot)
+        private void OnSnapshot(Snapshot snapshot)
         {
             world?.Apply(snapshot);
         }
@@ -148,19 +148,28 @@ namespace Shooter.Client
         private void OnMessageReceived(string json)
         {
             ClientBound message = Json.Deserialize<ClientBound>(json);
-            if (message == null)
-            {
-                Log.Warn("Server sent an unreadable message: {}", Excerpt(json));
-                return;
-            }
 
             try
             {
-                message.Apply(this);
+                switch (message)
+                {
+                    case Welcome welcome:
+                        OnWelcome(welcome);
+                        break;
+                    case WorldJoined worldJoined:
+                        OnWorldJoined(worldJoined);
+                        break;
+                    case Snapshot snapshot:
+                        OnSnapshot(snapshot);
+                        break;
+                    default:
+                        Log.Warn("Server sent an unreadable message: {}", Excerpt(json));
+                        break;
+                }
             }
             catch (Exception e)
             {
-                Log.Error("Message {} from server failed: {}", message.GetType().Name, e);
+                Log.Error("Message {} from server failed: {}", message?.GetType().Name, e);
             }
         }
 

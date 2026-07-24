@@ -1,5 +1,4 @@
 using System;
-using Shooter.Client;
 
 namespace Shooter.Server.Protocol
 {
@@ -7,10 +6,5 @@ namespace Shooter.Server.Protocol
     {
         public string WorldId { get; set; }
         public Guid You { get; set; }
-
-        public override void Apply(ClientHost host)
-        {
-            host.OnWorldJoined(this);
-        }
     }
 }

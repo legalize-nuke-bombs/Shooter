@@ -1,0 +1,17 @@
+{
+    "name": "Shooter.Serialization",
+    "rootNamespace": "Shooter.Serialization",
+    "references": [
+        "Unity.Nuget.Newtonsoft-Json",
+        "Shooter.Logging"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
