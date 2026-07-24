@@ -1,6 +1,6 @@
 {
     "name": "Shooter.Client",
-    "rootNamespace": "Shooter.Client",
+    "rootNamespace": "Shooter",
     "references": [
         "Shooter.Logging",
         "Shooter.Serialization",

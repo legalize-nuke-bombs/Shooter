@@ -1,6 +1,6 @@
 {
     "name": "Shooter.Bootstrap",
-    "rootNamespace": "Shooter.Bootstrapping",
+    "rootNamespace": "Shooter",
     "references": [
         "Shooter.Client",
         "Shooter.Server",
