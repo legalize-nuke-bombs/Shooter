@@ -32,10 +32,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Sleeper
                 return;
             }
 
-            if (input.Use) TryToSleep(input.Pitch, input.Yaw);
+            if (input.Use) TrySleep(input.Pitch, input.Yaw);
         }
 
-        public bool TryToSleep(float pitch, float yaw)
+        public bool TrySleep(float pitch, float yaw)
         {
             Hands.Hands hands = Self.Get<Hands.Hands>();
             bool handsFree = hands == null || hands.Free;
