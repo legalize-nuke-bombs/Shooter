@@ -2,8 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
-using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Parts.Health;
+using Shooter.Client.Worlds.Entities;
 
 namespace Shooter.Client.Hud
 {
@@ -32,10 +31,8 @@ namespace Shooter.Client.Hud
 
         protected override void Draw(Painter2D painter, Rect rect)
         {
-            EntityState me = world.Me;
-            if (me == null) return;
-            HealthState health = me.Part<HealthState>();
-            if (health == null) return;
+            EntityView me = world.Me;
+            if (me == null || me.MaxHp <= 0) return;
 
             float left = rect.width * RelOffsetX;
             float y = rect.height * RelOffsetY;
@@ -43,12 +40,13 @@ namespace Shooter.Client.Hud
 
             painter.lineWidth = Thickness;
             DrawSegment(painter, TrackColor, left, y, width);
-            DrawSegment(painter, FillColor, left, y, width * health.Hp / health.MaxHp);
+            DrawSegment(painter, FillColor, left, y, width * me.Hp / me.MaxHp);
         }
 
         private static void DrawSegment(Painter2D painter, Color color, float left, float y, float width)
         {
             if (width <= 0f) return;
+
             painter.strokeColor = color;
             painter.BeginPath();
             painter.MoveTo(new Vector2(left, y));

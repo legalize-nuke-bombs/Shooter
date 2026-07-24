@@ -10,5 +10,13 @@ namespace Shooter.Client.Worlds.Entities
         {
             body.AddComponent<EntityBody>().View = view;
         }
+
+        public static EntityView Resolve(Collider collider)
+        {
+            if (collider == null) return null;
+
+            EntityBody link = collider.GetComponentInParent<EntityBody>();
+            return link == null ? null : link.View;
+        }
     }
 }

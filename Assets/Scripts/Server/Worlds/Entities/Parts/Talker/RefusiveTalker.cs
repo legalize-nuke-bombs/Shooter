@@ -1,17 +1,18 @@
-using System;
-
+using System.Threading.Tasks;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker
 {
-    public class RefusiveTalker : Talker
+    public sealed class RefusiveTalker : Talker
     {
-        public RefusiveTalker(Guid selfId, ServerWorld world) : base(selfId, world)
+        private const string Refusal = "Not now.";
+
+        public RefusiveTalker(Entity self) : base(self)
         {
         }
 
-        protected override void StartTalking(long userId)
+        protected override Task<string> Answer(Conversation conversation)
         {
-            Say(userId, "Not now.");
+            return Task.FromResult(Refusal);
         }
     }
 }

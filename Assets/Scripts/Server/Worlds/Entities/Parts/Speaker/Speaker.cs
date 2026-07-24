@@ -2,26 +2,28 @@ using System.Collections.Generic;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Speaker
 {
-    public class Speaker : Part
+    public sealed class Speaker : Part
     {
+        private const int RecentLimit = 5;
+
         private readonly Queue<Sound> recent = new Queue<Sound>();
-        private long ctr = 0;
+        private long counter;
+
+        public Speaker(Entity self) : base(self, typeof(Speaker))
+        {
+        }
 
         public void Play(SoundType soundType)
         {
-            var sound = new Sound
+            recent.Enqueue(new Sound
             {
-                Id = ctr,
+                Id = counter,
                 Type = soundType
-            };
-            recent.Enqueue(sound);
+            });
+            counter++;
 
-            ctr++;
-
-            while (recent.Count > 5)
-            {
+            while (recent.Count > RecentLimit)
                 recent.Dequeue();
-            }
         }
 
         public override PartState State()

@@ -4,47 +4,37 @@ namespace Shooter.Server.Sessions
 {
     public class ServerSessionGrants
     {
-        private class Entry
-        {
-            public string WorldId { get; }
-            public long ExpiresAt { get; }
+        private readonly Dictionary<long, SessionGrant> grants = new Dictionary<long, SessionGrant>();
 
-            public Entry(string worldId, long expiresAt)
-            {
-                WorldId = worldId;
-                ExpiresAt = expiresAt;
-            }
+        public void Open(long userId, string worldId, string displayName, long expiresAt)
+        {
+            grants[userId] = new SessionGrant(worldId, displayName, expiresAt);
         }
 
-        private readonly Dictionary<long, Entry> grants = new Dictionary<long, Entry>();
-
-        public void Open(long userId, string worldId, long expiresAt)
+        public bool TryConsume(long userId, long now, out SessionGrant grant)
         {
-            grants[userId] = new Entry(worldId, expiresAt);
-        }
+            if (!grants.TryGetValue(userId, out grant)) return false;
 
-        public bool TryConsume(long userId, long now, out string worldId)
-        {
-            worldId = null;
-            if (!grants.TryGetValue(userId, out Entry entry)) return false;
             grants.Remove(userId);
-            if (entry.ExpiresAt < now) return false;
-            worldId = entry.WorldId;
-            return true;
+            if (grant.ExpiresAt >= now) return true;
+
+            grant = null;
+            return false;
         }
 
         public void Close(long userId, string worldId)
         {
-            if (grants.TryGetValue(userId, out Entry entry) && entry.WorldId == worldId)
+            if (grants.TryGetValue(userId, out SessionGrant grant) && grant.WorldId == worldId)
                 grants.Remove(userId);
         }
 
         public void CloseWorld(string worldId)
         {
             var closed = new List<long>();
-            foreach (KeyValuePair<long, Entry> pair in grants)
+            foreach (KeyValuePair<long, SessionGrant> pair in grants)
                 if (pair.Value.WorldId == worldId)
                     closed.Add(pair.Key);
+
             foreach (long userId in closed)
                 grants.Remove(userId);
         }
@@ -52,11 +42,13 @@ namespace Shooter.Server.Sessions
         public int Sweep(long now)
         {
             var expired = new List<long>();
-            foreach (KeyValuePair<long, Entry> pair in grants)
+            foreach (KeyValuePair<long, SessionGrant> pair in grants)
                 if (pair.Value.ExpiresAt < now)
                     expired.Add(pair.Key);
+
             foreach (long userId in expired)
                 grants.Remove(userId);
+
             return expired.Count;
         }
     }

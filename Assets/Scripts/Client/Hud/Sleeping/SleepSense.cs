@@ -1,9 +1,9 @@
 using Shooter.Client.Aiming;
 using Shooter.Client.Worlds;
-using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Time;
-using Shooter.Server.Worlds.Entities.Parts.Pilot;
+using Shooter.Client.Worlds.Entities;
+using Shooter.Server.Worlds.Entities.Parts.Hands;
 using Shooter.Server.Worlds.Sleeping;
+using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Client.Hud.Sleeping
 {
@@ -22,19 +22,28 @@ namespace Shooter.Client.Hud.Sleeping
         {
             get
             {
-                EntityState me = world.Me;
-                PilotState pilot = me?.Part<PilotState>();
-                return pilot != null && pilot.Sleeping;
+                EntityView me = world.Me;
+                return me != null && me.Sleeping;
             }
         }
 
-        public bool WorldAsleep => world.Sleep != null && world.Sleep.WorldAsleep;
+        public bool WorldAsleep => world.WorldAsleep;
 
-        public bool CanSleep => !MySleeping && Night
-                                && aim.Target != null
-                                && aim.Target.Value.distance <= Sleep.UseReach
-                                && Sleep.IsBed(aim.Target.Value);
+        public bool CanSleep => !MySleeping && SleepRule.CanSleep(HandsFree, Night, LookingAtBed);
+
+        private bool HandsFree
+        {
+            get
+            {
+                EntityView me = world.Me;
+                return me == null || me.HandsAction == HandsAction.None;
+            }
+        }
 
         private bool Night => world.Clock != null && DayCycle.IsNight(DayCycle.FractionOf(world.Clock.Timestamp));
+
+        private bool LookingAtBed => aim.Target != null
+                                     && aim.Target.Value.distance <= Sleep.UseReach
+                                     && Sleep.IsBed(aim.Target.Value);
     }
 }

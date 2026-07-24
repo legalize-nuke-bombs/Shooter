@@ -4,5 +4,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
     {
         public int Hp { get; set; }
         public int MaxHp { get; set; }
+        public bool Alive { get; set; }
     }
 }

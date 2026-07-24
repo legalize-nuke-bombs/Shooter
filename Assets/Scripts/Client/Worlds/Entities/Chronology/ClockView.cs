@@ -25,10 +25,10 @@ namespace Shooter.Client.Worlds.Entities.Chronology
             sun = FindSun();
 
             if (sun == null)
-                Log.Warn("Sky: no directional light in scene, day cycle will not render");
+                Log.Warn("No directional light in scene, day cycle will not render");
         }
 
-        public void Tick()
+        public void Render()
         {
             if (sun == null || world.Clock == null) return;
 

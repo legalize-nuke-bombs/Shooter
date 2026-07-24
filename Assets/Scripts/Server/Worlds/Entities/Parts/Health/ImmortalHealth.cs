@@ -2,6 +2,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
 {
     public sealed class ImmortalHealth : Health
     {
+        public ImmortalHealth(Entity self) : base(self)
+        {
+        }
+
         public override int Hp => 1;
         public override int MaxHp => 1;
         public override bool Alive => true;

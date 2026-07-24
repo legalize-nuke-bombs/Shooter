@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
+using Shooter.Server.Protocol;
 using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Parts.Pilot;
 
 namespace Shooter.Server.Worlds
 {
@@ -12,6 +12,8 @@ namespace Shooter.Server.Worlds
         private readonly Scene scene;
         private readonly Dictionary<Guid, Entity> all = new Dictionary<Guid, Entity>();
         private readonly Dictionary<long, Entity> byUser = new Dictionary<long, Entity>();
+        private readonly List<Entity> spawning = new List<Entity>();
+        private readonly List<Entity> despawning = new List<Entity>();
 
         public int PlayerCount => byUser.Count;
 
@@ -22,9 +24,9 @@ namespace Shooter.Server.Worlds
 
         public void Add(Entity entity)
         {
-            all[entity.Id] = entity;
-            SceneManager.MoveGameObjectToScene(entity.Body, scene);
-            Log.Info("{} spawned at {}", entity.Body.name, entity.Body.transform.position);
+            entity.MoveToScene(scene);
+            spawning.Add(entity);
+            Log.Info("Entity {} spawned at {}", entity.Name, entity.Position);
         }
 
         public void AddPlayer(long userId, Entity player)
@@ -36,14 +38,23 @@ namespace Shooter.Server.Worlds
         public void RemovePlayer(long userId)
         {
             if (!byUser.TryGetValue(userId, out Entity player)) return;
-            all.Remove(player.Id);
+
             byUser.Remove(userId);
-            player.Destroy();
+            Remove(player);
+
+            foreach (Entity entity in all.Values)
+                entity.Forget(userId);
+        }
+
+        public void Remove(Entity entity)
+        {
+            despawning.Add(entity);
+            Log.Info("Entity {} despawned at {}", entity.Name, entity.Position);
         }
 
         public Entity ByUserId(long userId)
         {
-            return byUser.GetValueOrDefault(userId, null);
+            return byUser.TryGetValue(userId, out Entity player) ? player : null;
         }
 
         public Entity ById(Guid id)
@@ -51,32 +62,20 @@ namespace Shooter.Server.Worlds
             return all.TryGetValue(id, out Entity entity) ? entity : null;
         }
 
+        public IEnumerable<Entity> Players()
+        {
+            return byUser.Values;
+        }
+
         public void ApplyInput(long userId, PlayerIntent intent)
         {
             if (byUser.TryGetValue(userId, out Entity player))
-                player.Get<Pilot>()?.Apply(intent);
-        }
-
-        public bool AllAsleep()
-        {
-            if (byUser.Count == 0) return false;
-            foreach (Entity player in byUser.Values)
-            {
-                Pilot pilot = player.Get<Pilot>();
-                if (pilot == null || !pilot.Sleeping)
-                    return false;
-            }
-            return true;
-        }
-
-        public void WakeAll()
-        {
-            foreach (Entity player in byUser.Values)
-                player.Get<Pilot>()?.WakeUp();
+                player.Apply(intent);
         }
 
         public void Tick(float dt)
         {
+            Settle();
             foreach (Entity entity in all.Values)
                 entity.Tick(dt);
         }
@@ -93,6 +92,27 @@ namespace Shooter.Server.Worlds
                 entity.Destroy();
             all.Clear();
             byUser.Clear();
+            spawning.Clear();
+            despawning.Clear();
+        }
+
+        private void Settle()
+        {
+            foreach (Entity entity in spawning)
+            {
+                all[entity.Id] = entity;
+                entity.MoveToScene(scene);
+                Log.Info("Entity {} spawned at {}", entity.Name, entity.Position);
+            }
+            spawning.Clear();
+
+            foreach (Entity entity in despawning)
+            {
+                all.Remove(entity.Id);
+                entity.Destroy();
+                Log.Info("Entity {} despawned", entity.Name);
+            }
+            despawning.Clear();
         }
     }
 }

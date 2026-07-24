@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Shooter.Client.Account;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Client.Worlds.Entities;
 using Shooter.Client.Worlds.Entities.Players;
-using Shooter.Logging;
-using Shooter.Server.Worlds.Entities;
-using Shooter.Server.Worlds.Entities.Parts.Pilot;
 using Shooter.Server.Worlds.Entities.Parts.Talker;
 
 namespace Shooter.Client.Hud.Talking
 {
-    public class TalkDialog : UiElement
+    public sealed class TalkDialog : Overlay
     {
         private static readonly Color FrameColor = new Color(0.02f, 0.03f, 0.05f, 0.92f);
         private static readonly Color MyColor = new Color(0.85f, 0.62f, 0.45f);
@@ -29,22 +27,17 @@ namespace Shooter.Client.Hud.Talking
         private readonly ScrollView history = new ScrollView(ScrollViewMode.Vertical);
         private readonly TextField input = new TextField();
 
-        public bool IsOpen { get; private set; }
-
         private Guid targetId;
         private int renderedMessages = -1;
         private bool renderedWaiting;
         private bool scrollPending;
 
-        public TalkDialog(Font font, ClientWorld world, PlayerRig rig, TalkSense talkSense)
+        public TalkDialog(Font font, ClientWorld world, PlayerRig rig, TalkSense talkSense) : base(rig)
         {
             this.font = font;
             this.world = world;
             this.rig = rig;
             this.talkSense = talkSense;
-
-            Fullscreen();
-            Visible = false;
 
             frame.style.position = Position.Absolute;
             frame.style.left = Length.Percent(30);
@@ -74,54 +67,37 @@ namespace Shooter.Client.Hud.Talking
             frame.Add(input);
         }
 
-        public void Show(EntityView talker)
+        public override Key Hotkey => Key.P;
+
+        protected override bool CanOpen()
         {
-            IsOpen = true;
-            targetId = talker.State.Id;
+            EntityView talker = talkSense.TargetTalker();
+            if (talker == null) return false;
+
+            targetId = talker.Id;
             title.text = talker.Name;
-            renderedMessages = -1;
-            input.value = "";
-            Visible = true;
-
-            rig.UiCaptured = true;
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
-            UnityEngine.Cursor.visible = true;
-            input.Focus();
-
-            Log.Info("Talk dialog opened for entity {} '{}'", targetId, talker.Name);
+            return true;
         }
 
-        public bool Hide()
+        protected override void OnOpen()
         {
-            if (!IsOpen)
-            {
-                return false;
-            }
-
-            IsOpen = false;
-            Visible = false;
-            rig.UiCaptured = false;
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            UnityEngine.Cursor.visible = false;
-            Log.Info("Talk dialog closed");
-            return true;
+            renderedMessages = -1;
+            input.value = "";
+            input.Focus();
         }
 
         protected override void OnTick(float dt)
         {
-            if (!IsOpen)
-            {
-                return;
-            }
+            if (!IsOpen) return;
 
             EntityView talker = talkSense.TargetTalker();
-            if (talker == null || talker.State.Id != targetId)
+            if (talker == null || talker.Id != targetId)
             {
-                Hide();
+                Close();
                 return;
             }
 
-            List<Message> messages = MyConversation(talker.State)?.Messages;
+            IReadOnlyList<Message> messages = talker.ConversationWith(world.MyUserId)?.Messages;
             int count = messages?.Count ?? 0;
             bool waiting = count > 0 && messages[count - 1].Author == MessageAuthor.Player;
 
@@ -142,24 +118,7 @@ namespace Shooter.Client.Hud.Talking
             }
         }
 
-        private ConversationState MyConversation(EntityState target)
-        {
-            PilotState pilot = world.Me?.Part<PilotState>();
-            if (pilot == null)
-            {
-                return null;
-            }
-
-            TalkerState talker = target.Part<TalkerState>();
-            if (talker?.Conversations == null)
-            {
-                return null;
-            }
-
-            return talker.Conversations.TryGetValue(pilot.UserId, out ConversationState conversation) ? conversation : null;
-        }
-
-        private void Render(List<Message> messages, bool waiting)
+        private void Render(IReadOnlyList<Message> messages, bool waiting)
         {
             history.Clear();
 
@@ -177,10 +136,7 @@ namespace Shooter.Client.Hud.Talking
                 }
             }
 
-            if (waiting)
-            {
-                history.Add(Line("…", MutedColor));
-            }
+            if (waiting) history.Add(Line("…", MutedColor));
 
             scrollPending = true;
         }
@@ -191,26 +147,17 @@ namespace Shooter.Client.Hud.Talking
             line.text = text;
             line.style.whiteSpace = WhiteSpace.Normal;
             line.style.marginBottom = 4;
-            if (color != null)
-            {
-                line.style.color = color.Value;
-            }
+            if (color != null) line.style.color = color.Value;
 
             return line;
         }
 
         private void OnInputKeyDown(KeyDownEvent e)
         {
-            if (e.keyCode != KeyCode.Return && e.keyCode != KeyCode.KeypadEnter)
-            {
-                return;
-            }
+            if (e.keyCode != KeyCode.Return && e.keyCode != KeyCode.KeypadEnter) return;
 
             string speech = input.value?.Trim();
-            if (string.IsNullOrEmpty(speech))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(speech)) return;
 
             rig.Say(speech);
             input.value = "";

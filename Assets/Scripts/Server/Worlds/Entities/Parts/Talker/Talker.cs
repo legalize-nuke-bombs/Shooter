@@ -1,7 +1,9 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Shooter.Logging;
-using System;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker
 {
@@ -10,130 +12,164 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
         public const float TalkReach = 8f;
         public const int SpeechLimit = 300;
 
-        protected readonly Dictionary<long, Conversation> Conversations = new Dictionary<long, Conversation>();
+        private const float AnswerTimeout = 30f;
 
-        private readonly HashSet<long> answering = new HashSet<long>();
+        private readonly Dictionary<long, Conversation> conversations = new Dictionary<long, Conversation>();
+        private readonly Dictionary<long, float> awaited = new Dictionary<long, float>();
+        private readonly ConcurrentQueue<Reply> replies = new ConcurrentQueue<Reply>();
 
-        protected readonly Guid SelfId;
-        protected readonly ServerWorld World;
-
-        protected Talker(Guid selfId, ServerWorld world)
+        protected Talker(Entity self) : base(self, typeof(Talker))
         {
-            SelfId = selfId;
-            World = world;
         }
 
-        public sealed override Type Slot => typeof(Talker);
-
-        public bool CanTalkTo(Entity user)
+        public bool TryToListen(Entity user, string content)
         {
-            Entity self = World.EntityById(SelfId);
-            if (self == null)
+            if (!Alive())
             {
+                Log.Info("Entity {} can not talk while it is dead, ignored", Self.Name);
                 return false;
             }
-            return Alive(self);
-        }
 
-        public bool TryToListen(long userId, string content)
-        {
-            Entity user = World.EntityByUserId(userId);
-            if (user == null)
+            Pilot.Pilot pilot = user.Get<Pilot.Pilot>();
+            if (pilot == null)
             {
-                return false;
-            }
-            if (!CanTalkTo(user))
-            {
+                Log.Info("Entity {} tried to talk to entity {} without a pilot, ignored", user.Name, Self.Name);
                 return false;
             }
 
             if (content.Length > SpeechLimit)
             {
-                Log.Info("User {} speech is over {} characters, ignored", userId, SpeechLimit);
+                Log.Info("Speech of entity {} is over {} characters, ignored", user.Name, SpeechLimit);
                 return false;
             }
 
-            if (Conversations.TryAdd(userId, new Conversation()))
+            long userId = pilot.UserId;
+            if (!conversations.TryGetValue(userId, out Conversation conversation))
             {
-                Log.Info("Conversation created with user {}", userId);
+                conversation = new Conversation(user);
+                conversations.Add(userId, conversation);
+                Log.Info("Entity {} started a conversation with user {}", Self.Name, userId);
             }
 
-            Conversation conversation = Conversations[userId];
+            conversation.Follow(user);
+
             Message last = conversation.Last();
             if (last != null && last.Author == MessageAuthor.Player)
             {
-                Log.Info("User {} spoke while the answer is pending, ignored", userId);
+                Log.Info("User {} spoke to entity {} while the answer is pending, ignored", userId, Self.Name);
                 return false;
             }
 
-            conversation.Add(new Message
-            {
-                Author = MessageAuthor.Player,
-                Content = content
-            });
-            Log.Info("Received message from user {}: {}", userId, content); // TODO remove content from logs
+            conversation.Add(new Message { Author = MessageAuthor.Player, Content = content });
+            Log.Info("Entity {} received a message from user {}", Self.Name, userId);
             return true;
         }
 
-        public override void Tick(Entity entity, float dt)
+        public override void Tick(float dt)
         {
-            if (!Alive(entity))
+            Deliver();
+            Expire(dt);
+
+            if (!Alive()) return;
+
+            foreach (KeyValuePair<long, Conversation> entry in conversations)
             {
-                return;
-            }
+                if (awaited.ContainsKey(entry.Key)) continue;
 
-            foreach (long userId in Conversations.Keys)
-            {
-                Message last = Conversations[userId].Last();
-                if (last == null || last.Author == MessageAuthor.Talker)
-                {
-                    continue;
-                }
+                Message last = entry.Value.Last();
+                if (last == null || last.Author == MessageAuthor.Talker) continue;
 
-                Entity user = World.EntityByUserId(userId);
-                if (user == null)
-                {
-                    continue;
-                }
-
-                if (answering.Contains(userId) || !CanTalkTo(user))
-                {
-                    continue;
-                }
-
-                answering.Add(userId);
-                StartTalking(userId);
+                Ask(entry.Key, entry.Value);
             }
         }
 
-        protected abstract void StartTalking(long userId);
-
-        protected void Say(long userId, string content)
+        public override void Forget(long userId)
         {
-            answering.Remove(userId);
-            Conversations[userId].Add(new Message
-            {
-                Author = MessageAuthor.Talker,
-                Content = content
-            });
-            Log.Info("Talking to {}: {}", userId, content); // TODO remove content from logs
+            if (!conversations.Remove(userId)) return;
+
+            awaited.Remove(userId);
+            Log.Info("Entity {} forgot the conversation with user {}", Self.Name, userId);
         }
 
         public override PartState State()
         {
             return new TalkerState
             {
-                Conversations =
-                    Conversations.ToDictionary(
-                        entry => entry.Key,
-                        entry => entry.Value.State())
+                Conversations = conversations.ToDictionary(entry => entry.Key, entry => entry.Value.State())
             };
         }
 
-        private bool Alive(Entity self)
+        protected abstract Task<string> Answer(Conversation conversation);
+
+        private void Ask(long userId, Conversation conversation)
         {
-            Health.Health health = self.Get<Health.Health>();
-            return (health != null && health.Alive);
+            awaited.Add(userId, 0f);
+            Log.Info("Entity {} is preparing an answer for user {}", Self.Name, userId);
+            _ = Prepare(userId, conversation);
+        }
+
+        private async Task Prepare(long userId, Conversation conversation)
+        {
+            try
+            {
+                string content = await Answer(conversation);
+                replies.Enqueue(new Reply { UserId = userId, Content = content });
+            }
+            catch (Exception e)
+            {
+                Log.Error("Entity {} failed to answer user {}: {}", Self.Name, userId, e.Message);
+                replies.Enqueue(new Reply { UserId = userId, Content = null });
+            }
+        }
+
+        private void Deliver()
+        {
+            while (replies.TryDequeue(out Reply reply))
+            {
+                awaited.Remove(reply.UserId);
+
+                if (reply.Content == null) continue;
+
+                if (!conversations.TryGetValue(reply.UserId, out Conversation conversation))
+                {
+                    Log.Info("Entity {} answered user {} whose conversation is gone, dropped", Self.Name, reply.UserId);
+                    continue;
+                }
+
+                conversation.Add(new Message { Author = MessageAuthor.Talker, Content = reply.Content });
+                Log.Info("Entity {} answered user {}", Self.Name, reply.UserId);
+            }
+        }
+
+        private void Expire(float dt)
+        {
+            if (awaited.Count == 0) return;
+
+            var expired = new List<long>();
+            foreach (long userId in awaited.Keys.ToList())
+            {
+                float waited = awaited[userId] + dt;
+                awaited[userId] = waited;
+                if (waited >= AnswerTimeout) expired.Add(userId);
+            }
+
+            foreach (long userId in expired)
+            {
+                awaited.Remove(userId);
+                Log.Warn("Entity {} gave up waiting for an answer to user {} after {}s", Self.Name, userId, AnswerTimeout);
+            }
+        }
+
+        private bool Alive()
+        {
+            Health.Health health = Self.Get<Health.Health>();
+            return health != null && health.Alive;
+        }
+
+        private struct Reply
+        {
+            public long UserId;
+            public string Content;
         }
     }
 }

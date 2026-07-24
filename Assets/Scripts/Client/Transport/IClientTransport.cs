@@ -4,7 +4,6 @@ namespace Shooter.Client.Transport
 {
     public interface IClientTransport
     {
-        event Action Connected;
         event Action<string> MessageReceived;
 
         void Connect(string url);

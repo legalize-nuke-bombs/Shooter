@@ -12,6 +12,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Hands
         private float remaining;
         private bool interruptible;
 
+        public Hands(Entity self) : base(self, typeof(Hands))
+        {
+        }
+
         public bool TryTake(HandsAction action, float duration, bool interruptible, System.Action complete)
         {
             if (!Free) return false;
@@ -36,7 +40,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Hands
             remaining = 0f;
         }
 
-        public override void Tick(Entity self, float dt)
+        public override void Tick(float dt)
         {
             if (Free) return;
             remaining -= dt;
@@ -46,6 +50,16 @@ namespace Shooter.Server.Worlds.Entities.Parts.Hands
             Action = HandsAction.None;
             complete = null;
             finished?.Invoke();
+        }
+
+        public override void Died()
+        {
+            Interrupt();
+        }
+
+        public override string Digest()
+        {
+            return Free ? null : "Занят: " + Action;
         }
 
         public override PartState State()

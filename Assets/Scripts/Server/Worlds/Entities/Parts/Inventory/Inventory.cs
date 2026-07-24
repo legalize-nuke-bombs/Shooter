@@ -1,29 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Items;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Inventory
 {
-    public class Inventory : Part
+    public sealed class Inventory : Part
     {
-        private readonly Dictionary<StackableItem, int> stacks;
-        private readonly Dictionary<long, UniqueItem> unique;
+        private readonly Dictionary<StackableItem, int> stacks = new Dictionary<StackableItem, int>();
+        private readonly Dictionary<long, UniqueItem> unique = new Dictionary<long, UniqueItem>();
         private long? equippedId;
 
-        public Inventory()
+        public Inventory(Entity self) : base(self, typeof(Inventory))
         {
-            stacks = new Dictionary<StackableItem, int>();
-            unique = new Dictionary<long, UniqueItem>();
-            equippedId = null;
-        }
-
-        public Inventory(Inventory inventory)
-        {
-            stacks = inventory.stacks.ToDictionary(entry => entry.Key, entry => entry.Value);
-            unique = inventory.unique.ToDictionary(entry => entry.Key, entry => entry.Value);
-            equippedId = inventory.equippedId;
         }
 
         public void Add(StackableItem item, int amount)
@@ -64,6 +53,19 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
             return 0;
         }
 
+        public void DrainInto(Inventory target)
+        {
+            foreach (KeyValuePair<StackableItem, int> stack in stacks)
+                target.Add(stack.Key, stack.Value);
+
+            foreach (UniqueItem item in unique.Values)
+                target.Add(item);
+
+            if (equippedId != null) target.Equip(equippedId.Value);
+
+            Clear();
+        }
+
         public void Clear()
         {
             stacks.Clear();
@@ -73,32 +75,30 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
 
         public UniqueItem Equipped()
         {
-            if (equippedId == null)
-            {
-                return null;
-            }
+            if (equippedId == null) return null;
 
-            return unique.GetValueOrDefault(equippedId.Value, null);
+            return unique.TryGetValue(equippedId.Value, out UniqueItem item) ? item : null;
         }
 
         public bool Equip(long uniqueItemId)
         {
-            if (unique.ContainsKey(uniqueItemId))
-            {
-                equippedId = uniqueItemId;
-                return true;
-            }
+            if (!unique.ContainsKey(uniqueItemId)) return false;
 
-            return false;
+            equippedId = uniqueItemId;
+            return true;
+        }
+
+        public override string Digest()
+        {
+            UniqueItem equipped = Equipped();
+            return "Предмет в руках: " + (equipped == null ? "-" : equipped.GetType().Name);
         }
 
         public override PartState State()
         {
             var uniqueStates = new Dictionary<long, UniqueItemState>();
             foreach (UniqueItem item in unique.Values)
-            {
                 uniqueStates.Add(item.Id, item.State());
-            }
 
             return new InventoryState
             {
