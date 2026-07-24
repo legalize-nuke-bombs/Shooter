@@ -1,11 +1,11 @@
 using System;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.Networking;
 using Shooter.Logging;
 using Shooter.Serialization;
 using Shooter.Server.Worlds.Time;
+using System.Linq;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
 {
@@ -15,11 +15,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
         private const int ExcerptLength = 300;
 
         private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-        private readonly string model;
+        private readonly string model = Environment.GetEnvironmentVariable("GEMINI_MODEl");
 
-        public GeminiTalker(Entity self, Clock clock, string character, GeminiModel model) : base(self, clock, character)
+        public GeminiTalker(Entity self, Clock clock, string character) : base(self, clock, character)
         {
-            this.model = model.ToRaw();
         }
 
         protected override async Task<string> RequestAnswer(string systemPrompt, string conversation)
