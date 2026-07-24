@@ -8,9 +8,9 @@ namespace Shooter.Client.Worlds.Entities
 
         public static void Follow(Transform body, Vector3 targetPosition, Quaternion targetRotation, float dt)
         {
-            float t = 1f - Mathf.Exp(-LerpFactor * dt);
-            body.position = Vector3.Lerp(body.position, targetPosition, t);
-            body.rotation = Quaternion.Slerp(body.rotation, targetRotation, t);
+            float factor = 1f - Mathf.Exp(-LerpFactor * dt);
+            body.position = Vector3.Lerp(body.position, targetPosition, factor);
+            body.rotation = Quaternion.Slerp(body.rotation, targetRotation, factor);
         }
 
         public static void Follow(Transform body, Vector3 targetPosition, float dt)

@@ -52,15 +52,14 @@ namespace Shooter.Client.Worlds.Entities.Parts.Nameable
 
             int length = Random.Range(10, 20);
 
-            var sb = new System.Text.StringBuilder();
+            var builder = new System.Text.StringBuilder();
             for (int i = 0; i < length; i++)
             {
-                char c = glitchAlphabet[Random.Range(0, glitchAlphabet.Length)];
-                sb.Append(c);
+                char symbol = glitchAlphabet[Random.Range(0, glitchAlphabet.Length)];
+                builder.Append(symbol);
             }
 
-            return sb.ToString();
+            return builder.ToString();
         }
-
     }
 }

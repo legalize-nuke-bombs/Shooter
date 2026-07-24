@@ -15,14 +15,14 @@ namespace Shooter.Client.Aiming
         public void At(Vector3 position, float pitch, float yaw)
         {
             Ray look = Sight.LookRay(position, pitch, yaw);
-            Target = sight.Cast(look, Range, out RaycastHit hit) ? hit : (RaycastHit?)null;
+            Target = sight.TryCast(look, Range, out RaycastHit hit) ? hit : (RaycastHit?)null;
         }
 
         public EntityView TargetView(float reach)
         {
             if (Target == null || Target.Value.distance > reach) return null;
 
-            return EntityBody.Resolve(Target.Value.collider);
+            return ClientEntityBody.Resolve(Target.Value.collider);
         }
     }
 }

@@ -1,3 +1,5 @@
+using Shooter.Server.Protocol;
+
 namespace Shooter.Server.Worlds.Entities.Parts.Nameable
 {
     public sealed class Nameable : Part
@@ -12,6 +14,18 @@ namespace Shooter.Server.Worlds.Entities.Parts.Nameable
         }
 
         public Nameable(Entity self, NameableType type) : this(self, type, null)
+        {
+        }
+
+        public override void Apply(PlayerIntent input)
+        {
+        }
+
+        public override void Tick(float dt)
+        {
+        }
+
+        public override void Died()
         {
         }
 

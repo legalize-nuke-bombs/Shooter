@@ -41,7 +41,7 @@ namespace Shooter.Server.Worlds.Entities.Creating
             inventory.Add(StackableItem.Currency, 1000);
             inventory.Add(StackableItem.Ammo762X39, 100);
             inventory.Add(new Ak47(0, 30));
-            inventory.Equip(0);
+            inventory.TryEquip(0);
             player.Add(inventory);
 
             player.Add(new Parts.Shooter.Shooter(player, gaze));

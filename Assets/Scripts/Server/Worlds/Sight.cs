@@ -19,7 +19,7 @@ namespace Shooter.Server.Worlds
             return new Ray(eyes, Quaternion.Euler(pitch, yaw, 0f) * Vector3.forward);
         }
 
-        public bool Cast(Ray look, float reach, out RaycastHit hit)
+        public bool TryCast(Ray look, float reach, out RaycastHit hit)
         {
             return physics.Raycast(look.origin, look.direction, out hit, reach);
         }

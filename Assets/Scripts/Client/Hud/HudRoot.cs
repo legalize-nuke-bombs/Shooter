@@ -67,7 +67,7 @@ namespace Shooter.Client.Hud
                 }
 
                 CloseAll();
-                overlay.Open();
+                overlay.TryOpen();
                 return;
             }
         }

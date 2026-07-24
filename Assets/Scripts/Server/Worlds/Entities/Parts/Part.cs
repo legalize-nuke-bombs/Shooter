@@ -15,30 +15,14 @@ namespace Shooter.Server.Worlds.Entities.Parts
             Slot = slot;
         }
 
-        public virtual void Apply(PlayerIntent input)
-        {
-        }
+        public abstract void Apply(PlayerIntent input);
 
-        public virtual void Tick(float dt)
-        {
-        }
+        public abstract void Tick(float dt);
 
-        public virtual void Died()
-        {
-        }
+        public abstract void Died();
 
-        public virtual void Forget(long userId)
-        {
-        }
+        public abstract string Digest();
 
-        public virtual string Digest()
-        {
-            return null;
-        }
-
-        public virtual PartState State()
-        {
-            return null;
-        }
+        public abstract PartState State();
     }
 }

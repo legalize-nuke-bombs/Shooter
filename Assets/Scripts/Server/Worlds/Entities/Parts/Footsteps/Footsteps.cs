@@ -1,3 +1,4 @@
+using Shooter.Server.Protocol;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Footsteps
@@ -12,16 +13,34 @@ namespace Shooter.Server.Worlds.Entities.Parts.Footsteps
         {
         }
 
+        public override void Apply(PlayerIntent input)
+        {
+        }
+
         public override void Tick(float dt)
         {
-            Movement.Movement motion = Self.Get<Movement.Movement>();
-            if (motion == null) return;
+            Movement.Movement movement = Self.Get<Movement.Movement>();
+            if (movement == null) return;
 
-            strideProgress += motion.GroundTravel;
+            strideProgress += movement.GroundTravel;
             if (strideProgress < StrideLength) return;
 
             strideProgress -= StrideLength;
             Self.Get<Speaker.Speaker>()?.Play(SoundType.Footsteps);
+        }
+
+        public override void Died()
+        {
+        }
+
+        public override string Digest()
+        {
+            return null;
+        }
+
+        public override PartState State()
+        {
+            return null;
         }
     }
 }

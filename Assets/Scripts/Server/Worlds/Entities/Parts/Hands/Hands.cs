@@ -1,4 +1,5 @@
 using Shooter.Logging;
+using Shooter.Server.Protocol;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Hands
 {
@@ -23,7 +24,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Hands
             return true;
         }
 
-        public bool Preempt(HandsAction action, float duration, bool interruptible, System.Action complete)
+        public bool TryPreempt(HandsAction action, float duration, bool interruptible, System.Action complete)
         {
             if (!Free && !this.interruptible) return false;
             if (!Free) Log.Info("Hands action {} preempted by {}", Action, action);
@@ -38,6 +39,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Hands
             Action = HandsAction.None;
             complete = null;
             remaining = 0f;
+        }
+
+        public override void Apply(PlayerIntent input)
+        {
         }
 
         public override void Tick(float dt)

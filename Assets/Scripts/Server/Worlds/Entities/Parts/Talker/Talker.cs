@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shooter.Logging;
+using Shooter.Server.Protocol;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker
 {
@@ -65,7 +66,20 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
             return true;
         }
 
-        public override void Tick(float dt)
+        public sealed override void Apply(PlayerIntent input)
+        {
+        }
+
+        public sealed override void Died()
+        {
+        }
+
+        public sealed override string Digest()
+        {
+            return null;
+        }
+
+        public sealed override void Tick(float dt)
         {
             Deliver();
             Expire(dt);
@@ -83,15 +97,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
             }
         }
 
-        public override void Forget(long userId)
-        {
-            if (!conversations.Remove(userId)) return;
-
-            awaited.Remove(userId);
-            Log.Info("Entity {} forgot the conversation with user {}", Self.Name, userId);
-        }
-
-        public override PartState State()
+        public sealed override PartState State()
         {
             return new TalkerState
             {
