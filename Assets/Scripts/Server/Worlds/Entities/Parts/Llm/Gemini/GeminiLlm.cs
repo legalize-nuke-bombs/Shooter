@@ -1,27 +1,28 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.Networking;
 using Shooter.Logging;
 using Shooter.Serialization;
-using Shooter.Server.Worlds.Time;
-using System.Linq;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
+namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
 {
-    public sealed class GeminiTalker : AITalker
+    public sealed class GeminiLlm : Llm
     {
         private const string Host = "generativelanguage.googleapis.com";
+        private const int TimeoutSeconds = 25;
         private const int ExcerptLength = 300;
 
         private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
         private readonly string model = Environment.GetEnvironmentVariable("GEMINI_MODEL");
 
-        public GeminiTalker(Entity self, Clock clock, string character) : base(self, clock, character)
+        public GeminiLlm(Entity self) : base(self)
         {
         }
 
-        protected override async Task<string> RequestAnswer(string systemPrompt, string conversation)
+        protected override async Task<string> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
@@ -30,10 +31,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
 
             var request = new GeminiRequest
             {
-                Contents = new[]
-                {
-                    new GeminiContent { Parts = new[] { new GeminiPart { Text = conversation } } }
-                },
+                Contents = messages.Select(Content).ToArray(),
                 SystemInstruction = new GeminiContent
                 {
                     Parts = new[] { new GeminiPart { Text = systemPrompt } }
@@ -47,14 +45,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
             {
                 webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Json.Serialize(request)));
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
+                webRequest.timeout = TimeoutSeconds;
                 webRequest.SetRequestHeader("Content-Type", "application/json");
                 webRequest.SetRequestHeader("x-goog-api-key", apiKey);
 
-                UnityWebRequestAsyncOperation operation = webRequest.SendWebRequest();
-                while (!operation.isDone)
-                {
-                    await Task.Yield();
-                }
+                await Completion(webRequest.SendWebRequest());
 
                 if (webRequest.result != UnityWebRequest.Result.Success)
                 {
@@ -70,6 +65,22 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
 
                 return text.Trim();
             }
+        }
+
+        private static Task Completion(UnityWebRequestAsyncOperation operation)
+        {
+            var completion = new TaskCompletionSource<bool>();
+            operation.completed += _ => completion.SetResult(true);
+            return completion.Task;
+        }
+
+        private static GeminiContent Content(LlmMessage message)
+        {
+            return new GeminiContent
+            {
+                Role = message.Role == LlmRole.User ? "user" : "model",
+                Parts = new[] { new GeminiPart { Text = message.Content } }
+            };
         }
 
         private static string Excerpt(string body)
