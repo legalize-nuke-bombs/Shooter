@@ -127,7 +127,12 @@ namespace Shooter.Logging
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static string Caller()
         {
-            return new StackFrame(2, false).GetMethod()?.DeclaringType?.Name ?? "?";
+            Type type = new StackFrame(2, false).GetMethod()?.DeclaringType;
+
+            while (type != null && (type.Name.StartsWith("<", StringComparison.Ordinal) || type.IsDefined(typeof(CompilerGeneratedAttribute), false)))
+                type = type.DeclaringType;
+
+            return type?.Name ?? "?";
         }
 
         private static string ThreadName()
