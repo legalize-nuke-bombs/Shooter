@@ -6,51 +6,42 @@ namespace Shooter.Server.Worlds.Items.Firearm
     public abstract class Firearm : UniqueItem
     {
         private int magazine;
+
         protected Firearm(long id, int magazine) : base(id)
         {
             this.magazine = magazine;
         }
 
-        public bool CanShoot()
-        {
-            return (magazine > 0);
-        }
+        public abstract FirearmType FirearmType { get; }
+        public abstract int MagazineSize { get; }
+        public abstract StackableItem AmmoType { get; }
+        public abstract float Distance { get; }
+        public abstract int Damage { get; }
+        public abstract float FireInterval { get; }
+        public abstract float ReloadTime { get; }
+        public abstract SoundType ShotSound { get; }
+        public abstract SoundType MisfireSound { get; }
+        public abstract SoundType ReloadSound { get; }
 
-        public bool MagazineFull()
-        {
-            return (magazine == MagazineSize());
-        }
+        public bool CanShoot => magazine > 0;
 
-        public bool TryToShoot()
+        public bool MagazineFull => magazine == MagazineSize;
+
+        public bool TryShoot()
         {
-            if (magazine == 0)
-            {
-                return false;
-            }
+            if (magazine == 0) return false;
 
             magazine--;
-
             return true;
         }
 
         public int Reload(int toAddRequested)
         {
-            int absent = MagazineSize() - magazine;
+            int absent = MagazineSize - magazine;
             int toAdd = Math.Min(absent, toAddRequested);
             magazine += toAdd;
             return toAdd;
         }
-
-        public abstract FirearmType FirearmType();
-        public abstract int MagazineSize();
-        public abstract StackableItem AmmoType();
-        public abstract float Distance();
-        public abstract int Damage();
-        public abstract float FireInterval();
-        public abstract float ReloadTime();
-        public abstract SoundType ShotSound();
-        public abstract SoundType MisfireSound();
-        public abstract SoundType ReloadSound();
 
         public override UniqueItemState State()
         {
@@ -58,11 +49,8 @@ namespace Shooter.Server.Worlds.Items.Firearm
             {
                 Id = Id,
                 Magazine = magazine,
-                FirearmType = FirearmType(),
-                MagazineSize = MagazineSize(),
-                AmmoType = AmmoType(),
-                Distance = Distance(),
-                Damage = Damage()
+                MagazineSize = MagazineSize,
+                FirearmType = FirearmType
             };
         }
     }

@@ -9,8 +9,6 @@ namespace Shooter.Server.Transport
         event Action<int> ClientDisconnected;
         event Action<string> HookReceived;
 
-        Func<string, bool> HookAuthorizer { get; set; }
-
         void Start(int port);
         void Send(int connectionId, string message);
         void Kick(int connectionId);

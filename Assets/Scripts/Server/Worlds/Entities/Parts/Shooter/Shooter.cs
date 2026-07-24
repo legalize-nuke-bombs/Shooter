@@ -34,17 +34,17 @@ namespace Shooter.Server.Worlds.Entities.Parts.Shooter
 
             if (!(inventory.Equipped() is Firearm firearm)) return false;
 
-            if (!hands.TryTake(HandsAction.Shooting, firearm.FireInterval(), false, null)) return false;
+            if (!hands.TryTake(HandsAction.Shooting, firearm.FireInterval, false, null)) return false;
 
             Speaker.Speaker speaker = Self.Get<Speaker.Speaker>();
 
-            if (!firearm.TryToShoot())
+            if (!firearm.TryShoot())
             {
-                speaker?.Play(firearm.MisfireSound());
+                speaker?.Play(firearm.MisfireSound);
                 return false;
             }
 
-            speaker?.Play(firearm.ShotSound());
+            speaker?.Play(firearm.ShotSound);
             Shot(pitch, yaw, firearm);
             return true;
         }
@@ -57,12 +57,12 @@ namespace Shooter.Server.Worlds.Entities.Parts.Shooter
 
             if (!(inventory.Equipped() is Firearm firearm)) return false;
 
-            if (firearm.MagazineFull() || inventory.Amount(firearm.AmmoType()) == 0) return false;
+            if (firearm.MagazineFull || inventory.Amount(firearm.AmmoType) == 0) return false;
 
-            if (!hands.TryTake(HandsAction.Reloading, firearm.ReloadTime(), true, () => Reloaded(inventory, firearm))) return false;
+            if (!hands.TryTake(HandsAction.Reloading, firearm.ReloadTime, true, () => Reloaded(inventory, firearm))) return false;
 
-            Self.Get<Speaker.Speaker>()?.Play(firearm.ReloadSound());
-            Log.Info("Entity {} started reload of {}, {}s", Self.Name, firearm.FirearmType(), firearm.ReloadTime());
+            Self.Get<Speaker.Speaker>()?.Play(firearm.ReloadSound);
+            Log.Info("Entity {} started reload of {}, {}s", Self.Name, firearm.FirearmType, firearm.ReloadTime);
             return true;
         }
 
@@ -77,17 +77,17 @@ namespace Shooter.Server.Worlds.Entities.Parts.Shooter
 
         private void Reloaded(Inventory.Inventory inventory, Firearm firearm)
         {
-            StackableItem ammoType = firearm.AmmoType();
+            StackableItem ammoType = firearm.AmmoType;
             int spent = firearm.Reload(inventory.Amount(ammoType));
             inventory.Remove(ammoType, spent, InventoryOnConflictAction.Partly);
-            Log.Info("Entity {} reloaded {} with {} rounds, {} {} left", Self.Name, firearm.FirearmType(), spent, inventory.Amount(ammoType), ammoType);
+            Log.Info("Entity {} reloaded {} with {} rounds, {} {} left", Self.Name, firearm.FirearmType, spent, inventory.Amount(ammoType), ammoType);
         }
 
         private void Shot(float pitch, float yaw, Firearm firearm)
         {
             Vector3 from = Self.Position;
 
-            if (!gaze.TryLook(from, pitch, yaw, firearm.Distance(), out RaycastHit hit))
+            if (!gaze.TryLook(from, pitch, yaw, firearm.Distance, out RaycastHit hit))
             {
                 Log.Info("Shot of entity {} from {} missed", Self.Name, from);
                 return;
@@ -107,8 +107,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Shooter
                 return;
             }
 
-            health.Damage(firearm.Damage());
-            Log.Info("Shot of entity {} from {} hit entity {} for {} damage", Self.Name, from, target.Name, firearm.Damage());
+            health.Damage(firearm.Damage);
+            Log.Info("Shot of entity {} from {} hit entity {} for {} damage", Self.Name, from, target.Name, firearm.Damage);
         }
     }
 }

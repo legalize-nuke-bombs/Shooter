@@ -1,5 +1,4 @@
 using UnityEngine;
-using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Time;
 using Shooter.Logging;
 

@@ -12,7 +12,6 @@ namespace Shooter.Client.Transport
     {
         private const int ReceiveBufferBytes = 16 * 1024;
 
-        public event Action Connected;
         public event Action<string> MessageReceived;
 
         private ClientWebSocket socket;
@@ -22,7 +21,6 @@ namespace Shooter.Client.Transport
 
         private enum EventKind
         {
-            Connected,
             Message
         }
 
@@ -45,7 +43,6 @@ namespace Shooter.Client.Transport
             {
                 switch (e.Kind)
                 {
-                    case EventKind.Connected: Connected?.Invoke(); break;
                     case EventKind.Message: MessageReceived?.Invoke(e.Payload); break;
                 }
             }
@@ -59,11 +56,31 @@ namespace Shooter.Client.Transport
         public void Stop()
         {
             cancellation?.Cancel();
-            if (socket is { State: WebSocketState.Open })
-                _ = socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "bye", CancellationToken.None);
-            socket?.Dispose();
+
+            ClientWebSocket closing = socket;
             socket = null;
-            Log.Info("Net: transport stopped");
+            if (closing != null) _ = CloseRoutine(closing);
+
+            cancellation?.Dispose();
+            cancellation = null;
+            Log.Info("Transport stopped");
+        }
+
+        private static async Task CloseRoutine(ClientWebSocket closing)
+        {
+            try
+            {
+                if (closing.State == WebSocketState.Open)
+                    await closing.CloseAsync(WebSocketCloseStatus.NormalClosure, "bye", CancellationToken.None).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                Log.Info("Socket close failed: {}", e.Message);
+            }
+            finally
+            {
+                closing.Dispose();
+            }
         }
 
         private async Task ConnectRoutine(string url)
@@ -71,13 +88,12 @@ namespace Shooter.Client.Transport
             try
             {
                 await socket.ConnectAsync(new Uri(url), cancellation.Token).ConfigureAwait(false);
-                Log.Info("Net: connected {}", url);
-                events.Enqueue(new TransportEvent { Kind = EventKind.Connected });
+                Log.Info("connected {}", url);
                 _ = ReceiveLoop();
             }
             catch (Exception e)
             {
-                Log.Warn("Net: connect failed: {}", e.Message);
+                Log.Warn("connect failed: {}", e.Message);
             }
         }
 
@@ -92,7 +108,7 @@ namespace Shooter.Client.Transport
                     WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation.Token).ConfigureAwait(false);
                     if (result.MessageType == WebSocketMessageType.Close)
                     {
-                        Log.Warn("Net: closed by server");
+                        Log.Warn("closed by server");
                         break;
                     }
 
@@ -106,7 +122,7 @@ namespace Shooter.Client.Transport
             catch (Exception e)
             {
                 if (!cancellation.IsCancellationRequested)
-                    Log.Warn("Net: receive loop ended: {}", e.Message);
+                    Log.Warn("receive loop ended: {}", e.Message);
             }
         }
 
@@ -122,7 +138,7 @@ namespace Shooter.Client.Transport
             }
             catch (Exception e)
             {
-                Log.Warn("Net: send failed: {}", e.Message);
+                Log.Warn("send failed: {}", e.Message);
             }
             finally
             {

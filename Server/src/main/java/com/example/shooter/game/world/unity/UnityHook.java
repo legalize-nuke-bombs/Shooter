@@ -13,4 +13,5 @@ public class UnityHook {
     private final UnityHookAction action;
     private final Long userId;
     private final UUID worldId;
+    private final String displayName;
 }

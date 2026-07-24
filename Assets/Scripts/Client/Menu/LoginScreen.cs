@@ -116,7 +116,6 @@ namespace Shooter.Client.Menu
                         return;
                     }
 
-                    Session.Username = username;
                     Session.DisplayName = me.DisplayName;
                     Session.UserId = me.Id;
 

@@ -54,7 +54,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 
         public override PartState State()
         {
-            return new PilotState { UserId = userId, Pitch = pitch };
+            return new PilotState { UserId = userId };
         }
 
         private void Steer(PlayerIntent input)

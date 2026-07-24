@@ -1,35 +1,40 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Shooter.Logging;
+using Shooter.Server.Sessions;
 
 namespace Shooter.Server.Transport
 {
     public class ServerWsTransport : IServerTransport
     {
-        private const string WsGuid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-        private const int MaxFrameBytes = 1024 * 1024;
+        private const int MaxBodyBytes = 1024 * 1024;
         private const int OutboxCapacity = 256;
+        private const int HandshakeTimeout = 5000;
+        private const string HookPath = "/hooks";
 
         public event Action<int, string> ClientConnected;
         public event Action<int, string> MessageReceived;
         public event Action<int> ClientDisconnected;
         public event Action<string> HookReceived;
 
-        public Func<string, bool> HookAuthorizer { get; set; }
+        private readonly HookAuthority hookAuthority;
+        private readonly ConcurrentDictionary<int, Client> clients = new ConcurrentDictionary<int, Client>();
+        private readonly ConcurrentQueue<TransportEvent> events = new ConcurrentQueue<TransportEvent>();
 
         private TcpListener listener;
         private Thread acceptThread;
         private volatile bool running;
         private int nextId;
-        private readonly ConcurrentDictionary<int, Client> clients = new ConcurrentDictionary<int, Client>();
-        private readonly ConcurrentQueue<TransportEvent> events = new ConcurrentQueue<TransportEvent>();
+
+        public ServerWsTransport(HookAuthority hookAuthority)
+        {
+            this.hookAuthority = hookAuthority;
+        }
 
         private class Client
         {
@@ -52,19 +57,6 @@ namespace Shooter.Server.Transport
             public EventKind Kind;
             public int ConnId;
             public string Payload;
-        }
-
-        private class HttpRequest
-        {
-            public string Method;
-            public string Path;
-            public string Query;
-            public readonly Dictionary<string, string> Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-            public string Header(string name)
-            {
-                return Headers.TryGetValue(name, out string value) ? value : null;
-            }
         }
 
         public void Start(int port)
@@ -94,8 +86,7 @@ namespace Shooter.Server.Transport
         {
             if (!clients.TryGetValue(connectionId, out Client client) || client.Closed) return;
 
-            byte[] frame = BuildTextFrame(Encoding.UTF8.GetBytes(message));
-            EnqueueFrame(connectionId, client, frame);
+            EnqueueFrame(connectionId, client, WsFrames.Text(Encoding.UTF8.GetBytes(message)));
         }
 
         public void Kick(int connectionId)
@@ -107,19 +98,38 @@ namespace Shooter.Server.Transport
         public void Stop()
         {
             running = false;
-            try { listener?.Stop(); } catch { }
+
+            try
+            {
+                listener?.Stop();
+            }
+            catch (SocketException e)
+            {
+                Log.Warn("Listener stop failed: {}", e.Message);
+            }
+
             foreach (var pair in clients)
                 CloseClient(pair.Key, pair.Value);
+
+            Log.Info("WS transport stopped");
         }
 
         private void EnqueueFrame(int connId, Client client, byte[] frame)
         {
             bool added;
-            try { added = client.Outbox.TryAdd(frame); }
-            catch (InvalidOperationException) { return; }
+            try
+            {
+                added = client.Outbox.TryAdd(frame);
+            }
+            catch (InvalidOperationException)
+            {
+                return;
+            }
 
-            if (!added)
-                CloseClient(connId, client);
+            if (added) return;
+
+            Log.Warn("Conn {} outbox is full, closing", connId);
+            CloseClient(connId, client);
         }
 
         private void AcceptLoop()
@@ -127,8 +137,15 @@ namespace Shooter.Server.Transport
             while (running)
             {
                 TcpClient tcp;
-                try { tcp = listener.AcceptTcpClient(); }
-                catch { break; }
+                try
+                {
+                    tcp = listener.AcceptTcpClient();
+                }
+                catch (Exception e)
+                {
+                    if (running) Log.Error("Accept loop stopped, server takes no new connections: {}", e.Message);
+                    break;
+                }
 
                 int connId = Interlocked.Increment(ref nextId);
                 var client = new Client { Tcp = tcp, Stream = tcp.GetStream() };
@@ -147,8 +164,9 @@ namespace Shooter.Server.Transport
                 foreach (byte[] frame in client.Outbox.GetConsumingEnumerable())
                     client.Stream.Write(frame, 0, frame.Length);
             }
-            catch
+            catch (Exception e)
             {
+                Log.Info("Conn {} writer stopped: {}", connId, e.Message);
             }
             finally
             {
@@ -161,73 +179,23 @@ namespace Shooter.Server.Transport
             string closeReason = "reader done";
             try
             {
-                client.Tcp.ReceiveTimeout = 5000;
-                HttpRequest request = ReadHttpRequest(client.Stream);
+                client.Tcp.ReceiveTimeout = HandshakeTimeout;
+                HttpHead head = HttpHead.Read(client.Stream);
 
-                if (request.Method == "POST" && request.Path == "/hooks")
+                if (head.Method == "POST" && head.Path == HookPath)
                 {
                     closeReason = "hook request served";
-                    HandleHookRequest(client, request);
+                    ServeHook(client, head);
                     return;
                 }
 
-                string query = CompleteWsHandshake(client.Stream, request);
+                string query = WsFrames.CompleteHandshake(client.Stream, head);
                 client.Tcp.ReceiveTimeout = 0;
-                Log.Info("Conn {} ws handshake ok, path {}", connId, request.Path);
+                Log.Info("Conn {} ws handshake ok, path {}", connId, head.Path);
 
                 events.Enqueue(new TransportEvent { Kind = EventKind.Connected, ConnId = connId, Payload = query });
 
-                var messageBuffer = new MemoryStream();
-                while (running && !client.Closed)
-                {
-                    byte b0 = ReadByte(client.Stream);
-                    byte b1 = ReadByte(client.Stream);
-
-                    bool fin = (b0 & 0x80) != 0;
-                    int opcode = b0 & 0x0F;
-                    bool masked = (b1 & 0x80) != 0;
-                    long length = b1 & 0x7F;
-
-                    if (length == 126)
-                    {
-                        byte[] ext = ReadExact(client.Stream, 2);
-                        length = (ext[0] << 8) | ext[1];
-                    }
-                    else if (length == 127)
-                    {
-                        byte[] ext = ReadExact(client.Stream, 8);
-                        length = 0;
-                        for (int i = 0; i < 8; i++) length = (length << 8) | ext[i];
-                    }
-
-                    if (length > MaxFrameBytes) throw new IOException("frame too large");
-
-                    byte[] mask = masked ? ReadExact(client.Stream, 4) : null;
-                    byte[] payload = ReadExact(client.Stream, (int)length);
-                    if (masked)
-                        for (int i = 0; i < payload.Length; i++)
-                            payload[i] ^= mask[i % 4];
-
-                    switch (opcode)
-                    {
-                        case 0x1:
-                        case 0x0:
-                            messageBuffer.Write(payload, 0, payload.Length);
-                            if (fin)
-                            {
-                                string text = Encoding.UTF8.GetString(messageBuffer.ToArray());
-                                messageBuffer.SetLength(0);
-                                events.Enqueue(new TransportEvent { Kind = EventKind.Message, ConnId = connId, Payload = text });
-                            }
-                            break;
-                        case 0x8:
-                            EnqueueFrame(connId, client, BuildControlFrame(0x8, payload));
-                            throw new IOException("client closed");
-                        case 0x9:
-                            EnqueueFrame(connId, client, BuildControlFrame(0xA, payload));
-                            break;
-                    }
-                }
+                ReadMessages(connId, client);
             }
             catch (Exception e)
             {
@@ -240,161 +208,85 @@ namespace Shooter.Server.Transport
             }
         }
 
-        private static HttpRequest ReadHttpRequest(NetworkStream stream)
+        private void ReadMessages(int connId, Client client)
         {
-            var headerBytes = new MemoryStream();
-            int sequence = 0;
-            while (sequence < 4)
+            var messageBuffer = new MemoryStream();
+
+            while (running && !client.Closed)
             {
-                int b = stream.ReadByte();
-                if (b < 0) throw new IOException("handshake eof");
-                headerBytes.WriteByte((byte)b);
-                if (headerBytes.Length > 16 * 1024) throw new IOException("handshake too large");
+                WsFrame frame = WsFrames.Read(client.Stream);
 
-                bool marker = (sequence % 2 == 0) ? b == '\r' : b == '\n';
-                sequence = marker ? sequence + 1 : (b == '\r' ? 1 : 0);
+                switch (frame.Opcode)
+                {
+                    case WsFrames.TextOpcode:
+                    case WsFrames.ContinuationOpcode:
+                        messageBuffer.Write(frame.Payload, 0, frame.Payload.Length);
+                        if (!frame.Final) break;
+
+                        string text = Encoding.UTF8.GetString(messageBuffer.ToArray());
+                        messageBuffer.SetLength(0);
+                        events.Enqueue(new TransportEvent { Kind = EventKind.Message, ConnId = connId, Payload = text });
+                        break;
+                    case WsFrames.CloseOpcode:
+                        EnqueueFrame(connId, client, WsFrames.Control(WsFrames.CloseOpcode, frame.Payload));
+                        throw new IOException("client closed");
+                    case WsFrames.PingOpcode:
+                        EnqueueFrame(connId, client, WsFrames.Control(WsFrames.PongOpcode, frame.Payload));
+                        break;
+                }
             }
-
-            string header = Encoding.ASCII.GetString(headerBytes.ToArray());
-            string[] lines = header.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-            string[] requestParts = lines[0].Split(' ');
-            if (requestParts.Length < 2) throw new IOException("malformed request line");
-
-            var request = new HttpRequest { Method = requestParts[0] };
-            string target = requestParts[1];
-            int qIndex = target.IndexOf('?');
-            request.Path = qIndex >= 0 ? target.Substring(0, qIndex) : target;
-            request.Query = qIndex >= 0 ? target.Substring(qIndex + 1) : "";
-
-            for (int i = 1; i < lines.Length; i++)
-            {
-                int colon = lines[i].IndexOf(':');
-                if (colon < 0) continue;
-                request.Headers[lines[i].Substring(0, colon).Trim()] = lines[i].Substring(colon + 1).Trim();
-            }
-
-            return request;
         }
 
-        private static string CompleteWsHandshake(NetworkStream stream, HttpRequest request)
+        private void ServeHook(Client client, HttpHead head)
         {
-            string key = request.Header("Sec-WebSocket-Key");
-            if (key == null) throw new IOException("no websocket key");
-
-            string accept;
-            using (var sha1 = SHA1.Create())
-                accept = Convert.ToBase64String(sha1.ComputeHash(Encoding.ASCII.GetBytes(key + WsGuid)));
-
-            byte[] response = Encoding.ASCII.GetBytes(
-                "HTTP/1.1 101 Switching Protocols\r\n" +
-                "Upgrade: websocket\r\n" +
-                "Connection: Upgrade\r\n" +
-                "Sec-WebSocket-Accept: " + accept + "\r\n\r\n");
-            stream.Write(response, 0, response.Length);
-            return request.Query;
-        }
-
-        private void HandleHookRequest(Client client, HttpRequest request)
-        {
-            string auth = request.Header("Authorization") ?? "";
+            string auth = head.Header("Authorization") ?? "";
             string token = auth.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase) ? auth.Substring(7).Trim() : null;
-            Func<string, bool> authorizer = HookAuthorizer;
 
-            if (token == null || authorizer == null || !authorizer(token))
+            if (token == null || !hookAuthority.Allows(token))
             {
                 Log.Warn("Hook post rejected: bad or missing bearer token");
-                WriteHttpResponse(client.Stream, "401 Unauthorized");
+                HttpHead.WriteResponse(client.Stream, "401 Unauthorized");
                 return;
             }
 
-            if (!int.TryParse(request.Header("Content-Length"), out int length) || length < 0 || length > MaxFrameBytes)
+            if (!int.TryParse(head.Header("Content-Length"), out int length) || length < 0 || length > MaxBodyBytes)
             {
                 Log.Warn("Hook post rejected: bad content length");
-                WriteHttpResponse(client.Stream, "411 Length Required");
+                HttpHead.WriteResponse(client.Stream, "411 Length Required");
                 return;
             }
 
-            string body = Encoding.UTF8.GetString(ReadExact(client.Stream, length));
+            string body = Encoding.UTF8.GetString(WsFrames.ReadExact(client.Stream, length));
             events.Enqueue(new TransportEvent { Kind = EventKind.Hook, ConnId = 0, Payload = body });
             Log.Info("Hook post accepted, {} bytes", length);
-            WriteHttpResponse(client.Stream, "200 OK", "{\"accepted\":true}");
-        }
-
-        private static void WriteHttpResponse(NetworkStream stream, string status, string body = null)
-        {
-            byte[] payload = body == null ? Array.Empty<byte>() : Encoding.UTF8.GetBytes(body);
-            byte[] response = Encoding.ASCII.GetBytes(
-                "HTTP/1.1 " + status + "\r\n" +
-                (body == null ? "" : "Content-Type: application/json\r\n") +
-                "Content-Length: " + payload.Length + "\r\n" +
-                "Connection: close\r\n\r\n");
-            stream.Write(response, 0, response.Length);
-            if (payload.Length > 0)
-                stream.Write(payload, 0, payload.Length);
-        }
-
-        private static byte[] BuildTextFrame(byte[] payload)
-        {
-            using var ms = new MemoryStream();
-            ms.WriteByte(0x81);
-            if (payload.Length < 126)
-            {
-                ms.WriteByte((byte)payload.Length);
-            }
-            else if (payload.Length <= ushort.MaxValue)
-            {
-                ms.WriteByte(126);
-                ms.WriteByte((byte)(payload.Length >> 8));
-                ms.WriteByte((byte)(payload.Length & 0xFF));
-            }
-            else
-            {
-                ms.WriteByte(127);
-                for (int i = 7; i >= 0; i--)
-                    ms.WriteByte((byte)((long)payload.Length >> (8 * i) & 0xFF));
-            }
-            ms.Write(payload, 0, payload.Length);
-            return ms.ToArray();
-        }
-
-        private static byte[] BuildControlFrame(int opcode, byte[] payload)
-        {
-            var frame = new byte[2 + payload.Length];
-            frame[0] = (byte)(0x80 | opcode);
-            frame[1] = (byte)payload.Length;
-            Array.Copy(payload, 0, frame, 2, payload.Length);
-            return frame;
+            HttpHead.WriteResponse(client.Stream, "200 OK", "{\"accepted\":true}");
         }
 
         private void CloseClient(int connId, Client client)
         {
             if (client.Closed) return;
+
             client.Closed = true;
-            try { client.Outbox.CompleteAdding(); } catch { }
-            try { client.Tcp.Close(); } catch { }
+
+            try
+            {
+                client.Outbox.CompleteAdding();
+            }
+            catch (ObjectDisposedException)
+            {
+            }
+
+            try
+            {
+                client.Tcp.Close();
+            }
+            catch (SocketException e)
+            {
+                Log.Warn("Conn {} socket close failed: {}", connId, e.Message);
+            }
+
             if (clients.TryRemove(connId, out _))
                 events.Enqueue(new TransportEvent { Kind = EventKind.Disconnected, ConnId = connId });
-        }
-
-        private static byte ReadByte(NetworkStream stream)
-        {
-            int b = stream.ReadByte();
-            if (b < 0) throw new IOException("eof");
-            return (byte)b;
-        }
-
-        private static byte[] ReadExact(NetworkStream stream, int count)
-        {
-            var buffer = new byte[count];
-            int offset = 0;
-            while (offset < count)
-            {
-                int read = stream.Read(buffer, offset, count - offset);
-                if (read <= 0) throw new IOException("eof");
-                offset += read;
-            }
-            return buffer;
         }
     }
 }

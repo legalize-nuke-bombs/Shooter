@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using Shooter.Serialization;
 using Shooter.Client.Account;
+using Shooter.Logging;
+using Shooter.Serialization;
 
 namespace Shooter.Client.Menu
 {
@@ -76,9 +77,9 @@ namespace Shooter.Client.Menu
             Request("GET", path, null, true, (code, text) =>
             {
                 if (code != 200) { onDone(null, HumanError(code, text)); return; }
-                WorldsWrap wrap = Json.Deserialize<WorldsWrap>("{\"items\":" + text + "}");
-                if (wrap?.Items == null) { onDone(null, "Не удалось получить список миров."); return; }
-                onDone(wrap.Items, null);
+                List<WorldDto> worlds = Json.Deserialize<List<WorldDto>>(text);
+                if (worlds == null) { onDone(null, "Не удалось получить список миров."); return; }
+                onDone(worlds, null);
             });
         }
 
@@ -110,6 +111,8 @@ namespace Shooter.Client.Menu
         private static IEnumerator RequestRoutine(string method, string path, string body, bool auth, Action<long, string> onDone)
         {
             string url = Session.HttpBase + path;
+            Log.Info("{} {} requested, authorized {}", method, path, auth);
+
             using var request = new UnityWebRequest(url, method);
             if (body != null)
             {
@@ -124,9 +127,18 @@ namespace Shooter.Client.Menu
 
             string text = request.downloadHandler.text ?? "";
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.DataProcessingError)
+            {
+                Log.Warn("{} {} failed to reach the server: {}", method, path, request.error);
                 onDone(0, request.error);
+                yield break;
+            }
+
+            if (request.responseCode >= 400)
+                Log.Warn("{} {} answered {}: {}", method, path, request.responseCode, text);
             else
-                onDone(request.responseCode, text);
+                Log.Info("{} {} answered {}", method, path, request.responseCode);
+
+            onDone(request.responseCode, text);
         }
 
         private static string HumanError(long code, string text)

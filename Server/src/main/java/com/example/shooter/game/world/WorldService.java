@@ -72,12 +72,12 @@ public class WorldService {
     }
 
     public Map<String, String> join(Long userId, UUID worldId) {
-        transactionTemplate.executeWithoutResult(status -> joinTx(userId, worldId));
-        worldUnityHookService.deliver(new UnityHook(UnityHookAction.OPEN_SESSION, userId, worldId));
+        String displayName = transactionTemplate.execute(status -> joinTx(userId, worldId));
+        worldUnityHookService.deliver(new UnityHook(UnityHookAction.OPEN_SESSION, userId, worldId, displayName));
         return Map.of("status", "ok");
     }
 
-    private void joinTx(Long userId, UUID worldId) {
+    private String joinTx(Long userId, UUID worldId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_AUTHENTICATED));
         Long now = Instant.now().getEpochSecond();
 
@@ -95,7 +95,7 @@ public class WorldService {
             player.setLastSeen(now);
             playerRepository.save(player);
             log.info("user {} came back to world {} as player {}", userId, worldId, player.getId());
-            return;
+            return user.getDisplayName();
         }
 
         if (world.getJoinPolicy() != WorldJoinPolicy.EVERYONE) {
@@ -116,6 +116,7 @@ public class WorldService {
         worldRepository.save(world);
 
         log.info("user {} joined world {} as player {} for the first time!", userId, worldId, player.getId());
+        return user.getDisplayName();
     }
 
     public Map<String, String> kick(Long userId, UUID worldId, Long targetId) {
@@ -133,7 +134,7 @@ public class WorldService {
         }
 
         log.info("user {} kicked target {} from the world {}", userId, targetId, worldId);
-        worldUnityHookService.deliver(new UnityHook(UnityHookAction.CLOSE_SESSION, targetId, worldId));
+        worldUnityHookService.deliver(new UnityHook(UnityHookAction.CLOSE_SESSION, targetId, worldId, null));
         return Map.of("status", "ok");
     }
 
@@ -143,7 +144,7 @@ public class WorldService {
             throw new ApiException(ErrorCode.CANT_SELF_BLACKLIST);
         }
         transactionTemplate.executeWithoutResult(status -> blacklistTx(userId, worldId, targetId));
-        worldUnityHookService.tryDeliver(new UnityHook(UnityHookAction.CLOSE_SESSION, targetId, worldId));
+        worldUnityHookService.tryDeliver(new UnityHook(UnityHookAction.CLOSE_SESSION, targetId, worldId, null));
         return Map.of("status", "ok");
     }
 
@@ -202,7 +203,7 @@ public class WorldService {
 
         worldRepository.deleteById(worldId);
         log.info("user {} deleted world {}", userId, worldId);
-        worldUnityHookService.tryDeliver(new UnityHook(UnityHookAction.CLOSE_SESSION, null, worldId));
+        worldUnityHookService.tryDeliver(new UnityHook(UnityHookAction.CLOSE_SESSION, null, worldId, null));
     }
 
     private void requireCreator(Long userId, UUID worldId) {
