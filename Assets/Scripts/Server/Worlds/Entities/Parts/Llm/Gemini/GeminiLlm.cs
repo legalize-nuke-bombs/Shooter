@@ -22,7 +22,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
         {
         }
 
-        protected override async Task<string> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages)
+        protected override async Task<LlmAnswer> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
@@ -35,6 +35,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
                 SystemInstruction = new GeminiContent
                 {
                     Parts = new[] { new GeminiPart { Text = systemPrompt } }
+                },
+                GenerationConfig = new GeminiGenerationConfig
+                {
+                    ResponseMimeType = "application/json",
+                    ResponseSchema = AnswerSchema()
                 }
             };
 
@@ -63,7 +68,13 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
                     throw new Exception("Response has no candidate text: " + Excerpt(webRequest.downloadHandler.text));
                 }
 
-                return text.Trim();
+                LlmAnswer answer = Json.Deserialize<LlmAnswer>(text);
+                if (string.IsNullOrEmpty(answer?.Reply))
+                {
+                    throw new Exception("Answer json has no reply: " + Excerpt(text));
+                }
+
+                return answer;
             }
         }
 
@@ -72,6 +83,20 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
             var completion = new TaskCompletionSource<bool>();
             operation.completed += _ => completion.SetResult(true);
             return completion.Task;
+        }
+
+        private static GeminiSchema AnswerSchema()
+        {
+            return new GeminiSchema
+            {
+                Type = "OBJECT",
+                Properties = new Dictionary<string, GeminiSchema>
+                {
+                    ["reply"] = new GeminiSchema { Type = "STRING" },
+                    ["memory"] = new GeminiSchema { Type = "STRING", Nullable = true }
+                },
+                Required = new[] { "reply" }
+            };
         }
 
         private static GeminiContent Content(LlmMessage message)

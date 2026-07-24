@@ -8,7 +8,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
 {
     public abstract class Llm : Part
     {
+        public const int MemoryLimit = 1500;
+
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
+
+        private string memory = "";
 
         protected Llm(Entity self) : base(self, typeof(Llm))
         {
@@ -24,7 +28,9 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
             await gate.WaitAsync();
             try
             {
-                return await Request(systemPrompt, messages);
+                LlmAnswer answer = await Request(Prompted(systemPrompt), messages);
+                Remember(answer.Memory);
+                return answer.Reply;
             }
             finally
             {
@@ -54,6 +60,26 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
             return null;
         }
 
-        protected abstract Task<string> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages);
+        protected abstract Task<LlmAnswer> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages);
+
+        private string Prompted(string systemPrompt)
+        {
+            string known = string.IsNullOrEmpty(memory) ? "Пока пусто." : memory;
+            return systemPrompt + "\n" +
+                   "Твоя память:\n" +
+                   known + "\n" +
+                   "Правила памяти: в поле memory ответа можешь вернуть новую полную версию своей памяти, либо null, если менять нечего.\n" +
+                   "В памяти держи только важное о себе и о мире вокруг.\n" +
+                   "Не записывай в память факты о собеседнике: историю разговора с ним ты и так всегда видишь.\n" +
+                   $"Держи память короче {MemoryLimit} символов, устаревшее выбрасывай.";
+        }
+
+        private void Remember(string update)
+        {
+            if (update == null) return;
+
+            memory = update;
+            Log.Info("Entity {} rewrote its memory ({} chars): {}", Self.Name, update.Length, update);
+        }
     }
 }
