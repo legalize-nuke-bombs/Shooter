@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine.Networking;
 using Shooter.Logging;
 using Shooter.Serialization;
+using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
 {
@@ -18,7 +19,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
         private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
         private readonly string model = Environment.GetEnvironmentVariable("GEMINI_MODEL");
 
-        public GeminiLlm(Entity self, string character) : base(self, character)
+        public GeminiLlm(Entity self, Clock clock, string character) : base(self, clock, character)
         {
         }
 

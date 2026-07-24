@@ -22,7 +22,7 @@ namespace Shooter.Server.Worlds.Entities.Creating
         {
             Entity npc = Npc("Kapsul", at);
             npc.Add(new KindName(npc, NameKind.Kapsul));
-            npc.Add(new GeminiLlm(npc, KapsulCharacter));
+            npc.Add(new GeminiLlm(npc, clock, KapsulCharacter));
             npc.Add(new AITalker(npc, clock));
             return npc;
         }
