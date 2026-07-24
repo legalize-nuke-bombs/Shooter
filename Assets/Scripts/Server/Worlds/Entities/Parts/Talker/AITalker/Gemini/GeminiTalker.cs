@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
 {
@@ -21,7 +20,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public GeminiTalker(GeminiModel model, string characterSystemPrompt, Health.Health health, Clock clock) : base(characterSystemPrompt, health, clock)
+        public GeminiTalker(Guid selfId, ServerWorld world, string characterSystemPrompt, GeminiModel model) : base(selfId, world, characterSystemPrompt)
         {
             this.model = model.ToRaw();
         }

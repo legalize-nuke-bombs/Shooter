@@ -2,7 +2,15 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
 {
     public class AITalkerSettings
     {
-        public string BaseSystemPrompt(string datetime, int hp, int maxHp)
+        public string BaseSystemPrompt(
+            string datetime,
+            string hp,
+            string maxHp,
+            string playerName,
+            string playerHp,
+            string playerMaxHp,
+            string playerEquippedItem
+            )
         {
             return
                 "Ты NPC в 3D мета хорроре с опциональным кооперативным режимом.\n" +
@@ -15,7 +23,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
                 "Если игрок спрашивает о том, что тебе неизвестно, или просит сделать что-то, для чего у тебя нет инструментов, то ты находишь лучшую отговорку не отвечать или не делать.\n" +
                 "Состояние мира на момент последнего сообщения игрока:\n" +
                 $"Игровая виртуальная дата и время: {datetime}\n" +
-                $"Твое здоровье: {hp}/{maxHp}";
+                $"Твое здоровье: {hp}/{maxHp}\n" +
+                $"Имя игрока: {playerName}\n" +
+                $"Здоровье игрока: {playerHp}/{playerMaxHp}\n" +
+                $"Предмет в руках игрока: {playerEquippedItem}";
         }
 
     }

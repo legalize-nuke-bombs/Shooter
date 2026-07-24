@@ -5,7 +5,6 @@ using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Time;
 using Shooter.Server.Worlds.Sleeping;
 using Shooter.Server.Worlds.Entities.Parts.Speaker;
-using Shooter.Server.Worlds.Entities.Spawning;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Pilot
 {
@@ -190,7 +189,14 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
         {
             Log.Info("Pilot at {} will be resurrected", controller.transform.position);
 
-            worldEntities.Add(NpcCreator.Create(new Nameable.Nameable(NameableType.SpecialDeadPlayer), new DeadHealth(), new Inventory.Inventory(inventory), null, controller.transform.position));
+            {
+                var npc = new Entity("Npc", controller.transform.position);
+                npc.Body.AddComponent<CapsuleCollider>();
+                npc.Add(new Nameable.Nameable(NameableType.SpecialDeadPlayer));
+                npc.Add(new DeadHealth());
+                npc.Add(new Inventory.Inventory(inventory));
+                worldEntities.Add(npc);
+            }
 
             controller.enabled = false;
             controller.transform.position = spawnPoint;
