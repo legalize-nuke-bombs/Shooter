@@ -1,6 +1,6 @@
 {
     "name": "Shooter.Auth",
-    "rootNamespace": "Shooter.Auth",
+    "rootNamespace": "Shooter",
     "references": [
         "Shooter.Serialization",
         "Unity.Nuget.Newtonsoft-Json"

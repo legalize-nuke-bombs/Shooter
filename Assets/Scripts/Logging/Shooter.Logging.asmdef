@@ -1,6 +1,6 @@
 {
     "name": "Shooter.Logging",
-    "rootNamespace": "Shooter.Logging",
+    "rootNamespace": "Shooter",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

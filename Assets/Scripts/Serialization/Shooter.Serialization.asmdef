@@ -1,6 +1,6 @@
 {
     "name": "Shooter.Serialization",
-    "rootNamespace": "Shooter.Serialization",
+    "rootNamespace": "Shooter",
     "references": [
         "Unity.Nuget.Newtonsoft-Json",
         "Shooter.Logging"
