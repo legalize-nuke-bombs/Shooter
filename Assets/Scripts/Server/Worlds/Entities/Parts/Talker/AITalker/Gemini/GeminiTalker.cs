@@ -15,7 +15,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
         private const int ExcerptLength = 300;
 
         private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-        private readonly string model = Environment.GetEnvironmentVariable("GEMINI_MODEl");
+        private readonly string model = Environment.GetEnvironmentVariable("GEMINI_MODEL");
 
         public GeminiTalker(Entity self, Clock clock, string character) : base(self, clock, character)
         {
