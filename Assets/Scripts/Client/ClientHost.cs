@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Client.Account;
 using Shooter.Client.Hud;
+using Shooter.Client.Menu;
 using Shooter.Client.Transport;
 using Shooter.Client.Worlds;
 using Shooter.Client.Worlds.Entities.Chronology;
@@ -25,6 +26,7 @@ namespace Shooter.Client
         private const string MenuPrefab = "MenuRoot";
         private const int ExcerptLength = 200;
 
+        private ClientSession session;
         private IClientTransport clientTransport;
         private GameObject rigObject;
         private ClientWorld world;
@@ -43,6 +45,11 @@ namespace Shooter.Client
         private void OnDisable()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        public void Bind(ClientSession clientSession)
+        {
+            session = clientSession;
         }
 
         private void Start()
@@ -117,7 +124,8 @@ namespace Shooter.Client
 
         private void EnterMenuScene()
         {
-            Instantiate(Resources.Load<GameObject>(MenuPrefab));
+            GameObject menu = Instantiate(Resources.Load<GameObject>(MenuPrefab));
+            menu.GetComponentInChildren<MenuController>().Bind(session);
             Log.Info("Menu built");
         }
 
@@ -125,7 +133,7 @@ namespace Shooter.Client
         {
             LoadMap();
 
-            if (string.IsNullOrEmpty(Session.Token))
+            if (!session.LoggedIn)
             {
                 Log.Warn("No session token, game scene stays offline");
                 return;
@@ -133,8 +141,8 @@ namespace Shooter.Client
 
             clientTransport = new ClientWsTransport();
             clientTransport.MessageReceived += OnMessageReceived;
-            clientTransport.Connect(Session.WsUrl);
-            Log.Info("Connecting to {}", Session.WsUrl);
+            clientTransport.Connect(session.WsUrl);
+            Log.Info("Connecting to {}", session.WsUrl);
         }
 
         private static void LoadMap()
@@ -179,7 +187,7 @@ namespace Shooter.Client
             rig = new PlayerRig(rigObject.transform);
             world = new ClientWorld(myId, myUserId, rigObject.transform);
 
-            hud = new HudRoot(world, rig);
+            hud = new HudRoot(world, rig, session);
             rigObject.GetComponentInChildren<UIDocument>().rootVisualElement.Add(hud);
 
             clockView = new ClockView(world);

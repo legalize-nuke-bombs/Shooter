@@ -17,6 +17,7 @@ namespace Shooter.Client.Menu
         private readonly Label userLabel;
 
         private readonly MenuApi api;
+        private readonly ClientSession session;
         private readonly ErrorModal errors;
         private readonly Action onCreateClick;
         private readonly Action onJoined;
@@ -25,9 +26,10 @@ namespace Shooter.Client.Menu
         private int page;
         private int loadRequest;
 
-        public WorldsScreen(VisualElement root, MenuApi api, ErrorModal errors, Action onCreateClick, Action onJoined)
+        public WorldsScreen(VisualElement root, MenuApi api, ErrorModal errors, ClientSession session, Action onCreateClick, Action onJoined)
         {
             this.api = api;
+            this.session = session;
             this.errors = errors;
             this.onCreateClick = onCreateClick;
             this.onJoined = onJoined;
@@ -48,7 +50,7 @@ namespace Shooter.Client.Menu
 
         public void Show()
         {
-            userLabel.text = Session.DisplayName;
+            userLabel.text = session.DisplayName;
             screen.RemoveFromClassList("hidden");
             Reload();
         }
@@ -148,12 +150,12 @@ namespace Shooter.Client.Menu
             return badge;
         }
 
-        private static WorldRole? FindMyRole(WorldDto world)
+        private WorldRole? FindMyRole(WorldDto world)
         {
-            if (world.Players == null || Session.UserId < 0) return null;
+            if (world.Players == null || session.UserId < 0) return null;
 
             foreach (PlayerDto player in world.Players)
-                if (player.User != null && player.User.Id == Session.UserId)
+                if (player.User != null && player.User.Id == session.UserId)
                     return player.Role;
 
             return null;

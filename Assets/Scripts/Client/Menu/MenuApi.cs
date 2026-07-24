@@ -31,10 +31,12 @@ namespace Shooter.Client.Menu
         };
 
         private readonly MonoBehaviour runner;
+        private readonly ClientSession session;
 
-        public MenuApi(MonoBehaviour runner)
+        public MenuApi(MonoBehaviour runner, ClientSession session)
         {
             this.runner = runner;
+            this.session = session;
         }
 
         public void CheckServer(Action<ServerInfoResponse> onDone)
@@ -108,9 +110,9 @@ namespace Shooter.Client.Menu
             runner.StartCoroutine(RequestRoutine(method, path, body, auth, onDone));
         }
 
-        private static IEnumerator RequestRoutine(string method, string path, string body, bool auth, Action<long, string> onDone)
+        private IEnumerator RequestRoutine(string method, string path, string body, bool auth, Action<long, string> onDone)
         {
-            string url = Session.HttpBase + path;
+            string url = session.HttpBase + path;
             Log.Info("{} {} requested, authorized {}", method, path, auth);
 
             using var request = new UnityWebRequest(url, method);
@@ -120,7 +122,7 @@ namespace Shooter.Client.Menu
                 request.SetRequestHeader("Content-Type", "application/json");
             }
             request.downloadHandler = new DownloadHandlerBuffer();
-            if (auth) request.SetRequestHeader("Authorization", "Bearer " + Session.Token);
+            if (auth) request.SetRequestHeader("Authorization", "Bearer " + session.Token);
             request.timeout = 10;
 
             yield return request.SendWebRequest();
