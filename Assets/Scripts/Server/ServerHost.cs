@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
 using Shooter.Serialization;
+using Shooter.Server.Control;
 using Shooter.Server.Protocol;
 using Shooter.Server.Sessions;
 using Shooter.Server.Transport;
@@ -19,6 +20,7 @@ namespace Shooter.Server
 
         private IServerTransport serverTransport;
         private ServerSessionGate serverSessionGate;
+        private ServerControlApi serverControlApi;
         private readonly Dictionary<string, ServerWorld> worlds = new Dictionary<string, ServerWorld>();
         private float tickTimer;
         private long tick;
@@ -47,12 +49,12 @@ namespace Shooter.Server
             }
             serverSessionGate = new ServerSessionGate(secret);
 
-            serverTransport = new ServerWsTransport();
+            serverTransport = new ServerWsTransport(new HookAuthority(secret));
+            serverControlApi = new ServerControlApi(serverSessionGate, serverTransport);
             serverTransport.ClientConnected += OnClientConnected;
             serverTransport.MessageReceived += OnMessageReceived;
             serverTransport.ClientDisconnected += OnClientDisconnected;
-            serverTransport.HookReceived += OnHookReceived;
-            serverTransport.HookAuthorizer = serverSessionGate.AuthorizeHook;
+            serverTransport.HookReceived += serverControlApi.Handle;
             serverTransport.Start(Port);
             Log.Info("WS listening on {}, tick rate {}", Port, TickRate);
         }
@@ -201,12 +203,6 @@ namespace Shooter.Server
                 foreach (int connId in serverSessionGate.ConnIdsInWorld(world.Id))
                     serverTransport.Send(connId, json);
             }
-        }
-
-        private void OnHookReceived(string json)
-        {
-            foreach (int connId in serverSessionGate.HandleHook(json))
-                serverTransport.Kick(connId);
         }
 
         private void OnClientDisconnected(int connId)

@@ -2,7 +2,6 @@ namespace Shooter.Client.Account
 {
     public static class Session
     {
-        public static string Username = "";
         public static string DisplayName = "";
         public static long UserId = -1;
         public static string Token = "";

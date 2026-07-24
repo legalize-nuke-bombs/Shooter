@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Shooter.Server.Worlds.Entities;
 using Shooter.Server.Worlds.Items;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Inventory

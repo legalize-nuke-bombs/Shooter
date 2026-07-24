@@ -74,7 +74,7 @@ namespace Shooter.Client.Menu
             }
             catch (Exception e)
             {
-                Log.Warn("Menu: config read failed, using default: {}", e.Message);
+                Log.Warn("config read failed, using default: {}", e.Message);
             }
         }
 
@@ -103,7 +103,7 @@ namespace Shooter.Client.Menu
             background.Tick(Time.deltaTime);
 
             if (!Keyboard.current.escapeKey.wasPressedThisFrame) return;
-            Log.Info("Menu: Escape pressed, quitting");
+            Log.Info("Escape pressed, quitting");
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.ExitPlaymode();
 #else
