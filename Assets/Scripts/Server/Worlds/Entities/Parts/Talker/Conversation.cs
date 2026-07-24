@@ -22,7 +22,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
             return messages.LastOrDefault();
         }
 
-        public string Prompt()
+        public override string ToString()
         {
             var settings = new JsonSerializerSettings();
             settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
@@ -31,15 +31,9 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
 
         public ConversationState State()
         {
-            var messageStates = new List<MessageState>();
-            foreach (Message message in messages)
-            {
-                messageStates.Add(message.State());
-            }
-
             return new ConversationState
             {
-                Messages = messageStates
+                Messages = messages.ToList()
             };
         }
     }
