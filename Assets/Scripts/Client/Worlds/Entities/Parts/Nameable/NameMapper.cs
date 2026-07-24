@@ -27,7 +27,7 @@ namespace Shooter.Client.Worlds.Entities.Parts.Nameable
                     return "Пропавший странник";
 
 
-                case NameableType.Capsule:
+                case NameableType.Kapsul:
                     return "Капсул";
 
 
