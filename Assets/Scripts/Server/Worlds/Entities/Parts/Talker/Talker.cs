@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Shooter.Logging;
 using System;
-using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker
 {
@@ -15,12 +14,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
 
         private readonly HashSet<long> answering = new HashSet<long>();
         private readonly Health.Health health;
-        private readonly Clock clock;
 
-        protected Talker(Health.Health health, Clock clock)
+        protected Talker(Health.Health health)
         {
             this.health = health;
-            this.clock = clock;
         }
 
         public sealed override Type Slot => typeof(Talker);
@@ -98,23 +95,9 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
             Conversations[userId].Add(new Message
             {
                 Author = MessageAuthor.Talker,
-                Content = content,
-                Metadata = BuildMessageMetadata()
+                Content = content
             });
             Log.Info("Talking to {}: {}", userId, content); // TODO remove content from logs
-        }
-
-        private MessageMetadata BuildMessageMetadata()
-        {
-            var time = TimeSpan.FromSeconds((long)clock.Timestamp);
-            string formattedTime = $"{time.Days}d {time.Hours:D2}h {time.Minutes:D2}m {time.Seconds:D2}s";
-
-            return new MessageMetadata
-            {
-                Clock = formattedTime,
-                Hp = health.Hp,
-                MaxHp = health.MaxHp
-            };
         }
 
         public override PartState State()

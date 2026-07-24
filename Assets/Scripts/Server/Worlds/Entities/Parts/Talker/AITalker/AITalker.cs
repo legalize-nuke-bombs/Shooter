@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
 {
@@ -12,7 +11,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
         private readonly string characterSystemPrompt;
         private readonly AITalkerSettings settings = new AITalkerSettings();
 
-        protected AITalker(string characterSystemPrompt, Health.Health health, Clock clock) : base(health, clock)
+        protected AITalker(string characterSystemPrompt, Health.Health health) : base(health)
         {
             this.characterSystemPrompt = characterSystemPrompt;
         }
@@ -27,10 +26,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
             string answer;
             try
             {
-                string systemPrompt = settings.BaseSystemPrompt + "\n" + characterSystemPrompt;
-                string conversation = Conversations[userId].Prompt();
-                Log.Info("Requesting answer for user {} systemPrompt {} conversation {}...", userId, systemPrompt, conversation); // TODO remove message content
-                answer = await RequestAnswer(systemPrompt, conversation);
+                Log.Info("Requesting answer for user {}...", userId);
+                answer = await RequestAnswer(settings.BaseSystemPrompt + "\n" + characterSystemPrompt, Conversations[userId].ToString());
             }
             catch (Exception e)
             {
