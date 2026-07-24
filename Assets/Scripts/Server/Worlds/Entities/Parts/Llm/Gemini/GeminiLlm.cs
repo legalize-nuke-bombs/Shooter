@@ -18,7 +18,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
         private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
         private readonly string model = Environment.GetEnvironmentVariable("GEMINI_MODEL");
 
-        public GeminiLlm(Entity self) : base(self)
+        public GeminiLlm(Entity self, string character) : base(self, character)
         {
         }
 
@@ -101,10 +101,14 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
 
         private static GeminiContent Content(LlmMessage message)
         {
+            string text = string.IsNullOrEmpty(message.Time)
+                ? message.Content
+                : $"[{message.Time}] {message.Content}";
+
             return new GeminiContent
             {
                 Role = message.Role == LlmRole.User ? "user" : "model",
-                Parts = new[] { new GeminiPart { Text = message.Content } }
+                Parts = new[] { new GeminiPart { Text = text } }
             };
         }
 

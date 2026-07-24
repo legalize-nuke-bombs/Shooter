@@ -4,5 +4,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
     {
         public LlmRole Role { get; set; }
         public string Content { get; set; }
+        public string Time { get; set; }
     }
 }

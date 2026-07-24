@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shooter.Logging;
 using Shooter.Server.Protocol;
+using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker
 {
@@ -18,9 +19,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
         private readonly Dictionary<long, Conversation> conversations = new Dictionary<long, Conversation>();
         private readonly Dictionary<long, float> awaited = new Dictionary<long, float>();
         private readonly ConcurrentQueue<Reply> replies = new ConcurrentQueue<Reply>();
+        private readonly Clock clock;
 
-        protected Talker(Entity self) : base(self, typeof(Talker))
+        protected Talker(Entity self, Clock clock) : base(self, typeof(Talker))
         {
+            this.clock = clock;
         }
 
         public bool TryListen(Entity user, string content)
@@ -61,7 +64,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
                 return false;
             }
 
-            conversation.Add(new Message { Author = MessageAuthor.Player, Content = content });
+            conversation.Add(new Message { Author = MessageAuthor.Player, Content = content, Time = clock.DateTime() });
             Log.Info("Entity {} received a message from user {}", Self.Name, userId);
             return true;
         }
@@ -142,7 +145,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
                     continue;
                 }
 
-                conversation.Add(new Message { Author = MessageAuthor.Talker, Content = reply.Content });
+                conversation.Add(new Message { Author = MessageAuthor.Talker, Content = reply.Content, Time = clock.DateTime() });
                 Log.Info("Entity {} answered user {}", Self.Name, reply.UserId);
             }
         }

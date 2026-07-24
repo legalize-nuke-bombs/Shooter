@@ -4,5 +4,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
     {
         public MessageAuthor Author { get; set; }
         public string Content { get; set; }
+        public string Time { get; set; }
     }
 }

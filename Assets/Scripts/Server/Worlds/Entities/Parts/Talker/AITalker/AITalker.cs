@@ -6,13 +6,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
 {
     public sealed class AITalker : Talker
     {
-        private readonly Clock clock;
-        private readonly string character;
-
-        public AITalker(Entity self, Clock clock, string character) : base(self)
+        public AITalker(Entity self, Clock clock) : base(self, clock)
         {
-            this.clock = clock;
-            this.character = character;
         }
 
         protected override Task<string> Answer(Conversation conversation)
@@ -23,7 +18,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
                 throw new InvalidOperationException($"Entity {Self.Name} has no llm part to answer with");
             }
 
-            return llm.Ask(TalkPrompt.System(Self, conversation, clock, character), TalkPrompt.Messages(conversation));
+            return llm.Ask(TalkPrompt.Situation(conversation.User), TalkPrompt.Messages(conversation));
         }
     }
 }

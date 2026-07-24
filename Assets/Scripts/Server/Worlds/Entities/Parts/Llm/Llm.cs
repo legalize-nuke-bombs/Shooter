@@ -8,17 +8,17 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
 {
     public abstract class Llm : Part
     {
-        public const int MemoryLimit = 1500;
-
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
+        private readonly string character;
 
         private string memory = "";
 
-        protected Llm(Entity self) : base(self, typeof(Llm))
+        protected Llm(Entity self, string character) : base(self, typeof(Llm))
         {
+            this.character = character;
         }
 
-        public async Task<string> Ask(string systemPrompt, IReadOnlyList<LlmMessage> messages)
+        public async Task<string> Ask(string situation, IReadOnlyList<LlmMessage> messages)
         {
             if (gate.CurrentCount == 0)
             {
@@ -28,7 +28,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
             await gate.WaitAsync();
             try
             {
-                LlmAnswer answer = await Request(Prompted(systemPrompt), messages);
+                string systemPrompt = LlmPrompt.System(character, memory, Self.Digest(), situation);
+                LlmAnswer answer = await Request(systemPrompt, messages);
                 Remember(answer.Memory);
                 return answer.Reply;
             }
@@ -61,18 +62,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
         }
 
         protected abstract Task<LlmAnswer> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages);
-
-        private string Prompted(string systemPrompt)
-        {
-            string known = string.IsNullOrEmpty(memory) ? "Пока пусто." : memory;
-            return systemPrompt + "\n" +
-                   "Твоя память:\n" +
-                   known + "\n" +
-                   "Правила памяти: в поле memory ответа можешь вернуть новую полную версию своей памяти, либо null, если менять нечего.\n" +
-                   "В памяти держи только важное о себе и о мире вокруг.\n" +
-                   "Не записывай в память факты о собеседнике: историю разговора с ним ты и так всегда видишь.\n" +
-                   $"Держи память короче {MemoryLimit} символов, устаревшее выбрасывай.";
-        }
 
         private void Remember(string update)
         {
