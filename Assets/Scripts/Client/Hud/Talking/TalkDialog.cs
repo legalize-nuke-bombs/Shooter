@@ -26,6 +26,7 @@ namespace Shooter.Client.Hud.Talking
         private readonly ClientWorld world;
         private readonly PlayerRig rig;
         private readonly TalkSense talkSense;
+        private readonly ClientSession session;
         private readonly VisualElement frame = new VisualElement();
         private readonly TextLine title;
         private readonly ScrollView history = new ScrollView(ScrollViewMode.Vertical);
@@ -36,12 +37,13 @@ namespace Shooter.Client.Hud.Talking
         private bool renderedWaiting;
         private bool scrollPending;
 
-        public TalkDialog(Font font, ClientWorld world, PlayerRig rig, TalkSense talkSense) : base(rig)
+        public TalkDialog(Font font, ClientWorld world, PlayerRig rig, TalkSense talkSense, ClientSession session) : base(rig)
         {
             this.font = font;
             this.world = world;
             this.rig = rig;
             this.talkSense = talkSense;
+            this.session = session;
 
             frame.style.position = Position.Absolute;
             frame.style.left = Length.Percent(30);
@@ -135,7 +137,7 @@ namespace Shooter.Client.Hud.Talking
                 foreach (Message message in messages)
                 {
                     bool mine = message.Author == MessageAuthor.Player;
-                    string author = mine ? Session.DisplayName : title.text;
+                    string author = mine ? session.DisplayName : title.text;
                     history.Add(Line(author + ": " + message.Content, mine ? MyColor : (Color?)null));
                 }
             }

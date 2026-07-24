@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using Shooter.Client.Account;
 using Shooter.Client.Hud.Hands;
 using Shooter.Client.Hud.Inventory;
 using Shooter.Client.Hud.Sleeping;
@@ -17,7 +18,7 @@ namespace Shooter.Client.Hud
 
         private readonly Overlay[] overlays;
 
-        public HudRoot(ClientWorld world, PlayerRig rig)
+        public HudRoot(ClientWorld world, PlayerRig rig, ClientSession session)
         {
             var font = Resources.Load<Font>(FontPath);
             pickingMode = PickingMode.Ignore;
@@ -37,7 +38,7 @@ namespace Shooter.Client.Hud
             Add(new DeadScreen(font, world));
 
             var inventory = new InventoryOverlay(font, world, rig);
-            var dialog = new TalkDialog(font, world, rig, talkSense);
+            var dialog = new TalkDialog(font, world, rig, talkSense, session);
             overlays = new Overlay[] { inventory, dialog };
 
             foreach (Overlay overlay in overlays)

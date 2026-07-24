@@ -20,14 +20,16 @@ namespace Shooter.Client.Menu
         private readonly Label status;
 
         private readonly MenuApi api;
+        private readonly ClientSession session;
         private readonly Action onLoggedIn;
 
         private bool registerMode = true;
         private bool busy;
 
-        public LoginScreen(VisualElement root, MenuApi api, Action onLoggedIn)
+        public LoginScreen(VisualElement root, MenuApi api, ClientSession session, Action onLoggedIn)
         {
             this.api = api;
+            this.session = session;
             this.onLoggedIn = onLoggedIn;
 
             screen = root.Q<VisualElement>("login-screen");
@@ -104,20 +106,19 @@ namespace Shooter.Client.Menu
                     return;
                 }
 
-                Session.Token = token;
+                session.Authorize(token);
                 api.Me((me, meError) =>
                 {
                     SetBusy(false);
 
                     if (meError != null)
                     {
-                        Session.Token = "";
+                        session.LogOut();
                         status.text = meError;
                         return;
                     }
 
-                    Session.DisplayName = me.DisplayName;
-                    Session.UserId = me.Id;
+                    session.Identify(me.Id, me.DisplayName);
 
                     status.text = "";
                     onLoggedIn();

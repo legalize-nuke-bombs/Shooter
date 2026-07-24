@@ -1,11 +1,9 @@
 using System;
-using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Logging;
-using Shooter.Serialization;
 using Shooter.Client.Account;
 
 namespace Shooter.Client.Menu
@@ -13,6 +11,7 @@ namespace Shooter.Client.Menu
     [RequireComponent(typeof(UIDocument))]
     public class MenuController : MonoBehaviour
     {
+        private ClientSession session;
         private MenuApi api;
         private MenuBackground background;
         private LoginScreen login;
@@ -22,24 +21,27 @@ namespace Shooter.Client.Menu
         private ErrorModal errorModal;
         private Label cornerStatus;
 
+        public void Bind(ClientSession clientSession)
+        {
+            session = clientSession;
+        }
+
         private void Start()
         {
             Log.Info("MenuController starting...");
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
 
-            LoadConfig();
-
             var root = GetComponent<UIDocument>().rootVisualElement;
             background = new MenuBackground();
             root.Q<VisualElement>("root").Insert(0, background);
             cornerStatus = root.Q<Label>("corner-status");
 
-            api = new MenuApi(this);
+            api = new MenuApi(this, session);
             errorModal = new ErrorModal(root);
             serverError = new ServerErrorScreen(root, CheckServer);
-            login = new LoginScreen(root, api, OnLoggedIn);
-            worlds = new WorldsScreen(root, api, errorModal, onCreateClick: () => createModal.Show(), onJoined: OnJoined);
+            login = new LoginScreen(root, api, session, OnLoggedIn);
+            worlds = new WorldsScreen(root, api, errorModal, session, onCreateClick: () => createModal.Show(), onJoined: OnJoined);
             createModal = new CreateWorldModal(root, api, onCreated: () => worlds.Reload());
 
             ShowHome();
@@ -48,7 +50,7 @@ namespace Shooter.Client.Menu
 
         private void ShowHome()
         {
-            if (string.IsNullOrEmpty(Session.Token))
+            if (!session.LoggedIn)
             {
                 worlds.Hide();
                 login.Show();
@@ -60,23 +62,6 @@ namespace Shooter.Client.Menu
             }
         }
 
-        private void LoadConfig()
-        {
-            try
-            {
-                string path = Path.Combine(Application.streamingAssetsPath, "config.json");
-                if (File.Exists(path))
-                {
-                    var config = Json.Deserialize<ConfigFile>(File.ReadAllText(path));
-                    if (!string.IsNullOrEmpty(config.ServerAddress))
-                        Session.ServerAddress = config.ServerAddress.Trim();
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Warn("config read failed, using default: {}", e.Message);
-            }
-        }
 
         private void CheckServer()
         {
@@ -88,7 +73,7 @@ namespace Shooter.Client.Menu
                 {
                     login.Hide();
                     worlds.Hide();
-                    serverError.Show("Сервер по адресу " + Session.ServerAddress + " недоступен. Адрес задаётся в файле StreamingAssets/config.json.");
+                    serverError.Show("Сервер по адресу " + session.ServerAddress + " недоступен. Адрес задаётся в файле StreamingAssets/config.json.");
                     return;
                 }
 
