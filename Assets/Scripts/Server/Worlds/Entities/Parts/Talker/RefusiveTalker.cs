@@ -8,7 +8,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
 
         protected override void StartTalking(long userId)
         {
-            Say(userId, "Not now.");
+            Say(userId, "Не сейчас.");
         }
     }
 }
