@@ -21,7 +21,7 @@ namespace Shooter.Server.Worlds.Entities.Creating
         {
             Entity npc = Npc("Kapsul", at);
             npc.Add(new KindName(npc, NameKind.Kapsul));
-            npc.Add(new GeminiTalker(npc, clock, KapsulCharacter, GeminiModel.Flash35));
+            npc.Add(new GeminiTalker(npc, clock, KapsulCharacter));
             return npc;
         }
 
