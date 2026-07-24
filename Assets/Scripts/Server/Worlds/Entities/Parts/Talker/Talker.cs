@@ -22,7 +22,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
         {
         }
 
-        public bool TryToListen(Entity user, string content)
+        public bool TryListen(Entity user, string content)
         {
             if (!Alive())
             {

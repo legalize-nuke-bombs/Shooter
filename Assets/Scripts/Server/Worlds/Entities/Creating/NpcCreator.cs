@@ -5,7 +5,7 @@ using Shooter.Server.Worlds.Entities.Parts.Inventory;
 using Shooter.Server.Worlds.Entities.Parts.Movement;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
 using Shooter.Server.Worlds.Entities.Parts.Talker;
-using Shooter.Server.Worlds.Entities.Parts.Talker.Gemini;
+using Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini;
 using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Creating

@@ -7,39 +7,32 @@ using Shooter.Logging;
 using Shooter.Serialization;
 using Shooter.Server.Worlds.Time;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Talker.Gemini
+namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
 {
-    public sealed class GeminiTalker : Talker
+    public sealed class GeminiTalker : AITalker
     {
         private const string Host = "generativelanguage.googleapis.com";
 
         private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-        private readonly Clock clock;
-        private readonly string character;
         private readonly string model;
 
-        public GeminiTalker(Entity self, Clock clock, string character, GeminiModel model) : base(self)
+        public GeminiTalker(Entity self, Clock clock, string character, GeminiModel model) : base(self, clock, character)
         {
-            this.clock = clock;
-            this.character = character;
             this.model = model.ToRaw();
         }
 
-        protected override async Task<string> Answer(Conversation conversation)
+        protected override async Task<string> RequestAnswer(string systemPrompt, string conversation)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
                 throw new InvalidOperationException("GEMINI_API_KEY environment variable is not set");
             }
 
-            string systemPrompt = TalkPrompt.System(Self, conversation, clock, character);
-            string dialog = TalkPrompt.Dialog(conversation);
-
             var request = new GeminiRequest
             {
                 Contents = new[]
                 {
-                    new GeminiContent { Parts = new[] { new GeminiPart { Text = dialog } } }
+                    new GeminiContent { Parts = new[] { new GeminiPart { Text = conversation } } }
                 },
                 SystemInstruction = new GeminiContent
                 {

@@ -49,7 +49,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
                 health?.Damage(10);
             }
 
-            if (!string.IsNullOrEmpty(input.Speech)) TryToTalk(input.Speech);
+            if (!string.IsNullOrEmpty(input.Speech)) TryTalk(input.Speech);
         }
 
         public override PartState State()
@@ -79,7 +79,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             health.Resurrect();
         }
 
-        private bool TryToTalk(string speech)
+        private bool TryTalk(string speech)
         {
             if (!gaze.TryLookAt(Self.Position, pitch, Self.Yaw, Talker.Talker.TalkReach, out Entity target))
             {
@@ -94,7 +94,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
                 return false;
             }
 
-            return talker.TryToListen(Self, speech);
+            return talker.TryListen(Self, speech);
         }
 
         private static float Finite(float value)
