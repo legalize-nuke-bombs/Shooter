@@ -6,6 +6,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Nameable
         SpecialCorrupted,
         SpecialDeadPlayer,
 
-        Capsule
+        Kapsul
     }
 }

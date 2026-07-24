@@ -4,6 +4,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
 {
     public class ConversationState
     {
-        public List<Message> Messages { get; set; }
+        public List<MessageState> Messages { get; set; }
     }
 }
