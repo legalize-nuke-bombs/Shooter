@@ -3,18 +3,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shooter.Logging;
 using Shooter.Server.Protocol;
+using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Llm
 {
     public abstract class Llm : Part
     {
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
+        private readonly Clock clock;
         private readonly string character;
 
         private string memory = "";
 
-        protected Llm(Entity self, string character) : base(self, typeof(Llm))
+        protected Llm(Entity self, Clock clock, string character) : base(self, typeof(Llm))
         {
+            this.clock = clock;
             this.character = character;
         }
 
@@ -28,7 +31,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
             await gate.WaitAsync();
             try
             {
-                string systemPrompt = LlmPrompt.System(character, memory, Self.Digest(), situation);
+                string systemPrompt = LlmPrompt.System(character, memory, WorldState(), situation);
                 LlmAnswer answer = await Request(systemPrompt, messages);
                 Remember(answer.Memory);
                 return answer.Reply;
@@ -62,6 +65,12 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm
         }
 
         protected abstract Task<LlmAnswer> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages);
+
+        private string WorldState()
+        {
+            return "Игровое время: " + clock.DateTime() + "\n" +
+                   "Твоё состояние:\n" + Self.Digest();
+        }
 
         private void Remember(string update)
         {
