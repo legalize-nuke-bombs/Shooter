@@ -77,5 +77,9 @@ namespace Shooter.Client.Hud.Inventory
             line.text = text;
             return line;
         }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
+        }
     }
 }

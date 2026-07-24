@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Server.Worlds.Time;
@@ -33,6 +34,10 @@ namespace Shooter.Client.Hud
             int minutes = (int)(DayCycle.FractionOf(timestamp) * 1440f);
             Visible = true;
             line.text = $"День {DayCycle.DayOf(timestamp) + 1}, {minutes / 60:D2}:{minutes % 60:D2}";
+        }
+
+        protected override void Draw(Painter2D painter, Rect rect)
+        {
         }
     }
 }
