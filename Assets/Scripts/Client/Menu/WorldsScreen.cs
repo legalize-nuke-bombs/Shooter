@@ -101,9 +101,9 @@ namespace Shooter.Client.Menu
             name.AddToClassList("world-name");
             nameRow.Add(name);
 
-            if (FindMyRole(world) == "CREATOR")
+            if (FindMyRole(world) == WorldRole.Creator)
                 nameRow.Add(MakeBadge("ВЛАДЕЛЕЦ"));
-            if (world.JoinPolicy == "NOBODY")
+            if (world.JoinPolicy == WorldJoinPolicy.Nobody)
                 nameRow.Add(MakeBadge("ЗАКРЫТ ДЛЯ ВХОДА"));
 
             info.Add(nameRow);
@@ -123,9 +123,9 @@ namespace Shooter.Client.Menu
                 foreach (PlayerDto player in sorted)
                 {
                     string chipName = player.User != null ? player.User.DisplayName : "игрок " + player.Id;
-                    var chip = new Label(player.Role == "CREATOR" ? "★ " + chipName : chipName);
+                    var chip = new Label(player.Role == WorldRole.Creator ? "★ " + chipName : chipName);
                     chip.AddToClassList("player-chip");
-                    if (player.Role == "CREATOR") chip.AddToClassList("player-chip-creator");
+                    if (player.Role == WorldRole.Creator) chip.AddToClassList("player-chip-creator");
                     playersRow.Add(chip);
                 }
                 info.Add(playersRow);
@@ -148,12 +148,14 @@ namespace Shooter.Client.Menu
             return badge;
         }
 
-        private static string FindMyRole(WorldDto world)
+        private static WorldRole? FindMyRole(WorldDto world)
         {
             if (world.Players == null || Session.UserId < 0) return null;
+
             foreach (PlayerDto player in world.Players)
                 if (player.User != null && player.User.Id == Session.UserId)
                     return player.Role;
+
             return null;
         }
 
@@ -166,7 +168,7 @@ namespace Shooter.Client.Menu
             return members + " · активность " + ago;
         }
 
-        private static int RoleRank(string role) => role == "CREATOR" ? 0 : 1;
+        private static int RoleRank(WorldRole role) => role == WorldRole.Creator ? 0 : 1;
 
         private void JoinById()
         {

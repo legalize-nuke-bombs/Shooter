@@ -8,7 +8,7 @@ namespace Shooter.Client.Menu
     public class CreateWorldModal
     {
         private static readonly string[] PolicyLabels = { "Открытый: вход по идентификатору", "Закрытый: новые участники не принимаются" };
-        private static readonly string[] PolicyValues = { "EVERYONE", "NOBODY" };
+        private static readonly WorldJoinPolicy[] PolicyValues = { WorldJoinPolicy.Everyone, WorldJoinPolicy.Nobody };
 
         private readonly VisualElement modal;
         private readonly TextField nameField;
