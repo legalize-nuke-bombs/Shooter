@@ -2,26 +2,26 @@ namespace Shooter.Server.Worlds.Entities.Parts.Nameable
 {
     public class Nameable : Part
     {
-        private readonly NameableType type;
-        private readonly string payload;
+        public NameableType Type { get; }
+        public string Payload { get; }
 
         public Nameable(NameableType type, string payload)
         {
-            this.type = type;
-            this.payload = payload;
+            Type = type;
+            Payload = payload;
         }
 
         public Nameable(NameableType type)
         {
-            this.type = type;
+            Type = type;
         }
 
         public override PartState State()
         {
             return new NameableState
             {
-                Type = type,
-                Payload = payload
+                Type = Type,
+                Payload = Payload
             };
         }
     }

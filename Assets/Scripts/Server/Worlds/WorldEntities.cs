@@ -41,6 +41,11 @@ namespace Shooter.Server.Worlds
             player.Destroy();
         }
 
+        public Entity ByUserId(long userId)
+        {
+            return byUser.GetValueOrDefault(userId, null);
+        }
+
         public Entity ById(Guid id)
         {
             return all.TryGetValue(id, out Entity entity) ? entity : null;
