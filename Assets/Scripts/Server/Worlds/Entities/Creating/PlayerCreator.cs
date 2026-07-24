@@ -10,7 +10,7 @@ using Shooter.Server.Worlds.Entities.Parts.Hands;
 using Shooter.Server.Worlds.Items;
 using Shooter.Server.Worlds.Items.Firearm;
 
-namespace Shooter.Server.Worlds.Entities.Spawning
+namespace Shooter.Server.Worlds.Entities.Creating
 {
     public static class PlayerCreator
     {

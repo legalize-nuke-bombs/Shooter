@@ -13,23 +13,36 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
         protected readonly Dictionary<long, Conversation> Conversations = new Dictionary<long, Conversation>();
 
         private readonly HashSet<long> answering = new HashSet<long>();
-        protected readonly Health.Health Health;
 
-        protected Talker(Health.Health health)
+        protected readonly Guid SelfId;
+        protected readonly ServerWorld World;
+
+        protected Talker(Guid selfId, ServerWorld world)
         {
-            Health = health;
+            SelfId = selfId;
+            World = world;
         }
 
         public sealed override Type Slot => typeof(Talker);
 
-        public bool CanTalkTo(long userId)
+        public bool CanTalkTo(Entity user)
         {
-            return Health.Alive;
+            Entity self = World.EntityById(SelfId);
+            if (self == null)
+            {
+                return false;
+            }
+            return Alive(self);
         }
 
         public bool TryToListen(long userId, string content)
         {
-            if (!CanTalkTo(userId))
+            Entity user = World.EntityByUserId(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            if (!CanTalkTo(user))
             {
                 return false;
             }
@@ -64,7 +77,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
 
         public override void Tick(Entity entity, float dt)
         {
-            if (!Health.Alive)
+            if (!Alive(entity))
             {
                 return;
             }
@@ -77,7 +90,13 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
                     continue;
                 }
 
-                if (answering.Contains(userId) || !CanTalkTo(userId))
+                Entity user = World.EntityByUserId(userId);
+                if (user == null)
+                {
+                    continue;
+                }
+
+                if (answering.Contains(userId) || !CanTalkTo(user))
                 {
                     continue;
                 }
@@ -109,6 +128,12 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
                         entry => entry.Key,
                         entry => entry.Value.State())
             };
+        }
+
+        private bool Alive(Entity self)
+        {
+            Health.Health health = self.Get<Health.Health>();
+            return (health != null && health.Alive);
         }
     }
 }
