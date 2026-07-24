@@ -22,16 +22,16 @@ namespace Shooter.Server.Worlds.Entities.Creating
         {
             Entity npc = Npc("Kapsul", at);
             npc.Add(new KindName(npc, NameKind.Kapsul));
-            npc.Add(new GeminiLlm(npc));
-            npc.Add(new AITalker(npc, clock, KapsulCharacter));
+            npc.Add(new GeminiLlm(npc, KapsulCharacter));
+            npc.Add(new AITalker(npc, clock));
             return npc;
         }
 
-        public static Entity Corrupted(Vector3 at)
+        public static Entity Corrupted(Vector3 at, Clock clock)
         {
             Entity npc = Npc("Corrupted", at);
             npc.Add(new CorruptedName(npc));
-            npc.Add(new RefusiveTalker(npc));
+            npc.Add(new RefusiveTalker(npc, clock));
             return npc;
         }
 

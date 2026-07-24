@@ -34,7 +34,7 @@ namespace Shooter.Server.Worlds
             sleep = new Sleep(clock, entities);
 
             entities.Add(NpcCreator.Kapsul(new Vector3(0f, 1.1f, 16f), clock));
-            entities.Add(NpcCreator.Corrupted(new Vector3(5f, 1.1f, 16f)));
+            entities.Add(NpcCreator.Corrupted(new Vector3(5f, 1.1f, 16f), clock));
         }
 
         public Clock Clock => clock;

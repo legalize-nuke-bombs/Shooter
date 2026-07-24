@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker
 {
@@ -6,7 +7,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
     {
         private const string Refusal = "Not now.";
 
-        public RefusiveTalker(Entity self) : base(self)
+        public RefusiveTalker(Entity self, Clock clock) : base(self, clock)
         {
         }
 
