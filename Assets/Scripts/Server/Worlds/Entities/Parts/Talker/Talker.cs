@@ -13,18 +13,18 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
         protected readonly Dictionary<long, Conversation> Conversations = new Dictionary<long, Conversation>();
 
         private readonly HashSet<long> answering = new HashSet<long>();
-        private readonly Health.Health health;
+        protected readonly Health.Health Health;
 
         protected Talker(Health.Health health)
         {
-            this.health = health;
+            Health = health;
         }
 
         public sealed override Type Slot => typeof(Talker);
 
         public bool CanTalkTo(long userId)
         {
-            return health.Alive;
+            return Health.Alive;
         }
 
         public bool TryToListen(long userId, string content)
@@ -64,7 +64,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
 
         public override void Tick(Entity entity, float dt)
         {
-            if (!health.Alive)
+            if (!Health.Alive)
             {
                 return;
             }

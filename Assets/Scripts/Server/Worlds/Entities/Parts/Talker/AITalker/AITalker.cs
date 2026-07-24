@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Shooter.Logging;
+using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
 {
@@ -11,9 +12,12 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
         private readonly string characterSystemPrompt;
         private readonly AITalkerSettings settings = new AITalkerSettings();
 
-        protected AITalker(string characterSystemPrompt, Health.Health health) : base(health)
+        private readonly Clock clock;
+
+        protected AITalker(string characterSystemPrompt, Health.Health health, Clock clock) : base(health)
         {
             this.characterSystemPrompt = characterSystemPrompt;
+            this.clock = clock;
         }
 
         protected override void StartTalking(long userId)
@@ -27,7 +31,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
             try
             {
                 Log.Info("Requesting answer for user {}...", userId);
-                answer = await RequestAnswer(settings.BaseSystemPrompt + "\n" + characterSystemPrompt, Conversations[userId].ToString());
+                answer = await RequestAnswer(
+                    BuildSystemPrompt(),
+                    BuildConversationPrompt(userId)
+                );
             }
             catch (Exception e)
             {
@@ -36,6 +43,18 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
             }
 
             Say(userId, answer);
+        }
+
+        private string BuildSystemPrompt()
+        {
+            return
+                settings.BaseSystemPrompt(clock.DateTime(), Health.Hp, Health.MaxHp) + "\n" +
+                characterSystemPrompt;
+        }
+
+        private string BuildConversationPrompt(long userId)
+        {
+            return Conversations[userId].ToString();
         }
 
         protected abstract Task<string> RequestAnswer(string systemPrompt, string conversation);

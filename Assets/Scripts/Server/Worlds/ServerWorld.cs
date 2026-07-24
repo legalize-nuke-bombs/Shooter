@@ -36,7 +36,7 @@ namespace Shooter.Server.Worlds
             sleep = new Sleep(clock, entities);
 
             Health capsuleHealth = new DefaultHealth(100);
-            entities.Add(NpcCreator.Create(new Nameable(NameableType.Capsule), capsuleHealth, new Inventory(), new GeminiTalker(GeminiModel.Flash35Lite, "Тебя зовут Капсул. Ты первый NPC добавленный в игру. Ты дружелюбный и эмпатичный. Ты помогаешь игроку.", capsuleHealth), new Vector3(0f, 1.1f, 16f)));
+            entities.Add(NpcCreator.Create(new Nameable(NameableType.Kapsul), capsuleHealth, new Inventory(), new GeminiTalker(GeminiModel.Flash35, "Тебя зовут Капсул. Ты первый NPC добавленный в игру. Ты дружелюбный и эмпатичный. Ты помогаешь игроку.", capsuleHealth, clock), new Vector3(0f, 1.1f, 16f)));
 
             Health corruptedHealth = new DefaultHealth(100);
             entities.Add(NpcCreator.Create(new Nameable(NameableType.SpecialCorrupted), corruptedHealth, new Inventory(), new RefusiveTalker(corruptedHealth), new Vector3(5f, 1.1f, 16f)));
