@@ -8,7 +8,7 @@ namespace Shooter.Client.Hud
 {
     public class TargetNameLabel : UiElement
     {
-        private const float Reach = 20;
+        private const float Reach = 20f;
 
         private readonly Aim aim;
         private readonly TextLine line;
@@ -28,21 +28,11 @@ namespace Shooter.Client.Hud
 
         protected override void OnTick(float dt)
         {
-            Visible = false;
+            EntityView target = aim.TargetView(Reach);
+            bool named = target != null && !string.IsNullOrEmpty(target.Name);
 
-            RaycastHit? target = aim.Target;
-
-            if (target == null || target.Value.distance > Reach)
-            {
-                return;
-            }
-
-            EntityBody bridge = target.Value.collider.GetComponentInParent<EntityBody>();
-            if (bridge != null && !string.IsNullOrEmpty(bridge.View.Name))
-            {
-                Visible = true;
-                line.text = bridge.View.Name;
-            }
+            Visible = named;
+            if (named) line.text = target.Name;
         }
     }
 }

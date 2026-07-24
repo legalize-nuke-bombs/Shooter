@@ -1,7 +1,8 @@
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using Shooter.Logging;
 
 namespace Shooter.Serialization
 {
@@ -12,14 +13,18 @@ namespace Shooter.Serialization
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             TypeNameHandling = TypeNameHandling.Auto,
+            SerializationBinder = new OwnTypesBinder(),
             Converters = { new StringEnumConverter() }
         };
-
-        private static readonly JsonSerializer Serializer = JsonSerializer.Create(Settings);
 
         public static string Serialize(object value)
         {
             return JsonConvert.SerializeObject(value, Settings);
+        }
+
+        public static string Serialize(object value, Type declaredType)
+        {
+            return JsonConvert.SerializeObject(value, declaredType, Settings);
         }
 
         public static T Deserialize<T>(string json)
@@ -28,20 +33,24 @@ namespace Shooter.Serialization
             {
                 return JsonConvert.DeserializeObject<T>(json, Settings);
             }
-            catch (JsonException)
+            catch (JsonException e)
             {
+                Log.Warn("Failed to read json as {}: {}", typeof(T).Name, e.Message);
                 return default;
             }
         }
 
-        public static JToken ToToken(object value)
+        private sealed class OwnTypesBinder : DefaultSerializationBinder
         {
-            return JToken.FromObject(value, Serializer);
-        }
+            private const string OwnNamespace = "Shooter.";
 
-        public static T FromToken<T>(JToken token)
-        {
-            return token == null ? default : token.ToObject<T>(Serializer);
+            public override Type BindToType(string assemblyName, string typeName)
+            {
+                if (typeName == null || !typeName.StartsWith(OwnNamespace, StringComparison.Ordinal))
+                    throw new JsonSerializationException("Type " + typeName + " is not allowed on the wire");
+
+                return base.BindToType(assemblyName, typeName);
+            }
         }
     }
 }

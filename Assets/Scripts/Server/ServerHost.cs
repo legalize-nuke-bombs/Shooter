@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Shooter.Logging;
+using Shooter.Serialization;
 using Shooter.Server.Protocol;
-using Shooter.Server.Worlds.Entities.Parts.Pilot;
 using Shooter.Server.Sessions;
 using Shooter.Server.Transport;
 using Shooter.Server.Worlds;
-using Shooter.Logging;
 
 namespace Shooter.Server
 {
@@ -15,6 +15,7 @@ namespace Shooter.Server
     {
         private const float TickRate = 30f;
         private const int Port = 9090;
+        private const int ExcerptLength = 200;
 
         private IServerTransport serverTransport;
         private ServerSessionGate serverSessionGate;
@@ -59,6 +60,39 @@ namespace Shooter.Server
         private void OnDestroy()
         {
             serverTransport?.Stop();
+
+            foreach (ServerWorld world in worlds.Values)
+                world.Destroy();
+            worlds.Clear();
+        }
+
+        public void EnterWorld(ServerSession session)
+        {
+            if (session.InWorld)
+            {
+                Log.Info("Conn {} user {} is already in world {}, join ignored", session.ConnId, session.UserId, session.WorldId);
+                return;
+            }
+
+            ServerWorld world = WorldFor(session.WorldId);
+            Guid you = world.AddPlayer(session.UserId, session.DisplayName);
+            session.InWorld = true;
+
+            Send(session.ConnId, new WorldJoined
+            {
+                WorldId = world.Id,
+                You = you
+            });
+
+            Log.Info("User {} joined world {} as entity {}, players there now {}", session.UserId, world.Id, you, world.Online);
+        }
+
+        public void ApplyInput(ServerSession session, PlayerIntent intent)
+        {
+            if (!session.InWorld) return;
+            if (!worlds.TryGetValue(session.WorldId, out ServerWorld world)) return;
+
+            world.ApplyInput(session.UserId, intent);
         }
 
         private static bool TryLoadSecret(out byte[] secret)
@@ -100,8 +134,6 @@ namespace Shooter.Server
                 tick++;
                 BroadcastSnapshots();
             }
-
-            serverSessionGate.Tick(Time.deltaTime);
         }
 
         private void OnClientConnected(int connId, string query)
@@ -111,48 +143,33 @@ namespace Shooter.Server
                 serverTransport.Kick(connId);
                 return;
             }
-            serverTransport.Send(connId, Message.Encode(MessageType.Welcome, new Welcome { PlayerId = session.UserId, TickRate = (int)TickRate }));
+
+            Send(connId, new Welcome { UserId = session.UserId, TickRate = (int)TickRate });
         }
 
         private void OnMessageReceived(int connId, string json)
         {
-            if (!serverSessionGate.TryGet(connId, out ServerSession session)) return;
-
-            Message message = Message.Decode(json);
-            if (message == null) return;
-
-            switch (message.Type)
+            if (!serverSessionGate.TryGet(connId, out ServerSession session))
             {
-                case MessageType.Hello:
-                    Hello hello = message.Read<Hello>();
-                    if (!string.IsNullOrEmpty(hello.Name))
-                        session.DisplayName = hello.Name.Length > 40 ? hello.Name.Substring(0, 40) : hello.Name;
-                    Log.Info("Conn {} hello: user {} name '{}'", connId, session.UserId, session.DisplayName);
-                    break;
-                case MessageType.JoinWorld:
-                    if (!session.InWorld)
-                        EnterWorld(session);
-                    break;
-                case MessageType.PlayerIntent:
-                    if (session.InWorld && worlds.TryGetValue(session.WorldId, out ServerWorld world))
-                        world.ApplyInput(session.UserId, message.Read<PlayerIntent>());
-                    break;
+                Log.Warn("Conn {} sent a message without a session, ignored", connId);
+                return;
             }
-        }
 
-        private void EnterWorld(ServerSession session)
-        {
-            ServerWorld world = WorldFor(session.WorldId);
-            Guid you = world.AddPlayer(session.UserId, session.DisplayName);
-            session.InWorld = true;
-
-            serverTransport.Send(session.ConnId, Message.Encode(MessageType.WorldJoined, new WorldJoined
+            ServerBound message = Json.Deserialize<ServerBound>(json);
+            if (message == null)
             {
-                WorldId = world.Id,
-                You = you
-            }));
+                Log.Warn("Conn {} sent an unreadable message: {}", connId, Excerpt(json));
+                return;
+            }
 
-            Log.Info("User {} joined world {} as entity {}, players there now {}", session.UserId, world.Id, you, world.Online());
+            try
+            {
+                message.Apply(this, session);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Conn {} message {} failed: {}", connId, message.GetType().Name, e);
+            }
         }
 
         private ServerWorld WorldFor(string worldId)
@@ -170,14 +187,17 @@ namespace Shooter.Server
         {
             foreach (ServerWorld world in worlds.Values)
                 world.Tick(dt);
+
+            serverSessionGate.Tick(dt);
         }
 
         private void BroadcastSnapshots()
         {
             foreach (ServerWorld world in worlds.Values)
             {
-                if (world.Online() == 0) continue;
-                string json = Message.Encode(MessageType.Snapshot, world.BuildSnapshot(tick));
+                if (world.Online == 0) continue;
+
+                string json = Json.Serialize(world.BuildSnapshot(tick), typeof(ClientBound));
                 foreach (int connId in serverSessionGate.ConnIdsInWorld(world.Id))
                     serverTransport.Send(connId, json);
             }
@@ -200,7 +220,7 @@ namespace Shooter.Server
             {
                 world.RemovePlayer(session.UserId);
 
-                if (world.Online() == 0)
+                if (world.Online == 0)
                 {
                     world.Destroy();
                     worlds.Remove(session.WorldId);
@@ -209,6 +229,17 @@ namespace Shooter.Server
             }
 
             Log.Info("User {} disconnected from world {}, sessions total {}", session.UserId, session.WorldId, serverSessionGate.Count);
+        }
+
+        private void Send(int connId, ClientBound message)
+        {
+            serverTransport.Send(connId, Json.Serialize(message, typeof(ClientBound)));
+        }
+
+        private static string Excerpt(string json)
+        {
+            if (string.IsNullOrEmpty(json)) return "";
+            return json.Length <= ExcerptLength ? json : json.Substring(0, ExcerptLength) + "...";
         }
     }
 }

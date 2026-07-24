@@ -7,73 +7,75 @@ using Shooter.Client.Hud.Sleeping;
 using Shooter.Client.Hud.Talking;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
-using Shooter.Client.Worlds.Entities;
 using Shooter.Client.Worlds.Entities.Players;
-using Shooter.Logging;
 
 namespace Shooter.Client.Hud
 {
-    public class HudRoot
+    public sealed class HudRoot : UiElement
     {
         private const string FontPath = "Fonts/PTSans-Regular";
 
-        private readonly VisualElement root;
-        private readonly InventoryOverlay inventory;
-        private readonly TalkDialog dialog;
-        private readonly TalkSense talkSense;
+        private readonly Overlay[] overlays;
 
-        public HudRoot(VisualElement root, ClientWorld world, PlayerRig rig)
+        public HudRoot(ClientWorld world, PlayerRig rig)
         {
-            this.root = root;
             var font = Resources.Load<Font>(FontPath);
+            pickingMode = PickingMode.Ignore;
+            Fullscreen();
 
             var sleepSense = new SleepSense(world, rig.Aim);
-            talkSense = new TalkSense(rig.Aim);
+            var talkSense = new TalkSense(rig.Aim);
 
-            root.pickingMode = PickingMode.Ignore;
-            root.Add(new HandsOverlay(world));
-            root.Add(new HpBar(world));
-            root.Add(new Crosshair());
-            root.Add(new TargetNameLabel(font, rig.Aim));
-            root.Add(new SleepOverlay(sleepSense));
-            root.Add(new ClockLabel(font, world));
-            root.Add(new SleepHintLabel(font, sleepSense));
-            root.Add(new TalkHintLabel(font, talkSense));
-            root.Add(new DeadScreen(font, world));
+            Add(new HandsOverlay(world));
+            Add(new HpBar(world));
+            Add(new Crosshair());
+            Add(new TargetNameLabel(font, rig.Aim));
+            Add(new SleepOverlay(sleepSense));
+            Add(new ClockLabel(font, world));
+            Add(new SleepHintLabel(font, sleepSense));
+            Add(new TalkHintLabel(font, talkSense));
+            Add(new DeadScreen(font, world));
 
-            inventory = new InventoryOverlay(font, world);
-            root.Add(inventory);
+            var inventory = new InventoryOverlay(font, world, rig);
+            var dialog = new TalkDialog(font, world, rig, talkSense);
+            overlays = new Overlay[] { inventory, dialog };
 
-            dialog = new TalkDialog(font, world, rig, talkSense);
-            root.Add(dialog);
+            foreach (Overlay overlay in overlays)
+                Add(overlay);
         }
 
-        public void Tick(float dt)
+        public bool Escape()
         {
-            foreach (VisualElement child in root.Children())
-                if (child is UiElement element)
-                    element.Tick(dt);
+            foreach (Overlay overlay in overlays)
+                if (overlay.Close()) return true;
 
-            if (dialog.IsOpen) return;
+            return false;
+        }
 
+        protected override void OnTick(float dt)
+        {
             Keyboard keyboard = Keyboard.current;
 
-            if (keyboard.iKey.wasPressedThisFrame)
+            foreach (Overlay overlay in overlays)
             {
-                inventory.Toggle();
-                Log.Info("Hud: I pressed, inventory toggled");
-            }
+                if (!keyboard[overlay.Hotkey].wasPressedThisFrame) continue;
 
-            if (keyboard.pKey.wasPressedThisFrame)
-            {
-                EntityView talker = talkSense.TargetTalker();
-                if (talker != null) dialog.Show(talker);
+                if (overlay.IsOpen)
+                {
+                    overlay.Close();
+                    return;
+                }
+
+                CloseAll();
+                overlay.Open();
+                return;
             }
         }
 
-        public bool HandleEscape()
+        private void CloseAll()
         {
-            return dialog.Hide();
+            foreach (Overlay overlay in overlays)
+                overlay.Close();
         }
     }
 }

@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
-using Shooter.Server.Worlds.Entities;
+using Shooter.Client.Worlds.Entities;
+using Shooter.Client.Worlds.Entities.Players;
 using Shooter.Server.Worlds.Entities.Parts.Inventory;
 using Shooter.Server.Worlds.Items;
 
 namespace Shooter.Client.Hud.Inventory
 {
-    public class InventoryOverlay : UiElement
+    public sealed class InventoryOverlay : Overlay
     {
         private static readonly Color FrameColor = new Color(0.02f, 0.03f, 0.05f, 0.92f);
 
@@ -17,15 +19,10 @@ namespace Shooter.Client.Hud.Inventory
         private readonly ClientWorld world;
         private readonly VisualElement frame = new VisualElement();
 
-        private bool open;
-
-        public InventoryOverlay(Font font, ClientWorld world)
+        public InventoryOverlay(Font font, ClientWorld world, PlayerRig rig) : base(rig)
         {
             this.font = font;
             this.world = world;
-
-            Fullscreen();
-            Visible = false;
 
             frame.style.position = Position.Absolute;
             frame.style.left = Length.Percent(35);
@@ -39,24 +36,24 @@ namespace Shooter.Client.Hud.Inventory
             Add(frame);
         }
 
-        public void Toggle()
+        public override Key Hotkey => Key.I;
+
+        protected override void OnOpen()
         {
-            open = !open;
-            Visible = open;
-            if (open) Refresh();
+            Refresh();
         }
 
         protected override void OnTick(float dt)
         {
+            if (!IsOpen) return;
+
             Refresh();
         }
 
         private void Refresh()
         {
-            if (!open) return;
-
-            EntityState me = world.Me;
-            InventoryState state = me?.Part<InventoryState>();
+            EntityView me = world.Me;
+            InventoryState state = me?.Inventory;
 
             frame.Clear();
             frame.Add(Line("ИНВЕНТАРЬ"));
@@ -74,7 +71,7 @@ namespace Shooter.Client.Hud.Inventory
             }
         }
 
-        private Label Line(string text)
+        private TextLine Line(string text)
         {
             var line = new TextLine(font, 14);
             line.text = text;

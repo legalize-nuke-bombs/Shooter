@@ -1,5 +1,4 @@
 using System;
-using Shooter.Logging;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Health
 {
@@ -8,7 +7,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
         private readonly int max;
         private int hp;
 
-        public DefaultHealth(int max)
+        public DefaultHealth(Entity self, int max) : base(self)
         {
             this.max = Math.Max(max, 1);
             hp = this.max;
@@ -20,40 +19,24 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
 
         public override void Damage(int amount)
         {
-            if (Alive && amount > 0)
-            {
-                Log.Info("Damaged amount {}", amount);
-                hp = Math.Max(hp - amount, 0);
-            }
-            else
-            {
-                Log.Info("Can not be damaged because it is already dead");
-            }
+            if (!Alive || amount <= 0) return;
+
+            hp = Math.Max(hp - amount, 0);
+            if (!Alive) Self.Died();
         }
 
         public override void Heal(int amount)
         {
-            if (Alive && amount > 0)
-            {
-                Log.Info("Healed amount {}", amount);
-                hp = Math.Min(hp + amount, max);
-            }
-            else
-            {
-                Log.Info("Can not be healed because it is dead");
-            }
+            if (!Alive || amount <= 0) return;
+
+            hp = Math.Min(hp + amount, max);
         }
 
         public override void Resurrect()
         {
-            if (Alive)
-            {
-                Log.Info("Can not be resurrected because it is already alive");
-            }
-            else
-            {
-                hp = MaxHp;
-            }
+            if (Alive) return;
+
+            hp = max;
         }
     }
 }

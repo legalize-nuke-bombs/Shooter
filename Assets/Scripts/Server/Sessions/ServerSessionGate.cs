@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Auth;
-using Shooter.Serialization;
 using Shooter.Logging;
+using Shooter.Serialization;
 
 namespace Shooter.Server.Sessions
 {
@@ -43,15 +43,15 @@ namespace Shooter.Server.Sessions
                 Log.Warn("Conn {} not a user token (sub '{}')", connId, subject);
                 return false;
             }
-            if (!serverSessionGrants.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out string worldId))
+            if (!serverSessionGrants.TryConsume(userId, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), out SessionGrant grant))
             {
                 Log.Warn("Conn {} user {} has no open session", connId, userId);
                 return false;
             }
 
-            session = new ServerSession(connId, userId, worldId);
+            session = new ServerSession(connId, userId, grant.WorldId, grant.DisplayName);
             sessions[connId] = session;
-            Log.Info("Conn {} authed: user {} world {}", connId, userId, worldId);
+            Log.Info("Conn {} authed: user {} '{}' world {}", connId, userId, session.DisplayName, grant.WorldId);
             return true;
         }
 
@@ -62,7 +62,9 @@ namespace Shooter.Server.Sessions
 
         public void Remove(int connId)
         {
-            sessions.Remove(connId);
+            if (!sessions.Remove(connId)) return;
+
+            Log.Info("Conn {} session removed, sessions total {}", connId, sessions.Count);
         }
 
         public IEnumerable<int> ConnIdsInWorld(string worldId)
@@ -75,7 +77,7 @@ namespace Shooter.Server.Sessions
         public IReadOnlyList<int> HandleHook(string json)
         {
             SessionHook hook = Json.Deserialize<SessionHook>(json);
-            if (hook == null || string.IsNullOrEmpty(hook.Action) || string.IsNullOrEmpty(hook.WorldId))
+            if (hook == null || string.IsNullOrEmpty(hook.WorldId))
             {
                 Log.Warn("Malformed hook, ignoring");
                 return Array.Empty<int>();
@@ -83,11 +85,16 @@ namespace Shooter.Server.Sessions
 
             switch (hook.Action)
             {
-                case "OPEN_SESSION":
-                    serverSessionGrants.Open(hook.UserId, hook.WorldId, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
-                    Log.Info("Session opened: user {} world {}", hook.UserId, hook.WorldId);
+                case SessionHookAction.OpenSession:
+                    if (hook.UserId == null)
+                    {
+                        Log.Warn("Hook {} for world {} has no user, ignoring", hook.Action, hook.WorldId);
+                        return Array.Empty<int>();
+                    }
+                    serverSessionGrants.Open(hook.UserId.Value, hook.WorldId, hook.DisplayName, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + AllowTtlSeconds);
+                    Log.Info("Session opened: user {} '{}' world {}", hook.UserId.Value, hook.DisplayName, hook.WorldId);
                     return Array.Empty<int>();
-                case "CLOSE_SESSION":
+                case SessionHookAction.CloseSession:
                     return CloseSessions(hook.UserId, hook.WorldId);
                 default:
                     Log.Warn("Unknown hook action {}, ignoring", hook.Action);
@@ -95,29 +102,30 @@ namespace Shooter.Server.Sessions
             }
         }
 
-        private IReadOnlyList<int> CloseSessions(long userId, string worldId)
-        {
-            bool wholeWorld = userId == 0;
-            if (wholeWorld) serverSessionGrants.CloseWorld(worldId);
-            else serverSessionGrants.Close(userId, worldId);
-
-            var toKick = new List<int>();
-            foreach (ServerSession session in sessions.Values)
-                if (session.WorldId == worldId && (wholeWorld || session.UserId == userId))
-                    toKick.Add(session.ConnId);
-
-            Log.Info("Session closed: user {} world {}, kicking online {}", wholeWorld ? "*" : userId.ToString(), worldId, toKick.Count);
-            return toKick;
-        }
-
         public void Tick(float dt)
         {
             sweepTimer += dt;
             if (sweepTimer < SweepInterval) return;
-            sweepTimer = 0f;
+
+            sweepTimer -= SweepInterval;
             int swept = serverSessionGrants.Sweep(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             if (swept > 0)
                 Log.Info("Swept {} expired session grants", swept);
+        }
+
+        private IReadOnlyList<int> CloseSessions(long? userId, string worldId)
+        {
+            bool wholeWorld = userId == null;
+            if (wholeWorld) serverSessionGrants.CloseWorld(worldId);
+            else serverSessionGrants.Close(userId.Value, worldId);
+
+            var toKick = new List<int>();
+            foreach (ServerSession session in sessions.Values)
+                if (session.WorldId == worldId && (wholeWorld || session.UserId == userId.Value))
+                    toKick.Add(session.ConnId);
+
+            Log.Info("Session closed: user {} world {}, kicking online {}", wholeWorld ? "*" : userId.Value.ToString(), worldId, toKick.Count);
+            return toKick;
         }
 
         private static string ExtractQueryParam(string query, string name)

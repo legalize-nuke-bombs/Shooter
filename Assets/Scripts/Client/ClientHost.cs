@@ -4,15 +4,14 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Shooter.Client.Account;
-using Shooter.Client.Worlds.Entities.Chronology;
-using Shooter.Client.Worlds.Entities.Players;
 using Shooter.Client.Hud;
 using Shooter.Client.Transport;
 using Shooter.Client.Worlds;
+using Shooter.Client.Worlds.Entities.Chronology;
+using Shooter.Client.Worlds.Entities.Players;
 using Shooter.Logging;
+using Shooter.Serialization;
 using Shooter.Server.Protocol;
-using Shooter.Server.Sessions;
-using Shooter.Server.Worlds;
 
 namespace Shooter.Client
 {
@@ -24,15 +23,16 @@ namespace Shooter.Client
         private const string MapScene = "Map";
         private const string RigPrefab = "PlayerRig";
         private const string MenuPrefab = "MenuRoot";
+        private const int ExcerptLength = 200;
 
         private IClientTransport clientTransport;
         private GameObject rigObject;
         private ClientWorld world;
         private PlayerRig rig;
         private HudRoot hud;
-        private ClockView sky;
+        private ClockView clockView;
 
-        private Guid myId = Guid.Empty;
+        private long myUserId;
         private float nextInputTime;
 
         private void OnEnable()
@@ -58,13 +58,31 @@ namespace Shooter.Client
             Teardown();
         }
 
+        public void OnWelcome(Welcome welcome)
+        {
+            myUserId = welcome.UserId;
+            Log.Info("Welcome, user {}, tick rate {}", welcome.UserId, welcome.TickRate);
+            Send(new JoinWorld());
+        }
+
+        public void OnWorldJoined(WorldJoined worldJoined)
+        {
+            BuildWorld(worldJoined.You);
+            Log.Info("Joined world {} as entity {}", worldJoined.WorldId, worldJoined.You);
+        }
+
+        public void OnSnapshot(Snapshot snapshot)
+        {
+            world?.Apply(snapshot);
+        }
+
         private void Update()
         {
             clientTransport?.Poll();
 
             if (world == null) return;
 
-            if (Keyboard.current.escapeKey.wasPressedThisFrame && !hud.HandleEscape())
+            if (Keyboard.current.escapeKey.wasPressedThisFrame && !hud.Escape())
             {
                 Log.Info("Escape pressed, leaving world for menu");
                 Teardown();
@@ -75,13 +93,13 @@ namespace Shooter.Client
             float deltaTime = Time.deltaTime;
             rig.Tick(deltaTime);
             hud.Tick(deltaTime);
-            sky.Tick();
+            clockView.Render();
             world.Tick(deltaTime);
 
             if (Time.time < nextInputTime) return;
 
             nextInputTime = Time.time + 1f / InputSendRate;
-            clientTransport.Send(Message.Encode(MessageType.PlayerIntent, rig.BuildIntent()));
+            Send(rig.BuildIntent());
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -114,7 +132,6 @@ namespace Shooter.Client
             }
 
             clientTransport = new ClientWsTransport();
-            clientTransport.Connected += OnConnected;
             clientTransport.MessageReceived += OnMessageReceived;
             clientTransport.Connect(Session.WsUrl);
             Log.Info("Connecting to {}", Session.WsUrl);
@@ -128,46 +145,44 @@ namespace Shooter.Client
             Log.Info("Map loaded additively for render");
         }
 
-        private void OnConnected()
-        {
-            clientTransport.Send(Message.Encode(MessageType.Hello, new Hello { Name = Session.DisplayName }));
-            Log.Info("Hello sent as '{}'", Session.DisplayName);
-        }
-
         private void OnMessageReceived(string json)
         {
-            Message message = Message.Decode(json);
-            if (message == null) return;
-
-            switch (message.Type)
+            ClientBound message = Json.Deserialize<ClientBound>(json);
+            if (message == null)
             {
-                case MessageType.Welcome:
-                    Welcome welcome = message.Read<Welcome>();
-                    Log.Info("Welcome, user {}, tick rate {}", welcome.PlayerId, welcome.TickRate);
-                    clientTransport.Send(Message.Encode(MessageType.JoinWorld, new JoinWorld()));
-                    break;
-                case MessageType.WorldJoined:
-                    WorldJoined worldJoined = message.Read<WorldJoined>();
-                    myId = worldJoined.You;
-                    BuildWorld();
-                    Log.Info("Joined world {} as entity {}", worldJoined.WorldId, myId);
-                    break;
-                case MessageType.Snapshot:
-                    world?.Apply(message.Read<Snapshot>());
-                    break;
+                Log.Warn("Server sent an unreadable message: {}", Excerpt(json));
+                return;
+            }
+
+            try
+            {
+                message.Apply(this);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Message {} from server failed: {}", message.GetType().Name, e);
             }
         }
 
-        private void BuildWorld()
+        private void BuildWorld(Guid myId)
         {
-            world = new ClientWorld(myId);
             rigObject = Instantiate(Resources.Load<GameObject>(RigPrefab));
-            rig = new PlayerRig(rigObject.transform, world);
-            hud = new HudRoot(rigObject.GetComponentInChildren<UIDocument>().rootVisualElement, world, rig);
-            sky = new ClockView(world);
+            rig = new PlayerRig(rigObject.transform);
+            world = new ClientWorld(myId, myUserId, rigObject.transform);
+
+            hud = new HudRoot(world, rig);
+            rigObject.GetComponentInChildren<UIDocument>().rootVisualElement.Add(hud);
+
+            clockView = new ClockView(world);
 
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.visible = false;
             Log.Info("Rig, hud and sky built for entity {}", myId);
+        }
+
+        private void Send(ServerBound message)
+        {
+            clientTransport?.Send(Json.Serialize(message, typeof(ServerBound)));
         }
 
         private void Teardown()
@@ -184,11 +199,18 @@ namespace Shooter.Client
             rigObject = null;
             rig = null;
             hud = null;
-            sky = null;
-            myId = Guid.Empty;
+            clockView = null;
 
             UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
             Log.Info("World torn down");
+        }
+
+        private static string Excerpt(string json)
+        {
+            if (string.IsNullOrEmpty(json)) return "";
+
+            return json.Length <= ExcerptLength ? json : json.Substring(0, ExcerptLength) + "...";
         }
     }
 }

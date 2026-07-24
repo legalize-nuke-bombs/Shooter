@@ -1,108 +1,114 @@
-using System;
+using UnityEngine;
 using Shooter.Logging;
-using Shooter.Server.Worlds.Entities.Parts.Inventory;
+using Shooter.Server.Protocol;
 using Shooter.Server.Worlds.Entities.Parts.Hands;
+using Shooter.Server.Worlds.Entities.Parts.Inventory;
 using Shooter.Server.Worlds.Items;
 using Shooter.Server.Worlds.Items.Firearm;
-using UnityEngine;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Shooter
 {
-    public class Shooter : Part
+    public sealed class Shooter : Part
     {
-        private readonly Inventory.Inventory inventory;
-        private readonly Speaker.Speaker speaker;
-        private readonly Sight sight;
-        private readonly WorldEntities worldEntities;
-        private readonly Hands.Hands hands;
+        private readonly Gaze gaze;
 
-        public Shooter(Inventory.Inventory inventory, Speaker.Speaker speaker, Sight sight, WorldEntities worldEntities, Hands.Hands hands)
+        public Shooter(Entity self, Gaze gaze) : base(self, typeof(Shooter))
         {
-            this.inventory = inventory;
-            this.speaker = speaker;
-            this.sight = sight;
-            this.worldEntities = worldEntities;
-            this.hands = hands;
+            this.gaze = gaze;
         }
 
-        public bool TryToShoot(Vector3 position, float pitch, float yaw)
+        public override void Apply(PlayerIntent input)
         {
-            if (!(inventory.Equipped() is Firearm firearm))
-            {
-                return false;
-            }
+            if (!input.Shoot && !input.Reload) return;
+            if (!Ready()) return;
 
-            if (!hands.TryTake(HandsAction.Shooting, firearm.FireInterval(), false, null))
-            {
-                return false;
-            }
+            if (input.Shoot) TryShoot(input.Pitch, input.Yaw);
+            if (input.Reload) TryReload();
+        }
+
+        public bool TryShoot(float pitch, float yaw)
+        {
+            Inventory.Inventory inventory = Self.Get<Inventory.Inventory>();
+            Hands.Hands hands = Self.Get<Hands.Hands>();
+            if (inventory == null || hands == null) return false;
+
+            if (!(inventory.Equipped() is Firearm firearm)) return false;
+
+            if (!hands.TryTake(HandsAction.Shooting, firearm.FireInterval(), false, null)) return false;
+
+            Speaker.Speaker speaker = Self.Get<Speaker.Speaker>();
 
             if (!firearm.TryToShoot())
             {
-                speaker.Play(firearm.MisfireSound());
+                speaker?.Play(firearm.MisfireSound());
                 return false;
             }
 
-            speaker.Play(firearm.ShotSound());
-            Shot(position, pitch, yaw, firearm);
+            speaker?.Play(firearm.ShotSound());
+            Shot(pitch, yaw, firearm);
             return true;
         }
 
-        public bool TryToReload()
+        public bool TryReload()
         {
-            if (!(inventory.Equipped() is Firearm firearm))
-            {
-                return false;
-            }
+            Inventory.Inventory inventory = Self.Get<Inventory.Inventory>();
+            Hands.Hands hands = Self.Get<Hands.Hands>();
+            if (inventory == null || hands == null) return false;
 
-            if (firearm.MagazineFull() || inventory.Amount(firearm.AmmoType()) == 0)
-            {
-                return false;
-            }
+            if (!(inventory.Equipped() is Firearm firearm)) return false;
 
-            if (!hands.TryTake(HandsAction.Reloading, firearm.ReloadTime(), true, () => Reloaded(firearm)))
-            {
-                return false;
-            }
+            if (firearm.MagazineFull() || inventory.Amount(firearm.AmmoType()) == 0) return false;
 
-            speaker.Play(firearm.ReloadSound());
-            Log.Info("Reload of {} started, {}s", firearm.FirearmType(), firearm.ReloadTime());
+            if (!hands.TryTake(HandsAction.Reloading, firearm.ReloadTime(), true, () => Reloaded(inventory, firearm))) return false;
+
+            Self.Get<Speaker.Speaker>()?.Play(firearm.ReloadSound());
+            Log.Info("Entity {} started reload of {}, {}s", Self.Name, firearm.FirearmType(), firearm.ReloadTime());
             return true;
         }
 
-        private void Reloaded(Firearm firearm)
+        private bool Ready()
+        {
+            Health.Health health = Self.Get<Health.Health>();
+            if (health != null && !health.Alive) return false;
+
+            Sleeper.Sleeper sleeper = Self.Get<Sleeper.Sleeper>();
+            return sleeper == null || !sleeper.Sleeping;
+        }
+
+        private void Reloaded(Inventory.Inventory inventory, Firearm firearm)
         {
             StackableItem ammoType = firearm.AmmoType();
             int spent = firearm.Reload(inventory.Amount(ammoType));
             inventory.Remove(ammoType, spent, InventoryOnConflictAction.Partly);
-            Log.Info("Reloaded {} with {} rounds, {} {} left", firearm.FirearmType(), spent, inventory.Amount(ammoType), ammoType);
+            Log.Info("Entity {} reloaded {} with {} rounds, {} {} left", Self.Name, firearm.FirearmType(), spent, inventory.Amount(ammoType), ammoType);
         }
 
-        private void Shot(Vector3 position, float pitch, float yaw, Firearm firearm)
+        private void Shot(float pitch, float yaw, Firearm firearm)
         {
-            Ray look = Sight.LookRay(position, pitch, yaw);
+            Vector3 from = Self.Position;
 
-            if (!sight.Cast(look, firearm.Distance(), out RaycastHit hit))
+            if (!gaze.TryLook(from, pitch, yaw, firearm.Distance(), out RaycastHit hit))
             {
-                Log.Info("Shot from {} missed", position);
+                Log.Info("Shot of entity {} from {} missed", Self.Name, from);
                 return;
             }
 
-            if (!EntityBody.TryResolve(hit.collider, out Guid targetId))
+            Entity target = gaze.Resolve(hit);
+            if (target == null)
             {
-                Log.Info("Shot from {} hit map at {}", position, hit.point);
+                Log.Info("Shot of entity {} from {} hit map at {}", Self.Name, from, hit.point);
                 return;
             }
 
-            Health.Health health = worldEntities.ById(targetId)?.Get<Health.Health>();
+            Health.Health health = target.Get<Health.Health>();
             if (health == null)
             {
-                Log.Info("Shot from {} hit entity {} without health", position, targetId);
+                Log.Info("Shot of entity {} from {} hit entity {} without health", Self.Name, from, target.Name);
                 return;
             }
 
             health.Damage(firearm.Damage());
-            Log.Info("Shot from {} hit entity {} for {} damage", position, targetId, firearm.Damage());
+            Log.Info("Shot of entity {} from {} hit entity {} for {} damage", Self.Name, from, target.Name, firearm.Damage());
         }
     }
 }

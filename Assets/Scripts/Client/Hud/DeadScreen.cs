@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
-using Shooter.Server.Worlds.Entities.Parts.Health;
+using Shooter.Client.Worlds.Entities;
 
 namespace Shooter.Client.Hud
 {
@@ -25,8 +25,8 @@ namespace Shooter.Client.Hud
 
         protected override void OnTick(float dt)
         {
-            HealthState health = world.Me?.Part<HealthState>();
-            Visible = health != null && health.Hp == 0;
+            EntityView me = world.Me;
+            Visible = me != null && !me.Alive;
         }
     }
 }
