@@ -24,9 +24,9 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
 
         public bool TryListen(Entity user, string content)
         {
-            if (!Alive())
+            if (!TalkRule.CanTalk(AliveOf(user), AliveOf(Self), true))
             {
-                Log.Info("Entity {} can not talk while it is dead, ignored", Self.Name);
+                Log.Info("Entity {} can not talk to entity {}: alive {} and {}", user.Name, Self.Name, AliveOf(user), AliveOf(Self));
                 return false;
             }
 
@@ -70,7 +70,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
             Deliver();
             Expire(dt);
 
-            if (!Alive()) return;
+            if (!AliveOf(Self)) return;
 
             foreach (KeyValuePair<long, Conversation> entry in conversations)
             {
@@ -101,6 +101,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
 
         protected abstract Task<string> Answer(Conversation conversation);
 
+        protected virtual string Fallback => "Not now.";
+
         private void Ask(long userId, Conversation conversation)
         {
             awaited.Add(userId, 0f);
@@ -118,7 +120,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
             catch (Exception e)
             {
                 Log.Error("Entity {} failed to answer user {}: {}", Self.Name, userId, e.Message);
-                replies.Enqueue(new Reply { UserId = userId, Content = null });
+                replies.Enqueue(new Reply { UserId = userId, Content = Fallback });
             }
         }
 
@@ -127,8 +129,6 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
             while (replies.TryDequeue(out Reply reply))
             {
                 awaited.Remove(reply.UserId);
-
-                if (reply.Content == null) continue;
 
                 if (!conversations.TryGetValue(reply.UserId, out Conversation conversation))
                 {
@@ -160,9 +160,9 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker
             }
         }
 
-        private bool Alive()
+        private static bool AliveOf(Entity entity)
         {
-            Health.Health health = Self.Get<Health.Health>();
+            Health.Health health = entity.Get<Health.Health>();
             return health != null && health.Alive;
         }
 

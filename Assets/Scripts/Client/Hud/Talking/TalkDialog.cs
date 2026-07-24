@@ -8,12 +8,16 @@ using Shooter.Client.Ui;
 using Shooter.Client.Worlds;
 using Shooter.Client.Worlds.Entities;
 using Shooter.Client.Worlds.Entities.Players;
+using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Parts.Talker;
 
 namespace Shooter.Client.Hud.Talking
 {
     public sealed class TalkDialog : Overlay
     {
+        private const string WaitingText = "Думает...";
+        private const string EmptyText = "Разговор не начат.";
+
         private static readonly Color FrameColor = new Color(0.02f, 0.03f, 0.05f, 0.92f);
         private static readonly Color MyColor = new Color(0.85f, 0.62f, 0.45f);
         private static readonly Color MutedColor = new Color(0.45f, 0.48f, 0.53f);
@@ -63,7 +67,7 @@ namespace Shooter.Client.Hud.Talking
             input.maxLength = Talker.SpeechLimit;
             input.style.fontSize = 14;
             input.style.unityFontDefinition = new StyleFontDefinition(FontDefinition.FromFont(font));
-            input.RegisterCallback<KeyDownEvent>(OnInputKeyDown);
+            input.RegisterCallback<KeyDownEvent>(OnInputKeyDown, TrickleDown.TrickleDown);
             frame.Add(input);
         }
 
@@ -124,7 +128,7 @@ namespace Shooter.Client.Hud.Talking
 
             if (messages == null || messages.Count == 0)
             {
-                history.Add(Line("Разговор не начат.", MutedColor));
+                history.Add(Line(EmptyText, MutedColor));
             }
             else
             {
@@ -136,7 +140,7 @@ namespace Shooter.Client.Hud.Talking
                 }
             }
 
-            if (waiting) history.Add(Line("…", MutedColor));
+            if (waiting) history.Add(Line(WaitingText, MutedColor));
 
             scrollPending = true;
         }
@@ -154,14 +158,18 @@ namespace Shooter.Client.Hud.Talking
 
         private void OnInputKeyDown(KeyDownEvent e)
         {
-            if (e.keyCode != KeyCode.Return && e.keyCode != KeyCode.KeypadEnter) return;
+            bool submit = e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter || e.character == '\n' || e.character == '\r';
+            if (!submit) return;
+
+            e.StopPropagation();
+            e.StopImmediatePropagation();
 
             string speech = input.value?.Trim();
             if (string.IsNullOrEmpty(speech)) return;
 
             rig.Say(speech);
             input.value = "";
-            e.StopPropagation();
+            Log.Info("Speech sent to entity {}", targetId);
         }
     }
 }

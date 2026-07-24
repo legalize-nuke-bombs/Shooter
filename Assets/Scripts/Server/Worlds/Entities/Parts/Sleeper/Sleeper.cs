@@ -15,6 +15,8 @@ namespace Shooter.Server.Worlds.Entities.Parts.Sleeper
         private readonly Clock clock;
         private readonly Gaze gaze;
 
+        private string lastRefusal;
+
         public Sleeper(Entity self, Clock clock, Gaze gaze) : base(self, typeof(Sleeper))
         {
             this.clock = clock;
@@ -41,11 +43,19 @@ namespace Shooter.Server.Worlds.Entities.Parts.Sleeper
             bool handsFree = hands == null || hands.Free;
             bool lookingAtBed = gaze.TryLook(Self.Position, pitch, yaw, Sleep.UseReach, out RaycastHit hit) && Sleep.IsBed(hit);
 
-            if (!SleepRule.CanSleep(handsFree, clock.IsNight(), lookingAtBed))
+            bool night = clock.IsNight();
+            if (!SleepRule.CanSleep(handsFree, night, lookingAtBed))
             {
-                Log.Info("Entity {} tried to sleep with hands free {}, night {}, bed in sight {}, ignored", Self.Name, handsFree, clock.IsNight(), lookingAtBed);
+                string refusal = $"hands free {handsFree}, night {night}, bed in sight {lookingAtBed}";
+                if (refusal != lastRefusal)
+                {
+                    lastRefusal = refusal;
+                    Log.Info("Entity {} tried to sleep with {}, ignored", Self.Name, refusal);
+                }
                 return false;
             }
+
+            lastRefusal = null;
 
             Sleeping = true;
             SpawnPoint = Self.Position;

@@ -24,7 +24,7 @@ namespace Shooter.Client.Hud
             Fullscreen();
 
             var sleepSense = new SleepSense(world, rig.Aim);
-            var talkSense = new TalkSense(rig.Aim);
+            var talkSense = new TalkSense(world, rig.Aim);
 
             Add(new HandsOverlay(world));
             Add(new HpBar(world));

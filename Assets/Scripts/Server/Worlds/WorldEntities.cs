@@ -99,19 +99,16 @@ namespace Shooter.Server.Worlds
         private void Settle()
         {
             foreach (Entity entity in spawning)
-            {
                 all[entity.Id] = entity;
-                entity.MoveToScene(scene);
-                Log.Info("Entity {} spawned at {}", entity.Name, entity.Position);
-            }
+
             spawning.Clear();
 
             foreach (Entity entity in despawning)
             {
                 all.Remove(entity.Id);
                 entity.Destroy();
-                Log.Info("Entity {} despawned", entity.Name);
             }
+
             despawning.Clear();
         }
     }
