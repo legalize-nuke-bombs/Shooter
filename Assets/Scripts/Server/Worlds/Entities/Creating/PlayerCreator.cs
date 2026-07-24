@@ -32,7 +32,7 @@ namespace Shooter.Server.Worlds.Entities.Creating
 
             player.Add(new Movement(player));
             player.Add(new Footsteps(player));
-            player.Add(new Nameable(player, NameableType.SpecialAbsolute, displayName));
+            player.Add(new GivenName(player, displayName));
             player.Add(new DefaultHealth(player, StartHp));
             player.Add(new Speaker(player));
             player.Add(new Hands(player));

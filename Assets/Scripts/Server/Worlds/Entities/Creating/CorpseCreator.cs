@@ -13,7 +13,7 @@ namespace Shooter.Server.Worlds.Entities.Creating
             var corpse = new Entity("Corpse", source.Position);
 
             corpse.Add(new Movement(corpse));
-            corpse.Add(new Nameable(corpse, NameableType.SpecialDeadPlayer));
+            corpse.Add(new KindName(corpse, NameKind.DeadPlayer));
             corpse.Add(new DeadHealth(corpse));
 
             var inventory = new Inventory(corpse);

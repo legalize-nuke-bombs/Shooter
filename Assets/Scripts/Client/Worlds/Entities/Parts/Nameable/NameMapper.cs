@@ -1,61 +1,62 @@
 using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
 using Shooter.Logging;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
-using UnityEngine;
 
 namespace Shooter.Client.Worlds.Entities.Parts.Nameable
 {
     public class NameMapper
     {
+        private const string GlitchAlphabet = "017XREVID#$@%?!&";
+        private const float MetaChance = 0.15f;
 
-        private readonly HashSet<NameableType> unknown = new HashSet<NameableType>();
+        private static readonly string[] MetaMessages = { "I_SEE_YOU", "WAKE_UP", "THE_END_IS_NEAR" };
+
+        private static readonly Dictionary<NameKind, string> KindNames = new Dictionary<NameKind, string>
+        {
+            { NameKind.Kapsul, "Капсул" },
+            { NameKind.DeadPlayer, "Пропавший странник" }
+        };
+
+        private readonly HashSet<NameKind> unknownKinds = new HashSet<NameKind>();
 
         public string NameOf(NameableState nameable)
         {
-            if (nameable == null)
+            switch (nameable)
             {
-                return "";
-            }
-
-            switch (nameable.Type)
-            {
-                case NameableType.SpecialAbsolute:
-                    return nameable.Payload;
-                case NameableType.SpecialCorrupted:
+                case GivenNameState given:
+                    return given.Name;
+                case CorruptedNameState _:
                     return Corrupted();
-                case NameableType.SpecialDeadPlayer:
-                    return "Пропавший странник";
-
-
-                case NameableType.Kapsul:
-                    return "Капсул";
-
-
+                case KindNameState kind:
+                    return Named(kind.Kind);
                 default:
-                    if (unknown.Add(nameable.Type))
-                    {
-                        Log.Warn("Unexpected nameable type {}", nameable.Type);
-                    }
-                    return nameable.Type.ToString();
+                    return "";
             }
+        }
+
+        private string Named(NameKind kind)
+        {
+            if (KindNames.TryGetValue(kind, out string name)) return name;
+
+            if (unknownKinds.Add(kind)) Log.Warn("No client name for kind {}", kind);
+            return kind.ToString();
         }
 
         private string Corrupted()
         {
-            const string glitchAlphabet = "017XREVID#$@%?!&";
-            string[] metaMessages = { "I_SEE_YOU", "WAKE_UP", "THE_END_IS_NEAR" };
-
-            if (Random.Range(0f, 1f) < 0.15f)
+            if (Random.Range(0f, 1f) < MetaChance)
             {
-                return metaMessages[Random.Range(0, metaMessages.Length)];
+                return MetaMessages[Random.Range(0, MetaMessages.Length)];
             }
 
             int length = Random.Range(10, 20);
 
-            var builder = new System.Text.StringBuilder();
+            var builder = new StringBuilder(length);
             for (int i = 0; i < length; i++)
             {
-                char symbol = glitchAlphabet[Random.Range(0, glitchAlphabet.Length)];
+                char symbol = GlitchAlphabet[Random.Range(0, GlitchAlphabet.Length)];
                 builder.Append(symbol);
             }
 
