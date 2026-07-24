@@ -121,7 +121,7 @@ namespace Shooter.Client.Hud.Talking
                 return;
             }
 
-            List<Message> messages = MyConversation(talker.State)?.Messages;
+            List<MessageState> messages = MyConversation(talker.State)?.Messages;
             int count = messages?.Count ?? 0;
             bool waiting = count > 0 && messages[count - 1].Author == MessageAuthor.Player;
 
@@ -159,7 +159,7 @@ namespace Shooter.Client.Hud.Talking
             return talker.Conversations.TryGetValue(pilot.UserId, out ConversationState conversation) ? conversation : null;
         }
 
-        private void Render(List<Message> messages, bool waiting)
+        private void Render(List<MessageState> messages, bool waiting)
         {
             history.Clear();
 
@@ -169,7 +169,7 @@ namespace Shooter.Client.Hud.Talking
             }
             else
             {
-                foreach (Message message in messages)
+                foreach (MessageState message in messages)
                 {
                     bool mine = message.Author == MessageAuthor.Player;
                     string author = mine ? Session.DisplayName : title.text;

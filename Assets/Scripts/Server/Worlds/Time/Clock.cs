@@ -2,7 +2,7 @@ namespace Shooter.Server.Worlds.Time
 {
     public class Clock
     {
-        private const float DayRealSeconds = 120f;
+        public const float DayRealSeconds = 600f;
 
         public double Timestamp { get; private set; }
 
