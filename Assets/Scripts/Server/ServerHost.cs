@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Logging;
@@ -21,7 +20,7 @@ namespace Shooter.Server
         private IServerTransport serverTransport;
         private ServerSessionGate serverSessionGate;
         private ServerControlApi serverControlApi;
-        private readonly Dictionary<string, ServerWorld> worlds = new Dictionary<string, ServerWorld>();
+        private readonly ServerWorlds worlds = new ServerWorlds();
         private float tickTimer;
         private long tick;
 
@@ -62,10 +61,7 @@ namespace Shooter.Server
         private void OnDestroy()
         {
             serverTransport?.Stop();
-
-            foreach (ServerWorld world in worlds.Values)
-                world.Destroy();
-            worlds.Clear();
+            worlds.CloseAll();
         }
 
         public void EnterWorld(ServerSession session)
@@ -76,7 +72,7 @@ namespace Shooter.Server
                 return;
             }
 
-            ServerWorld world = WorldFor(session.WorldId);
+            ServerWorld world = worlds.Open(session.WorldId);
             Guid you = world.AddPlayer(session.UserId, session.DisplayName);
             session.InWorld = true;
 
@@ -92,7 +88,7 @@ namespace Shooter.Server
         public void ApplyInput(ServerSession session, PlayerIntent intent)
         {
             if (!session.InWorld) return;
-            if (!worlds.TryGetValue(session.WorldId, out ServerWorld world)) return;
+            if (!worlds.TryGet(session.WorldId, out ServerWorld world)) return;
 
             world.ApplyInput(session.UserId, intent);
         }
@@ -174,31 +170,16 @@ namespace Shooter.Server
             }
         }
 
-        private ServerWorld WorldFor(string worldId)
-        {
-            if (!worlds.TryGetValue(worldId, out ServerWorld world))
-            {
-                world = new ServerWorld(worldId);
-                worlds[worldId] = world;
-                Log.Info("World {} created, total worlds {}", worldId, worlds.Count);
-            }
-            return world;
-        }
-
         private void Simulate(float dt)
         {
-            foreach (ServerWorld world in worlds.Values)
-                world.Tick(dt);
-
+            worlds.Tick(dt);
             serverSessionGate.Tick(dt);
         }
 
         private void BroadcastSnapshots()
         {
-            foreach (ServerWorld world in worlds.Values)
+            foreach (ServerWorld world in worlds.Populated())
             {
-                if (world.Online == 0) continue;
-
                 string json = Json.Serialize(world.BuildSnapshot(tick), typeof(ClientBound));
                 foreach (int connId in serverSessionGate.ConnIdsInWorld(world.Id))
                     serverTransport.Send(connId, json);
@@ -212,16 +193,10 @@ namespace Shooter.Server
 
             if (!session.InWorld) return;
 
-            if (worlds.TryGetValue(session.WorldId, out ServerWorld world))
+            if (worlds.TryGet(session.WorldId, out ServerWorld world))
             {
                 world.RemovePlayer(session.UserId);
-
-                if (world.Online == 0)
-                {
-                    world.Destroy();
-                    worlds.Remove(session.WorldId);
-                    Log.Info("World {} evicted, empty", session.WorldId);
-                }
+                worlds.CloseWhenEmpty(session.WorldId);
             }
 
             Log.Info("User {} disconnected from world {}, sessions total {}", session.UserId, session.WorldId, serverSessionGate.Count);

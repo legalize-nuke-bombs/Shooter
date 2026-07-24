@@ -20,7 +20,7 @@ namespace Shooter.Client.Ui
 
         public abstract Key Hotkey { get; }
 
-        public bool Open()
+        public bool TryOpen()
         {
             if (IsOpen || !CanOpen()) return false;
 

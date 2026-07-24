@@ -1,3 +1,5 @@
+using Shooter.Server.Protocol;
+
 namespace Shooter.Server.Worlds.Entities.Parts.Health
 {
     public abstract class Health : Part
@@ -13,12 +15,24 @@ namespace Shooter.Server.Worlds.Entities.Parts.Health
         public abstract void Heal(int amount);
         public abstract void Resurrect();
 
-        public override string Digest()
+        public sealed override void Apply(PlayerIntent input)
+        {
+        }
+
+        public sealed override void Tick(float dt)
+        {
+        }
+
+        public sealed override void Died()
+        {
+        }
+
+        public sealed override string Digest()
         {
             return Alive ? $"Здоровье: {Hp}/{MaxHp}" : "Мертв";
         }
 
-        public override PartState State()
+        public sealed override PartState State()
         {
             return new HealthState { Hp = Hp, MaxHp = MaxHp, Alive = Alive };
         }

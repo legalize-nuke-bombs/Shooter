@@ -41,9 +41,6 @@ namespace Shooter.Server.Worlds
 
             byUser.Remove(userId);
             Remove(player);
-
-            foreach (Entity entity in all.Values)
-                entity.Forget(userId);
         }
 
         public void Remove(Entity entity)

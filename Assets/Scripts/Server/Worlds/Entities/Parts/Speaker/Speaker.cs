@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Shooter.Server.Protocol;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Speaker
 {
@@ -24,6 +25,23 @@ namespace Shooter.Server.Worlds.Entities.Parts.Speaker
 
             while (recent.Count > RecentLimit)
                 recent.Dequeue();
+        }
+
+        public override void Apply(PlayerIntent input)
+        {
+        }
+
+        public override void Tick(float dt)
+        {
+        }
+
+        public override void Died()
+        {
+        }
+
+        public override string Digest()
+        {
+            return null;
         }
 
         public override PartState State()

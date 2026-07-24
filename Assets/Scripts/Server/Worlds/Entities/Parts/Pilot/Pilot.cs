@@ -52,6 +52,19 @@ namespace Shooter.Server.Worlds.Entities.Parts.Pilot
             if (!string.IsNullOrEmpty(input.Speech)) TryTalk(input.Speech);
         }
 
+        public override void Tick(float dt)
+        {
+        }
+
+        public override void Died()
+        {
+        }
+
+        public override string Digest()
+        {
+            return null;
+        }
+
         public override PartState State()
         {
             return new PilotState { UserId = userId };

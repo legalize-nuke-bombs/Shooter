@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Logging;
+using Shooter.Server.Protocol;
 using Shooter.Server.Worlds.Items;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Inventory
@@ -61,7 +62,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
             foreach (UniqueItem item in unique.Values)
                 target.Add(item);
 
-            if (equippedId != null) target.Equip(equippedId.Value);
+            if (equippedId != null) target.TryEquip(equippedId.Value);
 
             Clear();
         }
@@ -80,12 +81,24 @@ namespace Shooter.Server.Worlds.Entities.Parts.Inventory
             return unique.TryGetValue(equippedId.Value, out UniqueItem item) ? item : null;
         }
 
-        public bool Equip(long uniqueItemId)
+        public bool TryEquip(long uniqueItemId)
         {
             if (!unique.ContainsKey(uniqueItemId)) return false;
 
             equippedId = uniqueItemId;
             return true;
+        }
+
+        public override void Apply(PlayerIntent input)
+        {
+        }
+
+        public override void Tick(float dt)
+        {
+        }
+
+        public override void Died()
+        {
         }
 
         public override string Digest()

@@ -18,7 +18,7 @@ namespace Shooter.Client.Worlds.Entities
             GameObject capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             capsule.name = "Entity_" + state.Id;
             capsule.transform.position = Position;
-            EntityBody.Attach(capsule, this);
+            ClientEntityBody.Attach(capsule, this);
 
             body = capsule.transform;
             speaker = new SpeakerView(capsule);

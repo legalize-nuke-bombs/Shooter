@@ -26,6 +26,24 @@ namespace Shooter.Server.Worlds.Entities.Parts.Shooter
             if (input.Reload) TryReload();
         }
 
+        public override void Tick(float dt)
+        {
+        }
+
+        public override void Died()
+        {
+        }
+
+        public override string Digest()
+        {
+            return null;
+        }
+
+        public override PartState State()
+        {
+            return null;
+        }
+
         public bool TryShoot(float pitch, float yaw)
         {
             Inventory.Inventory inventory = Self.Get<Inventory.Inventory>();

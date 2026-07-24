@@ -71,6 +71,10 @@ namespace Shooter.Server.Worlds.Entities.Parts.Sleeper
             Log.Info("Entity {} woke up at {}", Self.Name, Self.Position);
         }
 
+        public override void Tick(float dt)
+        {
+        }
+
         public override void Died()
         {
             WakeUp();

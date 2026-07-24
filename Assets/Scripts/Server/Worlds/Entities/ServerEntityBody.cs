@@ -3,18 +3,18 @@ using UnityEngine;
 
 namespace Shooter.Server.Worlds.Entities
 {
-    public sealed class EntityBody : MonoBehaviour
+    public sealed class ServerEntityBody : MonoBehaviour
     {
         public Guid Id { get; private set; }
 
         public static void Bind(GameObject body, Guid id)
         {
-            body.AddComponent<EntityBody>().Id = id;
+            body.AddComponent<ServerEntityBody>().Id = id;
         }
 
         public static bool TryResolve(Collider collider, out Guid id)
         {
-            EntityBody link = collider.GetComponentInParent<EntityBody>();
+            ServerEntityBody link = collider.GetComponentInParent<ServerEntityBody>();
             id = link == null ? Guid.Empty : link.Id;
             return link != null;
         }

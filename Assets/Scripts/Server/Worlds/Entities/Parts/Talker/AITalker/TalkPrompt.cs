@@ -1,7 +1,7 @@
 using Shooter.Serialization;
 using Shooter.Server.Worlds.Time;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Talker
+namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
 {
     public static class TalkPrompt
     {

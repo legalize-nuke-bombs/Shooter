@@ -21,7 +21,7 @@ namespace Shooter.Server.Worlds.Entities
             Id = Guid.NewGuid();
             body = new GameObject(kind + "_" + Id);
             body.transform.position = position;
-            EntityBody.Bind(body, Id);
+            ServerEntityBody.Bind(body, Id);
         }
 
         public string Name => body.name;
@@ -85,12 +85,6 @@ namespace Shooter.Server.Worlds.Entities
             Log.Info("Entity {} died", Name);
             foreach (Part part in parts)
                 part.Died();
-        }
-
-        public void Forget(long userId)
-        {
-            foreach (Part part in parts)
-                part.Forget(userId);
         }
 
         public string Digest()

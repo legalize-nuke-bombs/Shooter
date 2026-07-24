@@ -1,5 +1,6 @@
 using UnityEngine;
 using Shooter.Logging;
+using Shooter.Server.Protocol;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Movement
 {
@@ -49,6 +50,24 @@ namespace Shooter.Server.Worlds.Entities.Parts.Movement
             verticalVelocity = 0f;
             velocity = Vector3.zero;
             Log.Info("Entity {} teleported to {}", Self.Name, position);
+        }
+
+        public override void Apply(PlayerIntent input)
+        {
+        }
+
+        public override void Died()
+        {
+        }
+
+        public override string Digest()
+        {
+            return null;
+        }
+
+        public override PartState State()
+        {
+            return null;
         }
 
         public override void Tick(float dt)
