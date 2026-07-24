@@ -1,6 +1,6 @@
 namespace Shooter.Server.Worlds.Entities.Parts.Nameable
 {
-    public abstract class NameableState : PartState
+    public class CorruptedNameState : NameableState
     {
     }
 }

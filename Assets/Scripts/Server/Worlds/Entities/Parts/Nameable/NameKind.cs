@@ -1,6 +1,8 @@
 namespace Shooter.Server.Worlds.Entities.Parts.Nameable
 {
-    public abstract class NameableState : PartState
+    public enum NameKind
     {
+        Kapsul,
+        DeadPlayer
     }
 }
