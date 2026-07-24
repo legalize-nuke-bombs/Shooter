@@ -1,4 +1,5 @@
-using Shooter.Serialization;
+using System.Collections.Generic;
+using Shooter.Server.Worlds.Entities.Parts.Llm;
 using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
@@ -25,9 +26,19 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
                 character;
         }
 
-        public static string Dialog(Conversation conversation)
+        public static IReadOnlyList<LlmMessage> Messages(Conversation conversation)
         {
-            return Json.Serialize(conversation.Messages);
+            var messages = new List<LlmMessage>();
+            foreach (Message message in conversation.Messages)
+            {
+                messages.Add(new LlmMessage
+                {
+                    Role = message.Author == MessageAuthor.Player ? LlmRole.User : LlmRole.Model,
+                    Content = message.Content
+                });
+            }
+
+            return messages;
         }
     }
 }

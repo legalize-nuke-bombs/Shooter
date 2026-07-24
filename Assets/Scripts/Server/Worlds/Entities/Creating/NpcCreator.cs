@@ -4,8 +4,9 @@ using Shooter.Server.Worlds.Entities.Parts.Health;
 using Shooter.Server.Worlds.Entities.Parts.Inventory;
 using Shooter.Server.Worlds.Entities.Parts.Movement;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
+using Shooter.Server.Worlds.Entities.Parts.Llm.Gemini;
 using Shooter.Server.Worlds.Entities.Parts.Talker;
-using Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini;
+using Shooter.Server.Worlds.Entities.Parts.Talker.AITalker;
 using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Creating
@@ -21,7 +22,8 @@ namespace Shooter.Server.Worlds.Entities.Creating
         {
             Entity npc = Npc("Kapsul", at);
             npc.Add(new KindName(npc, NameKind.Kapsul));
-            npc.Add(new GeminiTalker(npc, clock, KapsulCharacter));
+            npc.Add(new GeminiLlm(npc));
+            npc.Add(new AITalker(npc, clock, KapsulCharacter));
             return npc;
         }
 

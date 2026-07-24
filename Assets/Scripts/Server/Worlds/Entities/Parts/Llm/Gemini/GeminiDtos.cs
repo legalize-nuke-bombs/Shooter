@@ -1,4 +1,4 @@
-namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
+namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
 {
     public class GeminiRequest
     {
@@ -8,6 +8,7 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker.Gemini
 
     public class GeminiContent
     {
+        public string Role { get; set; }
         public GeminiPart[] Parts { get; set; }
     }
 
