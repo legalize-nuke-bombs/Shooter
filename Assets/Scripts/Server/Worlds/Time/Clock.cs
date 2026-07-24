@@ -1,3 +1,5 @@
+using System;
+
 namespace Shooter.Server.Worlds.Time
 {
     public class Clock
@@ -14,6 +16,13 @@ namespace Shooter.Server.Worlds.Time
         public bool IsNight()
         {
             return DayCycle.IsNight(DayCycle.FractionOf((long)Timestamp));
+        }
+
+        public string DateTime()
+        {
+            const long delta2026 = 1767225600L;
+            var dateTime = DateTimeOffset.FromUnixTimeSeconds(delta2026 + (long)Timestamp);
+            return dateTime.ToString("yyyy.MM.dd HH:mm:ss");
         }
 
         public ClockState State()
