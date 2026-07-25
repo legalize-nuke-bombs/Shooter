@@ -22,6 +22,10 @@ GameObject:
   - component: {fileID: -6296756489416219378}
   - component: {fileID: 6863058538127461490}
   - component: {fileID: 8840261867561332656}
+  - component: {fileID: -7249333409862263395}
+  - component: {fileID: 2242069941562545108}
+  - component: {fileID: 3960112245870691674}
+  - component: {fileID: 6784730251806547574}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -83,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2482877518
+  GlobalObjectIdHash: 1261245880
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -366,6 +370,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sounding.Footsteps
   ShowTopMostFoldoutHeaderGroup: 1
   strideLength: 2
+--- !u!114 &-7249333409862263395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432219165531623704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2716bb9d83b1a4c2d9af5eb01d57d010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.Inventory
+  ShowTopMostFoldoutHeaderGroup: 1
+  catalog: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
+--- !u!114 &2242069941562545108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432219165531623704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1d048f0ccc4b4c5fb82c40f89964647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Shooting.Shooter
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &3960112245870691674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432219165531623704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa8a4538947774bc2b4f6ec62c6df8ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Dying.Mortal
+  ShowTopMostFoldoutHeaderGroup: 1
+  corpsePrefab: {fileID: 0}
+--- !u!114 &6784730251806547574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432219165531623704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3274ea86c97a4b98b3f11fe9032f2c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Naming.GivenName
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &6541203602357860932
 GameObject:
   m_ObjectHideFlags: 0
