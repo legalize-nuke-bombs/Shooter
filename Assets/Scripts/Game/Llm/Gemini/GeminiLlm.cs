@@ -3,31 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using UnityEngine;
 using UnityEngine.Networking;
 using Shooter.Logging;
-using Shooter.Serialization;
-using Shooter.Server.Worlds.Time;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
+namespace Shooter.Game.Llm.Gemini
 {
     public sealed class GeminiLlm : Llm
     {
         private const string Host = "generativelanguage.googleapis.com";
+        private const string KeyVariable = "GEMINI_API_KEY";
         private const int TimeoutSeconds = 25;
         private const int ExcerptLength = 300;
 
-        private readonly string apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-        private readonly string model = Environment.GetEnvironmentVariable("GEMINI_MODEL");
-
-        public GeminiLlm(Entity self, Clock clock, string character) : base(self, clock, character)
+        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
-        }
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            Converters = { new StringEnumConverter() }
+        };
+
+        [SerializeField] private string model = "gemini-3.5-flash-lite";
+
+        private readonly string apiKey = System.Environment.GetEnvironmentVariable(KeyVariable);
 
         protected override async Task<LlmAnswer> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
-                throw new InvalidOperationException("GEMINI_API_KEY environment variable is not set");
+                throw new InvalidOperationException(KeyVariable + " environment variable is not set");
             }
 
             var request = new GeminiRequest
@@ -45,11 +52,11 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
             };
 
             var uri = new Uri($"https://{Host}/v1beta/models/{model}:generateContent");
-            Log.Info("Entity {} is asking {} for an answer", Self.Name, model);
+            Log.Info("Entity {} is asking {} for an answer", name, model);
 
             using (var webRequest = new UnityWebRequest(uri, "POST"))
             {
-                webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Json.Serialize(request)));
+                webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(request, Settings)));
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.timeout = TimeoutSeconds;
                 webRequest.SetRequestHeader("Content-Type", "application/json");
@@ -62,14 +69,14 @@ namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
                     throw new Exception($"HTTP {webRequest.responseCode} {webRequest.error}: {Excerpt(webRequest.downloadHandler?.text)}");
                 }
 
-                GeminiResponse response = Json.Deserialize<GeminiResponse>(webRequest.downloadHandler.text);
+                var response = JsonConvert.DeserializeObject<GeminiResponse>(webRequest.downloadHandler.text, Settings);
                 string text = response?.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text;
                 if (string.IsNullOrEmpty(text))
                 {
                     throw new Exception("Response has no candidate text: " + Excerpt(webRequest.downloadHandler.text));
                 }
 
-                LlmAnswer answer = Json.Deserialize<LlmAnswer>(text);
+                var answer = JsonConvert.DeserializeObject<LlmAnswer>(text, Settings);
                 if (string.IsNullOrEmpty(answer?.Reply))
                 {
                     throw new Exception("Answer json has no reply: " + Excerpt(text));

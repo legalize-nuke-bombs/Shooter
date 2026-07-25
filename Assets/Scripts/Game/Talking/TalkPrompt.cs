@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using Shooter.Server.Worlds.Entities.Parts.Llm;
+using Unity.Netcode;
+using Shooter.Game.Llm;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
+namespace Shooter.Game.Talking
 {
     public static class TalkPrompt
     {
@@ -13,16 +14,17 @@ namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
             "Если история разговора пуста, игрок говорит с тобой в первый раз.\n" +
             "Если игрок спрашивает о том, чего ты не знаешь, или просит то, чего ты не умеешь, найди лучшую отговорку.";
 
-        public static string Situation(Entity user)
+        public static string Situation(NetworkObject user)
         {
             return new Prompt()
-                .Section("Разговор", TalkRules + "\n\nСостояние игрока:\n" + user.Digest())
+                .Section("Разговор", TalkRules + "\n\nСостояние игрока:\n" + Digestion.Of(user))
                 .ToString();
         }
 
         public static IReadOnlyList<LlmMessage> Messages(Conversation conversation)
         {
             var messages = new List<LlmMessage>();
+
             foreach (Message message in conversation.Messages)
             {
                 messages.Add(new LlmMessage

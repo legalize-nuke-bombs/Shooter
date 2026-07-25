@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Llm.Gemini
+namespace Shooter.Game.Llm.Gemini
 {
     public class GeminiRequest
     {

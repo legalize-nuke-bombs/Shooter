@@ -1,21 +1,22 @@
 using System;
 using System.Threading.Tasks;
-using Shooter.Server.Worlds.Time;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Talker.AITalker
+namespace Shooter.Game.Talking
 {
     public sealed class AITalker : Talker
     {
-        public AITalker(Entity self, Clock clock) : base(self, clock)
+        private Llm.Llm llm;
+
+        private void Awake()
         {
+            llm = GetComponent<Llm.Llm>();
         }
 
         protected override Task<string> Answer(Conversation conversation)
         {
-            Llm.Llm llm = Self.Get<Llm.Llm>();
             if (llm == null)
             {
-                throw new InvalidOperationException($"Entity {Self.Name} has no llm part to answer with");
+                throw new InvalidOperationException($"Entity {name} has no llm to answer with");
             }
 
             return llm.Ask(TalkPrompt.Situation(conversation.User), TalkPrompt.Messages(conversation));
