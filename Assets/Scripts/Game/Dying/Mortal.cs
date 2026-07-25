@@ -57,7 +57,7 @@ namespace Shooter.Game.Dying
             }
 
             spawned.Spawn();
-            spawned.GetComponent<Corpse>()?.Fill(GetComponent<Inventory>());
+            spawned.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
             Log.Info("Entity {} left a corpse at {}", name, transform.position);
         }
     }

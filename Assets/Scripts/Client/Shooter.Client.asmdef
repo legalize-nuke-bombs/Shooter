@@ -3,11 +3,7 @@
     "rootNamespace": "Shooter",
     "references": [
         "Shooter.Logging",
-        "Shooter.Serialization",
-        "Shooter.Auth",
-        "Shooter.Server",
         "Shooter.Game",
-        "Unity.Nuget.Newtonsoft-Json",
         "Unity.Netcode.Runtime",
         "Unity.InputSystem"
     ],
