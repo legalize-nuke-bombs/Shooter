@@ -33,10 +33,15 @@ namespace Shooter.Game.Interacting
             usable.Use(NetworkObject);
         }
 
+        public bool TryLook(float distance, out RaycastHit hit)
+        {
+            return Physics.Raycast(Eyes, movement.Look, out hit, distance);
+        }
+
         public bool TryReach<T>(float distance, out T found) where T : class
         {
             found = null;
-            if (!Physics.Raycast(Eyes, movement.Look, out RaycastHit hit, distance)) return false;
+            if (!TryLook(distance, out RaycastHit hit)) return false;
             if (hit.collider == null) return false;
 
             found = hit.collider.GetComponentInParent<T>();
