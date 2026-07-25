@@ -7,14 +7,12 @@ namespace Shooter.Game.Items
     {
         [SerializeField] private ItemType type;
         [SerializeField] private string title;
-        [SerializeField] private int maxStack = 1;
+        [SerializeField] private bool stackable;
 
         public ItemType Type => type;
 
         public string Title => string.IsNullOrEmpty(title) ? type.ToString() : title;
 
-        public int MaxStack => Mathf.Max(maxStack, 1);
-
-        public bool Stackable => MaxStack > 1;
+        public bool Stackable => stackable;
     }
 }

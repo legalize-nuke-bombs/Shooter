@@ -30,20 +30,16 @@ namespace Shooter.Game.Items
             if (!IsServer || item.Empty) return;
 
             ItemSpec spec = catalog == null ? null : catalog.Spec(item.Type);
-            int maxStack = spec == null ? 1 : spec.MaxStack;
 
-            if (maxStack > 1)
+            if (spec != null && spec.Stackable)
             {
                 for (int slot = 0; slot < slots.Count; slot++)
                 {
                     Item stack = slots[slot];
-                    if (stack.Type != item.Type || stack.Amount >= maxStack) continue;
+                    if (stack.Type != item.Type) continue;
 
-                    int fits = Math.Min(maxStack - stack.Amount, item.Amount);
-                    slots[slot] = new Item(stack.Type, stack.Amount + fits, stack.Magazine);
-                    item.Amount -= fits;
-
-                    if (item.Empty) return;
+                    slots[slot] = new Item(stack.Type, stack.Amount + item.Amount, stack.Magazine);
+                    return;
                 }
             }
 
