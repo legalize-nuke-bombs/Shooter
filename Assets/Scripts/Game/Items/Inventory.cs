@@ -131,7 +131,7 @@ namespace Shooter.Game.Items
             if (!Equipped(out Item item)) return "Предмет в руках: -";
 
             ItemSpec spec = catalog == null ? null : catalog.Spec(item.Type);
-            return "Предмет в руках: " + (spec == null ? item.Type.ToString() : spec.Title);
+            return "Предмет в руках: " + (spec == null ? item.Type.ToString() : spec.PromptName);
         }
 
         private void Drop(int slot)
