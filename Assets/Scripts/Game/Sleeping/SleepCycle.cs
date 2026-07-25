@@ -4,20 +4,20 @@ using Shooter.Logging;
 
 namespace Shooter.Game.Sleeping
 {
-    public class WorldSleep : NetworkBehaviour
+    public class SleepCycle : NetworkBehaviour
     {
         private const float SkipTimeScale = 6f;
 
         private readonly NetworkVariable<bool> asleep = new NetworkVariable<bool>();
 
-        private WorldClock clock;
+        private Clock clock;
         private bool wasNight;
 
         public bool WorldAsleep => asleep.Value;
 
         private void Awake()
         {
-            clock = GetComponent<WorldClock>();
+            clock = GetComponent<Clock>();
         }
 
         public override void OnNetworkSpawn()

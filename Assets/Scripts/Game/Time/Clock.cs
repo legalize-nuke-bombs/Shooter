@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 namespace Shooter.Game.Time
 {
-    public class WorldClock : NetworkBehaviour
+    public class Clock : NetworkBehaviour
     {
         private const float DayRealSeconds = 120f;
         private const float SyncInterval = 1f;
