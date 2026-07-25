@@ -4,9 +4,12 @@
     "references": [
         "Shooter.Client",
         "Shooter.Server",
+        "Shooter.Game",
         "Shooter.Logging",
         "Shooter.Serialization",
-        "Unity.Nuget.Newtonsoft-Json"
+        "Unity.Nuget.Newtonsoft-Json",
+        "Unity.Netcode.Runtime",
+        "Unity.DedicatedServer.MultiplayerRoles"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

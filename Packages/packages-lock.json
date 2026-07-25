@@ -37,6 +37,13 @@
         "com.unity.test-framework.performance": "3.2.0"
       }
     },
+    "com.unity.dedicated-server": {
+      "version": "2.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ext.nunit": {
       "version": "2.1.0",
       "depth": 1,
@@ -72,7 +79,7 @@
     },
     "com.unity.mathematics": {
       "version": "1.4.0",
-      "depth": 3,
+      "depth": 2,
       "source": "builtin",
       "dependencies": {}
     },
@@ -84,9 +91,28 @@
         "com.unity.modules.uielements": "1.0.0"
       }
     },
+    "com.unity.multiplayer.playmode": {
+      "version": "2.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.2"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.netcode.gameobjects": {
+      "version": "2.13.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.transport": "2.6.0",
+        "com.unity.nuget.mono-cecil": "1.11.4"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.6",
-      "depth": 3,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -174,6 +200,16 @@
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.unity.transport": {
+      "version": "6.5.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.collections": "6.5.0",
+        "com.unity.burst": "1.8.24",
+        "com.unity.mathematics": "1.4.0"
+      }
     },
     "com.unity.ugui": {
       "version": "2.5.0",

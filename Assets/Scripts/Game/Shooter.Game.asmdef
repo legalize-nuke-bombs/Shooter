@@ -1,0 +1,18 @@
+{
+    "name": "Shooter.Game",
+    "rootNamespace": "Shooter",
+    "references": [
+        "Shooter.Logging",
+        "Unity.Netcode.Runtime",
+        "Unity.Nuget.Newtonsoft-Json"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

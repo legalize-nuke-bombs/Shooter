@@ -1,0 +1,114 @@
+using Unity.Netcode;
+using UnityEngine;
+
+namespace Shooter.Game.Movement
+{
+    [RequireComponent(typeof(CharacterController))]
+    public class Movement : NetworkBehaviour
+    {
+        private const float PitchLimit = 89f;
+        private const float GroundedFall = -1f;
+
+        [SerializeField] private float walkSpeed = 5f;
+        [SerializeField] private float sprintSpeed = 8f;
+        [SerializeField] private float jumpSpeed = 5f;
+        [SerializeField] private float gravity = -20f;
+
+        private readonly NetworkVariable<float> pitch = new NetworkVariable<float>();
+
+        private CharacterController characterController;
+        private Vector2 steering;
+        private float speed;
+        private float fall;
+        private bool jumping;
+        private int steeredAt;
+
+        public float Pitch => pitch.Value;
+
+        public float Yaw => transform.eulerAngles.y;
+
+        public Vector3 Look => Quaternion.Euler(pitch.Value, Yaw, 0f) * Vector3.forward;
+
+        private void Awake()
+        {
+            characterController = GetComponent<CharacterController>();
+            speed = walkSpeed;
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer) return;
+
+            NetworkManager.NetworkTickSystem.Tick += Step;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (!IsServer) return;
+
+            NetworkManager.NetworkTickSystem.Tick -= Step;
+        }
+
+        [Rpc(SendTo.Server, Delivery = RpcDelivery.Unreliable, InvokePermission = RpcInvokePermission.Owner)]
+        public void SteerRpc(Vector2 move, float yaw, float look, bool sprint, int tick)
+        {
+            if (tick <= steeredAt) return;
+            steeredAt = tick;
+
+            steering = Vector2.ClampMagnitude(Finite(move), 1f);
+            speed = sprint ? sprintSpeed : walkSpeed;
+            transform.rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
+            pitch.Value = Mathf.Clamp(Finite(look), -PitchLimit, PitchLimit);
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void JumpRpc()
+        {
+            if (!characterController.isGrounded) return;
+
+            jumping = true;
+        }
+
+        public void Halt()
+        {
+            steering = Vector2.zero;
+            jumping = false;
+        }
+
+        public void Teleport(Vector3 position)
+        {
+            characterController.enabled = false;
+            transform.position = position;
+            characterController.enabled = true;
+            fall = 0f;
+        }
+
+        private void Step()
+        {
+            float dt = NetworkManager.LocalTime.FixedDeltaTime;
+
+            if (characterController.isGrounded)
+            {
+                fall = jumping ? jumpSpeed : GroundedFall;
+                jumping = false;
+            }
+            else
+            {
+                fall += gravity * dt;
+            }
+
+            Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
+            characterController.Move((wish + Vector3.up * fall) * dt);
+        }
+
+        private static float Finite(float value)
+        {
+            return float.IsFinite(value) ? value : 0f;
+        }
+
+        private static Vector2 Finite(Vector2 value)
+        {
+            return new Vector2(Finite(value.x), Finite(value.y));
+        }
+    }
+}
