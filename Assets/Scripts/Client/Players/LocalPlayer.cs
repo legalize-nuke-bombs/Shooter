@@ -2,6 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Shooter.Game.Interacting;
+using Shooter.Game.Sleeping;
 using Shooter.Logging;
 
 namespace Shooter.Client.Players
@@ -17,6 +18,7 @@ namespace Shooter.Client.Players
 
         private Game.Movement.Movement movement;
         private Interactor interactor;
+        private Sleeper sleeper;
         private float pitch;
         private float yaw;
 
@@ -26,6 +28,7 @@ namespace Shooter.Client.Players
         {
             movement = GetComponent<Game.Movement.Movement>();
             interactor = GetComponent<Interactor>();
+            sleeper = GetComponent<Sleeper>();
         }
 
         public override void OnNetworkSpawn()
@@ -77,7 +80,10 @@ namespace Shooter.Client.Players
         {
             Keyboard keyboard = Keyboard.current;
             if (keyboard.spaceKey.wasPressedThisFrame) movement.JumpRpc();
-            if (keyboard.eKey.wasPressedThisFrame) interactor.UseRpc();
+            if (!keyboard.eKey.wasPressedThisFrame) return;
+
+            if (sleeper != null && sleeper.Sleeping) sleeper.WakeRpc();
+            else interactor.UseRpc();
         }
 
         private void Send()

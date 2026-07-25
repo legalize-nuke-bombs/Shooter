@@ -1,0 +1,52 @@
+using Unity.Netcode;
+using UnityEngine;
+using Shooter.Logging;
+
+namespace Shooter.Game.Health
+{
+    public sealed class DefaultHealth : Health
+    {
+        [SerializeField] private int maxHp = 100;
+
+        private readonly NetworkVariable<int> hp = new NetworkVariable<int>();
+
+        public override int Hp => hp.Value;
+
+        public override int MaxHp => Mathf.Max(maxHp, 1);
+
+        public override bool Alive => hp.Value > 0;
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer) return;
+
+            hp.Value = MaxHp;
+        }
+
+        public override void Damage(int amount)
+        {
+            if (!IsServer || !Alive || amount <= 0) return;
+
+            hp.Value = Mathf.Max(hp.Value - amount, 0);
+            Log.Info("Entity {} took {} damage, hp now {}/{}", name, amount, hp.Value, MaxHp);
+
+            if (!Alive) Die();
+        }
+
+        public override void Heal(int amount)
+        {
+            if (!IsServer || !Alive || amount <= 0) return;
+
+            hp.Value = Mathf.Min(hp.Value + amount, MaxHp);
+            Log.Info("Entity {} healed {}, hp now {}/{}", name, amount, hp.Value, MaxHp);
+        }
+
+        public override void Resurrect()
+        {
+            if (!IsServer || Alive) return;
+
+            hp.Value = MaxHp;
+            Log.Info("Entity {} resurrected with {} hp", name, hp.Value);
+        }
+    }
+}

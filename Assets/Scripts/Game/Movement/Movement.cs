@@ -17,6 +17,7 @@ namespace Shooter.Game.Movement
         private readonly NetworkVariable<float> pitch = new NetworkVariable<float>();
 
         private CharacterController characterController;
+        private IRestraint[] restraints;
         private Vector2 steering;
         private float speed;
         private float fall;
@@ -32,6 +33,7 @@ namespace Shooter.Game.Movement
         private void Awake()
         {
             characterController = GetComponent<CharacterController>();
+            restraints = GetComponents<IRestraint>();
             speed = walkSpeed;
         }
 
@@ -87,6 +89,8 @@ namespace Shooter.Game.Movement
         {
             float dt = NetworkManager.LocalTime.FixedDeltaTime;
 
+            if (Restrained()) Halt();
+
             if (characterController.isGrounded)
             {
                 fall = jumping ? jumpSpeed : GroundedFall;
@@ -99,6 +103,16 @@ namespace Shooter.Game.Movement
 
             Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
             characterController.Move((wish + Vector3.up * fall) * dt);
+        }
+
+        private bool Restrained()
+        {
+            foreach (IRestraint restraint in restraints)
+            {
+                if (restraint.Restrains) return true;
+            }
+
+            return false;
         }
 
         private static float Finite(float value)
