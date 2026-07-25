@@ -6,12 +6,12 @@ namespace Shooter.Game.Items
     public class ItemSpec : ScriptableObject
     {
         [SerializeField] private ItemType type;
-        [SerializeField] private string title;
+        [SerializeField] private string promptName;
         [SerializeField] private bool stackable;
 
         public ItemType Type => type;
 
-        public string Title => string.IsNullOrEmpty(title) ? type.ToString() : title;
+        public string PromptName => string.IsNullOrEmpty(promptName) ? type.ToString() : promptName;
 
         public bool Stackable => stackable;
     }
