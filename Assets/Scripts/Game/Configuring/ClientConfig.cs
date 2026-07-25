@@ -8,6 +8,6 @@ namespace Shooter.Game.Configuring
 
         public ushort Port { get; set; } = 7777;
 
-        public string Name { get; set; } = "Странник";
+        public string Name { get; set; } = "Player";
     }
 }
