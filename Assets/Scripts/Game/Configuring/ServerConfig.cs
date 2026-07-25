@@ -6,6 +6,6 @@ namespace Shooter.Game.Configuring
 
         public ushort Port { get; set; } = 7777;
 
-        public string World { get; set; } = "Полигон";
+        public string World { get; set; } = "Полигон Клода";
     }
 }
