@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Shooter.Server.Worlds.Entities.Parts.Llm
+namespace Shooter.Game.Llm
 {
     public sealed class Prompt
     {

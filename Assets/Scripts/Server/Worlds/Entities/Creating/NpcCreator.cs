@@ -4,9 +4,7 @@ using Shooter.Server.Worlds.Entities.Parts.Health;
 using Shooter.Server.Worlds.Entities.Parts.Inventory;
 using Shooter.Server.Worlds.Entities.Parts.Movement;
 using Shooter.Server.Worlds.Entities.Parts.Nameable;
-using Shooter.Server.Worlds.Entities.Parts.Llm.Gemini;
 using Shooter.Server.Worlds.Entities.Parts.Talker;
-using Shooter.Server.Worlds.Entities.Parts.Talker.AITalker;
 using Shooter.Server.Worlds.Time;
 
 namespace Shooter.Server.Worlds.Entities.Creating
@@ -15,15 +13,11 @@ namespace Shooter.Server.Worlds.Entities.Creating
     {
         private const int NpcHp = 100;
 
-        private const string KapsulCharacter =
-            "Тебя зовут Капсул. Ты первый NPC добавленный в игру. Ты дружелюбный и эмпатичный. Ты помогаешь игроку.";
-
         public static Entity Kapsul(Vector3 at, Clock clock)
         {
             Entity npc = Npc("Kapsul", at);
             npc.Add(new KindName(npc, NameKind.Kapsul));
-            npc.Add(new GeminiLlm(npc, clock, KapsulCharacter));
-            npc.Add(new AITalker(npc, clock));
+            npc.Add(new RefusiveTalker(npc, clock));
             return npc;
         }
 
