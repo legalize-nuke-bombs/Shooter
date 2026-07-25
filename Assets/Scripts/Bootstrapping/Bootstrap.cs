@@ -1,12 +1,10 @@
 using System;
 using System.IO;
+using Unity.Multiplayer;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Client;
-using Shooter.Client.Account;
 using Shooter.Logging;
-using Shooter.Serialization;
-using Shooter.Server;
 
 namespace Shooter.Bootstrapping
 {
@@ -14,9 +12,8 @@ namespace Shooter.Bootstrapping
     {
         private const string ServerArgument = "-server";
         private const string ClientArgument = "-client";
-        private const string ConfigFileName = "config.json";
-        private const string GameScene = "Game";
-        private const string DefaultServerAddress = "localhost:8080";
+        private const string NetworkPrefab = "NetworkManager";
+        private const string WorldScene = "Map";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Init()
@@ -27,12 +24,15 @@ namespace Shooter.Bootstrapping
 
         private static bool ServerRequested()
         {
-            string[] arguments = Environment.GetCommandLineArgs();
-            foreach (string argument in arguments)
+            foreach (string argument in Environment.GetCommandLineArgs())
             {
                 if (argument == ServerArgument) return true;
                 if (argument == ClientArgument) return false;
             }
+
+            MultiplayerRoleFlags role = MultiplayerRolesManager.ActiveMultiplayerRoleMask;
+            if (role == MultiplayerRoleFlags.Server) return true;
+            if (role == MultiplayerRoleFlags.Client) return false;
 
             return Application.isBatchMode;
         }
@@ -42,10 +42,17 @@ namespace Shooter.Bootstrapping
             Log.ToFile(InHome("shooter-server.log"));
             Log.Info("Bootstrapping server...");
 
-            Host<ServerHost>("ServerHost");
+            NetworkManager network = Network();
+            if (network == null) return;
 
-            if (SceneManager.GetActiveScene().name != GameScene)
-                SceneManager.LoadScene(GameScene);
+            if (!network.StartServer())
+            {
+                Log.Error("Server refused to start");
+                return;
+            }
+
+            Log.Info("Server listening, loading world scene {}", WorldScene);
+            network.SceneManager.LoadScene(WorldScene, LoadSceneMode.Single);
         }
 
         private static void StartClient()
@@ -53,45 +60,37 @@ namespace Shooter.Bootstrapping
             Log.ToFile(InHome("shooter-client.log"));
             Log.Info("Bootstrapping client...");
 
-            var session = new ClientSession(ReadServerAddress());
-            Log.Info("Client talks to {}", session.ServerAddress);
+            NetworkManager network = Network();
+            if (network == null) return;
 
-            Host<ClientHost>("ClientHost").Bind(session);
+            if (!network.StartClient())
+            {
+                Log.Error("Client refused to start");
+                return;
+            }
+
+            Log.Info("Client connecting...");
         }
 
-        private static T Host<T>(string name) where T : Component
+        private static NetworkManager Network()
         {
-            var host = new GameObject(name);
-            UnityEngine.Object.DontDestroyOnLoad(host);
-            return host.AddComponent<T>();
-        }
+            if (NetworkManager.Singleton != null) return NetworkManager.Singleton;
 
-        private static string ReadServerAddress()
-        {
-            try
+            var prefab = Resources.Load<GameObject>(NetworkPrefab);
+            if (prefab == null)
             {
-                string path = Path.Combine(Application.streamingAssetsPath, ConfigFileName);
-                if (!File.Exists(path))
-                {
-                    Log.Warn("No {} in streaming assets, falling back to {}", ConfigFileName, DefaultServerAddress);
-                    return DefaultServerAddress;
-                }
-
-                var config = Json.Deserialize<ClientConfig>(File.ReadAllText(path));
-                string address = config?.ServerAddress?.Trim();
-                if (string.IsNullOrEmpty(address))
-                {
-                    Log.Warn("{} has no server address, falling back to {}", ConfigFileName, DefaultServerAddress);
-                    return DefaultServerAddress;
-                }
-
-                return address;
+                Log.Error("No {} prefab in Resources, refusing to start", NetworkPrefab);
+                return null;
             }
-            catch (Exception e)
-            {
-                Log.Warn("Failed to read {}, falling back to {}: {}", ConfigFileName, DefaultServerAddress, e.Message);
-                return DefaultServerAddress;
-            }
+
+            GameObject instance = UnityEngine.Object.Instantiate(prefab);
+            instance.name = NetworkPrefab;
+            UnityEngine.Object.DontDestroyOnLoad(instance);
+
+            var network = instance.GetComponent<NetworkManager>();
+            if (network == null) Log.Error("Prefab {} has no NetworkManager component", NetworkPrefab);
+
+            return network;
         }
 
         private static string InHome(string fileName)
