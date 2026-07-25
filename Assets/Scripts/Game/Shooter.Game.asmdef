@@ -4,6 +4,7 @@
     "references": [
         "Shooter.Logging",
         "Unity.Netcode.Runtime",
+        "Unity.Collections",
         "Unity.Nuget.Newtonsoft-Json"
     ],
     "includePlatforms": [],
