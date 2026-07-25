@@ -6,6 +6,8 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Shooter.Client.Overlays;
+using Shooter.Game.Configuring;
 using Shooter.Logging;
 
 namespace Shooter.Bootstrapping
@@ -15,11 +17,9 @@ namespace Shooter.Bootstrapping
         private const string ServerArgument = "-server";
         private const string ClientArgument = "-client";
         private const string HostArgument = "-host";
-        private const string AddressArgument = "-address";
-        private const string NameArgument = "-name";
         private const string NetworkPrefab = "NetworkManager";
         private const string WorldScene = "Map";
-        private const ushort DefaultPort = 7777;
+        private const string AnyAddress = "0.0.0.0";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Init()
@@ -62,7 +62,7 @@ namespace Shooter.Bootstrapping
             NetworkManager network = Network();
             if (network == null) return;
 
-            Address(network);
+            Address(network, hosting);
             network.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(PlayerName());
 
             if (!begin(network))
@@ -70,6 +70,8 @@ namespace Shooter.Bootstrapping
                 Log.Error("The {} refused to start", part);
                 return;
             }
+
+            if (network.IsClient) Overlay();
 
             if (!hosting)
             {
@@ -87,41 +89,38 @@ namespace Shooter.Bootstrapping
             network.SceneManager.LoadScene(WorldScene, LoadSceneMode.Single);
         }
 
-        private static void Address(NetworkManager network)
+        private static void Address(NetworkManager network, bool hosting)
         {
-            string address = Argument(AddressArgument);
-            if (string.IsNullOrEmpty(address)) return;
-
             var transport = network.GetComponent<UnityTransport>();
             if (transport == null)
             {
-                Log.Warn("No unity transport to point at {}", address);
+                Log.Warn("No unity transport to configure");
                 return;
             }
 
-            string[] parts = address.Split(':');
-            ushort port = parts.Length > 1 && ushort.TryParse(parts[1], out ushort given) ? given : DefaultPort;
+            if (hosting)
+            {
+                ServerConfig server = Config.Read<ServerConfig>(ServerConfig.FileName);
+                transport.SetConnectionData(AnyAddress, server.Port, AnyAddress);
+                Log.Info("World {} listens on port {}", server.World, server.Port);
+                return;
+            }
 
-            transport.SetConnectionData(parts[0], port);
-            Log.Info("Transport points at {}:{}", parts[0], port);
+            ClientConfig client = Config.Read<ClientConfig>(ClientConfig.FileName);
+            transport.SetConnectionData(client.Address, client.Port);
+            Log.Info("Heading for {}:{}", client.Address, client.Port);
         }
 
         private static string PlayerName()
         {
-            string given = Argument(NameArgument);
-            return string.IsNullOrEmpty(given) ? SystemInfo.deviceName : given;
+            return Config.Read<ClientConfig>(ClientConfig.FileName).Name;
         }
 
-        private static string Argument(string name)
+        private static void Overlay()
         {
-            string[] arguments = Environment.GetCommandLineArgs();
-
-            for (int index = 0; index < arguments.Length - 1; index++)
-            {
-                if (arguments[index] == name) return arguments[index + 1];
-            }
-
-            return null;
+            var overlay = new GameObject("VersionOverlay");
+            overlay.AddComponent<VersionOverlay>();
+            UnityEngine.Object.DontDestroyOnLoad(overlay);
         }
 
         private static NetworkManager Network()
