@@ -51,6 +51,12 @@ namespace Shooter.Bootstrapping
                 return;
             }
 
+            if (SceneManager.GetActiveScene().name == WorldScene)
+            {
+                Log.Info("Server listening, world scene {} is already active", WorldScene);
+                return;
+            }
+
             Log.Info("Server listening, loading world scene {}", WorldScene);
             network.SceneManager.LoadScene(WorldScene, LoadSceneMode.Single);
         }

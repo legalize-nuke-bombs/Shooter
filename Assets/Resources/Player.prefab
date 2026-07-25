@@ -15,6 +15,9 @@ GameObject:
   - component: {fileID: 5265432105540151828}
   - component: {fileID: 5160185244976746616}
   - component: {fileID: 3122905911062101461}
+  - component: {fileID: 7344528183282362560}
+  - component: {fileID: 8978299279959939107}
+  - component: {fileID: -740267530134386408}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -75,13 +78,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1676846093
+  GlobalObjectIdHash: 2482877518
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  m_InScenePlaced: 1
+  m_InScenePlaced: 0
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
@@ -180,6 +183,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Players.LocalPlayer
   ShowTopMostFoldoutHeaderGroup: 1
   view: {fileID: 8048120746739619105}
+--- !u!114 &7344528183282362560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432219165531623704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 424a13632b5e54ef49dfa7004ab2f020, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Health.DefaultHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  maxHp: 100
+--- !u!114 &8978299279959939107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432219165531623704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d02793b305384890bcfc08023412b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Hands.Hands
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-740267530134386408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432219165531623704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd647eba8795b48869668ed81d64785c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sleeping.Sleeper
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &8441315520480134065
 GameObject:
   m_ObjectHideFlags: 0
