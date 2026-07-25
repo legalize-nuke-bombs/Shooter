@@ -1,15 +1,12 @@
 using Unity.Netcode;
 using UnityEngine;
 using Shooter.Game.Interacting;
-using Shooter.Game.Time;
 using Shooter.Logging;
 
 namespace Shooter.Game.Sleeping
 {
     public class Bed : MonoBehaviour, IUsable
     {
-        [SerializeField] private WorldClock clock;
-
         public void Use(NetworkObject user)
         {
             var sleeper = user.GetComponent<Sleeper>();
@@ -20,7 +17,7 @@ namespace Shooter.Game.Sleeping
 
             bool alive = health == null || health.Alive;
             bool handsFree = hands == null || hands.Free;
-            bool night = clock != null && clock.IsNight();
+            bool night = World.Current != null && World.Current.Clock.IsNight();
 
             if (!SleepRule.CanSleep(alive, handsFree, night))
             {

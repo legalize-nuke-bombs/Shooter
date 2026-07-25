@@ -1,5 +1,4 @@
 using Unity.Netcode;
-using UnityEngine;
 using Shooter.Game.Time;
 using Shooter.Logging;
 
@@ -9,13 +8,17 @@ namespace Shooter.Game.Sleeping
     {
         private const float SkipTimeScale = 6f;
 
-        [SerializeField] private WorldClock clock;
-
         private readonly NetworkVariable<bool> asleep = new NetworkVariable<bool>();
 
+        private WorldClock clock;
         private bool wasNight;
 
         public bool WorldAsleep => asleep.Value;
+
+        private void Awake()
+        {
+            clock = GetComponent<WorldClock>();
+        }
 
         public override void OnNetworkSpawn()
         {
