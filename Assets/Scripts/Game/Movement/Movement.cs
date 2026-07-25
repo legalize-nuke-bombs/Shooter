@@ -26,6 +26,8 @@ namespace Shooter.Game.Movement
 
         public float Pitch => pitch.Value;
 
+        public float GroundTravel { get; private set; }
+
         public float Yaw => transform.eulerAngles.y;
 
         public Vector3 Look => Quaternion.Euler(pitch.Value, Yaw, 0f) * Vector3.forward;
@@ -102,7 +104,12 @@ namespace Shooter.Game.Movement
             }
 
             Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
+            Vector3 before = transform.position;
             characterController.Move((wish + Vector3.up * fall) * dt);
+
+            GroundTravel = characterController.isGrounded
+                ? Vector3.Distance(new Vector3(before.x, 0f, before.z), new Vector3(transform.position.x, 0f, transform.position.z))
+                : 0f;
         }
 
         private static float Finite(float value)

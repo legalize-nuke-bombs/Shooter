@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ammo762X39
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.ItemSpec
   type: 1
-  promptName: "\u041F\u0430\u0442\u0440\u043E\u043D\u044B 762X39"
+  promptName: "\u041F\u0430\u0442\u0440\u043E\u043D\u044B 762x39"
   stackable: 1

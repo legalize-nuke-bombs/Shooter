@@ -1,5 +1,7 @@
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Configuring;
 using Shooter.Game.Sleeping;
 using Shooter.Game.Time;
 using Shooter.Logging;
@@ -12,9 +14,16 @@ namespace Shooter.Game
     {
         public static Environment Current { get; private set; }
 
+        private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
+        private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
+
         public Clock Clock { get; private set; }
 
         public SleepCycle SleepCycle { get; private set; }
+
+        public string World => world.Value.ToString();
+
+        public string Version => version.Value.ToString();
 
         private void Awake()
         {
@@ -25,7 +34,15 @@ namespace Shooter.Game
         public override void OnNetworkSpawn()
         {
             Current = this;
-            Log.Info("Environment is up, clock says {}", Clock.DateTime());
+
+            if (IsServer)
+            {
+                ServerConfig config = Config.Read<ServerConfig>(ServerConfig.FileName);
+                world.Value = new FixedString64Bytes(config.World);
+                version.Value = new FixedString32Bytes(Application.version);
+            }
+
+            Log.Info("Environment is up: world {}, version {}, clock says {}", World, Version, Clock.DateTime());
         }
 
         public override void OnNetworkDespawn()
