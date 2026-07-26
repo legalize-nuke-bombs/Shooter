@@ -32,6 +32,8 @@ namespace Shooter.Client.Players
         private float pitch;
         private float yaw;
 
+        public bool InventoryOpen { get; private set; }
+
         public bool Captured
         {
             get => captured;
@@ -74,6 +76,8 @@ namespace Shooter.Client.Players
             controls.Player.Attack.performed += Fire;
             controls.Player.Reload.performed += Reload;
             controls.Player.Interact.performed += Use;
+            controls.Player.Inventory.performed += OpenBag;
+            controls.UI.Inventory.performed += CloseBag;
             Grab();
 
             NetworkManager.NetworkTickSystem.Tick += Send;
@@ -90,8 +94,11 @@ namespace Shooter.Client.Players
             controls.Player.Attack.performed -= Fire;
             controls.Player.Reload.performed -= Reload;
             controls.Player.Interact.performed -= Use;
+            controls.Player.Inventory.performed -= OpenBag;
+            controls.UI.Inventory.performed -= CloseBag;
             controls.Dispose();
             controls = null;
+            InventoryOpen = false;
 
             Cursor.lockState = CursorLockMode.None;
             Log.Info("Local player despawned");
@@ -140,6 +147,18 @@ namespace Shooter.Client.Players
         private void Reload(InputAction.CallbackContext context)
         {
             gunner?.ReloadRpc();
+        }
+
+        private void OpenBag(InputAction.CallbackContext context)
+        {
+            InventoryOpen = true;
+            Captured = true;
+        }
+
+        private void CloseBag(InputAction.CallbackContext context)
+        {
+            InventoryOpen = false;
+            Captured = false;
         }
 
         private void Use(InputAction.CallbackContext context)

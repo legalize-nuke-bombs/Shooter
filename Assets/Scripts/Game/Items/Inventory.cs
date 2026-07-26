@@ -8,7 +8,7 @@ namespace Shooter.Game.Items
 {
     public class Inventory : NetworkBehaviour, IDigestible
     {
-        private const int Nothing = -1;
+        public const int Nothing = -1;
 
         [SerializeField] private ItemCatalog catalog;
 
@@ -21,11 +21,34 @@ namespace Shooter.Game.Items
             ? catalog
             : Environment.Current == null ? null : Environment.Current.Items;
 
+        public event Action Changed;
+
         public int Count => slots.Count;
+
+        public int EquippedSlot => equipped.Value;
+
+        public override void OnNetworkSpawn()
+        {
+            slots.OnListChanged += Shifted;
+            equipped.OnValueChanged += Swapped;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            slots.OnListChanged -= Shifted;
+            equipped.OnValueChanged -= Swapped;
+        }
 
         public Item At(int slot)
         {
             return slots[slot];
+        }
+
+        public bool Equipable(Item item)
+        {
+            ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.Type);
+
+            return spec != null && spec.Equipable;
         }
 
         public void Add(Item item)
@@ -87,11 +110,24 @@ namespace Shooter.Game.Items
             return removed;
         }
 
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void EquipRpc(int slot)
+        {
+            TryEquip(slot);
+        }
+
         public bool TryEquip(int slot)
         {
             if (!IsServer || slot < Nothing || slot >= slots.Count) return false;
 
+            if (slot != Nothing && !Equipable(slots[slot]))
+            {
+                Log.Info("Entity {} can not put {} in hands", name, slots[slot].Type);
+                return false;
+            }
+
             equipped.Value = slot;
+            Log.Info("Entity {} holds slot {}", name, slot);
             return true;
         }
 
@@ -135,6 +171,16 @@ namespace Shooter.Game.Items
 
             ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.Type);
             return "Предмет в руках: " + (spec == null ? item.Type.ToString() : spec.PromptName);
+        }
+
+        private void Shifted(NetworkListEvent<Item> change)
+        {
+            Changed?.Invoke();
+        }
+
+        private void Swapped(int previous, int current)
+        {
+            Changed?.Invoke();
         }
 
         private void Drop(int slot)

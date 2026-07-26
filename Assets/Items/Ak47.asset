@@ -15,6 +15,7 @@ MonoBehaviour:
   type: 2
   promptName: AK-47
   stackable: 0
+  equipable: 1
   magazineSize: 30
   ammoType: 1
   distance: 100

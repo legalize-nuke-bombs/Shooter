@@ -8,6 +8,11 @@
         <ui:VisualElement name="health" class="bar" picking-mode="Ignore">
             <ui:VisualElement name="health-fill" class="bar__fill" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:VisualElement name="inventory" class="inventory">
+            <ui:Label text="Инвентарь" class="line inventory__title" picking-mode="Ignore" />
+            <ui:VisualElement name="inventory-slots" class="inventory__slots" />
+            <ui:Label name="inventory-empty" text="Пусто" class="line inventory__empty" picking-mode="Ignore" />
+        </ui:VisualElement>
         <ui:VisualElement name="dream" class="dream" picking-mode="Ignore" />
         <ui:VisualElement name="versions" class="corner" picking-mode="Ignore">
             <ui:Label name="client-version" class="line" />

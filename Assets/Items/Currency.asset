@@ -15,3 +15,4 @@ MonoBehaviour:
   type: 0
   promptName: "\u0412\u0430\u043B\u044E\u0442\u0430"
   stackable: 1
+  equipable: 0
