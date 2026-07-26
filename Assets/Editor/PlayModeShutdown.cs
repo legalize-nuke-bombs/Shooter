@@ -18,15 +18,14 @@ namespace Shooter.Editing
             NetworkManager network = NetworkManager.Singleton;
             if (network == null) return;
 
-            try
+            if (network.IsListening)
             {
-                if (network.IsListening) network.Shutdown();
+                network.Shutdown();
+                return;
             }
-            finally
-            {
-                NetworkTransport transport = network.NetworkConfig == null ? null : network.NetworkConfig.NetworkTransport;
-                if (transport != null) transport.Shutdown();
-            }
+
+            NetworkTransport transport = network.NetworkConfig == null ? null : network.NetworkConfig.NetworkTransport;
+            if (transport != null) transport.Shutdown();
         }
     }
 }
