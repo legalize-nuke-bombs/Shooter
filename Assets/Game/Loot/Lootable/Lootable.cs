@@ -1,6 +1,5 @@
-using Unity.Netcode;
-using UnityEngine;
 using Shooter.Logging;
+using Unity.Netcode;
 
 namespace Shooter.Game.Loot
 {

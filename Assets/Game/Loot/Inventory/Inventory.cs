@@ -1,8 +1,8 @@
 using System;
-using Unity.Netcode;
-using UnityEngine;
 using Shooter.Game.Body;
 using Shooter.Logging;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game.Loot
 {

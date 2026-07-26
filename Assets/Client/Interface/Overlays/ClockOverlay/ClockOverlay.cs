@@ -1,9 +1,9 @@
 using System;
 using System.Globalization;
+using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Environment = Shooter.Game.Environment;
-using Shooter.Logging;
 
 namespace Shooter.Client.Interface.Overlays
 {

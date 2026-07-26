@@ -1,5 +1,5 @@
-using UnityEngine;
 using Shooter.Game.Body.Sounding;
+using UnityEngine;
 
 namespace Shooter.Game.Loot
 {

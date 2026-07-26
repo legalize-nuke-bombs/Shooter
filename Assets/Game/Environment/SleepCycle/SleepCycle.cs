@@ -1,6 +1,6 @@
-using Unity.Netcode;
 using Shooter.Game.Body.Sleeping;
 using Shooter.Logging;
+using Unity.Netcode;
 
 namespace Shooter.Game
 {

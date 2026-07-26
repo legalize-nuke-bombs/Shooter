@@ -1,5 +1,5 @@
-using Unity.Netcode;
 using Shooter.Logging;
+using Unity.Netcode;
 
 namespace Shooter.Game.Body
 {

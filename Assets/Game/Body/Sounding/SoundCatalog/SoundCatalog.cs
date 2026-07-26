@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Body.Sounding
 {

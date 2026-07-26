@@ -9,6 +9,11 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
+# using по общепринятому для .NET: System первыми, остальное одним алфавитным
+# списком без пустых строк между группами, алиасы в конце
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
 # var only when the type is apparent from the right-hand side
 csharp_style_var_for_built_in_types = false:suggestion
 csharp_style_var_when_type_is_apparent = true:suggestion
