@@ -8,8 +8,6 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using UnityEngine.Networking;
 using Shooter.Configuring;
-using Shooter.Game.Llm;
-using Shooter.Game.Speech;
 
 namespace Shooter.Game.Llm.Gemini
 {

@@ -2,7 +2,6 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Shooter.Configuring;
-using Shooter.Game.Body.Sleeping;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
 using Shooter.Logging;

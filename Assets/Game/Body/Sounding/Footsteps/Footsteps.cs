@@ -1,6 +1,5 @@
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Body;
 
 namespace Shooter.Game.Body.Sounding
 {

@@ -1,4 +1,3 @@
-using Shooter.Game.Speech;
 namespace Shooter.Game.Llm
 {
     public class LlmAnswer

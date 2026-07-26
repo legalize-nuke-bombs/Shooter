@@ -2,7 +2,6 @@ using Unity.Netcode;
 using UnityEngine;
 using Shooter.Game.Body.Sleeping;
 using Shooter.Game.Loot;
-using Shooter.Game;
 using Shooter.Logging;
 
 namespace Shooter.Game.Body
