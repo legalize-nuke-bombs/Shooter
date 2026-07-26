@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1261245880
+  GlobalObjectIdHash: 2482877518
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.Inventory
   ShowTopMostFoldoutHeaderGroup: 1
-  catalog: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
+  catalog: {fileID: 0}
 --- !u!114 &2242069941562545108
 MonoBehaviour:
   m_ObjectHideFlags: 0
