@@ -3,12 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Configuring;
 using Shooter.Game.Digesting;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm
 {
-    public abstract class Llm : NetworkBehaviour
+    public class Llm : NetworkBehaviour
     {
         private const int MemoryLimit = 2000;
 
@@ -28,8 +29,11 @@ namespace Shooter.Game.Llm
             await gate.WaitAsync();
             try
             {
+                LlmConfig config = Config.Read<ServerConfig>(ServerConfig.FileName).Llm;
                 string systemPrompt = LlmPrompt.System(character, memory, WorldState(), situation);
-                LlmAnswer answer = await Request(systemPrompt, messages);
+
+                Log.Info("Entity {} is asking {} for an answer", name, config.Model);
+                LlmAnswer answer = await LlmProviders.For(config).Request(config, systemPrompt, messages);
                 Remember(answer.Memory);
                 return answer.Reply;
             }
@@ -38,8 +42,6 @@ namespace Shooter.Game.Llm
                 gate.Release();
             }
         }
-
-        protected abstract Task<LlmAnswer> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages);
 
         private string WorldState()
         {
