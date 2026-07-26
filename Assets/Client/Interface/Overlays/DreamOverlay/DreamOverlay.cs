@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Client.Dreaming;
+using Shooter.Client.Interface.Dreaming;
 using Shooter.Logging;
 using Environment = Shooter.Game.Environment;
+using Shooter.Game;
 
-namespace Shooter.Client.Overlays
+namespace Shooter.Client.Interface.Overlays
 {
     [RequireComponent(typeof(PanelRenderer))]
     public class DreamOverlay : MonoBehaviour

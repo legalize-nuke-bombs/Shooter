@@ -1,4 +1,4 @@
-namespace Shooter.Game.Talking
+namespace Shooter.Game.Speech
 {
     public class Message
     {

@@ -1,4 +1,4 @@
-namespace Shooter.Game.Items
+namespace Shooter.Game.Loot
 {
     public enum InventoryOnConflict
     {

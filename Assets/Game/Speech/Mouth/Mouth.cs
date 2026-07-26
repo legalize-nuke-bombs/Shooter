@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Shooter.Game.Dying;
+using Shooter.Game.Body;
 using Shooter.Logging;
 
-namespace Shooter.Game.Talking
+namespace Shooter.Game.Speech
 {
     public class Mouth : NetworkBehaviour, IMortal
     {

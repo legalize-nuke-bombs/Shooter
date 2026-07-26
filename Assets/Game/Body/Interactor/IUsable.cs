@@ -1,6 +1,6 @@
 using Unity.Netcode;
 
-namespace Shooter.Game.Interacting
+namespace Shooter.Game.Body
 {
     public interface IUsable
     {

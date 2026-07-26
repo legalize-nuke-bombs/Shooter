@@ -1,17 +1,15 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Shooter.Client.Controlling;
-using Shooter.Game.Dying;
-using Shooter.Game.Interacting;
-using Shooter.Game.Moving;
-using Shooter.Game.Shooting;
-using Shooter.Game.Sleeping;
-using Shooter.Game.Talking;
-using Shooter.Game.Vitals;
+using Shooter.Game.Body.Sleeping;
+using Shooter.Game.Body;
+using Shooter.Game.Combat;
+using Shooter.Game.Loot;
+using Shooter.Game.Speech;
+using Shooter.Game;
 using Shooter.Logging;
 
-namespace Shooter.Client.Players
+namespace Shooter.Client.Playing
 {
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(Interactor))]

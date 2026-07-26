@@ -1,7 +1,7 @@
 using System;
 using Unity.Netcode;
 
-namespace Shooter.Game.Timing
+namespace Shooter.Game
 {
     public class Clock : NetworkBehaviour
     {

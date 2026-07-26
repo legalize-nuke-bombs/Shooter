@@ -1,7 +1,7 @@
 using UnityEngine;
-using Shooter.Game.Naming;
+using Shooter.Game.Body;
 
-namespace Shooter.Client.Naming
+namespace Shooter.Client.Interface.Naming
 {
     public abstract class NameSpec : ScriptableObject
     {

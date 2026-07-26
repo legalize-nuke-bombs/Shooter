@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Shooter.Logging;
 
-namespace Shooter.Game.Items
+namespace Shooter.Game.Loot
 {
     public class Lootable : NetworkBehaviour
     {

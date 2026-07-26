@@ -5,13 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Interacting;
-using Shooter.Game.Restraining;
-using Shooter.Game.Sleeping;
-using Shooter.Game.Vitals;
+using Shooter.Game.Body.Sleeping;
+using Shooter.Game.Body;
+using Shooter.Game;
 using Shooter.Logging;
 
-namespace Shooter.Game.Talking
+namespace Shooter.Game.Speech
 {
     public abstract class Talker : NetworkBehaviour, IUsable, IRestraint
     {

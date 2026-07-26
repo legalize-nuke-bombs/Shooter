@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Shooter.Game.Talking
+namespace Shooter.Game.Speech
 {
     public sealed class RefusiveTalker : Talker
     {

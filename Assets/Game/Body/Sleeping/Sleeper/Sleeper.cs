@@ -1,11 +1,10 @@
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Digesting;
-using Shooter.Game.Dying;
-using Shooter.Game.Restraining;
+using Shooter.Game.Body;
+using Shooter.Game;
 using Shooter.Logging;
 
-namespace Shooter.Game.Sleeping
+namespace Shooter.Game.Body.Sleeping
 {
     public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint
     {

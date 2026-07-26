@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Naming;
 using Shooter.Logging;
 
-namespace Shooter.Game.Networking
+namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(NetworkManager))]
     public class Greeter : MonoBehaviour

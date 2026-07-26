@@ -1,4 +1,4 @@
-namespace Shooter.Game.Restraining
+namespace Shooter.Game.Body
 {
     public interface IRestraint
     {

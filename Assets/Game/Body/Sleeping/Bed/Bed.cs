@@ -1,11 +1,10 @@
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Holding;
-using Shooter.Game.Interacting;
-using Shooter.Game.Vitals;
+using Shooter.Game.Body;
+using Shooter.Game;
 using Shooter.Logging;
 
-namespace Shooter.Game.Sleeping
+namespace Shooter.Game.Body.Sleeping
 {
     public class Bed : MonoBehaviour, IUsable
     {

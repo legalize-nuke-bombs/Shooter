@@ -1,4 +1,4 @@
-namespace Shooter.Game.Vitals
+namespace Shooter.Game.Body
 {
     public sealed class ImmortalHealth : Health
     {

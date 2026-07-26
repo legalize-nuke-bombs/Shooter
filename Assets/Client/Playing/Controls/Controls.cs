@@ -14,8 +14,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using Shooter.Game.Loot;
+using Shooter.Logging;
 
-namespace Shooter.Client.Controlling
+namespace Shooter.Client.Playing
 {
     /// <summary>
     /// Provides programmatic access to <see cref="InputActionAsset" />, <see cref="InputActionMap" />, <see cref="InputAction" /> and <see cref="InputControlScheme" /> instances defined in asset "Assets/InputSystem_Actions.inputactions".

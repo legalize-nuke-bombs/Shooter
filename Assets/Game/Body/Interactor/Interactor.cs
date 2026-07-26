@@ -1,9 +1,8 @@
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Moving;
 using Shooter.Logging;
 
-namespace Shooter.Game.Interacting
+namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Movement))]
     public class Interactor : NetworkBehaviour

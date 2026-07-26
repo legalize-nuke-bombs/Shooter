@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 
-namespace Shooter.Game.Talking
+namespace Shooter.Game.Speech
 {
     public sealed class Conversation
     {

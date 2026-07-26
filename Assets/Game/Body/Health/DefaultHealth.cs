@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Shooter.Logging;
 
-namespace Shooter.Game.Vitals
+namespace Shooter.Game.Body
 {
     public sealed class DefaultHealth : Health
     {

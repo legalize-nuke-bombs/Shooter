@@ -1,10 +1,8 @@
 using System;
 using Unity.Netcode;
-using Shooter.Game.Digesting;
-using Shooter.Game.Dying;
 using Shooter.Logging;
 
-namespace Shooter.Game.Holding
+namespace Shooter.Game.Body
 {
     public class Hands : NetworkBehaviour, IMortal, IDigestible
     {

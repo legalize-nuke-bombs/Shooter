@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Client.Aiming;
-using Shooter.Client.Naming;
-using Shooter.Game.Naming;
+using Shooter.Client.Interface.Naming;
+using Shooter.Client.Interface;
+using Shooter.Game.Body;
 using Shooter.Logging;
 
-namespace Shooter.Client.Overlays
+namespace Shooter.Client.Interface.Overlays
 {
     [RequireComponent(typeof(PanelRenderer))]
     [RequireComponent(typeof(Aimer))]

@@ -1,7 +1,6 @@
 using Unity.Netcode;
-using Shooter.Game.Digesting;
 
-namespace Shooter.Game.Naming
+namespace Shooter.Game.Body
 {
     public abstract class Nameable : NetworkBehaviour, IDigestible
     {

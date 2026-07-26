@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Logging;
 using Environment = Shooter.Game.Environment;
+using Shooter.Game;
 
-namespace Shooter.Client.Overlays
+namespace Shooter.Client.Interface.Overlays
 {
     [RequireComponent(typeof(PanelRenderer))]
     public class ClockOverlay : MonoBehaviour

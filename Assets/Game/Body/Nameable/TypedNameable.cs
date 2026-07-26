@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Game.Naming
+namespace Shooter.Game.Body
 {
     public sealed class TypedNameable : Nameable
     {

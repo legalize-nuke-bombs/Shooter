@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Shooter.Client.Dreaming
+namespace Shooter.Client.Interface.Dreaming
 {
     public abstract class DreamSpec : ScriptableObject
     {

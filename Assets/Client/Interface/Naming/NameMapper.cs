@@ -1,6 +1,6 @@
-using Shooter.Game.Naming;
+using Shooter.Game.Body;
 
-namespace Shooter.Client.Naming
+namespace Shooter.Client.Interface.Naming
 {
     public sealed class NameMapper
     {
