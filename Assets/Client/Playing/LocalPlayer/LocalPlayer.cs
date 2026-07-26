@@ -169,10 +169,17 @@ namespace Shooter.Client.Playing
             Capture();
         }
 
-        private void CloseBag(InputAction.CallbackContext context)
+        public void CloseInventory()
         {
+            if (!InventoryOpen) return;
+
             InventoryOpen = false;
             Capture();
+        }
+
+        private void CloseBag(InputAction.CallbackContext context)
+        {
+            CloseInventory();
         }
 
         private void OpenTalk(ulong talkerId)

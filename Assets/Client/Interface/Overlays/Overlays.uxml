@@ -4,7 +4,12 @@
     <ui:VisualElement name="overlays" class="overlays" picking-mode="Ignore">
         <ui:Label name="target-name" class="line target" picking-mode="Ignore" />
         <ui:Label name="hint" class="line hint" picking-mode="Ignore" />
-        <ui:VisualElement name="crosshair" class="crosshair" picking-mode="Ignore" />
+        <ui:VisualElement name="crosshair" class="crosshair" picking-mode="Ignore">
+            <ui:VisualElement class="crosshair__bar crosshair__bar--up" picking-mode="Ignore" />
+            <ui:VisualElement class="crosshair__bar crosshair__bar--down" picking-mode="Ignore" />
+            <ui:VisualElement class="crosshair__bar crosshair__bar--left" picking-mode="Ignore" />
+            <ui:VisualElement class="crosshair__bar crosshair__bar--right" picking-mode="Ignore" />
+        </ui:VisualElement>
         <ui:VisualElement name="health" class="bar" picking-mode="Ignore">
             <ui:VisualElement name="health-fill" class="bar__fill" picking-mode="Ignore" />
         </ui:VisualElement>

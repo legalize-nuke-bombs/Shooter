@@ -50,13 +50,13 @@ namespace Shooter.Client.Interface.Overlays
 
         private static string Describe(Environment environment)
         {
-            if (environment == null) return Application.version + " " + Disconnected;
+            string client = "Клиент " + Application.version;
+
+            if (environment == null) return client + "   Сервер " + Disconnected;
 
             string world = string.IsNullOrEmpty(environment.World) ? NamelessWorld : environment.World;
-            bool same = environment.Version == Application.version;
-            string versions = same ? Application.version : Application.version + " (сервер " + environment.Version + ")";
 
-            return versions + " " + world;
+            return client + "   Сервер " + environment.Version + "   " + world;
         }
     }
 }

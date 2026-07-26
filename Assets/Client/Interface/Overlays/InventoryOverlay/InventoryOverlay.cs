@@ -120,9 +120,18 @@ namespace Shooter.Client.Interface.Overlays
             row.Add(amount);
 
             row.SetEnabled(equipable);
-            if (equipable) row.clicked += () => bag.EquipRpc(held ? Inventory.Nothing : slot);
+            if (equipable) row.clicked += () => Equip(slot, held);
 
             return row;
+        }
+
+        private void Equip(int slot, bool held)
+        {
+            bag.EquipRpc(held ? Inventory.Nothing : slot);
+
+            if (held) return;
+
+            OwnPlayer.Find<LocalPlayer>()?.CloseInventory();
         }
 
         private string Amount(Item item)

@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Ak47Reload
   m_EditorClassIdentifier:
   id: ak47reload
-  clip: {fileID: 8300000, guid: 0924f46ebcd6e4c059ce9b44257847d8, type: 3}
+  clips:
+  - {fileID: 8300000, guid: 0924f46ebcd6e4c059ce9b44257847d8, type: 3}
+  volume: 0.2
