@@ -29,6 +29,14 @@ namespace Shooter.Game.Sleeping
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void WakeRpc()
         {
+            bool worldAsleep = Environment.Current != null && Environment.Current.SleepCycle.WorldAsleep;
+
+            if (!SleepRule.CanWake(worldAsleep))
+            {
+                Log.Info("Entity {} can not wake up on its own, the whole world is asleep", name);
+                return;
+            }
+
             WakeUp();
         }
 
