@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Shooter.Logging;
 
@@ -8,6 +9,8 @@ namespace Shooter.Game.Items
     {
         [SerializeField] private ItemSpec[] specs;
 
+        private readonly HashSet<ItemType> unknown = new HashSet<ItemType>();
+
         public ItemSpec Spec(ItemType type)
         {
             foreach (ItemSpec spec in specs)
@@ -15,7 +18,8 @@ namespace Shooter.Game.Items
                 if (spec != null && spec.Type == type) return spec;
             }
 
-            Log.Warn("Item catalog {} has no spec for {}", name, type);
+            if (unknown.Add(type)) Log.Warn("Item catalog {} has no spec for {}", name, type);
+
             return null;
         }
 
