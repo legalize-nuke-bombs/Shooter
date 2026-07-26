@@ -25,11 +25,11 @@ namespace Shooter.Game.Body.Sounding
         {
             if (!IsServer || sound == null) return;
 
-            PlayRpc(sound.Id);
+            PlayRpc(sound.Id, sound.Pick());
         }
 
         [Rpc(SendTo.Everyone)]
-        private void PlayRpc(FixedString32Bytes id)
+        private void PlayRpc(FixedString32Bytes id, byte variant)
         {
             SoundCatalog catalog = Voice;
             if (catalog == null)
@@ -39,9 +39,12 @@ namespace Shooter.Game.Body.Sounding
             }
 
             SoundSpec sound = catalog.Of(id);
-            if (sound == null || sound.Clip == null) return;
+            if (sound == null) return;
 
-            source.PlayOneShot(sound.Clip);
+            AudioClip clip = sound.Clip(variant);
+            if (clip == null) return;
+
+            source.PlayOneShot(clip, sound.Volume);
         }
     }
 }
