@@ -15,5 +15,6 @@
         <ui:VisualElement name="health" class="bar" picking-mode="Ignore">
             <ui:VisualElement name="health-fill" class="bar__fill" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:VisualElement name="dream" class="dream" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>
