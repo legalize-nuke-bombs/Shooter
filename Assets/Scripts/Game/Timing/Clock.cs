@@ -5,9 +5,13 @@ namespace Shooter.Game.Timing
 {
     public class Clock : NetworkBehaviour
     {
+        private const long DayLengthSeconds = 86400;
+        private const double DawnFraction = 0.25;
+        private const double DuskFraction = 0.75;
         private const float DayRealSeconds = 120f;
         private const float SyncInterval = 1f;
-        private const long Delta2026 = 1767225600L;
+
+        private static readonly DateTimeOffset Beginning = new DateTimeOffset(2026, 9, 1, 10, 0, 0, TimeSpan.Zero);
 
         private readonly NetworkVariable<double> synced = new NetworkVariable<double>();
         private readonly NetworkVariable<float> scale = new NetworkVariable<float>(1f);
@@ -16,6 +20,8 @@ namespace Shooter.Game.Timing
         private float untilSync;
 
         public double Timestamp => timestamp;
+
+        public DateTimeOffset Now => Beginning.AddSeconds(timestamp);
 
         public float Scale
         {
@@ -41,18 +47,20 @@ namespace Shooter.Game.Timing
 
         public bool IsNight()
         {
-            return DayCycle.IsNight(DayCycle.FractionOf((long)timestamp));
+            double fraction = Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
+
+            return fraction >= DuskFraction || fraction < DawnFraction;
         }
 
         public string DateTime()
         {
-            return DateTimeOffset.FromUnixTimeSeconds(Delta2026 + (long)timestamp).ToString("yyyy.MM.dd HH:mm:ss");
+            return Now.ToString("yyyy.MM.dd HH:mm:ss");
         }
 
         private void Step()
         {
             float dt = NetworkManager.LocalTime.FixedDeltaTime;
-            timestamp += dt * scale.Value * (DayCycle.DayLengthSeconds / DayRealSeconds);
+            timestamp += dt * scale.Value * (DayLengthSeconds / DayRealSeconds);
 
             if (!IsServer) return;
 

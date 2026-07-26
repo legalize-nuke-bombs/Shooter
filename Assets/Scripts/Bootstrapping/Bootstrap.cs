@@ -118,8 +118,9 @@ namespace Shooter.Bootstrapping
 
         private static void Overlay()
         {
-            var overlay = new GameObject("VersionOverlay");
+            var overlay = new GameObject("Overlays");
             overlay.AddComponent<VersionOverlay>();
+            overlay.AddComponent<ClockOverlay>();
             UnityEngine.Object.DontDestroyOnLoad(overlay);
         }
 
