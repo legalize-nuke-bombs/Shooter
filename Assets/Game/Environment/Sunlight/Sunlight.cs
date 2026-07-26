@@ -5,9 +5,6 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour
     {
-        private const float DayLengthSeconds = 86400f;
-        private const float DawnAngle = -90f;
-
         [SerializeField] private float azimuth = 170f;
 
         [SerializeField] private float brightest = 1.4f;
@@ -32,9 +29,7 @@ namespace Shooter.Game
 
         private static float Overhead(Environment environment)
         {
-            float passed = (float)(environment.Clock.Now.TimeOfDay.TotalSeconds / DayLengthSeconds);
-
-            return passed * 360f + DawnAngle;
+            return (float)((environment.Clock.DayFraction - Clock.DawnFraction) * 360.0);
         }
     }
 }
