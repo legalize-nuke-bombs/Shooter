@@ -1,34 +1,34 @@
 using System;
+using Unity.Collections;
 using Unity.Netcode;
 
 namespace Shooter.Game.Loot
 {
-    [Serializable]
     public struct Item : INetworkSerializable, IEquatable<Item>
     {
-        public ItemType Type;
+        public FixedString32Bytes Id;
         public int Amount;
-        public int Magazine;
+        public int State;
 
-        public Item(ItemType type, int amount, int magazine)
+        public Item(FixedString32Bytes id, int amount, int state)
         {
-            Type = type;
+            Id = id;
             Amount = amount;
-            Magazine = magazine;
+            State = state;
         }
 
         public bool Empty => Amount <= 0;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref Type);
+            serializer.SerializeValue(ref Id);
             serializer.SerializeValue(ref Amount);
-            serializer.SerializeValue(ref Magazine);
+            serializer.SerializeValue(ref State);
         }
 
         public bool Equals(Item other)
         {
-            return Type == other.Type && Amount == other.Amount && Magazine == other.Magazine;
+            return Id == other.Id && Amount == other.Amount && State == other.State;
         }
     }
 }

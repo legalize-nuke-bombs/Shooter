@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd4cf6567cf14cf59846c41a6c5cba9, type: 3}
   m_Name: Currency
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.ItemSpec
-  type: 0
+  id: coin
+  title: "\u0414\u0435\u043D\u044C\u0433\u0438"
   promptName: "\u0412\u0430\u043B\u044E\u0442\u0430"
   stackable: 1
   equipable: 0

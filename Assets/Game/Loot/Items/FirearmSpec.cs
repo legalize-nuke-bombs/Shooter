@@ -7,7 +7,7 @@ namespace Shooter.Game.Loot
     public class FirearmSpec : ItemSpec
     {
         [SerializeField] private int magazineSize = 30;
-        [SerializeField] private ItemType ammoType = ItemType.Ammo762X39;
+        [SerializeField] private ItemSpec ammo;
         [SerializeField] private float distance = 100f;
         [SerializeField] private int damage = 25;
         [SerializeField] private float fireInterval = 0.1f;
@@ -18,7 +18,7 @@ namespace Shooter.Game.Loot
 
         public int MagazineSize => Mathf.Max(magazineSize, 1);
 
-        public ItemType AmmoType => ammoType;
+        public ItemSpec Ammo => ammo;
 
         public float Distance => distance;
 

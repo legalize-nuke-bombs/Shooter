@@ -44,13 +44,13 @@ namespace Shooter.Game.Combat
 
             if (hands != null && !hands.TryTake(HandsAction.Shooting, spec.FireInterval, false, null)) return false;
 
-            if (item.Magazine <= 0)
+            if (item.State <= 0)
             {
                 speaker?.Play(spec.MisfireSound);
                 return false;
             }
 
-            inventory.Reequip(new Item(item.Type, item.Amount, item.Magazine - 1));
+            inventory.Reequip(new Item(item.Id, item.Amount, item.State - 1));
             speaker?.Play(spec.ShotSound);
             Hit(spec);
             return true;
@@ -59,14 +59,15 @@ namespace Shooter.Game.Combat
         public bool TryReload()
         {
             if (!Ready(out Item item, out FirearmSpec spec)) return false;
+            if (spec.Ammo == null) return false;
 
-            int absent = spec.MagazineSize - item.Magazine;
-            if (absent <= 0 || inventory.Amount(spec.AmmoType) == 0) return false;
+            int absent = spec.MagazineSize - item.State;
+            if (absent <= 0 || inventory.Amount(spec.Ammo.Id) == 0) return false;
 
             if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true, () => Reloaded(spec, absent))) return false;
 
             speaker?.Play(spec.ReloadSound);
-            Log.Info("Entity {} started reload of {}, {}s", name, item.Type, spec.ReloadTime);
+            Log.Info("Entity {} started reload of {}, {}s", name, item.Id, spec.ReloadTime);
             return true;
         }
 
@@ -78,7 +79,7 @@ namespace Shooter.Game.Combat
             if (!IsServer || Restraints.Any(restraints)) return false;
             if (!inventory.Equipped(out item)) return false;
 
-            spec = inventory.Catalog == null ? null : inventory.Catalog.Firearm(item.Type);
+            spec = inventory.Catalog == null ? null : inventory.Catalog.Firearm(item.Id);
             return spec != null;
         }
 
@@ -86,9 +87,9 @@ namespace Shooter.Game.Combat
         {
             if (!inventory.Equipped(out Item item)) return;
 
-            int taken = inventory.Remove(spec.AmmoType, absent, InventoryOnConflict.Partly);
-            inventory.Reequip(new Item(item.Type, item.Amount, item.Magazine + taken));
-            Log.Info("Entity {} reloaded {} with {} rounds, {} left in bag", name, item.Type, taken, inventory.Amount(spec.AmmoType));
+            int taken = inventory.Remove(spec.Ammo.Id, absent, InventoryOnConflict.Partly);
+            inventory.Reequip(new Item(item.Id, item.Amount, item.State + taken));
+            Log.Info("Entity {} reloaded {} with {} rounds, {} left in bag", name, item.Id, taken, inventory.Amount(spec.Ammo.Id));
         }
 
         private void Hit(FirearmSpec spec)

@@ -385,12 +385,12 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   catalog: {fileID: 0}
   contents:
-  - Type: 2
+  - Spec: {fileID: 11400000, guid: 0836adec8b5cb4888b092591dca0497a, type: 2}
     Amount: 1
-    Magazine: 30
-  - Type: 1
+    State: 30
+  - Spec: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
     Amount: 60
-    Magazine: 0
+    State: 0
 --- !u!114 &2242069941562545108
 MonoBehaviour:
   m_ObjectHideFlags: 0

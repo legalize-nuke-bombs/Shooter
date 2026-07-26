@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd4cf6567cf14cf59846c41a6c5cba9, type: 3}
   m_Name: Ammo762X39
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.ItemSpec
-  type: 1
+  id: ammo762x39
+  title: "\u041F\u0430\u0442\u0440\u043E\u043D\u044B 7.62x39"
   promptName: "\u041F\u0430\u0442\u0440\u043E\u043D\u044B 762x39"
   stackable: 1
   equipable: 0

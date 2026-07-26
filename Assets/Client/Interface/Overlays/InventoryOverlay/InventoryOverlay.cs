@@ -12,8 +12,6 @@ namespace Shooter.Client.Interface.Overlays
         private const string SlotsElement = "inventory-slots";
         private const string EmptyElement = "inventory-empty";
 
-        [SerializeField] private ItemNameCatalog names;
-
         private VisualElement window;
         private VisualElement rows;
         private Label empty;
@@ -48,12 +46,6 @@ namespace Shooter.Client.Interface.Overlays
             if (window == null || rows == null || empty == null)
             {
                 Log.Error("Overlay document has no {} window, the bag stays hidden", WindowElement);
-                return false;
-            }
-
-            if (names == null)
-            {
-                Log.Error("Inventory overlay has no item name catalog, the bag stays hidden");
                 return false;
             }
 
@@ -111,14 +103,15 @@ namespace Shooter.Client.Interface.Overlays
         private VisualElement Row(int slot, Item item)
         {
             bool held = slot == bag.EquippedSlot;
-            bool equipable = bag.Equipable(item);
+            ItemSpec spec = bag.Spec(item);
+            bool equipable = spec != null && spec.Equipable;
 
             var row = new Button { text = string.Empty };
             row.AddToClassList("slot");
             if (held) row.AddToClassList("slot--held");
             if (!equipable) row.AddToClassList("slot--fixed");
 
-            var name = new Label(names.Text(item.Type));
+            var name = new Label(spec == null ? item.Id.ToString() : spec.Title);
             name.AddToClassList("slot__name");
             row.Add(name);
 
@@ -134,7 +127,7 @@ namespace Shooter.Client.Interface.Overlays
 
         private string Amount(Item item)
         {
-            ItemSpec spec = bag.Catalog == null ? null : bag.Catalog.Spec(item.Type);
+            ItemSpec spec = bag.Spec(item);
 
             return spec != null && spec.Stackable ? item.Amount.ToString() : string.Empty;
         }

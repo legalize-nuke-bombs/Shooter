@@ -1,6 +1,7 @@
 using System;
 using Shooter.Game.Body;
 using Shooter.Logging;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Shooter.Game.Loot
 
         [SerializeField] private ItemCatalog catalog;
 
-        [SerializeField] private Item[] contents;
+        [SerializeField] private Entry[] contents;
 
         private readonly NetworkList<Item> slots = new NetworkList<Item>(
             null, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
@@ -36,8 +37,12 @@ namespace Shooter.Game.Loot
 
             if (!IsServer || contents.Length == 0) return;
 
-            foreach (Item item in contents)
-                Add(item);
+            foreach (Entry entry in contents)
+            {
+                if (entry.Spec == null) continue;
+
+                Add(new Item(entry.Spec.Id, entry.Amount, entry.State));
+            }
 
             Log.Info("Entity {} starts with {} kinds of things in the bag", name, contents.Length);
         }
@@ -53,9 +58,14 @@ namespace Shooter.Game.Loot
             return slots[slot];
         }
 
+        public ItemSpec Spec(Item item)
+        {
+            return Catalog == null ? null : Catalog.Spec(item.Id);
+        }
+
         public bool Equipable(Item item)
         {
-            ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.Type);
+            ItemSpec spec = Spec(item);
 
             return spec != null && spec.Equipable;
         }
@@ -64,41 +74,41 @@ namespace Shooter.Game.Loot
         {
             if (!IsServer || item.Empty) return;
 
-            ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.Type);
+            ItemSpec spec = Spec(item);
 
             if (spec != null && spec.Stackable)
             {
                 for (int slot = 0; slot < slots.Count; slot++)
                 {
                     Item stack = slots[slot];
-                    if (stack.Type != item.Type) continue;
+                    if (stack.Id != item.Id) continue;
 
-                    slots[slot] = new Item(stack.Type, stack.Amount + item.Amount, stack.Magazine);
+                    slots[slot] = new Item(stack.Id, stack.Amount + item.Amount, stack.State);
                     return;
                 }
             }
 
             slots.Add(item);
-            Log.Info("Entity {} took {} of {}", name, item.Amount, item.Type);
+            Log.Info("Entity {} took {} of {}", name, item.Amount, item.Id);
         }
 
-        public int Amount(ItemType type)
+        public int Amount(FixedString32Bytes id)
         {
             int total = 0;
 
             foreach (Item item in slots)
             {
-                if (item.Type == type) total += item.Amount;
+                if (item.Id == id) total += item.Amount;
             }
 
             return total;
         }
 
-        public int Remove(ItemType type, int amount, InventoryOnConflict onConflict)
+        public int Remove(FixedString32Bytes id, int amount, InventoryOnConflict onConflict)
         {
             if (!IsServer || amount <= 0) return 0;
 
-            int available = Amount(type);
+            int available = Amount(id);
             if (onConflict == InventoryOnConflict.Rollback && available < amount) return 0;
 
             int left = Math.Min(available, amount);
@@ -107,13 +117,13 @@ namespace Shooter.Game.Loot
             for (int slot = slots.Count - 1; slot >= 0 && left > 0; slot--)
             {
                 Item item = slots[slot];
-                if (item.Type != type) continue;
+                if (item.Id != id) continue;
 
                 int taken = Math.Min(item.Amount, left);
                 left -= taken;
 
                 if (item.Amount == taken) Drop(slot);
-                else slots[slot] = new Item(item.Type, item.Amount - taken, item.Magazine);
+                else slots[slot] = new Item(item.Id, item.Amount - taken, item.State);
             }
 
             return removed;
@@ -131,7 +141,7 @@ namespace Shooter.Game.Loot
 
             if (slot != Nothing && !Equipable(slots[slot]))
             {
-                Log.Info("Entity {} can not put {} in hands", name, slots[slot].Type);
+                Log.Info("Entity {} can not put {} in hands", name, slots[slot].Id);
                 return false;
             }
 
@@ -178,8 +188,8 @@ namespace Shooter.Game.Loot
         {
             if (!Equipped(out Item item)) return "Предмет в руках: -";
 
-            ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.Type);
-            return "Предмет в руках: " + (spec == null ? item.Type.ToString() : spec.PromptName);
+            ItemSpec spec = Spec(item);
+            return "Предмет в руках: " + (spec == null ? item.Id.ToString() : spec.PromptName);
         }
 
         private void Shifted(NetworkListEvent<Item> change)
@@ -198,6 +208,14 @@ namespace Shooter.Game.Loot
 
             if (equipped.Value == slot) equipped.Value = Nothing;
             else if (equipped.Value > slot) equipped.Value--;
+        }
+
+        [Serializable]
+        private struct Entry
+        {
+            public ItemSpec Spec;
+            public int Amount;
+            public int State;
         }
     }
 }
