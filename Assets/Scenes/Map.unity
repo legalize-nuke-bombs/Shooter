@@ -413,8 +413,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2870758420445658506, guid: 66eba1cf505464f7da595b052e143af3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1041076866}
   m_SourcePrefab: {fileID: 100100000, guid: 66eba1cf505464f7da595b052e143af3, type: 3}
+--- !u!1 &1041076865 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2870758420445658506, guid: 66eba1cf505464f7da595b052e143af3, type: 3}
+  m_PrefabInstance: {fileID: 1041076864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1041076866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1041076865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2716bb9d83b1a4c2d9af5eb01d57d010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.Inventory
+  ShowTopMostFoldoutHeaderGroup: 1
+  catalog: {fileID: 0}
 --- !u!1 &1483063457
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +649,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Environment
   ShowTopMostFoldoutHeaderGroup: 1
+  corpse: {fileID: 6108037598719724321, guid: dba187afb26374400bd1ba8b38212115, type: 3}
+  items: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
 --- !u!1 &1811023382
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,8 +843,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 05672008b3e6a4f1ca60a92c7d4d8552, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2117007352}
   m_SourcePrefab: {fileID: 100100000, guid: 05672008b3e6a4f1ca60a92c7d4d8552, type: 3}
+--- !u!1 &2117007351 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6874027793385663384, guid: 05672008b3e6a4f1ca60a92c7d4d8552, type: 3}
+  m_PrefabInstance: {fileID: 2117007350}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2117007352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117007351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2716bb9d83b1a4c2d9af5eb01d57d010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.Inventory
+  ShowTopMostFoldoutHeaderGroup: 1
+  catalog: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
