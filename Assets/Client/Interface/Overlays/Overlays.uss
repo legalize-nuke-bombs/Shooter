@@ -7,7 +7,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 10px;
+    padding: 4px 6px;
 }
 
 .corner {
@@ -16,6 +16,11 @@
 
 .corner--right {
     align-items: flex-end;
+}
+
+.corner__line {
+    font-size: 9px;
+    -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
 .line {
