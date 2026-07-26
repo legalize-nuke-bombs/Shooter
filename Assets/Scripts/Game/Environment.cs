@@ -1,7 +1,7 @@
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Configuring;
+using Shooter.Configuring;
 using Shooter.Game.Sleeping;
 using Shooter.Game.Timing;
 using Shooter.Logging;

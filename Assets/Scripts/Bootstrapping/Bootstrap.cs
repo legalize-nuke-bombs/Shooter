@@ -7,7 +7,7 @@ using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shooter.Client.Overlays;
-using Shooter.Game.Configuring;
+using Shooter.Configuring;
 using Shooter.Logging;
 
 namespace Shooter.Bootstrapping

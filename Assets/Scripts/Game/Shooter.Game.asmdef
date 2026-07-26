@@ -3,6 +3,7 @@
     "rootNamespace": "Shooter",
     "references": [
         "Shooter.Logging",
+        "Shooter.Configuring",
         "Unity.Netcode.Runtime",
         "Unity.Collections",
         "Unity.Nuget.Newtonsoft-Json"
