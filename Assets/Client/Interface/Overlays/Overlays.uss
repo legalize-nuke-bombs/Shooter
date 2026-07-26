@@ -19,13 +19,13 @@
 }
 
 .corner__line {
-    font-size: 9px;
+    font-size: 10px;
     -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
 .line {
     color: rgb(255, 255, 255);
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .target {
@@ -44,7 +44,7 @@
     right: 0;
     top: 50%;
     margin-top: 48px;
-    font-size: 14px;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.8);
     -unity-text-align: middle-center;
 }
@@ -94,7 +94,7 @@
 }
 
 .inventory__title {
-    font-size: 15px;
+    font-size: 14px;
     margin-bottom: 8px;
 }
 
@@ -138,12 +138,12 @@
 
 .slot__name {
     color: rgb(255, 255, 255);
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .slot__amount {
     color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .talk {
@@ -162,7 +162,7 @@
 }
 
 .talk__name {
-    font-size: 15px;
+    font-size: 14px;
     margin-bottom: 8px;
 }
 
@@ -172,7 +172,7 @@
 }
 
 .talk__waiting {
-    font-size: 13px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.5);
     -unity-font-style: italic;
     margin-top: 4px;
@@ -180,7 +180,7 @@
 }
 
 .talk__line {
-    font-size: 14px;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.85);
     white-space: normal;
     margin-bottom: 4px;
@@ -200,14 +200,14 @@
     border-color: rgba(255, 255, 255, 0.2);
     border-radius: 0;
     padding: 5px 7px;
-    font-size: 14px;
+    font-size: 13px;
     color: rgb(255, 255, 255);
     --unity-cursor-color: rgb(255, 255, 255);
     --unity-selection-color: rgba(168, 51, 51, 0.5);
 }
 
 .talk__help {
-    font-size: 12px;
+    font-size: 11px;
     color: rgba(255, 255, 255, 0.4);
 }
 
