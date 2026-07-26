@@ -157,17 +157,22 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       }
     },
-    "com.unity.render-pipelines.universal": {
+    "com.unity.render-pipelines.high-definition": {
       "version": "17.5.0",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
+        "com.unity.modules.video": "1.0.0",
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
         "com.unity.render-pipelines.core": "17.5.0",
         "com.unity.shadergraph": "17.5.0",
-        "com.unity.render-pipelines.universal-config": "17.5.0"
+        "com.unity.visualeffectgraph": "17.5.0",
+        "com.unity.render-pipelines.high-definition-config": "17.5.0"
       }
     },
-    "com.unity.render-pipelines.universal-config": {
+    "com.unity.render-pipelines.high-definition-config": {
       "version": "17.5.0",
       "depth": 1,
       "source": "builtin",
@@ -243,6 +248,15 @@
         "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.physics2d": "1.0.0",
         "com.unity.modules.physics": "1.0.0"
+      }
+    },
+    "com.unity.visualeffectgraph": {
+      "version": "17.5.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.shadergraph": "17.5.0",
+        "com.unity.render-pipelines.core": "17.5.0"
       }
     },
     "com.unity.visualscripting": {
