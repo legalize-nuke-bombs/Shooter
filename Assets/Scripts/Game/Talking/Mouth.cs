@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Unity.Netcode;
+using Shooter.Game.Dying;
 using Shooter.Logging;
 
 namespace Shooter.Game.Talking

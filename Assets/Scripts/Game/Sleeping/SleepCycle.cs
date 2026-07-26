@@ -1,5 +1,5 @@
 using Unity.Netcode;
-using Shooter.Game.Time;
+using Shooter.Game.Timing;
 using Shooter.Logging;
 
 namespace Shooter.Game.Sleeping

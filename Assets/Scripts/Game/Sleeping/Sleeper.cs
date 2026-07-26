@@ -1,5 +1,8 @@
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Digesting;
+using Shooter.Game.Dying;
+using Shooter.Game.Restraining;
 using Shooter.Logging;
 
 namespace Shooter.Game.Sleeping

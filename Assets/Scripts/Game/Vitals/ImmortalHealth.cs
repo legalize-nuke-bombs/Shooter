@@ -1,12 +1,12 @@
-namespace Shooter.Game.Health
+namespace Shooter.Game.Vitals
 {
-    public sealed class DeadHealth : Health
+    public sealed class ImmortalHealth : Health
     {
-        public override int Hp => 0;
+        public override int Hp => 1;
 
         public override int MaxHp => 1;
 
-        public override bool Alive => false;
+        public override bool Alive => true;
 
         public override void Damage(int amount)
         {

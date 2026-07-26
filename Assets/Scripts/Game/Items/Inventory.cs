@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Digesting;
 using Shooter.Logging;
 
 namespace Shooter.Game.Items

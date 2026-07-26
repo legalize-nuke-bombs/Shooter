@@ -1,21 +1,22 @@
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Moving;
 
 namespace Shooter.Game.Sounding
 {
-    [RequireComponent(typeof(Movement.Movement))]
+    [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(Speaker))]
     public class Footsteps : NetworkBehaviour
     {
         [SerializeField] private float strideLength = 2f;
 
-        private Movement.Movement movement;
+        private Movement movement;
         private Speaker speaker;
         private float stride;
 
         private void Awake()
         {
-            movement = GetComponent<Movement.Movement>();
+            movement = GetComponent<Movement>();
             speaker = GetComponent<Speaker>();
         }
 

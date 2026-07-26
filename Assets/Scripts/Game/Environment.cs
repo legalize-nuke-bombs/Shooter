@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Shooter.Game.Configuring;
 using Shooter.Game.Sleeping;
-using Shooter.Game.Time;
+using Shooter.Game.Timing;
 using Shooter.Logging;
 
 namespace Shooter.Game

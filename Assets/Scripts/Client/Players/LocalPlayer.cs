@@ -3,12 +3,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Shooter.Game.Dying;
 using Shooter.Game.Interacting;
+using Shooter.Game.Moving;
 using Shooter.Game.Sleeping;
+using Shooter.Game.Vitals;
 using Shooter.Logging;
 
 namespace Shooter.Client.Players
 {
-    [RequireComponent(typeof(Game.Movement.Movement))]
+    [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(Interactor))]
     public class LocalPlayer : NetworkBehaviour
     {
@@ -17,10 +19,10 @@ namespace Shooter.Client.Players
 
         [SerializeField] private Camera view;
 
-        private Game.Movement.Movement movement;
+        private Movement movement;
         private Interactor interactor;
         private Sleeper sleeper;
-        private Game.Health.Health health;
+        private Health health;
         private Mortal mortal;
         private Game.Shooting.Shooter shooter;
         private float pitch;
@@ -30,10 +32,10 @@ namespace Shooter.Client.Players
 
         private void Awake()
         {
-            movement = GetComponent<Game.Movement.Movement>();
+            movement = GetComponent<Movement>();
             interactor = GetComponent<Interactor>();
             sleeper = GetComponent<Sleeper>();
-            health = GetComponent<Game.Health.Health>();
+            health = GetComponent<Health>();
             mortal = GetComponent<Mortal>();
             shooter = GetComponent<Game.Shooting.Shooter>();
         }

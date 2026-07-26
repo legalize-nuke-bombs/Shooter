@@ -1,9 +1,11 @@
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Hands;
+using Shooter.Game.Holding;
 using Shooter.Game.Interacting;
 using Shooter.Game.Items;
+using Shooter.Game.Restraining;
 using Shooter.Game.Sounding;
+using Shooter.Game.Vitals;
 using Shooter.Logging;
 
 namespace Shooter.Game.Shooting
@@ -14,7 +16,7 @@ namespace Shooter.Game.Shooting
     {
         private Inventory inventory;
         private Interactor interactor;
-        private Hands.Hands hands;
+        private Hands hands;
         private Speaker speaker;
         private IRestraint[] restraints;
 
@@ -22,7 +24,7 @@ namespace Shooter.Game.Shooting
         {
             inventory = GetComponent<Inventory>();
             interactor = GetComponent<Interactor>();
-            hands = GetComponent<Hands.Hands>();
+            hands = GetComponent<Hands>();
             speaker = GetComponent<Speaker>();
             restraints = GetComponents<IRestraint>();
         }
@@ -100,7 +102,7 @@ namespace Shooter.Game.Shooting
                 return;
             }
 
-            var health = hit.collider.GetComponentInParent<Health.Health>();
+            var health = hit.collider.GetComponentInParent<Health>();
             if (health == null)
             {
                 Log.Info("Shot of entity {} hit {} without health", name, hit.collider.name);
