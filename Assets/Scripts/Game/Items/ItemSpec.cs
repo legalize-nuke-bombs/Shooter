@@ -8,11 +8,14 @@ namespace Shooter.Game.Items
         [SerializeField] private ItemType type;
         [SerializeField] private string promptName;
         [SerializeField] private bool stackable;
+        [SerializeField] private bool equipable;
 
         public ItemType Type => type;
 
         public string PromptName => string.IsNullOrEmpty(promptName) ? type.ToString() : promptName;
 
         public bool Stackable => stackable;
+
+        public bool Equipable => equipable;
     }
 }

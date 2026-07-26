@@ -3,6 +3,7 @@ using Unity.Netcode;
 
 namespace Shooter.Game.Items
 {
+    [Serializable]
     public struct Item : INetworkSerializable, IEquatable<Item>
     {
         public ItemType Type;

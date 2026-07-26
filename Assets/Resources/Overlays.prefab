@@ -17,6 +17,9 @@ GameObject:
   - component: {fileID: 6600000000000000106}
   - component: {fileID: 6600000000000000107}
   - component: {fileID: 6600000000000000108}
+  - component: {fileID: 6600000000000000109}
+  - component: {fileID: 6600000000000000110}
+  - component: {fileID: 6600000000000000111}
   m_Layer: 0
   m_Name: Overlays
   m_TagString: Untagged
@@ -185,3 +188,57 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   dreams: {fileID: 11400000, guid: c33c19444bc34a0594cbeae8d369cb84, type: 2}
+--- !u!114 &6600000000000000109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155463033436812329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52b9bc1c25884011a307fe3f9807a88b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  names: {fileID: 11400000, guid: 54f560813923495db26c0deaf148620d, type: 2}
+--- !u!114 &6600000000000000110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155463033436812329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!114 &6600000000000000111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155463033436812329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ActionsAsset: {fileID: 0}
+  m_PointAction: {fileID: 0}
+  m_MoveAction: {fileID: 0}
+  m_SubmitAction: {fileID: 0}
+  m_CancelAction: {fileID: 0}
+  m_LeftClickAction: {fileID: 0}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
+  m_ScrollWheelAction: {fileID: 0}
+  m_TrackedDevicePositionAction: {fileID: 0}
+  m_TrackedDeviceOrientationAction: {fileID: 0}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_ScrollDeltaPerTick: 6
