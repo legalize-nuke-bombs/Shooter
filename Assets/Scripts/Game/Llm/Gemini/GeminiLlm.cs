@@ -8,7 +8,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.Networking;
-using Shooter.Game.Configuring;
+using Shooter.Configuring;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm.Gemini
