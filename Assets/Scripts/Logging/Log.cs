@@ -10,13 +10,8 @@ namespace Shooter.Logging
 {
     public static class Log
     {
-        private const string EngineCaller = "Unity";
-
         private static readonly object Gate = new object();
         private static StreamWriter file;
-
-        [ThreadStatic]
-        private static bool mirroring;
 
         public static void ToFile(string path)
         {
@@ -30,6 +25,7 @@ namespace Shooter.Logging
 
             Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
             Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+            Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
             Application.logMessageReceivedThreaded -= OnEngineLog;
             Application.logMessageReceivedThreaded += OnEngineLog;
 
@@ -38,40 +34,24 @@ namespace Shooter.Logging
 
         public static void Info(string template, params object[] args)
         {
-            Emit(LogType.Log, Line("INFO", Caller(), template, args));
+            Debug.unityLogger.Log(LogType.Log, Said(Caller(), template, args));
         }
 
         public static void Warn(string template, params object[] args)
         {
-            Emit(LogType.Warning, Line("WARN", Caller(), template, args));
+            Debug.unityLogger.Log(LogType.Warning, Said(Caller(), template, args));
         }
 
         public static void Error(string template, params object[] args)
         {
-            Emit(LogType.Error, Line("ERROR", Caller(), template, args));
-        }
-
-        private static void Emit(LogType type, string line)
-        {
-            Write(line);
-
-            mirroring = true;
-            try
-            {
-                Debug.unityLogger.Log(type, line);
-            }
-            finally
-            {
-                mirroring = false;
-            }
+            Debug.unityLogger.Log(LogType.Error, Said(Caller(), template, args));
         }
 
         private static void OnEngineLog(string message, string stackTrace, LogType type)
         {
-            if (mirroring) return;
+            string line = DateTime.Now.ToString("HH:mm:ss.fff") + " " + LevelOf(type) + " [" + ThreadName() + "] " + message;
 
-            string line = Line(LevelOf(type), EngineCaller, message, null);
-            if (type == LogType.Exception || type == LogType.Error || type == LogType.Assert)
+            if (type == LogType.Exception || type == LogType.Assert)
             {
                 string trace = stackTrace?.TrimEnd();
                 if (!string.IsNullOrEmpty(trace)) line += Environment.NewLine + trace;
@@ -98,9 +78,9 @@ namespace Shooter.Logging
             }
         }
 
-        private static string Line(string level, string caller, string template, object[] args)
+        private static string Said(string caller, string template, object[] args)
         {
-            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + level + " [" + ThreadName() + "] " + caller + ": " + Format(template, args);
+            return caller + ": " + Format(template, args);
         }
 
         private static string Format(string template, object[] args)
