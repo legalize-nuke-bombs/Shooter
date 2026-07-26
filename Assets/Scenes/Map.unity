@@ -651,6 +651,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   corpse: {fileID: 6108037598719724321, guid: dba187afb26374400bd1ba8b38212115, type: 3}
   items: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
+  sounds: {fileID: 11400000, guid: 2656eaa17af145fd9e66f3e31217db62, type: 2}
 --- !u!1 &1811023382
 GameObject:
   m_ObjectHideFlags: 0
