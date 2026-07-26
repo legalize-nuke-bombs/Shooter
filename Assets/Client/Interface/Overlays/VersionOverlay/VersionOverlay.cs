@@ -7,12 +7,11 @@ namespace Shooter.Client.Interface.Overlays
 {
     public class VersionOverlay : Overlay
     {
-        private const string ClientElement = "client-version";
-        private const string ServerElement = "server-version";
-        private const string Disconnected = "Сервер — не подключён";
+        private const string VersionElement = "version";
+        private const string Disconnected = "не подключён";
         private const string NamelessWorld = "мир без имени";
 
-        private Label server;
+        private Label version;
         private bool connected;
 
         private void Update()
@@ -25,37 +24,39 @@ namespace Shooter.Client.Interface.Overlays
             if (present == connected) return;
 
             connected = present;
-            server.text = present ? Describe(environment) : Disconnected;
+            version.text = Describe(environment);
         }
 
         protected override bool Bind(VisualElement root)
         {
-            Label client = root.Q<Label>(ClientElement);
-            server = root.Q<Label>(ServerElement);
+            version = root.Q<Label>(VersionElement);
             connected = false;
 
-            if (client == null || server == null)
+            if (version == null)
             {
-                Log.Error("Overlay document has no {} or {} label, versions stay hidden", ClientElement, ServerElement);
+                Log.Error("Overlay document has no {} label, versions stay hidden", VersionElement);
                 return false;
             }
 
-            client.text = "Клиент " + Application.version;
-            server.text = Disconnected;
+            version.text = Describe(null);
 
             return true;
         }
 
         protected override void Unbind()
         {
-            server = null;
+            version = null;
         }
 
         private static string Describe(Environment environment)
         {
-            string world = string.IsNullOrEmpty(environment.World) ? NamelessWorld : environment.World;
+            if (environment == null) return Application.version + " " + Disconnected;
 
-            return "Сервер " + environment.Version + " — " + world;
+            string world = string.IsNullOrEmpty(environment.World) ? NamelessWorld : environment.World;
+            bool same = environment.Version == Application.version;
+            string versions = same ? Application.version : Application.version + " (сервер " + environment.Version + ")";
+
+            return versions + " " + world;
         }
     }
 }
