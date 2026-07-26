@@ -1,4 +1,5 @@
 using Shooter.Logging;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -20,15 +21,15 @@ namespace Shooter.Game.Body.Sounding
             source = GetComponent<AudioSource>();
         }
 
-        public void Play(SoundType sound)
+        public void Play(SoundSpec sound)
         {
-            if (!IsServer) return;
+            if (!IsServer || sound == null) return;
 
-            PlayRpc(sound);
+            PlayRpc(sound.Id);
         }
 
         [Rpc(SendTo.Everyone)]
-        private void PlayRpc(SoundType sound)
+        private void PlayRpc(FixedString32Bytes id)
         {
             SoundCatalog catalog = Voice;
             if (catalog == null)
@@ -37,10 +38,10 @@ namespace Shooter.Game.Body.Sounding
                 return;
             }
 
-            AudioClip clip = catalog.Clip(sound);
-            if (clip == null) return;
+            SoundSpec sound = catalog.Of(id);
+            if (sound == null || sound.Clip == null) return;
 
-            source.PlayOneShot(clip);
+            source.PlayOneShot(sound.Clip);
         }
     }
 }

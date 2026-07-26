@@ -1,0 +1,53 @@
+using System.Collections.Generic;
+using Shooter.Logging;
+using Unity.Collections;
+using UnityEngine;
+
+namespace Shooter.Game
+{
+    public abstract class Catalog<TSpec> : ScriptableObject where TSpec : Spec
+    {
+        [SerializeField] private TSpec[] specs;
+
+        private readonly Dictionary<FixedString32Bytes, TSpec> known = new Dictionary<FixedString32Bytes, TSpec>();
+        private readonly HashSet<FixedString32Bytes> unknown = new HashSet<FixedString32Bytes>();
+
+        public TSpec Of(FixedString32Bytes id)
+        {
+            if (known.TryGetValue(id, out TSpec spec)) return spec;
+
+            if (unknown.Add(id)) Log.Warn("Catalog {} has nothing under id {}", name, id);
+
+            return null;
+        }
+
+        private void OnEnable()
+        {
+            known.Clear();
+            unknown.Clear();
+
+            if (specs == null) return;
+
+            foreach (TSpec spec in specs)
+            {
+                if (spec == null) continue;
+
+                if (!spec.Fits())
+                {
+                    Log.Error("Catalog {} skips {}: its id does not fit the network format", name, spec.name);
+                    continue;
+                }
+
+                if (known.TryGetValue(spec.Id, out TSpec taken))
+                {
+                    Log.Error("Catalog {} holds both {} and {} under id {}", name, taken.name, spec.name, spec.Key);
+                    continue;
+                }
+
+                known.Add(spec.Id, spec);
+            }
+
+            Log.Info("Catalog {} knows {} things", name, known.Count);
+        }
+    }
+}

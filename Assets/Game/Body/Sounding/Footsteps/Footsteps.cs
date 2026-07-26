@@ -9,6 +9,8 @@ namespace Shooter.Game.Body.Sounding
     {
         [SerializeField] private float strideLength = 2f;
 
+        [SerializeField] private SoundSpec sound;
+
         private Movement movement;
         private Speaker speaker;
         private float stride;
@@ -39,7 +41,7 @@ namespace Shooter.Game.Body.Sounding
             if (stride < strideLength) return;
 
             stride -= strideLength;
-            speaker.Play(SoundType.Footsteps);
+            speaker.Play(sound);
         }
     }
 }
