@@ -96,9 +96,6 @@ namespace Shooter.Client.Overlays
             speaker.text = Named(talkerId);
             window.style.display = DisplayStyle.Flex;
 
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            if (player != null) player.Captured = true;
-
             input.Focus();
             Log.Info("Talk window opened with {}", speaker.text);
         }
@@ -121,9 +118,6 @@ namespace Shooter.Client.Overlays
             log.Clear();
             Wait(false);
             input.value = string.Empty;
-
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            if (player != null) player.Captured = false;
 
             Log.Info("Talk window closed");
         }
