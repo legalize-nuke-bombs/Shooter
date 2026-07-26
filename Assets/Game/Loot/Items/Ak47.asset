@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510036f5663b74a93925668716c94f23, type: 3}
   m_Name: Ak47
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.FirearmSpec
-  type: 2
+  id: ak47
+  title: "\u0410\u041A-47"
   promptName: AK-47
   stackable: 0
   equipable: 1
   magazineSize: 30
-  ammoType: 1
+  ammo: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
   distance: 100
   damage: 25
   fireInterval: 0.1

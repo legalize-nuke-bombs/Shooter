@@ -5,6 +5,7 @@
         "Shooter.Logging",
         "Shooter.Game",
         "Unity.Netcode.Runtime",
+        "Unity.Collections",
         "Unity.InputSystem"
     ],
     "includePlatforms": [],
