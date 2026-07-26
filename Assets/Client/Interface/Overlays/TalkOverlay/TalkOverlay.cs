@@ -9,8 +9,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
 {
-    [RequireComponent(typeof(PanelRenderer))]
-    public class TalkOverlay : MonoBehaviour
+    public class TalkOverlay : Overlay
     {
         private const string WindowElement = "talk";
         private const string NameElement = "talk-name";
@@ -21,7 +20,6 @@ namespace Shooter.Client.Interface.Overlays
 
         [SerializeField] private NameCatalog names;
 
-        private PanelRenderer panel;
         private VisualElement window;
         private Label speaker;
         private ScrollView log;
@@ -30,22 +28,9 @@ namespace Shooter.Client.Interface.Overlays
         private NameMapper mapper;
         private Mouth mouth;
 
-        private void OnEnable()
-        {
-            panel = GetComponent<PanelRenderer>();
-            panel.RegisterUIReloadCallback(Bind);
-        }
-
-        private void OnDisable()
-        {
-            panel.UnregisterUIReloadCallback(Bind);
-            Forget();
-            window = null;
-        }
-
         private void Update()
         {
-            if (window == null) return;
+            if (!Bound) return;
 
             Mouth own = OwnPlayer.Find<Mouth>();
             if (own == mouth) return;
@@ -60,7 +45,7 @@ namespace Shooter.Client.Interface.Overlays
             mouth.Closed += Close;
         }
 
-        private void Bind(PanelRenderer renderer, VisualElement root)
+        protected override bool Bind(VisualElement root)
         {
             window = root.Q<VisualElement>(WindowElement);
             speaker = root.Q<Label>(NameElement);
@@ -71,21 +56,27 @@ namespace Shooter.Client.Interface.Overlays
             if (window == null || speaker == null || log == null || waiting == null || input == null)
             {
                 Log.Error("Overlay document has no {} window, talks stay invisible", WindowElement);
-                window = null;
-                return;
+                return false;
             }
 
             if (names == null)
             {
                 Log.Error("Talk overlay has no name catalog, talks stay invisible");
-                window = null;
-                return;
+                return false;
             }
 
             mapper = new NameMapper(names);
             input.maxLength = Talker.SpeechLimit;
             input.RegisterCallback<KeyDownEvent>(Typed);
             window.style.display = DisplayStyle.None;
+
+            return true;
+        }
+
+        protected override void Unbind()
+        {
+            Forget();
+            window = null;
         }
 
         private void Open(ulong talkerId)

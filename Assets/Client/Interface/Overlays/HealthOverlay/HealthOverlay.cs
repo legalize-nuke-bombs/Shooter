@@ -6,35 +6,20 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
 {
-    [RequireComponent(typeof(PanelRenderer))]
-    public class HealthOverlay : MonoBehaviour
+    public class HealthOverlay : Overlay
     {
         private const string BarElement = "health";
         private const string FillElement = "health-fill";
         private const int Hidden = -1;
 
-        private PanelRenderer panel;
         private VisualElement bar;
         private VisualElement fill;
         private Health health;
         private int shown = Hidden;
 
-        private void OnEnable()
-        {
-            panel = GetComponent<PanelRenderer>();
-            panel.RegisterUIReloadCallback(Bind);
-        }
-
-        private void OnDisable()
-        {
-            panel.UnregisterUIReloadCallback(Bind);
-            bar = null;
-            fill = null;
-        }
-
         private void Update()
         {
-            if (bar == null) return;
+            if (!Bound) return;
 
             Health own = Own();
 
@@ -52,7 +37,7 @@ namespace Shooter.Client.Interface.Overlays
             fill.style.width = new Length(100f * hp / own.MaxHp, LengthUnit.Percent);
         }
 
-        private void Bind(PanelRenderer renderer, VisualElement root)
+        protected override bool Bind(VisualElement root)
         {
             bar = root.Q<VisualElement>(BarElement);
             fill = root.Q<VisualElement>(FillElement);
@@ -61,11 +46,18 @@ namespace Shooter.Client.Interface.Overlays
             if (bar == null || fill == null)
             {
                 Log.Error("Overlay document has no {} or {} element, health stays hidden", BarElement, FillElement);
-                bar = null;
-                return;
+                return false;
             }
 
             bar.style.display = DisplayStyle.None;
+
+            return true;
+        }
+
+        protected override void Unbind()
+        {
+            bar = null;
+            fill = null;
         }
 
         private void Hide()

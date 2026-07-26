@@ -6,8 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
 {
-    [RequireComponent(typeof(PanelRenderer))]
-    public class InventoryOverlay : MonoBehaviour
+    public class InventoryOverlay : Overlay
     {
         private const string WindowElement = "inventory";
         private const string SlotsElement = "inventory-slots";
@@ -15,7 +14,6 @@ namespace Shooter.Client.Interface.Overlays
 
         [SerializeField] private ItemNameCatalog names;
 
-        private PanelRenderer panel;
         private VisualElement window;
         private VisualElement rows;
         private Label empty;
@@ -23,24 +21,9 @@ namespace Shooter.Client.Interface.Overlays
         private bool open;
         private bool stale;
 
-        private void OnEnable()
-        {
-            panel = GetComponent<PanelRenderer>();
-            panel.RegisterUIReloadCallback(Bind);
-        }
-
-        private void OnDisable()
-        {
-            panel.UnregisterUIReloadCallback(Bind);
-
-            if (open) Close();
-
-            window = null;
-        }
-
         private void Update()
         {
-            if (window == null) return;
+            if (!Bound) return;
 
             LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
             bool wanted = player != null && player.InventoryOpen;
@@ -56,10 +39,8 @@ namespace Shooter.Client.Interface.Overlays
             if (open && stale) Fill();
         }
 
-        private void Bind(PanelRenderer renderer, VisualElement root)
+        protected override bool Bind(VisualElement root)
         {
-            if (open) Close();
-
             window = root.Q<VisualElement>(WindowElement);
             rows = root.Q<VisualElement>(SlotsElement);
             empty = root.Q<Label>(EmptyElement);
@@ -67,18 +48,26 @@ namespace Shooter.Client.Interface.Overlays
             if (window == null || rows == null || empty == null)
             {
                 Log.Error("Overlay document has no {} window, the bag stays hidden", WindowElement);
-                window = null;
-                return;
+                return false;
             }
 
             if (names == null)
             {
                 Log.Error("Inventory overlay has no item name catalog, the bag stays hidden");
-                window = null;
-                return;
+                return false;
             }
 
             window.style.display = DisplayStyle.None;
+
+            return true;
+        }
+
+        protected override void Unbind()
+        {
+            if (open) Close();
+
+            open = false;
+            window = null;
         }
 
         private void Open()
