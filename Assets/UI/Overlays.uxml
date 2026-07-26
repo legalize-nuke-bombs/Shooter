@@ -9,5 +9,6 @@
         <ui:VisualElement name="time" class="corner corner--right" picking-mode="Ignore">
             <ui:Label name="clock" class="line" />
         </ui:VisualElement>
+        <ui:Label name="target-name" class="line target" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

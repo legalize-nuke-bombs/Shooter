@@ -22,3 +22,13 @@
     color: rgb(255, 255, 255);
     font-size: 14px;
 }
+
+.target {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-top: 24px;
+    font-size: 15px;
+    -unity-text-align: middle-center;
+}

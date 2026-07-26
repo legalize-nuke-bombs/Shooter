@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1727842198676947517}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.15297127, y: 0, z: -0.36959076}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 2642257969760791537}
   - component: {fileID: 4957635887391225908}
   - component: {fileID: 2658346833551713148}
+  - component: {fileID: 6600000000000000103}
   m_Layer: 0
   m_Name: Corrupted
   m_TagString: Untagged
@@ -397,3 +398,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sounding.Footsteps
   ShowTopMostFoldoutHeaderGroup: 1
   strideLength: 2
+--- !u!114 &6600000000000000103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d5e5a11aa5364648afceb32280ae013, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  type: 2
