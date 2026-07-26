@@ -1,11 +1,11 @@
-using Unity.Netcode;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using Shooter.Game.Body.Sleeping;
 using Shooter.Game.Body;
+using Shooter.Game.Body.Sleeping;
 using Shooter.Game.Combat;
 using Shooter.Game.Speech;
 using Shooter.Logging;
+using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Shooter.Client.Playing
 {

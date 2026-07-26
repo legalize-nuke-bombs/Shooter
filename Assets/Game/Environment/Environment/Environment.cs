@@ -1,10 +1,10 @@
-using Unity.Collections;
-using Unity.Netcode;
-using UnityEngine;
 using Shooter.Configuring;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
 using Shooter.Logging;
+using Unity.Collections;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game
 {

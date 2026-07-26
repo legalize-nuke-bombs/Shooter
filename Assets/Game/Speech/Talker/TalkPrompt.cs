@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Unity.Netcode;
 using Shooter.Game.Body;
 using Shooter.Game.Llm;
+using Unity.Netcode;
 
 namespace Shooter.Game.Speech
 {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Text;
+using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Logging;
 
 namespace Shooter.Game.Body
 {

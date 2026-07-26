@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Unity.Netcode;
-using UnityEngine;
 using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Logging;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game.Llm
 {

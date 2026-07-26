@@ -1,10 +1,10 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 using Shooter.Client.Interface;
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
 using Shooter.Logging;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
 {

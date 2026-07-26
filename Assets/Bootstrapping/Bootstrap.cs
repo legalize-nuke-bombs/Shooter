@@ -1,13 +1,13 @@
 using System;
 using System.IO;
 using System.Text;
+using Shooter.Configuring;
+using Shooter.Logging;
 using Unity.Multiplayer;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Configuring;
-using Shooter.Logging;
 
 namespace Shooter.Bootstrapping
 {

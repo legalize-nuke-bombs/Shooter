@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Shooter.Game.Body;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Client.Interface
 {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using Shooter.Game.Body;
 using Shooter.Logging;
+using Unity.Netcode;
 
 namespace Shooter.Game.Speech
 {

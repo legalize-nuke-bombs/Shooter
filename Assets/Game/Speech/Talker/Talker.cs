@@ -3,11 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Shooter.Game.Body;
+using Shooter.Game.Body.Sleeping;
+using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Body.Sleeping;
-using Shooter.Game.Body;
-using Shooter.Logging;
 
 namespace Shooter.Game.Speech
 {

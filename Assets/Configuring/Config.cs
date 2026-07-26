@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using Newtonsoft.Json;
-using UnityEngine;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Configuring
 {

@@ -1,5 +1,5 @@
-using UnityEngine;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Client.Interface.Dreaming
 {

@@ -1,5 +1,5 @@
-using UnityEngine;
 using Shooter.Game.Body;
+using UnityEngine;
 
 namespace Shooter.Client.Interface.Naming
 {

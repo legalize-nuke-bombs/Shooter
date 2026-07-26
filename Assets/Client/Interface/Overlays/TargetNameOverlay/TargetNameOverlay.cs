@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEngine.UIElements;
 using Shooter.Client.Interface.Naming;
 using Shooter.Game.Body;
 using Shooter.Logging;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
 {
