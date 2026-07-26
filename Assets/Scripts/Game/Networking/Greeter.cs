@@ -11,7 +11,7 @@ namespace Shooter.Game.Networking
     public class Greeter : MonoBehaviour
     {
         private const int NameLimit = 24;
-        private const string Nameless = "Странник";
+        private const string Nameless = "Player";
 
         private readonly Dictionary<ulong, string> names = new Dictionary<ulong, string>();
 
