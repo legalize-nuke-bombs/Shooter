@@ -12,6 +12,8 @@ namespace Shooter.Game.Items
 
         [SerializeField] private ItemCatalog catalog;
 
+        [SerializeField] private Item[] contents;
+
         private readonly NetworkList<Item> slots = new NetworkList<Item>(
             null, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
 
@@ -31,6 +33,13 @@ namespace Shooter.Game.Items
         {
             slots.OnListChanged += Shifted;
             equipped.OnValueChanged += Swapped;
+
+            if (!IsServer || contents.Length == 0) return;
+
+            foreach (Item item in contents)
+                Add(item);
+
+            Log.Info("Entity {} starts with {} kinds of things in the bag", name, contents.Length);
         }
 
         public override void OnNetworkDespawn()
