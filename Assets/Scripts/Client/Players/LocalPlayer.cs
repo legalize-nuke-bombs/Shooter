@@ -31,26 +31,11 @@ namespace Shooter.Client.Players
         private Gunner gunner;
         private Controls controls;
         private bool captured;
+        private bool talking;
         private float pitch;
         private float yaw;
 
         public bool InventoryOpen { get; private set; }
-
-        public bool Captured
-        {
-            get => captured;
-            set
-            {
-                if (captured == value || controls == null) return;
-
-                captured = value;
-
-                if (value) Release();
-                else Grab();
-
-                Log.Info("Local player input is now {}", value ? "released to the interface" : "back on the player");
-            }
-        }
 
         private void Awake()
         {
@@ -82,6 +67,13 @@ namespace Shooter.Client.Players
             controls.Player.Inventory.performed += OpenBag;
             controls.UI.Inventory.performed += CloseBag;
             controls.UI.Cancel.performed += Escape;
+
+            if (mouth != null)
+            {
+                mouth.Opened += OpenTalk;
+                mouth.Closed += CloseTalk;
+            }
+
             Grab();
 
             NetworkManager.NetworkTickSystem.Tick += Send;
@@ -101,9 +93,17 @@ namespace Shooter.Client.Players
             controls.Player.Inventory.performed -= OpenBag;
             controls.UI.Inventory.performed -= CloseBag;
             controls.UI.Cancel.performed -= Escape;
+
+            if (mouth != null)
+            {
+                mouth.Opened -= OpenTalk;
+                mouth.Closed -= CloseTalk;
+            }
+
             controls.Dispose();
             controls = null;
             InventoryOpen = false;
+            talking = false;
 
             Cursor.lockState = CursorLockMode.None;
             Log.Info("Local player despawned");
@@ -123,6 +123,19 @@ namespace Shooter.Client.Players
         {
             view.transform.position = transform.position + Vector3.up * Interactor.EyeHeight;
             view.transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+        }
+
+        private void Capture()
+        {
+            bool wanted = InventoryOpen || talking;
+            if (captured == wanted || controls == null) return;
+
+            captured = wanted;
+
+            if (wanted) Release();
+            else Grab();
+
+            Log.Info("Local player input is now {}", wanted ? "released to the interface" : "back on the player");
         }
 
         private void Grab()
@@ -157,18 +170,30 @@ namespace Shooter.Client.Players
         private void OpenBag(InputAction.CallbackContext context)
         {
             InventoryOpen = true;
-            Captured = true;
+            Capture();
         }
 
         private void CloseBag(InputAction.CallbackContext context)
         {
             InventoryOpen = false;
-            Captured = false;
+            Capture();
+        }
+
+        private void OpenTalk(ulong talkerId)
+        {
+            talking = true;
+            Capture();
+        }
+
+        private void CloseTalk()
+        {
+            talking = false;
+            Capture();
         }
 
         private void Escape(InputAction.CallbackContext context)
         {
-            if (mouth != null && mouth.Interlocutor != 0)
+            if (talking)
             {
                 mouth.HangUpRpc();
                 return;
