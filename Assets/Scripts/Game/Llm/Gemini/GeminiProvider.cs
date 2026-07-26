@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using UnityEngine;
 using UnityEngine.Networking;
 using Shooter.Configuring;
-using Shooter.Logging;
 
 namespace Shooter.Game.Llm.Gemini
 {
-    public sealed class GeminiLlm : Llm
+    public sealed class GeminiProvider : ILlmProvider
     {
         private const string Host = "generativelanguage.googleapis.com";
         private const int TimeoutSeconds = 25;
@@ -26,10 +24,8 @@ namespace Shooter.Game.Llm.Gemini
             Converters = { new StringEnumConverter() }
         };
 
-        protected override async Task<LlmAnswer> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages)
+        public async Task<LlmAnswer> Request(LlmConfig llm, string systemPrompt, IReadOnlyList<LlmMessage> messages)
         {
-            LlmConfig llm = Config.Read<ServerConfig>(ServerConfig.FileName).Llm;
-
             if (string.IsNullOrEmpty(llm.Key))
             {
                 throw new InvalidOperationException($"Llm key is not set in {ServerConfig.FileName}");
@@ -50,7 +46,6 @@ namespace Shooter.Game.Llm.Gemini
             };
 
             var uri = new Uri($"https://{Host}/v1beta/models/{llm.Model}:generateContent");
-            Log.Info("Entity {} is asking {} for an answer", name, llm.Model);
 
             using (var webRequest = new UnityWebRequest(uri, "POST"))
             {
