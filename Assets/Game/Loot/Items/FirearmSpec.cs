@@ -12,9 +12,9 @@ namespace Shooter.Game.Loot
         [SerializeField] private int damage = 25;
         [SerializeField] private float fireInterval = 0.1f;
         [SerializeField] private float reloadTime = 2.5f;
-        [SerializeField] private SoundType shotSound = SoundType.Ak47Shot;
-        [SerializeField] private SoundType misfireSound = SoundType.Ak47Misfire;
-        [SerializeField] private SoundType reloadSound = SoundType.Ak47Reload;
+        [SerializeField] private SoundSpec shotSound;
+        [SerializeField] private SoundSpec misfireSound;
+        [SerializeField] private SoundSpec reloadSound;
 
         public int MagazineSize => Mathf.Max(magazineSize, 1);
 
@@ -28,10 +28,10 @@ namespace Shooter.Game.Loot
 
         public float ReloadTime => reloadTime;
 
-        public SoundType ShotSound => shotSound;
+        public SoundSpec ShotSound => shotSound;
 
-        public SoundType MisfireSound => misfireSound;
+        public SoundSpec MisfireSound => misfireSound;
 
-        public SoundType ReloadSound => reloadSound;
+        public SoundSpec ReloadSound => reloadSound;
     }
 }

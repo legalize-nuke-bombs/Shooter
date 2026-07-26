@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sounding.Speaker
   ShowTopMostFoldoutHeaderGroup: 1
-  voices: []
+  voice: {fileID: 0}
 --- !u!114 &8840261867561332656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,6 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sounding.Footsteps
   ShowTopMostFoldoutHeaderGroup: 1
   strideLength: 2
+  sound: {fileID: 11400000, guid: 6e4362098586bde360868d1e2be58ac8, type: 2}
 --- !u!114 &-7249333409862263395
 MonoBehaviour:
   m_ObjectHideFlags: 0
