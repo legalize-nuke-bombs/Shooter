@@ -1,6 +1,8 @@
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Holding;
 using Shooter.Game.Interacting;
+using Shooter.Game.Vitals;
 using Shooter.Logging;
 
 namespace Shooter.Game.Sleeping
@@ -12,8 +14,8 @@ namespace Shooter.Game.Sleeping
             var sleeper = user.GetComponent<Sleeper>();
             if (sleeper == null) return;
 
-            var health = user.GetComponent<Health.Health>();
-            var hands = user.GetComponent<Hands.Hands>();
+            var health = user.GetComponent<Health>();
+            var hands = user.GetComponent<Hands>();
 
             bool alive = health == null || health.Alive;
             bool handsFree = hands == null || hands.Free;

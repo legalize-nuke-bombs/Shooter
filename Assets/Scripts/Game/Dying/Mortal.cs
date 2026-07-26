@@ -1,7 +1,9 @@
 using Unity.Netcode;
 using UnityEngine;
 using Shooter.Game.Items;
+using Shooter.Game.Moving;
 using Shooter.Game.Sleeping;
+using Shooter.Game.Vitals;
 using Shooter.Logging;
 
 namespace Shooter.Game.Dying
@@ -10,14 +12,14 @@ namespace Shooter.Game.Dying
     {
         [SerializeField] private GameObject corpsePrefab;
 
-        private Health.Health health;
-        private Movement.Movement movement;
+        private Health health;
+        private Movement movement;
         private Sleeper sleeper;
 
         private void Awake()
         {
-            health = GetComponent<Health.Health>();
-            movement = GetComponent<Movement.Movement>();
+            health = GetComponent<Health>();
+            movement = GetComponent<Movement>();
             sleeper = GetComponent<Sleeper>();
         }
 

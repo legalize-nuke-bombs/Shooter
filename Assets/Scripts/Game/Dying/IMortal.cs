@@ -1,4 +1,4 @@
-namespace Shooter.Game
+namespace Shooter.Game.Dying
 {
     public interface IMortal
     {

@@ -1,7 +1,10 @@
 using Unity.Netcode;
+using Shooter.Game.Digesting;
+using Shooter.Game.Dying;
+using Shooter.Game.Restraining;
 using Shooter.Logging;
 
-namespace Shooter.Game.Health
+namespace Shooter.Game.Vitals
 {
     public abstract class Health : NetworkBehaviour, IDigestible, IRestraint
     {

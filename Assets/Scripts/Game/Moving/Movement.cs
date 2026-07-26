@@ -1,7 +1,8 @@
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Restraining;
 
-namespace Shooter.Game.Movement
+namespace Shooter.Game.Moving
 {
     [RequireComponent(typeof(CharacterController))]
     public class Movement : NetworkBehaviour

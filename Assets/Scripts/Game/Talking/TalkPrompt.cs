@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Unity.Netcode;
+using Shooter.Game.Digesting;
 using Shooter.Game.Llm;
 
 namespace Shooter.Game.Talking

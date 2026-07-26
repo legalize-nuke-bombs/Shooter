@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using Shooter.Game.Interacting;
+using Shooter.Game.Restraining;
 using Shooter.Game.Sleeping;
+using Shooter.Game.Vitals;
 using Shooter.Logging;
 
 namespace Shooter.Game.Talking
@@ -226,7 +228,7 @@ namespace Shooter.Game.Talking
 
         private static bool Alive(NetworkObject entity)
         {
-            var health = entity.GetComponent<Health.Health>();
+            var health = entity.GetComponent<Health>();
             return health != null && health.Alive;
         }
 

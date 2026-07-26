@@ -1,23 +1,24 @@
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Moving;
 using Shooter.Logging;
 
 namespace Shooter.Game.Interacting
 {
-    [RequireComponent(typeof(Movement.Movement))]
+    [RequireComponent(typeof(Movement))]
     public class Interactor : NetworkBehaviour
     {
         public const float EyeHeight = 0.75f;
 
         [SerializeField] private float reach = 3f;
 
-        private Movement.Movement movement;
+        private Movement movement;
 
         public Vector3 Eyes => transform.position + Vector3.up * EyeHeight;
 
         private void Awake()
         {
-            movement = GetComponent<Movement.Movement>();
+            movement = GetComponent<Movement>();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

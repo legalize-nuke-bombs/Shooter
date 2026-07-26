@@ -1,4 +1,4 @@
-namespace Shooter.Game.Time
+namespace Shooter.Game.Timing
 {
     public static class DayCycle
     {
