@@ -14,9 +14,19 @@ namespace Shooter.Editing
         private static void Stop(PlayModeStateChange state)
         {
             if (state != PlayModeStateChange.ExitingPlayMode) return;
-            if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening) return;
 
-            NetworkManager.Singleton.Shutdown();
+            NetworkManager network = NetworkManager.Singleton;
+            if (network == null) return;
+
+            try
+            {
+                if (network.IsListening) network.Shutdown();
+            }
+            finally
+            {
+                NetworkTransport transport = network.NetworkConfig == null ? null : network.NetworkConfig.NetworkTransport;
+                if (transport != null) transport.Shutdown();
+            }
         }
     }
 }
