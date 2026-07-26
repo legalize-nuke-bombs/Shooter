@@ -6,5 +6,10 @@ namespace Shooter.Game.Sleeping
         {
             return alive && handsFree && night;
         }
+
+        public static bool CanWake(bool worldAsleep)
+        {
+            return !worldAsleep;
+        }
     }
 }
