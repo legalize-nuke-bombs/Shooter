@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Shooter.Game.Naming
 {
-    public sealed class KindName : Nameable
+    public sealed class TypedNameable : Nameable
     {
-        [SerializeField] private NameKind kind;
+        [SerializeField] private NameableType type;
 
-        public NameKind Kind => kind;
+        public NameableType Type => type;
 
         public override string Digest()
         {

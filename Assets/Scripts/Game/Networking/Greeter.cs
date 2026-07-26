@@ -58,7 +58,7 @@ namespace Shooter.Game.Networking
             }
 
             string name = names.TryGetValue(client, out string known) ? known : Nameless;
-            connected.PlayerObject.GetComponent<GivenName>()?.Give(name);
+            connected.PlayerObject.GetComponent<AbsoluteNameable>()?.Rename(name);
             connected.PlayerObject.name = name;
 
             Log.Info("Client {} entered the world as {}, players online {}", client, name, network.ConnectedClients.Count);
