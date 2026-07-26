@@ -10,5 +10,9 @@
             <ui:Label name="clock" class="line" />
         </ui:VisualElement>
         <ui:Label name="target-name" class="line target" picking-mode="Ignore" />
+        <ui:VisualElement name="crosshair" class="crosshair" picking-mode="Ignore" />
+        <ui:VisualElement name="health" class="bar" picking-mode="Ignore">
+            <ui:VisualElement name="health-fill" class="bar__fill" picking-mode="Ignore" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
