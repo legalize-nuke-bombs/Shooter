@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Unity.Netcode;
-using Shooter.Game.Digesting;
+using Shooter.Game.Body;
 using Shooter.Game.Llm;
 
-namespace Shooter.Game.Talking
+namespace Shooter.Game.Speech
 {
     public static class TalkPrompt
     {

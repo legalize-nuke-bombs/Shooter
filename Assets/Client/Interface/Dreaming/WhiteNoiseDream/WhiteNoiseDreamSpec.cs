@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Shooter.Client.Dreaming
+namespace Shooter.Client.Interface.Dreaming
 {
     [CreateAssetMenu(menuName = "Shooter/Dreams/White Noise", fileName = "WhiteNoise")]
     public sealed class WhiteNoiseDreamSpec : DreamSpec

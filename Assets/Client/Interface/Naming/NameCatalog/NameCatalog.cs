@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Shooter.Game.Naming;
+using Shooter.Game.Body;
 using Shooter.Logging;
 
-namespace Shooter.Client.Naming
+namespace Shooter.Client.Interface.Naming
 {
     [CreateAssetMenu(menuName = "Shooter/Name Catalog", fileName = "NameCatalog")]
     public sealed class NameCatalog : ScriptableObject

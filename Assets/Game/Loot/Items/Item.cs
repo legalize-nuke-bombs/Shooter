@@ -1,7 +1,7 @@
 using System;
 using Unity.Netcode;
 
-namespace Shooter.Game.Items
+namespace Shooter.Game.Loot
 {
     [Serializable]
     public struct Item : INetworkSerializable, IEquatable<Item>

@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 using Shooter.Game;
 using Shooter.Logging;
 
-namespace Shooter.Client.Overlays
+namespace Shooter.Client.Interface.Overlays
 {
     [RequireComponent(typeof(PanelRenderer))]
     public class VersionOverlay : MonoBehaviour

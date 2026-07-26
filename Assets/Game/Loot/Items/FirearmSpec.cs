@@ -1,7 +1,7 @@
 using UnityEngine;
-using Shooter.Game.Sounding;
+using Shooter.Game.Body.Sounding;
 
-namespace Shooter.Game.Items
+namespace Shooter.Game.Loot
 {
     [CreateAssetMenu(menuName = "Shooter/Firearm", fileName = "Firearm")]
     public class FirearmSpec : ItemSpec

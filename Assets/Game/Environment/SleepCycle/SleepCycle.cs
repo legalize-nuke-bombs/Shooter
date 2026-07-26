@@ -1,8 +1,8 @@
 using Unity.Netcode;
-using Shooter.Game.Timing;
+using Shooter.Game.Body.Sleeping;
 using Shooter.Logging;
 
-namespace Shooter.Game.Sleeping
+namespace Shooter.Game
 {
     public class SleepCycle : NetworkBehaviour
     {

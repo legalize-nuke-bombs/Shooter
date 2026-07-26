@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Client.Aiming
+namespace Shooter.Client.Interface
 {
     public sealed class Aimer : MonoBehaviour
     {

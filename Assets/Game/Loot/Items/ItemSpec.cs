@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Game.Items
+namespace Shooter.Game.Loot
 {
     [CreateAssetMenu(menuName = "Shooter/Item", fileName = "Item")]
     public class ItemSpec : ScriptableObject

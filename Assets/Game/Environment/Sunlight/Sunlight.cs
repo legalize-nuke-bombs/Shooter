@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Game.Lighting
+namespace Shooter.Game
 {
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour

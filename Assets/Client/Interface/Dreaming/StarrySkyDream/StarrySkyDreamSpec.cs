@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Shooter.Client.Dreaming
+namespace Shooter.Client.Interface.Dreaming
 {
     [CreateAssetMenu(menuName = "Shooter/Dreams/Starry Sky", fileName = "StarrySky")]
     public sealed class StarrySkyDreamSpec : DreamSpec

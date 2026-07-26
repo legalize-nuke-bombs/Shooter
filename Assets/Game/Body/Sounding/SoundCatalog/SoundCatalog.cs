@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Shooter.Logging;
 
-namespace Shooter.Game.Sounding
+namespace Shooter.Game.Body.Sounding
 {
     [CreateAssetMenu(menuName = "Shooter/Sound Catalog", fileName = "SoundCatalog")]
     public class SoundCatalog : ScriptableObject

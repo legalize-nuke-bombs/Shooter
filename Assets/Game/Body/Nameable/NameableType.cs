@@ -1,4 +1,4 @@
-namespace Shooter.Game.Naming
+namespace Shooter.Game.Body
 {
     public enum NameableType
     {

@@ -1,10 +1,11 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Digesting;
+using Shooter.Game.Body;
+using Shooter.Game;
 using Shooter.Logging;
 
-namespace Shooter.Game.Items
+namespace Shooter.Game.Loot
 {
     public class Inventory : NetworkBehaviour, IDigestible
     {

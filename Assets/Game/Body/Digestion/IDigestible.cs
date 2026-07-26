@@ -1,4 +1,4 @@
-namespace Shooter.Game.Digesting
+namespace Shooter.Game.Body
 {
     public interface IDigestible
     {

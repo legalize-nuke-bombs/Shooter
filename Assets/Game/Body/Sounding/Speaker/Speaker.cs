@@ -1,8 +1,9 @@
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game;
 using Shooter.Logging;
 
-namespace Shooter.Game.Sounding
+namespace Shooter.Game.Body.Sounding
 {
     [RequireComponent(typeof(AudioSource))]
     public class Speaker : NetworkBehaviour

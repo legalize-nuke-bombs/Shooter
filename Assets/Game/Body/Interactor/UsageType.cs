@@ -1,4 +1,4 @@
-namespace Shooter.Game.Interacting
+namespace Shooter.Game.Body
 {
     public enum UsageType
     {

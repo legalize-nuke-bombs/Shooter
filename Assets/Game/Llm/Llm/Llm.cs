@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using Shooter.Configuring;
-using Shooter.Game.Digesting;
+using Shooter.Game.Body;
+using Shooter.Game.Speech;
+using Shooter.Game;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm

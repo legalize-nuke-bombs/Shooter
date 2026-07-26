@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Shooter.Game.Digesting
+namespace Shooter.Game.Body
 {
     public static class Digestion
     {

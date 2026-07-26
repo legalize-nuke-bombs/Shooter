@@ -1,7 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using Shooter.Game.Llm;
 
-namespace Shooter.Game.Talking
+namespace Shooter.Game.Speech
 {
     public sealed class AITalker : Talker
     {

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Shooter.Game.Interacting;
+using Shooter.Game.Body;
 using Shooter.Logging;
 
-namespace Shooter.Client.Hinting
+namespace Shooter.Client.Interface
 {
     [CreateAssetMenu(menuName = "Shooter/Hint Catalog", fileName = "HintCatalog")]
     public sealed class HintCatalog : ScriptableObject

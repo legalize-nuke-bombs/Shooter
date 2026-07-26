@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Client.Items;
-using Shooter.Client.Players;
-using Shooter.Game.Items;
+using Shooter.Client.Interface;
+using Shooter.Client.Playing;
+using Shooter.Game.Loot;
 using Shooter.Logging;
 
-namespace Shooter.Client.Overlays
+namespace Shooter.Client.Interface.Overlays
 {
     [RequireComponent(typeof(PanelRenderer))]
     public class InventoryOverlay : MonoBehaviour

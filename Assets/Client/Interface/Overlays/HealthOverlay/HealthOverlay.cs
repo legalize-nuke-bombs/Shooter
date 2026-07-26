@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Client.Players;
-using Shooter.Game.Vitals;
+using Shooter.Client.Playing;
+using Shooter.Game.Body;
 using Shooter.Logging;
 
-namespace Shooter.Client.Overlays
+namespace Shooter.Client.Interface.Overlays
 {
     [RequireComponent(typeof(PanelRenderer))]
     public class HealthOverlay : MonoBehaviour

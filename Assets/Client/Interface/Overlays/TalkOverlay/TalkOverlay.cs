@@ -1,13 +1,13 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Client.Naming;
-using Shooter.Client.Players;
-using Shooter.Game.Naming;
-using Shooter.Game.Talking;
+using Shooter.Client.Interface.Naming;
+using Shooter.Client.Playing;
+using Shooter.Game.Body;
+using Shooter.Game.Speech;
 using Shooter.Logging;
 
-namespace Shooter.Client.Overlays
+namespace Shooter.Client.Interface.Overlays
 {
     [RequireComponent(typeof(PanelRenderer))]
     public class TalkOverlay : MonoBehaviour

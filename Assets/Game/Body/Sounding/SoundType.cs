@@ -1,4 +1,4 @@
-namespace Shooter.Game.Sounding
+namespace Shooter.Game.Body.Sounding
 {
     public enum SoundType
     {

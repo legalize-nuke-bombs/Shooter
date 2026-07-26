@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Shooter.Client.Players
+namespace Shooter.Client.Playing
 {
     public static class OwnPlayer
     {

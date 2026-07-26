@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Shooter.Logging;
 
-namespace Shooter.Game.Items
+namespace Shooter.Game.Loot
 {
     [CreateAssetMenu(menuName = "Shooter/Item Catalog", fileName = "ItemCatalog")]
     public class ItemCatalog : ScriptableObject

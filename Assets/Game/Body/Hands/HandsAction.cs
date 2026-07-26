@@ -1,4 +1,4 @@
-namespace Shooter.Game.Holding
+namespace Shooter.Game.Body
 {
     public enum HandsAction
     {

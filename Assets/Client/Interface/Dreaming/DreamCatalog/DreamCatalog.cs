@@ -1,7 +1,7 @@
 using UnityEngine;
 using Shooter.Logging;
 
-namespace Shooter.Client.Dreaming
+namespace Shooter.Client.Interface.Dreaming
 {
     [CreateAssetMenu(menuName = "Shooter/Dream Catalog", fileName = "DreamCatalog")]
     public sealed class DreamCatalog : ScriptableObject

@@ -1,14 +1,11 @@
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Holding;
-using Shooter.Game.Interacting;
-using Shooter.Game.Items;
-using Shooter.Game.Restraining;
-using Shooter.Game.Sounding;
-using Shooter.Game.Vitals;
+using Shooter.Game.Body.Sounding;
+using Shooter.Game.Body;
+using Shooter.Game.Loot;
 using Shooter.Logging;
 
-namespace Shooter.Game.Shooting
+namespace Shooter.Game.Combat
 {
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Interactor))]

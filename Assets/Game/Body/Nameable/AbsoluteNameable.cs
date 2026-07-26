@@ -2,7 +2,7 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Shooter.Game.Naming
+namespace Shooter.Game.Body
 {
     public sealed class AbsoluteNameable : Nameable
     {
