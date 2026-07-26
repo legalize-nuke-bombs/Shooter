@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Shooter.Client.Controlling;
 using Shooter.Game.Dying;
 using Shooter.Game.Interacting;
 using Shooter.Game.Moving;
@@ -26,10 +27,26 @@ namespace Shooter.Client.Players
         private Health health;
         private Mortal mortal;
         private Gunner gunner;
+        private Controls controls;
+        private bool captured;
         private float pitch;
         private float yaw;
 
-        public bool Captured { get; set; }
+        public bool Captured
+        {
+            get => captured;
+            set
+            {
+                if (captured == value || controls == null) return;
+
+                captured = value;
+
+                if (value) Release();
+                else Grab();
+
+                Log.Info("Local player input is now {}", value ? "released to the interface" : "back on the player");
+            }
+        }
 
         private void Awake()
         {
@@ -51,7 +68,14 @@ namespace Shooter.Client.Players
             }
 
             yaw = transform.eulerAngles.y;
-            Cursor.lockState = CursorLockMode.Locked;
+
+            controls = new Controls();
+            controls.Player.Jump.performed += Jump;
+            controls.Player.Attack.performed += Fire;
+            controls.Player.Reload.performed += Reload;
+            controls.Player.Interact.performed += Use;
+            Grab();
+
             NetworkManager.NetworkTickSystem.Tick += Send;
             Log.Info("Local player spawned as network object {} owned by client {}", NetworkObjectId, OwnerClientId);
         }
@@ -60,17 +84,27 @@ namespace Shooter.Client.Players
         {
             if (!IsOwner) return;
 
-            Cursor.lockState = CursorLockMode.None;
             NetworkManager.NetworkTickSystem.Tick -= Send;
+
+            controls.Player.Jump.performed -= Jump;
+            controls.Player.Attack.performed -= Fire;
+            controls.Player.Reload.performed -= Reload;
+            controls.Player.Interact.performed -= Use;
+            controls.Dispose();
+            controls = null;
+
+            Cursor.lockState = CursorLockMode.None;
             Log.Info("Local player despawned");
         }
 
         private void Update()
         {
-            if (Captured) return;
+            if (controls == null) return;
 
-            Look();
-            Act();
+            Vector2 delta = controls.Player.Look.ReadValue<Vector2>() * LookSensitivity;
+
+            yaw += delta.x;
+            pitch = Mathf.Clamp(pitch - delta.y, -MaxPitch, MaxPitch);
         }
 
         private void LateUpdate()
@@ -79,23 +113,37 @@ namespace Shooter.Client.Players
             view.transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
         }
 
-        private void Look()
+        private void Grab()
         {
-            Vector2 delta = Mouse.current.delta.ReadValue() * LookSensitivity;
-            yaw += delta.x;
-            pitch = Mathf.Clamp(pitch - delta.y, -MaxPitch, MaxPitch);
+            controls.UI.Disable();
+            controls.Player.Enable();
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
-        private void Act()
+        private void Release()
         {
-            Keyboard keyboard = Keyboard.current;
-            Mouse mouse = Mouse.current;
+            controls.Player.Disable();
+            controls.UI.Enable();
+            Cursor.lockState = CursorLockMode.None;
+        }
 
-            if (keyboard.spaceKey.wasPressedThisFrame) movement.JumpRpc();
-            if (mouse.leftButton.wasPressedThisFrame) gunner?.FireRpc();
-            if (keyboard.rKey.wasPressedThisFrame) gunner?.ReloadRpc();
-            if (!keyboard.eKey.wasPressedThisFrame) return;
+        private void Jump(InputAction.CallbackContext context)
+        {
+            movement.JumpRpc();
+        }
 
+        private void Fire(InputAction.CallbackContext context)
+        {
+            gunner?.FireRpc();
+        }
+
+        private void Reload(InputAction.CallbackContext context)
+        {
+            gunner?.ReloadRpc();
+        }
+
+        private void Use(InputAction.CallbackContext context)
+        {
             if (health != null && !health.Alive) mortal?.RiseRpc();
             else if (sleeper != null && sleeper.Sleeping) sleeper.WakeRpc();
             else interactor.UseRpc();
@@ -103,22 +151,10 @@ namespace Shooter.Client.Players
 
         private void Send()
         {
-            movement.SteerRpc(Move(), yaw, pitch, Sprinting(), NetworkManager.LocalTime.Tick);
-        }
+            Vector2 move = controls.Player.Move.ReadValue<Vector2>();
+            bool sprinting = controls.Player.Sprint.IsPressed();
 
-        private Vector2 Move()
-        {
-            if (Captured) return Vector2.zero;
-
-            Keyboard keyboard = Keyboard.current;
-            return new Vector2(
-                (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
-                (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f));
-        }
-
-        private bool Sprinting()
-        {
-            return !Captured && Keyboard.current.leftShiftKey.isPressed;
+            movement.SteerRpc(move, yaw, pitch, sprinting, NetworkManager.LocalTime.Tick);
         }
     }
 }
