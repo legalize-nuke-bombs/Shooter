@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using Shooter.Client.Interface.Naming;
-using Shooter.Client.Interface;
 using Shooter.Game.Body;
 using Shooter.Logging;
 

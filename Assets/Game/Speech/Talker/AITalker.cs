@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Shooter.Game.Llm;
 
 namespace Shooter.Game.Speech
 {

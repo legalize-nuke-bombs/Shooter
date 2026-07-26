@@ -14,8 +14,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
-using Shooter.Game.Loot;
-using Shooter.Logging;
 
 namespace Shooter.Client.Playing
 {

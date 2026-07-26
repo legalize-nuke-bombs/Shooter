@@ -4,9 +4,7 @@ using UnityEngine.InputSystem;
 using Shooter.Game.Body.Sleeping;
 using Shooter.Game.Body;
 using Shooter.Game.Combat;
-using Shooter.Game.Loot;
 using Shooter.Game.Speech;
-using Shooter.Game;
 using Shooter.Logging;
 
 namespace Shooter.Client.Playing

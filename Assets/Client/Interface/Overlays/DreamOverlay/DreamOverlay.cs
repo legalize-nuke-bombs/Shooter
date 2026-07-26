@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using Environment = Shooter.Game.Environment;
 using Shooter.Client.Interface.Dreaming;
 using Shooter.Logging;
-using Environment = Shooter.Game.Environment;
-using Shooter.Game;
 
 namespace Shooter.Client.Interface.Overlays
 {

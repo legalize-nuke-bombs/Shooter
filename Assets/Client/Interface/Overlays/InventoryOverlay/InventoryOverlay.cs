@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using Shooter.Client.Interface;
 using Shooter.Client.Playing;
 using Shooter.Game.Loot;
 using Shooter.Logging;

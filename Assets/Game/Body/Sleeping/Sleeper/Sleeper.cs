@@ -1,7 +1,5 @@
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Body;
-using Shooter.Game;
 using Shooter.Logging;
 
 namespace Shooter.Game.Body.Sleeping

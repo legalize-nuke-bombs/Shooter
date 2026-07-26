@@ -43,3 +43,7 @@ dotnet_naming_rule.private_fields_camel.severity = warning
 
 # Rider/ReSharper Unity: "expensive method invocation" в Update-хот-пасах — не подсвечивать
 resharper_unity_performance_critical_code_invocation_highlighting = none
+
+# Namespace до макрофичи или фичи, папка компонента сегмента не даёт: буквальное
+# соответствие пути кончается именем класса и ломает разрешение имён (CS0118)
+resharper_check_namespace_highlighting = none

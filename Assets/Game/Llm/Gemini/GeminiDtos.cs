@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Shooter.Game.Llm;
 
 namespace Shooter.Game.Llm.Gemini
 {
