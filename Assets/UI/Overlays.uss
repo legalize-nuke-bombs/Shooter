@@ -33,6 +33,17 @@
     -unity-text-align: middle-center;
 }
 
+.hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-top: 48px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    -unity-text-align: middle-center;
+}
+
 .crosshair {
     position: absolute;
     left: 50%;

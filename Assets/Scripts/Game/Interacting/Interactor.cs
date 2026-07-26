@@ -16,6 +16,8 @@ namespace Shooter.Game.Interacting
 
         public Vector3 Eyes => transform.position + Vector3.up * EyeHeight;
 
+        public float Reach => reach;
+
         private void Awake()
         {
             movement = GetComponent<Movement>();

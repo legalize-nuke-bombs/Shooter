@@ -1,6 +1,6 @@
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Shooter.Client.Players;
 using Shooter.Game.Vitals;
 using Shooter.Logging;
 
@@ -78,15 +78,8 @@ namespace Shooter.Client.Overlays
 
         private Health Own()
         {
-            if (health != null) return health;
+            if (health == null) health = OwnPlayer.Find<Health>();
 
-            NetworkManager network = NetworkManager.Singleton;
-            if (network == null || !network.IsListening || network.SpawnManager == null) return null;
-
-            NetworkObject player = network.SpawnManager.GetLocalPlayerObject();
-            if (player == null) return null;
-
-            health = player.GetComponent<Health>();
             return health;
         }
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using Shooter.Client.Aiming;
 using Shooter.Client.Naming;
 using Shooter.Game.Naming;
 using Shooter.Logging;
@@ -7,15 +8,15 @@ using Shooter.Logging;
 namespace Shooter.Client.Overlays
 {
     [RequireComponent(typeof(PanelRenderer))]
+    [RequireComponent(typeof(Aimer))]
     public class TargetNameOverlay : MonoBehaviour
     {
         private const string TargetElement = "target-name";
 
         [SerializeField] private NameCatalog names;
 
-        [SerializeField] private float reach = 10f;
-
         private PanelRenderer panel;
+        private Aimer aimer;
         private NameMapper mapper;
         private Label target;
         private string shown = string.Empty;
@@ -23,6 +24,7 @@ namespace Shooter.Client.Overlays
         private void OnEnable()
         {
             panel = GetComponent<PanelRenderer>();
+            aimer = GetComponent<Aimer>();
             panel.RegisterUIReloadCallback(Bind);
         }
 
@@ -69,11 +71,7 @@ namespace Shooter.Client.Overlays
 
         private Nameable Aimed()
         {
-            Camera view = Camera.main;
-            if (view == null) return null;
-
-            Transform eyes = view.transform;
-            if (!Physics.Raycast(eyes.position, eyes.forward, out RaycastHit hit, reach)) return null;
+            if (!aimer.TryHit(out RaycastHit hit)) return null;
             if (hit.collider == null) return null;
 
             return hit.collider.GetComponentInParent<Nameable>();

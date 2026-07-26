@@ -24,6 +24,8 @@ namespace Shooter.Game.Talking
         private readonly Dictionary<ulong, float> awaited = new Dictionary<ulong, float>();
         private readonly ConcurrentQueue<Reply> replies = new ConcurrentQueue<Reply>();
 
+        public UsageType Usage => UsageType.Talk;
+
         public bool Restrains => conversations.Values.Any(conversation => conversation.Open);
 
         public override void OnNetworkSpawn()
