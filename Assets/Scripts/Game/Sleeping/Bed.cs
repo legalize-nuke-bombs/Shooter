@@ -9,6 +9,8 @@ namespace Shooter.Game.Sleeping
 {
     public class Bed : MonoBehaviour, IUsable
     {
+        public UsageType Usage => UsageType.Sleep;
+
         public void Use(NetworkObject user)
         {
             var sleeper = user.GetComponent<Sleeper>();
