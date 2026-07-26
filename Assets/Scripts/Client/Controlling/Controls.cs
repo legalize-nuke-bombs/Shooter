@@ -605,7 +605,7 @@ namespace Shooter.Client.Controlling
                 {
                     ""name"": """",
                     ""id"": ""f54b0ae7-6022-4fc1-a85f-87d40eb1f698"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -1141,7 +1141,7 @@ namespace Shooter.Client.Controlling
                 {
                     ""name"": """",
                     ""id"": ""543aadc7-15d6-4983-b858-7bf218495cfe"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
