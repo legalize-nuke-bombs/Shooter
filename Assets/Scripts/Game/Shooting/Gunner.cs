@@ -12,7 +12,7 @@ namespace Shooter.Game.Shooting
 {
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Interactor))]
-    public class Shooter : NetworkBehaviour
+    public class Gunner : NetworkBehaviour
     {
         private Inventory inventory;
         private Interactor interactor;
