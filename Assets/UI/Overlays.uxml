@@ -6,9 +6,6 @@
             <ui:Label name="client-version" class="line" />
             <ui:Label name="server-version" class="line" />
         </ui:VisualElement>
-        <ui:VisualElement name="time" class="corner corner--right" picking-mode="Ignore">
-            <ui:Label name="clock" class="line" />
-        </ui:VisualElement>
         <ui:Label name="target-name" class="line target" picking-mode="Ignore" />
         <ui:Label name="hint" class="line hint" picking-mode="Ignore" />
         <ui:VisualElement name="crosshair" class="crosshair" picking-mode="Ignore" />
@@ -16,5 +13,8 @@
             <ui:VisualElement name="health-fill" class="bar__fill" picking-mode="Ignore" />
         </ui:VisualElement>
         <ui:VisualElement name="dream" class="dream" picking-mode="Ignore" />
+        <ui:VisualElement name="time" class="corner corner--right" picking-mode="Ignore">
+            <ui:Label name="clock" class="line" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
