@@ -4,6 +4,7 @@ using UnityEngine;
 using Shooter.Configuring;
 using Shooter.Game.Items;
 using Shooter.Game.Sleeping;
+using Shooter.Game.Sounding;
 using Shooter.Game.Timing;
 using Shooter.Logging;
 
@@ -19,6 +20,8 @@ namespace Shooter.Game
 
         [SerializeField] private ItemCatalog items;
 
+        [SerializeField] private SoundCatalog sounds;
+
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
@@ -29,6 +32,8 @@ namespace Shooter.Game
         public GameObject Corpse => corpse;
 
         public ItemCatalog Items => items;
+
+        public SoundCatalog Sounds => sounds;
 
         public string World => world.Value.ToString();
 
