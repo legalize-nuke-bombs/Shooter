@@ -7,7 +7,7 @@ namespace Shooter.Game
     {
         [SerializeField] private float azimuth = 170f;
 
-        [SerializeField] private float brightest = 1.4f;
+        [SerializeField] private float brightest = 120000f;
 
         private Light sun;
 
