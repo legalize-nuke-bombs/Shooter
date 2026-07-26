@@ -195,7 +195,14 @@ namespace Shooter.Client.Playing
                 return;
             }
 
-            if (InventoryOpen) CloseBag(context);
+            if (InventoryOpen)
+            {
+                CloseBag(context);
+                return;
+            }
+
+            Log.Info("Escape with nothing open, quitting the game");
+            Application.Quit();
         }
 
         private void Use(InputAction.CallbackContext context)
