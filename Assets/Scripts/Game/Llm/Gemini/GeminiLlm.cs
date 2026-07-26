@@ -8,6 +8,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.Networking;
+using Shooter.Game.Configuring;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm.Gemini
@@ -15,7 +16,6 @@ namespace Shooter.Game.Llm.Gemini
     public sealed class GeminiLlm : Llm
     {
         private const string Host = "generativelanguage.googleapis.com";
-        private const string KeyVariable = "GEMINI_API_KEY";
         private const int TimeoutSeconds = 25;
         private const int ExcerptLength = 300;
 
@@ -26,15 +26,13 @@ namespace Shooter.Game.Llm.Gemini
             Converters = { new StringEnumConverter() }
         };
 
-        [SerializeField] private string model = "gemini-3.5-flash-lite";
-
-        private readonly string apiKey = System.Environment.GetEnvironmentVariable(KeyVariable);
-
         protected override async Task<LlmAnswer> Request(string systemPrompt, IReadOnlyList<LlmMessage> messages)
         {
-            if (string.IsNullOrEmpty(apiKey))
+            LlmConfig llm = Config.Read<ServerConfig>(ServerConfig.FileName).Llm;
+
+            if (string.IsNullOrEmpty(llm.Key))
             {
-                throw new InvalidOperationException(KeyVariable + " environment variable is not set");
+                throw new InvalidOperationException($"Llm key is not set in {ServerConfig.FileName}");
             }
 
             var request = new GeminiRequest
@@ -51,8 +49,8 @@ namespace Shooter.Game.Llm.Gemini
                 }
             };
 
-            var uri = new Uri($"https://{Host}/v1beta/models/{model}:generateContent");
-            Log.Info("Entity {} is asking {} for an answer", name, model);
+            var uri = new Uri($"https://{Host}/v1beta/models/{llm.Model}:generateContent");
+            Log.Info("Entity {} is asking {} for an answer", name, llm.Model);
 
             using (var webRequest = new UnityWebRequest(uri, "POST"))
             {
@@ -60,7 +58,7 @@ namespace Shooter.Game.Llm.Gemini
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.timeout = TimeoutSeconds;
                 webRequest.SetRequestHeader("Content-Type", "application/json");
-                webRequest.SetRequestHeader("x-goog-api-key", apiKey);
+                webRequest.SetRequestHeader("x-goog-api-key", llm.Key);
 
                 await Completion(webRequest.SendWebRequest());
 

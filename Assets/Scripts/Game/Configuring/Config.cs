@@ -39,9 +39,10 @@ namespace Shooter.Game.Configuring
 
             try
             {
-                var config = JsonConvert.DeserializeObject<T>(File.ReadAllText(path), Settings);
+                var config = JsonConvert.DeserializeObject<T>(File.ReadAllText(path), Settings) ?? new T();
                 Log.Info("Config {} read", path);
-                return config ?? new T();
+                Write(path, config);
+                return config;
             }
             catch (Exception e)
             {
