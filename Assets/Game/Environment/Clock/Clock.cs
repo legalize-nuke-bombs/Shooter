@@ -5,9 +5,10 @@ namespace Shooter.Game
 {
     public class Clock : NetworkBehaviour
     {
+        public const double DawnFraction = 0.25;
+        public const double DuskFraction = 0.75;
+
         private const long DayLengthSeconds = 86400;
-        private const double DawnFraction = 0.25;
-        private const double DuskFraction = 0.75;
         private const float DayRealSeconds = 120f;
         private const float SyncInterval = 1f;
 
@@ -22,6 +23,8 @@ namespace Shooter.Game
         public double Timestamp => timestamp;
 
         public DateTimeOffset Now => Beginning.AddSeconds(timestamp);
+
+        public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
 
         public float Scale
         {
@@ -47,7 +50,7 @@ namespace Shooter.Game
 
         public bool IsNight()
         {
-            double fraction = Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
+            double fraction = DayFraction;
 
             return fraction >= DuskFraction || fraction < DawnFraction;
         }
