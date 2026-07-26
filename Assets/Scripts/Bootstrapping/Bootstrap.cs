@@ -72,6 +72,7 @@ namespace Shooter.Bootstrapping
             }
 
             if (network.IsClient) Overlay();
+            else Listen();
 
             if (!hosting)
             {
@@ -129,6 +130,14 @@ namespace Shooter.Bootstrapping
             overlay.name = OverlayPrefab;
             UnityEngine.Object.DontDestroyOnLoad(overlay);
             Log.Info("Overlays are up");
+        }
+
+        private static void Listen()
+        {
+            var listener = new GameObject(nameof(AudioListener));
+            listener.AddComponent<AudioListener>();
+            UnityEngine.Object.DontDestroyOnLoad(listener);
+            Log.Info("The server has no player cameras, so it carries its own audio listener");
         }
 
         private static NetworkManager Network()
