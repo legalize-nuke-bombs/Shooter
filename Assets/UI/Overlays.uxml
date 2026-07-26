@@ -15,7 +15,8 @@
         </ui:VisualElement>
         <ui:VisualElement name="talk" class="talk">
             <ui:Label name="talk-name" class="line talk__name" picking-mode="Ignore" />
-            <ui:VisualElement name="talk-log" class="talk__log" />
+            <ui:ScrollView name="talk-log" class="talk__log" />
+            <ui:Label name="talk-waiting" text="Думает..." class="line talk__waiting" picking-mode="Ignore" />
             <ui:TextField name="talk-input" class="talk__input" />
             <ui:Label text="Enter — сказать, Esc — уйти" class="line talk__help" picking-mode="Ignore" />
         </ui:VisualElement>

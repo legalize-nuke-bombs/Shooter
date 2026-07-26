@@ -15,6 +15,7 @@ namespace Shooter.Client.Overlays
         private const string WindowElement = "talk";
         private const string NameElement = "talk-name";
         private const string LogElement = "talk-log";
+        private const string WaitingElement = "talk-waiting";
         private const string InputElement = "talk-input";
         private const string Stranger = "Незнакомец";
 
@@ -23,7 +24,8 @@ namespace Shooter.Client.Overlays
         private PanelRenderer panel;
         private VisualElement window;
         private Label speaker;
-        private VisualElement log;
+        private ScrollView log;
+        private Label waiting;
         private TextField input;
         private NameMapper mapper;
         private Mouth mouth;
@@ -62,10 +64,11 @@ namespace Shooter.Client.Overlays
         {
             window = root.Q<VisualElement>(WindowElement);
             speaker = root.Q<Label>(NameElement);
-            log = root.Q<VisualElement>(LogElement);
+            log = root.Q<ScrollView>(LogElement);
+            waiting = root.Q<Label>(WaitingElement);
             input = root.Q<TextField>(InputElement);
 
-            if (window == null || speaker == null || log == null || input == null)
+            if (window == null || speaker == null || log == null || waiting == null || input == null)
             {
                 Log.Error("Overlay document has no {} window, talks stay invisible", WindowElement);
                 window = null;
@@ -88,6 +91,7 @@ namespace Shooter.Client.Overlays
         private void Open(ulong talkerId)
         {
             log.Clear();
+            Wait(false);
             input.value = string.Empty;
             speaker.text = Named(talkerId);
             window.style.display = DisplayStyle.Flex;
@@ -106,18 +110,27 @@ namespace Shooter.Client.Overlays
             if (mine) line.AddToClassList("talk__line--mine");
 
             log.Add(line);
+            log.schedule.Execute(() => log.ScrollTo(line));
+
+            Wait(mine);
         }
 
         private void Close()
         {
             window.style.display = DisplayStyle.None;
             log.Clear();
+            Wait(false);
             input.value = string.Empty;
 
             LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
             if (player != null) player.Captured = false;
 
             Log.Info("Talk window closed");
+        }
+
+        private void Wait(bool answering)
+        {
+            waiting.style.display = answering ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private void Typed(KeyDownEvent typed)
