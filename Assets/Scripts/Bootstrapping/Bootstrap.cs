@@ -134,10 +134,12 @@ namespace Shooter.Bootstrapping
 
         private static void Listen()
         {
+            if (!Application.isEditor) return;
+
             var listener = new GameObject(nameof(AudioListener));
             listener.AddComponent<AudioListener>();
             UnityEngine.Object.DontDestroyOnLoad(listener);
-            Log.Info("The server has no player cameras, so it carries its own audio listener");
+            Log.Info("Editor-hosted server carries a dummy audio listener, real server builds strip audio entirely");
         }
 
         private static NetworkManager Network()
