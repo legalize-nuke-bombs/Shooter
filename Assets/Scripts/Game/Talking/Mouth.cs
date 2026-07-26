@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Shooter.Game.Dying;
@@ -10,6 +11,12 @@ namespace Shooter.Game.Talking
         private readonly NetworkVariable<ulong> interlocutor = new NetworkVariable<ulong>();
 
         private Talker heard;
+
+        public event Action<ulong> Opened;
+
+        public event Action<string, string, bool> Heard;
+
+        public event Action Closed;
 
         public bool Talking => heard != null;
 
@@ -75,18 +82,21 @@ namespace Shooter.Game.Talking
         private void OpenedRpc(ulong talkerId)
         {
             Log.Info("Talk with network object {} opened", talkerId);
+            Opened?.Invoke(talkerId);
         }
 
         [Rpc(SendTo.Owner)]
         private void HeardRpc(string content, string time, bool mine)
         {
             Log.Info("Talk line at {} from {}: {}", time, mine ? "me" : "them", content);
+            Heard?.Invoke(content, time, mine);
         }
 
         [Rpc(SendTo.Owner)]
         private void ClosedRpc()
         {
             Log.Info("Talk closed");
+            Closed?.Invoke();
         }
     }
 }

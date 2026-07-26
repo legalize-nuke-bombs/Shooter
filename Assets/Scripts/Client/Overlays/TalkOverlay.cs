@@ -1,0 +1,161 @@
+using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.UIElements;
+using Shooter.Client.Naming;
+using Shooter.Client.Players;
+using Shooter.Game.Naming;
+using Shooter.Game.Talking;
+using Shooter.Logging;
+
+namespace Shooter.Client.Overlays
+{
+    [RequireComponent(typeof(PanelRenderer))]
+    public class TalkOverlay : MonoBehaviour
+    {
+        private const string WindowElement = "talk";
+        private const string NameElement = "talk-name";
+        private const string LogElement = "talk-log";
+        private const string InputElement = "talk-input";
+        private const string Stranger = "Незнакомец";
+
+        [SerializeField] private NameCatalog names;
+
+        private PanelRenderer panel;
+        private VisualElement window;
+        private Label speaker;
+        private VisualElement log;
+        private TextField input;
+        private NameMapper mapper;
+        private Mouth mouth;
+
+        private void OnEnable()
+        {
+            panel = GetComponent<PanelRenderer>();
+            panel.RegisterUIReloadCallback(Bind);
+        }
+
+        private void OnDisable()
+        {
+            panel.UnregisterUIReloadCallback(Bind);
+            Forget();
+            window = null;
+        }
+
+        private void Update()
+        {
+            if (window == null) return;
+
+            Mouth own = OwnPlayer.Find<Mouth>();
+            if (own == mouth) return;
+
+            Forget();
+            mouth = own;
+
+            if (mouth == null) return;
+
+            mouth.Opened += Open;
+            mouth.Heard += Line;
+            mouth.Closed += Close;
+        }
+
+        private void Bind(PanelRenderer renderer, VisualElement root)
+        {
+            window = root.Q<VisualElement>(WindowElement);
+            speaker = root.Q<Label>(NameElement);
+            log = root.Q<VisualElement>(LogElement);
+            input = root.Q<TextField>(InputElement);
+
+            if (window == null || speaker == null || log == null || input == null)
+            {
+                Log.Error("Overlay document has no {} window, talks stay invisible", WindowElement);
+                window = null;
+                return;
+            }
+
+            if (names == null)
+            {
+                Log.Error("Talk overlay has no name catalog, talks stay invisible");
+                window = null;
+                return;
+            }
+
+            mapper = new NameMapper(names);
+            input.maxLength = Talker.SpeechLimit;
+            input.RegisterCallback<KeyDownEvent>(Typed);
+            window.style.display = DisplayStyle.None;
+        }
+
+        private void Open(ulong talkerId)
+        {
+            log.Clear();
+            input.value = string.Empty;
+            speaker.text = Named(talkerId);
+            window.style.display = DisplayStyle.Flex;
+
+            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
+            if (player != null) player.Captured = true;
+
+            input.Focus();
+            Log.Info("Talk window opened with {}", speaker.text);
+        }
+
+        private void Line(string content, string time, bool mine)
+        {
+            var line = new Label(content);
+            line.AddToClassList("talk__line");
+            if (mine) line.AddToClassList("talk__line--mine");
+
+            log.Add(line);
+        }
+
+        private void Close()
+        {
+            window.style.display = DisplayStyle.None;
+            log.Clear();
+            input.value = string.Empty;
+
+            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
+            if (player != null) player.Captured = false;
+
+            Log.Info("Talk window closed");
+        }
+
+        private void Typed(KeyDownEvent typed)
+        {
+            if (typed.keyCode != KeyCode.Return && typed.keyCode != KeyCode.KeypadEnter) return;
+
+            string speech = input.value.Trim();
+            input.value = string.Empty;
+            typed.StopPropagation();
+
+            if (speech.Length == 0 || mouth == null) return;
+
+            mouth.SayRpc(speech);
+        }
+
+        private string Named(ulong talkerId)
+        {
+            NetworkManager network = NetworkManager.Singleton;
+            if (network == null || network.SpawnManager == null) return Stranger;
+
+            if (!network.SpawnManager.SpawnedObjects.TryGetValue(talkerId, out NetworkObject talker)) return Stranger;
+
+            var nameable = talker.GetComponentInChildren<Nameable>();
+            if (nameable == null) return Stranger;
+
+            string named = mapper.Of(nameable);
+
+            return string.IsNullOrEmpty(named) ? Stranger : named;
+        }
+
+        private void Forget()
+        {
+            if (mouth == null) return;
+
+            mouth.Opened -= Open;
+            mouth.Heard -= Line;
+            mouth.Closed -= Close;
+            mouth = null;
+        }
+    }
+}

@@ -7,6 +7,7 @@ using Shooter.Game.Interacting;
 using Shooter.Game.Moving;
 using Shooter.Game.Shooting;
 using Shooter.Game.Sleeping;
+using Shooter.Game.Talking;
 using Shooter.Game.Vitals;
 using Shooter.Logging;
 
@@ -23,6 +24,7 @@ namespace Shooter.Client.Players
 
         private Movement movement;
         private Interactor interactor;
+        private Mouth mouth;
         private Sleeper sleeper;
         private Health health;
         private Mortal mortal;
@@ -54,6 +56,7 @@ namespace Shooter.Client.Players
         {
             movement = GetComponent<Movement>();
             interactor = GetComponent<Interactor>();
+            mouth = GetComponent<Mouth>();
             sleeper = GetComponent<Sleeper>();
             health = GetComponent<Health>();
             mortal = GetComponent<Mortal>();
@@ -78,6 +81,7 @@ namespace Shooter.Client.Players
             controls.Player.Interact.performed += Use;
             controls.Player.Inventory.performed += OpenBag;
             controls.UI.Inventory.performed += CloseBag;
+            controls.UI.Cancel.performed += Escape;
             Grab();
 
             NetworkManager.NetworkTickSystem.Tick += Send;
@@ -96,6 +100,7 @@ namespace Shooter.Client.Players
             controls.Player.Interact.performed -= Use;
             controls.Player.Inventory.performed -= OpenBag;
             controls.UI.Inventory.performed -= CloseBag;
+            controls.UI.Cancel.performed -= Escape;
             controls.Dispose();
             controls = null;
             InventoryOpen = false;
@@ -159,6 +164,17 @@ namespace Shooter.Client.Players
         {
             InventoryOpen = false;
             Captured = false;
+        }
+
+        private void Escape(InputAction.CallbackContext context)
+        {
+            if (mouth != null && mouth.Interlocutor != 0)
+            {
+                mouth.HangUpRpc();
+                return;
+            }
+
+            if (InventoryOpen) CloseBag(context);
         }
 
         private void Use(InputAction.CallbackContext context)
