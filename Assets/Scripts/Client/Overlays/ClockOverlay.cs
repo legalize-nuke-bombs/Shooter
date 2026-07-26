@@ -1,29 +1,81 @@
+using System;
+using System.Globalization;
 using UnityEngine;
-using Shooter.Game;
+using UnityEngine.UIElements;
+using Shooter.Logging;
+using Environment = Shooter.Game.Environment;
 
 namespace Shooter.Client.Overlays
 {
+    [RequireComponent(typeof(PanelRenderer))]
     public class ClockOverlay : MonoBehaviour
     {
-        private const int Margin = 10;
-        private const int LineHeight = 20;
-        private const int Width = 240;
+        private const string ClockElement = "clock";
+        private const string TimeFormat = "HH:mm";
+        private const long Hidden = long.MinValue;
 
-        private GUIStyle style;
-
-        private void OnGUI()
+        private static readonly string[] Months =
         {
+            "января", "февраля", "марта", "апреля", "мая", "июня",
+            "июля", "августа", "сентября", "октября", "ноября", "декабря"
+        };
+
+        private PanelRenderer panel;
+        private Label clock;
+        private long shown = Hidden;
+
+        private void OnEnable()
+        {
+            panel = GetComponent<PanelRenderer>();
+            panel.RegisterUIReloadCallback(Bind);
+        }
+
+        private void OnDisable()
+        {
+            panel.UnregisterUIReloadCallback(Bind);
+            clock = null;
+        }
+
+        private void Update()
+        {
+            if (clock == null) return;
+
             Environment environment = Environment.Current;
-            if (environment == null) return;
 
-            style ??= new GUIStyle(GUI.skin.label)
+            if (environment == null)
             {
-                normal = { textColor = Color.white },
-                alignment = TextAnchor.UpperRight
-            };
+                Hide();
+                return;
+            }
 
-            var at = new Rect(Screen.width - Width - Margin, Margin, Width, LineHeight);
-            GUI.Label(at, environment.Clock.DateTime(), style);
+            DateTimeOffset now = environment.Clock.Now;
+            long minute = now.Ticks / TimeSpan.TicksPerMinute;
+
+            if (minute == shown) return;
+
+            shown = minute;
+            clock.text = Describe(now);
+        }
+
+        private void Bind(PanelRenderer renderer, VisualElement root)
+        {
+            clock = root.Q<Label>(ClockElement);
+            shown = Hidden;
+
+            if (clock == null) Log.Error("Overlay document has no {} label, the clock stays hidden", ClockElement);
+        }
+
+        private void Hide()
+        {
+            if (shown == Hidden) return;
+
+            shown = Hidden;
+            clock.text = string.Empty;
+        }
+
+        private static string Describe(DateTimeOffset now)
+        {
+            return now.Day + " " + Months[now.Month - 1] + " " + now.Year + ", " + now.ToString(TimeFormat, CultureInfo.InvariantCulture);
         }
     }
 }
