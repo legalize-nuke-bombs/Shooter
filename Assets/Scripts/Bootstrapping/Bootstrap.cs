@@ -6,7 +6,6 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Shooter.Client.Overlays;
 using Shooter.Configuring;
 using Shooter.Logging;
 
@@ -18,6 +17,7 @@ namespace Shooter.Bootstrapping
         private const string ClientArgument = "-client";
         private const string HostArgument = "-host";
         private const string NetworkPrefab = "NetworkManager";
+        private const string OverlayPrefab = "Overlays";
         private const string WorldScene = "Map";
         private const string AnyAddress = "0.0.0.0";
 
@@ -118,10 +118,17 @@ namespace Shooter.Bootstrapping
 
         private static void Overlay()
         {
-            var overlay = new GameObject("Overlays");
-            overlay.AddComponent<VersionOverlay>();
-            overlay.AddComponent<ClockOverlay>();
+            var prefab = Resources.Load<GameObject>(OverlayPrefab);
+            if (prefab == null)
+            {
+                Log.Error("No {} prefab in Resources, the client goes without overlays", OverlayPrefab);
+                return;
+            }
+
+            GameObject overlay = UnityEngine.Object.Instantiate(prefab);
+            overlay.name = OverlayPrefab;
             UnityEngine.Object.DontDestroyOnLoad(overlay);
+            Log.Info("Overlays are up");
         }
 
         private static NetworkManager Network()

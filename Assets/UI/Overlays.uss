@@ -1,0 +1,24 @@
+.overlays {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+.corner {
+    flex-direction: column;
+}
+
+.corner--right {
+    align-items: flex-end;
+}
+
+.line {
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+}
