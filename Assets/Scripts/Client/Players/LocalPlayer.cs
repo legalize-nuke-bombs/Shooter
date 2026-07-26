@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using Shooter.Game.Dying;
 using Shooter.Game.Interacting;
 using Shooter.Game.Moving;
+using Shooter.Game.Shooting;
 using Shooter.Game.Sleeping;
 using Shooter.Game.Vitals;
 using Shooter.Logging;
@@ -24,7 +25,7 @@ namespace Shooter.Client.Players
         private Sleeper sleeper;
         private Health health;
         private Mortal mortal;
-        private Game.Shooting.Shooter shooter;
+        private Gunner gunner;
         private float pitch;
         private float yaw;
 
@@ -37,7 +38,7 @@ namespace Shooter.Client.Players
             sleeper = GetComponent<Sleeper>();
             health = GetComponent<Health>();
             mortal = GetComponent<Mortal>();
-            shooter = GetComponent<Game.Shooting.Shooter>();
+            gunner = GetComponent<Gunner>();
         }
 
         public override void OnNetworkSpawn()
@@ -91,8 +92,8 @@ namespace Shooter.Client.Players
             Mouse mouse = Mouse.current;
 
             if (keyboard.spaceKey.wasPressedThisFrame) movement.JumpRpc();
-            if (mouse.leftButton.wasPressedThisFrame) shooter?.FireRpc();
-            if (keyboard.rKey.wasPressedThisFrame) shooter?.ReloadRpc();
+            if (mouse.leftButton.wasPressedThisFrame) gunner?.FireRpc();
+            if (keyboard.rKey.wasPressedThisFrame) gunner?.ReloadRpc();
             if (!keyboard.eKey.wasPressedThisFrame) return;
 
             if (health != null && !health.Alive) mortal?.RiseRpc();

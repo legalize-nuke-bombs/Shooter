@@ -37,3 +37,7 @@ shooter-logs/
 *.aab
 *.unitypackage
 *.app
+
+# Локальные настройки запуска, создаются с дефолтами при первом старте
+/client.json
+/server.json
