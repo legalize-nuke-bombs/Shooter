@@ -17,7 +17,9 @@ namespace Shooter.Game.Items
 
         private readonly NetworkVariable<int> equipped = new NetworkVariable<int>(Nothing);
 
-        public ItemCatalog Catalog => catalog;
+        public ItemCatalog Catalog => catalog != null
+            ? catalog
+            : Environment.Current == null ? null : Environment.Current.Items;
 
         public int Count => slots.Count;
 
@@ -30,7 +32,7 @@ namespace Shooter.Game.Items
         {
             if (!IsServer || item.Empty) return;
 
-            ItemSpec spec = catalog == null ? null : catalog.Spec(item.Type);
+            ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.Type);
 
             if (spec != null && spec.Stackable)
             {
@@ -131,7 +133,7 @@ namespace Shooter.Game.Items
         {
             if (!Equipped(out Item item)) return "Предмет в руках: -";
 
-            ItemSpec spec = catalog == null ? null : catalog.Spec(item.Type);
+            ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.Type);
             return "Предмет в руках: " + (spec == null ? item.Type.ToString() : spec.PromptName);
         }
 

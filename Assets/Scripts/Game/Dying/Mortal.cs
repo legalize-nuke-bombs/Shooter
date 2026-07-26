@@ -43,13 +43,14 @@ namespace Shooter.Game.Dying
 
         private void LeaveCorpse()
         {
-            if (corpsePrefab == null)
+            GameObject prefab = Corpse();
+            if (prefab == null)
             {
-                Log.Warn("Entity {} died without a corpse prefab", name);
+                Log.Warn("Entity {} died, but neither it nor the world has a corpse prefab", name);
                 return;
             }
 
-            GameObject body = Instantiate(corpsePrefab, transform.position, transform.rotation);
+            GameObject body = Instantiate(prefab, transform.position, transform.rotation);
             var spawned = body.GetComponent<NetworkObject>();
             if (spawned == null)
             {
@@ -61,6 +62,13 @@ namespace Shooter.Game.Dying
             spawned.Spawn();
             spawned.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
             Log.Info("Entity {} left a corpse at {}", name, transform.position);
+        }
+
+        private GameObject Corpse()
+        {
+            if (corpsePrefab != null) return corpsePrefab;
+
+            return Environment.Current == null ? null : Environment.Current.Corpse;
         }
     }
 }
