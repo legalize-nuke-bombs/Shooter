@@ -5,33 +5,19 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
 {
-    [RequireComponent(typeof(PanelRenderer))]
-    public class VersionOverlay : MonoBehaviour
+    public class VersionOverlay : Overlay
     {
         private const string ClientElement = "client-version";
         private const string ServerElement = "server-version";
         private const string Disconnected = "Сервер — не подключён";
         private const string NamelessWorld = "мир без имени";
 
-        private PanelRenderer panel;
         private Label server;
         private bool connected;
 
-        private void OnEnable()
-        {
-            panel = GetComponent<PanelRenderer>();
-            panel.RegisterUIReloadCallback(Bind);
-        }
-
-        private void OnDisable()
-        {
-            panel.UnregisterUIReloadCallback(Bind);
-            server = null;
-        }
-
         private void Update()
         {
-            if (server == null) return;
+            if (!Bound) return;
 
             Environment environment = Environment.Current;
             bool present = environment != null;
@@ -42,7 +28,7 @@ namespace Shooter.Client.Interface.Overlays
             server.text = present ? Describe(environment) : Disconnected;
         }
 
-        private void Bind(PanelRenderer renderer, VisualElement root)
+        protected override bool Bind(VisualElement root)
         {
             Label client = root.Q<Label>(ClientElement);
             server = root.Q<Label>(ServerElement);
@@ -51,11 +37,18 @@ namespace Shooter.Client.Interface.Overlays
             if (client == null || server == null)
             {
                 Log.Error("Overlay document has no {} or {} label, versions stay hidden", ClientElement, ServerElement);
-                return;
+                return false;
             }
 
             client.text = "Клиент " + Application.version;
             server.text = Disconnected;
+
+            return true;
+        }
+
+        protected override void Unbind()
+        {
+            server = null;
         }
 
         private static string Describe(Environment environment)

@@ -6,36 +6,19 @@ using Environment = Shooter.Game.Environment;
 
 namespace Shooter.Client.Interface.Overlays
 {
-    [RequireComponent(typeof(PanelRenderer))]
-    public class DreamOverlay : MonoBehaviour
+    public class DreamOverlay : Overlay
     {
         private const string DreamElement = "dream";
 
         [SerializeField] private DreamCatalog dreams;
 
-        private PanelRenderer panel;
         private VisualElement screen;
         private Dream dream;
         private bool asleep;
 
-        private void OnEnable()
-        {
-            panel = GetComponent<PanelRenderer>();
-            panel.RegisterUIReloadCallback(Bind);
-        }
-
-        private void OnDisable()
-        {
-            panel.UnregisterUIReloadCallback(Bind);
-
-            if (dream != null) Wake();
-
-            screen = null;
-        }
-
         private void Update()
         {
-            if (screen == null) return;
+            if (!Bound) return;
 
             bool everyoneAsleep = WorldAsleep();
 
@@ -50,27 +33,34 @@ namespace Shooter.Client.Interface.Overlays
             dream?.Step(Time.deltaTime);
         }
 
-        private void Bind(PanelRenderer renderer, VisualElement root)
+        protected override bool Bind(VisualElement root)
         {
-            if (dream != null) Wake();
-
             screen = root.Q<VisualElement>(DreamElement);
             asleep = false;
 
             if (screen == null)
             {
                 Log.Error("Overlay document has no {} element, dreams stay unseen", DreamElement);
-                return;
+                return false;
             }
 
             if (dreams == null)
             {
                 Log.Error("Dream overlay has no dream catalog, dreams stay unseen");
-                screen = null;
-                return;
+                return false;
             }
 
             screen.style.display = DisplayStyle.None;
+
+            return true;
+        }
+
+        protected override void Unbind()
+        {
+            if (dream != null) Wake();
+
+            screen = null;
+            asleep = false;
         }
 
         private void Fall()

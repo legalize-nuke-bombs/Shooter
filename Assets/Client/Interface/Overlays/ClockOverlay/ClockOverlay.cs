@@ -7,8 +7,7 @@ using Environment = Shooter.Game.Environment;
 
 namespace Shooter.Client.Interface.Overlays
 {
-    [RequireComponent(typeof(PanelRenderer))]
-    public class ClockOverlay : MonoBehaviour
+    public class ClockOverlay : Overlay
     {
         private const string ClockElement = "clock";
         private const string TimeFormat = "HH:mm";
@@ -20,25 +19,12 @@ namespace Shooter.Client.Interface.Overlays
             "июля", "августа", "сентября", "октября", "ноября", "декабря"
         };
 
-        private PanelRenderer panel;
         private Label clock;
         private long shown = Hidden;
 
-        private void OnEnable()
-        {
-            panel = GetComponent<PanelRenderer>();
-            panel.RegisterUIReloadCallback(Bind);
-        }
-
-        private void OnDisable()
-        {
-            panel.UnregisterUIReloadCallback(Bind);
-            clock = null;
-        }
-
         private void Update()
         {
-            if (clock == null) return;
+            if (!Bound) return;
 
             Environment environment = Environment.Current;
 
@@ -57,12 +43,23 @@ namespace Shooter.Client.Interface.Overlays
             clock.text = Describe(now);
         }
 
-        private void Bind(PanelRenderer renderer, VisualElement root)
+        protected override bool Bind(VisualElement root)
         {
             clock = root.Q<Label>(ClockElement);
             shown = Hidden;
 
-            if (clock == null) Log.Error("Overlay document has no {} label, the clock stays hidden", ClockElement);
+            if (clock == null)
+            {
+                Log.Error("Overlay document has no {} label, the clock stays hidden", ClockElement);
+                return false;
+            }
+
+            return true;
+        }
+
+        protected override void Unbind()
+        {
+            clock = null;
         }
 
         private void Hide()

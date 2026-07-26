@@ -6,36 +6,26 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
 {
-    [RequireComponent(typeof(PanelRenderer))]
     [RequireComponent(typeof(Aimer))]
-    public class TargetNameOverlay : MonoBehaviour
+    public class TargetNameOverlay : Overlay
     {
         private const string TargetElement = "target-name";
 
         [SerializeField] private NameCatalog names;
 
-        private PanelRenderer panel;
         private Aimer aimer;
         private NameMapper mapper;
         private Label target;
         private string shown = string.Empty;
 
-        private void OnEnable()
+        private void Awake()
         {
-            panel = GetComponent<PanelRenderer>();
             aimer = GetComponent<Aimer>();
-            panel.RegisterUIReloadCallback(Bind);
-        }
-
-        private void OnDisable()
-        {
-            panel.UnregisterUIReloadCallback(Bind);
-            target = null;
         }
 
         private void Update()
         {
-            if (target == null) return;
+            if (!Bound) return;
 
             Nameable nameable = Aimed();
             string text = nameable == null ? string.Empty : mapper.Of(nameable);
@@ -46,7 +36,7 @@ namespace Shooter.Client.Interface.Overlays
             target.text = text;
         }
 
-        private void Bind(PanelRenderer renderer, VisualElement root)
+        protected override bool Bind(VisualElement root)
         {
             target = root.Q<Label>(TargetElement);
             shown = string.Empty;
@@ -54,18 +44,24 @@ namespace Shooter.Client.Interface.Overlays
             if (target == null)
             {
                 Log.Error("Overlay document has no {} label, target names stay hidden", TargetElement);
-                return;
+                return false;
             }
 
             if (names == null)
             {
                 Log.Error("Target name overlay has no name catalog, target names stay hidden");
-                target = null;
-                return;
+                return false;
             }
 
             mapper = new NameMapper(names);
             target.text = string.Empty;
+
+            return true;
+        }
+
+        protected override void Unbind()
+        {
+            target = null;
         }
 
         private Nameable Aimed()
