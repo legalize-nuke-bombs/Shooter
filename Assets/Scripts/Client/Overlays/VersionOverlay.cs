@@ -16,12 +16,16 @@ namespace Shooter.Client.Overlays
             style ??= new GUIStyle(GUI.skin.label) { normal = { textColor = Color.white } };
 
             GUI.Label(new Rect(Margin, Margin, Width, LineHeight), "Клиент " + Application.version, style);
+            GUI.Label(new Rect(Margin, Margin + LineHeight, Width, LineHeight), Server(), style);
+        }
 
+        private static string Server()
+        {
             Environment environment = Environment.Current;
-            if (environment == null) return;
+            if (environment == null) return "Сервер — не подключён";
 
             string world = string.IsNullOrEmpty(environment.World) ? "мир без имени" : environment.World;
-            GUI.Label(new Rect(Margin, Margin + LineHeight, Width, LineHeight), "Сервер " + environment.Version + " — " + world, style);
+            return "Сервер " + environment.Version + " — " + world;
         }
     }
 }
