@@ -11,12 +11,9 @@ namespace Shooter.Game
 
         private Light sun;
 
-        private LightShadows shadowing;
-
         private void Awake()
         {
             sun = GetComponent<Light>();
-            shadowing = sun.shadows;
         }
 
         private void Update()
@@ -27,8 +24,14 @@ namespace Shooter.Game
             float overhead = (float)environment.Clock.SunOverhead;
 
             transform.rotation = Quaternion.Euler(overhead, azimuth, 0f);
-            sun.intensity = brightest * Mathf.Clamp01(Mathf.Sin(overhead * Mathf.Deg2Rad));
-            sun.shadows = sun.intensity > 0f ? shadowing : LightShadows.None;
+            sun.intensity = brightest * HorizonFade(overhead);
+        }
+
+        internal static float HorizonFade(float overhead)
+        {
+            float elevation = Mathf.Asin(Mathf.Sin(overhead * Mathf.Deg2Rad)) * Mathf.Rad2Deg;
+
+            return Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-12f, 8f, elevation));
         }
     }
 }

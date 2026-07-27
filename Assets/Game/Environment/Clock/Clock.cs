@@ -1,15 +1,16 @@
 using System;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game
 {
     public class Clock : NetworkBehaviour
     {
-        public const double DawnFraction = 0.25;
-        public const double DuskFraction = 0.75;
+        public const double DawnFraction = 5.5 / 24.0;
+        public const double DuskFraction = 20.0 / 24.0;
 
         public const long DayLengthSeconds = 86400;
-        private const float DayRealSeconds = 200f;
+        private const float DayRealSeconds = 1200f;
         private const float SyncInterval = 1f;
 
         private static readonly DateTimeOffset Beginning = new DateTimeOffset(2026, 9, 1, 10, 0, 0, TimeSpan.Zero);
@@ -26,9 +27,18 @@ namespace Shooter.Game
 
         public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
 
-        public double Days => timestamp / DayLengthSeconds;
+        public double SunOverhead
+        {
+            get
+            {
+                double fraction = DayFraction;
+                if (fraction >= DawnFraction && fraction < DuskFraction)
+                    return (fraction - DawnFraction) / (DuskFraction - DawnFraction) * 180.0;
 
-        public double SunOverhead => (DayFraction - DawnFraction) * 360.0;
+                double sinceDusk = fraction >= DuskFraction ? fraction - DuskFraction : fraction + 1.0 - DuskFraction;
+                return 180.0 + sinceDusk / (1.0 - DuskFraction + DawnFraction) * 180.0;
+            }
+        }
 
         public float Scale
         {
@@ -50,6 +60,24 @@ namespace Shooter.Game
         {
             synced.OnValueChanged -= Adjust;
             NetworkManager.NetworkTickSystem.Tick -= Step;
+        }
+
+        [ContextMenu("Fast forward x10")]
+        private void FastForward()
+        {
+            Scale = 10f;
+        }
+
+        [ContextMenu("Fast forward x60")]
+        private void FastForwardHard()
+        {
+            Scale = 60f;
+        }
+
+        [ContextMenu("Normal speed")]
+        private void NormalSpeed()
+        {
+            Scale = 1f;
         }
 
         public bool IsNight()
