@@ -26,6 +26,10 @@ namespace Shooter.Game
 
         public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
 
+        public double Days => timestamp / DayLengthSeconds;
+
+        public double SunOverhead => (DayFraction - DawnFraction) * 360.0;
+
         public float Scale
         {
             get => scale.Value;

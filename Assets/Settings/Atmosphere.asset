@@ -60,11 +60,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   renderingMode:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   material:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
+    m_OverrideState: 1
+    m_Value: {fileID: 2100000, guid: ea9fafc49a843284e87b8c741d4381ca, type: 2}
   airDensityR:
     m_OverrideState: 0
     m_Value: 0.04534
@@ -117,11 +117,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {x: 0, y: 0, z: 0}
   spaceEmissionTexture:
-    m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 79af97b92221347c8a27cd67fc6a4f65, type: 3}
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
   spaceEmissionMultiplier:
-    m_OverrideState: 1
-    m_Value: 4000
+    m_OverrideState: 0
+    m_Value: 1
   spaceRotation:
     m_OverrideState: 0
     m_Value: {x: 0, y: 0, z: 0}
