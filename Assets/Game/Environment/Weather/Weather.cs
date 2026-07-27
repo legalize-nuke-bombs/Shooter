@@ -30,17 +30,18 @@ namespace Shooter.Game
             Environment environment = Environment.Current;
             if (environment == null || clouds == null) return;
 
-            float daylight = Daylight((float)environment.Clock.DayFraction);
+            float daylight = Daylight(environment.Clock);
 
             clouds.densityMultiplier.value = Mathf.Lerp(nightCloudDensity, dayCloudDensity, daylight);
             clouds.shapeFactor.value = Mathf.Lerp(nightShapeFactor, dayShapeFactor, daylight);
         }
 
-        private float Daylight(float fraction)
+        private float Daylight(Clock clock)
         {
+            float fraction = (float)clock.DayFraction;
             float halfWindow = transitionHours / 24f / 2f;
-            float dawn = Mathf.InverseLerp((float)Clock.DawnFraction - halfWindow, (float)Clock.DawnFraction + halfWindow, fraction);
-            float dusk = 1f - Mathf.InverseLerp((float)Clock.DuskFraction - halfWindow, (float)Clock.DuskFraction + halfWindow, fraction);
+            float dawn = Mathf.InverseLerp((float)clock.DawnFraction - halfWindow, (float)clock.DawnFraction + halfWindow, fraction);
+            float dusk = 1f - Mathf.InverseLerp((float)clock.DuskFraction - halfWindow, (float)clock.DuskFraction + halfWindow, fraction);
 
             return Mathf.SmoothStep(0f, 1f, Mathf.Min(dawn, dusk));
         }

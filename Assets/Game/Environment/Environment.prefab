@@ -90,6 +90,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Time.WorldClock
   ShowTopMostFoldoutHeaderGroup: 1
+  latitude: 55.75
+  declination: 12.33
+  solarNoonHours: 12.75
 --- !u!114 &4715244483815921385
 MonoBehaviour:
   m_ObjectHideFlags: 0

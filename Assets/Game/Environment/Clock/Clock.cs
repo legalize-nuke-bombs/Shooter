@@ -6,8 +6,11 @@ namespace Shooter.Game
 {
     public class Clock : NetworkBehaviour
     {
-        public const double DawnFraction = 5.5 / 24.0;
-        public const double DuskFraction = 20.0 / 24.0;
+        [SerializeField] private float latitude = 55.75f;
+
+        [SerializeField] private float declination = 12.33f;
+
+        [SerializeField] private float solarNoonHours = 12.75f;
 
         public const long DayLengthSeconds = 86400;
         private const float DayRealSeconds = 1200f;
@@ -27,18 +30,17 @@ namespace Shooter.Game
 
         public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
 
-        public double SunOverhead
-        {
-            get
-            {
-                double fraction = DayFraction;
-                if (fraction >= DawnFraction && fraction < DuskFraction)
-                    return (fraction - DawnFraction) / (DuskFraction - DawnFraction) * 180.0;
+        public float Latitude => latitude;
 
-                double sinceDusk = fraction >= DuskFraction ? fraction - DuskFraction : fraction + 1.0 - DuskFraction;
-                return 180.0 + sinceDusk / (1.0 - DuskFraction + DawnFraction) * 180.0;
-            }
-        }
+        public float Declination => declination;
+
+        public double HourAngle => (DayFraction - solarNoonHours / 24.0) * 360.0;
+
+        public double DawnFraction => (solarNoonHours - HalfDayHours) / 24.0;
+
+        public double DuskFraction => (solarNoonHours + HalfDayHours) / 24.0;
+
+        private double HalfDayHours => Celestial.HalfDayAngle(declination, latitude) / 15.0;
 
         public float Scale
         {

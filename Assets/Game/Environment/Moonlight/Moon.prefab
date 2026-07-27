@@ -252,6 +252,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1c8a52d9b74e0d8a6c5b1e7f204c93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  azimuth: 170
   brightest: 1.2
   lagBehindSun: 144

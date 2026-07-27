@@ -5,8 +5,6 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Moonlight : MonoBehaviour
     {
-        [SerializeField] private float azimuth = 170f;
-
         [SerializeField] private float brightest = 1.2f;
 
         [SerializeField] private float lagBehindSun = 144f;
@@ -24,10 +22,12 @@ namespace Shooter.Game
             Environment environment = Environment.Current;
             if (environment == null) return;
 
-            float overhead = (float)environment.Clock.SunOverhead - lagBehindSun;
+            Clock clock = environment.Clock;
+            float hourAngle = (float)clock.HourAngle - lagBehindSun;
+            float elevation = Celestial.Elevation(hourAngle, clock.Declination, clock.Latitude);
 
-            transform.rotation = Quaternion.Euler(overhead, azimuth, 0f);
-            moon.intensity = brightest * Illumination(lagBehindSun) * Sunlight.HorizonFade(overhead);
+            transform.rotation = Celestial.Rotation(hourAngle, clock.Declination, clock.Latitude);
+            moon.intensity = brightest * Illumination(lagBehindSun) * Sunlight.HorizonFade(elevation);
         }
 
         private static float Illumination(float elongation)

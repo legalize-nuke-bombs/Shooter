@@ -5,8 +5,6 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour
     {
-        [SerializeField] private float azimuth = 170f;
-
         [SerializeField] private float brightest = 120000f;
 
         private Light sun;
@@ -21,16 +19,16 @@ namespace Shooter.Game
             Environment environment = Environment.Current;
             if (environment == null) return;
 
-            float overhead = (float)environment.Clock.SunOverhead;
+            Clock clock = environment.Clock;
+            float hourAngle = (float)clock.HourAngle;
+            float elevation = Celestial.Elevation(hourAngle, clock.Declination, clock.Latitude);
 
-            transform.rotation = Quaternion.Euler(overhead, azimuth, 0f);
-            sun.intensity = brightest * HorizonFade(overhead);
+            transform.rotation = Celestial.Rotation(hourAngle, clock.Declination, clock.Latitude);
+            sun.intensity = brightest * HorizonFade(elevation);
         }
 
-        internal static float HorizonFade(float overhead)
+        internal static float HorizonFade(float elevation)
         {
-            float elevation = Mathf.Asin(Mathf.Sin(overhead * Mathf.Deg2Rad)) * Mathf.Rad2Deg;
-
             return Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-12f, 8f, elevation));
         }
     }
