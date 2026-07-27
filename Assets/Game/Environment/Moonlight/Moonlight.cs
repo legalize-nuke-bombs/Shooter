@@ -5,22 +5,18 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Moonlight : MonoBehaviour
     {
-        private const float SynodicMonthDays = 29.53f;
-
         [SerializeField] private float azimuth = 170f;
 
-        [SerializeField] private float brightest = 0.5f;
+        [SerializeField] private float brightest = 1.2f;
 
-        [SerializeField] private float phaseAtStart = 0.5f;
+        [SerializeField] private float lagBehindSun = 144f;
 
         private Light moon;
-
-        private LightShadows shadowing;
 
         private void Awake()
         {
             moon = GetComponent<Light>();
-            shadowing = moon.shadows;
+            moon.shadows = LightShadows.None;
         }
 
         private void Update()
@@ -28,15 +24,10 @@ namespace Shooter.Game
             Environment environment = Environment.Current;
             if (environment == null) return;
 
-            float sunOverhead = (float)environment.Clock.SunOverhead;
-            float elongation = (float)(360.0 * (phaseAtStart + environment.Clock.Days / SynodicMonthDays));
-            float overhead = sunOverhead - elongation;
+            float overhead = (float)environment.Clock.SunOverhead - lagBehindSun;
 
             transform.rotation = Quaternion.Euler(overhead, azimuth, 0f);
-            moon.intensity = brightest * Illumination(elongation) * Mathf.Clamp01(Mathf.Sin(overhead * Mathf.Deg2Rad));
-            moon.shadows = moon.intensity > 0f && Mathf.Sin(sunOverhead * Mathf.Deg2Rad) <= 0f
-                ? shadowing
-                : LightShadows.None;
+            moon.intensity = brightest * Illumination(lagBehindSun) * Sunlight.HorizonFade(overhead);
         }
 
         private static float Illumination(float elongation)
