@@ -8,7 +8,7 @@ namespace Shooter.Game
         public const double DawnFraction = 0.25;
         public const double DuskFraction = 0.75;
 
-        private const long DayLengthSeconds = 86400;
+        public const long DayLengthSeconds = 86400;
         private const float DayRealSeconds = 200f;
         private const float SyncInterval = 1f;
 
