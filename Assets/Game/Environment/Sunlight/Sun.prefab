@@ -111,7 +111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06554dd71f0f4c4fab901efee7117d9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  azimuth: 170
   brightest: 120000
 --- !u!114 &3650058678281968514
 MonoBehaviour:
