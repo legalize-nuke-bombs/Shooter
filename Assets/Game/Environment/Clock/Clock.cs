@@ -9,7 +9,7 @@ namespace Shooter.Game
         public const double DuskFraction = 0.75;
 
         private const long DayLengthSeconds = 86400;
-        private const float DayRealSeconds = 600f;
+        private const float DayRealSeconds = 200f;
         private const float SyncInterval = 1f;
 
         private static readonly DateTimeOffset Beginning = new DateTimeOffset(2026, 9, 1, 10, 0, 0, TimeSpan.Zero);
