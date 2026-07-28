@@ -11,4 +11,4 @@ ScriptedImporter:
   generateWrapperCode: 1
   wrapperCodePath: Assets/Client/Playing/Controls/Controls.cs
   wrapperClassName: Controls
-  wrapperCodeNamespace: Shooter.Client.Controlling
+  wrapperCodeNamespace: Shooter.Client.Playing

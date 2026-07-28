@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7169829318397611680}
   - component: {fileID: 3118879808475941266}
-  - component: {fileID: 2916062200529065215}
   m_Layer: 0
   m_Name: Global Volume
   m_TagString: Untagged
@@ -50,18 +49,3 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 8ba92e2dd7f884a0f88b98fa2d235fe7, type: 2}
---- !u!114 &2916062200529065215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7546486378962506240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c5f2a81d4e64b7a8f30c6b2d915e847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Weather
-  dayCloudDensity: 1
-  nightCloudDensity: 0
-  transitionHours: 1.5
