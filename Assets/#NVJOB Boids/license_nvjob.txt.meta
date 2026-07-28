@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a05ca7034797a3047803ed1ff6d64552
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 164188
+  packageName: '#NVJOB Simple Boids (Flocks of Birds, Fish and Insects)'
+  packageVersion: 1.1.1
+  assetPath: Assets/#NVJOB Boids/license_nvjob.txt
+  uploadId: 355922

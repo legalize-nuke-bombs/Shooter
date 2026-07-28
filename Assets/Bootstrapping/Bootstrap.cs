@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Text;
 using Shooter.Configuring;
@@ -24,16 +25,44 @@ namespace Shooter.Bootstrapping
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Init()
         {
-            switch (Role())
+            // Netcode fills its serializer tables from a generated method in the same startup phase,
+            // and the order between assemblies is not defined. Waiting a frame lets it finish first.
+            var starter = new GameObject(nameof(Bootstrap));
+            starter.AddComponent<Starter>();
+            UnityEngine.Object.DontDestroyOnLoad(starter);
+        }
+
+        internal static IEnumerator Begin()
+        {
+            Part part = Role();
+            string name = part == Part.Server ? "server" : part == Part.Client ? "client" : "host";
+
+            Log.ToFile(InHome("shooter-" + name + ".log"));
+            Log.Info("Bootstrapping {}...", name);
+
+            // Overlays come up first of all: the loading screen has to be on screen while the world
+            // loads and while we connect, not after everything is already standing.
+            if (part == Part.Server) Listen();
+            else Overlay();
+
+            // And the world has to stand before the network spawns anyone into it: a player born in
+            // the empty boot scene has no ground under him and falls while the map is still loading.
+            if (part != Part.Client && SceneManager.GetActiveScene().name != WorldScene)
+            {
+                Log.Info("Loading world scene {} before the network starts", WorldScene);
+                yield return SceneManager.LoadSceneAsync(WorldScene, LoadSceneMode.Single);
+            }
+
+            switch (part)
             {
                 case Part.Server:
-                    Start("server", network => network.StartServer(), true);
+                    Start(name, network => network.StartServer(), true);
                     break;
                 case Part.Client:
-                    Start("client", network => network.StartClient(), false);
+                    Start(name, network => network.StartClient(), false);
                     break;
                 default:
-                    Start("host", network => network.StartHost(), true);
+                    Start(name, network => network.StartHost(), true);
                     break;
             }
         }
@@ -56,9 +85,6 @@ namespace Shooter.Bootstrapping
 
         private static void Start(string part, Func<NetworkManager, bool> begin, bool hosting)
         {
-            Log.ToFile(InHome("shooter-" + part + ".log"));
-            Log.Info("Bootstrapping {}...", part);
-
             NetworkManager network = Network();
             if (network == null) return;
 
@@ -70,9 +96,6 @@ namespace Shooter.Bootstrapping
                 Log.Error("The {} refused to start", part);
                 return;
             }
-
-            if (network.IsClient) Overlay();
-            else Listen();
 
             if (!hosting)
             {
