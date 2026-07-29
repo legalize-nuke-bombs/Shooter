@@ -36,11 +36,12 @@ namespace Shooter.Client.Interface.Overlays
         };
 
         private readonly Dictionary<string, ProfilerRecorder> recorders = new();
+        private readonly FrameProfile profile = new();
         private readonly float[] frames = new float[FrameSamples];
         private readonly StringBuilder builder = new();
 
         private Label panel;
-        private bool visible;
+        private Page page;
         private int frame;
         private int filled;
         private float refresh;
@@ -63,13 +64,13 @@ namespace Shooter.Client.Interface.Overlays
                     Count("Draw Calls Count"), Count("Triangles Count"));
             }
 
-            if (!visible) return;
+            if (page == Page.Hidden) return;
 
             refresh -= Time.unscaledDeltaTime;
             if (refresh > 0) return;
 
             refresh = RefreshSeconds;
-            panel.text = Report();
+            panel.text = page == Page.Frame ? profile.Report() : Report();
         }
 
         protected override bool Bind(VisualElement root)
@@ -82,7 +83,7 @@ namespace Shooter.Client.Interface.Overlays
                 return false;
             }
 
-            visible = false;
+            page = Page.Hidden;
             frame = filled = 0;
             refresh = 0;
             panel.style.display = DisplayStyle.None;
@@ -96,6 +97,7 @@ namespace Shooter.Client.Interface.Overlays
             foreach (ProfilerRecorder recorder in recorders.Values) recorder.Dispose();
 
             recorders.Clear();
+            profile.Forget();
             panel = null;
         }
 
@@ -114,8 +116,11 @@ namespace Shooter.Client.Interface.Overlays
 
         private void Toggle()
         {
-            visible = !visible;
-            panel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            page = page == Page.Frame ? Page.Hidden : page + 1;
+
+            if (page == Page.Frame && !profile.Listening) profile.Listen();
+
+            panel.style.display = page == Page.Hidden ? DisplayStyle.None : DisplayStyle.Flex;
             refresh = 0;
         }
 
@@ -243,6 +248,13 @@ namespace Shooter.Client.Interface.Overlays
         private void Line(string line)
         {
             builder.Append(line).Append('\n');
+        }
+
+        private enum Page
+        {
+            Hidden,
+            Stats,
+            Frame
         }
     }
 }
