@@ -6,6 +6,8 @@ namespace Shooter.Game.Body
 {
     public class Hands : NetworkBehaviour, IMortal, IDigestible
     {
+        private static readonly Journal Log = Logs.Here();
+
         private readonly NetworkVariable<HandsAction> action = new NetworkVariable<HandsAction>();
 
         private Action complete;

@@ -11,6 +11,8 @@ namespace Shooter.Client.Interface.Overlays
 {
     public class TalkOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string WindowElement = "talk";
         private const string NameElement = "talk-name";
         private const string LogElement = "talk-log";

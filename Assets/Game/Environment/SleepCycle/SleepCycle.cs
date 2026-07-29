@@ -6,6 +6,8 @@ namespace Shooter.Game
 {
     public class SleepCycle : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const float SkipTimeScale = 6f;
 
         private readonly NetworkVariable<bool> asleep = new NetworkVariable<bool>();

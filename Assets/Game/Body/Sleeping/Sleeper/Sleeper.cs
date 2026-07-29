@@ -6,6 +6,8 @@ namespace Shooter.Game.Body.Sleeping
 {
     public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint
     {
+        private static readonly Journal Log = Logs.Here();
+
         private readonly NetworkVariable<bool> sleeping = new NetworkVariable<bool>();
 
         public bool Sleeping => sleeping.Value;

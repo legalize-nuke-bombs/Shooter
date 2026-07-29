@@ -10,6 +10,8 @@ namespace Shooter.Client.Interface.Overlays
     [RequireComponent(typeof(Aimer))]
     public class HintOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string HintElement = "hint";
         private const string KeyboardScheme = "Keyboard&Mouse";
 

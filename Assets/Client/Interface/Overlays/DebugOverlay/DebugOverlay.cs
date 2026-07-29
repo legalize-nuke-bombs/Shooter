@@ -13,6 +13,8 @@ namespace Shooter.Client.Interface.Overlays
 {
     public class DebugOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string DebugElement = "debug";
         private const int FrameSamples = 120;
         private const float RefreshSeconds = 0.25f;

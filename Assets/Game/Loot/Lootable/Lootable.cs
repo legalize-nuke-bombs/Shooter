@@ -5,6 +5,8 @@ namespace Shooter.Game.Loot
 {
     public class Lootable : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         public void Fill(Inventory from)
         {
             if (!IsServer || from == null) return;

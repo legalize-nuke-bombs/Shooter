@@ -13,6 +13,8 @@ namespace Shooter.Game.Speech
 {
     public abstract class Talker : NetworkBehaviour, IUsable, IRestraint
     {
+        private static readonly Journal Log = Logs.Here();
+
         public const float TalkReach = 8f;
         public const int SpeechLimit = 300;
 

@@ -6,6 +6,8 @@ namespace Shooter.Game.Body.Sleeping
 {
     public class Bed : MonoBehaviour, IUsable
     {
+        private static readonly Journal Log = Logs.Here();
+
         public UsageType Usage => UsageType.Sleep;
 
         public void Use(NetworkObject user)

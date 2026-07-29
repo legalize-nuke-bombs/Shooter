@@ -5,6 +5,8 @@ namespace Shooter.Game.Body
 {
     public abstract class Health : NetworkBehaviour, IDigestible, IRestraint
     {
+        private static readonly Journal Log = Logs.Here();
+
         public bool Restrains => !Alive;
 
         public abstract int Hp { get; }

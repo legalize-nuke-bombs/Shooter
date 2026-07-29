@@ -12,6 +12,8 @@ namespace Shooter.Bootstrapping
 {
     internal class Session : MonoBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string NetworkPrefab = "NetworkManager";
         private const string OverlayPrefab = "Overlays";
         private const string MenuScene = "Menu";

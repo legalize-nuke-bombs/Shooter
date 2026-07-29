@@ -9,6 +9,8 @@ namespace Shooter.Game.Loot
 {
     public class Inventory : NetworkBehaviour, IDigestible
     {
+        private static readonly Journal Log = Logs.Here();
+
         public const int Nothing = -1;
 
         [SerializeField] private ItemCatalog catalog;

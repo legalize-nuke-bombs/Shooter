@@ -6,6 +6,8 @@ namespace Shooter.Game.Body
 {
     public sealed class DefaultHealth : Health
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private int maxHp = 100;
 
         private readonly NetworkVariable<int> hp = new NetworkVariable<int>();

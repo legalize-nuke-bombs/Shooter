@@ -7,6 +7,8 @@ namespace Shooter.Game
 {
     public abstract class Catalog<TSpec> : ScriptableObject where TSpec : Spec
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private TSpec[] specs;
 
         private readonly Dictionary<FixedString32Bytes, TSpec> known = new Dictionary<FixedString32Bytes, TSpec>();

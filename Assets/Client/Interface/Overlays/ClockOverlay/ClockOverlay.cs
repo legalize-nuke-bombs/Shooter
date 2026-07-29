@@ -9,6 +9,8 @@ namespace Shooter.Client.Interface.Overlays
 {
     public class ClockOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string ClockElement = "clock";
         private const string TimeFormat = "HH:mm";
         private const long Hidden = long.MinValue;

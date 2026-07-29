@@ -10,6 +10,8 @@ namespace Shooter.Editing
 {
     public class CatalogFiller : AssetPostprocessor
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string SpecsField = "specs";
 
         private static void OnPostprocessAllAssets(string[] imported, string[] deleted,

@@ -8,6 +8,8 @@ namespace Shooter.Client.Interface.Overlays
 {
     public class HealthOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string BarElement = "health";
         private const string FillElement = "health-fill";
         private const int Hidden = -1;

@@ -12,6 +12,8 @@ namespace Shooter.Game
     [RequireComponent(typeof(SleepCycle))]
     public class Environment : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         public static Environment Current { get; private set; }
 
         [SerializeField] private GameObject corpse;

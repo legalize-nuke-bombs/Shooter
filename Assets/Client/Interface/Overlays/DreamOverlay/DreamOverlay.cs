@@ -8,6 +8,8 @@ namespace Shooter.Client.Interface.Overlays
 {
     public class DreamOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string DreamElement = "dream";
 
         [SerializeField] private DreamCatalog dreams;
