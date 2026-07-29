@@ -8,6 +8,8 @@ namespace Shooter.Client.Interface.Overlays
 {
     public class InventoryOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string WindowElement = "inventory";
         private const string SlotsElement = "inventory-slots";
         private const string EmptyElement = "inventory-empty";

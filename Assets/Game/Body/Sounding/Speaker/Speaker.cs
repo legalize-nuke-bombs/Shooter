@@ -8,6 +8,8 @@ namespace Shooter.Game.Body.Sounding
     [RequireComponent(typeof(AudioSource))]
     public class Speaker : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private SoundCatalog voice;
 
         private AudioSource source;

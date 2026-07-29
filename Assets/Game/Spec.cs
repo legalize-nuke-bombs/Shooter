@@ -7,6 +7,8 @@ namespace Shooter.Game
 {
     public abstract class Spec : ScriptableObject
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private string id;
 
         public string Key => string.IsNullOrEmpty(id) ? name : id;

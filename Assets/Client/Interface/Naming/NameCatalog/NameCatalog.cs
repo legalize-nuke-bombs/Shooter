@@ -8,6 +8,8 @@ namespace Shooter.Client.Interface.Naming
     [CreateAssetMenu(menuName = "Shooter/Name Catalog", fileName = "NameCatalog")]
     public sealed class NameCatalog : ScriptableObject
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private NameSpec[] specs;
 
         private readonly HashSet<NameableType> unnamed = new HashSet<NameableType>();

@@ -10,6 +10,8 @@ namespace Shooter.Client.Interface.Overlays
 {
     public class LoadingOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string ScreenElement = "loading";
         private const string TextElement = "loading-text";
 

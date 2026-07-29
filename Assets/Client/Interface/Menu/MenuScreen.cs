@@ -8,6 +8,8 @@ namespace Shooter.Client.Interface.Menu
 {
     public class MenuScreen : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string MainScreen = "main";
         private const string HostScreen = "host";
         private const string JoinScreen = "join";

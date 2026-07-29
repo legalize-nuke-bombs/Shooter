@@ -7,5 +7,7 @@ namespace Shooter.Configuring
         public ServerConfig Server { get; set; } = new ServerConfig();
 
         public ClientConfig Client { get; set; } = new ClientConfig();
+
+        public LoggingConfig Logging { get; set; } = new LoggingConfig();
     }
 }

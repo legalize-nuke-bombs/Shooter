@@ -6,6 +6,8 @@ namespace Shooter.Client.Interface.Dreaming
     [CreateAssetMenu(menuName = "Shooter/Dream Catalog", fileName = "DreamCatalog")]
     public sealed class DreamCatalog : ScriptableObject
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private DreamSpec[] dreams;
 
         public DreamSpec Pick()

@@ -9,6 +9,8 @@ namespace Shooter.Client.Interface.Overlays
     [RequireComponent(typeof(Aimer))]
     public class TargetNameOverlay : Overlay
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const string TargetElement = "target-name";
 
         [SerializeField] private NameCatalog names;

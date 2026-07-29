@@ -7,6 +7,8 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(Movement))]
     public class Interactor : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         public const float EyeHeight = 0.75f;
 
         [SerializeField] private float reach = 3f;

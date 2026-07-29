@@ -13,6 +13,8 @@ namespace Shooter.Client.Playing
     [RequireComponent(typeof(Interactor))]
     public class LocalPlayer : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
 

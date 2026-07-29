@@ -11,6 +11,8 @@ namespace Shooter.Game.Combat
     [RequireComponent(typeof(Interactor))]
     public class Gunner : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private Inventory inventory;
         private Interactor interactor;
         private Hands hands;

@@ -8,6 +8,8 @@ namespace Shooter.Game.Speech
 {
     public class Mouth : NetworkBehaviour, IMortal
     {
+        private static readonly Journal Log = Logs.Here();
+
         private readonly NetworkVariable<ulong> interlocutor = new NetworkVariable<ulong>();
 
         private Talker heard;

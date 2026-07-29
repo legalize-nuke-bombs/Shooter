@@ -8,6 +8,8 @@ namespace Shooter.Game.Body
 {
     public class Mortal : NetworkBehaviour, IMortal
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private GameObject corpsePrefab;
 
         private Health health;

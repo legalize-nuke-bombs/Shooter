@@ -9,6 +9,8 @@ namespace Shooter.Client.Interface
     [CreateAssetMenu(menuName = "Shooter/Hint Catalog", fileName = "HintCatalog")]
     public sealed class HintCatalog : ScriptableObject
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private Hint[] hints;
 
         private readonly HashSet<UsageType> unhinted = new HashSet<UsageType>();

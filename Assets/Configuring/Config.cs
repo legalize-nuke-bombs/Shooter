@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -8,9 +9,12 @@ namespace Shooter.Configuring
 {
     public static class Config
     {
+        private static readonly Journal Log = Logs.Here();
+
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
+            Converters = { new StringEnumConverter() }
         };
 
         private static GameConfig current;

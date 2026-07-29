@@ -11,6 +11,8 @@ namespace Shooter.Game.Llm
 {
     public class Llm : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const int MemoryLimit = 2000;
 
         [SerializeField] [TextArea(4, 12)] private string character;

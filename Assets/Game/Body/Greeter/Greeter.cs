@@ -9,6 +9,8 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(NetworkManager))]
     public class Greeter : MonoBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const int NameLimit = 24;
         private const string Nameless = "Player";
 
