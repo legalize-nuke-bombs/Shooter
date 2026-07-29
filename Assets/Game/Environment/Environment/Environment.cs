@@ -49,7 +49,7 @@ namespace Shooter.Game
 
             if (IsServer)
             {
-                ServerConfig config = Config.Read<ServerConfig>(ServerConfig.FileName);
+                ServerConfig config = Config.Read().Server;
                 world.Value = new FixedString64Bytes(config.World);
                 version.Value = new FixedString32Bytes(Application.version);
             }

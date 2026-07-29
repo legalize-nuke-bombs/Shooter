@@ -13,25 +13,23 @@ namespace Shooter.Configuring
             Formatting = Formatting.Indented
         };
 
-        private static readonly System.Collections.Generic.Dictionary<Type, object> Known =
-            new System.Collections.Generic.Dictionary<Type, object>();
+        private static GameConfig current;
 
-        public static T Read<T>(string fileName) where T : new()
+        public static GameConfig Read()
         {
-            if (Known.TryGetValue(typeof(T), out object cached)) return (T)cached;
+            if (current != null) return current;
 
-            T config = Load<T>(fileName);
-            Known[typeof(T)] = config;
-            return config;
+            current = Load();
+            return current;
         }
 
-        private static T Load<T>(string fileName) where T : new()
+        private static GameConfig Load()
         {
-            string path = Path.Combine(Folder(), fileName);
+            string path = Location();
 
             if (!File.Exists(path))
             {
-                var fresh = new T();
+                var fresh = new GameConfig();
                 Write(path, fresh);
                 Log.Info("Config {} was absent, wrote defaults", path);
                 return fresh;
@@ -39,7 +37,8 @@ namespace Shooter.Configuring
 
             try
             {
-                var config = JsonConvert.DeserializeObject<T>(File.ReadAllText(path), Settings) ?? new T();
+                var config = JsonConvert.DeserializeObject<GameConfig>(File.ReadAllText(path), Settings)
+                             ?? new GameConfig();
                 Log.Info("Config {} read", path);
                 Write(path, config);
                 return config;
@@ -47,7 +46,7 @@ namespace Shooter.Configuring
             catch (Exception e)
             {
                 Log.Error("Config {} is unreadable, falling back to defaults: {}", path, e.Message);
-                return new T();
+                return new GameConfig();
             }
         }
 
@@ -63,11 +62,13 @@ namespace Shooter.Configuring
             }
         }
 
-        private static string Folder()
+        private static string Location()
         {
-            return Application.isEditor
+            string folder = Application.isEditor
                 ? Path.GetFullPath(Path.Combine(Application.dataPath, ".."))
                 : Application.persistentDataPath;
+
+            return Path.Combine(folder, GameConfig.FileName);
         }
     }
 }

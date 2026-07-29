@@ -29,7 +29,7 @@ namespace Shooter.Game.Llm
             await gate.WaitAsync();
             try
             {
-                LlmConfig config = Config.Read<ServerConfig>(ServerConfig.FileName).Llm;
+                LlmConfig config = Config.Read().Server.Llm;
                 string systemPrompt = LlmPrompt.System(character, memory, WorldState(), situation);
 
                 Log.Info("Entity {} is asking {} for an answer", name, config.Model);
