@@ -2,11 +2,10 @@
     "name": "Shooter.Bootstrap",
     "rootNamespace": "Shooter",
     "references": [
+        "Shooter.Client",
         "Shooter.Configuring",
-        "Shooter.Game",
         "Shooter.Logging",
         "Unity.Netcode.Runtime",
-        "Unity.DedicatedServer.MultiplayerRoles",
         "Unity.Networking.Transport"
     ],
     "includePlatforms": [],

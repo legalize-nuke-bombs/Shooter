@@ -208,8 +208,8 @@ namespace Shooter.Client.Playing
                 return;
             }
 
-            Log.Info("Escape with nothing open, quitting the game");
-            Application.Quit();
+            Log.Info("Escape with nothing open, leaving the world for the menu");
+            NetworkManager.Shutdown();
         }
 
         private void Use(InputAction.CallbackContext context)

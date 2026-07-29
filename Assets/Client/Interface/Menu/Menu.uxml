@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="Menu.uss" />
+    <ui:VisualElement name="menu" class="menu">
+        <ui:VisualElement name="main" class="screen">
+            <ui:Button name="host" text="Начать игру" class="menu__button" />
+            <ui:Button name="join" text="Присоединиться к игре" class="menu__button" />
+            <ui:Button name="open-settings" text="Настройки" class="menu__button" />
+            <ui:Button name="quit" text="Выйти" class="menu__button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="settings" class="screen">
+            <ui:TextField name="player-name" label="Имя игрока" class="menu__field" />
+            <ui:TextField name="address" label="Адрес" class="menu__field" />
+            <ui:TextField name="port" label="Порт" class="menu__field" />
+            <ui:TextField name="world" label="Имя мира" class="menu__field" />
+            <ui:TextField name="server-port" label="Порт своего мира" class="menu__field" />
+            <ui:Button name="back" text="Назад" class="menu__button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
