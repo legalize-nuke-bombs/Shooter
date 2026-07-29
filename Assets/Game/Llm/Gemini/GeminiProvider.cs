@@ -28,7 +28,7 @@ namespace Shooter.Game.Llm.Gemini
         {
             if (string.IsNullOrEmpty(llm.Key))
             {
-                throw new InvalidOperationException($"Llm key is not set in {ServerConfig.FileName}");
+                throw new InvalidOperationException($"Llm key is not set in {GameConfig.FileName}");
             }
 
             var request = new GeminiRequest

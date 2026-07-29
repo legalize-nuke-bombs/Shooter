@@ -124,20 +124,20 @@ namespace Shooter.Bootstrapping
 
             if (hosting)
             {
-                ServerConfig server = Config.Read<ServerConfig>(ServerConfig.FileName);
+                ServerConfig server = Config.Read().Server;
                 transport.SetConnectionData(AnyAddress, server.Port, AnyAddress);
                 Log.Info("World {} listens on port {}", server.World, server.Port);
                 return;
             }
 
-            ClientConfig client = Config.Read<ClientConfig>(ClientConfig.FileName);
+            ClientConfig client = Config.Read().Client;
             transport.SetConnectionData(client.Address, client.Port);
             Log.Info("Heading for {}:{}", client.Address, client.Port);
         }
 
         private static string PlayerName()
         {
-            return Config.Read<ClientConfig>(ClientConfig.FileName).Name;
+            return Config.Read().Client.Name;
         }
 
         private static void Overlay()

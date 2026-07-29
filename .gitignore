@@ -41,8 +41,7 @@ shooter-logs/
 *.app
 
 # Локальные настройки запуска, создаются с дефолтами при первом старте
-/client.json
-/server.json
+/config.json
 
 # Следы пакета тестирования производительности, натекают в Resources при запуске тестов
 /Assets/Resources/PerformanceTestRun*
