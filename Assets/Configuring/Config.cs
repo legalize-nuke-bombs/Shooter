@@ -23,6 +23,13 @@ namespace Shooter.Configuring
             return current;
         }
 
+        public static void Save()
+        {
+            if (current == null) return;
+
+            Write(Location(), current);
+        }
+
         private static GameConfig Load()
         {
             string path = Location();

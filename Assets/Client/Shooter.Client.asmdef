@@ -2,6 +2,7 @@
     "name": "Shooter.Client",
     "rootNamespace": "Shooter",
     "references": [
+        "Shooter.Configuring",
         "Shooter.Logging",
         "Shooter.Game",
         "Unity.Netcode.Runtime",
