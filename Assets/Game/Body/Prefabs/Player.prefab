@@ -447,7 +447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnBody
   ShowTopMostFoldoutHeaderGroup: 1
-  body: {fileID: 0}
+  body: {fileID: 1353187442657540678}
 --- !u!1 &8441315520480134065
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,15 +690,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 0b49af3716fa6de46907d70826af6d60, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0b49af3716fa6de46907d70826af6d60, type: 3}
-      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b49af3716fa6de46907d70826af6d60, type: 3}
-      propertyPath: m_LocalPosition.z
+      propertyPath: m_LocalPosition.y
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0b49af3716fa6de46907d70826af6d60, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b49af3716fa6de46907d70826af6d60, type: 3}
       propertyPath: m_LocalRotation.w
