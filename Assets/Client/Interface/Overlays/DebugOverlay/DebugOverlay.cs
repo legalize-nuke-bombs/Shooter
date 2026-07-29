@@ -17,6 +17,7 @@ namespace Shooter.Client.Interface.Overlays
 
         private const string DebugElement = "debug";
         private const int FrameSamples = 120;
+        private const int Column = 34;
         private const float RefreshSeconds = 0.25f;
         private const float ReportSeconds = 60f;
         private const float Megabyte = 1024f * 1024f;
@@ -28,20 +29,17 @@ namespace Shooter.Client.Interface.Overlays
             (ProfilerCategory.Memory, "Total Reserved Memory"),
             (ProfilerCategory.Memory, "GC Used Memory"),
             (ProfilerCategory.Memory, "Gfx Used Memory"),
-            (ProfilerCategory.Render, "Draw Calls Count"),
-            (ProfilerCategory.Render, "SetPass Calls Count"),
             (ProfilerCategory.Render, "Batches Count"),
             (ProfilerCategory.Render, "Triangles Count"),
             (ProfilerCategory.Render, "Vertices Count")
         };
 
         private readonly Dictionary<string, ProfilerRecorder> recorders = new();
-        private readonly FrameProfile profile = new();
         private readonly float[] frames = new float[FrameSamples];
         private readonly StringBuilder builder = new();
 
         private Label panel;
-        private Page page;
+        private bool visible;
         private int frame;
         private int filled;
         private float refresh;
@@ -59,18 +57,18 @@ namespace Shooter.Client.Interface.Overlays
             if (report <= 0)
             {
                 report = ReportSeconds;
-                Log.Info("FPS {}, VRAM {}, RAM {}, draws {}, triangles {}",
+                Log.Info("FPS {}, VRAM {}, RAM {}, batches {}, triangles {}",
                     Frequency(), Video(), Bytes("System Used Memory"),
-                    Count("Draw Calls Count"), Count("Triangles Count"));
+                    Count("Batches Count"), Count("Triangles Count"));
             }
 
-            if (page == Page.Hidden) return;
+            if (!visible) return;
 
             refresh -= Time.unscaledDeltaTime;
             if (refresh > 0) return;
 
             refresh = RefreshSeconds;
-            panel.text = page == Page.Frame ? profile.Report() : Report();
+            panel.text = Report();
         }
 
         protected override bool Bind(VisualElement root)
@@ -83,7 +81,7 @@ namespace Shooter.Client.Interface.Overlays
                 return false;
             }
 
-            page = Page.Hidden;
+            visible = false;
             frame = filled = 0;
             refresh = 0;
             panel.style.display = DisplayStyle.None;
@@ -97,7 +95,6 @@ namespace Shooter.Client.Interface.Overlays
             foreach (ProfilerRecorder recorder in recorders.Values) recorder.Dispose();
 
             recorders.Clear();
-            profile.Forget();
             panel = null;
         }
 
@@ -116,11 +113,8 @@ namespace Shooter.Client.Interface.Overlays
 
         private void Toggle()
         {
-            page = page == Page.Frame ? Page.Hidden : page + 1;
-
-            if (page == Page.Frame && !profile.Listening) profile.Listen();
-
-            panel.style.display = page == Page.Hidden ? DisplayStyle.None : DisplayStyle.Flex;
+            visible = !visible;
+            panel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
             refresh = 0;
         }
 
@@ -136,15 +130,19 @@ namespace Shooter.Client.Interface.Overlays
             builder.Clear();
 
             Frames();
-            Line($"Draw calls {Count("Draw Calls Count")}   SetPass {Count("SetPass Calls Count")}   " +
-                 $"Batches {Count("Batches Count")}");
-            Line($"Triangles {Count("Triangles Count")}   Vertices {Count("Vertices Count")}");
-            Line($"VRAM {Video()}   {SystemInfo.graphicsDeviceName}");
-            Line($"RAM {Bytes("System Used Memory")} / {SystemInfo.systemMemorySize} МБ   " +
-                 $"{SystemInfo.processorType.Trim()} ({SystemInfo.processorCount})");
-            Line($"GC {Managed()}   Reserved {Bytes("Total Reserved Memory")}");
-            Line($"Экран {Screen.width}×{Screen.height}   {Screen.currentResolution.refreshRateRatio.value:F0} Гц   " +
-                 (Screen.fullScreen ? "Полный экран" : "Окно"));
+            Line($"Партии {Count("Batches Count")}", $"Треугольники {Count("Triangles Count")}");
+            Line($"Вершины {Count("Vertices Count")}");
+
+            Gap();
+            Line($"VRAM {Video()}", SystemInfo.graphicsDeviceName);
+            Line($"RAM {Bytes("System Used Memory")} / {SystemInfo.systemMemorySize} МБ",
+                $"{SystemInfo.processorType.Trim()} ({SystemInfo.processorCount})");
+            Line($"GC {Managed()}", $"Зарезервировано {Bytes("Total Reserved Memory")}");
+
+            Gap();
+            Line($"Экран {Screen.width}×{Screen.height}",
+                $"{Screen.currentResolution.refreshRateRatio.value:F0} Гц   " +
+                (Screen.fullScreen ? "Полный экран" : "Окно"));
             World();
 
             return builder.ToString().TrimEnd();
@@ -162,12 +160,14 @@ namespace Shooter.Client.Interface.Overlays
             }
 
             float average = total / filled;
-            Line($"FPS {1f / average:F0}   Кадр {average * 1000f:F1} мс   Худший {worst * 1000f:F1} мс");
+            Line($"FPS {1f / average:F0}", $"Кадр {average * 1000f:F1} мс   Худший {worst * 1000f:F1} мс");
         }
 
         private void World()
         {
             NetworkManager network = NetworkManager.Singleton;
+
+            Gap();
 
             if (network == null || !network.IsListening)
             {
@@ -176,23 +176,24 @@ namespace Shooter.Client.Interface.Overlays
             }
 
             string role = network.IsHost ? "Хост" : network.IsServer ? "Сервер" : "Клиент";
-            string peers = network.IsServer ? $"   Клиентов {network.ConnectedClientsIds.Count}" : "";
+            string peers = network.IsServer ? $"Клиентов {network.ConnectedClientsIds.Count}" : "";
             string delay = network.IsClient && !network.IsHost
-                ? $"   Задержка {network.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkManager.ServerClientId)} мс"
+                ? $"Задержка {network.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkManager.ServerClientId)} мс"
                 : "";
-            Line(role + peers + delay);
+            Line(role, peers + delay);
 
             Transform player = OwnPlayer.Find<Transform>();
             if (player != null)
             {
                 Vector3 at = player.position;
-                Line($"Позиция {at.x:F1} {at.y:F1} {at.z:F1}   {Facing(player.eulerAngles.y)}");
+                Line($"Позиция {at.x:F1} {at.y:F1} {at.z:F1}", Facing(player.eulerAngles.y));
             }
 
             Environment environment = Environment.Current;
-            Line(environment == null
-                ? $"Мир не получен   Клиент {Application.version}"
-                : $"Мир {environment.World}   Сервер {environment.Version}   Клиент {Application.version}");
+            Line(environment == null ? "Мир не получен" : $"Мир {environment.World}",
+                environment == null
+                    ? $"Клиент {Application.version}"
+                    : $"Сервер {environment.Version}   Клиент {Application.version}");
         }
 
         private string Managed()
@@ -204,7 +205,7 @@ namespace Shooter.Client.Interface.Overlays
 
         private string Frequency()
         {
-            if (filled == 0) return "—";
+            if (filled == 0) return Unavailable;
 
             float total = 0;
             for (int i = 0; i < filled; i++) total += frames[i];
@@ -245,16 +246,14 @@ namespace Shooter.Client.Interface.Overlays
             return true;
         }
 
-        private void Line(string line)
+        private void Line(string left, string right = null)
         {
-            builder.Append(line).Append('\n');
+            builder.Append(string.IsNullOrEmpty(right) ? left : left.PadRight(Column) + right).Append('\n');
         }
 
-        private enum Page
+        private void Gap()
         {
-            Hidden,
-            Stats,
-            Frame
+            builder.Append('\n');
         }
     }
 }
