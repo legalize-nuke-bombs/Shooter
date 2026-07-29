@@ -254,14 +254,14 @@ MonoBehaviour:
     customBufferFormat: 12
     supportedLitShaderMode: 2
     planarReflectionResolution:
-      m_Values: 000100000004000000080000
+      m_Values: 000100000004000000040000
       m_SchemaId:
         m_Id: With3Levels
     cubeReflectionResolution:
       m_Values: 000100000002000000040000
       m_SchemaId:
         m_Id: With3Levels
-    supportDecals: 1
+    supportDecals: 0
     supportDecalLayers: 0
     supportSurfaceGradient: 0
     decalNormalBufferHP: 0
@@ -297,7 +297,7 @@ MonoBehaviour:
       maxEnvLightsOnScreen: 64
       reflectionCacheCompressed: 0
       reflectionProbeFormat: 74
-      reflectionProbeTexCacheSize: 1073750016
+      reflectionProbeTexCacheSize: 2048
       reflectionProbeTexLastValidCubeMip: 3
       reflectionProbeTexLastValidPlanarMip: 0
       reflectionProbeDecreaseResToFit: 1

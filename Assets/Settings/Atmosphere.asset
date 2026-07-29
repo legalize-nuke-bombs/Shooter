@@ -203,7 +203,7 @@ MonoBehaviour:
     m_Value: 1
   depthExtent:
     m_OverrideState: 1
-    m_Value: 100
+    m_Value: 60
   denoisingMode:
     m_OverrideState: 1
     m_Value: 3
@@ -217,7 +217,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0.1
   m_FogControlMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   screenResolutionPercentage:
     m_OverrideState: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
     m_Value: 64
   m_VolumetricFogBudget:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.25
   m_ResolutionDepthRatio:
     m_OverrideState: 1
     m_Value: 0.666
@@ -921,7 +921,7 @@ MonoBehaviour:
   active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: -25
+    m_Value: -35
   tint:
     m_OverrideState: 1
     m_Value: 0
