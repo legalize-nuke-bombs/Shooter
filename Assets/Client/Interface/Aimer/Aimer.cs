@@ -1,3 +1,4 @@
+using Shooter.Game.Body;
 using UnityEngine;
 
 namespace Shooter.Client.Interface
@@ -31,7 +32,7 @@ namespace Shooter.Client.Interface
             if (view == null) return;
 
             Transform eyes = view.transform;
-            hits = Physics.Raycast(eyes.position, eyes.forward, out hit, reach);
+            hits = Interactor.TryLook(eyes.position, eyes.forward, reach, eyes.root, out hit);
         }
     }
 }

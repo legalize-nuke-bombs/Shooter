@@ -1,4 +1,5 @@
 using Shooter.Game.Body;
+using Shooter.Game.Body.Hitboxes;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
 using Shooter.Logging;
@@ -109,8 +110,12 @@ namespace Shooter.Game.Combat
                 return;
             }
 
-            health.Damage(spec.Damage);
-            Log.Info("Shot of entity {} hit {} for {} damage", name, health.name, spec.Damage);
+            var hitbox = hit.collider.GetComponent<Hitbox>();
+            BodyPart part = hitbox == null ? BodyPart.Torso : hitbox.Part;
+            int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
+
+            health.Damage(damage);
+            Log.Info("Shot of entity {} hit {} in {} for {} damage", name, health.name, part, damage);
         }
     }
 }
