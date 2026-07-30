@@ -11,21 +11,21 @@ namespace Shooter.Game.Body
         private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkVariable<FixedString32Bytes> skin = new NetworkVariable<FixedString32Bytes>();
-        private readonly NetworkVariable<NameableType> title = new NetworkVariable<NameableType>(NameableType.DeadPlayer);
+        private readonly NetworkVariable<FixedString32Bytes> title = new NetworkVariable<FixedString32Bytes>();
 
         public void Dress(SkinSpec spec)
         {
             skin.Value = spec.Id;
         }
 
-        public void Rename(NameableType type)
+        public void Rename(NameSpec spec)
         {
-            title.Value = type;
+            title.Value = spec.Id;
         }
 
         public override void OnNetworkSpawn()
         {
-            GetComponent<TypedNameable>()?.Assign(title.Value);
+            Inherit();
 
             if (skin.Value.IsEmpty)
             {
@@ -47,6 +47,22 @@ namespace Shooter.Game.Body
             body.AddComponent<Ragdoll>();
 
             Log.Info("Corpse {} dressed as {}", name, skin.Value);
+        }
+
+        private void Inherit()
+        {
+            var named = GetComponent<TypedNameable>();
+            if (named == null || title.Value.IsEmpty) return;
+
+            NameCatalog catalog = Environment.Current == null ? null : Environment.Current.Names;
+            NameSpec spec = catalog == null ? null : catalog.Of(title.Value);
+            if (spec == null)
+            {
+                Log.Warn("Corpse {} cannot find name {}, keeps its own", name, title.Value);
+                return;
+            }
+
+            named.Assign(spec);
         }
     }
 }

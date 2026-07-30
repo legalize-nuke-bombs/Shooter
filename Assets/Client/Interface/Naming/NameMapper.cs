@@ -4,13 +4,6 @@ namespace Shooter.Client.Interface.Naming
 {
     public sealed class NameMapper
     {
-        private readonly NameCatalog catalog;
-
-        public NameMapper(NameCatalog catalog)
-        {
-            this.catalog = catalog;
-        }
-
         public string Of(Nameable nameable)
         {
             switch (nameable)
@@ -18,7 +11,7 @@ namespace Shooter.Client.Interface.Naming
                 case AbsoluteNameable absolute:
                     return absolute.Name;
                 case TypedNameable typed:
-                    return catalog.Text(typed.Type);
+                    return typed.Spec == null ? string.Empty : typed.Spec.Text();
                 default:
                     return string.Empty;
             }

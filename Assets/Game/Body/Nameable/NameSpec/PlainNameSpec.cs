@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Client.Interface.Naming
+namespace Shooter.Game.Body
 {
     [CreateAssetMenu(menuName = "Shooter/Plain Name", fileName = "PlainName")]
     public sealed class PlainNameSpec : NameSpec

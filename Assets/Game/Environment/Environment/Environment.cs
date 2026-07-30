@@ -25,6 +25,8 @@ namespace Shooter.Game
 
         [SerializeField] private SkinCatalog skins;
 
+        [SerializeField] private NameCatalog names;
+
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
@@ -39,6 +41,8 @@ namespace Shooter.Game
         public SoundCatalog Sounds => sounds;
 
         public SkinCatalog Skins => skins;
+
+        public NameCatalog Names => names;
 
         public string World => world.Value.ToString();
 
