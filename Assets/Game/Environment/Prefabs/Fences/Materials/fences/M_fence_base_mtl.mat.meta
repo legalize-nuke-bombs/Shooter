@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f542ee0b48639d348a20d9d6b0fad525
+timeCreated: 1525174189
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 105862
+  packageName: Modular self-stand fence
+  packageVersion: 1.2
+  assetPath: Assets/Fences/Materials/fences/M_fence_base_mtl.mat
+  uploadId: 325927

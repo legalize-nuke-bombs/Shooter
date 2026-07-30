@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0726431d21a7dcb48b0c48f6ba5d24fc
+timeCreated: 1475386126
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73101
+  packageName: Crate and Barrels
+  packageVersion: 1.0
+  assetPath: Assets/Assets_Crate_Barrels/models/Materials/plastic_crates-1.mat
+  uploadId: 140470

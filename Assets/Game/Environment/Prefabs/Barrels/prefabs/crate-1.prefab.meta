@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b36f08aa40d9cf04893f169ffe70b132
+timeCreated: 1475387650
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73101
+  packageName: Crate and Barrels
+  packageVersion: 1.0
+  assetPath: Assets/Assets_Crate_Barrels/prefabs/crate-1.prefab
+  uploadId: 140470
