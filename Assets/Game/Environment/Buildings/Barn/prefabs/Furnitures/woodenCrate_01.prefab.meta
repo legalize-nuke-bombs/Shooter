@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 76942ff6e91dff7459281119a0a8b452
+timeCreated: 1485367328
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/woodenCrate_01.prefab
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4d210521e56bea644b9034ed279aa59b
+timeCreated: 1493020644
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/glass_01.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d5baa58ee82158f4f8502e38566d9919
+timeCreated: 1486485630
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/large_Paint_Buckets/largePaintBucket_02_Red.mat
+  uploadId: 184849

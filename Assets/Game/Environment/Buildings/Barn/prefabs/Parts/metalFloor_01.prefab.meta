@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 60d6e71772372ba49bef43ffe8bc40de
+timeCreated: 1487692042
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/metalFloor_01.prefab
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cb2de0c2630a8ea46a7e4ac0ef0227f9
+timeCreated: 1493020172
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/weatheredWood_01.mat
+  uploadId: 184849

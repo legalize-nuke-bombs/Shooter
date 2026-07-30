@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 799e08ed51da89d418198755c7706d73
+timeCreated: 1496917698
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/tire_01_LOD1.prefab
+  uploadId: 184849

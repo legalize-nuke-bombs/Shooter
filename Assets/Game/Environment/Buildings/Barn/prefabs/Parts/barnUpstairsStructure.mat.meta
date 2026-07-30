@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d1e766d7767548b4e85ba0815c3af7b1
+timeCreated: 1487779066
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/barnUpstairsStructure.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4fa21d96bb4de264690c47030d347773
+timeCreated: 1488967172
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/window_01.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b0b8a60800c9f3d46a32aebe5cb641c0
+timeCreated: 1487348079
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/exterior_tools/LODs/pitchFork_01_LOD2.prefab
+  uploadId: 184849

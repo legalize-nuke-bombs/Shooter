@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c9d431a3cd686694a9fd066ef441164e
+timeCreated: 1484321378
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/cans/plastic/LODs/plasticCan_03_LOD0.prefab
+  uploadId: 184849

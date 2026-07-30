@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8a790462e37f8ec4ab3606763d71d085
+timeCreated: 1489764045
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Lights/interiorLight_02.prefab
+  uploadId: 184849

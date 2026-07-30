@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 496d7c9926717da4b9d77efe1516620d
+timeCreated: 1484149760
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/metalFurnitureYellow_01.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7dcf47870981c3d4c85f858a27816c70
+timeCreated: 1489763792
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Lights/LODs/interiorLight_02_LOD0.prefab
+  uploadId: 184849

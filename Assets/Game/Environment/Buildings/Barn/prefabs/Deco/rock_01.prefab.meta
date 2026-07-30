@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 64f22f70d18dd4c40b0b933cfc063ba4
+timeCreated: 1487872037
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/rock_01.prefab
+  uploadId: 184849

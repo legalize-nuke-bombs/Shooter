@@ -1,0 +1,191 @@
+fileFormatVersion: 2
+guid: 581089346b95b6f4981bb1b3ce5a8fd4
+timeCreated: 1490089782
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: emergencyStopButton_LOD2
+    100002: gas_generator_core_LOD2
+    100004: gas_generator_hatch_LOD2
+    100006: gas_generator_hatchInside_LOD2
+    100008: //RootNode
+    100010: gasLamp004
+    100012: gasLamp005
+    100014: hatchHandle_LOD2
+    100016: plugCap_01_LOD2
+    100018: plugCap_02_LOD2
+    100020: plugInside_01_LOD2
+    100022: plugInside_01_LOD2 1
+    100024: powerButton_LOD2
+    100026: powerLamp004
+    100028: powerLamp005
+    100030: wheel_01_LOD2
+    100032: wheel_01_LOD2 1
+    100034: wheel_03_LOD2
+    100036: wheel_04_LOD2
+    100038: gasLamp_LOD2
+    100040: powerLamp_LOD2
+    100042: wheel_02_LOD2
+    400000: emergencyStopButton_LOD2
+    400002: gas_generator_core_LOD2
+    400004: gas_generator_hatch_LOD2
+    400006: gas_generator_hatchInside_LOD2
+    400008: //RootNode
+    400010: gasLamp004
+    400012: gasLamp005
+    400014: hatchHandle_LOD2
+    400016: plugCap_01_LOD2
+    400018: plugCap_02_LOD2
+    400020: plugInside_01_LOD2
+    400022: plugInside_01_LOD2 1
+    400024: powerButton_LOD2
+    400026: powerLamp004
+    400028: powerLamp005
+    400030: wheel_01_LOD2
+    400032: wheel_01_LOD2 1
+    400034: wheel_03_LOD2
+    400036: wheel_04_LOD2
+    400038: gasLamp_LOD2
+    400040: powerLamp_LOD2
+    400042: wheel_02_LOD2
+    2300000: emergencyStopButton_LOD2
+    2300002: gas_generator_core_LOD2
+    2300004: gas_generator_hatch_LOD2
+    2300006: gas_generator_hatchInside_LOD2
+    2300008: gasLamp004
+    2300010: gasLamp005
+    2300012: hatchHandle_LOD2
+    2300014: plugCap_01_LOD2
+    2300016: plugCap_02_LOD2
+    2300018: plugInside_01_LOD2
+    2300020: plugInside_01_LOD2 1
+    2300022: powerButton_LOD2
+    2300024: powerLamp004
+    2300026: powerLamp005
+    2300028: wheel_01_LOD2
+    2300030: wheel_01_LOD2 1
+    2300032: wheel_03_LOD2
+    2300034: wheel_04_LOD2
+    2300036: gasLamp_LOD2
+    2300038: powerLamp_LOD2
+    2300040: wheel_02_LOD2
+    2300042: //RootNode
+    3300000: emergencyStopButton_LOD2
+    3300002: gas_generator_core_LOD2
+    3300004: gas_generator_hatch_LOD2
+    3300006: gas_generator_hatchInside_LOD2
+    3300008: gasLamp004
+    3300010: gasLamp005
+    3300012: hatchHandle_LOD2
+    3300014: plugCap_01_LOD2
+    3300016: plugCap_02_LOD2
+    3300018: plugInside_01_LOD2
+    3300020: plugInside_01_LOD2 1
+    3300022: powerButton_LOD2
+    3300024: powerLamp004
+    3300026: powerLamp005
+    3300028: wheel_01_LOD2
+    3300030: wheel_01_LOD2 1
+    3300032: wheel_03_LOD2
+    3300034: wheel_04_LOD2
+    3300036: gasLamp_LOD2
+    3300038: powerLamp_LOD2
+    3300040: wheel_02_LOD2
+    3300042: //RootNode
+    4300000: powerLamp004
+    4300002: gasLamp004
+    4300004: plugCap_01_LOD2
+    4300006: hatchHandle_LOD2
+    4300008: plugInside_01_LOD2
+    4300010: gas_generator_hatchInside_LOD2
+    4300012: gas_generator_hatch_LOD2
+    4300014: emergencyStopButton_LOD2
+    4300016: plugCap_02_LOD2
+    4300018: plugInside_01_LOD2
+    4300020: wheel_01_LOD2
+    4300022: powerLamp005
+    4300024: gasLamp005
+    4300026: powerButton_LOD2
+    4300028: wheel_03_LOD2
+    4300030: wheel_04_LOD2
+    4300032: wheel_01_LOD2
+    4300034: gas_generator_core_LOD2
+    4300036: powerLamp_LOD2
+    4300038: gasLamp_LOD2
+    4300040: wheel_02_LOD2
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/models/Props/gasGenerator_01_LOD2.FBX
+  uploadId: 184849

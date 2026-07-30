@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 283e1d5f98ea25548a736f8da9a31ae6
+timeCreated: 1483984223
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/tool_boxes/LODs/toolBoxYellow_01_LOD0.prefab
+  uploadId: 184849

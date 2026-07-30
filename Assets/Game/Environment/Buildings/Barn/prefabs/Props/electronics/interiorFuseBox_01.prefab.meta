@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f95b5510b343d4940bb04d0e3e5c506e
+timeCreated: 1490198072
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/electronics/interiorFuseBox_01.prefab
+  uploadId: 184849

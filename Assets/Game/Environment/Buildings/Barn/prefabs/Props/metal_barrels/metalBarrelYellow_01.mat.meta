@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3c9b6c8f43a29d940a2b74312bc330c6
+timeCreated: 1485279655
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/metal_barrels/metalBarrelYellow_01.mat
+  uploadId: 184849

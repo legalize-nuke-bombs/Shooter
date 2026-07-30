@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 93652c88b82de5a4ca267824edc57f30
+timeCreated: 1485860466
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/exterior_tools/exteriorTools_01.mat
+  uploadId: 184849

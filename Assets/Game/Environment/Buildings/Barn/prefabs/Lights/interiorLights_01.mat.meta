@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 02500d7db38d85b4b96518bdf68805c7
+timeCreated: 1489686429
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Lights/interiorLights_01.mat
+  uploadId: 184849

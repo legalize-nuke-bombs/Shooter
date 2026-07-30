@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 23d9dc28f88ba7046bf863fe2d730516
+timeCreated: 1487760649
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/LODs/barnWoodFrame_01_LOD0.prefab
+  uploadId: 184849

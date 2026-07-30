@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0a1da0e883304bc438dbc7ff7e5e8c85
+timeCreated: 1488473278
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/LODs/barnLadder_01_LOD2.prefab
+  uploadId: 184849

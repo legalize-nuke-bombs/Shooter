@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ff62351821f0f5549be99b6dcebd1493
+timeCreated: 1488204748
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/roofTimbers_01.prefab
+  uploadId: 184849

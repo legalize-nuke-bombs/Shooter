@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5b627a00ed0d4ec4f97c761873b89526
+timeCreated: 1485363177
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/metalChest_01.mat
+  uploadId: 184849

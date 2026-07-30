@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a48eb19c7fc8ddf46bdd87ed9aabfbbe
+timeCreated: 1489509293
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/electronics/fuseBox_01.prefab
+  uploadId: 184849

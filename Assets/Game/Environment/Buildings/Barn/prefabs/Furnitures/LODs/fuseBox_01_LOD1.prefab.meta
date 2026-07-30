@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 71925b37593065b43abcc415b3b633ff
+timeCreated: 1488208381
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/LODs/fuseBox_01_LOD1.prefab
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 979c975902a8d6241a55990d4de6e811
+timeCreated: 1487267064
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/LODs/groundGrid_01_LOD1.prefab
+  uploadId: 184849

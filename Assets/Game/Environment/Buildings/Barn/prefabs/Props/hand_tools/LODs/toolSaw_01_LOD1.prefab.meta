@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2334eb8a429726441b5ec1c58bebbb50
+timeCreated: 1486564382
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/hand_tools/LODs/toolSaw_01_LOD1.prefab
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c2dff6a48bbdab64592402438513e34e
+timeCreated: 1493020645
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/concrete_01.mat
+  uploadId: 184849

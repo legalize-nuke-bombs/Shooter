@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0637f45e7ab98e448ac47e4296c8180c
+timeCreated: 1486565573
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/hand_tools/toolNippers_01.prefab
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9fdbc7bd23431dd429748cdf4633ccf6
+timeCreated: 1485274664
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/hand_tools/LODs/toolScrewer_01_LOD0.prefab
+  uploadId: 184849

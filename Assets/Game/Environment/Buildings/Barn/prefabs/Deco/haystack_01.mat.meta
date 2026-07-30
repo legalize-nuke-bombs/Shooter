@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 70d1218dcb7a2e14c82f6453bb8d3232
+timeCreated: 1486043928
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/haystack_01.mat
+  uploadId: 184849

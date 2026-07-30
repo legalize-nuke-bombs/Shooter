@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bebe37aa172b10a41a768ae1e787e61a
+timeCreated: 1486553998
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/woodStock_01.prefab
+  uploadId: 184849

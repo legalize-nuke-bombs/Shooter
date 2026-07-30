@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 15ba3dac99bbc2d42aa245097ecece05
+timeCreated: 1488994347
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/barnDoor_01.prefab
+  uploadId: 184849

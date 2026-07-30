@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 71c9f624010fa5f448b65169bfe31c91
+timeCreated: 1490091269
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/gasGenerator_01_LOD2.prefab
+  uploadId: 184849

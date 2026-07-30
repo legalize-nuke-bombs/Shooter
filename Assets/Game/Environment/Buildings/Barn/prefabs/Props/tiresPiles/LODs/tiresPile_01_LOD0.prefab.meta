@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2d868e1811f9321439fbba04759fa6c5
+timeCreated: 1497340389
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/tiresPiles/LODs/tiresPile_01_LOD0.prefab
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7b4320ae18d192846aa928bf1c332523
+timeCreated: 1487759488
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/barnWoodFrameSecondary.mat
+  uploadId: 184849

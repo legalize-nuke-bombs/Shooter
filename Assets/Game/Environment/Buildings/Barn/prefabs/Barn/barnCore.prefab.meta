@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d8bbe0f37ee92dc45b8c20cf9a88915c
+timeCreated: 1487253318
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Barn/barnCore.prefab
+  uploadId: 184849

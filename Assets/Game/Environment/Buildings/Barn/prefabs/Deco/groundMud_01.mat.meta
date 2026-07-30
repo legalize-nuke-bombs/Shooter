@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bc450f19d96690b47b42e1b35a1fd52f
+timeCreated: 1488273358
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/groundMud_01.mat
+  uploadId: 184849

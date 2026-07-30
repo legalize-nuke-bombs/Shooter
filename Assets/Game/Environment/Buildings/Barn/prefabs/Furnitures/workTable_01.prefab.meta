@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f68ad54a4f7128046bf0e086ff61d880
+timeCreated: 1484146527
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/workTable_01.prefab
+  uploadId: 184849

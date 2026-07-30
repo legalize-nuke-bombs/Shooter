@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0d5158430d86b164196f3f8092b9efe3
+timeCreated: 1486487977
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/toolsWall_01/LODs/toolsWall_01_LOD0.prefab
+  uploadId: 184849

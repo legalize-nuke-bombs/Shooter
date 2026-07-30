@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4bf1d798d51f17746a563f055f2990fc
+timeCreated: 1493020644
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/red_01.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b58b0cd6af98a4d4ab07359d4b060049
+timeCreated: 1493020644
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/beechWood_01.mat
+  uploadId: 184849

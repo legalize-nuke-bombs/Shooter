@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2a6d7cc76f616504889fb6b1b7f808af
+timeCreated: 1489426562
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Barn/barnRoof_02.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8c20b389877e5ea4786b8c7c741e3aa9
+timeCreated: 1487761503
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/barnWoodFrame_03.prefab
+  uploadId: 184849

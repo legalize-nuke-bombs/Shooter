@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0956e8ab76450ce43ba1c9fc2d243871
+timeCreated: 1487784246
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/fence_02.prefab
+  uploadId: 184849

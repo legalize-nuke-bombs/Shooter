@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f0510a0241416884cba2724368792d2d
+timeCreated: 1490118376
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/theBarn_Empty.prefab
+  uploadId: 184849

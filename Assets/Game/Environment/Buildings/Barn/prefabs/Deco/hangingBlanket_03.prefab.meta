@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f69745ce9e1eadb4a9da30e2f0fd318c
+timeCreated: 1486060029
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/hangingBlanket_03.prefab
+  uploadId: 184849

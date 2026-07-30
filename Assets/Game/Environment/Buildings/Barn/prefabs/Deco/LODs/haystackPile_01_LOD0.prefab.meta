@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e65e8dc1621e9234c97492a77f97c1d5
+timeCreated: 1486044874
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/LODs/haystackPile_01_LOD0.prefab
+  uploadId: 184849

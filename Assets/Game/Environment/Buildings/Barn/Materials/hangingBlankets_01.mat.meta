@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a492f1ffc22451f49a482cbdb5b340e9
+timeCreated: 1493020644
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/hangingBlankets_01.mat
+  uploadId: 184849

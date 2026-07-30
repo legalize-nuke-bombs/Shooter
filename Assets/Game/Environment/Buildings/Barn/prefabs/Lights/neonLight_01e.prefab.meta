@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 00731364d9efae6488bdb66c70116988
+timeCreated: 1489764853
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Lights/neonLight_01e.prefab
+  uploadId: 184849

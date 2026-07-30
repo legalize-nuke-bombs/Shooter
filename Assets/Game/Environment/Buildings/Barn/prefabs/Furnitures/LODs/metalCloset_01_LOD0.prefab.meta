@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ad19d2669a06a334b984f4508f544a1e
+timeCreated: 1488906057
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/LODs/metalCloset_01_LOD0.prefab
+  uploadId: 184849

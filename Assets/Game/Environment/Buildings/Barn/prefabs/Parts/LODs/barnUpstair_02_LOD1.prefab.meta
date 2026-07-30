@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: db3b4841437171d47915b7c3bed87092
+timeCreated: 1487779521
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/LODs/barnUpstair_02_LOD1.prefab
+  uploadId: 184849

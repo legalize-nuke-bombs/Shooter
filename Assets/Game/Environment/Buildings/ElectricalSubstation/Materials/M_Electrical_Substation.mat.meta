@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 576ab5f042c60614cb256c90cac75fee
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 190678
+  packageName: Electrical Substation
+  packageVersion: 1.0
+  assetPath: Assets/Electrical Substation/Materials/M_Electrical_Substation.mat
+  uploadId: 420960

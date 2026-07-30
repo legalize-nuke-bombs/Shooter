@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c9a68fd72af5f3142a3be206ad22ebd2
+timeCreated: 1485450985
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/shelve_01.prefab
+  uploadId: 184849
