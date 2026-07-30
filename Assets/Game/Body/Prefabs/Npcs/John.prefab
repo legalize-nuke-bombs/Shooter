@@ -51,19 +51,19 @@ PrefabInstance:
     - target: {fileID: 4228232704910921683, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: spec
       value: 
-      objectReference: {fileID: 11400000, guid: b8465cbbdb263e7459c08488f3f043db, type: 2}
+      objectReference: {fileID: 11400000, guid: 5a8afdb3532007c4e96db82a1e54287f, type: 2}
     - target: {fileID: 4631506295885286890, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3711924916
+      value: 2441482670
       objectReference: {fileID: 0}
     - target: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: m_Name
-      value: Fina
+      value: John
       objectReference: {fileID: 0}
     - target: {fileID: 7950136779140239968, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: spec
       value: 
-      objectReference: {fileID: 11400000, guid: ba936853d66775c4bb1c7991bec4074b, type: 2}
+      objectReference: {fileID: 11400000, guid: 9ed3f55f26a11e413c0dc42e63481c04, type: 2}
     - target: {fileID: 7950136779140239972, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: corpsePrefab
       value: 
@@ -97,15 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Llm
   ShowTopMostFoldoutHeaderGroup: 1
-  character: "\u0422\u044B \u2014 \u0424\u0438\u043D\u0430, \u0442\u0440\u0435\u0445\u043C\u0435\u0440\u043D\u0430\u044F
-    \u0430\u043D\u0438\u043C\u0435-\u0434\u0435\u0432\u043E\u0447\u043A\u0430 \u0438\u0437
-    \u043E\u0447\u0435\u043D\u044C \u0441\u0442\u0440\u0430\u043D\u043D\u043E\u0433\u043E
-    \u0438\u0437\u043C\u0435\u0440\u0435\u043D\u0438\u044F. \u0422\u044B \u0432\u044B\u0433\u043B\u044F\u0434\u0438\u0448\u044C
-    \u0447\u0443\u0436\u0435\u0440\u043E\u0434\u043D\u043E \u0438 \u043C\u0438\u043B\u043E.\n\n\u0422\u044B
-    \u0432\u0435\u0434\u0435\u0448\u044C \u0441\u0435\u0431\u044F \u0434\u0440\u0443\u0436\u0435\u043B\u044E\u0431\u043D\u043E,
-    \u043D\u043E \u0442\u0432\u043E\u0438 \u0441\u043B\u043E\u0432\u0430 \u043F\u0443\u0433\u0430\u044E\u0442.\n\u0422\u0432\u043E\u044F
-    \u0440\u0435\u0447\u044C \u043D\u0435\u0441\u0432\u044F\u0437\u043D\u0430\u044F,
-    \u043F\u0441\u0438\u0445\u043E\u0434\u0435\u043B\u0438\u0447\u0435\u0441\u043A\u0430\u044F."
+  character: "\u0422\u044B \u2014 \u0418\u043E\u0430\u043D\u043D, \u0433\u043B\u0430\u0432\u0430
+    \u043A\u0443\u043B\u044C\u0442\u0438\u0441\u0442\u043E\u0432."
 --- !u!114 &-6005480022835525321
 MonoBehaviour:
   m_ObjectHideFlags: 0

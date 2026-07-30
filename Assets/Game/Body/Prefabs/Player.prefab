@@ -280,6 +280,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.data[0].Spec
+      value: 
+      objectReference: {fileID: 11400000, guid: 0836adec8b5cb4888b092591dca0497a, type: 2}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.data[1].Spec
+      value: 
+      objectReference: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.data[2].Spec
+      value: 
+      objectReference: {fileID: 11400000, guid: da689ff943a374b4b82b6765cd1884ab, type: 2}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.data[3].Spec
+      value: 
+      objectReference: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.data[0].Amount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.data[1].Amount
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.data[2].Amount
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: contents.Array.data[3].Amount
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6600000000000000105, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: spec
       value: 
