@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000012590266918}
   - component: {fileID: 33000013286098770}
+  - component: {fileID: 640001092718537601}
   - component: {fileID: 23000012991220784}
   m_Layer: 0
   m_Name: crate-3_LOD0
@@ -238,3 +239,24 @@ LODGroup:
     - renderer: {fileID: 23000012913716426}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!64 &640001092718537601
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010927185376}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 5fcec1f8a2921ee4e8af5830d4591269, type: 3}

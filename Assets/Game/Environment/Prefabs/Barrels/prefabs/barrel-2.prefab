@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000010469381932}
   - component: {fileID: 33000011119968676}
+  - component: {fileID: 640001066605928401}
   - component: {fileID: 23000010930217750}
   m_Layer: 0
   m_Name: barrel-2_LOD0
@@ -238,3 +239,24 @@ LODGroup:
     - renderer: {fileID: 23000013199755436}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!64 &640001066605928401
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010666059284}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 152ddb9e58b436343a781597a367c52f, type: 3}
