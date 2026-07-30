@@ -1,7 +1,7 @@
 using System.Text;
 using UnityEngine;
 
-namespace Shooter.Client.Interface.Naming
+namespace Shooter.Game.Body
 {
     [CreateAssetMenu(menuName = "Shooter/Glitch Name", fileName = "GlitchName")]
     public sealed class GlitchNameSpec : NameSpec

@@ -13,10 +13,9 @@ namespace Shooter.Client.Interface.Overlays
 
         private const string TargetElement = "target-name";
 
-        [SerializeField] private NameCatalog names;
+        private readonly NameMapper mapper = new NameMapper();
 
         private Aimer aimer;
-        private NameMapper mapper;
         private Label target;
         private string shown = string.Empty;
 
@@ -49,13 +48,6 @@ namespace Shooter.Client.Interface.Overlays
                 return false;
             }
 
-            if (names == null)
-            {
-                Log.Error("Target name overlay has no name catalog, target names stay hidden");
-                return false;
-            }
-
-            mapper = new NameMapper(names);
             target.text = string.Empty;
 
             return true;

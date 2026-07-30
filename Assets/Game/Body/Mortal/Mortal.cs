@@ -69,7 +69,7 @@ namespace Shooter.Game.Body
                 if (skin != null && skin.Spec != null) corpse.Dress(skin.Spec);
 
                 var named = GetComponent<TypedNameable>();
-                if (named != null) corpse.Rename(named.Type);
+                if (named != null && named.Spec != null) corpse.Rename(named.Spec);
             }
 
             spawned.Spawn();

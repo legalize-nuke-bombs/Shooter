@@ -20,14 +20,13 @@ namespace Shooter.Client.Interface.Overlays
         private const string InputElement = "talk-input";
         private const string Stranger = "Незнакомец";
 
-        [SerializeField] private NameCatalog names;
+        private readonly NameMapper mapper = new NameMapper();
 
         private VisualElement window;
         private Label speaker;
         private ScrollView log;
         private Label waiting;
         private TextField input;
-        private NameMapper mapper;
         private Mouth mouth;
 
         private void Update()
@@ -61,13 +60,6 @@ namespace Shooter.Client.Interface.Overlays
                 return false;
             }
 
-            if (names == null)
-            {
-                Log.Error("Talk overlay has no name catalog, talks stay invisible");
-                return false;
-            }
-
-            mapper = new NameMapper(names);
             input.maxLength = Talker.SpeechLimit;
             input.RegisterCallback<KeyDownEvent>(Typed);
             window.style.display = DisplayStyle.None;

@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  type: 0
+  spec: {fileID: 11400000, guid: 1aa6c084c97c444e9a38f2b5373b8c9e, type: 2}
 --- !u!114 &-768695607319511987
 MonoBehaviour:
   m_ObjectHideFlags: 0

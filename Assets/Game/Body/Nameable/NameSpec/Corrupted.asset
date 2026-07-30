@@ -11,8 +11,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f94b75a9bb009446982fffbe9180b02b, type: 3}
   m_Name: Corrupted
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Naming.GlitchNameSpec
-  type: 2
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.GlitchNameSpec
+  id:
   alphabet: '017XREVID#$@%?!&'
   messages:
   - I_SEE_YOU

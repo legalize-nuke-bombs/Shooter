@@ -4,13 +4,13 @@ namespace Shooter.Game.Body
 {
     public sealed class TypedNameable : Nameable
     {
-        [SerializeField] private NameableType type;
+        [SerializeField] private NameSpec spec;
 
-        public NameableType Type => type;
+        public NameSpec Spec => spec;
 
-        public void Assign(NameableType assigned)
+        public void Assign(NameSpec assigned)
         {
-            type = assigned;
+            spec = assigned;
         }
 
         public override string Digest()
