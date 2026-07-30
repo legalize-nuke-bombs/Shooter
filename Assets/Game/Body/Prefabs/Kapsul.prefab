@@ -128,7 +128,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
@@ -409,6 +409,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1525218576529477831, guid: c8c7ed9bf6c3af2b64b4bad3c8ac754b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6586499256004586147}
+    - targetCorrespondingSourceObject: {fileID: 1525218576529477831, guid: c8c7ed9bf6c3af2b64b4bad3c8ac754b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6586499256004586149}
   m_SourcePrefab: {fileID: 100100000, guid: c8c7ed9bf6c3af2b64b4bad3c8ac754b, type: 3}
 --- !u!1 &244556435739653404 stripped
 GameObject:
@@ -425,9 +428,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c77d50f589a36e541a7d3fc4e02184e2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Appearance.Poser
   speedDamping: 0.15
+--- !u!114 &6586499256004586149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244556435739653404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e1c7b9d3a2f48e6b4d0a8c5f19273b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Hitboxes.Hitboxes
 --- !u!4 &589697106222804902 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2189165697742768765, guid: c8c7ed9bf6c3af2b64b4bad3c8ac754b, type: 3}
