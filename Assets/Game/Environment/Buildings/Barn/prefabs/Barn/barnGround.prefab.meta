@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 833324689bb300e498a62aff3b76dc17
+timeCreated: 1487253361
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Barn/barnGround.prefab
+  uploadId: 184849

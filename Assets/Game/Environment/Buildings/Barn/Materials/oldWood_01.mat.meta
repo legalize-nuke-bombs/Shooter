@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7056893d12022ae4b902ef53361f6b9a
+timeCreated: 1493020644
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/oldWood_01.mat
+  uploadId: 184849

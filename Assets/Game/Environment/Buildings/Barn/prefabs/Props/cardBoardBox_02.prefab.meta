@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9811b46f4e2bd21418ce81b3fd51f6b1
+timeCreated: 1485540191
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/cardBoardBox_02.prefab
+  uploadId: 184849

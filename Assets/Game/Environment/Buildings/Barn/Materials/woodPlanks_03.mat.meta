@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e92acbd3b68aacf41931fcf7f2af77a3
+timeCreated: 1493020172
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/woodPlanks_03.mat
+  uploadId: 184849

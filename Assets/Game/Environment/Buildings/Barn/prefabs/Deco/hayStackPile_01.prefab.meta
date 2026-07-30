@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ea840646da155f54d8de5a4cb9b0949c
+timeCreated: 1488301575
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/hayStackPile_01.prefab
+  uploadId: 184849

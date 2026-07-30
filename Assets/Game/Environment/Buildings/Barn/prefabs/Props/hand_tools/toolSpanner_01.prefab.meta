@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 21ccb2f365f6a0549aed582c6233cda9
+timeCreated: 1486564870
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/hand_tools/toolSpanner_01.prefab
+  uploadId: 184849

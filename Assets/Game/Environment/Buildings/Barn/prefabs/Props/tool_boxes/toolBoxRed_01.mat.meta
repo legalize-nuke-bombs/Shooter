@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5001ae9c4f89e814783cf98833ce1176
+timeCreated: 1483980695
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/tool_boxes/toolBoxRed_01.mat
+  uploadId: 184849

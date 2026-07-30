@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 755ea6dda8555704589078e5c2310be5
+timeCreated: 1486658210
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/gasGenerator_01.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8411dde2374904c4c9fad129601609ce
+timeCreated: 1486485630
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/large_Paint_Buckets/largePaintBucket_02_blue.mat
+  uploadId: 184849

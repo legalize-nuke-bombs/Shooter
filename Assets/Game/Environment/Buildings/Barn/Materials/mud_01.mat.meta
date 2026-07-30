@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d9c6a6797d8c53741bc53722577a027e
+timeCreated: 1493020645
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/mud_01.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d9306fda573340f43a4384988fcd8fdb
+timeCreated: 1485274522
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/hand_tools/LODs/toolHammer_01_LOD0.prefab
+  uploadId: 184849

@@ -1,0 +1,115 @@
+fileFormatVersion: 2
+guid: 9198f0384d2f2c04cb79e0730404f184
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: backFrame
+    100004: barnCore
+    100006: frontFrame
+    100008: mainFrame
+    100010: upperFrame
+    100012: barnCoreInside
+    400000: //RootNode
+    400002: backFrame
+    400004: barnCore
+    400006: frontFrame
+    400008: mainFrame
+    400010: upperFrame
+    400012: barnCoreInside
+    2300000: //RootNode
+    2300002: backFrame
+    2300004: barnCore
+    2300006: frontFrame
+    2300008: mainFrame
+    2300010: upperFrame
+    2300012: barnCoreInside
+    3300000: //RootNode
+    3300002: backFrame
+    3300004: barnCore
+    3300006: frontFrame
+    3300008: mainFrame
+    3300010: upperFrame
+    3300012: barnCoreInside
+    4300000: barnCore
+    4300002: mainFrame
+    4300004: frontFrame
+    4300006: upperFrame
+    4300008: backFrame
+    4300010: barnCoreInside
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.01
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/models/Barn/barnCore.FBX
+  uploadId: 184849

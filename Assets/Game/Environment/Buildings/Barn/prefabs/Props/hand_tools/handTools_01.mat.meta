@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cf7a98914cd39524bba4db2485e1d819
+timeCreated: 1485267396
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/hand_tools/handTools_01.mat
+  uploadId: 184849

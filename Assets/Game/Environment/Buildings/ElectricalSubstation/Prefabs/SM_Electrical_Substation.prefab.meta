@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 9c5bae8b85a897242bf43786c980d021
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 190678
+  packageName: Electrical Substation
+  packageVersion: 1.0
+  assetPath: Assets/Electrical Substation/Prefabs/SM_Electrical_Substation.prefab
+  uploadId: 420960

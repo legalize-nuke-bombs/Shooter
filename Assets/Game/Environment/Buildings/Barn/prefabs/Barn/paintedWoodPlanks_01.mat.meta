@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 217291bae2bf1df49ac09db566616fcb
+timeCreated: 1485437967
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Barn/paintedWoodPlanks_01.mat
+  uploadId: 184849

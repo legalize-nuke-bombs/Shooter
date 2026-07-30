@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: df56459dc0d732d4d965812e5c4eb95c
+timeCreated: 1487347953
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/exterior_tools/LODs/pickAxe_01_LOD1.prefab
+  uploadId: 184849

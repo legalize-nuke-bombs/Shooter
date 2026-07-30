@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c5d722f5f11bc8344b33dc6886eeb3be
+timeCreated: 1488905284
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/metalCloset_01.mat
+  uploadId: 184849

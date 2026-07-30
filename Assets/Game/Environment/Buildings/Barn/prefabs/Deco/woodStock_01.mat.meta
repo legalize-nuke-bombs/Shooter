@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 82b59b5454feb8146b27190d7898bf0e
+timeCreated: 1486553939
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/woodStock_01.mat
+  uploadId: 184849

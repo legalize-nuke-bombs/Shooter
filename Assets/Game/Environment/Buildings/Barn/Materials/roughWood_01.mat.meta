@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 747e045bf1a0ce143b9b928c577c7828
+timeCreated: 1493020644
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/roughWood_01.mat
+  uploadId: 184849

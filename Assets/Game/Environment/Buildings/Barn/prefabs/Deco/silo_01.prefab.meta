@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 14e93f1ec2751254cb315bbd421fadfd
+timeCreated: 1489583886
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/silo_01.prefab
+  uploadId: 184849

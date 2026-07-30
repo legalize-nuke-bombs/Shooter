@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 520b71a96b3486548ba4a4309e1045d0
+timeCreated: 1487346852
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/exterior_tools/LODs/shovel_01_LOD1.prefab
+  uploadId: 184849

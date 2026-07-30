@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 15048b2a883489b409c25c81e4342ddc
+timeCreated: 1488385909
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/farmBootLeft_LOD0.prefab
+  uploadId: 184849

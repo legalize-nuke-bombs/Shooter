@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4ec7f24549a472c4d946ea6feb98f96a
+timeCreated: 1493020172
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/entranceLevels_01.mat
+  uploadId: 184849

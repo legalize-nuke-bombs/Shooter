@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: db3056b7b36410c4cbd3a8254d63dba9
+timeCreated: 1493020172
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/wood_01.mat
+  uploadId: 184849

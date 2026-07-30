@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8ec849c879730c745a0c15628940804c
+timeCreated: 1486565461
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/hand_tools/LODs/toolNippers_01_LOD1.prefab
+  uploadId: 184849

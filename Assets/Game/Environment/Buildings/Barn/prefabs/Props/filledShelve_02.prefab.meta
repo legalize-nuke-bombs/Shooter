@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5522aaf8a1919a04994f2202254b54bc
+timeCreated: 1486569430
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/filledShelve_02.prefab
+  uploadId: 184849

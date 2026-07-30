@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d3d4ed6153ae66643a97ae4245878b6d
+timeCreated: 1488302213
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/LODs/haystack_02_LOD2.prefab
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 82e8eee1565a8e04db23be39a94d8d6e
+timeCreated: 1488823030
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/metalFurnitureRed_01.prefab
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 50e085f940dc6da429c4e4018e2a5fc0
+timeCreated: 1483984157
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/tool_boxes/LODs/toolBoxRed_01_LOD0.prefab
+  uploadId: 184849

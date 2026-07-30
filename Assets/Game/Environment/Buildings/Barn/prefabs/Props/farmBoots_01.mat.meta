@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ea547f50ffb1fb34cafce1587ec31b78
+timeCreated: 1488381156
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/farmBoots_01.mat
+  uploadId: 184849

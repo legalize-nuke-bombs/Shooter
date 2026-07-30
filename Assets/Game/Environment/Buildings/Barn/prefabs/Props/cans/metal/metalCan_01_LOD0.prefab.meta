@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 098c8671eef461f4da260e73d15f8adc
+timeCreated: 1484321387
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/cans/metal/metalCan_01_LOD0.prefab
+  uploadId: 184849

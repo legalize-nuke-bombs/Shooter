@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 41440cecf0fe1cb4689a1684e638e1ea
+timeCreated: 1490197745
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/electronics/insideElectronics.mat
+  uploadId: 184849

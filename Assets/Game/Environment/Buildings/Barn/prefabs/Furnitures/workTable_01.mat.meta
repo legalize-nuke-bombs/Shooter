@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cc5b0c61dca3d5c40b188410aca9fd44
+timeCreated: 1483971218
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/workTable_01.mat
+  uploadId: 184849

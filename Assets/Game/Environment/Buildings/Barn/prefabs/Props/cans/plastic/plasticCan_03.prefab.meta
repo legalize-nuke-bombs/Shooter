@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ecb339f91cd0d774796a96033cbdadab
+timeCreated: 1486567646
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/cans/plastic/plasticCan_03.prefab
+  uploadId: 184849

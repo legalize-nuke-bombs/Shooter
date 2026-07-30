@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0e847e481740d0a41bcb0ef5634e5370
+timeCreated: 1485279518
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/metal_barrels/metalBarrelRed_03.mat
+  uploadId: 184849

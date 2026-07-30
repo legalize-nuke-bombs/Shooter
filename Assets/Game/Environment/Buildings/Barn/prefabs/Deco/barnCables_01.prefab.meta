@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b8421e037de012d4080466b85c938b6b
+timeCreated: 1488209589
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/barnCables_01.prefab
+  uploadId: 184849

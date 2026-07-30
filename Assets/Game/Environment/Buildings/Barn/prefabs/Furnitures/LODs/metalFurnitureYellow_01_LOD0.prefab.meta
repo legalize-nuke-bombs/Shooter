@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 42e08c027e6a11a4387b6a7852fa49a7
+timeCreated: 1484149797
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Furnitures/LODs/metalFurnitureYellow_01_LOD0.prefab
+  uploadId: 184849

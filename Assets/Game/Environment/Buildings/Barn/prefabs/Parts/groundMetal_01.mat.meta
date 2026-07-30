@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 86c16cc7709e72a4aaf1e94895b39652
+timeCreated: 1487266917
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/groundMetal_01.mat
+  uploadId: 184849

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3f8205461251abb4c880622850e321a6
+timeCreated: 1497340463
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/tiresPiles/tiresPile_01.prefab
+  uploadId: 184849

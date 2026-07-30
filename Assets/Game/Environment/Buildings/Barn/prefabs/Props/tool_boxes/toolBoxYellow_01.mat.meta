@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 11fbb14b4254f844486b5ae8858c0686
+timeCreated: 1483984129
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/tool_boxes/toolBoxYellow_01.mat
+  uploadId: 184849

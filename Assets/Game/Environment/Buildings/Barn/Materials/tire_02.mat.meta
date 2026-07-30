@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e1fe7a47805d1ee419b555f9adb34fd2
+timeCreated: 1496929303
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/tire_02.mat
+  uploadId: 184849

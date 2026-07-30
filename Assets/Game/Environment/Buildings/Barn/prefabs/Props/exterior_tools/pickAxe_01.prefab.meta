@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e6f638f6ca47c1542b978a1b4a7ecfdf
+timeCreated: 1487348012
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/exterior_tools/pickAxe_01.prefab
+  uploadId: 184849

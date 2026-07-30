@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: df85b48baeea8fa428eb3d047183b5e2
+timeCreated: 1490102992
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/strawGround_01.mat
+  uploadId: 184849

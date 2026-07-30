@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 067049707f08def42a41a677f967b8c6
+timeCreated: 1487865485
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Parts/LODs/barnOuterTimbers_02_LOD1.prefab
+  uploadId: 184849

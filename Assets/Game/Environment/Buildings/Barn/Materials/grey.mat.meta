@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 58b67ed11d60bb54ca5df5dccd5464f7
+timeCreated: 1493020644
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/grey.mat
+  uploadId: 184849

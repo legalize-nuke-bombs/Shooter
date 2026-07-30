@@ -1,0 +1,169 @@
+fileFormatVersion: 2
+guid: a7c8c443b82f03241b054a2f4d007515
+timeCreated: 1485535528
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: drawer_01_LOD1
+    100002: drawer_02_LOD1
+    100004: drawer_03_LOD1
+    100006: drawer_04_LOD1
+    100008: drawerInside_01_LOD1
+    100010: drawerInside_02_LOD1
+    100012: drawerInside_03_LOD1
+    100014: drawerInside_04_LOD1
+    100016: //RootNode
+    100018: metalFurnitureCore_01_LOD1
+    100020: wheel_01_LOD1
+    100022: wheel_02_LOD1
+    100024: wheel_03_LOD1
+    100026: wheel_04_LOD1
+    100028: wheelSupport_01_LOD1
+    100030: wheelSupport_02_LOD1
+    100032: wheelSupport_03_LOD1
+    100034: wheelSupport_04_LOD1
+    400000: drawer_01_LOD1
+    400002: drawer_02_LOD1
+    400004: drawer_03_LOD1
+    400006: drawer_04_LOD1
+    400008: drawerInside_01_LOD1
+    400010: drawerInside_02_LOD1
+    400012: drawerInside_03_LOD1
+    400014: drawerInside_04_LOD1
+    400016: //RootNode
+    400018: metalFurnitureCore_01_LOD1
+    400020: wheel_01_LOD1
+    400022: wheel_02_LOD1
+    400024: wheel_03_LOD1
+    400026: wheel_04_LOD1
+    400028: wheelSupport_01_LOD1
+    400030: wheelSupport_02_LOD1
+    400032: wheelSupport_03_LOD1
+    400034: wheelSupport_04_LOD1
+    2300000: drawer_01_LOD1
+    2300002: drawer_02_LOD1
+    2300004: drawer_03_LOD1
+    2300006: drawer_04_LOD1
+    2300008: drawerInside_01_LOD1
+    2300010: drawerInside_02_LOD1
+    2300012: drawerInside_03_LOD1
+    2300014: drawerInside_04_LOD1
+    2300016: metalFurnitureCore_01_LOD1
+    2300018: wheel_01_LOD1
+    2300020: wheel_02_LOD1
+    2300022: wheel_03_LOD1
+    2300024: wheel_04_LOD1
+    2300026: wheelSupport_01_LOD1
+    2300028: wheelSupport_02_LOD1
+    2300030: wheelSupport_03_LOD1
+    2300032: wheelSupport_04_LOD1
+    3300000: drawer_01_LOD1
+    3300002: drawer_02_LOD1
+    3300004: drawer_03_LOD1
+    3300006: drawer_04_LOD1
+    3300008: drawerInside_01_LOD1
+    3300010: drawerInside_02_LOD1
+    3300012: drawerInside_03_LOD1
+    3300014: drawerInside_04_LOD1
+    3300016: metalFurnitureCore_01_LOD1
+    3300018: wheel_01_LOD1
+    3300020: wheel_02_LOD1
+    3300022: wheel_03_LOD1
+    3300024: wheel_04_LOD1
+    3300026: wheelSupport_01_LOD1
+    3300028: wheelSupport_02_LOD1
+    3300030: wheelSupport_03_LOD1
+    3300032: wheelSupport_04_LOD1
+    4300000: metalFurnitureCore_01_LOD1
+    4300002: drawer_04_LOD1
+    4300004: wheelSupport_02_LOD1
+    4300006: wheel_02_LOD1
+    4300008: drawer_03_LOD1
+    4300010: wheel_01_LOD1
+    4300012: wheelSupport_01_LOD1
+    4300014: wheel_04_LOD1
+    4300016: wheelSupport_04_LOD1
+    4300018: wheel_03_LOD1
+    4300020: wheelSupport_03_LOD1
+    4300022: drawer_02_LOD1
+    4300024: drawerInside_03_LOD1
+    4300026: drawerInside_02_LOD1
+    4300028: drawerInside_04_LOD1
+    4300030: drawer_01_LOD1
+    4300032: drawerInside_01_LOD1
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/models/Furnitures/metalFurniture_01_LOD1.FBX
+  uploadId: 184849

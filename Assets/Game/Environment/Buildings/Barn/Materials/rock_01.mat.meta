@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b85bd10789447e24ba501bca947d2f98
+timeCreated: 1493020644
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/Materials/rock_01.mat
+  uploadId: 184849

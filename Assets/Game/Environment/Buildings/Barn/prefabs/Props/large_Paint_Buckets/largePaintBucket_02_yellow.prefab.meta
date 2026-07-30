@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7b1af4072b9eea042b8124c412277612
+timeCreated: 1486485945
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Props/large_Paint_Buckets/largePaintBucket_02_yellow.prefab
+  uploadId: 184849

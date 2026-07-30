@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4929fdb911bcebd4a9ea402fe63001f3
+timeCreated: 1488209502
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 86222
+  packageName: The Barn
+  packageVersion: 1.1
+  assetPath: Assets/the_barn/prefabs/Deco/LODs/barnCables_01_LOD0.prefab
+  uploadId: 184849
