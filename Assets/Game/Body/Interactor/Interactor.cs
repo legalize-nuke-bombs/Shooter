@@ -11,8 +11,11 @@ namespace Shooter.Game.Body
 
         public const float EyeHeight = 0.75f;
 
-        private static readonly int LookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character");
         private static readonly RaycastHit[] Sights = new RaycastHit[16];
+
+        private static int lookMask;
+
+        private static int LookMask => lookMask != 0 ? lookMask : lookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character");
 
         [SerializeField] private float reach = 3f;
 
