@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4e43abb469f351c4f863ec0c2e7cdbf2
+timeCreated: 1475789229
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73409
+  packageName: Butcher The Murderer - PBR
+  packageVersion: 1.0
+  assetPath: Assets/Butcher/Materials/ButcherDirty.mat
+  uploadId: 145518

@@ -6,7 +6,10 @@ namespace Shooter.Game.Body
     public class SkinSpec : Spec
     {
         [SerializeField] private GameObject model;
+        [SerializeField] private RuntimeAnimatorController pose;
 
         public GameObject Model => model;
+
+        public RuntimeAnimatorController Pose => pose;
     }
 }
