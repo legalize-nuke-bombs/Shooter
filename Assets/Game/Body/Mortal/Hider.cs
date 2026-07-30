@@ -3,6 +3,7 @@ using UnityEngine;
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Skin))]
     public class Hider : MonoBehaviour
     {
         private Health health;
@@ -12,9 +13,11 @@ namespace Shooter.Game.Body
         private void Awake()
         {
             health = GetComponent<Health>();
+        }
 
-            var animator = GetComponentInChildren<Animator>();
-            flesh = animator == null ? null : animator.gameObject;
+        private void Start()
+        {
+            flesh = GetComponent<Skin>().Flesh;
         }
 
         private void Update()

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SkinSpec
   id:
   model: {fileID: 1525218576529477831, guid: c8c7ed9bf6c3af2b64b4bad3c8ac754b, type: 3}
+  pose: {fileID: 9100000, guid: 20bafe18833d452498c5fd18563bb01f, type: 2}
