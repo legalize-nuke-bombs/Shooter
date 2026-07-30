@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 2658346833551713148}
   - component: {fileID: 6600000000000000103}
   - component: {fileID: 6600000000000000105}
+  - component: {fileID: 6600000000000000109}
   m_Layer: 8
   m_Name: Corrupted
   m_TagString: Untagged
@@ -337,6 +338,20 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Skin
   spec: {fileID: 11400000, guid: 3e9d5a7c1f2b48e0a6c8d3b5e9f74162, type: 2}
+--- !u!114 &6600000000000000109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa8a4538947774bc2b4f6ec62c6df8ee, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Mortal
+  ShowTopMostFoldoutHeaderGroup: 1
+  corpsePrefab: {fileID: 0}
 --- !u!1001 &2838109575856159933
 PrefabInstance:
   m_ObjectHideFlags: 0

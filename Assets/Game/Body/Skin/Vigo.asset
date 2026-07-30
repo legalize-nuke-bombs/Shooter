@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Vigo
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SkinSpec
   id:
-  model: {fileID: 100100000, guid: 90e678f7c710aa903e82bb66d0c09d21, type: 3}
+  model: {fileID: 919132149155446097, guid: 90e678f7c710aa903e82bb66d0c09d21, type: 3}

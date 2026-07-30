@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Cyberpunk
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SkinSpec
   id:
-  model: {fileID: 100100000, guid: 0b49af3716fa6de46907d70826af6d60, type: 3}
+  model: {fileID: 919132149155446097, guid: 0b49af3716fa6de46907d70826af6d60, type: 3}
