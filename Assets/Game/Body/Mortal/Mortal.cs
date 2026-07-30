@@ -43,7 +43,7 @@ namespace Shooter.Game.Body
 
         private void LeaveCorpse()
         {
-            GameObject prefab = Corpse();
+            GameObject prefab = CorpsePrefab();
             if (prefab == null)
             {
                 Log.Warn("Entity {} died, but neither it nor the world has a corpse prefab", name);
@@ -59,12 +59,16 @@ namespace Shooter.Game.Body
                 return;
             }
 
+            var skin = GetComponent<Skin>();
+            if (skin != null && skin.Spec != null)
+                body.GetComponent<Corpse>()?.Dress(skin.Spec);
+
             spawned.Spawn();
             spawned.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
             Log.Info("Entity {} left a corpse at {}", name, transform.position);
         }
 
-        private GameObject Corpse()
+        private GameObject CorpsePrefab()
         {
             if (corpsePrefab != null) return corpsePrefab;
 

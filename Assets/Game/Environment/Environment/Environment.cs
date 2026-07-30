@@ -1,4 +1,5 @@
 using Shooter.Configuring;
+using Shooter.Game.Body;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
 using Shooter.Logging;
@@ -22,6 +23,8 @@ namespace Shooter.Game
 
         [SerializeField] private SoundCatalog sounds;
 
+        [SerializeField] private SkinCatalog skins;
+
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
@@ -34,6 +37,8 @@ namespace Shooter.Game
         public ItemCatalog Items => items;
 
         public SoundCatalog Sounds => sounds;
+
+        public SkinCatalog Skins => skins;
 
         public string World => world.Value.ToString();
 

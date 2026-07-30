@@ -10,22 +10,6 @@ namespace Shooter.Game.Body.Hitboxes
 
         public const string Layer = "Hitbox";
 
-        private const float SpineLength = 0.75f;
-        private const float HeadRadius = 0.13f;
-
-        private static readonly Segment[] Segments =
-        {
-            new Segment(HumanBodyBones.Hips, HumanBodyBones.Neck, BodyPart.Torso, 0.17f),
-            new Segment(HumanBodyBones.LeftUpperArm, HumanBodyBones.LeftLowerArm, BodyPart.Limbs, 0.06f),
-            new Segment(HumanBodyBones.LeftLowerArm, HumanBodyBones.LeftHand, BodyPart.Limbs, 0.05f),
-            new Segment(HumanBodyBones.RightUpperArm, HumanBodyBones.RightLowerArm, BodyPart.Limbs, 0.06f),
-            new Segment(HumanBodyBones.RightLowerArm, HumanBodyBones.RightHand, BodyPart.Limbs, 0.05f),
-            new Segment(HumanBodyBones.LeftUpperLeg, HumanBodyBones.LeftLowerLeg, BodyPart.Limbs, 0.085f),
-            new Segment(HumanBodyBones.LeftLowerLeg, HumanBodyBones.LeftFoot, BodyPart.Limbs, 0.065f),
-            new Segment(HumanBodyBones.RightUpperLeg, HumanBodyBones.RightLowerLeg, BodyPart.Limbs, 0.085f),
-            new Segment(HumanBodyBones.RightLowerLeg, HumanBodyBones.RightFoot, BodyPart.Limbs, 0.065f)
-        };
-
         private void Start()
         {
             int layer = LayerMask.NameToLayer(Layer);
@@ -44,13 +28,13 @@ namespace Shooter.Game.Body.Hitboxes
                 return;
             }
 
-            float scale = Vector3.Distance(hips.position, head.position) / SpineLength;
+            float scale = Skeleton.Scale(hips, head);
             int built = 0;
 
-            foreach (Segment segment in Segments)
+            foreach (Skeleton.Segment segment in Skeleton.Segments)
             {
                 Transform from = animator.GetBoneTransform(segment.From);
-                Transform to = Ending(animator, segment);
+                Transform to = Skeleton.Ending(animator, segment);
                 if (from == null || to == null)
                 {
                     Log.Warn("Entity {} misses bones {} - {}, hitbox skipped", name, segment.From, segment.To);
@@ -61,16 +45,8 @@ namespace Shooter.Game.Body.Hitboxes
                 built++;
             }
 
-            Ball(head, (head.position - hips.position).normalized, HeadRadius * scale, layer);
+            Ball(head, (head.position - hips.position).normalized, Skeleton.HeadRadius * scale, layer);
             Log.Info("Entity {} got {} hitboxes, humanoid scale {}", name, built + 1, scale);
-        }
-
-        private static Transform Ending(Animator animator, Segment segment)
-        {
-            Transform ending = animator.GetBoneTransform(segment.To);
-            if (ending == null && segment.To == HumanBodyBones.Neck)
-                ending = animator.GetBoneTransform(HumanBodyBones.Head);
-            return ending;
         }
 
         private void Pill(Transform bone, Vector3 target, BodyPart part, float radius, int layer)
@@ -79,7 +55,7 @@ namespace Shooter.Game.Body.Hitboxes
             Vector3 reach = target - bone.position;
             mount.transform.rotation = Quaternion.FromToRotation(Vector3.up, reach.normalized);
 
-            float grip = BoneScale(bone);
+            float grip = Skeleton.BoneScale(bone);
             float length = reach.magnitude / grip;
             float thickness = radius / grip;
 
@@ -96,7 +72,7 @@ namespace Shooter.Game.Body.Hitboxes
             GameObject mount = Mount(bone, BodyPart.Head, layer);
 
             var ball = mount.AddComponent<SphereCollider>();
-            ball.radius = radius / BoneScale(bone);
+            ball.radius = radius / Skeleton.BoneScale(bone);
             ball.center = mount.transform.InverseTransformPoint(bone.position + up * (radius * 0.5f));
             Mute(ball);
         }
@@ -118,28 +94,6 @@ namespace Shooter.Game.Body.Hitboxes
         private static void Mute(Collider hitbox)
         {
             hitbox.excludeLayers = ~0;
-        }
-
-        private static float BoneScale(Transform bone)
-        {
-            Vector3 lossy = bone.lossyScale;
-            return (lossy.x + lossy.y + lossy.z) / 3f;
-        }
-
-        private readonly struct Segment
-        {
-            public readonly HumanBodyBones From;
-            public readonly HumanBodyBones To;
-            public readonly BodyPart Part;
-            public readonly float Radius;
-
-            public Segment(HumanBodyBones from, HumanBodyBones to, BodyPart part, float radius)
-            {
-                From = from;
-                To = to;
-                Part = part;
-                Radius = radius;
-            }
         }
     }
 }
