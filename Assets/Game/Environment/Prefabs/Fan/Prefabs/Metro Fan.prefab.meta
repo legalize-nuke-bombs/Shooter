@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 768003408b1c8644881fd8e548bc60f6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 122276
+  packageName: Fan for Metro
+  packageVersion: 1.0
+  assetPath: Assets/AssetsStore/Fan/Assets/Prefabs/Metro Fan.prefab
+  uploadId: 257470

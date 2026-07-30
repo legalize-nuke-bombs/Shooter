@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b3eea57714dfeb1499b7171b93fd96d1
+timeCreated: 1511371684
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 105862
+  packageName: Modular self-stand fence
+  packageVersion: 1.2
+  assetPath: Assets/Fences/Materials/fences/M_fence_stand_small_crete.mat
+  uploadId: 325927

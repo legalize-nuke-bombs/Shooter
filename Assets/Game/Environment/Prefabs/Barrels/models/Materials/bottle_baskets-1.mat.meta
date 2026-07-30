@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ec20e9bcfc8c1c648bc26da4c53e8210
+timeCreated: 1475386126
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73101
+  packageName: Crate and Barrels
+  packageVersion: 1.0
+  assetPath: Assets/Assets_Crate_Barrels/models/Materials/bottle_baskets-1.mat
+  uploadId: 140470

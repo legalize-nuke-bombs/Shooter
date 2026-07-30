@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0243089128ff30c4a972cd76df0f6dd9
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 122276
+  packageName: Fan for Metro
+  packageVersion: 1.0
+  assetPath: Assets/AssetsStore/Fan/Assets/Materials/fan.mat
+  uploadId: 257470

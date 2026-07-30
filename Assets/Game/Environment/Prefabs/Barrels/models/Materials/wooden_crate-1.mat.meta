@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 70eb0a6125dae384cbcbb512b1e0f8ad
+timeCreated: 1475386126
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73101
+  packageName: Crate and Barrels
+  packageVersion: 1.0
+  assetPath: Assets/Assets_Crate_Barrels/models/Materials/wooden_crate-1.mat
+  uploadId: 140470

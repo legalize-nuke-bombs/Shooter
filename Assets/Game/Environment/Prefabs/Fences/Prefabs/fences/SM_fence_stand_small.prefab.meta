@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 21bd80f4ed903334f8265e141cc4f164
+timeCreated: 1511371684
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 105862
+  packageName: Modular self-stand fence
+  packageVersion: 1.2
+  assetPath: Assets/Fences/Prefabs/fences/SM_fence_stand_small.prefab
+  uploadId: 325927

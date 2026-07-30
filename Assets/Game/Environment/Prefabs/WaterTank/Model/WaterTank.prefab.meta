@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c3316510b94ab6d429ad855d7dc65fe4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 17463
+  packageName: WaterTank
+  packageVersion: 1.0
+  assetPath: Assets/WaterTank/Model/WaterTank.prefab
+  uploadId: 6249

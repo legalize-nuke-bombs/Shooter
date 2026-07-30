@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: aab2e14ff6549534ca1daed5c6897cf3
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 263843
+  packageName: Trash-bin
+  packageVersion: 1.0
+  assetPath: Assets/Trash-bin/Trash-bin/dustbin_LOD2.mat
+  uploadId: 620596
