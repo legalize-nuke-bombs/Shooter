@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: d5c9a7556017cf846b40d419dcf56cb3
+timeCreated: 1533071567
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 125030
+  packageName: Soviet Television Electron 718
+  packageVersion: 1.0
+  assetPath: Assets/Soviet Television Electron 718/Materials/TV_map01.mat
+  uploadId: 263404
