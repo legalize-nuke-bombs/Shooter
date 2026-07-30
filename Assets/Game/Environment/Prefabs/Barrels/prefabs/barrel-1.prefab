@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000011923468858}
   - component: {fileID: 33000011804360852}
-  - component: {fileID: 640001235488924001}
+  - component: {fileID: 64012354889240001}
   - component: {fileID: 23000011029279620}
   m_Layer: 0
   m_Name: barrel-1_LOD0
@@ -239,7 +239,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &640001235488924001
+--- !u!64 &64012354889240001
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

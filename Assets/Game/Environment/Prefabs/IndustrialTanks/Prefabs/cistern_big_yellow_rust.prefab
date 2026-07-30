@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4446905220503596}
   - component: {fileID: 33014482282245926}
-  - component: {fileID: 640040988654502801}
+  - component: {fileID: 64009886545028001}
   - component: {fileID: 23778834459483884}
   m_Layer: 0
   m_Name: cistern_big_yellow_rust
@@ -91,7 +91,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &640040988654502801
+--- !u!64 &64009886545028001
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

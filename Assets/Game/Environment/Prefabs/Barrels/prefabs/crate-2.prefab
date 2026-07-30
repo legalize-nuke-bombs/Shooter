@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4000010233740098}
   - component: {fileID: 33000012058168600}
-  - component: {fileID: 640001171999015801}
   - component: {fileID: 23000014006211190}
   m_Layer: 0
   m_Name: crate-2_LOD1
@@ -101,6 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000014279898150}
   - component: {fileID: 33000012511602480}
+  - component: {fileID: 64011719990158001}
   - component: {fileID: 23000010878817768}
   m_Layer: 0
   m_Name: crate-2_LOD0
@@ -239,7 +239,7 @@ LODGroup:
     - renderer: {fileID: 23000014006211190}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
---- !u!64 &640001171999015801
+--- !u!64 &64011719990158001
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

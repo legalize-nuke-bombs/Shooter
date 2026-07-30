@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4928534734691592}
   - component: {fileID: 33557934039185720}
-  - component: {fileID: 640006101200523201}
+  - component: {fileID: 64061012005232001}
   - component: {fileID: 23723769309911086}
   m_Layer: 0
   m_Name: Control_panel5
@@ -91,7 +91,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &640006101200523201
+--- !u!64 &64061012005232001
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
