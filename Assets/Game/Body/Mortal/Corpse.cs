@@ -11,14 +11,22 @@ namespace Shooter.Game.Body
         private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkVariable<FixedString32Bytes> skin = new NetworkVariable<FixedString32Bytes>();
+        private readonly NetworkVariable<NameableType> title = new NetworkVariable<NameableType>(NameableType.DeadPlayer);
 
         public void Dress(SkinSpec spec)
         {
             skin.Value = spec.Id;
         }
 
+        public void Rename(NameableType type)
+        {
+            title.Value = type;
+        }
+
         public override void OnNetworkSpawn()
         {
+            GetComponent<TypedNameable>()?.Assign(title.Value);
+
             if (skin.Value.IsEmpty)
             {
                 Log.Warn("Corpse {} has no skin id, stays invisible", name);
