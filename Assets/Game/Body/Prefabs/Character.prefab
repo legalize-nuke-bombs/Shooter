@@ -14,15 +14,17 @@ GameObject:
   - component: {fileID: 4119176430707883170}
   - component: {fileID: 6063394281020942509}
   - component: {fileID: 5056160827475318576}
-  - component: {fileID: 1743774435395175479}
   - component: {fileID: 2642257969760791537}
   - component: {fileID: 4957635887391225908}
   - component: {fileID: 2658346833551713148}
-  - component: {fileID: 6600000000000000103}
   - component: {fileID: 6600000000000000105}
   - component: {fileID: 6600000000000000109}
+  - component: {fileID: -8362392851120402615}
+  - component: {fileID: 4817786038491211010}
+  - component: {fileID: 6370029383145960073}
+  - component: {fileID: 6403981259524950330}
   m_Layer: 8
-  m_Name: Corrupted
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2514222309
+  GlobalObjectIdHash: 1008475832
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -171,19 +173,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Health.DefaultHealth
   ShowTopMostFoldoutHeaderGroup: 1
   maxHp: 100
---- !u!114 &1743774435395175479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874027793385663384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfcca5f10e2d848058c7a6977e585e7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Talking.RefusiveTalker
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!82 &2642257969760791537
 AudioSource:
   m_ObjectHideFlags: 0
@@ -310,20 +299,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   strideLength: 2
   sound: {fileID: 11400000, guid: 6e4362098586bde360868d1e2be58ac8, type: 2}
---- !u!114 &6600000000000000103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874027793385663384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d5e5a11aa5364648afceb32280ae013, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  spec: {fileID: 11400000, guid: 6fe9815648e747a98d9da3461e0b2886, type: 2}
 --- !u!114 &6600000000000000105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d2a6c4f1b9e43708c5e2a7d9f461b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Skin
-  spec: {fileID: 11400000, guid: 3e9d5a7c1f2b48e0a6c8d3b5e9f74162, type: 2}
+  spec: {fileID: 0}
 --- !u!114 &6600000000000000109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,4 +325,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Mortal
   ShowTopMostFoldoutHeaderGroup: 1
-  corpsePrefab: {fileID: 0}
+  corpsePrefab: {fileID: 6108037598719724321, guid: dba187afb26374400bd1ba8b38212115, type: 3}
+--- !u!114 &-8362392851120402615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d300bee3d10543df81abd8fe8466d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Interactor
+  ShowTopMostFoldoutHeaderGroup: 1
+  reach: 3
+--- !u!114 &4817786038491211010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d02793b305384890bcfc08023412b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Hands
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &6370029383145960073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2716bb9d83b1a4c2d9af5eb01d57d010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Inventory
+  ShowTopMostFoldoutHeaderGroup: 1
+  catalog: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
+  contents: []
+--- !u!114 &6403981259524950330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1d048f0ccc4b4c5fb82c40f89964647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.Gunner
+  ShowTopMostFoldoutHeaderGroup: 1
