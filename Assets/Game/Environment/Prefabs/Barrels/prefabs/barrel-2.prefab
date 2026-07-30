@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000010469381932}
   - component: {fileID: 33000011119968676}
-  - component: {fileID: 640001066605928401}
+  - component: {fileID: 64010666059284001}
   - component: {fileID: 23000010930217750}
   m_Layer: 0
   m_Name: barrel-2_LOD0
@@ -239,7 +239,7 @@ LODGroup:
     - renderer: {fileID: 23000013199755436}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
---- !u!64 &640001066605928401
+--- !u!64 &64010666059284001
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

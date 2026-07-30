@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000012649326960}
   - component: {fileID: 33000013003544248}
-  - component: {fileID: 640001384344414801}
+  - component: {fileID: 64013843444148001}
   - component: {fileID: 23000013276871884}
   m_Layer: 0
   m_Name: bottle_case-4
@@ -91,7 +91,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &640001384344414801
+--- !u!64 &64013843444148001
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
