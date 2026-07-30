@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Adventurer
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SkinSpec
   id:
-  model: {fileID: 100100000, guid: c8c7ed9bf6c3af2b64b4bad3c8ac754b, type: 3}
+  model: {fileID: 1525218576529477831, guid: c8c7ed9bf6c3af2b64b4bad3c8ac754b, type: 3}
