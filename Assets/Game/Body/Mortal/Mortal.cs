@@ -28,6 +28,9 @@ namespace Shooter.Game.Body
             if (!IsServer) return;
 
             LeaveCorpse();
+
+            if (!NetworkObject.IsPlayerObject)
+                NetworkObject.Despawn();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -59,9 +62,15 @@ namespace Shooter.Game.Body
                 return;
             }
 
-            var skin = GetComponent<Skin>();
-            if (skin != null && skin.Spec != null)
-                body.GetComponent<Corpse>()?.Dress(skin.Spec);
+            var corpse = body.GetComponent<Corpse>();
+            if (corpse != null)
+            {
+                var skin = GetComponent<Skin>();
+                if (skin != null && skin.Spec != null) corpse.Dress(skin.Spec);
+
+                var named = GetComponent<TypedNameable>();
+                if (named != null) corpse.Rename(named.Type);
+            }
 
             spawned.Spawn();
             spawned.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());

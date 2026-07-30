@@ -8,6 +8,11 @@ namespace Shooter.Game.Body
 
         public NameableType Type => type;
 
+        public void Assign(NameableType assigned)
+        {
+            type = assigned;
+        }
+
         public override string Digest()
         {
             return null;

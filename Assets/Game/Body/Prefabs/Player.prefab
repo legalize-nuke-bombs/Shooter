@@ -28,6 +28,7 @@ GameObject:
   - component: {fileID: 6784730251806547574}
   - component: {fileID: 9135861986743829273}
   - component: {fileID: 9135861986743829275}
+  - component: {fileID: 9135861986743829277}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -462,6 +463,18 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Skin
   spec: {fileID: 11400000, guid: f2c81b5d9e3a4706b8d4c1e7a593f028, type: 2}
+--- !u!114 &9135861986743829277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432219165531623704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b2d8f4a7c34910b6e8d0a2c4f75318, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Hider
 --- !u!1 &8441315520480134065
 GameObject:
   m_ObjectHideFlags: 0
