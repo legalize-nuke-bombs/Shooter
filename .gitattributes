@@ -8,6 +8,10 @@
 *.tiff filter=lfs diff=lfs merge=lfs -text
 *.psd filter=lfs diff=lfs merge=lfs -text
 *.fbx filter=lfs diff=lfs merge=lfs -text
+*.FBX filter=lfs diff=lfs merge=lfs -text
+*.PNG filter=lfs diff=lfs merge=lfs -text
+*.TGA filter=lfs diff=lfs merge=lfs -text
+*.TIF filter=lfs diff=lfs merge=lfs -text
 *.st filter=lfs diff=lfs merge=lfs -text
 *.st9 filter=lfs diff=lfs merge=lfs -text
 Assets/Game/Environment/Terrain/*.asset filter=lfs diff=lfs merge=lfs -text
