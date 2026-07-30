@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 4957635887391225908}
   - component: {fileID: 2658346833551713148}
   - component: {fileID: 6600000000000000103}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Corrupted
   m_TagString: Untagged
   m_Icon: {fileID: 0}

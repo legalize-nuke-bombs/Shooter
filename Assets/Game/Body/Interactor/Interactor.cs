@@ -11,6 +11,9 @@ namespace Shooter.Game.Body
 
         public const float EyeHeight = 0.75f;
 
+        private static readonly int LookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character");
+        private static readonly RaycastHit[] Sights = new RaycastHit[16];
+
         [SerializeField] private float reach = 3f;
 
         private Movement movement;
@@ -39,7 +42,26 @@ namespace Shooter.Game.Body
 
         public bool TryLook(float distance, out RaycastHit hit)
         {
-            return Physics.Raycast(Eyes, movement.Look, out hit, distance);
+            return TryLook(Eyes, movement.Look, distance, transform, out hit);
+        }
+
+        public static bool TryLook(Vector3 origin, Vector3 direction, float distance, Transform looker, out RaycastHit hit)
+        {
+            int found = Physics.RaycastNonAlloc(origin, direction, Sights, distance, LookMask);
+            hit = default;
+            float closest = float.PositiveInfinity;
+
+            for (int i = 0; i < found; i++)
+            {
+                RaycastHit candidate = Sights[i];
+                if (candidate.distance >= closest) continue;
+                if (candidate.transform.IsChildOf(looker)) continue;
+
+                hit = candidate;
+                closest = candidate.distance;
+            }
+
+            return closest < float.PositiveInfinity;
         }
 
         public bool TryReach<T>(float distance, out T found) where T : class
