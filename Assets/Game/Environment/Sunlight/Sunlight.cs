@@ -5,6 +5,8 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour
     {
+        internal const float ShadowHandover = -6f;
+
         [SerializeField] private float brightest = 120000f;
 
         private Light sun;
@@ -25,6 +27,7 @@ namespace Shooter.Game
 
             transform.rotation = Celestial.Rotation(hourAngle, clock.Declination, clock.Latitude);
             sun.intensity = brightest * HorizonFade(elevation);
+            sun.shadows = elevation > ShadowHandover ? LightShadows.Soft : LightShadows.None;
         }
 
         internal static float HorizonFade(float elevation)
