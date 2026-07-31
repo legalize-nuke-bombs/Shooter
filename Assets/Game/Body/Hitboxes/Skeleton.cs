@@ -5,7 +5,8 @@ namespace Shooter.Game.Body.Hitboxes
     public static class Skeleton
     {
         public const float SpineLength = 0.75f;
-        public const float HeadRadius = 0.13f;
+        public const float HeadRadius = 0.095f;
+        public const float HeadRise = 0.13f;
         public const float HeadMass = 8f;
 
         public static readonly Segment[] Segments =
