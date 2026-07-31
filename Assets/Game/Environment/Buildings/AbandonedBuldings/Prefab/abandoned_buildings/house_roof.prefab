@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 480398}
   - component: {fileID: 3379552}
-  - component: {fileID: 6435223}
   m_Layer: 0
   m_Name: UCX_house_roof
   m_TagString: Untagged
@@ -53,6 +52,7 @@ GameObject:
   - component: {fileID: 3368454}
   - component: {fileID: 2360642}
   - component: {fileID: 6435222}
+  - component: {fileID: 6435223}
   m_Layer: 0
   m_Name: house_roof
   m_TagString: Untagged
@@ -193,12 +193,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 116118}
+  m_GameObject: {fileID: 166044}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   material: {fileID: 11400000, guid: 5272c55b882edd34a9d80b11bd6f240c, type: 2}
-  exportAllChildren: 1
+  exportAllChildren: 0
   terrainSimplificationLevel: 0
