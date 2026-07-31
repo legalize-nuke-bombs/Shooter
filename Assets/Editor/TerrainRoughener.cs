@@ -9,10 +9,16 @@ namespace Shooter.Editing
         private static readonly Journal Log = Logs.Here();
 
         private const float Fade = 0.5f;
+        private const float Lacunarity = 2f;
+        private const float Turn = 0.5f;
+        private const float VarietyScale = 0.12f;
 
         private float amplitude = 0.15f;
-        private float bump = 6f;
-        private int octaves = 3;
+        private float bump = 25f;
+        private int octaves = 4;
+        private float ridges = 0.6f;
+        private float warp = 0.8f;
+        private float variety = 0.7f;
         private float seed = 1f;
         private bool spare = true;
         private float margin = 2.5f;
@@ -32,8 +38,13 @@ namespace Shooter.Editing
         private void OnGUI()
         {
             amplitude = EditorGUILayout.Slider("Amplitude, m", amplitude, 0f, 3f);
-            bump = EditorGUILayout.Slider("Bump size, m", bump, 1f, 80f);
-            octaves = EditorGUILayout.IntSlider("Octaves", octaves, 1, 5);
+            bump = EditorGUILayout.Slider("Bump size, m", bump, 1f, 120f);
+            octaves = EditorGUILayout.IntSlider("Octaves", octaves, 1, 6);
+
+            EditorGUILayout.Space();
+            ridges = EditorGUILayout.Slider("Ridges", ridges, 0f, 1f);
+            warp = EditorGUILayout.Slider("Warp", warp, 0f, 2f);
+            variety = EditorGUILayout.Slider("Variety", variety, 0f, 1f);
             seed = EditorGUILayout.FloatField("Seed", seed);
 
             EditorGUILayout.Space();
@@ -65,25 +76,21 @@ namespace Shooter.Editing
 
             if (ground == null) ground = data.GetHeights(0, 0, resolution, resolution);
 
-            float[,] heights = data.GetHeights(0, 0, resolution, resolution);
+            float[,] field = Field(resolution, corner, size);
             float[,] spared = spare ? Spared(resolution, corner, size) : null;
-            float stepX = size.x / (resolution - 1);
-            float stepZ = size.z / (resolution - 1);
+            float[,] heights = data.GetHeights(0, 0, resolution, resolution);
+            float scale = Even(field, resolution);
             float highest = 0f;
-            int moved = 0;
 
             for (int z = 0; z < resolution; z++)
             {
                 for (int x = 0; x < resolution; x++)
                 {
-                    float shift = Wave(corner.x + x * stepX, corner.z + z * stepZ) * amplitude;
+                    float shift = field[z, x] * scale;
                     if (spared != null) shift *= 1f - spared[z, x];
 
                     heights[z, x] = Mathf.Clamp01(ground[z, x] + shift / size.y);
-                    if (Mathf.Abs(shift) < 0.001f) continue;
-
                     highest = Mathf.Max(highest, Mathf.Abs(shift));
-                    moved++;
                 }
             }
 
@@ -91,8 +98,8 @@ namespace Shooter.Editing
             data.SetHeights(0, 0, heights);
             EditorUtility.SetDirty(data);
 
-            Log.Info("Terrain roughened: {} cells of {} moved, up to {}m, bump {}m over {} octaves",
-                moved, resolution * resolution, highest, bump, octaves);
+            Log.Info("Terrain roughened: bump {}m over {} octaves, ridges {}, warp {}, variety {}, tallest shift {}m",
+                bump, octaves, ridges, warp, variety, highest);
         }
 
         private void Restore()
@@ -107,23 +114,101 @@ namespace Shooter.Editing
             Log.Info("Terrain restored to the ground captured before roughening");
         }
 
-        private float Wave(float x, float z)
+        private float[,] Field(int resolution, Vector3 corner, Vector3 size)
+        {
+            var field = new float[resolution, resolution];
+            float stepX = size.x / (resolution - 1);
+            float stepZ = size.z / (resolution - 1);
+            float span = Mathf.Max(bump, 0.01f);
+
+            for (int z = 0; z < resolution; z++)
+            {
+                for (int x = 0; x < resolution; x++)
+                {
+                    var point = new Vector2((corner.x + x * stepX) / span, (corner.z + z * stepZ) / span);
+                    field[z, x] = Shape(Warped(point)) * Rough(point);
+                }
+            }
+
+            return field;
+        }
+
+        private float Even(float[,] field, int resolution)
+        {
+            double total = 0d;
+
+            for (int z = 0; z < resolution; z++)
+                for (int x = 0; x < resolution; x++)
+                    total += field[z, x];
+
+            var middle = (float)(total / (resolution * (double)resolution));
+            float peak = 0f;
+
+            for (int z = 0; z < resolution; z++)
+            {
+                for (int x = 0; x < resolution; x++)
+                {
+                    field[z, x] -= middle;
+                    peak = Mathf.Max(peak, Mathf.Abs(field[z, x]));
+                }
+            }
+
+            return peak <= 0f ? 0f : amplitude / peak;
+        }
+
+        private Vector2 Warped(Vector2 point)
+        {
+            if (warp <= 0f) return point;
+
+            var shift = new Vector2(Noise(point + Offset(21)), Noise(point + Offset(22)));
+            return point + shift * warp;
+        }
+
+        private float Shape(Vector2 point)
         {
             float sum = 0f;
             float weight = 0f;
-            float frequency = 1f / Mathf.Max(bump, 0.01f);
             float share = 1f;
+            Vector2 walk = point;
 
             for (int i = 0; i < octaves; i++)
             {
-                float noise = Mathf.PerlinNoise(x * frequency + seed * 137.13f, z * frequency + seed * 291.71f);
-                sum += (noise - 0.5f) * 2f * share;
+                float noise = Noise(walk + Offset(i));
+                float crest = 1f - Mathf.Abs(noise);
+                crest = crest * crest * 2f - 1f;
+
+                sum += Mathf.Lerp(noise, crest, ridges) * share;
                 weight += share;
-                frequency *= 2f;
+                walk = Spun(walk) * Lacunarity;
                 share *= Fade;
             }
 
             return weight <= 0f ? 0f : sum / weight;
+        }
+
+        private float Rough(Vector2 point)
+        {
+            if (variety <= 0f) return 1f;
+
+            float calm = Noise(point * VarietyScale + Offset(31)) * 0.5f + 0.5f;
+            return Mathf.Lerp(1f, Mathf.SmoothStep(0f, 1f, calm), variety);
+        }
+
+        private Vector2 Offset(int index)
+        {
+            return new Vector2(seed * 137.13f + index * 41.7f, seed * 291.71f + index * 79.3f);
+        }
+
+        private static float Noise(Vector2 point)
+        {
+            return Mathf.PerlinNoise(point.x, point.y) * 2f - 1f;
+        }
+
+        private static Vector2 Spun(Vector2 point)
+        {
+            float cosine = Mathf.Cos(Turn);
+            float sine = Mathf.Sin(Turn);
+            return new Vector2(point.x * cosine - point.y * sine, point.x * sine + point.y * cosine);
         }
 
         private float[,] Spared(int resolution, Vector3 corner, Vector3 size)
