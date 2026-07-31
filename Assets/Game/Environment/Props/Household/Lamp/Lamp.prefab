@@ -137,7 +137,7 @@ MonoBehaviour:
   powered:
   - {fileID: 7431905612350005}
   glowing:
-  - {fileID: 2300000, guid: dba02eb55a680a348ba35df7f483bad0, type: 3}
+  - {fileID: 7431905612350004}
 --- !u!1 &7431905612350005
 GameObject:
   m_ObjectHideFlags: 0
