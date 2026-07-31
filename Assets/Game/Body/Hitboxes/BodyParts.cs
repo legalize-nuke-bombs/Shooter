@@ -16,7 +16,7 @@ namespace Shooter.Game.Body.Hitboxes
         {
             return part switch
             {
-                BodyPart.Head => 1.5f,
+                BodyPart.Head => 1.1f,
                 BodyPart.Limbs => 1.2f,
                 _ => 1.15f
             };
