@@ -57,7 +57,7 @@ namespace Shooter.Game.Body.Hitboxes
 
             float grip = Skeleton.BoneScale(bone);
             float length = reach.magnitude / grip;
-            float thickness = radius / grip;
+            float thickness = radius * part.Generosity() / grip;
 
             var pill = mount.AddComponent<CapsuleCollider>();
             pill.direction = 1;
@@ -72,7 +72,7 @@ namespace Shooter.Game.Body.Hitboxes
             GameObject mount = Mount(bone, BodyPart.Head, layer);
 
             var ball = mount.AddComponent<SphereCollider>();
-            ball.radius = radius / Skeleton.BoneScale(bone);
+            ball.radius = radius * BodyPart.Head.Generosity() / Skeleton.BoneScale(bone);
             ball.center = mount.transform.InverseTransformPoint(bone.position + up * (radius * 0.5f));
             Mute(ball);
         }
