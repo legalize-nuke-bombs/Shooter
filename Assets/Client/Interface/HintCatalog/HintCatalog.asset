@@ -17,3 +17,7 @@ MonoBehaviour:
     Text: Спать
   - Usage: 1
     Text: Поговорить
+  - Usage: 2
+    Text: Включить
+  - Usage: 3
+    Text: Выключить
