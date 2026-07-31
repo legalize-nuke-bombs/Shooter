@@ -252,4 +252,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee33d2a6a7055f149afc727488e78880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Skyglow
-  brightest: 2.5
+  brightest: 0
