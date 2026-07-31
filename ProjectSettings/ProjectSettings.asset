@@ -848,7 +848,11 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 1
   webEnableSubmoduleStrippingCompatibility: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: STEAMAUDIO_ENABLED
+    Standalone: STEAMAUDIO_ENABLED
+    WebGL: STEAMAUDIO_ENABLED
+    iPhone: STEAMAUDIO_ENABLED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
