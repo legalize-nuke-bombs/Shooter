@@ -14,6 +14,8 @@ namespace Shooter.Game.Combat
     {
         private static readonly Journal Log = Logs.Here();
 
+        private static readonly RaycastHit[] Shots = new RaycastHit[32];
+
         private Inventory inventory;
         private Interactor interactor;
         private Hands hands;
@@ -97,7 +99,8 @@ namespace Shooter.Game.Combat
 
         private void Hit(FirearmSpec spec)
         {
-            if (!interactor.TryLook(spec.Distance, out RaycastHit hit))
+            int found = interactor.Look(spec.Distance, Shots);
+            if (!Interactor.TryNearest(Shots, found, out RaycastHit hit))
             {
                 Log.Info("Shot of entity {} missed", name);
                 return;
@@ -110,12 +113,32 @@ namespace Shooter.Game.Combat
                 return;
             }
 
-            var hitbox = hit.collider.GetComponent<Hitbox>();
-            BodyPart part = hitbox == null ? BodyPart.Torso : hitbox.Part;
+            BodyPart part = Weakest(found, health);
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
             health.Damage(damage);
             Log.Info("Shot of entity {} hit {} in {} for {} damage", name, health.name, part, damage);
+        }
+
+        private BodyPart Weakest(int found, Health victim)
+        {
+            BodyPart weakest = BodyPart.Torso;
+            float highest = 0f;
+
+            for (int i = 0; i < found; i++)
+            {
+                Collider collider = Shots[i].collider;
+                if (collider.GetComponentInParent<Health>() != victim) continue;
+
+                var hitbox = collider.GetComponent<Hitbox>();
+                BodyPart part = hitbox == null ? BodyPart.Torso : hitbox.Part;
+                if (part.Multiplier() <= highest) continue;
+
+                weakest = part;
+                highest = part.Multiplier();
+            }
+
+            return weakest;
         }
     }
 }

@@ -48,20 +48,42 @@ namespace Shooter.Game.Body
             return TryLook(Eyes, movement.Look, distance, transform, out hit);
         }
 
+        public int Look(float distance, RaycastHit[] into)
+        {
+            return Look(Eyes, movement.Look, distance, transform, into);
+        }
+
         public static bool TryLook(Vector3 origin, Vector3 direction, float distance, Transform looker, out RaycastHit hit)
         {
-            int found = Physics.RaycastNonAlloc(origin, direction, Sights, distance, LookMask);
+            int found = Look(origin, direction, distance, looker, Sights);
+            return TryNearest(Sights, found, out hit);
+        }
+
+        public static int Look(Vector3 origin, Vector3 direction, float distance, Transform looker, RaycastHit[] into)
+        {
+            int found = Physics.RaycastNonAlloc(origin, direction, into, distance, LookMask);
+            int kept = 0;
+
+            for (int i = 0; i < found; i++)
+            {
+                if (into[i].transform.IsChildOf(looker)) continue;
+                into[kept++] = into[i];
+            }
+
+            return kept;
+        }
+
+        public static bool TryNearest(RaycastHit[] hits, int found, out RaycastHit hit)
+        {
             hit = default;
             float closest = float.PositiveInfinity;
 
             for (int i = 0; i < found; i++)
             {
-                RaycastHit candidate = Sights[i];
-                if (candidate.distance >= closest) continue;
-                if (candidate.transform.IsChildOf(looker)) continue;
+                if (hits[i].distance >= closest) continue;
 
-                hit = candidate;
-                closest = candidate.distance;
+                hit = hits[i];
+                closest = hits[i].distance;
             }
 
             return closest < float.PositiveInfinity;
