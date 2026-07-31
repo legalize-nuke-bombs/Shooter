@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4956659685434160520}
   - component: {fileID: 3023313839430463417}
   - component: {fileID: 8900115880471442694}
+  - component: {fileID: 9078841587603965519}
   m_Layer: 0
   m_Name: Bake01 (8)
   m_TagString: Untagged
@@ -4206,3 +4207,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 9078841587603965518}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9078841587603965519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43763649078710455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  material: {fileID: 11400000, guid: 5272c55b882edd34a9d80b11bd6f240c, type: 2}
+  exportAllChildren: 1
+  terrainSimplificationLevel: 0
