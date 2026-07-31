@@ -3,6 +3,8 @@ namespace Shooter.Game.Body
     public enum UsageType
     {
         Sleep,
-        Talk
+        Talk,
+        TurnOn,
+        TurnOff
     }
 }
