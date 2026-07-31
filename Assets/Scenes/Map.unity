@@ -5687,6 +5687,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sun
       objectReference: {fileID: 0}
+    - target: {fileID: 3936451717357740143, guid: 391b8ecc41e774f36af51ce0fd60b8cd, type: 3}
+      propertyPath: brightest
+      value: 120000
+      objectReference: {fileID: 0}
     - target: {fileID: 5259545090700716513, guid: 391b8ecc41e774f36af51ce0fd60b8cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.2
