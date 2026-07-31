@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8306512793191059398}
   - component: {fileID: 6098540378862189324}
   - component: {fileID: 8306512793191059399}
+  - component: {fileID: 8306512793191059400}
   m_Layer: 0
   m_Name: SM_Electrical_Substation
   m_TagString: Untagged
@@ -101,3 +102,18 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &8306512793191059400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5738327382467238617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  material: {fileID: 11400000, guid: ed65b244617a3154ba34ebdb722855a9, type: 2}
+  exportAllChildren: 1
+  terrainSimplificationLevel: 0
