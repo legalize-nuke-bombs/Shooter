@@ -45,7 +45,7 @@ Light:
   serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 4
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EnableSpotReflector: 1
   m_LightUnit: 0
   m_LuxAtDistance: 1
-  m_Intensity: 0.5
+  m_Intensity: 4
   m_InnerSpotPercent: -1
   m_ShapeWidth: -1
   m_ShapeHeight: -1
@@ -252,5 +252,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1c8a52d9b74e0d8a6c5b1e7f204c93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brightest: 1.2
+  brightest: 4
   lagBehindSun: 144
