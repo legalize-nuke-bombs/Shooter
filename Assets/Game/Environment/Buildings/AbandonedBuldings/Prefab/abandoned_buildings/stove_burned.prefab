@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 3333694}
   - component: {fileID: 2329044}
   - component: {fileID: 6406334}
+  - component: {fileID: 6406335}
   m_Layer: 0
   m_Name: stove
   m_TagString: Untagged
@@ -186,3 +187,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 5cd8d39a1158d16498902913cf91c5a4, type: 3}
+--- !u!114 &6406335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  material: {fileID: 11400000, guid: ed65b244617a3154ba34ebdb722855a9, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0
