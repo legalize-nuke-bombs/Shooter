@@ -11,5 +11,15 @@ namespace Shooter.Game.Body.Hitboxes
                 _ => 1f
             };
         }
+
+        public static float Generosity(this BodyPart part)
+        {
+            return part switch
+            {
+                BodyPart.Head => 1.5f,
+                BodyPart.Limbs => 1.2f,
+                _ => 1.15f
+            };
+        }
     }
 }
