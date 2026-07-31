@@ -45,7 +45,8 @@ namespace Shooter.Game.Body.Hitboxes
                 built++;
             }
 
-            Ball(head, (head.position - hips.position).normalized, Skeleton.HeadRadius * scale, layer);
+            Vector3 crown = head.position + (head.position - hips.position).normalized * (Skeleton.HeadRise * scale);
+            Pill(head, crown, BodyPart.Head, Skeleton.HeadRadius * scale, layer);
             Log.Info("Entity {} got {} hitboxes, humanoid scale {}", name, built + 1, scale);
         }
 
@@ -65,16 +66,6 @@ namespace Shooter.Game.Body.Hitboxes
             pill.height = length + thickness * 1.5f;
             pill.center = new Vector3(0f, length / 2f, 0f);
             Mute(pill);
-        }
-
-        private void Ball(Transform bone, Vector3 up, float radius, int layer)
-        {
-            GameObject mount = Mount(bone, BodyPart.Head, layer);
-
-            var ball = mount.AddComponent<SphereCollider>();
-            ball.radius = radius * BodyPart.Head.Generosity() / Skeleton.BoneScale(bone);
-            ball.center = mount.transform.InverseTransformPoint(bone.position + up * (radius * 0.5f));
-            Mute(ball);
         }
 
         private GameObject Mount(Transform bone, BodyPart part, int layer)
