@@ -14,7 +14,6 @@ namespace Shooter.Game
         private void Awake()
         {
             moon = GetComponent<Light>();
-            moon.shadows = LightShadows.None;
         }
 
         private void Update()
@@ -28,6 +27,10 @@ namespace Shooter.Game
 
             transform.rotation = Celestial.Rotation(hourAngle, clock.Declination, clock.Latitude);
             moon.intensity = brightest * Illumination(lagBehindSun) * Sunlight.HorizonFade(elevation);
+
+            float sunElevation = Celestial.Elevation((float)clock.HourAngle, clock.Declination, clock.Latitude);
+            bool alone = sunElevation <= Sunlight.ShadowHandover && elevation > Sunlight.ShadowHandover;
+            moon.shadows = alone ? LightShadows.Soft : LightShadows.None;
         }
 
         private static float Illumination(float elongation)
