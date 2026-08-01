@@ -85,7 +85,6 @@ GameObject:
   - component: {fileID: 3363814}
   - component: {fileID: 2348802}
   - component: {fileID: 6475044}
-  - component: {fileID: 6475045}
   m_Layer: 0
   m_Name: junk_bridge
   m_TagString: Untagged
@@ -187,18 +186,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 5861287f42befa844ab82fdf73435b7e, type: 3}
---- !u!114 &6475045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 199220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  material: {fileID: 11400000, guid: 5272c55b882edd34a9d80b11bd6f240c, type: 2}
-  exportAllChildren: 0
-  terrainSimplificationLevel: 0

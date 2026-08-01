@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8917530646124852646}
   - component: {fileID: 7320842598891428731}
-  - component: {fileID: 1422662056274643726}
   - component: {fileID: 1309917172197526871}
-  - component: {fileID: 1098243644792364657}
+  - component: {fileID: 501915309449027661}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -86,14 +85,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1422662056274643726
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8153453556380322540}
-  m_Enabled: 1
 --- !u!114 &1309917172197526871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,35 +224,14 @@ MonoBehaviour:
       data1: 0
       data2: 0
   defaultFrameSettings: 0
---- !u!114 &1098243644792364657
-MonoBehaviour:
+--- !u!81 &501915309449027661
+AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8153453556380322540}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fd9ebf1401392e4bbd47fea32f47642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioListener
-  currentBakedListener: {fileID: 0}
-  applyReverb: 1
-  reverbType: 0
-  useAllProbeBatches: 0
-  probeBatches: []
-  mTotalDataSize: 0
-  mProbeDataSizes: 
-  mIdentifier:
-    type: 0
-    variation: 0
-    endpointInfluence:
-      center:
-        x: 0
-        y: 0
-        z: 0
-      radius: 0
-  mProbeBatchesUsed: []
 --- !u!1001 &6032461996145085491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -360,7 +330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8468188008145903587, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3122457742
+      value: 1505038324
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

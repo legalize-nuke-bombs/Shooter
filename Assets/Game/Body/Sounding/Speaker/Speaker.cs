@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -5,23 +6,21 @@ using UnityEngine;
 
 namespace Shooter.Game.Body.Sounding
 {
-    [RequireComponent(typeof(AudioSource))]
     public class Speaker : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
+        private const int Voices = 8;
+
         [SerializeField] private SoundCatalog voice;
 
-        private AudioSource source;
+        private readonly List<AudioSource> sources = new List<AudioSource>();
+
+        private int next;
 
         private SoundCatalog Voice => voice != null
             ? voice
             : Environment.Current == null ? null : Environment.Current.Sounds;
-
-        private void Awake()
-        {
-            source = GetComponent<AudioSource>();
-        }
 
         public void Play(SoundSpec sound)
         {
@@ -46,7 +45,37 @@ namespace Shooter.Game.Body.Sounding
             AudioClip clip = sound.Clip(variant);
             if (clip == null) return;
 
-            source.PlayOneShot(clip, sound.Volume);
+            AudioSource source = Free();
+            source.clip = clip;
+            source.volume = sound.Volume;
+            source.rolloffMode = sound.Rolloff;
+            source.minDistance = sound.MinDistance;
+            source.maxDistance = sound.MaxDistance;
+            source.Play();
+        }
+
+        private AudioSource Free()
+        {
+            foreach (AudioSource source in sources)
+                if (!source.isPlaying)
+                    return source;
+
+            if (sources.Count < Voices) return Add();
+
+            AudioSource taken = sources[next];
+            next = (next + 1) % sources.Count;
+
+            return taken;
+        }
+
+        private AudioSource Add()
+        {
+            AudioSource source = gameObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            source.spatialBlend = 1f;
+            sources.Add(source);
+
+            return source;
         }
     }
 }
