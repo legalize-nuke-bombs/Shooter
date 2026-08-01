@@ -13,9 +13,9 @@ namespace Shooter.Game.Body
             spec = assigned;
         }
 
-        public override string Digest()
+        public override string Digest(DigestionDetail detail)
         {
-            return null;
+            return spec == null ? null : spec.Prompt();
         }
     }
 }

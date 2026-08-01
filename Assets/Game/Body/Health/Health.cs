@@ -21,10 +21,12 @@ namespace Shooter.Game.Body
 
         public abstract void Resurrect();
 
-        public string Digest()
+        public string Digest(DigestionDetail detail)
         {
             return Alive ? $"Здоровье: {Hp}/{MaxHp}" : "Мертв";
         }
+
+        public DigestionPriority Priority => DigestionPriority.Medium;
 
         protected void Die()
         {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Body.Sleeping
 {
-    public class Bed : MonoBehaviour, IUsable
+    public class Bed : MonoBehaviour, IUsable, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -30,5 +30,12 @@ namespace Shooter.Game.Body.Sleeping
 
             sleeper.FallAsleep();
         }
+
+        public string Digest(DigestionDetail detail)
+        {
+            return "Место для сна";
+        }
+
+        public DigestionPriority Priority => DigestionPriority.High;
     }
 }

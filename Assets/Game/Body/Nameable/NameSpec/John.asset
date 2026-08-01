@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.PlainNameSpec
   id: 
   text: "\u0418\u043E\u0430\u043D\u043D"
+  prompt: "\u0418\u043E\u0430\u043D\u043D"

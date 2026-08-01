@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 64417249396387252}
   - component: {fileID: 95718132340211496}
   - component: {fileID: 3139988796031940284}
+  - component: {fileID: -7636497170895440602}
   m_Layer: 0
   m_Name: bed
   m_TagString: Untagged
@@ -149,3 +150,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8f3501c926e64b909d4d17e1ff4b887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sleeping.Bed
+--- !u!114 &-7636497170895440602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703843792552052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
+  content: "\u041A\u0440\u043E\u0432\u0430\u0442\u044C"
