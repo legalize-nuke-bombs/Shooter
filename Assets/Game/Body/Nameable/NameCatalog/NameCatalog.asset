@@ -13,13 +13,10 @@ MonoBehaviour:
   m_Name: NameCatalog
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.NameCatalog
   specs:
+  - {fileID: 11400000, guid: cfe12c834452ba04898229093b36e283, type: 2}
   - {fileID: 11400000, guid: 6fe9815648e747a98d9da3461e0b2886, type: 2}
   - {fileID: 11400000, guid: ece2f4356d084b36b38278fd1e2de944, type: 2}
-  - {fileID: 11400000, guid: b8465cbbdb263e7459c08488f3f043db, type: 2}
-  - {fileID: 11400000, guid: a8b4d89baf0fec24882a24e2f163a914, type: 2}
-  - {fileID: 11400000, guid: e2ccd0d4ef3228243bad17abe3c90757, type: 2}
-  - {fileID: 11400000, guid: 5a8afdb3532007c4e96db82a1e54287f, type: 2}
   - {fileID: 11400000, guid: 1aa6c084c97c444e9a38f2b5373b8c9e, type: 2}
   - {fileID: 11400000, guid: 12b8f722e534d3842803078b5a9a5793, type: 2}
-  - {fileID: 11400000, guid: 9779f977879663c4c9b0b2874f40d251, type: 2}
+  - {fileID: 11400000, guid: dc41d3a00f75b684aa7d67c559b64859, type: 2}
   - {fileID: 11400000, guid: 73ebcce2cc552da4dac557329c3f0632, type: 2}
