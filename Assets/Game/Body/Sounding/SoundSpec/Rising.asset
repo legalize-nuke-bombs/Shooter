@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Rising
   m_EditorClassIdentifier:
   id: rising
-  clips: []
-  volume: 0.5
+  clips:
+  - {fileID: 8300000, guid: 445941b8ef174ab89ae30a48a0788885, type: 3}
+  volume: 0.2
   rolloff: 1
   minDistance: 1
   maxDistance: 12
