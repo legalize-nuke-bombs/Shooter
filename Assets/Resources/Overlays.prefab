@@ -174,10 +174,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7155463033436812329}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69925ca45d07465480db4094f72fd918, type: 3}
+  m_Script: {fileID: 11500000, guid: 527a6e204c3a4fcfb19a92ca9a20d61c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  dreams: {fileID: 11400000, guid: c33c19444bc34a0594cbeae8d369cb84, type: 2}
 --- !u!114 &6600000000000000109
 MonoBehaviour:
   m_ObjectHideFlags: 0

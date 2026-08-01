@@ -360,7 +360,23 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4317973954513247666}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6421885537240197814}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+--- !u!114 &-6421885537240197814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98cf256fefd8405bb7f5281135d3bb71, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.SleepView
+  view: {fileID: 7320842598891428731}
 --- !u!1 &924064630755534763 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
@@ -445,6 +461,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sleeping.Sleeper
   ShowTopMostFoldoutHeaderGroup: 1
+  bedding: {fileID: 11400000, guid: 38e73b218bc243b190e351946cdd0bbd, type: 2}
+  rising: {fileID: 11400000, guid: 765c4fb5bcd8474cb89db79572190686, type: 2}
 --- !u!114 &4317973954513247666
 MonoBehaviour:
   m_ObjectHideFlags: 0
