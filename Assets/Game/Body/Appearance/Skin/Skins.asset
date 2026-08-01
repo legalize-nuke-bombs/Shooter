@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SkinCatalog
   specs:
   - {fileID: 11400000, guid: 7a4f2e8c5d1b49a3b0e6c9d2f8a51637, type: 2}
+  - {fileID: 11400000, guid: c0a6795b4be341b79c8dd8c1f7eceb94, type: 2}
+  - {fileID: 11400000, guid: 4b3ca71c15e94816a5ecff55fcc9dbff, type: 2}
+  - {fileID: 11400000, guid: acde820c8e6c4decb8ca4b9bb4d89853, type: 2}
   - {fileID: 11400000, guid: 13025e751fc929309b75080573d51de1, type: 2}
   - {fileID: 11400000, guid: b0c559ecb530b214c8808c0cd6eb1c3a, type: 2}
   - {fileID: 11400000, guid: f2c81b5d9e3a4706b8d4c1e7a593f028, type: 2}
@@ -31,6 +34,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3e9d5a7c1f2b48e0a6c8d3b5e9f74162, type: 2}
   - {fileID: 11400000, guid: f2cb18773d5bcffd89c26e32124cd661, type: 2}
   - {fileID: 11400000, guid: f2423df601c0a5e707c27791a22b713a, type: 2}
-  - {fileID: 11400000, guid: acde820c8e6c4decb8ca4b9bb4d89853, type: 2}
-  - {fileID: 11400000, guid: c0a6795b4be341b79c8dd8c1f7eceb94, type: 2}
-  - {fileID: 11400000, guid: 4b3ca71c15e94816a5ecff55fcc9dbff, type: 2}
