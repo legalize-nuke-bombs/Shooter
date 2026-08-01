@@ -60,7 +60,7 @@ MonoBehaviour:
   soaring: 0.5
   verticalWawe: 8
   rotationClamp: 1
-  rotationClampValue: 20
+  rotationClampValue: 10
   scaleRandom: {x: 1, y: 1.5}
   danger: 0
   dangerRadius: 15
