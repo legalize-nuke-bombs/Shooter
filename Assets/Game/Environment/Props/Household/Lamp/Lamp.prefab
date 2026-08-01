@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -7162147896932703135}
   - component: {fileID: -7705243458050158706}
   - component: {fileID: -3063063672073548532}
+  - component: {fileID: -5312904471068312254}
   m_Layer: 0
   m_Name: Lamp
   m_TagString: Untagged
@@ -161,6 +162,21 @@ MonoBehaviour:
   - {fileID: 7431905612350005}
   glowing:
   - {fileID: 7431905612350004}
+  click: {fileID: 11400000, guid: de22721b38c4499db906e6ff35d60559, type: 2}
+--- !u!114 &-5312904471068312254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7431905612350001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f9eb2a89611456e858577d0a9d30e7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sounding.Speaker
+  ShowTopMostFoldoutHeaderGroup: 1
+  voice: {fileID: 0}
 --- !u!114 &-3063063672073548532
 MonoBehaviour:
   m_ObjectHideFlags: 0
