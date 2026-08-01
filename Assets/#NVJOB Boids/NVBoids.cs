@@ -233,9 +233,9 @@ public class NVBoids : MonoBehaviour
             nobj.SetActive(debug);
             flocksTransform[f] = nobj.transform;
             Vector3 rdvf = Random.onUnitSphere * fragmentedFlock;
-            flocksTransform[f].position = thisTransform.position;
             flockPos[f] = new Vector3(rdvf.x, Mathf.Abs(rdvf.y * fragmentedFlockYLimit), rdvf.z);
             flocksTransform[f].parent = thisTransform;
+            flocksTransform[f].localPosition = flockPos[f];
         }
 
         //-------------- // For Danger and for flock hunter
@@ -270,10 +270,11 @@ public class NVBoids : MonoBehaviour
         {
             birdsTransform[b] = Instantiate(birdPref, thisTransform).transform;
             Vector3 lpv = Random.insideUnitSphere * fragmentedBirds;
-            birdsTransform[b].localPosition = rdTargetPos[b] = new Vector3(lpv.x, lpv.y * fragmentedBirdsYLimit, lpv.z);
+            rdTargetPos[b] = new Vector3(lpv.x, lpv.y * fragmentedBirdsYLimit, lpv.z);
+            curentFlock[b] = Random.Range(0, flockNum);
+            birdsTransform[b].localPosition = flockPos[curentFlock[b]] + rdTargetPos[b];
             birdsTransform[b].localScale = Vector3.one * Random.Range(scaleRandom.x, scaleRandom.y);
             birdsTransform[b].localRotation = Quaternion.Euler(0, Random.value * 360, 0);
-            curentFlock[b] = Random.Range(0, flockNum);
             birdsSpeed[b] = Random.Range(3.0f, 7.0f);
         }
 
