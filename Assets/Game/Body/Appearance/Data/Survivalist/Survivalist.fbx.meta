@@ -140,7 +140,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human:
-    - boneName: root
+    - boneName: pelvis
       humanName: Hips
       limit:
         min: {x: 0, y: 0, z: 0}

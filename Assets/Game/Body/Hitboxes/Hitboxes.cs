@@ -10,6 +10,9 @@ namespace Shooter.Game.Body.Hitboxes
 
         public const string Layer = "Hitbox";
 
+        private const float LeastScale = 0.6f;
+        private const float MostScale = 1.4f;
+
         private void Start()
         {
             int layer = LayerMask.NameToLayer(Layer);
@@ -29,6 +32,10 @@ namespace Shooter.Game.Body.Hitboxes
             }
 
             float scale = Skeleton.Scale(hips, head);
+            if (scale < LeastScale || scale > MostScale)
+                Log.Error("Entity {} measures {} from hips to head, a humanoid scale of {}: its avatar likely maps Hips to a bone that is not the pelvis",
+                    name, Vector3.Distance(hips.position, head.position), scale);
+
             int built = 0;
 
             foreach (Skeleton.Segment segment in Skeleton.Segments)
