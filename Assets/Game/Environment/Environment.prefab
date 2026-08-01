@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7171569104614631660}
   - component: {fileID: 2934016132358497645}
   - component: {fileID: 4715244483815921385}
+  - component: {fileID: 8352106744219038612}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -108,3 +109,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sleeping.WorldSleep
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &8352106744219038612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047279815154395446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f95533f978e8e46a00717cceaea45f, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Ambience
+  layers:
+  - loop: {fileID: 8300000, guid: 660790bb19a97eb4581a05d90c81f369, type: 3}
+    volume: 0.18
+    above: -90
+    below: 90
+    fade: 6
+  - loop: {fileID: 8300000, guid: bec1cfb465efc7a41bd5ccbac5b6f2a2, type: 3}
+    volume: 0.08
+    above: -4
+    below: 90
+    fade: 8
+  - loop: {fileID: 8300000, guid: 21538f6160ff48040a8488deb4ed6d5e, type: 3}
+    volume: 0.22
+    above: -90
+    below: 0
+    fade: 6
+  - loop: {fileID: 8300000, guid: 2cbeb5b18dd7a4940801811781c0e0d8, type: 3}
+    volume: 0.1
+    above: -90
+    below: -2
+    fade: 8
