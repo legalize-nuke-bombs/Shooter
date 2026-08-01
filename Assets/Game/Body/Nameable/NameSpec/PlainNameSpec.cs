@@ -6,10 +6,16 @@ namespace Shooter.Game.Body
     public sealed class PlainNameSpec : NameSpec
     {
         [SerializeField] private string text;
+        [SerializeField] private string prompt;
 
         public override string Text()
         {
             return text;
+        }
+
+        public override string Prompt()
+        {
+            return prompt;
         }
     }
 }

@@ -2,6 +2,8 @@ namespace Shooter.Game.Body
 {
     public interface IDigestible
     {
-        string Digest();
+        DigestionPriority Priority { get; }
+
+        string Digest(DigestionDetail detail);
     }
 }

@@ -26,7 +26,7 @@ namespace Shooter.Game.Body
             current.Value = new FixedString64Bytes(name);
         }
 
-        public override string Digest()
+        public override string Digest(DigestionDetail detail)
         {
             return string.IsNullOrEmpty(Name) ? null : "Имя: " + Name;
         }

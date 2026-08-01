@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Shooter.Game.Body;
 using Shooter.Logging;
 using Unity.Collections;
@@ -186,12 +187,48 @@ namespace Shooter.Game.Loot
             equipped.Value = Nothing;
         }
 
-        public string Digest()
+        public string Digest(DigestionDetail detail)
         {
-            if (!Equipped(out Item item)) return "Предмет в руках: -";
+            StringBuilder digest = new StringBuilder();
 
-            ItemSpec spec = Spec(item);
-            return "Предмет в руках: " + (spec == null ? item.Id.ToString() : spec.PromptName);
+            if (Equipped(out Item item))
+            {
+                ItemSpec equippedSpec = Spec(item);
+                digest.Append("Предмет в руках: ")
+                    .Append(equippedSpec == null ? item.Id.ToString() : equippedSpec.PromptName);
+            }
+
+            if (detail == DigestionDetail.Full && slots.Count > 0)
+            {
+                if (digest.Length > 0) digest.Append("\n");
+
+                digest.Append("Содержимое инвентаря:");
+
+                for (int slot = 0; slot < slots.Count; slot++)
+                {
+                    Item carried = slots[slot];
+                    ItemSpec carriedSpec = Spec(carried);
+
+                    digest.Append("\n")
+                        .Append(carriedSpec == null ? carried.Id.ToString() : carriedSpec.PromptName)
+                        .Append(" x ")
+                        .Append(carried.Amount);
+                }
+            }
+
+            return digest.Length == 0 ? null : digest.ToString();
+        }
+
+        public DigestionPriority Priority => DigestionPriority.Low;
+
+        private void OnValidate()
+        {
+            if (contents == null) return;
+
+            foreach (Entry entry in contents)
+            {
+                if (entry.Spec == null) Log.Error("Entity {} has a starting inventory slot without an item spec", name);
+            }
         }
 
         private void Shifted(NetworkListEvent<Item> change)

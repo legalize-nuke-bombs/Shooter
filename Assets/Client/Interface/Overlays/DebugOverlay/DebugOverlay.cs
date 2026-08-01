@@ -220,9 +220,7 @@ namespace Shooter.Client.Interface.Overlays
 
         private static string Facing(float yaw)
         {
-            string[] sides = { "север", "северо-восток", "восток", "юго-восток", "юг", "юго-запад", "запад", "северо-запад" };
-
-            return $"{sides[Mathf.RoundToInt(yaw / 45f) & 7]} ({yaw:F0}°)";
+            return $"{Cardinal.Side(yaw)} ({yaw:F0}°)";
         }
 
         private string Bytes(string name)

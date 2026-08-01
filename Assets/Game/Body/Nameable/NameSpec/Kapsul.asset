@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd774a2046ffe4c24baf33f0a37fe12b, type: 3}
   m_Name: Kapsul
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.PlainNameSpec
-  id:
-  text: Капсул
+  id: 
+  text: "\u041A\u0430\u043F\u0441\u0443\u043B"
+  prompt: "\u041A\u0430\u043F\u0441\u0443\u043B"

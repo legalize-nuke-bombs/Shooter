@@ -49,6 +49,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400338}
+  - component: {fileID: 7262242672195420882}
   m_Layer: 0
   m_Name: house_ruined
   m_TagString: Untagged
@@ -73,6 +74,20 @@ Transform:
   - {fileID: 453762}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7262242672195420882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
+  content: "\u0420\u0430\u0437\u0440\u0443\u0448\u0435\u043D\u043D\u044B\u0439 \u0434\u0435\u0440\u0435\u0432\u0435\u043D\u0441\u043A\u0438\u0439
+    \u0434\u043E\u043C"
 --- !u!1 &189916
 GameObject:
   m_ObjectHideFlags: 0

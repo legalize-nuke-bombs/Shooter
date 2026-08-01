@@ -52,9 +52,11 @@ namespace Shooter.Game.Body.Sleeping
             WakeUp();
         }
 
-        public string Digest()
+        public string Digest(DigestionDetail detail)
         {
             return Sleeping ? "Спит" : null;
         }
+
+        public DigestionPriority Priority => DigestionPriority.Low;
     }
 }

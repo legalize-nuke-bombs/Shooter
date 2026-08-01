@@ -29,5 +29,10 @@ namespace Shooter.Game.Body
 
             return noise.ToString();
         }
+
+        public override string Prompt()
+        {
+            return "Имя не читается";
+        }
     }
 }

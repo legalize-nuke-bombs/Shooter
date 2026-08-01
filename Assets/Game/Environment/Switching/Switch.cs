@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Switch : NetworkBehaviour, IUsable
+    public class Switch : NetworkBehaviour, IUsable, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -54,6 +54,13 @@ namespace Shooter.Game
         {
             Apply(now);
         }
+
+        public string Digest(DigestionDetail detail)
+        {
+            return shining.Value ? "Включен" : "Выключен";
+        }
+
+        public DigestionPriority Priority => DigestionPriority.High;
 
         private void Apply(bool now)
         {

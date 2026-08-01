@@ -64,10 +64,12 @@ namespace Shooter.Game.Body
             Interrupt();
         }
 
-        public string Digest()
+        public string Digest(DigestionDetail detail)
         {
             return Free ? null : "Занят: " + Action;
         }
+
+        public DigestionPriority Priority => DigestionPriority.Low;
 
         private void Step()
         {

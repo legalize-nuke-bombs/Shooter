@@ -18,7 +18,7 @@ namespace Shooter.Game.Speech
         public static string Situation(NetworkObject user)
         {
             return new Prompt()
-                .Section("Разговор", TalkRules + "\n\nСостояние игрока:\n" + Digestion.Of(user))
+                .Section("Разговор", TalkRules + "\n\nСостояние игрока:\n" + Digestion.Of(user, DigestionDetail.Full))
                 .ToString();
         }
 
