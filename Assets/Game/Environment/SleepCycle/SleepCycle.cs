@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        private const float SkipTimeScale = 25f;
+        private const float SkipTimeScale = 50f;
 
         private readonly NetworkVariable<bool> asleep = new NetworkVariable<bool>();
 
