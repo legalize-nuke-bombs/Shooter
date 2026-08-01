@@ -9,7 +9,19 @@ namespace Shooter.Game.Body.Sounding
 
         [SerializeField, Range(0f, 1f)] private float volume = 1f;
 
+        [SerializeField] private AudioRolloffMode rolloff = AudioRolloffMode.Logarithmic;
+
+        [SerializeField] private float minDistance = 1f;
+
+        [SerializeField] private float maxDistance = 100f;
+
         public float Volume => volume;
+
+        public AudioRolloffMode Rolloff => rolloff;
+
+        public float MinDistance => minDistance;
+
+        public float MaxDistance => maxDistance;
 
         public bool Silent => clips == null || clips.Length == 0;
 
