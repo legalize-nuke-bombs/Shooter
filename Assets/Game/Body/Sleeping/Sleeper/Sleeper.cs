@@ -1,3 +1,4 @@
+using Shooter.Game.Body.Sounding;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,21 +9,32 @@ namespace Shooter.Game.Body.Sleeping
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private SoundSpec bedding;
+
+        [SerializeField] private SoundSpec rising;
+
         private readonly NetworkVariable<bool> sleeping = new NetworkVariable<bool>();
+        private readonly NetworkVariable<Vector3> bedside = new NetworkVariable<Vector3>();
+
+        private Speaker speaker;
 
         public bool Sleeping => sleeping.Value;
 
         public bool Restrains => Sleeping;
 
+        public Vector3 Bedside => bedside.Value;
+
         public Vector3 SpawnPoint { get; private set; }
 
-        public void FallAsleep()
+        public void FallAsleep(Bed bed)
         {
             if (!IsServer || Sleeping) return;
 
+            bedside.Value = bed == null ? transform.position : bed.transform.position;
             sleeping.Value = true;
             SpawnPoint = transform.position;
-            Log.Info("Entity {} fell asleep at {}", name, SpawnPoint);
+            Sound(bedding);
+            Log.Info("Entity {} fell asleep at {} in a bed at {}", name, SpawnPoint, bedside.Value);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -41,15 +53,28 @@ namespace Shooter.Game.Body.Sleeping
 
         public void WakeUp()
         {
-            if (!IsServer || !Sleeping) return;
-
-            sleeping.Value = false;
-            Log.Info("Entity {} woke up at {}", name, transform.position);
+            Rouse(true);
         }
 
         public void Died()
         {
-            WakeUp();
+            Rouse(false);
+        }
+
+        private void Rouse(bool heard)
+        {
+            if (!IsServer || !Sleeping) return;
+
+            sleeping.Value = false;
+            if (heard) Sound(rising);
+            Log.Info("Entity {} woke up at {}", name, transform.position);
+        }
+
+        private void Sound(SoundSpec sound)
+        {
+            if (speaker == null) speaker = GetComponent<Speaker>();
+
+            if (speaker != null) speaker.Play(sound);
         }
 
         public string Digest(DigestionDetail detail)

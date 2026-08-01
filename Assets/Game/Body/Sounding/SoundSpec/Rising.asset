@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04779557931145128e8418bfde3db46b, type: 3}
-  m_Name: WhiteNoise
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Dreaming.WhiteNoiseDreamSpec
-  weight: 1
-  resolution: 128
-  framesPerSecond: 20
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: Rising
+  m_EditorClassIdentifier:
+  id: rising
+  clips: []
+  volume: 0.5
+  rolloff: 1
+  minDistance: 1
+  maxDistance: 12

@@ -8,7 +8,11 @@ namespace Shooter.Game.Body.Sleeping
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private Camera bedside;
+
         public UsageType Usage => UsageType.Sleep;
+
+        public Camera Bedside => bedside != null ? bedside : bedside = GetComponentInChildren<Camera>(true);
 
         public void Use(NetworkObject user)
         {
@@ -28,7 +32,7 @@ namespace Shooter.Game.Body.Sleeping
                 return;
             }
 
-            sleeper.FallAsleep();
+            sleeper.FallAsleep(this);
         }
 
         public string Digest(DigestionDetail detail)
