@@ -45,3 +45,25 @@ shooter-logs/
 
 # Следы пакета тестирования производительности, натекают в Resources при запуске тестов
 /Assets/Resources/PerformanceTestRun*
+
+# Скачанные паки ждут разбора прямо в Assets, в репозиторий едет только то, что уже разложено по нашей структуре
+/Assets/BookHeadMonster/
+/Assets/BookHeadMonster.meta
+/Assets/Creep Horror Creature/
+/Assets/Creep Horror Creature.meta
+/Assets/Croc men/
+/Assets/Croc men.meta
+/Assets/Cursed Priest/
+/Assets/Cursed Priest.meta
+/Assets/Demon Horror Creature with Weapon/
+/Assets/Demon Horror Creature with Weapon.meta
+/Assets/MonsterMutant 7/
+/Assets/MonsterMutant 7.meta
+/Assets/Standard Assets/
+/Assets/Standard Assets.meta
+/Assets/TWO_SAPIENS_2S_JOHN_BASIC/
+/Assets/TWO_SAPIENS_2S_JOHN_BASIC.meta
+/Assets/_GhoulZombie/
+/Assets/_GhoulZombie.meta
+/Assets/monster_scavenger/
+/Assets/monster_scavenger.meta
