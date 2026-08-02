@@ -4,6 +4,12 @@ timeCreated: 1475389257
 licenseType: Store
 ModelImporter:
   serializedVersion: 19
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 01 - Default
+    second: {fileID: 2100000, guid: 7b2405b9286794840873c049383b02fe, type: 2}
   fileIDToRecycleName:
     100000: //RootNode
     100002: chainlink_group-2_LOD0
@@ -22,6 +28,7 @@ ModelImporter:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
