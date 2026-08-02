@@ -14,11 +14,12 @@ namespace Shooter.Game.Llm
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private string corePrompt =
+        private const string CorePrompt =
             "Ты неигровой персонаж (NPC) в 3D мета-хорроре с опциональным кооперативным режимом.\n" +
             "Ты никогда не упоминаешь ничего, что связано с программированием (если это не часть твоего лора).\n" +
             "Ты не обязан ничего игрокам. Игроки — чужаки, и они часто лгут.\n" +
-            "ВАЖНО: Атмосфера игры мрачная и пугающая. Твой тон должен быть реалистичным, настороженным или зловещим. Категорически запрещено использовать эмодзи, проявлять излишний энтузиазм или звучать как виртуальный ассистент.";
+            "Атмосфера игры мрачная и пугающая. Твой тон должен быть реалистичным, настороженным или зловещим. Категорически запрещено использовать эмодзи, проявлять излишний энтузиазм или звучать как виртуальный ассистент.\n" +
+            "Ты ВСЕГДА форматируешь свои ответы как JSON. Ты ВСЕГДА следуешь JSON схеме описанной ниже. Ты НИКОГДА не нарушаешь описанную ниже схему JSON.";
 
         [SerializeField] private string character;
 
@@ -26,7 +27,7 @@ namespace Shooter.Game.Llm
         private string memory = "Пока пусто.";
         private string MemoryPrompt =>
             "У тебя есть постоянная Память, которую ты поддерживаешь.\n" +
-            "Чтобы обновить Память, ты в поле memory ответа возвращаешь новую ПОЛНУЮ версию своей Памяти, либо null, если менять нечего.\n" +
+            "Чтобы обновить Память, ты в поле `memory` ответа возвращаешь новую ПОЛНУЮ версию своей Памяти, либо null, если менять нечего.\n" +
             "То, что ты не перенесешь в новую версию памяти, будет безвозвратно утеряно.\n" +
             "Ты хранишь в Памяти максимально подробные сведения об этом мире, о себе.\n" +
             "Ты НЕ хранишь в Памяти подробные личные детали игроков: они живут в переписках с ними.\n" +
@@ -34,20 +35,18 @@ namespace Shooter.Game.Llm
             "Твоя память сейчас:\n" +
             memory;
 
-        private string Prompt(string situation)
-        {
-            return new Prompt()
-                .Section("Главное", corePrompt)
-                .Section("Личность", character)
-                .Section("Память", MemoryPrompt)
-                .Section("Состояние мира", WorldState())
-                .Text(situation)
-                .ToString();
-        }
+        private const string AnswerPrompt =
+            "Сейчас игрок обращается к тебе. Ты должен ему ответить, поместив ответ в поле ответа `reply`.\n" +
+            "Ты должен отвечать на языке игрока.\n" +
+            "Твои ответы должны быть краткими, сухими или напряженными. Не пытайся понравиться игроку.\n" +
+            "Никогда не используй вежливые клише ИИ (например, 'Чем могу помочь?', 'С радостью отвечу').\n" +
+            "Сообщения помечены игровым временем. Учитывай время между репликами.\n" +
+            "Если история пуста, это ваш первый контакт.\n" +
+            "Если ты чего-то не знаешь, реагируй уклончиво, подозрительно или смени тему, не признавая свою неосведомленность напрямую.";
 
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
 
-        public async Task<string> Ask(string situation, IReadOnlyList<LlmMessage> messages)
+        public async Task<string> Answer(IReadOnlyList<LlmMessage> messages)
         {
             if (gate.CurrentCount == 0)
             {
@@ -59,7 +58,16 @@ namespace Shooter.Game.Llm
             {
                 LlmConfig config = Config.Read().Server.Llm;
                 Log.Info("Entity {} is asking {} for an answer", name, config.Model);
-                LlmAnswer answer = await LlmProviders.For(config).Request(config, Prompt(situation), messages);
+                LlmAnswer answer = await LlmProvider.Request(
+                    config,
+                    new Prompt()
+                        .Section("Главное", CorePrompt)
+                        .Section("О тебе", character)
+                        .Section("Твоя память", MemoryPrompt)
+                        .Section("Состояние мира", WorldState())
+                        .Section("Ситуация", AnswerPrompt),
+                    messages
+                );
                 Remember(answer.Memory);
                 return answer.Reply;
             }
@@ -76,8 +84,6 @@ namespace Shooter.Game.Llm
             string worldState = "Игровое время: " + time + "\n" +
                                 "Твоё состояние:\n" + Digestion.Of(this, DigestionDetail.Full) + "\n" +
                                 "Объекты рядом с тобой:\n" + DigestNearObjects();
-
-            Log.Info("Entity {} built the world state: {}", name, worldState);
 
             return worldState;
         }
