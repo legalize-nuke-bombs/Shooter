@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    public class Llm : NetworkBehaviour
+    public class Llm : NetworkBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -45,6 +45,12 @@ namespace Shooter.Game.Llm
             "Если ты чего-то не знаешь, реагируй уклончиво, подозрительно или смени тему, не признавая свою неосведомленность напрямую.";
 
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
+        private readonly CancellationTokenSource life = new CancellationTokenSource();
+
+        public void Died()
+        {
+            life.Cancel();
+        }
 
         public async Task<string> Answer(IReadOnlyList<LlmMessage> messages)
         {
@@ -53,7 +59,7 @@ namespace Shooter.Game.Llm
                 Log.Info("Entity {} has an llm request in flight, waiting for a free slot", name);
             }
 
-            await gate.WaitAsync();
+            await gate.WaitAsync(life.Token);
             try
             {
                 LlmConfig config = Config.Read().Server.Llm;
@@ -66,9 +72,13 @@ namespace Shooter.Game.Llm
                         .Section("Твоя память", MemoryPrompt)
                         .Section("Состояние мира", WorldState())
                         .Section("Ситуация", AnswerPrompt),
-                    messages
+                    messages,
+                    life.Token
                 );
+
+                life.Token.ThrowIfCancellationRequested();
                 Remember(answer.Memory);
+
                 return answer.Reply;
             }
             finally

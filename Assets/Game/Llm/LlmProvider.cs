@@ -1,63 +1,103 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm
 {
     public static class LlmProvider
     {
+        private static readonly Journal Log = Logs.Here();
+
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public static async Task<LlmAnswer> Request(LlmConfig config, Prompt basePrompt, IReadOnlyList<LlmMessage> messages)
+        public static async Task<LlmAnswer> Request(LlmConfig config, Prompt basePrompt,
+            IReadOnlyList<LlmMessage> messages, CancellationToken until)
         {
             if (string.IsNullOrEmpty(config.Key))
             {
                 throw new InvalidOperationException($"Llm key is not set in {GameConfig.FileName}");
             }
 
-            var networkMessages = new List<OpenAiMessage>();
-            networkMessages.Add(new OpenAiMessage { Role = "system", Content = basePrompt.ToString() });
-            networkMessages.AddRange(messages.Select(BuildContent));
+            var spoken = new List<OpenAiMessage>
+            {
+                new OpenAiMessage { Role = "system", Content = basePrompt.ToString() }
+            };
+            spoken.AddRange(messages.Select(Said));
 
-            var requestBody = new OpenAiRequest
+            var body = new OpenAiRequest
             {
                 Model = config.Model,
-                Messages = networkMessages.ToArray(),
+                Messages = spoken.ToArray(),
                 ResponseFormat = new OpenAiResponseFormat { Type = "json_object" }
             };
 
-            ILlmApiProvider apiProvider = LlmApiProviders.For(config);
-            string rawResponse = await apiProvider.Request(config.Key, requestBody);
+            string raw = await Ask(OpenAiHosts.For(config), config.Key, body, until);
 
-            var apiResponse = JsonConvert.DeserializeObject<OpenAiResponse>(rawResponse, Settings);
-            string textContent = apiResponse?.Choices?.FirstOrDefault()?.Message?.Content;
+            var response = JsonConvert.DeserializeObject<OpenAiResponse>(raw, Settings);
+            string content = response?.Choices?.FirstOrDefault()?.Message?.Content;
 
-            if (string.IsNullOrEmpty(textContent))
+            if (string.IsNullOrEmpty(content))
             {
-                throw new Exception($"API response contains no message content. Raw: {rawResponse}");
+                throw new LlmAnswerException($"Response carries no message content. Raw: {raw}");
             }
 
-            textContent = CleanMarkdown(textContent);
+            content = WithoutFences(content);
 
-            var answer = JsonConvert.DeserializeObject<LlmAnswer>(textContent, Settings);
+            LlmAnswer answer;
+            try
+            {
+                answer = JsonConvert.DeserializeObject<LlmAnswer>(content, Settings);
+            }
+            catch (JsonException e)
+            {
+                throw new LlmAnswerException($"Answer is not json: {e.Message}. Content: {content}");
+            }
+
             if (string.IsNullOrEmpty(answer?.Reply))
             {
-                throw new Exception($"Parsed answer JSON has no reply property. Content: {textContent}");
+                throw new LlmAnswerException($"Answer json has no reply property. Content: {content}");
             }
 
             return answer;
         }
 
-        private static OpenAiMessage BuildContent(LlmMessage message)
+        private static async Task<string> Ask(IOpenAiHost host, string key, OpenAiRequest body,
+            CancellationToken until)
+        {
+            Log.Info("Sending request. Model: {}. Payload: {}",
+                body.Model, JsonConvert.SerializeObject(body, Settings));
+
+            try
+            {
+                string raw = await host.Request(key, body, until);
+                Log.Info("Response received successfully. Raw content: {}", raw);
+
+                return raw;
+            }
+            catch (OperationCanceledException)
+            {
+                Log.Info("Request dropped, the asker is gone");
+                throw;
+            }
+            catch (Exception e)
+            {
+                Log.Error("Request failed. Error: {}", e.Message);
+                throw;
+            }
+        }
+
+        private static OpenAiMessage Said(LlmMessage message)
         {
             string text = string.IsNullOrEmpty(message.Time)
                 ? message.Content
@@ -70,7 +110,7 @@ namespace Shooter.Game.Llm
             };
         }
 
-        private static string CleanMarkdown(string text)
+        private static string WithoutFences(string text)
         {
             return string.IsNullOrEmpty(text)
                 ? ""
