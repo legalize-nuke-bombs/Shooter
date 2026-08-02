@@ -27,12 +27,16 @@ namespace Shooter.Game
 
         [SerializeField] private NameCatalog names;
 
+        private MainSpawnPoint spawn;
+
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
         public Clock Clock { get; private set; }
 
         public SleepCycle SleepCycle { get; private set; }
+
+        public Transform Spawn => spawn == null ? transform : spawn.transform;
 
         public GameObject Corpse => corpse;
 
@@ -52,6 +56,13 @@ namespace Shooter.Game
         {
             Clock = GetComponent<Clock>();
             SleepCycle = GetComponent<SleepCycle>();
+            MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
+            spawn = points.Length == 0 ? null : points[0];
+
+            if (spawn == null)
+                Log.Warn("World has no main spawn point, everyone will appear at {}", transform.position);
+            else if (points.Length > 1)
+                Log.Warn("World has {} main spawn points, everyone will appear at the one on {}", points.Length, spawn.name);
         }
 
         public override void OnNetworkSpawn()

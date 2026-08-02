@@ -24,7 +24,17 @@ namespace Shooter.Game.Body.Sleeping
 
         public Vector3 Bedside => bedside.Value;
 
-        public Vector3 SpawnPoint { get; private set; }
+        private Vector3? bedded;
+
+        public Vector3 SpawnPoint
+        {
+            get
+            {
+                if (bedded.HasValue) return bedded.Value;
+
+                return Environment.Current == null ? transform.position : Environment.Current.Spawn.position;
+            }
+        }
 
         public void FallAsleep(Bed bed)
         {
@@ -32,7 +42,7 @@ namespace Shooter.Game.Body.Sleeping
 
             bedside.Value = bed == null ? transform.position : bed.transform.position;
             sleeping.Value = true;
-            SpawnPoint = transform.position;
+            bedded = transform.position;
             Sound(bedding);
             Log.Info("Entity {} fell asleep at {} in a bed at {}", name, SpawnPoint, bedside.Value);
         }

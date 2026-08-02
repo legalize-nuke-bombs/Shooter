@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(CharacterController))]
     public class Movement : NetworkBehaviour
     {
+        public event Action<float> Turned;
+
         private const float PitchLimit = 89f;
         private const float GroundedFall = -1f;
 
@@ -81,10 +84,23 @@ namespace Shooter.Game.Body
 
         public void Teleport(Vector3 position)
         {
+            Teleport(position, Yaw);
+        }
+
+        public void Teleport(Vector3 position, float yaw)
+        {
             characterController.enabled = false;
-            transform.position = position;
+            transform.SetPositionAndRotation(position, Quaternion.Euler(0f, Finite(yaw), 0f));
             characterController.enabled = true;
             fall = 0f;
+
+            if (IsServer) TurnRpc(Yaw);
+        }
+
+        [Rpc(SendTo.Owner)]
+        private void TurnRpc(float yaw)
+        {
+            Turned?.Invoke(yaw);
         }
 
         private void Step()

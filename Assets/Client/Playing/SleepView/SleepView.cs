@@ -86,7 +86,7 @@ namespace Shooter.Client.Playing
             Bed closest = null;
             float best = BedReach * BedReach;
 
-            foreach (Bed bed in FindObjectsByType<Bed>(FindObjectsSortMode.None))
+            foreach (Bed bed in FindObjectsByType<Bed>())
             {
                 float apart = (bed.transform.position - slept).sqrMagnitude;
                 if (apart > best) continue;
