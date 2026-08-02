@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -7,46 +8,54 @@ using UnityEngine.Networking;
 
 namespace Shooter.Game.Llm.Polza
 {
-    public sealed class PolzaApiProvider : ILlmApiProvider
+    public sealed class PolzaHost : IOpenAiHost
     {
         private const string Host = "api.polza.ai";
         private const int TimeoutSeconds = 25;
 
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
+            Formatting = Formatting.Indented,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public async Task<string> RequestRaw(string apiKey, OpenAiRequest requestBody)
+        public async Task<string> Request(string key, OpenAiRequest body, CancellationToken until)
         {
             var uri = new Uri($"https://{Host}/v1/chat/completions");
 
             using (var webRequest = new UnityWebRequest(uri, "POST"))
             {
-                string jsonToSend = JsonConvert.SerializeObject(requestBody, Settings);
-                webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(jsonToSend));
+                string sent = JsonConvert.SerializeObject(body, Settings);
+                webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(sent));
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.timeout = TimeoutSeconds;
                 webRequest.SetRequestHeader("Content-Type", "application/json");
-                webRequest.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+                webRequest.SetRequestHeader("Authorization", $"Bearer {key}");
 
                 var completion = new TaskCompletionSource<bool>();
-                webRequest.SendWebRequest().completed += _ => completion.SetResult(true);
-                await completion.Task;
+                webRequest.SendWebRequest().completed += _ => completion.TrySetResult(true);
+
+                using (until.Register(webRequest.Abort))
+                {
+                    await completion.Task;
+                }
+
+                until.ThrowIfCancellationRequested();
 
                 if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
                     webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    throw new Exception($"HTTP {webRequest.responseCode} {webRequest.error}: {webRequest.downloadHandler?.text}");
+                    throw new LlmHostException(
+                        $"HTTP {webRequest.responseCode} {webRequest.error}: {webRequest.downloadHandler?.text}");
                 }
 
-                string responseText = webRequest.downloadHandler?.text;
-                if (string.IsNullOrEmpty(responseText))
+                string answered = webRequest.downloadHandler?.text;
+                if (string.IsNullOrEmpty(answered))
                 {
-                    throw new Exception("API returned an empty response body.");
+                    throw new LlmHostException("Host returned an empty response body");
                 }
 
-                return responseText;
+                return answered;
             }
         }
     }
