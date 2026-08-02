@@ -242,15 +242,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -74.11791
       objectReference: {fileID: 0}
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.952
       objectReference: {fileID: 0}
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -84.07171
       objectReference: {fileID: 0}
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -329,7 +329,15 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8468188008145903587, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8468188008145903587, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: GlobalObjectIdHash
+      value: 644454968
+      objectReference: {fileID: 0}
+    - target: {fileID: 8468188008145903587, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 3122457742
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -364,19 +372,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: -6421885537240197814}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
---- !u!114 &-6421885537240197814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924064630755534763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98cf256fefd8405bb7f5281135d3bb71, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.SleepView
-  view: {fileID: 7320842598891428731}
 --- !u!1 &924064630755534763 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
@@ -476,6 +471,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
   content: "\u0418\u0433\u0440\u043E\u043A"
+--- !u!114 &-6421885537240197814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98cf256fefd8405bb7f5281135d3bb71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.SleepView
+  ShowTopMostFoldoutHeaderGroup: 1
+  view: {fileID: 7320842598891428731}
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
