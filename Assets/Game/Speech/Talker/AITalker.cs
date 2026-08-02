@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shooter.Game.Llm;
 
 namespace Shooter.Game.Speech
 {
@@ -19,7 +21,24 @@ namespace Shooter.Game.Speech
                 throw new InvalidOperationException($"Entity {name} has no llm to answer with");
             }
 
-            return llm.Ask(TalkPrompt.Situation(conversation.User), TalkPrompt.Messages(conversation));
+            return llm.Answer(Messages(conversation));
+        }
+
+        private static IReadOnlyList<LlmMessage> Messages(Conversation conversation)
+        {
+            var messages = new List<LlmMessage>();
+
+            foreach (Message message in conversation.Messages)
+            {
+                messages.Add(new LlmMessage
+                {
+                    Role = message.Author == MessageAuthor.Player ? LlmRole.User : LlmRole.Model,
+                    Content = message.Content,
+                    Time = message.Time
+                });
+            }
+
+            return messages;
         }
     }
 }
