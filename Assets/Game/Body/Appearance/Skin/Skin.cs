@@ -40,7 +40,18 @@ namespace Shooter.Game.Body
             Flesh.AddComponent<Poser>();
             Flesh.AddComponent<Hitboxes.Hitboxes>();
 
-            Log.Info("Entity {} dressed as {}", name, spec.Id);
+            Log.Info("Entity {} dressed as {}, {} m tall", name, spec.Id, Height(Flesh));
+        }
+
+        private static float Height(GameObject flesh)
+        {
+            var renderers = flesh.GetComponentsInChildren<Renderer>();
+            if (renderers.Length == 0) return 0f;
+
+            Bounds bounds = renderers[0].bounds;
+            foreach (Renderer renderer in renderers) bounds.Encapsulate(renderer.bounds);
+
+            return bounds.size.y;
         }
     }
 }
