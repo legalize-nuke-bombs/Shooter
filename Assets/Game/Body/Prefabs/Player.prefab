@@ -242,15 +242,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -74.11791
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.952
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -84.07171
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -330,11 +330,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8468188008145903587, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_InScenePlaced
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8468188008145903587, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 644454968
+      value: 3122457742
       objectReference: {fileID: 0}
     - target: {fileID: 8468188008145903587, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
