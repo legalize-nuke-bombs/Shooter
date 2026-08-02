@@ -23,6 +23,23 @@
             <ui:Button name="join-back" text="Назад" class="menu__button" />
         </ui:VisualElement>
         <ui:VisualElement name="settings" class="screen">
+            <ui:VisualElement name="tabs" class="menu__tabs">
+                <ui:Button name="open-client" text="Клиент" class="menu__tab" />
+                <ui:Button name="open-server" text="Сервер" class="menu__tab" />
+            </ui:VisualElement>
+            <ui:VisualElement name="client-settings">
+                <ui:TextField name="player-name" label="Имя игрока" class="menu__field" />
+                <ui:TextField name="server-address" label="Адрес сервера" class="menu__field" />
+                <ui:TextField name="client-port" label="Порт сервера" class="menu__field" />
+            </ui:VisualElement>
+            <ui:VisualElement name="server-settings">
+                <ui:TextField name="world-name" label="Имя мира" class="menu__field" />
+                <ui:TextField name="server-port" label="Порт" class="menu__field" />
+                <ui:Label text="Языковая модель" class="menu__title" />
+                <ui:TextField name="llm-provider" label="Провайдер" class="menu__field" />
+                <ui:TextField name="llm-model" label="Модель" class="menu__field" />
+                <ui:TextField name="llm-key" label="Ключ" password="true" class="menu__field" />
+            </ui:VisualElement>
             <ui:Button name="settings-back" text="Назад" class="menu__button" />
         </ui:VisualElement>
     </ui:VisualElement>
