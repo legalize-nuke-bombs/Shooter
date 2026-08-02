@@ -46,14 +46,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behavioralCh: {x: 10, y: 20}
   debug: 0
-  flockNum: 100
+  flockNum: 50
   fragmentedFlock: 250
   fragmentedFlockYLimit: 0
   migrationFrequency: 0.06
   posChangeFrequency: 0.7
   smoothChFrequency: 4
   birdPref: {fileID: 7623336724680058607, guid: 2f5f5731eb36efb4ead612880acc102e, type: 3}
-  birdsNum: 500
+  birdsNum: 250
   birdSpeed: 2
   fragmentedBirds: 20
   fragmentedBirdsYLimit: 0.15
