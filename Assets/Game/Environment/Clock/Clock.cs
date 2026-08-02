@@ -16,7 +16,13 @@ namespace Shooter.Game
         private const float DayRealSeconds = 1200f;
         private const float SyncInterval = 1f;
 
-        private static readonly DateTimeOffset Beginning = new DateTimeOffset(2026, 9, 1, 10, 0, 0, TimeSpan.Zero);
+        [SerializeField] private int beginningYear = 2026;
+        [SerializeField] private int beginningMonth = 9;
+        [SerializeField] private int beginningDay = 1;
+        [SerializeField] private int beginningHour = 22;
+        [SerializeField] private int beginningMinutes = 0;
+        [SerializeField] private int beginningSeconds = 0;
+        private DateTimeOffset Beginning => new DateTimeOffset(beginningYear, beginningMonth, beginningDay, beginningHour, beginningMinutes, beginningSeconds, TimeSpan.Zero);
 
         private readonly NetworkVariable<double> synced = new NetworkVariable<double>();
         private readonly NetworkVariable<float> scale = new NetworkVariable<float>(1f);
