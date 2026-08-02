@@ -56,6 +56,7 @@ namespace Shooter.Client.Playing
             }
 
             yaw = transform.eulerAngles.y;
+            movement.Turned += Turn;
 
             controls = new Controls();
             controls.Player.Jump.performed += Jump;
@@ -83,6 +84,7 @@ namespace Shooter.Client.Playing
             if (!IsOwner) return;
 
             NetworkManager.NetworkTickSystem.Tick -= Send;
+            movement.Turned -= Turn;
 
             controls.Player.Jump.performed -= Jump;
             controls.Player.Attack.performed -= Fire;
@@ -115,6 +117,11 @@ namespace Shooter.Client.Playing
 
             yaw += delta.x;
             pitch = Mathf.Clamp(pitch - delta.y, -MaxPitch, MaxPitch);
+        }
+
+        private void Turn(float turned)
+        {
+            yaw = turned;
         }
 
         private void LateUpdate()

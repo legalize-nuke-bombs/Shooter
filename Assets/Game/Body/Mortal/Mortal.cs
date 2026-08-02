@@ -38,10 +38,17 @@ namespace Shooter.Game.Body
         {
             if (health == null || health.Alive) return;
 
-            Vector3 at = sleeper == null ? Vector3.zero : sleeper.SpawnPoint;
+            Vector3 at = SpawnPoint();
             movement?.Teleport(at);
             health.Resurrect();
             Log.Info("Entity {} rose at {}", name, at);
+        }
+
+        private Vector3 SpawnPoint()
+        {
+            if (sleeper != null) return sleeper.SpawnPoint;
+
+            return Environment.Current == null ? transform.position : Environment.Current.Spawn.position;
         }
 
         private void LeaveCorpse()

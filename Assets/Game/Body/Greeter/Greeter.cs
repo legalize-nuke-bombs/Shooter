@@ -62,7 +62,12 @@ namespace Shooter.Game.Body
             connected.PlayerObject.GetComponent<AbsoluteNameable>()?.Rename(name);
             connected.PlayerObject.name = name;
 
-            Log.Info("Client {} entered the world as {}, players online {}", client, name, network.ConnectedClients.Count);
+            Transform at = Environment.Current == null
+                ? connected.PlayerObject.transform
+                : Environment.Current.Spawn;
+            connected.PlayerObject.GetComponent<Movement>()?.Teleport(at.position, at.eulerAngles.y);
+
+            Log.Info("Client {} entered the world as {} at {}, players online {}", client, name, at.position, network.ConnectedClients.Count);
         }
 
         private void Forget(ulong client)
