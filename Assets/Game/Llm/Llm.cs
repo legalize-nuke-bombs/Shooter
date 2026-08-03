@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -70,8 +69,8 @@ namespace Shooter.Game.Llm
                 );
 
 
-        private string interNpcInteractionInbox = "";
-        private Prompt InterNpcInteractionPrompt =>
+        private readonly Inbox interNpcInbox = new Inbox();
+        private Prompt InterNpcInteractionPrompt(string inbox) =>
             new Prompt()
                 .Section("Общение с другими NPC",
                     "Ты можешь сказать что-то другому NPC, используя поле ответа `interNpcInteractions`.\n" +
@@ -80,11 +79,11 @@ namespace Shooter.Game.Llm
                     "Ты постоянно делишься любыми новыми подробностями о мире, которые ты узнал, со своими NPC друзьями.\n" +
                     "Твои Входящие показываются только один раз (входящие, не записанные сразу в Память, будут утеряны!):\n" +
                     "Твои Входящие:\n" +
-                    interNpcInteractionInbox
+                    inbox
                 );
 
-        private string systemNotificationsInbox = "";
-        private Prompt SystemNotificationsPrompt =>
+        private readonly Inbox systemInbox = new Inbox();
+        private Prompt SystemNotificationsPrompt(string inbox) =>
             new Prompt()
                 .Section(
                     "Сообщения Системы",
@@ -92,7 +91,7 @@ namespace Shooter.Game.Llm
                     "Сообщения Системы показываются только один раз.\n" +
                     "Система оповещает о запрошенных тобой действиях, которые выполнить не удалось. По умолчанию считай все запрошенные тобой действия выполненными.\n" +
                     "Сообщения от Системы тебе:\n" +
-                    systemNotificationsInbox
+                    inbox
                 );
 
         private Prompt WorldStatePrompt =>
@@ -130,21 +129,17 @@ namespace Shooter.Game.Llm
             }
 
             await gate.WaitAsync(life.Token);
+
+            string takenInteractions = interNpcInbox.Take();
+            string takenNotifications = systemInbox.Take();
+
             try
             {
                 LlmConfig config = Config.Read().Server.Llm;
                 Log.Info("Entity {} is asking {} for an answer", name, config.Model);
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
-                    new Prompt()
-                        .Section(CorePrompt)
-                        .Section(ResponseFormattingRulesPrompt)
-                        .Section(CharacterPrompt)
-                        .Section(MemoryPrompt)
-                        .Section(InterNpcInteractionPrompt)
-                        .Section(SystemNotificationsPrompt)
-                        .Section(WorldStatePrompt)
-                        .Section(AnswerPrompt),
+                    Assemble(takenInteractions, takenNotifications),
                     messages,
                     life.Token
                 );
@@ -152,14 +147,33 @@ namespace Shooter.Game.Llm
                 life.Token.ThrowIfCancellationRequested();
                 Remember(answer.Memory);
                 InterNpcInteraction(answer.InterNpcInteractions);
-                ClearSystemNotificationsInbox();
 
                 return answer.Reply;
+            }
+            catch
+            {
+                interNpcInbox.Return(takenInteractions);
+                systemInbox.Return(takenNotifications);
+                Log.Info("Entity {} kept its inboxes: the answer did not come through", name);
+                throw;
             }
             finally
             {
                 gate.Release();
             }
+        }
+
+        private Prompt Assemble(string interactions, string notifications)
+        {
+            return new Prompt()
+                .Section(CorePrompt)
+                .Section(ResponseFormattingRulesPrompt)
+                .Section(CharacterPrompt)
+                .Section(MemoryPrompt)
+                .Section(InterNpcInteractionPrompt(interactions))
+                .Section(SystemNotificationsPrompt(notifications))
+                .Section(WorldStatePrompt)
+                .Section(AnswerPrompt);
         }
 
         private string Time()
@@ -215,18 +229,23 @@ namespace Shooter.Game.Llm
 
         private void InterNpcInteraction(LlmAnswer.LlmInterNpcInteractionCommand[] cmds)
         {
-            interNpcInteractionInbox = "";
-
             if (cmds == null || cmds.Length == 0)
             {
                 return;
+            }
+
+            string ownName = PromptName();
+            if (ownName == null)
+            {
+                ownName = name;
+                Log.Warn("Entity {} speaks to other npcs without a name of its own, signing as {}", name, ownName);
             }
 
             Llm[] allLlms = FindObjectsByType<Llm>();
 
             foreach (LlmAnswer.LlmInterNpcInteractionCommand cmd in cmds)
             {
-                if (cmd.TargetNames == null || cmd.TargetNames.Length == 0 || String.IsNullOrEmpty(cmd.Content))
+                if (cmd.TargetNames == null || cmd.TargetNames.Length == 0 || string.IsNullOrEmpty(cmd.Content))
                 {
                     continue;
                 }
@@ -235,14 +254,16 @@ namespace Shooter.Game.Llm
 
                 foreach (Llm llm in allLlms)
                 {
-                    if (llm.TryGetComponent(out Nameable nameable) && cmd.TargetNames.Contains(nameable.PromptName()))
-                    {
-                        received.Add(nameable.PromptName());
+                    if (llm == this) continue;
 
-                        Log.Info("Entity {} said to {}: {}", name, nameable.PromptName(), cmd.Content);
+                    string targetName = llm.PromptName();
+                    if (targetName == null || !cmd.TargetNames.Contains(targetName)) continue;
 
-                        llm.interNpcInteractionInbox += ("[" + Time() + "] " + name + ": " + cmd.Content + "\n");
-                    }
+                    received.Add(targetName);
+
+                    Log.Info("Entity {} said to {}: {}", name, targetName, cmd.Content);
+
+                    llm.interNpcInbox.Put("[" + Time() + "] " + ownName + ": " + cmd.Content);
                 }
 
                 foreach (string targetName in cmd.TargetNames)
@@ -250,15 +271,15 @@ namespace Shooter.Game.Llm
                     if (!received.Contains(targetName))
                     {
                         Log.Warn("Failed to said from {} to {}", name, targetName);
-                        systemNotificationsInbox += ("[" + Time() + "] " + $"Не удалось доставить твое сообщение до {targetName}: имя введено с ошибкой, цель не является llm npc или цель мертва\n");
+                        systemInbox.Put("[" + Time() + "] " + $"Не удалось доставить твое сообщение до {targetName}: имя введено с ошибкой, цель не является llm npc или цель мертва");
                     }
                 }
             }
         }
 
-        private void ClearSystemNotificationsInbox()
+        private string PromptName()
         {
-            systemNotificationsInbox = "";
+            return TryGetComponent(out Nameable nameable) ? nameable.PromptName() : null;
         }
     }
 }
