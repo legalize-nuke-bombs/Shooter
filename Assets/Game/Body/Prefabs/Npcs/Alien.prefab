@@ -63,7 +63,7 @@ PrefabInstance:
     - target: {fileID: 7950136779140239968, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: spec
       value: 
-      objectReference: {fileID: 11400000, guid: 731f030516a543c1b81f46a784b549c2, type: 2}
+      objectReference: {fileID: 11400000, guid: 557d099a4c5645de8f0d8c08f29bb60b, type: 2}
     - target: {fileID: 7950136779140239972, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: corpsePrefab
       value: 
