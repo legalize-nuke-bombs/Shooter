@@ -196,7 +196,7 @@ namespace Shooter.Editing
             renderer.updateWhenOffscreen = false;
 
             Bounds room = merged.bounds;
-            room.Expand(room.size * 0.5f);
+            room.Expand(new Vector3(room.size.x * 0.5f, 0f, room.size.z * 0.5f));
             renderer.localBounds = room;
 
             Log.Info("Material {} collected {} meshes into one of {} vertices on {} bone slots over {} bones, {} m tall",
