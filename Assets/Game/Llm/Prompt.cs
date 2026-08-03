@@ -6,20 +6,25 @@ namespace Shooter.Game.Llm
     {
         private readonly StringBuilder text = new StringBuilder();
 
-        public Prompt Text(string content)
+        public Prompt Section(string title, string content)
+        {
+            if (string.IsNullOrEmpty(content)) return this;
+
+            return Text("## " + title + "\n\n" + content);
+        }
+
+        public Prompt Section(Prompt section)
+        {
+            return Text(section.ToString());
+        }
+
+        private Prompt Text(string content)
         {
             if (string.IsNullOrEmpty(content)) return this;
 
             if (text.Length > 0) text.Append("\n");
             text.Append(content.TrimEnd('\n')).Append("\n");
             return this;
-        }
-
-        public Prompt Section(string title, string content)
-        {
-            if (string.IsNullOrEmpty(content)) return this;
-
-            return Text("## " + title + "\n\n" + content);
         }
 
         public override string ToString()
