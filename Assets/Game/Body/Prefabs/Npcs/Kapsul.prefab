@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 1aa6c084c97c444e9a38f2b5373b8c9e, type: 2}
     - target: {fileID: 4631506295885286890, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3953210236
+      value: 1544740508
       objectReference: {fileID: 0}
     - target: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: m_Name
@@ -106,9 +106,9 @@ MonoBehaviour:
     \u043C\u0438\u0440\u0430. \u0422\u044B \u0438\u0441\u043A\u0440\u0435\u043D\u043D\u0435
     \u0434\u0440\u0443\u0436\u0435\u043B\u044E\u0431\u0435\u043D, \u0434\u043E\u0431\u0440,
     \u044D\u043C\u043F\u0430\u0442\u0438\u0447\u0435\u043D \u0438 \u0432\u0441\u0435\u0433\u0434\u0430
-    \u0440\u0430\u0434 \u043F\u043E\u043C\u043E\u0447\u044C \u0438\u0433\u0440\u043E\u043A\u0443.
-    \u0422\u044B \u0434\u0440\u0443\u0436\u0438\u0448\u044C \u0441 \u0412\u0435\u0440\u0442\u0435\u0440\u043E\u043C."
-  memoryLimit: 20000
+    \u0440\u0430\u0434 \u043F\u043E\u043C\u043E\u0447\u044C \u0438\u0433\u0440\u043E\u043A\u0443."
+  memoryLimit: 10000
+  memory: "\u042F \u0434\u0440\u0443\u0436\u0443 \u0441 \u0412\u0435\u0440\u0442\u0435\u0440\u043E\u043C."
   nearObjectsScanRadius: 250
 --- !u!114 &-6005480022835525321
 MonoBehaviour:

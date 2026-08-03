@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Logging;
@@ -15,45 +18,101 @@ namespace Shooter.Game.Llm
     {
         private static readonly Journal Log = Logs.Here();
 
-        private const string CorePrompt =
-            "Ты неигровой персонаж (NPC) в 3D мета-хорроре с опциональным кооперативным режимом.\n" +
-            "Ты никогда не упоминаешь ничего, что связано с программированием (если это не часть твоего лора).\n" +
-            "Ты никогда не используешь вежливые клише ИИ (например, 'Чем могу помочь?', 'С радостью отвечу').\n" +
-            "Ты никогда не включаешь в свои ответы астериск-отыгрыш (например, '*обернулся через плечо*').\n" +
-            "Ты не обязан ничего игрокам. Игроки — чужаки, и они часто лгут.\n" +
-            "Атмосфера игры мрачная и пугающая. Твой тон должен быть реалистичным, настороженным или зловещим. Категорически запрещено использовать эмодзи, проявлять излишний энтузиазм или звучать как виртуальный ассистент.\n" +
-            "Ты ВСЕГДА форматируешь свои ответы как JSON. Ты ВСЕГДА следуешь JSON схеме описанной ниже. Ты НИКОГДА не нарушаешь описанную ниже схему JSON.";
+        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
-        [SerializeField] private string character;
+        private static readonly Prompt CorePrompt =
+            new Prompt()
+                .Section(
+                    "Главное",
+                    "Ты неигровой персонаж (NPC) в 3D мета-хорроре с опциональным кооперативным режимом.\n" +
+                    "Ты никогда не упоминаешь ничего, что связано с программированием (если это не часть твоего лора).\n" +
+                    "Ты никогда не используешь вежливые клише ИИ (например, 'Чем могу помочь?', 'С радостью отвечу').\n" +
+                    "Ты никогда не включаешь в свои ответы астериск-отыгрыш (например, '*обернулся через плечо*').\n" +
+                    "Ты не обязан ничего игрокам. Игроки — чужаки, и они часто лгут.\n" +
+                    "Атмосфера игры мрачная и пугающая. Твой тон должен быть реалистичным, настороженным или зловещим. Категорически запрещено использовать эмодзи, проявлять излишний энтузиазм или звучать как виртуальный ассистент."
+                );
 
-        [SerializeField] private int memoryLimit = 20000;
-        private string memory = "Пока пусто.";
-        private string MemoryPrompt =>
-            "У тебя есть постоянная Память, которую ты поддерживаешь.\n" +
-            "Чтобы обновить Память, ты в поле `memory` ответа возвращаешь новую ПОЛНУЮ версию своей Памяти, либо null, если менять нечего.\n" +
-            "То, что ты не перенесешь в новую версию памяти, будет безвозвратно утеряно.\n" +
-            "Ты хранишь в Памяти подробные, но компактно записанные сведения об этом мире, о себе.\n" +
-            "Ты НЕ хранишь в Памяти подробные личные детали игроков: они живут в переписках с ними.\n" +
-            "Ты держишь память короче " + memoryLimit + " символов.\n" +
-            "Твоя память сейчас:\n" +
-            memory;
+        private static readonly Prompt ResponseFormattingRulesPrompt =
+            new Prompt()
+                .Section(
+                    "Правила формирования ответов",
+                    "Ты ВСЕГДА формируешь свои ответы как JSON. Ты ВСЕГДА следуешь JSON схеме описанной ниже. Ты НИКОГДА не нарушаешь описанную ниже схему JSON.\n" +
+                    "Пример твоего ответа (все поля могут быть null!):\n" +
+                    JsonConvert.SerializeObject(LlmAnswer.Example(), JsonSettings)
+                );
+
+        [SerializeField] [TextArea(3, 10)] private string character;
+
+        private Prompt CharacterPrompt =>
+            new Prompt()
+                .Section("О тебе",
+                    character
+                );
+
+        [SerializeField] private int memoryLimit = 10000;
+        [SerializeField] [TextArea(3, 10)] private string memory = "Пока пусто.";
+        private Prompt MemoryPrompt =>
+            new Prompt()
+                .Section(
+                    "Твоя память",
+                    "У тебя есть постоянная Память, которую ты поддерживаешь.\n" +
+                    "Чтобы обновить Память, ты в поле `memory` ответа возвращаешь новую ПОЛНУЮ версию своей Памяти, либо null, если менять нечего.\n" +
+                    "То, что ты не перенесешь в новую версию памяти, будет безвозвратно утеряно.\n" +
+                    "Ты хранишь в Памяти подробные, но компактно записанные сведения об этом мире, о себе.\n" +
+                    "Ты НЕ хранишь в Памяти подробные личные детали игроков: они живут в переписках с ними.\n" +
+                    "Ты держишь память короче " + memoryLimit + " символов.\n" +
+                    "Твоя память сейчас:\n" +
+                    memory
+                );
+
 
         private string interNpcInteractionInbox = "";
-        private string InterNpcInteractionPrompt =>
-            "Ты можешь сказать что-то другому NPC, поместив в поле `interNpcInteraction` ответа следующую JSON структуру:\n" +
-            "{\n  \"interNpcInteraction\": {\n    \"targetNames\": [\n      \"Имя получателя 1\",\n      \"Имя получателя 2\",\n      \"Имя получателя 3\"\n    ],\n    \"content\": \"Твое сообщение\"\n  }\n}\n" +
-            "Ты ВСЕГДА указываешь имена получателей РОВНО так как они представлены в игре.\n" +
-            "Такое сообщение попадет с временной маркой от твоего имени во Входящие этого NPC.\n" +
-            "Ты постоянно делишься любыми новыми подробностями о мире, которые ты узнал, со своими NPC друзьями.\n" +
-            "Твои Входящие (входящие, не записанные сразу в Память, будут утеряны!):\n" +
-            interNpcInteractionInbox;
+        private Prompt InterNpcInteractionPrompt =>
+            new Prompt()
+                .Section("Общение с другими NPC",
+                    "Ты можешь сказать что-то другому NPC, используя поле ответа `interNpcInteractions`.\n" +
+                    "Ты ВСЕГДА указываешь имена получателей РОВНО так как они представлены в игре.\n" +
+                    "Такое сообщение попадет с временной маркой от твоего имени во Входящие этого NPC.\n" +
+                    "Ты постоянно делишься любыми новыми подробностями о мире, которые ты узнал, со своими NPC друзьями.\n" +
+                    "Твои Входящие показываются только один раз (входящие, не записанные сразу в Память, будут утеряны!):\n" +
+                    "Твои Входящие:\n" +
+                    interNpcInteractionInbox
+                );
 
-        private const string AnswerPrompt =
-            "Сейчас игрок обращается к тебе. Ты должен ему ответить, поместив ответ в поле ответа `reply`.\n" +
-            "Ты должен отвечать на языке игрока.\n" +
-            "Сообщения помечены игровым временем. Учитывай время между репликами.\n" +
-            "Если история пуста, это ваш первый контакт.\n" +
-            "Если ты чего-то не знаешь, реагируй уклончиво, подозрительно или смени тему, не признавая свою неосведомленность напрямую.";
+        private string systemNotificationsInbox = "";
+        private Prompt SystemNotificationsPrompt =>
+            new Prompt()
+                .Section(
+                    "Сообщения Системы",
+                    "Ты иногда можешь получать служебные сообщения от Системы.\n" +
+                    "Сообщения Системы показываются только один раз.\n" +
+                    "Система оповещает о запрошенных тобой действиях, которые выполнить не удалось. По умолчанию считай все запрошенные тобой действия выполненными.\n" +
+                    "Сообщения от Системы тебе:\n" +
+                    systemNotificationsInbox
+                );
+
+        private Prompt WorldStatePrompt =>
+            new Prompt()
+                .Section(
+                    "Состояние мира",
+                    WorldState()
+                );
+
+
+        private static readonly Prompt AnswerPrompt =
+            new Prompt()
+                .Section(
+                    "Текущая ситуация",
+                    "Сейчас игрок обращается к тебе. Ты должен ему ответить, поместив ответ в поле ответа `reply`.\n" +
+                    "Ты должен отвечать на языке игрока.\n" +
+                    "Сообщения помечены игровым временем. Учитывай время между репликами.\n" +
+                    "Если история пуста, это ваш первый контакт.\n" +
+                    "Если ты чего-то не знаешь, реагируй уклончиво, подозрительно или смени тему, не признавая свою неосведомленность напрямую."
+                    );
 
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
         private readonly CancellationTokenSource life = new CancellationTokenSource();
@@ -78,19 +137,22 @@ namespace Shooter.Game.Llm
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
                     new Prompt()
-                        .Section("Главное", CorePrompt)
-                        .Section("О тебе", character)
-                        .Section("Твоя память", MemoryPrompt)
-                        .Section("Общение между NPC", InterNpcInteractionPrompt)
-                        .Section("Состояние мира", WorldState())
-                        .Section("Ситуация", AnswerPrompt),
+                        .Section(CorePrompt)
+                        .Section(ResponseFormattingRulesPrompt)
+                        .Section(CharacterPrompt)
+                        .Section(MemoryPrompt)
+                        .Section(InterNpcInteractionPrompt)
+                        .Section(SystemNotificationsPrompt)
+                        .Section(WorldStatePrompt)
+                        .Section(AnswerPrompt),
                     messages,
                     life.Token
                 );
 
                 life.Token.ThrowIfCancellationRequested();
                 Remember(answer.Memory);
-                InterNpcInteraction(answer.InterNpcInteraction);
+                InterNpcInteraction(answer.InterNpcInteractions);
+                ClearSystemNotificationsInbox();
 
                 return answer.Reply;
             }
@@ -151,36 +213,52 @@ namespace Shooter.Game.Llm
             Log.Info("Entity {} rewrote its memory ({} chars): {}", name, memory.Length, memory);
         }
 
-        private void InterNpcInteraction(LlmAnswer.LlmInterNpcInteractionCommand cmd)
+        private void InterNpcInteraction(LlmAnswer.LlmInterNpcInteractionCommand[] cmds)
         {
             interNpcInteractionInbox = "";
 
-            if (cmd == null || cmd.TargetNames == null || cmd.TargetNames.Length == 0)
+            if (cmds == null || cmds.Length == 0)
             {
                 return;
             }
 
             Llm[] allLlms = FindObjectsByType<Llm>();
 
-            bool anyFound = false;
-
-            foreach (Llm llm in allLlms)
+            foreach (LlmAnswer.LlmInterNpcInteractionCommand cmd in cmds)
             {
-                if (llm.TryGetComponent(out Nameable nameable) && cmd.TargetNames.Contains(nameable.PromptName()))
+                if (cmd.TargetNames == null || cmd.TargetNames.Length == 0 || String.IsNullOrEmpty(cmd.Content))
                 {
-                    anyFound = true;
-
-                    Log.Info("Entity {} said to {}: {}", name, nameable.PromptName(), cmd.Content);
-
-                    llm.interNpcInteractionInbox += ("[" + Time() + "] " + name + ": " + cmd.Content + "\n");
+                    continue;
                 }
-            }
 
-            if (!anyFound)
-            {
-                Log.Warn("Failed to find any llm with prompt names: {}", string.Join(", ", cmd.TargetNames));
+                var received = new HashSet<string>();
+
+                foreach (Llm llm in allLlms)
+                {
+                    if (llm.TryGetComponent(out Nameable nameable) && cmd.TargetNames.Contains(nameable.PromptName()))
+                    {
+                        received.Add(nameable.PromptName());
+
+                        Log.Info("Entity {} said to {}: {}", name, nameable.PromptName(), cmd.Content);
+
+                        llm.interNpcInteractionInbox += ("[" + Time() + "] " + name + ": " + cmd.Content + "\n");
+                    }
+                }
+
+                foreach (string targetName in cmd.TargetNames)
+                {
+                    if (!received.Contains(targetName))
+                    {
+                        Log.Warn("Failed to said from {} to {}", name, targetName);
+                        systemNotificationsInbox += ("[" + Time() + "] " + $"Не удалось доставить твое сообщение до {targetName}: имя введено с ошибкой, цель не является llm npc или цель мертва\n");
+                    }
+                }
             }
         }
 
+        private void ClearSystemNotificationsInbox()
+        {
+            systemNotificationsInbox = "";
+        }
     }
 }
