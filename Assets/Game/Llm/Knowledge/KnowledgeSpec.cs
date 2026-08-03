@@ -5,8 +5,11 @@ namespace Shooter.Game.Llm.Knowledge
     [CreateAssetMenu(menuName = "Shooter-Llm/KnowledgeSpec", fileName = "KnowledgeSpec")]
     public class KnowledgeSpec : Spec
     {
+
         [SerializeField] [TextArea(3, 10)] private string content;
+        [SerializeField] private KnowledgeType type;
 
         public string Content => content;
+        public KnowledgeType Type => type;
     }
 }
