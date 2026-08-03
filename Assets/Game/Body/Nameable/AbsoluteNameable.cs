@@ -30,5 +30,10 @@ namespace Shooter.Game.Body
         {
             return string.IsNullOrEmpty(Name) ? null : "Имя: " + Name;
         }
+
+        public override string PromptName()
+        {
+            return Name;
+        }
     }
 }

@@ -17,5 +17,10 @@ namespace Shooter.Game.Body
         {
             return spec == null ? null : spec.Prompt();
         }
+
+        public override string PromptName()
+        {
+            return spec.Prompt();
+        }
     }
 }
