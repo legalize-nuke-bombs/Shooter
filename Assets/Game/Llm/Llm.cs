@@ -251,6 +251,7 @@ namespace Shooter.Game.Llm
                 }
 
                 var received = new HashSet<string>();
+                var fails = new Dictionary<string, string>();
 
                 foreach (Llm llm in allLlms)
                 {
@@ -258,6 +259,12 @@ namespace Shooter.Game.Llm
 
                     string targetName = llm.PromptName();
                     if (targetName == null || !cmd.TargetNames.Contains(targetName)) continue;
+
+                    if (!llm.Alive())
+                    {
+                        fails.Add(targetName, "Цель мертва");
+                        continue;
+                    }
 
                     received.Add(targetName);
 
@@ -270,8 +277,9 @@ namespace Shooter.Game.Llm
                 {
                     if (!received.Contains(targetName))
                     {
+                        string reason = fails.GetValueOrDefault(targetName, "Имя NPC введено с ошибкой или NPC с таким именем не существует");
                         Log.Warn("Failed to said from {} to {}", name, targetName);
-                        systemNotificationsInbox.Put("[" + Time() + "] " + $"Не удалось доставить твое сообщение до {targetName}: имя введено с ошибкой, цель не является llm npc или цель мертва");
+                        systemNotificationsInbox.Put("[" + Time() + "] " + $"Не удалось доставить твое сообщение до {targetName}: {reason}. Недоставленное сообщение: {cmd.Content}");
                     }
                 }
             }
@@ -280,6 +288,11 @@ namespace Shooter.Game.Llm
         private string PromptName()
         {
             return TryGetComponent(out Nameable nameable) ? nameable.PromptName() : null;
+        }
+
+        private bool Alive()
+        {
+            return TryGetComponent(out Health health) ? health.Alive : false;
         }
     }
 }
