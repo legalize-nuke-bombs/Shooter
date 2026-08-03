@@ -262,7 +262,7 @@ namespace Shooter.Game.Llm
 
                     if (!llm.Alive())
                     {
-                        fails.Add(targetName, "Цель мертва");
+                        fails[targetName] = "Цель мертва";
                         continue;
                     }
 
@@ -292,7 +292,7 @@ namespace Shooter.Game.Llm
 
         private bool Alive()
         {
-            return TryGetComponent(out Health health) ? health.Alive : false;
+            return TryGetComponent(out Health health) && health.Alive;
         }
     }
 }
