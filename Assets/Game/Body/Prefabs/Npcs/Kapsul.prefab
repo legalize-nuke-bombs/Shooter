@@ -109,6 +109,8 @@ MonoBehaviour:
     \u0440\u0430\u0434 \u043F\u043E\u043C\u043E\u0447\u044C \u0438\u0433\u0440\u043E\u043A\u0443."
   memoryLimit: 10000
   memory: "\u042F \u0434\u0440\u0443\u0436\u0443 \u0441 \u0412\u0435\u0440\u0442\u0435\u0440\u043E\u043C."
+  knowledges:
+  - {fileID: 11400000, guid: 3f71e5c9648419545be7a8ce670966cc, type: 2}
   nearObjectsScanRadius: 250
 --- !u!114 &-6005480022835525321
 MonoBehaviour:
