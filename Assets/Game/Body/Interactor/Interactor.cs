@@ -35,7 +35,15 @@ namespace Shooter.Game.Body
         {
             if (!TryReach(reach, out IUsable usable))
             {
-                Log.Info("Player {} used nothing within {}m", OwnerClientId, reach);
+                int seen = Look(reach, Sights);
+                for (int i = 0; i < seen; i++)
+                {
+                    Log.Info("Player {} sees {} on layer {} in {}m, usable {}", OwnerClientId, Sights[i].collider.name,
+                        LayerMask.LayerToName(Sights[i].collider.gameObject.layer), Sights[i].distance,
+                        Sights[i].collider.GetComponentInParent<IUsable>() == null ? "no" : "yes");
+                }
+
+                Log.Info("Player {} used nothing within {}m, saw {} colliders", OwnerClientId, reach, seen);
                 return;
             }
 
