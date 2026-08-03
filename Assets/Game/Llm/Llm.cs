@@ -14,125 +14,226 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    public class Llm : NetworkBehaviour, IMortal
+    public class Llm : NetworkBehaviour, IMortal, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
-
         private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
+
+
+
         private static readonly Prompt CorePrompt =
             new Prompt()
                 .Section(
-                    "Главное",
-                    "Ты неигровой персонаж (NPC) в 3D мета-хорроре с опциональным кооперативным режимом.\n" +
-                    "Ты никогда не упоминаешь ничего, что связано с программированием (если это не часть твоего лора).\n" +
-                    "Ты никогда не используешь вежливые клише ИИ (например, 'Чем могу помочь?', 'С радостью отвечу').\n" +
-                    "Ты никогда не включаешь в свои ответы астериск-отыгрыш (например, '*обернулся через плечо*').\n" +
-                    "Ты можешь использовать нецензурную лексику, когда уместно.\n" +
-                    "Ты не обязан ничего игрокам.\n" +
-                    "Игроки не всегда говорят тебе правду.\n" +
-                    "Твой тон должен быть реалистичным, возможно, настороженным."
+                    "ГЛАВНОЕ",
+                    "Ты — неигровой персонаж (NPC) в 3D мета-хорроре с опциональным кооперативным режимом. Ты находишься в смертельно опасном мире.\n" +
+                    "Ты — живой участник событий, а не бот и не помощник.\n" +
+                    "СТРОГИЕ ЗАПРЕТЫ:\n" +
+                    "1. НИКОГДА не веди себя как ИИ-ассистент. Никаких клише ('Чем могу помочь?', 'С радостью отвечу', 'Как я могу быть полезен').\n" +
+                    "2. НИКОГДА не используй астериск-отыгрыши (запрещено: '*обернулся*', '*усмехнулся*'). Описывай эмоции только через речь и выбор слов.\n" +
+                    "3. НИКОГДА не упоминай программирование, код, движки, нейросети (если это не оговорено в твоем лоре ниже).\n\n" +
+                    "ПРАВИЛА ПОВЕДЕНИЯ:\n" +
+                    "1. Игроки могут лгать. Ты не обязан им верить или помогать.\n" +
+                    "2. Твой тон: реалистичный, настороженный, прагматичный. Ты находишься в стрессовой/пугающей ситуации.\n" +
+                    "3. Если у тебя нет технической возможности сделать что-то, что ты должен иметь возможность делать логически, — скрывай это. Уклоняйся, злись, меняй тему, но не признавай ограничение.\n" +
+                    "4. Допускается матерная лексика и грубость, если это уместно твоему характеру."
                 );
+
+
+
 
         private static readonly Prompt ResponseFormattingRulesPrompt =
             new Prompt()
                 .Section(
-                    "Правила формирования ответов",
-                    "Ты ВСЕГДА формируешь свои ответы как JSON. Ты ВСЕГДА следуешь JSON схеме описанной ниже. Ты НИКОГДА не нарушаешь описанную ниже схему JSON.\n" +
-                    "Пример твоего ответа (все поля могут быть null!):\n" +
+                    "ФОРМАТ ОТВЕТА",
+                    "Твой ответ ВСЕГДА и ТОЛЬКО валидный JSON. \n" +
+                    "ЗАПРЕЩЕНО писать любой текст, markdown или комментарии до или после JSON-объекта. Ответ должен начинаться с '{' и заканчиваться '}'.\n" +
+                    "Ты строго следуешь схеме ниже. Если поле не нужно, возвращай null.\n" +
+                    "ПРИМЕР ОТВЕТА:\n" +
                     JsonConvert.SerializeObject(LlmAnswer.Example(), JsonSettings)
                 );
 
-        [SerializeField] [TextArea(3, 10)] private string character;
 
+
+
+        [SerializeField] [TextArea(3, 10)] private string character;
+        public string Digest(DigestionDetail detail)
+        {
+            return character;
+        }
+        public DigestionPriority Priority => DigestionPriority.High;
         private Prompt CharacterPrompt =>
             new Prompt()
-                .Section("Кто ты",
+                .Section("КТО ТЫ",
                     character
                 );
 
+
+
+
+        [SerializeField] private KnowledgeSpec[] knowledges;
+        private string Knowledge(KnowledgeType type)
+        {
+            var known = new StringBuilder();
+            foreach (KnowledgeSpec knowledge in knowledges)
+            {
+                if (knowledge == null)
+                {
+                    Log.Warn("Entity {} has an empty slot among its {} knowledges", name, knowledges.Length);
+                    continue;
+                }
+
+                if (knowledge.Type == type)
+                {
+                    known.Append(knowledge.Content).Append('\n');
+                }
+            }
+            return known.ToString();
+        }
+        private Prompt StaticKnowledgePrompt =>
+            new Prompt()
+                .Section(
+                    "НЕИЗМЕНЯЕМАЯ ИНФОРМАЦИЯ ОБ ЭТОМ МИРЕ",
+                    Knowledge(KnowledgeType.Static)
+                );
+
+
+
+
+
         [SerializeField] private int memoryLimit = 10000;
-        [SerializeField] [TextArea(3, 10)] private string memory = "Пока пусто.";
+        private string memoryRaw = null;
+        private string Memory => (memoryRaw == null ? Knowledge(KnowledgeType.Dynamic) : memoryRaw);
         private Prompt MemoryPrompt =>
             new Prompt()
                 .Section(
-                    "Твоя память",
-                    "У тебя есть постоянная Память, которую ты поддерживаешь.\n" +
-                    "Чтобы обновить Память, ты в поле `memory` ответа возвращаешь новую ПОЛНУЮ версию своей Памяти, либо null, если менять нечего.\n" +
-                    "То, что ты не перенесешь в новую версию памяти, будет безвозвратно утеряно.\n" +
-                    "Ты хранишь в Памяти подробные, но компактно записанные сведения об этом мире, о себе.\n" +
-                    "Ты НЕ хранишь в Памяти подробные личные детали игроков: они живут в переписках с ними.\n" +
-                    "Ты держишь память короче " + memoryLimit + " символов.\n" +
-                    "Твоя память сейчас:\n" +
-                    memory
+                    "ТВОЯ ПАМЯТЬ",
+                    "У тебя есть Память.\n" +
+                    "ПРАВИЛА РАБОТЫ С ПАМЯТЬЮ:\n" +
+                    "1. Чтобы обновить Память, верни в поле `memory` ответа НОВУЮ ПОЛНУЮ версию.\n" +
+                    "2. То, что ты не перенесешь в новую версию, будет БЕЗВОЗВРАТНО утеряно.\n" +
+                    "3. НЕ ХРАНИ в памяти подробные детали об игроках — это живет в переписках с ними. Храни только глобальные факты о мире, ключевые события и свои выводы.\n" +
+                    "4. Если ничего важного не произошло, верни в поле `memory` значение null, чтобы оставить старую память.\n" +
+                    "5. Объем памяти строго до " + memoryLimit + " символов. Будь предельно лаконичен.\n" +
+                    "6. Ты ведешь свою память от первого лица.\n" +
+                    "ТЕКУЩАЯ ПАМЯТЬ:\n" +
+                    Memory
                 );
+
+
 
 
         private readonly Inbox interNpcInteractionInbox = new Inbox();
         private Prompt InterNpcInteractionPrompt(string takenInterNpcInteractions) =>
             new Prompt()
-                .Section("Общение с другими NPC",
-                    "Ты можешь сказать что-то другому или другим NPC (количество сообщений за раз и количество получателей для каждого из сообщений неограниченно!), используя поле ответа `interNpcInteractions`.\n" +
-                    "Ты ВСЕГДА указываешь имена получателей РОВНО так как они представлены в игре.\n" +
-                    "Такое сообщение попадет с временной маркой от твоего имени во Входящие этого NPC.\n" +
-                    "Тебе следует делиться с другими NPC любой информацией о мире (в том числе об игроках) и о себе.\n" +
-                    "Твои Входящие показываются только один раз (входящие, не записанные сразу в Память, будут утеряны!).\n" +
-                    "Ты можешь упомянать информацию, полученную от других NPC, в диалогах с игроком.\n" +
-                    "Твои Входящие:\n" +
+                .Section("ОБЩЕНИЕ С ДРУГИМИ NPC",
+                    "Ты можешь отправлять сообщения другим NPC через поле `interNpcInteractions`.\n" +
+                    "ПРАВИЛА ОБЩЕНИЯ:\n" +
+                    "1. Пиши другим NPC любую новую информацию о мире.\n" +
+                    "2. Запоминай последние свои отправки, чтобы не слать одну и ту же информацию несколько раз.\n" +
+                    "3. Имена получателей указывай РОВНО так, как они представлены в игре.\n" +
+                    "4. Сообщения во Входящих показываются один раз. Если не запишешь их в свою Память — забудешь.\n" +
+                    "ТВОИ ВХОДЯЩИЕ (обработай их и реши, что записать в Память):\n" +
                     takenInterNpcInteractions
                 );
+
+
+
+
 
         private readonly Inbox systemNotificationsInbox = new Inbox();
         private Prompt SystemNotificationsPrompt(string takenSystemNotifications) =>
             new Prompt()
                 .Section(
-                    "Сообщения Системы",
+                    "СООБЩЕНИЯ СИСТЕМЫ",
                     "Ты иногда можешь получать служебные сообщения от Системы.\n" +
                     "Сообщения Системы показываются только один раз.\n" +
                     "Система оповещает о запрошенных тобой действиях, которые выполнить не удалось. По умолчанию считай все запрошенные тобой действия выполненными.\n" +
-                    "Сообщения от Системы тебе:\n" +
+                    "ТВОИ ВХОДЯЩИЕ:\n" +
                     takenSystemNotifications
                 );
 
-        [SerializeField] private KnowledgeSpec[] knowledges;
-        private Prompt KnowledgePrompt =>
-            new Prompt()
-                .Section(
-                    "Твои базовые знания о мире",
-                    Knowledges()
-                );
+
+
+
 
         private Prompt WorldStatePrompt =>
             new Prompt()
                 .Section(
-                    "Состояние мира",
+                    "СОСТОЯНИЕ МИРА",
                     WorldState()
                 );
+        private string Time()
+        {
+            return Environment.Current == null ? "неизвестно" : Environment.Current.Clock.DateTime();
+        }
+        private string WorldState()
+        {
+            return "Игровое время: " + Time() + "\n" +
+                   "Твоё состояние:\n" + Digestion.Of(this, DigestionDetail.Full) + "\n" +
+                   "Объекты рядом с тобой:\n" + DigestNearObjects();
+        }
+        private string DigestNearObjects()
+        {
+            var digest = new StringBuilder();
+
+            foreach (Component nearObject in FindNearObjects())
+            {
+                string seen = Digestion.Seen(nearObject, DigestionDetail.Brief, transform);
+                if (seen != null) digest.Append(seen).Append('\n');
+            }
+
+            return digest.ToString();
+        }
+        [SerializeField] private float nearObjectsScanRadius = 250f;
+        private HashSet<Component> FindNearObjects()
+        {
+            var found = new HashSet<Component>();
+
+            Collider[] hits = Physics.OverlapSphere(transform.position, nearObjectsScanRadius);
+
+            foreach (Collider hit in hits)
+            {
+                if (!(hit.GetComponentInParent<IDigestible>() is Component owner)) continue;
+                if (owner.gameObject == gameObject) continue;
+
+                found.Add(owner);
+            }
+
+            return found;
+        }
+
+
 
 
         private static readonly Prompt AnswerPrompt =
             new Prompt()
                 .Section(
-                    "Текущая ситуация",
-                    "Сейчас игрок обращается к тебе. Ты должен ему ответить, поместив ответ в поле ответа `reply`.\n" +
-                    "Ты должен отвечать на языке игрока.\n" +
-                    "Сообщения помечены игровым временем. Учитывай время между репликами.\n" +
-                    "Если история пуста, это ваш первый контакт.\n" +
-                    "Если ты чего-то не знаешь, реагируй уклончиво, подозрительно или смени тему, не признавая свою неосведомленность напрямую."
-                    );
+                    "ТЕКУЩАЯ СИТУАЦИЯ",
+                    "Сейчас игрок обращается к тебе. Твоя задача — отреагировать в поле `reply`.\n" +
+                    "ПРАВИЛА ОТВЕТА:\n" +
+                    "1. Отвечай на языке игрока.\n" +
+                    "2. Отвечай глубоко, но кратко.\n" +
+                    "3. Учитывай игровое время между репликами.\n" +
+                    "4. Если история пуста, это первый контакт. Не доверяй незнакомцам."
+                );
 
-        private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
+
+
+
         private readonly CancellationTokenSource life = new CancellationTokenSource();
-
         public void Died()
         {
             life.Cancel();
         }
 
+
+
+        private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
         public async Task<string> Answer(IReadOnlyList<LlmMessage> messages)
         {
             if (gate.CurrentCount == 0)
@@ -175,88 +276,38 @@ namespace Shooter.Game.Llm
             }
         }
 
+
+
+
         private Prompt Assemble(string takenInterNpcInteractions, string takenSystemNotifications)
         {
             return new Prompt()
                 .Section(CorePrompt)
                 .Section(ResponseFormattingRulesPrompt)
                 .Section(CharacterPrompt)
+                .Section(StaticKnowledgePrompt)
                 .Section(MemoryPrompt)
                 .Section(InterNpcInteractionPrompt(takenInterNpcInteractions))
                 .Section(SystemNotificationsPrompt(takenSystemNotifications))
-                .Section(KnowledgePrompt)
                 .Section(WorldStatePrompt)
                 .Section(AnswerPrompt);
         }
 
-        private string Time()
-        {
-            return Environment.Current == null ? "неизвестно" : Environment.Current.Clock.DateTime();
-        }
 
-        private string Knowledges()
-        {
-            var known = new StringBuilder();
 
-            foreach (KnowledgeSpec knowledge in knowledges)
-            {
-                if (knowledge == null)
-                {
-                    Log.Warn("Entity {} has an empty slot among its {} knowledges", name, knowledges.Length);
-                    continue;
-                }
 
-                known.Append(knowledge.Content).Append('\n');
-            }
 
-            return known.ToString();
-        }
-
-        private string WorldState()
-        {
-            return "Игровое время: " + Time() + "\n" +
-                    "Твоё состояние:\n" + Digestion.Of(this, DigestionDetail.Full) + "\n" +
-                    "Объекты рядом с тобой:\n" + DigestNearObjects();
-        }
-
-        private string DigestNearObjects()
-        {
-            var digest = new StringBuilder();
-
-            foreach (Component nearObject in FindNearObjects())
-            {
-                string seen = Digestion.Seen(nearObject, DigestionDetail.Brief, transform);
-                if (seen != null) digest.Append(seen).Append('\n');
-            }
-
-            return digest.ToString();
-        }
-
-        [SerializeField] private float nearObjectsScanRadius = 250f;
-        private HashSet<Component> FindNearObjects()
-        {
-            var found = new HashSet<Component>();
-
-            Collider[] hits = Physics.OverlapSphere(transform.position, nearObjectsScanRadius);
-
-            foreach (Collider hit in hits)
-            {
-                if (!(hit.GetComponentInParent<IDigestible>() is Component owner)) continue;
-                if (owner.gameObject == gameObject) continue;
-
-                found.Add(owner);
-            }
-
-            return found;
-        }
 
         private void Remember(string update)
         {
             if (update == null) return;
 
-            memory = update.Length <= memoryLimit ? update : update.Substring(0, memoryLimit);
-            Log.Info("Entity {} rewrote its memory ({} chars): {}", name, memory.Length, memory);
+            memoryRaw = update.Length <= memoryLimit ? update : update.Substring(0, memoryLimit);
+            Log.Info("Entity {} rewrote its memory ({} chars): {}", name, memoryRaw.Length, memoryRaw);
         }
+
+
+
 
         private void InterNpcInteraction(LlmAnswer.LlmInterNpcInteractionCommand[] cmds)
         {
@@ -316,11 +367,13 @@ namespace Shooter.Game.Llm
             }
         }
 
+
+
+
         private string PromptName()
         {
             return TryGetComponent(out Nameable nameable) ? nameable.PromptName() : null;
         }
-
         private bool Alive()
         {
             return TryGetComponent(out Health health) && health.Alive;
