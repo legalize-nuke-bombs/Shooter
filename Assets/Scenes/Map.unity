@@ -8934,6 +8934,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 603843099495270707, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 603843099495270707, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 32842216
+      objectReference: {fileID: 0}
+    - target: {fileID: 603843099495270707, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 603843099495270707, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3707110902
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035167093152380126, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035167093152380126, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3352273947
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035167093152380126, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035167093152380126, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3707110902
+      objectReference: {fileID: 0}
     - target: {fileID: 4697082321187291139, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
       propertyPath: m_InScenePlaced
       value: 1

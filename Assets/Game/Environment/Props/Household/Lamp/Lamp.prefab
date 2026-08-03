@@ -176,7 +176,6 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sounding.Speaker
   ShowTopMostFoldoutHeaderGroup: 1
-  voice: {fileID: 0}
 --- !u!114 &-3063063672073548532
 MonoBehaviour:
   m_ObjectHideFlags: 0

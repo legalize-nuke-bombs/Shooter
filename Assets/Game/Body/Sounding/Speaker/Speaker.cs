@@ -12,19 +12,21 @@ namespace Shooter.Game.Body.Sounding
 
         private const int Voices = 8;
 
-        [SerializeField] private SoundCatalog voice;
-
         private readonly List<AudioSource> sources = new List<AudioSource>();
 
         private int next;
 
-        private SoundCatalog Voice => voice != null
-            ? voice
-            : Environment.Current == null ? null : Environment.Current.Sounds;
+        private static SoundCatalog Sounds => Environment.Current == null ? null : Environment.Current.Sounds;
 
         public void Play(SoundSpec sound)
         {
-            if (!IsServer || sound == null) return;
+            if (!IsServer) return;
+
+            if (sound == null)
+            {
+                Log.Warn("Entity {} was asked to play a sound without a spec set", name);
+                return;
+            }
 
             PlayRpc(sound.Id, sound.Pick());
         }
@@ -32,10 +34,10 @@ namespace Shooter.Game.Body.Sounding
         [Rpc(SendTo.Everyone)]
         private void PlayRpc(FixedString32Bytes id, byte variant)
         {
-            SoundCatalog catalog = Voice;
+            SoundCatalog catalog = Sounds;
             if (catalog == null)
             {
-                Log.Warn("Entity {} has no sound catalog, neither its own nor the world one", name);
+                Log.Warn("Entity {} cannot play {}: the world has no sound catalog", name, id);
                 return;
             }
 

@@ -190,7 +190,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sounding.Speaker
   ShowTopMostFoldoutHeaderGroup: 1
-  voice: {fileID: 0}
 --- !u!1001 &2154924059641547055
 PrefabInstance:
   m_ObjectHideFlags: 0
