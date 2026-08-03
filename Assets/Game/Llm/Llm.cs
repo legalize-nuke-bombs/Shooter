@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Llm.Knowledge;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -94,6 +95,14 @@ namespace Shooter.Game.Llm
                     takenSystemNotifications
                 );
 
+        [SerializeField] private KnowledgeSpec[] knowledges;
+        private Prompt KnowledgePrompt =>
+            new Prompt()
+                .Section(
+                    "Твои базовые знания о мире",
+                    Knowledges()
+                );
+
         private Prompt WorldStatePrompt =>
             new Prompt()
                 .Section(
@@ -172,6 +181,7 @@ namespace Shooter.Game.Llm
                 .Section(MemoryPrompt)
                 .Section(InterNpcInteractionPrompt(takenInterNpcInteractions))
                 .Section(SystemNotificationsPrompt(takenSystemNotifications))
+                .Section(KnowledgePrompt)
                 .Section(WorldStatePrompt)
                 .Section(AnswerPrompt);
         }
@@ -179,6 +189,24 @@ namespace Shooter.Game.Llm
         private string Time()
         {
             return Environment.Current == null ? "неизвестно" : Environment.Current.Clock.DateTime();
+        }
+
+        private string Knowledges()
+        {
+            var known = new StringBuilder();
+
+            foreach (KnowledgeSpec knowledge in knowledges)
+            {
+                if (knowledge == null)
+                {
+                    Log.Warn("Entity {} has an empty slot among its {} knowledges", name, knowledges.Length);
+                    continue;
+                }
+
+                known.Append(knowledge.Content).Append('\n');
+            }
+
+            return known.ToString();
         }
 
         private string WorldState()
