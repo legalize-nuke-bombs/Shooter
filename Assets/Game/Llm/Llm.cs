@@ -195,7 +195,7 @@ namespace Shooter.Game.Llm
             foreach (Component nearObject in FindNearObjects())
             {
                 string seen = Digestion.Seen(nearObject, DigestionDetail.Brief, transform);
-                if (seen != null) digest.AppendLine(seen);
+                if (seen != null) digest.Append(seen).Append('\n');
             }
 
             return digest.ToString();
