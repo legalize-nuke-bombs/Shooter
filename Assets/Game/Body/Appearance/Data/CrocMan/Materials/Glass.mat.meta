@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d30ce88c783b49b2b12df7599113e02c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 226029
+  packageName: Skinless Zombie
+  packageVersion: 1.1.0
+  assetPath: Assets/Tensori/SkinlessZombie/Art/Materials/Skin.mat
+  uploadId: 518731

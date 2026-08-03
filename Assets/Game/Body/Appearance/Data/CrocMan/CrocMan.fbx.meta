@@ -1,0 +1,1085 @@
+fileFormatVersion: 2
+guid: 7c9e38df6f6f48f69be0e94361781022
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: _group1polySurface5HeadBase_mesh2
+    100002: ball_l
+    100004: ball_r
+    100006: Base_mesh
+    100008: Body
+    100010: Body_11_RetopoGroup2
+    100012: Body_4_RetopoGroup2
+    100014: calf_l
+    100016: calf_r
+    100018: calf_twist_01_l
+    100020: calf_twist_01_r
+    100022: Character1_Ctrl_ChestEndEffector
+    100024: Character1_Ctrl_ChestOriginEffector
+    100026: Character1_Ctrl_Head
+    100028: Character1_Ctrl_HeadEffector
+    100030: Character1_Ctrl_Hips
+    100032: Character1_Ctrl_HipsEffector
+    100034: Character1_Ctrl_LeftAnkleEffector
+    100036: Character1_Ctrl_LeftArm
+    100038: Character1_Ctrl_LeftElbowEffector
+    100040: Character1_Ctrl_LeftFoot
+    100042: Character1_Ctrl_LeftForeArm
+    100044: Character1_Ctrl_LeftHand
+    100046: Character1_Ctrl_LeftHipEffector
+    100048: Character1_Ctrl_LeftKneeEffector
+    100050: Character1_Ctrl_LeftLeg
+    100052: Character1_Ctrl_LeftShoulder
+    100054: Character1_Ctrl_LeftShoulderEffector
+    100056: Character1_Ctrl_LeftUpLeg
+    100058: Character1_Ctrl_LeftWristEffector
+    100060: Character1_Ctrl_Neck
+    100062: Character1_Ctrl_Reference
+    100064: Character1_Ctrl_RightAnkleEffector
+    100066: Character1_Ctrl_RightArm
+    100068: Character1_Ctrl_RightElbowEffector
+    100070: Character1_Ctrl_RightFoot
+    100072: Character1_Ctrl_RightForeArm
+    100074: Character1_Ctrl_RightHand
+    100076: Character1_Ctrl_RightHipEffector
+    100078: Character1_Ctrl_RightKneeEffector
+    100080: Character1_Ctrl_RightLeg
+    100082: Character1_Ctrl_RightShoulder
+    100084: Character1_Ctrl_RightShoulderEffector
+    100086: Character1_Ctrl_RightUpLeg
+    100088: Character1_Ctrl_RightWristEffector
+    100090: Character1_Ctrl_Spine
+    100092: Character1_Ctrl_Spine1
+    100094: Character1_Ctrl_Spine2
+    100096: clavicle_l
+    100098: clavicle_r
+    100100: foot_l
+    100102: foot_r
+    100104: Group2BodyBase_mesh
+    100106: hand_l
+    100108: hand_r
+    100110: head
+    100112: index_01_l
+    100114: index_01_r
+    100116: index_02_l
+    100118: index_02_r
+    100120: index_03_l
+    100122: index_03_r
+    100124: lowerarm_l
+    100126: lowerarm_r
+    100128: lowerarm_twist_01_l
+    100130: lowerarm_twist_01_r
+    100132: middle_01_l
+    100134: middle_01_r
+    100136: middle_02_l
+    100138: middle_02_r
+    100140: middle_03_l
+    100142: middle_03_r
+    100144: neck_01
+    100146: pants
+    100148: pants_11_RetopoGroup3
+    100150: pants_1_RetopoGroup2
+    100152: pelvis
+    100154: pinky_01_l
+    100156: pinky_01_r
+    100158: pinky_02_l
+    100160: pinky_02_r
+    100162: pinky_03_l
+    100164: pinky_03_r
+    100166: polySurface100
+    100168: polySurface101
+    100170: polySurface102
+    100172: polySurface103
+    100174: polySurface104
+    100176: polySurface11
+    100178: polySurface12
+    100180: polySurface13
+    100182: polySurface14
+    100184: polySurface15
+    100186: polySurface16
+    100188: polySurface17
+    100190: polySurface18
+    100192: polySurface19
+    100194: polySurface20
+    100196: polySurface21
+    100198: polySurface22
+    100200: polySurface23
+    100202: polySurface24
+    100204: polySurface25
+    100206: polySurface27
+    100208: polySurface34
+    100210: polySurface37
+    100212: polySurface38
+    100214: polySurface39
+    100216: polySurface40
+    100218: polySurface41
+    100220: polySurface45
+    100222: polySurface47
+    100224: polySurface48
+    100226: polySurface49
+    100228: polySurface50
+    100230: polySurface51
+    100232: polySurface52
+    100234: polySurface53
+    100236: polySurface54
+    100238: polySurface55
+    100240: polySurface56
+    100242: polySurface57
+    100244: polySurface58
+    100246: polySurface59
+    100248: polySurface60
+    100250: polySurface61
+    100252: polySurface62
+    100254: polySurface64
+    100256: polySurface66
+    100258: polySurface7
+    100260: polySurface70
+    100262: polySurface73
+    100264: polySurface74
+    100266: polySurface75
+    100268: polySurface76
+    100270: polySurface77
+    100272: polySurface78
+    100274: polySurface79
+    100276: polySurface8
+    100278: polySurface80
+    100280: polySurface81
+    100282: polySurface82
+    100284: polySurface83
+    100286: polySurface84
+    100288: polySurface85
+    100290: polySurface86
+    100292: polySurface87
+    100294: polySurface88
+    100296: polySurface89
+    100298: polySurface90
+    100300: polySurface91
+    100302: polySurface92
+    100304: polySurface93
+    100306: polySurface94
+    100308: polySurface95
+    100310: polySurface96
+    100312: polySurface97
+    100314: polySurface98
+    100316: polySurface99
+    100318: RetopoGroup1
+    100320: ring_01_l
+    100322: ring_01_r
+    100324: ring_02_l
+    100326: ring_02_r
+    100328: ring_03_l
+    100330: ring_03_r
+    100332: root
+    100334: //RootNode
+    100336: spine_01
+    100338: spine_02
+    100340: spine_03
+    100342: thigh_l
+    100344: thigh_r
+    100346: thigh_twist_01_l
+    100348: thigh_twist_01_r
+    100350: thumb_01_l
+    100352: thumb_01_r
+    100354: thumb_02_l
+    100356: thumb_02_r
+    100358: thumb_03_l
+    100360: thumb_03_r
+    100362: upperarm_l
+    100364: upperarm_r
+    100366: upperarm_twist_01_l
+    100368: upperarm_twist_01_r
+    100370: waistcoat
+    100372: ZBrushPolyMesh3D
+    400000: _group1polySurface5HeadBase_mesh2
+    400002: ball_l
+    400004: ball_r
+    400006: Base_mesh
+    400008: Body
+    400010: Body_11_RetopoGroup2
+    400012: Body_4_RetopoGroup2
+    400014: calf_l
+    400016: calf_r
+    400018: calf_twist_01_l
+    400020: calf_twist_01_r
+    400022: Character1_Ctrl_ChestEndEffector
+    400024: Character1_Ctrl_ChestOriginEffector
+    400026: Character1_Ctrl_Head
+    400028: Character1_Ctrl_HeadEffector
+    400030: Character1_Ctrl_Hips
+    400032: Character1_Ctrl_HipsEffector
+    400034: Character1_Ctrl_LeftAnkleEffector
+    400036: Character1_Ctrl_LeftArm
+    400038: Character1_Ctrl_LeftElbowEffector
+    400040: Character1_Ctrl_LeftFoot
+    400042: Character1_Ctrl_LeftForeArm
+    400044: Character1_Ctrl_LeftHand
+    400046: Character1_Ctrl_LeftHipEffector
+    400048: Character1_Ctrl_LeftKneeEffector
+    400050: Character1_Ctrl_LeftLeg
+    400052: Character1_Ctrl_LeftShoulder
+    400054: Character1_Ctrl_LeftShoulderEffector
+    400056: Character1_Ctrl_LeftUpLeg
+    400058: Character1_Ctrl_LeftWristEffector
+    400060: Character1_Ctrl_Neck
+    400062: Character1_Ctrl_Reference
+    400064: Character1_Ctrl_RightAnkleEffector
+    400066: Character1_Ctrl_RightArm
+    400068: Character1_Ctrl_RightElbowEffector
+    400070: Character1_Ctrl_RightFoot
+    400072: Character1_Ctrl_RightForeArm
+    400074: Character1_Ctrl_RightHand
+    400076: Character1_Ctrl_RightHipEffector
+    400078: Character1_Ctrl_RightKneeEffector
+    400080: Character1_Ctrl_RightLeg
+    400082: Character1_Ctrl_RightShoulder
+    400084: Character1_Ctrl_RightShoulderEffector
+    400086: Character1_Ctrl_RightUpLeg
+    400088: Character1_Ctrl_RightWristEffector
+    400090: Character1_Ctrl_Spine
+    400092: Character1_Ctrl_Spine1
+    400094: Character1_Ctrl_Spine2
+    400096: clavicle_l
+    400098: clavicle_r
+    400100: foot_l
+    400102: foot_r
+    400104: Group2BodyBase_mesh
+    400106: hand_l
+    400108: hand_r
+    400110: head
+    400112: index_01_l
+    400114: index_01_r
+    400116: index_02_l
+    400118: index_02_r
+    400120: index_03_l
+    400122: index_03_r
+    400124: lowerarm_l
+    400126: lowerarm_r
+    400128: lowerarm_twist_01_l
+    400130: lowerarm_twist_01_r
+    400132: middle_01_l
+    400134: middle_01_r
+    400136: middle_02_l
+    400138: middle_02_r
+    400140: middle_03_l
+    400142: middle_03_r
+    400144: neck_01
+    400146: pants
+    400148: pants_11_RetopoGroup3
+    400150: pants_1_RetopoGroup2
+    400152: pelvis
+    400154: pinky_01_l
+    400156: pinky_01_r
+    400158: pinky_02_l
+    400160: pinky_02_r
+    400162: pinky_03_l
+    400164: pinky_03_r
+    400166: polySurface100
+    400168: polySurface101
+    400170: polySurface102
+    400172: polySurface103
+    400174: polySurface104
+    400176: polySurface11
+    400178: polySurface12
+    400180: polySurface13
+    400182: polySurface14
+    400184: polySurface15
+    400186: polySurface16
+    400188: polySurface17
+    400190: polySurface18
+    400192: polySurface19
+    400194: polySurface20
+    400196: polySurface21
+    400198: polySurface22
+    400200: polySurface23
+    400202: polySurface24
+    400204: polySurface25
+    400206: polySurface27
+    400208: polySurface34
+    400210: polySurface37
+    400212: polySurface38
+    400214: polySurface39
+    400216: polySurface40
+    400218: polySurface41
+    400220: polySurface45
+    400222: polySurface47
+    400224: polySurface48
+    400226: polySurface49
+    400228: polySurface50
+    400230: polySurface51
+    400232: polySurface52
+    400234: polySurface53
+    400236: polySurface54
+    400238: polySurface55
+    400240: polySurface56
+    400242: polySurface57
+    400244: polySurface58
+    400246: polySurface59
+    400248: polySurface60
+    400250: polySurface61
+    400252: polySurface62
+    400254: polySurface64
+    400256: polySurface66
+    400258: polySurface7
+    400260: polySurface70
+    400262: polySurface73
+    400264: polySurface74
+    400266: polySurface75
+    400268: polySurface76
+    400270: polySurface77
+    400272: polySurface78
+    400274: polySurface79
+    400276: polySurface8
+    400278: polySurface80
+    400280: polySurface81
+    400282: polySurface82
+    400284: polySurface83
+    400286: polySurface84
+    400288: polySurface85
+    400290: polySurface86
+    400292: polySurface87
+    400294: polySurface88
+    400296: polySurface89
+    400298: polySurface90
+    400300: polySurface91
+    400302: polySurface92
+    400304: polySurface93
+    400306: polySurface94
+    400308: polySurface95
+    400310: polySurface96
+    400312: polySurface97
+    400314: polySurface98
+    400316: polySurface99
+    400318: RetopoGroup1
+    400320: ring_01_l
+    400322: ring_01_r
+    400324: ring_02_l
+    400326: ring_02_r
+    400328: ring_03_l
+    400330: ring_03_r
+    400332: root
+    400334: //RootNode
+    400336: spine_01
+    400338: spine_02
+    400340: spine_03
+    400342: thigh_l
+    400344: thigh_r
+    400346: thigh_twist_01_l
+    400348: thigh_twist_01_r
+    400350: thumb_01_l
+    400352: thumb_01_r
+    400354: thumb_02_l
+    400356: thumb_02_r
+    400358: thumb_03_l
+    400360: thumb_03_r
+    400362: upperarm_l
+    400364: upperarm_r
+    400366: upperarm_twist_01_l
+    400368: upperarm_twist_01_r
+    400370: waistcoat
+    400372: ZBrushPolyMesh3D
+    2100000: Mat_croc_men_waistcoat
+    2100002: Mat_croc_men_pants
+    2100004: Mat_croc_men_Body
+    2100006: eyebrows
+    2100008: Mat_croc_men_glass
+    4300000: waistcoat
+    4300002: pants_11_RetopoGroup3
+    4300004: polySurface7
+    4300006: pants_1_RetopoGroup2
+    4300008: polySurface11
+    4300010: polySurface12
+    4300012: polySurface13
+    4300014: polySurface14
+    4300016: polySurface15
+    4300018: polySurface16
+    4300020: polySurface17
+    4300022: polySurface18
+    4300024: polySurface19
+    4300026: polySurface20
+    4300028: polySurface21
+    4300030: polySurface22
+    4300032: polySurface23
+    4300034: polySurface24
+    4300036: polySurface25
+    4300038: polySurface27
+    4300040: polySurface38
+    4300042: polySurface39
+    4300044: polySurface40
+    4300046: polySurface41
+    4300048: Body_4_RetopoGroup2
+    4300050: RetopoGroup1
+    4300052: polySurface47
+    4300054: polySurface48
+    4300056: polySurface49
+    4300058: polySurface50
+    4300060: polySurface51
+    4300062: polySurface52
+    4300064: polySurface53
+    4300066: polySurface54
+    4300068: polySurface55
+    4300070: polySurface56
+    4300072: polySurface57
+    4300074: polySurface58
+    4300076: polySurface59
+    4300078: polySurface60
+    4300080: polySurface61
+    4300082: polySurface62
+    4300084: polySurface64
+    4300086: polySurface74
+    4300088: polySurface8
+    4300090: polySurface75
+    4300092: polySurface76
+    4300094: polySurface77
+    4300096: polySurface78
+    4300098: polySurface79
+    4300100: polySurface80
+    4300102: polySurface81
+    4300104: polySurface82
+    4300106: polySurface83
+    4300108: polySurface84
+    4300110: polySurface85
+    4300112: polySurface86
+    4300114: polySurface87
+    4300116: polySurface88
+    4300118: polySurface89
+    4300120: polySurface90
+    4300122: polySurface91
+    4300124: polySurface92
+    4300126: polySurface93
+    4300128: polySurface94
+    4300130: polySurface95
+    4300132: polySurface96
+    4300134: polySurface97
+    4300136: polySurface98
+    4300138: polySurface99
+    4300140: polySurface100
+    4300142: polySurface101
+    4300144: polySurface102
+    4300146: polySurface103
+    4300148: polySurface104
+    4300150: polySurface37
+    4300152: polySurface34
+    4300154: polySurface73
+    4300156: polySurface70
+    4300158: _group1polySurface5HeadBase_mesh2
+    4300160: polySurface45
+    4300162: Group2BodyBase_mesh
+    9500000: //RootNode
+    13700000: _group1polySurface5HeadBase_mesh2
+    13700002: Body_4_RetopoGroup2
+    13700004: Group2BodyBase_mesh
+    13700006: pants_11_RetopoGroup3
+    13700008: pants_1_RetopoGroup2
+    13700010: polySurface100
+    13700012: polySurface101
+    13700014: polySurface102
+    13700016: polySurface103
+    13700018: polySurface104
+    13700020: polySurface11
+    13700022: polySurface12
+    13700024: polySurface13
+    13700026: polySurface14
+    13700028: polySurface15
+    13700030: polySurface16
+    13700032: polySurface17
+    13700034: polySurface18
+    13700036: polySurface19
+    13700038: polySurface20
+    13700040: polySurface21
+    13700042: polySurface22
+    13700044: polySurface23
+    13700046: polySurface24
+    13700048: polySurface25
+    13700050: polySurface27
+    13700052: polySurface34
+    13700054: polySurface37
+    13700056: polySurface38
+    13700058: polySurface39
+    13700060: polySurface40
+    13700062: polySurface41
+    13700064: polySurface45
+    13700066: polySurface47
+    13700068: polySurface48
+    13700070: polySurface49
+    13700072: polySurface50
+    13700074: polySurface51
+    13700076: polySurface52
+    13700078: polySurface53
+    13700080: polySurface54
+    13700082: polySurface55
+    13700084: polySurface56
+    13700086: polySurface57
+    13700088: polySurface58
+    13700090: polySurface59
+    13700092: polySurface60
+    13700094: polySurface61
+    13700096: polySurface62
+    13700098: polySurface64
+    13700100: polySurface7
+    13700102: polySurface70
+    13700104: polySurface73
+    13700106: polySurface74
+    13700108: polySurface75
+    13700110: polySurface76
+    13700112: polySurface77
+    13700114: polySurface78
+    13700116: polySurface79
+    13700118: polySurface8
+    13700120: polySurface80
+    13700122: polySurface81
+    13700124: polySurface82
+    13700126: polySurface83
+    13700128: polySurface84
+    13700130: polySurface85
+    13700132: polySurface86
+    13700134: polySurface87
+    13700136: polySurface88
+    13700138: polySurface89
+    13700140: polySurface90
+    13700142: polySurface91
+    13700144: polySurface92
+    13700146: polySurface93
+    13700148: polySurface94
+    13700150: polySurface95
+    13700152: polySurface96
+    13700154: polySurface97
+    13700156: polySurface98
+    13700158: polySurface99
+    13700160: RetopoGroup1
+    13700162: waistcoat
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_croc_men_Body
+    second: {fileID: 2100000, guid: 41b7ba4c7cf2414bb0588fdf673c1c36, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_croc_men_glass
+    second: {fileID: 2100000, guid: d30ce88c783b49b2b12df7599113e02c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_croc_men_pants
+    second: {fileID: 2100000, guid: 726dfeeb360a47afb5bdb76f6c92cda8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_croc_men_waistcoat
+    second: {fileID: 2100000, guid: 5777865e2ea14b63a993892fff25086e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eyebrows
+    second: {fileID: 2100000, guid: 35b3c6f7fc4249cabb80c2307d549fc9, type: 2}
+  materials:
+    importMaterials: 1
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human:
+    - boneName: pelvis
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: thigh_l
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: thigh_r
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: calf_l
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: calf_r
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: foot_l
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: foot_r
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: spine_01
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: spine_02
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: spine_03
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: neck_01
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: clavicle_l
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: clavicle_r
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: upperarm_l
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: upperarm_r
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: lowerarm_l
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: lowerarm_r
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: hand_l
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: hand_r
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ball_l
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ball_r
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: thumb_01_l
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: thumb_02_l
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: thumb_03_l
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: index_01_l
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: index_02_l
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: index_03_l
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: middle_01_l
+      humanName: Left Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: middle_02_l
+      humanName: Left Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: middle_03_l
+      humanName: Left Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ring_01_l
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ring_02_l
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ring_03_l
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: pinky_01_l
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: pinky_02_l
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: pinky_03_l
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: thumb_01_r
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: thumb_02_r
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: thumb_03_r
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: index_01_r
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: index_02_r
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: index_03_r
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: middle_01_r
+      humanName: Right Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: middle_02_r
+      humanName: Right Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: middle_03_r
+      humanName: Right Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ring_01_r
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ring_02_r
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ring_03_r
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: pinky_01_r
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: pinky_02_r
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: pinky_03_r
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 3
+  avatarSetup: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186131
+  packageName: Croc men
+  packageVersion: 1.0
+  assetPath: Assets/Game/Body/Appearance/Data/CrocMan/CrocMan.fbx
+  uploadId: 408825
