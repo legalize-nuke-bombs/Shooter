@@ -70,7 +70,7 @@ namespace Shooter.Game.Llm
 
 
         private readonly Inbox interNpcInbox = new Inbox();
-        private Prompt InterNpcInteractionPrompt(string inbox) =>
+        private Prompt InterNpcInteractionPrompt(string taken) =>
             new Prompt()
                 .Section("Общение с другими NPC",
                     "Ты можешь сказать что-то другому NPC, используя поле ответа `interNpcInteractions`.\n" +
@@ -79,11 +79,11 @@ namespace Shooter.Game.Llm
                     "Ты постоянно делишься любыми новыми подробностями о мире, которые ты узнал, со своими NPC друзьями.\n" +
                     "Твои Входящие показываются только один раз (входящие, не записанные сразу в Память, будут утеряны!):\n" +
                     "Твои Входящие:\n" +
-                    inbox
+                    taken
                 );
 
         private readonly Inbox systemInbox = new Inbox();
-        private Prompt SystemNotificationsPrompt(string inbox) =>
+        private Prompt SystemNotificationsPrompt(string taken) =>
             new Prompt()
                 .Section(
                     "Сообщения Системы",
@@ -91,7 +91,7 @@ namespace Shooter.Game.Llm
                     "Сообщения Системы показываются только один раз.\n" +
                     "Система оповещает о запрошенных тобой действиях, которые выполнить не удалось. По умолчанию считай все запрошенные тобой действия выполненными.\n" +
                     "Сообщения от Системы тебе:\n" +
-                    inbox
+                    taken
                 );
 
         private Prompt WorldStatePrompt =>
@@ -163,15 +163,15 @@ namespace Shooter.Game.Llm
             }
         }
 
-        private Prompt Assemble(string interactions, string notifications)
+        private Prompt Assemble(string takenInteractions, string takenNotifications)
         {
             return new Prompt()
                 .Section(CorePrompt)
                 .Section(ResponseFormattingRulesPrompt)
                 .Section(CharacterPrompt)
                 .Section(MemoryPrompt)
-                .Section(InterNpcInteractionPrompt(interactions))
-                .Section(SystemNotificationsPrompt(notifications))
+                .Section(InterNpcInteractionPrompt(takenInteractions))
+                .Section(SystemNotificationsPrompt(takenNotifications))
                 .Section(WorldStatePrompt)
                 .Section(AnswerPrompt);
         }
