@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Shooter.Game.Body
 {
+    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Movement))]
+    // Sleeper is not required
     public class Mortal : NetworkBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();

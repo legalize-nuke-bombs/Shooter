@@ -10,6 +10,8 @@ namespace Shooter.Game.Combat
 {
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Interactor))]
+    [RequireComponent(typeof(Hands))]
+    [RequireComponent(typeof(Speaker))]
     public class Gunner : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
