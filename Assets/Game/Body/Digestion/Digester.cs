@@ -1,28 +1,28 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 
 namespace Shooter.Game.Body
 {
-    public static class Digestion
+    public class Digester : MonoBehaviour
     {
-        public static string Of(Component entity, DigestionDetail detail)
+        public string Of(Component entity, DigestionDetail detail)
         {
             return Block(entity, detail, null);
         }
 
-        public static string Seen(Component entity, DigestionDetail detail, Transform eyes)
+        public string Seen(Component entity, DigestionDetail detail, Transform eyes)
         {
             return Block(entity, detail, eyes);
         }
 
-        private static string Block(Component entity, DigestionDetail detail, Transform eyes)
+        private string Block(Component entity, DigestionDetail detail, Transform eyes)
         {
             IEnumerable<IDigestible> parts = entity.GetComponents<IDigestible>()
                 .OrderByDescending(part => part.Priority);
 
-            StringBuilder digest = new StringBuilder();
+            var digest = new StringBuilder();
 
             foreach (IDigestible part in parts)
             {
@@ -47,7 +47,7 @@ namespace Shooter.Game.Body
             return digest.Length == 0 ? null : digest.ToString();
         }
 
-        private static string Whereabouts(Component entity, Transform eyes)
+        private string Whereabouts(Component entity, Transform eyes)
         {
             Vector3 offset = entity.transform.position - eyes.position;
 
