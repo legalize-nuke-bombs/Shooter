@@ -114,8 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "\u0414\u0435\u0448\u0435\u0432\u0430\u044F \u043B\u044E\u0441\u0442\u0440\u0430,
-    4 \u043B\u0430\u043C\u043F\u043E\u0447\u043A\u0438"
+  content: "A cheap chandelier, four bulbs"
 --- !u!33 &7611449031891415402
 MeshFilter:
   m_ObjectHideFlags: 0

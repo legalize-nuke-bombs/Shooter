@@ -66,7 +66,7 @@ namespace Shooter.Game.Body
 
         public string Digest(DigestionDetail detail)
         {
-            return Free ? null : "Занят: " + Action;
+            return Free ? null : "Busy: " + Action;
         }
 
         public DigestionPriority Priority => DigestionPriority.Low;

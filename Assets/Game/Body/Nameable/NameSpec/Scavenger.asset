@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.PlainNameSpec
   id: 
   text: "\u041C\u0443\u0441\u043E\u0440\u0449\u0438\u043A"
-  prompt: "\u041C\u0443\u0441\u043E\u0440\u0449\u0438\u043A"
+  prompt: "Scavenger"

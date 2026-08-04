@@ -32,7 +32,7 @@ namespace Shooter.Game.Body
 
         public override string Prompt()
         {
-            return "Имя не читается";
+            return "The name is unreadable";
         }
     }
 }

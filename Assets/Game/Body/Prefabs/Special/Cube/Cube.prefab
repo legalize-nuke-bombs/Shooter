@@ -128,8 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "\u041E\u0433\u0440\u043E\u043C\u043D\u044B\u0439 \u0437\u0430\u0440\u043E\u0441\u0448\u0438\u0439
-    \u043A\u0443\u0431 25x25x25 \u043C\u0435\u0442\u0440\u043E\u0432"
+  content: "A huge overgrown cube, 25x25x25 meters"
 --- !u!114 &7723478074634143434
 MonoBehaviour:
   m_ObjectHideFlags: 0

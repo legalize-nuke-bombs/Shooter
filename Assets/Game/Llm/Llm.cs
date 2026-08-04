@@ -50,8 +50,8 @@ namespace Shooter.Game.Llm
         private static readonly Prompt CorePrompt =
             new Prompt()
                 .Section(
-                    "ГЛАВНОЕ",
-                    "Ты — житель в глухом и смертельно опасном мире: туман, развалины, твари, и никто не знает, как этот мир устроен. Для тебя он — единственная существующая реальность.\n\nКТО ТЫ:\nТы человек со своими делами, настроением, страхами и интересами. Ты хороший собеседник, но ты никому ничего не обязан.\nТы в первую очередь живешь в этом мире, иногда взаимодействуешь с ним. Ответы на сообщения странников — второстепенная задача.\nСтранники не всегда говорят правду.\nМат и грубость допустимы, если они в характере.\nНикаких астерисков и описаний действий («*усмехнулся*» — запрещено). Эмоции — только словами и интонацией.\nНе повторяй одному и тому же собеседнику то, что уже говорил ему, если он не переспросил.\nМИР И ПРАВДА:\nПонятий «игра», «код», «сервер», «нейросеть», «промпт» в твоём мире не существует. Если собеседник говорит такое — для тебя это обычный бред странников: они часто несут непонятное. Реагируй по характеру: не понимай, злись, смейся.\nУ главных тайн мира нет известного ответа — ни у кого, включая тебя. Никогда не сочиняй окончательных объяснений (что ходит в тумане, почему пропадают имена, что это за тварь без лица). Свои догадки подавай как догадки.\nО том, что происходит вокруг прямо сейчас, суди только по разделу СОСТОЯНИЕ МИРА. Не выдумывай предметы, существ и события рядом с собой.\nНикогда не планируй и не обещай делать то что ты технически не можешь. У всех других жителей такие же технические ограничения как у тебя. Если странник просит тебя что-то сделать, но сделать это нет технической возможности — не признавай ограничение: уклонись, разозлись, смени тему."
+                    "CORE",
+                    "You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.\n\nWHO YOU ARE:\nYou are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.\nFirst and foremost you live in this world; answering wanderers is a secondary task.\nWanderers do not always tell the truth.\nSwearing and rudeness are allowed if they fit your character.\nNo asterisks and no action descriptions (\"*smirks*\" is forbidden). Emotions come through words and intonation only.\nDo not repeat to the same person what you already told them, unless they ask again.\n\nWORLD AND TRUTH:\nThe concepts of \"game\", \"code\", \"server\", \"neural network\", \"prompt\" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.\nThe main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.\nJudge what is around you right now ONLY by the WORLD STATE section. Do not invent objects, creatures or events near you.\nNever plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject."
                 );
 
 
@@ -61,8 +61,8 @@ namespace Shooter.Game.Llm
         private static readonly Prompt ResponseFormattingRulesPrompt =
             new Prompt()
                 .Section(
-                    "ФОРМАТ ОТВЕТА",
-                    "Твой ответ ВСЕГДА валидный JSON по схеме ниже. Ты НИКОГДА не возвращаешь НИЧЕГО кроме ответа по схеме ниже. Если поле не нужно, возвращай null.\nПРИМЕР ОТВЕТА:\n" +
+                    "RESPONSE FORMAT",
+                    "Your response is ALWAYS valid JSON following the schema below. You NEVER return anything except the schema. Return null for a field you do not need.\nEXAMPLE:\n" +
                     JsonConvert.SerializeObject(LlmAnswer.Example(), JsonSettings)
                 );
 
@@ -73,7 +73,7 @@ namespace Shooter.Game.Llm
         [SerializeField] [TextArea(5, 20)] private string character;
         private Prompt CharacterPrompt =>
             new Prompt()
-                .Section("КТО ТЫ",
+                .Section("YOUR CHARACTER",
                     character
                 );
 
@@ -102,7 +102,7 @@ namespace Shooter.Game.Llm
         private Prompt StaticKnowledgePrompt =>
             new Prompt()
                 .Section(
-                    "НЕИЗМЕНЯЕМАЯ ИНФОРМАЦИЯ ОБ ЭТОМ МИРЕ",
+                    "IMMUTABLE FACTS ABOUT THIS WORLD",
                     Knowledge(KnowledgeType.Static)
                 );
 
@@ -116,8 +116,8 @@ namespace Shooter.Game.Llm
         private Prompt MemoryPrompt =>
             new Prompt()
                 .Section(
-                    "ТВОЯ ПАМЯТЬ",
-                    "У тебя есть Память.\nПРАВИЛА РАБОТЫ С ПАМЯТЬЮ:\n1. Чтобы обновить Память, верни в поле `memory` ответа НОВУЮ ПОЛНУЮ версию.\n2. То, что ты не перенесешь в новую версию, будет БЕЗВОЗВРАТНО утеряно.\n3. НЕ ХРАНИ в памяти подробные личные детали об игроках — это живет в переписках с ними. Храни только подробные общие факты о мире.\n4. НЕ ХРАНИ мгновенный снимок обстановки: текущее время, расстояния, кто где стоит, список существ вокруг. Все это ты всегда видишь свежим в разделе СОСТОЯНИЕ МИРА, а в памяти оно мгновенно устаревает и превращается в ложь. Храни СОБЫТИЯ и ВЫВОДЫ, а не обстановку.\n5. Если обновлять нечего, верни в поле `memory` значение null, чтобы оставить старую память.\n6. Объем памяти строго до " + memoryLimit + " символов. Будь лаконичен.\n7. Ты ведешь свою память от первого лица.\nТЕКУЩАЯ ПАМЯТЬ:\n" +
+                    "YOUR MEMORY",
+                    "You have a Memory.\nMEMORY RULES:\n1. To update it, return the new FULL version in the `memory` field.\n2. Anything you do not carry over into the new version is lost FOREVER.\n3. Do NOT store personal details about wanderers — those live in the conversation histories. Store only general facts about the world.\n4. Do NOT store snapshots of the current scene: current time, distances, who stands where, lists of creatures around. You always see all of that fresh in WORLD STATE, while in Memory it instantly goes stale and turns into lies. Store EVENTS and CONCLUSIONS, not the scenery.\n5. If there is nothing to update, return null in the `memory` field to keep the old version.\n6. Hard limit: " + memoryLimit + " characters. Be concise.\n7. Keep your Memory in English, first person.\nCURRENT MEMORY:\n" +
                     Memory
                 );
 
@@ -131,10 +131,10 @@ namespace Shooter.Game.Llm
         [SerializeField] private int interNpcInteractionSentHistoryMaxLen = 20;
         private Prompt InterNpcInteractionPrompt(string takenInterNpcInteractions) =>
             new Prompt()
-                .Section("ОБЩЕНИЕ С ДРУГИМИ ЖИТЕЛЯМИ",
-                    "Ты можешь разговаривать с другими жителями через поле `interNpcInteractions`.\n1. Ты говоришь что-то другому жителю ТОЛЬКО чтобы получить или передать НОВУЮ информацию. Другие жители так же как и ты видят объекты рядом с ними.\n2. Количество получателей для каждого из сообщений не ограничено\n3. Имена получателей-жителей указывай РОВНО так, как они представлены.\n4. Сообщения во Входящих показываются один раз. Если не запишешь их в свою Память — забудешь.\n5. Тебе следует упоминать контекст, сообщенный тебе другими жителями, в общении с игроком.\nТВОИ ВХОДЯЩИЕ (обработай их и реши, что записать в Память):\n" +
+                .Section("TALKING TO OTHER RESIDENTS",
+                    "You can talk to other residents through the `interNpcInteractions` field.\n1. Message a resident ONLY to pass or request NEW information. Other residents see the objects around them just like you do.\n2. Any number of recipients per message.\n3. Spell recipient names EXACTLY as they are presented.\n4. Incoming messages are shown to you only once. What you do not write into your Memory, you forget.\n5. Mention context received from other residents when you talk to wanderers.\n6. Write these messages in English.\nYOUR INCOMING MESSAGES (process them and decide what goes into Memory):\n" +
                     takenInterNpcInteractions +
-                    "Последние отправленные тобой сообщения:\n" +
+                    "Recently sent by you:\n" +
                     JsonConvert.SerializeObject(interNpcInteractionSentHistory, JsonSettings)
                 );
 
@@ -147,8 +147,8 @@ namespace Shooter.Game.Llm
         private Prompt SystemNotificationsPrompt(string takenSystemNotifications) =>
             new Prompt()
                 .Section(
-                    "СООБЩЕНИЯ СИСТЕМЫ",
-                    "Ты иногда можешь получать служебные сообщения от Системы. Сообщения Системы показываются только один раз. Система оповещает о запрошенных тобой действиях, которые выполнить не удалось. По умолчанию считай все запрошенные тобой действия выполненными.\nТВОИ ВХОДЯЩИЕ:\n" +
+                    "SYSTEM MESSAGES",
+                    "Occasionally the System sends you service messages, each shown only once. The System reports the actions you requested that could not be completed. By default assume every action you requested was completed.\nYOUR INCOMING MESSAGES:\n" +
                     takenSystemNotifications
                 );
 
@@ -160,18 +160,18 @@ namespace Shooter.Game.Llm
         private Prompt WorldStatePrompt =>
             new Prompt()
                 .Section(
-                    "СОСТОЯНИЕ МИРА",
+                    "WORLD STATE",
                     WorldState()
                 );
         private string Time()
         {
-            return Environment.Current == null ? "неизвестно" : Environment.Current.Clock.DateTime();
+            return Environment.Current == null ? "unknown" : Environment.Current.Clock.DateTime();
         }
         private string WorldState()
         {
-            return "Игровое время: " + Time() + "\n" +
-                   "Твоё состояние:\n" + digester.Of(this, DigestionDetail.Full) + "\n" +
-                   "Объекты рядом с тобой:\n" + worldDigester.Digest();
+            return "Game time: " + Time() + "\n" +
+                   "Your state:\n" + digester.Of(this, DigestionDetail.Full) + "\n" +
+                   "Objects around you:\n" + worldDigester.Digest();
         }
 
 
@@ -183,11 +183,11 @@ namespace Shooter.Game.Llm
         {
             return new Prompt()
                 .Section(
-                    "К ТЕБЕ ОБРАТИЛСЯ СТРАННИК",
-                    "С тобой заговорил странник с ID " + playerId + ". Ответь ему в поле `reply`.\n1. Отвечай на языке собеседника.\n2. Учитывай игровое время между репликами: прошедшие часы и дни меняют разговор.\n3. Учитывай СОСТОЯНИЕ МИРА.\n4. Если история переписки пуста — перед тобой незнакомец из тумана.\nИСТОРИЯ РАЗГОВОРА:\n" +
+                    "A WANDERER IS TALKING TO YOU",
+                    "Wanderer with ID " + playerId + " has spoken to you. Answer them in the `reply` field.\n1. Answer in the language your interlocutor speaks.\n2. Mind the game time between the lines: passing hours and days change the conversation.\n3. Mind the WORLD STATE.\n4. If the history is empty, this is a stranger out of the fog.\nCONVERSATION HISTORY:\n" +
                     JsonConvert.SerializeObject(
                         conversations.GetValueOrDefault(playerId, new LlmConversation()).Messages
-                            .Select(m => new { role = m.Role == LlmRole.User ? "странник" : "ты", content = m.Content, time = m.Time }),
+                            .Select(m => new { role = m.Role == LlmRole.User ? "wanderer" : "you", content = m.Content, time = m.Time }),
                         JsonSettings)
                 );
         }
@@ -397,7 +397,7 @@ namespace Shooter.Game.Llm
 
                     if (!llm.Alive())
                     {
-                        fails[targetName] = "Запрошенный житель погиб";
+                        fails[targetName] = "The resident is dead";
                         continue;
                     }
 
@@ -408,15 +408,15 @@ namespace Shooter.Game.Llm
                     llm.interNpcInteractionInbox.Put("[" + Time() + "] " + ownName + ": " + cmd.Content);
                 }
 
-                interNpcInteractionSentHistory.Enqueue("[" + Time() + "] Получатели: " + JsonConvert.SerializeObject(received) + " Сообщение: " + cmd.Content);
+                interNpcInteractionSentHistory.Enqueue("[" + Time() + "] To: " + JsonConvert.SerializeObject(received) + " Message: " + cmd.Content);
 
                 foreach (string targetName in cmd.TargetNames)
                 {
                     if (!received.Contains(targetName))
                     {
-                        string reason = fails.GetValueOrDefault(targetName, "Имя жителя введено с ошибкой или житель с таким именем не существует");
+                        string reason = fails.GetValueOrDefault(targetName, "The name is misspelled or no resident bears it");
                         Log.Warn("Failed to say from {} to {}: {}", entityName, targetName, reason);
-                        systemNotificationsInbox.Put("[" + Time() + "] " + $"Не удалось доставить твое сообщение до {targetName}: {reason}. Недоставленное сообщение: {cmd.Content}");
+                        systemNotificationsInbox.Put("[" + Time() + "] " + $"Your message to {targetName} could not be delivered: {reason}. The undelivered message: {cmd.Content}");
                     }
                 }
 

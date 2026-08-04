@@ -90,7 +90,7 @@ namespace Shooter.Game.Body.Sleeping
 
         public string Digest(DigestionDetail detail)
         {
-            return Sleeping ? "Спит" : null;
+            return Sleeping ? "Asleep" : null;
         }
 
         public DigestionPriority Priority => DigestionPriority.Low;
