@@ -37,7 +37,7 @@ namespace Shooter.Game.Body.Sleeping
 
         public string Digest(DigestionDetail detail)
         {
-            return "Место для сна";
+            return "A place to sleep";
         }
 
         public DigestionPriority Priority => DigestionPriority.High;

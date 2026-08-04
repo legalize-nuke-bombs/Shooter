@@ -51,7 +51,7 @@ namespace Shooter.Game.Body
         {
             Vector3 offset = entity.transform.position - eyes.position;
 
-            return Mathf.RoundToInt(offset.magnitude) + " м, " + Cardinal.Side(offset);
+            return Mathf.RoundToInt(offset.magnitude) + " m, " + Cardinal.Side(offset);
         }
     }
 }

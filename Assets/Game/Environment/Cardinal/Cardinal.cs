@@ -6,7 +6,7 @@ namespace Shooter.Game
     {
         private static readonly string[] Sides =
         {
-            "север", "северо-восток", "восток", "юго-восток", "юг", "юго-запад", "запад", "северо-запад"
+            "north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"
         };
 
         public static string Side(float yaw)

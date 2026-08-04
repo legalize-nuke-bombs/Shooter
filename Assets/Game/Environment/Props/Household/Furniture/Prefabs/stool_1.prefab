@@ -149,4 +149,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "\u0414\u0435\u0448\u0435\u0432\u044B\u0439 \u0441\u0442\u0443\u043B"
+  content: "A cheap chair"

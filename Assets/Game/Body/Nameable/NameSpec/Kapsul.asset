@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.PlainNameSpec
   id: 
   text: "\u041A\u0430\u043F\u0441\u0443\u043B"
-  prompt: "\u041A\u0430\u043F\u0441\u0443\u043B"
+  prompt: "Kapsul"

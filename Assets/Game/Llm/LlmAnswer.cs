@@ -16,19 +16,14 @@ namespace Shooter.Game.Llm
         {
             return new LlmAnswer()
             {
-                Reply = "Твой ответ игроку (только если ты с ним сейчас говоришь)",
-                Memory = "Твоя обновленная Память ЦЕЛИКОМ (только если стало известное что-то новое)",
+                Reply = "Your answer to the wanderer, or null if nobody is waiting for one",
+                Memory = "The new FULL version of your Memory, or null to keep it unchanged",
                 InterNpcInteractions = new LlmInterNpcInteractionCommand[]
                 {
                     new LlmInterNpcInteractionCommand()
                     {
-                        TargetNames = new string[] { "Первый получатель твоего первого сообщения", "Второй получатель твоего первого сообщения" },
-                        Content = "Содержимое твоего первого сообщения"
-                    },
-                    new LlmInterNpcInteractionCommand()
-                    {
-                        TargetNames = new string[] { "Первый получатель твоего второго сообщения", "Второй получатель твоего второго сообщения" },
-                        Content = "Содержимое твоего второго сообщения"
+                        TargetNames = new string[] { "Exact recipient name", "Another recipient of the same message" },
+                        Content = "The message"
                     },
                 }
             };

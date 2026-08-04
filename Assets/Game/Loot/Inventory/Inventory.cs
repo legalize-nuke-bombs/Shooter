@@ -194,7 +194,7 @@ namespace Shooter.Game.Loot
             if (Equipped(out Item item))
             {
                 ItemSpec equippedSpec = Spec(item);
-                digest.Append("Предмет в руках: ")
+                digest.Append("Holding: ")
                     .Append(equippedSpec == null ? item.Id.ToString() : equippedSpec.PromptName);
             }
 
@@ -202,7 +202,7 @@ namespace Shooter.Game.Loot
             {
                 if (digest.Length > 0) digest.Append("\n");
 
-                digest.Append("Содержимое инвентаря:");
+                digest.Append("Inventory:");
 
                 for (int slot = 0; slot < slots.Count; slot++)
                 {

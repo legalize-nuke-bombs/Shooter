@@ -65,7 +65,7 @@ namespace Shooter.Game
 
         public string Digest(DigestionDetail detail)
         {
-            return shining.Value ? "Включен" : "Выключен";
+            return shining.Value ? "Turned on" : "Turned off";
         }
 
         public DigestionPriority Priority => DigestionPriority.High;

@@ -28,7 +28,7 @@ namespace Shooter.Game.Body
 
         public override string Digest(DigestionDetail detail)
         {
-            return string.IsNullOrEmpty(Name) ? null : "Имя: " + Name;
+            return string.IsNullOrEmpty(Name) ? null : "Name: " + Name;
         }
 
         public override string PromptName()
