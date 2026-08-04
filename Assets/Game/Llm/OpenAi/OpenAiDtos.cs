@@ -1,4 +1,6 @@
-﻿namespace Shooter.Game.Llm.OpenAi
+﻿using Newtonsoft.Json;
+
+namespace Shooter.Game.Llm.OpenAi
 {
     public class OpenAiRequest
     {
@@ -21,10 +23,20 @@
     public class OpenAiResponse
     {
         public OpenAiChoice[] Choices { get; set; }
+        public OpenAiUsage Usage { get; set; }
     }
 
     public class OpenAiChoice
     {
         public OpenAiMessage Message { get; set; }
+    }
+
+    public class OpenAiUsage
+    {
+        [JsonProperty("prompt_tokens")]
+        public int PromptTokens { get; set; }
+
+        [JsonProperty("completion_tokens")]
+        public int CompletionTokens { get; set; }
     }
 }
