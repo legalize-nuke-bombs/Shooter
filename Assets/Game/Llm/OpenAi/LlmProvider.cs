@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,9 +28,13 @@ namespace Shooter.Game.Llm.OpenAi
                 throw new InvalidOperationException($"Llm key is not set in {GameConfig.FileName}");
             }
 
+            string promptRaw = prompt.ToString();
+
+            string requestId = Guid.NewGuid().ToString();
+
             var spoken = new List<OpenAiMessage>
             {
-                new OpenAiMessage { Role = "system", Content = prompt.ToString() }
+                new OpenAiMessage { Role = "system", Content = promptRaw }
             };
 
             var body = new OpenAiRequest
@@ -39,9 +44,21 @@ namespace Shooter.Game.Llm.OpenAi
                 ResponseFormat = new OpenAiResponseFormat { Type = "json_object" }
             };
 
+            string folderPath = Path.Combine(UnityEngine.Application.temporaryCachePath, "LlmRequests");
+            Directory.CreateDirectory(folderPath);
+
+            string promptPath = Path.Combine(folderPath, $"{requestId}.md");
+            Log.Info("Request {}. Input: {}ch. Will be saved as {}", requestId, promptRaw.Length, promptPath);
+            await File.WriteAllTextAsync(promptPath, promptRaw, until);
+
+            string responsePath = Path.Combine(folderPath, $"{requestId}.json");
             string raw = await Ask(OpenAiHosts.For(config), config.Key, body, until);
+            await File.WriteAllTextAsync(responsePath, raw, until);
+            Log.Info("Response {}. Output: {}ch. Will be saved as {}", requestId, raw.Length, responsePath);
+
             return ParseRawAnswer(raw);
         }
+
 
         private static async Task<string> Ask(IOpenAiHost host, string key, OpenAiRequest body,
             CancellationToken until)
