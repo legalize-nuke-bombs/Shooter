@@ -1,4 +1,4 @@
-﻿namespace Shooter.Game.Llm
+﻿namespace Shooter.Game.Llm.OpenAi
 {
     public class OpenAiRequest
     {

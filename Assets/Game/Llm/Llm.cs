@@ -10,6 +10,7 @@ using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Game.Llm.Knowledge;
 using Shooter.Logging;
+using Shooter.Game.Llm.OpenAi;
 using Unity.Netcode;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.OpenAi
 {
     public interface IOpenAiHost
     {
