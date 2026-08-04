@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Shooter.Game.Llm;
 
 namespace Shooter.Game.Speech
 {
@@ -14,31 +11,15 @@ namespace Shooter.Game.Speech
             llm = GetComponent<Llm.Llm>();
         }
 
-        protected override Task<string> Answer(Conversation conversation)
+        protected override void RequestAnswer(ulong clientId, string message, Action<string> onAnswer)
         {
             if (llm == null)
             {
-                throw new InvalidOperationException($"Entity {name} has no llm to answer with");
+                onAnswer($"Entity {name} has no llm to answer with");
+                return;
             }
 
-            return llm.Answer(Messages(conversation));
-        }
-
-        private static IReadOnlyList<LlmMessage> Messages(Conversation conversation)
-        {
-            var messages = new List<LlmMessage>();
-
-            foreach (Message message in conversation.Messages)
-            {
-                messages.Add(new LlmMessage
-                {
-                    Role = message.Author == MessageAuthor.Player ? LlmRole.User : LlmRole.Model,
-                    Content = message.Content,
-                    Time = message.Time
-                });
-            }
-
-            return messages;
+            llm.Listen((long)clientId, message, onAnswer);
         }
     }
 }

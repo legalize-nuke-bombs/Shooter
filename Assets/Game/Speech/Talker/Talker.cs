@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Shooter.Game.Body;
 using Shooter.Game.Body.Sleeping;
 using Shooter.Logging;
@@ -18,27 +16,21 @@ namespace Shooter.Game.Speech
         public const float TalkReach = 8f;
         public const int SpeechLimit = 300;
 
-        private const float AnswerTimeout = 30f;
-
+        private readonly HashSet<ulong> thinking = new HashSet<ulong>();
         private readonly Dictionary<ulong, Conversation> conversations = new Dictionary<ulong, Conversation>();
-        private readonly Dictionary<ulong, float> awaited = new Dictionary<ulong, float>();
-        private readonly ConcurrentQueue<Reply> replies = new ConcurrentQueue<Reply>();
 
         public UsageType Usage => UsageType.Talk;
-
-        public bool Restrains => conversations.Values.Any(conversation => conversation.Open);
+        public bool Restrains => conversations.Values.Any(c => c.Open);
 
         public override void OnNetworkSpawn()
         {
             if (!IsServer) return;
-
             NetworkManager.NetworkTickSystem.Tick += Step;
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) return;
-
             NetworkManager.NetworkTickSystem.Tick -= Step;
         }
 
@@ -83,8 +75,7 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            Message last = conversation.Last();
-            if (last != null && last.Author == MessageAuthor.Player)
+            if (thinking.Contains(user.OwnerClientId))
             {
                 Log.Info("Entity {} spoke to {} while the answer is pending, ignored", user.name, name);
                 return;
@@ -101,26 +92,49 @@ namespace Shooter.Game.Speech
                 conversation.Close();
         }
 
-        protected abstract Task<string> Answer(Conversation conversation);
+        protected abstract void RequestAnswer(ulong clientId, string message, Action<string> onAnswer);
 
-        protected virtual string Fallback => "Not now.";
+        private void DeliverAnswer(ulong clientId, string content)
+        {
+            thinking.Remove(clientId);
+
+            if (!conversations.TryGetValue(clientId, out Conversation conversation) || !conversation.Open)
+            {
+                Log.Info("Entity {} answered client {} whose conversation is gone, dropped", name, clientId);
+                return;
+            }
+
+            Say(conversation, conversation.User, MessageAuthor.Talker, content);
+            Log.Info("Entity {} answered client {}", name, clientId);
+        }
 
         private void Step()
         {
-            Deliver();
-            Expire(NetworkManager.LocalTime.FixedDeltaTime);
             Watch();
 
             if (!Alive(NetworkObject)) return;
 
             foreach (KeyValuePair<ulong, Conversation> entry in conversations)
             {
-                if (!entry.Value.Open || awaited.ContainsKey(entry.Key)) continue;
+                if (!entry.Value.Open || thinking.Contains(entry.Key)) continue;
 
                 Message last = entry.Value.Last();
                 if (last == null || last.Author == MessageAuthor.Talker) continue;
 
-                Ask(entry.Key, entry.Value);
+                thinking.Add(entry.Key);
+
+                try
+                {
+                    RequestAnswer(entry.Key, last.Content, (answer) =>
+                    {
+                        DeliverAnswer(entry.Key, answer);
+                    });
+                }
+                catch (Exception e)
+                {
+                    Log.Error("Entity {} failed to request answer for client {}: {}", name, entry.Key, e.Message);
+                    DeliverAnswer(entry.Key, "Not now.");
+                }
             }
         }
 
@@ -151,63 +165,6 @@ namespace Shooter.Game.Speech
             user.GetComponent<Mouth>()?.Hear(message);
         }
 
-        private void Ask(ulong client, Conversation conversation)
-        {
-            awaited.Add(client, 0f);
-            Log.Info("Entity {} is preparing an answer for client {}", name, client);
-            _ = Prepare(client, conversation);
-        }
-
-        private async Task Prepare(ulong client, Conversation conversation)
-        {
-            try
-            {
-                string content = await Answer(conversation);
-                replies.Enqueue(new Reply { Client = client, Content = content });
-            }
-            catch (Exception e)
-            {
-                Log.Error("Entity {} failed to answer client {}: {}", name, client, e.Message);
-                replies.Enqueue(new Reply { Client = client, Content = Fallback });
-            }
-        }
-
-        private void Deliver()
-        {
-            while (replies.TryDequeue(out Reply reply))
-            {
-                awaited.Remove(reply.Client);
-
-                if (!conversations.TryGetValue(reply.Client, out Conversation conversation))
-                {
-                    Log.Info("Entity {} answered client {} whose conversation is gone, dropped", name, reply.Client);
-                    continue;
-                }
-
-                Say(conversation, conversation.User, MessageAuthor.Talker, reply.Content);
-                Log.Info("Entity {} answered client {}", name, reply.Client);
-            }
-        }
-
-        private void Expire(float dt)
-        {
-            if (awaited.Count == 0) return;
-
-            var expired = new List<ulong>();
-            foreach (ulong client in awaited.Keys.ToList())
-            {
-                float waited = awaited[client] + dt;
-                awaited[client] = waited;
-                if (waited >= AnswerTimeout) expired.Add(client);
-            }
-
-            foreach (ulong client in expired)
-            {
-                awaited.Remove(client);
-                Log.Warn("Entity {} gave up waiting for an answer to client {} after {}s", name, client, AnswerTimeout);
-            }
-        }
-
         private void Watch()
         {
             foreach (Conversation conversation in conversations.Values)
@@ -218,6 +175,9 @@ namespace Shooter.Game.Speech
                 if (user != null && Reachable(user) && Alive(user) && Awake(user) && Alive(NetworkObject)) continue;
 
                 Log.Info("Entity {} ends the talk with {}: out of reach, dead or asleep", name, user == null ? "a gone player" : user.name);
+
+                if (user != null) thinking.Remove(user.OwnerClientId);
+
                 conversation.Close();
                 user?.GetComponent<Mouth>()?.Close();
             }
@@ -238,12 +198,6 @@ namespace Shooter.Game.Speech
         {
             var sleeper = entity.GetComponent<Sleeper>();
             return sleeper == null || !sleeper.Sleeping;
-        }
-
-        private struct Reply
-        {
-            public ulong Client;
-            public string Content;
         }
     }
 }
