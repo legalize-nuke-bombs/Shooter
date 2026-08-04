@@ -21,6 +21,12 @@ namespace Shooter.Game.Llm.OpenAi
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
+        private static int sessionRequests;
+        private static long sessionCharsIn;
+        private static long sessionCharsOut;
+        private static long sessionTokensIn;
+        private static long sessionTokensOut;
+
         public static async Task<LlmAnswer> Request(LlmConfig config, Prompt prompt, CancellationToken until)
         {
             if (string.IsNullOrEmpty(config.Key))
@@ -56,7 +62,27 @@ namespace Shooter.Game.Llm.OpenAi
             await File.WriteAllTextAsync(responsePath, raw, until);
             Log.Info("Response {}. Output: {}ch. Will be saved as {}", requestId, raw.Length, responsePath);
 
-            return ParseRawAnswer(raw);
+            OpenAiResponse response = Deserialize(raw);
+            string content = response?.Choices?.FirstOrDefault()?.Message?.Content ?? "";
+            Count(promptRaw.Length, content.Length, response?.Usage);
+
+            return ParseAnswer(content, raw);
+        }
+
+        private static void Count(int charsIn, int charsOut, OpenAiUsage usage)
+        {
+            sessionRequests++;
+            sessionCharsIn += charsIn;
+            sessionCharsOut += charsOut;
+
+            if (usage != null)
+            {
+                sessionTokensIn += usage.PromptTokens;
+                sessionTokensOut += usage.CompletionTokens;
+            }
+
+            Log.Info("Session totals: {} requests, input {} chars / {} tokens, output {} chars / {} tokens",
+                sessionRequests, sessionCharsIn, sessionTokensIn, sessionCharsOut, sessionTokensOut);
         }
 
 
@@ -84,12 +110,22 @@ namespace Shooter.Game.Llm.OpenAi
             }
         }
 
-        private static LlmAnswer ParseRawAnswer(string raw)
+        private static OpenAiResponse Deserialize(string raw)
         {
             try
             {
-                OpenAiResponse response = JsonConvert.DeserializeObject<OpenAiResponse>(raw, Settings);
-                string content = response?.Choices?.FirstOrDefault()?.Message?.Content;
+                return JsonConvert.DeserializeObject<OpenAiResponse>(raw, Settings);
+            }
+            catch (Exception e)
+            {
+                throw new LlmAnswerException($"Failed to parse the provider response {raw}: {e.Message}");
+            }
+        }
+
+        private static LlmAnswer ParseAnswer(string content, string raw)
+        {
+            try
+            {
                 content = CleanJsonString(content);
                 return JsonConvert.DeserializeObject<LlmAnswer>(content, Settings);
             }
