@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Body.Sleeping
 {
+    [RequireComponent(typeof(Speaker))]
     public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint
     {
         private static readonly Journal Log = Logs.Here();
