@@ -108,8 +108,14 @@ namespace Shooter.Game.Body
             {
                 if (skinned.sharedMesh == null) continue;
 
+                Transform[] bones = skinned.bones;
+                Matrix4x4[] binds = skinned.sharedMesh.bindposes;
+                Matrix4x4 pose = bones.Length > 0 && binds.Length > 0 && bones[0] != null
+                    ? bones[0].localToWorldMatrix * binds[0]
+                    : skinned.transform.localToWorldMatrix;
+
                 meshes.Add(skinned.sharedMesh);
-                places.Add(rootScale);
+                places.Add(rootScale * root.worldToLocalMatrix * pose);
             }
 
             foreach (MeshFilter filter in spec.Model.GetComponentsInChildren<MeshFilter>())
