@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23378903165160098}
   - component: {fileID: 64331697256136518}
   - component: {fileID: 95814574519789956}
+  - component: {fileID: -6286646093304053660}
   m_Layer: 0
   m_Name: bookcase_1
   m_TagString: Untagged
@@ -136,3 +137,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-6286646093304053660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303245409181938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
+  content: "\u0414\u0435\u0448\u0435\u0432\u044B\u0439 \u043A\u043D\u0438\u0436\u043D\u044B\u0439
+    \u0448\u043A\u0430\u0444"
