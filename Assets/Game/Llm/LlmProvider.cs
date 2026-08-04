@@ -21,8 +21,7 @@ namespace Shooter.Game.Llm
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public static async Task<LlmAnswer> Request(LlmConfig config, Prompt basePrompt,
-            IReadOnlyList<LlmMessage> messages, CancellationToken until)
+        public static async Task<LlmAnswer> Request(LlmConfig config, Prompt prompt, CancellationToken until)
         {
             if (string.IsNullOrEmpty(config.Key))
             {
@@ -31,9 +30,8 @@ namespace Shooter.Game.Llm
 
             var spoken = new List<OpenAiMessage>
             {
-                new OpenAiMessage { Role = "system", Content = basePrompt.ToString() }
+                new OpenAiMessage { Role = "system", Content = prompt.ToString() }
             };
-            spoken.AddRange(messages.Select(Said));
 
             var body = new OpenAiRequest
             {

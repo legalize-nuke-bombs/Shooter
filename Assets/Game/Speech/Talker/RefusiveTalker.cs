@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System;
 
 namespace Shooter.Game.Speech
 {
@@ -6,9 +6,9 @@ namespace Shooter.Game.Speech
     {
         private const string Refusal = "Not now.";
 
-        protected override Task<string> Answer(Conversation conversation)
+        protected override void RequestAnswer(ulong clientId, string message, Action<string> onAnswer)
         {
-            return Task.FromResult(Refusal);
+            onAnswer(Refusal);
         }
     }
 }

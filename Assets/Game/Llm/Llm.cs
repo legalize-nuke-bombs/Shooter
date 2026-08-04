@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -170,12 +171,41 @@ namespace Shooter.Game.Llm
 
 
 
-        private static readonly Prompt AnswerPrompt =
-            new Prompt()
+        private Dictionary<long, LlmConversation> conversations = new Dictionary<long, LlmConversation>();
+        private Prompt AnswerPrompt(long playerId)
+        {
+            return new Prompt()
                 .Section(
                     "ТЕКУЩАЯ СИТУАЦИЯ",
-                    "С тобой заговорил странник. Ответь ему в поле `reply`.\n1. Отвечай на языке собеседника.\n2. Учитывай игровое время между репликами: прошедшие часы и дни меняют разговор.\n3. Учитывай СОСТОЯНИЕ МИРА.\n4. Если история переписки пуста — перед тобой незнакомец из тумана."
+                    "С тобой заговорил странник ID" + playerId + ". Ответь ему в поле `reply`.\n1. Отвечай на языке собеседника.\n2. Учитывай игровое время между репликами: прошедшие часы и дни меняют разговор.\n3. Учитывай СОСТОЯНИЕ МИРА.\n4. Если история переписки пуста — перед тобой незнакомец из тумана.\nИСТОРИЯ РАЗГОВОРА:\n" +
+                    JsonConvert.SerializeObject(conversations.GetValueOrDefault(playerId, new LlmConversation()), JsonSettings)
                 );
+        }
+
+        public void Listen(long playerId, string message, Action<string> onAnswer)
+        {
+            conversations.TryAdd(playerId, new LlmConversation());
+            conversations[playerId].RegisterUserMessage(new LlmMessage()
+            {
+                Content = message,
+                Role = LlmRole.User,
+                Time = Time()
+            },
+                onAnswer
+                );
+        }
+        private long? PendingConversationId()
+        {
+            foreach (KeyValuePair<long, LlmConversation> kvp in conversations)
+            {
+                if (kvp.Value.Pending())
+                {
+                    return kvp.Key;
+                }
+            }
+            return null;
+        }
+
 
 
 
@@ -189,15 +219,41 @@ namespace Shooter.Game.Llm
 
 
 
-        private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
-        public async Task<string> Answer(IReadOnlyList<LlmMessage> messages)
-        {
-            if (gate.CurrentCount == 0)
-            {
-                Log.Info("Entity {} has an llm request in flight, waiting for a free slot", name);
-            }
 
-            await gate.WaitAsync(life.Token);
+
+        private Prompt Assemble(string takenInterNpcInteractions, string takenSystemNotifications, long? pendingConversationId)
+        {
+            Prompt result = new Prompt()
+                .Section(CorePrompt)
+                .Section(ResponseFormattingRulesPrompt)
+                .Section(CharacterPrompt)
+                .Section(StaticKnowledgePrompt)
+                .Section(MemoryPrompt)
+                .Section(InterNpcInteractionPrompt(takenInterNpcInteractions))
+                .Section(SystemNotificationsPrompt(takenSystemNotifications))
+                .Section(WorldStatePrompt);
+            if (pendingConversationId != null)
+            {
+                result = result
+                    .Section(AnswerPrompt(pendingConversationId.Value));
+            }
+            return result;
+        }
+
+
+
+
+
+        private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
+        public async Task Tick()
+        {
+            bool entered = await gate.WaitAsync(0, life.Token);
+
+            if (!entered)
+            {
+                Log.Info("Entity {} already has an llm tick in flight. Skipping this tick.", name);
+                return;
+            }
 
             string takenInterNpcInteractions = interNpcInteractionInbox.Take();
             string takenSystemNotifications = systemNotificationsInbox.Take();
@@ -206,25 +262,23 @@ namespace Shooter.Game.Llm
             {
                 LlmConfig config = Config.Read().Server.Llm;
                 Log.Info("Entity {} is asking {} for an answer", name, config.Model);
+                long? pendingConversationId = PendingConversationId();
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
-                    Assemble(takenInterNpcInteractions, takenSystemNotifications),
-                    messages,
+                    Assemble(takenInterNpcInteractions, takenSystemNotifications, pendingConversationId),
                     life.Token
                 );
 
                 life.Token.ThrowIfCancellationRequested();
+                SaveReply(pendingConversationId, answer.Reply);
                 Remember(answer.Memory);
                 InterNpcInteraction(answer.InterNpcInteractions);
-
-                return answer.Reply;
             }
             catch
             {
                 interNpcInteractionInbox.Return(takenInterNpcInteractions);
                 systemNotificationsInbox.Return(takenSystemNotifications);
-                Log.Info("Entity {} kept its inboxes: the answer did not come through", name);
-                throw;
+                Log.Warn("Entity {} failed to response: inboxes retuned", name);
             }
             finally
             {
@@ -235,22 +289,22 @@ namespace Shooter.Game.Llm
 
 
 
-        private Prompt Assemble(string takenInterNpcInteractions, string takenSystemNotifications)
+        private void SaveReply(long? pendingConversationId, string reply)
         {
-            return new Prompt()
-                .Section(CorePrompt)
-                .Section(ResponseFormattingRulesPrompt)
-                .Section(CharacterPrompt)
-                .Section(StaticKnowledgePrompt)
-                .Section(MemoryPrompt)
-                .Section(InterNpcInteractionPrompt(takenInterNpcInteractions))
-                .Section(SystemNotificationsPrompt(takenSystemNotifications))
-                .Section(WorldStatePrompt)
-                .Section(AnswerPrompt);
+            if (pendingConversationId == null)
+            {
+                Log.Warn("Entity {} sent reply that nobody asked", name);
+                return;
+            }
+            conversations[pendingConversationId.Value].RegisterModelMessage(
+                new LlmMessage()
+                {
+                    Content = reply,
+                    Role = LlmRole.Model,
+                    Time = Time()
+                }
+            );
         }
-
-
-
 
 
 
