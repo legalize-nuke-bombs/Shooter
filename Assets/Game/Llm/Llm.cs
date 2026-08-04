@@ -159,7 +159,7 @@ namespace Shooter.Game.Llm
         {
             return "Игровое время: " + Time() + "\n" +
                    "Твоё состояние:\n" + digester.Of(this, DigestionDetail.Full) + "\n" +
-                   "Объекты рядом с тобой:\n" + worldDigester.DigestNearObjects();
+                   "Объекты рядом с тобой:\n" + worldDigester.Digest();
         }
 
 
