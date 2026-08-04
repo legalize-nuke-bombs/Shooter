@@ -1,43 +1,59 @@
-﻿using Shooter.Logging;
+﻿using Shooter.Game.Sweeping;
+using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class StructureHealth : NetworkBehaviour
+    [RequireComponent(typeof(AutoSweepable))]
+    public class StructureHealth : NetworkBehaviour, ISweepable
     {
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private bool broken = false;
-
         public bool Broken => broken;
+
+        // TODO Поставить НЕТ по умолчанию
+        [SerializeField] private bool useDespawn = true;
+        [SerializeField] private float despawnTime = 10f;
+
+        private float timeSinceBroken;
 
         public void Break()
         {
             Log.Info("Entity {} became broken", name);
 
             broken = true;
+            timeSinceBroken = 0f;
 
             foreach (IBreakable breakable in GetComponents<IBreakable>())
                 breakable.Broken();
         }
 
-        // TODO Заглушка, удалить
-        private float timer = 10f;
+        public bool CanBeSwept()
+        {
+            return broken && useDespawn && (timeSinceBroken >= despawnTime);
+        }
+
+        // TODO Автоломание - заглушка, удалить
+        private float breakTimer = 10f;
         public void Update()
         {
-            if (broken)
+            if (broken && useDespawn)
             {
-                return;
+                timeSinceBroken += Time.deltaTime;
             }
 
-            if (timer <= 0f)
+            if (!broken)
             {
-                Break();
-            }
-            else
-            {
-                timer -= Time.deltaTime;
+                if (breakTimer <= 0f)
+                {
+                    Break();
+                }
+                else
+                {
+                    breakTimer -= Time.deltaTime;
+                }
             }
         }
     }
