@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23276144528225152}
   - component: {fileID: 64260946320374698}
   - component: {fileID: 95413991883950376}
+  - component: {fileID: 1648052844109720948}
   m_Layer: 0
   m_Name: nightstand_2
   m_TagString: Untagged
@@ -136,3 +137,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1648052844109720948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011439637972986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
+  content: "\u0414\u0435\u0448\u0435\u0432\u0430\u044F \u0442\u0443\u043C\u0431\u043E\u0447\u043A\u0430"

@@ -2443,10 +2443,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1172631373987382, guid: cd0dec594d983fb4e818009695f46b1c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 975754444}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd0dec594d983fb4e818009695f46b1c, type: 3}
 --- !u!1 &470657651
 GameObject:
@@ -5382,24 +5379,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e730e362773695e408e48f59e6dff87a, type: 3}
---- !u!1 &975754438 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1172631373987382, guid: cd0dec594d983fb4e818009695f46b1c, type: 3}
-  m_PrefabInstance: {fileID: 469543895}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &975754444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 975754438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "\u0421\u0442\u0443\u043B \u0440\u044F\u0434\u043E\u043C \u0441 \u041A\u0443\u0431\u043E\u043C"
 --- !u!1001 &979805477
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7236,24 +7215,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c5bae8b85a897242bf43786c980d021, type: 3}
---- !u!1 &1352151544 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1396718442724188, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
-  m_PrefabInstance: {fileID: 1386162336}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1352151550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1352151544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "\u0421\u0442\u043E\u043B \u0440\u044F\u0434\u043E\u043C \u0441 \u041A\u0443\u0431\u043E\u043C"
 --- !u!1001 &1357477975
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7516,10 +7477,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1396718442724188, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1352151550}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
 --- !u!1001 &1408546247
 PrefabInstance:
@@ -9578,7 +9536,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
   content: "\u0426\u0435\u043D\u0442\u0440 \u0437\u0435\u043B\u0435\u043D\u043E\u0433\u043E
-    \u0445\u0443\u0442\u043E\u0440\u0430"
+    \u0445\u0443\u0442\u043E\u0440\u0430, \u0432\u043E\u043A\u0440\u0443\u0433 \u043B\u0435\u0441,
+    \u043B\u0435\u0442\u0430\u044E\u0442 \u043F\u0442\u0438\u0446\u044B"
 --- !u!1001 &1715320957
 PrefabInstance:
   m_ObjectHideFlags: 0

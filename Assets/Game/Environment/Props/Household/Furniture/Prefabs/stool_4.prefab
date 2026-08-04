@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23723498837383362}
   - component: {fileID: 64553252534490014}
   - component: {fileID: 95463806241704834}
+  - component: {fileID: 3154982196082155060}
   m_Layer: 0
   m_Name: stool_4
   m_TagString: Untagged
@@ -136,3 +137,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3154982196082155060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415823851124332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
+  content: "\u0414\u0435\u0448\u0435\u0432\u0430\u044F \u0442\u0430\u0431\u0443\u0440\u0435\u0442\u043A\u0430"
