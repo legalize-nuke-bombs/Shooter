@@ -11,14 +11,13 @@ using Shooter.Game.Body;
 using Shooter.Game.Llm.Knowledge;
 using Shooter.Logging;
 using Shooter.Game.Llm.OpenAi;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Digester))]
     [RequireComponent(typeof(WorldDigester))]
-    public class Llm : NetworkBehaviour, IMortal
+    public class Llm : MonoBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
         private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
