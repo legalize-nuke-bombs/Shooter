@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -14,6 +15,8 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [RequireComponent(typeof(Digester))]
+    [RequireComponent(typeof(WorldDigester))]
     public class Llm : NetworkBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
@@ -24,6 +27,17 @@ namespace Shooter.Game.Llm
         };
 
 
+
+
+
+        private Digester digester;
+        private WorldDigester worldDigester;
+
+        public void Awake()
+        {
+            digester = GetComponent<Digester>();
+            worldDigester = GetComponent<WorldDigester>();
+        }
 
 
         private static readonly Prompt CorePrompt =
@@ -144,38 +158,10 @@ namespace Shooter.Game.Llm
         private string WorldState()
         {
             return "Игровое время: " + Time() + "\n" +
-                   "Твоё состояние:\n" + Digestion.Of(this, DigestionDetail.Full) + "\n" +
-                   "Объекты рядом с тобой:\n" + DigestNearObjects();
+                   "Твоё состояние:\n" + digester.Of(this, DigestionDetail.Full) + "\n" +
+                   "Объекты рядом с тобой:\n" + worldDigester.DigestNearObjects();
         }
-        private string DigestNearObjects()
-        {
-            var digest = new StringBuilder();
 
-            foreach (Component nearObject in FindNearObjects())
-            {
-                string seen = Digestion.Seen(nearObject, DigestionDetail.Brief, transform);
-                if (seen != null) digest.Append(seen).Append('\n');
-            }
-
-            return digest.ToString();
-        }
-        [SerializeField] private float nearObjectsScanRadius = 250f;
-        private HashSet<Component> FindNearObjects()
-        {
-            var found = new HashSet<Component>();
-
-            Collider[] hits = Physics.OverlapSphere(transform.position, nearObjectsScanRadius);
-
-            foreach (Collider hit in hits)
-            {
-                if (!(hit.GetComponentInParent<IDigestible>() is Component owner)) continue;
-                if (owner.gameObject == gameObject) continue;
-
-                found.Add(owner);
-            }
-
-            return found;
-        }
 
 
 
