@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -119,11 +118,16 @@ namespace Shooter.Game.Llm
 
 
         private readonly Inbox interNpcInteractionInbox = new Inbox();
+
+        private readonly Queue<string> interNpcInteractionSentHistory = new Queue<string>();
+        [SerializeField] private int interNpcInteractionSentHistoryMaxLen = 30;
         private Prompt InterNpcInteractionPrompt(string takenInterNpcInteractions) =>
             new Prompt()
                 .Section("ОБЩЕНИЕ С ДРУГИМИ ЖИТЕЛЯМИ",
-                    "Ты можешь отправлять сообщения другим жителям через поле `interNpcInteractions`.\nПРАВИЛА ОБЩЕНИЯ:\n1. Тебе следует всегда сообщать ближайшим жителям новую информацию о том что происходит в мире в подробностях.\n2. Количество сообщений, которое можно отправить за раз, и количество получателей для каждого из сообщений НЕ ОГРАНИЧЕНО!\n3. Запоминай всегда свои последние отправки, чтобы не слать одну и ту же информацию несколько раз.\n4. Имена получателей-жителей указывай РОВНО так, как они представлены.\n5. Сообщения во Входящих показываются один раз. Если не запишешь их в свою Память — забудешь.\n6. Тебе следует использовать контекст, сообщенный тебе другими NPC, в общении с игроком.\nТВОИ ВХОДЯЩИЕ (обработай их и реши, что записать в Память):\n" +
-                    takenInterNpcInteractions
+                    "Ты можешь отправлять сообщения другим жителям через поле `interNpcInteractions`.\nПРАВИЛА ОБЩЕНИЯ:\n1. Количество сообщений, которое можно отправить за раз, и количество получателей для каждого из сообщений НЕ ОГРАНИЧЕНО!.\n2. Тебе следует делиться с ближайшим жителями и твоими друзьями информацию о всем новом что происходит в мире в подробностях.\n3. Имена получателей-жителей указывай РОВНО так, как они представлены.\n4. Сообщения во Входящих показываются один раз. Если не запишешь их в свою Память — забудешь.\n5. Тебе следует использовать контекст, сообщенный тебе другими NPC, в общении с игроком.\nТВОИ ВХОДЯЩИЕ (обработай их и реши, что записать в Память):\n" +
+                    takenInterNpcInteractions +
+                    "Последние отправленные тобой сообщения:\n" +
+                    JsonConvert.SerializeObject(interNpcInteractionSentHistory, JsonSettings)
                 );
 
 
@@ -301,6 +305,7 @@ namespace Shooter.Game.Llm
                     }
 
                     received.Add(targetName);
+                    interNpcInteractionSentHistory.Enqueue("[" + Time() + "] Отправлено получателю " + targetName + ": " + cmd.Content);
 
                     Log.Info("Entity {} said to {}: {}", name, targetName, cmd.Content);
 
@@ -315,6 +320,11 @@ namespace Shooter.Game.Llm
                         Log.Warn("Failed to said from {} to {}", name, targetName);
                         systemNotificationsInbox.Put("[" + Time() + "] " + $"Не удалось доставить твое сообщение до {targetName}: {reason}. Недоставленное сообщение: {cmd.Content}");
                     }
+                }
+
+                while (interNpcInteractionSentHistory.Count > interNpcInteractionSentHistoryMaxLen)
+                {
+                    interNpcInteractionSentHistory.Dequeue();
                 }
             }
         }
