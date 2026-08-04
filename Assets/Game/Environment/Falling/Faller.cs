@@ -20,7 +20,7 @@ namespace Shooter.Game.Falling
 
         private Rigidbody rigidbody;
         private NetworkRigidbody networkRigidbody;
-        [SerializeField] private float forceK = 0.5f;
+        [SerializeField] private float forceK = 0.1f;
 
         public void Awake()
         {

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: treefall
   clips:
   - {fileID: 8300000, guid: 18b3a914a878dcc43bb94d7a1c77a13d, type: 3}
-  volume: 0.6
+  volume: 0.85
   rolloff: 0
-  minDistance: 12.5
-  maxDistance: 300
+  minDistance: 20
+  maxDistance: 500
