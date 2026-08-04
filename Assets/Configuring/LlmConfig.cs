@@ -5,6 +5,6 @@ namespace Shooter.Configuring
         public string Key { get; set; } = "";
         public string Provider { get; set; } = "Polza";
 
-        public string Model { get; set; } = "anthropic/claude-sonnet-4.6";
+        public string Model { get; set; } = "anthropic/claude-haiku-4.5";
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -41,45 +40,18 @@ namespace Shooter.Game.Llm.OpenAi
             };
 
             string raw = await Ask(OpenAiHosts.For(config), config.Key, body, until);
-
-            var response = JsonConvert.DeserializeObject<OpenAiResponse>(raw, Settings);
-            string content = response?.Choices?.FirstOrDefault()?.Message?.Content;
-
-            if (string.IsNullOrEmpty(content))
-            {
-                throw new LlmAnswerException($"Response carries no message content. Raw: {raw}");
-            }
-
-            content = CleanJsonString(content);
-
-            LlmAnswer answer;
-            try
-            {
-                answer = JsonConvert.DeserializeObject<LlmAnswer>(content, Settings);
-            }
-            catch (JsonException e)
-            {
-                throw new LlmAnswerException($"Answer is not json: {e.Message}. Content: {content}");
-            }
-
-            if (string.IsNullOrEmpty(answer?.Reply))
-            {
-                throw new LlmAnswerException($"Answer json has no reply property. Content: {content}");
-            }
-
-            return answer;
+            return ParseRawAnswer(raw);
         }
 
         private static async Task<string> Ask(IOpenAiHost host, string key, OpenAiRequest body,
             CancellationToken until)
         {
-            Log.Info("Sending request. Model: {}. Payload: {}",
-                body.Model, JsonConvert.SerializeObject(body, Settings));
+            Log.Info("Sending request. Model: {}", body.Model);
 
             try
             {
                 string raw = await host.Request(key, body, until);
-                Log.Info("Response received successfully. Raw content: {}", raw);
+                Log.Info("Response received successfully");
 
                 return raw;
             }
@@ -95,17 +67,19 @@ namespace Shooter.Game.Llm.OpenAi
             }
         }
 
-        private static OpenAiMessage Said(LlmMessage message)
+        private static LlmAnswer ParseRawAnswer(string raw)
         {
-            string text = string.IsNullOrEmpty(message.Time)
-                ? message.Content
-                : $"[{message.Time}] {message.Content}";
-
-            return new OpenAiMessage
+            try
             {
-                Role = message.Role == LlmRole.User ? "user" : "assistant",
-                Content = text
-            };
+                OpenAiResponse response = JsonConvert.DeserializeObject<OpenAiResponse>(raw, Settings);
+                string content = response?.Choices?.FirstOrDefault()?.Message?.Content;
+                content = CleanJsonString(content);
+                return JsonConvert.DeserializeObject<LlmAnswer>(content, Settings);
+            }
+            catch (Exception e)
+            {
+                throw new LlmAnswerException($"Failed to parse llm response {raw}: {e.Message}");
+            }
         }
 
         private static string CleanJsonString(string text)

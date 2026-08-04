@@ -1,4 +1,7 @@
-﻿using Shooter.Game.Llm.Ticker.Children;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Shooter.Game.Llm.Ticker.Children;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -7,7 +10,7 @@ namespace Shooter.Game.Llm.Ticker
     [RequireComponent(typeof(Llm))]
     public class LlmMainTicker : MonoBehaviour
     {
-        private Journal log = Logs.Here();
+        private static readonly Journal Log = Logs.Here();
 
         private Llm llm;
         private LlmChildTicker[] tickers;
@@ -18,25 +21,28 @@ namespace Shooter.Game.Llm.Ticker
             tickers = GetComponents<LlmChildTicker>();
             if (tickers.Length == 0)
             {
-                log.Warn("Entity {} does not have any ticker!", name);
+                Log.Warn("Entity {} does not have any ticker!", name);
             }
         }
 
-        private bool TickRequired()
+        private Type TickRequired()
         {
             LlmStatus llmStatus = llm.Status();
             foreach (LlmChildTicker ticker in tickers)
             {
                 if (ticker.TickRequired(llmStatus))
                 {
-                    return true;
+                    return ticker.GetType();
                 }
             }
-            return false;
+            return null;
         }
 
-        private void RegisterTick()
+        private void RegisterTick(Type type)
         {
+            ticksByChildren.TryAdd(type, 0);
+            ticksByChildren[type]++;
+
             foreach (LlmChildTicker ticker in tickers)
             {
                 ticker.RegisterTick();
@@ -45,11 +51,55 @@ namespace Shooter.Game.Llm.Ticker
 
         public void Update()
         {
-            if (TickRequired())
+            Type type = TickRequired();
+            if (type != null)
             {
-                RegisterTick();
-                _ = llm.Tick();
+                Tick(type);
             }
+            HandleLogging();
+        }
+
+        private async void Tick(Type type)
+        {
+            try
+            {
+                bool success = await llm.Tick();
+
+                if (success)
+                {
+                    RegisterTick(type);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Entity {} failed to execute LLM Tick: {}", name, ex.Message);
+            }
+        }
+
+        private readonly Dictionary<Type, long> ticksByChildren = new Dictionary<Type, long>();
+        [SerializeField] private float loggingInterval = 30f;
+        private float loggingTimer = 0;
+        private void HandleLogging()
+        {
+            loggingTimer -= Time.deltaTime;
+            if (loggingTimer <= 0f)
+            {
+                LogStatistics();
+                loggingTimer = loggingInterval;
+            }
+        }
+
+        private void LogStatistics()
+        {
+            var sb = new StringBuilder();
+            sb.Append($"{name} stats: ");
+
+            foreach (var kvp in ticksByChildren)
+            {
+                sb.Append($"{kvp.Key.Name}: {kvp.Value} ticks, ");
+            }
+
+            Log.Info(sb.ToString());
         }
     }
 }
