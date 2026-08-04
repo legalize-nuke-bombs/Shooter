@@ -10,14 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8397500821482943483, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: content
-      value: "\u0412\u0435\u0440\u0442\u0435\u0440 \u2014 \u0442\u043E\u0449\u0438\u0439
-        \u0434\u0451\u0440\u0433\u0430\u043D\u044B\u0439 \u043F\u0430\u0440\u0435\u043D\u044C.
-        \u041F\u043E\u0441\u0442\u043E\u044F\u043D\u043D\u043E \u043E\u0437\u0438\u0440\u0430\u0435\u0442\u0441\u044F
-        \u0438 \u043F\u0440\u0438\u0441\u043B\u0443\u0448\u0438\u0432\u0430\u0435\u0442\u0441\u044F,
-        \u0432\u0437\u0434\u0440\u0430\u0433\u0438\u0432\u0430\u0435\u0442 \u043E\u0442
-        \u0440\u0435\u0437\u043A\u0438\u0445 \u0437\u0432\u0443\u043A\u043E\u0432,
-        \u0434\u0435\u0440\u0436\u0438\u0442\u0441\u044F \u043F\u043E\u0434\u0430\u043B\u044C\u0448\u0435
-        \u043E\u0442 \u0437\u0430\u043A\u0440\u044B\u0442\u044B\u0445 \u0434\u0432\u0435\u0440\u0435\u0439."
+      value: "Verter - a skinny jumpy guy. Constantly looks around and listens, flinches at sharp sounds, keeps away from closed doors."
       objectReference: {fileID: 0}
     - target: {fileID: 1903426252344384340, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: m_LocalPosition.x

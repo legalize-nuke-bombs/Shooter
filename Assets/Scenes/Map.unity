@@ -10083,9 +10083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "\u0426\u0435\u043D\u0442\u0440 \u0437\u0435\u043B\u0435\u043D\u043E\u0433\u043E
-    \u0445\u0443\u0442\u043E\u0440\u0430, \u0432\u043E\u043A\u0440\u0443\u0433 \u043B\u0435\u0441,
-    \u043B\u0435\u0442\u0430\u044E\u0442 \u043F\u0442\u0438\u0446\u044B"
+  content: The center of the green hamlet; forest all around, birds flying
 --- !u!1001 &1715320957
 PrefabInstance:
   m_ObjectHideFlags: 0
