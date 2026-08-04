@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Body
@@ -9,6 +10,8 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(Digester))]
     public class WorldDigester : MonoBehaviour
     {
+        private static Journal log = Logs.Here();
+
         [SerializeField] private float scanRadius = 250f;
 
         private Digester digester;
@@ -18,7 +21,7 @@ namespace Shooter.Game.Body
             digester = GetComponent<Digester>();
         }
 
-        public string DigestNearObjects()
+        public string Digest()
         {
             var digest = new StringBuilder();
 
@@ -28,7 +31,9 @@ namespace Shooter.Game.Body
                 if (seen != null) digest.Append(seen).Append('\n');
             }
 
-            return digest.ToString();
+            string result = digest.ToString();
+            log.Info("Digestion finished, length: {}", result.Length);
+            return result;
         }
 
         private List<Component> FindNearObjects()
