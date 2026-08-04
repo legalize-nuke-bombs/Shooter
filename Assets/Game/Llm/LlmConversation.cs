@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shooter.Game.Llm
 {
@@ -12,6 +13,8 @@ namespace Shooter.Game.Llm
         {
             return messages.Count > 0 && messages[^1].Role == LlmRole.User;
         }
+
+        public List<LlmMessage> Messages => messages.ToList();
 
         public void RegisterUserMessage(LlmMessage message, Action<string> onAnswerEvent)
         {

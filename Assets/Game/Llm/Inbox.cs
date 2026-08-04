@@ -4,6 +4,11 @@ namespace Shooter.Game.Llm
     {
         private string content = "";
 
+        public bool Empty()
+        {
+            return content == "";
+        }
+
         public void Put(string entry)
         {
             content += entry + "\n";

@@ -171,28 +171,29 @@ namespace Shooter.Game.Llm
 
 
 
-        private Dictionary<long, LlmConversation> conversations = new Dictionary<long, LlmConversation>();
+        private readonly Dictionary<long, LlmConversation> conversations = new Dictionary<long, LlmConversation>();
         private Prompt AnswerPrompt(long playerId)
         {
             return new Prompt()
                 .Section(
                     "ТЕКУЩАЯ СИТУАЦИЯ",
-                    "С тобой заговорил странник ID" + playerId + ". Ответь ему в поле `reply`.\n1. Отвечай на языке собеседника.\n2. Учитывай игровое время между репликами: прошедшие часы и дни меняют разговор.\n3. Учитывай СОСТОЯНИЕ МИРА.\n4. Если история переписки пуста — перед тобой незнакомец из тумана.\nИСТОРИЯ РАЗГОВОРА:\n" +
-                    JsonConvert.SerializeObject(conversations.GetValueOrDefault(playerId, new LlmConversation()), JsonSettings)
+                    "С тобой заговорил странник c ID " + playerId + ". Ответь ему в поле `reply`.\n1. Отвечай на языке собеседника.\n2. Учитывай игровое время между репликами: прошедшие часы и дни меняют разговор.\n3. Учитывай СОСТОЯНИЕ МИРА.\n4. Если история переписки пуста — перед тобой незнакомец из тумана.\nИСТОРИЯ РАЗГОВОРА:\n" +
+                    JsonConvert.SerializeObject(conversations.GetValueOrDefault(playerId, new LlmConversation()).Messages, JsonSettings)
                 );
         }
 
         public void Listen(long playerId, string message, Action<string> onAnswer)
         {
             conversations.TryAdd(playerId, new LlmConversation());
-            conversations[playerId].RegisterUserMessage(new LlmMessage()
+            conversations[playerId].RegisterUserMessage(
+                new LlmMessage()
             {
                 Content = message,
                 Role = LlmRole.User,
                 Time = Time()
             },
                 onAnswer
-                );
+            );
         }
         private long? PendingConversationId()
         {
@@ -245,13 +246,21 @@ namespace Shooter.Game.Llm
 
 
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
+        public LlmStatus Status()
+        {
+            return new LlmStatus()
+            {
+                PendingConversations = (PendingConversationId() != null),
+                PendingInterNpcInteractionsInbox = !interNpcInteractionInbox.Empty(),
+                PendingSystemNotificationsInbox = !systemNotificationsInbox.Empty()
+            };
+        }
         public async Task Tick()
         {
             bool entered = await gate.WaitAsync(0, life.Token);
 
             if (!entered)
             {
-                Log.Info("Entity {} already has an llm tick in flight. Skipping this tick.", name);
                 return;
             }
 
@@ -261,8 +270,9 @@ namespace Shooter.Game.Llm
             try
             {
                 LlmConfig config = Config.Read().Server.Llm;
-                Log.Info("Entity {} is asking {} for an answer", name, config.Model);
                 long? pendingConversationId = PendingConversationId();
+                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {}", name, config.Model, pendingConversationId);
+
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
                     Assemble(takenInterNpcInteractions, takenSystemNotifications, pendingConversationId),
