@@ -252,10 +252,11 @@ GameObject:
   - component: {fileID: 699996685639266931}
   - component: {fileID: 5038630363986091630}
   - component: {fileID: 427411115658280303}
-  - component: {fileID: 8721263113895454932}
+  - component: {fileID: -962150206808761716}
   - component: {fileID: 6571235420989052650}
   - component: {fileID: 1369263495528292696}
   - component: {fileID: 5582404725710639054}
+  - component: {fileID: 1095720879265826792}
   m_Layer: 0
   m_Name: StreetLamp1_ShortDouble (Concrete)
   m_TagString: Untagged
@@ -371,8 +372,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "An old street lamp, two bulbs"
---- !u!114 &8721263113895454932
+  content: An old street lamp, two bulbs
+--- !u!114 &-962150206808761716
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -384,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4179404224
+  GlobalObjectIdHash: 879873498
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -442,6 +443,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0994b96bab5f474394fb7847ac2cf72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Scattered
+--- !u!114 &1095720879265826792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263881239168321199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319fed79a55547928a37881ef49c1c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  broken: 0
 --- !u!1 &1726197021241180716
 GameObject:
   m_ObjectHideFlags: 0

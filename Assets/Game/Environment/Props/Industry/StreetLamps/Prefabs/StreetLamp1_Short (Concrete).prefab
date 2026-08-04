@@ -256,6 +256,7 @@ GameObject:
   - component: {fileID: 7576730018341829107}
   - component: {fileID: 6756454469674120541}
   - component: {fileID: 1439108169809779075}
+  - component: {fileID: 8537724810945162158}
   m_Layer: 0
   m_Name: StreetLamp1_Short (Concrete)
   m_TagString: Untagged
@@ -427,7 +428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "An old street lamp, one bulb"
+  content: An old street lamp, one bulb
 --- !u!114 &1439108169809779075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,3 +441,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0994b96bab5f474394fb7847ac2cf72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Scattered
+--- !u!114 &8537724810945162158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533964689087174679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319fed79a55547928a37881ef49c1c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  broken: 0
