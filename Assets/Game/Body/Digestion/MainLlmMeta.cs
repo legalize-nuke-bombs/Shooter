@@ -4,7 +4,7 @@ namespace Shooter.Game.Body
 {
     public class MainLlmMeta : MonoBehaviour, IDigestible
     {
-        [SerializeField] [TextArea(3, 10)] private string content;
+        [SerializeField] [TextArea(5, 20)] private string content;
 
         public string Digest(DigestionDetail detail)
         {
