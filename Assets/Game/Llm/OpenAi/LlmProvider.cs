@@ -9,7 +9,7 @@ using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
 using Shooter.Logging;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.OpenAi
 {
     public static class LlmProvider
     {
