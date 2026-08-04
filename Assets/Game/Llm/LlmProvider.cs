@@ -52,7 +52,7 @@ namespace Shooter.Game.Llm
                 throw new LlmAnswerException($"Response carries no message content. Raw: {raw}");
             }
 
-            content = WithoutFences(content);
+            content = CleanJsonString(content);
 
             LlmAnswer answer;
             try
@@ -110,11 +110,18 @@ namespace Shooter.Game.Llm
             };
         }
 
-        private static string WithoutFences(string text)
+        private static string CleanJsonString(string text)
         {
-            return string.IsNullOrEmpty(text)
-                ? ""
-                : Regex.Replace(text.Trim(), @"^```(?:json)?\s*|\s*```$", "", RegexOptions.IgnoreCase);
+            if (string.IsNullOrEmpty(text))
+                return "";
+
+            int firstBracket = text.IndexOf('{');
+            int lastBracket = text.LastIndexOf('}');
+
+            if (firstBracket == -1 || lastBracket == -1 || firstBracket >= lastBracket)
+                return "";
+
+            return text.Substring(firstBracket, lastBracket - firstBracket + 1);
         }
     }
 }
