@@ -172,7 +172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6822739149213719314, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: knowledges.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6822739149213719314, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: 'knowledges.Array.data[1]'
@@ -182,6 +182,10 @@ PrefabInstance:
       propertyPath: 'knowledges.Array.data[2]'
       value: 
       objectReference: {fileID: 11400000, guid: 3b4433cd545beab41a7ed993a53ac698, type: 2}
+    - target: {fileID: 6822739149213719314, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
+      propertyPath: 'knowledges.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
     - target: {fileID: 8781692597535222973, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: m_Name
       value: Verter
