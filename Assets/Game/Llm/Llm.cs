@@ -49,7 +49,7 @@ namespace Shooter.Game.Llm
 
 
 
-        [SerializeField] [TextArea(5, 50)] private string character;
+        [SerializeField] [TextArea(5, 20)] private string character;
         private Prompt CharacterPrompt =>
             new Prompt()
                 .Section("КТО ТЫ",
