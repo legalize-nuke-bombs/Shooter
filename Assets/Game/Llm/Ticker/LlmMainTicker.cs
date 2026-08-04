@@ -49,8 +49,9 @@ namespace Shooter.Game.Llm.Ticker
 
         private void RegisterTick(Type type)
         {
-            ticksByChildren.TryAdd(type, 0);
-            ticksByChildren[type]++;
+            TicksByChildren.TryAdd(type, 0);
+            TicksByChildren[type]++;
+            ticksTotal++;
 
             foreach (LlmChildTicker ticker in tickers)
             {
@@ -90,27 +91,35 @@ namespace Shooter.Game.Llm.Ticker
             }
         }
 
-        private readonly Dictionary<Type, long> ticksByChildren = new Dictionary<Type, long>();
+        private static readonly Dictionary<Type, long> TicksByChildren = new Dictionary<Type, long>();
+        private static long ticksTotal;
+        private static float nextLogAt;
         [SerializeField] private float loggingInterval = 30f;
-        private float loggingTimer = 0;
+
         private void HandleLogging()
         {
-            loggingTimer -= Time.deltaTime;
-            if (loggingTimer <= 0f)
-            {
-                LogStatistics();
-                loggingTimer = loggingInterval;
-            }
+            if (Time.time < nextLogAt) return;
+
+            nextLogAt = Time.time + loggingInterval;
+            LogStatistics();
         }
 
-        private void LogStatistics()
+        private static void LogStatistics()
         {
             var sb = new StringBuilder();
-            sb.Append($"{name} stats: ");
+            sb.Append("Llm tick totals: ").Append(ticksTotal);
 
-            foreach (var kvp in ticksByChildren)
+            if (ticksTotal > 0)
             {
-                sb.Append($"{kvp.Key.Name}: {kvp.Value} ticks, ");
+                sb.Append(" (");
+                bool first = true;
+                foreach (var kvp in TicksByChildren)
+                {
+                    if (!first) sb.Append(", ");
+                    sb.Append(kvp.Key.Name).Append(' ').Append(kvp.Value);
+                    first = false;
+                }
+                sb.Append(')');
             }
 
             Log.Info(sb.ToString());
