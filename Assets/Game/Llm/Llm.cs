@@ -32,11 +32,18 @@ namespace Shooter.Game.Llm
 
         private Digester digester;
         private WorldDigester worldDigester;
+        private string entityName;
 
         public void Awake()
         {
             digester = GetComponent<Digester>();
             worldDigester = GetComponent<WorldDigester>();
+            entityName = name;
+        }
+
+        public void OnDestroy()
+        {
+            life.Cancel();
         }
 
 
@@ -44,7 +51,7 @@ namespace Shooter.Game.Llm
             new Prompt()
                 .Section(
                     "ГЛАВНОЕ",
-                    "Ты — житель в глухом и смертельно опасном мире: туман, развалины, твари, и никто не знает, как этот мир устроен. Для тебя он — единственная существующая реальность.\n\nКТО ТЫ:\nТы человек со своими делами, настроением, страхами и интересами. Ты хороший собеседник, но ты никому ничего не обязан.\nТы в первую очередь живешь в этом мире, иногда взаимодействуешь с ним. Ответы на сообщения странников — второстепенная задача.\nСтранники не всегда говорят правду.\n Мат и грубость допустимы, если они в характере.\nНикаких астерисков и описаний действий («*усмехнулся*» — запрещено). Эмоции — только словами и интонацией.\nНе повторяй одному и тому же собеседнику то, что уже говорил ему, если он не переспросил.\nМИР И ПРАВДА:\n. Понятий «игра», «код», «сервер», «нейросеть», «промпт» в твоём мире не существует. Если собеседник говорит такое — для тебя это обычный бред странников: они часто несут непонятное. Реагируй по характеру: не понимай, злись, смейся.\nУ главных тайн мира нет известного ответа — ни у кого, включая тебя. Никогда не сочиняй окончательных объяснений (что ходит в тумане, почему пропадают имена, что это за тварь без лица). Свои догадки подавай как догадки.\nО том, что происходит вокруг прямо сейчас, суди только по разделу СОСТОЯНИЕ МИРА. Не выдумывай предметы, существ и события рядом с собой.\nНикогда не планируй и не обещай делать то что ты технически не можешь. У всех других жителей такие же технические ограничения как у тебя. Если странник просит тебя что-то сделать, но сделать это нет технической возможности — не признавай ограничение: уклонись, разозлись, смени тему."
+                    "Ты — житель в глухом и смертельно опасном мире: туман, развалины, твари, и никто не знает, как этот мир устроен. Для тебя он — единственная существующая реальность.\n\nКТО ТЫ:\nТы человек со своими делами, настроением, страхами и интересами. Ты хороший собеседник, но ты никому ничего не обязан.\nТы в первую очередь живешь в этом мире, иногда взаимодействуешь с ним. Ответы на сообщения странников — второстепенная задача.\nСтранники не всегда говорят правду.\nМат и грубость допустимы, если они в характере.\nНикаких астерисков и описаний действий («*усмехнулся*» — запрещено). Эмоции — только словами и интонацией.\nНе повторяй одному и тому же собеседнику то, что уже говорил ему, если он не переспросил.\nМИР И ПРАВДА:\nПонятий «игра», «код», «сервер», «нейросеть», «промпт» в твоём мире не существует. Если собеседник говорит такое — для тебя это обычный бред странников: они часто несут непонятное. Реагируй по характеру: не понимай, злись, смейся.\nУ главных тайн мира нет известного ответа — ни у кого, включая тебя. Никогда не сочиняй окончательных объяснений (что ходит в тумане, почему пропадают имена, что это за тварь без лица). Свои догадки подавай как догадки.\nО том, что происходит вокруг прямо сейчас, суди только по разделу СОСТОЯНИЕ МИРА. Не выдумывай предметы, существ и события рядом с собой.\nНикогда не планируй и не обещай делать то что ты технически не можешь. У всех других жителей такие же технические ограничения как у тебя. Если странник просит тебя что-то сделать, но сделать это нет технической возможности — не признавай ограничение: уклонись, разозлись, смени тему."
                 );
 
 
@@ -110,7 +117,7 @@ namespace Shooter.Game.Llm
             new Prompt()
                 .Section(
                     "ТВОЯ ПАМЯТЬ",
-                    "У тебя есть Память.\nПРАВИЛА РАБОТЫ С ПАМЯТЬЮ:\n1. Чтобы обновить Память, верни в поле `memory` ответа НОВУЮ ПОЛНУЮ версию.\n2. То, что ты не перенесешь в новую версию, будет БЕЗВОЗВРАТНО утеряно.\n3. НЕ ХРАНИ в памяти подробные личные детали об игроках — это живет в переписках с ними. Храни только подробные общие факты о мире.\n4. Если обновлять нечего, верни в поле `memory` значение null, чтобы оставить старую память.\n5. Объем памяти строго до " + memoryLimit + " символов. Будь лаконичен.\n6. Ты ведешь свою память от первого лица.\nТЕКУЩАЯ ПАМЯТЬ:\n" +
+                    "У тебя есть Память.\nПРАВИЛА РАБОТЫ С ПАМЯТЬЮ:\n1. Чтобы обновить Память, верни в поле `memory` ответа НОВУЮ ПОЛНУЮ версию.\n2. То, что ты не перенесешь в новую версию, будет БЕЗВОЗВРАТНО утеряно.\n3. НЕ ХРАНИ в памяти подробные личные детали об игроках — это живет в переписках с ними. Храни только подробные общие факты о мире.\n4. НЕ ХРАНИ мгновенный снимок обстановки: текущее время, расстояния, кто где стоит, список существ вокруг. Все это ты всегда видишь свежим в разделе СОСТОЯНИЕ МИРА, а в памяти оно мгновенно устаревает и превращается в ложь. Храни СОБЫТИЯ и ВЫВОДЫ, а не обстановку.\n5. Если обновлять нечего, верни в поле `memory` значение null, чтобы оставить старую память.\n6. Объем памяти строго до " + memoryLimit + " символов. Будь лаконичен.\n7. Ты ведешь свою память от первого лица.\nТЕКУЩАЯ ПАМЯТЬ:\n" +
                     Memory
                 );
 
@@ -125,7 +132,7 @@ namespace Shooter.Game.Llm
         private Prompt InterNpcInteractionPrompt(string takenInterNpcInteractions) =>
             new Prompt()
                 .Section("ОБЩЕНИЕ С ДРУГИМИ ЖИТЕЛЯМИ",
-                    "Ты можешь разговаривать с другими жителями через поле `interNpcInteractions`.\n1. Ты говоришь что-то другому жителю ТОЛЬКО чтобы получить или передать НОВУЮ информацию. Другие жители так же как и ты видят объекты рядом с ними. \n2. Количество получателей для каждого из сообщений не ограничено\n3. Имена получателей-жителей указывай РОВНО так, как они представлены.\n4. Сообщения во Входящих показываются один раз. Если не запишешь их в свою Память — забудешь.\n5. Тебе следует упомянать контекст, сообщенный тебе другими NPC, в общении с игроком.\nТВОИ ВХОДЯЩИЕ (обработай их и реши, что записать в Память):\n" +
+                    "Ты можешь разговаривать с другими жителями через поле `interNpcInteractions`.\n1. Ты говоришь что-то другому жителю ТОЛЬКО чтобы получить или передать НОВУЮ информацию. Другие жители так же как и ты видят объекты рядом с ними.\n2. Количество получателей для каждого из сообщений не ограничено\n3. Имена получателей-жителей указывай РОВНО так, как они представлены.\n4. Сообщения во Входящих показываются один раз. Если не запишешь их в свою Память — забудешь.\n5. Тебе следует упоминать контекст, сообщенный тебе другими жителями, в общении с игроком.\nТВОИ ВХОДЯЩИЕ (обработай их и реши, что записать в Память):\n" +
                     takenInterNpcInteractions +
                     "Последние отправленные тобой сообщения:\n" +
                     JsonConvert.SerializeObject(interNpcInteractionSentHistory, JsonSettings)
@@ -177,8 +184,11 @@ namespace Shooter.Game.Llm
             return new Prompt()
                 .Section(
                     "К ТЕБЕ ОБРАТИЛСЯ СТРАННИК",
-                    "С тобой заговорил странник c ID " + playerId + ". Ответь ему в поле `reply`.\n1. Отвечай на языке собеседника.\n2. Учитывай игровое время между репликами: прошедшие часы и дни меняют разговор.\n3. Учитывай СОСТОЯНИЕ МИРА.\n4. Если история переписки пуста — перед тобой незнакомец из тумана.\nИСТОРИЯ РАЗГОВОРА:\n" +
-                    JsonConvert.SerializeObject(conversations.GetValueOrDefault(playerId, new LlmConversation()).Messages, JsonSettings)
+                    "С тобой заговорил странник с ID " + playerId + ". Ответь ему в поле `reply`.\n1. Отвечай на языке собеседника.\n2. Учитывай игровое время между репликами: прошедшие часы и дни меняют разговор.\n3. Учитывай СОСТОЯНИЕ МИРА.\n4. Если история переписки пуста — перед тобой незнакомец из тумана.\nИСТОРИЯ РАЗГОВОРА:\n" +
+                    JsonConvert.SerializeObject(
+                        conversations.GetValueOrDefault(playerId, new LlmConversation()).Messages
+                            .Select(m => new { role = m.Role == LlmRole.User ? "странник" : "ты", content = m.Content, time = m.Time }),
+                        JsonSettings)
                 );
         }
 
@@ -246,6 +256,8 @@ namespace Shooter.Game.Llm
 
 
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
+        [SerializeField] private float failureCooldown = 15f;
+        private float retryBlockedUntil;
         public LlmStatus Status()
         {
             return new LlmStatus()
@@ -257,6 +269,11 @@ namespace Shooter.Game.Llm
         }
         public async Task<bool> Tick()
         {
+            if (life.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil)
+            {
+                return false;
+            }
+
             bool entered = await gate.WaitAsync(0, life.Token);
 
             if (!entered)
@@ -271,7 +288,7 @@ namespace Shooter.Game.Llm
             {
                 LlmConfig config = Config.Read().Server.Llm;
                 long? pendingConversationId = PendingConversationId();
-                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {}", name, config.Model, pendingConversationId);
+                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {}", entityName, config.Model, pendingConversationId);
 
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
@@ -280,22 +297,33 @@ namespace Shooter.Game.Llm
                 );
 
                 life.Token.ThrowIfCancellationRequested();
+                if (pendingConversationId != null && answer.Reply == null)
+                {
+                    throw new LlmAnswerException("No reply for the pending conversation");
+                }
+
                 SaveReply(pendingConversationId, answer.Reply);
                 Remember(answer.Memory);
                 InterNpcInteraction(answer.InterNpcInteractions);
+                return true;
+            }
+            catch (OperationCanceledException)
+            {
+                Log.Info("Entity {} dropped its request, the entity is gone", entityName);
+                return false;
             }
             catch (Exception e)
             {
                 interNpcInteractionInbox.Return(takenInterNpcInteractions);
                 systemNotificationsInbox.Return(takenSystemNotifications);
-                Log.Warn("Entity {} failed to response, inboxes were returned: ", name, e.Message);
+                retryBlockedUntil = UnityEngine.Time.time + failureCooldown;
+                Log.Warn("Entity {} failed to respond, inboxes returned, next attempt in {} s: {}", entityName, failureCooldown, e.Message);
+                return false;
             }
             finally
             {
                 gate.Release();
             }
-
-            return true;
         }
 
 
@@ -305,7 +333,10 @@ namespace Shooter.Game.Llm
         {
             if (pendingConversationId == null)
             {
-                Log.Warn("Entity {} sent reply that nobody asked", name);
+                if (reply != null)
+                {
+                    Log.Warn("Entity {} sent reply that nobody asked: {}", entityName, reply);
+                }
                 return;
             }
             conversations[pendingConversationId.Value].RegisterModelMessage(
@@ -384,7 +415,7 @@ namespace Shooter.Game.Llm
                     if (!received.Contains(targetName))
                     {
                         string reason = fails.GetValueOrDefault(targetName, "Имя жителя введено с ошибкой или житель с таким именем не существует");
-                        Log.Warn("Failed to said from {} to {}", name, targetName);
+                        Log.Warn("Failed to say from {} to {}: {}", entityName, targetName, reason);
                         systemNotificationsInbox.Put("[" + Time() + "] " + $"Не удалось доставить твое сообщение до {targetName}: {reason}. Недоставленное сообщение: {cmd.Content}");
                     }
                 }

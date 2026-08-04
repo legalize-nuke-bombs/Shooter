@@ -10,7 +10,7 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(Digester))]
     public class WorldDigester : MonoBehaviour
     {
-        private static Journal log = Logs.Here();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float scanRadius = 250f;
 
@@ -32,7 +32,7 @@ namespace Shooter.Game.Body
             }
 
             string result = digest.ToString();
-            log.Info("Digestion finished, length: {}", result.Length);
+            Log.Info("Digestion finished, length: {}", result.Length);
             return result;
         }
 

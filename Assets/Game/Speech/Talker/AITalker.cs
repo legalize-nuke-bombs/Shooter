@@ -1,9 +1,13 @@
 using System;
+using Shooter.Logging;
 
 namespace Shooter.Game.Speech
 {
     public sealed class AITalker : Talker
     {
+        private static readonly Journal Log = Logs.Here();
+        private const string Fallback = "Not now.";
+
         private Llm.Llm llm;
 
         private void Awake()
@@ -15,7 +19,8 @@ namespace Shooter.Game.Speech
         {
             if (llm == null)
             {
-                onAnswer($"Entity {name} has no llm to answer with");
+                Log.Error("Entity {} has no llm to answer with", name);
+                onAnswer(Fallback);
                 return;
             }
 

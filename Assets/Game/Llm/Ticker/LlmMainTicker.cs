@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Llm.Ticker.Children;
 using Shooter.Logging;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Llm.Ticker
@@ -13,15 +14,23 @@ namespace Shooter.Game.Llm.Ticker
         private static readonly Journal Log = Logs.Here();
 
         private Llm llm;
+        private NetworkObject netObject;
+        private string entityName;
         private LlmChildTicker[] tickers;
 
         public void Awake()
         {
             llm = GetComponent<Llm>();
+            netObject = GetComponent<NetworkObject>();
+            entityName = name;
+            if (netObject == null)
+            {
+                Log.Warn("Entity {} has no NetworkObject, its llm will never tick", entityName);
+            }
             tickers = GetComponents<LlmChildTicker>();
             if (tickers.Length == 0)
             {
-                Log.Warn("Entity {} does not have any ticker!", name);
+                Log.Warn("Entity {} does not have any ticker!", entityName);
             }
         }
 
@@ -51,6 +60,11 @@ namespace Shooter.Game.Llm.Ticker
 
         public void Update()
         {
+            if (netObject == null || !netObject.IsSpawned || !netObject.NetworkManager.IsServer)
+            {
+                return;
+            }
+
             Type type = TickRequired();
             if (type != null)
             {
@@ -72,7 +86,7 @@ namespace Shooter.Game.Llm.Ticker
             }
             catch (Exception ex)
             {
-                Log.Error("Entity {} failed to execute LLM Tick: {}", name, ex.Message);
+                Log.Error("Entity {} failed to execute LLM Tick: {}", entityName, ex.Message);
             }
         }
 

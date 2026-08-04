@@ -58,6 +58,11 @@ namespace Shooter.Logging
                 }
             }
 
+            for (; argIndex < args.Length; argIndex++)
+            {
+                builder.Append(" | ").Append(args[argIndex] ?? "null");
+            }
+
             return builder.ToString();
         }
     }
