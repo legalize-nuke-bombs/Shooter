@@ -2,6 +2,10 @@ fileFormatVersion: 2
 guid: 5a7339c5e5574a54a0b20beac0dc9d26
 ModelImporter:
   serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 7400000
+    second: RifleIdle
   materials:
     materialImportMode: 0
   animations:

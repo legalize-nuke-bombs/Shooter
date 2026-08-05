@@ -2,6 +2,10 @@ fileFormatVersion: 2
 guid: 522cb8f5ba5b414e8dc435a06423ff48
 ModelImporter:
   serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 7400000
+    second: Gunplay2
   materials:
     materialImportMode: 0
   animations:

@@ -2,6 +2,10 @@ fileFormatVersion: 2
 guid: c36cb5d018204e279be8c7266bb7f240
 ModelImporter:
   serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 7400000
+    second: RifleHolster2
   materials:
     materialImportMode: 0
   animations:
