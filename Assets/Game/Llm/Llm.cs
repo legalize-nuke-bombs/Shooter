@@ -199,7 +199,7 @@ namespace Shooter.Game.Llm
             return new Prompt()
                 .Section(
                     "A WANDERER IS TALKING TO YOU",
-                    "Wanderer with ID " + playerId + " has spoken to you. Answer them in the `reply` field.\n1. Answer in the language your interlocutor speaks.\n2. Mind the game time between the lines: passing hours and days change the conversation.\n3. Mind the WORLD STATE.\n4. If the history is empty, this is a stranger out of the fog.\nCONVERSATION HISTORY:\n" +
+                    "Wanderer has spoken to you. Answer them in the `reply` field.\n1. Answer in the language your interlocutor speaks.\n2. Mind the game time between the lines: passing hours and days change the conversation.\n3. Mind the WORLD STATE.\n4. If the history is empty, this is a stranger out of the fog.\nCONVERSATION HISTORY:\n" +
                     conversations.GetValueOrDefault(playerId, new LlmConversation()).Prompt()
                 );
         }
@@ -208,7 +208,7 @@ namespace Shooter.Game.Llm
             return new Prompt()
                 .Section(
                     "CONVERSATION WITH THE WANDERER MUST BE COMPACTED",
-                    "The conversation with the wanderer with ID " + playerId + " exceeded the maximum length. The conversation with them MUST be compacted.\nAfter the compact, the entire conversation with this wanderer will be ERASED. Instead, there will be only one system message with the contents of the `compact` field from the response you will give.\nYou MUST keep all the details important for the continuity of deep communication with this wanderer.\nYou SHOULD compress the conversation to at most half its length.\nTHE CONVERSATION:\n" +
+                    "The conversation with the wanderer exceeded the maximum length. The conversation with them MUST be compacted.\nAfter the compact, the entire conversation with this wanderer will be ERASED. Instead, there will be only one system message with the contents of the `compact` field from the response you will give.\nYou MUST keep all the details important for the continuity of deep communication with this wanderer.\nYou SHOULD compress the conversation to at most half its length.\nTHE CONVERSATION:\n" +
                     conversations.GetValueOrDefault(playerId, new LlmConversation()).Prompt()
                 );
         }
