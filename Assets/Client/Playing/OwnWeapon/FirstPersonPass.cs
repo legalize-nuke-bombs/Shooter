@@ -10,19 +10,29 @@ namespace Shooter.Client.Playing
     public class FirstPersonPass : CustomPass
     {
         private static readonly Journal Log = Logs.Here();
-        private static int culls;
         private static int shots;
 
         public LayerMask layer;
 
+        private Material probe;
+        private int probePass = -1;
+
+        protected override void Setup(ScriptableRenderContext renderContext, CommandBuffer cmd)
+        {
+            Shader unlit = Shader.Find("HDRP/Unlit");
+            if (unlit == null)
+            {
+                Log.Warn("First person pass probe found no HDRP/Unlit shader");
+                return;
+            }
+            probe = CoreUtils.CreateEngineMaterial(unlit);
+            probePass = probe.FindPass("ForwardOnly");
+            Log.Info("First person pass probe material ready, forward pass index {}", probePass);
+        }
+
         protected override void AggregateCullingParameters(ref ScriptableCullingParameters cullingParameters, HDCamera hdCamera)
         {
             cullingParameters.cullingMask |= (uint)(int)layer;
-            if (culls < 3)
-            {
-                culls++;
-                Log.Info("First person pass culls layer mask {} for camera {}", (int)layer, hdCamera.camera.name);
-            }
         }
 
         protected override void Execute(CustomPassContext ctx)
@@ -35,6 +45,16 @@ namespace Shooter.Client.Playing
 
             CoreUtils.SetRenderTarget(ctx.cmd, ctx.cameraColorBuffer, ctx.cameraDepthBuffer, ClearFlag.Depth);
             CustomPassUtils.DrawRenderers(ctx, layer);
+
+            if (probe != null && probePass >= 0)
+            {
+                CustomPassUtils.DrawRenderers(ctx, layer, CustomPass.RenderQueueType.All, probe, probePass);
+            }
+        }
+
+        protected override void Cleanup()
+        {
+            CoreUtils.Destroy(probe);
         }
     }
 }
