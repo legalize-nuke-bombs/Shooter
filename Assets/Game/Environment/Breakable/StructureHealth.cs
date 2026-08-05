@@ -6,14 +6,14 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(AutoSweepable))]
-    public class StructureHealth : NetworkBehaviour, ISweepable
+    public class StructureHealth : MonoBehaviour, ISweepable
     {
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private bool broken = false;
         public bool Broken => broken;
 
-        [SerializeField] private bool useDespawn = false;
+        [SerializeField] private bool useDespawn = true;
         [SerializeField] private float despawnTime = 10f;
 
         private float timeSinceBroken;
@@ -38,7 +38,8 @@ namespace Shooter.Game
         private float breakTimer = 10f;
         public void Update()
         {
-            if (!IsSpawned || !IsServer) return;
+            NetworkManager networkManager = NetworkManager.Singleton;
+            if (networkManager == null || !networkManager.IsServer) return;
 
             if (broken && useDespawn)
             {

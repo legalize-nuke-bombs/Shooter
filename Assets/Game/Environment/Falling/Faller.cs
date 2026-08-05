@@ -1,6 +1,5 @@
 ﻿using Shooter.Game.Body.Sounding;
 using Shooter.Logging;
-using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ namespace Shooter.Game.Falling
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(NetworkRigidbody))]
-    public class Faller : NetworkBehaviour, IBreakable
+    public class Faller : MonoBehaviour, IBreakable
     {
         private static readonly Journal Log = Logs.Here();
 
