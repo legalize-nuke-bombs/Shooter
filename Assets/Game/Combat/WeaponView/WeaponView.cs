@@ -39,6 +39,9 @@ namespace Shooter.Game.Combat
         private void Refresh()
         {
             GameObject wanted = Wanted();
+            Log.Info("Entity {} refresh: wanted {}, shown {}", name,
+                wanted == null ? "nothing" : wanted.name,
+                shownModel == null ? "nothing" : shownModel.name);
             if (wanted == shownModel) return;
 
             if (shown != null) Destroy(shown);
@@ -56,6 +59,7 @@ namespace Shooter.Game.Combat
             if (animator == null) return;
 
             int layer = animator.GetLayerIndex("Armed");
+            Log.Info("Entity {} armed {}, layer index {}", name, armed, layer);
             if (layer >= 0) animator.SetLayerWeight(layer, armed ? 1f : 0f);
         }
 
@@ -82,10 +86,18 @@ namespace Shooter.Game.Combat
 
         private Transform Hand()
         {
-            if (skin.Flesh == null) return null;
+            if (skin.Flesh == null)
+            {
+                Log.Warn("Entity {} has no flesh yet, weapon stays invisible", name);
+                return null;
+            }
 
             var animator = skin.Flesh.GetComponent<Animator>();
-            if (animator == null) return null;
+            if (animator == null)
+            {
+                Log.Warn("Entity {} flesh has no animator, weapon stays invisible", name);
+                return null;
+            }
 
             Transform hand = animator.GetBoneTransform(HumanBodyBones.RightHand);
             if (hand == null) Log.Warn("Entity {} has no right hand bone, weapon stays invisible", name);
