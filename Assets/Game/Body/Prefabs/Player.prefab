@@ -505,9 +505,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnWeapon
   ShowTopMostFoldoutHeaderGroup: 1
-  restPosition: {x: 0.325, y: -0.193, z: 0.654}
+  restPosition: {x: 0.26, y: -0.24, z: 0.7}
   restRotation: {x: 0, y: 0, z: 0}
-  restScale: 10
+  restScale: 1.8
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
