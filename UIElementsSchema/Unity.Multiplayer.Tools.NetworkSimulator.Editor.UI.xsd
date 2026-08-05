@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="Unity.Multiplayer.Tools.NetworkSimulator.Editor.UI" elementFormDefault="qualified" targetNamespace="Unity.Multiplayer.Tools.NetworkSimulator.Editor.UI" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
+  <xs:complexType name="NetworkPresetDropdownType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="UnityEngine.UIElements" base="q1:DropdownFieldType">
+        <xs:choice />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NetworkPresetDropdown" xmlns:q2="UnityEngine.UIElements" substitutionGroup="q2:DropdownField" type="tns:NetworkPresetDropdownType" />
+  <xs:complexType name="ToggleButtonStripType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="UnityEngine.UIElements" base="q3:BindableElementType">
+        <xs:choice />
+        <xs:attribute name="label" type="xs:string" />
+        <xs:attribute name="value" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ToggleButtonStrip" xmlns:q4="UnityEngine.UIElements" substitutionGroup="q4:BindableElement" type="tns:ToggleButtonStripType" />
+  <xs:complexType name="NetworkScenarioSettingsType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="UnityEngine.UIElements" base="q5:VisualElementType">
+        <xs:choice />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NetworkScenarioSettings" xmlns:q6="UnityEngine.UIElements" substitutionGroup="q6:VisualElement" type="tns:NetworkScenarioSettingsType" />
+</xs:schema>

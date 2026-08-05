@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="Unity.Multiplayer.Tools.NetVis.Editor.UI" elementFormDefault="qualified" targetNamespace="Unity.Multiplayer.Tools.NetVis.Editor.UI" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
+  <xs:import schemaLocation="UnityEditor.UIElements.xsd" namespace="UnityEditor.UIElements" />
+  <xs:complexType name="OwnershipConfigurationViewType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="UnityEngine.UIElements" base="q1:VisualElementType">
+        <xs:choice />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="OwnershipConfigurationView" xmlns:q2="UnityEngine.UIElements" substitutionGroup="q2:VisualElement" type="tns:OwnershipConfigurationViewType" />
+  <xs:complexType name="CommonSettingsViewType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="UnityEngine.UIElements" base="q3:VisualElementType">
+        <xs:choice />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CommonSettingsView" xmlns:q4="UnityEngine.UIElements" substitutionGroup="q4:VisualElement" type="tns:CommonSettingsViewType" />
+  <xs:complexType name="OwnershipServerClientConfigurationViewType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="UnityEngine.UIElements" base="q5:VisualElementType">
+        <xs:choice />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="OwnershipServerClientConfigurationView" xmlns:q6="UnityEngine.UIElements" substitutionGroup="q6:VisualElement" type="tns:OwnershipServerClientConfigurationViewType" />
+  <xs:complexType name="BandwidthConfigurationViewType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="UnityEngine.UIElements" base="q7:VisualElementType">
+        <xs:choice />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BandwidthConfigurationView" xmlns:q8="UnityEngine.UIElements" substitutionGroup="q8:VisualElement" type="tns:BandwidthConfigurationViewType" />
+  <xs:complexType name="BandwidthShadingConfigurationViewType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q9="UnityEngine.UIElements" base="q9:VisualElementType">
+        <xs:choice />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BandwidthShadingConfigurationView" xmlns:q10="UnityEngine.UIElements" substitutionGroup="q10:VisualElement" type="tns:BandwidthShadingConfigurationViewType" />
+  <xs:complexType name="MeshShadingFillDropdownType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q11="UnityEditor.UIElements" base="q11:GradientFieldType">
+        <xs:choice />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="MeshShadingFillDropdown" xmlns:q12="UnityEditor.UIElements" substitutionGroup="q12:GradientField" type="tns:MeshShadingFillDropdownType" />
+</xs:schema>

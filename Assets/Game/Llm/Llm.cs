@@ -193,7 +193,7 @@ namespace Shooter.Game.Llm
             return new Prompt()
                 .Section(
                     "CONVERSATION WITH THE WANDERER MUST BE COMPACTED",
-                    "The conversation with the wanderer with ID " + playerId + " exceeded the maximum length. The conversation with them MUST BE Compacted.\nAfter the Compact, the entire conversation with this wanderer will be ERASED. Instead, there will be only one system message with the contents of the `compact` field from the response you will give.\nYou MUST keep all the details important for the continuity of deep communication with this wanderer.\nYou SHOULD compress this conversation at least twice.\nTHE CONVERSATION:\n" +
+                    "The conversation with the wanderer with ID " + playerId + " exceeded the maximum length. The conversation with them MUST be compacted.\nAfter the compact, the entire conversation with this wanderer will be ERASED. Instead, there will be only one system message with the contents of the `compact` field from the response you will give.\nYou MUST keep all the details important for the continuity of deep communication with this wanderer.\nYou SHOULD compress the conversation to at most half its length.\nTHE CONVERSATION:\n" +
                     conversations.GetValueOrDefault(playerId, new LlmConversation()).Prompt()
                 );
         }
@@ -226,7 +226,7 @@ namespace Shooter.Game.Llm
         {
             foreach (KeyValuePair<long, LlmConversation> kvp in conversations)
             {
-                if (kvp.Value.PayloadSize >= conversationMaxSize)
+                if (kvp.Value.PayloadSize >= conversationMaxSize && !kvp.Value.Pending())
                 {
                     return kvp.Key;
                 }
@@ -314,7 +314,7 @@ namespace Shooter.Game.Llm
                 long? pendingConversationId = PendingConversationId();
                 long? pendingCompactConversationId = PendingCompactConversationId();
                 LlmConfig config = (pendingCompactConversationId == null ? Config.Read().Server.LlmBase : Config.Read().Server.LlmMax);
-                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {} pendingCompactConversationId", entityName, config.Model, pendingConversationId, pendingCompactConversationId);
+                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {} pendingCompactConversationId {}", entityName, config.Model, pendingConversationId, pendingCompactConversationId);
 
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
@@ -323,6 +323,15 @@ namespace Shooter.Game.Llm
                 );
 
                 life.Token.ThrowIfCancellationRequested();
+
+                if (pendingCompactConversationId != null && answer.Compact == null)
+                {
+                    throw new LlmAnswerException("No compact for the pending compact");
+                }
+                if (pendingCompactConversationId == null && pendingConversationId != null && answer.Reply == null)
+                {
+                    throw new LlmAnswerException("No reply for the pending conversation");
+                }
 
                 Compact(pendingCompactConversationId, answer.Compact);
                 SaveReply(pendingConversationId, answer.Reply);
@@ -372,8 +381,8 @@ namespace Shooter.Game.Llm
                     Role = LlmRole.System,
                     Time = Time()
                 }
-        );
-    }
+            );
+        }
 
 
 
