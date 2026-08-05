@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: -8881105693448165182}
   - component: {fileID: 6432417319824531450}
   - component: {fileID: 1484456545685969808}
+  - component: {fileID: 160576409435655242}
   m_Layer: 0
   m_Name: Pine_B
   m_TagString: Untagged
@@ -256,6 +257,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   ShowTopMostFoldoutHeaderGroup: 1
   broken: 0
+  useDespawn: 1
+  despawnTime: 10
 --- !u!114 &1484456545685969808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,3 +706,17 @@ Tree:
   m_GameObject: {fileID: 8061814523214358686}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b8aa0ccd1fb79294da6b8f03791e27f2, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &160576409435655242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127992084609228112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e75ea9e04b94231b0582659d315148c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sweeping.AutoSweepable
+  ShowTopMostFoldoutHeaderGroup: 1
+  checkInterval: 1

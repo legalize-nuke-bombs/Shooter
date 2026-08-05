@@ -82,7 +82,7 @@ namespace Shooter.Game
         {
             return shining.Value
                 ? "Turned on"
-                : (structureHealth.Broken ? "Broken" : "Turned of");
+                : (structureHealth.Broken ? "Broken" : "Turned off");
         }
 
         public DigestionPriority Priority => DigestionPriority.High;
