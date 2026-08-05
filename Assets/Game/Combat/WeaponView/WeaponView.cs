@@ -19,6 +19,13 @@ namespace Shooter.Game.Combat
         private GameObject shownModel;
         private GameObject shown;
 
+        private Transform rightHand;
+        private Transform leftHand;
+        private Vector3 gripPoint;
+        private Vector3 barrelAxis;
+        private Vector3 barrelUp;
+        private bool anchored;
+
         public void Awake()
         {
             inventory = GetComponent<Inventory>();
@@ -76,7 +83,7 @@ namespace Shooter.Game.Combat
             if (hand == null) return null;
 
             GameObject worn = Instantiate(model, hand);
-            Held(worn);
+            Anchor(worn);
 
             if (IsLocalPlayer) Conceal(worn);
 
@@ -105,21 +112,42 @@ namespace Shooter.Game.Combat
             return hand;
         }
 
-        private void Held(GameObject worn)
+        private void Anchor(GameObject worn)
         {
+            anchored = false;
+            worn.transform.localPosition = Vector3.zero;
+            worn.transform.localRotation = Quaternion.identity;
+
             WeaponRig rig = worn.GetComponent<WeaponRig>();
-            if (rig == null || rig.Grip == null)
+            if (rig == null || rig.Grip == null || rig.Foregrip == null)
             {
-                worn.transform.localPosition = Vector3.zero;
-                worn.transform.localRotation = Quaternion.identity;
+                Log.Warn("Entity {} weapon {} has no grip pair, stays glued to the hand bone", name, worn.name);
                 return;
             }
 
-            Quaternion gripRotation = Quaternion.Inverse(worn.transform.rotation) * rig.Grip.rotation;
-            Vector3 gripPosition = worn.transform.InverseTransformPoint(rig.Grip.position);
+            Transform root = worn.transform;
+            gripPoint = root.InverseTransformPoint(rig.Grip.position);
+            barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
+            barrelUp = root.InverseTransformDirection(rig.Grip.up);
 
-            worn.transform.localRotation = Quaternion.Inverse(gripRotation);
-            worn.transform.localPosition = -(worn.transform.localRotation * gripPosition);
+            var animator = skin.Flesh.GetComponent<Animator>();
+            rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
+            leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+            anchored = rightHand != null && leftHand != null;
+        }
+
+        private void LateUpdate()
+        {
+            if (!anchored || shown == null) return;
+
+            Vector3 aim = leftHand.position - rightHand.position;
+            if (aim.sqrMagnitude < 0.0001f) return;
+
+            Quaternion look = Quaternion.LookRotation(aim, Vector3.up);
+            Quaternion barrel = Quaternion.LookRotation(barrelAxis, barrelUp);
+
+            shown.transform.rotation = look * Quaternion.Inverse(barrel);
+            shown.transform.position = rightHand.position - shown.transform.rotation * gripPoint;
         }
 
         private void Conceal(GameObject worn)

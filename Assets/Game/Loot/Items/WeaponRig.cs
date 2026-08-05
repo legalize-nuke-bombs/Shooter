@@ -5,6 +5,7 @@ namespace Shooter.Game.Loot
     public class WeaponRig : MonoBehaviour
     {
         [SerializeField] private Transform grip;
+        [SerializeField] private Transform foregrip;
         [SerializeField] private Transform muzzle;
         [SerializeField] private Transform bolt;
         [SerializeField] private Transform magazine;
@@ -12,6 +13,7 @@ namespace Shooter.Game.Loot
         [SerializeField] private Transform safety;
 
         public Transform Grip => grip;
+        public Transform Foregrip => foregrip;
         public Transform Muzzle => muzzle;
         public Transform Bolt => bolt;
         public Transform Magazine => magazine;
