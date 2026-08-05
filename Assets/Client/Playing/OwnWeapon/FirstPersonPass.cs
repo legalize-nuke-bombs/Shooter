@@ -45,11 +45,6 @@ namespace Shooter.Client.Playing
 
             CoreUtils.SetRenderTarget(ctx.cmd, ctx.cameraColorBuffer, ctx.cameraDepthBuffer, ClearFlag.Depth);
             CustomPassUtils.DrawRenderers(ctx, layer);
-
-            if (probe != null && probePass >= 0)
-            {
-                CustomPassUtils.DrawRenderers(ctx, layer, CustomPass.RenderQueueType.All, probe, probePass);
-            }
         }
 
         protected override void Cleanup()
