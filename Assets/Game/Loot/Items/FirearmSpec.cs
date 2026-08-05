@@ -6,6 +6,7 @@ namespace Shooter.Game.Loot
     [CreateAssetMenu(menuName = "Shooter/Firearm", fileName = "Firearm")]
     public class FirearmSpec : ItemSpec
     {
+        [SerializeField] private GameObject model;
         [SerializeField] private int magazineSize = 30;
         [SerializeField] private ItemSpec ammo;
         [SerializeField] private float distance = 100f;
@@ -15,6 +16,8 @@ namespace Shooter.Game.Loot
         [SerializeField] private SoundSpec shotSound;
         [SerializeField] private SoundSpec misfireSound;
         [SerializeField] private SoundSpec reloadSound;
+
+        public GameObject Model => model;
 
         public int MagazineSize => Mathf.Max(magazineSize, 1);
 
