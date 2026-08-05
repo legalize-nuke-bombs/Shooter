@@ -19,12 +19,9 @@ namespace Shooter.Game.Combat
         private GameObject shownModel;
         private GameObject shown;
 
+        private WeaponRig rig;
         private Transform rightHand;
         private Transform leftHand;
-        private Vector3 gripPoint;
-        private Vector3 barrelAxis;
-        private Vector3 barrelUp;
-        private bool anchored;
 
         public void Awake()
         {
@@ -114,34 +111,34 @@ namespace Shooter.Game.Combat
 
         private void Anchor(GameObject worn)
         {
-            anchored = false;
             worn.transform.localPosition = Vector3.zero;
             worn.transform.localRotation = Quaternion.identity;
 
-            WeaponRig rig = worn.GetComponent<WeaponRig>();
+            rig = worn.GetComponent<WeaponRig>();
             if (rig == null || rig.Grip == null || rig.Foregrip == null)
             {
                 Log.Warn("Entity {} weapon {} has no grip pair, stays glued to the hand bone", name, worn.name);
+                rig = null;
                 return;
             }
-
-            Transform root = worn.transform;
-            gripPoint = root.InverseTransformPoint(rig.Grip.position);
-            barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
-            barrelUp = root.InverseTransformDirection(rig.Grip.up);
 
             var animator = skin.Flesh.GetComponent<Animator>();
             rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-            anchored = rightHand != null && leftHand != null;
         }
 
         private void LateUpdate()
         {
-            if (!anchored || shown == null) return;
+            if (shown == null || rig == null || rig.Grip == null || rig.Foregrip == null) return;
+            if (rightHand == null || leftHand == null) return;
 
             Vector3 aim = leftHand.position - rightHand.position;
             if (aim.sqrMagnitude < 0.0001f) return;
+
+            Transform root = shown.transform;
+            Vector3 gripPoint = root.InverseTransformPoint(rig.Grip.position);
+            Vector3 barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
+            Vector3 barrelUp = root.InverseTransformDirection(rig.Grip.up);
 
             Quaternion look = Quaternion.LookRotation(aim, Vector3.up);
             Quaternion barrel = Quaternion.LookRotation(barrelAxis, barrelUp);
