@@ -411,22 +411,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnBody
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &3141592653589793001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924064630755534763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8e51b3a9d0f47e2b6a1420c7d93f8b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnWeapon
-  ShowTopMostFoldoutHeaderGroup: 1
-  restPosition: {x: 0.325, y: -0.193, z: 0.654}
-  restRotation: {x: 0, y: 0, z: 0}
-  restScale: 1
 --- !u!114 &1121741087500898459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,6 +492,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.SleepView
   ShowTopMostFoldoutHeaderGroup: 1
   view: {fileID: 7320842598891428731}
+--- !u!114 &3141592653589793001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e51b3a9d0f47e2b6a1420c7d93f8b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnWeapon
+  ShowTopMostFoldoutHeaderGroup: 1
+  restPosition: {x: 0.325, y: -0.193, z: 0.654}
+  restRotation: {x: 0, y: 0, z: 0}
+  restScale: 10
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}

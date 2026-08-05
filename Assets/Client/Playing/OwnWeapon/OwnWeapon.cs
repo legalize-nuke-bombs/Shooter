@@ -77,7 +77,8 @@ namespace Shooter.Client.Playing
             foreach (Renderer piece in worn.GetComponentsInChildren<Renderer>(true))
                 piece.shadowCastingMode = ShadowCastingMode.Off;
 
-            Log.Info("Own player {} sees {} in first person", name, model.name);
+            Log.Info("Own player {} sees {} in first person at {} scaled {} (rest {})",
+                name, model.name, worn.transform.localPosition, worn.transform.localScale, restScale);
             return worn;
         }
 
