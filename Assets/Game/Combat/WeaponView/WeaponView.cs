@@ -44,6 +44,19 @@ namespace Shooter.Game.Combat
             if (shown != null) Destroy(shown);
             shownModel = wanted;
             shown = wanted == null ? null : Wear(wanted);
+
+            Armed(wanted != null);
+        }
+
+        private void Armed(bool armed)
+        {
+            if (skin.Flesh == null) return;
+
+            var animator = skin.Flesh.GetComponent<Animator>();
+            if (animator == null) return;
+
+            int layer = animator.GetLayerIndex("Armed");
+            if (layer >= 0) animator.SetLayerWeight(layer, armed ? 1f : 0f);
         }
 
         private GameObject Wanted()
