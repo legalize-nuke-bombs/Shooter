@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 4817786038491211010}
   - component: {fileID: 6370029383145960073}
   - component: {fileID: 6403981259524950330}
+  - component: {fileID: -4473180149750321490}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -281,4 +282,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d048f0ccc4b4c5fb82c40f89964647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.Gunner
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-4473180149750321490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd22611990f447c39e19cbe4d449d37e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.WeaponView
   ShowTopMostFoldoutHeaderGroup: 1
