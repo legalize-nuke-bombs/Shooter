@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: Ak47Reload
+  m_Name: AkmReload
   m_EditorClassIdentifier:
-  id: ak47reload
+  id: akmreload
   clips:
   - {fileID: 8300000, guid: 0924f46ebcd6e4c059ce9b44257847d8, type: 3}
   volume: 0.2

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 510036f5663b74a93925668716c94f23, type: 3}
-  m_Name: Ak47
+  m_Name: Akm
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.FirearmSpec
-  id: ak47
-  title: "\u0410\u041A-47"
-  promptName: AK-47
+  id: akm
+  title: "\u0410\u041A\u041C"
+  promptName: AKM
   stackable: 0
   equipable: 1
   magazineSize: 30

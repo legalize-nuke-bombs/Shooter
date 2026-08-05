@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: Ak47Shot
+  m_Name: AkmMisfire
   m_EditorClassIdentifier:
-  id: ak47shot
+  id: akmmisfire
   clips:
-  - {fileID: 8300000, guid: 1bfae0676e6cc29548e9a530052278eb, type: 3}
-  - {fileID: 8300000, guid: ac73f14e284448ccac4f59e9d048d1b9, type: 3}
-  - {fileID: 8300000, guid: 3fd537a05b2fa858250937f3f5aa7011, type: 3}
-  volume: 1
+  - {fileID: 8300000, guid: 7d799d35040ba485f91d110f9fd24422, type: 3}
+  volume: 0.35
   rolloff: 0
-  minDistance: 25
-  maxDistance: 600
+  minDistance: 2
+  maxDistance: 40
