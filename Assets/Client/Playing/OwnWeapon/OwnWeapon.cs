@@ -111,12 +111,6 @@ namespace Shooter.Client.Playing
                 foreach (Transform part in worn.GetComponentsInChildren<Transform>(true))
                     part.gameObject.layer = layer;
 
-            foreach (Renderer piece in worn.GetComponentsInChildren<Renderer>(true))
-                foreach (Material stuff in piece.sharedMaterials)
-                    Log.Info("Own player {} weapon material {} shader {} queue {}: forward pass {} on {}, forward only pass {}",
-                        name, stuff.name, stuff.shader.name, stuff.renderQueue,
-                        stuff.FindPass("Forward"), stuff.GetShaderPassEnabled("Forward"), stuff.FindPass("ForwardOnly"));
-
             Log.Info("Own player {} sees {} in first person at {} scaled {} (rest {})",
                 name, model.name, worn.transform.localPosition, worn.transform.localScale, restScale);
             return worn;
