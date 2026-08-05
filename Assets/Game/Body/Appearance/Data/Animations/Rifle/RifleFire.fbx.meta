@@ -2,6 +2,10 @@ fileFormatVersion: 2
 guid: cfb1d0f99f484d93b443c541663b60c5
 ModelImporter:
   serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 7400000
+    second: RifleFire
   materials:
     materialImportMode: 0
   animations:

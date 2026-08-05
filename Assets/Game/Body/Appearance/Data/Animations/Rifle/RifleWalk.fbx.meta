@@ -2,6 +2,10 @@ fileFormatVersion: 2
 guid: 5182851832754363894cf586950d0289
 ModelImporter:
   serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 7400000
+    second: RifleWalk
   materials:
     materialImportMode: 0
   animations:

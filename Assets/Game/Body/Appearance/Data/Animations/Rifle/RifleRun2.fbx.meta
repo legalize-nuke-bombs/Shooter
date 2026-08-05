@@ -2,6 +2,10 @@ fileFormatVersion: 2
 guid: 2ca411dff03e43e4971f93697014158b
 ModelImporter:
   serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 7400000
+    second: RifleRun2
   materials:
     materialImportMode: 0
   animations:
