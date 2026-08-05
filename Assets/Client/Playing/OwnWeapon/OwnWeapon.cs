@@ -60,12 +60,11 @@ namespace Shooter.Client.Playing
             eye.cullingMask &= ~(1 << layer);
 
             var volume = gameObject.AddComponent<CustomPassVolume>();
-            volume.isGlobal = true;
+            volume.targetCamera = eye;
             volume.injectionPoint = CustomPassInjectionPoint.BeforePostProcess;
 
             var pass = volume.AddPassOfType(typeof(FirstPersonPass)) as FirstPersonPass;
             pass.layer = 1 << layer;
-            pass.eye = eye;
 
             Log.Info("Own player {} draws first person weapon over the world, layer {}", name, layer);
         }
