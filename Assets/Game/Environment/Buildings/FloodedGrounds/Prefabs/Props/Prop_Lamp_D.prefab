@@ -1167,7 +1167,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   broken: 0
   useDespawn: 0
-  despawnTime: 10
 --- !u!114 &142845338544003232
 MonoBehaviour:
   m_ObjectHideFlags: 0
