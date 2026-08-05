@@ -6,6 +6,7 @@ namespace Shooter.Configuring
 
         public string World { get; set; } = "New world";
 
-        public LlmConfig Llm { get; set; } = new LlmConfig();
+        public LlmConfig LlmBase { get; set; } = LlmConfig.LlmBase();
+        public LlmConfig LlmMax { get; set; } = LlmConfig.LlmMax();
     }
 }

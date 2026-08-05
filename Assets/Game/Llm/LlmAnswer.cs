@@ -3,6 +3,7 @@ namespace Shooter.Game.Llm
     public class LlmAnswer
     {
         public string Reply { get; set; }
+        public string Compact { get; set; }
         public string Memory { get; set; }
         public LlmInterNpcInteractionCommand[] InterNpcInteractions { get; set; }
 
@@ -17,6 +18,7 @@ namespace Shooter.Game.Llm
             return new LlmAnswer()
             {
                 Reply = "Your answer to the wanderer, or null if nobody is waiting for one",
+                Compact = "A retelling of the conversation with the wanderer, or null if the system did not explicitly request consolidation.",
                 Memory = "The new FULL version of your Memory, or null to keep it unchanged",
                 InterNpcInteractions = new LlmInterNpcInteractionCommand[]
                 {
