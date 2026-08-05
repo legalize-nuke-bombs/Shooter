@@ -129,7 +129,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
   memoryLimit: 10000
   interNpcInteractionSentHistoryMaxLen: 30
-  conversationMaxSize: 1000
   failureCooldown: 15
 --- !u!114 &-6005480022835525321
 MonoBehaviour:
