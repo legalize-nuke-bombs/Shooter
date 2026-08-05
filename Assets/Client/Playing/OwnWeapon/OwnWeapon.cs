@@ -70,28 +70,13 @@ namespace Shooter.Client.Playing
 
             GameObject worn = Instantiate(model, eye.transform);
             worn.transform.localPosition = restPosition;
-            worn.transform.localRotation = Quaternion.Euler(restRotation) * Straighten(worn);
+            worn.transform.localRotation = Quaternion.Euler(restRotation);
 
             foreach (Renderer piece in worn.GetComponentsInChildren<Renderer>(true))
                 piece.shadowCastingMode = ShadowCastingMode.Off;
 
             Log.Info("Own player {} sees {} in first person", name, model.name);
             return worn;
-        }
-
-        private static Quaternion Straighten(GameObject worn)
-        {
-            var rig = worn.GetComponent<WeaponRig>();
-            if (rig == null || rig.Grip == null || rig.Foregrip == null)
-            {
-                Log.Warn("First person weapon {} has no grip pair, keeping the raw model pose", worn.name);
-                return Quaternion.identity;
-            }
-
-            Transform root = worn.transform;
-            Vector3 barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
-            Vector3 barrelUp = root.InverseTransformDirection(rig.Grip.up);
-            return Quaternion.Inverse(Quaternion.LookRotation(barrelAxis, barrelUp));
         }
 
         private void LateUpdate()
