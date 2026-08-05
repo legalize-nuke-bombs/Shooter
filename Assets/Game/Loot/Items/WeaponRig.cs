@@ -4,12 +4,14 @@ namespace Shooter.Game.Loot
 {
     public class WeaponRig : MonoBehaviour
     {
+        [SerializeField] private Transform grip;
         [SerializeField] private Transform muzzle;
         [SerializeField] private Transform bolt;
         [SerializeField] private Transform magazine;
         [SerializeField] private Transform trigger;
         [SerializeField] private Transform safety;
 
+        public Transform Grip => grip;
         public Transform Muzzle => muzzle;
         public Transform Bolt => bolt;
         public Transform Magazine => magazine;

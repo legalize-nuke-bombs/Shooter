@@ -17,6 +17,7 @@ MonoBehaviour:
   promptName: AKM
   stackable: 0
   equipable: 1
+  model: {fileID: 7492422559979336910, guid: a0e48e2f4140fa44ca545664cfbf5726, type: 3}
   magazineSize: 30
   ammo: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
   distance: 100
