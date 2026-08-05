@@ -41,11 +41,10 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     isReadable: 0
   importAnimation: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 90e678f7c710aa903e82bb66d0c09d21, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 2
+  avatarSetup: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
