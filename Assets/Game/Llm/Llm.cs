@@ -185,13 +185,18 @@ namespace Shooter.Game.Llm
                 .Section(
                     "A WANDERER IS TALKING TO YOU",
                     "Wanderer with ID " + playerId + " has spoken to you. Answer them in the `reply` field.\n1. Answer in the language your interlocutor speaks.\n2. Mind the game time between the lines: passing hours and days change the conversation.\n3. Mind the WORLD STATE.\n4. If the history is empty, this is a stranger out of the fog.\nCONVERSATION HISTORY:\n" +
-                    JsonConvert.SerializeObject(
-                        conversations.GetValueOrDefault(playerId, new LlmConversation()).Messages
-                            .Select(m => new { role = m.Role == LlmRole.User ? "wanderer" : "you", content = m.Content, time = m.Time }),
-                        JsonSettings)
+                    conversations.GetValueOrDefault(playerId, new LlmConversation()).Prompt()
                 );
         }
-
+        private Prompt CompactPrompt(long playerId)
+        {
+            return new Prompt()
+                .Section(
+                    "CONVERSATION WITH THE WANDERER MUST BE COMPACTED",
+                    "The conversation with the wanderer with ID " + playerId + " exceeded the maximum length. The conversation with them MUST BE Compacted.\nAfter the Compact, the entire conversation with this wanderer will be ERASED. Instead, there will be only one system message with the contents of the `compact` field from the response you will give.\nYou MUST keep all the details important for the continuity of deep communication with this wanderer.\nYou SHOULD compress this conversation at least twice.\nTHE CONVERSATION:\n" +
+                    conversations.GetValueOrDefault(playerId, new LlmConversation()).Prompt()
+                );
+        }
         public void Listen(long playerId, string message, Action<string> onAnswer)
         {
             conversations.TryAdd(playerId, new LlmConversation());
@@ -216,6 +221,18 @@ namespace Shooter.Game.Llm
             }
             return null;
         }
+        [SerializeField] private int conversationMaxSize = 100000;
+        private long? PendingCompactConversationId()
+        {
+            foreach (KeyValuePair<long, LlmConversation> kvp in conversations)
+            {
+                if (kvp.Value.PayloadSize >= conversationMaxSize)
+                {
+                    return kvp.Key;
+                }
+            }
+            return null;
+        }
 
 
 
@@ -232,7 +249,7 @@ namespace Shooter.Game.Llm
 
 
 
-        private Prompt Assemble(string takenInterNpcInteractions, string takenSystemNotifications, long? pendingConversationId)
+        private Prompt Assemble(string takenInterNpcInteractions, string takenSystemNotifications, long? pendingConversationId, long? pendingCompactConversationId)
         {
             Prompt result = new Prompt()
                 .Section(CorePrompt)
@@ -243,6 +260,13 @@ namespace Shooter.Game.Llm
                 .Section(InterNpcInteractionPrompt(takenInterNpcInteractions))
                 .Section(SystemNotificationsPrompt(takenSystemNotifications))
                 .Section(WorldStatePrompt);
+
+            if (pendingCompactConversationId != null)
+            {
+                return result
+                    .Section(CompactPrompt(pendingCompactConversationId.Value));
+            }
+
             if (pendingConversationId != null)
             {
                 result = result
@@ -263,6 +287,7 @@ namespace Shooter.Game.Llm
             return new LlmStatus()
             {
                 PendingConversations = (PendingConversationId() != null),
+                PendingCompact = (PendingCompactConversationId() != null),
                 PendingInterNpcInteractionsInbox = !interNpcInteractionInbox.Empty(),
                 PendingSystemNotificationsInbox = !systemNotificationsInbox.Empty()
             };
@@ -286,22 +311,20 @@ namespace Shooter.Game.Llm
 
             try
             {
-                LlmConfig config = Config.Read().Server.Llm;
                 long? pendingConversationId = PendingConversationId();
-                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {}", entityName, config.Model, pendingConversationId);
+                long? pendingCompactConversationId = PendingCompactConversationId();
+                LlmConfig config = (pendingCompactConversationId == null ? Config.Read().Server.LlmBase : Config.Read().Server.LlmMax);
+                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {} pendingCompactConversationId", entityName, config.Model, pendingConversationId, pendingCompactConversationId);
 
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
-                    Assemble(takenInterNpcInteractions, takenSystemNotifications, pendingConversationId),
+                    Assemble(takenInterNpcInteractions, takenSystemNotifications, pendingConversationId, pendingCompactConversationId),
                     life.Token
                 );
 
                 life.Token.ThrowIfCancellationRequested();
-                if (pendingConversationId != null && answer.Reply == null)
-                {
-                    throw new LlmAnswerException("No reply for the pending conversation");
-                }
 
+                Compact(pendingCompactConversationId, answer.Compact);
                 SaveReply(pendingConversationId, answer.Reply);
                 Remember(answer.Memory);
                 InterNpcInteraction(answer.InterNpcInteractions);
@@ -329,14 +352,41 @@ namespace Shooter.Game.Llm
 
 
 
+
+        private void Compact(long? pendingCompactConversationId, string compact)
+        {
+            if (compact == null)
+            {
+                return;
+            }
+            if (pendingCompactConversationId == null)
+            {
+                Log.Warn("Entity {} sent compact that nobody asked: {}", entityName, compact);
+                return;
+            }
+
+            conversations[pendingCompactConversationId.Value].Replace(
+                new LlmMessage()
+                {
+                    Content = compact,
+                    Role = LlmRole.System,
+                    Time = Time()
+                }
+        );
+    }
+
+
+
+
         private void SaveReply(long? pendingConversationId, string reply)
         {
+            if (reply == null)
+            {
+                return;
+            }
             if (pendingConversationId == null)
             {
-                if (reply != null)
-                {
-                    Log.Warn("Entity {} sent reply that nobody asked: {}", entityName, reply);
-                }
+                Log.Warn("Entity {} sent reply that nobody asked: {}", entityName, reply);
                 return;
             }
             conversations[pendingConversationId.Value].RegisterModelMessage(

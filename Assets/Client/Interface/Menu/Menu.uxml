@@ -36,9 +36,14 @@
                 <ui:TextField name="world-name" label="Имя мира" class="menu__field" />
                 <ui:TextField name="server-port" label="Порт" class="menu__field" />
                 <ui:Label text="Языковая модель" class="menu__title" />
-                <ui:TextField name="llm-provider" label="Провайдер" class="menu__field" />
-                <ui:TextField name="llm-model" label="Модель" class="menu__field" />
-                <ui:TextField name="llm-key" label="Ключ" password="true" class="menu__field" />
+                <ui:Label text="Простые операции" class="menu__title" />
+                <ui:TextField name="llm-base-provider" label="Провайдер" class="menu__field" />
+                <ui:TextField name="llm-base-model" label="Модель" class="menu__field" />
+                <ui:TextField name="llm-base-key" label="Ключ" password="true" class="menu__field" />
+                <ui:Label text="Сложные операции" class="menu__title" />
+                <ui:TextField name="llm-max-provider" label="Провайдер" class="menu__field" />
+                <ui:TextField name="llm-max-model" label="Модель" class="menu__field" />
+                <ui:TextField name="llm-max-key" label="Ключ" password="true" class="menu__field" />
             </ui:VisualElement>
             <ui:Button name="settings-back" text="Назад" class="menu__button" />
         </ui:VisualElement>

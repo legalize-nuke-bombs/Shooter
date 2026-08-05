@@ -38,9 +38,12 @@ namespace Shooter.Client.Interface.Menu
         private const string ClientPortField = "client-port";
         private const string WorldNameField = "world-name";
         private const string ServerPortField = "server-port";
-        private const string LlmProviderField = "llm-provider";
-        private const string LlmModelField = "llm-model";
-        private const string LlmKeyField = "llm-key";
+        private const string LlmBaseProviderField = "llm-base-provider";
+        private const string LlmBaseModelField = "llm-base-model";
+        private const string LlmBaseKeyField = "llm-base-key";
+        private const string LlmMaxProviderField = "llm-max-provider";
+        private const string LlmMaxModelField = "llm-max-model";
+        private const string LlmMaxKeyField = "llm-max-key";
         private const string ChosenTab = "menu__tab--chosen";
 
         private VisualElement mainScreen;
@@ -71,9 +74,12 @@ namespace Shooter.Client.Interface.Menu
         private TextField clientPort;
         private TextField worldName;
         private TextField serverPort;
-        private TextField llmProvider;
-        private TextField llmModel;
-        private TextField llmKey;
+        private TextField llmBaseProvider;
+        private TextField llmBaseModel;
+        private TextField llmBaseKey;
+        private TextField llmMaxProvider;
+        private TextField llmMaxModel;
+        private TextField llmMaxKey;
         private bool missing;
 
         public event Action Hosting;
@@ -114,9 +120,12 @@ namespace Shooter.Client.Interface.Menu
             clientPort = Find<TextField>(root, ClientPortField);
             worldName = Find<TextField>(root, WorldNameField);
             serverPort = Find<TextField>(root, ServerPortField);
-            llmProvider = Find<TextField>(root, LlmProviderField);
-            llmModel = Find<TextField>(root, LlmModelField);
-            llmKey = Find<TextField>(root, LlmKeyField);
+            llmBaseProvider = Find<TextField>(root, LlmBaseProviderField);
+            llmBaseModel = Find<TextField>(root, LlmBaseModelField);
+            llmBaseKey = Find<TextField>(root, LlmBaseKeyField);
+            llmMaxProvider = Find<TextField>(root, LlmMaxProviderField);
+            llmMaxModel = Find<TextField>(root, LlmMaxModelField);
+            llmMaxKey = Find<TextField>(root, LlmMaxKeyField);
 
             if (missing)
             {
@@ -183,9 +192,12 @@ namespace Shooter.Client.Interface.Menu
             clientPort = null;
             worldName = null;
             serverPort = null;
-            llmProvider = null;
-            llmModel = null;
-            llmKey = null;
+            llmBaseProvider = null;
+            llmBaseModel = null;
+            llmBaseKey = null;
+            llmMaxProvider = null;
+            llmMaxModel = null;
+            llmMaxKey = null;
         }
 
         private void OpenHost()
@@ -219,9 +231,12 @@ namespace Shooter.Client.Interface.Menu
             clientPort.value = config.Client.Port.ToString();
             worldName.value = config.Server.World;
             serverPort.value = config.Server.Port.ToString();
-            llmProvider.value = config.Server.Llm.Provider;
-            llmModel.value = config.Server.Llm.Model;
-            llmKey.value = config.Server.Llm.Key;
+            llmBaseProvider.value = config.Server.LlmBase.Provider;
+            llmBaseModel.value = config.Server.LlmBase.Model;
+            llmBaseKey.value = config.Server.LlmBase.Key;
+            llmMaxProvider.value = config.Server.LlmMax.Provider;
+            llmMaxModel.value = config.Server.LlmMax.Model;
+            llmMaxKey.value = config.Server.LlmMax.Key;
 
             ShowClient();
             Show(settingsScreen);
@@ -309,15 +324,15 @@ namespace Shooter.Client.Interface.Menu
             config.Client.Port = Number(clientPort.value, config.Client.Port);
             config.Server.World = worldName.value;
             config.Server.Port = Number(serverPort.value, config.Server.Port);
-            config.Server.Llm.Provider = llmProvider.value;
-            config.Server.Llm.Model = llmModel.value;
-            config.Server.Llm.Key = llmKey.value;
+            config.Server.LlmBase.Provider = llmBaseProvider.value;
+            config.Server.LlmBase.Model = llmBaseModel.value;
+            config.Server.LlmBase.Key = llmBaseKey.value;
+            config.Server.LlmMax.Provider = llmMaxProvider.value;
+            config.Server.LlmMax.Model = llmMaxModel.value;
+            config.Server.LlmMax.Key = llmMaxKey.value;
             Config.Save();
 
-            Log.Info("Settings kept: world {} on port {}, joining {}:{} as {}, model {} at {}, key set {}",
-                config.Server.World, config.Server.Port, config.Client.Address, config.Client.Port,
-                config.Client.Name, config.Server.Llm.Model, config.Server.Llm.Provider,
-                !string.IsNullOrEmpty(config.Server.Llm.Key));
+            Log.Info("Settings kept");
         }
 
         private void Choose(VisualElement tab)
