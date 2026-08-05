@@ -6,6 +6,7 @@ namespace Shooter.Game.Llm
         public string Compact { get; set; }
         public string Memory { get; set; }
         public LlmInterNpcInteractionCommand[] InterNpcInteractions { get; set; }
+        public LlmCharacterRelationCommand[] CharacterRelations { get; set; }
 
         public class LlmInterNpcInteractionCommand
         {
@@ -27,6 +28,14 @@ namespace Shooter.Game.Llm
                         TargetNames = new string[] { "Exact recipient name", "Another recipient of the same message" },
                         Content = "The message"
                     },
+                },
+                CharacterRelations = new LlmCharacterRelationCommand[]
+                {
+                    new LlmCharacterRelationCommand()
+                    {
+                        TargetName = "Exact target name",
+                        NewAmount = 100
+                    }
                 }
             };
         }
