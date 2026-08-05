@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 6756454469674120541}
   - component: {fileID: 1439108169809779075}
   - component: {fileID: 8537724810945162158}
+  - component: {fileID: 890275461371656946}
   m_Layer: 0
   m_Name: StreetLamp1_Short (Concrete)
   m_TagString: Untagged
@@ -455,3 +456,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   ShowTopMostFoldoutHeaderGroup: 1
   broken: 0
+--- !u!114 &890275461371656946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533964689087174679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e75ea9e04b94231b0582659d315148c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sweeping.AutoSweepable
+  ShowTopMostFoldoutHeaderGroup: 1
+  checkInterval: 1

@@ -453,6 +453,7 @@ GameObject:
   - component: {fileID: 5708770728811757081}
   - component: {fileID: 39347672793468060}
   - component: {fileID: 8805688211333826661}
+  - component: {fileID: 867863963603876876}
   m_Layer: 0
   m_Name: Pine_D
   m_TagString: Untagged
@@ -690,6 +691,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   ShowTopMostFoldoutHeaderGroup: 1
   broken: 0
+  useDespawn: 1
+  despawnTime: 10
 --- !u!114 &8805688211333826661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,3 +706,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sounding.Speaker
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &867863963603876876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8316334779356437779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e75ea9e04b94231b0582659d315148c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sweeping.AutoSweepable
+  ShowTopMostFoldoutHeaderGroup: 1
+  checkInterval: 1

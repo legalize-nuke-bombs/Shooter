@@ -13,8 +13,7 @@ namespace Shooter.Game
         [SerializeField] private bool broken = false;
         public bool Broken => broken;
 
-        // TODO Поставить НЕТ по умолчанию
-        [SerializeField] private bool useDespawn = true;
+        [SerializeField] private bool useDespawn = false;
         [SerializeField] private float despawnTime = 10f;
 
         private float timeSinceBroken;
@@ -39,6 +38,8 @@ namespace Shooter.Game
         private float breakTimer = 10f;
         public void Update()
         {
+            if (!IsSpawned || !IsServer) return;
+
             if (broken && useDespawn)
             {
                 timeSinceBroken += Time.deltaTime;

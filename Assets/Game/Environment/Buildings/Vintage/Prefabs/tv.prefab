@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 7487244357921330418}
   - component: {fileID: 4340733874121901550}
   - component: {fileID: -8034441723559104857}
+  - component: {fileID: 131122804043036422}
+  - component: {fileID: 199361976671453671}
   m_Layer: 0
   m_Name: tv
   m_TagString: Untagged
@@ -263,3 +265,33 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7431905612370001, guid: 6f3a91d47c8b4e25ab60d3f918c7e520, type: 3}
   m_PrefabInstance: {fileID: 2154924059641547055}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &131122804043036422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622243103439998288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319fed79a55547928a37881ef49c1c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  broken: 0
+  useDespawn: 0
+  despawnTime: 10
+--- !u!114 &199361976671453671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622243103439998288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e75ea9e04b94231b0582659d315148c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sweeping.AutoSweepable
+  ShowTopMostFoldoutHeaderGroup: 1
+  checkInterval: 1
