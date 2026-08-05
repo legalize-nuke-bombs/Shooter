@@ -297,7 +297,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   broken: 0
   useDespawn: 0
-  despawnTime: 10
 --- !u!114 &1484456545685969808
 MonoBehaviour:
   m_ObjectHideFlags: 0

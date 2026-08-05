@@ -15,6 +15,11 @@ namespace Shooter.Game.Sweeping
             sweepables = GetComponentsInChildren<ISweepable>();
         }
 
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer) enabled = false;
+        }
+
         [SerializeField] private float checkInterval = 1f;
         private float timeSinceLastCheck = 0f;
         public void Update()

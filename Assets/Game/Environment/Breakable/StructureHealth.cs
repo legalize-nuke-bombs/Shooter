@@ -1,6 +1,5 @@
-﻿using Shooter.Game.Sweeping;
+using Shooter.Game.Sweeping;
 using Shooter.Logging;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -13,17 +12,17 @@ namespace Shooter.Game
         [SerializeField] private bool broken = false;
         public bool Broken => broken;
 
-        [SerializeField] private bool useDespawn = true;
-        [SerializeField] private float despawnTime = 10f;
+        [SerializeField] private bool useDespawn = false;
+        [SerializeField] private float despawnTime = 10f * 60;
 
-        private float timeSinceBroken;
+        private float brokenAt;
 
         public void Break()
         {
             Log.Info("Entity {} became broken", name);
 
             broken = true;
-            timeSinceBroken = 0f;
+            brokenAt = Time.time;
 
             foreach (IBreakable breakable in GetComponents<IBreakable>())
                 breakable.Broken();
@@ -31,32 +30,7 @@ namespace Shooter.Game
 
         public bool CanBeSwept()
         {
-            return broken && useDespawn && (timeSinceBroken >= despawnTime);
-        }
-
-        // TODO Автоломание - заглушка, удалить
-        private float breakTimer = 10f;
-        public void Update()
-        {
-            NetworkManager networkManager = NetworkManager.Singleton;
-            if (networkManager == null || !networkManager.IsServer) return;
-
-            if (broken && useDespawn)
-            {
-                timeSinceBroken += Time.deltaTime;
-            }
-
-            if (!broken)
-            {
-                if (breakTimer <= 0f)
-                {
-                    Break();
-                }
-                else
-                {
-                    breakTimer -= Time.deltaTime;
-                }
-            }
+            return broken && useDespawn && (Time.time - brokenAt >= despawnTime);
         }
     }
 }
