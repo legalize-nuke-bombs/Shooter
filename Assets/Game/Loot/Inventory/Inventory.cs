@@ -21,7 +21,7 @@ namespace Shooter.Game.Loot
         private readonly NetworkList<Item> slots = new NetworkList<Item>(
             null, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
 
-        private readonly NetworkVariable<int> equipped = new NetworkVariable<int>(Nothing);
+        [SerializeField] private NetworkVariable<int> equipped = new NetworkVariable<int>(Nothing);
 
         public ItemCatalog Catalog => catalog != null
             ? catalog
