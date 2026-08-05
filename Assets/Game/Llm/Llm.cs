@@ -11,12 +11,14 @@ using Shooter.Game.Body;
 using Shooter.Game.Llm.Knowledge;
 using Shooter.Logging;
 using Shooter.Game.Llm.OpenAi;
+using Shooter.Game.Relationship;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Digester))]
     [RequireComponent(typeof(WorldDigester))]
+    [RequireComponent(typeof(CharacterRelation))]
     public class Llm : MonoBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
@@ -33,11 +35,13 @@ namespace Shooter.Game.Llm
         private Digester digester;
         private WorldDigester worldDigester;
         private string entityName;
+        private CharacterRelation characterRelation;
 
         public void Awake()
         {
             digester = GetComponent<Digester>();
             worldDigester = GetComponent<WorldDigester>();
+            characterRelation = GetComponent<CharacterRelation>();
             entityName = name;
         }
 
@@ -126,7 +130,6 @@ namespace Shooter.Game.Llm
 
 
         private readonly Inbox interNpcInteractionInbox = new Inbox();
-
         private readonly Queue<string> interNpcInteractionSentHistory = new Queue<string>();
         [SerializeField] private int interNpcInteractionSentHistoryMaxLen = 20;
         private Prompt InterNpcInteractionPrompt(string takenInterNpcInteractions) =>
@@ -137,6 +140,18 @@ namespace Shooter.Game.Llm
                     "Recently sent by you:\n" +
                     JsonConvert.SerializeObject(interNpcInteractionSentHistory, JsonSettings)
                 );
+
+
+
+
+        private Prompt CharacterRelationPrompt =>
+            new Prompt()
+                .Section("RELATIONSHIPS WITH OTHER CHARACTERS (RESIDENTS AND WANDERERS)",
+                    "You have your own attitude towards every character.\n" +
+                    "The attitude is expressed by a number from 0 to 100. This number determines whether the character is an enemy, neutral, or friend. Your character automatically attacks all characters he considers enemies in order to defend themselves instantly.\n" +
+                    "Your current relationships with characters are visible in Your state.\n" +
+                    "You can always manually change the value of your relationship to character at your discretion using the `characterRelations` response field.\n" +
+                    "Your attitude towards the character will drop automatically if they attack you or your friends.");
 
 
 
@@ -258,6 +273,7 @@ namespace Shooter.Game.Llm
                 .Section(StaticKnowledgePrompt)
                 .Section(MemoryPrompt)
                 .Section(InterNpcInteractionPrompt(takenInterNpcInteractions))
+                .Section(CharacterRelationPrompt)
                 .Section(SystemNotificationsPrompt(takenSystemNotifications))
                 .Section(WorldStatePrompt);
 
@@ -337,6 +353,7 @@ namespace Shooter.Game.Llm
                 SaveReply(pendingConversationId, answer.Reply);
                 Remember(answer.Memory);
                 InterNpcInteraction(answer.InterNpcInteractions);
+                CharacterRelations(answer.CharacterRelations);
                 return true;
             }
             catch (OperationCanceledException)
@@ -349,7 +366,7 @@ namespace Shooter.Game.Llm
                 interNpcInteractionInbox.Return(takenInterNpcInteractions);
                 systemNotificationsInbox.Return(takenSystemNotifications);
                 retryBlockedUntil = UnityEngine.Time.time + failureCooldown;
-                Log.Warn("Entity {} failed to respond, inboxes returned, next attempt in {} s: {}", entityName, failureCooldown, e.Message);
+                Log.Warn("Entity {} failed to respond, inboxes returned, next attempt in {} s: {}", entityName, failureCooldown, e.ToString());
                 return false;
             }
             finally
@@ -482,6 +499,30 @@ namespace Shooter.Game.Llm
                 while (interNpcInteractionSentHistory.Count > interNpcInteractionSentHistoryMaxLen)
                 {
                     interNpcInteractionSentHistory.Dequeue();
+                }
+            }
+        }
+
+
+
+        private void CharacterRelations(LlmCharacterRelationCommand[] cmds)
+        {
+            if (cmds == null || cmds.Length == 0)
+            {
+                return;
+            }
+
+            foreach (LlmCharacterRelationCommand cmd in cmds)
+            {
+                Log.Info("Entity {} is updating relation to character {} from {} to {}", name, cmd.TargetName, characterRelation.Amount(cmd.TargetName), cmd.NewAmount);
+                try
+                {
+                    characterRelation.SetAmount(cmd.TargetName, cmd.NewAmount);
+                }
+                catch (Exception e)
+                {
+                    Log.Warn("Entity {} failed to update relation: {}", name, e.Message);
+                    systemNotificationsInbox.Put("[" + Time() + "]" + $"Failed to update your relation to character {cmd.TargetName} from {characterRelation.Amount(cmd.TargetName)} to {cmd.NewAmount}: {e.Message}");
                 }
             }
         }
