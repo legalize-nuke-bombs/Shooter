@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 0fa2946de33644fe83379bac79ed2d48
+ModelImporter:
+  serializedVersion: 22
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WPNM_AKM
+    second: {fileID: 2100000, guid: 3e1cf54530194f6ebacee705482058a6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WPNM_calibers
+    second: {fileID: 2100000, guid: a716d32b072246e68df452fce00b6cfe, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
