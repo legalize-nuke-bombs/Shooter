@@ -424,8 +424,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnWeapon
   ShowTopMostFoldoutHeaderGroup: 1
-  restPosition: {x: 0.23, y: -0.24, z: 0.38}
+  restPosition: {x: 0.325, y: -0.193, z: 0.654}
   restRotation: {x: 0, y: 0, z: 0}
+  restScale: 1
 --- !u!114 &1121741087500898459
 MonoBehaviour:
   m_ObjectHideFlags: 0
