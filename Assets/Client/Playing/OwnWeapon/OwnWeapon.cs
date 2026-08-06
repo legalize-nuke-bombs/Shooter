@@ -25,7 +25,7 @@ namespace Shooter.Client.Playing
         private GameObject shownModel;
         private GameObject shown;
 
-        public void Awake()
+        private void Awake()
         {
             inventory = GetComponent<Inventory>();
             eye = GetComponentInChildren<Camera>(true);

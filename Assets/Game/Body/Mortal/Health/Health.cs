@@ -1,6 +1,8 @@
+using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Relationship;
 using Shooter.Logging;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game.Body
 {
@@ -8,11 +10,15 @@ namespace Shooter.Game.Body
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private EarSoundSpec hurtSound;
+
         private CharacterRelation characterRelation;
+        private EarSpeaker earSpeaker;
 
         protected virtual void Awake()
         {
             characterRelation = GetComponent<CharacterRelation>();
+            earSpeaker = GetComponent<EarSpeaker>();
         }
 
         public bool Restrains => !Alive;
@@ -36,6 +42,8 @@ namespace Shooter.Game.Body
             DamageRaw(amount);
 
             if (!Alive) Die();
+            else earSpeaker.Play(hurtSound);
+
             var result = new DamageResult()
             {
                 Murder = !Alive

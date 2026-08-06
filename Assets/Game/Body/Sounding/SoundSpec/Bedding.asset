@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   id: bedding
   clips:
-  - {fileID: 8300000, guid: 0165d88d54e9414284f05cece451e88a, type: 3}
+  - {fileID: 8300000, guid: 9fdf47e2af1342e19dff72c66d80acb3, type: 3}
   volume: 0.5
   rolloff: 1
   minDistance: 1

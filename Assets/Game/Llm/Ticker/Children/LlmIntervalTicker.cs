@@ -8,12 +8,12 @@ namespace Shooter.Game.Llm.Ticker.Children
         [SerializeField] private float firstTickDelay = 1f;
         private float timer;
 
-        public void Awake()
+        private void Awake()
         {
             timer = firstTickDelay;
         }
 
-        public void Update()
+        private void Update()
         {
             timer -= Time.deltaTime;
         }

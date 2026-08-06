@@ -23,7 +23,7 @@ namespace Shooter.Game.Combat
         private Transform rightHand;
         private Transform leftHand;
 
-        public void Awake()
+        private void Awake()
         {
             inventory = GetComponent<Inventory>();
             skin = GetComponent<Skin>();

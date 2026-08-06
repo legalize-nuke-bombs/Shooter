@@ -9,6 +9,8 @@ namespace Shooter.Game.Body
     {
         public event Action<float> Turned;
 
+        public event Action<float> Landed;
+
         private const float PitchLimit = 89f;
         private const float GroundedFall = -1f;
 
@@ -111,6 +113,8 @@ namespace Shooter.Game.Body
 
             if (characterController.isGrounded)
             {
+                if (fall < GroundedFall) Landed?.Invoke(-fall);
+
                 fall = jumping ? jumpSpeed : GroundedFall;
                 jumping = false;
             }

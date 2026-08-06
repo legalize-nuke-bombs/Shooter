@@ -1,3 +1,4 @@
+using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Sleeping;
 using Shooter.Game.Loot;
 using Shooter.Logging;
@@ -8,6 +9,7 @@ namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Movement))]
+    [RequireComponent(typeof(EarSpeaker))]
     // Sleeper is not required
     public class Mortal : NetworkBehaviour, IMortal
     {
@@ -15,21 +17,26 @@ namespace Shooter.Game.Body
 
         [SerializeField] private GameObject corpsePrefab;
 
+        [SerializeField] private EarSoundSpec deathSound;
+
         private Health health;
         private Movement movement;
         private Sleeper sleeper;
+        private EarSpeaker earSpeaker;
 
         private void Awake()
         {
             health = GetComponent<Health>();
             movement = GetComponent<Movement>();
             sleeper = GetComponent<Sleeper>();
+            earSpeaker = GetComponent<EarSpeaker>();
         }
 
         public void Died()
         {
             if (!IsServer) return;
 
+            earSpeaker.Play(deathSound);
             LeaveCorpse();
 
             if (!NetworkObject.IsPlayerObject)

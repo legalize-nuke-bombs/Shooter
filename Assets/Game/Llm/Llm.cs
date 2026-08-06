@@ -37,7 +37,7 @@ namespace Shooter.Game.Llm
         private string entityName;
         private CharacterRelation characterRelation;
 
-        public void Awake()
+        private void Awake()
         {
             digester = GetComponent<Digester>();
             worldDigester = GetComponent<WorldDigester>();
@@ -45,7 +45,7 @@ namespace Shooter.Game.Llm
             entityName = name;
         }
 
-        public void OnDestroy()
+        private void OnDestroy()
         {
             life.Cancel();
         }
