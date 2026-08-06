@@ -121,7 +121,7 @@ namespace Shooter.Game.Combat
             BodyPart part = Weakest(found, health);
             if (part == BodyPart.Head)
             {
-                if (hit.collider.TryGetComponent(out Speaker targetSpeaker))
+                if (health.TryGetComponent(out Speaker targetSpeaker))
                 {
                     targetSpeaker.Play(spec.HeadshotSound);
                 }
