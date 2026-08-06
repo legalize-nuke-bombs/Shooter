@@ -456,6 +456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   ShowTopMostFoldoutHeaderGroup: 1
   broken: 0
+  breakSound: {fileID: 11400000, guid: 9c77bf221cbd409fbe947692ee46a0c0, type: 2}
 --- !u!114 &890275461371656946
 MonoBehaviour:
   m_ObjectHideFlags: 0
