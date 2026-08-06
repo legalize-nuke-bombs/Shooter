@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: Footsteps
+  m_Name: LampBreak
   m_EditorClassIdentifier:
-  id: footsteps
+  id: lampbreak
   clips:
-  - {fileID: 8300000, guid: 161dbd261955425ba8d6cac91718cd2a, type: 3}
-  - {fileID: 8300000, guid: 28580712e71e410a85157037ef5c0f31, type: 3}
-  volume: 0.12
+  - {fileID: 8300000, guid: 8c7a077a2060476b905ba9585688b061, type: 3}
+  - {fileID: 8300000, guid: 1819784b9f5149549513de65821b2d4f, type: 3}
+  - {fileID: 8300000, guid: 44d5354762964d5681b5ebb446193d48, type: 3}
+  - {fileID: 8300000, guid: cd1a276e428b472b89fe3ff17f5e467a, type: 3}
+  volume: 0.8
   rolloff: 0
-  minDistance: 2
-  maxDistance: 30
+  minDistance: 8
+  maxDistance: 150

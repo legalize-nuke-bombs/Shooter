@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: Footsteps
+  m_Name: TreeGroundHit
   m_EditorClassIdentifier:
-  id: footsteps
+  id: treegroundhit
   clips:
-  - {fileID: 8300000, guid: 161dbd261955425ba8d6cac91718cd2a, type: 3}
-  - {fileID: 8300000, guid: 28580712e71e410a85157037ef5c0f31, type: 3}
-  volume: 0.12
+  - {fileID: 8300000, guid: c8ad069513a946b69f8b263ff838a908, type: 3}
+  volume: 0.85
   rolloff: 0
-  minDistance: 2
-  maxDistance: 30
+  minDistance: 20
+  maxDistance: 500

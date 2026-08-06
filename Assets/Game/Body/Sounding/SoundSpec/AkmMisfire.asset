@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   id: akmmisfire
   clips:
-  - {fileID: 8300000, guid: 7d799d35040ba485f91d110f9fd24422, type: 3}
+  - {fileID: 8300000, guid: 696a81d252bb45299d8a49f2bf8a0652, type: 3}
+  - {fileID: 8300000, guid: 30c193e73f3a4e1b9c1d4157648af120, type: 3}
+  - {fileID: 8300000, guid: 672ef0c2551e4c0696ca2b108aef67db, type: 3}
   volume: 0.35
   rolloff: 0
   minDistance: 2

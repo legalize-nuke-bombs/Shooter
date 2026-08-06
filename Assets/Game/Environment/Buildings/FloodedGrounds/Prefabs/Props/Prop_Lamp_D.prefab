@@ -1166,6 +1166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   ShowTopMostFoldoutHeaderGroup: 1
   broken: 0
+  breakSound: {fileID: 11400000, guid: 9c77bf221cbd409fbe947692ee46a0c0, type: 2}
   useDespawn: 0
 --- !u!114 &142845338544003232
 MonoBehaviour:
