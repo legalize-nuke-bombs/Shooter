@@ -10,7 +10,7 @@ namespace Shooter.Game.Body
 
         private CharacterRelation characterRelation;
 
-        public void Awake()
+        protected virtual void Awake()
         {
             characterRelation = GetComponent<CharacterRelation>();
         }
