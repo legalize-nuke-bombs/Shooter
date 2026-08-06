@@ -12,11 +12,13 @@ namespace Shooter.Game.Body
     {
         private static readonly Journal Log = Logs.Here();
 
+        private static readonly Collider[] Around = new Collider[512];
+
         [SerializeField] private float scanRadius = 250f;
 
         private Digester digester;
 
-        public void Awake()
+        private void Awake()
         {
             digester = GetComponent<Digester>();
         }
@@ -39,11 +41,13 @@ namespace Shooter.Game.Body
         private List<Component> FindNearObjects()
         {
             var found = new HashSet<Component>();
-            Collider[] hits = Physics.OverlapSphere(transform.position, scanRadius);
+            int hits = Physics.OverlapSphereNonAlloc(transform.position, scanRadius, Around);
+            if (hits == Around.Length)
+                Log.Warn("Digester of {} filled its buffer of {} colliders within {} m, the digest may miss part of the world", name, Around.Length, scanRadius);
 
-            foreach (Collider hit in hits)
+            for (int i = 0; i < hits; i++)
             {
-                if (!(hit.GetComponentInParent<IDigestible>() is Component owner)) continue;
+                if (!(Around[i].GetComponentInParent<IDigestible>() is Component owner)) continue;
                 if (owner.gameObject == gameObject) continue;
 
                 found.Add(owner);

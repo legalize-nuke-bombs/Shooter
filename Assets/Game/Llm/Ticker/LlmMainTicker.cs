@@ -18,7 +18,7 @@ namespace Shooter.Game.Llm.Ticker
         private string entityName;
         private LlmChildTicker[] tickers;
 
-        public void Awake()
+        private void Awake()
         {
             llm = GetComponent<Llm>();
             netObject = GetComponent<NetworkObject>();
@@ -59,7 +59,7 @@ namespace Shooter.Game.Llm.Ticker
             }
         }
 
-        public void Update()
+        private void Update()
         {
             if (netObject == null || !netObject.IsSpawned || !netObject.NetworkManager.IsServer)
             {

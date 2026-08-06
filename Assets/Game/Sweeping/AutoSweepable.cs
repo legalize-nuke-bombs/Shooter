@@ -10,7 +10,7 @@ namespace Shooter.Game.Sweeping
 
         private ISweepable[] sweepables;
 
-        public void Awake()
+        private void Awake()
         {
             sweepables = GetComponentsInChildren<ISweepable>();
         }
@@ -22,7 +22,7 @@ namespace Shooter.Game.Sweeping
 
         [SerializeField] private float checkInterval = 1f;
         private float timeSinceLastCheck = 0f;
-        public void Update()
+        private void Update()
         {
             if (!IsSpawned || !IsServer) return;
 

@@ -141,7 +141,7 @@ MonoBehaviour:
   powered:
   - {fileID: 2161080503177255294}
   glowing: []
-  click: {fileID: 11400000, guid: de22721b38c4499db906e6ff35d60559, type: 2}
+  click: {fileID: 11400000, guid: 02b49b67faa74acfb909b628cdf70854, type: 2}
 --- !u!64 &7487244357921330418
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   ShowTopMostFoldoutHeaderGroup: 1
   broken: 0
-  breakSound: {fileID: 11400000, guid: 9c77bf221cbd409fbe947692ee46a0c0, type: 2}
+  breakSound: {fileID: 11400000, guid: d0a496466f1147428d7b72010028a171, type: 2}
   useDespawn: 0
 --- !u!114 &199361976671453671
 MonoBehaviour:

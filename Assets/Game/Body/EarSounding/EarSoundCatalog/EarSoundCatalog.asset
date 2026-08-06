@@ -11,6 +11,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33209af35b25464289416e91c59ef6e7, type: 3}
   m_Name: EarSoundCatalog
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   specs:
+  - {fileID: 11400000, guid: 0cd1cb4da19d417a9b0b0a8203ac52ea, type: 2}
   - {fileID: 11400000, guid: 2469b560ee1d4dfa8baadf87c7efbb01, type: 2}
+  - {fileID: 11400000, guid: 05826ac8cd8f419b87aeead8c6f25c14, type: 2}
+  - {fileID: 11400000, guid: 283dbd0dbf7c47e887681ac86f8750d0, type: 2}

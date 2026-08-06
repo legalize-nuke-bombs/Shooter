@@ -14,10 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   id: lampbreak
   clips:
-  - {fileID: 8300000, guid: 8c7a077a2060476b905ba9585688b061, type: 3}
-  - {fileID: 8300000, guid: 1819784b9f5149549513de65821b2d4f, type: 3}
-  - {fileID: 8300000, guid: 44d5354762964d5681b5ebb446193d48, type: 3}
-  - {fileID: 8300000, guid: cd1a276e428b472b89fe3ff17f5e467a, type: 3}
+  - {fileID: 8300000, guid: 9c8e317a96f945c4b8e1f957060c1cec, type: 3}
   volume: 0.45
   rolloff: 0
   minDistance: 8

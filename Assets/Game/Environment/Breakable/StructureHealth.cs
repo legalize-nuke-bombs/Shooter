@@ -23,7 +23,7 @@ namespace Shooter.Game
 
         private float brokenAt;
 
-        public void Awake()
+        private void Awake()
         {
             speaker = GetComponent<Speaker>();
         }

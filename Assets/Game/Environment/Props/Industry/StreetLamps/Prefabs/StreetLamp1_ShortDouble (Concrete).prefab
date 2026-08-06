@@ -431,7 +431,7 @@ MonoBehaviour:
   - {fileID: 1726197021241180716}
   - {fileID: 389052339342911053}
   glowing: []
-  click: {fileID: 11400000, guid: de22721b38c4499db906e6ff35d60559, type: 2}
+  click: {fileID: 11400000, guid: f2a77689d95042398fdb128bc738c2a0, type: 2}
 --- !u!114 &5582404725710639054
 MonoBehaviour:
   m_ObjectHideFlags: 0

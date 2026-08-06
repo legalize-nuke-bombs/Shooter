@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Combat
 {
-    [RequireComponent(typeof(Nameable))]
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Interactor))]
     [RequireComponent(typeof(Hands))]
@@ -126,7 +125,7 @@ namespace Shooter.Game.Combat
             if (part == BodyPart.Head) earSpeaker.Play(spec.HeadshotSound);
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
-            health.Damage(damage, nameable.PromptName());
+            health.Damage(damage, nameable == null ? null : nameable.PromptName());
             Log.Info("Shot of entity {} hit {} in {} for {} damage", name, health.name, part, damage);
         }
 

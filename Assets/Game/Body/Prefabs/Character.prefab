@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4957635887391225908}
   - component: {fileID: 469253834919569006}
   - component: {fileID: 2658346833551713148}
+  - component: {fileID: 6600000000000000202}
   - component: {fileID: 6600000000000000105}
   - component: {fileID: 6600000000000000109}
   - component: {fileID: -8362392851120402615}
@@ -174,6 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Health.DefaultHealth
   ShowTopMostFoldoutHeaderGroup: 1
   maxHp: 100
+  hurtSound: {fileID: 11400000, guid: 05826ac8cd8f419b87aeead8c6f25c14, type: 2}
 --- !u!114 &4957635887391225908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +204,20 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   strideLength: 2
   sound: {fileID: 11400000, guid: 6e4362098586bde360868d1e2be58ac8, type: 2}
+--- !u!114 &6600000000000000202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2999e86a88a4251a09e99e6f15ad622, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minSpeed: 3
+  sound: {fileID: 11400000, guid: 67f8d0ce98874c0493befcfd4f5e80d9, type: 2}
 --- !u!114 &6600000000000000105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,6 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Mortal
   ShowTopMostFoldoutHeaderGroup: 1
   corpsePrefab: {fileID: 6108037598719724321, guid: dba187afb26374400bd1ba8b38212115, type: 3}
+  deathSound: {fileID: 11400000, guid: 0cd1cb4da19d417a9b0b0a8203ac52ea, type: 2}
 --- !u!114 &-8362392851120402615
 MonoBehaviour:
   m_ObjectHideFlags: 0
