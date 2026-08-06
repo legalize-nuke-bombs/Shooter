@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Combat
 {
+    [RequireComponent(typeof(Nameable))]
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Interactor))]
     [RequireComponent(typeof(Hands))]
@@ -18,6 +19,7 @@ namespace Shooter.Game.Combat
 
         private static readonly RaycastHit[] Shots = new RaycastHit[32];
 
+        private Nameable nameable;
         private Inventory inventory;
         private Interactor interactor;
         private Hands hands;
@@ -26,6 +28,7 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
+            nameable = GetComponent<Nameable>();
             inventory = GetComponent<Inventory>();
             interactor = GetComponent<Interactor>();
             hands = GetComponent<Hands>();
@@ -125,7 +128,7 @@ namespace Shooter.Game.Combat
             }
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
-            health.Damage(damage);
+            health.Damage(damage, nameable.PromptName());
             Log.Info("Shot of entity {} hit {} in {} for {} damage", name, health.name, part, damage);
         }
 

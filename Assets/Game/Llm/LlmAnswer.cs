@@ -34,7 +34,8 @@ namespace Shooter.Game.Llm
                     new LlmCharacterRelationCommand()
                     {
                         TargetName = "Exact target name",
-                        NewAmount = 100
+                        NewAmount = 100,
+                        Reason = "Reason for the relation change"
                     }
                 }
             };

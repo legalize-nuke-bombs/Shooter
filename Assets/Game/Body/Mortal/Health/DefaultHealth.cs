@@ -25,14 +25,10 @@ namespace Shooter.Game.Body
             hp.Value = MaxHp;
         }
 
-        public override void Damage(int amount)
+        protected override void DamageRaw(int amount)
         {
-            if (!IsServer || !Alive || amount <= 0) return;
-
             hp.Value = Mathf.Max(hp.Value - amount, 0);
             Log.Info("Entity {} took {} damage, hp now {}/{}", name, amount, hp.Value, MaxHp);
-
-            if (!Alive) Die();
         }
 
         public override void Heal(int amount)

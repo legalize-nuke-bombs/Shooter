@@ -8,8 +8,9 @@ namespace Shooter.Game.Body
 
         public override bool Alive => true;
 
-        public override void Damage(int amount)
+        protected override void DamageRaw(int amount)
         {
+
         }
 
         public override void Heal(int amount)
