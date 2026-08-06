@@ -258,5 +258,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Falling.Faller
   forceK: 0.1
-  groundHitSound: {fileID: 11400000, guid: da7bf4e7241a47288bf250c94f6d1772, type: 2}
+  groundHitSound: {fileID: 11400000, guid: 5b006ad531da93f46bb38d35e89d7e85, type: 2}
   groundHitMinSpeed: 2

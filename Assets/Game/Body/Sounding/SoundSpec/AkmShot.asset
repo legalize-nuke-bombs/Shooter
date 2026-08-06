@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   id: akmshot
   clips:
-  - {fileID: 8300000, guid: 125642657f594bdfbe3146b05f72c392, type: 3}
+  - {fileID: 8300000, guid: 1bfae0676e6cc29548e9a530052278eb, type: 3}
+  - {fileID: 8300000, guid: ac73f14e284448ccac4f59e9d048d1b9, type: 3}
+  - {fileID: 8300000, guid: 3fd537a05b2fa858250937f3f5aa7011, type: 3}
   volume: 1
   rolloff: 0
   minDistance: 25

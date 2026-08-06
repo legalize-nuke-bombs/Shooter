@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   id: footsteps
   clips:
-  - {fileID: 8300000, guid: 161dbd261955425ba8d6cac91718cd2a, type: 3}
-  - {fileID: 8300000, guid: 28580712e71e410a85157037ef5c0f31, type: 3}
+  - {fileID: 8300000, guid: 4e2bc74d8399619a50c9f85f758d9f24, type: 3}
+  - {fileID: 8300000, guid: 7c0027e0a2a8cb698a6c4e097605b40e, type: 3}
+  - {fileID: 8300000, guid: ab22afb67bae2e7a2546be7dfa0c0d06, type: 3}
+  - {fileID: 8300000, guid: 2f596b8552aad31b24d9c840cc762ee7, type: 3}
   volume: 0.12
   rolloff: 0
   minDistance: 2
