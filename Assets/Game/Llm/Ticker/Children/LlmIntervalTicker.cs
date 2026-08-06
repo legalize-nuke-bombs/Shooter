@@ -5,7 +5,7 @@ namespace Shooter.Game.Llm.Ticker.Children
     public class LlmIntervalTicker : LlmChildTicker
     {
         [SerializeField] private float interval = 300f;
-        [SerializeField] private float firstTickDelay = 5f;
+        [SerializeField] private float firstTickDelay = 1f;
         private float timer;
 
         public void Awake()
