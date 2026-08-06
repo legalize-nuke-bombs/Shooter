@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   broken: 0
+  breakSound: {fileID: 11400000, guid: 5b006ad531da93f46bb38d35e89d7e85, type: 2}
   useDespawn: 0
   despawnTime: 600
 --- !u!114 &8612113667321592335
@@ -162,7 +163,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7850062363463173081}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 500
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -256,5 +257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b23be04a8f4fb5a5e8fd03a79f4504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Falling.Faller
-  fallingSound: {fileID: 11400000, guid: 5b006ad531da93f46bb38d35e89d7e85, type: 2}
   forceK: 0.1
+  groundHitSound: {fileID: 11400000, guid: 5b006ad531da93f46bb38d35e89d7e85, type: 2}
+  groundHitMinSpeed: 2
