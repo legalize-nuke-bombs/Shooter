@@ -22,9 +22,10 @@ namespace Shooter.Game.Falling
 
         [SerializeField] private SoundSpec groundHitSound = null;
         [SerializeField] private float groundHitMinSpeed = 2f;
-        [SerializeField] private float groundHitGraceTime = 0.5f;
+        [SerializeField] private float groundHitArmTilt = 30f;
         [SerializeField] private float maxDepenetrationSpeed = 1f;
         private bool waitingForGroundHit;
+        private float initialTilt;
         private float fellAt;
 
         public void Awake()
@@ -36,10 +37,16 @@ namespace Shooter.Game.Falling
             rigidbody.isKinematic = !structureHealth.Broken;
             rigidbody.maxDepenetrationVelocity = maxDepenetrationSpeed;
             waitingForGroundHit = structureHealth.Broken;
+            initialTilt = Tilt();
             fellAt = Time.time;
 
             networkRigidbody = GetComponent<NetworkRigidbody>();
             networkRigidbody.AutoUpdateKinematicState = false;
+        }
+
+        private float Tilt()
+        {
+            return Vector3.Angle(transform.up, Vector3.up);
         }
 
         public void Broken()
@@ -53,6 +60,7 @@ namespace Shooter.Game.Falling
 
             rigidbody.isKinematic = false;
             waitingForGroundHit = true;
+            initialTilt = Tilt();
             fellAt = Time.time;
 
             Vector3 pushDirection = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized;
@@ -72,9 +80,10 @@ namespace Shooter.Game.Falling
         private void GroundHit(Collision collision)
         {
             if (!waitingForGroundHit) return;
-            if (Time.time - fellAt < groundHitGraceTime) return;
 
             float speedChange = collision.impulse.magnitude / rigidbody.mass;
+
+            if (Tilt() - initialTilt < groundHitArmTilt) return;
             if (speedChange < groundHitMinSpeed) return;
 
             Log.Info("Entity {} hit the ground at {} m/s", name, speedChange);
