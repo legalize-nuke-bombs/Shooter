@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6063394281020942509}
   - component: {fileID: 5056160827475318576}
   - component: {fileID: 4957635887391225908}
+  - component: {fileID: 469253834919569006}
   - component: {fileID: 2658346833551713148}
   - component: {fileID: 6600000000000000105}
   - component: {fileID: 6600000000000000109}
@@ -296,3 +297,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.WeaponView
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &469253834919569006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d028c92be98248b69708cd7966d30d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

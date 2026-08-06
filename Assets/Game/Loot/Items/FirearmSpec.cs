@@ -1,3 +1,4 @@
+using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Sounding;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace Shooter.Game.Loot
         [SerializeField] private SoundSpec shotSound;
         [SerializeField] private SoundSpec misfireSound;
         [SerializeField] private SoundSpec reloadSound;
-        [SerializeField] private SoundSpec headshotSound;
+        [SerializeField] private EarSoundSpec headshotSound;
 
         public GameObject Model => model;
 
@@ -38,6 +39,6 @@ namespace Shooter.Game.Loot
 
         public SoundSpec ReloadSound => reloadSound;
 
-        public SoundSpec HeadshotSound => headshotSound;
+        public EarSoundSpec HeadshotSound => headshotSound;
     }
 }

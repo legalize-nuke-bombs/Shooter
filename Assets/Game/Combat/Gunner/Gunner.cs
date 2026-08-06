@@ -1,4 +1,5 @@
 using Shooter.Game.Body;
+using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Hitboxes;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
@@ -13,6 +14,7 @@ namespace Shooter.Game.Combat
     [RequireComponent(typeof(Interactor))]
     [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(Speaker))]
+    [RequireComponent(typeof(EarSpeaker))]
     public class Gunner : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -24,6 +26,7 @@ namespace Shooter.Game.Combat
         private Interactor interactor;
         private Hands hands;
         private Speaker speaker;
+        private EarSpeaker earSpeaker;
         private IRestraint[] restraints;
 
         private void Awake()
@@ -33,6 +36,7 @@ namespace Shooter.Game.Combat
             interactor = GetComponent<Interactor>();
             hands = GetComponent<Hands>();
             speaker = GetComponent<Speaker>();
+            earSpeaker = GetComponent<EarSpeaker>();
             restraints = GetComponents<IRestraint>();
         }
 
@@ -119,13 +123,7 @@ namespace Shooter.Game.Combat
             }
 
             BodyPart part = Weakest(found, health);
-            if (part == BodyPart.Head)
-            {
-                if (health.TryGetComponent(out Speaker targetSpeaker))
-                {
-                    targetSpeaker.Play(spec.HeadshotSound);
-                }
-            }
+            if (part == BodyPart.Head) earSpeaker.Play(spec.HeadshotSound);
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
             health.Damage(damage, nameable.PromptName());
