@@ -27,4 +27,4 @@ MonoBehaviour:
   shotSound: {fileID: 11400000, guid: 3ce82d71758ec3a71b6e328efb3220a8, type: 2}
   misfireSound: {fileID: 11400000, guid: b350a4b605fd1f66e101747903aa0383, type: 2}
   reloadSound: {fileID: 11400000, guid: 4c38a07e8a5b3ddce2b2dc46db74b543, type: 2}
-  headshotSound: {fileID: 11400000, guid: a64fe36a94ed4cc4cb4ea743b90c7771, type: 2}
+  headshotSound: {fileID: 11400000, guid: 2469b560ee1d4dfa8baadf87c7efbb01, type: 2}

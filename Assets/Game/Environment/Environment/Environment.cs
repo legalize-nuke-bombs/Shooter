@@ -1,5 +1,6 @@
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
 using Shooter.Logging;
@@ -23,6 +24,8 @@ namespace Shooter.Game
 
         [SerializeField] private SoundCatalog sounds;
 
+        [SerializeField] private EarSoundCatalog earSounds;
+
         [SerializeField] private SkinCatalog skins;
 
         [SerializeField] private NameCatalog names;
@@ -43,6 +46,8 @@ namespace Shooter.Game
         public ItemCatalog Items => items;
 
         public SoundCatalog Sounds => sounds;
+
+        public EarSoundCatalog EarSounds => earSounds;
 
         public SkinCatalog Skins => skins;
 
