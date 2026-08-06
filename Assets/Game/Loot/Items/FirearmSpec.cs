@@ -16,6 +16,7 @@ namespace Shooter.Game.Loot
         [SerializeField] private SoundSpec shotSound;
         [SerializeField] private SoundSpec misfireSound;
         [SerializeField] private SoundSpec reloadSound;
+        [SerializeField] private SoundSpec headshotSound;
 
         public GameObject Model => model;
 
@@ -36,5 +37,7 @@ namespace Shooter.Game.Loot
         public SoundSpec MisfireSound => misfireSound;
 
         public SoundSpec ReloadSound => reloadSound;
+
+        public SoundSpec HeadshotSound => headshotSound;
     }
 }
