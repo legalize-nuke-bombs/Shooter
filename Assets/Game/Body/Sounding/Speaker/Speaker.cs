@@ -50,6 +50,7 @@ namespace Shooter.Game.Body.Sounding
             AudioSource source = Free();
             source.clip = clip;
             source.volume = sound.Volume;
+            source.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
             source.rolloffMode = sound.Rolloff;
             source.minDistance = sound.MinDistance;
             source.maxDistance = sound.MaxDistance;

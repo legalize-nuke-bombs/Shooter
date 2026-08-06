@@ -15,6 +15,8 @@ namespace Shooter.Game.Body.Sounding
 
         [SerializeField] private float maxDistance = 100f;
 
+        [SerializeField, Range(0f, 0.5f)] private float pitchVariation = 0.05f;
+
         public float Volume => volume;
 
         public AudioRolloffMode Rolloff => rolloff;
@@ -22,6 +24,8 @@ namespace Shooter.Game.Body.Sounding
         public float MinDistance => minDistance;
 
         public float MaxDistance => maxDistance;
+
+        public float PitchVariation => pitchVariation;
 
         public bool Silent => clips == null || clips.Length == 0;
 
