@@ -18,7 +18,7 @@ namespace Shooter.Game.Llm
         {
             return new LlmAnswer()
             {
-                Reply = "Your answer to the wanderer, or null if nobody is waiting for one",
+                Reply = "Your answer to the WANDERER, or null if the system did not explicitly request filling this field.",
                 Compact = "A retelling of the conversation with the wanderer, or null if the system did not explicitly request consolidation.",
                 Memory = "The new FULL version of your Memory, or null to keep it unchanged",
                 InterNpcInteractions = new LlmInterNpcInteractionCommand[]
