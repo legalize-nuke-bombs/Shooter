@@ -149,7 +149,7 @@ namespace Shooter.Game.Llm
                 .Section("RELATIONSHIPS WITH OTHER CHARACTERS (RESIDENTS AND WANDERERS)",
                     "You have your own attitude towards every character.\n" +
                     "The attitude is expressed by a number from 0 to 100. This number determines whether the character is an enemy, neutral, or friend. Your character automatically attacks all characters he considers enemies in order to defend themselves instantly.\n" +
-                    "Your current relationships with characters are visible in Your state.\n" +
+                    "Your current relationships with characters and relations changelog are visible in Your state.\n" +
                     "You can always manually change the value of your relationship to character at your discretion using the `characterRelations` response field.\n" +
                     "Your attitude towards the character will drop automatically if they attack you or your friends.");
 
@@ -180,7 +180,7 @@ namespace Shooter.Game.Llm
                 );
         private string Time()
         {
-            return Environment.Current == null ? "unknown" : Environment.Current.Clock.DateTime();
+            return Environment.Current.Clock.DateTime();
         }
         private string WorldState()
         {
@@ -514,15 +514,15 @@ namespace Shooter.Game.Llm
 
             foreach (LlmCharacterRelationCommand cmd in cmds)
             {
-                Log.Info("Entity {} is updating relation to character {} from {} to {}", name, cmd.TargetName, characterRelation.Amount(cmd.TargetName), cmd.NewAmount);
+                Log.Info("Entity {} is updating relation to character {} from {} to {}: {}", name, cmd.TargetName, characterRelation.Amount(cmd.TargetName), cmd.NewAmount, cmd.Reason);
                 try
                 {
-                    characterRelation.SetAmount(cmd.TargetName, cmd.NewAmount);
+                    characterRelation.SetAmount(cmd.TargetName, cmd.NewAmount, cmd.Reason);
                 }
                 catch (Exception e)
                 {
                     Log.Warn("Entity {} failed to update relation: {}", name, e.Message);
-                    systemNotificationsInbox.Put("[" + Time() + "]" + $"Failed to update your relation to character {cmd.TargetName} from {characterRelation.Amount(cmd.TargetName)} to {cmd.NewAmount}: {e.Message}");
+                    systemNotificationsInbox.Put("[" + Time() + "]" + $"Failed to update your relation to character {cmd.TargetName} from {characterRelation.Amount(cmd.TargetName)} to {cmd.NewAmount} {cmd.Reason}: {e.Message}");
                 }
             }
         }

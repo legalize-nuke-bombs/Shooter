@@ -1,3 +1,4 @@
+using Shooter.Game.Relationship;
 using Shooter.Logging;
 using Unity.Netcode;
 
@@ -7,6 +8,13 @@ namespace Shooter.Game.Body
     {
         private static readonly Journal Log = Logs.Here();
 
+        private CharacterRelation characterRelation;
+
+        public void Awake()
+        {
+            characterRelation = GetComponent<CharacterRelation>();
+        }
+
         public bool Restrains => !Alive;
 
         public abstract int Hp { get; }
@@ -15,7 +23,33 @@ namespace Shooter.Game.Body
 
         public abstract bool Alive { get; }
 
-        public abstract void Damage(int amount);
+        public DamageResult Damage(int amount, string attackerName)
+        {
+            if (!IsServer || !Alive || amount <= 0)
+            {
+                return new DamageResult()
+                {
+                    Murder = false
+                };
+            }
+
+            DamageRaw(amount);
+
+            if (!Alive) Die();
+            var result = new DamageResult()
+            {
+                Murder = !Alive
+            };
+
+            if (characterRelation != null && attackerName != null)
+            {
+                characterRelation.DecreaseAmount(attackerName, amount, $"{attackerName} dealt {amount} damage");
+            }
+
+            return result;
+        }
+
+        protected abstract void DamageRaw(int amount);
 
         public abstract void Heal(int amount);
 
