@@ -7,7 +7,7 @@ namespace Shooter.Game.Body.Sounding
     [RequireComponent(typeof(Speaker))]
     public class Landing : NetworkBehaviour
     {
-        [SerializeField] private float minSpeed = 3f;
+        [SerializeField] private float minHeight = 0.6f;
 
         [SerializeField] private SoundSpec sound;
 
@@ -34,9 +34,9 @@ namespace Shooter.Game.Body.Sounding
             movement.Landed -= Landed;
         }
 
-        private void Landed(float speed)
+        private void Landed(float height)
         {
-            if (speed < minSpeed) return;
+            if (height < minHeight) return;
 
             speaker.Play(sound);
         }

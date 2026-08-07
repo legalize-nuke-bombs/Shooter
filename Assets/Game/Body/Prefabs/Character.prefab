@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  minSpeed: 3
+  minHeight: 0.6
   sound: {fileID: 11400000, guid: 67f8d0ce98874c0493befcfd4f5e80d9, type: 2}
 --- !u!114 &6600000000000000105
 MonoBehaviour:
