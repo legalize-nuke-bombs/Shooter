@@ -173,6 +173,11 @@
     margin-bottom: 14px;
 }
 
+.ghost {
+    position: absolute;
+    opacity: 0.8;
+}
+
 .grid__cell {
     position: absolute;
     border-width: 1px;

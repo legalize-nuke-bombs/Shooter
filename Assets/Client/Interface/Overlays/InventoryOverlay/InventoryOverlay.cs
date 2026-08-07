@@ -27,6 +27,10 @@ namespace Shooter.Client.Interface.Overlays
         private VisualElement held;
         private Label coins;
         private Inventory bag;
+        private VisualElement ghost;
+        private ulong dragged;
+        private bool draggedFromHands;
+        private int pointer;
         private bool open;
         private bool stale;
 
@@ -235,9 +239,78 @@ namespace Shooter.Client.Interface.Overlays
                 thing.Add(label);
             }
 
-            if (equipable) thing.clicked += () => Equip(id, holding);
+            if (equipable) Draggable(thing, id, holding);
 
             return thing;
+        }
+
+        private void Draggable(VisualElement thing, ulong id, bool holding)
+        {
+            thing.RegisterCallback<PointerDownEvent>(down =>
+            {
+                if (down.button != 0 || ghost != null) return;
+
+                dragged = id;
+                draggedFromHands = holding;
+                pointer = down.pointerId;
+
+                ghost = Ghost(thing);
+                window.Add(ghost);
+                Follow(down.position);
+
+                thing.CapturePointer(pointer);
+                down.StopPropagation();
+            });
+
+            thing.RegisterCallback<PointerMoveEvent>(move =>
+            {
+                if (ghost == null || move.pointerId != pointer) return;
+
+                Follow(move.position);
+            });
+
+            thing.RegisterCallback<PointerUpEvent>(up =>
+            {
+                if (ghost == null || up.pointerId != pointer) return;
+
+                thing.ReleasePointer(pointer);
+                Drop(up.position);
+            });
+        }
+
+        private VisualElement Ghost(VisualElement thing)
+        {
+            var shadow = new VisualElement();
+            shadow.AddToClassList("ghost");
+            shadow.style.width = thing.resolvedStyle.width;
+            shadow.style.height = thing.resolvedStyle.height;
+
+            VisualElement icon = thing.Q<VisualElement>(className: "slot__icon");
+
+            if (icon != null)
+            {
+                shadow.style.backgroundImage = icon.resolvedStyle.backgroundImage;
+                shadow.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            }
+
+            return shadow;
+        }
+
+        private void Follow(Vector2 at)
+        {
+            ghost.style.left = at.x - ghost.resolvedStyle.width / 2f;
+            ghost.style.top = at.y - ghost.resolvedStyle.height / 2f;
+        }
+
+        private void Drop(Vector2 at)
+        {
+            ghost.RemoveFromHierarchy();
+            ghost = null;
+
+            if (bag == null) return;
+
+            if (held.worldBound.Contains(at) && !draggedFromHands) bag.EquipRpc(dragged);
+            else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.Nothing);
         }
 
         private Button Slot(ItemSpec spec, string fallback, bool holding, bool equipable)
@@ -270,9 +343,5 @@ namespace Shooter.Client.Interface.Overlays
             return slot;
         }
 
-        private void Equip(ulong id, bool holding)
-        {
-            bag.EquipRpc(holding ? Inventory.Nothing : id);
-        }
     }
 }
