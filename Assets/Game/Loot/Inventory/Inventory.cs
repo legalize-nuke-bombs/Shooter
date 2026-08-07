@@ -443,9 +443,15 @@ namespace Shooter.Game.Loot
         [Serializable]
         private struct Entry
         {
-            public ItemSpec Spec;
-            public int Amount;
-            public bool Equip;
+            [SerializeField] private ItemSpec spec;
+            [SerializeField] private int amount;
+            [SerializeField] private bool equip;
+
+            public ItemSpec Spec => spec;
+
+            public int Amount => amount;
+
+            public bool Equip => equip;
         }
     }
 }
