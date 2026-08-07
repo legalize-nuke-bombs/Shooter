@@ -188,7 +188,7 @@ MonoBehaviour:
     m_Value: 0
   maximumHeight:
     m_OverrideState: 1
-    m_Value: 60
+    m_Value: 300
   meanFreePath:
     m_OverrideState: 1
     m_Value: 20
@@ -629,7 +629,7 @@ MonoBehaviour:
     m_Value: 0
   cloudSimpleMode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   m_CloudPreset:
     m_OverrideState: 1
     m_Value: 3
@@ -816,7 +816,7 @@ MonoBehaviour:
     m_Value: 0.35
   shapeFactor:
     m_OverrideState: 1
-    m_Value: 0.825
+    m_Value: 0.85
   shapeScale:
     m_OverrideState: 1
     m_Value: 5
@@ -825,10 +825,10 @@ MonoBehaviour:
     m_Value: {x: -0.1, y: 0, z: 0}
   erosionFactor:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 0.75
   erosionScale:
     m_OverrideState: 1
-    m_Value: 75
+    m_Value: 107
   erosionNoiseType:
     m_OverrideState: 1
     m_Value: 0
