@@ -11,21 +11,20 @@ namespace Shooter.Client.Interface.Overlays
     {
         private static readonly Journal Log = Logs.Here();
 
-        private const string WindowElement = "inventory";
+        private const string WindowElement = "inventory-screen";
         private const string GridElement = "inventory-grid";
-        private const string EmptyElement = "inventory-empty";
         private const string HeldElement = "inventory-held";
         private const string CoinsElement = "inventory-coins";
         private const string Coins = "coin";
-        private const float Cell = 54f;
-        private const float Bezel = 10f;
+        private const float Cell = 48f;
+        private const float Bezel = 8f;
         private const int Columns = 10;
-        private const int Rows = 8;
+        private const int Rows = 6;
+        private const int HandRows = 2;
 
         private VisualElement window;
         private VisualElement grid;
         private VisualElement held;
-        private Label empty;
         private Label coins;
         private Inventory bag;
         private bool open;
@@ -53,11 +52,10 @@ namespace Shooter.Client.Interface.Overlays
         {
             window = root.Q<VisualElement>(WindowElement);
             grid = root.Q<VisualElement>(GridElement);
-            empty = root.Q<Label>(EmptyElement);
             held = root.Q<VisualElement>(HeldElement);
             coins = root.Q<Label>(CoinsElement);
 
-            if (window == null || grid == null || empty == null || held == null || coins == null)
+            if (window == null || grid == null || held == null || coins == null)
             {
                 Log.Error("Overlay document has no {} window, the bag stays hidden", WindowElement);
                 return false;
@@ -109,11 +107,11 @@ namespace Shooter.Client.Interface.Overlays
             grid.Clear();
             held.Clear();
 
-            Paper();
+            Paper(held, HandRows);
+            Paper(grid, Rows);
 
             if (bag == null)
             {
-                empty.style.display = DisplayStyle.Flex;
                 coins.text = "0";
                 return;
             }
@@ -121,18 +119,22 @@ namespace Shooter.Client.Interface.Overlays
             UniqueItem equipped = bag.Equipped();
             var taken = new bool[Rows, Columns];
             int money = 0;
-            int packed = 0;
 
-            if (equipped != null) held.Add(Held(equipped));
+            if (equipped != null)
+            {
+                ItemSpec spec = bag.Spec(equipped);
+
+                held.Add(Thing(spec, equipped.SpecId, 0, 0, null, equipped.Id, true, true));
+            }
 
             foreach (UniqueItem item in bag.Uniques)
             {
                 if (equipped != null && item.Id == equipped.Id) continue;
 
                 ItemSpec spec = bag.Spec(item);
-                if (Pack(taken, spec, out int row, out int column)) packed++;
+                Pack(taken, spec, out int row, out int column);
 
-                grid.Add(Thing(spec, item.SpecId, row, column, null, item.Id, spec != null && spec.Equipable));
+                grid.Add(Thing(spec, item.SpecId, row, column, null, item.Id, spec != null && spec.Equipable, false));
             }
 
             foreach (StackRecord stack in bag.Stacks)
@@ -144,21 +146,20 @@ namespace Shooter.Client.Interface.Overlays
                 }
 
                 ItemSpec spec = bag.Spec(stack.SpecId);
-                if (Pack(taken, spec, out int row, out int column)) packed++;
+                Pack(taken, spec, out int row, out int column);
 
-                grid.Add(Thing(spec, stack.SpecId.ToString(), row, column, stack.Amount.ToString(), Inventory.Nothing, false));
+                grid.Add(Thing(spec, stack.SpecId.ToString(), row, column, stack.Amount.ToString(), Inventory.Nothing, false, false));
             }
 
             coins.text = money.ToString();
-            empty.style.display = packed == 0 ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        private void Paper()
+        private static void Paper(VisualElement host, int rows)
         {
-            grid.style.width = Columns * Cell;
-            grid.style.height = Rows * Cell;
+            host.style.width = Columns * Cell;
+            host.style.height = rows * Cell;
 
-            for (int row = 0; row < Rows; row++)
+            for (int row = 0; row < rows; row++)
             {
                 for (int column = 0; column < Columns; column++)
                 {
@@ -168,7 +169,7 @@ namespace Shooter.Client.Interface.Overlays
                     cell.style.top = row * Cell;
                     cell.style.width = Cell;
                     cell.style.height = Cell;
-                    grid.Add(cell);
+                    host.Add(cell);
                 }
             }
         }
@@ -216,10 +217,10 @@ namespace Shooter.Client.Interface.Overlays
             }
         }
 
-        private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, ulong id, bool equipable)
+        private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, ulong id, bool equipable, bool holding)
         {
             Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
-            Button thing = Slot(spec, fallback, false, equipable);
+            Button thing = Slot(spec, fallback, holding, equipable);
 
             thing.style.position = Position.Absolute;
             thing.style.left = column * Cell;
@@ -234,20 +235,7 @@ namespace Shooter.Client.Interface.Overlays
                 thing.Add(label);
             }
 
-            if (equipable) thing.clicked += () => Equip(id, false);
-
-            return thing;
-        }
-
-        private VisualElement Held(UniqueItem item)
-        {
-            ItemSpec spec = bag.Spec(item);
-            Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
-            Button thing = Slot(spec, item.SpecId, true, true);
-
-            thing.style.width = size.x * Cell;
-            thing.style.height = size.y * Cell;
-            thing.clicked += () => Equip(item.Id, true);
+            if (equipable) thing.clicked += () => Equip(id, holding);
 
             return thing;
         }
