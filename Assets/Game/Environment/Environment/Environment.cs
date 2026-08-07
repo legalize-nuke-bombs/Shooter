@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DefaultExecutionOrder(-100)]
     [RequireComponent(typeof(Clock))]
     [RequireComponent(typeof(SleepCycle))]
     [RequireComponent(typeof(UniqueItemIdProvider))]
@@ -72,12 +73,17 @@ namespace Shooter.Game
                 Log.Warn("World has no main spawn point, everyone will appear at {}", transform.position);
             else if (points.Length > 1)
                 Log.Warn("World has {} main spawn points, everyone will appear at the one on {}", points.Length, spawn.name);
+
+            Current = this;
+        }
+
+        private void OnDestroy()
+        {
+            if (Current == this) Current = null;
         }
 
         public override void OnNetworkSpawn()
         {
-            Current = this;
-
             if (IsServer)
             {
                 ServerConfig config = Config.Read().Server;
@@ -90,9 +96,6 @@ namespace Shooter.Game
 
         public override void OnNetworkDespawn()
         {
-            if (Current != this) return;
-
-            Current = null;
             Log.Info("Environment is down");
         }
     }
