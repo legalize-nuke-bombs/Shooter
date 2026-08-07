@@ -4,6 +4,7 @@ using Shooter.Game.Body.Hitboxes;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
 using Shooter.Logging;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -53,17 +54,16 @@ namespace Shooter.Game.Combat
 
         public bool TryShoot()
         {
-            if (!Ready(out Item item, out FirearmSpec spec)) return false;
+            if (!Ready(out Firearm firearm, out FirearmSpec spec)) return false;
 
             if (hands != null && !hands.TryTake(HandsAction.Shooting, spec.FireInterval, false, null)) return false;
 
-            if (item.State <= 0)
+            if (!firearm.Spend())
             {
                 speaker?.Play(spec.MisfireSound);
                 return false;
             }
 
-            inventory.Reequip(new Item(item.Id, item.Amount, item.State - 1));
             speaker?.Play(spec.ShotSound);
             Hit(spec);
             return true;
@@ -71,38 +71,40 @@ namespace Shooter.Game.Combat
 
         public bool TryReload()
         {
-            if (!Ready(out Item item, out FirearmSpec spec)) return false;
+            if (!Ready(out Firearm firearm, out FirearmSpec spec)) return false;
             if (spec.Ammo == null) return false;
 
-            int absent = spec.MagazineSize - item.State;
+            int absent = spec.MagazineSize - firearm.Magazine;
             if (absent <= 0 || inventory.Amount(spec.Ammo.Id) == 0) return false;
 
-            if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true, () => Reloaded(spec, absent))) return false;
+            if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true, () => Reloaded(firearm, spec, absent))) return false;
 
             speaker?.Play(spec.ReloadSound);
-            Log.Info("Entity {} started reload of {}, {}s", name, item.Id, spec.ReloadTime);
+            Log.Info("Entity {} started reload of {}, {}s", name, firearm.SpecId, spec.ReloadTime);
             return true;
         }
 
-        private bool Ready(out Item item, out FirearmSpec spec)
+        private bool Ready(out Firearm firearm, out FirearmSpec spec)
         {
-            item = default;
+            firearm = null;
             spec = null;
 
             if (!IsServer || Restraints.Any(restraints)) return false;
-            if (!inventory.Equipped(out item)) return false;
 
-            spec = inventory.Catalog == null ? null : inventory.Catalog.Firearm(item.Id);
+            firearm = inventory.Equipped() as Firearm;
+            if (firearm == null) return false;
+
+            spec = inventory.Catalog == null ? null : inventory.Catalog.Firearm(new FixedString32Bytes(firearm.SpecId));
             return spec != null;
         }
 
-        private void Reloaded(FirearmSpec spec, int absent)
+        private void Reloaded(Firearm firearm, FirearmSpec spec, int absent)
         {
-            if (!inventory.Equipped(out Item item)) return;
+            if (inventory.Find(firearm.Id) == null) return;
 
             int taken = inventory.Remove(spec.Ammo.Id, absent, InventoryOnConflict.Partly);
-            inventory.Reequip(new Item(item.Id, item.Amount, item.State + taken));
-            Log.Info("Entity {} reloaded {} with {} rounds, {} left in bag", name, item.Id, taken, inventory.Amount(spec.Ammo.Id));
+            firearm.Reload(taken, spec.MagazineSize);
+            Log.Info("Entity {} reloaded {} with {} rounds, {} left in bag", name, firearm.SpecId, taken, inventory.Amount(spec.Ammo.Id));
         }
 
         private void Hit(FirearmSpec spec)

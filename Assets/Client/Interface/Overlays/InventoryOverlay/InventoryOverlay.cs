@@ -98,49 +98,61 @@ namespace Shooter.Client.Interface.Overlays
             int count = bag == null ? 0 : bag.Count;
             empty.style.display = count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
 
-            for (int slot = 0; slot < count; slot++)
-                rows.Add(Row(slot, bag.At(slot)));
+            if (bag == null) return;
+
+            foreach (StackRecord stack in bag.Stacks) rows.Add(Row(stack));
+
+            foreach (UniqueItem item in bag.Uniques) rows.Add(Row(item));
         }
 
-        private VisualElement Row(int slot, Item item)
+        private VisualElement Row(StackRecord stack)
         {
-            bool held = slot == bag.EquippedSlot;
+            ItemSpec spec = bag.Spec(stack.SpecId);
+            VisualElement row = Slot(spec == null ? stack.SpecId.ToString() : spec.Title, false, false);
+
+            var amount = new Label(stack.Amount.ToString());
+            amount.AddToClassList("slot__amount");
+            row.Add(amount);
+
+            return row;
+        }
+
+        private VisualElement Row(UniqueItem item)
+        {
+            bool held = item.Id == bag.EquippedId;
             ItemSpec spec = bag.Spec(item);
             bool equipable = spec != null && spec.Equipable;
 
+            VisualElement row = Slot(spec == null ? item.SpecId : spec.Title, held, equipable);
+
+            if (equipable) ((Button)row).clicked += () => Equip(item.Id, held);
+
+            return row;
+        }
+
+        private VisualElement Slot(string title, bool held, bool equipable)
+        {
             var row = new Button { text = string.Empty };
             row.AddToClassList("slot");
             if (held) row.AddToClassList("slot--held");
             if (!equipable) row.AddToClassList("slot--fixed");
 
-            var name = new Label(spec == null ? item.Id.ToString() : spec.Title);
+            var name = new Label(title);
             name.AddToClassList("slot__name");
             row.Add(name);
 
-            var amount = new Label(Amount(item));
-            amount.AddToClassList("slot__amount");
-            row.Add(amount);
-
             row.SetEnabled(equipable);
-            if (equipable) row.clicked += () => Equip(slot, held);
 
             return row;
         }
 
-        private void Equip(int slot, bool held)
+        private void Equip(ulong id, bool held)
         {
-            bag.EquipRpc(held ? Inventory.Nothing : slot);
+            bag.EquipRpc(held ? Inventory.Nothing : id);
 
             if (held) return;
 
             OwnPlayer.Find<LocalPlayer>()?.CloseInventory();
-        }
-
-        private string Amount(Item item)
-        {
-            ItemSpec spec = bag.Spec(item);
-
-            return spec != null && spec.Stackable ? item.Amount.ToString() : string.Empty;
         }
     }
 }

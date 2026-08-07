@@ -86,9 +86,7 @@ namespace Shooter.Client.Playing
 
         private GameObject Wanted()
         {
-            if (!inventory.Equipped(out Item item)) return null;
-
-            return inventory.Spec(item) is FirearmSpec firearm ? firearm.Model : null;
+            return inventory.Holding is FirearmSpec firearm ? firearm.Model : null;
         }
 
         private GameObject Wear(GameObject model)

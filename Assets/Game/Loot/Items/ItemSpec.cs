@@ -17,5 +17,10 @@ namespace Shooter.Game.Loot
         public bool Stackable => stackable;
 
         public bool Equipable => equipable;
+
+        public virtual UniqueItem Create(ulong id)
+        {
+            return new UniqueItem(id, Key);
+        }
     }
 }
