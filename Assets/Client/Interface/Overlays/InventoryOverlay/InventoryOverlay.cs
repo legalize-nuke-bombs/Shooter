@@ -16,6 +16,7 @@ namespace Shooter.Client.Interface.Overlays
         private const string HeldElement = "inventory-held";
         private const string CoinsElement = "inventory-coins";
         private const float IconSize = 88f;
+        private const string Coins = "coin";
 
         private VisualElement window;
         private VisualElement rows;
@@ -127,9 +128,7 @@ namespace Shooter.Client.Interface.Overlays
 
             foreach (StackRecord stack in bag.Stacks)
             {
-                ItemSpec spec = bag.Spec(stack.SpecId);
-
-                if (spec != null && spec.Currency)
+                if (stack.SpecId == Coins)
                 {
                     money += stack.Amount;
                     continue;
