@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 7021814678890179094}
   - component: {fileID: 4445930403988394465}
   - component: {fileID: 7723478074634143434}
-  - component: {fileID: 8678851527500330701}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -128,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "A huge overgrown cube, 25x25x25 meters"
+  content: A huge overgrown cube, 25x25x25 meters
 --- !u!114 &7723478074634143434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,20 +154,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &8678851527500330701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1475251358202894423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d5e5a11aa5364648afceb32280ae013, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.TypedNameable
-  ShowTopMostFoldoutHeaderGroup: 1
-  spec: {fileID: 11400000, guid: 68cf89b7fafa75642bd831826cc9c331, type: 2}
 --- !u!1 &4402097373001482622
 GameObject:
   m_ObjectHideFlags: 0
