@@ -108,13 +108,13 @@ namespace Shooter.Client.Interface.Overlays
         private VisualElement Row(StackRecord stack)
         {
             ItemSpec spec = bag.Spec(stack.SpecId);
-            VisualElement row = Slot(spec == null ? stack.SpecId.ToString() : spec.Title, false, false);
+            Button slot = Slot(spec, stack.SpecId.ToString(), false, false);
 
             var amount = new Label(stack.Amount.ToString());
             amount.AddToClassList("slot__amount");
-            row.Add(amount);
+            slot.Add(amount);
 
-            return row;
+            return slot;
         }
 
         private VisualElement Row(UniqueItem item)
@@ -123,27 +123,37 @@ namespace Shooter.Client.Interface.Overlays
             ItemSpec spec = bag.Spec(item);
             bool equipable = spec != null && spec.Equipable;
 
-            VisualElement row = Slot(spec == null ? item.SpecId : spec.Title, held, equipable);
+            Button slot = Slot(spec, item.SpecId, held, equipable);
 
-            if (equipable) ((Button)row).clicked += () => Equip(item.Id, held);
+            if (equipable) slot.clicked += () => Equip(item.Id, held);
 
-            return row;
+            return slot;
         }
 
-        private VisualElement Slot(string title, bool held, bool equipable)
+        private Button Slot(ItemSpec spec, string fallback, bool held, bool equipable)
         {
-            var row = new Button { text = string.Empty };
-            row.AddToClassList("slot");
-            if (held) row.AddToClassList("slot--held");
-            if (!equipable) row.AddToClassList("slot--fixed");
+            var slot = new Button { text = string.Empty, tooltip = spec == null ? fallback : spec.Title };
+            slot.AddToClassList("slot");
+            if (held) slot.AddToClassList("slot--held");
+            if (!equipable) slot.AddToClassList("slot--fixed");
 
-            var name = new Label(title);
-            name.AddToClassList("slot__name");
-            row.Add(name);
+            if (spec != null && spec.Icon != null)
+            {
+                var icon = new VisualElement();
+                icon.AddToClassList("slot__icon");
+                icon.style.backgroundImage = Background.FromSprite(spec.Icon);
+                slot.Add(icon);
+            }
+            else
+            {
+                var name = new Label(spec == null ? fallback : spec.Title);
+                name.AddToClassList("slot__name");
+                slot.Add(name);
+            }
 
-            row.SetEnabled(equipable);
+            slot.SetEnabled(equipable);
 
-            return row;
+            return slot;
         }
 
         private void Equip(ulong id, bool held)
