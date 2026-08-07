@@ -13,6 +13,9 @@
         <ui:VisualElement name="health" class="bar" picking-mode="Ignore">
             <ui:VisualElement name="health-fill" class="bar__fill" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:VisualElement name="stamina" class="bar bar--stamina" picking-mode="Ignore">
+            <ui:VisualElement name="stamina-fill" class="bar__fill bar__fill--stamina" picking-mode="Ignore" />
+        </ui:VisualElement>
         <ui:VisualElement name="inventory" class="inventory">
             <ui:Label text="Инвентарь" class="line inventory__title" picking-mode="Ignore" />
             <ui:VisualElement name="inventory-slots" class="inventory__slots" />

@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 6600000000000000112}
   - component: {fileID: 6600000000000000113}
   - component: {fileID: 6600000000000000114}
+  - component: {fileID: 6600000000000000115}
   m_Layer: 0
   m_Name: Overlays
   m_TagString: Untagged
@@ -137,6 +138,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e02ffc78755b4942918b6977086b61d2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &6600000000000000115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155463033436812329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c4e2b18d95a4f6ab3178e0c62d9a145, type: 3}
   m_Name:
   m_EditorClassIdentifier:
 --- !u!114 &6600000000000000106

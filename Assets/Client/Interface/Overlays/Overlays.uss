@@ -105,6 +105,15 @@
     background-color: rgb(168, 51, 51);
 }
 
+.bar--stamina {
+    bottom: 24px;
+    height: 6px;
+}
+
+.bar__fill--stamina {
+    background-color: rgb(96, 138, 74);
+}
+
 .inventory {
     position: absolute;
     left: 50%;
