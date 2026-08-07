@@ -151,12 +151,6 @@
     background-color: rgba(8, 8, 10, 0.94);
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.14);
-    display: none;
-}
-
-.inventory__title {
-    font-size: 20px;
-    margin-bottom: 14px;
 }
 
 .inventory__caption {
