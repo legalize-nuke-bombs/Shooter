@@ -111,7 +111,7 @@
 }
 
 .bar__fill--stamina {
-    background-color: rgb(96, 138, 74);
+    background-color: rgb(74, 138, 176);
 }
 
 .inventory {

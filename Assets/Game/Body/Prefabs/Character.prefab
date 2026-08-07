@@ -348,7 +348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Endurance
   ShowTopMostFoldoutHeaderGroup: 1
   maxAmount: 100
-  sprintCost: 10
-  walkCost: 2
-  recoverySpeed: 5
+  sprintCost: 25
+  walkCost: 3
+  recoverySpeed: 12
   sprintThreshold: 30
