@@ -18,6 +18,7 @@ namespace Shooter.Client.Interface.Overlays
         private const string CoinsElement = "inventory-coins";
         private const string Coins = "coin";
         private const float Cell = 54f;
+        private const float Bezel = 10f;
         private const int Columns = 10;
         private const int Rows = 8;
 
@@ -253,6 +254,8 @@ namespace Shooter.Client.Interface.Overlays
 
         private Button Slot(ItemSpec spec, string fallback, bool holding, bool equipable)
         {
+            Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
+
             var slot = new Button { text = string.Empty, tooltip = spec == null ? fallback : spec.Title };
             slot.AddToClassList("slot");
             if (holding) slot.AddToClassList("slot--held");
@@ -263,6 +266,8 @@ namespace Shooter.Client.Interface.Overlays
                 var icon = new VisualElement();
                 icon.AddToClassList("slot__icon");
                 icon.style.backgroundImage = Background.FromSprite(spec.Icon);
+                icon.style.width = size.x * Cell - Bezel;
+                icon.style.height = size.y * Cell - Bezel;
                 slot.Add(icon);
             }
             else

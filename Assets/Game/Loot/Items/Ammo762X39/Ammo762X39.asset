@@ -19,3 +19,4 @@ MonoBehaviour:
   equipable: 0
   model: {fileID: 2730496887622252028, guid: 4b489fd8296f8994c9891a9029c72a4b, type: 3}
   icon: {fileID: 21300000, guid: 9c6fc29566ef74e4ebf12fb26b9cd54c, type: 3}
+  cells: {x: 2, y: 1}
