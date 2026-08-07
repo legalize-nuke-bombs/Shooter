@@ -66,7 +66,7 @@ namespace Shooter.Editor
                 }
 
                 Camera camera = Studio(studio, bounds);
-                Texture2D shot = Shoot(camera);
+                Texture2D shot = Shoot(camera, camera.GetComponent<HDAdditionalCameraData>());
                 string path = Save(spec, shot);
 
                 Object.DestroyImmediate(shot);
@@ -187,11 +187,25 @@ namespace Shooter.Editor
             volume.profile = profile;
         }
 
-        private static Texture2D Shoot(Camera camera)
+        private static Texture2D Shoot(Camera camera, HDAdditionalCameraData data)
+        {
+            Texture2D onBlack = Frame(camera, data, Color.black);
+            Texture2D onWhite = Frame(camera, data, Color.white);
+
+            Texture2D shot = Cut(onBlack, onWhite);
+
+            Object.DestroyImmediate(onBlack);
+            Object.DestroyImmediate(onWhite);
+
+            return shot;
+        }
+
+        private static Texture2D Frame(Camera camera, HDAdditionalCameraData data, Color background)
         {
             var target = new RenderTexture(Size, Size, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
             RenderTexture previous = RenderTexture.active;
 
+            data.backgroundColorHDR = background;
             camera.targetTexture = target;
             camera.Render();
 
@@ -209,6 +223,38 @@ namespace Shooter.Editor
             return shot;
         }
 
+        private static Texture2D Cut(Texture2D onBlack, Texture2D onWhite)
+        {
+            Color[] dark = onBlack.GetPixels();
+            Color[] light = onWhite.GetPixels();
+            var pixels = new Color[dark.Length];
+
+            float span = Mathf.Max(light[0].r - dark[0].r, light[0].g - dark[0].g, light[0].b - dark[0].b);
+
+            if (span <= 0.01f)
+            {
+                Debug.LogWarning("Icon studio rendered the same picture on both backgrounds, the icon stays opaque");
+                span = 1f;
+            }
+
+            for (int index = 0; index < dark.Length; index++)
+            {
+                Color over = dark[index];
+                float lifted = (light[index].r - over.r + light[index].g - over.g + light[index].b - over.b) / 3f;
+                float alpha = Mathf.Clamp01(1f - lifted / span);
+
+                pixels[index] = alpha <= 0.004f
+                    ? Color.clear
+                    : new Color(over.r / alpha, over.g / alpha, over.b / alpha, alpha);
+            }
+
+            var shot = new Texture2D(onBlack.width, onBlack.height, TextureFormat.RGBA32, false);
+            shot.SetPixels(pixels);
+            shot.Apply();
+
+            return shot;
+        }
+
         private static string Save(ItemSpec spec, Texture2D shot)
         {
             string folder = Path.GetDirectoryName(AssetDatabase.GetAssetPath(spec));
@@ -219,6 +265,7 @@ namespace Shooter.Editor
 
             var importer = (TextureImporter)AssetImporter.GetAtPath(path);
             importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
             importer.alphaIsTransparency = true;
             importer.mipmapEnabled = false;
             importer.SaveAndReimport();
