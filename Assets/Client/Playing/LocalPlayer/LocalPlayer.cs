@@ -104,7 +104,7 @@ namespace Shooter.Client.Playing
             InventoryOpen = false;
             talking = false;
 
-            Cursor.lockState = CursorLockMode.None;
+            Point(true);
             Log.Info("Local player despawned");
         }
 
@@ -144,7 +144,7 @@ namespace Shooter.Client.Playing
         {
             controls.UI.Disable();
             controls.Player.Enable();
-            Cursor.lockState = CursorLockMode.Locked;
+            Point(false);
         }
 
         private void Browse()
@@ -156,14 +156,20 @@ namespace Shooter.Client.Playing
             controls.Player.Interact.Disable();
             controls.Player.Inventory.Disable();
             controls.UI.Enable();
-            Cursor.lockState = CursorLockMode.None;
+            Point(true);
         }
 
         private void Listen()
         {
             controls.Player.Disable();
             controls.UI.Enable();
-            Cursor.lockState = CursorLockMode.None;
+            Point(true);
+        }
+
+        private static void Point(bool shown)
+        {
+            Cursor.lockState = shown ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = shown;
         }
 
         private void Jump(InputAction.CallbackContext context)
