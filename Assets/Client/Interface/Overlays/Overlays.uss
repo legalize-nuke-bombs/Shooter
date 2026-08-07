@@ -114,6 +114,27 @@
     background-color: rgb(74, 138, 176);
 }
 
+.ammo {
+    position: absolute;
+    right: 14px;
+    bottom: 10px;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.ammo__magazine {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 32px;
+    -unity-font-style: bold;
+}
+
+.ammo__reserve {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+    margin-left: 6px;
+    margin-bottom: 6px;
+}
+
 .inventory {
     position: absolute;
     left: 50%;

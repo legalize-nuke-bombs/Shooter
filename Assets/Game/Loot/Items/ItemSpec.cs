@@ -9,6 +9,12 @@ namespace Shooter.Game.Loot
         [SerializeField] private string promptName;
         [SerializeField] private bool stackable;
         [SerializeField] private bool equipable;
+        [SerializeField] private GameObject model;
+        [SerializeField] private Sprite icon;
+
+        public GameObject Model => model;
+
+        public Sprite Icon => icon;
 
         public string Title => string.IsNullOrEmpty(title) ? Key : title;
 
