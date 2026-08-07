@@ -12,15 +12,12 @@ namespace Shooter.Game.Loot
         [SerializeField] private GameObject model;
         [SerializeField] private Sprite icon;
         [SerializeField] private float iconScale = 1f;
-        [SerializeField] private bool currency;
 
         public GameObject Model => model;
 
         public Sprite Icon => icon;
 
         public float IconScale => Mathf.Clamp(iconScale, 0.1f, 1f);
-
-        public bool Currency => currency;
 
         public string Title => string.IsNullOrEmpty(title) ? Key : title;
 
