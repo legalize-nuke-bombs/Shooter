@@ -352,4 +352,4 @@ MonoBehaviour:
   sprintCost: 25
   walkCost: 3
   recoverySpeed: 12
-  sprintThreshold: 5
+  sprintThreshold: 10
