@@ -12,6 +12,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Clock))]
     [RequireComponent(typeof(SleepCycle))]
+    [RequireComponent(typeof(UniqueItemIdProvider))]
     public class Environment : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -39,6 +40,8 @@ namespace Shooter.Game
 
         public SleepCycle SleepCycle { get; private set; }
 
+        public UniqueItemIdProvider ItemIds { get; private set; }
+
         public Transform Spawn => spawn == null ? transform : spawn.transform;
 
         public GameObject Corpse => corpse;
@@ -61,6 +64,7 @@ namespace Shooter.Game
         {
             Clock = GetComponent<Clock>();
             SleepCycle = GetComponent<SleepCycle>();
+            ItemIds = GetComponent<UniqueItemIdProvider>();
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];
 

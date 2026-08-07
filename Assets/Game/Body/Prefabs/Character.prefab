@@ -304,11 +304,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   catalog: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
   contents: []
-  equipped:
-    UpdateTraits:
-      MinSecondsBetweenUpdates: 0
-      MaxSecondsBetweenUpdates: 0
-    m_InternalValue: -1
 --- !u!114 &6403981259524950330
 MonoBehaviour:
   m_ObjectHideFlags: 0

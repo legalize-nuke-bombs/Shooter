@@ -40,5 +40,10 @@ namespace Shooter.Game.Loot
         public SoundSpec ReloadSound => reloadSound;
 
         public EarSoundSpec HeadshotSound => headshotSound;
+
+        public override UniqueItem Create(ulong id)
+        {
+            return new Firearm(id, Key);
+        }
     }
 }
