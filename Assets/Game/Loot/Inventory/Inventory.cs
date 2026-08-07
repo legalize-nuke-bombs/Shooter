@@ -186,7 +186,14 @@ namespace Shooter.Game.Loot
 
         public int Amount(FixedString32Bytes specId)
         {
-            return stacks.TryGetValue(specId, out int held) ? held : 0;
+            if (IsServer) return stacks.TryGetValue(specId, out int held) ? held : 0;
+
+            foreach (StackRecord record in stackRecords)
+            {
+                if (record.SpecId == specId) return record.Amount;
+            }
+
+            return 0;
         }
 
         public int Remove(FixedString32Bytes specId, int amount, InventoryOnConflict onConflict)
