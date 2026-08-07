@@ -179,7 +179,10 @@ namespace Shooter.Editor
             Texture2D onBlack = Frame(camera, data, Color.black, size);
             Texture2D onWhite = Frame(camera, data, Color.white, size);
 
-            Texture2D shot = Cut(onBlack, onWhite);
+            Texture2D full = Cut(onBlack, onWhite);
+            Texture2D shot = Crop(full);
+
+            if (shot != full) Object.DestroyImmediate(full);
 
             Object.DestroyImmediate(onBlack);
             Object.DestroyImmediate(onWhite);
@@ -240,6 +243,43 @@ namespace Shooter.Editor
             shot.Apply();
 
             return shot;
+        }
+
+        private static Texture2D Crop(Texture2D shot)
+        {
+            Color[] pixels = shot.GetPixels();
+            int left = shot.width;
+            int right = -1;
+            int bottom = shot.height;
+            int top = -1;
+
+            for (int y = 0; y < shot.height; y++)
+            {
+                for (int x = 0; x < shot.width; x++)
+                {
+                    if (pixels[y * shot.width + x].a <= 0.02f) continue;
+
+                    left = Mathf.Min(left, x);
+                    right = Mathf.Max(right, x);
+                    bottom = Mathf.Min(bottom, y);
+                    top = Mathf.Max(top, y);
+                }
+            }
+
+            if (right < 0)
+            {
+                Debug.LogWarning("The shot came out fully transparent, nothing to crop");
+                return shot;
+            }
+
+            int width = right - left + 1;
+            int height = top - bottom + 1;
+
+            var cropped = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            cropped.SetPixels(shot.GetPixels(left, bottom, width, height));
+            cropped.Apply();
+
+            return cropped;
         }
 
         private static string Save(GameObject prefab, Texture2D shot)

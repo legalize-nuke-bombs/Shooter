@@ -140,8 +140,6 @@
     left: 50%;
     top: 50%;
     translate: -50% -50%;
-    min-width: 900px;
-    max-width: 1120px;
     padding: 22px 26px;
     background-color: rgba(8, 8, 10, 0.94);
     border-width: 1px;
@@ -160,16 +158,11 @@
     margin-bottom: 6px;
 }
 
-.inventory__body {
-    flex-direction: row;
-}
-
 .inventory__gear {
-    width: 250px;
-    margin-right: 26px;
-    padding-right: 26px;
-    border-right-width: 1px;
-    border-right-color: rgba(255, 255, 255, 0.1);
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .inventory__held {
