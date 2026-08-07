@@ -183,10 +183,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: 14px;
-    padding-bottom: 12px;
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(255, 255, 255, 0.1);
+    margin-bottom: 8px;
 }
 
 .inventory__coins {

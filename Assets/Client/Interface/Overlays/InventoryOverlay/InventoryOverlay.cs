@@ -223,14 +223,15 @@ namespace Shooter.Client.Interface.Overlays
 
         private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, ulong id, bool equipable, bool holding)
         {
-            Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
-            Button thing = Slot(spec, fallback, holding, equipable);
+            Vector2Int cells = spec == null ? Vector2Int.one : spec.Cells;
+            var size = new Vector2(cells.x * Cell, cells.y * Cell);
+            VisualElement thing = Slot(spec, fallback, holding, equipable);
 
             thing.style.position = Position.Absolute;
             thing.style.left = column * Cell;
             thing.style.top = row * Cell;
-            thing.style.width = size.x * Cell;
-            thing.style.height = size.y * Cell;
+            thing.style.width = size.x;
+            thing.style.height = size.y;
 
             if (amount != null)
             {
@@ -239,12 +240,12 @@ namespace Shooter.Client.Interface.Overlays
                 thing.Add(label);
             }
 
-            if (equipable) Draggable(thing, id, holding);
+            if (equipable) Draggable(thing, id, holding, spec == null ? null : spec.Icon, size);
 
             return thing;
         }
 
-        private void Draggable(VisualElement thing, ulong id, bool holding)
+        private void Draggable(VisualElement thing, ulong id, bool holding, Sprite icon, Vector2 size)
         {
             thing.RegisterCallback<PointerDownEvent>(down =>
             {
@@ -254,9 +255,9 @@ namespace Shooter.Client.Interface.Overlays
                 draggedFromHands = holding;
                 pointer = down.pointerId;
 
-                ghost = Ghost(thing);
+                ghost = Ghost(icon, size);
                 window.Add(ghost);
-                Follow(down.position);
+                Follow(down.position, size);
 
                 thing.CapturePointer(pointer);
                 down.StopPropagation();
@@ -266,7 +267,7 @@ namespace Shooter.Client.Interface.Overlays
             {
                 if (ghost == null || move.pointerId != pointer) return;
 
-                Follow(move.position);
+                Follow(move.position, size);
             });
 
             thing.RegisterCallback<PointerUpEvent>(up =>
@@ -278,28 +279,22 @@ namespace Shooter.Client.Interface.Overlays
             });
         }
 
-        private VisualElement Ghost(VisualElement thing)
+        private static VisualElement Ghost(Sprite icon, Vector2 size)
         {
             var shadow = new VisualElement();
             shadow.AddToClassList("ghost");
-            shadow.style.width = thing.resolvedStyle.width;
-            shadow.style.height = thing.resolvedStyle.height;
+            shadow.style.width = size.x;
+            shadow.style.height = size.y;
 
-            VisualElement icon = thing.Q<VisualElement>(className: "slot__icon");
-
-            if (icon != null)
-            {
-                shadow.style.backgroundImage = icon.resolvedStyle.backgroundImage;
-                shadow.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            }
+            if (icon != null) shadow.style.backgroundImage = Background.FromSprite(icon);
 
             return shadow;
         }
 
-        private void Follow(Vector2 at)
+        private void Follow(Vector2 at, Vector2 size)
         {
-            ghost.style.left = at.x - ghost.resolvedStyle.width / 2f;
-            ghost.style.top = at.y - ghost.resolvedStyle.height / 2f;
+            ghost.style.left = at.x - size.x / 2f;
+            ghost.style.top = at.y - size.y / 2f;
         }
 
         private void Drop(Vector2 at)
@@ -313,11 +308,11 @@ namespace Shooter.Client.Interface.Overlays
             else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.Nothing);
         }
 
-        private Button Slot(ItemSpec spec, string fallback, bool holding, bool equipable)
+        private static VisualElement Slot(ItemSpec spec, string fallback, bool holding, bool equipable)
         {
             Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
 
-            var slot = new Button { text = string.Empty, tooltip = spec == null ? fallback : spec.Title };
+            var slot = new VisualElement { tooltip = spec == null ? fallback : spec.Title };
             slot.AddToClassList("slot");
             if (holding) slot.AddToClassList("slot--held");
             if (!equipable) slot.AddToClassList("slot--fixed");
@@ -337,8 +332,6 @@ namespace Shooter.Client.Interface.Overlays
                 name.AddToClassList("slot__name");
                 slot.Add(name);
             }
-
-            slot.SetEnabled(equipable);
 
             return slot;
         }
