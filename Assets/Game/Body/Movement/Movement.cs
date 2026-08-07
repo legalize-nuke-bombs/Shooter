@@ -31,6 +31,8 @@ namespace Shooter.Game.Body
         private float fall;
         private bool jumping;
         private int steeredAt;
+        private bool airborne;
+        private float airborneFrom;
 
         public float Pitch => pitch.Value;
 
@@ -118,13 +120,27 @@ namespace Shooter.Game.Body
 
             if (characterController.isGrounded)
             {
-                if (fall < GroundedFall) Landed?.Invoke(-fall);
+                if (airborne)
+                {
+                    airborne = false;
+                    Landed?.Invoke(airborneFrom - transform.position.y);
+                }
 
                 fall = jumping ? jumpSpeed : GroundedFall;
                 jumping = false;
             }
             else
             {
+                if (!airborne)
+                {
+                    airborne = true;
+                    airborneFrom = transform.position.y;
+                }
+                else if (transform.position.y > airborneFrom)
+                {
+                    airborneFrom = transform.position.y;
+                }
+
                 fall += gravity * dt;
             }
 
