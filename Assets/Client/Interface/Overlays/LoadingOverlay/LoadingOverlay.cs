@@ -77,7 +77,8 @@ namespace Shooter.Client.Interface.Overlays
             if (network == null || !network.IsListening) return Starting;
 
             if (!network.IsConnectedClient) return entered ? Lost : Connecting + Address(network);
-            if (Environment.Current == null) return Waiting;
+            Environment world = Environment.Current;
+            if (world == null || !world.IsSpawned) return Waiting;
             if (OwnPlayer.Find<Transform>() == null) return Entering;
 
             entered = true;
