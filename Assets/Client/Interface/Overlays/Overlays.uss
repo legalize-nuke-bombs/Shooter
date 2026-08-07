@@ -140,11 +140,9 @@
     left: 50%;
     top: 50%;
     translate: -50% -50%;
-    width: 68%;
-    height: 72%;
-    min-width: 520px;
-    max-width: 1040px;
-    padding: 20px 24px;
+    min-width: 900px;
+    max-width: 1120px;
+    padding: 22px 26px;
     background-color: rgba(8, 8, 10, 0.94);
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.14);
@@ -162,15 +160,35 @@
     margin-bottom: 6px;
 }
 
-.inventory__hands {
-    margin-bottom: 18px;
-    padding-bottom: 16px;
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(255, 255, 255, 0.1);
+.inventory__body {
+    flex-direction: row;
+}
+
+.inventory__gear {
+    width: 250px;
+    margin-right: 26px;
+    padding-right: 26px;
+    border-right-width: 1px;
+    border-right-color: rgba(255, 255, 255, 0.1);
 }
 
 .inventory__held {
     flex-direction: row;
+}
+
+.inventory__bag {
+    flex-grow: 1;
+}
+
+.inventory__grid {
+    position: relative;
+}
+
+.grid__cell {
+    position: absolute;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.025);
 }
 
 .inventory__money {
@@ -188,20 +206,13 @@
     margin-left: 10px;
 }
 
-.inventory__slots {
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
 .inventory__empty {
     color: rgba(255, 255, 255, 0.45);
 }
 
 .slot {
-    width: 104px;
-    height: 104px;
-    margin: 0 8px 8px 0;
-    padding: 0;
+    margin: 0;
+    padding: 3px;
     justify-content: center;
     align-items: center;
     border-width: 1px;
@@ -228,6 +239,8 @@
 }
 
 .slot__icon {
+    width: 100%;
+    height: 100%;
     -unity-background-scale-mode: scale-to-fit;
 }
 
@@ -237,11 +250,6 @@
     bottom: 3px;
     font-size: 13px;
     color: rgb(255, 255, 255);
-}
-
-.inventory__slots {
-    flex-grow: 1;
-    align-content: flex-start;
 }
 
 .slot__name {
