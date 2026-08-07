@@ -318,7 +318,20 @@ namespace Shooter.Game.Loot
 
         private void Fill(Entry entry)
         {
-            Add(entry.Spec, Math.Max(entry.Amount, 1));
+            int amount = Math.Max(entry.Amount, 1);
+
+            if (entry.Spec.Stackable)
+            {
+                Add(entry.Spec, amount);
+                return;
+            }
+
+            for (int made = 0; made < amount; made++)
+            {
+                UniqueItem item = Create(entry.Spec);
+
+                if (item != null && entry.Equip && equipped.Value == Nothing) Equip(item.Id);
+            }
         }
 
         private void Restack(FixedString32Bytes specId)
@@ -425,6 +438,7 @@ namespace Shooter.Game.Loot
         {
             public ItemSpec Spec;
             public int Amount;
+            public bool Equip;
         }
     }
 }
