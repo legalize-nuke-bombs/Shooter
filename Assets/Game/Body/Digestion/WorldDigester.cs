@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Shooter.Logging;
@@ -12,7 +11,7 @@ namespace Shooter.Game.Body
     {
         private static readonly Journal Log = Logs.Here();
 
-        private static readonly Collider[] Around = new Collider[512];
+        private static readonly Collider[] Around = new Collider[8192];
 
         [SerializeField] private float scanRadius = 250f;
 
