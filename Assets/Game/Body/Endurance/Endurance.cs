@@ -9,7 +9,7 @@ namespace Shooter.Game.Body
         [SerializeField] private float sprintCost = 25f;
         [SerializeField] private float walkCost = 3f;
         [SerializeField] private float recoverySpeed = 12f;
-        [SerializeField] private float sprintThreshold = 30f;
+        [SerializeField] private float sprintThreshold = 5f;
 
         private readonly NetworkVariable<float> amount = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Owner);
 
