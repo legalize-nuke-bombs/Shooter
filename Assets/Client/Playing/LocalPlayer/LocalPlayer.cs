@@ -28,7 +28,6 @@ namespace Shooter.Client.Playing
         private Mortal mortal;
         private Gunner gunner;
         private Controls controls;
-        private bool captured;
         private bool talking;
         private float pitch;
         private float yaw;
@@ -132,15 +131,13 @@ namespace Shooter.Client.Playing
 
         private void Capture()
         {
-            bool wanted = InventoryOpen || talking;
-            if (captured == wanted || controls == null) return;
+            if (controls == null) return;
 
-            captured = wanted;
-
-            if (wanted) Release();
+            if (talking) Listen();
+            else if (InventoryOpen) Browse();
             else Grab();
 
-            Log.Info("Local player input is now {}", wanted ? "released to the interface" : "back on the player");
+            Log.Info("Local player input is now {}", talking ? "on the talk" : InventoryOpen ? "shared with the bag" : "back on the player");
         }
 
         private void Grab()
@@ -150,7 +147,19 @@ namespace Shooter.Client.Playing
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        private void Release()
+        private void Browse()
+        {
+            controls.Player.Enable();
+            controls.Player.Look.Disable();
+            controls.Player.Attack.Disable();
+            controls.Player.Reload.Disable();
+            controls.Player.Interact.Disable();
+            controls.Player.Inventory.Disable();
+            controls.UI.Enable();
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        private void Listen()
         {
             controls.Player.Disable();
             controls.UI.Enable();

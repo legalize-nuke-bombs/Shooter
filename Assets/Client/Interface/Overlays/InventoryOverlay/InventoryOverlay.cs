@@ -13,10 +13,15 @@ namespace Shooter.Client.Interface.Overlays
         private const string WindowElement = "inventory";
         private const string SlotsElement = "inventory-slots";
         private const string EmptyElement = "inventory-empty";
+        private const string HeldElement = "inventory-held";
+        private const string CoinsElement = "inventory-coins";
+        private const float IconSize = 88f;
 
         private VisualElement window;
         private VisualElement rows;
+        private VisualElement held;
         private Label empty;
+        private Label coins;
         private Inventory bag;
         private bool open;
         private bool stale;
@@ -44,8 +49,10 @@ namespace Shooter.Client.Interface.Overlays
             window = root.Q<VisualElement>(WindowElement);
             rows = root.Q<VisualElement>(SlotsElement);
             empty = root.Q<Label>(EmptyElement);
+            held = root.Q<VisualElement>(HeldElement);
+            coins = root.Q<Label>(CoinsElement);
 
-            if (window == null || rows == null || empty == null)
+            if (window == null || rows == null || empty == null || held == null || coins == null)
             {
                 Log.Error("Overlay document has no {} window, the bag stays hidden", WindowElement);
                 return false;
@@ -82,6 +89,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (window != null) window.style.display = DisplayStyle.None;
             rows?.Clear();
+            held?.Clear();
             Log.Info("The bag is closed");
         }
 
@@ -94,15 +102,45 @@ namespace Shooter.Client.Interface.Overlays
         {
             stale = false;
             rows.Clear();
+            held.Clear();
 
-            int count = bag == null ? 0 : bag.Count;
-            empty.style.display = count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            if (bag == null)
+            {
+                empty.style.display = DisplayStyle.Flex;
+                coins.text = "0";
+                return;
+            }
 
-            if (bag == null) return;
+            UniqueItem equipped = bag.Equipped();
+            int money = 0;
+            int shown = 0;
 
-            foreach (StackRecord stack in bag.Stacks) rows.Add(Row(stack));
+            if (equipped != null) held.Add(Row(equipped));
 
-            foreach (UniqueItem item in bag.Uniques) rows.Add(Row(item));
+            foreach (UniqueItem item in bag.Uniques)
+            {
+                if (equipped != null && item.Id == equipped.Id) continue;
+
+                rows.Add(Row(item));
+                shown++;
+            }
+
+            foreach (StackRecord stack in bag.Stacks)
+            {
+                ItemSpec spec = bag.Spec(stack.SpecId);
+
+                if (spec != null && spec.Currency)
+                {
+                    money += stack.Amount;
+                    continue;
+                }
+
+                rows.Add(Row(stack));
+                shown++;
+            }
+
+            coins.text = money.ToString();
+            empty.style.display = shown == 0 ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private VisualElement Row(StackRecord stack)
@@ -142,6 +180,8 @@ namespace Shooter.Client.Interface.Overlays
                 var icon = new VisualElement();
                 icon.AddToClassList("slot__icon");
                 icon.style.backgroundImage = Background.FromSprite(spec.Icon);
+                icon.style.width = IconSize * spec.IconScale;
+                icon.style.height = IconSize * spec.IconScale;
                 slot.Add(icon);
             }
             else
