@@ -6,11 +6,10 @@ namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(Endurance))]
+    [RequireComponent(typeof(Landing))]
     public class Movement : NetworkBehaviour
     {
         public event Action<float> Turned;
-
-        public event Action<float> Landed;
 
         private const float PitchLimit = 89f;
         private const float GroundedFall = -1f;
@@ -24,6 +23,7 @@ namespace Shooter.Game.Body
 
         private CharacterController characterController;
         private Endurance endurance;
+        private Landing landing;
         private IRestraint[] restraints;
 
         private Vector2 steering;
@@ -46,6 +46,7 @@ namespace Shooter.Game.Body
         {
             characterController = GetComponent<CharacterController>();
             endurance = GetComponent<Endurance>();
+            landing = GetComponent<Landing>();
             restraints = GetComponents<IRestraint>();
         }
 
@@ -123,7 +124,7 @@ namespace Shooter.Game.Body
                 if (airborne)
                 {
                     airborne = false;
-                    Landed?.Invoke(airborneFrom - transform.position.y);
+                    landing.Land(airborneFrom - transform.position.y);
                 }
 
                 fall = jumping ? jumpSpeed : GroundedFall;
