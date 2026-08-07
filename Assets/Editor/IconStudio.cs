@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.IO;
-using Shooter.Game.Loot;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -8,52 +6,42 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Editor
 {
-    public static class ItemIconRenderer
+    public struct IconSetup
     {
-        private const string Menu = "Tools/Render Item Icons";
+        public Vector3 SightAngles;
+        public Vector3 KeyAngles;
+        public Vector3 FillAngles;
+        public float KeyIntensity;
+        public float FillIntensity;
+        public float Stop;
+        public float Padding;
+        public int Size;
+    }
+
+    public static class IconStudio
+    {
         private const int Layer = 11;
-        private const int Size = 512;
-        private const float Padding = 1.12f;
         private const float Distance = 10f;
-        private const float SunIntensity = 20000f;
-        private const float FillIntensity = 6000f;
-        private const float Stop = 13.2f;
 
-        private static readonly Vector3 SightAngles = new Vector3(18f, -35f, 0f);
-        private static readonly Vector3 SunAngles = new Vector3(40f, -20f, 0f);
-        private static readonly Vector3 FillAngles = new Vector3(10f, 150f, 0f);
-
-        [MenuItem(Menu)]
-        private static void Render()
+        public static IconSetup Default()
         {
-            ItemSpec[] specs = Selection.GetFiltered<ItemSpec>(SelectionMode.Assets);
-            int drawn = 0;
-
-            foreach (ItemSpec spec in specs)
+            return new IconSetup
             {
-                if (spec.Model == null)
-                {
-                    Debug.LogWarning($"{spec.name} has no model, its icon stays as it is");
-                    continue;
-                }
-
-                if (Draw(spec)) drawn++;
-            }
-
-            AssetDatabase.SaveAssets();
-            Debug.Log($"Rendered {drawn} icons out of {specs.Length} selected specs");
+                SightAngles = new Vector3(18f, -35f, 0f),
+                KeyAngles = new Vector3(40f, -20f, 0f),
+                FillAngles = new Vector3(10f, 150f, 0f),
+                KeyIntensity = 20000f,
+                FillIntensity = 6000f,
+                Stop = 13.2f,
+                Padding = 1.12f,
+                Size = 512
+            };
         }
 
-        [MenuItem(Menu, true)]
-        private static bool Selected()
+        public static string Shoot(GameObject prefab, IconSetup setup)
         {
-            return Selection.GetFiltered<ItemSpec>(SelectionMode.Assets).Length > 0;
-        }
-
-        private static bool Draw(ItemSpec spec)
-        {
-            GameObject studio = new GameObject("Icon Studio") { hideFlags = HideFlags.HideAndDontSave };
-            GameObject model = Object.Instantiate(spec.Model, studio.transform);
+            var studio = new GameObject("Icon Studio") { hideFlags = HideFlags.HideAndDontSave };
+            GameObject model = Object.Instantiate(prefab, studio.transform);
 
             try
             {
@@ -61,17 +49,17 @@ namespace Shooter.Editor
 
                 if (!Framed(model, out Bounds bounds))
                 {
-                    Debug.LogWarning($"{spec.name} has a model without renderers, its icon stays as it is");
-                    return false;
+                    Debug.LogWarning($"{prefab.name} has no renderers, nothing to shoot");
+                    return null;
                 }
 
-                Camera camera = Studio(studio, bounds);
-                Texture2D shot = Shoot(camera, camera.GetComponent<HDAdditionalCameraData>());
-                string path = Save(spec, shot);
+                Camera camera = Setup(studio, bounds, setup);
+                Texture2D shot = Shoot(camera, camera.GetComponent<HDAdditionalCameraData>(), setup.Size);
+                string path = Save(prefab, shot);
 
                 Object.DestroyImmediate(shot);
 
-                return Attach(spec, path);
+                return path;
             }
             finally
             {
@@ -98,36 +86,35 @@ namespace Shooter.Editor
             return true;
         }
 
-        private static Camera Studio(GameObject studio, Bounds bounds)
+        private static Camera Setup(GameObject studio, Bounds bounds, IconSetup setup)
         {
-            Sun(studio, SunAngles, SunIntensity);
-            Sun(studio, FillAngles, FillIntensity);
-            Sky(studio);
+            Sun(studio, setup.KeyAngles, setup.KeyIntensity);
+            Sun(studio, setup.FillAngles, setup.FillIntensity);
+            Sky(studio, setup.Stop);
 
             var holder = new GameObject("Camera") { layer = Layer };
             holder.transform.SetParent(studio.transform);
 
             Camera camera = holder.AddComponent<Camera>();
             camera.orthographic = true;
-            camera.orthographicSize = Framing(bounds);
+            camera.orthographicSize = Framing(bounds, setup);
             camera.nearClipPlane = 0.01f;
             camera.farClipPlane = Distance * 4f;
             camera.cullingMask = 1 << Layer;
-            camera.transform.rotation = Quaternion.Euler(SightAngles);
+            camera.transform.rotation = Quaternion.Euler(setup.SightAngles);
             camera.transform.position = bounds.center - camera.transform.forward * Distance;
 
             HDAdditionalCameraData data = holder.AddComponent<HDAdditionalCameraData>();
             data.clearColorMode = HDAdditionalCameraData.ClearColorMode.Color;
-            data.backgroundColorHDR = new Color(0f, 0f, 0f, 0f);
             data.volumeLayerMask = 1 << Layer;
             data.probeLayerMask = 0;
 
             return camera;
         }
 
-        private static float Framing(Bounds bounds)
+        private static float Framing(Bounds bounds, IconSetup setup)
         {
-            Quaternion sight = Quaternion.Euler(SightAngles);
+            Quaternion sight = Quaternion.Euler(setup.SightAngles);
             Vector3 extents = bounds.extents;
             float widest = 0f;
 
@@ -143,7 +130,7 @@ namespace Shooter.Editor
                 widest = Mathf.Max(widest, Mathf.Abs(seen.x), Mathf.Abs(seen.y));
             }
 
-            return widest * Padding;
+            return widest * setup.Padding;
         }
 
         private static void Sun(GameObject studio, Vector3 angles, float intensity)
@@ -163,7 +150,7 @@ namespace Shooter.Editor
             light.intensity = intensity;
         }
 
-        private static void Sky(GameObject studio)
+        private static void Sky(GameObject studio, float stop)
         {
             var holder = new GameObject("Volume") { layer = Layer };
             holder.transform.SetParent(studio.transform);
@@ -175,7 +162,7 @@ namespace Shooter.Editor
             exposure.mode.overrideState = true;
             exposure.mode.value = ExposureMode.Fixed;
             exposure.fixedExposure.overrideState = true;
-            exposure.fixedExposure.value = Stop;
+            exposure.fixedExposure.value = stop;
 
             var tonemapping = profile.Add<Tonemapping>();
             tonemapping.mode.overrideState = true;
@@ -187,10 +174,10 @@ namespace Shooter.Editor
             volume.profile = profile;
         }
 
-        private static Texture2D Shoot(Camera camera, HDAdditionalCameraData data)
+        private static Texture2D Shoot(Camera camera, HDAdditionalCameraData data, int size)
         {
-            Texture2D onBlack = Frame(camera, data, Color.black);
-            Texture2D onWhite = Frame(camera, data, Color.white);
+            Texture2D onBlack = Frame(camera, data, Color.black, size);
+            Texture2D onWhite = Frame(camera, data, Color.white, size);
 
             Texture2D shot = Cut(onBlack, onWhite);
 
@@ -200,9 +187,9 @@ namespace Shooter.Editor
             return shot;
         }
 
-        private static Texture2D Frame(Camera camera, HDAdditionalCameraData data, Color background)
+        private static Texture2D Frame(Camera camera, HDAdditionalCameraData data, Color background, int size)
         {
-            var target = new RenderTexture(Size, Size, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            var target = new RenderTexture(size, size, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
             RenderTexture previous = RenderTexture.active;
 
             data.backgroundColorHDR = background;
@@ -211,8 +198,8 @@ namespace Shooter.Editor
 
             RenderTexture.active = target;
 
-            var shot = new Texture2D(Size, Size, TextureFormat.RGBA32, false);
-            shot.ReadPixels(new Rect(0f, 0f, Size, Size), 0, 0);
+            var shot = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            shot.ReadPixels(new Rect(0f, 0f, size, size), 0, 0);
             shot.Apply();
 
             RenderTexture.active = previous;
@@ -233,7 +220,7 @@ namespace Shooter.Editor
 
             if (span <= 0.01f)
             {
-                Debug.LogWarning("Icon studio rendered the same picture on both backgrounds, the icon stays opaque");
+                Debug.LogWarning("Both backgrounds came out the same, the icon stays opaque");
                 span = 1f;
             }
 
@@ -255,10 +242,10 @@ namespace Shooter.Editor
             return shot;
         }
 
-        private static string Save(ItemSpec spec, Texture2D shot)
+        private static string Save(GameObject prefab, Texture2D shot)
         {
-            string folder = Path.GetDirectoryName(AssetDatabase.GetAssetPath(spec));
-            string path = Path.Combine(folder, spec.name + "Icon.png").Replace('\\', '/');
+            string folder = Path.GetDirectoryName(AssetDatabase.GetAssetPath(prefab));
+            string path = Path.Combine(folder, prefab.name + "Icon.png").Replace('\\', '/');
 
             File.WriteAllBytes(path, shot.EncodeToPNG());
             AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
@@ -271,23 +258,6 @@ namespace Shooter.Editor
             importer.SaveAndReimport();
 
             return path;
-        }
-
-        private static bool Attach(ItemSpec spec, string path)
-        {
-            var icon = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-
-            if (icon == null)
-            {
-                Debug.LogWarning($"{spec.name} rendered into {path}, but the sprite did not import");
-                return false;
-            }
-
-            var serialized = new SerializedObject(spec);
-            serialized.FindProperty("icon").objectReferenceValue = icon;
-            serialized.ApplyModifiedProperties();
-
-            return true;
         }
     }
 }
