@@ -26,7 +26,6 @@ GameObject:
   - component: {fileID: 6403981259524950330}
   - component: {fileID: -4473180149750321490}
   - component: {fileID: -5769156024497868447}
-  - component: {fileID: 1471058823904517332}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -231,8 +230,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2999e86a88a4251a09e99e6f15ad622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   minHeight: 0.6
+  safeHeight: 3
+  damagePerMetre: 12
   sound: {fileID: 11400000, guid: 67f8d0ce98874c0493befcfd4f5e80d9, type: 2}
 --- !u!114 &6600000000000000105
 MonoBehaviour:
@@ -335,21 +335,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.WeaponView
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &1471058823904517332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874027793385663384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d21c46fb7e34a5d91f0263ba7c85e19, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Falling
-  ShowTopMostFoldoutHeaderGroup: 1
-  safeHeight: 3
-  damagePerMetre: 12
 --- !u!114 &-5769156024497868447
 MonoBehaviour:
   m_ObjectHideFlags: 0
