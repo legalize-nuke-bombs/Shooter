@@ -140,19 +140,52 @@
     left: 50%;
     top: 50%;
     translate: -50% -50%;
-    width: 34%;
-    min-width: 330px;
-    max-width: 460px;
-    padding: 12px;
-    background-color: rgba(8, 8, 10, 0.92);
+    width: 68%;
+    height: 72%;
+    min-width: 520px;
+    max-width: 1040px;
+    padding: 20px 24px;
+    background-color: rgba(8, 8, 10, 0.94);
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.14);
     display: none;
 }
 
 .inventory__title {
-    font-size: 14px;
-    margin-bottom: 8px;
+    font-size: 20px;
+    margin-bottom: 14px;
+}
+
+.inventory__caption {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.inventory__hands {
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.inventory__held {
+    flex-direction: row;
+}
+
+.inventory__money {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 12px;
+    padding-top: 14px;
+    border-top-width: 1px;
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.inventory__coins {
+    font-size: 18px;
+    margin-left: 10px;
 }
 
 .inventory__slots {
@@ -165,9 +198,9 @@
 }
 
 .slot {
-    width: 76px;
-    height: 76px;
-    margin: 0 6px 6px 0;
+    width: 104px;
+    height: 104px;
+    margin: 0 8px 8px 0;
     padding: 0;
     justify-content: center;
     align-items: center;
@@ -195,17 +228,20 @@
 }
 
 .slot__icon {
-    width: 66px;
-    height: 66px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
 .slot__amount {
     position: absolute;
-    right: 4px;
-    bottom: 2px;
-    font-size: 12px;
+    right: 6px;
+    bottom: 3px;
+    font-size: 13px;
     color: rgb(255, 255, 255);
+}
+
+.inventory__slots {
+    flex-grow: 1;
+    align-content: flex-start;
 }
 
 .slot__name {
