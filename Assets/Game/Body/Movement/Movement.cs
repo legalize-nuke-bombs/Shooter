@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(Endurance))]
     public class Movement : NetworkBehaviour
     {
         public event Action<float> Turned;
@@ -22,9 +23,11 @@ namespace Shooter.Game.Body
         private readonly NetworkVariable<float> pitch = new NetworkVariable<float>();
 
         private CharacterController characterController;
+        private Endurance endurance;
         private IRestraint[] restraints;
+
         private Vector2 steering;
-        private float speed;
+        private bool sprinting;
         private float fall;
         private bool jumping;
         private int steeredAt;
@@ -40,8 +43,8 @@ namespace Shooter.Game.Body
         private void Awake()
         {
             characterController = GetComponent<CharacterController>();
+            endurance = GetComponent<Endurance>();
             restraints = GetComponents<IRestraint>();
-            speed = walkSpeed;
         }
 
         public override void OnNetworkSpawn()
@@ -65,9 +68,10 @@ namespace Shooter.Game.Body
             steeredAt = tick;
 
             steering = Vector2.ClampMagnitude(Finite(move), 1f);
-            speed = sprint ? sprintSpeed : walkSpeed;
             transform.rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
             pitch.Value = Mathf.Clamp(Finite(look), -PitchLimit, PitchLimit);
+
+            sprinting = sprint;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -81,6 +85,7 @@ namespace Shooter.Game.Body
         public void Halt()
         {
             steering = Vector2.zero;
+            sprinting = false;
             jumping = false;
         }
 
@@ -123,6 +128,11 @@ namespace Shooter.Game.Body
                 fall += gravity * dt;
             }
 
+            bool moving = steering.sqrMagnitude > 0f;
+            bool running = moving && sprinting && endurance.Sprint(dt);
+            if (moving && !running) endurance.Walk(dt);
+
+            float speed = running ? sprintSpeed : walkSpeed;
             Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
             Vector3 before = transform.position;
             characterController.Move((wish + Vector3.up * fall) * dt);
