@@ -285,10 +285,6 @@ namespace Shooter.Client.Interface.Overlays
         private void Equip(ulong id, bool holding)
         {
             bag.EquipRpc(holding ? Inventory.Nothing : id);
-
-            if (holding) return;
-
-            OwnPlayer.Find<LocalPlayer>()?.CloseInventory();
         }
     }
 }

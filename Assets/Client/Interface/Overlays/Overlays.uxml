@@ -25,16 +25,14 @@
                 <ui:Label text="Деньги" class="line inventory__caption" picking-mode="Ignore" />
                 <ui:Label name="inventory-coins" text="0" class="line inventory__coins" picking-mode="Ignore" />
             </ui:VisualElement>
-            <ui:VisualElement class="inventory__body">
-                <ui:VisualElement class="inventory__gear">
-                    <ui:Label text="В руках" class="line inventory__caption" picking-mode="Ignore" />
-                    <ui:VisualElement name="inventory-held" class="inventory__held" />
-                </ui:VisualElement>
-                <ui:VisualElement class="inventory__bag">
-                    <ui:Label text="Рюкзак" class="line inventory__caption" picking-mode="Ignore" />
-                    <ui:VisualElement name="inventory-grid" class="inventory__grid" />
-                    <ui:Label name="inventory-empty" text="Пусто" class="line inventory__empty" picking-mode="Ignore" />
-                </ui:VisualElement>
+            <ui:VisualElement class="inventory__gear">
+                <ui:Label text="В руках" class="line inventory__caption" picking-mode="Ignore" />
+                <ui:VisualElement name="inventory-held" class="inventory__held" />
+            </ui:VisualElement>
+            <ui:VisualElement class="inventory__bag">
+                <ui:Label text="Рюкзак" class="line inventory__caption" picking-mode="Ignore" />
+                <ui:VisualElement name="inventory-grid" class="inventory__grid" />
+                <ui:Label name="inventory-empty" text="Пусто" class="line inventory__empty" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="talk" class="talk">
