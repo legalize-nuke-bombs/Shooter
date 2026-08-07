@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 6370029383145960073}
   - component: {fileID: 6403981259524950330}
   - component: {fileID: -4473180149750321490}
+  - component: {fileID: -5769156024497868447}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -174,8 +175,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Health.DefaultHealth
   ShowTopMostFoldoutHeaderGroup: 1
-  maxHp: 100
   hurtSound: {fileID: 11400000, guid: 05826ac8cd8f419b87aeead8c6f25c14, type: 2}
+  maxHp: 100
 --- !u!114 &4957635887391225908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +189,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f9eb2a89611456e858577d0a9d30e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sounding.Speaker
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &469253834919569006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d028c92be98248b69708cd7966d30d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &2658346833551713148
 MonoBehaviour:
@@ -216,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2999e86a88a4251a09e99e6f15ad622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   minSpeed: 3
   sound: {fileID: 11400000, guid: 67f8d0ce98874c0493befcfd4f5e80d9, type: 2}
 --- !u!114 &6600000000000000105
@@ -288,6 +303,11 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   catalog: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
   contents: []
+  equipped:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: -1
 --- !u!114 &6403981259524950330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,7 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.WeaponView
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &469253834919569006
+--- !u!114 &-5769156024497868447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -323,6 +343,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6874027793385663384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d028c92be98248b69708cd7966d30d6d, type: 3}
+  m_Script: {fileID: 11500000, guid: a7a13ea48f364e9091b1ea551c2c6a71, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Endurance
+  ShowTopMostFoldoutHeaderGroup: 1
+  maxAmount: 100
+  sprintCost: 10
+  walkCost: 2
+  recoverySpeed: 5
+  sprintThreshold: 30
