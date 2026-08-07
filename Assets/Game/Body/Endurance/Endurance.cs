@@ -6,9 +6,9 @@ namespace Shooter.Game.Body
     public class Endurance : NetworkBehaviour, IDigestible
     {
         [SerializeField] private float maxAmount = 100f;
-        [SerializeField] private float sprintCost = 10f;
-        [SerializeField] private float walkCost = 2f;
-        [SerializeField] private float recoverySpeed = 5f;
+        [SerializeField] private float sprintCost = 25f;
+        [SerializeField] private float walkCost = 3f;
+        [SerializeField] private float recoverySpeed = 12f;
         [SerializeField] private float sprintThreshold = 30f;
 
         private readonly NetworkVariable<float> amount = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Owner);

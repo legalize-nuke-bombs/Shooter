@@ -15,7 +15,7 @@ namespace Shooter.Game.Body
         private const float PitchLimit = 89f;
         private const float GroundedFall = -1f;
 
-        [SerializeField] private float walkSpeed = 5f;
+        [SerializeField] private float walkSpeed = 4f;
         [SerializeField] private float sprintSpeed = 8f;
         [SerializeField] private float jumpSpeed = 5f;
         [SerializeField] private float gravity = -20f;
