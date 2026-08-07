@@ -285,39 +285,39 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[0].Equip
+      propertyPath: contents.Array.data[0].equip
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[0].Spec
+      propertyPath: contents.Array.data[0].spec
       value: 
       objectReference: {fileID: 11400000, guid: 0836adec8b5cb4888b092591dca0497a, type: 2}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[1].Spec
+      propertyPath: contents.Array.data[1].spec
       value: 
       objectReference: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[2].Spec
+      propertyPath: contents.Array.data[2].spec
       value: 
       objectReference: {fileID: 11400000, guid: da689ff943a374b4b82b6765cd1884ab, type: 2}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[3].Spec
+      propertyPath: contents.Array.data[3].spec
       value: 
       objectReference: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[0].Amount
+      propertyPath: contents.Array.data[0].amount
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[1].Amount
+      propertyPath: contents.Array.data[1].amount
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[2].Amount
+      propertyPath: contents.Array.data[2].amount
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[3].Amount
+      propertyPath: contents.Array.data[3].amount
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6600000000000000105, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
