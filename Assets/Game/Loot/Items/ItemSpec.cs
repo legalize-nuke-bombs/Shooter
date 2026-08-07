@@ -11,13 +11,13 @@ namespace Shooter.Game.Loot
         [SerializeField] private bool equipable;
         [SerializeField] private GameObject model;
         [SerializeField] private Sprite icon;
-        [SerializeField] private float iconScale = 1f;
+        [SerializeField] private Vector2Int cells = Vector2Int.one;
 
         public GameObject Model => model;
 
         public Sprite Icon => icon;
 
-        public float IconScale => Mathf.Clamp(iconScale, 0.1f, 1f);
+        public Vector2Int Cells => new Vector2Int(Mathf.Max(cells.x, 1), Mathf.Max(cells.y, 1));
 
         public string Title => string.IsNullOrEmpty(title) ? Key : title;
 

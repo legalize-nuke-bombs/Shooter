@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Shooter.Client.Playing;
 using Shooter.Game.Loot;
 using Shooter.Logging;
@@ -11,15 +12,17 @@ namespace Shooter.Client.Interface.Overlays
         private static readonly Journal Log = Logs.Here();
 
         private const string WindowElement = "inventory";
-        private const string SlotsElement = "inventory-slots";
+        private const string GridElement = "inventory-grid";
         private const string EmptyElement = "inventory-empty";
         private const string HeldElement = "inventory-held";
         private const string CoinsElement = "inventory-coins";
-        private const float IconSize = 88f;
         private const string Coins = "coin";
+        private const float Cell = 54f;
+        private const int Columns = 10;
+        private const int Rows = 8;
 
         private VisualElement window;
-        private VisualElement rows;
+        private VisualElement grid;
         private VisualElement held;
         private Label empty;
         private Label coins;
@@ -48,12 +51,12 @@ namespace Shooter.Client.Interface.Overlays
         protected override bool Bind(VisualElement root)
         {
             window = root.Q<VisualElement>(WindowElement);
-            rows = root.Q<VisualElement>(SlotsElement);
+            grid = root.Q<VisualElement>(GridElement);
             empty = root.Q<Label>(EmptyElement);
             held = root.Q<VisualElement>(HeldElement);
             coins = root.Q<Label>(CoinsElement);
 
-            if (window == null || rows == null || empty == null || held == null || coins == null)
+            if (window == null || grid == null || empty == null || held == null || coins == null)
             {
                 Log.Error("Overlay document has no {} window, the bag stays hidden", WindowElement);
                 return false;
@@ -89,7 +92,7 @@ namespace Shooter.Client.Interface.Overlays
             bag = null;
 
             if (window != null) window.style.display = DisplayStyle.None;
-            rows?.Clear();
+            grid?.Clear();
             held?.Clear();
             Log.Info("The bag is closed");
         }
@@ -102,8 +105,10 @@ namespace Shooter.Client.Interface.Overlays
         private void Fill()
         {
             stale = false;
-            rows.Clear();
+            grid.Clear();
             held.Clear();
+
+            Paper();
 
             if (bag == null)
             {
@@ -113,17 +118,20 @@ namespace Shooter.Client.Interface.Overlays
             }
 
             UniqueItem equipped = bag.Equipped();
+            var taken = new bool[Rows, Columns];
             int money = 0;
-            int shown = 0;
+            int packed = 0;
 
-            if (equipped != null) held.Add(Row(equipped));
+            if (equipped != null) held.Add(Held(equipped));
 
             foreach (UniqueItem item in bag.Uniques)
             {
                 if (equipped != null && item.Id == equipped.Id) continue;
 
-                rows.Add(Row(item));
-                shown++;
+                ItemSpec spec = bag.Spec(item);
+                if (Pack(taken, spec, out int row, out int column)) packed++;
+
+                grid.Add(Thing(spec, item.SpecId, row, column, null, item.Id, spec != null && spec.Equipable));
             }
 
             foreach (StackRecord stack in bag.Stacks)
@@ -134,44 +142,120 @@ namespace Shooter.Client.Interface.Overlays
                     continue;
                 }
 
-                rows.Add(Row(stack));
-                shown++;
+                ItemSpec spec = bag.Spec(stack.SpecId);
+                if (Pack(taken, spec, out int row, out int column)) packed++;
+
+                grid.Add(Thing(spec, stack.SpecId.ToString(), row, column, stack.Amount.ToString(), Inventory.Nothing, false));
             }
 
             coins.text = money.ToString();
-            empty.style.display = shown == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            empty.style.display = packed == 0 ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        private VisualElement Row(StackRecord stack)
+        private void Paper()
         {
-            ItemSpec spec = bag.Spec(stack.SpecId);
-            Button slot = Slot(spec, stack.SpecId.ToString(), false, false);
+            grid.style.width = Columns * Cell;
+            grid.style.height = Rows * Cell;
 
-            var amount = new Label(stack.Amount.ToString());
-            amount.AddToClassList("slot__amount");
-            slot.Add(amount);
-
-            return slot;
+            for (int row = 0; row < Rows; row++)
+            {
+                for (int column = 0; column < Columns; column++)
+                {
+                    var cell = new VisualElement();
+                    cell.AddToClassList("grid__cell");
+                    cell.style.left = column * Cell;
+                    cell.style.top = row * Cell;
+                    cell.style.width = Cell;
+                    cell.style.height = Cell;
+                    grid.Add(cell);
+                }
+            }
         }
 
-        private VisualElement Row(UniqueItem item)
+        private static bool Pack(bool[,] taken, ItemSpec spec, out int row, out int column)
         {
-            bool held = item.Id == bag.EquippedId;
+            Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
+
+            for (row = 0; row + size.y <= Rows; row++)
+            {
+                for (column = 0; column + size.x <= Columns; column++)
+                {
+                    if (!Free(taken, row, column, size)) continue;
+
+                    Fill(taken, row, column, size);
+
+                    return true;
+                }
+            }
+
+            row = 0;
+            column = 0;
+
+            return false;
+        }
+
+        private static bool Free(bool[,] taken, int row, int column, Vector2Int size)
+        {
+            for (int down = 0; down < size.y; down++)
+            {
+                for (int right = 0; right < size.x; right++)
+                {
+                    if (taken[row + down, column + right]) return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static void Fill(bool[,] taken, int row, int column, Vector2Int size)
+        {
+            for (int down = 0; down < size.y; down++)
+            {
+                for (int right = 0; right < size.x; right++) taken[row + down, column + right] = true;
+            }
+        }
+
+        private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, ulong id, bool equipable)
+        {
+            Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
+            Button thing = Slot(spec, fallback, false, equipable);
+
+            thing.style.position = Position.Absolute;
+            thing.style.left = column * Cell;
+            thing.style.top = row * Cell;
+            thing.style.width = size.x * Cell;
+            thing.style.height = size.y * Cell;
+
+            if (amount != null)
+            {
+                var label = new Label(amount);
+                label.AddToClassList("slot__amount");
+                thing.Add(label);
+            }
+
+            if (equipable) thing.clicked += () => Equip(id, false);
+
+            return thing;
+        }
+
+        private VisualElement Held(UniqueItem item)
+        {
             ItemSpec spec = bag.Spec(item);
-            bool equipable = spec != null && spec.Equipable;
+            Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
+            Button thing = Slot(spec, item.SpecId, true, true);
 
-            Button slot = Slot(spec, item.SpecId, held, equipable);
+            thing.style.width = size.x * Cell;
+            thing.style.height = size.y * Cell;
+            thing.clicked += () => Equip(item.Id, true);
 
-            if (equipable) slot.clicked += () => Equip(item.Id, held);
-
-            return slot;
+            return thing;
         }
 
-        private Button Slot(ItemSpec spec, string fallback, bool held, bool equipable)
+        private Button Slot(ItemSpec spec, string fallback, bool holding, bool equipable)
         {
             var slot = new Button { text = string.Empty, tooltip = spec == null ? fallback : spec.Title };
             slot.AddToClassList("slot");
-            if (held) slot.AddToClassList("slot--held");
+            if (holding) slot.AddToClassList("slot--held");
             if (!equipable) slot.AddToClassList("slot--fixed");
 
             if (spec != null && spec.Icon != null)
@@ -179,8 +263,6 @@ namespace Shooter.Client.Interface.Overlays
                 var icon = new VisualElement();
                 icon.AddToClassList("slot__icon");
                 icon.style.backgroundImage = Background.FromSprite(spec.Icon);
-                icon.style.width = IconSize * spec.IconScale;
-                icon.style.height = IconSize * spec.IconScale;
                 slot.Add(icon);
             }
             else
@@ -195,11 +277,11 @@ namespace Shooter.Client.Interface.Overlays
             return slot;
         }
 
-        private void Equip(ulong id, bool held)
+        private void Equip(ulong id, bool holding)
         {
-            bag.EquipRpc(held ? Inventory.Nothing : id);
+            bag.EquipRpc(holding ? Inventory.Nothing : id);
 
-            if (held) return;
+            if (holding) return;
 
             OwnPlayer.Find<LocalPlayer>()?.CloseInventory();
         }
