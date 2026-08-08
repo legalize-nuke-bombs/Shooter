@@ -7,9 +7,7 @@ namespace Shooter.Game.Llm.Knowledge
     {
 
         [SerializeField] [TextArea(5, 20)] private string content;
-        [SerializeField] private KnowledgeType type;
 
         public string Content => content;
-        public KnowledgeType Type => type;
     }
 }

@@ -80,7 +80,7 @@ namespace Shooter.Game.Llm
         [SerializeField] [TextArea(5, 20)] private string character;
 
         [SerializeField] private KnowledgeSpec[] knowledges;
-        private string Knowledge(KnowledgeType type)
+        private string Knowledge()
         {
             var known = new StringBuilder();
             foreach (KnowledgeSpec knowledge in knowledges)
@@ -91,27 +91,17 @@ namespace Shooter.Game.Llm
                     continue;
                 }
 
-                if (knowledge.Type == type)
-                {
-                    known.Append(knowledge.Content).Append('\n');
-                }
+                known.Append(knowledge.Content).Append('\n');
             }
             return known.ToString();
         }
 
-        private string persona;
-        private string Persona()
-        {
-            persona ??= new Prompt()
+        private static readonly string Persona =
+            new Prompt()
                 .Section(CorePrompt)
                 .Section(IdPrompt)
                 .Section(RelationPrompt)
-                .Section("YOUR CHARACTER", character)
-                .Section("IMMUTABLE FACTS ABOUT THIS WORLD", Knowledge(KnowledgeType.Identity))
                 .ToString();
-
-            return persona;
-        }
 
 
 
@@ -145,7 +135,7 @@ namespace Shooter.Game.Llm
 
         private List<OpenAiMessage> Composed()
         {
-            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = Persona() } };
+            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = Persona } };
             messages.AddRange(history);
 
             return messages;
@@ -288,10 +278,22 @@ namespace Shooter.Game.Llm
 
         private void Begin()
         {
-            string experience = Knowledge(KnowledgeType.Experience);
-            if (string.IsNullOrEmpty(experience)) return;
+            var start = new StringBuilder();
 
-            Append(new OpenAiMessage { Role = "user", Content = "YOUR LIFE SO FAR:\n" + experience });
+            if (!string.IsNullOrEmpty(character))
+            {
+                start.Append("WHO YOU ARE:\n").Append(character.TrimEnd('\n')).Append('\n');
+            }
+
+            string knowledge = Knowledge();
+            if (knowledge.Length > 0)
+            {
+                start.Append("WHAT YOU KNOW AND REMEMBER:\n").Append(knowledge);
+            }
+
+            if (start.Length == 0) return;
+
+            Append(new OpenAiMessage { Role = "user", Content = start.ToString().TrimEnd('\n') });
         }
 
         private string Observation()
@@ -533,12 +535,12 @@ namespace Shooter.Game.Llm
                     })
             };
 
-            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = Persona() } };
+            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = Persona } };
             messages.AddRange(history.Take(cut));
             messages.Add(new OpenAiMessage
             {
                 Role = "user",
-                Content = "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of everything above: the retelling will replace the story, and anything you leave out is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Compress to at most half the length."
+                Content = "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of everything above: the retelling will replace the story, and anything you leave out is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Compress to at most half the length."
             });
 
             Log.Info($"Entity {entityName} is compacting {cut} of {history.Count} history messages");
