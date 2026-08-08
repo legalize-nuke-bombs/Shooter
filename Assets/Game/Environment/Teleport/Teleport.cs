@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Shooter.Game.Body;
 using Shooter.Game.Body.EarSounding;
 using Shooter.Logging;
@@ -7,54 +6,41 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(SphereCollider))]
     public class Teleport : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
-        private static readonly Collider[] Inside = new Collider[64];
-
-        [SerializeField] private float radius = 10f;
         [SerializeField] private GameObject destination;
 
         [SerializeField] private EarSoundSpec sound = null;
 
-        [SerializeField] private float tickInterval = 1f;
+        private static int characterLayer = -1;
 
-        private readonly HashSet<Movement> moved = new HashSet<Movement>();
+        private static int CharacterLayer =>
+            characterLayer != -1 ? characterLayer : characterLayer = LayerMask.NameToLayer("Character");
 
-        private float sinceLastTick;
+        private void Awake()
+        {
+            var sphere = GetComponent<SphereCollider>();
+            if (!sphere.isTrigger) Log.Warn("Teleport {} has a solid sphere collider, tick Is Trigger for it to work", name);
+        }
 
-        private void Update()
+        private void OnTriggerEnter(Collider other)
         {
             NetworkManager network = NetworkManager.Singleton;
             if (network == null || !network.IsServer) return;
 
-            sinceLastTick += Time.deltaTime;
-            if (sinceLastTick < tickInterval) return;
+            if (other.gameObject.layer != CharacterLayer) return;
 
-            sinceLastTick -= tickInterval;
-            Tick();
-        }
+            var movement = other.GetComponentInParent<Movement>();
+            if (movement == null) return;
 
-        private void Tick()
-        {
-            int found = Physics.OverlapSphereNonAlloc(transform.position, radius, Inside);
-            if (found == Inside.Length)
-                Log.Warn("Teleport {} filled its buffer of {} colliders, someone in the radius may be left behind", name, Inside.Length);
+            Vector3 at = destination.transform.position;
+            Log.Info("Entity {} is teleported by {} to {}", movement.name, name, at);
 
-            moved.Clear();
-
-            for (int i = 0; i < found; i++)
-            {
-                var movement = Inside[i].GetComponentInParent<Movement>();
-                if (movement == null || !moved.Add(movement)) continue;
-
-                Vector3 at = destination.transform.position;
-                Log.Info("Entity {} is teleported by {} to {}", movement.name, name, at);
-
-                movement.Teleport(at);
-                movement.GetComponent<EarSpeaker>()?.Play(sound);
-            }
+            movement.Teleport(at);
+            movement.GetComponent<EarSpeaker>()?.Play(sound);
         }
     }
 }
