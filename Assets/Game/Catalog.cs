@@ -70,5 +70,20 @@ namespace Shooter.Game
 
             Log.Info("Catalog {} knows {} things", name, known.Count);
         }
+
+        public TSpec Find(System.Func<TSpec, bool> predicate)
+        {
+            if (predicate == null) return null;
+
+            for (int i = 0; i < ordered.Count; i++)
+            {
+                if (predicate(ordered[i]))
+                {
+                    return ordered[i];
+                }
+            }
+
+            return null;
+        }
     }
 }

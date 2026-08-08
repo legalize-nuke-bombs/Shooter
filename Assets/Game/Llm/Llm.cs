@@ -12,6 +12,8 @@ using Shooter.Game.Identity;
 using Shooter.Game.Llm.Knowledge;
 using Shooter.Logging;
 using Shooter.Game.Llm.OpenAi;
+using Shooter.Game.Loot;
+using Shooter.Game.Loot.InventoryExchanger;
 using Shooter.Game.Relationship;
 using UnityEngine;
 
@@ -20,6 +22,7 @@ namespace Shooter.Game.Llm
     [RequireComponent(typeof(Digester))]
     [RequireComponent(typeof(WorldDigester))]
     [RequireComponent(typeof(CharacterRelation))]
+    [RequireComponent(typeof(InventoryExchanger))]
     public class Llm : MonoBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
@@ -35,15 +38,15 @@ namespace Shooter.Game.Llm
 
         private Digester digester;
         private WorldDigester worldDigester;
-        private string entityName;
         private CharacterRelation characterRelation;
+        private InventoryExchanger inventoryExchanger;
 
         private void Awake()
         {
             digester = GetComponent<Digester>();
             worldDigester = GetComponent<WorldDigester>();
             characterRelation = GetComponent<CharacterRelation>();
-            entityName = name;
+            inventoryExchanger = GetComponent<InventoryExchanger>();
         }
 
         private void OnDestroy()
@@ -162,6 +165,14 @@ namespace Shooter.Game.Llm
                     "Your current relationships with characters and relations changelog are visible in Your state.\n" +
                     "You can always manually change the value of your relationship to character at your discretion using the `characterRelations` response field.\n" +
                     "Your attitude towards the character will drop automatically if they attack you or your friends.");
+
+
+
+
+        private Prompt InventoryExchangePrompt =>
+            new Prompt()
+                .Section("INVENTORY EXCHANGE",
+                    "You can always transfer items from your inventory to other characters at your discretion using response fields `giveStackableItems` and `giveUniqueItems`. You ALWAYS inform the recipient of what you have given to them.");
 
 
 
@@ -285,6 +296,7 @@ namespace Shooter.Game.Llm
                 .Section(MemoryPrompt)
                 .Section(InterNpcInteractionPrompt(takenInterNpcInteractions))
                 .Section(CharacterRelationPrompt)
+                .Section(InventoryExchangePrompt)
                 .Section(SystemNotificationsPrompt(takenSystemNotifications))
                 .Section(WorldStatePrompt);
 
@@ -341,7 +353,7 @@ namespace Shooter.Game.Llm
                 long? pendingConversationId = PendingConversationId();
                 long? pendingCompactConversationId = PendingCompactConversationId();
                 LlmConfig config = (pendingCompactConversationId == null ? Config.Read().Server.LlmBase : Config.Read().Server.LlmMax);
-                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {} pendingCompactConversationId {}", entityName, config.Model, pendingConversationId, pendingCompactConversationId);
+                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {} pendingCompactConversationId {}", name, config.Model, pendingConversationId, pendingCompactConversationId);
 
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
@@ -365,11 +377,12 @@ namespace Shooter.Game.Llm
                 Remember(answer.Memory);
                 InterNpcInteraction(answer.InterNpcInteractions);
                 CharacterRelations(answer.CharacterRelations);
+                InventoryExchange(answer.GiveStackableItems, answer.GiveUniqueItems);
                 return true;
             }
             catch (OperationCanceledException)
             {
-                Log.Info("Entity {} dropped its request, the entity is gone", entityName);
+                Log.Info("Entity {} dropped its request, the entity is gone", name);
                 return false;
             }
             catch (Exception e)
@@ -377,7 +390,7 @@ namespace Shooter.Game.Llm
                 interNpcInteractionInbox.Return(takenInterNpcInteractions);
                 systemNotificationsInbox.Return(takenSystemNotifications);
                 retryBlockedUntil = UnityEngine.Time.time + failureCooldown;
-                Log.Warn("Entity {} failed to respond, inboxes returned, next attempt in {} s: {}", entityName, failureCooldown, e.ToString());
+                Log.Warn("Entity {} failed to respond, inboxes returned, next attempt in {} s: {}", name, failureCooldown, e.ToString());
                 return false;
             }
             finally
@@ -398,7 +411,7 @@ namespace Shooter.Game.Llm
             }
             if (pendingCompactConversationId == null)
             {
-                Log.Warn("Entity {} sent compact that nobody asked: {}", entityName, compact);
+                Log.Warn("Entity {} sent compact that nobody asked: {}", name, compact);
                 return;
             }
 
@@ -423,7 +436,7 @@ namespace Shooter.Game.Llm
             }
             if (pendingConversationId == null)
             {
-                Log.Warn("Entity {} sent reply that nobody asked: {}", entityName, reply);
+                Log.Warn("Entity {} sent reply that nobody asked: {}", name, reply);
                 return;
             }
             conversations[pendingConversationId.Value].RegisterModelMessage(
@@ -449,7 +462,7 @@ namespace Shooter.Game.Llm
 
 
 
-        private void InterNpcInteraction(LlmAnswer.LlmInterNpcInteractionCommand[] cmds)
+        private void InterNpcInteraction(LlmAnswer.InterNpcInteractionCommand[] cmds)
         {
             if (cmds == null || cmds.Length == 0)
             {
@@ -460,7 +473,7 @@ namespace Shooter.Game.Llm
 
             Llm[] allLlms = FindObjectsByType<Llm>();
 
-            foreach (LlmAnswer.LlmInterNpcInteractionCommand cmd in cmds)
+            foreach (LlmAnswer.InterNpcInteractionCommand cmd in cmds)
             {
                 if (cmd.TargetIds == null || cmd.TargetIds.Length == 0 || string.IsNullOrEmpty(cmd.Content))
                 {
@@ -497,7 +510,7 @@ namespace Shooter.Game.Llm
                     if (!received.Contains(targetId))
                     {
                         string reason = fails.GetValueOrDefault(targetId, "The id is misspelled or no resident bears it");
-                        Log.Warn("Failed to say from {} to {}: {}", entityName, targetId, reason);
+                        Log.Warn("Failed to say from {} to {}: {}", name, targetId, reason);
                         systemNotificationsInbox.Put("[" + Time() + "] " + $"Your message to {targetId} could not be delivered: {reason}. The undelivered message: {cmd.Content}");
                     }
                 }
@@ -511,14 +524,14 @@ namespace Shooter.Game.Llm
 
 
 
-        private void CharacterRelations(LlmAnswer.LlmCharacterRelationCommand[] cmds)
+        private void CharacterRelations(LlmAnswer.CharacterRelationCommand[] cmds)
         {
             if (cmds == null || cmds.Length == 0)
             {
                 return;
             }
 
-            foreach (LlmAnswer.LlmCharacterRelationCommand cmd in cmds)
+            foreach (LlmAnswer.CharacterRelationCommand cmd in cmds)
             {
                 Log.Info("Entity {} is updating relation to character {} from {} to {}: {}", name, cmd.TargetId, characterRelation.Amount(cmd.TargetId), cmd.NewAmount, cmd.Reason);
                 try
@@ -529,6 +542,54 @@ namespace Shooter.Game.Llm
                 {
                     Log.Warn("Entity {} failed to update relation: {}", name, e.Message);
                     systemNotificationsInbox.Put("[" + Time() + "]" + $"Failed to update your relation to character {cmd.TargetId} from {characterRelation.Amount(cmd.TargetId)} to {cmd.NewAmount} {cmd.Reason}: {e.Message}");
+                }
+            }
+        }
+
+
+
+
+        private void InventoryExchange(LlmAnswer.GiveStackableItemCommand[] stackableCmds, LlmAnswer.GiveUniqueItemCommand[] uniqueCmds)
+        {
+            if (stackableCmds != null)
+            {
+                var failed = new List<LlmAnswer.GiveStackableItemCommand>();
+                foreach (LlmAnswer.GiveStackableItemCommand cmd in stackableCmds)
+                {
+                    ItemSpec item = Environment.Current.Items.FindByPromptName(cmd.ItemName);
+                    if (item == null)
+                    {
+                        failed.Add(cmd);
+                        continue;
+                    }
+                    if (!inventoryExchanger.GiveStackable(cmd.TargetId, item, cmd.ItemAmount))
+                    {
+                        failed.Add(cmd);
+                        continue;
+                    }
+                }
+                foreach (LlmAnswer.GiveStackableItemCommand cmd in failed)
+                {
+                    Log.Warn("Entity {} failed to give {} x {} to {}", name, cmd.ItemName, cmd.ItemAmount, cmd.TargetId);
+                    systemNotificationsInbox.Put("[" + Time() + "] " + $"Failed to give {cmd.ItemName} x {cmd.ItemAmount} to {cmd.TargetId}");
+                }
+            }
+
+            if (uniqueCmds != null)
+            {
+                var failed = new List<LlmAnswer.GiveUniqueItemCommand>();
+                foreach (LlmAnswer.GiveUniqueItemCommand cmd in uniqueCmds)
+                {
+                    if (!inventoryExchanger.GiveUnique(cmd.TargetId, cmd.SlotIdx))
+                    {
+                        failed.Add(cmd);
+                        continue;
+                    }
+                }
+                foreach (LlmAnswer.GiveUniqueItemCommand cmd in failed)
+                {
+                    Log.Warn("Entity {} failed to give unique slot idx {} to {}", name, cmd.SlotIdx, cmd.TargetId);
+                    systemNotificationsInbox.Put("[" + Time() + "] " + $"Failed to give unique item slot idx {cmd.SlotIdx} to {cmd.TargetId}");
                 }
             }
         }

@@ -111,7 +111,7 @@ namespace Shooter.Game.Loot
 
         public void Add(ItemSpec spec, int amount)
         {
-            if (!IsServer || spec == null || amount <= 0) return;
+            if (!IsServer || amount <= 0 || spec == null || !spec.Stackable) return;
 
             if (!spec.Stackable)
             {
@@ -133,7 +133,7 @@ namespace Shooter.Game.Loot
 
         public int Remove(ItemSpec spec, int amount, InventoryOnConflict onConflict)
         {
-            if (!IsServer || amount <= 0) return 0;
+            if (!IsServer || amount <= 0 || spec == null || !spec.Stackable) return 0;
 
             int index = IndexOf(spec);
             if (index < 0 || index >= stackAmounts.Count) return 0;
@@ -228,7 +228,7 @@ namespace Shooter.Game.Loot
             StringBuilder digest = new StringBuilder();
             ItemSpec held = EquippedSpec;
 
-            if (held != null) digest.Append("Holding: ").Append(held.PromptName);
+            if (held != null) digest.Append("Holding: ").Append(held.PromptName).Append(" (slot " + EquippedSlot + ")");
 
             if (detail != DigestionDetail.Full) return digest.Length == 0 ? null : digest.ToString();
 
@@ -245,13 +245,14 @@ namespace Shooter.Game.Loot
                     .Append(stackAmounts[index]);
             }
 
-            foreach (UniqueItem item in uniqueItems)
+            for (int index = 0; index < uniqueItems.Count; index++)
             {
+                UniqueItem item = uniqueItems[index];
                 if (item == null) continue;
 
                 ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
 
-                Line(digest).Append(spec == null ? item.SpecId : spec.PromptName);
+                Line(digest).Append((spec == null ? item.SpecId : spec.PromptName) + " (slot " + index + ")");
             }
 
             return digest.Length == 0 ? null : digest.ToString();
