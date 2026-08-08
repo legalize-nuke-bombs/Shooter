@@ -2,7 +2,7 @@
 {
     public enum KnowledgeType
     {
-        Static,
-        Dynamic
+        Identity,
+        Experience
     }
 }

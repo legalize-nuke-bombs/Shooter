@@ -28,48 +28,6 @@ namespace Shooter.Game.Llm.OpenAi
         private static long sessionTokensIn;
         private static long sessionTokensOut;
 
-        public static async Task<LlmAnswer> Request(LlmConfig config, Prompt prompt, CancellationToken until)
-        {
-            if (string.IsNullOrEmpty(config.Key))
-            {
-                throw new InvalidOperationException($"Llm key is not set in {GameConfig.FileName}");
-            }
-
-            string promptRaw = prompt.ToString();
-
-            string requestId = Guid.NewGuid().ToString();
-
-            var spoken = new List<OpenAiMessage>
-            {
-                new OpenAiMessage { Role = "system", Content = promptRaw }
-            };
-
-            var body = new OpenAiRequest
-            {
-                Model = config.Model,
-                Messages = spoken.ToArray(),
-                ResponseFormat = new OpenAiResponseFormat { Type = "json_object" }
-            };
-
-            string folderPath = Path.Combine(UnityEngine.Application.temporaryCachePath, "LlmRequests");
-            Directory.CreateDirectory(folderPath);
-
-            string promptPath = Path.Combine(folderPath, $"{requestId}.md");
-            Log.Info($"Request {requestId}. Input: {promptRaw.Length}ch. Will be saved as {promptPath}");
-            await File.WriteAllTextAsync(promptPath, promptRaw, until);
-
-            string responsePath = Path.Combine(folderPath, $"{requestId}.json");
-            string raw = await Ask(OpenAiHosts.For(config), config.Key, body, until);
-            await File.WriteAllTextAsync(responsePath, raw, until);
-            Log.Info($"Response {requestId}. Output: {raw.Length}ch. Will be saved as {responsePath}");
-
-            OpenAiResponse response = Deserialize(raw);
-            string content = response?.Choices?.FirstOrDefault()?.Message?.Content ?? "";
-            Count(promptRaw.Length, content.Length, response?.Usage);
-
-            return ParseAnswer(content, raw);
-        }
-
         public static async Task<LlmTurn> Request(LlmConfig config, IReadOnlyList<OpenAiMessage> messages,
             IReadOnlyList<OpenAiTool> tools, CancellationToken until)
         {
@@ -212,31 +170,5 @@ namespace Shooter.Game.Llm.OpenAi
             }
         }
 
-        private static LlmAnswer ParseAnswer(string content, string raw)
-        {
-            try
-            {
-                content = CleanJsonString(content);
-                return JsonConvert.DeserializeObject<LlmAnswer>(content, Settings);
-            }
-            catch (Exception e)
-            {
-                throw new LlmAnswerException($"Failed to parse llm response {raw}: {e.Message}");
-            }
-        }
-
-        private static string CleanJsonString(string text)
-        {
-            if (string.IsNullOrEmpty(text))
-                return "";
-
-            int firstBracket = text.IndexOf('{');
-            int lastBracket = text.LastIndexOf('}');
-
-            if (firstBracket == -1 || lastBracket == -1 || firstBracket >= lastBracket)
-                return "";
-
-            return text.Substring(firstBracket, lastBracket - firstBracket + 1);
-        }
     }
 }

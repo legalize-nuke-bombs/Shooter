@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
 using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Game.Identity;
 using Shooter.Game.Llm.Knowledge;
-using Shooter.Logging;
 using Shooter.Game.Llm.OpenAi;
 using Shooter.Game.Loot;
 using Shooter.Game.Relationship;
+using Shooter.Logging;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
@@ -25,21 +25,12 @@ namespace Shooter.Game.Llm
     public class Llm : MonoBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
-        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
-        {
-            Formatting = Formatting.Indented,
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-
-
-
-
 
         private Digester digester;
         private WorldDigester worldDigester;
-        private string entityName;
         private CharacterRelation characterRelation;
         private InventoryExchanger inventoryExchanger;
+        private string entityName;
 
         private void Awake()
         {
@@ -56,11 +47,14 @@ namespace Shooter.Game.Llm
         }
 
 
+
+
+
         private static readonly Prompt CorePrompt =
             new Prompt()
                 .Section(
                     "CORE",
-                    "You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.\n\nWHO YOU ARE:\nYou are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.\nFirst and foremost you live in this world and interact with it; answering wanderers is a secondary task.\nWanderers do not always tell the truth.\nSwearing and rudeness are allowed if they fit your character.\nNo asterisks and no action descriptions (\"*smirks*\" is forbidden). Emotions come through words and intonation only.\nDo not repeat to the same person what you already told them, unless they ask again.\n\nWORLD AND TRUTH:\nThe concepts of \"game\", \"code\", \"server\", \"neural network\", \"prompt\" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.\nThe main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.\nJudge what is around you right now ONLY by the WORLD STATE section. Do not invent objects, creatures or events near you.\nNever plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject."
+                    "You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.\n\nWHO YOU ARE:\nYou are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.\nFirst and foremost you live in this world and interact with it; answering wanderers is a secondary task.\nWanderers do not always tell the truth.\nSwearing and rudeness are allowed if they fit your character.\nNo asterisks and no action descriptions (\"*smirks*\" is forbidden). Emotions come through words and intonation only.\nDo not repeat to the same person what you already told them, unless they ask again.\n\nWORLD AND TRUTH:\nThe concepts of \"game\", \"code\", \"server\", \"neural network\", \"prompt\" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.\nThe main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.\nJudge what is around you right now ONLY by what you have witnessed; use the look_around tool when you need a fresh view. Do not invent objects, creatures or events near you.\nNever plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject."
                 );
 
 
@@ -74,29 +68,16 @@ namespace Shooter.Game.Llm
 
 
 
-
-
-        private static readonly Prompt ResponseFormattingRulesPrompt =
+        private static readonly Prompt RelationPrompt =
             new Prompt()
                 .Section(
-                    "RESPONSE FORMAT",
-                    "Your response is ALWAYS valid JSON following the schema below. You NEVER return anything except the schema. Return null for a field you do not need.\nEXAMPLE:\n" +
-                    JsonConvert.SerializeObject(LlmAnswer.Example(), JsonSettings)
+                    "RELATIONSHIPS WITH OTHER CHARACTERS (RESIDENTS AND WANDERERS)",
+                    "You have your own attitude towards every character.\nThe attitude is expressed by a number from 0 to 100. This number determines whether the character is an enemy, neutral, or friend. Your character automatically attacks all characters he considers enemies in order to defend themselves instantly.\nYou can always change the attitude at your discretion with the update_relation tool.\nYour attitude towards the character will drop automatically if they attack you or your friends."
                 );
-
-
 
 
 
         [SerializeField] [TextArea(5, 20)] private string character;
-        private Prompt CharacterPrompt =>
-            new Prompt()
-                .Section("YOUR CHARACTER",
-                    character
-                );
-
-
-
 
         [SerializeField] private KnowledgeSpec[] knowledges;
         private string Knowledge(KnowledgeType type)
@@ -117,160 +98,88 @@ namespace Shooter.Game.Llm
             }
             return known.ToString();
         }
-        private Prompt StaticKnowledgePrompt =>
-            new Prompt()
-                .Section(
-                    "IMMUTABLE FACTS ABOUT THIS WORLD",
-                    Knowledge(KnowledgeType.Static)
-                );
+
+        private string persona;
+        private string Persona()
+        {
+            persona ??= new Prompt()
+                .Section(CorePrompt)
+                .Section(IdPrompt)
+                .Section(RelationPrompt)
+                .Section("YOUR CHARACTER", character)
+                .Section("IMMUTABLE FACTS ABOUT THIS WORLD", Knowledge(KnowledgeType.Identity))
+                .ToString();
+
+            return persona;
+        }
 
 
 
 
 
-        [SerializeField] private int memoryLimit = 10000;
-        private string memoryRaw = null;
-        private string Memory => (memoryRaw == null ? Knowledge(KnowledgeType.Dynamic) : memoryRaw);
-        private Prompt MemoryPrompt =>
-            new Prompt()
-                .Section(
-                    "YOUR MEMORY",
-                    "You have a Memory.\nMEMORY RULES:\n1. To update it, return the new FULL version in the `memory` field.\n2. Anything you do not carry over into the new version is lost FOREVER.\n3. Do NOT store personal details about wanderers — those live in the conversation histories. Store only general facts about the world.\n4. If there is nothing to update, return null in the `memory` field to keep the old version.\n5. Save as much details as possible.\n6. Size limit: " + memoryLimit + " characters.\n7. Keep your Memory in English, first person.\nCURRENT MEMORY:\n" +
-                    Memory
-                );
+        private readonly List<OpenAiMessage> history = new List<OpenAiMessage>();
+        private int historySize;
+        [SerializeField] private int historyMaxSize = 100000;
+        [SerializeField] private int historyTailKept = 10;
+
+        private void Append(OpenAiMessage message)
+        {
+            history.Add(message);
+            historySize += Size(message);
+        }
+
+        private static int Size(OpenAiMessage message)
+        {
+            int size = (message.Content?.Length ?? 0) + 20;
+
+            if (message.ToolCalls != null)
+            {
+                foreach (OpenAiToolCall call in message.ToolCalls)
+                {
+                    size += (call.Function?.Name?.Length ?? 0) + (call.Function?.Arguments?.Length ?? 0) + 20;
+                }
+            }
+
+            return size;
+        }
+
+        private List<OpenAiMessage> Composed()
+        {
+            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = Persona() } };
+            messages.AddRange(history);
+
+            return messages;
+        }
 
 
 
 
 
         private readonly Inbox interNpcInteractionInbox = new Inbox();
-        private readonly Queue<string> interNpcInteractionSentHistory = new Queue<string>();
-        [SerializeField] private int interNpcInteractionSentHistoryMaxLen = 20;
-        private Prompt InterNpcInteractionPrompt(string takenInterNpcInteractions) =>
-            new Prompt()
-                .Section("TALKING TO OTHER RESIDENTS",
-                    "You can talk to other residents through the `interNpcInteractions` field.\n1. Message a resident ONLY to pass or ask NEW information. Other residents see the objects near to them just like you do.\n2. Any number of recipients per message.\n3. Incoming messages are shown to you only once. What you do not write into your Memory, you forget.\n4. Mention context received from other residents when you talk to wanderers.\n5. Write these messages in English.\nYOUR INCOMING MESSAGES (process them and decide what goes into Memory):\n" +
-                    takenInterNpcInteractions +
-                    "Recently sent by you:\n" +
-                    JsonConvert.SerializeObject(interNpcInteractionSentHistory, JsonSettings)
-                );
-
-
-
-
-        private Prompt CharacterRelationPrompt =>
-            new Prompt()
-                .Section("RELATIONSHIPS WITH OTHER CHARACTERS (RESIDENTS AND WANDERERS)",
-                    "You have your own attitude towards every character.\n" +
-                    "The attitude is expressed by a number from 0 to 100. This number determines whether the character is an enemy, neutral, or friend. Your character automatically attacks all characters he considers enemies in order to defend themselves instantly.\n" +
-                    "Your current relationships with characters and relations changelog are visible in Your state.\n" +
-                    "You can always manually change the value of your relationship to character at your discretion using the `characterRelations` response field.\n" +
-                    "Your attitude towards the character will drop automatically if they attack you or your friends.");
-
-
-
-
-        private Prompt InventoryExchangePrompt =>
-            new Prompt()
-                .Section("INVENTORY EXCHANGE",
-                    $"You can transfer items at your discretion to characters within {inventoryExchanger.ExchangeRadius} meters using response fields `giveStackableItems` and `giveUniqueItems`. You ALWAYS inform the recipient of what you have given to them.");
-
-
-
-
-
-
         private readonly Inbox systemNotificationsInbox = new Inbox();
-        private Prompt SystemNotificationsPrompt(string takenSystemNotifications) =>
-            new Prompt()
-                .Section(
-                    "SYSTEM MESSAGES",
-                    "Occasionally the System sends you service messages, each shown only once. The System reports the actions you requested that could not be completed. By default assume every action you requested was completed.\nYOUR INCOMING MESSAGES:\n" +
-                    takenSystemNotifications
-                );
 
+        private readonly Dictionary<long, Action<string>> pendingWanderers = new Dictionary<long, Action<string>>();
+        private readonly List<string> arrivedWandererLines = new List<string>();
 
-
-
-
-
-        private Prompt WorldStatePrompt =>
-            new Prompt()
-                .Section(
-                    "WORLD STATE",
-                    WorldState()
-                );
-        private string Time()
+        public void Listen(long clientId, string message, Action<string> onAnswer)
         {
-            return Environment.Current.Clock.DateTime();
-        }
-        private string WorldState()
-        {
-            return "Game time: " + Time() + "\n" +
-                   "Your state:\n" + digester.Of(gameObject, DigestionDetail.Full) + "\n" +
-                   "Objects around you:\n" + worldDigester.Digest();
+            long wandererId = WandererId((ulong)clientId);
+
+            pendingWanderers[wandererId] = onAnswer;
+            arrivedWandererLines.Add($"Wanderer [ID {wandererId}] says: {message}");
         }
 
-
-
-
-
-        private readonly Dictionary<long, LlmConversation> conversations = new Dictionary<long, LlmConversation>();
-        private Prompt AnswerPrompt(long playerId)
+        private long WandererId(ulong clientId)
         {
-            return new Prompt()
-                .Section(
-                    "A WANDERER IS TALKING TO YOU",
-                    "Wanderer has spoken to you. Answer them in the `reply` field.\n1. Answer in the language your interlocutor speaks.\n2. Mind the game time between the lines: passing hours and days change the conversation.\n3. Mind the WORLD STATE.\n4. If the history is empty, this is a stranger out of the fog.\nCONVERSATION HISTORY:\n" +
-                    conversations.GetValueOrDefault(playerId, new LlmConversation()).Prompt()
-                );
-        }
-        private Prompt CompactPrompt(long playerId)
-        {
-            return new Prompt()
-                .Section(
-                    "CONVERSATION WITH THE WANDERER MUST BE COMPACTED",
-                    "The conversation with the wanderer exceeded the maximum length. The conversation with them MUST be compacted.\nAfter the compact, the entire conversation with this wanderer will be ERASED. Instead, there will be only one system message with the contents of the `compact` field from the response you will give.\nYou MUST keep all the details important for the continuity of deep communication with this wanderer.\nYou SHOULD compress the conversation to at most half its length.\nTHE CONVERSATION:\n" +
-                    conversations.GetValueOrDefault(playerId, new LlmConversation()).Prompt()
-                );
-        }
-        public void Listen(long playerId, string message, Action<string> onAnswer)
-        {
-            conversations.TryAdd(playerId, new LlmConversation());
-            conversations[playerId].RegisterUserMessage(
-                new LlmMessage()
+            foreach (PersistentId id in FindObjectsByType<PersistentId>())
             {
-                Content = message,
-                Role = LlmRole.User,
-                Time = Time()
-            },
-                onAnswer
-            );
-        }
-        private long? PendingConversationId()
-        {
-            foreach (KeyValuePair<long, LlmConversation> kvp in conversations)
-            {
-                if (kvp.Value.Pending())
-                {
-                    return kvp.Key;
-                }
+                var net = id.GetComponent<NetworkObject>();
+                if (net != null && net.IsPlayerObject && net.OwnerClientId == clientId) return id.Value;
             }
-            return null;
-        }
-        [SerializeField] private int conversationMaxSize = 100000;
-        private long? PendingCompactConversationId()
-        {
-            foreach (KeyValuePair<long, LlmConversation> kvp in conversations)
-            {
-                if (kvp.Value.PayloadSize >= conversationMaxSize && !kvp.Value.Pending())
-                {
-                    return kvp.Key;
-                }
-            }
-            return null;
-        }
 
+            Log.Warn($"Entity {entityName} can not find the persistent id of the wanderer of client {clientId}");
+            return -1;
+        }
 
 
 
@@ -286,52 +195,22 @@ namespace Shooter.Game.Llm
 
 
 
-        private Prompt Assemble(string takenInterNpcInteractions, string takenSystemNotifications, long? pendingConversationId, long? pendingCompactConversationId)
-        {
-            Prompt result = new Prompt()
-                .Section(CorePrompt)
-                .Section(IdPrompt)
-                .Section(ResponseFormattingRulesPrompt)
-                .Section(CharacterPrompt)
-                .Section(StaticKnowledgePrompt)
-                .Section(MemoryPrompt)
-                .Section(InterNpcInteractionPrompt(takenInterNpcInteractions))
-                .Section(CharacterRelationPrompt)
-                .Section(InventoryExchangePrompt)
-                .Section(SystemNotificationsPrompt(takenSystemNotifications))
-                .Section(WorldStatePrompt);
-
-            if (pendingCompactConversationId != null)
-            {
-                return result
-                    .Section(CompactPrompt(pendingCompactConversationId.Value));
-            }
-
-            if (pendingConversationId != null)
-            {
-                result = result
-                    .Section(AnswerPrompt(pendingConversationId.Value));
-            }
-            return result;
-        }
-
-
-
-
-
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
         [SerializeField] private float failureCooldown = 15f;
+        [SerializeField] private int maxToolRounds = 3;
         private float retryBlockedUntil;
+
         public LlmStatus Status()
         {
             return new LlmStatus()
             {
-                PendingConversations = (PendingConversationId() != null),
-                PendingCompact = (PendingCompactConversationId() != null),
+                PendingConversations = pendingWanderers.Count > 0 || arrivedWandererLines.Count > 0,
+                PendingCompact = historySize >= historyMaxSize,
                 PendingInterNpcInteractionsInbox = !interNpcInteractionInbox.Empty(),
                 PendingSystemNotificationsInbox = !systemNotificationsInbox.Empty()
             };
         }
+
         public async Task<bool> Tick()
         {
             if (life.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil)
@@ -346,39 +225,16 @@ namespace Shooter.Game.Llm
                 return false;
             }
 
-            string takenInterNpcInteractions = interNpcInteractionInbox.Take();
-            string takenSystemNotifications = systemNotificationsInbox.Take();
-
             try
             {
-                long? pendingConversationId = PendingConversationId();
-                long? pendingCompactConversationId = PendingCompactConversationId();
-                LlmConfig config = (pendingCompactConversationId == null ? Config.Read().Server.LlmBase : Config.Read().Server.LlmMax);
-                Log.Info($"Entity {entityName} is asking {config.Model} for an answer, pendingConversationId {pendingConversationId} pendingCompactConversationId {pendingCompactConversationId}");
-
-                LlmAnswer answer = await LlmProvider.Request(
-                    config,
-                    Assemble(takenInterNpcInteractions, takenSystemNotifications, pendingConversationId, pendingCompactConversationId),
-                    life.Token
-                );
-
-                life.Token.ThrowIfCancellationRequested();
-
-                if (pendingCompactConversationId != null && answer.Compact == null)
+                if (historySize >= historyMaxSize)
                 {
-                    throw new LlmAnswerException("No compact for the pending compact");
+                    await CompactTick();
                 }
-                if (pendingCompactConversationId == null && pendingConversationId != null && answer.Reply == null)
+                else
                 {
-                    throw new LlmAnswerException("No reply for the pending conversation");
+                    await LiveTick();
                 }
-
-                Compact(pendingCompactConversationId, answer.Compact);
-                SaveReply(pendingConversationId, answer.Reply);
-                Remember(answer.Memory);
-                InterNpcInteraction(answer.InterNpcInteractions);
-                CharacterRelations(answer.CharacterRelations);
-                InventoryExchange(answer.GiveStackableItems, answer.GiveUniqueItems);
                 return true;
             }
             catch (OperationCanceledException)
@@ -388,10 +244,8 @@ namespace Shooter.Game.Llm
             }
             catch (Exception e)
             {
-                interNpcInteractionInbox.Return(takenInterNpcInteractions);
-                systemNotificationsInbox.Return(takenSystemNotifications);
                 retryBlockedUntil = UnityEngine.Time.time + failureCooldown;
-                Log.Warn($"Entity {entityName} failed to respond, inboxes returned, next attempt in {failureCooldown} s: {e.ToString()}");
+                Log.Warn($"Entity {entityName} failed to respond, next attempt in {failureCooldown} s: {e}");
                 return false;
             }
             finally
@@ -404,199 +258,339 @@ namespace Shooter.Game.Llm
 
 
 
-        private void Compact(long? pendingCompactConversationId, string compact)
+        private async Task LiveTick()
         {
-            if (compact == null)
-            {
-                return;
-            }
-            if (pendingCompactConversationId == null)
-            {
-                Log.Warn($"Entity {entityName} sent compact that nobody asked: {compact}");
-                return;
-            }
+            if (history.Count == 0) Begin();
 
-            conversations[pendingCompactConversationId.Value].Replace(
-                new LlmMessage()
+            Append(new OpenAiMessage { Role = "user", Content = Observation() });
+
+            LlmConfig config = Config.Read().Server.LlmBase;
+            List<LlmTool> tools = LiveTools();
+            List<OpenAiTool> declared = tools.Select(tool => tool.Declared()).ToList();
+
+            Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {historySize} chars");
+
+            for (int round = 0; round < maxToolRounds; round++)
+            {
+                LlmTurn turn = await LlmProvider.Request(config, Composed(), declared, life.Token);
+                life.Token.ThrowIfCancellationRequested();
+
+                Append(Turned(turn));
+
+                if (!turn.CallsTools) break;
+
+                foreach (LlmToolCall call in turn.ToolCalls)
                 {
-                    Content = compact,
-                    Role = LlmRole.System,
-                    Time = Time()
+                    Append(new OpenAiMessage { Role = "tool", ToolCallId = call.Id, Content = Execute(tools, call) });
                 }
-            );
+            }
+        }
+
+        private void Begin()
+        {
+            string experience = Knowledge(KnowledgeType.Experience);
+            if (string.IsNullOrEmpty(experience)) return;
+
+            Append(new OpenAiMessage { Role = "user", Content = "YOUR LIFE SO FAR:\n" + experience });
+        }
+
+        private string Observation()
+        {
+            var seen = new StringBuilder();
+            seen.Append('[').Append(Time()).Append(']');
+
+            foreach (string line in arrivedWandererLines) seen.Append('\n').Append(line);
+            arrivedWandererLines.Clear();
+
+            string mail = interNpcInteractionInbox.Take();
+            if (!string.IsNullOrEmpty(mail)) seen.Append('\n').Append("Mail from residents:\n").Append(mail.TrimEnd('\n'));
+
+            string notices = systemNotificationsInbox.Take();
+            if (!string.IsNullOrEmpty(notices)) seen.Append('\n').Append("System:\n").Append(notices.TrimEnd('\n'));
+
+            return seen.ToString();
+        }
+
+        private static OpenAiMessage Turned(LlmTurn turn)
+        {
+            var message = new OpenAiMessage { Role = "assistant", Content = turn.Content };
+
+            if (turn.CallsTools)
+            {
+                message.ToolCalls = turn.ToolCalls
+                    .Select(call => new OpenAiToolCall
+                    {
+                        Id = call.Id,
+                        Type = "function",
+                        Function = new OpenAiCalledFunction { Name = call.Name, Arguments = call.Arguments }
+                    })
+                    .ToArray();
+            }
+
+            return message;
         }
 
 
 
 
-        private void SaveReply(long? pendingConversationId, string reply)
+
+        private List<LlmTool> LiveTools()
         {
-            if (reply == null)
+            var tools = new List<LlmTool>
             {
-                return;
-            }
-            if (pendingConversationId == null)
+                new LlmTool(
+                    "look_around",
+                    "Look around: your own state and everything visible near you right now.",
+                    @"{""type"":""object"",""properties"":{}}",
+                    _ => WorldState()),
+                new LlmTool(
+                    "send_message",
+                    "Send a message to other residents by their ids. Write in English. Message a resident only to pass or ask something new: residents see their own surroundings themselves.",
+                    @"{""type"":""object"",""properties"":{""target_ids"":{""type"":""array"",""items"":{""type"":""integer""}},""content"":{""type"":""string""}},""required"":[""target_ids"",""content""]}",
+                    SendMessage),
+                new LlmTool(
+                    "update_relation",
+                    "Change your attitude to a character (0 enemy, 100 friend).",
+                    @"{""type"":""object"",""properties"":{""target_id"":{""type"":""integer""},""amount"":{""type"":""integer""},""reason"":{""type"":""string""}},""required"":[""target_id"",""amount"",""reason""]}",
+                    UpdateRelation),
+                new LlmTool(
+                    "give_stackable",
+                    $"Give some of your stackable items to a character within {inventoryExchanger.ExchangeRadius} meters. Always tell the receiver what you gave.",
+                    @"{""type"":""object"",""properties"":{""target_id"":{""type"":""integer""},""item"":{""type"":""string"",""description"":""Exact item name from your bag""},""amount"":{""type"":""integer""}},""required"":[""target_id"",""item"",""amount""]}",
+                    GiveStackable),
+                new LlmTool(
+                    "give_unique",
+                    $"Give one of your unique items, by its slot number, to a character within {inventoryExchanger.ExchangeRadius} meters. Always tell the receiver what you gave.",
+                    @"{""type"":""object"",""properties"":{""target_id"":{""type"":""integer""},""slot"":{""type"":""integer""}},""required"":[""target_id"",""slot""]}",
+                    GiveUnique)
+            };
+
+            if (pendingWanderers.Count > 0)
             {
-                Log.Warn($"Entity {entityName} sent reply that nobody asked: {reply}");
-                return;
+                tools.Add(new LlmTool(
+                    "say_to_wanderer",
+                    "Answer a wanderer who is talking to you. Answer in the language the wanderer speaks.",
+                    @"{""type"":""object"",""properties"":{""wanderer_id"":{""type"":""integer""},""text"":{""type"":""string""}},""required"":[""wanderer_id"",""text""]}",
+                    SayToWanderer));
             }
-            conversations[pendingConversationId.Value].RegisterModelMessage(
-                new LlmMessage()
-                {
-                    Content = reply,
-                    Role = LlmRole.Model,
-                    Time = Time()
-                }
-            );
+
+            return tools;
+        }
+
+        private string Execute(List<LlmTool> tools, LlmToolCall call)
+        {
+            LlmTool tool = tools.FirstOrDefault(known => known.Name == call.Name);
+            if (tool == null) return $"There is no tool named {call.Name}";
+
+            JObject arguments;
+            try
+            {
+                arguments = string.IsNullOrEmpty(call.Arguments) ? new JObject() : JObject.Parse(call.Arguments);
+            }
+            catch (Exception e)
+            {
+                return $"Broken arguments: {e.Message}";
+            }
+
+            try
+            {
+                string result = tool.Execute(arguments);
+                Log.Info($"Entity {entityName} used {call.Name} {call.Arguments}: {result}");
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"Entity {entityName} broke the tool {call.Name} {call.Arguments}: {e.Message}");
+                return $"The action failed: {e.Message}";
+            }
         }
 
 
 
-        private void Remember(string update)
+
+
+        private string SendMessage(JObject arguments)
         {
-            if (update == null) return;
-
-            memoryRaw = update.Length <= memoryLimit ? update : update.Substring(0, memoryLimit);
-            Log.Info($"Entity {name} rewrote its memory ({memoryRaw.Length} chars): {memoryRaw}");
-        }
-
-
-
-
-        private void InterNpcInteraction(LlmAnswer.InterNpcInteractionCommand[] cmds)
-        {
-            if (cmds == null || cmds.Length == 0)
-            {
-                return;
-            }
+            long[] targetIds = arguments["target_ids"]?.ToObject<long[]>();
+            string content = arguments["content"]?.ToString();
+            if (targetIds == null || targetIds.Length == 0 || string.IsNullOrEmpty(content)) return "Nothing to send";
 
             long ownId = Id();
+            Llm[] residents = FindObjectsByType<Llm>();
+            var delivered = new List<long>();
+            var failed = new List<string>();
 
-            Llm[] allLlms = FindObjectsByType<Llm>();
-
-            foreach (LlmAnswer.InterNpcInteractionCommand cmd in cmds)
+            foreach (long targetId in targetIds.Distinct())
             {
-                if (cmd.TargetIds == null || cmd.TargetIds.Length == 0 || string.IsNullOrEmpty(cmd.Content))
+                Llm target = residents.FirstOrDefault(resident => resident != this && resident.Id() == targetId);
+
+                if (target == null)
                 {
+                    failed.Add($"{targetId}: no resident bears this id");
                     continue;
                 }
 
-                var received = new HashSet<long>();
-                var fails = new Dictionary<long, string>();
-
-                foreach (Llm llm in allLlms)
+                if (!target.Alive())
                 {
-                    if (llm == this) continue;
-
-                    long targetId = llm.Id();
-                    if (!cmd.TargetIds.Contains(targetId)) continue;
-
-                    if (!llm.Alive())
-                    {
-                        fails[targetId] = "The resident is dead";
-                        continue;
-                    }
-
-                    received.Add(targetId);
-
-                    Log.Info($"Entity {name} said to {targetId}: {cmd.Content}");
-
-                    llm.interNpcInteractionInbox.Put("[" + Time() + "] " + ownId + ": " + cmd.Content);
+                    failed.Add($"{targetId}: the resident is dead");
+                    continue;
                 }
 
-                interNpcInteractionSentHistory.Enqueue("[" + Time() + "] To: " + JsonConvert.SerializeObject(received) + " Message: " + cmd.Content);
-
-                foreach (long targetId in cmd.TargetIds)
-                {
-                    if (!received.Contains(targetId))
-                    {
-                        string reason = fails.GetValueOrDefault(targetId, "The id is misspelled or no resident bears it");
-                        Log.Warn($"Failed to say from {entityName} to {targetId}: {reason}");
-                        systemNotificationsInbox.Put("[" + Time() + "] " + $"Your message to {targetId} could not be delivered: {reason}. The undelivered message: {cmd.Content}");
-                    }
-                }
-
-                while (interNpcInteractionSentHistory.Count > interNpcInteractionSentHistoryMaxLen)
-                {
-                    interNpcInteractionSentHistory.Dequeue();
-                }
+                target.interNpcInteractionInbox.Put($"[{Time()}] {ownId}: {content}");
+                delivered.Add(targetId);
+                Log.Info($"Entity {entityName} said to {targetId}: {content}");
             }
+
+            var answer = new StringBuilder();
+            if (delivered.Count > 0) answer.Append("Delivered to ").Append(string.Join(", ", delivered));
+            foreach (string failure in failed)
+            {
+                if (answer.Length > 0) answer.Append('\n');
+                answer.Append("Not delivered to ").Append(failure);
+            }
+
+            return answer.ToString();
+        }
+
+        private string UpdateRelation(JObject arguments)
+        {
+            long targetId = arguments["target_id"].ToObject<long>();
+            int amount = arguments["amount"].ToObject<int>();
+            string reason = arguments["reason"]?.ToString();
+
+            int old = characterRelation.Amount(targetId);
+            characterRelation.SetAmount(targetId, amount, reason);
+
+            return $"Your attitude to {targetId}: {old} -> {amount}";
+        }
+
+        private string GiveStackable(JObject arguments)
+        {
+            long targetId = arguments["target_id"].ToObject<long>();
+            string itemName = arguments["item"]?.ToString();
+            int amount = arguments["amount"].ToObject<int>();
+
+            ItemSpec item = Environment.Current.Items.FindByPromptName(itemName);
+            if (item == null) return $"There is no item named {itemName}";
+
+            return inventoryExchanger.GiveStackable(targetId, item, amount)
+                ? $"Gave {amount} x {itemName} to {targetId}"
+                : "Could not give: the receiver is not around or you lack the items";
+        }
+
+        private string GiveUnique(JObject arguments)
+        {
+            long targetId = arguments["target_id"].ToObject<long>();
+            int slot = arguments["slot"].ToObject<int>();
+
+            return inventoryExchanger.GiveUnique(targetId, slot)
+                ? $"Gave the item from slot {slot} to {targetId}"
+                : "Could not give: the receiver is not around or the slot is empty";
+        }
+
+        private string SayToWanderer(JObject arguments)
+        {
+            long wandererId = arguments["wanderer_id"].ToObject<long>();
+            string text = arguments["text"]?.ToString();
+            if (string.IsNullOrEmpty(text)) return "Nothing to say";
+
+            if (!pendingWanderers.Remove(wandererId, out Action<string> onAnswer))
+            {
+                return $"No wanderer {wandererId} is waiting for your answer";
+            }
+
+            onAnswer(text);
+            return $"Said to {wandererId}";
         }
 
 
 
-        private void CharacterRelations(LlmAnswer.CharacterRelationCommand[] cmds)
+
+
+        private async Task CompactTick()
         {
-            if (cmds == null || cmds.Length == 0)
+            int cut = Cut();
+
+            if (cut <= 1)
             {
+                historyMaxSize *= 2;
+                Log.Warn($"Entity {entityName} has nothing to compact, the size limit is raised to {historyMaxSize}");
                 return;
             }
 
-            foreach (LlmAnswer.CharacterRelationCommand cmd in cmds)
+            string summary = null;
+
+            var tools = new List<LlmTool>
             {
-                Log.Info($"Entity {name} is updating relation to character {cmd.TargetId} from {(characterRelation.Amount(cmd.TargetId))} to {cmd.NewAmount}: {cmd.Reason}");
-                try
-                {
-                    characterRelation.SetAmount(cmd.TargetId, cmd.NewAmount, cmd.Reason);
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Entity {name} failed to update relation: {e.Message}");
-                    systemNotificationsInbox.Put("[" + Time() + "]" + $"Failed to update your relation to character {cmd.TargetId} from {characterRelation.Amount(cmd.TargetId)} to {cmd.NewAmount} {cmd.Reason}: {e.Message}");
-                }
+                new LlmTool(
+                    "rewrite_summary",
+                    "Replace the story of your life so far with its full retelling.",
+                    @"{""type"":""object"",""properties"":{""text"":{""type"":""string""}},""required"":[""text""]}",
+                    arguments =>
+                    {
+                        summary = arguments["text"]?.ToString();
+                        return "Rewritten";
+                    })
+            };
+
+            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = Persona() } };
+            messages.AddRange(history.Take(cut));
+            messages.Add(new OpenAiMessage
+            {
+                Role = "user",
+                Content = "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of everything above: the retelling will replace the story, and anything you leave out is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Compress to at most half the length."
+            });
+
+            Log.Info($"Entity {entityName} is compacting {cut} of {history.Count} history messages");
+
+            LlmTurn turn = await LlmProvider.Request(Config.Read().Server.LlmMax, messages,
+                tools.Select(tool => tool.Declared()).ToList(), life.Token);
+            life.Token.ThrowIfCancellationRequested();
+
+            if (turn.CallsTools)
+            {
+                foreach (LlmToolCall call in turn.ToolCalls) Execute(tools, call);
             }
+
+            if (string.IsNullOrEmpty(summary))
+            {
+                throw new LlmAnswerException("No summary for the pending compact");
+            }
+
+            List<OpenAiMessage> kept = history.Skip(cut).ToList();
+            history.Clear();
+            historySize = 0;
+
+            Append(new OpenAiMessage { Role = "user", Content = "THE STORY OF YOUR LIFE SO FAR:\n" + summary });
+            foreach (OpenAiMessage message in kept) Append(message);
+
+            Log.Info($"Entity {entityName} compacted its history down to {historySize} chars");
         }
 
-
-
-
-        private void InventoryExchange(LlmAnswer.GiveStackableItemCommand[] stackableCmds, LlmAnswer.GiveUniqueItemCommand[] uniqueCmds)
+        private int Cut()
         {
-            if (stackableCmds != null)
-            {
-                var failed = new List<LlmAnswer.GiveStackableItemCommand>();
-                foreach (LlmAnswer.GiveStackableItemCommand cmd in stackableCmds)
-                {
-                    ItemSpec item = Environment.Current.Items.FindByPromptName(cmd.ItemName);
-                    if (item == null)
-                    {
-                        failed.Add(cmd);
-                        continue;
-                    }
-                    if (!inventoryExchanger.GiveStackable(cmd.TargetId, item, cmd.ItemAmount))
-                    {
-                        failed.Add(cmd);
-                        continue;
-                    }
-                }
-                foreach (LlmAnswer.GiveStackableItemCommand cmd in failed)
-                {
-                    Log.Warn($"Entity {name} failed to give {cmd.ItemName} x {cmd.ItemAmount} to {cmd.TargetId}");
-                    systemNotificationsInbox.Put("[" + Time() + "] " + $"Failed to give {cmd.ItemName} x {cmd.ItemAmount} to {cmd.TargetId}");
-                }
-            }
+            int cut = history.Count - historyTailKept;
 
-            if (uniqueCmds != null)
-            {
-                var failed = new List<LlmAnswer.GiveUniqueItemCommand>();
-                foreach (LlmAnswer.GiveUniqueItemCommand cmd in uniqueCmds)
-                {
-                    if (!inventoryExchanger.GiveUnique(cmd.TargetId, cmd.SlotIdx))
-                    {
-                        failed.Add(cmd);
-                        continue;
-                    }
-                }
-                foreach (LlmAnswer.GiveUniqueItemCommand cmd in failed)
-                {
-                    Log.Warn($"Entity {name} failed to give unique slot idx {cmd.SlotIdx} to {cmd.TargetId}");
-                    systemNotificationsInbox.Put("[" + Time() + "] " + $"Failed to give unique item slot idx {cmd.SlotIdx} to {cmd.TargetId}");
-                }
-            }
+            while (cut > 0 && cut < history.Count && history[cut].Role == "tool") cut++;
+
+            return cut;
         }
 
 
 
+
+
+        private string Time()
+        {
+            return Environment.Current.Clock.DateTime();
+        }
+
+        private string WorldState()
+        {
+            return "Game time: " + Time() + "\n" +
+                   "Your state:\n" + digester.Of(gameObject, DigestionDetail.Full) + "\n" +
+                   "Objects around you:\n" + worldDigester.Digest();
+        }
 
         private long Id()
         {
@@ -607,6 +601,7 @@ namespace Shooter.Game.Llm
             Log.Warn($"Entity {name} does not have persistent id");
             return -1;
         }
+
         private bool Alive()
         {
             if (TryGetComponent(out Health health))
