@@ -9,9 +9,6 @@ namespace Shooter.Game.Llm.OpenAi
         public OpenAiMessage[] Messages { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public OpenAiResponseFormat ResponseFormat { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public OpenAiTool[] Tools { get; set; }
     }
 
@@ -51,11 +48,6 @@ namespace Shooter.Game.Llm.OpenAi
     {
         public string Name { get; set; }
         public string Arguments { get; set; }
-    }
-
-    public class OpenAiResponseFormat
-    {
-        public string Type { get; set; }
     }
 
     public class OpenAiResponse
