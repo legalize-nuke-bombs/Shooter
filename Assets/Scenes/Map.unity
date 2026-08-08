@@ -1752,11 +1752,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8537724810945162158, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: useDespawn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8537724810945162158, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: despawnTime
-      value: 60
+      value: 600
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

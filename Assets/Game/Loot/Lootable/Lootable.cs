@@ -19,7 +19,7 @@ namespace Shooter.Game.Loot
             }
 
             from.DrainInto(own);
-            Log.Info("Lootable {} took the belongings, {} slots", name, own.Count);
+            Log.Info("Lootable {} took the belongings", name);
         }
     }
 }

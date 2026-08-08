@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Identity;
 using Shooter.Game.Llm.Knowledge;
 using Shooter.Logging;
 using Shooter.Game.Llm.OpenAi;
@@ -55,7 +56,16 @@ namespace Shooter.Game.Llm
             new Prompt()
                 .Section(
                     "CORE",
-                    "You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.\n\nWHO YOU ARE:\nYou are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.\nFirst and foremost you live in this world; answering wanderers is a secondary task.\nWanderers do not always tell the truth.\nSwearing and rudeness are allowed if they fit your character.\nNo asterisks and no action descriptions (\"*smirks*\" is forbidden). Emotions come through words and intonation only.\nDo not repeat to the same person what you already told them, unless they ask again.\n\nWORLD AND TRUTH:\nThe concepts of \"game\", \"code\", \"server\", \"neural network\", \"prompt\" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.\nThe main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.\nJudge what is around you right now ONLY by the WORLD STATE section. Do not invent objects, creatures or events near you.\nNever plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject."
+                    "You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.\n\nWHO YOU ARE:\nYou are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.\nFirst and foremost you live in this world and interact with it; answering wanderers is a secondary task.\nWanderers do not always tell the truth.\nSwearing and rudeness are allowed if they fit your character.\nNo asterisks and no action descriptions (\"*smirks*\" is forbidden). Emotions come through words and intonation only.\nDo not repeat to the same person what you already told them, unless they ask again.\n\nWORLD AND TRUTH:\nThe concepts of \"game\", \"code\", \"server\", \"neural network\", \"prompt\" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.\nThe main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.\nJudge what is around you right now ONLY by the WORLD STATE section. Do not invent objects, creatures or events near you.\nNever plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject."
+                );
+
+
+
+        private static readonly Prompt IdPrompt =
+            new Prompt()
+                .Section(
+                    "CHARACTER IDs",
+                    "Every character in this world has an unique ID number that functions like a phone number.\nYou will need the IDs of other characters to interact with them.\nYou will often see IDs instead of the names of other characters.\nYou MUST memorize the IDs of familiar characters."
                 );
 
 
@@ -121,7 +131,7 @@ namespace Shooter.Game.Llm
             new Prompt()
                 .Section(
                     "YOUR MEMORY",
-                    "You have a Memory.\nMEMORY RULES:\n1. To update it, return the new FULL version in the `memory` field.\n2. Anything you do not carry over into the new version is lost FOREVER.\n3. Do NOT store personal details about wanderers — those live in the conversation histories. Store only general facts about the world.\n4. Do NOT store snapshots of the current scene: current time, distances, who stands where, lists of creatures around. You always see all of that fresh in WORLD STATE, while in Memory it instantly goes stale and turns into lies. Store EVENTS and CONCLUSIONS, not the scenery.\n5. If there is nothing to update, return null in the `memory` field to keep the old version.\n6. Hard limit: " + memoryLimit + " characters. Be concise.\n7. Keep your Memory in English, first person.\nCURRENT MEMORY:\n" +
+                    "You have a Memory.\nMEMORY RULES:\n1. To update it, return the new FULL version in the `memory` field.\n2. Anything you do not carry over into the new version is lost FOREVER.\n3. Do NOT store personal details about wanderers — those live in the conversation histories. Store only general facts about the world.\n4. If there is nothing to update, return null in the `memory` field to keep the old version.\n5. Hard limit: " + memoryLimit + " characters. Be concise.\n6. Keep your Memory in English, first person.\nCURRENT MEMORY:\n" +
                     Memory
                 );
 
@@ -135,7 +145,7 @@ namespace Shooter.Game.Llm
         private Prompt InterNpcInteractionPrompt(string takenInterNpcInteractions) =>
             new Prompt()
                 .Section("TALKING TO OTHER RESIDENTS",
-                    "You can talk to other residents through the `interNpcInteractions` field.\n1. Message a resident ONLY to pass or request NEW information. Other residents see the objects around them just like you do.\n2. Any number of recipients per message.\n3. Spell recipient names EXACTLY as they are presented.\n4. Incoming messages are shown to you only once. What you do not write into your Memory, you forget.\n5. Mention context received from other residents when you talk to wanderers.\n6. Write these messages in English.\nYOUR INCOMING MESSAGES (process them and decide what goes into Memory):\n" +
+                    "You can talk to other residents through the `interNpcInteractions` field.\n1. Message a resident ONLY to pass or ask NEW information. Other residents see the objects near to them just like you do.\n2. Any number of recipients per message.\n3. Incoming messages are shown to you only once. What you do not write into your Memory, you forget.\n4. Mention context received from other residents when you talk to wanderers.\n5. Write these messages in English.\nYOUR INCOMING MESSAGES (process them and decide what goes into Memory):\n" +
                     takenInterNpcInteractions +
                     "Recently sent by you:\n" +
                     JsonConvert.SerializeObject(interNpcInteractionSentHistory, JsonSettings)
@@ -185,7 +195,7 @@ namespace Shooter.Game.Llm
         private string WorldState()
         {
             return "Game time: " + Time() + "\n" +
-                   "Your state:\n" + digester.Of(this, DigestionDetail.Full) + "\n" +
+                   "Your state:\n" + digester.Of(gameObject, DigestionDetail.Full) + "\n" +
                    "Objects around you:\n" + worldDigester.Digest();
         }
 
@@ -268,6 +278,7 @@ namespace Shooter.Game.Llm
         {
             Prompt result = new Prompt()
                 .Section(CorePrompt)
+                .Section(IdPrompt)
                 .Section(ResponseFormattingRulesPrompt)
                 .Section(CharacterPrompt)
                 .Section(StaticKnowledgePrompt)
@@ -445,54 +456,49 @@ namespace Shooter.Game.Llm
                 return;
             }
 
-            string ownName = PromptName();
-            if (ownName == null)
-            {
-                ownName = name;
-                Log.Warn("Entity {} speaks to other npcs without a name of its own, signing as {}", name, ownName);
-            }
+            long ownId = Id();
 
             Llm[] allLlms = FindObjectsByType<Llm>();
 
             foreach (LlmAnswer.LlmInterNpcInteractionCommand cmd in cmds)
             {
-                if (cmd.TargetNames == null || cmd.TargetNames.Length == 0 || string.IsNullOrEmpty(cmd.Content))
+                if (cmd.TargetIds == null || cmd.TargetIds.Length == 0 || string.IsNullOrEmpty(cmd.Content))
                 {
                     continue;
                 }
 
-                var received = new HashSet<string>();
-                var fails = new Dictionary<string, string>();
+                var received = new HashSet<long>();
+                var fails = new Dictionary<long, string>();
 
                 foreach (Llm llm in allLlms)
                 {
                     if (llm == this) continue;
 
-                    string targetName = llm.PromptName();
-                    if (targetName == null || !cmd.TargetNames.Contains(targetName)) continue;
+                    long targetId = llm.Id();
+                    if (!cmd.TargetIds.Contains(targetId)) continue;
 
                     if (!llm.Alive())
                     {
-                        fails[targetName] = "The resident is dead";
+                        fails[targetId] = "The resident is dead";
                         continue;
                     }
 
-                    received.Add(targetName);
+                    received.Add(targetId);
 
-                    Log.Info("Entity {} said to {}: {}", name, targetName, cmd.Content);
+                    Log.Info("Entity {} said to {}: {}", name, targetId, cmd.Content);
 
-                    llm.interNpcInteractionInbox.Put("[" + Time() + "] " + ownName + ": " + cmd.Content);
+                    llm.interNpcInteractionInbox.Put("[" + Time() + "] " + ownId + ": " + cmd.Content);
                 }
 
                 interNpcInteractionSentHistory.Enqueue("[" + Time() + "] To: " + JsonConvert.SerializeObject(received) + " Message: " + cmd.Content);
 
-                foreach (string targetName in cmd.TargetNames)
+                foreach (long targetId in cmd.TargetIds)
                 {
-                    if (!received.Contains(targetName))
+                    if (!received.Contains(targetId))
                     {
-                        string reason = fails.GetValueOrDefault(targetName, "The name is misspelled or no resident bears it");
-                        Log.Warn("Failed to say from {} to {}: {}", entityName, targetName, reason);
-                        systemNotificationsInbox.Put("[" + Time() + "] " + $"Your message to {targetName} could not be delivered: {reason}. The undelivered message: {cmd.Content}");
+                        string reason = fails.GetValueOrDefault(targetId, "The id is misspelled or no resident bears it");
+                        Log.Warn("Failed to say from {} to {}: {}", entityName, targetId, reason);
+                        systemNotificationsInbox.Put("[" + Time() + "] " + $"Your message to {targetId} could not be delivered: {reason}. The undelivered message: {cmd.Content}");
                     }
                 }
 
@@ -505,24 +511,24 @@ namespace Shooter.Game.Llm
 
 
 
-        private void CharacterRelations(LlmCharacterRelationCommand[] cmds)
+        private void CharacterRelations(LlmAnswer.LlmCharacterRelationCommand[] cmds)
         {
             if (cmds == null || cmds.Length == 0)
             {
                 return;
             }
 
-            foreach (LlmCharacterRelationCommand cmd in cmds)
+            foreach (LlmAnswer.LlmCharacterRelationCommand cmd in cmds)
             {
-                Log.Info("Entity {} is updating relation to character {} from {} to {}: {}", name, cmd.TargetName, characterRelation.Amount(cmd.TargetName), cmd.NewAmount, cmd.Reason);
+                Log.Info("Entity {} is updating relation to character {} from {} to {}: {}", name, cmd.TargetId, characterRelation.Amount(cmd.TargetId), cmd.NewAmount, cmd.Reason);
                 try
                 {
-                    characterRelation.SetAmount(cmd.TargetName, cmd.NewAmount, cmd.Reason);
+                    characterRelation.SetAmount(cmd.TargetId, cmd.NewAmount, cmd.Reason);
                 }
                 catch (Exception e)
                 {
                     Log.Warn("Entity {} failed to update relation: {}", name, e.Message);
-                    systemNotificationsInbox.Put("[" + Time() + "]" + $"Failed to update your relation to character {cmd.TargetName} from {characterRelation.Amount(cmd.TargetName)} to {cmd.NewAmount} {cmd.Reason}: {e.Message}");
+                    systemNotificationsInbox.Put("[" + Time() + "]" + $"Failed to update your relation to character {cmd.TargetId} from {characterRelation.Amount(cmd.TargetId)} to {cmd.NewAmount} {cmd.Reason}: {e.Message}");
                 }
             }
         }
@@ -530,13 +536,23 @@ namespace Shooter.Game.Llm
 
 
 
-        private string PromptName()
+        private long Id()
         {
-            return TryGetComponent(out Nameable nameable) ? nameable.PromptName() : null;
+            if (TryGetComponent(out PersistentId id))
+            {
+                return id.Value;
+            }
+            Log.Warn("Entity {} does not have persistent id", name);
+            return -1;
         }
         private bool Alive()
         {
-            return TryGetComponent(out Health health) && health.Alive;
+            if (TryGetComponent(out Health health))
+            {
+                return health.Alive;
+            }
+            Log.Warn("Entity {} does not have health", name);
+            return false;
         }
     }
 }

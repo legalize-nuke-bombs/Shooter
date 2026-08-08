@@ -29,7 +29,7 @@ namespace Shooter.Game.Body
 
         public abstract bool Alive { get; }
 
-        public DamageResult Damage(int amount, string attackerName)
+        public DamageResult Damage(int amount, long? attackerId)
         {
             if (!IsServer || !Alive || amount <= 0)
             {
@@ -49,9 +49,9 @@ namespace Shooter.Game.Body
                 Murder = !Alive
             };
 
-            if (characterRelation != null && attackerName != null)
+            if (characterRelation != null && attackerId != null)
             {
-                characterRelation.DecreaseAmount(attackerName, amount, $"{attackerName} dealt {amount} damage");
+                characterRelation.DecreaseAmount(attackerId.Value, amount, $"{attackerId.Value} dealt {amount} damage");
             }
 
             return result;

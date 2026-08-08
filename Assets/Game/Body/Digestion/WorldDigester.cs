@@ -26,7 +26,7 @@ namespace Shooter.Game.Body
         {
             var digest = new StringBuilder();
 
-            foreach (Component nearObject in FindNearObjects())
+            foreach (GameObject nearObject in FindNearObjects())
             {
                 string seen = digester.Seen(nearObject, DigestionDetail.Brief, transform);
                 if (seen != null) digest.Append(seen).Append('\n');
@@ -37,9 +37,9 @@ namespace Shooter.Game.Body
             return result;
         }
 
-        private List<Component> FindNearObjects()
+        private List<GameObject> FindNearObjects()
         {
-            var found = new HashSet<Component>();
+            var found = new HashSet<GameObject>();
             int hits = Physics.OverlapSphereNonAlloc(transform.position, scanRadius, Around);
             if (hits == Around.Length)
                 Log.Warn("Digester of {} filled its buffer of {} colliders within {} m, the digest may miss part of the world", name, Around.Length, scanRadius);
@@ -49,7 +49,7 @@ namespace Shooter.Game.Body
                 if (!(Around[i].GetComponentInParent<IDigestible>() is Component owner)) continue;
                 if (owner.gameObject == gameObject) continue;
 
-                found.Add(owner);
+                found.Add(owner.gameObject);
             }
 
             return found.OrderBy(owner => (transform.position - owner.transform.position).sqrMagnitude)

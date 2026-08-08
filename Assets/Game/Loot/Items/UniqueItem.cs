@@ -4,15 +4,12 @@ namespace Shooter.Game.Loot
 {
     public class UniqueItem
     {
-        public ulong Id { get; private set; }
-
         public string SpecId { get; private set; }
 
         [JsonIgnore] public bool Dirty { get; private set; }
 
-        public UniqueItem(ulong id, string specId)
+        public UniqueItem(string specId)
         {
-            Id = id;
             SpecId = specId;
         }
 

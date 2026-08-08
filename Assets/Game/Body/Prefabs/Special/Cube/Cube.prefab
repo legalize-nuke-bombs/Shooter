@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7021814678890179094}
   - component: {fileID: 4445930403988394465}
   - component: {fileID: 7723478074634143434}
+  - component: {fileID: 6121009694353266147}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -154,6 +155,19 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &6121009694353266147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475251358202894423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69c4f0350a0545bea50bbfcc987b88f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Identity.PersistentId
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &4402097373001482622
 GameObject:
   m_ObjectHideFlags: 0

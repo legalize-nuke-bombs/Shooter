@@ -11,23 +11,23 @@ namespace Shooter.Game.Relationship
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly Dictionary<string, int> amounts = new Dictionary<string, int>();
+        private readonly Dictionary<long, int> amounts = new Dictionary<long, int>();
         [SerializeField] [Range(0, 100)] private int defaultAmount = 50;
         // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
 
         private readonly Queue<RelationChangelog> changelog = new Queue<RelationChangelog>();
         [SerializeField] private int maxChangelogSize = 20;
 
-        public int Amount(string characterName)
+        public int Amount(long characterId)
         {
-            return amounts.GetValueOrDefault(characterName, defaultAmount);
+            return amounts.GetValueOrDefault(characterId, defaultAmount);
         }
 
-        public void SetAmount(string characterName, int amount, string reason)
+        public void SetAmount(long characterId, int amount, string reason)
         {
-            int currentAmount = Amount(characterName);
+            int currentAmount = Amount(characterId);
 
-            Log.Info("Entity {} SetAmount request: character name {} {} -> {} reason {}", name, characterName, currentAmount, amount, reason);
+            Log.Info("Entity {} SetAmount request: character id {} amount {} -> {} reason {}", name, characterId, currentAmount, amount, reason);
 
             if (amount < 0 || amount > 100)
             {
@@ -42,7 +42,7 @@ namespace Shooter.Game.Relationship
             changelog.Enqueue(new RelationChangelog()
             {
                     Time = Environment.Current.Clock.DateTime(),
-                    Name = characterName,
+                    Id = characterId,
                     From = currentAmount,
                     To = amount,
                     Reason = reason
@@ -52,20 +52,20 @@ namespace Shooter.Game.Relationship
                 changelog.Dequeue();
             }
 
-            amounts[characterName] = amount;
+            amounts[characterId] = amount;
         }
 
-        public void DecreaseAmount(string characterName, int amount, string reason)
+        public void DecreaseAmount(long characterId, int amount, string reason)
         {
-            SetAmount(characterName, Math.Max(0, Amount(characterName) - amount), reason);
+            SetAmount(characterId, Math.Max(0, Amount(characterId) - amount), reason);
         }
 
         [SerializeField] [Range(0, 100)] private int enemyThreshold = 0;
         [SerializeField] [Range(0, 100)] private int friendThreshold = 90;
 
-        public RelationshipStatus Status(string characterName)
+        public RelationshipStatus Status(long characterId)
         {
-            return Status(Amount(characterName));
+            return Status(Amount(characterId));
         }
 
         private RelationshipStatus Status(int amount)
@@ -103,7 +103,7 @@ namespace Shooter.Game.Relationship
             sb.Append("Relations with other characters changelog. ");
             foreach (RelationChangelog rc in changelog)
             {
-                sb.Append($"[{rc.Time}] Relation to {rc.Name} {rc.From} -> {rc.To} reason: {rc.Reason}. ");
+                sb.Append($"[{rc.Time}] Relation to {rc.Id} {rc.From} -> {rc.To} reason: {rc.Reason}. ");
             }
 
             return sb.ToString();

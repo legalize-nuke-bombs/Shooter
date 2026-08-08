@@ -2,9 +2,9 @@ using Shooter.Game.Body;
 using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Hitboxes;
 using Shooter.Game.Body.Sounding;
+using Shooter.Game.Identity;
 using Shooter.Game.Loot;
 using Shooter.Logging;
-using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -21,7 +21,7 @@ namespace Shooter.Game.Combat
 
         private static readonly RaycastHit[] Shots = new RaycastHit[32];
 
-        private Nameable nameable;
+        private PersistentId id;
         private Inventory inventory;
         private Interactor interactor;
         private Hands hands;
@@ -31,7 +31,7 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            nameable = GetComponent<Nameable>();
+            id = GetComponent<PersistentId>();
             inventory = GetComponent<Inventory>();
             interactor = GetComponent<Interactor>();
             hands = GetComponent<Hands>();
@@ -75,7 +75,7 @@ namespace Shooter.Game.Combat
             if (spec.Ammo == null) return false;
 
             int absent = spec.MagazineSize - firearm.Magazine;
-            if (absent <= 0 || inventory.Amount(spec.Ammo.Id) == 0) return false;
+            if (absent <= 0 || inventory.Amount(spec.Ammo) == 0) return false;
 
             if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true, () => Reloaded(firearm, spec, absent))) return false;
 
@@ -94,17 +94,17 @@ namespace Shooter.Game.Combat
             firearm = inventory.Equipped() as Firearm;
             if (firearm == null) return false;
 
-            spec = inventory.Catalog == null ? null : inventory.Catalog.Firearm(new FixedString32Bytes(firearm.SpecId));
+            spec = Environment.Current.Items.Firearm(firearm.SpecId);
             return spec != null;
         }
 
         private void Reloaded(Firearm firearm, FirearmSpec spec, int absent)
         {
-            if (inventory.Find(firearm.Id) == null) return;
+            if (!inventory.Contains(firearm)) return;
 
-            int taken = inventory.Remove(spec.Ammo.Id, absent, InventoryOnConflict.Partly);
+            int taken = inventory.Remove(spec.Ammo, absent, InventoryOnConflict.Partly);
             firearm.Reload(taken, spec.MagazineSize);
-            Log.Info("Entity {} reloaded {} with {} rounds, {} left in bag", name, firearm.SpecId, taken, inventory.Amount(spec.Ammo.Id));
+            Log.Info("Entity {} reloaded {} with {} rounds, {} left in bag", name, firearm.SpecId, taken, inventory.Amount(spec.Ammo));
         }
 
         private void Hit(FirearmSpec spec)
@@ -127,7 +127,7 @@ namespace Shooter.Game.Combat
             if (part == BodyPart.Head) earSpeaker.Play(spec.HeadshotSound);
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
-            health.Damage(damage, nameable == null ? null : nameable.PromptName());
+            health.Damage(damage, id == null ? null : id.Value);
             Log.Info("Shot of entity {} hit {} in {} for {} damage", name, health.name, part, damage);
         }
 

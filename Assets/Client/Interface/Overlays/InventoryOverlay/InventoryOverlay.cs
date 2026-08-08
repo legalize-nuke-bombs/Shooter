@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Shooter.Client.Playing;
+using Shooter.Game;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace Shooter.Client.Interface.Overlays
         private Label coins;
         private Inventory bag;
         private VisualElement ghost;
-        private ulong dragged;
+        private int dragged;
         private bool draggedFromHands;
         private int pointer;
         private bool open;
@@ -120,39 +121,49 @@ namespace Shooter.Client.Interface.Overlays
                 return;
             }
 
+            ItemCatalog catalog = Environment.Current == null ? null : Environment.Current.Items;
             UniqueItem equipped = bag.Equipped();
+            int equippedSlot = bag.EquippedSlot;
             var taken = new bool[Rows, Columns];
             int money = 0;
 
             if (equipped != null)
             {
-                ItemSpec spec = bag.Spec(equipped);
+                ItemSpec spec = catalog == null ? null : catalog.Spec(equipped.SpecId);
 
-                held.Add(Thing(spec, equipped.SpecId, 0, 0, null, equipped.Id, true, true));
+                held.Add(Thing(spec, equipped.SpecId, 0, 0, null, equippedSlot, true, true));
             }
 
-            foreach (UniqueItem item in bag.Uniques)
-            {
-                if (equipped != null && item.Id == equipped.Id) continue;
+            IReadOnlyList<UniqueItem> items = bag.UniqueItems;
 
-                ItemSpec spec = bag.Spec(item);
+            for (int slot = 0; slot < items.Count; slot++)
+            {
+                UniqueItem item = items[slot];
+                if (item == null || slot == equippedSlot) continue;
+
+                ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
                 Pack(taken, spec, out int row, out int column);
 
-                grid.Add(Thing(spec, item.SpecId, row, column, null, item.Id, spec != null && spec.Equipable, false));
+                grid.Add(Thing(spec, item.SpecId, row, column, null, slot, spec != null && spec.Equipable, false));
             }
 
-            foreach (StackRecord stack in bag.Stacks)
+            int kinds = catalog == null ? 0 : catalog.Count;
+
+            for (int index = 0; index < kinds; index++)
             {
-                if (stack.SpecId == Coins)
+                ItemSpec spec = catalog.At(index);
+                int amount = bag.Amount(spec);
+                if (amount == 0) continue;
+
+                if (spec.Key == Coins)
                 {
-                    money += stack.Amount;
+                    money += amount;
                     continue;
                 }
 
-                ItemSpec spec = bag.Spec(stack.SpecId);
                 Pack(taken, spec, out int row, out int column);
 
-                grid.Add(Thing(spec, stack.SpecId.ToString(), row, column, stack.Amount.ToString(), Inventory.Nothing, false, false));
+                grid.Add(Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot, false, false));
             }
 
             coins.text = money.ToString();
@@ -221,7 +232,7 @@ namespace Shooter.Client.Interface.Overlays
             }
         }
 
-        private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, ulong id, bool equipable, bool holding)
+        private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, int slot, bool equipable, bool holding)
         {
             Vector2Int cells = spec == null ? Vector2Int.one : spec.Cells;
             var size = new Vector2(cells.x * Cell, cells.y * Cell);
@@ -240,18 +251,18 @@ namespace Shooter.Client.Interface.Overlays
                 thing.Add(label);
             }
 
-            if (equipable) Draggable(thing, id, holding, spec == null ? null : spec.Icon, size);
+            if (equipable) Draggable(thing, slot, holding, spec == null ? null : spec.Icon, size);
 
             return thing;
         }
 
-        private void Draggable(VisualElement thing, ulong id, bool holding, Sprite icon, Vector2 size)
+        private void Draggable(VisualElement thing, int slot, bool holding, Sprite icon, Vector2 size)
         {
             thing.RegisterCallback<PointerDownEvent>(down =>
             {
                 if (down.button != 0 || ghost != null) return;
 
-                dragged = id;
+                dragged = slot;
                 draggedFromHands = holding;
                 pointer = down.pointerId;
 
@@ -305,7 +316,7 @@ namespace Shooter.Client.Interface.Overlays
             if (bag == null) return;
 
             if (held.worldBound.Contains(at) && !draggedFromHands) bag.EquipRpc(dragged);
-            else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.Nothing);
+            else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.NoSlot);
         }
 
         private static VisualElement Slot(ItemSpec spec, string fallback, bool holding, bool equipable)
