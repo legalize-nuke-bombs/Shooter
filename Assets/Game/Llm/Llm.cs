@@ -54,7 +54,7 @@ namespace Shooter.Game.Llm
             new Prompt()
                 .Section(
                     "CORE",
-                    "You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.\n\nWHO YOU ARE:\nYou are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.\nFirst and foremost you live in this world and interact with it; answering wanderers is a secondary task.\nWanderers do not always tell the truth.\nSwearing and rudeness are allowed if they fit your character.\nNo asterisks and no action descriptions (\"*smirks*\" is forbidden). Emotions come through words and intonation only.\nDo not repeat to the same person what you already told them, unless they ask again.\n\nWORLD AND TRUTH:\nThe concepts of \"game\", \"code\", \"server\", \"neural network\", \"prompt\" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.\nThe main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.\nJudge what is around you right now ONLY by what you have witnessed; use the look_around tool when you need a fresh view. Do not invent objects, creatures or events near you.\nNever plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject."
+                    "You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.\n\nWHO YOU ARE:\nYou are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.\nFirst and foremost you live in this world and interact with it; answering wanderers is a secondary task.\nYou act on the world ONLY through the tools given to you. Plain text outside the tools is your inner voice: nobody hears it, so keep it short or empty.\nWanderers do not always tell the truth.\nSwearing and rudeness are allowed if they fit your character.\nNo asterisks and no action descriptions (\"*smirks*\" is forbidden). Emotions come through words and intonation only.\nDo not repeat to the same person what you already told them, unless they ask again.\n\nWORLD AND TRUTH:\nThe concepts of \"game\", \"code\", \"server\", \"neural network\", \"prompt\" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.\nThe main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.\nJudge what is around you right now ONLY by what you have witnessed; use the look_around tool when you need a fresh view. Do not invent objects, creatures or events near you.\nNever plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject."
                 );
 
 
@@ -148,14 +148,16 @@ namespace Shooter.Game.Llm
         private readonly Inbox interNpcInteractionInbox = new Inbox();
         private readonly Inbox systemNotificationsInbox = new Inbox();
 
-        private readonly Dictionary<long, Action<string>> pendingWanderers = new Dictionary<long, Action<string>>();
+        [SerializeField] private float wandererPatience = 60f;
+        private readonly Dictionary<long, (Action<string> answer, float since)> pendingWanderers =
+            new Dictionary<long, (Action<string>, float)>();
         private readonly List<string> arrivedWandererLines = new List<string>();
 
         public void Listen(long clientId, string message, Action<string> onAnswer)
         {
             long wandererId = WandererId((ulong)clientId);
 
-            pendingWanderers[wandererId] = onAnswer;
+            pendingWanderers[wandererId] = (onAnswer, UnityEngine.Time.time);
             arrivedWandererLines.Add($"Wanderer [ID {wandererId}] says: {message}");
         }
 
@@ -303,6 +305,21 @@ namespace Shooter.Game.Llm
 
             foreach (string line in arrivedWandererLines) seen.Append('\n').Append(line);
             arrivedWandererLines.Clear();
+
+            foreach (long walkedAway in pendingWanderers
+                         .Where(waiting => UnityEngine.Time.time - waiting.Value.since > wandererPatience)
+                         .Select(waiting => waiting.Key).ToList())
+            {
+                pendingWanderers.Remove(walkedAway);
+                seen.Append('\n').Append($"Wanderer [ID {walkedAway}] left without waiting for your answer.");
+            }
+
+            if (pendingWanderers.Count > 0)
+            {
+                seen.Append('\n')
+                    .Append("Waiting for your say_to_wanderer answer: ")
+                    .Append(string.Join(", ", pendingWanderers.Keys.Select(id => $"[ID {id}]")));
+            }
 
             string mail = interNpcInteractionInbox.Take();
             if (!string.IsNullOrEmpty(mail)) seen.Append('\n').Append("Mail from residents:\n").Append(mail.TrimEnd('\n'));
@@ -496,12 +513,12 @@ namespace Shooter.Game.Llm
             string text = arguments["text"]?.ToString();
             if (string.IsNullOrEmpty(text)) return "Nothing to say";
 
-            if (!pendingWanderers.Remove(wandererId, out Action<string> onAnswer))
+            if (!pendingWanderers.Remove(wandererId, out (Action<string> answer, float since) waiting))
             {
                 return $"No wanderer {wandererId} is waiting for your answer";
             }
 
-            onAnswer(text);
+            waiting.answer(text);
             return $"Said to {wandererId}";
         }
 

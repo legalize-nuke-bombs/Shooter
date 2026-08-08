@@ -18,14 +18,6 @@ namespace Shooter.Game.Body.Sounding
 
         private static SoundCatalog Sounds => Environment.Current == null ? null : Environment.Current.Sounds;
 
-        private static AudioListener listenerCache;
-
-        private static AudioListener Listener()
-        {
-            if (listenerCache == null) listenerCache = FindAnyObjectByType<AudioListener>();
-            return listenerCache;
-        }
-
         public void Play(SoundSpec sound)
         {
             if (!IsServer) return;
@@ -62,10 +54,6 @@ namespace Shooter.Game.Body.Sounding
             source.rolloffMode = sound.Rolloff;
             source.minDistance = sound.MinDistance;
             source.maxDistance = sound.MaxDistance;
-
-            AudioListener listener = Listener();
-            float listenerDistance = listener == null ? -1f : Vector3.Distance(transform.position, listener.transform.position);
-            Log.Info($"Entity {name} PLAYS {id} variant {variant} volume {sound.Volume} distance {listenerDistance} range {sound.MinDistance}-{sound.MaxDistance} loadState {clip.loadState} at t={UnityEngine.Time.time}");
 
             source.Play();
         }
