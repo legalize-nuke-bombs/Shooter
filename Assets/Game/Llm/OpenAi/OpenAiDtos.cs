@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Shooter.Game.Llm.OpenAi
 {
@@ -6,13 +7,50 @@ namespace Shooter.Game.Llm.OpenAi
     {
         public string Model { get; set; }
         public OpenAiMessage[] Messages { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public OpenAiResponseFormat ResponseFormat { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public OpenAiTool[] Tools { get; set; }
     }
 
     public class OpenAiMessage
     {
         public string Role { get; set; }
         public string Content { get; set; }
+
+        [JsonProperty("tool_calls", NullValueHandling = NullValueHandling.Ignore)]
+        public OpenAiToolCall[] ToolCalls { get; set; }
+
+        [JsonProperty("tool_call_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string ToolCallId { get; set; }
+    }
+
+    public class OpenAiTool
+    {
+        public string Type { get; set; } = "function";
+        public OpenAiFunction Function { get; set; }
+    }
+
+    public class OpenAiFunction
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public JObject Parameters { get; set; }
+    }
+
+    public class OpenAiToolCall
+    {
+        public string Id { get; set; }
+        public string Type { get; set; }
+        public OpenAiCalledFunction Function { get; set; }
+    }
+
+    public class OpenAiCalledFunction
+    {
+        public string Name { get; set; }
+        public string Arguments { get; set; }
     }
 
     public class OpenAiResponseFormat
