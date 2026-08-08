@@ -33,7 +33,7 @@ namespace Shooter.Game
         {
             if (known.TryGetValue(id, out TSpec spec)) return spec;
 
-            if (unknown.Add(id)) Log.Warn("Catalog {} has nothing under id {}", name, id);
+            if (unknown.Add(id)) Log.Warn($"Catalog {name} has nothing under id {id}");
 
             return null;
         }
@@ -53,13 +53,13 @@ namespace Shooter.Game
 
                 if (!spec.Fits())
                 {
-                    Log.Error("Catalog {} skips {}: its id does not fit the network format", name, spec.name);
+                    Log.Error($"Catalog {name} skips {spec.name}: its id does not fit the network format");
                     continue;
                 }
 
                 if (known.TryGetValue(spec.Id, out TSpec taken))
                 {
-                    Log.Error("Catalog {} holds both {} and {} under id {}", name, taken.name, spec.name, spec.Key);
+                    Log.Error($"Catalog {name} holds both {taken.name} and {spec.name} under id {spec.Key}");
                     continue;
                 }
 
@@ -68,7 +68,7 @@ namespace Shooter.Game
                 ordered.Add(spec);
             }
 
-            Log.Info("Catalog {} knows {} things", name, known.Count);
+            Log.Info($"Catalog {name} knows {known.Count} things");
         }
 
         public TSpec Find(System.Func<TSpec, bool> predicate)

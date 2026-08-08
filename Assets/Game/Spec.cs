@@ -23,8 +23,7 @@ namespace Shooter.Game
         private void OnValidate()
         {
             if (!Fits())
-                Log.Error("{} has an id of {} bytes, longer than the {} the network format holds",
-                    name, Encoding.UTF8.GetByteCount(Key), FixedString32Bytes.UTF8MaxLengthInBytes);
+                Log.Error($"{name} has an id of {(Encoding.UTF8.GetByteCount(Key))} bytes, longer than the {FixedString32Bytes.UTF8MaxLengthInBytes} the network format holds");
         }
     }
 }

@@ -26,18 +26,18 @@ namespace Shooter.Game.Loot
             Inventory targetInventory = TargetInventory(targetId);
             if (targetInventory == null)
             {
-                Log.Info("Failed to give {} x {} from {} to {} : the target is not around", stackable.Id, amount, name, targetId);
+                Log.Info($"Failed to give {stackable.Id} x {amount} from {name} to {targetId} : the target is not around");
                 return false;
             }
 
             if (inventory.RemoveStackable(stackable, amount, InventoryOnConflict.Rollback) != amount)
             {
-                Log.Info("Failed to give {} x {} from {} to {} : insufficient items", stackable.Id, amount, name, targetId);
+                Log.Info($"Failed to give {stackable.Id} x {amount} from {name} to {targetId} : insufficient items");
                 return false;
             }
             targetInventory.AddStackable(stackable, amount);
 
-            Log.Info("{} gave {} x {} to {}", name, stackable.Id, amount, targetId);
+            Log.Info($"{name} gave {stackable.Id} x {amount} to {targetId}");
             return true;
         }
 
@@ -46,19 +46,19 @@ namespace Shooter.Game.Loot
             Inventory targetInventory = TargetInventory(targetId);
             if (targetInventory == null)
             {
-                Log.Info("Failed to give unique slot {} from {} to {}: the target is not around", slotId, name, targetId);
+                Log.Info($"Failed to give unique slot {slotId} from {name} to {targetId}: the target is not around");
                 return false;
             }
 
             UniqueItem uniqueItem = inventory.Take(slotId);
             if (uniqueItem == null)
             {
-                Log.Info("Failed to give unique slot {} from {} to {}: the specified unique item does not exist", slotId, name, targetId);
+                Log.Info($"Failed to give unique slot {slotId} from {name} to {targetId}: the specified unique item does not exist");
                 return false;
             }
             targetInventory.Put(uniqueItem);
 
-            Log.Info("{} gave unique item slot {} ({}) to {}", name, slotId, uniqueItem.SpecId, targetId);
+            Log.Info($"{name} gave unique item slot {slotId} ({uniqueItem.SpecId}) to {targetId}");
             return true;
         }
 

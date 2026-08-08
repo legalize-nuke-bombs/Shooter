@@ -53,7 +53,7 @@ namespace Shooter.Editing
 
             if (specs == null)
             {
-                Log.Error("Catalog {} has no {} field to fill", catalog.name, SpecsField);
+                Log.Error($"Catalog {catalog.name} has no {SpecsField} field to fill");
                 return;
             }
 
@@ -69,8 +69,7 @@ namespace Shooter.Editing
             serialized.ApplyModifiedPropertiesWithoutUndo();
             AssetDatabase.SaveAssetIfDirty(catalog);
 
-            Log.Warn("Catalog {} refilled with every {} in the project: was [{}], now [{}]",
-                catalog.name, kind.Name, string.Join(", ", before), string.Join(", ", after));
+            Log.Warn($"Catalog {catalog.name} refilled with every {kind.Name} in the project: was [{(string.Join(", ", before))}], now [{(string.Join(", ", after))}]");
         }
 
         private static List<string> Listed(SerializedProperty specs)

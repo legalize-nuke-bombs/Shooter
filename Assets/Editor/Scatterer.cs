@@ -64,8 +64,7 @@ namespace Shooter.Editing
 
             if (scaled > 0) EditorSceneManager.MarkAllScenesDirty();
 
-            Log.Warn("Scattered {} of {} marked objects, {} were placed by hand already",
-                scaled, scattered.Length, left);
+            Log.Warn($"Scattered {scaled} of {scattered.Length} marked objects, {left} were placed by hand already");
         }
 
         private static Transform Source(Transform standing)

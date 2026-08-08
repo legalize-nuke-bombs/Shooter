@@ -40,7 +40,7 @@ namespace Shooter.Editing
             EditorUtility.ClearProgressBar();
             AssetDatabase.SaveAssets();
 
-            Log.Warn("Looked at {} prefabs, dressed {} of them with {} colliders", paths.Count, dressed, added);
+            Log.Warn($"Looked at {paths.Count} prefabs, dressed {dressed} of them with {added} colliders");
         }
 
         [MenuItem(Menu, true)]
@@ -72,7 +72,7 @@ namespace Shooter.Editing
                 PrefabUtility.UnloadPrefabContents(prefab);
             }
 
-            if (added > 0) Log.Info("Prefab {} got {} colliders", path, added);
+            if (added > 0) Log.Info($"Prefab {path} got {added} colliders");
 
             return added;
         }

@@ -27,7 +27,7 @@ namespace Shooter.Game.Relationship
         {
             int currentAmount = Amount(characterId);
 
-            Log.Info("Entity {} SetAmount request: character id {} amount {} -> {} reason {}", name, characterId, currentAmount, amount, reason);
+            Log.Info($"Entity {name} SetAmount request: character id {characterId} amount {currentAmount} -> {amount} reason {reason}");
 
             if (amount < 0 || amount > 100)
             {

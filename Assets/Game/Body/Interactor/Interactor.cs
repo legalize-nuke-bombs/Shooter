@@ -38,16 +38,14 @@ namespace Shooter.Game.Body
                 int seen = Look(reach, Sights);
                 for (int i = 0; i < seen; i++)
                 {
-                    Log.Info("Player {} sees {} on layer {} in {}m, usable {}", OwnerClientId, Sights[i].collider.name,
-                        LayerMask.LayerToName(Sights[i].collider.gameObject.layer), Sights[i].distance,
-                        Sights[i].collider.GetComponentInParent<IUsable>() == null ? "no" : "yes");
+                    Log.Info($"Player {OwnerClientId} sees {(Sights[i].collider.name)} on layer {(LayerMask.LayerToName(Sights[i].collider.gameObject.layer))} in {(Sights[i].distance)}m, usable {(Sights[i].collider.GetComponentInParent<IUsable>() == null ? "no" : "yes")}");
                 }
 
-                Log.Info("Player {} used nothing within {}m, saw {} colliders", OwnerClientId, reach, seen);
+                Log.Info($"Player {OwnerClientId} used nothing within {reach}m, saw {seen} colliders");
                 return;
             }
 
-            Log.Info("Player {} uses {}", OwnerClientId, ((Component)usable).name);
+            Log.Info($"Player {OwnerClientId} uses {(((Component)usable).name)}");
             usable.Use(NetworkObject);
         }
 

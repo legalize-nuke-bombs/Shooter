@@ -18,14 +18,14 @@ namespace Shooter.Client.Playing
             GameObject flesh = GetComponent<Skin>().Flesh;
             if (flesh == null)
             {
-                Log.Warn("Own player {} has no flesh to hide", name);
+                Log.Warn($"Own player {name} has no flesh to hide");
                 return;
             }
 
             Renderer[] renderers = flesh.GetComponentsInChildren<Renderer>(true);
             foreach (Renderer piece in renderers) piece.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
 
-            Log.Info("Body of the own player left as shadow only, {} renderers affected", renderers.Length);
+            Log.Info($"Body of the own player left as shadow only, {renderers.Length} renderers affected");
         }
     }
 }

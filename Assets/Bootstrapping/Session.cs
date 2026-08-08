@@ -38,7 +38,7 @@ namespace Shooter.Bootstrapping
             var screen = FindAnyObjectByType<MenuScreen>();
             if (screen == null)
             {
-                Log.Error("Scene {} carries no menu screen, there is nothing to press", MenuScene);
+                Log.Error($"Scene {MenuScene} carries no menu screen, there is nothing to press");
                 yield break;
             }
 
@@ -95,12 +95,12 @@ namespace Shooter.Bootstrapping
 
             if (!(hosting ? network.StartHost() : network.StartClient()))
             {
-                Log.Error("The {} refused to start", hosting ? "host" : "client");
+                Log.Error($"The {(hosting ? "host" : "client")} refused to start");
                 yield return ToMenu();
                 yield break;
             }
 
-            Log.Info("{} is up as {}", hosting ? "Host" : "Client", client.Name);
+            Log.Info($"{(hosting ? "Host" : "Client")} is up as {client.Name}");
         }
 
         private void Stopped(bool ignored)
@@ -145,13 +145,13 @@ namespace Shooter.Bootstrapping
             {
                 ServerConfig server = Config.Read().Server;
                 transport.SetConnectionData(AnyAddress, server.Port, AnyAddress);
-                Log.Info("World {} listens on port {}", server.World, server.Port);
+                Log.Info($"World {server.World} listens on port {server.Port}");
                 return;
             }
 
             ClientConfig client = Config.Read().Client;
             transport.SetConnectionData(client.Address, client.Port);
-            Log.Info("Heading for {}:{}", client.Address, client.Port);
+            Log.Info($"Heading for {client.Address}:{client.Port}");
         }
 
         private void Overlays()
@@ -159,7 +159,7 @@ namespace Shooter.Bootstrapping
             var prefab = Resources.Load<GameObject>(OverlayPrefab);
             if (prefab == null)
             {
-                Log.Error("No {} prefab in Resources, the session goes without overlays", OverlayPrefab);
+                Log.Error($"No {OverlayPrefab} prefab in Resources, the session goes without overlays");
                 return;
             }
 
@@ -176,7 +176,7 @@ namespace Shooter.Bootstrapping
             var prefab = Resources.Load<GameObject>(NetworkPrefab);
             if (prefab == null)
             {
-                Log.Error("No {} prefab in Resources, refusing to start", NetworkPrefab);
+                Log.Error($"No {NetworkPrefab} prefab in Resources, refusing to start");
                 return null;
             }
 
@@ -185,7 +185,7 @@ namespace Shooter.Bootstrapping
             DontDestroyOnLoad(instance);
 
             var network = instance.GetComponent<NetworkManager>();
-            if (network == null) Log.Error("Prefab {} has no NetworkManager component", NetworkPrefab);
+            if (network == null) Log.Error($"Prefab {NetworkPrefab} has no NetworkManager component");
 
             return network;
         }

@@ -30,7 +30,7 @@ namespace Shooter.Game
 
         public void Break()
         {
-            Log.Info("Entity {} became broken", name);
+            Log.Info($"Entity {name} became broken");
 
             broken = true;
             brokenAt = Time.time;

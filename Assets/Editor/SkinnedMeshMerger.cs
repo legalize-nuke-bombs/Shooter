@@ -24,14 +24,14 @@ namespace Shooter.Editing
             SkinnedMeshRenderer[] sources = chosen.GetComponentsInChildren<SkinnedMeshRenderer>(true);
             if (sources.Length == 0)
             {
-                Log.Error("Object {} has no skinned meshes", chosen.name);
+                Log.Error($"Object {chosen.name} has no skinned meshes");
                 return;
             }
 
             string folder = Folder(sources[0]);
             if (folder == null) return;
 
-            Log.Info("Merging {} skinned meshes of {} into materials", sources.Length, chosen.name);
+            Log.Info($"Merging {sources.Length} skinned meshes of {chosen.name} into materials");
 
             foreach (IGrouping<Material, SkinnedMeshRenderer> group in sources.GroupBy(source => source.sharedMaterial))
             {
@@ -47,8 +47,7 @@ namespace Shooter.Editing
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Log.Info("Object {} now wears {} skinned meshes", chosen.name,
-                chosen.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length);
+            Log.Info($"Object {chosen.name} now wears {(chosen.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length)} skinned meshes");
         }
 
         private static string Folder(SkinnedMeshRenderer source)
@@ -56,7 +55,7 @@ namespace Shooter.Editing
             string model = AssetDatabase.GetAssetPath(source.sharedMesh);
             if (string.IsNullOrEmpty(model))
             {
-                Log.Error("Mesh {} does not come from an asset, nowhere to put the merged one", source.sharedMesh.name);
+                Log.Error($"Mesh {source.sharedMesh.name} does not come from an asset, nowhere to put the merged one");
                 return null;
             }
 
@@ -199,8 +198,7 @@ namespace Shooter.Editing
             room.Expand(new Vector3(room.size.x * 0.5f, 0f, room.size.z * 0.5f));
             renderer.localBounds = room;
 
-            Log.Info("Material {} collected {} meshes into one of {} vertices on {} bone slots over {} bones, {} m tall",
-                merged.name, group.Length, vertices.Count, bones.Count, bones.Distinct().Count(), merged.bounds.size.y);
+            Log.Info($"Material {merged.name} collected {group.Length} meshes into one of {vertices.Count} vertices on {bones.Count} bone slots over {(bones.Distinct().Count())} bones, {merged.bounds.size.y} m tall");
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Shooter.Client.Interface.Overlays
             shown = stage;
             Show(stage);
 
-            if (stage != null) Log.Info("Loading screen says: {}", stage);
+            if (stage != null) Log.Info($"Loading screen says: {stage}");
         }
 
         protected override bool Bind(VisualElement root)
@@ -48,7 +48,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (screen == null || text == null)
             {
-                Log.Error("Overlay document has no {} screen, the loading state stays hidden", ScreenElement);
+                Log.Error($"Overlay document has no {ScreenElement} screen, the loading state stays hidden");
                 return false;
             }
 

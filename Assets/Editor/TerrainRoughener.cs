@@ -98,8 +98,7 @@ namespace Shooter.Editing
             data.SetHeights(0, 0, heights);
             EditorUtility.SetDirty(data);
 
-            Log.Info("Terrain roughened: bump {}m over {} octaves, ridges {}, warp {}, variety {}, tallest shift {}m",
-                bump, octaves, ridges, warp, variety, highest);
+            Log.Info($"Terrain roughened: bump {bump}m over {octaves} octaves, ridges {ridges}, warp {warp}, variety {variety}, tallest shift {highest}m");
         }
 
         private void Restore()
@@ -236,8 +235,7 @@ namespace Shooter.Editing
                 kept++;
             }
 
-            Log.Info("Sparing {} placed objects with {}m margin, {} skipped as wider than {}m",
-                kept, margin, huge, widest);
+            Log.Info($"Sparing {kept} placed objects with {margin}m margin, {huge} skipped as wider than {widest}m");
             return mask;
         }
 

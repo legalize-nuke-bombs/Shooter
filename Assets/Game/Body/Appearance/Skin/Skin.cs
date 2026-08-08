@@ -19,7 +19,7 @@ namespace Shooter.Game.Body
         {
             if (spec == null || spec.Model == null)
             {
-                Log.Error("Entity {} has no skin to wear, stays invisible", name);
+                Log.Error($"Entity {name} has no skin to wear, stays invisible");
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace Shooter.Game.Body
             var animator = Flesh.GetComponent<Animator>();
             if (animator == null)
             {
-                Log.Error("Skin {} of entity {} has no animator, entity stays still", spec.Id, name);
+                Log.Error($"Skin {spec.Id} of entity {name} has no animator, entity stays still");
                 return;
             }
 
@@ -41,7 +41,7 @@ namespace Shooter.Game.Body
             Flesh.AddComponent<Poser>();
             Flesh.AddComponent<Hitboxes.Hitboxes>();
 
-            Log.Info("Entity {} dressed as {}, {} m tall", name, spec.Id, Height(Flesh));
+            Log.Info($"Entity {name} dressed as {spec.Id}, {(Height(Flesh))} m tall");
         }
 
         private static float Height(GameObject flesh)

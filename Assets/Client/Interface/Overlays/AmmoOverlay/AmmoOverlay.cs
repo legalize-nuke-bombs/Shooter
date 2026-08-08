@@ -60,7 +60,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (box == null || magazine == null || reserve == null)
             {
-                Log.Error("Overlay document has no {} box, the ammo counter stays hidden", BoxElement);
+                Log.Error($"Overlay document has no {BoxElement} box, the ammo counter stays hidden");
                 return false;
             }
 

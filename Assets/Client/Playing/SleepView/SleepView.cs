@@ -64,7 +64,7 @@ namespace Shooter.Client.Playing
 
             if (bedside == null)
             {
-                Log.Warn("Bed at {} has no camera of its own, the night stays dark", sleeper.Bedside);
+                Log.Warn($"Bed at {sleeper.Bedside} has no camera of its own, the night stays dark");
                 return;
             }
 

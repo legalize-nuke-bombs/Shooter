@@ -44,7 +44,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (target == null)
             {
-                Log.Error("Overlay document has no {} label, target names stay hidden", TargetElement);
+                Log.Error($"Overlay document has no {TargetElement} label, target names stay hidden");
                 return false;
             }
 

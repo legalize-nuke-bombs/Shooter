@@ -57,9 +57,7 @@ namespace Shooter.Client.Interface.Overlays
             if (report <= 0)
             {
                 report = ReportSeconds;
-                Log.Info("FPS {}, VRAM {}, RAM {}, batches {}, triangles {}",
-                    Frequency(), Video(), Bytes("System Used Memory"),
-                    Count("Batches Count"), Count("Triangles Count"));
+                Log.Info($"FPS {Frequency()}, VRAM {Video()}, RAM {(Bytes("System Used Memory"))}, batches {(Count("Batches Count"))}, triangles {(Count("Triangles Count"))}");
             }
 
             if (!visible) return;
@@ -77,7 +75,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (panel == null)
             {
-                Log.Error("Overlay document has no {} label, the debug panel stays hidden", DebugElement);
+                Log.Error($"Overlay document has no {DebugElement} label, the debug panel stays hidden");
                 return false;
             }
 
@@ -108,7 +106,7 @@ namespace Shooter.Client.Interface.Overlays
                 else recorder.Dispose();
             }
 
-            Log.Info("Debug panel watches {} of {} profiler counters", recorders.Count, Counters.Length);
+            Log.Info($"Debug panel watches {recorders.Count} of {Counters.Length} profiler counters");
         }
 
         private void Toggle()

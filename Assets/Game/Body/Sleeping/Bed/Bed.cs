@@ -28,7 +28,7 @@ namespace Shooter.Game.Body.Sleeping
 
             if (!SleepRule.CanSleep(alive, handsFree, night))
             {
-                Log.Info("Entity {} can not sleep in {}: alive {}, hands free {}, night {}", user.name, name, alive, handsFree, night);
+                Log.Info($"Entity {user.name} can not sleep in {name}: alive {alive}, hands free {handsFree}, night {night}");
                 return;
             }
 

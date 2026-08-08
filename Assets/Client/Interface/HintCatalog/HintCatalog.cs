@@ -22,7 +22,7 @@ namespace Shooter.Client.Interface
                 if (hint.Usage == usage) return hint.Text;
             }
 
-            if (unhinted.Add(usage)) Log.Warn("Hint catalog {} has no hint for {}", name, usage);
+            if (unhinted.Add(usage)) Log.Warn($"Hint catalog {name} has no hint for {usage}");
 
             return usage.ToString();
         }

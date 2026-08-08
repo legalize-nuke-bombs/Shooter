@@ -42,7 +42,7 @@ namespace Shooter.Configuring
             {
                 var fresh = new GameConfig();
                 Write(path, fresh);
-                Log.Info("Config {} was absent, wrote defaults", path);
+                Log.Info($"Config {path} was absent, wrote defaults");
                 return fresh;
             }
 
@@ -50,13 +50,13 @@ namespace Shooter.Configuring
             {
                 var config = JsonConvert.DeserializeObject<GameConfig>(File.ReadAllText(path), Settings)
                              ?? new GameConfig();
-                Log.Info("Config {} read", path);
+                Log.Info($"Config {path} read");
                 Write(path, config);
                 return config;
             }
             catch (Exception e)
             {
-                Log.Error("Config {} is unreadable, falling back to defaults: {}", path, e.Message);
+                Log.Error($"Config {path} is unreadable, falling back to defaults: {e.Message}");
                 return new GameConfig();
             }
         }
@@ -69,7 +69,7 @@ namespace Shooter.Configuring
             }
             catch (Exception e)
             {
-                Log.Error("Config {} can not be written: {}", path, e.Message);
+                Log.Error($"Config {path} can not be written: {e.Message}");
             }
         }
 

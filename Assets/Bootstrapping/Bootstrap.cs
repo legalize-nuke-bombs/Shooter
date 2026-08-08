@@ -18,7 +18,7 @@ namespace Shooter.Bootstrapping
 
             Logs.ToFile("shooter-" + instance);
             Logs.Least = Config.Read().Logging.Level;
-            Log.Info("Bootstrapping the {}, logging from {} and up", instance, Logs.Least);
+            Log.Info($"Bootstrapping the {instance}, logging from {Logs.Least} and up");
 
             // Netcode fills its serializer tables from a generated method in the same startup phase,
             // and the order between assemblies is not defined. The session starts from Start, a frame

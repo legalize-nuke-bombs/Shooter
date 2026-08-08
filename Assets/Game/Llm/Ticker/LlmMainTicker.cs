@@ -25,12 +25,12 @@ namespace Shooter.Game.Llm.Ticker
             entityName = name;
             if (netObject == null)
             {
-                Log.Warn("Entity {} has no NetworkObject, its llm will never tick", entityName);
+                Log.Warn($"Entity {entityName} has no NetworkObject, its llm will never tick");
             }
             tickers = GetComponents<LlmChildTicker>();
             if (tickers.Length == 0)
             {
-                Log.Warn("Entity {} does not have any ticker!", entityName);
+                Log.Warn($"Entity {entityName} does not have any ticker!");
             }
         }
 
@@ -87,7 +87,7 @@ namespace Shooter.Game.Llm.Ticker
             }
             catch (Exception ex)
             {
-                Log.Error("Entity {} failed to execute LLM Tick: {}", entityName, ex.Message);
+                Log.Error($"Entity {entityName} failed to execute LLM Tick: {ex.Message}");
             }
         }
 

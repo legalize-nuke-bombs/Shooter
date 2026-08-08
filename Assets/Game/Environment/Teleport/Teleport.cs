@@ -23,7 +23,7 @@ namespace Shooter.Game
         private void Awake()
         {
             var sphere = GetComponent<SphereCollider>();
-            if (!sphere.isTrigger) Log.Warn("Teleport {} has a solid sphere collider, tick Is Trigger for it to work", name);
+            if (!sphere.isTrigger) Log.Warn($"Teleport {name} has a solid sphere collider, tick Is Trigger for it to work");
         }
 
         private void OnTriggerEnter(Collider other)
@@ -37,7 +37,7 @@ namespace Shooter.Game
             if (movement == null) return;
 
             Vector3 at = destination.transform.position;
-            Log.Info("Entity {} is teleported by {} to {}", movement.name, name, at);
+            Log.Info($"Entity {movement.name} is teleported by {name} to {at}");
 
             movement.Teleport(at);
             movement.GetComponent<EarSpeaker>()?.Play(sound);

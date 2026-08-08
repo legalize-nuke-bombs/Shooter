@@ -45,7 +45,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (hint == null)
             {
-                Log.Error("Overlay document has no {} label, interaction hints stay hidden", HintElement);
+                Log.Error($"Overlay document has no {HintElement} label, interaction hints stay hidden");
                 return false;
             }
 
@@ -57,7 +57,7 @@ namespace Shooter.Client.Interface.Overlays
 
             key = Key();
             hint.text = string.Empty;
-            Log.Info("Interaction hints are bound to key {}", key);
+            Log.Info($"Interaction hints are bound to key {key}");
 
             return true;
         }
