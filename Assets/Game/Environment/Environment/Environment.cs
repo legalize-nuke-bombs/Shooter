@@ -1,6 +1,7 @@
 using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Game.Body.EarSounding;
+using Shooter.Game.Identity;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
 using Shooter.Game.Sweeping;
@@ -12,9 +13,9 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(-100)]
+    [RequireComponent(typeof(PersistentIdProvider))]
     [RequireComponent(typeof(Clock))]
     [RequireComponent(typeof(SleepCycle))]
-    [RequireComponent(typeof(UniqueItemIdProvider))]
     [RequireComponent(typeof(Sweeper))]
     public class Environment : NetworkBehaviour
     {
@@ -39,11 +40,11 @@ namespace Shooter.Game
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
+        public PersistentIdProvider PersistentIdProvider { get; private set; }
+
         public Clock Clock { get; private set; }
 
         public SleepCycle SleepCycle { get; private set; }
-
-        public UniqueItemIdProvider ItemIds { get; private set; }
 
         public Sweeper Sweeper { get; private set; }
 
@@ -67,9 +68,9 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            PersistentIdProvider = GetComponent<PersistentIdProvider>();
             Clock = GetComponent<Clock>();
             SleepCycle = GetComponent<SleepCycle>();
-            ItemIds = GetComponent<UniqueItemIdProvider>();
             Sweeper = GetComponent<Sweeper>();
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];

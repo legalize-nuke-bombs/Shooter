@@ -27,9 +27,9 @@ namespace Shooter.Game.Loot
 
         public bool Equipable => equipable;
 
-        public virtual UniqueItem Create(ulong id)
+        public virtual UniqueItem Create()
         {
-            return new UniqueItem(id, Key);
+            return new UniqueItem(Key);
         }
     }
 }

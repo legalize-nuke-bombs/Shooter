@@ -1,4 +1,5 @@
 using Shooter.Client.Playing;
+using Shooter.Game;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using UnityEngine.UIElements;
@@ -27,7 +28,8 @@ namespace Shooter.Client.Interface.Overlays
 
             Inventory own = Own();
             var firearm = own == null ? null : own.Equipped() as Firearm;
-            var spec = own == null ? null : own.Spec(firearm) as FirearmSpec;
+            ItemCatalog items = Environment.Current == null ? null : Environment.Current.Items;
+            FirearmSpec spec = items == null || firearm == null ? null : items.Firearm(firearm.SpecId);
 
             if (firearm == null || spec == null)
             {
@@ -36,7 +38,7 @@ namespace Shooter.Client.Interface.Overlays
             }
 
             int held = firearm.Magazine;
-            int left = spec.Ammo == null ? 0 : own.Amount(spec.Ammo.Id);
+            int left = spec.Ammo == null ? 0 : own.Amount(spec.Ammo);
 
             if (held == shownMagazine && left == shownReserve) return;
 

@@ -14,6 +14,21 @@ namespace Shooter.Game
         private readonly Dictionary<FixedString32Bytes, TSpec> known = new Dictionary<FixedString32Bytes, TSpec>();
         private readonly HashSet<FixedString32Bytes> unknown = new HashSet<FixedString32Bytes>();
 
+        private readonly List<TSpec> ordered = new List<TSpec>();
+        private readonly Dictionary<FixedString32Bytes, int> indices = new Dictionary<FixedString32Bytes, int>();
+
+        public int Count => ordered.Count;
+
+        public TSpec At(int index)
+        {
+            return index >= 0 && index < ordered.Count ? ordered[index] : null;
+        }
+
+        public int Index(TSpec spec)
+        {
+            return spec != null && indices.TryGetValue(spec.Id, out int index) ? index : -1;
+        }
+
         public TSpec Of(FixedString32Bytes id)
         {
             if (known.TryGetValue(id, out TSpec spec)) return spec;
@@ -27,6 +42,8 @@ namespace Shooter.Game
         {
             known.Clear();
             unknown.Clear();
+            ordered.Clear();
+            indices.Clear();
 
             if (specs == null) return;
 
@@ -47,6 +64,8 @@ namespace Shooter.Game
                 }
 
                 known.Add(spec.Id, spec);
+                indices.Add(spec.Id, ordered.Count);
+                ordered.Add(spec);
             }
 
             Log.Info("Catalog {} knows {} things", name, known.Count);

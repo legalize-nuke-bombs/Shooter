@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 6403981259524950330}
   - component: {fileID: -4473180149750321490}
   - component: {fileID: -5769156024497868447}
+  - component: {fileID: -8817301132106935022}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -302,7 +303,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Inventory
   ShowTopMostFoldoutHeaderGroup: 1
-  catalog: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
   contents: []
 --- !u!114 &6403981259524950330
 MonoBehaviour:
@@ -348,3 +348,16 @@ MonoBehaviour:
   walkCost: 3
   recoverySpeed: 12
   sprintThreshold: 10
+--- !u!114 &-8817301132106935022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69c4f0350a0545bea50bbfcc987b88f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Identity.PersistentId
+  ShowTopMostFoldoutHeaderGroup: 1

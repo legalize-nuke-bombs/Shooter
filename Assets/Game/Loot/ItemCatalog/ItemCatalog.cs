@@ -11,9 +11,14 @@ namespace Shooter.Game.Loot
             return Of(id);
         }
 
-        public FirearmSpec Firearm(FixedString32Bytes id)
+        public ItemSpec Spec(string id)
         {
-            return Of(id) as FirearmSpec;
+            return Of(new FixedString32Bytes(id));
+        }
+
+        public FirearmSpec Firearm(string id)
+        {
+            return Of(new FixedString32Bytes(id)) as FirearmSpec;
         }
     }
 }

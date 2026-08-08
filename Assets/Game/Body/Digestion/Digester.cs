@@ -1,23 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Shooter.Game.Identity;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Body
 {
     public class Digester : MonoBehaviour
     {
-        public string Of(Component entity, DigestionDetail detail)
+        private static readonly Journal Log = Logs.Here();
+
+        public string Of(GameObject entity, DigestionDetail detail)
         {
             return Block(entity, detail, null);
         }
 
-        public string Seen(Component entity, DigestionDetail detail, Transform eyes)
+        public string Seen(GameObject entity, DigestionDetail detail, Transform eyes)
         {
             return Block(entity, detail, eyes);
         }
 
-        private string Block(Component entity, DigestionDetail detail, Transform eyes)
+        private string Block(GameObject entity, DigestionDetail detail, Transform eyes)
         {
             IEnumerable<IDigestible> parts = entity.GetComponents<IDigestible>()
                 .OrderByDescending(part => part.Priority);
@@ -44,13 +48,23 @@ namespace Shooter.Game.Body
                 }
             }
 
-            return digest.Length == 0 ? null : digest.ToString();
+            if (digest.Length == 0)
+            {
+                return null;
+            }
+
+            PersistentId id = entity.GetComponent<PersistentId>();
+            if (id == null)
+            {
+                return digest.ToString();
+            }
+
+            return "[ID " + id.Value + "] " + digest;
         }
 
-        private string Whereabouts(Component entity, Transform eyes)
+        private string Whereabouts(GameObject entity, Transform eyes)
         {
             Vector3 offset = entity.transform.position - eyes.position;
-
             return Mathf.RoundToInt(offset.magnitude) + " m, " + Cardinal.Side(offset);
         }
     }

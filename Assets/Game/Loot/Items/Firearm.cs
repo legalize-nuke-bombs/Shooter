@@ -6,7 +6,7 @@ namespace Shooter.Game.Loot
     {
         public int Magazine { get; private set; }
 
-        public Firearm(ulong id, string specId) : base(id, specId)
+        public Firearm(string specId) : base(specId)
         {
         }
 

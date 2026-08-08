@@ -15,68 +15,61 @@ namespace Shooter.Game.Loot
     {
         private static readonly Journal Log = Logs.Here();
 
-        public const ulong Nothing = 0;
-
-        [SerializeField] private ItemCatalog catalog;
+        public const int NoSlot = -1;
 
         [SerializeField] private Entry[] contents;
 
-        private readonly NetworkList<StackRecord> stackRecords = new NetworkList<StackRecord>(
+        private readonly NetworkList<int> stackAmounts = new NetworkList<int>(
             null, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
 
-        private readonly NetworkList<FixedString4096Bytes> uniqueRecords = new NetworkList<FixedString4096Bytes>(
-            null, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
+        private readonly NetworkList<FixedString4096Bytes> packedUniqueItems = new NetworkList<FixedString4096Bytes>();
 
-        private readonly NetworkVariable<ulong> equipped = new NetworkVariable<ulong>(
-            Nothing, NetworkVariableReadPermission.Owner);
+        private readonly NetworkVariable<int> equippedSlot = new NetworkVariable<int>(NoSlot);
 
-        private readonly NetworkVariable<FixedString32Bytes> holding = new NetworkVariable<FixedString32Bytes>();
-
-        private readonly Dictionary<FixedString32Bytes, int> stacks = new Dictionary<FixedString32Bytes, int>();
-
-        private readonly List<UniqueItem> owned = new List<UniqueItem>();
-
-        private readonly List<UniqueItem> mirrored = new List<UniqueItem>();
-
-        public ItemCatalog Catalog => catalog != null
-            ? catalog
-            : Environment.Current == null ? null : Environment.Current.Items;
+        private readonly List<UniqueItem> uniqueItems = new List<UniqueItem>();
 
         public event Action Changed;
 
-        public IReadOnlyList<UniqueItem> Uniques => IsServer ? owned : mirrored;
+        public IReadOnlyList<UniqueItem> UniqueItems => uniqueItems;
 
-        public IReadOnlyList<StackRecord> Stacks
+        public int EquippedSlot => equippedSlot.Value;
+
+        public ItemSpec EquippedSpec
         {
             get
             {
-                var records = new List<StackRecord>(stackRecords.Count);
+                UniqueItem item = Equipped();
 
-                foreach (StackRecord record in stackRecords) records.Add(record);
-
-                return records;
+                return item == null || Catalog == null ? null : Catalog.Spec(item.SpecId);
             }
         }
 
-        public ItemSpec Holding => Spec(holding.Value);
+        public DigestionPriority Priority => DigestionPriority.Low;
 
-        public ulong EquippedId => equipped.Value;
+        private static ItemCatalog Catalog => Environment.Current == null ? null : Environment.Current.Items;
 
-        public int Count => stackRecords.Count + uniqueRecords.Count;
+        private void Awake()
+        {
+            enabled = false;
+        }
 
         public override void OnNetworkSpawn()
         {
-            stackRecords.OnListChanged += StacksShifted;
-            uniqueRecords.OnListChanged += UniquesShifted;
-            equipped.OnValueChanged += Reequipped;
-            holding.OnValueChanged += Rehanded;
+            stackAmounts.OnListChanged += StackAmountsShifted;
+            packedUniqueItems.OnListChanged += PackedUniqueItemsShifted;
+            equippedSlot.OnValueChanged += Reequipped;
 
             if (!IsServer)
             {
                 Remirror();
-                enabled = false;
                 return;
             }
+
+            enabled = true;
+
+            ItemCatalog catalog = Catalog;
+            int kinds = catalog == null ? 0 : catalog.Count;
+            for (int index = 0; index < kinds; index++) stackAmounts.Add(0);
 
             foreach (Entry entry in contents)
             {
@@ -90,20 +83,30 @@ namespace Shooter.Game.Loot
 
         public override void OnNetworkDespawn()
         {
-            stackRecords.OnListChanged -= StacksShifted;
-            uniqueRecords.OnListChanged -= UniquesShifted;
-            equipped.OnValueChanged -= Reequipped;
-            holding.OnValueChanged -= Rehanded;
+            stackAmounts.OnListChanged -= StackAmountsShifted;
+            packedUniqueItems.OnListChanged -= PackedUniqueItemsShifted;
+            equippedSlot.OnValueChanged -= Reequipped;
+
+            enabled = false;
         }
 
-        public ItemSpec Spec(FixedString32Bytes specId)
+        private void LateUpdate()
         {
-            return Catalog == null || specId.IsEmpty ? null : Catalog.Spec(specId);
+            for (int slot = 0; slot < uniqueItems.Count; slot++)
+            {
+                UniqueItem item = uniqueItems[slot];
+                if (item == null || !item.Dirty) continue;
+
+                item.Clean();
+                packedUniqueItems[slot] = Pack(item);
+            }
         }
 
-        public ItemSpec Spec(UniqueItem item)
+        public int Amount(ItemSpec spec)
         {
-            return item == null ? null : Spec(new FixedString32Bytes(item.SpecId));
+            int index = IndexOf(spec);
+
+            return index < 0 || index >= stackAmounts.Count ? 0 : stackAmounts[index];
         }
 
         public void Add(ItemSpec spec, int amount)
@@ -112,196 +115,141 @@ namespace Shooter.Game.Loot
 
             if (!spec.Stackable)
             {
-                for (int made = 0; made < amount; made++) Create(spec);
+                for (int made = 0; made < amount; made++) Put(spec.Create());
                 return;
             }
 
-            FixedString32Bytes specId = spec.Id;
-            stacks.TryGetValue(specId, out int held);
-            stacks[specId] = held + amount;
+            int index = IndexOf(spec);
 
-            Restack(specId);
-            Log.Info("Entity {} took {} of {}", name, amount, specId);
-        }
-
-        public UniqueItem Create(ItemSpec spec)
-        {
-            if (!IsServer || spec == null || spec.Stackable) return null;
-
-            UniqueItemIdProvider ids = Environment.Current == null ? null : Environment.Current.ItemIds;
-
-            if (ids == null)
+            if (index < 0 || index >= stackAmounts.Count)
             {
-                Log.Error("Entity {} can not create {}: the world has no item id provider", name, spec.Key);
-                return null;
+                Log.Error("Entity {} can not take {}: the world catalog does not know it", name, spec.Key);
+                return;
             }
 
-            UniqueItem item = spec.Create(ids.Next());
-            Put(item);
-
-            return item;
+            stackAmounts[index] += amount;
+            Log.Info("Entity {} took {} of {}", name, amount, spec.Key);
         }
 
-        public void Put(UniqueItem item)
-        {
-            if (!IsServer || item == null) return;
-
-            owned.Add(item);
-            item.Clean();
-            uniqueRecords.Add(Pack(item));
-
-            Log.Info("Entity {} took {} number {}", name, item.SpecId, item.Id);
-        }
-
-        public UniqueItem Find(ulong id)
-        {
-            foreach (UniqueItem item in Uniques)
-            {
-                if (item.Id == id) return item;
-            }
-
-            return null;
-        }
-
-        public UniqueItem Take(ulong id)
-        {
-            if (!IsServer) return null;
-
-            for (int index = 0; index < owned.Count; index++)
-            {
-                if (owned[index].Id != id) continue;
-
-                UniqueItem item = owned[index];
-
-                owned.RemoveAt(index);
-                uniqueRecords.RemoveAt(index);
-
-                if (equipped.Value == id) Equip(Nothing);
-
-                return item;
-            }
-
-            return null;
-        }
-
-        public int Amount(FixedString32Bytes specId)
-        {
-            if (IsServer) return stacks.TryGetValue(specId, out int held) ? held : 0;
-
-            foreach (StackRecord record in stackRecords)
-            {
-                if (record.SpecId == specId) return record.Amount;
-            }
-
-            return 0;
-        }
-
-        public int Remove(FixedString32Bytes specId, int amount, InventoryOnConflict onConflict)
+        public int Remove(ItemSpec spec, int amount, InventoryOnConflict onConflict)
         {
             if (!IsServer || amount <= 0) return 0;
 
-            int available = Amount(specId);
+            int index = IndexOf(spec);
+            if (index < 0 || index >= stackAmounts.Count) return 0;
+
+            int available = stackAmounts[index];
             if (onConflict == InventoryOnConflict.Rollback && available < amount) return 0;
 
             int taken = Math.Min(available, amount);
             if (taken == 0) return 0;
 
-            if (available == taken) stacks.Remove(specId);
-            else stacks[specId] = available - taken;
-
-            Restack(specId);
+            stackAmounts[index] = available - taken;
 
             return taken;
         }
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void EquipRpc(ulong id)
+        public int Put(UniqueItem item)
         {
-            Equip(id);
+            if (!IsServer || item == null) return NoSlot;
+
+            item.Clean();
+            int slot = uniqueItems.IndexOf(null);
+
+            if (slot == NoSlot)
+            {
+                slot = uniqueItems.Count;
+                uniqueItems.Add(item);
+                packedUniqueItems.Add(Pack(item));
+            }
+            else
+            {
+                uniqueItems[slot] = item;
+                packedUniqueItems[slot] = Pack(item);
+            }
+
+            Log.Info("Entity {} took {} into slot {}", name, item.SpecId, slot);
+
+            return slot;
         }
 
-        public bool Equip(ulong id)
+        public UniqueItem Take(int slot)
         {
-            if (!IsServer) return false;
+            if (!IsServer) return null;
 
-            if (id == Nothing)
-            {
-                equipped.Value = Nothing;
-                holding.Value = default;
+            UniqueItem item = At(slot);
+            if (item == null) return null;
 
-                return true;
-            }
+            uniqueItems[slot] = null;
+            packedUniqueItems[slot] = default;
 
-            UniqueItem item = Find(id);
-            if (item == null) return false;
+            if (equippedSlot.Value == slot) Equip(NoSlot);
 
-            ItemSpec spec = Spec(item);
+            return item;
+        }
 
-            if (spec == null || !spec.Equipable)
-            {
-                Log.Info("Entity {} can not put {} in hands", name, item.SpecId);
-                return false;
-            }
+        public bool Contains(UniqueItem item)
+        {
+            return item != null && uniqueItems.Contains(item);
+        }
 
-            equipped.Value = id;
-            holding.Value = spec.Id;
-
-            Log.Info("Entity {} holds {} number {}", name, item.SpecId, item.Id);
-
-            return true;
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void EquipRpc(int slot)
+        {
+            Equip(slot);
         }
 
         public UniqueItem Equipped()
         {
-            return equipped.Value == Nothing ? null : Find(equipped.Value);
+            return At(equippedSlot.Value);
         }
 
         public void DrainInto(Inventory target)
         {
             if (!IsServer) return;
 
-            foreach (KeyValuePair<FixedString32Bytes, int> stack in stacks)
-                target.Add(Spec(stack.Key), stack.Value);
+            ItemCatalog catalog = Catalog;
 
-            foreach (UniqueItem item in owned)
-                target.Put(item);
+            for (int index = 0; index < stackAmounts.Count; index++)
+            {
+                if (stackAmounts[index] > 0) target.Add(catalog.At(index), stackAmounts[index]);
+            }
+
+            foreach (UniqueItem item in uniqueItems)
+            {
+                if (item != null) target.Put(item);
+            }
 
             Clear();
-        }
-
-        public void Clear()
-        {
-            if (!IsServer) return;
-
-            stacks.Clear();
-            owned.Clear();
-            stackRecords.Clear();
-            uniqueRecords.Clear();
-
-            Equip(Nothing);
         }
 
         public string Digest(DigestionDetail detail)
         {
             StringBuilder digest = new StringBuilder();
-            ItemSpec held = Holding;
+            ItemSpec held = EquippedSpec;
 
             if (held != null) digest.Append("Holding: ").Append(held.PromptName);
 
             if (detail != DigestionDetail.Full) return digest.Length == 0 ? null : digest.ToString();
 
-            foreach (StackRecord record in stackRecords)
-            {
-                ItemSpec spec = Spec(record.SpecId);
+            ItemCatalog catalog = Catalog;
 
-                Line(digest).Append(spec == null ? record.SpecId.ToString() : spec.PromptName)
+            for (int index = 0; index < stackAmounts.Count; index++)
+            {
+                if (stackAmounts[index] == 0) continue;
+
+                ItemSpec spec = catalog == null ? null : catalog.At(index);
+
+                Line(digest).Append(spec == null ? "unknown" : spec.PromptName)
                     .Append(" x ")
-                    .Append(record.Amount);
+                    .Append(stackAmounts[index]);
             }
 
-            foreach (UniqueItem item in Uniques)
+            foreach (UniqueItem item in uniqueItems)
             {
-                ItemSpec spec = Spec(item);
+                if (item == null) continue;
+
+                ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
 
                 Line(digest).Append(spec == null ? item.SpecId : spec.PromptName);
             }
@@ -309,18 +257,51 @@ namespace Shooter.Game.Loot
             return digest.Length == 0 ? null : digest.ToString();
         }
 
-        public DigestionPriority Priority => DigestionPriority.Low;
-
-        private void LateUpdate()
+        private bool Equip(int slot)
         {
-            for (int index = 0; index < owned.Count; index++)
-            {
-                UniqueItem item = owned[index];
-                if (!item.Dirty) continue;
+            if (!IsServer) return false;
 
-                item.Clean();
-                uniqueRecords[index] = Pack(item);
+            if (slot == NoSlot)
+            {
+                equippedSlot.Value = NoSlot;
+
+                return true;
             }
+
+            UniqueItem item = At(slot);
+            if (item == null) return false;
+
+            ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.SpecId);
+
+            if (spec == null || !spec.Equipable)
+            {
+                Log.Info("Entity {} can not put {} in hands", name, item.SpecId);
+                return false;
+            }
+
+            equippedSlot.Value = slot;
+
+            Log.Info("Entity {} holds {} from slot {}", name, item.SpecId, slot);
+
+            return true;
+        }
+
+        private UniqueItem At(int slot)
+        {
+            return slot >= 0 && slot < uniqueItems.Count ? uniqueItems[slot] : null;
+        }
+
+        private void Clear()
+        {
+            for (int index = 0; index < stackAmounts.Count; index++)
+            {
+                if (stackAmounts[index] != 0) stackAmounts[index] = 0;
+            }
+
+            uniqueItems.Clear();
+            packedUniqueItems.Clear();
+
+            Equip(NoSlot);
         }
 
         private void Fill(Entry entry)
@@ -335,25 +316,17 @@ namespace Shooter.Game.Loot
 
             for (int made = 0; made < amount; made++)
             {
-                UniqueItem item = Create(entry.Spec);
+                int slot = Put(entry.Spec.Create());
 
-                if (item != null && entry.Equip && equipped.Value == Nothing) Equip(item.Id);
+                if (slot != NoSlot && entry.Equip && equippedSlot.Value == NoSlot) Equip(slot);
             }
         }
 
-        private void Restack(FixedString32Bytes specId)
+        private static int IndexOf(ItemSpec spec)
         {
-            for (int index = 0; index < stackRecords.Count; index++)
-            {
-                if (stackRecords[index].SpecId != specId) continue;
+            ItemCatalog catalog = Catalog;
 
-                if (stacks.TryGetValue(specId, out int held)) stackRecords[index] = new StackRecord(specId, held);
-                else stackRecords.RemoveAt(index);
-
-                return;
-            }
-
-            if (stacks.TryGetValue(specId, out int added)) stackRecords.Add(new StackRecord(specId, added));
+            return catalog == null || spec == null ? -1 : catalog.Index(spec);
         }
 
         private FixedString4096Bytes Pack(UniqueItem item)
@@ -363,8 +336,8 @@ namespace Shooter.Game.Loot
 
             if (size <= FixedString4096Bytes.UTF8MaxLengthInBytes) return new FixedString4096Bytes(state);
 
-            Log.Error("Entity {} holds {} number {} whose state takes {} bytes, more than the {} the network format holds",
-                name, item.SpecId, item.Id, size, FixedString4096Bytes.UTF8MaxLengthInBytes);
+            Log.Error("Entity {} holds {} whose state takes {} bytes, more than the {} the network format holds",
+                name, item.SpecId, size, FixedString4096Bytes.UTF8MaxLengthInBytes);
 
             return default;
         }
@@ -376,7 +349,7 @@ namespace Shooter.Game.Loot
             string json = state.ToString();
             JObject parsed = JObject.Parse(json);
             string specId = parsed.Value<string>(nameof(UniqueItem.SpecId));
-            ItemSpec spec = Spec(new FixedString32Bytes(specId));
+            ItemSpec spec = Catalog == null ? null : Catalog.Spec(specId);
 
             if (spec == null)
             {
@@ -384,7 +357,7 @@ namespace Shooter.Game.Loot
                 return null;
             }
 
-            UniqueItem item = spec.Create(parsed.Value<ulong>(nameof(UniqueItem.Id)));
+            UniqueItem item = spec.Create();
             JsonConvert.PopulateObject(json, item);
             item.Clean();
 
@@ -393,19 +366,50 @@ namespace Shooter.Game.Loot
 
         private void Remirror()
         {
-            mirrored.Clear();
+            uniqueItems.Clear();
 
-            foreach (FixedString4096Bytes state in uniqueRecords)
+            foreach (FixedString4096Bytes state in packedUniqueItems) uniqueItems.Add(Unpack(state));
+        }
+
+        private void Mirror(NetworkListEvent<FixedString4096Bytes> change)
+        {
+            switch (change.Type)
             {
-                UniqueItem item = Unpack(state);
-
-                if (item != null) mirrored.Add(item);
+                case NetworkListEvent<FixedString4096Bytes>.EventType.Add:
+                    uniqueItems.Add(Unpack(change.Value));
+                    break;
+                case NetworkListEvent<FixedString4096Bytes>.EventType.Value:
+                    uniqueItems[change.Index] = Unpack(change.Value);
+                    break;
+                case NetworkListEvent<FixedString4096Bytes>.EventType.Clear:
+                    uniqueItems.Clear();
+                    break;
+                default:
+                    Remirror();
+                    break;
             }
         }
 
         private static StringBuilder Line(StringBuilder digest)
         {
             return digest.Length == 0 ? digest : digest.Append("\n");
+        }
+
+        private void StackAmountsShifted(NetworkListEvent<int> change)
+        {
+            Changed?.Invoke();
+        }
+
+        private void PackedUniqueItemsShifted(NetworkListEvent<FixedString4096Bytes> change)
+        {
+            if (!IsServer) Mirror(change);
+
+            Changed?.Invoke();
+        }
+
+        private void Reequipped(int previous, int current)
+        {
+            Changed?.Invoke();
         }
 
         private void OnValidate()
@@ -416,28 +420,6 @@ namespace Shooter.Game.Loot
             {
                 if (entry.Spec == null) Log.Error("Entity {} has a starting inventory slot without an item spec", name);
             }
-        }
-
-        private void StacksShifted(NetworkListEvent<StackRecord> change)
-        {
-            Changed?.Invoke();
-        }
-
-        private void UniquesShifted(NetworkListEvent<FixedString4096Bytes> change)
-        {
-            if (!IsServer) Remirror();
-
-            Changed?.Invoke();
-        }
-
-        private void Reequipped(ulong previous, ulong current)
-        {
-            Changed?.Invoke();
-        }
-
-        private void Rehanded(FixedString32Bytes previous, FixedString32Bytes current)
-        {
-            Changed?.Invoke();
         }
 
         [Serializable]

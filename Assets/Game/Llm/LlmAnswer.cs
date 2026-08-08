@@ -10,8 +10,15 @@ namespace Shooter.Game.Llm
 
         public class LlmInterNpcInteractionCommand
         {
-            public string[] TargetNames { get; set; }
+            public long[] TargetIds { get; set; }
             public string Content { get; set; }
+        }
+
+        public class LlmCharacterRelationCommand
+        {
+            public long TargetId { get; set; }
+            public int NewAmount { get; set; }
+            public string Reason { get; set; }
         }
 
         public static LlmAnswer Example()
@@ -25,7 +32,7 @@ namespace Shooter.Game.Llm
                 {
                     new LlmInterNpcInteractionCommand()
                     {
-                        TargetNames = new string[] { "Exact recipient name", "Another recipient of the same message" },
+                        TargetIds = new long[] { 0, 1 },
                         Content = "The message"
                     },
                 },
@@ -33,7 +40,7 @@ namespace Shooter.Game.Llm
                 {
                     new LlmCharacterRelationCommand()
                     {
-                        TargetName = "Exact target name",
+                        TargetId = 0,
                         NewAmount = 100,
                         Reason = "Reason for the relation change"
                     }
