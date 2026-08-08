@@ -20,5 +20,10 @@ namespace Shooter.Game.Loot
         {
             return Of(new FixedString32Bytes(id)) as FirearmSpec;
         }
+
+        public ItemSpec FindByPromptName(string promptName)
+        {
+            return Find(item => item.PromptName == promptName);
+        }
     }
 }
