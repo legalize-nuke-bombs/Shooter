@@ -298,8 +298,7 @@ namespace Shooter.Client.Interface.Menu
             config.Server.Port = Number(hostPort.value, config.Server.Port);
             Config.Save();
 
-            Log.Info("Own world {} on port {} under the name {}",
-                config.Server.World, config.Server.Port, config.Client.Name);
+            Log.Info($"Own world {config.Server.World} on port {config.Server.Port} under the name {config.Client.Name}");
         }
 
         private void KeepJoin()
@@ -311,8 +310,7 @@ namespace Shooter.Client.Interface.Menu
             config.Client.Port = Number(joinPort.value, config.Client.Port);
             Config.Save();
 
-            Log.Info("World of {}:{} under the name {}",
-                config.Client.Address, config.Client.Port, config.Client.Name);
+            Log.Info($"World of {config.Client.Address}:{config.Client.Port} under the name {config.Client.Name}");
         }
 
         private void KeepSettings()
@@ -357,7 +355,7 @@ namespace Shooter.Client.Interface.Menu
             var element = root.Q<T>(name);
             if (element != null) return element;
 
-            Log.Error("Menu document has no element {}", name);
+            Log.Error($"Menu document has no element {name}");
             missing = true;
 
             return null;
@@ -367,7 +365,7 @@ namespace Shooter.Client.Interface.Menu
         {
             if (ushort.TryParse(typed, out ushort parsed) && parsed != 0) return parsed;
 
-            Log.Warn("Port {} is not a number between 1 and 65535, keeping {}", typed, fallback);
+            Log.Warn($"Port {typed} is not a number between 1 and 65535, keeping {fallback}");
 
             return fallback;
         }

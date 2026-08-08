@@ -56,7 +56,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (window == null || speaker == null || log == null || waiting == null || input == null)
             {
-                Log.Error("Overlay document has no {} window, talks stay invisible", WindowElement);
+                Log.Error($"Overlay document has no {WindowElement} window, talks stay invisible");
                 return false;
             }
 
@@ -82,7 +82,7 @@ namespace Shooter.Client.Interface.Overlays
             window.style.display = DisplayStyle.Flex;
 
             input.Focus();
-            Log.Info("Talk window opened with {}", speaker.text);
+            Log.Info($"Talk window opened with {speaker.text}");
         }
 
         private void Line(string content, string time, bool mine)

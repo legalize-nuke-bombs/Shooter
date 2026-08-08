@@ -49,7 +49,7 @@ namespace Shooter.Game.Sweeping
 
             foreach (Sweepable sweepable in ripe)
             {
-                Log.Info("Entity {} is swept away", sweepable.name);
+                Log.Info($"Entity {sweepable.name} is swept away");
                 sweepable.Sweep();
             }
         }

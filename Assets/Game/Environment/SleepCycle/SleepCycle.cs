@@ -43,7 +43,7 @@ namespace Shooter.Game
             {
                 asleep.Value = everyone;
                 clock.Scale = everyone ? SkipTimeScale : 1f;
-                Log.Info("World asleep is now {}", everyone);
+                Log.Info($"World asleep is now {everyone}");
             }
 
             if (clock.IsNight())

@@ -45,7 +45,7 @@ namespace Shooter.Game.Body
             response.Approved = true;
             response.CreatePlayerObject = true;
 
-            Log.Info("Client {} approved as {}", request.ClientNetworkId, name);
+            Log.Info($"Client {request.ClientNetworkId} approved as {name}");
         }
 
         private void Welcome(ulong client)
@@ -54,7 +54,7 @@ namespace Shooter.Game.Body
 
             if (!network.ConnectedClients.TryGetValue(client, out NetworkClient connected) || connected.PlayerObject == null)
             {
-                Log.Warn("Client {} connected without a player object", client);
+                Log.Warn($"Client {client} connected without a player object");
                 return;
             }
 
@@ -67,14 +67,14 @@ namespace Shooter.Game.Body
                 : Environment.Current.Spawn;
             connected.PlayerObject.GetComponent<Movement>()?.Teleport(at.position, at.eulerAngles.y);
 
-            Log.Info("Client {} entered the world as {} at {}, players online {}", client, name, at.position, network.ConnectedClients.Count);
+            Log.Info($"Client {client} entered the world as {name} at {at.position}, players online {network.ConnectedClients.Count}");
         }
 
         private void Forget(ulong client)
         {
             if (!names.Remove(client)) return;
 
-            Log.Info("Client {} left the world", client);
+            Log.Info($"Client {client} left the world");
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Shooter.Game.Speech
 
             heard = talker;
             interlocutor.Value = talker.NetworkObjectId;
-            Log.Info("Player {} opened a talk with {}", OwnerClientId, talker.name);
+            Log.Info($"Player {OwnerClientId} opened a talk with {talker.name}");
 
             OpenedRpc(talker.NetworkObjectId);
             foreach (Message message in history)
@@ -43,7 +43,7 @@ namespace Shooter.Game.Speech
         {
             if (!IsServer || heard == null) return;
 
-            Log.Info("Player {} closed the talk with {}", OwnerClientId, heard.name);
+            Log.Info($"Player {OwnerClientId} closed the talk with {heard.name}");
             heard.Leave(NetworkObject);
             heard = null;
             interlocutor.Value = 0;
@@ -67,7 +67,7 @@ namespace Shooter.Game.Speech
         {
             if (heard == null)
             {
-                Log.Info("Player {} said something with no talk open, ignored", OwnerClientId);
+                Log.Info($"Player {OwnerClientId} said something with no talk open, ignored");
                 return;
             }
 
@@ -83,14 +83,14 @@ namespace Shooter.Game.Speech
         [Rpc(SendTo.Owner)]
         private void OpenedRpc(ulong talkerId)
         {
-            Log.Info("Talk with network object {} opened", talkerId);
+            Log.Info($"Talk with network object {talkerId} opened");
             Opened?.Invoke(talkerId);
         }
 
         [Rpc(SendTo.Owner)]
         private void HeardRpc(string content, string time, bool mine)
         {
-            Log.Info("Talk line at {} from {}: {}", time, mine ? "me" : "them", content);
+            Log.Info($"Talk line at {time} from {(mine ? "me" : "them")}: {content}");
             Heard?.Invoke(content, time, mine);
         }
 

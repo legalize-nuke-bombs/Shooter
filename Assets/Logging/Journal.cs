@@ -1,4 +1,3 @@
-using System.Text;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -14,56 +13,29 @@ namespace Shooter.Logging
         }
 
         [HideInCallstack]
-        public void Info(string template, params object[] args)
+        public void Info(string message)
         {
-            Say(Level.Info, LogType.Log, template, args);
+            Say(Level.Info, LogType.Log, message);
         }
 
         [HideInCallstack]
-        public void Warn(string template, params object[] args)
+        public void Warn(string message)
         {
-            Say(Level.Warn, LogType.Warning, template, args);
+            Say(Level.Warn, LogType.Warning, message);
         }
 
         [HideInCallstack]
-        public void Error(string template, params object[] args)
+        public void Error(string message)
         {
-            Say(Level.Error, LogType.Error, template, args);
+            Say(Level.Error, LogType.Error, message);
         }
 
         [HideInCallstack]
-        private void Say(Level level, LogType type, string template, object[] args)
+        private void Say(Level level, LogType type, string message)
         {
             if (level < Logs.Least) return;
 
-            Debug.unityLogger.Log(type, name + ": " + Filled(template, args));
-        }
-
-        private static string Filled(string template, object[] args)
-        {
-            if (args == null || args.Length == 0) return template;
-
-            var builder = new StringBuilder(template.Length);
-            int argIndex = 0;
-            for (int i = 0; i < template.Length; i++)
-            {
-                if (argIndex < args.Length && i + 1 < template.Length && template[i] == '{' && template[i + 1] == '}')
-                {
-                    builder.Append(args[argIndex++] ?? "null");
-                    i++;
-                }
-                else
-                {
-                    builder.Append(template[i]);
-                }
-            }
-
-            for (; argIndex < args.Length; argIndex++)
-            {
-                builder.Append(" | ").Append(args[argIndex] ?? "null");
-            }
-
-            return builder.ToString();
+            Debug.unityLogger.Log(type, name + ": " + message);
         }
     }
 }

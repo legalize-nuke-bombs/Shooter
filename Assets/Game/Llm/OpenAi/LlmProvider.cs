@@ -54,13 +54,13 @@ namespace Shooter.Game.Llm.OpenAi
             Directory.CreateDirectory(folderPath);
 
             string promptPath = Path.Combine(folderPath, $"{requestId}.md");
-            Log.Info("Request {}. Input: {}ch. Will be saved as {}", requestId, promptRaw.Length, promptPath);
+            Log.Info($"Request {requestId}. Input: {promptRaw.Length}ch. Will be saved as {promptPath}");
             await File.WriteAllTextAsync(promptPath, promptRaw, until);
 
             string responsePath = Path.Combine(folderPath, $"{requestId}.json");
             string raw = await Ask(OpenAiHosts.For(config), config.Key, body, until);
             await File.WriteAllTextAsync(responsePath, raw, until);
-            Log.Info("Response {}. Output: {}ch. Will be saved as {}", requestId, raw.Length, responsePath);
+            Log.Info($"Response {requestId}. Output: {raw.Length}ch. Will be saved as {responsePath}");
 
             OpenAiResponse response = Deserialize(raw);
             string content = response?.Choices?.FirstOrDefault()?.Message?.Content ?? "";
@@ -81,15 +81,14 @@ namespace Shooter.Game.Llm.OpenAi
                 sessionTokensOut += usage.CompletionTokens;
             }
 
-            Log.Info("Session totals: {} requests, input {} chars / {} tokens, output {} chars / {} tokens",
-                sessionRequests, sessionCharsIn, sessionTokensIn, sessionCharsOut, sessionTokensOut);
+            Log.Info($"Session totals: {sessionRequests} requests, input {sessionCharsIn} chars / {sessionTokensIn} tokens, output {sessionCharsOut} chars / {sessionTokensOut} tokens");
         }
 
 
         private static async Task<string> Ask(IOpenAiHost host, string key, OpenAiRequest body,
             CancellationToken until)
         {
-            Log.Info("Sending request. Model: {}", body.Model);
+            Log.Info($"Sending request. Model: {body.Model}");
 
             try
             {
@@ -105,7 +104,7 @@ namespace Shooter.Game.Llm.OpenAi
             }
             catch (Exception e)
             {
-                Log.Error("Request failed. Error: {}", e.Message);
+                Log.Error($"Request failed. Error: {e.Message}");
                 throw;
             }
         }

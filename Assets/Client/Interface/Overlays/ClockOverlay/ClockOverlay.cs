@@ -52,7 +52,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (clock == null)
             {
-                Log.Error("Overlay document has no {} label, the clock stays hidden", ClockElement);
+                Log.Error($"Overlay document has no {ClockElement} label, the clock stays hidden");
                 return false;
             }
 

@@ -49,7 +49,7 @@ namespace Shooter.Editing
             EditorUtility.ClearProgressBar();
             AssetDatabase.SaveAssets();
 
-            Log.Warn("Looked at {} prefabs, dressed {} trees with {} capsules", paths.Count, dressed, placed);
+            Log.Warn($"Looked at {paths.Count} prefabs, dressed {dressed} trees with {placed} capsules");
         }
 
         [MenuItem(Menu, true)]
@@ -93,20 +93,20 @@ namespace Shooter.Editing
 
             if (mesh == null)
             {
-                Log.Warn("Prefab {} has no mesh to trace, skipped", path);
+                Log.Warn($"Prefab {path} has no mesh to trace, skipped");
                 return 0;
             }
 
             if (!mesh.isReadable)
             {
-                Log.Error("Mesh {} of prefab {} is not readable from editor code, skipped without touching the import", mesh.name, path);
+                Log.Error($"Mesh {mesh.name} of prefab {path} is not readable from editor code, skipped without touching the import");
                 return 0;
             }
 
             List<int> barks = Barks(renderer, mesh);
             if (barks.Count == 0)
             {
-                Log.Warn("Prefab {} has no bark material on mesh {}, skipped", path, mesh.name);
+                Log.Warn($"Prefab {path} has no bark material on mesh {mesh.name}, skipped");
                 return 0;
             }
 
@@ -115,7 +115,7 @@ namespace Shooter.Editing
 
             if (components.Count == 0)
             {
-                Log.Warn("Prefab {} has bark materials but no bark triangles, skipped", path);
+                Log.Warn($"Prefab {path} has bark materials but no bark triangles, skipped");
                 return 0;
             }
 
@@ -124,14 +124,13 @@ namespace Shooter.Editing
 
             if (chosen.Count == 0)
             {
-                Log.Warn("Prefab {} yielded no capsules, left untouched", path);
+                Log.Warn($"Prefab {path} yielded no capsules, left untouched");
                 return 0;
             }
 
             Clear(prefab);
 
-            Log.Info("Tree {}: {} bark submeshes on mesh {}, {} components, {} twigs dropped, {} limbs kept, {} capsules fitted, {} placed",
-                prefab.name, barks.Count, mesh.name, components.Count, twigs, limbs.Count, fitted, chosen.Count);
+            Log.Info($"Tree {prefab.name}: {barks.Count} bark submeshes on mesh {mesh.name}, {components.Count} components, {twigs} twigs dropped, {limbs.Count} limbs kept, {fitted} capsules fitted, {chosen.Count} placed");
 
             Place(prefab, chosen);
 
@@ -469,8 +468,7 @@ namespace Shooter.Editing
                 collider.radius = capsule.Radius;
                 collider.height = capsule.Length + capsule.Radius * 2f;
 
-                Log.Info("Tree {}: {} radius {} m, height {} m, center y {} m",
-                    prefab.name, name, Round(capsule.Radius), Round(collider.height), Round(capsule.Center.y));
+                Log.Info($"Tree {prefab.name}: {name} radius {(Round(capsule.Radius))} m, height {(Round(collider.height))} m, center y {(Round(capsule.Center.y))} m");
             }
         }
 

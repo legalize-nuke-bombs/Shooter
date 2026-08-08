@@ -38,7 +38,7 @@ namespace Shooter.Game.Falling
 
         private void Fall()
         {
-            Log.Info("Entity {} is falling!", name);
+            Log.Info($"Entity {name} is falling!");
 
             rigidbody.isKinematic = false;
 

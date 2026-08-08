@@ -29,7 +29,7 @@ namespace Shooter.Game.Loot
             ItemSpec found = Find(item => item.PromptName == promptName);
 
             if (found != null && Find(item => item != found && item.PromptName == promptName) != null)
-                Log.Warn("Catalog {} holds several items under prompt name {}", name, promptName);
+                Log.Warn($"Catalog {name} holds several items under prompt name {promptName}");
 
             return found;
         }

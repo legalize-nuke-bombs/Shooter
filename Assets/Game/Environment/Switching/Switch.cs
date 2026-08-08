@@ -58,18 +58,18 @@ namespace Shooter.Game
         {
             if (structureHealth.Broken)
             {
-                Log.Info("Entity {} tried to switch {} but it was broken", user.name, name);
+                Log.Info($"Entity {user.name} tried to switch {name} but it was broken");
                 return;
             }
 
             shining.Value = !shining.Value;
             speaker.Play(click);
-            Log.Info("Entity {} switched {} {}", user.name, name, shining.Value ? "on" : "off");
+            Log.Info($"Entity {user.name} switched {name} {(shining.Value ? "on" : "off")}");
         }
 
         public void Broken()
         {
-            Log.Info("Entity {} will be switched off because it was broken", name);
+            Log.Info($"Entity {name} will be switched off because it was broken");
             shining.Value = false;
         }
 

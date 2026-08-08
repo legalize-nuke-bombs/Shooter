@@ -32,7 +32,7 @@ namespace Shooter.Game.Body.Sounding
 
             if (sound == null)
             {
-                Log.Warn("Entity {} was asked to play a sound without a spec set", name);
+                Log.Warn($"Entity {name} was asked to play a sound without a spec set");
                 return;
             }
 
@@ -45,7 +45,7 @@ namespace Shooter.Game.Body.Sounding
             SoundCatalog catalog = Sounds;
             if (catalog == null)
             {
-                Log.Warn("Entity {} cannot play {}: the world has no sound catalog", name, id);
+                Log.Warn($"Entity {name} cannot play {id}: the world has no sound catalog");
                 return;
             }
 
@@ -65,8 +65,7 @@ namespace Shooter.Game.Body.Sounding
 
             AudioListener listener = Listener();
             float listenerDistance = listener == null ? -1f : Vector3.Distance(transform.position, listener.transform.position);
-            Log.Info("Entity {} PLAYS {} variant {} volume {} distance {} range {}-{} loadState {} at t={}",
-                name, id, variant, sound.Volume, listenerDistance, sound.MinDistance, sound.MaxDistance, clip.loadState, UnityEngine.Time.time);
+            Log.Info($"Entity {name} PLAYS {id} variant {variant} volume {sound.Volume} distance {listenerDistance} range {sound.MinDistance}-{sound.MaxDistance} loadState {clip.loadState} at t={UnityEngine.Time.time}");
 
             source.Play();
         }

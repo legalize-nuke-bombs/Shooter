@@ -28,7 +28,7 @@ namespace Shooter.Game.Body
         protected override void DamageRaw(int amount)
         {
             hp.Value = Mathf.Max(hp.Value - amount, 0);
-            Log.Info("Entity {} took {} damage, hp now {}/{}", name, amount, hp.Value, MaxHp);
+            Log.Info($"Entity {name} took {amount} damage, hp now {hp.Value}/{MaxHp}");
         }
 
         public override void Heal(int amount)
@@ -36,7 +36,7 @@ namespace Shooter.Game.Body
             if (!IsServer || !Alive || amount <= 0) return;
 
             hp.Value = Mathf.Min(hp.Value + amount, MaxHp);
-            Log.Info("Entity {} healed {}, hp now {}/{}", name, amount, hp.Value, MaxHp);
+            Log.Info($"Entity {name} healed {amount}, hp now {hp.Value}/{MaxHp}");
         }
 
         public override void Resurrect()
@@ -44,7 +44,7 @@ namespace Shooter.Game.Body
             if (!IsServer || Alive) return;
 
             hp.Value = MaxHp;
-            Log.Info("Entity {} resurrected with {} hp", name, hp.Value);
+            Log.Info($"Entity {name} resurrected with {hp.Value} hp");
         }
     }
 }

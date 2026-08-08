@@ -75,7 +75,7 @@ namespace Shooter.Client.Playing
             Grab();
 
             NetworkManager.NetworkTickSystem.Tick += Send;
-            Log.Info("Local player spawned as network object {} owned by client {}", NetworkObjectId, OwnerClientId);
+            Log.Info($"Local player spawned as network object {NetworkObjectId} owned by client {OwnerClientId}");
         }
 
         public override void OnNetworkDespawn()
@@ -137,7 +137,7 @@ namespace Shooter.Client.Playing
             else if (InventoryOpen) Browse();
             else Grab();
 
-            Log.Info("Local player input is now {}", talking ? "on the talk" : InventoryOpen ? "shared with the bag" : "back on the player");
+            Log.Info($"Local player input is now {(talking ? "on the talk" : InventoryOpen ? "shared with the bag" : "back on the player")}");
         }
 
         private void Grab()

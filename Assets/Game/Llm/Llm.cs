@@ -106,7 +106,7 @@ namespace Shooter.Game.Llm
             {
                 if (knowledge == null)
                 {
-                    Log.Warn("Entity {} has an empty slot among its {} knowledges", name, knowledges.Length);
+                    Log.Warn($"Entity {name} has an empty slot among its {knowledges.Length} knowledges");
                     continue;
                 }
 
@@ -354,7 +354,7 @@ namespace Shooter.Game.Llm
                 long? pendingConversationId = PendingConversationId();
                 long? pendingCompactConversationId = PendingCompactConversationId();
                 LlmConfig config = (pendingCompactConversationId == null ? Config.Read().Server.LlmBase : Config.Read().Server.LlmMax);
-                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {} pendingCompactConversationId {}", entityName, config.Model, pendingConversationId, pendingCompactConversationId);
+                Log.Info($"Entity {entityName} is asking {config.Model} for an answer, pendingConversationId {pendingConversationId} pendingCompactConversationId {pendingCompactConversationId}");
 
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
@@ -383,7 +383,7 @@ namespace Shooter.Game.Llm
             }
             catch (OperationCanceledException)
             {
-                Log.Info("Entity {} dropped its request, the entity is gone", entityName);
+                Log.Info($"Entity {entityName} dropped its request, the entity is gone");
                 return false;
             }
             catch (Exception e)
@@ -391,7 +391,7 @@ namespace Shooter.Game.Llm
                 interNpcInteractionInbox.Return(takenInterNpcInteractions);
                 systemNotificationsInbox.Return(takenSystemNotifications);
                 retryBlockedUntil = UnityEngine.Time.time + failureCooldown;
-                Log.Warn("Entity {} failed to respond, inboxes returned, next attempt in {} s: {}", entityName, failureCooldown, e.ToString());
+                Log.Warn($"Entity {entityName} failed to respond, inboxes returned, next attempt in {failureCooldown} s: {e.ToString()}");
                 return false;
             }
             finally
@@ -412,7 +412,7 @@ namespace Shooter.Game.Llm
             }
             if (pendingCompactConversationId == null)
             {
-                Log.Warn("Entity {} sent compact that nobody asked: {}", entityName, compact);
+                Log.Warn($"Entity {entityName} sent compact that nobody asked: {compact}");
                 return;
             }
 
@@ -437,7 +437,7 @@ namespace Shooter.Game.Llm
             }
             if (pendingConversationId == null)
             {
-                Log.Warn("Entity {} sent reply that nobody asked: {}", entityName, reply);
+                Log.Warn($"Entity {entityName} sent reply that nobody asked: {reply}");
                 return;
             }
             conversations[pendingConversationId.Value].RegisterModelMessage(
@@ -457,7 +457,7 @@ namespace Shooter.Game.Llm
             if (update == null) return;
 
             memoryRaw = update.Length <= memoryLimit ? update : update.Substring(0, memoryLimit);
-            Log.Info("Entity {} rewrote its memory ({} chars): {}", name, memoryRaw.Length, memoryRaw);
+            Log.Info($"Entity {name} rewrote its memory ({memoryRaw.Length} chars): {memoryRaw}");
         }
 
 
@@ -499,7 +499,7 @@ namespace Shooter.Game.Llm
 
                     received.Add(targetId);
 
-                    Log.Info("Entity {} said to {}: {}", name, targetId, cmd.Content);
+                    Log.Info($"Entity {name} said to {targetId}: {cmd.Content}");
 
                     llm.interNpcInteractionInbox.Put("[" + Time() + "] " + ownId + ": " + cmd.Content);
                 }
@@ -511,7 +511,7 @@ namespace Shooter.Game.Llm
                     if (!received.Contains(targetId))
                     {
                         string reason = fails.GetValueOrDefault(targetId, "The id is misspelled or no resident bears it");
-                        Log.Warn("Failed to say from {} to {}: {}", entityName, targetId, reason);
+                        Log.Warn($"Failed to say from {entityName} to {targetId}: {reason}");
                         systemNotificationsInbox.Put("[" + Time() + "] " + $"Your message to {targetId} could not be delivered: {reason}. The undelivered message: {cmd.Content}");
                     }
                 }
@@ -534,14 +534,14 @@ namespace Shooter.Game.Llm
 
             foreach (LlmAnswer.CharacterRelationCommand cmd in cmds)
             {
-                Log.Info("Entity {} is updating relation to character {} from {} to {}: {}", name, cmd.TargetId, characterRelation.Amount(cmd.TargetId), cmd.NewAmount, cmd.Reason);
+                Log.Info($"Entity {name} is updating relation to character {cmd.TargetId} from {(characterRelation.Amount(cmd.TargetId))} to {cmd.NewAmount}: {cmd.Reason}");
                 try
                 {
                     characterRelation.SetAmount(cmd.TargetId, cmd.NewAmount, cmd.Reason);
                 }
                 catch (Exception e)
                 {
-                    Log.Warn("Entity {} failed to update relation: {}", name, e.Message);
+                    Log.Warn($"Entity {name} failed to update relation: {e.Message}");
                     systemNotificationsInbox.Put("[" + Time() + "]" + $"Failed to update your relation to character {cmd.TargetId} from {characterRelation.Amount(cmd.TargetId)} to {cmd.NewAmount} {cmd.Reason}: {e.Message}");
                 }
             }
@@ -571,7 +571,7 @@ namespace Shooter.Game.Llm
                 }
                 foreach (LlmAnswer.GiveStackableItemCommand cmd in failed)
                 {
-                    Log.Warn("Entity {} failed to give {} x {} to {}", name, cmd.ItemName, cmd.ItemAmount, cmd.TargetId);
+                    Log.Warn($"Entity {name} failed to give {cmd.ItemName} x {cmd.ItemAmount} to {cmd.TargetId}");
                     systemNotificationsInbox.Put("[" + Time() + "] " + $"Failed to give {cmd.ItemName} x {cmd.ItemAmount} to {cmd.TargetId}");
                 }
             }
@@ -589,7 +589,7 @@ namespace Shooter.Game.Llm
                 }
                 foreach (LlmAnswer.GiveUniqueItemCommand cmd in failed)
                 {
-                    Log.Warn("Entity {} failed to give unique slot idx {} to {}", name, cmd.SlotIdx, cmd.TargetId);
+                    Log.Warn($"Entity {name} failed to give unique slot idx {cmd.SlotIdx} to {cmd.TargetId}");
                     systemNotificationsInbox.Put("[" + Time() + "] " + $"Failed to give unique item slot idx {cmd.SlotIdx} to {cmd.TargetId}");
                 }
             }
@@ -604,7 +604,7 @@ namespace Shooter.Game.Llm
             {
                 return id.Value;
             }
-            Log.Warn("Entity {} does not have persistent id", name);
+            Log.Warn($"Entity {name} does not have persistent id");
             return -1;
         }
         private bool Alive()
@@ -613,7 +613,7 @@ namespace Shooter.Game.Llm
             {
                 return health.Alive;
             }
-            Log.Warn("Entity {} does not have health", name);
+            Log.Warn($"Entity {name} does not have health");
             return false;
         }
     }

@@ -41,7 +41,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (screen == null)
             {
-                Log.Error("Overlay document has no {} element, sleep stays unseen", SleepElement);
+                Log.Error($"Overlay document has no {SleepElement} element, sleep stays unseen");
                 return false;
             }
 

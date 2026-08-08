@@ -28,14 +28,10 @@ namespace Shooter.Game
             picture = screen == null ? null : screen.material;
             own = Mathf.Abs(transform.position.x * 0.7f + transform.position.z * 1.3f);
 
-            Log.Info("Screen {}: light {} enabled {} intensity {} range {}, renderer {}, material {}, shader {}, mesh {}",
-                name, glow.type, glow.enabled, glow.intensity, glow.range,
-                screen == null ? "none" : screen.name,
-                picture == null ? "none" : picture.name,
-                picture == null ? "none" : picture.shader.name,
-                screen == null ? "none" : screen.GetComponent<MeshFilter>() == null ? "no filter"
-                    : screen.GetComponent<MeshFilter>().sharedMesh == null ? "no mesh"
-                    : screen.GetComponent<MeshFilter>().sharedMesh.vertexCount.ToString());
+            MeshFilter filter = screen == null ? null : screen.GetComponent<MeshFilter>();
+            string mesh = screen == null ? "none" : filter == null ? "no filter" : filter.sharedMesh == null ? "no mesh" : filter.sharedMesh.vertexCount.ToString();
+
+            Log.Info($"Screen {name}: light {glow.type} enabled {glow.enabled} intensity {glow.intensity} range {glow.range}, renderer {(screen == null ? "none" : screen.name)}, material {(picture == null ? "none" : picture.name)}, shader {(picture == null ? "none" : picture.shader.name)}, mesh {mesh}");
         }
 
         private void Update()

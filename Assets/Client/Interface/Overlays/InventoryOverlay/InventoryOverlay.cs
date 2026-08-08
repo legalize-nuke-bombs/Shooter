@@ -62,7 +62,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (window == null || grid == null || held == null || coins == null)
             {
-                Log.Error("Overlay document has no {} window, the bag stays hidden", WindowElement);
+                Log.Error($"Overlay document has no {WindowElement} window, the bag stays hidden");
                 return false;
             }
 

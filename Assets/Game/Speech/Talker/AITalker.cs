@@ -19,7 +19,7 @@ namespace Shooter.Game.Speech
         {
             if (llm == null)
             {
-                Log.Error("Entity {} has no llm to answer with", name);
+                Log.Error($"Entity {name} has no llm to answer with");
                 onAnswer(Fallback);
                 return;
             }

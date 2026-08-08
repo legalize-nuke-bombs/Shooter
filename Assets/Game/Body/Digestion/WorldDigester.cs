@@ -33,7 +33,7 @@ namespace Shooter.Game.Body
             }
 
             string result = digest.ToString();
-            Log.Info("Digestion finished, length: {}", result.Length);
+            Log.Info($"Digestion finished, length: {result.Length}");
             return result;
         }
 
@@ -42,7 +42,7 @@ namespace Shooter.Game.Body
             var found = new HashSet<GameObject>();
             int hits = Physics.OverlapSphereNonAlloc(transform.position, scanRadius, Around);
             if (hits == Around.Length)
-                Log.Warn("Digester of {} filled its buffer of {} colliders within {} m, the digest may miss part of the world", name, Around.Length, scanRadius);
+                Log.Warn($"Digester of {name} filled its buffer of {Around.Length} colliders within {scanRadius} m, the digest may miss part of the world");
 
             for (int i = 0; i < hits; i++)
             {

@@ -49,8 +49,7 @@ namespace Shooter.Game.Speech
 
             if (!TalkRule.CanTalk(Alive(user), Alive(NetworkObject), Awake(NetworkObject)))
             {
-                Log.Info("Entity {} refused to talk to {}: speaker alive {}, own alive {}, own awake {}",
-                    name, user.name, Alive(user), Alive(NetworkObject), Awake(NetworkObject));
+                Log.Info($"Entity {name} refused to talk to {user.name}: speaker alive {(Alive(user))}, own alive {(Alive(NetworkObject))}, own awake {(Awake(NetworkObject))}");
                 return;
             }
 
@@ -65,19 +64,19 @@ namespace Shooter.Game.Speech
 
             if (content == null || content.Length > SpeechLimit)
             {
-                Log.Info("Speech of entity {} is over {} characters, ignored", user.name, SpeechLimit);
+                Log.Info($"Speech of entity {user.name} is over {SpeechLimit} characters, ignored");
                 return;
             }
 
             if (!conversations.TryGetValue(user.OwnerClientId, out Conversation conversation) || !conversation.Open)
             {
-                Log.Info("Entity {} spoke to {} without an open talk, ignored", user.name, name);
+                Log.Info($"Entity {user.name} spoke to {name} without an open talk, ignored");
                 return;
             }
 
             if (thinking.Contains(user.OwnerClientId))
             {
-                Log.Info("Entity {} spoke to {} while the answer is pending, ignored", user.name, name);
+                Log.Info($"Entity {user.name} spoke to {name} while the answer is pending, ignored");
                 return;
             }
 
@@ -100,12 +99,12 @@ namespace Shooter.Game.Speech
 
             if (!conversations.TryGetValue(clientId, out Conversation conversation) || !conversation.Open)
             {
-                Log.Info("Entity {} answered client {} whose conversation is gone, dropped", name, clientId);
+                Log.Info($"Entity {name} answered client {clientId} whose conversation is gone, dropped");
                 return;
             }
 
             Say(conversation, conversation.User, MessageAuthor.Talker, content);
-            Log.Info("Entity {} answered client {}", name, clientId);
+            Log.Info($"Entity {name} answered client {clientId}");
         }
 
         private void Step()
@@ -132,7 +131,7 @@ namespace Shooter.Game.Speech
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Entity {} failed to request answer for client {}: {}", name, entry.Key, e.Message);
+                    Log.Error($"Entity {name} failed to request answer for client {entry.Key}: {e.Message}");
                     DeliverAnswer(entry.Key, "Not now.");
                 }
             }
@@ -148,7 +147,7 @@ namespace Shooter.Game.Speech
 
             conversation = new Conversation(user);
             conversations.Add(user.OwnerClientId, conversation);
-            Log.Info("Entity {} started a conversation with client {}", name, user.OwnerClientId);
+            Log.Info($"Entity {name} started a conversation with client {user.OwnerClientId}");
             return conversation;
         }
 
@@ -174,7 +173,7 @@ namespace Shooter.Game.Speech
                 NetworkObject user = conversation.User;
                 if (user != null && Reachable(user) && Alive(user) && Awake(user) && Alive(NetworkObject)) continue;
 
-                Log.Info("Entity {} ends the talk with {}: out of reach, dead or asleep", name, user == null ? "a gone player" : user.name);
+                Log.Info($"Entity {name} ends the talk with {(user == null ? "a gone player" : user.name)}: out of reach, dead or asleep");
 
                 if (user != null) thinking.Remove(user.OwnerClientId);
 

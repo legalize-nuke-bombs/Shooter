@@ -76,9 +76,9 @@ namespace Shooter.Game
             spawn = points.Length == 0 ? null : points[0];
 
             if (spawn == null)
-                Log.Warn("World has no main spawn point, everyone will appear at {}", transform.position);
+                Log.Warn($"World has no main spawn point, everyone will appear at {transform.position}");
             else if (points.Length > 1)
-                Log.Warn("World has {} main spawn points, everyone will appear at the one on {}", points.Length, spawn.name);
+                Log.Warn($"World has {points.Length} main spawn points, everyone will appear at the one on {spawn.name}");
 
             Current = this;
         }
@@ -101,7 +101,7 @@ namespace Shooter.Game
                 Sweeper.enabled = true;
             }
 
-            Log.Info("Environment is up: world {}, version {}, clock says {}", World, Version, Clock.DateTime());
+            Log.Info($"Environment is up: world {World}, version {Version}, clock says {Clock.DateTime()}");
         }
 
         public override void OnNetworkDespawn()

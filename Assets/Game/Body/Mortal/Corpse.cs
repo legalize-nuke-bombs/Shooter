@@ -29,7 +29,7 @@ namespace Shooter.Game.Body
 
             if (skin.Value.IsEmpty)
             {
-                Log.Warn("Corpse {} has no skin id, stays invisible", name);
+                Log.Warn($"Corpse {name} has no skin id, stays invisible");
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace Shooter.Game.Body
             SkinSpec spec = catalog == null ? null : catalog.Of(skin.Value);
             if (spec == null || spec.Model == null)
             {
-                Log.Error("Corpse {} cannot find skin {}, stays invisible", name, skin.Value);
+                Log.Error($"Corpse {name} cannot find skin {skin.Value}, stays invisible");
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace Shooter.Game.Body
             body.transform.localRotation = Quaternion.identity;
             body.AddComponent<Ragdoll>();
 
-            Log.Info("Corpse {} dressed as {}", name, skin.Value);
+            Log.Info($"Corpse {name} dressed as {skin.Value}");
         }
 
         private void Inherit()
@@ -58,7 +58,7 @@ namespace Shooter.Game.Body
             NameSpec spec = catalog == null ? null : catalog.Of(title.Value);
             if (spec == null)
             {
-                Log.Warn("Corpse {} cannot find name {}, keeps its own", name, title.Value);
+                Log.Warn($"Corpse {name} cannot find name {title.Value}, keeps its own");
                 return;
             }
 

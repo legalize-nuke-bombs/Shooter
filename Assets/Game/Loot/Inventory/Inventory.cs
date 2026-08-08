@@ -78,7 +78,7 @@ namespace Shooter.Game.Loot
                 Fill(entry);
             }
 
-            Log.Info("Entity {} starts with {} kinds of things in the bag", name, contents.Length);
+            Log.Info($"Entity {name} starts with {contents.Length} kinds of things in the bag");
         }
 
         public override void OnNetworkDespawn()
@@ -117,12 +117,12 @@ namespace Shooter.Game.Loot
 
             if (index < 0 || index >= stackAmounts.Count)
             {
-                Log.Error("Entity {} can not take {}: the world catalog does not know it", name, spec.Key);
+                Log.Error($"Entity {name} can not take {spec.Key}: the world catalog does not know it");
                 return;
             }
 
             stackAmounts[index] += amount;
-            Log.Info("Entity {} took {} of {}", name, amount, spec.Key);
+            Log.Info($"Entity {name} took {amount} of {spec.Key}");
         }
 
         public int RemoveStackable(ItemSpec spec, int amount, InventoryOnConflict onConflict)
@@ -162,7 +162,7 @@ namespace Shooter.Game.Loot
                 packedUniqueItems[slot] = Pack(item);
             }
 
-            Log.Info("Entity {} took {} into slot {}", name, item.SpecId, slot);
+            Log.Info($"Entity {name} took {item.SpecId} into slot {slot}");
 
             return slot;
         }
@@ -270,13 +270,13 @@ namespace Shooter.Game.Loot
 
             if (spec == null || !spec.Equipable)
             {
-                Log.Info("Entity {} can not put {} in hands", name, item.SpecId);
+                Log.Info($"Entity {name} can not put {item.SpecId} in hands");
                 return false;
             }
 
             equippedSlot.Value = slot;
 
-            Log.Info("Entity {} holds {} from slot {}", name, item.SpecId, slot);
+            Log.Info($"Entity {name} holds {item.SpecId} from slot {slot}");
 
             return true;
         }
@@ -331,8 +331,7 @@ namespace Shooter.Game.Loot
 
             if (size <= FixedString4096Bytes.UTF8MaxLengthInBytes) return new FixedString4096Bytes(state);
 
-            Log.Error("Entity {} holds {} whose state takes {} bytes, more than the {} the network format holds",
-                name, item.SpecId, size, FixedString4096Bytes.UTF8MaxLengthInBytes);
+            Log.Error($"Entity {name} holds {item.SpecId} whose state takes {size} bytes, more than the {FixedString4096Bytes.UTF8MaxLengthInBytes} the network format holds");
 
             return default;
         }
@@ -348,7 +347,7 @@ namespace Shooter.Game.Loot
 
             if (spec == null)
             {
-                Log.Error("Entity {} received a thing of unknown kind {}", name, specId);
+                Log.Error($"Entity {name} received a thing of unknown kind {specId}");
                 return null;
             }
 
@@ -413,7 +412,7 @@ namespace Shooter.Game.Loot
 
             foreach (Entry entry in contents)
             {
-                if (entry.Spec == null) Log.Error("Entity {} has a starting inventory slot without an item spec", name);
+                if (entry.Spec == null) Log.Error($"Entity {name} has a starting inventory slot without an item spec");
             }
         }
 

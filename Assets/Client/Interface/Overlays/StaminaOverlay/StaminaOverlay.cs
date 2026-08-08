@@ -47,7 +47,7 @@ namespace Shooter.Client.Interface.Overlays
 
             if (bar == null || fill == null)
             {
-                Log.Error("Overlay document has no {} or {} element, stamina stays hidden", BarElement, FillElement);
+                Log.Error($"Overlay document has no {BarElement} or {FillElement} element, stamina stays hidden");
                 return false;
             }
 
