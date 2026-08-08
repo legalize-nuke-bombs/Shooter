@@ -134,7 +134,7 @@ namespace Shooter.Game.Llm
             new Prompt()
                 .Section(
                     "YOUR MEMORY",
-                    "You have a Memory.\nMEMORY RULES:\n1. To update it, return the new FULL version in the `memory` field.\n2. Anything you do not carry over into the new version is lost FOREVER.\n3. Do NOT store personal details about wanderers — those live in the conversation histories. Store only general facts about the world.\n4. If there is nothing to update, return null in the `memory` field to keep the old version.\n5. Hard limit: " + memoryLimit + " characters. Be concise.\n6. Keep your Memory in English, first person.\nCURRENT MEMORY:\n" +
+                    "You have a Memory.\nMEMORY RULES:\n1. To update it, return the new FULL version in the `memory` field.\n2. Anything you do not carry over into the new version is lost FOREVER.\n3. Do NOT store personal details about wanderers — those live in the conversation histories. Store only general facts about the world.\n4. If there is nothing to update, return null in the `memory` field to keep the old version.\n4. Save as much details as possible. 5. Size limit: " + memoryLimit + " characters.\n6. Keep your Memory in English, first person.\nCURRENT MEMORY:\n" +
                     Memory
                 );
 
@@ -172,7 +172,7 @@ namespace Shooter.Game.Llm
         private Prompt InventoryExchangePrompt =>
             new Prompt()
                 .Section("INVENTORY EXCHANGE",
-                    "You can always transfer items from your inventory to other characters at your discretion using response fields `giveStackableItems` and `giveUniqueItems`. You ALWAYS inform the recipient of what you have given to them.");
+                    $"You can transfer items at your discretion to characters within {inventoryExchanger.ExchangeRadius} meters using response fields `giveStackableItems` and `giveUniqueItems`. You ALWAYS inform the recipient of what you have given to them.");
 
 
 
