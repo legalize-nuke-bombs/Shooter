@@ -13,7 +13,6 @@ using Shooter.Game.Llm.Knowledge;
 using Shooter.Logging;
 using Shooter.Game.Llm.OpenAi;
 using Shooter.Game.Loot;
-using Shooter.Game.Loot.InventoryExchanger;
 using Shooter.Game.Relationship;
 using UnityEngine;
 
@@ -38,6 +37,7 @@ namespace Shooter.Game.Llm
 
         private Digester digester;
         private WorldDigester worldDigester;
+        private string entityName;
         private CharacterRelation characterRelation;
         private InventoryExchanger inventoryExchanger;
 
@@ -47,6 +47,7 @@ namespace Shooter.Game.Llm
             worldDigester = GetComponent<WorldDigester>();
             characterRelation = GetComponent<CharacterRelation>();
             inventoryExchanger = GetComponent<InventoryExchanger>();
+            entityName = name;
         }
 
         private void OnDestroy()
@@ -134,7 +135,7 @@ namespace Shooter.Game.Llm
             new Prompt()
                 .Section(
                     "YOUR MEMORY",
-                    "You have a Memory.\nMEMORY RULES:\n1. To update it, return the new FULL version in the `memory` field.\n2. Anything you do not carry over into the new version is lost FOREVER.\n3. Do NOT store personal details about wanderers — those live in the conversation histories. Store only general facts about the world.\n4. If there is nothing to update, return null in the `memory` field to keep the old version.\n4. Save as much details as possible. 5. Size limit: " + memoryLimit + " characters.\n6. Keep your Memory in English, first person.\nCURRENT MEMORY:\n" +
+                    "You have a Memory.\nMEMORY RULES:\n1. To update it, return the new FULL version in the `memory` field.\n2. Anything you do not carry over into the new version is lost FOREVER.\n3. Do NOT store personal details about wanderers — those live in the conversation histories. Store only general facts about the world.\n4. If there is nothing to update, return null in the `memory` field to keep the old version.\n5. Save as much details as possible.\n6. Size limit: " + memoryLimit + " characters.\n7. Keep your Memory in English, first person.\nCURRENT MEMORY:\n" +
                     Memory
                 );
 
@@ -353,7 +354,7 @@ namespace Shooter.Game.Llm
                 long? pendingConversationId = PendingConversationId();
                 long? pendingCompactConversationId = PendingCompactConversationId();
                 LlmConfig config = (pendingCompactConversationId == null ? Config.Read().Server.LlmBase : Config.Read().Server.LlmMax);
-                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {} pendingCompactConversationId {}", name, config.Model, pendingConversationId, pendingCompactConversationId);
+                Log.Info("Entity {} is asking {} for an answer, pendingConversationId {} pendingCompactConversationId {}", entityName, config.Model, pendingConversationId, pendingCompactConversationId);
 
                 LlmAnswer answer = await LlmProvider.Request(
                     config,
@@ -382,7 +383,7 @@ namespace Shooter.Game.Llm
             }
             catch (OperationCanceledException)
             {
-                Log.Info("Entity {} dropped its request, the entity is gone", name);
+                Log.Info("Entity {} dropped its request, the entity is gone", entityName);
                 return false;
             }
             catch (Exception e)
@@ -390,7 +391,7 @@ namespace Shooter.Game.Llm
                 interNpcInteractionInbox.Return(takenInterNpcInteractions);
                 systemNotificationsInbox.Return(takenSystemNotifications);
                 retryBlockedUntil = UnityEngine.Time.time + failureCooldown;
-                Log.Warn("Entity {} failed to respond, inboxes returned, next attempt in {} s: {}", name, failureCooldown, e.ToString());
+                Log.Warn("Entity {} failed to respond, inboxes returned, next attempt in {} s: {}", entityName, failureCooldown, e.ToString());
                 return false;
             }
             finally
@@ -411,7 +412,7 @@ namespace Shooter.Game.Llm
             }
             if (pendingCompactConversationId == null)
             {
-                Log.Warn("Entity {} sent compact that nobody asked: {}", name, compact);
+                Log.Warn("Entity {} sent compact that nobody asked: {}", entityName, compact);
                 return;
             }
 
@@ -436,7 +437,7 @@ namespace Shooter.Game.Llm
             }
             if (pendingConversationId == null)
             {
-                Log.Warn("Entity {} sent reply that nobody asked: {}", name, reply);
+                Log.Warn("Entity {} sent reply that nobody asked: {}", entityName, reply);
                 return;
             }
             conversations[pendingConversationId.Value].RegisterModelMessage(
@@ -510,7 +511,7 @@ namespace Shooter.Game.Llm
                     if (!received.Contains(targetId))
                     {
                         string reason = fails.GetValueOrDefault(targetId, "The id is misspelled or no resident bears it");
-                        Log.Warn("Failed to say from {} to {}: {}", name, targetId, reason);
+                        Log.Warn("Failed to say from {} to {}: {}", entityName, targetId, reason);
                         systemNotificationsInbox.Put("[" + Time() + "] " + $"Your message to {targetId} could not be delivered: {reason}. The undelivered message: {cmd.Content}");
                     }
                 }

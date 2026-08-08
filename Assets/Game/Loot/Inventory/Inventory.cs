@@ -102,22 +102,16 @@ namespace Shooter.Game.Loot
             }
         }
 
-        public int Amount(ItemSpec spec)
+        public int StackableAmount(ItemSpec spec)
         {
             int index = IndexOf(spec);
 
             return index < 0 || index >= stackAmounts.Count ? 0 : stackAmounts[index];
         }
 
-        public void Add(ItemSpec spec, int amount)
+        public void AddStackable(ItemSpec spec, int amount)
         {
             if (!IsServer || amount <= 0 || spec == null || !spec.Stackable) return;
-
-            if (!spec.Stackable)
-            {
-                for (int made = 0; made < amount; made++) Put(spec.Create());
-                return;
-            }
 
             int index = IndexOf(spec);
 
@@ -131,7 +125,7 @@ namespace Shooter.Game.Loot
             Log.Info("Entity {} took {} of {}", name, amount, spec.Key);
         }
 
-        public int Remove(ItemSpec spec, int amount, InventoryOnConflict onConflict)
+        public int RemoveStackable(ItemSpec spec, int amount, InventoryOnConflict onConflict)
         {
             if (!IsServer || amount <= 0 || spec == null || !spec.Stackable) return 0;
 
@@ -212,7 +206,7 @@ namespace Shooter.Game.Loot
 
             for (int index = 0; index < stackAmounts.Count; index++)
             {
-                if (stackAmounts[index] > 0) target.Add(catalog.At(index), stackAmounts[index]);
+                if (stackAmounts[index] > 0) target.AddStackable(catalog.At(index), stackAmounts[index]);
             }
 
             foreach (UniqueItem item in uniqueItems)
@@ -311,7 +305,7 @@ namespace Shooter.Game.Loot
 
             if (entry.Spec.Stackable)
             {
-                Add(entry.Spec, amount);
+                AddStackable(entry.Spec, amount);
                 return;
             }
 

@@ -1,7 +1,8 @@
-﻿using Shooter.Logging;
+﻿using Shooter.Game.Identity;
+using Shooter.Logging;
 using UnityEngine;
 
-namespace Shooter.Game.Loot.InventoryExchanger
+namespace Shooter.Game.Loot
 {
     [RequireComponent(typeof(Inventory))]
     public class InventoryExchanger : MonoBehaviour
@@ -15,7 +16,7 @@ namespace Shooter.Game.Loot.InventoryExchanger
 
         private Inventory inventory;
 
-        public void Awake()
+        private void Awake()
         {
             inventory = GetComponent<Inventory>();
         }
@@ -25,16 +26,16 @@ namespace Shooter.Game.Loot.InventoryExchanger
             Inventory targetInventory = TargetInventory(targetId);
             if (targetInventory == null)
             {
-                Log.Info("Failed to give {} x {} from {} to {} : target does not have inventory", stackable.Id, amount, name, targetId);
+                Log.Info("Failed to give {} x {} from {} to {} : the target is not around", stackable.Id, amount, name, targetId);
                 return false;
             }
 
-            if (inventory.Remove(stackable, amount, InventoryOnConflict.Rollback) != amount)
+            if (inventory.RemoveStackable(stackable, amount, InventoryOnConflict.Rollback) != amount)
             {
                 Log.Info("Failed to give {} x {} from {} to {} : insufficient items", stackable.Id, amount, name, targetId);
                 return false;
             }
-            targetInventory.Add(stackable, amount);
+            targetInventory.AddStackable(stackable, amount);
 
             Log.Info("{} gave {} x {} to {}", name, stackable.Id, amount, targetId);
             return true;
@@ -45,7 +46,7 @@ namespace Shooter.Game.Loot.InventoryExchanger
             Inventory targetInventory = TargetInventory(targetId);
             if (targetInventory == null)
             {
-                Log.Info("Failed to give unique slot {} from {} to {}: target does not have inventory", slotId, name, targetId);
+                Log.Info("Failed to give unique slot {} from {} to {}: the target is not around", slotId, name, targetId);
                 return false;
             }
 
@@ -69,11 +70,10 @@ namespace Shooter.Game.Loot.InventoryExchanger
 
             for (int i = 0; i < hits; i++)
             {
-                Inventory targetInventory = around[i].GetComponentInParent<Inventory>();
-                if (targetInventory != null)
-                {
-                    return targetInventory;
-                }
+                PersistentId id = around[i].GetComponentInParent<PersistentId>();
+                if (id == null || id.Value != targetId || id.transform == transform) continue;
+
+                return id.GetComponent<Inventory>();
             }
 
             return null;

@@ -152,7 +152,7 @@ namespace Shooter.Client.Interface.Overlays
             for (int index = 0; index < kinds; index++)
             {
                 ItemSpec spec = catalog.At(index);
-                int amount = bag.Amount(spec);
+                int amount = bag.StackableAmount(spec);
                 if (amount == 0) continue;
 
                 if (spec.Key == Coins)

@@ -75,7 +75,7 @@ namespace Shooter.Game.Combat
             if (spec.Ammo == null) return false;
 
             int absent = spec.MagazineSize - firearm.Magazine;
-            if (absent <= 0 || inventory.Amount(spec.Ammo) == 0) return false;
+            if (absent <= 0 || inventory.StackableAmount(spec.Ammo) == 0) return false;
 
             if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true, () => Reloaded(firearm, spec, absent))) return false;
 
@@ -102,9 +102,9 @@ namespace Shooter.Game.Combat
         {
             if (!inventory.Contains(firearm)) return;
 
-            int taken = inventory.Remove(spec.Ammo, absent, InventoryOnConflict.Partly);
+            int taken = inventory.RemoveStackable(spec.Ammo, absent, InventoryOnConflict.Partly);
             firearm.Reload(taken, spec.MagazineSize);
-            Log.Info("Entity {} reloaded {} with {} rounds, {} left in bag", name, firearm.SpecId, taken, inventory.Amount(spec.Ammo));
+            Log.Info("Entity {} reloaded {} with {} rounds, {} left in bag", name, firearm.SpecId, taken, inventory.StackableAmount(spec.Ammo));
         }
 
         private void Hit(FirearmSpec spec)

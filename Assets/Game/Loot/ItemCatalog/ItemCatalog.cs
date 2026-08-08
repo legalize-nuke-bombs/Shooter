@@ -1,3 +1,4 @@
+using Shooter.Logging;
 using Unity.Collections;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace Shooter.Game.Loot
     [CreateAssetMenu(menuName = "Shooter/Item Catalog", fileName = "ItemCatalog")]
     public class ItemCatalog : Catalog<ItemSpec>
     {
+        private static readonly Journal Log = Logs.Here();
+
         public ItemSpec Spec(FixedString32Bytes id)
         {
             return Of(id);
@@ -23,7 +26,12 @@ namespace Shooter.Game.Loot
 
         public ItemSpec FindByPromptName(string promptName)
         {
-            return Find(item => item.PromptName == promptName);
+            ItemSpec found = Find(item => item.PromptName == promptName);
+
+            if (found != null && Find(item => item != found && item.PromptName == promptName) != null)
+                Log.Warn("Catalog {} holds several items under prompt name {}", name, promptName);
+
+            return found;
         }
     }
 }
