@@ -3,6 +3,7 @@ using Shooter.Game.Body;
 using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
+using Shooter.Game.Sweeping;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -14,6 +15,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Clock))]
     [RequireComponent(typeof(SleepCycle))]
     [RequireComponent(typeof(UniqueItemIdProvider))]
+    [RequireComponent(typeof(Sweeper))]
     public class Environment : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -43,6 +45,8 @@ namespace Shooter.Game
 
         public UniqueItemIdProvider ItemIds { get; private set; }
 
+        public Sweeper Sweeper { get; private set; }
+
         public Transform Spawn => spawn == null ? transform : spawn.transform;
 
         public GameObject Corpse => corpse;
@@ -66,6 +70,7 @@ namespace Shooter.Game
             Clock = GetComponent<Clock>();
             SleepCycle = GetComponent<SleepCycle>();
             ItemIds = GetComponent<UniqueItemIdProvider>();
+            Sweeper = GetComponent<Sweeper>();
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];
 
@@ -77,9 +82,11 @@ namespace Shooter.Game
             Current = this;
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
             if (Current == this) Current = null;
+
+            base.OnDestroy();
         }
 
         public override void OnNetworkSpawn()
@@ -89,6 +96,8 @@ namespace Shooter.Game
                 ServerConfig config = Config.Read().Server;
                 world.Value = new FixedString64Bytes(config.World);
                 version.Value = new FixedString32Bytes(Application.version);
+
+                Sweeper.enabled = true;
             }
 
             Log.Info("Environment is up: world {}, version {}, clock says {}", World, Version, Clock.DateTime());
@@ -96,6 +105,8 @@ namespace Shooter.Game
 
         public override void OnNetworkDespawn()
         {
+            Sweeper.enabled = false;
+
             Log.Info("Environment is down");
         }
     }

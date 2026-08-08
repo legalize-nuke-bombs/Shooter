@@ -1750,6 +1750,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8537724810945162158, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: useDespawn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8537724810945162158, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: despawnTime
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18343,6 +18351,10 @@ PrefabInstance:
     - target: {fileID: 2934016132358497645, guid: 872c1b546323d42fbb6dc742702c4f44, type: 3}
       propertyPath: beginningMinutes
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3402175736063904370, guid: 872c1b546323d42fbb6dc742702c4f44, type: 3}
+      propertyPath: interval
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 4938708927321481060, guid: 872c1b546323d42fbb6dc742702c4f44, type: 3}
       propertyPath: m_InScenePlaced

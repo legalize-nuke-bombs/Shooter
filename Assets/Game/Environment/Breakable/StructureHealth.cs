@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(AutoSweepable))]
+    [RequireComponent(typeof(Sweepable))]
     [RequireComponent(typeof(Speaker))]
-    public class StructureHealth : MonoBehaviour, ISweepable
+    public class StructureHealth : MonoBehaviour, ISweepingRule
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -41,9 +41,6 @@ namespace Shooter.Game
                 breakable.Broken();
         }
 
-        public bool CanBeSwept()
-        {
-            return broken && useDespawn && (Time.time - brokenAt >= despawnTime);
-        }
+        public bool Permits => broken && useDespawn && (Time.time - brokenAt >= despawnTime);
     }
 }

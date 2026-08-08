@@ -15,6 +15,11 @@ namespace Shooter.Game.Body
 
         private bool exhausted;
 
+        private void Awake()
+        {
+            enabled = false;
+        }
+
         public float Amount => amount.Value;
 
         public float MaxAmount => Mathf.Max(maxAmount, 1f);
@@ -29,8 +34,14 @@ namespace Shooter.Game.Body
                 return;
             }
 
+            enabled = true;
             amount.SetUpdateTraits(new NetworkVariableUpdateTraits { MinSecondsBetweenUpdates = 0.1f });
             amount.Value = MaxAmount;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            enabled = false;
         }
 
         public bool Sprint(float dt)
