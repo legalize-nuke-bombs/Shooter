@@ -17,3 +17,6 @@ MonoBehaviour:
   promptName: Currency
   stackable: 1
   equipable: 0
+  model: {fileID: 0}
+  icon: {fileID: 21300000, guid: c9a04e1b3e341cb4b89e5504595a1c34, type: 3}
+  cells: {x: 1, y: 1}

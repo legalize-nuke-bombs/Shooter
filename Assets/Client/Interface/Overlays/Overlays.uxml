@@ -37,6 +37,7 @@
             <ui:TextField name="talk-input" class="talk__input" />
             <ui:Label text="Enter — сказать, Esc — уйти" class="line talk__help" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:VisualElement name="notifications" class="notifications" picking-mode="Ignore" />
         <ui:VisualElement name="sleep" class="sleep" picking-mode="Ignore" />
         <ui:VisualElement name="versions" class="corner" picking-mode="Ignore">
             <ui:Label name="debug" class="line corner__line debug" picking-mode="Ignore" />

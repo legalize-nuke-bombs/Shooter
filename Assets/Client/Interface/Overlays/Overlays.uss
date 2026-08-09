@@ -337,3 +337,31 @@
     -unity-text-outline-width: 0.7px;
     -unity-text-outline-color: rgba(0, 0, 0, 0.9);
 }
+
+.notifications {
+    position: absolute;
+    right: 14px;
+    bottom: 56px;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+}
+
+.notification {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 4px;
+    padding: 4px 6px;
+    background-color: rgba(0, 0, 0, 0.55);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.notification__icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+}
+
+.notification__text {
+    font-size: 13px;
+}
