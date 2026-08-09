@@ -211,6 +211,8 @@ You have your own attitude towards every character, expressed by a number from 0
                     throw new LlmException("The story is still overflowing after the retelling tick");
                 }
 
+                Silent(presented);
+
                 return true;
             }
             catch (OperationCanceledException)
@@ -226,15 +228,18 @@ You have your own attitude towards every character, expressed by a number from 0
             }
             finally
             {
-                foreach (long ignored in presented)
-                {
-                    if (!pendingWanderers.Remove(ignored, out Action<string> answer)) continue;
-
-                    answer(null);
-                    Log.Info($"Entity {entityName} chose not to answer wanderer {ignored}");
-                }
-
                 gate.Release();
+            }
+        }
+
+        private void Silent(IReadOnlyList<long> presented)
+        {
+            foreach (long ignored in presented)
+            {
+                if (!pendingWanderers.Remove(ignored, out Action<string> answer)) continue;
+
+                answer(null);
+                Log.Info($"Entity {entityName} chose not to answer wanderer {ignored}");
             }
         }
 

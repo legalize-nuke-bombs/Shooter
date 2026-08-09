@@ -340,9 +340,9 @@
 
 .notifications {
     position: absolute;
-    right: 14px;
-    bottom: 56px;
-    flex-direction: column-reverse;
+    right: 6px;
+    top: 4px;
+    flex-direction: column;
     align-items: flex-end;
 }
 
@@ -352,8 +352,6 @@
     margin-top: 4px;
     padding: 4px 6px;
     background-color: rgba(0, 0, 0, 0.55);
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .notification__icon {
