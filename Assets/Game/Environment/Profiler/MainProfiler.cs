@@ -37,7 +37,7 @@ namespace Shooter.Game
                 string logLine = profiler?.LogLine();
                 if (logLine != null)
                 {
-                    sb.Append($"{profiler.GetType().Name} {logLine}");
+                    sb.AppendLine($"{profiler.GetType().Name} {logLine}");
                 }
             }
 
