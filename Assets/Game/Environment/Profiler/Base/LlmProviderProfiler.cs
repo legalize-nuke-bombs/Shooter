@@ -1,4 +1,4 @@
-﻿namespace Shooter.Game.Base
+﻿namespace Shooter.Game.Profiling
 {
     public class LlmProviderProfiler : BaseProfiler
     {

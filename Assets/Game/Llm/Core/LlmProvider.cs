@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
-using Shooter.Game.Base;
+using Shooter.Game.Profiling;
 using Shooter.Game.Llm.OpenAi;
 using Shooter.Logging;
 

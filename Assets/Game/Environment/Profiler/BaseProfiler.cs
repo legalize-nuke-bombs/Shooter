@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Shooter.Game
+namespace Shooter.Game.Profiling
 {
     public abstract class BaseProfiler : MonoBehaviour
     {

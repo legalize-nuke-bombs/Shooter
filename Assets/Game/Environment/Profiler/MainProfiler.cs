@@ -4,7 +4,7 @@ using System.Text;
 using Shooter.Logging;
 using UnityEngine;
 
-namespace Shooter.Game
+namespace Shooter.Game.Profiling
 {
     public class MainProfiler : MonoBehaviour
     {
