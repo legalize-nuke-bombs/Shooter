@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: Bestiary
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Knowledge.KnowledgeSpec
   id: 
-  content: "Alien - a creature that looks like an alien.\nAngel - a creature with skulls on its back and tentacles resembling wings.\nLibrarian - a creature with a book instead of a head.\nGhoul\nMND - a strange womanlike forest figure\nScavenger - a creature that feeds on corpses.\nTailor - a creature with sewn-shut eyes.\nZombie"
-  type: 0
+  content: 

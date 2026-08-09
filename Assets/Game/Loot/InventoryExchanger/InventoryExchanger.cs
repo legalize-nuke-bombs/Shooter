@@ -9,10 +9,10 @@ namespace Shooter.Game.Loot
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private float exchangeRadius = 5f;
+        [SerializeField] private float exchangeRadius = 10f;
         public float ExchangeRadius => exchangeRadius;
 
-        private readonly Collider[] around = new Collider[512];
+        private readonly Collider[] around = new Collider[1024];
 
         private Inventory inventory;
 
