@@ -15,7 +15,7 @@ namespace Shooter.Game.Speech
             llm = GetComponent<Llm.Llm>();
         }
 
-        protected override void RequestAnswer(ulong clientId, string message, Action<string> onAnswer)
+        protected override void RequestAnswer(long wandererId, string message, Action<string> onAnswer)
         {
             if (llm == null)
             {
@@ -24,7 +24,7 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            llm.Listen((long)clientId, message, onAnswer);
+            llm.Listen(wandererId, message, onAnswer);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Shooter.Game.Speech
     {
         private const string Refusal = "Not now.";
 
-        protected override void RequestAnswer(ulong clientId, string message, Action<string> onAnswer)
+        protected override void RequestAnswer(long wandererId, string message, Action<string> onAnswer)
         {
             onAnswer(Refusal);
         }

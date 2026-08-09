@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Body.Sleeping;
+using Shooter.Game.Identity;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -53,6 +54,12 @@ namespace Shooter.Game.Speech
                 return;
             }
 
+            if (!user.TryGetComponent(out PersistentId _))
+            {
+                Log.Warn($"Entity {name} refused to talk to {user.name}: the speaker has no persistent id");
+                return;
+            }
+
             Conversation conversation = Remember(user);
             conversation.Reopen(user);
             mouth.Open(this, conversation.Messages);
@@ -91,7 +98,7 @@ namespace Shooter.Game.Speech
                 conversation.Close();
         }
 
-        protected abstract void RequestAnswer(ulong clientId, string message, Action<string> onAnswer);
+        protected abstract void RequestAnswer(long wandererId, string message, Action<string> onAnswer);
 
         private void DeliverAnswer(ulong clientId, string content)
         {
@@ -120,11 +127,17 @@ namespace Shooter.Game.Speech
                 Message last = entry.Value.Last();
                 if (last == null || last.Author == MessageAuthor.Talker) continue;
 
+                if (!entry.Value.User.TryGetComponent(out PersistentId speaker))
+                {
+                    Log.Warn($"Entity {name} can not answer {entry.Value.User.name}: the speaker has no persistent id");
+                    continue;
+                }
+
                 thinking.Add(entry.Key);
 
                 try
                 {
-                    RequestAnswer(entry.Key, last.Content, (answer) =>
+                    RequestAnswer(speaker.Value, last.Content, (answer) =>
                     {
                         DeliverAnswer(entry.Key, answer);
                     });
