@@ -100,79 +100,36 @@ You have your own attitude towards every character, expressed by a number from 0
 
         private void Begin()
         {
-            var start = new StringBuilder();
-
-            if (!string.IsNullOrEmpty(character))
-            {
-                start.Append("WHO YOU ARE:\n").Append(character.TrimEnd('\n')).Append('\n');
-            }
-
-            string knowledge = Knowledge();
-            if (knowledge.Length > 0)
-            {
-                start.Append("WHAT YOU KNOW AND REMEMBER:\n").Append(knowledge);
-            }
-
+            string start = (character + "\n" + Knowledge()).Trim('\n');
             if (start.Length == 0) return;
 
-            Append(new LlmMessage { Role = LlmRole.User, Content = start.ToString().TrimEnd('\n') });
+            history.Append(new LlmMessage { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + start });
         }
 
 
 
 
 
-        private readonly List<LlmMessage> history = new List<LlmMessage>();
-        private int historySize;
-        [SerializeField] private int historyMaxSize = 100000;
-
-        private void Append(LlmMessage message)
-        {
-            history.Add(message);
-            historySize += Size(message);
-        }
-
-        private static int Size(LlmMessage message)
-        {
-            int size = (message.Content?.Length ?? 0) + 20;
-
-            if (message.ToolCalls != null)
-            {
-                foreach (LlmToolCall call in message.ToolCalls)
-                {
-                    size += (call.Name?.Length ?? 0) + (call.Arguments?.Length ?? 0) + 20;
-                }
-            }
-
-            return size;
-        }
-
-
-
-
-
-        private bool unseenMail;
+        private readonly LlmHistory history = new LlmHistory();
+        [SerializeField] private int historyMaxSize = 30000;
 
         public void Notice(string line)
         {
-            Append(new LlmMessage { Role = LlmRole.User, Content = line });
-            unseenMail = true;
+            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line });
         }
 
 
 
 
 
-        [SerializeField] private float wandererPatience = 60f;
-        private readonly Dictionary<long, (Action<string> answer, float since)> pendingWanderers =
-            new Dictionary<long, (Action<string>, float)>();
+        private readonly Dictionary<long, Action<string>> pendingWanderers = new Dictionary<long, Action<string>>();
 
         public void Listen(long clientId, string message, Action<string> onAnswer)
         {
             long wandererId = WandererId((ulong)clientId);
 
-            pendingWanderers[wandererId] = (onAnswer, UnityEngine.Time.time);
-            Append(new LlmMessage { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
+            pendingWanderers[wandererId] = onAnswer;
+            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
         }
 
         private long WandererId(ulong clientId)
@@ -211,9 +168,8 @@ You have your own attitude towards every character, expressed by a number from 0
         {
             return new LlmStatus()
             {
-                PendingConversations = pendingWanderers.Count > 0,
-                PendingCompact = historySize >= historyMaxSize,
-                PendingMail = unseenMail
+                PendingCompact = history.Size >= historyMaxSize,
+                PendingMail = history.Unseen
             };
         }
 
@@ -233,7 +189,7 @@ You have your own attitude towards every character, expressed by a number from 0
 
             try
             {
-                if (historySize >= historyMaxSize)
+                if (history.Size >= historyMaxSize)
                 {
                     await CompactTick();
                 }
@@ -268,27 +224,35 @@ You have your own attitude towards every character, expressed by a number from 0
         {
             if (history.Count == 0) Begin();
 
-            unseenMail = false;
-            Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
+            history.Seen();
+            history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
+
+            List<long> presented = pendingWanderers.Keys.ToList();
 
             LlmConfig config = Config.Read().Server.LlmBase;
             List<LlmTool> tools = LiveTools();
 
-            Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {historySize} chars");
+            Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
 
             for (int round = 0; round < maxToolRounds; round++)
             {
-                LlmTurn turn = await LlmProvider.Request(config, $"{entityName}-live", Persona, history, tools, life.Token);
+                LlmTurn turn = await LlmProvider.Request(config, $"{entityName}-live", Persona, history.Messages, tools, life.Token);
                 life.Token.ThrowIfCancellationRequested();
 
-                Append(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
+                history.Append(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
 
                 if (!turn.CallsTools) break;
 
                 foreach (LlmToolCall call in turn.ToolCalls)
                 {
-                    Append(new LlmMessage { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
+                    history.Append(new LlmMessage { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
                 }
+            }
+
+            foreach (long ignored in presented.Where(pendingWanderers.ContainsKey))
+            {
+                pendingWanderers.Remove(ignored);
+                Log.Info($"Entity {entityName} chose not to answer wanderer {ignored}");
             }
         }
 
@@ -296,14 +260,6 @@ You have your own attitude towards every character, expressed by a number from 0
         {
             var seen = new StringBuilder();
             seen.Append('[').Append(Time()).Append(']');
-
-            foreach (long walkedAway in pendingWanderers
-                         .Where(waiting => UnityEngine.Time.time - waiting.Value.since > wandererPatience)
-                         .Select(waiting => waiting.Key).ToList())
-            {
-                pendingWanderers.Remove(walkedAway);
-                seen.Append('\n').Append($"Wanderer [ID {walkedAway}] left without waiting for your answer.");
-            }
 
             if (pendingWanderers.Count > 0)
             {
@@ -326,27 +282,27 @@ You have your own attitude towards every character, expressed by a number from 0
                 new LlmTool(
                     "look_around",
                     "Look around: your own state and everything visible near you right now.",
-                    @"{""type"":""object"",""properties"":{}}",
+                    LlmTool.Schema(),
                     _ => WorldState()),
                 new LlmTool(
                     "send_message",
                     "Send a message to other residents by their ids. Write in English. Message a resident only to pass or ask something new: residents see their own surroundings themselves.",
-                    @"{""type"":""object"",""properties"":{""target_ids"":{""type"":""array"",""items"":{""type"":""integer""}},""content"":{""type"":""string""}},""required"":[""target_ids"",""content""]}",
+                    LlmTool.Schema(("target_ids", "integer[]", null), ("content", "string", null)),
                     SendMessage),
                 new LlmTool(
                     "update_relation",
                     "Change your attitude to a character (0 enemy, 100 friend).",
-                    @"{""type"":""object"",""properties"":{""target_id"":{""type"":""integer""},""amount"":{""type"":""integer""},""reason"":{""type"":""string""}},""required"":[""target_id"",""amount"",""reason""]}",
+                    LlmTool.Schema(("target_id", "integer", null), ("amount", "integer", null), ("reason", "string", null)),
                     UpdateRelation),
                 new LlmTool(
                     "give_stackable",
                     $"Give some of your stackable items to a character within {inventoryExchanger.ExchangeRadius} meters. Always tell the receiver what you gave.",
-                    @"{""type"":""object"",""properties"":{""target_id"":{""type"":""integer""},""item"":{""type"":""string"",""description"":""Exact item name from your bag""},""amount"":{""type"":""integer""}},""required"":[""target_id"",""item"",""amount""]}",
+                    LlmTool.Schema(("target_id", "integer", null), ("item", "string", "Exact item name from your bag"), ("amount", "integer", null)),
                     GiveStackable),
                 new LlmTool(
                     "give_unique",
                     $"Give one of your unique items, by its slot number, to a character within {inventoryExchanger.ExchangeRadius} meters. Always tell the receiver what you gave.",
-                    @"{""type"":""object"",""properties"":{""target_id"":{""type"":""integer""},""slot"":{""type"":""integer""}},""required"":[""target_id"",""slot""]}",
+                    LlmTool.Schema(("target_id", "integer", null), ("slot", "integer", null)),
                     GiveUnique)
             };
 
@@ -355,7 +311,7 @@ You have your own attitude towards every character, expressed by a number from 0
                 tools.Add(new LlmTool(
                     "say_to_wanderer",
                     "Answer a wanderer who is talking to you. Answer in the language the wanderer speaks.",
-                    @"{""type"":""object"",""properties"":{""wanderer_id"":{""type"":""integer""},""text"":{""type"":""string""}},""required"":[""wanderer_id"",""text""]}",
+                    LlmTool.Schema(("wanderer_id", "integer", null), ("text", "string", null)),
                     SayToWanderer));
             }
 
@@ -479,12 +435,12 @@ You have your own attitude towards every character, expressed by a number from 0
             string text = arguments["text"]?.ToString();
             if (string.IsNullOrEmpty(text)) return "Nothing to say";
 
-            if (!pendingWanderers.Remove(wandererId, out (Action<string> answer, float since) waiting))
+            if (!pendingWanderers.Remove(wandererId, out Action<string> answer))
             {
                 return $"No wanderer {wandererId} is waiting for your answer";
             }
 
-            waiting.answer(text);
+            answer(text);
             return $"Said to {wandererId}";
         }
 
@@ -501,7 +457,7 @@ You have your own attitude towards every character, expressed by a number from 0
                 new LlmTool(
                     "rewrite_summary",
                     "Replace the story of your life so far with its full retelling.",
-                    @"{""type"":""object"",""properties"":{""text"":{""type"":""string""}},""required"":[""text""]}",
+                    LlmTool.Schema(("text", "string", null)),
                     arguments =>
                     {
                         summary = arguments["text"]?.ToString();
@@ -511,14 +467,14 @@ You have your own attitude towards every character, expressed by a number from 0
 
             int snapshot = history.Count;
 
-            var compacted = new List<LlmMessage>(history);
+            var compacted = new List<LlmMessage>(history.Messages);
             compacted.Add(new LlmMessage
             {
                 Role = LlmRole.User,
                 Content = "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of everything above: the retelling will replace the story, and anything you leave out is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length."
             });
 
-            Log.Info($"Entity {entityName} is compacting {snapshot} history messages / {historySize} chars");
+            Log.Info($"Entity {entityName} is compacting {snapshot} history messages / {history.Size} chars");
 
             LlmTurn turn = await LlmProvider.Request(Config.Read().Server.LlmMax, $"{entityName}-compact", Persona,
                 compacted, tools, life.Token);
@@ -534,14 +490,9 @@ You have your own attitude towards every character, expressed by a number from 0
                 throw new LlmException("No summary for the pending compact");
             }
 
-            List<LlmMessage> fresh = history.Skip(snapshot).ToList();
-            history.Clear();
-            historySize = 0;
+            history.Retell("THE STORY OF YOUR LIFE SO FAR:\n" + summary, snapshot);
 
-            Append(new LlmMessage { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + summary });
-            foreach (LlmMessage message in fresh) Append(message);
-
-            Log.Info($"Entity {entityName} compacted its history down to {historySize} chars");
+            Log.Info($"Entity {entityName} compacted its history down to {history.Size} chars");
         }
 
 
