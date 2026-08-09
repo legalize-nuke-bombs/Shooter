@@ -13,7 +13,6 @@ namespace Shooter.Game.Llm.Tools
         public abstract JObject Parameters { get; }
 
         public virtual bool Available => true;
-        public virtual bool Compacting => false;
         public virtual LlmLevel Level => LlmLevel.Base;
 
         public abstract string Execute(string arguments);

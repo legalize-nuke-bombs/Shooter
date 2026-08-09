@@ -187,14 +187,49 @@ You have your own attitude towards every character, expressed by a number from 0
 
             try
             {
-                if (history.Overflowing)
+                bool retelling = history.Overflowing;
+
+                if (history.Count == 0) Begin();
+
+                history.Seen();
+                history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
+                history.Snapshot();
+
+                List<long> presented = pendingWanderers.Keys.ToList();
+
+                List<LlmTool> selected = abilities.Where(ability => ability.Available).ToList();
+                LlmConfig config = Fitting(selected);
+                List<ILlmTool> tools = selected.Cast<ILlmTool>().ToList();
+
+                Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
+
+                for (int round = 0; round < maxToolRounds; round++)
                 {
-                    await CompactTick();
+                    LlmTurn turn = await LlmProvider.Request(config, $"{entityName}-{(retelling ? "compact" : "live")}",
+                        Persona, history.Messages, tools, life.Token);
+                    life.Token.ThrowIfCancellationRequested();
+
+                    history.Append(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
+
+                    if (!turn.CallsTools) break;
+
+                    foreach (LlmToolCall call in turn.ToolCalls)
+                    {
+                        history.Append(new LlmMessage { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
+                    }
                 }
-                else
+
+                foreach (long ignored in presented.Where(pendingWanderers.ContainsKey))
                 {
-                    await LiveTick();
+                    pendingWanderers.Remove(ignored);
+                    Log.Info($"Entity {entityName} chose not to answer wanderer {ignored}");
                 }
+
+                if (retelling && history.Overflowing)
+                {
+                    throw new LlmException("The story is still overflowing after the retelling tick");
+                }
+
                 return true;
             }
             catch (OperationCanceledException)
@@ -214,46 +249,8 @@ You have your own attitude towards every character, expressed by a number from 0
             }
         }
 
-
-
-
-
-        private async Task LiveTick()
-        {
-            if (history.Count == 0) Begin();
-
-            history.Seen();
-            history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
-
-            List<long> presented = pendingWanderers.Keys.ToList();
-
-            List<LlmTool> selected = abilities.Where(ability => ability.Available && !ability.Compacting).ToList();
-            LlmConfig config = Fitting(selected);
-            List<ILlmTool> tools = selected.Cast<ILlmTool>().ToList();
-
-            Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
-
-            for (int round = 0; round < maxToolRounds; round++)
-            {
-                LlmTurn turn = await LlmProvider.Request(config, $"{entityName}-live", Persona, history.Messages, tools, life.Token);
-                life.Token.ThrowIfCancellationRequested();
-
-                history.Append(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
-
-                if (!turn.CallsTools) break;
-
-                foreach (LlmToolCall call in turn.ToolCalls)
-                {
-                    history.Append(new LlmMessage { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
-                }
-            }
-
-            foreach (long ignored in presented.Where(pendingWanderers.ContainsKey))
-            {
-                pendingWanderers.Remove(ignored);
-                Log.Info($"Entity {entityName} chose not to answer wanderer {ignored}");
-            }
-        }
+        private const string RetellingDemand =
+            "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of your whole story: the call itself will remain as the only story of your life, everything older will be erased, and anything you leave out of the retelling is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length.";
 
         private string Observation()
         {
@@ -265,6 +262,11 @@ You have your own attitude towards every character, expressed by a number from 0
                 seen.Append('\n')
                     .Append("Waiting for your say_to_wanderer answer: ")
                     .Append(string.Join(", ", pendingWanderers.Keys.Select(id => $"[ID {id}]")));
+            }
+
+            if (history.Overflowing)
+            {
+                seen.Append('\n').Append(RetellingDemand);
             }
 
             return seen.ToString();
@@ -291,44 +293,6 @@ You have your own attitude towards every character, expressed by a number from 0
                 Log.Warn($"Entity {entityName} broke the tool {call.Name} {call.Arguments}: {e.Message}");
                 return $"The action failed: {e.Message}";
             }
-        }
-
-
-
-
-
-        private async Task CompactTick()
-        {
-            List<LlmTool> selected = abilities.Where(ability => ability.Available && ability.Compacting).ToList();
-            LlmConfig config = Fitting(selected);
-            List<ILlmTool> tools = selected.Cast<ILlmTool>().ToList();
-
-            history.Snapshot();
-
-            var compacted = new List<LlmMessage>(history.Messages);
-            compacted.Add(new LlmMessage
-            {
-                Role = LlmRole.User,
-                Content = "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of everything above: the retelling will replace the story, and anything you leave out is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length."
-            });
-
-            Log.Info($"Entity {entityName} is compacting {compacted.Count - 1} history messages / {history.Size} chars");
-
-            LlmTurn turn = await LlmProvider.Request(config, $"{entityName}-compact", Persona,
-                compacted, tools, life.Token);
-            life.Token.ThrowIfCancellationRequested();
-
-            if (turn.CallsTools)
-            {
-                foreach (LlmToolCall call in turn.ToolCalls) Execute(tools, call);
-            }
-
-            if (history.Overflowing)
-            {
-                throw new LlmException("The story is still overflowing after the compact tick");
-            }
-
-            Log.Info($"Entity {entityName} compacted its history down to {history.Size} chars");
         }
 
 

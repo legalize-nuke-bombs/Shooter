@@ -39,14 +39,13 @@ namespace Shooter.Game.Llm
             snapshot = messages.Count;
         }
 
-        public void Retell(string story)
+        public void Forget()
         {
             List<LlmMessage> fresh = messages.Skip(snapshot).ToList();
 
             messages.Clear();
             Size = 0;
 
-            Append(new LlmMessage { Role = LlmRole.User, Content = story });
             foreach (LlmMessage message in fresh) Append(message);
 
             snapshot = messages.Count;

@@ -15,17 +15,16 @@ namespace Shooter.Game.Llm.Tools
         public override string Name => "rewrite_summary";
 
         public override string Description =>
-            "Replace the story of your life so far with its full retelling.";
+            "Retell the story of your life. Your call replaces everything older: its text remains as the only story.";
 
         public override bool Available => history.Overflowing;
-        public override bool Compacting => true;
         public override LlmLevel Level => LlmLevel.Max;
 
         protected override string Execute(RewriteSummaryArguments arguments)
         {
             if (string.IsNullOrEmpty(arguments.Text)) return "Nothing to retell";
 
-            history.Retell("THE STORY OF YOUR LIFE SO FAR:\n" + arguments.Text);
+            history.Forget();
             return "Rewritten";
         }
     }
