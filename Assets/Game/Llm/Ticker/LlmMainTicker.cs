@@ -36,11 +36,7 @@ namespace Shooter.Game.Llm.Ticker
                 Log.Warn($"Entity {entityName} does not have any ticker!");
             }
 
-            profiler = Environment.Current.Profiler.GetComponent<LlmTickProfiler>();
-            if (profiler == null)
-            {
-                Log.Error("Failed to find LlmTickProfiler!");
-            }
+            profiler = Environment.Current.Profiler?.Of<LlmTickProfiler>();
         }
 
         private Type TickRequired()

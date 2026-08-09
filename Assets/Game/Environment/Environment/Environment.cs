@@ -23,8 +23,8 @@ namespace Shooter.Game
 
         public static Environment Current { get; private set; }
 
-        [SerializeField] private GameObject profiler;
-        public GameObject Profiler => profiler;
+        [SerializeField] private MainProfiler profiler;
+        public MainProfiler Profiler => profiler;
 
         [SerializeField] private GameObject corpse;
 
@@ -77,6 +77,9 @@ namespace Shooter.Game
             Sweeper = GetComponent<Sweeper>();
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];
+
+            if (profiler == null)
+                Log.Warn("World has no profiler, nothing will be measured");
 
             if (spawn == null)
                 Log.Warn($"World has no main spawn point, everyone will appear at {transform.position}");
