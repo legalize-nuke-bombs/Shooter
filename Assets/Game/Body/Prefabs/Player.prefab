@@ -523,6 +523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee066fcf9da521048b12ac4b6024caf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Notifying.PlayerNotificationRecipient
+  sound: {fileID: 11400000, guid: 44e6e460e1cb44d98f376b7e174c5e4d, type: 2}
   ShowTopMostFoldoutHeaderGroup: 1
 --- !u!4 &8027223328707039298 stripped
 Transform:
