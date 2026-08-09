@@ -95,20 +95,28 @@ namespace Shooter.Client.Interface.Overlays
                 line.Add(icon);
             }
 
-            var text = new Label(Told(given, spec));
-            text.AddToClassList("line");
-            text.AddToClassList("notification__text");
-            line.Add(text);
+            var body = new VisualElement();
+            body.AddToClassList("notification__body");
+
+            var title = new Label(Told(given, spec));
+            title.AddToClassList("line");
+            title.AddToClassList("notification__title");
+            body.Add(title);
+
+            var from = new Label($"от {Named(given.ActorId)}");
+            from.AddToClassList("notification__from");
+            body.Add(from);
+
+            line.Add(body);
 
             return line;
         }
 
-        private string Told(ItemsGivenNotification given, ItemSpec spec)
+        private static string Told(ItemsGivenNotification given, ItemSpec spec)
         {
             string title = spec == null ? given.ItemSpecId : spec.Title;
-            string amount = spec != null && !spec.Stackable ? string.Empty : $" ×{given.Amount}";
 
-            return $"{Named(given.ActorId)} → {title}{amount}";
+            return spec != null && !spec.Stackable ? title : $"{title} ×{given.Amount}";
         }
 
         private string Named(long actorId)

@@ -350,16 +350,28 @@
     flex-direction: row;
     align-items: center;
     margin-top: 4px;
-    padding: 4px 6px;
-    background-color: rgba(0, 0, 0, 0.55);
+    padding: 5px 8px 5px 6px;
+    background-color: rgba(0, 0, 0, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgba(214, 198, 160, 0.45);
 }
 
 .notification__icon {
-    width: 28px;
-    height: 28px;
-    margin-right: 6px;
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
 }
 
-.notification__text {
+.notification__body {
+    flex-direction: column;
+}
+
+.notification__title {
     font-size: 13px;
+}
+
+.notification__from {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.45);
+    -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
