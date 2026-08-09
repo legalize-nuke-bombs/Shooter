@@ -23,7 +23,7 @@
         <ui:VisualElement name="inventory-screen" class="screen">
             <ui:VisualElement class="inventory">
                 <ui:VisualElement class="inventory__money" picking-mode="Ignore">
-                    <ui:Label text="Деньги" class="line inventory__caption" picking-mode="Ignore" />
+                    <ui:Label text="Рубли" class="line inventory__caption" picking-mode="Ignore" />
                     <ui:Label name="inventory-coins" text="0" class="line inventory__coins" picking-mode="Ignore" />
                 </ui:VisualElement>
                 <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands" />
