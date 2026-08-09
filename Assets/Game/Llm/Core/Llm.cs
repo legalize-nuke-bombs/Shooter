@@ -170,6 +170,8 @@ You have your own attitude towards every character, expressed by a number from 0
                 return false;
             }
 
+            var presented = new List<long>();
+
             try
             {
                 bool retelling = history.Overflowing;
@@ -180,7 +182,7 @@ You have your own attitude towards every character, expressed by a number from 0
                 history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
                 history.Snapshot();
 
-                List<long> presented = pendingWanderers.Keys.ToList();
+                presented.AddRange(pendingWanderers.Keys);
 
                 List<LlmTool> selected = abilities.Where(ability => ability.Available).ToList();
                 LlmConfig config = Fitting(selected);
@@ -204,12 +206,6 @@ You have your own attitude towards every character, expressed by a number from 0
                     }
                 }
 
-                foreach (long ignored in presented.Where(pendingWanderers.ContainsKey))
-                {
-                    pendingWanderers.Remove(ignored);
-                    Log.Info($"Entity {entityName} chose not to answer wanderer {ignored}");
-                }
-
                 if (retelling && history.Overflowing)
                 {
                     throw new LlmException("The story is still overflowing after the retelling tick");
@@ -230,6 +226,14 @@ You have your own attitude towards every character, expressed by a number from 0
             }
             finally
             {
+                foreach (long ignored in presented)
+                {
+                    if (!pendingWanderers.Remove(ignored, out Action<string> answer)) continue;
+
+                    answer(null);
+                    Log.Info($"Entity {entityName} chose not to answer wanderer {ignored}");
+                }
+
                 gate.Release();
             }
         }
