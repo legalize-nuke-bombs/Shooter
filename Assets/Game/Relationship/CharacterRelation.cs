@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
+using Shooter.Game.Body.Notifying;
+using Shooter.Game.Identity;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -10,6 +12,13 @@ namespace Shooter.Game.Relationship
     public class CharacterRelation : MonoBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
+
+        private PersistentId ownId;
+
+        private void Awake()
+        {
+            ownId = GetComponent<PersistentId>();
+        }
 
         private readonly Dictionary<long, int> amounts = new Dictionary<long, int>();
         [SerializeField] [Range(0, 100)] private int defaultAmount = 50;
@@ -37,6 +46,20 @@ namespace Shooter.Game.Relationship
             }
 
             amounts[characterId] = amount;
+
+            Notify(characterId, currentAmount, amount);
+        }
+
+        private void Notify(long characterId, int before, int after)
+        {
+            if (ownId == null) return;
+
+            PersistentId target = Environment.Current.PersistentIds.Of(characterId);
+            if (target == null) return;
+
+            if (!target.TryGetComponent(out MainNotificationRecipient recipient)) return;
+
+            recipient.Receive(new RelationChangedNotification { ActorId = ownId.Value, Before = before, After = after });
         }
 
         public void DecreaseAmount(long characterId, int amount, string reason)

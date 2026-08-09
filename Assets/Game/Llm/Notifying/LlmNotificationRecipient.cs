@@ -36,6 +36,7 @@ namespace Shooter.Game.Llm.Notifying
             {
                 ItemsGivenNotification given => $"Character {given.ActorId} gave you {given.ItemSpecId} x {given.Amount}",
                 MailNotification mail => $"Mail from {mail.SenderId}: {mail.Content}",
+                RelationChangedNotification changed => $"Character {changed.ActorId} changed their attitude towards you: {changed.Before} -> {changed.After}",
                 _ => null
             };
         }
