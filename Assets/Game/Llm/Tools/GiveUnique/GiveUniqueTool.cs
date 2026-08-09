@@ -17,7 +17,7 @@ namespace Shooter.Game.Llm.Tools
         public override string Name => "give_unique";
 
         public override string Description =>
-            $"Give one of your unique items, by its slot number, to a character within {inventoryExchanger.ExchangeRadius} meters. Always tell the receiver what you gave.";
+            $"Give one of your unique items, by its slot number, to a character within {inventoryExchanger.ExchangeRadius} meters.";
 
         protected override string Execute(GiveUniqueArguments arguments)
         {
