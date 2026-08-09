@@ -25,7 +25,7 @@ namespace Shooter.Game.Llm.Tools
         public override string Name => "send_message";
 
         public override string Description =>
-            "Send a message to other residents by their ids. Write in English. Message a resident only to pass or ask something new: residents see their own surroundings themselves.";
+            "Send a message to other residents by their ids. Write in English. Message a resident to pass something new.";
 
         protected override string Execute(SendMessageArguments arguments)
         {
