@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using Shooter.Game.Base;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -30,8 +31,21 @@ namespace Shooter.Game.Llm.Tools
         private JObject parameters;
         public override JObject Parameters => parameters ??= LlmSchema.Of(typeof(TArguments));
 
+        private LlmToolProfiler profiler;
+
+        protected virtual void Awake()
+        {
+            profiler = Environment.Current.Profiler.GetComponent<LlmToolProfiler>();
+            if (profiler == null)
+            {
+                Log.Error("Failed to find LlmToolProfiler!");
+            }
+        }
+
         public override string Execute(string arguments)
         {
+            profiler?.RegisterTool(GetType().Name);
+
             var parsed = JsonConvert.DeserializeObject<TArguments>(
                 string.IsNullOrEmpty(arguments) ? "{}" : arguments, Settings);
 

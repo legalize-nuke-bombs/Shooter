@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Shooter.Game.Base;
 using Shooter.Game.Llm.Ticker.Children;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -17,20 +16,30 @@ namespace Shooter.Game.Llm.Ticker
         private NetworkObject netObject;
         private string entityName;
         private LlmChildTicker[] tickers;
+        private LlmTickProfiler profiler;
 
         private void Awake()
         {
             llm = GetComponent<Llm>();
+
             netObject = GetComponent<NetworkObject>();
-            entityName = name;
             if (netObject == null)
             {
                 Log.Warn($"Entity {entityName} has no NetworkObject, its llm will never tick");
             }
+
+            entityName = name;
+
             tickers = GetComponents<LlmChildTicker>();
             if (tickers.Length == 0)
             {
                 Log.Warn($"Entity {entityName} does not have any ticker!");
+            }
+
+            profiler = Environment.Current.Profiler.GetComponent<LlmTickProfiler>();
+            if (profiler == null)
+            {
+                Log.Error("Failed to find LlmTickProfiler!");
             }
         }
 
@@ -49,9 +58,7 @@ namespace Shooter.Game.Llm.Ticker
 
         private void RegisterTick(Type type)
         {
-            TicksByChildren.TryAdd(type, 0);
-            TicksByChildren[type]++;
-            ticksTotal++;
+            profiler?.RegisterTick(type.Name);
 
             foreach (LlmChildTicker ticker in tickers)
             {
@@ -71,7 +78,6 @@ namespace Shooter.Game.Llm.Ticker
             {
                 Tick(type);
             }
-            HandleLogging();
         }
 
         private async void Tick(Type type)
@@ -89,40 +95,6 @@ namespace Shooter.Game.Llm.Ticker
             {
                 Log.Error($"Entity {entityName} failed to execute LLM Tick: {ex.Message}");
             }
-        }
-
-        private static readonly Dictionary<Type, long> TicksByChildren = new Dictionary<Type, long>();
-        private static long ticksTotal;
-        private static float nextLogAt;
-        [SerializeField] private float loggingInterval = 30f;
-
-        private void HandleLogging()
-        {
-            if (Time.time < nextLogAt) return;
-
-            nextLogAt = Time.time + loggingInterval;
-            LogStatistics();
-        }
-
-        private static void LogStatistics()
-        {
-            var sb = new StringBuilder();
-            sb.Append("Llm tick totals: ").Append(ticksTotal);
-
-            if (ticksTotal > 0)
-            {
-                sb.Append(" (");
-                bool first = true;
-                foreach (var kvp in TicksByChildren)
-                {
-                    if (!first) sb.Append(", ");
-                    sb.Append(kvp.Key.Name).Append(' ').Append(kvp.Value);
-                    first = false;
-                }
-                sb.Append(')');
-            }
-
-            Log.Info(sb.ToString());
         }
     }
 }

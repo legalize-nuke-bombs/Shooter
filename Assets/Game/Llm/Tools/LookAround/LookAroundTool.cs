@@ -10,8 +10,9 @@ namespace Shooter.Game.Llm.Tools
         private Digester digester;
         private WorldDigester worldDigester;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             digester = GetComponent<Digester>();
             worldDigester = GetComponent<WorldDigester>();
         }

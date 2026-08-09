@@ -7,8 +7,9 @@ namespace Shooter.Game.Llm.Tools
     {
         private LlmHistory history;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             history = GetComponent<LlmHistory>();
         }
 
