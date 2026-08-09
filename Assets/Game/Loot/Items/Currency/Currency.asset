@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Currency
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.ItemSpec
   id: coin
-  title: "\u0414\u0435\u043D\u044C\u0433\u0438"
-  promptName: Currency
+  title: "\u0420\u0443\u0431\u043B\u0438"
+  promptName: rubles
   stackable: 1
   equipable: 0
   model: {fileID: 0}
