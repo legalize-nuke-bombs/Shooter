@@ -6,6 +6,7 @@ using Shooter.Game.Body.Notifying;
 using Shooter.Game.Identity;
 using Shooter.Game.Loot;
 using Shooter.Logging;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
@@ -75,6 +76,7 @@ namespace Shooter.Client.Interface.Overlays
             return notification switch
             {
                 ItemsGivenNotification given => Given(given),
+                RelationChangedNotification changed => Changed(changed),
                 _ => null
             };
         }
@@ -84,26 +86,36 @@ namespace Shooter.Client.Interface.Overlays
             ItemCatalog catalog = Environment.Current == null ? null : Environment.Current.Items;
             ItemSpec spec = catalog == null ? null : catalog.Spec(given.ItemSpecId);
 
+            return Line(spec == null ? null : spec.Icon, Told(given, spec), given.ActorId);
+        }
+
+        private VisualElement Changed(RelationChangedNotification changed)
+        {
+            return Line(null, changed.After > changed.Before ? "Отношение улучшилось" : "Отношение ухудшилось", changed.ActorId);
+        }
+
+        private VisualElement Line(Sprite icon, string title, long actorId)
+        {
             var line = new VisualElement();
             line.AddToClassList("notification");
 
-            if (spec != null && spec.Icon != null)
+            if (icon != null)
             {
-                var icon = new VisualElement();
-                icon.AddToClassList("notification__icon");
-                icon.style.backgroundImage = Background.FromSprite(spec.Icon);
-                line.Add(icon);
+                var image = new VisualElement();
+                image.AddToClassList("notification__icon");
+                image.style.backgroundImage = Background.FromSprite(icon);
+                line.Add(image);
             }
 
             var body = new VisualElement();
             body.AddToClassList("notification__body");
 
-            var title = new Label(Told(given, spec));
-            title.AddToClassList("line");
-            title.AddToClassList("notification__title");
-            body.Add(title);
+            var caption = new Label(title);
+            caption.AddToClassList("line");
+            caption.AddToClassList("notification__title");
+            body.Add(caption);
 
-            var from = new Label($"от {Named(given.ActorId)}");
+            var from = new Label($"от {Named(actorId)}");
             from.AddToClassList("notification__from");
             body.Add(from);
 
