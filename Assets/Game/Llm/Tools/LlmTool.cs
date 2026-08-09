@@ -35,11 +35,7 @@ namespace Shooter.Game.Llm.Tools
 
         protected virtual void Awake()
         {
-            profiler = Environment.Current.Profiler.GetComponent<LlmToolProfiler>();
-            if (profiler == null)
-            {
-                Log.Error("Failed to find LlmToolProfiler!");
-            }
+            profiler = Environment.Current.Profiler?.Of<LlmToolProfiler>();
         }
 
         public override string Execute(string arguments)

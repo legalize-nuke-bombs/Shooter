@@ -17060,11 +17060,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84c08551ee25f7c4f9a6b9c9e499a674, type: 3}
---- !u!1 &1969002581 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4542903080694801248, guid: 84c08551ee25f7c4f9a6b9c9e499a674, type: 3}
+--- !u!114 &1969002585 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8468999026878655810, guid: 84c08551ee25f7c4f9a6b9c9e499a674, type: 3}
   m_PrefabInstance: {fileID: 1969002580}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c770d3d1040643208058c5da75d11f37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainProfiler
 --- !u!1001 &1985197486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18474,7 +18480,7 @@ PrefabInstance:
     - target: {fileID: 7171569104614631660, guid: 872c1b546323d42fbb6dc742702c4f44, type: 3}
       propertyPath: profiler
       value: 
-      objectReference: {fileID: 1969002581}
+      objectReference: {fileID: 1969002585}
     - target: {fileID: 7171569104614631660, guid: 872c1b546323d42fbb6dc742702c4f44, type: 3}
       propertyPath: earSounds
       value: 
