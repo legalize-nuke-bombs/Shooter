@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
+using Shooter.Game.Base;
 using Shooter.Game.Llm.OpenAi;
 using Shooter.Logging;
 
@@ -25,11 +26,6 @@ namespace Shooter.Game.Llm
         private static readonly string SessionFolder = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
         private static int requestNumber;
-        private static int sessionRequests;
-        private static long sessionCharsIn;
-        private static long sessionCharsOut;
-        private static long sessionTokensIn;
-        private static long sessionTokensOut;
 
         public static async Task<LlmTurn> Request(LlmConfig config, string requestName, string system,
             IReadOnlyList<LlmMessage> history, IReadOnlyList<ILlmTool> tools, CancellationToken until)
@@ -66,7 +62,9 @@ namespace Shooter.Game.Llm
 
             OpenAiResponse response = Deserialize(raw);
             OpenAiMessage answered = response?.Choices?.FirstOrDefault()?.Message;
-            Count(sent.Length, answered?.Content?.Length ?? 0, response?.Usage);
+
+            LlmProviderProfiler profiler = Environment.Current.Profiler.GetComponent<LlmProviderProfiler>();
+            profiler?.RegisterSessionRequest(sent.Length, answered?.Content?.Length ?? 0, response?.Usage.PromptTokens, response?.Usage.CompletionTokens);
 
             return Turned(answered, raw);
         }
@@ -133,21 +131,6 @@ namespace Shooter.Game.Llm
             }
 
             return new LlmTurn { Content = answered.Content, ToolCalls = calls.ToArray() };
-        }
-
-        private static void Count(int charsIn, int charsOut, OpenAiUsage usage)
-        {
-            sessionRequests++;
-            sessionCharsIn += charsIn;
-            sessionCharsOut += charsOut;
-
-            if (usage != null)
-            {
-                sessionTokensIn += usage.PromptTokens;
-                sessionTokensOut += usage.CompletionTokens;
-            }
-
-            Log.Info($"Session totals: {sessionRequests} requests, input {sessionCharsIn} chars / {sessionTokensIn} tokens, output {sessionCharsOut} chars / {sessionTokensOut} tokens");
         }
 
         private static async Task<string> Ask(IOpenAiHost host, string key, OpenAiRequest body,

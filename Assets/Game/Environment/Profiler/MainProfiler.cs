@@ -1,4 +1,5 @@
-﻿using Shooter.Logging;
+﻿using System.Text;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -30,14 +31,21 @@ namespace Shooter.Game
 
         private void WriteLogs()
         {
+            var sb = new StringBuilder();
             foreach (BaseProfiler profiler in profilers)
             {
                 string logLine = profiler?.LogLine();
                 if (logLine != null)
                 {
-                    Log.Info($"{profiler.GetType().Name} {logLine}");
+                    sb.Append($"{profiler.GetType().Name} {logLine}");
                 }
             }
+
+            if (sb.Length > 0)
+            {
+                Log.Info(sb.ToString());
+            }
+
         }
     }
 }
