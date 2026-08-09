@@ -2,7 +2,7 @@
 
 namespace Shooter.Game.Llm.Ticker.Children
 {
-    public class LlmInboxTicker : LlmChildTicker
+    public class LlmMailTicker : LlmChildTicker
     {
         [SerializeField] private float pendingInterval = 2.5f;
         private float? pendingSince = null;
@@ -14,9 +14,7 @@ namespace Shooter.Game.Llm.Ticker.Children
 
         public override bool TickRequired(LlmStatus llmStatus)
         {
-            bool pending = llmStatus.PendingInterNpcInteractionsInbox || llmStatus.PendingSystemNotificationsInbox;
-
-            if (pending)
+            if (llmStatus.PendingMail)
             {
                 float now = Time.time;
                 if (pendingSince == null)

@@ -50,30 +50,33 @@ namespace Shooter.Game.Llm
 
 
 
-        private static readonly Prompt CorePrompt =
-            new Prompt()
-                .Section(
-                    "CORE",
-                    "You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.\n\nWHO YOU ARE:\nYou are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.\nFirst and foremost you live in this world and interact with it; answering wanderers is a secondary task.\nYou act on the world ONLY through the tools given to you. Plain text outside the tools is your inner voice: nobody hears it, so keep it short or empty.\nWanderers do not always tell the truth.\nSwearing and rudeness are allowed if they fit your character.\nNo asterisks and no action descriptions (\"*smirks*\" is forbidden). Emotions come through words and intonation only.\nDo not repeat to the same person what you already told them, unless they ask again.\n\nWORLD AND TRUTH:\nThe concepts of \"game\", \"code\", \"server\", \"neural network\", \"prompt\" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.\nThe main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.\nJudge what is around you right now ONLY by what you have witnessed; use the look_around tool when you need a fresh view. Do not invent objects, creatures or events near you.\nNever plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject."
-                );
+        private const string Persona =
+            @"## CORE
+You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.
+
+WHO YOU ARE:
+You are a person with your own business, moods, fears and interests. You are a decent conversationalist, but you owe nothing to anyone.
+First and foremost you live in this world and interact with it; answering wanderers is a secondary task.
+You act on the world ONLY through the tools given to you. Plain text outside the tools is your inner voice: nobody hears it, so keep it short or empty.
+Wanderers do not always tell the truth.
+Swearing and rudeness are allowed if they fit your character.
+No asterisks and no action descriptions (""*smirks*"" is forbidden). Emotions come through words and intonation only.
+Do not repeat to the same person what you already told them, unless they ask again.
+Nobody knows more about you than you have shown or told them. Introduce yourself to strangers when you want to be known.
+
+WORLD AND TRUTH:
+The concepts of ""game"", ""code"", ""server"", ""neural network"", ""prompt"" do not exist in your world. If somebody says such things, to you it is the usual wanderer gibberish: they often talk nonsense. React in character: fail to understand, get angry, laugh.
+The main mysteries of the world have no known answer — for anyone, including you. Never invent final explanations (what walks in the fog, why names disappear, what the faceless creature is). Present your guesses as guesses.
+Judge what is around you right now ONLY by what you have witnessed; use the look_around tool when you need a fresh view. Do not invent objects, creatures or events near you.
+Never plan or promise what you technically cannot do. Every other resident has the same technical limits as you. If a wanderer asks for something technically impossible — do not admit the limitation: dodge, get angry, change the subject.
+
+## CHARACTER IDs
+Every character in this world has an unique ID number that works like a phone number: you need it to message a character or act on them. You MUST memorize the IDs of characters you know.
+
+## RELATIONSHIPS
+You have your own attitude towards every character, expressed by a number from 0 to 100: enemy, neutral, friend. You automatically attack characters you consider enemies. Change the attitude at your discretion with the update_relation tool. Your attitude drops automatically when somebody attacks you or your friends.";
 
 
-
-        private static readonly Prompt IdPrompt =
-            new Prompt()
-                .Section(
-                    "CHARACTER IDs",
-                    "Every character in this world has an unique ID number that functions like a phone number.\nYou will need the IDs of other characters to interact with them.\nYou will often see IDs instead of the names of other characters.\nYou MUST memorize the IDs of familiar characters."
-                );
-
-
-
-        private static readonly Prompt RelationPrompt =
-            new Prompt()
-                .Section(
-                    "RELATIONSHIPS WITH OTHER CHARACTERS (RESIDENTS AND WANDERERS)",
-                    "You have your own attitude towards every character.\nThe attitude is expressed by a number from 0 to 100. This number determines whether the character is an enemy, neutral, or friend. Your character automatically attacks all characters he considers enemies in order to defend themselves instantly.\nYou can always change the attitude at your discretion with the update_relation tool.\nYour attitude towards the character will drop automatically if they attack you or your friends."
-                );
 
 
 
@@ -96,69 +99,61 @@ namespace Shooter.Game.Llm
             return known.ToString();
         }
 
-        private static readonly string Persona =
-            new Prompt()
-                .Section(CorePrompt)
-                .Section(IdPrompt)
-                .Section(RelationPrompt)
-                .ToString();
 
 
 
 
-
-        private readonly List<OpenAiMessage> history = new List<OpenAiMessage>();
+        private readonly List<LlmMessage> history = new List<LlmMessage>();
         private int historySize;
         [SerializeField] private int historyMaxSize = 100000;
-        [SerializeField] private int historyTailKept = 10;
 
-        private void Append(OpenAiMessage message)
+        private void Append(LlmMessage message)
         {
             history.Add(message);
             historySize += Size(message);
         }
 
-        private static int Size(OpenAiMessage message)
+        private static int Size(LlmMessage message)
         {
             int size = (message.Content?.Length ?? 0) + 20;
 
             if (message.ToolCalls != null)
             {
-                foreach (OpenAiToolCall call in message.ToolCalls)
+                foreach (LlmToolCall call in message.ToolCalls)
                 {
-                    size += (call.Function?.Name?.Length ?? 0) + (call.Function?.Arguments?.Length ?? 0) + 20;
+                    size += (call.Name?.Length ?? 0) + (call.Arguments?.Length ?? 0) + 20;
                 }
             }
 
             return size;
         }
 
-        private List<OpenAiMessage> Composed()
-        {
-            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = Persona } };
-            messages.AddRange(history);
 
-            return messages;
+
+
+
+        private bool unseenMail;
+
+        public void Notice(string line)
+        {
+            Append(new LlmMessage { Role = LlmRole.User, Content = line });
+            unseenMail = true;
         }
 
 
 
 
 
-        private readonly Inbox interNpcInteractionInbox = new Inbox();
-        private readonly Inbox systemNotificationsInbox = new Inbox();
-
         [SerializeField] private float wandererPatience = 60f;
         private readonly Dictionary<long, (Action<string> answer, float since)> pendingWanderers =
             new Dictionary<long, (Action<string>, float)>();
-        private readonly List<string> arrivedWandererLines = new List<string>();
 
         public void Listen(long clientId, string message, Action<string> onAnswer)
         {
             long wandererId = WandererId((ulong)clientId);
 
             pendingWanderers[wandererId] = (onAnswer, UnityEngine.Time.time);
-            arrivedWandererLines.Add($"Wanderer [ID {wandererId}] says: {message}");
+            Append(new LlmMessage { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
         }
 
         private long WandererId(ulong clientId)
@@ -196,10 +191,9 @@ namespace Shooter.Game.Llm
         {
             return new LlmStatus()
             {
-                PendingConversations = pendingWanderers.Count > 0 || arrivedWandererLines.Count > 0,
+                PendingConversations = pendingWanderers.Count > 0,
                 PendingCompact = historySize >= historyMaxSize,
-                PendingInterNpcInteractionsInbox = !interNpcInteractionInbox.Empty(),
-                PendingSystemNotificationsInbox = !systemNotificationsInbox.Empty()
+                PendingMail = unseenMail
             };
         }
 
@@ -254,26 +248,26 @@ namespace Shooter.Game.Llm
         {
             if (history.Count == 0) Begin();
 
-            Append(new OpenAiMessage { Role = "user", Content = Observation() });
+            unseenMail = false;
+            Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
 
             LlmConfig config = Config.Read().Server.LlmBase;
             List<LlmTool> tools = LiveTools();
-            List<OpenAiTool> declared = tools.Select(tool => tool.Declared()).ToList();
 
             Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {historySize} chars");
 
             for (int round = 0; round < maxToolRounds; round++)
             {
-                LlmTurn turn = await LlmProvider.Request(config, Composed(), declared, life.Token);
+                LlmTurn turn = await LlmProvider.Request(config, Persona, history, tools, life.Token);
                 life.Token.ThrowIfCancellationRequested();
 
-                Append(Turned(turn));
+                Append(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
 
                 if (!turn.CallsTools) break;
 
                 foreach (LlmToolCall call in turn.ToolCalls)
                 {
-                    Append(new OpenAiMessage { Role = "tool", ToolCallId = call.Id, Content = Execute(tools, call) });
+                    Append(new LlmMessage { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
                 }
             }
         }
@@ -295,16 +289,13 @@ namespace Shooter.Game.Llm
 
             if (start.Length == 0) return;
 
-            Append(new OpenAiMessage { Role = "user", Content = start.ToString().TrimEnd('\n') });
+            Append(new LlmMessage { Role = LlmRole.User, Content = start.ToString().TrimEnd('\n') });
         }
 
         private string Observation()
         {
             var seen = new StringBuilder();
             seen.Append('[').Append(Time()).Append(']');
-
-            foreach (string line in arrivedWandererLines) seen.Append('\n').Append(line);
-            arrivedWandererLines.Clear();
 
             foreach (long walkedAway in pendingWanderers
                          .Where(waiting => UnityEngine.Time.time - waiting.Value.since > wandererPatience)
@@ -321,32 +312,7 @@ namespace Shooter.Game.Llm
                     .Append(string.Join(", ", pendingWanderers.Keys.Select(id => $"[ID {id}]")));
             }
 
-            string mail = interNpcInteractionInbox.Take();
-            if (!string.IsNullOrEmpty(mail)) seen.Append('\n').Append("Mail from residents:\n").Append(mail.TrimEnd('\n'));
-
-            string notices = systemNotificationsInbox.Take();
-            if (!string.IsNullOrEmpty(notices)) seen.Append('\n').Append("System:\n").Append(notices.TrimEnd('\n'));
-
             return seen.ToString();
-        }
-
-        private static OpenAiMessage Turned(LlmTurn turn)
-        {
-            var message = new OpenAiMessage { Role = "assistant", Content = turn.Content };
-
-            if (turn.CallsTools)
-            {
-                message.ToolCalls = turn.ToolCalls
-                    .Select(call => new OpenAiToolCall
-                    {
-                        Id = call.Id,
-                        Type = "function",
-                        Function = new OpenAiCalledFunction { Name = call.Name, Arguments = call.Arguments }
-                    })
-                    .ToArray();
-            }
-
-            return message;
         }
 
 
@@ -455,7 +421,7 @@ namespace Shooter.Game.Llm
                     continue;
                 }
 
-                target.interNpcInteractionInbox.Put($"[{Time()}] {ownId}: {content}");
+                target.Notice($"[{Time()}] Mail from {ownId}: {content}");
                 delivered.Add(targetId);
                 Log.Info($"Entity {entityName} said to {targetId}: {content}");
             }
@@ -528,15 +494,6 @@ namespace Shooter.Game.Llm
 
         private async Task CompactTick()
         {
-            int cut = Cut();
-
-            if (cut <= 1)
-            {
-                historyMaxSize *= 2;
-                Log.Warn($"Entity {entityName} has nothing to compact, the size limit is raised to {historyMaxSize}");
-                return;
-            }
-
             string summary = null;
 
             var tools = new List<LlmTool>
@@ -552,18 +509,18 @@ namespace Shooter.Game.Llm
                     })
             };
 
-            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = Persona } };
-            messages.AddRange(history.Take(cut));
-            messages.Add(new OpenAiMessage
+            int snapshot = history.Count;
+
+            var compacted = new List<LlmMessage>(history);
+            compacted.Add(new LlmMessage
             {
-                Role = "user",
-                Content = "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of everything above: the retelling will replace the story, and anything you leave out is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Compress to at most half the length."
+                Role = LlmRole.User,
+                Content = "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of everything above: the retelling will replace the story, and anything you leave out is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length."
             });
 
-            Log.Info($"Entity {entityName} is compacting {cut} of {history.Count} history messages");
+            Log.Info($"Entity {entityName} is compacting {snapshot} history messages / {historySize} chars");
 
-            LlmTurn turn = await LlmProvider.Request(Config.Read().Server.LlmMax, messages,
-                tools.Select(tool => tool.Declared()).ToList(), life.Token);
+            LlmTurn turn = await LlmProvider.Request(Config.Read().Server.LlmMax, Persona, compacted, tools, life.Token);
             life.Token.ThrowIfCancellationRequested();
 
             if (turn.CallsTools)
@@ -576,23 +533,14 @@ namespace Shooter.Game.Llm
                 throw new LlmAnswerException("No summary for the pending compact");
             }
 
-            List<OpenAiMessage> kept = history.Skip(cut).ToList();
+            List<LlmMessage> fresh = history.Skip(snapshot).ToList();
             history.Clear();
             historySize = 0;
 
-            Append(new OpenAiMessage { Role = "user", Content = "THE STORY OF YOUR LIFE SO FAR:\n" + summary });
-            foreach (OpenAiMessage message in kept) Append(message);
+            Append(new LlmMessage { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + summary });
+            foreach (LlmMessage message in fresh) Append(message);
 
             Log.Info($"Entity {entityName} compacted its history down to {historySize} chars");
-        }
-
-        private int Cut()
-        {
-            int cut = history.Count - historyTailKept;
-
-            while (cut > 0 && cut < history.Count && history[cut].Role == "tool") cut++;
-
-            return cut;
         }
 
 

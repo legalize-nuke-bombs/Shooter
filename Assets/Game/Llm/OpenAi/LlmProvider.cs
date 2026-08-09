@@ -28,8 +28,8 @@ namespace Shooter.Game.Llm.OpenAi
         private static long sessionTokensIn;
         private static long sessionTokensOut;
 
-        public static async Task<LlmTurn> Request(LlmConfig config, IReadOnlyList<OpenAiMessage> messages,
-            IReadOnlyList<OpenAiTool> tools, CancellationToken until)
+        public static async Task<LlmTurn> Request(LlmConfig config, string system,
+            IReadOnlyList<LlmMessage> history, IReadOnlyList<LlmTool> tools, CancellationToken until)
         {
             if (string.IsNullOrEmpty(config.Key))
             {
@@ -38,20 +38,23 @@ namespace Shooter.Game.Llm.OpenAi
 
             string requestId = Guid.NewGuid().ToString();
 
+            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = system } };
+            messages.AddRange(history.Select(Mapped));
+
             var body = new OpenAiRequest
             {
                 Model = config.Model,
                 Messages = messages.ToArray(),
-                Tools = tools == null || tools.Count == 0 ? null : tools.ToArray()
+                Tools = tools == null || tools.Count == 0 ? null : tools.Select(tool => tool.Declared()).ToArray()
             };
 
             string folderPath = Path.Combine(UnityEngine.Application.temporaryCachePath, "LlmRequests");
             Directory.CreateDirectory(folderPath);
 
-            string tapeRaw = Rendered(messages);
+            string seenByModel = Rendered(system, history, tools);
             string promptPath = Path.Combine(folderPath, $"{requestId}.md");
-            Log.Info($"Request {requestId}. Input: {tapeRaw.Length}ch. Will be saved as {promptPath}");
-            await File.WriteAllTextAsync(promptPath, tapeRaw, until);
+            Log.Info($"Request {requestId}. Input: {seenByModel.Length}ch. Will be saved as {promptPath}");
+            await File.WriteAllTextAsync(promptPath, seenByModel, until);
 
             string responsePath = Path.Combine(folderPath, $"{requestId}.json");
             string raw = await Ask(OpenAiHosts.For(config), config.Key, body, until);
@@ -60,32 +63,70 @@ namespace Shooter.Game.Llm.OpenAi
 
             OpenAiResponse response = Deserialize(raw);
             OpenAiMessage answered = response?.Choices?.FirstOrDefault()?.Message;
-            Count(tapeRaw.Length, answered?.Content?.Length ?? 0, response?.Usage);
+            Count(seenByModel.Length, answered?.Content?.Length ?? 0, response?.Usage);
 
             return Turned(answered, raw);
         }
 
-        private static string Rendered(IReadOnlyList<OpenAiMessage> messages)
+        private static OpenAiMessage Mapped(LlmMessage message)
+        {
+            var mapped = new OpenAiMessage
+            {
+                Role = message.Role.ToString().ToLowerInvariant(),
+                Content = message.Content,
+                ToolCallId = message.ToolCallId
+            };
+
+            if (message.ToolCalls != null && message.ToolCalls.Length > 0)
+            {
+                mapped.ToolCalls = message.ToolCalls
+                    .Select(call => new OpenAiToolCall
+                    {
+                        Id = call.Id,
+                        Type = "function",
+                        Function = new OpenAiCalledFunction { Name = call.Name, Arguments = call.Arguments }
+                    })
+                    .ToArray();
+            }
+
+            return mapped;
+        }
+
+        private static string Rendered(string system, IReadOnlyList<LlmMessage> history, IReadOnlyList<LlmTool> tools)
         {
             var text = new StringBuilder();
 
-            foreach (OpenAiMessage message in messages)
+            if (tools != null && tools.Count > 0)
             {
-                text.Append("## ").Append(message.Role);
-                if (!string.IsNullOrEmpty(message.ToolCallId)) text.Append(" (").Append(message.ToolCallId).Append(")");
-                text.Append("\n");
+                text.Append("## tools\n");
 
-                if (!string.IsNullOrEmpty(message.Content)) text.Append(message.Content).Append("\n");
+                foreach (LlmTool tool in tools)
+                {
+                    text.Append("### ").Append(tool.Name).Append('\n')
+                        .Append(tool.Description).Append('\n')
+                        .Append(tool.Parameters).Append("\n\n");
+                }
+            }
+
+            text.Append("## system\n").Append(system).Append('\n');
+
+            foreach (LlmMessage message in history)
+            {
+                text.Append("## ").Append(message.Role.ToString().ToLowerInvariant());
+                if (!string.IsNullOrEmpty(message.ToolCallId)) text.Append(" (").Append(message.ToolCallId).Append(')');
+                text.Append('\n');
+
+                if (!string.IsNullOrEmpty(message.Content)) text.Append(message.Content).Append('\n');
 
                 if (message.ToolCalls != null)
                 {
-                    foreach (OpenAiToolCall call in message.ToolCalls)
+                    foreach (LlmToolCall call in message.ToolCalls)
                     {
-                        text.Append("-> ").Append(call.Function?.Name).Append(" ").Append(call.Function?.Arguments).Append("\n");
+                        text.Append("-> ").Append(call.Name).Append(' ').Append(call.Arguments).Append('\n');
                     }
                 }
 
-                text.Append("\n");
+                text.Append('\n');
             }
 
             return text.ToString();
@@ -133,7 +174,6 @@ namespace Shooter.Game.Llm.OpenAi
             Log.Info($"Session totals: {sessionRequests} requests, input {sessionCharsIn} chars / {sessionTokensIn} tokens, output {sessionCharsOut} chars / {sessionTokensOut} tokens");
         }
 
-
         private static async Task<string> Ask(IOpenAiHost host, string key, OpenAiRequest body,
             CancellationToken until)
         {
@@ -169,6 +209,5 @@ namespace Shooter.Game.Llm.OpenAi
                 throw new LlmAnswerException($"Failed to parse the provider response {raw}: {e.Message}");
             }
         }
-
     }
 }
