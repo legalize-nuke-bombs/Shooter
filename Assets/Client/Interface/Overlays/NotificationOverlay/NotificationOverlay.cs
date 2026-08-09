@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Shooter.Client.Interface.Notifying;
 using Shooter.Client.Playing;
 using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Notifying;
@@ -14,8 +17,32 @@ namespace Shooter.Client.Interface.Overlays
         private const long Life = 5000;
         private const int Limit = 4;
 
+        private Dictionary<Type, NotificationLine> lines;
         private VisualElement feed;
         private PlayerNotificationRecipient recipient;
+
+        private void Awake()
+        {
+            lines = Lines();
+        }
+
+        private Dictionary<Type, NotificationLine> Lines()
+        {
+            var known = new Dictionary<Type, NotificationLine>();
+
+            foreach (NotificationLine line in GetComponents<NotificationLine>())
+            {
+                if (known.TryGetValue(line.Kind, out NotificationLine taken))
+                {
+                    Log.Error($"Notification lines {taken.GetType().Name} and {line.GetType().Name} both draw {line.Kind.Name}, the second one stays unused");
+                    continue;
+                }
+
+                known.Add(line.Kind, line);
+            }
+
+            return known;
+        }
 
         private void Update()
         {
@@ -53,8 +80,7 @@ namespace Shooter.Client.Interface.Overlays
 
         private void Show(Notification notification)
         {
-            NotificationLine line = NotificationLines.Of(notification);
-            if (line == null) return;
+            if (!lines.TryGetValue(notification.GetType(), out NotificationLine line)) return;
 
             VisualElement element = line.Build(notification);
             feed.Add(element);
