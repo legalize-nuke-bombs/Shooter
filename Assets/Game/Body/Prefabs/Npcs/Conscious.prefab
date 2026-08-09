@@ -92,9 +92,6 @@ PrefabInstance:
       addedObject: {fileID: -2201341720855734229}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8327272139687336847}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8108498229917824114}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
@@ -124,10 +121,9 @@ MonoBehaviour:
   knowledges:
   - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
   - {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
-  memoryLimit: 10000
-  interNpcInteractionSentHistoryMaxLen: 30
-  conversationMaxSize: 100000
+  historyMaxSize: 30000
   failureCooldown: 15
+  maxToolRounds: 3
 --- !u!114 &-6005480022835525321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,18 +188,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.LlmMainTicker
   loggingInterval: 30
---- !u!114 &8327272139687336847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c54a04fb2cf4fedb5e2bd493d9214f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.Children.LlmConversationTicker
 --- !u!114 &8108498229917824114
 MonoBehaviour:
   m_ObjectHideFlags: 0

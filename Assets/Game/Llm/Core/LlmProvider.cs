@@ -32,7 +32,7 @@ namespace Shooter.Game.Llm
         private static long sessionTokensOut;
 
         public static async Task<LlmTurn> Request(LlmConfig config, string requestName, string system,
-            IReadOnlyList<LlmMessage> history, IReadOnlyList<LlmTool> tools, CancellationToken until)
+            IReadOnlyList<LlmMessage> history, IReadOnlyList<ILlmTool> tools, CancellationToken until)
         {
             if (string.IsNullOrEmpty(config.Key))
             {
@@ -71,7 +71,7 @@ namespace Shooter.Game.Llm
             return Turned(answered, raw);
         }
 
-        private static OpenAiTool Declared(LlmTool tool)
+        private static OpenAiTool Declared(ILlmTool tool)
         {
             return new OpenAiTool
             {
