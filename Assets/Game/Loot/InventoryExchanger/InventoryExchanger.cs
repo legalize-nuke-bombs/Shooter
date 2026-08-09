@@ -11,13 +11,8 @@ namespace Shooter.Game.Loot
     {
         private static readonly Journal Log = Logs.Here();
 
-        private static int characterMask;
-        private static int CharacterMask => characterMask != 0 ? characterMask : characterMask = LayerMask.GetMask("Character");
-
         [SerializeField] private float exchangeRadius = 10f;
         public float ExchangeRadius => exchangeRadius;
-
-        private readonly Collider[] around = new Collider[64];
 
         private Inventory inventory;
         private PersistentId ownId;
@@ -90,19 +85,10 @@ namespace Shooter.Game.Loot
 
         private PersistentId Target(long targetId)
         {
-            int hits = Physics.OverlapSphereNonAlloc(transform.position, exchangeRadius, around, CharacterMask);
-            if (hits == around.Length)
-                Log.Warn($"{name} sees {hits} characters within {exchangeRadius}m, somebody stays invisible for the exchange");
+            PersistentId target = Environment.Current.PersistentIds.Of(targetId);
+            if (target == null || target == ownId) return null;
 
-            for (int i = 0; i < hits; i++)
-            {
-                PersistentId id = around[i].GetComponentInParent<PersistentId>();
-                if (id == null || id.Value != targetId || id.transform == transform) continue;
-
-                return id;
-            }
-
-            return null;
+            return Vector3.Distance(target.transform.position, transform.position) <= exchangeRadius ? target : null;
         }
     }
 }
