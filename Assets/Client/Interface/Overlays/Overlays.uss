@@ -353,22 +353,18 @@
     padding: 0 10px 0 0;
     min-width: 176px;
     background-color: rgba(8, 8, 8, 0.78);
-    border-left-width: 2px;
-    border-left-color: rgba(214, 198, 160, 0.55);
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-top-color: rgba(255, 255, 255, 0.06);
-    border-right-color: rgba(255, 255, 255, 0.06);
-    border-bottom-color: rgba(255, 255, 255, 0.06);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.06);
 }
 
 .notification__icon {
-    width: 44px;
-    align-self: stretch;
+    width: 48px;
+    height: 48px;
     margin-right: 9px;
     background-color: rgba(214, 198, 160, 0.06);
-    -unity-background-scale-mode: scale-to-fit;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .notification__body {
