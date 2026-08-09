@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Shooter.Game.Body;
+using Shooter.Game.Body.Notifying;
 using Shooter.Game.Identity;
 using Shooter.Logging;
 using UnityEngine;
@@ -33,7 +34,6 @@ namespace Shooter.Game.Llm.Tools
                 return "Nothing to send";
             }
 
-            string time = Environment.Current.Clock.DateTime();
             Llm[] residents = FindObjectsByType<Llm>();
             var delivered = new List<long>();
             var failed = new List<string>();
@@ -56,7 +56,13 @@ namespace Shooter.Game.Llm.Tools
                     continue;
                 }
 
-                target.Notice($"[{time}] Mail from {ownId.Value}: {arguments.Content}");
+                if (!target.TryGetComponent(out MainNotificationRecipient recipient))
+                {
+                    failed.Add($"{targetId}: the resident hears nothing");
+                    continue;
+                }
+
+                recipient.Receive(new MailNotification { SenderId = ownId.Value, Content = arguments.Content });
                 delivered.Add(targetId);
                 Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
             }
