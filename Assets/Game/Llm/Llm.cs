@@ -9,7 +9,6 @@ using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Game.Identity;
 using Shooter.Game.Llm.Knowledge;
-using Shooter.Game.Llm.OpenAi;
 using Shooter.Game.Loot;
 using Shooter.Game.Relationship;
 using Shooter.Logging;

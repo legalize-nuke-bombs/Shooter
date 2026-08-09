@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
+using Shooter.Game.Llm.OpenAi;
 using Shooter.Logging;
 
-namespace Shooter.Game.Llm.OpenAi
+namespace Shooter.Game.Llm
 {
     public static class LlmProvider
     {
@@ -54,19 +54,19 @@ namespace Shooter.Game.Llm.OpenAi
             string folderPath = Path.Combine(UnityEngine.Application.temporaryCachePath, "LlmRequests", SessionFolder);
             Directory.CreateDirectory(folderPath);
 
-            string seenByModel = Rendered(system, history, tools);
-            string promptPath = Path.Combine(folderPath, $"{requestId}.md");
-            Log.Info($"Request {requestId}. Input: {seenByModel.Length}ch. Will be saved as {promptPath}");
-            await File.WriteAllTextAsync(promptPath, seenByModel, until);
+            string sent = JsonConvert.SerializeObject(body, Settings);
+            string requestPath = Path.Combine(folderPath, $"{requestId}-request.json");
+            Log.Info($"Request {requestId}. Input: {sent.Length}ch. Will be saved as {requestPath}");
+            await File.WriteAllTextAsync(requestPath, sent, until);
 
-            string responsePath = Path.Combine(folderPath, $"{requestId}.json");
+            string responsePath = Path.Combine(folderPath, $"{requestId}-response.json");
             string raw = await Ask(OpenAiHosts.For(config), config.Key, body, until);
             await File.WriteAllTextAsync(responsePath, raw, until);
             Log.Info($"Response {requestId}. Output: {raw.Length}ch. Will be saved as {responsePath}");
 
             OpenAiResponse response = Deserialize(raw);
             OpenAiMessage answered = response?.Choices?.FirstOrDefault()?.Message;
-            Count(seenByModel.Length, answered?.Content?.Length ?? 0, response?.Usage);
+            Count(sent.Length, answered?.Content?.Length ?? 0, response?.Usage);
 
             return Turned(answered, raw);
         }
@@ -93,46 +93,6 @@ namespace Shooter.Game.Llm.OpenAi
             }
 
             return mapped;
-        }
-
-        private static string Rendered(string system, IReadOnlyList<LlmMessage> history, IReadOnlyList<LlmTool> tools)
-        {
-            var text = new StringBuilder();
-
-            if (tools != null && tools.Count > 0)
-            {
-                text.Append("## tools\n");
-
-                foreach (LlmTool tool in tools)
-                {
-                    text.Append("### ").Append(tool.Name).Append('\n')
-                        .Append(tool.Description).Append('\n')
-                        .Append(tool.Parameters).Append("\n\n");
-                }
-            }
-
-            text.Append("## system\n").Append(system).Append('\n');
-
-            foreach (LlmMessage message in history)
-            {
-                text.Append("## ").Append(message.Role.ToString().ToLowerInvariant());
-                if (!string.IsNullOrEmpty(message.ToolCallId)) text.Append(" (").Append(message.ToolCallId).Append(')');
-                text.Append('\n');
-
-                if (!string.IsNullOrEmpty(message.Content)) text.Append(message.Content).Append('\n');
-
-                if (message.ToolCalls != null)
-                {
-                    foreach (LlmToolCall call in message.ToolCalls)
-                    {
-                        text.Append("-> ").Append(call.Name).Append(' ').Append(call.Arguments).Append('\n');
-                    }
-                }
-
-                text.Append('\n');
-            }
-
-            return text.ToString();
         }
 
         private static LlmTurn Turned(OpenAiMessage answered, string raw)
