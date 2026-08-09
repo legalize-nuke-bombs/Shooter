@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shooter.Game.Base
+﻿namespace Shooter.Game.Base
 {
     public class LlmProviderProfiler : BaseProfiler
     {
@@ -12,29 +10,24 @@ namespace Shooter.Game.Base
         private long sessionTokensIn = 0;
         private long sessionTokensOut = 0;
 
-        public void RegisterSessionRequest(long? charsIn, long? charsOut, long? tokensIn, long? tokensOut)
+        public void RegisterSessionRequest(long charsIn, long charsOut, long? tokensIn, long? tokensOut)
         {
-            charsIn ??= 0;
-            charsOut ??= 0;
-            tokensIn ??= 0;
-            tokensOut ??= 0;
-
-            if (charsIn < 0 || charsOut < 0 || tokensIn < 0 || tokensOut < 0)
-            {
-                throw new ArgumentException("arguments must be non negative");
-            }
-
             sessionRequests++;
 
-            sessionCharsIn += charsIn.Value;
-            sessionCharsOut += charsOut.Value;
+            sessionCharsIn += charsIn;
+            sessionCharsOut += charsOut;
 
-            sessionTokensIn += tokensIn.Value;
-            sessionTokensOut += tokensOut.Value;
+            sessionTokensIn += tokensIn ?? 0;
+            sessionTokensOut += tokensOut ?? 0;
         }
 
         public override string LogLine()
         {
+            if (sessionRequests == 0)
+            {
+                return null;
+            }
+
             return $"Session totals: {sessionRequests} requests, input {sessionCharsIn} chars / {sessionTokensIn} tokens, output {sessionCharsOut} chars / {sessionTokensOut} tokens";
         }
     }

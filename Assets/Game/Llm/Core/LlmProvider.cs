@@ -64,7 +64,7 @@ namespace Shooter.Game.Llm
             OpenAiMessage answered = response?.Choices?.FirstOrDefault()?.Message;
 
             LlmProviderProfiler profiler = Environment.Current.Profiler.GetComponent<LlmProviderProfiler>();
-            profiler?.RegisterSessionRequest(sent.Length, answered?.Content?.Length ?? 0, response?.Usage.PromptTokens, response?.Usage.CompletionTokens);
+            profiler?.RegisterSessionRequest(sent.Length, answered?.Content?.Length ?? 0, response?.Usage?.PromptTokens, response?.Usage?.CompletionTokens);
 
             return Turned(answered, raw);
         }
