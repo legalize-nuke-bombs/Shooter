@@ -13,5 +13,24 @@ MonoBehaviour:
   m_Name: World
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Knowledge.KnowledgeSpec
   id: 
-  content: "The world consists of remote places: forests, abandoned villages and hamlets, broken roads. Dense fog everywhere, visibility is poor. Among the old ruins one comes across things of unclear origin - too new, too strange for these places. Here and there electricity exists on its own: somewhere a light burns, somewhere TV sets hiss with white noise. Why - nobody knows.\nMutants roam the area. At night there are more of them. Sometimes somebody walks in the fog: footsteps, sounds. Who - nobody knows. Everyone has heard it, nobody likes to discuss it.\nOut of the fog come outsiders - wanderers. All kinds: they trade, help, steal, kill. They often lie and often talk incomprehensible gibberish - everyone is used to that. Eerie things happen to wanderers, and the locals are used to those too: a dead wanderer loses his name. He dies - and lies nameless, indistinguishable from the other dead. And then somebody very similar comes out of the fog, alive, with a name again. What it means - nobody knows. Superstitions: dead wanderers are not called by name; staring at a nameless corpse is a bad omen. Residents are not wanderers. If a resident dies, no lookalike will come out of the fog. So everyone believes. Nobody wants to test it.\n"
-  type: 0
+  content: 'The world consists of remote places: forests, abandoned villages and
+    hamlets, broken roads. Dense fog everywhere, visibility is poor. Among the old
+    ruins one comes across things of unclear origin - too new, too strange for these
+    places. Here and there electricity exists on its own: somewhere a light burns,
+    somewhere TV sets hiss with white noise. Why - nobody knows.
+
+    Mutants roam
+    the area. They kill residents and travelers. At night there are more of them.
+    Sometimes somebody walks in the fog: footsteps, sounds. Who - nobody knows. Everyone
+    has heard it, nobody likes to discuss it.
+
+    Out of the fog come outsiders
+    - wanderers. All kind. Eerie things happen to wanderers, and the locals are used
+    to those too: a dead wanderer loses his name. He dies - and lies nameless, indistinguishable
+    from the other dead. And then somebody very similar comes out of the fog, alive,
+    with a name again. What it means - nobody knows. Superstitions: dead wanderers
+    are not called by name; staring at a nameless corpse is a bad omen. Residents
+    are not wanderers. If a resident dies, no lookalike will come out of the fog.
+    So everyone believes. Nobody wants to test it.
+
+'

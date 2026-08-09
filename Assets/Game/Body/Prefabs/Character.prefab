@@ -374,4 +374,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa040486d9db43e6ad668e48236c067e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.InventoryExchanger.InventoryExchanger
-  exchangeRadius: 5
+  exchangeRadius: 10
