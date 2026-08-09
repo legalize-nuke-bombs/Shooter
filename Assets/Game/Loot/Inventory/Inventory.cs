@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Shooter.Game.Body;
 using Shooter.Logging;
 using Unity.Collections;
@@ -98,7 +96,7 @@ namespace Shooter.Game.Loot
                 if (item == null || !item.Dirty) continue;
 
                 item.Clean();
-                packedUniqueItems[slot] = Pack(item);
+                packedUniqueItems[slot] = UniqueItemPacking.Pack(item);
             }
         }
 
@@ -154,12 +152,12 @@ namespace Shooter.Game.Loot
             {
                 slot = uniqueItems.Count;
                 uniqueItems.Add(item);
-                packedUniqueItems.Add(Pack(item));
+                packedUniqueItems.Add(UniqueItemPacking.Pack(item));
             }
             else
             {
                 uniqueItems[slot] = item;
-                packedUniqueItems[slot] = Pack(item);
+                packedUniqueItems[slot] = UniqueItemPacking.Pack(item);
             }
 
             Log.Info($"Entity {name} took {item.SpecId} into slot {slot}");
@@ -324,45 +322,11 @@ namespace Shooter.Game.Loot
             return catalog == null || spec == null ? -1 : catalog.Index(spec);
         }
 
-        private FixedString4096Bytes Pack(UniqueItem item)
-        {
-            string state = JsonConvert.SerializeObject(item);
-            int size = Encoding.UTF8.GetByteCount(state);
-
-            if (size <= FixedString4096Bytes.UTF8MaxLengthInBytes) return new FixedString4096Bytes(state);
-
-            Log.Error($"Entity {name} holds {item.SpecId} whose state takes {size} bytes, more than the {FixedString4096Bytes.UTF8MaxLengthInBytes} the network format holds");
-
-            return default;
-        }
-
-        private UniqueItem Unpack(FixedString4096Bytes state)
-        {
-            if (state.IsEmpty) return null;
-
-            string json = state.ToString();
-            JObject parsed = JObject.Parse(json);
-            string specId = parsed.Value<string>(nameof(UniqueItem.SpecId));
-            ItemSpec spec = Catalog == null ? null : Catalog.Spec(specId);
-
-            if (spec == null)
-            {
-                Log.Error($"Entity {name} received a thing of unknown kind {specId}");
-                return null;
-            }
-
-            UniqueItem item = spec.Create();
-            JsonConvert.PopulateObject(json, item);
-            item.Clean();
-
-            return item;
-        }
-
         private void Remirror()
         {
             uniqueItems.Clear();
 
-            foreach (FixedString4096Bytes state in packedUniqueItems) uniqueItems.Add(Unpack(state));
+            foreach (FixedString4096Bytes state in packedUniqueItems) uniqueItems.Add(UniqueItemPacking.Unpack(state));
         }
 
         private void Mirror(NetworkListEvent<FixedString4096Bytes> change)
@@ -370,10 +334,10 @@ namespace Shooter.Game.Loot
             switch (change.Type)
             {
                 case NetworkListEvent<FixedString4096Bytes>.EventType.Add:
-                    uniqueItems.Add(Unpack(change.Value));
+                    uniqueItems.Add(UniqueItemPacking.Unpack(change.Value));
                     break;
                 case NetworkListEvent<FixedString4096Bytes>.EventType.Value:
-                    uniqueItems[change.Index] = Unpack(change.Value);
+                    uniqueItems[change.Index] = UniqueItemPacking.Unpack(change.Value);
                     break;
                 case NetworkListEvent<FixedString4096Bytes>.EventType.Clear:
                     uniqueItems.Clear();
