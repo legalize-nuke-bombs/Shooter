@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Body.Notifying;
 using Shooter.Game.Identity;
 using Shooter.Game.Llm.Knowledge;
 using Shooter.Game.Llm.Tools;
@@ -16,6 +17,7 @@ using UnityEngine;
 namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(LlmHistory))]
+    [RequireComponent(typeof(MainNotificationRecipient))]
     public class Llm : MonoBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
