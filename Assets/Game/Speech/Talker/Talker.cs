@@ -104,6 +104,12 @@ namespace Shooter.Game.Speech
         {
             thinking.Remove(clientId);
 
+            if (content == null)
+            {
+                Log.Info($"Entity {name} kept silent towards client {clientId}");
+                return;
+            }
+
             if (!conversations.TryGetValue(clientId, out Conversation conversation) || !conversation.Open)
             {
                 Log.Info($"Entity {name} answered client {clientId} whose conversation is gone, dropped");

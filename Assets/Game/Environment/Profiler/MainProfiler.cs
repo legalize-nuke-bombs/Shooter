@@ -15,8 +15,27 @@ namespace Shooter.Game.Profiling
         [SerializeField] private float loggingInterval = 10f;
         private float sinceLastLog;
 
-        private void Awake()
+        private bool collected;
+
+        public T Of<T>() where T : BaseProfiler
         {
+            Collect();
+
+            if (profilers.TryGetValue(typeof(T), out BaseProfiler profiler))
+            {
+                return (T)profiler;
+            }
+
+            Log.Error($"World has no {typeof(T).Name}, it will count nothing");
+            return null;
+        }
+
+        private void Collect()
+        {
+            if (collected) return;
+
+            collected = true;
+
             foreach (BaseProfiler profiler in GetComponentsInChildren<BaseProfiler>())
             {
                 if (!profilers.TryAdd(profiler.GetType(), profiler))
@@ -26,17 +45,6 @@ namespace Shooter.Game.Profiling
             }
 
             Log.Info($"Found {profilers.Count} profilers");
-        }
-
-        public T Of<T>() where T : BaseProfiler
-        {
-            if (profilers.TryGetValue(typeof(T), out BaseProfiler profiler))
-            {
-                return (T)profiler;
-            }
-
-            Log.Error($"World has no {typeof(T).Name}, it will count nothing");
-            return null;
         }
 
         private void Update()
@@ -50,6 +58,8 @@ namespace Shooter.Game.Profiling
 
         private void WriteLogs()
         {
+            Collect();
+
             var sb = new StringBuilder();
             foreach (BaseProfiler profiler in profilers.Values)
             {
