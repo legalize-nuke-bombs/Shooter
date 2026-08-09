@@ -6,11 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shooter.Configuring;
 using Shooter.Game.Body;
-using Shooter.Game.Identity;
 using Shooter.Game.Llm.Knowledge;
 using Shooter.Game.Llm.Tools;
 using Shooter.Logging;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
@@ -115,10 +113,8 @@ You have your own attitude towards every character, expressed by a number from 0
 
         public bool HasWaitingWanderer => pendingWanderers.Count > 0;
 
-        public void Listen(long clientId, string message, Action<string> onAnswer)
+        public void Listen(long wandererId, string message, Action<string> onAnswer)
         {
-            long wandererId = WandererId((ulong)clientId);
-
             pendingWanderers[wandererId] = onAnswer;
             history.Arrive(new LlmMessage { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
         }
@@ -129,18 +125,6 @@ You have your own attitude towards every character, expressed by a number from 0
 
             answer(text);
             return true;
-        }
-
-        private long WandererId(ulong clientId)
-        {
-            foreach (PersistentId id in FindObjectsByType<PersistentId>())
-            {
-                var net = id.GetComponent<NetworkObject>();
-                if (net != null && net.IsPlayerObject && net.OwnerClientId == clientId) return id.Value;
-            }
-
-            Log.Warn($"Entity {entityName} can not find the persistent id of the wanderer of client {clientId}");
-            return -1;
         }
 
 
