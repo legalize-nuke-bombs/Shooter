@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0df6a9f0be0cad34996291203fc85ca8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 338188
+  packageName: Baked Bread and Pastry
+  packageVersion: 1.0
+  assetPath: Assets/Baked Bread and Pastry/Materials/M_Bread_Flatbread_01a.mat
+  uploadId: 800482
