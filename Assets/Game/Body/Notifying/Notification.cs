@@ -1,7 +1,6 @@
-﻿namespace Shooter.Game.Body.Notifying
+namespace Shooter.Game.Body.Notifying
 {
-    public class Notification
+    public abstract class Notification
     {
-        
     }
 }
