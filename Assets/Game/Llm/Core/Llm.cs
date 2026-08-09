@@ -9,18 +9,13 @@ using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Game.Identity;
 using Shooter.Game.Llm.Knowledge;
-using Shooter.Game.Loot;
-using Shooter.Game.Relationship;
+using Shooter.Game.Llm.Tools;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(Digester))]
-    [RequireComponent(typeof(WorldDigester))]
-    [RequireComponent(typeof(CharacterRelation))]
-    [RequireComponent(typeof(InventoryExchanger))]
     public class Llm : MonoBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
@@ -55,18 +50,12 @@ You have your own attitude towards every character, expressed by a number from 0
 
 
 
-        private Digester digester;
-        private WorldDigester worldDigester;
-        private CharacterRelation characterRelation;
-        private InventoryExchanger inventoryExchanger;
+        private LlmTool[] abilities;
         private string entityName;
 
         private void Awake()
         {
-            digester = GetComponent<Digester>();
-            worldDigester = GetComponent<WorldDigester>();
-            characterRelation = GetComponent<CharacterRelation>();
-            inventoryExchanger = GetComponent<InventoryExchanger>();
+            abilities = GetComponents<LlmTool>();
             entityName = name.Replace("(Clone)", "").Trim();
         }
 
@@ -124,12 +113,22 @@ You have your own attitude towards every character, expressed by a number from 0
 
         private readonly Dictionary<long, Action<string>> pendingWanderers = new Dictionary<long, Action<string>>();
 
+        public bool HasWaitingWanderer => pendingWanderers.Count > 0;
+
         public void Listen(long clientId, string message, Action<string> onAnswer)
         {
             long wandererId = WandererId((ulong)clientId);
 
             pendingWanderers[wandererId] = onAnswer;
             history.Arrive(new LlmMessage { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
+        }
+
+        public bool Answer(long wandererId, string text)
+        {
+            if (!pendingWanderers.Remove(wandererId, out Action<string> answer)) return false;
+
+            answer(text);
+            return true;
         }
 
         private long WandererId(ulong clientId)
@@ -230,7 +229,7 @@ You have your own attitude towards every character, expressed by a number from 0
             List<long> presented = pendingWanderers.Keys.ToList();
 
             LlmConfig config = Config.Read().Server.LlmBase;
-            List<LlmTool> tools = LiveTools();
+            List<ILlmTool> tools = abilities.Where(ability => ability.Available).Cast<ILlmTool>().ToList();
 
             Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
 
@@ -271,71 +270,14 @@ You have your own attitude towards every character, expressed by a number from 0
             return seen.ToString();
         }
 
-
-
-
-
-        private List<LlmTool> LiveTools()
+        private string Execute(IReadOnlyList<ILlmTool> tools, LlmToolCall call)
         {
-            var tools = new List<LlmTool>
-            {
-                new LlmTool(
-                    "look_around",
-                    "Look around: your own state and everything visible near you right now.",
-                    LlmTool.Schema(),
-                    _ => WorldState()),
-                new LlmTool(
-                    "send_message",
-                    "Send a message to other residents by their ids. Write in English. Message a resident only to pass or ask something new: residents see their own surroundings themselves.",
-                    LlmTool.Schema(("target_ids", "integer[]", null), ("content", "string", null)),
-                    SendMessage),
-                new LlmTool(
-                    "update_relation",
-                    "Change your attitude to a character (0 enemy, 100 friend).",
-                    LlmTool.Schema(("target_id", "integer", null), ("amount", "integer", null), ("reason", "string", null)),
-                    UpdateRelation),
-                new LlmTool(
-                    "give_stackable",
-                    $"Give some of your stackable items to a character within {inventoryExchanger.ExchangeRadius} meters. Always tell the receiver what you gave.",
-                    LlmTool.Schema(("target_id", "integer", null), ("item", "string", "Exact item name from your bag"), ("amount", "integer", null)),
-                    GiveStackable),
-                new LlmTool(
-                    "give_unique",
-                    $"Give one of your unique items, by its slot number, to a character within {inventoryExchanger.ExchangeRadius} meters. Always tell the receiver what you gave.",
-                    LlmTool.Schema(("target_id", "integer", null), ("slot", "integer", null)),
-                    GiveUnique)
-            };
-
-            if (pendingWanderers.Count > 0)
-            {
-                tools.Add(new LlmTool(
-                    "say_to_wanderer",
-                    "Answer a wanderer who is talking to you. Answer in the language the wanderer speaks.",
-                    LlmTool.Schema(("wanderer_id", "integer", null), ("text", "string", null)),
-                    SayToWanderer));
-            }
-
-            return tools;
-        }
-
-        private string Execute(List<LlmTool> tools, LlmToolCall call)
-        {
-            LlmTool tool = tools.FirstOrDefault(known => known.Name == call.Name);
+            ILlmTool tool = tools.FirstOrDefault(known => known.Name == call.Name);
             if (tool == null) return $"There is no tool named {call.Name}";
 
-            JObject arguments;
             try
             {
-                arguments = string.IsNullOrEmpty(call.Arguments) ? new JObject() : JObject.Parse(call.Arguments);
-            }
-            catch (Exception e)
-            {
-                return $"Broken arguments: {e.Message}";
-            }
-
-            try
-            {
-                string result = tool.Execute(arguments);
+                string result = tool.Execute(call.Arguments);
                 Log.Info($"Entity {entityName} used {call.Name} {call.Arguments}: {result}");
                 return result;
             }
@@ -350,120 +292,10 @@ You have your own attitude towards every character, expressed by a number from 0
 
 
 
-        private string SendMessage(JObject arguments)
-        {
-            long[] targetIds = arguments["target_ids"]?.ToObject<long[]>();
-            string content = arguments["content"]?.ToString();
-            if (targetIds == null || targetIds.Length == 0 || string.IsNullOrEmpty(content)) return "Nothing to send";
-
-            long ownId = Id();
-            Llm[] residents = FindObjectsByType<Llm>();
-            var delivered = new List<long>();
-            var failed = new List<string>();
-
-            foreach (long targetId in targetIds.Distinct())
-            {
-                Llm target = residents.FirstOrDefault(resident => resident != this && resident.Id() == targetId);
-
-                if (target == null)
-                {
-                    failed.Add($"{targetId}: no resident bears this id");
-                    continue;
-                }
-
-                if (!target.Alive())
-                {
-                    failed.Add($"{targetId}: the resident is dead");
-                    continue;
-                }
-
-                target.Notice($"[{Time()}] Mail from {ownId}: {content}");
-                delivered.Add(targetId);
-                Log.Info($"Entity {entityName} said to {targetId}: {content}");
-            }
-
-            var answer = new StringBuilder();
-            if (delivered.Count > 0) answer.Append("Delivered to ").Append(string.Join(", ", delivered));
-            foreach (string failure in failed)
-            {
-                if (answer.Length > 0) answer.Append('\n');
-                answer.Append("Not delivered to ").Append(failure);
-            }
-
-            return answer.ToString();
-        }
-
-        private string UpdateRelation(JObject arguments)
-        {
-            long targetId = arguments["target_id"].ToObject<long>();
-            int amount = arguments["amount"].ToObject<int>();
-            string reason = arguments["reason"]?.ToString();
-
-            int old = characterRelation.Amount(targetId);
-            characterRelation.SetAmount(targetId, amount, reason);
-
-            return $"Your attitude to {targetId}: {old} -> {amount}";
-        }
-
-        private string GiveStackable(JObject arguments)
-        {
-            long targetId = arguments["target_id"].ToObject<long>();
-            string itemName = arguments["item"]?.ToString();
-            int amount = arguments["amount"].ToObject<int>();
-
-            ItemSpec item = Environment.Current.Items.FindByPromptName(itemName);
-            if (item == null) return $"There is no item named {itemName}";
-
-            return inventoryExchanger.GiveStackable(targetId, item, amount)
-                ? $"Gave {amount} x {itemName} to {targetId}"
-                : "Could not give: the receiver is not around or you lack the items";
-        }
-
-        private string GiveUnique(JObject arguments)
-        {
-            long targetId = arguments["target_id"].ToObject<long>();
-            int slot = arguments["slot"].ToObject<int>();
-
-            return inventoryExchanger.GiveUnique(targetId, slot)
-                ? $"Gave the item from slot {slot} to {targetId}"
-                : "Could not give: the receiver is not around or the slot is empty";
-        }
-
-        private string SayToWanderer(JObject arguments)
-        {
-            long wandererId = arguments["wanderer_id"].ToObject<long>();
-            string text = arguments["text"]?.ToString();
-            if (string.IsNullOrEmpty(text)) return "Nothing to say";
-
-            if (!pendingWanderers.Remove(wandererId, out Action<string> answer))
-            {
-                return $"No wanderer {wandererId} is waiting for your answer";
-            }
-
-            answer(text);
-            return $"Said to {wandererId}";
-        }
-
-
-
-
-
         private async Task CompactTick()
         {
-            string summary = null;
-
-            var tools = new List<LlmTool>
-            {
-                new LlmTool(
-                    "rewrite_summary",
-                    "Replace the story of your life so far with its full retelling.",
-                    LlmTool.Schema(("text", "string", null)),
-                    arguments =>
-                    {
-                        summary = arguments["text"]?.ToString();
-                        return "Rewritten";
-                    })
-            };
+            var retelling = new RewriteSummary();
+            var tools = new List<ILlmTool> { retelling };
 
             int snapshot = history.Count;
 
@@ -485,14 +317,36 @@ You have your own attitude towards every character, expressed by a number from 0
                 foreach (LlmToolCall call in turn.ToolCalls) Execute(tools, call);
             }
 
-            if (string.IsNullOrEmpty(summary))
+            if (string.IsNullOrEmpty(retelling.Summary))
             {
                 throw new LlmException("No summary for the pending compact");
             }
 
-            history.Retell("THE STORY OF YOUR LIFE SO FAR:\n" + summary, snapshot);
+            history.Retell("THE STORY OF YOUR LIFE SO FAR:\n" + retelling.Summary, snapshot);
 
             Log.Info($"Entity {entityName} compacted its history down to {history.Size} chars");
+        }
+
+        private sealed class RewriteSummary : ILlmTool
+        {
+            public string Summary { get; private set; }
+
+            public string Name => "rewrite_summary";
+
+            public string Description => "Replace the story of your life so far with its full retelling.";
+
+            public JObject Parameters => LlmSchema.Of(typeof(Arguments));
+
+            public string Execute(string arguments)
+            {
+                Summary = JObject.Parse(arguments)["text"]?.ToString();
+                return "Rewritten";
+            }
+
+            private class Arguments
+            {
+                public string Text { get; set; }
+            }
         }
 
 
@@ -502,33 +356,6 @@ You have your own attitude towards every character, expressed by a number from 0
         private string Time()
         {
             return Environment.Current.Clock.DateTime();
-        }
-
-        private string WorldState()
-        {
-            return "Game time: " + Time() + "\n" +
-                   "Your state:\n" + digester.Of(gameObject, DigestionDetail.Full) + "\n" +
-                   "Objects around you:\n" + worldDigester.Digest();
-        }
-
-        private long Id()
-        {
-            if (TryGetComponent(out PersistentId id))
-            {
-                return id.Value;
-            }
-            Log.Warn($"Entity {entityName} does not have persistent id");
-            return -1;
-        }
-
-        private bool Alive()
-        {
-            if (TryGetComponent(out Health health))
-            {
-                return health.Alive;
-            }
-            Log.Warn($"Entity {entityName} does not have health");
-            return false;
         }
     }
 }
