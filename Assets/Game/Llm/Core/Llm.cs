@@ -276,9 +276,7 @@ You have your own attitude towards every character, expressed by a number from 0
 
             try
             {
-                string result = tool.Execute(call.Arguments);
-                Log.Info($"Entity {entityName} used {call.Name} {call.Arguments}: {result}");
-                return result;
+                return tool.Execute(call.Arguments);
             }
             catch (Exception e)
             {

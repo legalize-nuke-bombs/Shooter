@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4631506295885286890, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1544740508
+      value: 3953210236
       objectReference: {fileID: 0}
     - target: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: m_Name
@@ -117,6 +117,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8188014351635383579}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7568397589352757571}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5999818323793082896}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -139,7 +145,6 @@ MonoBehaviour:
   knowledges:
   - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
   - {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
-  historyMaxSize: 30000
   failureCooldown: 15
   maxToolRounds: 3
 --- !u!114 &-6005480022835525321
@@ -317,3 +322,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62d7cc1824d02db48b430de0d4ed5135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.SayToWandererTool
+--- !u!114 &7568397589352757571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e316d1881d24b44aae7524829da8141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmHistory
+  maxSize: 30000
+--- !u!114 &5999818323793082896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b0c7a284f668042b3300abc000b723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.RewriteSummaryTool

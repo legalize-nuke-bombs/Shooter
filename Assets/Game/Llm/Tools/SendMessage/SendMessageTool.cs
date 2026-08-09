@@ -13,6 +13,13 @@ namespace Shooter.Game.Llm.Tools
     {
         private static readonly Journal Log = Logs.Here();
 
+        private PersistentId ownId;
+
+        private void Awake()
+        {
+            ownId = GetComponent<PersistentId>();
+        }
+
         public override string Name => "send_message";
 
         public override string Description =>
@@ -25,7 +32,6 @@ namespace Shooter.Game.Llm.Tools
                 return "Nothing to send";
             }
 
-            long ownId = GetComponent<PersistentId>().Value;
             string time = Environment.Current.Clock.DateTime();
             Llm[] residents = FindObjectsByType<Llm>();
             var delivered = new List<long>();
@@ -49,7 +55,7 @@ namespace Shooter.Game.Llm.Tools
                     continue;
                 }
 
-                target.Notice($"[{time}] Mail from {ownId}: {arguments.Content}");
+                target.Notice($"[{time}] Mail from {ownId.Value}: {arguments.Content}");
                 delivered.Add(targetId);
                 Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
             }
