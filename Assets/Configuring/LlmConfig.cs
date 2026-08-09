@@ -13,7 +13,7 @@ namespace Shooter.Configuring
             {
                 Key = "",
                 Provider = "Polza",
-                Model = "anthropic/claude-haiku-4.5"
+                Model = "google/gemini-3.6-flash"
             };
         }
 
@@ -23,7 +23,7 @@ namespace Shooter.Configuring
             {
                 Key = "",
                 Provider = "Polza",
-                Model = "anthropic/claude-fable-5"
+                Model = "anthropic/claude-opus-5"
             };
         }
     }
