@@ -99,6 +99,24 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4451123807352778509}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3638057203140018348}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6469017341233358392}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3242761856278858096}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1919641431005335609}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6878640183145115472}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8188014351635383579}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -227,3 +245,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f69690e0dd4f71986cc5cd47fc2700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.Children.LlmCompactTicker
+--- !u!114 &-3638057203140018348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 272fd0c78fa178a4196c476700e562fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.LookAroundTool
+--- !u!114 &6469017341233358392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670617944c4035a499a00d663e6d0d65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.SendMessageTool
+--- !u!114 &3242761856278858096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ebca220cede8044182f3326ee88b712, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.UpdateRelationTool
+--- !u!114 &1919641431005335609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f9180adde0dc8d48bb4e520befeade8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.GiveStackableTool
+--- !u!114 &6878640183145115472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532666c12038a8547bbcd8de20fb085c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.GiveUniqueTool
+--- !u!114 &8188014351635383579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d7cc1824d02db48b430de0d4ed5135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.SayToWandererTool

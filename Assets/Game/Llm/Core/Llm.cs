@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Game.Identity;
@@ -16,6 +15,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [RequireComponent(typeof(LlmHistory))]
     public class Llm : MonoBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
@@ -50,11 +50,13 @@ You have your own attitude towards every character, expressed by a number from 0
 
 
 
+        private LlmHistory history;
         private LlmTool[] abilities;
         private string entityName;
 
         private void Awake()
         {
+            history = GetComponent<LlmHistory>();
             abilities = GetComponents<LlmTool>();
             entityName = name.Replace("(Clone)", "").Trim();
         }
@@ -98,9 +100,6 @@ You have your own attitude towards every character, expressed by a number from 0
 
 
 
-
-        private readonly LlmHistory history = new LlmHistory();
-        [SerializeField] private int historyMaxSize = 30000;
 
         public void Notice(string line)
         {
@@ -167,7 +166,7 @@ You have your own attitude towards every character, expressed by a number from 0
         {
             return new LlmStatus()
             {
-                PendingCompact = history.Size >= historyMaxSize,
+                PendingCompact = history.Overflowing,
                 PendingMail = history.Unseen
             };
         }
@@ -188,7 +187,7 @@ You have your own attitude towards every character, expressed by a number from 0
 
             try
             {
-                if (history.Size >= historyMaxSize)
+                if (history.Overflowing)
                 {
                     await CompactTick();
                 }
@@ -229,7 +228,7 @@ You have your own attitude towards every character, expressed by a number from 0
             List<long> presented = pendingWanderers.Keys.ToList();
 
             LlmConfig config = Config.Read().Server.LlmBase;
-            List<ILlmTool> tools = abilities.Where(ability => ability.Available).Cast<ILlmTool>().ToList();
+            List<ILlmTool> tools = abilities.Where(ability => ability.Available && !ability.Compacting).Cast<ILlmTool>().ToList();
 
             Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
 
@@ -294,10 +293,9 @@ You have your own attitude towards every character, expressed by a number from 0
 
         private async Task CompactTick()
         {
-            var retelling = new RewriteSummary();
-            var tools = new List<ILlmTool> { retelling };
+            List<ILlmTool> tools = abilities.Where(ability => ability.Available && ability.Compacting).Cast<ILlmTool>().ToList();
 
-            int snapshot = history.Count;
+            history.Snapshot();
 
             var compacted = new List<LlmMessage>(history.Messages);
             compacted.Add(new LlmMessage
@@ -306,7 +304,7 @@ You have your own attitude towards every character, expressed by a number from 0
                 Content = "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of everything above: the retelling will replace the story, and anything you leave out is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length."
             });
 
-            Log.Info($"Entity {entityName} is compacting {snapshot} history messages / {history.Size} chars");
+            Log.Info($"Entity {entityName} is compacting {compacted.Count - 1} history messages / {history.Size} chars");
 
             LlmTurn turn = await LlmProvider.Request(Config.Read().Server.LlmMax, $"{entityName}-compact", Persona,
                 compacted, tools, life.Token);
@@ -317,36 +315,12 @@ You have your own attitude towards every character, expressed by a number from 0
                 foreach (LlmToolCall call in turn.ToolCalls) Execute(tools, call);
             }
 
-            if (string.IsNullOrEmpty(retelling.Summary))
+            if (history.Overflowing)
             {
-                throw new LlmException("No summary for the pending compact");
+                throw new LlmException("The story is still overflowing after the compact tick");
             }
-
-            history.Retell("THE STORY OF YOUR LIFE SO FAR:\n" + retelling.Summary, snapshot);
 
             Log.Info($"Entity {entityName} compacted its history down to {history.Size} chars");
-        }
-
-        private sealed class RewriteSummary : ILlmTool
-        {
-            public string Summary { get; private set; }
-
-            public string Name => "rewrite_summary";
-
-            public string Description => "Replace the story of your life so far with its full retelling.";
-
-            public JObject Parameters => LlmSchema.Of(typeof(Arguments));
-
-            public string Execute(string arguments)
-            {
-                Summary = JObject.Parse(arguments)["text"]?.ToString();
-                return "Rewritten";
-            }
-
-            private class Arguments
-            {
-                public string Text { get; set; }
-            }
         }
 
 

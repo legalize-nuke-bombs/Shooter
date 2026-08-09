@@ -1,15 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    public sealed class LlmHistory
+    public sealed class LlmHistory : MonoBehaviour
     {
+        [SerializeField] private int maxSize = 30000;
+
         private readonly List<LlmMessage> messages = new List<LlmMessage>();
+        private int snapshot;
 
         public int Count => messages.Count;
         public int Size { get; private set; }
         public bool Unseen { get; private set; }
+        public bool Overflowing => Size >= maxSize;
         public IReadOnlyList<LlmMessage> Messages => messages;
 
         public void Append(LlmMessage message)
@@ -29,7 +34,12 @@ namespace Shooter.Game.Llm
             Unseen = false;
         }
 
-        public void Retell(string story, int snapshot)
+        public void Snapshot()
+        {
+            snapshot = messages.Count;
+        }
+
+        public void Retell(string story)
         {
             List<LlmMessage> fresh = messages.Skip(snapshot).ToList();
 
@@ -38,6 +48,8 @@ namespace Shooter.Game.Llm
 
             Append(new LlmMessage { Role = LlmRole.User, Content = story });
             foreach (LlmMessage message in fresh) Append(message);
+
+            snapshot = messages.Count;
         }
 
         private static int Sized(LlmMessage message)
