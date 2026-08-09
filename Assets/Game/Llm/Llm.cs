@@ -26,30 +26,6 @@ namespace Shooter.Game.Llm
     {
         private static readonly Journal Log = Logs.Here();
 
-        private Digester digester;
-        private WorldDigester worldDigester;
-        private CharacterRelation characterRelation;
-        private InventoryExchanger inventoryExchanger;
-        private string entityName;
-
-        private void Awake()
-        {
-            digester = GetComponent<Digester>();
-            worldDigester = GetComponent<WorldDigester>();
-            characterRelation = GetComponent<CharacterRelation>();
-            inventoryExchanger = GetComponent<InventoryExchanger>();
-            entityName = name;
-        }
-
-        private void OnDestroy()
-        {
-            life.Cancel();
-        }
-
-
-
-
-
         private const string Persona =
             @"## CORE
 You are a resident of a remote and deadly world: fog, ruins, creatures, and nobody knows how this world works. For you it is the only reality there is.
@@ -80,9 +56,33 @@ You have your own attitude towards every character, expressed by a number from 0
 
 
 
-        [SerializeField] [TextArea(5, 20)] private string character;
+        private Digester digester;
+        private WorldDigester worldDigester;
+        private CharacterRelation characterRelation;
+        private InventoryExchanger inventoryExchanger;
+        private string entityName;
 
+        private void Awake()
+        {
+            digester = GetComponent<Digester>();
+            worldDigester = GetComponent<WorldDigester>();
+            characterRelation = GetComponent<CharacterRelation>();
+            inventoryExchanger = GetComponent<InventoryExchanger>();
+            entityName = name.Replace("(Clone)", "").Trim();
+        }
+
+        private void OnDestroy()
+        {
+            life.Cancel();
+        }
+
+
+
+
+
+        [SerializeField] [TextArea(5, 20)] private string character;
         [SerializeField] private KnowledgeSpec[] knowledges;
+
         private string Knowledge()
         {
             var known = new StringBuilder();
@@ -90,13 +90,33 @@ You have your own attitude towards every character, expressed by a number from 0
             {
                 if (knowledge == null)
                 {
-                    Log.Warn($"Entity {name} has an empty slot among its {knowledges.Length} knowledges");
+                    Log.Warn($"Entity {entityName} has an empty slot among its {knowledges.Length} knowledges");
                     continue;
                 }
 
                 known.Append(knowledge.Content).Append('\n');
             }
             return known.ToString();
+        }
+
+        private void Begin()
+        {
+            var start = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(character))
+            {
+                start.Append("WHO YOU ARE:\n").Append(character.TrimEnd('\n')).Append('\n');
+            }
+
+            string knowledge = Knowledge();
+            if (knowledge.Length > 0)
+            {
+                start.Append("WHAT YOU KNOW AND REMEMBER:\n").Append(knowledge);
+            }
+
+            if (start.Length == 0) return;
+
+            Append(new LlmMessage { Role = LlmRole.User, Content = start.ToString().TrimEnd('\n') });
         }
 
 
@@ -173,6 +193,7 @@ You have your own attitude towards every character, expressed by a number from 0
 
 
         private readonly CancellationTokenSource life = new CancellationTokenSource();
+
         public void Died()
         {
             life.Cancel();
@@ -258,7 +279,7 @@ You have your own attitude towards every character, expressed by a number from 0
 
             for (int round = 0; round < maxToolRounds; round++)
             {
-                LlmTurn turn = await LlmProvider.Request(config, Persona, history, tools, life.Token);
+                LlmTurn turn = await LlmProvider.Request(config, $"{entityName}-live", Persona, history, tools, life.Token);
                 life.Token.ThrowIfCancellationRequested();
 
                 Append(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
@@ -270,26 +291,6 @@ You have your own attitude towards every character, expressed by a number from 0
                     Append(new LlmMessage { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
                 }
             }
-        }
-
-        private void Begin()
-        {
-            var start = new StringBuilder();
-
-            if (!string.IsNullOrEmpty(character))
-            {
-                start.Append("WHO YOU ARE:\n").Append(character.TrimEnd('\n')).Append('\n');
-            }
-
-            string knowledge = Knowledge();
-            if (knowledge.Length > 0)
-            {
-                start.Append("WHAT YOU KNOW AND REMEMBER:\n").Append(knowledge);
-            }
-
-            if (start.Length == 0) return;
-
-            Append(new LlmMessage { Role = LlmRole.User, Content = start.ToString().TrimEnd('\n') });
         }
 
         private string Observation()
@@ -520,7 +521,8 @@ You have your own attitude towards every character, expressed by a number from 0
 
             Log.Info($"Entity {entityName} is compacting {snapshot} history messages / {historySize} chars");
 
-            LlmTurn turn = await LlmProvider.Request(Config.Read().Server.LlmMax, Persona, compacted, tools, life.Token);
+            LlmTurn turn = await LlmProvider.Request(Config.Read().Server.LlmMax, $"{entityName}-compact", Persona,
+                compacted, tools, life.Token);
             life.Token.ThrowIfCancellationRequested();
 
             if (turn.CallsTools)
@@ -530,7 +532,7 @@ You have your own attitude towards every character, expressed by a number from 0
 
             if (string.IsNullOrEmpty(summary))
             {
-                throw new LlmAnswerException("No summary for the pending compact");
+                throw new LlmException("No summary for the pending compact");
             }
 
             List<LlmMessage> fresh = history.Skip(snapshot).ToList();
@@ -565,7 +567,7 @@ You have your own attitude towards every character, expressed by a number from 0
             {
                 return id.Value;
             }
-            Log.Warn($"Entity {name} does not have persistent id");
+            Log.Warn($"Entity {entityName} does not have persistent id");
             return -1;
         }
 
@@ -575,7 +577,7 @@ You have your own attitude towards every character, expressed by a number from 0
             {
                 return health.Alive;
             }
-            Log.Warn($"Entity {name} does not have health");
+            Log.Warn($"Entity {entityName} does not have health");
             return false;
         }
     }

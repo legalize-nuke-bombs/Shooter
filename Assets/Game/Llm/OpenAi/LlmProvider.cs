@@ -22,13 +22,16 @@ namespace Shooter.Game.Llm.OpenAi
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
+        private static readonly string SessionFolder = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+
+        private static int requestNumber;
         private static int sessionRequests;
         private static long sessionCharsIn;
         private static long sessionCharsOut;
         private static long sessionTokensIn;
         private static long sessionTokensOut;
 
-        public static async Task<LlmTurn> Request(LlmConfig config, string system,
+        public static async Task<LlmTurn> Request(LlmConfig config, string requestName, string system,
             IReadOnlyList<LlmMessage> history, IReadOnlyList<LlmTool> tools, CancellationToken until)
         {
             if (string.IsNullOrEmpty(config.Key))
@@ -36,7 +39,7 @@ namespace Shooter.Game.Llm.OpenAi
                 throw new InvalidOperationException($"Llm key is not set in {GameConfig.FileName}");
             }
 
-            string requestId = Guid.NewGuid().ToString();
+            string requestId = $"{++requestNumber:d4}-{requestName}";
 
             var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = system } };
             messages.AddRange(history.Select(Mapped));
@@ -48,7 +51,7 @@ namespace Shooter.Game.Llm.OpenAi
                 Tools = tools == null || tools.Count == 0 ? null : tools.Select(tool => tool.Declared()).ToArray()
             };
 
-            string folderPath = Path.Combine(UnityEngine.Application.temporaryCachePath, "LlmRequests");
+            string folderPath = Path.Combine(UnityEngine.Application.temporaryCachePath, "LlmRequests", SessionFolder);
             Directory.CreateDirectory(folderPath);
 
             string seenByModel = Rendered(system, history, tools);
@@ -136,7 +139,7 @@ namespace Shooter.Game.Llm.OpenAi
         {
             if (answered == null)
             {
-                throw new LlmAnswerException($"The provider response has no message: {raw}");
+                throw new LlmException($"The provider response has no message: {raw}");
             }
 
             var calls = new List<LlmToolCall>();
@@ -206,7 +209,7 @@ namespace Shooter.Game.Llm.OpenAi
             }
             catch (Exception e)
             {
-                throw new LlmAnswerException($"Failed to parse the provider response {raw}: {e.Message}");
+                throw new LlmException($"Failed to parse the provider response {raw}: {e.Message}");
             }
         }
     }

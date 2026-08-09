@@ -15,9 +15,6 @@ namespace Shooter.Game.Relationship
         [SerializeField] [Range(0, 100)] private int defaultAmount = 50;
         // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
 
-        private readonly Queue<RelationChangelog> changelog = new Queue<RelationChangelog>();
-        [SerializeField] private int maxChangelogSize = 20;
-
         public int Amount(long characterId)
         {
             return amounts.GetValueOrDefault(characterId, defaultAmount);
@@ -37,19 +34,6 @@ namespace Shooter.Game.Relationship
             if (amount == currentAmount)
             {
                 return;
-            }
-
-            changelog.Enqueue(new RelationChangelog()
-            {
-                    Time = Environment.Current.Clock.DateTime(),
-                    Id = characterId,
-                    From = currentAmount,
-                    To = amount,
-                    Reason = reason
-            });
-            while (changelog.Count > maxChangelogSize)
-            {
-                changelog.Dequeue();
             }
 
             amounts[characterId] = amount;
@@ -98,13 +82,7 @@ namespace Shooter.Game.Relationship
             {
                 sb.Append(kvp.Key + " : " + kvp.Value + " (" + Status(kvp.Value) + "). ");
             }
-            sb.Append($"The relation towards characters not listed here is the standard {defaultAmount}.\n");
-
-            sb.Append("Relations with other characters changelog. ");
-            foreach (RelationChangelog rc in changelog)
-            {
-                sb.Append($"[{rc.Time}] Relation to {rc.Id} {rc.From} -> {rc.To} reason: {rc.Reason}. ");
-            }
+            sb.Append($"The relation towards characters not listed here is the standard {defaultAmount}.");
 
             return sb.ToString();
         }
