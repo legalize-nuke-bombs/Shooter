@@ -15,8 +15,9 @@ namespace Shooter.Game.Llm.Tools
 
         private PersistentId ownId;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             ownId = GetComponent<PersistentId>();
         }
 

@@ -169,7 +169,7 @@ namespace Shooter.Game.Llm
             }
             catch (Exception e)
             {
-                Log.Error($"Request failed. Error: {e.Message}");
+                Log.Warn($"Request failed. Error: {e.Message}");
                 throw;
             }
         }

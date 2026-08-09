@@ -23,6 +23,9 @@ namespace Shooter.Game
 
         public static Environment Current { get; private set; }
 
+        [SerializeField] private GameObject profiler;
+        public GameObject Profiler => profiler;
+
         [SerializeField] private GameObject corpse;
 
         [SerializeField] private ItemCatalog items;

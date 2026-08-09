@@ -131,7 +131,7 @@ namespace Shooter.Game.Speech
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Entity {name} failed to request answer for client {entry.Key}: {e.Message}");
+                    Log.Warn($"Entity {name} failed to request answer for client {entry.Key}: {e.Message}");
                     DeliverAnswer(entry.Key, "Not now.");
                 }
             }

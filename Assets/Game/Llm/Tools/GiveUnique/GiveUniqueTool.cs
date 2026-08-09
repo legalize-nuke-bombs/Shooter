@@ -8,8 +8,9 @@ namespace Shooter.Game.Llm.Tools
     {
         private InventoryExchanger inventoryExchanger;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             inventoryExchanger = GetComponent<InventoryExchanger>();
         }
 

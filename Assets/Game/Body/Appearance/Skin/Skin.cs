@@ -19,7 +19,7 @@ namespace Shooter.Game.Body
         {
             if (spec == null || spec.Model == null)
             {
-                Log.Error($"Entity {name} has no skin to wear, stays invisible");
+                Log.Warn($"Entity {name} has no skin to wear, stays invisible");
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace Shooter.Game.Body
             var animator = Flesh.GetComponent<Animator>();
             if (animator == null)
             {
-                Log.Error($"Skin {spec.Id} of entity {name} has no animator, entity stays still");
+                Log.Warn($"Skin {spec.Id} of entity {name} has no animator, entity stays still");
                 return;
             }
 

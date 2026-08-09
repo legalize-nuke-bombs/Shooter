@@ -8,8 +8,9 @@ namespace Shooter.Game.Llm.Tools
     {
         private CharacterRelation characterRelation;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             characterRelation = GetComponent<CharacterRelation>();
         }
 

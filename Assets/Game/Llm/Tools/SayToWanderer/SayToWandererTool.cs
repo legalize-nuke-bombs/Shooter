@@ -7,8 +7,9 @@ namespace Shooter.Game.Llm.Tools
     {
         private Llm llm;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             llm = GetComponent<Llm>();
         }
 
