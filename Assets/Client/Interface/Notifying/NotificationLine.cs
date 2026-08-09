@@ -8,9 +8,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Environment = Shooter.Game.Environment;
 
-namespace Shooter.Client.Interface.Overlays
+namespace Shooter.Client.Interface.Notifying
 {
-    public abstract class NotificationLine
+    public abstract class NotificationLine : MonoBehaviour
     {
         public abstract Type Kind { get; }
 
@@ -23,6 +23,9 @@ namespace Shooter.Client.Interface.Overlays
     {
         private const string Stranger = "Незнакомец";
 
+        [SerializeField] private Sprite icon;
+        [SerializeField] private EarSoundSpec sound;
+
         private readonly NameMapper mapper = new NameMapper();
 
         public override Type Kind => typeof(T);
@@ -31,28 +34,26 @@ namespace Shooter.Client.Interface.Overlays
 
         public override EarSoundSpec Sound(Notification notification) => Sound((T)notification);
 
-        protected abstract Sprite Icon(T notification);
+        protected virtual Sprite Icon(T notification) => icon;
 
         protected abstract string Title(T notification);
 
         protected abstract long Actor(T notification);
 
-        protected abstract EarSoundSpec Sound(T notification);
-
-        protected static EarSoundCatalog Sounds => Environment.Current == null ? null : Environment.Current.EarSounds;
+        protected virtual EarSoundSpec Sound(T notification) => sound;
 
         private VisualElement Assemble(T notification)
         {
             var line = new VisualElement();
             line.AddToClassList("notification");
 
-            Sprite icon = Icon(notification);
-            if (icon != null)
+            Sprite image = Icon(notification);
+            if (image != null)
             {
-                var image = new VisualElement();
-                image.AddToClassList("notification__icon");
-                image.style.backgroundImage = Background.FromSprite(icon);
-                line.Add(image);
+                var box = new VisualElement();
+                box.AddToClassList("notification__icon");
+                box.style.backgroundImage = Background.FromSprite(image);
+                line.Add(box);
             }
 
             var body = new VisualElement();

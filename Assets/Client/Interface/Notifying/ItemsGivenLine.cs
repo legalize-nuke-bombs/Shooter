@@ -1,15 +1,12 @@
-using Shooter.Game;
-using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Notifying;
 using Shooter.Game.Loot;
 using UnityEngine;
+using Environment = Shooter.Game.Environment;
 
-namespace Shooter.Client.Interface.Overlays
+namespace Shooter.Client.Interface.Notifying
 {
     public sealed class ItemsGivenLine : NotificationLine<ItemsGivenNotification>
     {
-        private const string SoundId = "items_given";
-
         protected override Sprite Icon(ItemsGivenNotification notification)
         {
             ItemSpec spec = Spec(notification);
@@ -26,8 +23,6 @@ namespace Shooter.Client.Interface.Overlays
         }
 
         protected override long Actor(ItemsGivenNotification notification) => notification.ActorId;
-
-        protected override EarSoundSpec Sound(ItemsGivenNotification notification) => Sounds == null ? null : Sounds.Of(SoundId);
 
         private static ItemSpec Spec(ItemsGivenNotification notification)
         {
