@@ -34,17 +34,14 @@ namespace Shooter.Game.Llm.Tools
                 return "Nothing to send";
             }
 
-            Llm[] residents = FindObjectsByType<Llm>();
             var delivered = new List<long>();
             var failed = new List<string>();
 
             foreach (long targetId in arguments.TargetIds.Distinct())
             {
-                Llm target = residents.FirstOrDefault(resident =>
-                    resident.gameObject != gameObject &&
-                    resident.TryGetComponent(out PersistentId id) && id.Value == targetId);
+                PersistentId target = Environment.Current.PersistentIds.Of(targetId);
 
-                if (target == null)
+                if (target == null || target.gameObject == gameObject || !target.TryGetComponent<Llm>(out _))
                 {
                     failed.Add($"{targetId}: no resident bears this id");
                     continue;

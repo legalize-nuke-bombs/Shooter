@@ -14,7 +14,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(-100)]
-    [RequireComponent(typeof(PersistentIdProvider))]
+    [RequireComponent(typeof(PersistentIds))]
     [RequireComponent(typeof(Clock))]
     [RequireComponent(typeof(SleepCycle))]
     [RequireComponent(typeof(Sweeper))]
@@ -44,7 +44,7 @@ namespace Shooter.Game
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
-        public PersistentIdProvider PersistentIdProvider { get; private set; }
+        public PersistentIds PersistentIds { get; private set; }
 
         public Clock Clock { get; private set; }
 
@@ -72,7 +72,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            PersistentIdProvider = GetComponent<PersistentIdProvider>();
+            PersistentIds = GetComponent<PersistentIds>();
             Clock = GetComponent<Clock>();
             SleepCycle = GetComponent<SleepCycle>();
             Sweeper = GetComponent<Sweeper>();
