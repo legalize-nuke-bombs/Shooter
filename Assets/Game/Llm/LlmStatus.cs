@@ -4,7 +4,6 @@
     {
         public bool PendingConversations { get; set; }
         public bool PendingCompact { get; set; }
-        public bool PendingInterNpcInteractionsInbox { get; set; }
-        public bool PendingSystemNotificationsInbox { get; set; }
+        public bool PendingMail { get; set; }
     }
 }
