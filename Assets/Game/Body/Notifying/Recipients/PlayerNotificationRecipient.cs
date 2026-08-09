@@ -1,4 +1,5 @@
 using System;
+using Shooter.Game.Body.EarSounding;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -7,11 +8,21 @@ using UnityEngine;
 namespace Shooter.Game.Body.Notifying
 {
     [RequireComponent(typeof(MainNotificationRecipient))]
+    [RequireComponent(typeof(EarSpeaker))]
     public class PlayerNotificationRecipient : NetworkBehaviour, IChildNotificationRecipient
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private EarSoundSpec sound;
+
+        private EarSpeaker ear;
+
         public event Action<Notification> Shown;
+
+        private void Awake()
+        {
+            ear = GetComponent<EarSpeaker>();
+        }
 
         public void OnReceive(Notification notification)
         {
@@ -21,6 +32,8 @@ namespace Shooter.Game.Body.Notifying
             if (packed.IsEmpty) return;
 
             ShownRpc(packed);
+
+            if (sound != null) ear.Play(sound);
         }
 
         [Rpc(SendTo.Owner)]
