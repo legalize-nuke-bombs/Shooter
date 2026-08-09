@@ -9,7 +9,7 @@ namespace Shooter.Game.Body.Notifying
         
         private IChildNotificationRecipient[] recipients;
 
-        public void Awake()
+        private void Awake()
         {
             recipients = GetComponentsInChildren<IChildNotificationRecipient>();
             Log.Info($"Entity {name} has {recipients.Length} child notification recipients");
@@ -20,7 +20,7 @@ namespace Shooter.Game.Body.Notifying
             Log.Info($"Entity {name} received notification");
             foreach (IChildNotificationRecipient recipient in recipients)
             {
-                recipient?.OnReceive(notification);
+                recipient.OnReceive(notification);
             }
         }
     }

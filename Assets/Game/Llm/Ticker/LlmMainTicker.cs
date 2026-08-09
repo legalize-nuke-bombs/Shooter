@@ -1,5 +1,5 @@
 ﻿using System;
-using Shooter.Game.Base;
+using Shooter.Game.Profiling;
 using Shooter.Game.Llm.Ticker.Children;
 using Shooter.Logging;
 using Unity.Netcode;

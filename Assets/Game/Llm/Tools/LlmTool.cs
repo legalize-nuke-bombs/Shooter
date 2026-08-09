@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using Shooter.Game.Base;
+using Shooter.Game.Profiling;
 using Shooter.Logging;
 using UnityEngine;
 

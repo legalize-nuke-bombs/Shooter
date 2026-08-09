@@ -4,6 +4,7 @@ using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Identity;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
+using Shooter.Game.Profiling;
 using Shooter.Game.Sweeping;
 using Shooter.Logging;
 using Unity.Collections;

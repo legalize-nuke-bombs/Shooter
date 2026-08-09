@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Shooter.Game.Base
+namespace Shooter.Game.Profiling
 {
     public class LlmTickProfiler : BaseProfiler
     {

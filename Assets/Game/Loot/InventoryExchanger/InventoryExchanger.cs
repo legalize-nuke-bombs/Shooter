@@ -9,10 +9,13 @@ namespace Shooter.Game.Loot
     {
         private static readonly Journal Log = Logs.Here();
 
+        private static int characterMask;
+        private static int CharacterMask => characterMask != 0 ? characterMask : characterMask = LayerMask.GetMask("Character");
+
         [SerializeField] private float exchangeRadius = 10f;
         public float ExchangeRadius => exchangeRadius;
 
-        private readonly Collider[] around = new Collider[1024];
+        private readonly Collider[] around = new Collider[64];
 
         private Inventory inventory;
 
@@ -64,9 +67,9 @@ namespace Shooter.Game.Loot
 
         private Inventory TargetInventory(long targetId)
         {
-            int hits = Physics.OverlapSphereNonAlloc(transform.position, exchangeRadius, around);
+            int hits = Physics.OverlapSphereNonAlloc(transform.position, exchangeRadius, around, CharacterMask);
             if (hits == around.Length)
-                Log.Warn("OverlapSphereNonAlloc overflow");
+                Log.Warn($"{name} sees {hits} characters within {exchangeRadius}m, somebody stays invisible for the exchange");
 
             for (int i = 0; i < hits; i++)
             {
