@@ -49,7 +49,7 @@ namespace Shooter.Game.Body
                 Murder = !Alive
             };
 
-            if (characterRelation != null && attackerId != null)
+            if (Alive && characterRelation != null && attackerId != null)
             {
                 characterRelation.DecreaseAmount(attackerId.Value, amount, $"{attackerId.Value} dealt {amount} damage");
             }

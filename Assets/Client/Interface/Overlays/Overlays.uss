@@ -350,7 +350,7 @@
     flex-direction: row;
     align-items: center;
     margin-top: 4px;
-    padding: 6px 10px 6px 8px;
+    padding: 0 10px 0 0;
     min-width: 176px;
     background-color: rgba(8, 8, 8, 0.78);
     border-left-width: 2px;
@@ -364,8 +364,8 @@
 }
 
 .notification__icon {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    align-self: stretch;
     margin-right: 9px;
     background-color: rgba(214, 198, 160, 0.06);
     -unity-background-scale-mode: scale-to-fit;
@@ -373,6 +373,7 @@
 
 .notification__body {
     flex-direction: column;
+    padding: 6px 0;
 }
 
 .notification__title {
