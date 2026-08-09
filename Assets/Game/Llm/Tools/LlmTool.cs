@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Llm.Tools
@@ -19,6 +20,8 @@ namespace Shooter.Game.Llm.Tools
 
     public abstract class LlmTool<TArguments> : LlmTool
     {
+        private static readonly Journal Log = Logs.Here();
+
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
             ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() }
@@ -32,7 +35,10 @@ namespace Shooter.Game.Llm.Tools
             var parsed = JsonConvert.DeserializeObject<TArguments>(
                 string.IsNullOrEmpty(arguments) ? "{}" : arguments, Settings);
 
-            return Execute(parsed);
+            string result = Execute(parsed);
+            Log.Info($"Entity {name} used {Name} {arguments}: {result}");
+
+            return result;
         }
 
         protected abstract string Execute(TArguments arguments);
