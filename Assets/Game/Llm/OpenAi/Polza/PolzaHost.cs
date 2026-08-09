@@ -45,14 +45,14 @@ namespace Shooter.Game.Llm.OpenAi.Polza
                 if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
                     webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    throw new LlmHostException(
+                    throw new LlmException(
                         $"HTTP {webRequest.responseCode} {webRequest.error}: {webRequest.downloadHandler?.text}");
                 }
 
                 string answered = webRequest.downloadHandler?.text;
                 if (string.IsNullOrEmpty(answered))
                 {
-                    throw new LlmHostException("Host returned an empty response body");
+                    throw new LlmException("Host returned an empty response body");
                 }
 
                 return answered;
