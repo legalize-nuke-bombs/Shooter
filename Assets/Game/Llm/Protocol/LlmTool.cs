@@ -1,6 +1,5 @@
 using System;
 using Newtonsoft.Json.Linq;
-using Shooter.Game.Llm.OpenAi;
 
 namespace Shooter.Game.Llm
 {
@@ -17,19 +16,6 @@ namespace Shooter.Game.Llm
             Description = description;
             Parameters = JObject.Parse(parameters);
             Execute = execute;
-        }
-
-        public OpenAiTool Declared()
-        {
-            return new OpenAiTool
-            {
-                Function = new OpenAiFunction
-                {
-                    Name = Name,
-                    Description = Description,
-                    Parameters = Parameters
-                }
-            };
         }
     }
 }
