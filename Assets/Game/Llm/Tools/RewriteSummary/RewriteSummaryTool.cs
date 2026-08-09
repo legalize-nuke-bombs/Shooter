@@ -19,6 +19,7 @@ namespace Shooter.Game.Llm.Tools
 
         public override bool Available => history.Overflowing;
         public override bool Compacting => true;
+        public override LlmLevel Level => LlmLevel.Max;
 
         protected override string Execute(RewriteSummaryArguments arguments)
         {

@@ -227,8 +227,9 @@ You have your own attitude towards every character, expressed by a number from 0
 
             List<long> presented = pendingWanderers.Keys.ToList();
 
-            LlmConfig config = Config.Read().Server.LlmBase;
-            List<ILlmTool> tools = abilities.Where(ability => ability.Available && !ability.Compacting).Cast<ILlmTool>().ToList();
+            List<LlmTool> selected = abilities.Where(ability => ability.Available && !ability.Compacting).ToList();
+            LlmConfig config = Fitting(selected);
+            List<ILlmTool> tools = selected.Cast<ILlmTool>().ToList();
 
             Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
 
@@ -269,6 +270,13 @@ You have your own attitude towards every character, expressed by a number from 0
             return seen.ToString();
         }
 
+        private static LlmConfig Fitting(List<LlmTool> tools)
+        {
+            return tools.Any(tool => tool.Level == LlmLevel.Max)
+                ? Config.Read().Server.LlmMax
+                : Config.Read().Server.LlmBase;
+        }
+
         private string Execute(IReadOnlyList<ILlmTool> tools, LlmToolCall call)
         {
             ILlmTool tool = tools.FirstOrDefault(known => known.Name == call.Name);
@@ -291,7 +299,9 @@ You have your own attitude towards every character, expressed by a number from 0
 
         private async Task CompactTick()
         {
-            List<ILlmTool> tools = abilities.Where(ability => ability.Available && ability.Compacting).Cast<ILlmTool>().ToList();
+            List<LlmTool> selected = abilities.Where(ability => ability.Available && ability.Compacting).ToList();
+            LlmConfig config = Fitting(selected);
+            List<ILlmTool> tools = selected.Cast<ILlmTool>().ToList();
 
             history.Snapshot();
 
@@ -304,7 +314,7 @@ You have your own attitude towards every character, expressed by a number from 0
 
             Log.Info($"Entity {entityName} is compacting {compacted.Count - 1} history messages / {history.Size} chars");
 
-            LlmTurn turn = await LlmProvider.Request(Config.Read().Server.LlmMax, $"{entityName}-compact", Persona,
+            LlmTurn turn = await LlmProvider.Request(config, $"{entityName}-compact", Persona,
                 compacted, tools, life.Token);
             life.Token.ThrowIfCancellationRequested();
 
