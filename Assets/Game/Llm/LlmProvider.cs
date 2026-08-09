@@ -48,7 +48,7 @@ namespace Shooter.Game.Llm
             {
                 Model = config.Model,
                 Messages = messages.ToArray(),
-                Tools = tools == null || tools.Count == 0 ? null : tools.Select(tool => tool.Declared()).ToArray()
+                Tools = tools == null || tools.Count == 0 ? null : tools.Select(Declared).ToArray()
             };
 
             string folderPath = Path.Combine(UnityEngine.Application.temporaryCachePath, "LlmRequests", SessionFolder);
@@ -69,6 +69,19 @@ namespace Shooter.Game.Llm
             Count(sent.Length, answered?.Content?.Length ?? 0, response?.Usage);
 
             return Turned(answered, raw);
+        }
+
+        private static OpenAiTool Declared(LlmTool tool)
+        {
+            return new OpenAiTool
+            {
+                Function = new OpenAiFunction
+                {
+                    Name = tool.Name,
+                    Description = tool.Description,
+                    Parameters = tool.Parameters
+                }
+            };
         }
 
         private static OpenAiMessage Mapped(LlmMessage message)
