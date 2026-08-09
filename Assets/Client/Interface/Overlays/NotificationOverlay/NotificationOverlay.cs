@@ -1,12 +1,7 @@
-using Shooter.Client.Interface.Naming;
 using Shooter.Client.Playing;
-using Shooter.Game;
-using Shooter.Game.Body;
+using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Body.Notifying;
-using Shooter.Game.Identity;
-using Shooter.Game.Loot;
 using Shooter.Logging;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface.Overlays
@@ -16,11 +11,8 @@ namespace Shooter.Client.Interface.Overlays
         private static readonly Journal Log = Logs.Here();
 
         private const string FeedElement = "notifications";
-        private const string Stranger = "Незнакомец";
         private const long Life = 5000;
         private const int Limit = 4;
-
-        private readonly NameMapper mapper = new NameMapper();
 
         private VisualElement feed;
         private PlayerNotificationRecipient recipient;
@@ -61,87 +53,27 @@ namespace Shooter.Client.Interface.Overlays
 
         private void Show(Notification notification)
         {
-            VisualElement line = Line(notification);
+            NotificationLine line = NotificationLines.Of(notification);
             if (line == null) return;
 
-            feed.Add(line);
+            VisualElement element = line.Build(notification);
+            feed.Add(element);
 
             while (feed.childCount > Limit) feed.RemoveAt(0);
 
-            feed.schedule.Execute(line.RemoveFromHierarchy).StartingIn(Life);
+            feed.schedule.Execute(element.RemoveFromHierarchy).StartingIn(Life);
+
+            Ring(line.Sound(notification));
         }
 
-        private VisualElement Line(Notification notification)
+        private void Ring(EarSoundSpec sound)
         {
-            return notification switch
-            {
-                ItemsGivenNotification given => Given(given),
-                RelationChangedNotification changed => Changed(changed),
-                _ => null
-            };
-        }
+            if (sound == null) return;
 
-        private VisualElement Given(ItemsGivenNotification given)
-        {
-            ItemCatalog catalog = Environment.Current == null ? null : Environment.Current.Items;
-            ItemSpec spec = catalog == null ? null : catalog.Spec(given.ItemSpecId);
+            EarSpeaker ear = OwnPlayer.Find<EarSpeaker>();
+            if (ear == null) return;
 
-            return Line(spec == null ? null : spec.Icon, Told(given, spec), given.ActorId);
-        }
-
-        private VisualElement Changed(RelationChangedNotification changed)
-        {
-            return Line(null, changed.After > changed.Before ? "Отношение улучшилось" : "Отношение ухудшилось", changed.ActorId);
-        }
-
-        private VisualElement Line(Sprite icon, string title, long actorId)
-        {
-            var line = new VisualElement();
-            line.AddToClassList("notification");
-
-            if (icon != null)
-            {
-                var image = new VisualElement();
-                image.AddToClassList("notification__icon");
-                image.style.backgroundImage = Background.FromSprite(icon);
-                line.Add(image);
-            }
-
-            var body = new VisualElement();
-            body.AddToClassList("notification__body");
-
-            var caption = new Label(title);
-            caption.AddToClassList("line");
-            caption.AddToClassList("notification__title");
-            body.Add(caption);
-
-            var from = new Label($"от {Named(actorId)}");
-            from.AddToClassList("notification__from");
-            body.Add(from);
-
-            line.Add(body);
-
-            return line;
-        }
-
-        private static string Told(ItemsGivenNotification given, ItemSpec spec)
-        {
-            string title = spec == null ? given.ItemSpecId : spec.Title;
-
-            return spec != null && !spec.Stackable ? title : $"{title} ×{given.Amount}";
-        }
-
-        private string Named(long actorId)
-        {
-            PersistentId actor = Environment.Current == null ? null : Environment.Current.PersistentIds.Of(actorId);
-            if (actor == null) return Stranger;
-
-            var nameable = actor.GetComponentInChildren<Nameable>();
-            if (nameable == null) return Stranger;
-
-            string named = mapper.Of(nameable);
-
-            return string.IsNullOrEmpty(named) ? Stranger : named;
+            ear.PlayLocal(sound);
         }
 
         private void Forget()

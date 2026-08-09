@@ -32,6 +32,13 @@ namespace Shooter.Game.Body.EarSounding
             PlayRpc(sound.Id, sound.Pick());
         }
 
+        public void PlayLocal(EarSoundSpec sound)
+        {
+            if (sound == null) return;
+
+            Ring(sound, sound.Pick());
+        }
+
         [Rpc(SendTo.Owner)]
         private void PlayRpc(FixedString32Bytes id, byte variant)
         {
@@ -45,6 +52,11 @@ namespace Shooter.Game.Body.EarSounding
             EarSoundSpec sound = catalog.Of(id);
             if (sound == null) return;
 
+            Ring(sound, variant);
+        }
+
+        private void Ring(EarSoundSpec sound, byte variant)
+        {
             AudioClip clip = sound.Clip(variant);
             if (clip == null) return;
 
@@ -53,7 +65,7 @@ namespace Shooter.Game.Body.EarSounding
             source.volume = sound.Volume;
             source.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
 
-            Log.Info($"Entity {name} plays {id} variant {variant} in the owner's ear at t={Time.time}");
+            Log.Info($"Entity {name} plays {sound.Id} variant {variant} in the owner's ear at t={Time.time}");
 
             source.Play();
         }
