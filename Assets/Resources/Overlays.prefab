@@ -338,4 +338,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.Notifying.RelationChangedLine
   icon: {fileID: 0}
-  sound: {fileID: 11400000, guid: 44e6e460e1cb44d98f376b7e174c5e4d, type: 2}
+  sound: {fileID: 0}
+  improvedIcon: {fileID: 21300000, guid: 7c8f43a89ad147ebb7ddf62714df9f35, type: 3}
+  worsenedIcon: {fileID: 21300000, guid: 566a8b5d40a3457ea0c48f6a8739129d, type: 3}
+  improvedSound: {fileID: 11400000, guid: ec9d6380458b451cb27421a3a0e2ee8e, type: 2}
+  worsenedSound: {fileID: 11400000, guid: 74d319b8312f4b25a28b3355715af9b5, type: 2}
