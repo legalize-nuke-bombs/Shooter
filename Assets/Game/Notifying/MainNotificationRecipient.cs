@@ -1,12 +1,14 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Notifying
 {
+    [RequireComponent(typeof(PersistentId))]
     public class MainNotificationRecipient : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
-        
+
         private IChildNotificationRecipient[] recipients;
 
         private void Awake()
