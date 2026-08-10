@@ -26,7 +26,7 @@
     color: rgba(255, 255, 255, 0.85);
     font-size: 14px;
     -unity-text-align: middle-left;
-    -unity-font-definition: url("../Overlays/RobotoMono-Regular.ttf");
+    -unity-font-definition: url("../Overlays/Data/RobotoMono-Regular.ttf");
 }
 
 .menu__button:hover {
@@ -54,7 +54,7 @@
     color: rgba(255, 255, 255, 0.5);
     font-size: 14px;
     -unity-text-align: middle-center;
-    -unity-font-definition: url("../Overlays/RobotoMono-Regular.ttf");
+    -unity-font-definition: url("../Overlays/Data/RobotoMono-Regular.ttf");
 }
 
 .menu__tab:hover {
@@ -71,7 +71,7 @@
     margin: 10px 0 6px 0;
     color: rgba(255, 255, 255, 0.45);
     font-size: 12px;
-    -unity-font-definition: url("../Overlays/RobotoMono-Regular.ttf");
+    -unity-font-definition: url("../Overlays/Data/RobotoMono-Regular.ttf");
 }
 
 .menu__field {
