@@ -23,7 +23,7 @@ namespace Shooter.Game.Loot
             ownId = GetComponent<PersistentId>();
         }
 
-        public bool GiveStackable(long targetId, ItemSpec stackable, int amount)
+        public bool GiveStackable(long targetId, StackableItemSpec stackable, int amount)
         {
             PersistentId target = Target(targetId);
             Inventory targetInventory = target == null ? null : target.GetComponent<Inventory>();

@@ -5,10 +5,10 @@ using UnityEngine;
 namespace Shooter.Game.Loot
 {
     [CreateAssetMenu(menuName = "Shooter/Firearm", fileName = "Firearm")]
-    public class FirearmSpec : ItemSpec
+    public class FirearmSpec : UniqueItemSpec
     {
         [SerializeField] private int magazineSize = 30;
-        [SerializeField] private ItemSpec ammo;
+        [SerializeField] private StackableItemSpec ammo;
         [SerializeField] private float distance = 100f;
         [SerializeField] private int damage = 25;
         [SerializeField] private float fireInterval = 0.1f;
@@ -20,7 +20,7 @@ namespace Shooter.Game.Loot
 
         public int MagazineSize => Mathf.Max(magazineSize, 1);
 
-        public ItemSpec Ammo => ammo;
+        public StackableItemSpec Ammo => ammo;
 
         public float Distance => distance;
 

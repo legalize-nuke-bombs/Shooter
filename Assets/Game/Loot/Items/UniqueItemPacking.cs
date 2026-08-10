@@ -31,7 +31,7 @@ namespace Shooter.Game.Loot
             var specId = parsed.Value<string>(nameof(UniqueItem.SpecId));
 
             ItemCatalog catalog = Environment.Current == null ? null : Environment.Current.Items;
-            ItemSpec spec = catalog == null ? null : catalog.Spec(specId);
+            var spec = (catalog == null ? null : catalog.Spec(specId)) as UniqueItemSpec;
 
             if (spec == null)
             {

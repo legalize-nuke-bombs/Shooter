@@ -144,14 +144,15 @@ namespace Shooter.Client.Interface.Overlays
                 ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
                 Pack(taken, spec, out int row, out int column);
 
-                grid.Add(Thing(spec, item.SpecId, row, column, null, slot, spec != null && spec.Equipable, false));
+                grid.Add(Thing(spec, item.SpecId, row, column, null, slot, spec is UniqueItemSpec unique && unique.Equipable, false));
             }
 
             int kinds = catalog == null ? 0 : catalog.Count;
 
             for (int index = 0; index < kinds; index++)
             {
-                ItemSpec spec = catalog.At(index);
+                if (catalog.At(index) is not StackableItemSpec spec) continue;
+
                 int amount = bag.StackableAmount(spec);
                 if (amount == 0) continue;
 

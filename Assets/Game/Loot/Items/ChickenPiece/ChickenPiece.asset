@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dd4cf6567cf14cf59846c41a6c5cba9, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f8b41c7d95e4a3fb06c1d27e8a45913, type: 3}
   m_Name: ChickenPiece
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.ItemSpec
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: chickenpiece
   title: "\u041A\u0443\u0440\u0438\u043D\u0430\u044F \u043D\u043E\u0436\u043A\u0430"
   promptName: Chicken leg
-  stackable: 1
-  equipable: 0
   model: {fileID: 2921134319588251144, guid: 16acbe5bed5d99944a567da1b7fcb438, type: 3}
   icon: {fileID: 21300000, guid: 4527394da99fbdb4da97757e72b0ca22, type: 3}
   cells: {x: 1, y: 1}

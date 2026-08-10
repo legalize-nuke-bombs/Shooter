@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dd4cf6567cf14cf59846c41a6c5cba9, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f8b41c7d95e4a3fb06c1d27e8a45913, type: 3}
   m_Name: Bread
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.ItemSpec
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: bread
   title: "\u0425\u043B\u0435\u0431"
   promptName: Bread
-  stackable: 1
-  equipable: 0
   model: {fileID: 6093391673720001028, guid: 2475a01d6f14eaf48bd688382a900e55, type: 3}
   icon: {fileID: 21300000, guid: c1d5c749437a20d4bae56a39bbcee3c2, type: 3}
   cells: {x: 1, y: 1}

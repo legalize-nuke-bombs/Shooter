@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dd4cf6567cf14cf59846c41a6c5cba9, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f8b41c7d95e4a3fb06c1d27e8a45913, type: 3}
   m_Name: Ammo762X39
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.ItemSpec
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: ammo762x39
   title: "\u041F\u0430\u0442\u0440\u043E\u043D\u044B 7.62x39"
   promptName: 7.62x39 ammo
-  stackable: 1
-  equipable: 0
   model: {fileID: 2730496887622252028, guid: 4b489fd8296f8994c9891a9029c72a4b, type: 3}
   icon: {fileID: 21300000, guid: 9c6fc29566ef74e4ebf12fb26b9cd54c, type: 3}
   cells: {x: 2, y: 1}
