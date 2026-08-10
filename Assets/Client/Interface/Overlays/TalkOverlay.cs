@@ -1,13 +1,13 @@
-using Shooter.Client.Interface.Naming;
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
+using Shooter.Game.Llm;
 using Shooter.Game.Speech;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Shooter.Client.Interface.Overlays
+namespace Shooter.Client.Interface
 {
     public class TalkOverlay : Overlay
     {

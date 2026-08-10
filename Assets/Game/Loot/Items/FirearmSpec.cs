@@ -1,5 +1,4 @@
-using Shooter.Game.Body.EarSounding;
-using Shooter.Game.Body.Sounding;
+using Shooter.Game.Body;
 using UnityEngine;
 
 namespace Shooter.Game.Loot

@@ -1,11 +1,11 @@
-﻿using System;
-using Shooter.Game.Profiling;
-using Shooter.Game.Llm.Ticker.Children;
+using System;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Llm.Ticker
+namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Llm))]
     public class LlmMainTicker : MonoBehaviour

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(LlmHistory))]
     public sealed class RewriteSummaryTool : LlmTool<RewriteSummaryArguments>

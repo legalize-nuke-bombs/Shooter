@@ -1,7 +1,7 @@
 using Unity.Collections;
 using UnityEngine;
 
-namespace Shooter.Game.Icons
+namespace Shooter.Game.Core
 {
     [CreateAssetMenu(menuName = "Shooter/Icon Catalog", fileName = "IconCatalog")]
     public class IconCatalog : Catalog<IconSpec>

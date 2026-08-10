@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Llm))]
     public sealed class SayToWandererTool : LlmTool<SayToWandererArguments>

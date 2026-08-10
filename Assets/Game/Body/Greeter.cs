@@ -3,6 +3,7 @@ using System.Text;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Body
 {

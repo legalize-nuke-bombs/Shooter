@@ -1,4 +1,4 @@
-namespace Shooter.Game.Body.Hitboxes
+namespace Shooter.Game.Body
 {
     public static class BodyParts
     {

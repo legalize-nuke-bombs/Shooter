@@ -1,9 +1,8 @@
-using Shooter.Game.Body.EarSounding;
-using Shooter.Game.Body.Sleeping;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Body
 {

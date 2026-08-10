@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Text;
-using Shooter.Client.Interface.Menu;
+using Shooter.Client.Interface;
 using Shooter.Configuring;
 using Shooter.Logging;
 using Unity.Netcode;

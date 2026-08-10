@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Shooter.Game.Packing;
+using Shooter.Game.Core;
 using Unity.Netcode;
 
 namespace Shooter.Game.Loot

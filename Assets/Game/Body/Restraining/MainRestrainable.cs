@@ -1,4 +1,4 @@
-﻿using Shooter.Logging;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Body

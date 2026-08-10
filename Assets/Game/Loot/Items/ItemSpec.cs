@@ -1,4 +1,4 @@
-using Shooter.Game.Icons;
+using Shooter.Game.Core;
 using UnityEngine;
 
 namespace Shooter.Game.Loot

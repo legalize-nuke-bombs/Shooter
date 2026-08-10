@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Game.Body.Hitboxes
+namespace Shooter.Game.Body
 {
     public class Hitbox : MonoBehaviour
     {

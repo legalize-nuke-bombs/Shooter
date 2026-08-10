@@ -1,10 +1,9 @@
 using System;
-using Shooter.Client.Interface.Overlays;
 using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine.UIElements;
 
-namespace Shooter.Client.Interface.Menu
+namespace Shooter.Client.Interface
 {
     public class MenuScreen : Overlay
     {

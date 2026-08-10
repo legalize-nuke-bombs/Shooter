@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Shooter.Game.Body;
-using Shooter.Game.Body.Sleeping;
-using Shooter.Game.Identity;
+using Shooter.Game.Llm;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Speech
 {

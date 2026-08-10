@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Game.Body.Appearance
+namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Animator))]
     public class Poser : MonoBehaviour

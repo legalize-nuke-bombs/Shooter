@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Shooter.Game.Llm.OpenAi
+namespace Shooter.Game.Llm
 {
     public class OpenAiRequest
     {

@@ -1,4 +1,4 @@
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     public class LookAroundArguments
     {

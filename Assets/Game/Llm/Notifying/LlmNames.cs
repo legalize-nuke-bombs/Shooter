@@ -1,7 +1,8 @@
-using Shooter.Game.Body.Notifying;
+using Shooter.Game.Notifying;
 using Shooter.Game.Loot;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Llm.Notifying
+namespace Shooter.Game.Llm
 {
     public class LlmNames : INames
     {

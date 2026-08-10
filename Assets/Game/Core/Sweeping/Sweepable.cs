@@ -1,7 +1,9 @@
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.World;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Sweeping
+namespace Shooter.Game.Core
 {
     public class Sweepable : NetworkBehaviour
     {

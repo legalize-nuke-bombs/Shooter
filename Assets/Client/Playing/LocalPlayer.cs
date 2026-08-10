@@ -1,5 +1,5 @@
 using Shooter.Game.Body;
-using Shooter.Game.Body.Sleeping;
+using Shooter.Game.Llm;
 using Shooter.Game.Combat;
 using Shooter.Game.Speech;
 using Shooter.Logging;

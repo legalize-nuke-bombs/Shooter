@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Shooter.Logging;
 using UnityEngine;
 
-namespace Shooter.Game.Body.Hitboxes
+namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Animator))]
     public class Ragdoll : MonoBehaviour

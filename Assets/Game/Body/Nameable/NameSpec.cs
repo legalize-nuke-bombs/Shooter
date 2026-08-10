@@ -1,3 +1,5 @@
+using Shooter.Game.Core;
+
 namespace Shooter.Game.Body
 {
     public abstract class NameSpec : Spec

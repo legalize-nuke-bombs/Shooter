@@ -1,4 +1,4 @@
-namespace Shooter.Game.Body.Sleeping
+namespace Shooter.Game.Body
 {
     public static class SleepRule
     {

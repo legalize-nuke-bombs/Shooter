@@ -1,8 +1,9 @@
-﻿using System.Text;
+using System.Text;
 using Shooter.Game.Body;
-using Shooter.Game.Identity;
+using Shooter.Game.Core;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     public class LookByIdsTool : LlmTool<LookByIdsArguments>
     {

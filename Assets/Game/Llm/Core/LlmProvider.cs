@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
-using Shooter.Game.Profiling;
-using Shooter.Game.Llm.OpenAi;
+using Shooter.Game.World;
 using Shooter.Logging;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Llm
 {

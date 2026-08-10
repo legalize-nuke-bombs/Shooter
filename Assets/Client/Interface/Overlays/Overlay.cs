@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Shooter.Client.Interface.Overlays
+namespace Shooter.Client.Interface
 {
     [RequireComponent(typeof(PanelRenderer))]
     public abstract class Overlay : MonoBehaviour

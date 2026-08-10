@@ -3,7 +3,7 @@ using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Shooter.Client.Interface.Overlays
+namespace Shooter.Client.Interface
 {
     public class SleepOverlay : Overlay
     {

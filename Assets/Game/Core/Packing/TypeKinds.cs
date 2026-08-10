@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Shooter.Logging;
 using Unity.Netcode;
 
-namespace Shooter.Game.Packing
+namespace Shooter.Game.Core
 {
     public sealed class TypeKinds<TBase> : IKinds<TBase> where TBase : class, INetworkSerializable
     {

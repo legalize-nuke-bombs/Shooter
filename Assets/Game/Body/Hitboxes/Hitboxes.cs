@@ -1,7 +1,7 @@
 using Shooter.Logging;
 using UnityEngine;
 
-namespace Shooter.Game.Body.Hitboxes
+namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Animator))]
     public class Hitboxes : MonoBehaviour

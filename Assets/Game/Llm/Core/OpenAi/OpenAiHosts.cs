@@ -1,8 +1,7 @@
 using System;
 using Shooter.Configuring;
-using Shooter.Game.Llm.OpenAi.Polza;
 
-namespace Shooter.Game.Llm.OpenAi
+namespace Shooter.Game.Llm
 {
     public static class OpenAiHosts
     {

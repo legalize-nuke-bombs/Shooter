@@ -1,7 +1,7 @@
 using Shooter.Game.Loot;
 using UnityEngine;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(InventoryExchanger))]
     public sealed class GiveUniqueTool : LlmTool<GiveUniqueArguments>

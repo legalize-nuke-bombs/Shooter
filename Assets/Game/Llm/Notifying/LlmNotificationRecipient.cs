@@ -1,8 +1,9 @@
-using Shooter.Game.Body.Notifying;
+using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Llm.Notifying
+namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(MainNotificationRecipient))]

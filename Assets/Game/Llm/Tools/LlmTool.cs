@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using Shooter.Game.Profiling;
+using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     public abstract class LlmTool : MonoBehaviour, ILlmTool
     {
