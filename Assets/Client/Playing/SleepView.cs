@@ -1,4 +1,4 @@
-using Shooter.Game.Body.Sleeping;
+using Shooter.Game.Body;
 using Shooter.Logging;
 using UnityEngine;
 using Unity.Netcode;

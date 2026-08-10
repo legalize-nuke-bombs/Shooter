@@ -1,9 +1,10 @@
-using Shooter.Game.Body.Sounding;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Llm;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Body.Sleeping
+namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Speaker))]
     public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint

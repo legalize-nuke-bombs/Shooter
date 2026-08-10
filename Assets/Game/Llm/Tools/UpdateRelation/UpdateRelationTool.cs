@@ -1,7 +1,7 @@
 using Shooter.Game.Relationship;
 using UnityEngine;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(CharacterRelation))]
     public sealed class UpdateRelationTool : LlmTool<UpdateRelationArguments>

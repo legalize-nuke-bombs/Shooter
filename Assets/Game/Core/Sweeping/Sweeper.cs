@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Shooter.Logging;
 using UnityEngine;
 
-namespace Shooter.Game.Sweeping
+namespace Shooter.Game.Core
 {
     public class Sweeper : MonoBehaviour
     {

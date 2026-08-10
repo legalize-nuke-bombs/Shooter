@@ -1,4 +1,4 @@
-﻿namespace Shooter.Game.Llm.Tools.SendFeedback
+namespace Shooter.Game.Llm
 {
     public class SendFeedbackArguments
     {

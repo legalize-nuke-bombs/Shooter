@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Shooter.Game.Body.Appearance;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -39,7 +38,7 @@ namespace Shooter.Game.Body
             animator.applyRootMotion = false;
 
             Flesh.AddComponent<Poser>();
-            Flesh.AddComponent<Hitboxes.Hitboxes>();
+            Flesh.AddComponent<Hitboxes>();
 
             Log.Info($"Entity {name} dressed as {spec.Id}, {(Height(Flesh))} m tall");
         }

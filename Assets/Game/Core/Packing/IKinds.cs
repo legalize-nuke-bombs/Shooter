@@ -1,6 +1,6 @@
 using Unity.Netcode;
 
-namespace Shooter.Game.Packing
+namespace Shooter.Game.Core
 {
     public interface IKinds<TBase> where TBase : class, INetworkSerializable
     {

@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
+using Shooter.Game.Core;
 
-namespace Shooter.Game.Llm.Knowledge
+namespace Shooter.Game.Llm
 {
     [CreateAssetMenu(menuName = "Shooter-Llm/KnowledgeSpec", fileName = "KnowledgeSpec")]
     public class KnowledgeSpec : Spec

@@ -1,4 +1,5 @@
-using Shooter.Game;
+using Shooter.Game.Core;
+using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEditor;
 using UnityEditor.SceneManagement;

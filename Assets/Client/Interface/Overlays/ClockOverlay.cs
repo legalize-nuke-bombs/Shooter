@@ -3,9 +3,9 @@ using System.Globalization;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Environment = Shooter.Game.Environment;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Client.Interface.Overlays
+namespace Shooter.Client.Interface
 {
     public class ClockOverlay : Overlay
     {

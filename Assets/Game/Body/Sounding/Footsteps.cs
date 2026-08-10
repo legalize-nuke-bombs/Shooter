@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Shooter.Game.Body.Sounding
+namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(Speaker))]

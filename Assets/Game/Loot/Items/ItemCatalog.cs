@@ -1,4 +1,4 @@
-using Shooter.Game.Packing;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Collections;
 using UnityEngine;

@@ -1,4 +1,4 @@
-﻿namespace Shooter.Game.Llm.Ticker.Children
+namespace Shooter.Game.Llm
 {
     public class LlmCompactTicker : LlmChildTicker
     {

@@ -1,6 +1,6 @@
 using Unity.Netcode;
 
-namespace Shooter.Game.Packing
+namespace Shooter.Game.Core
 {
     public struct Packed<TBase> : INetworkSerializable where TBase : class, INetworkSerializable
     {

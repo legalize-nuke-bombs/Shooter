@@ -1,12 +1,11 @@
 using Shooter.Game.Body;
-using Shooter.Game.Body.EarSounding;
-using Shooter.Game.Body.Hitboxes;
-using Shooter.Game.Body.Sounding;
-using Shooter.Game.Identity;
+using Shooter.Game.Llm;
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Combat
 {

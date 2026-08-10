@@ -1,8 +1,8 @@
-using Shooter.Game.Body.Hitboxes;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Body
 {

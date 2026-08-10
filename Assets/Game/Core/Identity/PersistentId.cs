@@ -1,6 +1,7 @@
 using Unity.Netcode;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Identity
+namespace Shooter.Game.Core
 {
     public class PersistentId : NetworkBehaviour
     {

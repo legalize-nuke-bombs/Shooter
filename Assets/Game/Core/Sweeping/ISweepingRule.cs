@@ -1,4 +1,4 @@
-namespace Shooter.Game.Sweeping
+namespace Shooter.Game.Core
 {
     public interface ISweepingRule
     {

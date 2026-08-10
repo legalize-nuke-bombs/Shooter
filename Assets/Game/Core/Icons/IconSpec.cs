@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shooter.Game.Icons
+namespace Shooter.Game.Core
 {
     [CreateAssetMenu(menuName = "Shooter/Icon", fileName = "Icon")]
     public class IconSpec : Spec

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-namespace Shooter.Game.Llm.Ticker.Children
+namespace Shooter.Game.Llm
 {
     public abstract class LlmChildTicker : MonoBehaviour
     {

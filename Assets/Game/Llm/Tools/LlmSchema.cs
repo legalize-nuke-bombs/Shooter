@@ -3,7 +3,7 @@ using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     public static class LlmSchema
     {

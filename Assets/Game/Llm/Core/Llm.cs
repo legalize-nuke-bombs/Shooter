@@ -6,10 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shooter.Configuring;
 using Shooter.Game.Body;
-using Shooter.Game.Llm.Knowledge;
-using Shooter.Game.Llm.Tools;
 using Shooter.Logging;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Llm
 {

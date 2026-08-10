@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using UnityEngine.Networking;
 
-namespace Shooter.Game.Llm.OpenAi.Polza
+namespace Shooter.Game.Llm
 {
     public sealed class PolzaHost : IOpenAiHost
     {

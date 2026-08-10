@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using Shooter.Logging;
 
-namespace Shooter.Game.Llm.Tools.SendFeedback
+namespace Shooter.Game.Llm
 {
     public sealed class SendFeedbackTool : LlmTool<SendFeedbackArguments>
     {

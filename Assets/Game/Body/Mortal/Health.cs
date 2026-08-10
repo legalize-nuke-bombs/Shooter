@@ -1,8 +1,8 @@
-using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Relationship;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Llm;
 
 namespace Shooter.Game.Body
 {

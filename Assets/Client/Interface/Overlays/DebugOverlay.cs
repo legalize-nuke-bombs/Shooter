@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Client.Playing;
-using Shooter.Game;
+using Shooter.Game.Core;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Client.Interface.Overlays
+namespace Shooter.Client.Interface
 {
     public class DebugOverlay : Overlay
     {

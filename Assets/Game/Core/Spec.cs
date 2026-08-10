@@ -3,7 +3,7 @@ using Shooter.Logging;
 using Unity.Collections;
 using UnityEngine;
 
-namespace Shooter.Game
+namespace Shooter.Game.Core
 {
     public abstract class Spec : ScriptableObject
     {

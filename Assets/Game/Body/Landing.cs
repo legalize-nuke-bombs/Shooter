@@ -1,4 +1,3 @@
-using Shooter.Game.Body.Sounding;
 using UnityEngine;
 
 namespace Shooter.Game.Body

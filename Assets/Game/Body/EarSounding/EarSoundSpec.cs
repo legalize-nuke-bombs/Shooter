@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
+using Shooter.Game.Core;
 
-namespace Shooter.Game.Body.EarSounding
+namespace Shooter.Game.Body
 {
     [CreateAssetMenu(menuName = "Shooter/Ear Sound", fileName = "EarSound")]
     public class EarSoundSpec : Spec

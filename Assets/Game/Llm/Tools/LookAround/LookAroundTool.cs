@@ -1,7 +1,7 @@
 using Shooter.Game.Body;
 using UnityEngine;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(WorldDigester))]
     public sealed class LookAroundTool : LlmTool<LookAroundArguments>

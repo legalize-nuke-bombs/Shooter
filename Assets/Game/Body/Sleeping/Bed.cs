@@ -1,8 +1,10 @@
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Llm;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Body.Sleeping
+namespace Shooter.Game.Body
 {
     public class Bed : MonoBehaviour, IUsable, IDigestible
     {

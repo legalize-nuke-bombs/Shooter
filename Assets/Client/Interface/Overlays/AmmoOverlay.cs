@@ -1,10 +1,12 @@
 using Shooter.Client.Playing;
-using Shooter.Game;
+using Shooter.Game.Core;
+using Shooter.Game.World;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using UnityEngine.UIElements;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Client.Interface.Overlays
+namespace Shooter.Client.Interface
 {
     public class AmmoOverlay : Overlay
     {

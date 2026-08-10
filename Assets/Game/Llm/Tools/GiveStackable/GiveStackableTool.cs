@@ -1,7 +1,8 @@
 using Shooter.Game.Loot;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Llm.Tools
+namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(InventoryExchanger))]
     public sealed class GiveStackableTool : LlmTool<GiveStackableArguments>

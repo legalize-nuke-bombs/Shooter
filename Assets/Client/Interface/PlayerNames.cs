@@ -1,11 +1,11 @@
-using Shooter.Client.Interface.Naming;
 using Shooter.Game.Body;
-using Shooter.Game.Body.Notifying;
-using Shooter.Game.Identity;
+using Shooter.Game.Llm;
+using Shooter.Game.Notifying;
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
-using Environment = Shooter.Game.Environment;
+using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Client.Interface.Notifying
+namespace Shooter.Client.Interface
 {
     public class PlayerNames : INames
     {
