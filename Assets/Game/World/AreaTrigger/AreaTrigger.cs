@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Shooter.Game.Core;
-using Shooter.Game.Notifying;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,23 +7,21 @@ using UnityEngine;
 namespace Shooter.Game.World
 {
     [RequireComponent(typeof(SphereCollider))]
-    public class AreaNotificationPublisher : MonoBehaviour
+    public abstract class AreaTrigger : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private NotificationSpec notificationSpec;
-
         private static int characterLayer = -1;
-
         private static int CharacterLayer =>
             characterLayer != -1 ? characterLayer : characterLayer = LayerMask.NameToLayer("Character");
 
-        private HashSet<long> done = new HashSet<long>();
+        private readonly HashSet<long> done = new HashSet<long>();
+        [SerializeField] private bool allowReiteration = true;
 
         private void Awake()
         {
             SphereCollider sphere = GetComponent<SphereCollider>();
-            if (!sphere.isTrigger) Log.Warn($"Sphere must be trigger!");
+            if (!sphere.isTrigger) Log.Warn("Sphere must has a trigger!");
         }
 
         private void OnTriggerEnter(Collider target)
@@ -34,29 +31,25 @@ namespace Shooter.Game.World
 
             if (target.gameObject.layer != CharacterLayer) return;
 
-            MainNotificationRecipient notificationRecipient = target.GetComponentInParent<MainNotificationRecipient>();
-            if (notificationRecipient == null) return;
-
             PersistentId persistentId = target.GetComponentInParent<PersistentId>();
             if (persistentId == null)
             {
-                Log.Warn($"Entity {notificationRecipient.name} has notification recipient but does not have persistent id");
+                Log.Warn($"Character {persistentId.name} does not have a persistent id");
                 return;
             }
 
-            if (notificationSpec == null)
+            if (!allowReiteration)
             {
-                Log.Warn($"Entity {name} does not have a notification spec");
-                return;
+                if (!done.Add(persistentId.Value))
+                {
+                    return;
+                }
             }
 
-            if (!done.Add(persistentId.Value))
-            {
-                return;
-            }
-
-            Log.Info($"Entity {name} is sending notification to {notificationRecipient.name}...");
-            notificationRecipient.Receive(notificationSpec.Notify());
+            Log.Info($"Entity {name} is going to trigger on {persistentId.name}");
+            OnTrigger(persistentId);
         }
+
+        protected abstract void OnTrigger(PersistentId character);
     }
 }
