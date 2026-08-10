@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Shooter.Game.World
 {
-    public class AreaNotificationPublisher : AreaTrigger
+    public class NotificationPublisher : MonoBehaviour, ITriggerable
     {
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private NotificationSpec notificationSpec;
 
-        protected override void OnTrigger(PersistentId character)
+        public void OnTrigger(PersistentId character)
         {
             if (notificationSpec == null)
             {
