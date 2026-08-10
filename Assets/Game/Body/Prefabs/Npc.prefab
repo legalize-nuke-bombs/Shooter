@@ -102,6 +102,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Relationship.PlayerRelation
   defaultAmount: 50
+  improved: {fileID: 11400000, guid: d83699cab1f34617bd9688666b7cf237, type: 2}
+  worsened: {fileID: 11400000, guid: f38e4c842114467d9bad7f750bb7cac4, type: 2}
   enemyThreshold: 0
   friendThreshold: 90
 --- !u!114 &6206777283256855488

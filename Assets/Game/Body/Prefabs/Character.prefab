@@ -377,6 +377,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.InventoryExchanger.InventoryExchanger
   exchangeRadius: 10
+  itemsGiven: {fileID: 11400000, guid: 12886c680f944346b16023adc455afba, type: 2}
+  itemGiven: {fileID: 11400000, guid: 535087ddf06c4564b3a8662f32c7a184, type: 2}
 --- !u!114 &-5531865876210179846
 MonoBehaviour:
   m_ObjectHideFlags: 0

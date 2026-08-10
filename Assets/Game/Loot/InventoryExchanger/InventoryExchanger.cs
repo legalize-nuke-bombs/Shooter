@@ -14,6 +14,9 @@ namespace Shooter.Game.Loot
         [SerializeField] private float exchangeRadius = 10f;
         public float ExchangeRadius => exchangeRadius;
 
+        [SerializeField] private NotificationSpec itemsGiven;
+        [SerializeField] private NotificationSpec itemGiven;
+
         private Inventory inventory;
         private PersistentId ownId;
 
@@ -40,7 +43,7 @@ namespace Shooter.Game.Loot
             }
             targetInventory.AddStackable(stackable, amount);
 
-            Notify(target, stackable.Key, amount);
+            Notify(target, itemsGiven, stackable.Key, amount);
 
             Log.Info($"{name} gave {stackable.Id} x {amount} to {targetId}");
             return true;
@@ -64,18 +67,30 @@ namespace Shooter.Game.Loot
             }
             targetInventory.Put(uniqueItem);
 
-            Notify(target, uniqueItem.SpecId, 1);
+            Notify(target, itemGiven, uniqueItem.SpecId, 1);
 
             Log.Info($"{name} gave unique item slot {slotId} ({uniqueItem.SpecId}) to {targetId}");
             return true;
         }
 
-        private void Notify(PersistentId target, string itemSpecId, int amount)
+        private void Notify(PersistentId target, NotificationSpec spec, string itemSpecId, int amount)
         {
             var recipient = target.GetComponent<MainNotificationRecipient>();
             if (recipient == null) return;
 
-            recipient.Receive(new ItemsGivenNotification(ownId.Value, itemSpecId, amount));
+            if (spec == null)
+            {
+                Log.Warn($"{name} has no notification to tell {target.name} about {itemSpecId}, the gift goes unnoticed");
+                return;
+            }
+
+            ItemSpec item = Environment.Current.Items.Spec(itemSpecId);
+
+            recipient.Receive(spec.Notify()
+                .Under(item == null ? null : item.Icon)
+                .With(Args.Actor, ownId.Value)
+                .With(Args.Subject, itemSpecId)
+                .With("amount", amount));
         }
 
         private PersistentId Target(long targetId)
