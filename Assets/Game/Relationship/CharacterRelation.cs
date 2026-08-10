@@ -22,6 +22,8 @@ namespace Shooter.Game.Relationship
 
         private readonly Dictionary<long, int> amounts = new Dictionary<long, int>();
         [SerializeField] [Range(0, 100)] private int defaultAmount = 50;
+        [SerializeField] private NotificationSpec improved;
+        [SerializeField] private NotificationSpec worsened;
         // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
 
         public int Amount(long characterId)
@@ -59,7 +61,18 @@ namespace Shooter.Game.Relationship
 
             if (!target.TryGetComponent(out MainNotificationRecipient recipient)) return;
 
-            recipient.Receive(new RelationChangedNotification(ownId.Value, before, after));
+            NotificationSpec spec = after > before ? improved : worsened;
+
+            if (spec == null)
+            {
+                Log.Warn($"Entity {name} has no notification for an attitude that went {before} -> {after}, the change goes unnoticed");
+                return;
+            }
+
+            recipient.Receive(spec.Notify()
+                .With(Args.Actor, ownId.Value)
+                .With("before", before)
+                .With("after", after));
         }
 
         public void DecreaseAmount(long characterId, int amount, string reason)

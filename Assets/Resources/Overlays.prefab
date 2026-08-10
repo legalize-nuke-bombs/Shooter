@@ -25,8 +25,6 @@ GameObject:
   - component: {fileID: 6600000000000000115}
   - component: {fileID: 6600000000000000116}
   - component: {fileID: -5523551864615888746}
-  - component: {fileID: 6600000000000000117}
-  - component: {fileID: 6600000000000000118}
   - component: {fileID: 6600000000000000119}
   m_Layer: 0
   m_Name: Overlays
@@ -312,38 +310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06ce3731abc44b54bb1b243ed66d8954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.Overlays.NotificationOverlay
---- !u!114 &6600000000000000117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7155463033436812329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84d6d5ceec7e4b28a3055cdca40a00d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.Notifying.ItemsGivenLine
-  icon: {fileID: 0}
-  sound: {fileID: 11400000, guid: 44e6e460e1cb44d98f376b7e174c5e4d, type: 2}
---- !u!114 &6600000000000000118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7155463033436812329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f866ea8b8374125ae990f829ae48a70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.Notifying.RelationChangedLine
-  icon: {fileID: 0}
-  sound: {fileID: 0}
-  improvedIcon: {fileID: 21300000, guid: 7c8f43a89ad147ebb7ddf62714df9f35, type: 3}
-  worsenedIcon: {fileID: 21300000, guid: 566a8b5d40a3457ea0c48f6a8739129d, type: 3}
-  improvedSound: {fileID: 11400000, guid: ec9d6380458b451cb27421a3a0e2ee8e, type: 2}
-  worsenedSound: {fileID: 11400000, guid: 74d319b8312f4b25a28b3355715af9b5, type: 2}
 --- !u!114 &6600000000000000119
 MonoBehaviour:
   m_ObjectHideFlags: 0

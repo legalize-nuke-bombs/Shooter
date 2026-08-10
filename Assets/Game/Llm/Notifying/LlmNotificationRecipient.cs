@@ -10,6 +10,8 @@ namespace Shooter.Game.Llm.Notifying
     {
         private static readonly Journal Log = Logs.Here();
 
+        private readonly LlmNames names = new LlmNames();
+
         private Llm llm;
 
         private void Awake()
@@ -19,26 +21,31 @@ namespace Shooter.Game.Llm.Notifying
 
         public void OnReceive(Notification notification)
         {
-            string told = Told(notification);
+            NotificationSpec spec = Spec(notification);
+            if (spec == null) return;
 
-            if (told == null)
+            if (string.IsNullOrEmpty(spec.Told))
             {
-                Log.Info($"Entity {name} has nothing to remember about {notification.GetType().Name}");
+                Log.Info($"Entity {name} has nothing to remember about {notification.Spec}");
                 return;
             }
+
+            string told = Template.Filled(spec.Told, notification, names);
 
             llm.Notice($"[{Environment.Current.Clock.DateTime()}] {told}");
         }
 
-        private static string Told(Notification notification)
+        private NotificationSpec Spec(Notification notification)
         {
-            return notification switch
+            NotificationCatalog catalog = Environment.Current == null ? null : Environment.Current.Notifications;
+
+            if (catalog == null)
             {
-                ItemsGivenNotification given => $"Character {given.ActorId} gave you {given.ItemSpecId} x {given.Amount}",
-                MailNotification mail => $"Mail from {mail.SenderId}: {mail.Content}",
-                RelationChangedNotification changed => $"Character {changed.ActorId} changed their attitude towards you: {changed.Before} -> {changed.After}",
-                _ => null
-            };
+                Log.Error($"Entity {name} has no world to ask about {notification.Spec}, the notification is lost");
+                return null;
+            }
+
+            return catalog.Of(notification.Spec);
         }
     }
 }

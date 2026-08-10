@@ -14,6 +14,8 @@ namespace Shooter.Game.Llm.Tools
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private NotificationSpec mail;
+
         private PersistentId ownId;
 
         protected override void Awake()
@@ -59,7 +61,16 @@ namespace Shooter.Game.Llm.Tools
                     continue;
                 }
 
-                recipient.Receive(new MailNotification(ownId.Value, arguments.Content));
+                if (mail == null)
+                {
+                    failed.Add($"{targetId}: this world knows no mail");
+                    continue;
+                }
+
+                recipient.Receive(mail.Notify()
+                    .With(Args.Actor, ownId.Value)
+                    .With("text", arguments.Content));
+
                 delivered.Add(targetId);
                 Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
             }

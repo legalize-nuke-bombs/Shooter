@@ -1,5 +1,4 @@
 using System;
-using Shooter.Game.Packing;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -15,18 +14,15 @@ namespace Shooter.Game.Body.Notifying
 
         public void OnReceive(Notification notification)
         {
-            if (!IsServer || notification == null) return;
+            if (!IsServer || notification.IsEmpty) return;
 
-            ShownRpc(new Packed<Notification>(notification));
+            ShownRpc(notification);
         }
 
         [Rpc(SendTo.Owner)]
-        private void ShownRpc(Packed<Notification> packed)
+        private void ShownRpc(Notification notification)
         {
-            Notification notification = packed.Value;
-            if (notification == null) return;
-
-            Log.Info($"Notification {notification.GetType().Name} arrived");
+            Log.Info($"Notification {notification.Spec} arrived");
 
             Shown?.Invoke(notification);
         }

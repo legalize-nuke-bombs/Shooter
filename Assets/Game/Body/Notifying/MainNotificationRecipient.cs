@@ -17,7 +17,7 @@ namespace Shooter.Game.Body.Notifying
 
         public void Receive(Notification notification)
         {
-            Log.Info($"Entity {name} received notification");
+            Log.Info($"Entity {name} received notification {notification.Spec}");
             foreach (IChildNotificationRecipient recipient in recipients)
             {
                 recipient.OnReceive(notification);
