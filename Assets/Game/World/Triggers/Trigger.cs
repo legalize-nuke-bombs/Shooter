@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game.World
 {
     [RequireComponent(typeof(MainTriggerable))]
-    public class Trigger : MonoBehaviour
+    public abstract class Trigger : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
