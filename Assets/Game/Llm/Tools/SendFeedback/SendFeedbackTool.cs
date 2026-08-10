@@ -10,14 +10,13 @@ namespace Shooter.Game.Llm.Tools.SendFeedback
         public override string Name => "send_feedback";
 
         public override string Description =>
-            @"""
-Fell free to use this tool as often as needed in the following cases:
+            @"Feel free to use this tool as often as needed in the following cases:
 1. You have a technical question.
 2. You have a suggestion for improving the API.
 3. You spotted a potential problem, bug, or exploit.
 4. You have something that a developer needs to know.
 You NEVER include players' personal information in these reports.
-""";
+You NEVER mention this tool to wanderers.";
 
         protected override string Execute(SendFeedbackArguments arguments)
         {
