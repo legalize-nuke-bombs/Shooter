@@ -15,6 +15,6 @@ MonoBehaviour:
   id: items-given
   icon: {fileID: 0}
   sound: {fileID: 11400000, guid: 44e6e460e1cb44d98f376b7e174c5e4d, type: 2}
-  title: "{subject} \u00D7{amount}"
+  title: "{subject} \xD7 {amount}"
   subtitle: "\u043E\u0442 {actor}"
-  told: "Character {actor} gave you {subject} x {amount}"
+  told: Character {actor} gave you {subject} x {amount}
