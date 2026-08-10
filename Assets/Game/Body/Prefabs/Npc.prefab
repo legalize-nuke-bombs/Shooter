@@ -66,6 +66,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: -618641958357416854}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6206777283256855488}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
 --- !u!1 &7684853543061305745 stripped
 GameObject:
@@ -98,7 +101,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce955cba01bd400c8f1604703358d3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Relationship.PlayerRelation
-  ShowTopMostFoldoutHeaderGroup: 1
   defaultAmount: 50
   enemyThreshold: 0
   friendThreshold: 90
+--- !u!114 &6206777283256855488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7684853543061305745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 910cf1f9dd3043d7b435c35ff25f06c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.UnlimitedHunger
+  ShowTopMostFoldoutHeaderGroup: 1
+  sprintCost: 0.5
+  walkCost: 0.25
+  jumpCost: 2
+  idleCost: 0.1

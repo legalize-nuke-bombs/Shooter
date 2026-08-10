@@ -20,8 +20,23 @@ namespace Shooter.Game.Body
 
         [SerializeField] private float sprintCost = 0.5f;
         [SerializeField] private float walkCost = 0.25f;
-        [SerializeField] private float jumpCost = 5f;
+        [SerializeField] private float jumpCost = 2f;
         [SerializeField] private float idleCost = 0.1f;
+
+        private void Awake()
+        {
+            enabled = false;
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            enabled = IsServer;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            enabled = false;
+        }
 
         private void Update()
         {
@@ -57,7 +72,8 @@ namespace Shooter.Game.Body
         {
             switch (type)
             {
-                case ActionType.Sprint | ActionType.Jump:
+                case ActionType.Sprint:
+                case ActionType.Jump:
                     return true;
                 default:
                     return false;
