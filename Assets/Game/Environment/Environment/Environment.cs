@@ -4,6 +4,7 @@ using Shooter.Game.Body.EarSounding;
 using Shooter.Game.Identity;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
+using Shooter.Game.Packing;
 using Shooter.Game.Profiling;
 using Shooter.Game.Sweeping;
 using Shooter.Logging;
@@ -78,6 +79,8 @@ namespace Shooter.Game
             Sweeper = GetComponent<Sweeper>();
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];
+
+            if (items != null) Kinds.Use<UniqueItem>(items);
 
             if (profiler == null)
                 Log.Warn("World has no profiler, nothing will be measured");

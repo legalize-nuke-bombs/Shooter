@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
+using Shooter.Game.Packing;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -20,7 +21,7 @@ namespace Shooter.Game.Loot
         private readonly NetworkList<int> stackAmounts = new NetworkList<int>(
             null, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
 
-        private readonly NetworkList<FixedString4096Bytes> packedUniqueItems = new NetworkList<FixedString4096Bytes>();
+        private readonly NetworkList<PackedBytes> packedUniqueItems = new NetworkList<PackedBytes>();
 
         private readonly NetworkVariable<int> equippedSlot = new NetworkVariable<int>(NoSlot);
 
@@ -96,7 +97,7 @@ namespace Shooter.Game.Loot
                 if (item == null || !item.Dirty) continue;
 
                 item.Clean();
-                packedUniqueItems[slot] = UniqueItemPacking.Pack(item);
+                packedUniqueItems[slot] = PackedBytes.Of<UniqueItem>(item);
             }
         }
 
@@ -152,12 +153,12 @@ namespace Shooter.Game.Loot
             {
                 slot = uniqueItems.Count;
                 uniqueItems.Add(item);
-                packedUniqueItems.Add(UniqueItemPacking.Pack(item));
+                packedUniqueItems.Add(PackedBytes.Of<UniqueItem>(item));
             }
             else
             {
                 uniqueItems[slot] = item;
-                packedUniqueItems[slot] = UniqueItemPacking.Pack(item);
+                packedUniqueItems[slot] = PackedBytes.Of<UniqueItem>(item);
             }
 
             Log.Info($"Entity {name} took {item.SpecId} into slot {slot}");
@@ -329,20 +330,20 @@ namespace Shooter.Game.Loot
         {
             uniqueItems.Clear();
 
-            foreach (FixedString4096Bytes state in packedUniqueItems) uniqueItems.Add(UniqueItemPacking.Unpack(state));
+            foreach (PackedBytes state in packedUniqueItems) uniqueItems.Add(state.Unpack<UniqueItem>());
         }
 
-        private void Mirror(NetworkListEvent<FixedString4096Bytes> change)
+        private void Mirror(NetworkListEvent<PackedBytes> change)
         {
             switch (change.Type)
             {
-                case NetworkListEvent<FixedString4096Bytes>.EventType.Add:
-                    uniqueItems.Add(UniqueItemPacking.Unpack(change.Value));
+                case NetworkListEvent<PackedBytes>.EventType.Add:
+                    uniqueItems.Add(change.Value.Unpack<UniqueItem>());
                     break;
-                case NetworkListEvent<FixedString4096Bytes>.EventType.Value:
-                    uniqueItems[change.Index] = UniqueItemPacking.Unpack(change.Value);
+                case NetworkListEvent<PackedBytes>.EventType.Value:
+                    uniqueItems[change.Index] = change.Value.Unpack<UniqueItem>();
                     break;
-                case NetworkListEvent<FixedString4096Bytes>.EventType.Clear:
+                case NetworkListEvent<PackedBytes>.EventType.Clear:
                     uniqueItems.Clear();
                     break;
                 default:
@@ -361,7 +362,7 @@ namespace Shooter.Game.Loot
             Changed?.Invoke();
         }
 
-        private void PackedUniqueItemsShifted(NetworkListEvent<FixedString4096Bytes> change)
+        private void PackedUniqueItemsShifted(NetworkListEvent<PackedBytes> change)
         {
             if (!IsServer) Mirror(change);
 

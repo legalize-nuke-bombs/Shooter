@@ -2,9 +2,9 @@ namespace Shooter.Game.Body
 {
     public sealed class ImmortalHealth : Health
     {
-        public override int Hp => 1;
+        public override int Hp => 100;
 
-        public override int MaxHp => 1;
+        public override int MaxHp => 100;
 
         public override bool Alive => true;
 

@@ -21,7 +21,11 @@ namespace Shooter.Game.Body
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
-        public bool Restrains => !Alive;
+        public bool CanPerform(ActionType type, float dt)
+        {
+            return Alive;
+        }
+        public void RegisterAction(ActionType type, float dt) { }
 
         public abstract int Hp { get; }
 

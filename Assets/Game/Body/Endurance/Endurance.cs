@@ -1,15 +1,16 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Body
 {
-    public class Endurance : NetworkBehaviour, IDigestible
+    public class Endurance : NetworkBehaviour, IDigestible, IRestraint
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
         [SerializeField] private float walkCost = 3f;
+        [SerializeField] private float jumpCost = 10f;
         [SerializeField] private float recoverySpeed = 12f;
-        [SerializeField] private float sprintThreshold = 10f;
 
         private readonly NetworkVariable<float> amount = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Owner);
 
@@ -44,28 +45,6 @@ namespace Shooter.Game.Body
             enabled = false;
         }
 
-        public bool Sprint(float dt)
-        {
-            if (exhausted && amount.Value < sprintThreshold) return false;
-
-            float cost = sprintCost * dt;
-            if (cost > amount.Value)
-            {
-                exhausted = true;
-                return false;
-            }
-
-            exhausted = false;
-            amount.Value -= cost;
-
-            return true;
-        }
-
-        public void Walk(float dt)
-        {
-            amount.Value = Mathf.Max(amount.Value - walkCost * dt, 0f);
-        }
-
         public string Digest(DigestionDetail detail)
         {
             if (detail != DigestionDetail.Full) return null;
@@ -76,6 +55,43 @@ namespace Shooter.Game.Body
         private void Update()
         {
             amount.Value = Mathf.Min(amount.Value + Time.deltaTime * recoverySpeed, MaxAmount);
+        }
+
+        public bool CanPerform(ActionType type, float dt)
+        {
+            return !Blocker(type) || (amount.Value >= Cost(type, dt));
+        }
+
+        public void RegisterAction(ActionType type, float dt)
+        {
+            amount.Value = Math.Max(0, amount.Value - Cost(type, dt));
+        }
+
+        private float Cost(ActionType type, float dt)
+        {
+            switch (type)
+            {
+                case ActionType.Sprint:
+                    return sprintCost * dt;
+                case ActionType.Walk:
+                    return walkCost * dt;
+                case ActionType.Jump:
+                    return jumpCost;
+                default:
+                    return 0;
+            }
+        }
+
+        private bool Blocker(ActionType type)
+        {
+            switch (type)
+            {
+                case ActionType.Sprint:
+                case ActionType.Jump:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

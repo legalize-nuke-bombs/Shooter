@@ -1,20 +1,23 @@
 using System;
+using Unity.Netcode;
 
 namespace Shooter.Game.Loot
 {
     public class Firearm : UniqueItem
     {
-        public int Magazine { get; private set; }
+        private int magazine;
 
         public Firearm(string specId) : base(specId)
         {
         }
 
+        public int Magazine => magazine;
+
         public bool Spend()
         {
-            if (Magazine == 0) return false;
+            if (magazine == 0) return false;
 
-            Magazine--;
+            magazine--;
             Touch();
 
             return true;
@@ -22,13 +25,18 @@ namespace Shooter.Game.Loot
 
         public int Reload(int rounds, int size)
         {
-            int taken = Math.Min(rounds, size - Magazine);
+            int taken = Math.Min(rounds, size - magazine);
             if (taken <= 0) return 0;
 
-            Magazine += taken;
+            magazine += taken;
             Touch();
 
             return taken;
+        }
+
+        public override void NetworkSerialize<T>(BufferSerializer<T> serializer)
+        {
+            serializer.SerializeValue(ref magazine);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Shooter.Game.Relationship
 
             if (!target.TryGetComponent(out MainNotificationRecipient recipient)) return;
 
-            recipient.Receive(new RelationChangedNotification { ActorId = ownId.Value, Before = before, After = after });
+            recipient.Receive(new RelationChangedNotification(ownId.Value, before, after));
         }
 
         public void DecreaseAmount(long characterId, int amount, string reason)

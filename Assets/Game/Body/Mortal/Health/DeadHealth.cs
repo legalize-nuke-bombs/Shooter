@@ -4,7 +4,7 @@ namespace Shooter.Game.Body
     {
         public override int Hp => 0;
 
-        public override int MaxHp => 1;
+        public override int MaxHp => 100;
 
         public override bool Alive => false;
 
