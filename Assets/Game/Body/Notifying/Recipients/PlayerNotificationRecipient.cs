@@ -1,6 +1,6 @@
 using System;
+using Shooter.Game.Packing;
 using Shooter.Logging;
-using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -15,18 +15,15 @@ namespace Shooter.Game.Body.Notifying
 
         public void OnReceive(Notification notification)
         {
-            if (!IsServer) return;
+            if (!IsServer || notification == null) return;
 
-            FixedString4096Bytes packed = NotificationPacking.Pack(notification);
-            if (packed.IsEmpty) return;
-
-            ShownRpc(packed);
+            ShownRpc(new Packed<Notification>(notification));
         }
 
         [Rpc(SendTo.Owner)]
-        private void ShownRpc(FixedString4096Bytes packed)
+        private void ShownRpc(Packed<Notification> packed)
         {
-            Notification notification = NotificationPacking.Unpack(packed);
+            Notification notification = packed.Value;
             if (notification == null) return;
 
             Log.Info($"Notification {notification.GetType().Name} arrived");

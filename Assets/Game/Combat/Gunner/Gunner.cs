@@ -15,6 +15,7 @@ namespace Shooter.Game.Combat
     [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(EarSpeaker))]
+    [RequireComponent(typeof(MainRestrainable))]
     public class Gunner : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -27,7 +28,7 @@ namespace Shooter.Game.Combat
         private Hands hands;
         private Speaker speaker;
         private EarSpeaker earSpeaker;
-        private IRestraint[] restraints;
+        private MainRestrainable restrainable;
 
         private void Awake()
         {
@@ -37,7 +38,7 @@ namespace Shooter.Game.Combat
             hands = GetComponent<Hands>();
             speaker = GetComponent<Speaker>();
             earSpeaker = GetComponent<EarSpeaker>();
-            restraints = GetComponents<IRestraint>();
+            restrainable = GetComponent<MainRestrainable>();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -54,9 +55,11 @@ namespace Shooter.Game.Combat
 
         public bool TryShoot()
         {
-            if (!Ready(out Firearm firearm, out FirearmSpec spec)) return false;
+            if (!Ready(out Firearm firearm, out FirearmSpec spec, ActionType.Shoot)) return false;
 
             if (hands != null && !hands.TryTake(HandsAction.Shooting, spec.FireInterval, false, null)) return false;
+
+            restrainable.RegisterAction(ActionType.Shoot, MainRestrainable.InstantAction);
 
             if (!firearm.Spend())
             {
@@ -71,7 +74,7 @@ namespace Shooter.Game.Combat
 
         public bool TryReload()
         {
-            if (!Ready(out Firearm firearm, out FirearmSpec spec)) return false;
+            if (!Ready(out Firearm firearm, out FirearmSpec spec, ActionType.Reload)) return false;
             if (spec.Ammo == null) return false;
 
             int absent = spec.MagazineSize - firearm.Magazine;
@@ -79,17 +82,18 @@ namespace Shooter.Game.Combat
 
             if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true, () => Reloaded(firearm, spec, absent))) return false;
 
+            restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantAction);
             speaker?.Play(spec.ReloadSound);
             Log.Info($"Entity {name} started reload of {firearm.SpecId}, {spec.ReloadTime}s");
             return true;
         }
 
-        private bool Ready(out Firearm firearm, out FirearmSpec spec)
+        private bool Ready(out Firearm firearm, out FirearmSpec spec, ActionType action)
         {
             firearm = null;
             spec = null;
 
-            if (!IsServer || Restraints.Any(restraints)) return false;
+            if (!IsServer || !restrainable.CanPerform(action, MainRestrainable.InstantAction)) return false;
 
             firearm = inventory.Equipped() as Firearm;
             if (firearm == null) return false;

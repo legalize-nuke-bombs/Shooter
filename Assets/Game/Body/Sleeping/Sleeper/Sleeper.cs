@@ -21,7 +21,11 @@ namespace Shooter.Game.Body.Sleeping
 
         public bool Sleeping => sleeping.Value;
 
-        public bool Restrains => Sleeping;
+        public bool CanPerform(ActionType type, float dt)
+        {
+            return !Sleeping;
+        }
+        public void RegisterAction(ActionType type, float dt) { }
 
         public Vector3 Bedside => bedside.Value;
 

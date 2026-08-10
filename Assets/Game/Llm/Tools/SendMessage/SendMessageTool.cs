@@ -59,7 +59,7 @@ namespace Shooter.Game.Llm.Tools
                     continue;
                 }
 
-                recipient.Receive(new MailNotification { SenderId = ownId.Value, Content = arguments.Content });
+                recipient.Receive(new MailNotification(ownId.Value, arguments.Content));
                 delivered.Add(targetId);
                 Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
             }

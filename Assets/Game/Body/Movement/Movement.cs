@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(CharacterController))]
-    [RequireComponent(typeof(Endurance))]
+    [RequireComponent(typeof(MainRestrainable))]
     [RequireComponent(typeof(Landing))]
     public class Movement : NetworkBehaviour
     {
@@ -22,9 +22,8 @@ namespace Shooter.Game.Body
         private readonly NetworkVariable<float> pitch = new NetworkVariable<float>();
 
         private CharacterController characterController;
-        private Endurance endurance;
+        private MainRestrainable restrainable;
         private Landing landing;
-        private IRestraint[] restraints;
 
         private Vector2 steering;
         private bool sprinting;
@@ -45,9 +44,8 @@ namespace Shooter.Game.Body
         private void Awake()
         {
             characterController = GetComponent<CharacterController>();
-            endurance = GetComponent<Endurance>();
+            restrainable = GetComponent<MainRestrainable>();
             landing = GetComponent<Landing>();
-            restraints = GetComponents<IRestraint>();
         }
 
         public override void OnNetworkSpawn()
@@ -117,8 +115,6 @@ namespace Shooter.Game.Body
         {
             float dt = NetworkManager.LocalTime.FixedDeltaTime;
 
-            if (Restraints.Any(restraints)) Halt();
-
             if (characterController.isGrounded)
             {
                 if (airborne)
@@ -127,7 +123,15 @@ namespace Shooter.Game.Body
                     landing.Land(airborneFrom - transform.position.y);
                 }
 
-                fall = jumping ? jumpSpeed : GroundedFall;
+                if (jumping && restrainable.CanPerform(ActionType.Jump, MainRestrainable.InstantAction))
+                {
+                    restrainable.RegisterAction(ActionType.Jump, MainRestrainable.InstantAction);
+                    fall = jumpSpeed;
+                }
+                else
+                {
+                    fall = GroundedFall;
+                }
                 jumping = false;
             }
             else
@@ -145,11 +149,25 @@ namespace Shooter.Game.Body
                 fall += gravity * dt;
             }
 
-            bool moving = steering.sqrMagnitude > 0f;
-            bool running = moving && sprinting && endurance.Sprint(dt);
-            if (moving && !running) endurance.Walk(dt);
+            bool walking = steering.SqrMagnitude() > 0f;
+            sprinting = sprinting && walking;
 
-            float speed = running ? sprintSpeed : walkSpeed;
+            float speed;
+            if (sprinting && restrainable.CanPerform(ActionType.Sprint, dt))
+            {
+                restrainable.RegisterAction(ActionType.Sprint, dt);
+                speed = sprintSpeed;
+            }
+            else if (walking && restrainable.CanPerform(ActionType.Walk, dt))
+            {
+                restrainable.RegisterAction(ActionType.Walk, dt);
+                speed = walkSpeed;
+            }
+            else
+            {
+                speed = 0;
+            }
+
             Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
             Vector3 before = transform.position;
             characterController.Move((wish + Vector3.up * fall) * dt);

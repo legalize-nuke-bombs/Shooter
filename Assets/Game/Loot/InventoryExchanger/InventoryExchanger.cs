@@ -75,12 +75,7 @@ namespace Shooter.Game.Loot
             var recipient = target.GetComponent<MainNotificationRecipient>();
             if (recipient == null) return;
 
-            recipient.Receive(new ItemsGivenNotification
-            {
-                ActorId = ownId.Value,
-                ItemSpecId = itemSpecId,
-                Amount = amount
-            });
+            recipient.Receive(new ItemsGivenNotification(ownId.Value, itemSpecId, amount));
         }
 
         private PersistentId Target(long targetId)

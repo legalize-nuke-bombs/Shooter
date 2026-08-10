@@ -21,7 +21,12 @@ namespace Shooter.Game.Speech
         private readonly Dictionary<ulong, Conversation> conversations = new Dictionary<ulong, Conversation>();
 
         public UsageType Usage => UsageType.Talk;
-        public bool Restrains => conversations.Values.Any(c => c.Open);
+
+        public bool CanPerform(ActionType type, float dt)
+        {
+            return !conversations.Values.Any(c => c.Open);
+        }
+        public void RegisterAction(ActionType type, float dt) {}
 
         public override void OnNetworkSpawn()
         {
