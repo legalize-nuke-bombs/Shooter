@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: -5523551864615888746}
   - component: {fileID: 6600000000000000117}
   - component: {fileID: 6600000000000000118}
+  - component: {fileID: 6600000000000000119}
   m_Layer: 0
   m_Name: Overlays
   m_TagString: Untagged
@@ -343,3 +344,16 @@ MonoBehaviour:
   worsenedIcon: {fileID: 21300000, guid: 566a8b5d40a3457ea0c48f6a8739129d, type: 3}
   improvedSound: {fileID: 11400000, guid: ec9d6380458b451cb27421a3a0e2ee8e, type: 2}
   worsenedSound: {fileID: 11400000, guid: 74d319b8312f4b25a28b3355715af9b5, type: 2}
+--- !u!114 &6600000000000000119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155463033436812329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac3e50186df4b12a9e0c5d4f2718b93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glyph: {fileID: 21300000, guid: 4b7e19d0c85a4c3f9127ea60b8d3f527, type: 3}

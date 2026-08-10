@@ -1,28 +1,41 @@
-﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Body
 {
     public class DefaultHunger : Hunger
     {
-        [SerializeField] private float amount;
-        [SerializeField] private float maxAmount;
+        [SerializeField] private float maxAmount = 100f;
 
-        public override float Amount => amount;
-        public override float MaxAmount => maxAmount;
+        private readonly NetworkVariable<float> amount = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Owner);
+
+        public override float Amount => amount.Value;
+
+        public override float MaxAmount => Mathf.Max(maxAmount, 1f);
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+
+            if (!IsServer) return;
+
+            amount.SetUpdateTraits(new NetworkVariableUpdateTraits { MinSecondsBetweenUpdates = 0.1f });
+            amount.Value = MaxAmount;
+        }
 
         public override bool CanSpend(float a)
         {
-            return amount >= a;
+            return amount.Value >= a;
         }
+
         public override void Spend(float a)
         {
-            a = Math.Max(a, 0);
-            amount = Math.Max(amount - a, 0);
+            amount.Value = Mathf.Max(amount.Value - Mathf.Max(a, 0f), 0f);
         }
+
         public override void Restore(float a)
         {
-            amount = Math.Min(amount + a, maxAmount);
+            amount.Value = Mathf.Min(amount.Value + Mathf.Max(a, 0f), MaxAmount);
         }
     }
 }

@@ -16,6 +16,10 @@
         <ui:VisualElement name="stamina" class="bar bar--stamina" picking-mode="Ignore">
             <ui:VisualElement name="stamina-fill" class="bar__fill bar__fill--stamina" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:VisualElement name="hunger" class="hunger" picking-mode="Ignore">
+            <ui:VisualElement name="hunger-glyph" class="hunger__glyph" picking-mode="Ignore" />
+            <ui:Label name="hunger-amount" class="hunger__amount" picking-mode="Ignore" />
+        </ui:VisualElement>
         <ui:VisualElement name="ammo" class="ammo" picking-mode="Ignore">
             <ui:Label name="ammo-magazine" class="ammo__magazine" picking-mode="Ignore" />
             <ui:Label name="ammo-reserve" class="ammo__reserve" picking-mode="Ignore" />
