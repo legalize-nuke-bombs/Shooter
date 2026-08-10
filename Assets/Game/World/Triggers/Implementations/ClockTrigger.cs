@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Shooter.Game.Core;
 using Shooter.Logging;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.World
@@ -27,37 +26,6 @@ namespace Shooter.Game.World
         [SerializeField] private int invokeMaxNum = 0;
 
         private int invokes = 0;
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            NetworkManager network = NetworkManager.Singleton;
-            enabled = network != null && network.IsServer;
-            if (network == null) return;
-
-            network.OnServerStarted += WakeUp;
-            network.OnServerStopped += Sleep;
-        }
-
-        private void OnDestroy()
-        {
-            NetworkManager network = NetworkManager.Singleton;
-            if (network == null) return;
-
-            network.OnServerStarted -= WakeUp;
-            network.OnServerStopped -= Sleep;
-        }
-
-        private void WakeUp()
-        {
-            enabled = true;
-        }
-
-        private void Sleep(bool wasHost)
-        {
-            enabled = false;
-        }
 
         private double? NextInvoke()
         {

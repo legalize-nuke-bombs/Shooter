@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using Shooter.Game.Core;
 using Shooter.Logging;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.World
 {
+    [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(MainTriggerable))]
-    public abstract class Trigger : MonoBehaviour
+    public abstract class Trigger : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -22,6 +24,18 @@ namespace Shooter.Game.World
             {
                 Log.Warn($"Entity {name} does not have main triggerable");
             }
+
+            enabled = false;
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            enabled = IsServer;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            enabled = false;
         }
 
         protected void OnTrigger(PersistentId character)
