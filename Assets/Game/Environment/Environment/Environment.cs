@@ -1,6 +1,7 @@
 using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Game.Body.EarSounding;
+using Shooter.Game.Icons;
 using Shooter.Game.Identity;
 using Shooter.Game.Body.Sounding;
 using Shooter.Game.Loot;
@@ -32,6 +33,8 @@ namespace Shooter.Game
 
         [SerializeField] private ItemCatalog items;
 
+        [SerializeField] private IconCatalog icons;
+
         [SerializeField] private SoundCatalog sounds;
 
         [SerializeField] private EarSoundCatalog earSounds;
@@ -58,6 +61,8 @@ namespace Shooter.Game
         public GameObject Corpse => corpse;
 
         public ItemCatalog Items => items;
+
+        public IconCatalog Icons => icons;
 
         public SoundCatalog Sounds => sounds;
 

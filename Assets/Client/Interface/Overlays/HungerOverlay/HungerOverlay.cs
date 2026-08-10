@@ -1,5 +1,6 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
+using Shooter.Game.Icons;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,7 +16,7 @@ namespace Shooter.Client.Interface.Overlays
         private const string AmountElement = "hunger-amount";
         private const int Hidden = -1;
 
-        [SerializeField] private Sprite glyph;
+        [SerializeField] private IconSpec glyph;
 
         private VisualElement box;
         private Label amount;
@@ -56,7 +57,8 @@ namespace Shooter.Client.Interface.Overlays
 
             VisualElement image = root.Q<VisualElement>(GlyphElement);
 
-            if (image != null && glyph != null) image.style.backgroundImage = Background.FromSprite(glyph);
+            if (image != null && glyph != null && glyph.Sprite != null)
+                image.style.backgroundImage = Background.FromSprite(glyph.Sprite);
 
             box.style.display = DisplayStyle.None;
 

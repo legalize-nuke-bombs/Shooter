@@ -16,5 +16,5 @@ MonoBehaviour:
   title: "\u042F\u0431\u043B\u043E\u043A\u043E"
   promptName: Apple
   model: {fileID: 5259299800716398628, guid: bf3411e3b666f18429007662fef6c18d, type: 3}
-  icon: {fileID: 21300000, guid: 49d375bfcde80e64799f97183f8717e2, type: 3}
+  icon: {fileID: 11400000, guid: a4915dc5353b4554a10695f592418dd7, type: 2}
   cells: {x: 1, y: 1}

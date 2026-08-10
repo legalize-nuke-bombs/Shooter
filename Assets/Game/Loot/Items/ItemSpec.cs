@@ -1,3 +1,4 @@
+using Shooter.Game.Icons;
 using UnityEngine;
 
 namespace Shooter.Game.Loot
@@ -7,12 +8,12 @@ namespace Shooter.Game.Loot
         [SerializeField] private string title;
         [SerializeField] private string promptName;
         [SerializeField] private GameObject model;
-        [SerializeField] private Sprite icon;
+        [SerializeField] private IconSpec icon;
         [SerializeField] private Vector2Int cells = Vector2Int.one;
 
         public GameObject Model => model;
 
-        public Sprite Icon => icon;
+        public IconSpec Icon => icon;
 
         public Vector2Int Cells => new Vector2Int(Mathf.Max(cells.x, 1), Mathf.Max(cells.y, 1));
 

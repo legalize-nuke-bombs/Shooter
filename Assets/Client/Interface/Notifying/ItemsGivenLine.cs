@@ -11,7 +11,7 @@ namespace Shooter.Client.Interface.Notifying
         {
             ItemSpec spec = Spec(notification);
 
-            return spec == null ? null : spec.Icon;
+            return spec == null || spec.Icon == null ? null : spec.Icon.Sprite;
         }
 
         protected override string Title(ItemsGivenNotification notification)
