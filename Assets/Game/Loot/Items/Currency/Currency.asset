@@ -16,5 +16,5 @@ MonoBehaviour:
   title: "\u0420\u0443\u0431\u043B\u0438"
   promptName: rubles
   model: {fileID: 0}
-  icon: {fileID: 21300000, guid: c9a04e1b3e341cb4b89e5504595a1c34, type: 3}
+  icon: {fileID: 11400000, guid: 92416472735945f18922ab23d6592ec2, type: 2}
   cells: {x: 1, y: 1}

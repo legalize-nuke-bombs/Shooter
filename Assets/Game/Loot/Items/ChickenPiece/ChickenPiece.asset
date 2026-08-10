@@ -16,5 +16,5 @@ MonoBehaviour:
   title: "\u041A\u0443\u0440\u0438\u043D\u0430\u044F \u043D\u043E\u0436\u043A\u0430"
   promptName: Chicken leg
   model: {fileID: 2921134319588251144, guid: 16acbe5bed5d99944a567da1b7fcb438, type: 3}
-  icon: {fileID: 21300000, guid: 4527394da99fbdb4da97757e72b0ca22, type: 3}
+  icon: {fileID: 11400000, guid: f63cae947ea9425bbe77980a9659c78e, type: 2}
   cells: {x: 1, y: 1}

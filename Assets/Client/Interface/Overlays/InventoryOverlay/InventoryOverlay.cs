@@ -252,9 +252,14 @@ namespace Shooter.Client.Interface.Overlays
                 thing.Add(label);
             }
 
-            if (equipable) Draggable(thing, slot, holding, spec == null ? null : spec.Icon, size);
+            if (equipable) Draggable(thing, slot, holding, Icon(spec), size);
 
             return thing;
+        }
+
+        private static Sprite Icon(ItemSpec spec)
+        {
+            return spec == null || spec.Icon == null ? null : spec.Icon.Sprite;
         }
 
         private void Draggable(VisualElement thing, int slot, bool holding, Sprite icon, Vector2 size)
@@ -329,11 +334,11 @@ namespace Shooter.Client.Interface.Overlays
             if (holding) slot.AddToClassList("slot--held");
             if (!equipable) slot.AddToClassList("slot--fixed");
 
-            if (spec != null && spec.Icon != null)
+            if (Icon(spec) != null)
             {
                 var icon = new VisualElement();
                 icon.AddToClassList("slot__icon");
-                icon.style.backgroundImage = Background.FromSprite(spec.Icon);
+                icon.style.backgroundImage = Background.FromSprite(Icon(spec));
                 icon.style.width = size.x * Cell - Bezel;
                 icon.style.height = size.y * Cell - Bezel;
                 slot.Add(icon);

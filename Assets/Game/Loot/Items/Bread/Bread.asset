@@ -16,5 +16,5 @@ MonoBehaviour:
   title: "\u0425\u043B\u0435\u0431"
   promptName: Bread
   model: {fileID: 6093391673720001028, guid: 2475a01d6f14eaf48bd688382a900e55, type: 3}
-  icon: {fileID: 21300000, guid: c1d5c749437a20d4bae56a39bbcee3c2, type: 3}
+  icon: {fileID: 11400000, guid: c78fa605bad546c7945ab4cdd95bc907, type: 2}
   cells: {x: 1, y: 1}

@@ -16,5 +16,5 @@ MonoBehaviour:
   title: "\u041F\u0430\u0442\u0440\u043E\u043D\u044B 7.62x39"
   promptName: 7.62x39 ammo
   model: {fileID: 2730496887622252028, guid: 4b489fd8296f8994c9891a9029c72a4b, type: 3}
-  icon: {fileID: 21300000, guid: 9c6fc29566ef74e4ebf12fb26b9cd54c, type: 3}
+  icon: {fileID: 11400000, guid: ff0cb665195a414ca33b54ef32f17835, type: 2}
   cells: {x: 2, y: 1}
