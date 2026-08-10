@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Shooter.Game.Core;
 using Shooter.Logging;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.World
@@ -21,12 +20,19 @@ namespace Shooter.Game.World
             public double Timestamp => days * 3600 * 24 + hours * 3600 + minutes * 60;
         }
 
-        [SerializeField] private Cooldown veryFirstCooldown;
-        [SerializeField] private Cooldown interCooldown;
+        [SerializeField] private Cooldown veryFirstCooldown = new Cooldown { days = 1 };
+        [SerializeField] private Cooldown interCooldown = new Cooldown { days = 1 };
         [SerializeField] private bool useInvokeMaxNum = false;
         [SerializeField] private int invokeMaxNum = 0;
 
         private int invokes = 0;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            enabled = false;
+        }
 
         private double? NextInvoke()
         {
@@ -39,21 +45,14 @@ namespace Shooter.Game.World
 
         private void Update()
         {
-            NetworkManager network = NetworkManager.Singleton;
-            if (network == null || !network.IsServer)
-            {
-                return;
-            }
-
             double? nextInvoke = NextInvoke();
             if (nextInvoke == null)
             {
+                enabled = false;
                 return;
             }
 
-            Clock clock = Environment.Current.Clock;
-            Log.Info($"Clock ts {clock.Timestamp} nextInvoke {nextInvoke}");
-            if (clock.Timestamp >= nextInvoke)
+            if (Environment.Current.Clock.Timestamp >= nextInvoke)
             {
                 OnTrigger();
             }

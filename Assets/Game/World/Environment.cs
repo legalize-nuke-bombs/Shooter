@@ -43,6 +43,8 @@ namespace Shooter.Game.World
 
         private MainSpawnPoint spawn;
 
+        private ClockTrigger[] clockTriggers;
+
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
@@ -85,6 +87,8 @@ namespace Shooter.Game.World
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];
 
+            clockTriggers = FindObjectsByType<ClockTrigger>(FindObjectsInactive.Include);
+
             if (items != null) Kinds.Use<UniqueItem>(items);
 
             if (profiler == null)
@@ -114,6 +118,8 @@ namespace Shooter.Game.World
                 version.Value = new FixedString32Bytes(Application.version);
 
                 Sweeper.enabled = true;
+
+                foreach (ClockTrigger trigger in clockTriggers) trigger.enabled = true;
             }
 
             Log.Info($"Environment is up: world {World}, version {Version}, clock says {Clock.DateTime()}");
@@ -122,6 +128,8 @@ namespace Shooter.Game.World
         public override void OnNetworkDespawn()
         {
             Sweeper.enabled = false;
+
+            foreach (ClockTrigger trigger in clockTriggers) trigger.enabled = false;
 
             Log.Info("Environment is down");
         }
