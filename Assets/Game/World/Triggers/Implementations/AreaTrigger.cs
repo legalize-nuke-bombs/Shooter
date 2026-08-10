@@ -1,6 +1,5 @@
 ﻿using Shooter.Game.Core;
 using Shooter.Logging;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.World
@@ -24,8 +23,7 @@ namespace Shooter.Game.World
 
         private void OnTriggerEnter(Collider target)
         {
-            NetworkManager network = NetworkManager.Singleton;
-            if (network == null || !network.IsServer) return;
+            if (!IsServer) return;
 
             if (target.gameObject.layer != CharacterLayer) return;
 
