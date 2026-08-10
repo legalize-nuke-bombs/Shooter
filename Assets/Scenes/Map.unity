@@ -1786,6 +1786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faf9d8777bda49d3a70493fd4be325d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Teleport
+  allowReiteration: 1
   destination: {fileID: 2071401413}
   sound: {fileID: 11400000, guid: 283dbd0dbf7c47e887681ac86f8750d0, type: 2}
 --- !u!135 &160195659
@@ -3472,6 +3473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6881cb66b948dcbe99547d3996bf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.AreaNotificationPublisher
+  allowReiteration: 0
   notificationSpec: {fileID: 11400000, guid: a915e3e4f58857e4a9f88dcfffe60789, type: 2}
 --- !u!135 &377216351
 SphereCollider:
