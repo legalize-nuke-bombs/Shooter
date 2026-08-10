@@ -19,7 +19,7 @@ namespace Shooter.Game.World
             base.Awake();
 
             SphereCollider sphere = GetComponent<SphereCollider>();
-            if (!sphere.isTrigger) Log.Warn("Sphere must has a trigger!");
+            if (!sphere.isTrigger) Log.Warn("Sphere must have a trigger!");
         }
 
         private void OnTriggerEnter(Collider target)

@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc5282e42563459281557c6a6f6a63aa, type: 3}
-  m_Name: AllienTone
-  m_EditorClassIdentifier: 
-  id: allientone
-  clips:
-  - {fileID: 8300000, guid: 4990186f08e46184594304393f95a8ad, type: 3}
-  volume: 1
-  pitchVariation: 0
+  m_Script: {fileID: 11500000, guid: bd774a2046ffe4c24baf33f0a37fe12b, type: 3}
+  m_Name: Alien
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.PlainNameSpec
+  id: 
+  text: "\u041F\u0440\u0438\u0448\u0435\u043B\u0435\u0446"
+  prompt: "Alien"
