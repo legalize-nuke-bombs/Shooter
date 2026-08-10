@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace Shooter.Game.World
 {
-    public class Teleport : AreaTrigger
+    public class Teleport : MonoBehaviour, ITriggerable
     {
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject destination;
         [SerializeField] private EarSoundSpec sound = null;
 
-        protected override void OnTrigger(PersistentId character)
+        public void OnTrigger(PersistentId character)
         {
             if (destination == null)
             {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Shooter.Game.Core;
+﻿using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game.World
 {
     [RequireComponent(typeof(SphereCollider))]
-    public abstract class AreaTrigger : MonoBehaviour
+    public class AreaTrigger : Trigger
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -15,11 +14,10 @@ namespace Shooter.Game.World
         private static int CharacterLayer =>
             characterLayer != -1 ? characterLayer : characterLayer = LayerMask.NameToLayer("Character");
 
-        private readonly HashSet<long> done = new HashSet<long>();
-        [SerializeField] private bool allowReiteration = true;
-
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             SphereCollider sphere = GetComponent<SphereCollider>();
             if (!sphere.isTrigger) Log.Warn("Sphere must has a trigger!");
         }
@@ -34,22 +32,11 @@ namespace Shooter.Game.World
             PersistentId persistentId = target.GetComponentInParent<PersistentId>();
             if (persistentId == null)
             {
-                Log.Warn($"Character {persistentId.name} does not have a persistent id");
+                Log.Warn($"Character {target.name} does not have a persistent id");
                 return;
             }
 
-            if (!allowReiteration)
-            {
-                if (!done.Add(persistentId.Value))
-                {
-                    return;
-                }
-            }
-
-            Log.Info($"Entity {name} is going to trigger on {persistentId.name}");
             OnTrigger(persistentId);
         }
-
-        protected abstract void OnTrigger(PersistentId character);
     }
 }
