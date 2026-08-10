@@ -39,5 +39,27 @@ namespace Shooter.Game.Core
         {
             return known.TryGetValue(id, out PersistentId found) ? found : null;
         }
+
+        public List<PersistentId> GetFiltered(string layerName)
+        {
+            int targetLayer = LayerMask.NameToLayer(layerName);
+            if (targetLayer == -1)
+            {
+                Log.Error($"Layer with name '{layerName}' does not exist!");
+                return new List<PersistentId>();
+            }
+
+            var result = new List<PersistentId>();
+
+            foreach (PersistentId id in known.Values)
+            {
+                if (id.gameObject.layer == targetLayer)
+                {
+                    result.Add(id);
+                }
+            }
+
+            return result;
+        }
     }
 }
