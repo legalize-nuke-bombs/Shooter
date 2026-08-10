@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
-using Shooter.Game.Packing;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -21,15 +20,13 @@ namespace Shooter.Game.Loot
         private readonly NetworkList<int> stackAmounts = new NetworkList<int>(
             null, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
 
-        private readonly NetworkList<PackedBytes> packedUniqueItems = new NetworkList<PackedBytes>();
+        private readonly NetworkVariable<ItemSlots> slots = new NetworkVariable<ItemSlots>(new ItemSlots());
 
         private readonly NetworkVariable<int> equippedSlot = new NetworkVariable<int>(NoSlot);
 
-        private readonly List<UniqueItem> uniqueItems = new List<UniqueItem>();
-
         public event Action Changed;
 
-        public IReadOnlyList<UniqueItem> UniqueItems => uniqueItems;
+        public IReadOnlyList<UniqueItem> UniqueItems => slots.Value.All;
 
         public int EquippedSlot => equippedSlot.Value;
 
@@ -55,14 +52,10 @@ namespace Shooter.Game.Loot
         public override void OnNetworkSpawn()
         {
             stackAmounts.OnListChanged += StackAmountsShifted;
-            packedUniqueItems.OnListChanged += PackedUniqueItemsShifted;
+            slots.OnValueChanged += SlotsArrived;
             equippedSlot.OnValueChanged += Reequipped;
 
-            if (!IsServer)
-            {
-                Remirror();
-                return;
-            }
+            if (!IsServer) return;
 
             enabled = true;
 
@@ -83,7 +76,7 @@ namespace Shooter.Game.Loot
         public override void OnNetworkDespawn()
         {
             stackAmounts.OnListChanged -= StackAmountsShifted;
-            packedUniqueItems.OnListChanged -= PackedUniqueItemsShifted;
+            slots.OnValueChanged -= SlotsArrived;
             equippedSlot.OnValueChanged -= Reequipped;
 
             enabled = false;
@@ -91,14 +84,11 @@ namespace Shooter.Game.Loot
 
         private void LateUpdate()
         {
-            for (int slot = 0; slot < uniqueItems.Count; slot++)
-            {
-                UniqueItem item = uniqueItems[slot];
-                if (item == null || !item.Dirty) continue;
+            if (!slots.Value.Dirty) return;
 
-                item.Clean();
-                packedUniqueItems[slot] = PackedBytes.Of<UniqueItem>(item);
-            }
+            slots.Value.Settle();
+
+            SlotsShifted();
         }
 
         public int StackableAmount(StackableItemSpec spec)
@@ -146,20 +136,9 @@ namespace Shooter.Game.Loot
         {
             if (!IsServer || item == null) return NoSlot;
 
-            item.Clean();
-            int slot = uniqueItems.IndexOf(null);
+            int slot = slots.Value.Put(item);
 
-            if (slot == NoSlot)
-            {
-                slot = uniqueItems.Count;
-                uniqueItems.Add(item);
-                packedUniqueItems.Add(PackedBytes.Of<UniqueItem>(item));
-            }
-            else
-            {
-                uniqueItems[slot] = item;
-                packedUniqueItems[slot] = PackedBytes.Of<UniqueItem>(item);
-            }
+            SlotsShifted();
 
             Log.Info($"Entity {name} took {item.SpecId} into slot {slot}");
 
@@ -170,20 +149,19 @@ namespace Shooter.Game.Loot
         {
             if (!IsServer) return null;
 
-            UniqueItem item = At(slot);
+            UniqueItem item = slots.Value.Take(slot);
             if (item == null) return null;
 
-            uniqueItems[slot] = null;
-            packedUniqueItems[slot] = default;
-
             if (equippedSlot.Value == slot) Equip(NoSlot);
+
+            SlotsShifted();
 
             return item;
         }
 
         public bool Contains(UniqueItem item)
         {
-            return item != null && uniqueItems.Contains(item);
+            return slots.Value.Contains(item);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -209,7 +187,7 @@ namespace Shooter.Game.Loot
                     target.AddStackable(stackable, stackAmounts[index]);
             }
 
-            foreach (UniqueItem item in uniqueItems)
+            foreach (UniqueItem item in slots.Value.All)
             {
                 if (item != null) target.Put(item);
             }
@@ -239,9 +217,9 @@ namespace Shooter.Game.Loot
                     .Append(stackAmounts[index]);
             }
 
-            for (int index = 0; index < uniqueItems.Count; index++)
+            for (int index = 0; index < slots.Value.Count; index++)
             {
-                UniqueItem item = uniqueItems[index];
+                UniqueItem item = slots.Value.At(index);
                 if (item == null) continue;
 
                 ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
@@ -283,7 +261,7 @@ namespace Shooter.Game.Loot
 
         private UniqueItem At(int slot)
         {
-            return slot >= 0 && slot < uniqueItems.Count ? uniqueItems[slot] : null;
+            return slots.Value.At(slot);
         }
 
         private void Clear()
@@ -293,8 +271,9 @@ namespace Shooter.Game.Loot
                 if (stackAmounts[index] != 0) stackAmounts[index] = 0;
             }
 
-            uniqueItems.Clear();
-            packedUniqueItems.Clear();
+            slots.Value.Clear();
+
+            SlotsShifted();
 
             Equip(NoSlot);
         }
@@ -326,32 +305,6 @@ namespace Shooter.Game.Loot
             return catalog == null || spec == null ? -1 : catalog.Index(spec);
         }
 
-        private void Remirror()
-        {
-            uniqueItems.Clear();
-
-            foreach (PackedBytes state in packedUniqueItems) uniqueItems.Add(state.Unpack<UniqueItem>());
-        }
-
-        private void Mirror(NetworkListEvent<PackedBytes> change)
-        {
-            switch (change.Type)
-            {
-                case NetworkListEvent<PackedBytes>.EventType.Add:
-                    uniqueItems.Add(change.Value.Unpack<UniqueItem>());
-                    break;
-                case NetworkListEvent<PackedBytes>.EventType.Value:
-                    uniqueItems[change.Index] = change.Value.Unpack<UniqueItem>();
-                    break;
-                case NetworkListEvent<PackedBytes>.EventType.Clear:
-                    uniqueItems.Clear();
-                    break;
-                default:
-                    Remirror();
-                    break;
-            }
-        }
-
         private static StringBuilder Line(StringBuilder digest)
         {
             return digest.Length == 0 ? digest : digest.Append("\n");
@@ -362,10 +315,13 @@ namespace Shooter.Game.Loot
             Changed?.Invoke();
         }
 
-        private void PackedUniqueItemsShifted(NetworkListEvent<PackedBytes> change)
+        private void SlotsArrived(ItemSlots previous, ItemSlots current)
         {
-            if (!IsServer) Mirror(change);
+            Changed?.Invoke();
+        }
 
+        private void SlotsShifted()
+        {
             Changed?.Invoke();
         }
 
