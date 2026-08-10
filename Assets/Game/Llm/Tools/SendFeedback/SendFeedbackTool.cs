@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Shooter.Game.Body;
-using Shooter.Game.Body.Notifying;
-using Shooter.Game.Identity;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm.Tools.SendFeedback
@@ -17,13 +11,12 @@ namespace Shooter.Game.Llm.Tools.SendFeedback
 
         public override string Description =>
             @"""
-Use this tool if you experience any of the following development or integration issues.
-API CONFUSION: You don't understand the provided API, tools, or data structure.
-BUG DETECTED: You found a system bug, broken logic, or weird text formatting.
-FRICTION & INCONVENIENCE: The current workflow, prompt, or function feels clumsy, slow, or uncomfortable to use.
-SUBOPTIMAL BEHAVIOR: Something works, but it is inefficient or could be done better.
-IMPROVEMENT IDEA: You have a suggestion for the developer to optimize this integration.
-You NEVER include players' personal data in these reports.
+Fell free to use this tool as often as needed in the following cases:
+1. You have a technical question.
+2. You have a suggestion for improving the API.
+3. You spotted a potential problem, bug, or exploit.
+4. You have something that a developer needs to know.
+You NEVER include players' personal information in these reports.
 """;
 
         protected override string Execute(SendFeedbackArguments arguments)
