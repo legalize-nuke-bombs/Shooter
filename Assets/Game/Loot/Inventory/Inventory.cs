@@ -100,16 +100,16 @@ namespace Shooter.Game.Loot
             }
         }
 
-        public int StackableAmount(ItemSpec spec)
+        public int StackableAmount(StackableItemSpec spec)
         {
             int index = IndexOf(spec);
 
             return index < 0 || index >= stackAmounts.Count ? 0 : stackAmounts[index];
         }
 
-        public void AddStackable(ItemSpec spec, int amount)
+        public void AddStackable(StackableItemSpec spec, int amount)
         {
-            if (!IsServer || amount <= 0 || spec == null || !spec.Stackable) return;
+            if (!IsServer || amount <= 0 || spec == null) return;
 
             int index = IndexOf(spec);
 
@@ -123,9 +123,9 @@ namespace Shooter.Game.Loot
             Log.Info($"Entity {name} took {amount} of {spec.Key}");
         }
 
-        public int RemoveStackable(ItemSpec spec, int amount, InventoryOnConflict onConflict)
+        public int RemoveStackable(StackableItemSpec spec, int amount, InventoryOnConflict onConflict)
         {
-            if (!IsServer || amount <= 0 || spec == null || !spec.Stackable) return 0;
+            if (!IsServer || amount <= 0 || spec == null) return 0;
 
             int index = IndexOf(spec);
             if (index < 0 || index >= stackAmounts.Count) return 0;
@@ -204,7 +204,8 @@ namespace Shooter.Game.Loot
 
             for (int index = 0; index < stackAmounts.Count; index++)
             {
-                if (stackAmounts[index] > 0) target.AddStackable(catalog.At(index), stackAmounts[index]);
+                if (stackAmounts[index] > 0 && catalog.At(index) is StackableItemSpec stackable)
+                    target.AddStackable(stackable, stackAmounts[index]);
             }
 
             foreach (UniqueItem item in uniqueItems)
@@ -264,7 +265,7 @@ namespace Shooter.Game.Loot
             UniqueItem item = At(slot);
             if (item == null) return false;
 
-            ItemSpec spec = Catalog == null ? null : Catalog.Spec(item.SpecId);
+            var spec = (Catalog == null ? null : Catalog.Spec(item.SpecId)) as UniqueItemSpec;
 
             if (spec == null || !spec.Equipable)
             {
@@ -301,15 +302,17 @@ namespace Shooter.Game.Loot
         {
             int amount = Math.Max(entry.Amount, 1);
 
-            if (entry.Spec.Stackable)
+            if (entry.Spec is StackableItemSpec stackable)
             {
-                AddStackable(entry.Spec, amount);
+                AddStackable(stackable, amount);
                 return;
             }
 
+            if (entry.Spec is not UniqueItemSpec unique) return;
+
             for (int made = 0; made < amount; made++)
             {
-                int slot = Put(entry.Spec.Create());
+                int slot = Put(unique.Create());
 
                 if (slot != NoSlot && entry.Equip && equippedSlot.Value == NoSlot) Equip(slot);
             }

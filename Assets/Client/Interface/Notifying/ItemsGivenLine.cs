@@ -19,7 +19,7 @@ namespace Shooter.Client.Interface.Notifying
             ItemSpec spec = Spec(notification);
             string title = spec == null ? notification.ItemSpecId : spec.Title;
 
-            return spec != null && !spec.Stackable ? title : $"{title} ×{notification.Amount}";
+            return spec is UniqueItemSpec ? title : $"{title} ×{notification.Amount}";
         }
 
         protected override long Actor(ItemsGivenNotification notification) => notification.ActorId;

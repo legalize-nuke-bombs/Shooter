@@ -24,7 +24,10 @@ namespace Shooter.Game.Llm.Tools
             ItemSpec item = Environment.Current.Items.FindByPromptName(arguments.Item);
             if (item == null) return $"There is no item named {arguments.Item}";
 
-            return inventoryExchanger.GiveStackable(arguments.TargetId, item, arguments.Amount)
+            if (item is not StackableItemSpec stackable)
+                return $"{arguments.Item} does not come in counted amounts, hand it over by its slot number with give_unique";
+
+            return inventoryExchanger.GiveStackable(arguments.TargetId, stackable, arguments.Amount)
                 ? $"Gave {arguments.Amount} x {arguments.Item} to {arguments.TargetId}"
                 : "Could not give: the receiver is not around or you lack the items";
         }

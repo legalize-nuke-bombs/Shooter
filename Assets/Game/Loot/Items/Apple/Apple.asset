@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dd4cf6567cf14cf59846c41a6c5cba9, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f8b41c7d95e4a3fb06c1d27e8a45913, type: 3}
   m_Name: Apple
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.ItemSpec
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: apple
   title: "\u042F\u0431\u043B\u043E\u043A\u043E"
   promptName: Apple
-  stackable: 1
-  equipable: 0
   model: {fileID: 5259299800716398628, guid: bf3411e3b666f18429007662fef6c18d, type: 3}
   icon: {fileID: 21300000, guid: 49d375bfcde80e64799f97183f8717e2, type: 3}
   cells: {x: 1, y: 1}
