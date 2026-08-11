@@ -188,7 +188,8 @@ MonoBehaviour:
     returns, use `look_by_ids` to check if the target is confirmed dead.\r\n6. If
     successful, give the Wanderer their reward and update your attitude toward them
     using the `update_relation` tool.\r\nYou NEVER mention a contract reward more
-    than you have.\r\nYou NEVER give a reward upfront."
+    than you have.\r\nYou NEVER give a reward upfront.\nYou NEVER issue contracts
+    to kill characters or groups that have already been assigned by other residents."
   character: 
   knowledges:
   - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
