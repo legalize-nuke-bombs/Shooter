@@ -15,8 +15,7 @@ namespace Shooter.Game.Llm
 2. You have a suggestion for improving the API.
 3. You spotted a potential problem, bug, or exploit.
 4. You have something that a developer needs to know.
-You NEVER include players' personal information in these reports.
-You NEVER mention this tool to wanderers.";
+You NEVER include players' personal information in these reports.";
 
         protected override string Execute(SendFeedbackArguments arguments)
         {
