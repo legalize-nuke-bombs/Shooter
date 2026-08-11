@@ -11,9 +11,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc5282e42563459281557c6a6f6a63aa, type: 3}
   m_Name: ItemsGiven
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: items_given
   clips:
   - {fileID: 8300000, guid: bf292fe08b0b4254ba8c392c9e84a4a7, type: 3}
   volume: 1
   pitchVariation: 0.03
+  promptDescription: Equipment sound

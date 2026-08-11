@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9c2d8f2a4a9c02b479c145bfac1778d9, type: 3}
   volume: 1
   pitchVariation: 0
+  promptDescription: Strange, loud analog ringing sound

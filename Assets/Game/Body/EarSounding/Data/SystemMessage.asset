@@ -11,9 +11,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc5282e42563459281557c6a6f6a63aa, type: 3}
   m_Name: SystemMessage
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: systemmessage
   clips:
   - {fileID: 8300000, guid: 1ef6a4f7f4184d03b2a19b8f2a81487d, type: 3}
   volume: 1
   pitchVariation: 0.05
+  promptDescription: System notification sound
