@@ -5,36 +5,38 @@ namespace Shooter.Game.Core
 {
     public class PersistentId : NetworkBehaviour
     {
-        private readonly NetworkVariable<long> value = new NetworkVariable<long>(PersistentIds.Nobody);
+        public const long Nobody = -1;
+
+        private readonly NetworkVariable<long> value = new NetworkVariable<long>(Nobody);
 
         public long Value => value.Value;
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer)
-            {
-                value.Value = Environment.Current.PersistentIds.Reserve();
-            }
+            Register<PersistentId> register = Environment.Current.Registers.Of<PersistentId>();
+
+            if (IsServer) value.Value = register.Add(this);
+            else if (value.Value != Nobody) register.Add(value.Value, this);
 
             value.OnValueChanged += Renumbered;
-
-            if (value.Value != PersistentIds.Nobody) Environment.Current.PersistentIds.Register(this);
         }
 
         public override void OnNetworkDespawn()
         {
             value.OnValueChanged -= Renumbered;
 
-            if (Environment.Current != null) Environment.Current.PersistentIds.Forget(value.Value, this);
+            if (Environment.Current != null) Environment.Current.Registers.Of<PersistentId>().Remove(value.Value);
         }
 
         private void Renumbered(long previous, long current)
         {
             if (Environment.Current == null) return;
 
-            Environment.Current.PersistentIds.Forget(previous, this);
+            Register<PersistentId> register = Environment.Current.Registers.Of<PersistentId>();
 
-            if (current != PersistentIds.Nobody) Environment.Current.PersistentIds.Register(this);
+            register.Remove(previous);
+
+            if (current != Nobody) register.Add(current, this);
         }
     }
 }

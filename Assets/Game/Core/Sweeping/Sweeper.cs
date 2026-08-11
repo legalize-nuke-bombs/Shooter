@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Shooter.Logging;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Core
 {
@@ -10,7 +11,6 @@ namespace Shooter.Game.Core
 
         [SerializeField] private float interval = 60f;
 
-        private readonly HashSet<Sweepable> adopted = new HashSet<Sweepable>();
         private readonly List<Sweepable> ripe = new List<Sweepable>();
 
         private float sinceLastSweep;
@@ -18,16 +18,6 @@ namespace Shooter.Game.Core
         private void Awake()
         {
             enabled = false;
-        }
-
-        public void Adopt(Sweepable sweepable)
-        {
-            adopted.Add(sweepable);
-        }
-
-        public void Drop(Sweepable sweepable)
-        {
-            adopted.Remove(sweepable);
         }
 
         private void Update()
@@ -43,7 +33,7 @@ namespace Shooter.Game.Core
         {
             ripe.Clear();
 
-            foreach (Sweepable sweepable in adopted)
+            foreach (Sweepable sweepable in Environment.Current.Registers.Of<Sweepable>().All)
                 if (sweepable.CanBeSwept())
                     ripe.Add(sweepable);
 

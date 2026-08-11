@@ -24,7 +24,7 @@ namespace Shooter.Client.Interface
         {
             if (!long.TryParse(value, out long id)) return value;
 
-            PersistentId actor = Environment.Current == null ? null : Environment.Current.PersistentIds.Of(id);
+            PersistentId actor = Environment.Current == null ? null : Environment.Current.Registers.Of<PersistentId>().Of(id);
             if (actor == null) return Stranger;
 
             var nameable = actor.GetComponentInChildren<Nameable>();

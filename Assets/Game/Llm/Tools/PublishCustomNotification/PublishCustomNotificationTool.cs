@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Notifying;
@@ -13,6 +12,8 @@ namespace Shooter.Game.Llm.PublishCustomNotification
     public class PublishCustomNotificationTool : LlmTool<PublishCustomNotificationArguments>
     {
         private static readonly Journal Log = Logs.Here();
+
+        private const string CharacterLayer = "Character";
 
         private PersistentId id;
 
@@ -61,7 +62,7 @@ If you want the notification to be received only by specific character(s), pass 
                     .With("title", arguments.Title)
                     .With("subtitle", arguments.Subtitle);
 
-            PersistentIds ids = Environment.Current.PersistentIds;
+            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
 
             if (arguments.IncludeEveryone)
             {
@@ -71,13 +72,27 @@ If you want the notification to be received only by specific character(s), pass 
             return PublishCustomIds(notification, arguments.IncludeCustomIds ?? System.Array.Empty<long>(), ids);
         }
 
-        private string PublishIncludeEveryone(Notification notification, PersistentIds ids)
+        private string PublishIncludeEveryone(Notification notification, Register<PersistentId> ids)
         {
-            List<PersistentId> characters = ids.GetFiltered("Character");
+            int characterLayer = LayerMask.NameToLayer(CharacterLayer);
+            if (characterLayer == -1)
+            {
+                Log.Error($"Layer {CharacterLayer} does not exist, nobody can be notified");
+                return "Failed to publish: nobody can be notified";
+            }
+
+            int characters = 0;
             int published = 0;
 
-            foreach (PersistentId character in characters)
+            foreach (PersistentId character in ids.All)
             {
+                if (character.gameObject.layer != characterLayer)
+                {
+                    continue;
+                }
+
+                characters++;
+
                 MainNotificationRecipient recipient = character.GetComponent<MainNotificationRecipient>();
                 if (recipient == null)
                 {
@@ -92,11 +107,11 @@ If you want the notification to be received only by specific character(s), pass 
                 published++;
             }
 
-            Log.Info($"Entity {name} published IncludeEveryone notification to {published} / {characters.Count} characters");
+            Log.Info($"Entity {name} published IncludeEveryone notification to {published} / {characters} characters");
             return $"Published to {published} characters";
         }
 
-        private string PublishCustomIds(Notification notification, long[] targetIds, PersistentIds ids)
+        private string PublishCustomIds(Notification notification, long[] targetIds, Register<PersistentId> ids)
         {
             var sb = new StringBuilder();
             int published = 0;
