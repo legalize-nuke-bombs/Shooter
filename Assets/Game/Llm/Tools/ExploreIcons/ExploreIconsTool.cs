@@ -4,7 +4,7 @@ using Shooter.Game.World;
 
 namespace Shooter.Game.Llm.ExploreIcons
 {
-    public sealed class ExploreEarSoundsTool : LlmTool<ExploreIconsArguments>
+    public sealed class ExploreIconsTool : LlmTool<ExploreIconsArguments>
     {
         public override string Name => "explore_icons";
 

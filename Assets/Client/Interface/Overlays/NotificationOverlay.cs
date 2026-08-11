@@ -1,5 +1,6 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
@@ -57,6 +58,9 @@ namespace Shooter.Client.Interface
 
         private void Show(Notification notification)
         {
+            NotificationSpec spec = Environment.Current.Notifications.Of(notification.Spec);
+            if (spec == null || string.IsNullOrEmpty(spec.Title)) return;
+
             VisualElement element = Line(notification);
             feed.Add(element);
 
@@ -72,7 +76,8 @@ namespace Shooter.Client.Interface
             var line = new VisualElement();
             line.AddToClassList("notification");
 
-            Sprite image = notification.Icon().Sprite;
+            IconSpec icon = notification.Icon();
+            Sprite image = icon == null ? null : icon.Sprite;
 
             if (image != null)
             {

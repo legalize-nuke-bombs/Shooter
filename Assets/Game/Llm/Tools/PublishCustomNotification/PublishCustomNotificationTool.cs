@@ -68,7 +68,7 @@ If you want the notification to be received only by specific character(s), pass 
                 return PublishIncludeEveryone(notification, ids);
             }
 
-            return PublishCustomIds(notification, arguments.IncludeCustomIds, ids);
+            return PublishCustomIds(notification, arguments.IncludeCustomIds ?? System.Array.Empty<long>(), ids);
         }
 
         private string PublishIncludeEveryone(Notification notification, PersistentIds ids)
@@ -101,19 +101,25 @@ If you want the notification to be received only by specific character(s), pass 
             var sb = new StringBuilder();
             int published = 0;
 
-            foreach (long id in targetIds)
+            foreach (long targetId in targetIds)
             {
-                PersistentId character = ids.Of(id);
+                if (targetId == id.Value)
+                {
+                    sb.Append($"ID {targetId} is you. ");
+                    continue;
+                }
+
+                PersistentId character = ids.Of(targetId);
                 if (character == null)
                 {
-                    sb.Append($"ID {id} not found. ");
+                    sb.Append($"ID {targetId} not found. ");
                     continue;
                 }
 
                 MainNotificationRecipient recipient = character.GetComponent<MainNotificationRecipient>();
                 if (recipient == null)
                 {
-                    sb.Append($"ID {id} does not accept notifications. ");
+                    sb.Append($"ID {targetId} does not accept notifications. ");
                     continue;
                 }
 
