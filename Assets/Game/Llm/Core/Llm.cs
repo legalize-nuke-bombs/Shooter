@@ -76,7 +76,7 @@ namespace Shooter.Game.Llm
 
         public void Notice(string line)
         {
-            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line });
+            history.Arrive(new LlmMessage { Role = LlmRole.System, Content = line });
         }
 
 
