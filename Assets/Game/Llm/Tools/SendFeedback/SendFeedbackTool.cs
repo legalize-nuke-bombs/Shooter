@@ -15,7 +15,7 @@ namespace Shooter.Game.Llm
 2. It seems to you that one of your tools needs to be modified or removed.
 3. It seems to you that you need additional tools.
 4. You spotted a potential problem, bug, or exploit.
-5. You have something that a developer needs to know.
+5. You have ANY other proposal for the development of this world.
 The world is under active development; any feedback is valuable and will be read.
 You NEVER include players' personal information in these reports.";
 
