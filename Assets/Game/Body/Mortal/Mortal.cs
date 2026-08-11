@@ -7,7 +7,7 @@ using Environment = Shooter.Game.World.Environment;
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Health))]
-    [RequireComponent(typeof(Movement))]
+    // Movement is not required
     [RequireComponent(typeof(EarSpeaker))]
     // Sleeper is not required
     public class Mortal : NetworkBehaviour, IMortal
