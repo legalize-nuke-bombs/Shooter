@@ -1792,6 +1792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4343521fa56040a791814871aff3cd29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.AreaTrigger
+  ShowTopMostFoldoutHeaderGroup: 1
   allowReiteration: 1
 --- !u!114 &160195672
 MonoBehaviour:
@@ -3509,6 +3510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4343521fa56040a791814871aff3cd29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.AreaTrigger
+  ShowTopMostFoldoutHeaderGroup: 1
   allowReiteration: 0
 --- !u!114 &377216364
 MonoBehaviour:
@@ -18514,6 +18516,22 @@ PrefabInstance:
     - target: {fileID: 1214448317635665621, guid: c378395c8cc78ed4b911af44892d7a64, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7767295749055815217, guid: c378395c8cc78ed4b911af44892d7a64, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7767295749055815217, guid: c378395c8cc78ed4b911af44892d7a64, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1234277659
+      objectReference: {fileID: 0}
+    - target: {fileID: 7767295749055815217, guid: c378395c8cc78ed4b911af44892d7a64, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7767295749055815217, guid: c378395c8cc78ed4b911af44892d7a64, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3805575117
       objectReference: {fileID: 0}
     - target: {fileID: 8852087064433780507, guid: c378395c8cc78ed4b911af44892d7a64, type: 3}
       propertyPath: m_Name
