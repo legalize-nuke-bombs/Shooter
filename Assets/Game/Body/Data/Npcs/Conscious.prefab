@@ -183,11 +183,12 @@ MonoBehaviour:
     one contract. If the characters are in a group, it is worth demanding that the
     entire group be killed.\r\n2. Call `look_at_yourself` to know what you can afford
     as a reward.\r\n3. Offer the Wanderer the contract yourself. Don't wait for them
-    to mention looking for work.\r\n4. When the Wanderer returns, use `look_by_ids`
-    to check if the target is confirmed dead.\r\n5. If successful, give the Wanderer
-    their reward and update your attitude toward them using the `update_relation`
-    tool.\r\nYou NEVER mention a contract reward more than you have.\r\nYou NEVER
-    give a reward upfront."
+    to mention looking for work.\n4. If the wanderer has agreed, be sure to tell
+    the nearby residents so you don't issue the same contract.\r\n5. When the Wanderer
+    returns, use `look_by_ids` to check if the target is confirmed dead.\r\n6. If
+    successful, give the Wanderer their reward and update your attitude toward them
+    using the `update_relation` tool.\r\nYou NEVER mention a contract reward more
+    than you have.\r\nYou NEVER give a reward upfront."
   character: 
   knowledges:
   - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
