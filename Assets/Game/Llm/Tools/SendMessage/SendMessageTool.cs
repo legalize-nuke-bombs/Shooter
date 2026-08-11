@@ -42,7 +42,7 @@ namespace Shooter.Game.Llm
 
             foreach (long targetId in arguments.TargetIds.Distinct())
             {
-                PersistentId target = Environment.Current.PersistentIds.Of(targetId);
+                PersistentId target = Environment.Current.Registers.Of<PersistentId>().Of(targetId);
 
                 if (target == null || target.gameObject == gameObject || !target.TryGetComponent<Llm>(out _))
                 {

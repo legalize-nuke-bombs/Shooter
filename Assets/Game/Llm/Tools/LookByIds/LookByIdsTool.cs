@@ -28,7 +28,7 @@ namespace Shooter.Game.Llm
 
             foreach (long targetId in targetIds)
             {
-                PersistentId target = Environment.Current.PersistentIds.Of(targetId);
+                PersistentId target = Environment.Current.Registers.Of<PersistentId>().Of(targetId);
 
                 if (target == null)
                 {

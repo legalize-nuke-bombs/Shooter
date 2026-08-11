@@ -96,7 +96,7 @@ namespace Shooter.Game.Loot
 
         private PersistentId Target(long targetId)
         {
-            PersistentId target = Environment.Current.PersistentIds.Of(targetId);
+            PersistentId target = Environment.Current.Registers.Of<PersistentId>().Of(targetId);
             if (target == null || target == ownId) return null;
 
             return Vector3.Distance(target.transform.position, transform.position) <= exchangeRadius ? target : null;

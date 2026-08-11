@@ -9,6 +9,8 @@ namespace Shooter.Game.Core
     {
         private ISweepingRule[] rules;
 
+        private long registered;
+
         private void Awake()
         {
             rules = GetComponentsInChildren<ISweepingRule>();
@@ -16,7 +18,7 @@ namespace Shooter.Game.Core
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) Environment.Current.Sweeper.Adopt(this);
+            if (IsServer) registered = Environment.Current.Registers.Of<Sweepable>().Add(this);
         }
 
         public override void OnNetworkDespawn()
@@ -24,7 +26,7 @@ namespace Shooter.Game.Core
             if (IsServer)
             {
                 Environment world = Environment.Current;
-                if (world != null) world.Sweeper.Drop(this);
+                if (world != null) world.Registers.Of<Sweepable>().Remove(registered);
             }
 
             gameObject.SetActive(false);

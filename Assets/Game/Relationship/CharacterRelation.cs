@@ -58,7 +58,7 @@ namespace Shooter.Game.Relationship
         {
             if (ownId == null) return;
 
-            PersistentId target = Environment.Current.PersistentIds.Of(characterId);
+            PersistentId target = Environment.Current.Registers.Of<PersistentId>().Of(characterId);
             if (target == null) return;
 
             if (!target.TryGetComponent(out MainNotificationRecipient recipient)) return;
