@@ -19,8 +19,8 @@ namespace Shooter.Game.Llm
         private LlmChildTicker[] tickers;
         private LlmTickProfiler profiler;
 
-        [SerializeField] private float budgetWindow = 60f;
-        [SerializeField] private int budgetTicks = 20;
+        [SerializeField] private float budgetWindow = 20f;
+        [SerializeField] private int budgetTicks = 5;
 
         private readonly Queue<float> recent = new Queue<float>();
         private bool muted;
