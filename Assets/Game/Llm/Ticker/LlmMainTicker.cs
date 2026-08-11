@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -17,6 +18,12 @@ namespace Shooter.Game.Llm
         private string entityName;
         private LlmChildTicker[] tickers;
         private LlmTickProfiler profiler;
+
+        [SerializeField] private float budgetWindow = 60f;
+        [SerializeField] private int budgetTicks = 20;
+
+        private readonly Queue<float> recent = new Queue<float>();
+        private bool muted;
 
         private void Awake()
         {
@@ -52,8 +59,27 @@ namespace Shooter.Game.Llm
             return null;
         }
 
+        private bool Affordable()
+        {
+            while (recent.Count > 0 && Time.time - recent.Peek() > budgetWindow) recent.Dequeue();
+
+            if (recent.Count < budgetTicks)
+            {
+                if (muted) Log.Warn($"Entity {entityName} is allowed to think again, {recent.Count} ticks in the last {budgetWindow} s");
+                muted = false;
+
+                return true;
+            }
+
+            if (!muted) Log.Warn($"Entity {entityName} spent {recent.Count} ticks in {budgetWindow} s and stops thinking until it calms down");
+            muted = true;
+
+            return false;
+        }
+
         private void RegisterTick(Type type)
         {
+            recent.Enqueue(Time.time);
             profiler?.RegisterTick(type.Name);
 
             foreach (LlmChildTicker ticker in tickers)
@@ -65,6 +91,11 @@ namespace Shooter.Game.Llm
         private void Update()
         {
             if (netObject == null || !netObject.IsSpawned || !netObject.NetworkManager.IsServer)
+            {
+                return;
+            }
+
+            if (!Affordable())
             {
                 return;
             }
