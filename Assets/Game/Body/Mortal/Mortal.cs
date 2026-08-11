@@ -38,8 +38,12 @@ namespace Shooter.Game.Body
             earSpeaker.Play(deathSound);
             LeaveCorpse();
 
-            if (!NetworkObject.IsPlayerObject)
-                NetworkObject.Despawn();
+            if (!NetworkObject.IsPlayerObject) NetworkObject.Despawn(!NetworkObject.InScenePlaced);
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            gameObject.SetActive(false);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
