@@ -80,6 +80,11 @@ namespace Shooter.Game.Llm
             waiting.Listen(wandererId, message, onAnswer);
         }
 
+        public void Forget(long wandererId)
+        {
+            waiting.Forget(wandererId);
+        }
+
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
         [SerializeField] private float failureCooldown = 5f;
         [SerializeField] private int maxToolRounds = 5;
@@ -118,8 +123,6 @@ namespace Shooter.Game.Llm
                 history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
                 history.Snapshot();
 
-                waiting.Snapshot();
-
                 List<LlmTool> selected = abilities.Where(ability => ability.Available).ToList();
                 LlmConfig config = Fitting(selected);
                 List<ILlmTool> tools = selected.Cast<ILlmTool>().ToList();
@@ -146,8 +149,6 @@ namespace Shooter.Game.Llm
                 {
                     throw new LlmException("The story is still overflowing after the retelling tick");
                 }
-
-                waiting.Silent();
 
                 return true;
             }

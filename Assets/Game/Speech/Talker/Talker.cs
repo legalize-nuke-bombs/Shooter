@@ -60,13 +60,13 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            if (!user.TryGetComponent(out PersistentId _))
+            if (!user.TryGetComponent(out PersistentId speaker))
             {
                 Log.Warn($"Entity {name} refused to talk to {user.name}: the speaker has no persistent id");
                 return;
             }
 
-            Conversation conversation = Remember(user);
+            Conversation conversation = Remember(user, speaker.Value);
             conversation.Reopen(user);
             mouth.Open(this, conversation.Messages);
         }
@@ -100,21 +100,21 @@ namespace Shooter.Game.Speech
         {
             if (!IsServer) return;
 
-            if (conversations.TryGetValue(user.OwnerClientId, out Conversation conversation))
-                conversation.Close();
+            if (!conversations.TryGetValue(user.OwnerClientId, out Conversation conversation)) return;
+
+            conversation.Close();
+            Forget(conversation.Wanderer);
         }
 
         protected abstract void RequestAnswer(long wandererId, string message, Action<string> onAnswer);
 
+        protected virtual void Forget(long wandererId)
+        {
+        }
+
         private void DeliverAnswer(ulong clientId, string content)
         {
             thinking.Remove(clientId);
-
-            if (content == null)
-            {
-                Log.Info($"Entity {name} kept silent towards client {clientId}");
-                return;
-            }
 
             if (!conversations.TryGetValue(clientId, out Conversation conversation) || !conversation.Open)
             {
@@ -162,7 +162,7 @@ namespace Shooter.Game.Speech
             }
         }
 
-        private Conversation Remember(NetworkObject user)
+        private Conversation Remember(NetworkObject user, long wanderer)
         {
             if (conversations.TryGetValue(user.OwnerClientId, out Conversation conversation))
             {
@@ -170,7 +170,7 @@ namespace Shooter.Game.Speech
                 return conversation;
             }
 
-            conversation = new Conversation(user);
+            conversation = new Conversation(user, wanderer);
             conversations.Add(user.OwnerClientId, conversation);
             Log.Info($"Entity {name} started a conversation with client {user.OwnerClientId}");
             return conversation;
@@ -203,6 +203,7 @@ namespace Shooter.Game.Speech
                 if (user != null) thinking.Remove(user.OwnerClientId);
 
                 conversation.Close();
+                Forget(conversation.Wanderer);
                 user?.GetComponent<Mouth>()?.Close();
             }
         }

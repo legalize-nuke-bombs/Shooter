@@ -8,7 +8,6 @@ namespace Shooter.Game.Llm
     public sealed class LlmWaiting : MonoBehaviour
     {
         private readonly Dictionary<long, Action<string>> pending = new Dictionary<long, Action<string>>();
-        private readonly List<long> presented = new List<long>();
 
         private LlmHistory history;
 
@@ -34,25 +33,9 @@ namespace Shooter.Game.Llm
             return true;
         }
 
-        public void Snapshot()
+        public void Forget(long wandererId)
         {
-            presented.Clear();
-            presented.AddRange(pending.Keys);
-        }
-
-        public void Silent()
-        {
-            foreach (long ignored in presented)
-            {
-                if (!pending.Remove(ignored, out Action<string> answer)) continue;
-
-                answer(null);
-                history.Append(new LlmMessage
-                {
-                    Role = LlmRole.User,
-                    Content = $"Wanderer [ID {ignored}] got no answer from you and stopped waiting."
-                });
-            }
+            pending.Remove(wandererId);
         }
     }
 }
