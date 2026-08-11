@@ -13,23 +13,25 @@ using Environment = Shooter.Game.World.Environment;
 namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(LlmHistory))]
+    [RequireComponent(typeof(LlmWaiting))]
     public class Llm : MonoBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] [TextArea(5, 50)] private string persona = "Persona is not set yet";
-
-
-
-
-
         private LlmHistory history;
+        private LlmWaiting waiting;
         private LlmTool[] abilities;
         private string entityName;
+        private readonly CancellationTokenSource life = new CancellationTokenSource();
+
+        [SerializeField] [TextArea(5, 50)] private string persona = "Persona is not set yet";
+        [SerializeField] [TextArea(5, 20)] private string character;
+        [SerializeField] private KnowledgeSpec[] knowledges;
 
         private void Awake()
         {
             history = GetComponent<LlmHistory>();
+            waiting = GetComponent<LlmWaiting>();
             abilities = GetComponents<LlmTool>();
             entityName = name;
         }
@@ -39,12 +41,18 @@ namespace Shooter.Game.Llm
             life.Cancel();
         }
 
+        private void Begin()
+        {
+            string start = (character + "\n" + Knowledge()).Trim('\n');
+            if (start.Length == 0) return;
 
+            history.Append(new LlmMessage { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + start });
+        }
 
-
-
-        [SerializeField] [TextArea(5, 20)] private string character;
-        [SerializeField] private KnowledgeSpec[] knowledges;
+        public void Died()
+        {
+            life.Cancel();
+        }
 
         private string Knowledge()
         {
@@ -62,59 +70,15 @@ namespace Shooter.Game.Llm
             return known.ToString();
         }
 
-        private void Begin()
-        {
-            string start = (character + "\n" + Knowledge()).Trim('\n');
-            if (start.Length == 0) return;
-
-            history.Append(new LlmMessage { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + start });
-        }
-
-
-
-
-
         public void Notice(string line)
         {
             history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line });
         }
 
-
-
-
-
-        private readonly Dictionary<long, Action<string>> pendingWanderers = new Dictionary<long, Action<string>>();
-
-        public bool HasWaitingWanderer => pendingWanderers.Count > 0;
-
         public void Listen(long wandererId, string message, Action<string> onAnswer)
         {
-            pendingWanderers[wandererId] = onAnswer;
-            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
+            waiting.Listen(wandererId, message, onAnswer);
         }
-
-        public bool Answer(long wandererId, string text)
-        {
-            if (!pendingWanderers.Remove(wandererId, out Action<string> answer)) return false;
-
-            answer(text);
-            return true;
-        }
-
-
-
-
-
-        private readonly CancellationTokenSource life = new CancellationTokenSource();
-
-        public void Died()
-        {
-            life.Cancel();
-        }
-
-
-
-
 
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
         [SerializeField] private float failureCooldown = 5f;
@@ -144,8 +108,6 @@ namespace Shooter.Game.Llm
                 return false;
             }
 
-            var presented = new List<long>();
-
             try
             {
                 bool retelling = history.Overflowing;
@@ -156,7 +118,7 @@ namespace Shooter.Game.Llm
                 history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
                 history.Snapshot();
 
-                presented.AddRange(pendingWanderers.Keys);
+                waiting.Snapshot();
 
                 List<LlmTool> selected = abilities.Where(ability => ability.Available).ToList();
                 LlmConfig config = Fitting(selected);
@@ -185,7 +147,7 @@ namespace Shooter.Game.Llm
                     throw new LlmException("The story is still overflowing after the retelling tick");
                 }
 
-                Silent(presented);
+                waiting.Silent();
 
                 return true;
             }
@@ -206,17 +168,6 @@ namespace Shooter.Game.Llm
             }
         }
 
-        private void Silent(IReadOnlyList<long> presented)
-        {
-            foreach (long ignored in presented)
-            {
-                if (!pendingWanderers.Remove(ignored, out Action<string> answer)) continue;
-
-                answer(null);
-                Log.Info($"Entity {entityName} chose not to answer wanderer {ignored}");
-            }
-        }
-
         private const string RetellingDemand =
             "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of your whole story: the call itself will remain as the only story of your life, everything older will be erased, and anything you leave out of the retelling is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length.";
 
@@ -225,12 +176,9 @@ namespace Shooter.Game.Llm
             var seen = new StringBuilder();
             seen.Append('[').Append(Time()).Append(']');
 
-            if (pendingWanderers.Count > 0)
-            {
-                seen.Append('\n')
-                    .Append("Waiting for your say_to_wanderer answer: ")
-                    .Append(string.Join(", ", pendingWanderers.Keys.Select(id => $"[ID {id}]")));
-            }
+            string awaited = waiting.Observation();
+
+            if (awaited.Length > 0) seen.Append('\n').Append(awaited);
 
             if (history.Overflowing)
             {
@@ -262,10 +210,6 @@ namespace Shooter.Game.Llm
                 return $"The action failed: {e.Message}";
             }
         }
-
-
-
-
 
         private string Time()
         {
