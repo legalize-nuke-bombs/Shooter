@@ -4,8 +4,7 @@ namespace Shooter.Game.Llm
     {
         User,
         Assistant,
-        Tool,
-        System
+        Tool
     }
 
     public class LlmMessage

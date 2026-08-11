@@ -84,11 +84,6 @@ namespace Shooter.Game.Llm
 
         private static OpenAiMessage Mapped(LlmMessage message)
         {
-            if (message.Role == LlmRole.System)
-            {
-                return new OpenAiMessage { Role = "user", Content = $"[SYSTEM] {message.Content}" };
-            }
-
             var mapped = new OpenAiMessage
             {
                 Role = message.Role.ToString().ToLowerInvariant(),
