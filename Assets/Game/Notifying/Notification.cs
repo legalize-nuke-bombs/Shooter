@@ -23,14 +23,14 @@ namespace Shooter.Game.Notifying
 
         public IconSpec Icon()
         {
-            return icon == null
+            return icon.IsEmpty
                 ? Environment.Current.Notifications.Of(spec).Icon
                 : Environment.Current.Icons.Of(icon);
         }
 
         public EarSoundSpec Sound()
         {
-            return sound == null
+            return sound.IsEmpty
                 ? Environment.Current.Notifications.Of(spec).Sound
                 : Environment.Current.EarSounds.Of(sound);
         }
