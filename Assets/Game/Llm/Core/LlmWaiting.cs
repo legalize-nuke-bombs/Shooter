@@ -52,7 +52,14 @@ namespace Shooter.Game.Llm
         {
             foreach (long ignored in presented)
             {
-                if (pending.Remove(ignored, out Action<string> answer)) answer(null);
+                if (!pending.Remove(ignored, out Action<string> answer)) continue;
+
+                answer(null);
+                history.Append(new LlmMessage
+                {
+                    Role = LlmRole.User,
+                    Content = $"Wanderer [ID {ignored}] got no answer from you and stopped waiting."
+                });
             }
         }
     }
