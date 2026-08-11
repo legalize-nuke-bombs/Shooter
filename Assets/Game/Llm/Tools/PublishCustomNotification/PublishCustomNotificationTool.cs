@@ -5,12 +5,22 @@ using Shooter.Game.Core;
 using Shooter.Game.Notifying;
 using Shooter.Game.World;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Llm.PublishCustomNotification
 {
+    [RequireComponent(typeof(PersistentId))]
     public class PublishCustomNotificationTool : LlmTool<PublishCustomNotificationArguments>
     {
         private static readonly Journal Log = Logs.Here();
+
+        private PersistentId id;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            id = GetComponent<PersistentId>();
+        }
 
         public override string Name => "publish_custom_notification";
 
@@ -70,6 +80,10 @@ If you want the notification to be received only by specific character(s), pass 
             {
                 MainNotificationRecipient recipient = character.GetComponent<MainNotificationRecipient>();
                 if (recipient == null)
+                {
+                    continue;
+                }
+                if (character.Value == id.Value)
                 {
                     continue;
                 }
