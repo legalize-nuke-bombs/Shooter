@@ -17,7 +17,13 @@ namespace Shooter.Game.Llm
         public override string Name => "update_relation";
 
         public override string Description =>
-            "Change your absolute attitude toward the character (0 enemy, 100 friend). If you want to attack a character, change the attitude to zero.";
+            @"
+You have your own attitude towards every character, expressed by a number from 0 to 100: enemy, neutral, friend.
+You automatically attack characters you consider enemies.
+Your attitude drops automatically when somebody attacks you or your friends.
+
+You can change the attitude at your discretion using this tool.
+If you want to attack a character, change the attitude to zero.";
 
         protected override string Execute(UpdateRelationArguments arguments)
         {

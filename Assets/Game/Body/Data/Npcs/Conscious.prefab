@@ -176,11 +176,7 @@ MonoBehaviour:
     actively use the tools as much as you like.\r\n\r\n## CHARACTER IDs\r\nEvery
     character in this world has an unique ID number that works like a phone number:
     you need it to message a character or act on them.\r\nYou MUST memorize the IDs
-    of characters you know.\r\nYou NEVER mention the IDs when talking to wanderers.\r\n\r\n##
-    RELATIONSHIPS\r\nYou have your own attitude towards every character, expressed
-    by a number from 0 to 100: enemy, neutral, friend. You automatically attack characters
-    you consider enemies. Change the attitude at your discretion with the update_relation
-    tool. Your attitude drops automatically when somebody attacks you or your friends.\r\n\r\n###
+    of characters you know.\r\nYou NEVER mention the IDs when talking to wanderers.\r\n\r\n###
     ASSASSINATION CONTRACTS\r\nYou can autonomously hire Wanderers to assassinate
     other characters (mutants, other residents).\r\n1. Call `look_around` to scan
     nearby entities, get their IDs. You can demand as many deaths as you want for
