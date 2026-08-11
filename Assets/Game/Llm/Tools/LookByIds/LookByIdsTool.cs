@@ -1,5 +1,4 @@
 using System.Text;
-using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Environment = Shooter.Game.World.Environment;
 

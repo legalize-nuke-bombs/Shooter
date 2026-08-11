@@ -13,6 +13,7 @@ namespace Shooter.Game.Body
         [SerializeField, Range(0f, 0.5f)] private float pitchVariation = 0f;
 
         [SerializeField] private string promptDescription;
+        public string PromptDescription => promptDescription;
 
         public float Volume => volume;
 
