@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace Shooter.Game.Llm
+{
+    [RequireComponent(typeof(LlmHistory))]
+    public sealed class LlmWaiting : MonoBehaviour
+    {
+        private readonly Dictionary<long, Action<string>> pending = new Dictionary<long, Action<string>>();
+        private readonly List<long> presented = new List<long>();
+
+        private LlmHistory history;
+
+        public bool Any => pending.Count > 0;
+
+        private void Awake()
+        {
+            history = GetComponent<LlmHistory>();
+        }
+
+        public void Listen(long wandererId, string message, Action<string> onAnswer)
+        {
+            pending[wandererId] = onAnswer;
+            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
+        }
+
+        public bool Answer(long wandererId, string text)
+        {
+            if (!pending.Remove(wandererId, out Action<string> answer)) return false;
+
+            answer(text);
+
+            return true;
+        }
+
+        public string Observation()
+        {
+            return pending.Count == 0
+                ? string.Empty
+                : "Waiting for your say_to_wanderer answer: " + string.Join(", ", pending.Keys.Select(id => $"[ID {id}]"));
+        }
+
+        public void Snapshot()
+        {
+            presented.Clear();
+            presented.AddRange(pending.Keys);
+        }
+
+        public void Silent()
+        {
+            foreach (long ignored in presented)
+            {
+                if (pending.Remove(ignored, out Action<string> answer)) answer(null);
+            }
+        }
+    }
+}

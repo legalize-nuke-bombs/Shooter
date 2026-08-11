@@ -2,15 +2,15 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(Llm))]
+    [RequireComponent(typeof(LlmWaiting))]
     public sealed class SayToWandererTool : LlmTool<SayToWandererArguments>
     {
-        private Llm llm;
+        private LlmWaiting waiting;
 
         protected override void Awake()
         {
             base.Awake();
-            llm = GetComponent<Llm>();
+            waiting = GetComponent<LlmWaiting>();
         }
 
         public override string Name => "say_to_wanderer";
@@ -18,13 +18,13 @@ namespace Shooter.Game.Llm
         public override string Description =>
             "Answer a wanderer who is talking to you. Answer in the language the wanderer speaks.";
 
-        public override bool Available => llm.HasWaitingWanderer;
+        public override bool Available => waiting.Any;
 
         protected override string Execute(SayToWandererArguments arguments)
         {
             if (string.IsNullOrEmpty(arguments.Text)) return "Nothing to say";
 
-            return llm.Answer(arguments.WandererId, arguments.Text)
+            return waiting.Answer(arguments.WandererId, arguments.Text)
                 ? $"Said to {arguments.WandererId}"
                 : $"No wanderer {arguments.WandererId} is waiting for your answer";
         }
