@@ -8,12 +8,15 @@ namespace Shooter.Game.Speech
     {
         private readonly List<Message> messages = new List<Message>();
 
-        public Conversation(NetworkObject user)
+        public Conversation(NetworkObject user, long wanderer)
         {
             User = user;
+            Wanderer = wanderer;
         }
 
         public NetworkObject User { get; private set; }
+
+        public long Wanderer { get; }
 
         public bool Open { get; private set; }
 

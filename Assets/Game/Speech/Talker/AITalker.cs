@@ -26,5 +26,10 @@ namespace Shooter.Game.Speech
 
             llm.Listen(wandererId, message, onAnswer);
         }
+
+        protected override void Forget(long wandererId)
+        {
+            if (llm != null) llm.Forget(wandererId);
+        }
     }
 }
