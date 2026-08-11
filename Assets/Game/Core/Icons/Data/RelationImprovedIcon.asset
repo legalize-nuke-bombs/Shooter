@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Icons.IconSpec
   id: relation-improved
   sprite: {fileID: 21300000, guid: 7c8f43a89ad147ebb7ddf62714df9f35, type: 3}
+  promptDescription: Handshake icon

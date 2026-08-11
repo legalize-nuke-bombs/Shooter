@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Icons.IconSpec
   id: warning-sign
   sprite: {fileID: 21300000, guid: 3403435d08fc99941a5d74775d91b11c, type: 3}
+  promptDescription: Warning sign icon

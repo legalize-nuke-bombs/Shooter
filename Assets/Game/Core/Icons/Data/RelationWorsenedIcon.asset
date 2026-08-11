@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Icons.IconSpec
   id: relation-worsened
   sprite: {fileID: 21300000, guid: 566a8b5d40a3457ea0c48f6a8739129d, type: 3}
+  promptDescription: Broken heart icon

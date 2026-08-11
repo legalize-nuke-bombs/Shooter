@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Icons.IconSpec
   id: akm
   sprite: {fileID: 21300000, guid: dbaaf56c5646db14694089a610d59a5f, type: 3}
+  promptDescription: AKM icon
