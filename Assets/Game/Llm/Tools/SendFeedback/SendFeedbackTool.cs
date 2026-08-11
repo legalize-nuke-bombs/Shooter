@@ -11,10 +11,12 @@ namespace Shooter.Game.Llm
 
         public override string Description =>
             @"Feel free to use this tool as often as needed in the following cases:
-1. You have a technical question.
-2. You have a suggestion for improving the API.
-3. You spotted a potential problem, bug, or exploit.
-4. You have something that a developer needs to know.
+1. It seems to you that something in the prompts isn't formulated clearly enough.
+2. It seems to you that one of your tools needs to be modified or removed.
+3. It seems to you that you need additional tools.
+4. You spotted a potential problem, bug, or exploit.
+5. You have something that a developer needs to know.
+The world is under active development; any feedback is valuable and will be read.
 You NEVER include players' personal information in these reports.";
 
         protected override string Execute(SendFeedbackArguments arguments)
