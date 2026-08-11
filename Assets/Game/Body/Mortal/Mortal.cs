@@ -82,6 +82,8 @@ namespace Shooter.Game.Body
                 return;
             }
 
+            spawned.Spawn();
+
             var corpse = body.GetComponent<Corpse>();
             if (corpse != null)
             {
@@ -92,7 +94,6 @@ namespace Shooter.Game.Body
                 if (named != null && named.Spec != null) corpse.Rename(named.Spec);
             }
 
-            spawned.Spawn();
             spawned.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
             Log.Info($"Entity {name} left a corpse at {transform.position}");
         }

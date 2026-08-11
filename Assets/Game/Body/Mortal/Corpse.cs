@@ -13,6 +13,8 @@ namespace Shooter.Game.Body
         private readonly NetworkVariable<FixedString32Bytes> skin = new NetworkVariable<FixedString32Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> title = new NetworkVariable<FixedString32Bytes>();
 
+        private bool dressed;
+
         public void Dress(SkinSpec spec)
         {
             skin.Value = spec.Id;
@@ -25,40 +27,51 @@ namespace Shooter.Game.Body
 
         public override void OnNetworkSpawn()
         {
-            Inherit();
+            skin.OnValueChanged += Dressed;
+            title.OnValueChanged += Titled;
 
-            if (skin.Value.IsEmpty)
-            {
-                Log.Warn($"Corpse {name} has no skin id, stays invisible");
-                return;
-            }
+            if (!skin.Value.IsEmpty) Dressed(default, skin.Value);
+            if (!title.Value.IsEmpty) Titled(default, title.Value);
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            skin.OnValueChanged -= Dressed;
+            title.OnValueChanged -= Titled;
+        }
+
+        private void Dressed(FixedString32Bytes previous, FixedString32Bytes current)
+        {
+            if (dressed || current.IsEmpty) return;
 
             SkinCatalog catalog = Environment.Current == null ? null : Environment.Current.Skins;
-            SkinSpec spec = catalog == null ? null : catalog.Of(skin.Value);
+            SkinSpec spec = catalog == null ? null : catalog.Of(current);
             if (spec == null || spec.Model == null)
             {
-                Log.Error($"Corpse {name} cannot find skin {skin.Value}, stays invisible");
+                Log.Error($"Corpse {name} cannot find skin {current}, stays invisible");
                 return;
             }
+
+            dressed = true;
 
             GameObject body = Instantiate(spec.Model, transform);
             body.transform.localPosition = new Vector3(0f, -1f, 0f);
             body.transform.localRotation = Quaternion.identity;
             body.AddComponent<Ragdoll>();
 
-            Log.Info($"Corpse {name} dressed as {skin.Value}");
+            Log.Info($"Corpse {name} dressed as {current}");
         }
 
-        private void Inherit()
+        private void Titled(FixedString32Bytes previous, FixedString32Bytes current)
         {
             var named = GetComponent<TypedNameable>();
-            if (named == null || title.Value.IsEmpty) return;
+            if (named == null || current.IsEmpty) return;
 
             NameCatalog catalog = Environment.Current == null ? null : Environment.Current.Names;
-            NameSpec spec = catalog == null ? null : catalog.Of(title.Value);
+            NameSpec spec = catalog == null ? null : catalog.Of(current);
             if (spec == null)
             {
-                Log.Warn($"Corpse {name} cannot find name {title.Value}, keeps its own");
+                Log.Warn($"Corpse {name} cannot find name {current}, keeps its own");
                 return;
             }
 
