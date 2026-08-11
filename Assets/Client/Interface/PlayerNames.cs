@@ -1,5 +1,4 @@
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Game.Notifying;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
@@ -15,8 +14,8 @@ namespace Shooter.Client.Interface
 
         public string Of(string name, string value)
         {
-            if (name == Args.Actor) return Named(value);
-            if (name == Args.Subject) return Titled(value);
+            if (name == "actor") return Named(value);
+            if (name == "subject") return Titled(value);
 
             return value;
         }
