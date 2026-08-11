@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Notifying.NotificationSpec
   id: ancient-evil
   icon: {fileID: 11400000, guid: ad4749bcbd1a02f4ba3692d216b69529, type: 2}
-  sound: {fileID: 11400000, guid: 3fec1d5b75597b84493683778a5d28c8, type: 2}
+  sound: {fileID: 11400000, guid: 0439b9ef1cc34b91bcb3fd6dd2ccf1a7, type: 2}
   title: "\u0412 \u043C\u0438\u0440\u0435 \u0431\u044B\u043B\u043E \u043E\u0431\u043D\u0430\u0440\u0443\u0436\u0435\u043D\u043E
     \u0434\u0440\u0435\u0432\u043D\u0435\u0435 \u0437\u043B\u043E"
   subtitle: 

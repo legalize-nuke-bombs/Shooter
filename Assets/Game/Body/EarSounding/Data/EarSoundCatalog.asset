@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: EarSoundCatalog
   m_EditorClassIdentifier: 
   specs:
+  - {fileID: 11400000, guid: 0439b9ef1cc34b91bcb3fd6dd2ccf1a7, type: 2}
   - {fileID: 11400000, guid: 40522e9547c5daf4db1b36f4c84e6472, type: 2}
   - {fileID: 11400000, guid: 9c64315abdfebb8408213fa82c41f639, type: 2}
   - {fileID: 11400000, guid: 0cd1cb4da19d417a9b0b0a8203ac52ea, type: 2}
