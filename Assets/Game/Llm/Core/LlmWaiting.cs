@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
@@ -33,13 +32,6 @@ namespace Shooter.Game.Llm
             answer(text);
 
             return true;
-        }
-
-        public string Observation()
-        {
-            return pending.Count == 0
-                ? string.Empty
-                : "Waiting for your say_to_wanderer answer: " + string.Join(", ", pending.Keys.Select(id => $"[ID {id}]"));
         }
 
         public void Snapshot()

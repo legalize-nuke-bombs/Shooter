@@ -176,10 +176,6 @@ namespace Shooter.Game.Llm
             var seen = new StringBuilder();
             seen.Append('[').Append(Time()).Append(']');
 
-            string awaited = waiting.Observation();
-
-            if (awaited.Length > 0) seen.Append('\n').Append(awaited);
-
             if (history.Overflowing)
             {
                 seen.Append('\n').Append(RetellingDemand);
