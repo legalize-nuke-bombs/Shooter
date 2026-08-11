@@ -1,3 +1,5 @@
+using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
@@ -31,9 +33,15 @@ namespace Shooter.Game.Llm
                 return;
             }
 
+            IconSpec icon = notification.Icon();
+            string iconDescription = (icon == null) ? "none" : icon.PromptDescription;
+
+            EarSoundSpec sound = notification.Sound();
+            string soundDescription = (sound == null) ? "none" : sound.PromptDescription;
+
             string told = Template.Filled(spec.Told, notification, names);
 
-            llm.Notice($"[{Environment.Current.Clock.DateTime()}] {told}");
+            llm.Notice($"[{Environment.Current.Clock.DateTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}");
         }
 
         private NotificationSpec Spec(Notification notification)
