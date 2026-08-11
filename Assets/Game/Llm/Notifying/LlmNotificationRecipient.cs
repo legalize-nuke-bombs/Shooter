@@ -13,7 +13,6 @@ namespace Shooter.Game.Llm
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly LlmNames names = new LlmNames();
 
         private Llm llm;
 
@@ -39,7 +38,7 @@ namespace Shooter.Game.Llm
             EarSoundSpec sound = notification.Sound();
             string soundDescription = (sound == null) ? "none" : sound.PromptDescription;
 
-            string told = Template.Filled(spec.Told, notification, names);
+            string told = Template.Filled(spec.Told, notification);
 
             llm.Notice($"[{Environment.Current.Clock.DateTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}");
         }

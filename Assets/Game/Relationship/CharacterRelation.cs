@@ -16,10 +16,12 @@ namespace Shooter.Game.Relationship
         private static readonly Journal Log = Logs.Here();
 
         private PersistentId ownId;
+        private Nameable ownNameable;
 
         private void Awake()
         {
             ownId = GetComponent<PersistentId>();
+            ownNameable = GetComponentInChildren<Nameable>();
         }
 
         private readonly Dictionary<long, int> amounts = new Dictionary<long, int>();
@@ -72,7 +74,8 @@ namespace Shooter.Game.Relationship
             }
 
             recipient.Receive(spec.Notify()
-                .With("actor", ownId.Value)
+                .With("actorId", ownId.Value)
+                .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
                 .With("before", before)
                 .With("after", after));
         }

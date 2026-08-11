@@ -13,30 +13,14 @@ namespace Shooter.Game.Core
 
         public override void OnNetworkSpawn()
         {
-            Register<PersistentId> register = Environment.Current.Registers.Of<PersistentId>();
-
-            if (IsServer) value.Value = register.Add(this);
-            else if (value.Value != Nobody) register.Add(value.Value, this);
-
-            value.OnValueChanged += Renumbered;
+            if (IsServer) value.Value = Environment.Current.Registers.Of<PersistentId>().Add(this);
         }
 
         public override void OnNetworkDespawn()
         {
-            value.OnValueChanged -= Renumbered;
+            if (!IsServer) return;
 
             if (Environment.Current != null) Environment.Current.Registers.Of<PersistentId>().Remove(value.Value);
-        }
-
-        private void Renumbered(long previous, long current)
-        {
-            if (Environment.Current == null) return;
-
-            Register<PersistentId> register = Environment.Current.Registers.Of<PersistentId>();
-
-            register.Remove(previous);
-
-            if (current != Nobody) register.Add(current, this);
         }
     }
 }

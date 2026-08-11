@@ -10,7 +10,7 @@ namespace Shooter.Game.Notifying
         private const char Opening = '{';
         private const char Closing = '}';
 
-        public static string Filled(string pattern, Notification notification, INames names)
+        public static string Filled(string pattern, Notification notification)
         {
             if (string.IsNullOrEmpty(pattern)) return string.Empty;
 
@@ -35,7 +35,7 @@ namespace Shooter.Game.Notifying
                 }
 
                 string name = pattern.Substring(index + 1, closing - index - 1);
-                string value = notification.Of(name);
+                string value = notification.Rendered(name);
 
                 if (value == null)
                 {
@@ -44,7 +44,7 @@ namespace Shooter.Game.Notifying
                 }
                 else
                 {
-                    filled.Append(names.Of(name, value));
+                    filled.Append(value);
                 }
 
                 index = closing + 1;

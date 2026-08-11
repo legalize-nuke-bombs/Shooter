@@ -16,5 +16,5 @@ MonoBehaviour:
   icon: {fileID: 0}
   sound: {fileID: 11400000, guid: 44e6e460e1cb44d98f376b7e174c5e4d, type: 2}
   title: "{subject}"
-  subtitle: "\u043E\u0442 {actor}"
-  told: "Character {actor} gave you {subject}"
+  subtitle: "\u043E\u0442 {actorName}"
+  told: "Character {actorId} gave you {subjectPrompt}"

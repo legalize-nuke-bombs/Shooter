@@ -17,7 +17,6 @@ namespace Shooter.Client.Interface
         private const long Life = 5000;
         private const int Limit = 4;
 
-        private readonly PlayerNames names = new PlayerNames();
 
         private VisualElement feed;
         private PlayerNotificationRecipient recipient;
@@ -90,12 +89,12 @@ namespace Shooter.Client.Interface
             var body = new VisualElement();
             body.AddToClassList("notification__body");
 
-            var caption = new Label(Template.Filled(notification.Title(), notification, names));
+            var caption = new Label(Template.Filled(notification.Title(), notification));
             caption.AddToClassList("line");
             caption.AddToClassList("notification__title");
             body.Add(caption);
 
-            string under = Template.Filled(notification.Subtitle(), notification, names);
+            string under = Template.Filled(notification.Subtitle(), notification);
 
             if (!string.IsNullOrEmpty(under))
             {

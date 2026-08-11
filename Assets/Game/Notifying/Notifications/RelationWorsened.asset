@@ -16,5 +16,5 @@ MonoBehaviour:
   icon: {fileID: 11400000, guid: bbfaa0c612f142999dd6cc6d60241172, type: 2}
   sound: {fileID: 11400000, guid: 74d319b8312f4b25a28b3355715af9b5, type: 2}
   title: "\u041E\u0442\u043D\u043E\u0448\u0435\u043D\u0438\u0435 \u0443\u0445\u0443\u0434\u0448\u0438\u043B\u043E\u0441\u044C"
-  subtitle: '{actor}'
-  told: 'Character {actor} changed their attitude towards you: {before} -> {after}'
+  subtitle: '{actorName}'
+  told: 'Character {actorId} changed their attitude towards you: {before} -> {after}'
