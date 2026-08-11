@@ -11,9 +11,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc5282e42563459281557c6a6f6a63aa, type: 3}
   m_Name: Hurt
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: hurt
   clips:
   - {fileID: 8300000, guid: 744653c23d774418b50f989e916c56ef, type: 3}
   volume: 1
   pitchVariation: 0.04
+  promptDescription: Take damage sound

@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4990186f08e46184594304393f95a8ad, type: 3}
   volume: 1
   pitchVariation: 0
+  promptDescription: String sound with an alien effect

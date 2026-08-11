@@ -11,9 +11,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc5282e42563459281557c6a6f6a63aa, type: 3}
   m_Name: Teleporting
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: teleporting
   clips:
   - {fileID: 8300000, guid: e28ab3735fea41ce9f0c0d771d3577e1, type: 3}
   volume: 1
   pitchVariation: 0
+  promptDescription: Teleporting sound
