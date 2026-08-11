@@ -31,7 +31,7 @@ namespace Shooter.Game.Llm
         {
             history = GetComponent<LlmHistory>();
             abilities = GetComponents<LlmTool>();
-            entityName = name.Replace("(Clone)", "").Trim();
+            entityName = name;
         }
 
         private void OnDestroy()
