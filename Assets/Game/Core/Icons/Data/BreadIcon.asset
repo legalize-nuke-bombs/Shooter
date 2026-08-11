@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Icons.IconSpec
   id: bread
   sprite: {fileID: 21300000, guid: c1d5c749437a20d4bae56a39bbcee3c2, type: 3}
+  promptDescription: Bread icon

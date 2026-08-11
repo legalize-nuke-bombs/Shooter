@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Icons.IconSpec
   id: chicken-piece
   sprite: {fileID: 21300000, guid: 4527394da99fbdb4da97757e72b0ca22, type: 3}
+  promptDescription: Chicken leg icon

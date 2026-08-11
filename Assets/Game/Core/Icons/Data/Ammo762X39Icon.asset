@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Icons.IconSpec
   id: ammo-762x39
   sprite: {fileID: 21300000, guid: 9c6fc29566ef74e4ebf12fb26b9cd54c, type: 3}
+  promptDescription: Ammo 7.62x39 icon

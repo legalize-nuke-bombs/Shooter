@@ -6,7 +6,9 @@ namespace Shooter.Game.Core
     public class IconSpec : Spec
     {
         [SerializeField] private Sprite sprite;
+        [SerializeField] private string promptDescription;
 
         public Sprite Sprite => sprite;
+        public string PromptDescription => promptDescription;
     }
 }
