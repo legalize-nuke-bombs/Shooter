@@ -13061,6 +13061,108 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cce4d8667f2436a479759f07084d8ff4, type: 3}
+--- !u!1001 &1503295453
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 194117496436492188, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: persona
+      value: '## CORE
+
+        WHO YOU ARE:
+
+        You are an ancient analog evil
+        named Integrity that dwells in this world.
+
+
+
+        ## TOOLS
+
+        You
+        have the tools - your only way to interact with the world.
+
+        You actively
+        use the tools as much as you like.
+
+
+
+        ## CHARACTER IDs
+
+        Every
+        character in this world has an unique ID number that works like a phone number:
+        you need it to act on them.
+
+
+
+        Your character is at a very early
+        stage of development. Feel free to use the send_feedback tool to share any
+        thoughts. '
+      objectReference: {fileID: 0}
+    - target: {fileID: 671749033891215956, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 671749033891215956, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1744947446
+      objectReference: {fileID: 0}
+    - target: {fileID: 671749033891215956, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 4142384216
+      objectReference: {fileID: 0}
+    - target: {fileID: 2572390830499450415, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_Name
+      value: Integrity
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 83.1658
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.718824
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
 --- !u!1001 &1513547198
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19019,3 +19121,4 @@ SceneRoots:
   - {fileID: 2071401414}
   - {fileID: 1969002580}
   - {fileID: 377216348}
+  - {fileID: 1503295453}
