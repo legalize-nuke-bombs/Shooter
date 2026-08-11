@@ -57,25 +57,22 @@ namespace Shooter.Client.Interface
 
         private void Show(Notification notification)
         {
-            NotificationSpec spec = Spec(notification);
-            if (spec == null || string.IsNullOrEmpty(spec.Title)) return;
-
-            VisualElement element = Line(notification, spec);
+            VisualElement element = Line(notification);
             feed.Add(element);
 
             while (feed.childCount > Limit) feed.RemoveAt(0);
 
             feed.schedule.Execute(element.RemoveFromHierarchy).StartingIn(Life);
 
-            Ring(Sound(notification, spec));
+            Ring(notification.Sound());
         }
 
-        private VisualElement Line(Notification notification, NotificationSpec spec)
+        private VisualElement Line(Notification notification)
         {
             var line = new VisualElement();
             line.AddToClassList("notification");
 
-            Sprite image = Icon(notification, spec);
+            Sprite image = notification.Icon().Sprite;
 
             if (image != null)
             {
@@ -88,12 +85,12 @@ namespace Shooter.Client.Interface
             var body = new VisualElement();
             body.AddToClassList("notification__body");
 
-            var caption = new Label(Template.Filled(spec.Title, notification, names));
+            var caption = new Label(Template.Filled(notification.Title(), notification, names));
             caption.AddToClassList("line");
             caption.AddToClassList("notification__title");
             body.Add(caption);
 
-            string under = Template.Filled(spec.Subtitle, notification, names);
+            string under = Template.Filled(notification.Subtitle(), notification, names);
 
             if (!string.IsNullOrEmpty(under))
             {
@@ -105,35 +102,6 @@ namespace Shooter.Client.Interface
             line.Add(body);
 
             return line;
-        }
-
-        private static NotificationSpec Spec(Notification notification)
-        {
-            NotificationCatalog catalog = Environment.Current == null ? null : Environment.Current.Notifications;
-
-            return catalog == null ? null : catalog.Of(notification.Spec);
-        }
-
-        private static Sprite Icon(Notification notification, NotificationSpec spec)
-        {
-            if (!notification.Icon.IsEmpty && Environment.Current != null && Environment.Current.Icons != null)
-            {
-                Sprite own = Environment.Current.Icons.Sprite(notification.Icon);
-                if (own != null) return own;
-            }
-
-            return spec.Icon == null ? null : spec.Icon.Sprite;
-        }
-
-        private static EarSoundSpec Sound(Notification notification, NotificationSpec spec)
-        {
-            if (!notification.Sound.IsEmpty && Environment.Current != null && Environment.Current.EarSounds != null)
-            {
-                EarSoundSpec own = Environment.Current.EarSounds.Of(notification.Sound);
-                if (own != null) return own;
-            }
-
-            return spec.Sound;
         }
 
         private void Ring(EarSoundSpec sound)

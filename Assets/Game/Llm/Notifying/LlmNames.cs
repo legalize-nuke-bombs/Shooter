@@ -8,8 +8,8 @@ namespace Shooter.Game.Llm
     {
         public string Of(string name, string value)
         {
-            if (name == Args.Actor) return $"Character {value}";
-            if (name == Args.Subject) return Prompted(value);
+            if (name == "actor") return $"Character {value}";
+            if (name == "subject") return Prompted(value);
 
             return value;
         }

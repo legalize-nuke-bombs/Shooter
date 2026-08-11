@@ -72,7 +72,7 @@ namespace Shooter.Game.Relationship
             }
 
             recipient.Receive(spec.Notify()
-                .With(Args.Actor, ownId.Value)
+                .With("actor", ownId.Value)
                 .With("before", before)
                 .With("after", after));
         }

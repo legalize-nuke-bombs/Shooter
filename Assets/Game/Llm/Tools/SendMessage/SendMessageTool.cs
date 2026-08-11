@@ -69,7 +69,7 @@ namespace Shooter.Game.Llm
                 }
 
                 recipient.Receive(mail.Notify()
-                    .With(Args.Actor, ownId.Value)
+                    .With("actor", ownId.Value)
                     .With("text", arguments.Content));
 
                 delivered.Add(targetId);

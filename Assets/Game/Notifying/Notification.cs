@@ -1,6 +1,6 @@
-using System;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.World;
 using Unity.Collections;
 using Unity.Netcode;
 
@@ -18,14 +18,34 @@ namespace Shooter.Game.Notifying
             this.spec = spec;
             icon = default;
             sound = default;
-            args = Array.Empty<Arg>();
+            args = System.Array.Empty<Arg>();
+        }
+
+        public IconSpec Icon()
+        {
+            return icon == null
+                ? Environment.Current.Notifications.Of(spec).Icon
+                : Environment.Current.Icons.Of(icon);
+        }
+
+        public EarSoundSpec Sound()
+        {
+            return sound == null
+                ? Environment.Current.Notifications.Of(spec).Sound
+                : Environment.Current.EarSounds.Of(sound);
+        }
+
+        public string Title()
+        {
+            return Environment.Current.Notifications.Of(spec).Title;
+        }
+
+        public string Subtitle()
+        {
+            return Environment.Current.Notifications.Of(spec).Subtitle;
         }
 
         public FixedString32Bytes Spec => spec;
-
-        public FixedString32Bytes Icon => icon;
-
-        public FixedString32Bytes Sound => sound;
 
         public bool IsEmpty => spec.IsEmpty;
 

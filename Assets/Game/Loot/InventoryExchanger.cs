@@ -89,8 +89,8 @@ namespace Shooter.Game.Loot
 
             recipient.Receive(spec.Notify()
                 .Under(item == null ? null : item.Icon)
-                .With(Args.Actor, ownId.Value)
-                .With(Args.Subject, itemSpecId)
+                .With("actor", ownId.Value)
+                .With("subject", itemSpecId)
                 .With("amount", amount));
         }
 
