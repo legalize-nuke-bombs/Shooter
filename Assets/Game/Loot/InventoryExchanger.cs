@@ -1,3 +1,4 @@
+using Shooter.Game.Body;
 using Shooter.Game.Notifying;
 using Shooter.Game.Core;
 using Shooter.Logging;
@@ -20,11 +21,13 @@ namespace Shooter.Game.Loot
 
         private Inventory inventory;
         private PersistentId ownId;
+        private Nameable ownNameable;
 
         private void Awake()
         {
             inventory = GetComponent<Inventory>();
             ownId = GetComponent<PersistentId>();
+            ownNameable = GetComponentInChildren<Nameable>();
         }
 
         public bool GiveStackable(long targetId, StackableItemSpec stackable, int amount)
@@ -89,8 +92,10 @@ namespace Shooter.Game.Loot
 
             recipient.Receive(spec.Notify()
                 .Under(item == null ? null : item.Icon)
-                .With("actor", ownId.Value)
-                .With("subject", itemSpecId)
+                .With("actorId", ownId.Value)
+                .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
+                .With("subject", itemSpecId, ArgType.Item)
+                .With("subjectPrompt", itemSpecId, ArgType.ItemPrompt)
                 .With("amount", amount));
         }
 

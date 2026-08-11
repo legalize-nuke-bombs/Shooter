@@ -17,4 +17,4 @@ MonoBehaviour:
   sound: {fileID: 0}
   title: ""
   subtitle: ""
-  told: "Mail from {actor}: {text}"
+  told: "Mail from Character {actorId}: {text}"

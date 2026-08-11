@@ -1,5 +1,6 @@
 using UnityEngine;
 using Shooter.Game.Llm;
+using Shooter.Game.Notifying;
 
 namespace Shooter.Game.Body
 {
@@ -22,6 +23,13 @@ namespace Shooter.Game.Body
         public override string PromptName()
         {
             return spec == null ? null : spec.Prompt();
+        }
+
+        public override Arg NamedAs(string key)
+        {
+            return spec == null
+                ? new Arg(key, string.Empty)
+                : new Arg(key, spec.Id.ToString(), ArgType.Name);
         }
     }
 }

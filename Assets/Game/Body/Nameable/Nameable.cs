@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using Shooter.Game.Llm;
+using Shooter.Game.Notifying;
 
 namespace Shooter.Game.Body
 {
@@ -9,5 +10,6 @@ namespace Shooter.Game.Body
 
         public abstract string Digest(DigestionDetail detail);
         public abstract string PromptName();
+        public abstract Arg NamedAs(string key);
     }
 }

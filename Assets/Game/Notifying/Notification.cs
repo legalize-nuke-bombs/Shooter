@@ -49,13 +49,13 @@ namespace Shooter.Game.Notifying
 
         public bool IsEmpty => spec.IsEmpty;
 
-        public string Of(string name)
+        public string Rendered(string name)
         {
             if (args == null || string.IsNullOrEmpty(name)) return null;
 
             foreach (Arg arg in args)
             {
-                if (arg.Name == name) return arg.Value;
+                if (arg.Name == name) return arg.Rendered();
             }
 
             return null;
@@ -69,6 +69,16 @@ namespace Shooter.Game.Notifying
         public Notification With(string name, long value)
         {
             return Holding(new Arg(name, value.ToString()));
+        }
+
+        public Notification With(string name, string value, ArgType type)
+        {
+            return Holding(new Arg(name, value, type));
+        }
+
+        public Notification With(Arg arg)
+        {
+            return Holding(arg);
         }
 
         public Notification Under(IconSpec own)

@@ -18,11 +18,13 @@ namespace Shooter.Game.Llm
         [SerializeField] private NotificationSpec mail;
 
         private PersistentId ownId;
+        private Nameable ownNameable;
 
         protected override void Awake()
         {
             base.Awake();
             ownId = GetComponent<PersistentId>();
+            ownNameable = GetComponentInChildren<Nameable>();
         }
 
         public override string Name => "send_message";
@@ -69,7 +71,8 @@ namespace Shooter.Game.Llm
                 }
 
                 recipient.Receive(mail.Notify()
-                    .With("actor", ownId.Value)
+                    .With("actorId", ownId.Value)
+                    .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
                     .With("text", arguments.Content));
 
                 delivered.Add(targetId);
