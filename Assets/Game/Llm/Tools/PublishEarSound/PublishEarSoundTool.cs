@@ -52,7 +52,7 @@ namespace Shooter.Game.Llm.PublishEarSound
             {
                 wandererFinder.Find(output);
             }
-            foreach (long customId in arguments.IncludeCustomIds)
+            foreach (long customId in arguments.IncludeCustomIds ?? System.Array.Empty<long>())
             {
                 output.Include(customId);
             }
