@@ -20,7 +20,7 @@ namespace Shooter.Game.Llm.LookAroundEntity
 
         public override string Name => "look_around_entity";
 
-        public override string Description => "This tool shows everything around entity whose ID was passed. The greater the distance, the less detail is visible.";
+        public override string Description => "This tool shows everything around entity whose ID was passed. The greater the distance, the less detail is visible. You can use this tool to observe other characters.";
 
         protected override string Execute(LookAroundEntityArguments arguments)
         {
