@@ -8,6 +8,7 @@
         public string Subtitle { get; set; }
 
         public bool IncludeEveryone { get; set; }
+        public bool IncludeEveryWanderer { get; set; }
         public long[] IncludeCustomIds { get; set; }
     }
 }

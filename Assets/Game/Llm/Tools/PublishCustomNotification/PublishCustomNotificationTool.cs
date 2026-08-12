@@ -33,7 +33,8 @@ Use this tool when you want to create and send a notification.
 `EarSoundName` is the ID of your notification ear sound.
 `Title` and `Subtitle` is the text of your notification. Write in English.
 
-If you want everyone (both residents and strangers) to receive your notification, use the `IncludeEveryone` flag.
+If you want everyone (both residents and wanderers) to receive your notification, use the `IncludeEveryone` flag.
+If you want every wanderer to receive your notification, use the `IncludeEveryWanderer` flag.
 If you want the notification to be received only by specific character(s), pass their IDs to `IncludeCustomIds`.
 ";
 
@@ -62,17 +63,28 @@ If you want the notification to be received only by specific character(s), pass 
                     .With("title", arguments.Title)
                     .With("subtitle", arguments.Subtitle);
 
-            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+
+            var sb = new StringBuilder();
 
             if (arguments.IncludeEveryone)
             {
-                return PublishIncludeEveryone(notification, ids);
+                sb.AppendLine(PublishIncludeEveryone(notification));
             }
 
-            return PublishCustomIds(notification, arguments.IncludeCustomIds ?? System.Array.Empty<long>(), ids);
+            if (arguments.IncludeEveryWanderer)
+            {
+                sb.AppendLine(PublishIncludeEveryWanderer(notification));
+            }
+
+            if (arguments.IncludeCustomIds != null && arguments.IncludeCustomIds.Length > 0)
+            {
+                sb.AppendLine(PublishCustomIds(notification, arguments.IncludeCustomIds));
+            }
+
+            return sb.ToString();
         }
 
-        private string PublishIncludeEveryone(Notification notification, Register<PersistentId> ids)
+        private string PublishIncludeEveryone(Notification notification)
         {
             int characterLayer = LayerMask.NameToLayer(CharacterLayer);
             if (characterLayer == -1)
@@ -84,7 +96,7 @@ If you want the notification to be received only by specific character(s), pass 
             int characters = 0;
             int published = 0;
 
-            foreach (PersistentId character in ids.All)
+            foreach (PersistentId character in Environment.Current.Registers.Of<PersistentId>().All)
             {
                 if (character.gameObject.layer != characterLayer)
                 {
@@ -111,8 +123,33 @@ If you want the notification to be received only by specific character(s), pass 
             return $"Published to {published} characters";
         }
 
-        private string PublishCustomIds(Notification notification, long[] targetIds, Register<PersistentId> ids)
+        private string PublishIncludeEveryWanderer(Notification notification)
         {
+            int players = 0;
+            int published = 0;
+
+            foreach (Player player in Environment.Current.Registers.Of<Player>().All)
+            {
+                players++;
+
+                MainNotificationRecipient recipient = player.GetComponent<MainNotificationRecipient>();
+                if (recipient == null)
+                {
+                    continue;
+                }
+
+                recipient.Receive(notification);
+                published++;
+            }
+
+            Log.Info($"Entity {name} published IncludeEveryWanderer notification to {published} / {players} players");
+            return $"Published to {published} players";
+        }
+
+        private string PublishCustomIds(Notification notification, long[] targetIds)
+        {
+            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+
             var sb = new StringBuilder();
             int published = 0;
 
