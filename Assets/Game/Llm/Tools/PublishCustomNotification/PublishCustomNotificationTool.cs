@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.Llm.ToolHelpers.Finder;
 using Shooter.Game.Notifying;
 using Shooter.Game.World;
 using Shooter.Logging;
@@ -9,34 +10,28 @@ using UnityEngine;
 namespace Shooter.Game.Llm.PublishCustomNotification
 {
     [RequireComponent(typeof(PersistentId))]
+    [RequireComponent(typeof(CharacterFinder))]
+    [RequireComponent(typeof(WandererFinder))]
     public class PublishCustomNotificationTool : LlmTool<PublishCustomNotificationArguments>
     {
         private static readonly Journal Log = Logs.Here();
 
-        private const string CharacterLayer = "Character";
-
         private PersistentId id;
+        private CharacterFinder characterFinder;
+        private WandererFinder wandererFinder;
 
         protected override void Awake()
         {
             base.Awake();
             id = GetComponent<PersistentId>();
+            characterFinder = GetComponent<CharacterFinder>();
+            wandererFinder = GetComponent<WandererFinder>();
         }
 
         public override string Name => "publish_custom_notification";
 
         public override string Description =>
-            @"
-Use this tool when you want to create and send a notification.
-
-`IconName` is the ID of your notification icon.
-`EarSoundName` is the ID of your notification ear sound.
-`Title` and `Subtitle` is the text of your notification. Write in English.
-
-If you want everyone (both residents and wanderers) to receive your notification, use the `IncludeEveryone` flag.
-If you want every wanderer to receive your notification, use the `IncludeEveryWanderer` flag.
-If you want the notification to be received only by specific character(s), pass their IDs to `IncludeCustomIds`.
-";
+            "Use this tool when you want to create and send a notification.";
 
         protected override string Execute(PublishCustomNotificationArguments arguments)
         {
@@ -63,115 +58,38 @@ If you want the notification to be received only by specific character(s), pass 
                     .With("title", arguments.Title)
                     .With("subtitle", arguments.Subtitle);
 
-
-            var sb = new StringBuilder();
-
+            var output = new FinderHashSetOutput();
             if (arguments.IncludeEveryone)
             {
-                sb.AppendLine(PublishIncludeEveryone(notification));
+                characterFinder.Find(output);
             }
-
             if (arguments.IncludeEveryWanderer)
             {
-                sb.AppendLine(PublishIncludeEveryWanderer(notification));
+                wandererFinder.Find(output);
             }
-
-            if (arguments.IncludeCustomIds != null && arguments.IncludeCustomIds.Length > 0)
+            foreach (long customId in arguments.IncludeCustomIds)
             {
-                sb.AppendLine(PublishCustomIds(notification, arguments.IncludeCustomIds));
+                output.Include(customId);
             }
-
-            return sb.ToString();
-        }
-
-        private string PublishIncludeEveryone(Notification notification)
-        {
-            int characterLayer = LayerMask.NameToLayer(CharacterLayer);
-            if (characterLayer == -1)
-            {
-                Log.Error($"Layer {CharacterLayer} does not exist, nobody can be notified");
-                return "Failed to publish: nobody can be notified";
-            }
-
-            int characters = 0;
-            int published = 0;
-
-            foreach (PersistentId character in Environment.Current.Registers.Of<PersistentId>().All)
-            {
-                if (character.gameObject.layer != characterLayer)
-                {
-                    continue;
-                }
-
-                characters++;
-
-                MainNotificationRecipient recipient = character.GetComponent<MainNotificationRecipient>();
-                if (recipient == null)
-                {
-                    continue;
-                }
-                if (character.Value == id.Value)
-                {
-                    continue;
-                }
-
-                recipient.Receive(notification);
-                published++;
-            }
-
-            Log.Info($"Entity {name} published IncludeEveryone notification to {published} / {characters} characters");
-            return $"Published to {published} characters";
-        }
-
-        private string PublishIncludeEveryWanderer(Notification notification)
-        {
-            int players = 0;
-            int published = 0;
-
-            foreach (Player player in Environment.Current.Registers.Of<Player>().All)
-            {
-                players++;
-
-                MainNotificationRecipient recipient = player.GetComponent<MainNotificationRecipient>();
-                if (recipient == null)
-                {
-                    continue;
-                }
-
-                recipient.Receive(notification);
-                published++;
-            }
-
-            Log.Info($"Entity {name} published IncludeEveryWanderer notification to {published} / {players} players");
-            return $"Published to {published} players";
-        }
-
-        private string PublishCustomIds(Notification notification, long[] targetIds)
-        {
-            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+            output.Exclude(id.Value);
 
             var sb = new StringBuilder();
             int published = 0;
 
-            foreach (long targetId in targetIds)
+            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+            foreach (long targetIdValue in output.All())
             {
-                if (targetId == id.Value)
+                PersistentId targetId = ids.Of(targetIdValue);
+                if (targetId == null)
                 {
-                    sb.Append($"ID {targetId} is you. ");
+                    sb.Append($"ID {targetIdValue} not found. ");
                     continue;
                 }
 
-                PersistentId character = ids.Of(targetId);
-                if (character == null)
-                {
-                    sb.Append($"ID {targetId} not found. ");
-                    continue;
-                }
-
-                MainNotificationRecipient recipient = character.GetComponent<MainNotificationRecipient>();
+                MainNotificationRecipient recipient = targetId.GetComponent<MainNotificationRecipient>();
                 if (recipient == null)
                 {
-                    sb.Append($"ID {targetId} does not accept notifications. ");
+                    sb.Append($"ID {targetIdValue} does not accept notifications. ");
                     continue;
                 }
 
@@ -179,11 +97,8 @@ If you want the notification to be received only by specific character(s), pass 
                 published++;
             }
 
-            sb.Append($"Published to {published} characters");
-            string s = sb.ToString();
-
-            Log.Info($"Entity {name} published IncludeCustomIds notification: {s}");
-            return s;
+            sb.Append($"Published to {published} characters.");
+            return sb.ToString();
         }
     }
 }

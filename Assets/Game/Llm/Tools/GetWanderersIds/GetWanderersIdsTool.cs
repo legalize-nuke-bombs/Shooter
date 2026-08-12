@@ -1,14 +1,25 @@
 ﻿using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.Llm.ToolHelpers.Finder;
 using Shooter.Game.World;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Llm.GetWanderersIds
 {
+    [RequireComponent(typeof(WandererFinder))]
     public sealed class GetWanderersIdsTool : LlmTool<GetWanderersIdsArguments>
     {
         private static readonly Journal Log = Logs.Here();
+
+        private WandererFinder wandererFinder;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            wandererFinder = GetComponent<WandererFinder>();
+        }
 
         public override string Name => "get_wanderers_ids";
 
@@ -17,27 +28,18 @@ namespace Shooter.Game.Llm.GetWanderersIds
 
         protected override string Execute(GetWanderersIdsArguments arguments)
         {
-            Register<Player> players = Environment.Current.Registers.Of<Player>();
+            var output = new FinderHashSetOutput();
+            wandererFinder.Find(output);
 
             var sb = new StringBuilder();
-
             int found = 0;
 
-            foreach (Player player in players.All)
+            foreach (long targetId in output.All())
             {
-                PersistentId persistentId = player.GetComponent<PersistentId>();
-                if (persistentId == null)
-                {
-                    Log.Warn($"Player {player.name} does not have persistent id");
-                    continue;
-                }
-
-                sb.Append(persistentId.Value + " ");
-                found++;
+                sb.Append(targetId + " ");
             }
 
-            Log.Info($"Entity {name} requested wanderers ids. Found {found} wanderers");
-            return sb.ToString();
+            return $"{found} wanderers: " + sb;
         }
     }
 }
