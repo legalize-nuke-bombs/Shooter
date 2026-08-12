@@ -34,6 +34,7 @@ namespace Shooter.Game.World
             if (Broken)
             {
                 Log.Warn($"Entity {name} can not be broken because it is already broken");
+                return;
             }
 
             Log.Info($"Entity {name} became broken");

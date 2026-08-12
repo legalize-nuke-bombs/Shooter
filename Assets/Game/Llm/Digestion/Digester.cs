@@ -1,36 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Shooter.Game.Core;
 using Shooter.Game.World;
-using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
     public class Digester : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         public string Of(GameObject entity, DigestionDetail detail)
         {
-            return Block(entity, detail, null);
+            return entity == null ? null : Block(entity.GetComponent<MainDigestible>(), detail, null);
         }
 
-        public string Seen(GameObject entity, DigestionDetail detail, Transform eyes)
+        public string Seen(MainDigestible entity, DigestionDetail detail, Vector3 eyes)
         {
             return Block(entity, detail, eyes);
         }
 
-        private string Block(GameObject entity, DigestionDetail detail, Transform eyes)
+        private string Block(MainDigestible entity, DigestionDetail detail, Vector3? eyes)
         {
-            IEnumerable<IDigestible> parts = entity.GetComponents<IDigestible>()
-                .OrderByDescending(part => part.Priority);
+            if (entity == null) return null;
 
             var digest = new StringBuilder();
 
-            foreach (IDigestible part in parts)
+            foreach (IDigestible part in entity.Parts)
             {
                 string said = part.Digest(detail);
                 if (string.IsNullOrWhiteSpace(said)) continue;
@@ -42,7 +35,7 @@ namespace Shooter.Game.Llm
                     if (digest.Length == 0)
                     {
                         digest.Append(line.TrimEnd());
-                        if (eyes != null) digest.Append(" (").Append(Whereabouts(entity, eyes)).Append(")");
+                        if (eyes != null) digest.Append(" (").Append(Whereabouts(entity, eyes.Value)).Append(")");
                         continue;
                     }
 
@@ -55,7 +48,7 @@ namespace Shooter.Game.Llm
                 return null;
             }
 
-            PersistentId id = entity.GetComponent<PersistentId>();
+            PersistentId id = entity.Id;
             if (id == null)
             {
                 return digest.ToString();
@@ -64,44 +57,9 @@ namespace Shooter.Game.Llm
             return "[ID " + id.Value + "] " + digest;
         }
 
-        public DigestibleSize Size(GameObject entity)
+        private string Whereabouts(MainDigestible entity, Vector3 eyes)
         {
-            DigestibleSize? size = null;
-
-            IDigestible[] digestibles = entity.GetComponents<IDigestible>();
-            foreach (IDigestible digestible in digestibles)
-            {
-                DigestibleSize? digestibleSize = digestible.Size;
-                if (digestibleSize == null)
-                {
-                    continue;
-                }
-
-                if (size == null)
-                {
-                    size = digestibleSize.Value;
-                }
-                else
-                {
-                    if (digestibleSize.Value > size.Value)
-                    {
-                        size = digestibleSize;
-                    }
-                }
-            }
-
-            if (size == null)
-            {
-                Log.Warn($"Entity {entity.name} has no distible size overrides, using the small");
-                return DigestibleSize.Small;
-            }
-
-            return size.Value;
-        }
-
-        private string Whereabouts(GameObject entity, Transform eyes)
-        {
-            Vector3 offset = entity.transform.position - eyes.position;
+            Vector3 offset = entity.transform.position - eyes;
             return Mathf.RoundToInt(offset.magnitude) + " m, " + Cardinal.Side(offset);
         }
     }
