@@ -254,9 +254,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.WorldDigester
   smallViewingDistance: 50
-  mediumViewingDistance: 100
-  largeViewingDistance: 250
-  biggestViewingDistance: 500
+  mediumViewingDistance: 150
+  largeViewingDistance: 500
+  biggestViewingDistance: 1e+9
 --- !u!114 &-2201341720855734229
 MonoBehaviour:
   m_ObjectHideFlags: 0
