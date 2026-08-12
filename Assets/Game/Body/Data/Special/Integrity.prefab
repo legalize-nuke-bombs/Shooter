@@ -205,14 +205,7 @@ MonoBehaviour:
     way to interact with the world.
 
     You actively use the tools as much as you
-    like.
-
-
-
-    ## CHARACTER IDs
-
-    Every character in this world has an unique
-    ID number that works like a phone number: you need it to act on them. '
+    like. '
   character: 
   knowledges:
   - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
