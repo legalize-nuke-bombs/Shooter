@@ -86,8 +86,8 @@ namespace Shooter.Game.Llm
         }
 
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
-        [SerializeField] private float failureCooldown = 5f;
-        [SerializeField] private int maxToolRounds = 5;
+        [SerializeField] private float failureCooldown = 2.5f;
+        [SerializeField] private int maxToolRounds = 10;
         private float retryBlockedUntil;
 
         public LlmStatus Status()
