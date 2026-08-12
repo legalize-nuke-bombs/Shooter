@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Shooter.Logging;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Llm
 {
@@ -11,7 +12,10 @@ namespace Shooter.Game.Llm
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private float viewingRadius = 500f;
+        [SerializeField] private float smallViewingDistance = 50f;
+        [SerializeField] private float mediumViewingDistance = 100f;
+        [SerializeField] private float largeViewingDistance = 250f;
+        [SerializeField] private float biggestViewingDistance = 500f;
 
         private Digester digester;
 
@@ -22,16 +26,13 @@ namespace Shooter.Game.Llm
 
         public string Digest(Vector3? position = null)
         {
-            position ??= transform.position;
-
-            HashSet<GameObject> objects = FindNearObjects(position.Value);
-            List<GameObject> sortedObjects = SortObjects(objects);
+            Vector3 origin = position ?? transform.position;
 
             var digest = new StringBuilder();
 
-            foreach (GameObject nearObject in sortedObjects)
+            foreach (MainDigestible entity in FindVisible(origin))
             {
-                string seen = digester.Seen(nearObject, DigestionDetail.Brief, transform);
+                string seen = digester.Seen(entity, DigestionDetail.Brief, origin);
                 if (seen != null) digest.Append(seen).Append('\n');
             }
 
@@ -40,53 +41,32 @@ namespace Shooter.Game.Llm
             return result;
         }
 
-        private HashSet<GameObject> FindNearObjects(Vector3 position)
+        private List<MainDigestible> FindVisible(Vector3 origin)
         {
-            /*
-            List<GameObject> Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-                .ConvertAll(x => x.GetComponent<IMyInterface>()?.transform.parent?.gameObject)
-                .FindAll(x => x != null);
-            List<GameObject> parents = GameObject.FindObjectsByType<MonoBehaviour>()
-                .OfType<IDigestible>()
-                .Select(component => ((MonoBehaviour)component).transform.parent?.gameObject)
-                .Where(parent => parent != null)
-                .Distinct()
-                .ToList();
+            var visible = new List<MainDigestible>();
 
-            var found = new HashSet<GameObject>();
-            int hits = Physics.OverlapSphereNonAlloc(position, viewingRadius, Around);
-            if (hits == Around.Length)
-                Log.Warn($"Digester of {name} filled its buffer of {Around.Length} colliders within {viewingRadius} m, the digest may miss part of the world");
-
-            for (int i = 0; i < hits; i++)
+            foreach (MainDigestible entity in Environment.Current.Registers.Of<MainDigestible>().All)
             {
-                if (!(Around[i].GetComponentInParent<IDigestible>() is Component owner)) continue;
-                if (owner.gameObject == gameObject) continue;
+                if (entity.gameObject == gameObject) continue;
 
-                GameObject target = owner.gameObject;
-                if (found.Contains(target))
-                {
-                    continue;
-                }
+                float reach = ViewingDistance(entity.Size);
+                if ((origin - entity.transform.position).sqrMagnitude > reach * reach) continue;
 
-                float targetDistanceScore = digester.DistanceScore(target);
-                if ((position - target.transform.position).sqrMagnitude * targetDistanceScore > viewingRadius * viewingRadius)
-                {
-                    continue;
-                }
-
-                found.Add(owner.gameObject);
+                visible.Add(entity);
             }
 
-            return found;*/
-            return null;
-            // TODO
+            return visible.OrderBy(entity => (origin - entity.transform.position).sqrMagnitude).ToList();
         }
 
-        private List<GameObject> SortObjects(HashSet<GameObject> objects)
+        private float ViewingDistance(DigestibleSize size)
         {
-            return objects.OrderBy(owner => (transform.position - owner.transform.position).sqrMagnitude)
-                .ToList();
+            return size switch
+            {
+                DigestibleSize.Biggest => biggestViewingDistance,
+                DigestibleSize.Large => largeViewingDistance,
+                DigestibleSize.Medium => mediumViewingDistance,
+                _ => smallViewingDistance,
+            };
         }
     }
 }
