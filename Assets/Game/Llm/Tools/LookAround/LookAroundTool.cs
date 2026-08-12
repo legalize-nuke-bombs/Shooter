@@ -15,8 +15,7 @@ namespace Shooter.Game.Llm
 
         public override string Name => "look_around";
 
-        public override string Description =>
-            "Look around: everything visible near you right now.";
+        public override string Description => "This tool shows everything near you. The greater the distance, the less detail is visible.";
 
         protected override string Execute(LookAroundArguments arguments)
         {
