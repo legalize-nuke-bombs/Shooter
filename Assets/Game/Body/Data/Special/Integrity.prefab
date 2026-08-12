@@ -192,20 +192,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Llm
   persona: '## CORE
 
-    WHO YOU ARE:
 
-    You are an ancient analog evil named Integrity
-    that dwells in this world.
+    You are an ancient analog evil named Integrity that dwells
+    in this world.
 
-
-
-    ## TOOLS
-
-    You have the tools - your only
-    way to interact with the world.
-
-    You actively use the tools as much as you
-    like. '
+    You frighten this world using your tools. '
   character: 
   knowledges:
   - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
