@@ -9,11 +9,11 @@ namespace Shooter.Game.Llm.ToolHelpers.Finder
         public void Find(IFinderOutput output)
         {
             Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
-            LayerMask layerMask = LayerMask.GetMask("Character");
+            int characterLayer = LayerMask.NameToLayer("Character");
 
             foreach (PersistentId id in ids.All)
             {
-                if (id.gameObject.layer == layerMask)
+                if (id.gameObject.layer == characterLayer)
                 {
                     output.Include(id.Value);
                 }

@@ -67,7 +67,7 @@ namespace Shooter.Game.Llm.PublishCustomNotification
             {
                 wandererFinder.Find(output);
             }
-            foreach (long customId in arguments.IncludeCustomIds)
+            foreach (long customId in arguments.IncludeCustomIds ?? System.Array.Empty<long>())
             {
                 output.Include(customId);
             }
