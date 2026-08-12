@@ -503,6 +503,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
   content: A wanderer
+  size: 2
 --- !u!114 &-6421885537240197814
 MonoBehaviour:
   m_ObjectHideFlags: 0

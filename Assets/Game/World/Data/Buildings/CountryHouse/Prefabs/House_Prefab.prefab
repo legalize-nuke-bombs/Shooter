@@ -2496,7 +2496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "A village house"
+  content: A village house
+  size: 2
 --- !u!1 &2594713235057194445
 GameObject:
   m_ObjectHideFlags: 0

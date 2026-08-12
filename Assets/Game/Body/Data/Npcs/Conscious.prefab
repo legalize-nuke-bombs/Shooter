@@ -141,6 +141,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: -3919384734013774379}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5853452922775177041}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -228,6 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
   content: A resident
+  size: 0
 --- !u!114 &4779971333844689432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a395f81da244a6bf9c0256b55636f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.WorldDigester
-  scanRadius: 250
+  viewingRadius: 500
 --- !u!114 &-2201341720855734229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,3 +478,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd34b7499c5cb3478456cdd08d0c854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmTalkTicker
+--- !u!114 &5853452922775177041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.MainLlmMeta
+  content: 
+  size: 2

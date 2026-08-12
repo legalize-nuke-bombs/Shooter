@@ -1,5 +1,6 @@
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.Llm;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Shooter.Game.World
 {
     [RequireComponent(typeof(Sweepable))]
     [RequireComponent(typeof(Speaker))]
-    public class StructureHealth : MonoBehaviour, ISweepingRule
+    public class StructureHealth : MonoBehaviour, ISweepingRule, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -30,6 +31,11 @@ namespace Shooter.Game.World
 
         public void Break()
         {
+            if (Broken)
+            {
+                Log.Warn($"Entity {name} can not be broken because it is already broken");
+            }
+
             Log.Info($"Entity {name} became broken");
 
             broken = true;
@@ -40,6 +46,13 @@ namespace Shooter.Game.World
             foreach (IBreakable breakable in GetComponents<IBreakable>())
                 breakable.Broken();
         }
+
+        public string Digest(DigestionDetail detail)
+        {
+            return Broken ? "Broken" : "Intact";
+        }
+
+        public DigestionPriority Priority => DigestionPriority.Medium;
 
         public bool Permits => broken && useDespawn && (Time.time - brokenAt >= despawnTime);
     }

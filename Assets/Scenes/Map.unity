@@ -14788,6 +14788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
   content: The center of the green hamlet; forest all around, birds flying
+  size: 3
 --- !u!1001 &1715320957
 PrefabInstance:
   m_ObjectHideFlags: 0
