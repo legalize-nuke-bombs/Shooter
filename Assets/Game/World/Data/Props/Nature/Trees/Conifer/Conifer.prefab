@@ -520,6 +520,7 @@ GameObject:
   - component: {fileID: 4388053584151060432}
   - component: {fileID: 8844894662087583905}
   - component: {fileID: 298886581796811493}
+  - component: {fileID: 7012224470223036609}
   m_Layer: 0
   m_Name: Conifer
   m_TagString: Untagged
@@ -601,6 +602,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0994b96bab5f474394fb7847ac2cf72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Scattered
+--- !u!114 &7012224470223036609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4012337630082778474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.MainLlmMeta
+  content: Conifer
+  distanceScore: 10
 --- !u!1 &5285341944295864333
 GameObject:
   m_ObjectHideFlags: 0

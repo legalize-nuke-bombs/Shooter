@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,6 +62,41 @@ namespace Shooter.Game.Llm
             }
 
             return "[ID " + id.Value + "] " + digest;
+        }
+
+        public DigestibleSize Size(GameObject entity)
+        {
+            DigestibleSize? size = null;
+
+            IDigestible[] digestibles = entity.GetComponents<IDigestible>();
+            foreach (IDigestible digestible in digestibles)
+            {
+                DigestibleSize? digestibleSize = digestible.Size;
+                if (digestibleSize == null)
+                {
+                    continue;
+                }
+
+                if (size == null)
+                {
+                    size = digestibleSize.Value;
+                }
+                else
+                {
+                    if (digestibleSize.Value > size.Value)
+                    {
+                        size = digestibleSize;
+                    }
+                }
+            }
+
+            if (size == null)
+            {
+                Log.Warn($"Entity {entity.name} has no distible size overrides, using the small");
+                return DigestibleSize.Small;
+            }
+
+            return size.Value;
         }
 
         private string Whereabouts(GameObject entity, Transform eyes)

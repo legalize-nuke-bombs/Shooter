@@ -11,9 +11,7 @@ namespace Shooter.Game.Llm
     {
         private static readonly Journal Log = Logs.Here();
 
-        private static readonly Collider[] Around = new Collider[8192];
-
-        [SerializeField] private float scanRadius = 250f;
+        [SerializeField] private float viewingRadius = 500f;
 
         private Digester digester;
 
@@ -22,11 +20,16 @@ namespace Shooter.Game.Llm
             digester = GetComponent<Digester>();
         }
 
-        public string Digest()
+        public string Digest(Vector3? position = null)
         {
+            position ??= transform.position;
+
+            HashSet<GameObject> objects = FindNearObjects(position.Value);
+            List<GameObject> sortedObjects = SortObjects(objects);
+
             var digest = new StringBuilder();
 
-            foreach (GameObject nearObject in FindNearObjects())
+            foreach (GameObject nearObject in sortedObjects)
             {
                 string seen = digester.Seen(nearObject, DigestionDetail.Brief, transform);
                 if (seen != null) digest.Append(seen).Append('\n');
@@ -37,22 +40,52 @@ namespace Shooter.Game.Llm
             return result;
         }
 
-        private List<GameObject> FindNearObjects()
+        private HashSet<GameObject> FindNearObjects(Vector3 position)
         {
+            /*
+            List<GameObject> Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                .ConvertAll(x => x.GetComponent<IMyInterface>()?.transform.parent?.gameObject)
+                .FindAll(x => x != null);
+            List<GameObject> parents = GameObject.FindObjectsByType<MonoBehaviour>()
+                .OfType<IDigestible>()
+                .Select(component => ((MonoBehaviour)component).transform.parent?.gameObject)
+                .Where(parent => parent != null)
+                .Distinct()
+                .ToList();
+
             var found = new HashSet<GameObject>();
-            int hits = Physics.OverlapSphereNonAlloc(transform.position, scanRadius, Around);
+            int hits = Physics.OverlapSphereNonAlloc(position, viewingRadius, Around);
             if (hits == Around.Length)
-                Log.Warn($"Digester of {name} filled its buffer of {Around.Length} colliders within {scanRadius} m, the digest may miss part of the world");
+                Log.Warn($"Digester of {name} filled its buffer of {Around.Length} colliders within {viewingRadius} m, the digest may miss part of the world");
 
             for (int i = 0; i < hits; i++)
             {
                 if (!(Around[i].GetComponentInParent<IDigestible>() is Component owner)) continue;
                 if (owner.gameObject == gameObject) continue;
 
+                GameObject target = owner.gameObject;
+                if (found.Contains(target))
+                {
+                    continue;
+                }
+
+                float targetDistanceScore = digester.DistanceScore(target);
+                if ((position - target.transform.position).sqrMagnitude * targetDistanceScore > viewingRadius * viewingRadius)
+                {
+                    continue;
+                }
+
                 found.Add(owner.gameObject);
             }
 
-            return found.OrderBy(owner => (transform.position - owner.transform.position).sqrMagnitude)
+            return found;*/
+            return null;
+            // TODO
+        }
+
+        private List<GameObject> SortObjects(HashSet<GameObject> objects)
+        {
+            return objects.OrderBy(owner => (transform.position - owner.transform.position).sqrMagnitude)
                 .ToList();
         }
     }

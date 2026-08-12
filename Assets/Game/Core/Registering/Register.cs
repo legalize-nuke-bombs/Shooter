@@ -18,7 +18,7 @@ namespace Shooter.Game.Core
 
         public T Of(long id)
         {
-            return members.TryGetValue(id, out T found) ? found : null;
+            return members.GetValueOrDefault(id, null);
         }
 
         public long Add(T member)
@@ -27,17 +27,6 @@ namespace Shooter.Game.Core
             members[id] = member;
 
             return id;
-        }
-
-        public void Add(long id, T member)
-        {
-            if (members.TryGetValue(id, out T taken) && taken != member)
-            {
-                Log.Error($"Entries {taken.name} and {member.name} share the id {id}, the second one stays unreachable");
-                return;
-            }
-
-            members[id] = member;
         }
 
         public void Remove(long id)

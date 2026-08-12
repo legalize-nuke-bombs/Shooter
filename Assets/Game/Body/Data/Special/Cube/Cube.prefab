@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
   content: A huge overgrown cube, 25x25x25 meters
+  size: 2
 --- !u!114 &7723478074634143434
 MonoBehaviour:
   m_ObjectHideFlags: 0

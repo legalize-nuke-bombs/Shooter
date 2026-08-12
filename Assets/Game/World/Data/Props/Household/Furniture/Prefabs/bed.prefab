@@ -164,7 +164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "A cheap bed"
+  content: A cheap bed
+  distanceScore: 10
 --- !u!1 &7198701611487610746
 GameObject:
   m_ObjectHideFlags: 0

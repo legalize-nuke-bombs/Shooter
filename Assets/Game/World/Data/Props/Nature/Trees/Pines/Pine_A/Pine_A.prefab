@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 3023433396663086157}
   - component: {fileID: 8047786361642113852}
   - component: {fileID: -4804876187813781178}
+  - component: {fileID: 7626239233395129329}
   m_Layer: 0
   m_Name: Pine_A
   m_TagString: Untagged
@@ -231,6 +232,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0994b96bab5f474394fb7847ac2cf72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Scattered
+--- !u!114 &7626239233395129329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2503636403554334455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.MainLlmMeta
+  content: Pine
+  distanceScore: 10
 --- !u!1 &2507063413685713644
 GameObject:
   m_ObjectHideFlags: 0

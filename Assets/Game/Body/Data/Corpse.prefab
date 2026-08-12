@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2657284231240461859}
   - component: {fileID: 6600000000000000102}
   - component: {fileID: 6600000000000000104}
+  - component: {fileID: -1216823521821002097}
   m_Layer: 0
   m_Name: Corpse
   m_TagString: Untagged
@@ -56,7 +57,7 @@ MonoBehaviour:
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  m_InScenePlaced: 1
+  m_InScenePlaced: 0
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
@@ -123,6 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Vitals.DeadHealth
   ShowTopMostFoldoutHeaderGroup: 1
+  hurtSound: {fileID: 0}
 --- !u!114 &4215112116692012146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +138,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.Inventory
   ShowTopMostFoldoutHeaderGroup: 1
-  catalog: {fileID: 0}
   contents: []
 --- !u!114 &2657284231240461859
 MonoBehaviour:
@@ -162,7 +163,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d5e5a11aa5364648afceb32280ae013, type: 3}
   m_Name: 
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   spec: {fileID: 11400000, guid: ece2f4356d084b36b38278fd1e2de944, type: 2}
 --- !u!114 &6600000000000000104
@@ -175,5 +176,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b8e1f6a9c2d47358b0d6e3a1c7f5284, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Corpse
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-1216823521821002097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6108037598719724321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.MainLlmMeta
+  content: Corpse
+  size: 0
