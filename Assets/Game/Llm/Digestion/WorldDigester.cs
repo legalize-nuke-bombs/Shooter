@@ -13,9 +13,9 @@ namespace Shooter.Game.Llm
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float smallViewingDistance = 50f;
-        [SerializeField] private float mediumViewingDistance = 100f;
-        [SerializeField] private float largeViewingDistance = 250f;
-        [SerializeField] private float biggestViewingDistance = 500f;
+        [SerializeField] private float mediumViewingDistance = 150f;
+        [SerializeField] private float largeViewingDistance = 500f;
+        [SerializeField] private float biggestViewingDistance = 1e+9f;
 
         private Digester digester;
 
