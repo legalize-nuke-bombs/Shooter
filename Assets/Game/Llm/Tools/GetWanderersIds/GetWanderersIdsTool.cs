@@ -37,6 +37,7 @@ namespace Shooter.Game.Llm.GetWanderersIds
             foreach (long targetId in output.All())
             {
                 sb.Append(targetId + " ");
+                found++;
             }
 
             return $"{found} wanderers: " + sb;
