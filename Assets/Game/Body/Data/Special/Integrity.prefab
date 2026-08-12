@@ -153,6 +153,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: -3396472739180776447}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9063065640756137226}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3360195651299909164}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &2572390830499450415 stripped
 GameObject:
@@ -212,8 +218,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
   - {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
   - {fileID: 11400000, guid: 3f71e5c9648419545be7a8ce670966cc, type: 2}
-  failureCooldown: 5
-  maxToolRounds: 5
+  failureCooldown: 2.5
+  maxToolRounds: 10
 --- !u!114 &-5690060462814819552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,3 +457,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce93f15617d41d9b7bc9c7800aeb80b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.PublishEarSound.PublishEarSoundTool
+--- !u!114 &9063065640756137226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2572390830499450415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec6360e43e7d4356bcd18b22c2fc1d63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.ToolHelpers.Finder.CharacterFinder
+--- !u!114 &3360195651299909164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2572390830499450415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba1beb7fc8314c699148cca859719833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.ToolHelpers.Finder.WandererFinder
