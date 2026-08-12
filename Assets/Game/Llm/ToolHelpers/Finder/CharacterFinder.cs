@@ -1,0 +1,23 @@
+﻿using Shooter.Game.Core;
+using Shooter.Game.World;
+using UnityEngine;
+
+namespace Shooter.Game.Llm.ToolHelpers.Finder
+{
+    public class CharacterFinder : MonoBehaviour, IFinder
+    {
+        public void Find(IFinderOutput output)
+        {
+            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+            LayerMask layerMask = LayerMask.GetMask("Character");
+
+            foreach (PersistentId id in ids.All)
+            {
+                if (id.gameObject.layer == layerMask)
+                {
+                    output.Include(id.Value);
+                }
+            }
+        }
+    }
+}

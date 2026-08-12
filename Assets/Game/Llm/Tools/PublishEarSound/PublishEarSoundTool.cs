@@ -1,25 +1,36 @@
 ﻿using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.Notifying;
+using Shooter.Game.Llm.ToolHelpers.Finder;
 using Shooter.Game.World;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Llm.PublishEarSound
 {
+    [RequireComponent(typeof(PersistentId))]
+    [RequireComponent(typeof(CharacterFinder))]
+    [RequireComponent(typeof(WandererFinder))]
     public class PublishEarSoundTool : LlmTool<PublishEarSoundArguments>
     {
         private static readonly Journal Log = Logs.Here();
 
+        private PersistentId id;
+        private CharacterFinder characterFinder;
+        private WandererFinder wandererFinder;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            id = GetComponent<PersistentId>();
+            characterFinder = GetComponent<CharacterFinder>();
+            wandererFinder = GetComponent<WandererFinder>();
+        }
+
         public override string Name => "publish_ear_sound";
 
         public override string Description =>
-            @"
-Use this tool when you want the wanderers to hear a sound inside their heads.
-
-If you want every wanderer to hear the sound, use the `IncludeEveryWanderer` flag.
-If you want the sound to be heard only by specific character(s), pass their IDs to `IncludeCustomWanderers`.
-";
+            "Use this tool when you want characters to hear a sound inside their heads.";
 
         protected override string Execute(PublishEarSoundArguments arguments)
         {
@@ -32,67 +43,37 @@ If you want the sound to be heard only by specific character(s), pass their IDs 
                 return $"Failed to publish: ear sound {arguments.EarSoundName} does not exist";
             }
 
-
-            var sb = new StringBuilder();
-
+            var output = new FinderHashSetOutput();
+            if (arguments.IncludeEveryone)
+            {
+                characterFinder.Find(output);
+            }
             if (arguments.IncludeEveryWanderer)
             {
-                sb.AppendLine(PublishIncludeEveryWanderer(sound));
+                wandererFinder.Find(output);
             }
-
-            if (arguments.IncludeCustomWanderers != null && arguments.IncludeCustomWanderers.Length > 0)
+            foreach (long customId in arguments.IncludeCustomIds)
             {
-                sb.AppendLine(PublishCustomWanderers(sound, arguments.IncludeCustomWanderers));
+                output.Include(customId);
             }
-
-            return sb.ToString();
-        }
-
-        private string PublishIncludeEveryWanderer(EarSoundSpec sound)
-        {
-            int players = 0;
-            int published = 0;
-
-            foreach (Player player in Environment.Current.Registers.Of<Player>().All)
-            {
-                players++;
-
-                EarSpeaker speaker = player.GetComponent<EarSpeaker>();
-                if (speaker == null)
-                {
-                    Log.Warn($"Entity {player.name} does not have ear speaker");
-                    continue;
-                }
-
-                speaker.Play(sound);
-
-                published++;
-            }
-
-            Log.Info($"Entity {name} published IncludeEveryWanderer sound to {published} / {players} players");
-            return $"Published to {published} players";
-        }
-
-        private string PublishCustomWanderers(EarSoundSpec sound, long[] targetIds)
-        {
-            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
 
             var sb = new StringBuilder();
             int published = 0;
 
-            foreach (long targetId in targetIds)
+            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+            foreach (long targetIdValue in output.All())
             {
-                PersistentId character = ids.Of(targetId);
-                if (character == null)
+                PersistentId targetId = ids.Of(targetIdValue);
+                if (targetId == null)
                 {
-                    sb.Append($"ID {targetId} not found. ");
+                    sb.Append($"ID {targetIdValue} not found. ");
                     continue;
                 }
 
-                EarSpeaker speaker = character.GetComponent<EarSpeaker>();
+                EarSpeaker speaker = targetId.GetComponent<EarSpeaker>();
                 if (speaker == null)
                 {
-                    sb.Append($"ID {targetId} does not have an ear speaker. ");
+                    sb.Append($"ID {targetIdValue} does not have an ear speaker. ");
                     continue;
                 }
 
@@ -100,10 +81,8 @@ If you want the sound to be heard only by specific character(s), pass their IDs 
                 published++;
             }
 
-            sb.Append($"Published to {published} characters");
-            string s = sb.ToString();
-            Log.Info($"Entity {name} published IncludeCustomWanderers sound: {s}");
-            return s;
+            sb.Append($"Published to {published} characters.");
+            return sb.ToString();
         }
     }
 }
