@@ -72,6 +72,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Integrity
       objectReference: {fileID: 0}
+    - target: {fileID: 7900868138807271552, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      propertyPath: contents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7900868138807271552, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      propertyPath: contents.Array.data[0].spec
+      value: 
+      objectReference: {fileID: 11400000, guid: b888190a93023bd4fb220a32d897c4bf, type: 2}
+    - target: {fileID: 7900868138807271552, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      propertyPath: contents.Array.data[0].amount
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 8352049979544651065, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: maxHp
       value: 1000000
@@ -159,6 +171,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3360195651299909164}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2856431420098792297}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7989042014049513668}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &2572390830499450415 stripped
 GameObject:
@@ -196,7 +214,13 @@ MonoBehaviour:
     You are an ancient analog evil named Integrity that dwells
     in this world.
 
-    You frighten this world using your tools. '
+    You frighten this world using your tools.
+
+
+    ## TEMPORARY
+
+    New
+    tool (give_stackable) has been added. Feel free to test it '
   character: 
   knowledges:
   - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
@@ -465,3 +489,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1beb7fc8314c699148cca859719833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.ToolHelpers.Finder.WandererFinder
+--- !u!114 &2856431420098792297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2572390830499450415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f9180adde0dc8d48bb4e520befeade8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.GiveStackableTool
+--- !u!114 &-7989042014049513668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2572390830499450415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532666c12038a8547bbcd8de20fb085c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.GiveUniqueTool

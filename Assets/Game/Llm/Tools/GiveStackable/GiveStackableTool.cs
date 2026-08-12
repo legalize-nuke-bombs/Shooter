@@ -18,7 +18,11 @@ namespace Shooter.Game.Llm
         public override string Name => "give_stackable";
 
         public override string Description =>
-            $"Give some of your stackable items to a character within {inventoryExchanger.ExchangeRadius} meters. The item is addressed by its exact name from your bag.";
+            @$"
+Give some of your stackable items to a character within {inventoryExchanger.ExchangeRadius} meters.
+The item is addressed by its exact name from your bag.
+The recipient will automatically receive a notification.
+";
 
         protected override string Execute(GiveStackableArguments arguments)
         {
