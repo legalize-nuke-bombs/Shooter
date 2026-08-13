@@ -1,9 +1,10 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Combat
 {
-    public struct BulletHole : IEquatable<BulletHole>
+    public struct BulletHole : INetworkSerializeByMemcpy, IEquatable<BulletHole>
     {
         public Vector3 Position;
         public Vector3 Normal;
