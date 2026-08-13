@@ -15,15 +15,48 @@ MonoBehaviour:
   id: akm
   title: "\u0410\u041A\u041C"
   promptName: AKM
-  equipable: 1
   model: {fileID: 7492422559979336910, guid: a0e48e2f4140fa44ca545664cfbf5726, type: 3}
   icon: {fileID: 11400000, guid: dc2ef63794314c829b091e3628876c5c, type: 2}
   cells: {x: 4, y: 2}
+  equipable: 1
   magazineSize: 30
   ammo: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
   distance: 100
   damage: 25
   fireInterval: 0.1
+  spray:
+    points:
+    - {x: 0, y: 0}
+    - {x: 0, y: 1.2}
+    - {x: -0.1, y: 2.5}
+    - {x: -0.2, y: 4.1}
+    - {x: 0.1, y: 5.8}
+    - {x: -0.4, y: 7.3}
+    - {x: -1.1, y: 8.7}
+    - {x: -2.2, y: 9.9}
+    - {x: -1.5, y: 10.6}
+    - {x: -0.4, y: 11}
+    - {x: 0.8, y: 10.9}
+    - {x: 1.9, y: 10.6}
+    - {x: 2.8, y: 10.1}
+    - {x: 3.4, y: 9.6}
+    - {x: 3.1, y: 9.2}
+    - {x: 2.1, y: 8.9}
+    - {x: 0.9, y: 8.7}
+    - {x: -0.5, y: 8.6}
+    - {x: -1.9, y: 8.6}
+    - {x: -2.9, y: 8.6}
+    - {x: -3.2, y: 9}
+    - {x: -2.3, y: 9.1}
+    - {x: -1.1, y: 9.2}
+    - {x: 0.2, y: 9.3}
+    - {x: 1.4, y: 9.2}
+    - {x: 2.1, y: 9}
+    - {x: 1.5, y: 8.8}
+    - {x: 0.2, y: 8.7}
+    - {x: -1, y: 8.7}
+    - {x: -2, y: 8.8}
+  sprayRecovery: 0.4
   reloadTime: 1.43
   shotSound: {fileID: 11400000, guid: 3ce82d71758ec3a71b6e328efb3220a8, type: 2}
   misfireSound: {fileID: 11400000, guid: b350a4b605fd1f66e101747903aa0383, type: 2}
