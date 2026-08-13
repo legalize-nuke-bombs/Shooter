@@ -185,11 +185,6 @@ namespace Shooter.Editing
                 new Rect(canvas.x + 4f, canvas.yMax - 18f, canvas.width - 8f, 16f),
                 $"cell {step:0.#}° ≈ {spread:0} cm at 10 m",
                 EditorStyles.miniLabel);
-
-            GUI.Label(
-                new Rect(canvas.xMax - 44f, canvas.y + 2f, 42f, 16f),
-                $"±{range:0.#}°",
-                EditorStyles.miniLabel);
         }
 
         private void Pattern(Rect canvas, SerializedProperty points, float range, Vector2 pan)
