@@ -29,6 +29,9 @@ namespace Shooter.Game.Combat
         private EarSpeaker earSpeaker;
         private MainRestrainable restrainable;
 
+        private int sprayShot;
+        private float lastShotAt;
+
         private void Awake()
         {
             id = GetComponent<PersistentId>();
@@ -66,8 +69,13 @@ namespace Shooter.Game.Combat
                 return false;
             }
 
+            if (Time.time - lastShotAt >= spec.SprayRecovery) sprayShot = 0;
+
             speaker?.Play(spec.ShotSound);
             Hit(spec);
+
+            sprayShot++;
+            lastShotAt = Time.time;
             return true;
         }
 
@@ -112,7 +120,10 @@ namespace Shooter.Game.Combat
 
         private void Hit(FirearmSpec spec)
         {
-            int found = interactor.Look(spec.Distance, Shots);
+            Vector2 offset = spec.Spray.At(sprayShot);
+            Vector3 direction = Quaternion.LookRotation(interactor.Sight) * Quaternion.Euler(-offset.y, offset.x, 0f) * Vector3.forward;
+
+            int found = Interactor.Look(interactor.Eyes, direction, spec.Distance, transform, Shots);
             if (!Interactor.TryNearest(Shots, found, out RaycastHit hit))
             {
                 Log.Info($"Shot of entity {name} missed");

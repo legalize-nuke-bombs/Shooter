@@ -1,4 +1,5 @@
 using Shooter.Game.Body;
+using Shooter.Game.Combat;
 using UnityEngine;
 
 namespace Shooter.Game.Loot
@@ -11,6 +12,8 @@ namespace Shooter.Game.Loot
         [SerializeField] private float distance = 100f;
         [SerializeField] private int damage = 25;
         [SerializeField] private float fireInterval = 0.1f;
+        [SerializeField] private SprayPattern spray = new SprayPattern();
+        [SerializeField] private float sprayRecovery = 0.4f;
         [SerializeField] private float reloadTime = 2.5f;
         [SerializeField] private SoundSpec shotSound;
         [SerializeField] private SoundSpec misfireSound;
@@ -26,6 +29,10 @@ namespace Shooter.Game.Loot
         public int Damage => damage;
 
         public float FireInterval => fireInterval;
+
+        public SprayPattern Spray => spray;
+
+        public float SprayRecovery => sprayRecovery;
 
         public float ReloadTime => reloadTime;
 

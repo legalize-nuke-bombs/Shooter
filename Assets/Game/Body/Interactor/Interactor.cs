@@ -23,6 +23,8 @@ namespace Shooter.Game.Body
 
         public Vector3 Eyes => transform.position + Vector3.up * EyeHeight;
 
+        public Vector3 Sight => movement.Look;
+
         public float Reach => reach;
 
         private void Awake()
