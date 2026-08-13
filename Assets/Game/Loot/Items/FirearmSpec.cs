@@ -12,6 +12,7 @@ namespace Shooter.Game.Loot
         [SerializeField] private float distance = 100f;
         [SerializeField] private int damage = 25;
         [SerializeField] private float fireInterval = 0.1f;
+        [SerializeField] private FireMode fireMode = FireMode.Semi;
         [SerializeField] private SprayPattern spray = new SprayPattern();
         [SerializeField] private float sprayRecovery = 0.4f;
         [SerializeField] private float recoilPunch = 0.5f;
@@ -30,6 +31,8 @@ namespace Shooter.Game.Loot
         public int Damage => damage;
 
         public float FireInterval => fireInterval;
+
+        public FireMode FireMode => fireMode;
 
         public SprayPattern Spray => spray;
 

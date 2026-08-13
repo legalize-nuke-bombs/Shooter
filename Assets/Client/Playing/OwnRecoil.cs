@@ -1,3 +1,4 @@
+using Shooter.Game.Combat;
 using Shooter.Game.Loot;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Shooter.Client.Playing
 
         private int shot;
         private float lastShotAt;
+        private bool held;
 
         public Vector2 Punch { get; private set; }
 
@@ -30,15 +32,29 @@ namespace Shooter.Client.Playing
         private void Update()
         {
             Punch *= Mathf.Exp(-recovery * Time.deltaTime);
+
+            if (held) Kick(true);
         }
 
-        public void Kick()
+        public void Press()
+        {
+            held = true;
+            Kick(false);
+        }
+
+        public void Release()
+        {
+            held = false;
+        }
+
+        private void Kick(bool sustained)
         {
             var firearm = inventory.Equipped() as Firearm;
             if (firearm == null || firearm.Magazine <= 0) return;
 
             FirearmSpec spec = Environment.Current.Items.Firearm(firearm.SpecId);
             if (spec == null) return;
+            if (sustained && spec.FireMode != FireMode.Auto) return;
 
             if (Time.time - lastShotAt < spec.FireInterval) return;
             if (Time.time - lastShotAt >= spec.SprayRecovery) shot = 0;

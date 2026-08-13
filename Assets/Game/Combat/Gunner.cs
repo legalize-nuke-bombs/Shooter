@@ -31,6 +31,7 @@ namespace Shooter.Game.Combat
 
         private int sprayShot;
         private float lastShotAt;
+        private bool triggerHeld;
 
         private void Awake()
         {
@@ -44,8 +45,28 @@ namespace Shooter.Game.Combat
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void FireRpc()
+        public void PressTriggerRpc()
         {
+            triggerHeld = true;
+            TryShoot();
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void ReleaseTriggerRpc()
+        {
+            triggerHeld = false;
+        }
+
+        private void Update()
+        {
+            if (!IsServer || !triggerHeld) return;
+
+            var firearm = inventory.Equipped() as Firearm;
+            if (firearm == null) return;
+
+            FirearmSpec spec = Environment.Current.Items.Firearm(firearm.SpecId);
+            if (spec == null || spec.FireMode != FireMode.Auto) return;
+
             TryShoot();
         }
 
@@ -65,6 +86,7 @@ namespace Shooter.Game.Combat
 
             if (!firearm.Spend())
             {
+                triggerHeld = false;
                 speaker?.Play(spec.MisfireSound);
                 return false;
             }
