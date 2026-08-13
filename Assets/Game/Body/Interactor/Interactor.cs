@@ -67,7 +67,7 @@ namespace Shooter.Game.Body
 
         public static int Look(Vector3 origin, Vector3 direction, float distance, Transform looker, RaycastHit[] into)
         {
-            int found = Physics.RaycastNonAlloc(origin, direction, into, distance, LookMask);
+            int found = Physics.RaycastNonAlloc(origin, direction, into, distance, LookMask, QueryTriggerInteraction.Ignore);
             int kept = 0;
 
             for (int i = 0; i < found; i++)

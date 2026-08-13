@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2934016132358497645}
   - component: {fileID: 4715244483815921385}
   - component: {fileID: 8352106744219038612}
+  - component: {fileID: 4327895610234871652}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -144,3 +145,19 @@ MonoBehaviour:
     above: -90
     below: -2
     fade: 8
+--- !u!114 &4327895610234871652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047279815154395446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c37380cbfe4ab382559f4cf9a1c106, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.BulletHoles
+  material: {fileID: 2100000, guid: fe92059f79154bc1a2853ba6192f5d9b, type: 2}
+  capacity: 1024
+  diameter: 0.08
+  depth: 0.2

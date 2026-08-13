@@ -1,5 +1,6 @@
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Combat;
 using Shooter.Game.Llm;
 using Shooter.Game.Notifying;
 using Shooter.Game.Core;
@@ -16,6 +17,7 @@ namespace Shooter.Game.World
     [RequireComponent(typeof(Clock))]
     [RequireComponent(typeof(SleepCycle))]
     [RequireComponent(typeof(Sweeper))]
+    [RequireComponent(typeof(BulletHoles))]
     public class Environment : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -54,6 +56,8 @@ namespace Shooter.Game.World
 
         public Sweeper Sweeper { get; private set; }
 
+        public BulletHoles BulletHoles { get; private set; }
+
         public Transform Spawn => spawn == null ? transform : spawn.transform;
 
         public GameObject Corpse => corpse;
@@ -82,6 +86,7 @@ namespace Shooter.Game.World
             Clock = GetComponent<Clock>();
             SleepCycle = GetComponent<SleepCycle>();
             Sweeper = GetComponent<Sweeper>();
+            BulletHoles = GetComponent<BulletHoles>();
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];
 

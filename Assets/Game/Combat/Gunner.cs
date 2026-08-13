@@ -122,6 +122,7 @@ namespace Shooter.Game.Combat
             var health = hit.collider.GetComponentInParent<Health>();
             if (health == null)
             {
+                Environment.Current.BulletHoles.Add(hit.point, hit.normal);
                 Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
                 return;
             }
