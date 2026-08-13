@@ -18,7 +18,9 @@ namespace Shooter.Editing
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUIUtility.singleLineHeight + 4f + CanvasSide;
+            SerializedProperty points = property.FindPropertyRelative("points");
+
+            return EditorGUIUtility.singleLineHeight + 4f + CanvasSide + 4f + EditorGUI.GetPropertyHeight(points, true);
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -34,6 +36,9 @@ namespace Shooter.Editing
             var pan = new Vector2(EditorPrefs.GetFloat(PanXKey, 0f), EditorPrefs.GetFloat(PanYKey, 0f));
 
             Mouse(canvas, points, range, pan);
+
+            var list = new Rect(position.x, canvas.yMax + 4f, position.width, EditorGUI.GetPropertyHeight(points, true));
+            EditorGUI.PropertyField(list, points, new GUIContent("Points"), true);
 
             if (Event.current.type != EventType.Repaint) return;
 
