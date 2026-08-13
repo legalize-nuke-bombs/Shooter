@@ -24,6 +24,7 @@ MonoBehaviour:
   distance: 100
   damage: 25
   fireInterval: 0.1
+  fireMode: 1
   spray:
     points:
     - {x: 0, y: 0}

@@ -61,7 +61,8 @@ namespace Shooter.Client.Playing
 
             controls = new Controls();
             controls.Player.Jump.performed += Jump;
-            controls.Player.Attack.performed += Fire;
+            controls.Player.Attack.performed += PressTrigger;
+            controls.Player.Attack.canceled += ReleaseTrigger;
             controls.Player.Reload.performed += Reload;
             controls.Player.Interact.performed += Use;
             controls.Player.Inventory.performed += OpenBag;
@@ -88,7 +89,8 @@ namespace Shooter.Client.Playing
             movement.Turned -= Turn;
 
             controls.Player.Jump.performed -= Jump;
-            controls.Player.Attack.performed -= Fire;
+            controls.Player.Attack.performed -= PressTrigger;
+            controls.Player.Attack.canceled -= ReleaseTrigger;
             controls.Player.Reload.performed -= Reload;
             controls.Player.Interact.performed -= Use;
             controls.Player.Inventory.performed -= OpenBag;
@@ -181,10 +183,16 @@ namespace Shooter.Client.Playing
             movement.JumpRpc();
         }
 
-        private void Fire(InputAction.CallbackContext context)
+        private void PressTrigger(InputAction.CallbackContext context)
         {
-            gunner?.FireRpc();
-            recoil?.Kick();
+            gunner?.PressTriggerRpc();
+            recoil?.Press();
+        }
+
+        private void ReleaseTrigger(InputAction.CallbackContext context)
+        {
+            gunner?.ReleaseTriggerRpc();
+            recoil?.Release();
         }
 
         private void Reload(InputAction.CallbackContext context)
