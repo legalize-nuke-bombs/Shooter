@@ -7,12 +7,11 @@ namespace Shooter.Editing
     [CustomPropertyDrawer(typeof(SprayPattern))]
     public class SprayPatternDrawer : PropertyDrawer
     {
+        private const string RangeKey = "Shooter.SprayPattern.Range";
         private const float CanvasSide = 280f;
         private const float GrabRadius = 12f;
-        private const float MinRangeDegrees = 5f;
 
         private int dragged = -1;
-        private float frozenRange;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -24,20 +23,23 @@ namespace Shooter.Editing
             SerializedProperty points = property.FindPropertyRelative("points");
 
             var header = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(header, label.text, $"{points.arraySize} bullets | LMB add/drag, RMB delete");
+            EditorGUI.LabelField(header, label.text, $"{points.arraySize} bullets | LMB add/drag, RMB delete, wheel zoom");
 
             float side = Mathf.Min(CanvasSide, position.width - 4f);
             var canvas = new Rect(position.x + (position.width - side) * 0.5f, header.yMax + 2f, side, side);
-
-            float range = dragged >= 0 ? frozenRange : Range(points);
+            float range = EditorPrefs.GetFloat(RangeKey, 5f);
 
             Mouse(canvas, points, range);
 
             if (Event.current.type != EventType.Repaint) return;
 
             EditorGUI.DrawRect(canvas, new Color(0.12f, 0.12f, 0.12f));
-            Grid(canvas, range);
-            Pattern(canvas, points, range);
+
+            GUI.BeginClip(canvas);
+            var local = new Rect(0f, 0f, canvas.width, canvas.height);
+            Grid(local, range);
+            Pattern(local, points, range);
+            GUI.EndClip();
         }
 
         private void Mouse(Rect canvas, SerializedProperty points, float range)
@@ -55,6 +57,12 @@ namespace Shooter.Editing
 
             switch (current.type)
             {
+                case EventType.ScrollWheel when inside:
+                    float zoomed = range * Mathf.Pow(1.1f, Mathf.Sign(current.delta.y));
+                    EditorPrefs.SetFloat(RangeKey, Mathf.Clamp(zoomed, 1f, 45f));
+                    current.Use();
+                    break;
+
                 case EventType.MouseDown when current.button == 0 && inside:
                     dragged = Closest(canvas, points, current.mousePosition, range);
 
@@ -65,7 +73,6 @@ namespace Shooter.Editing
                         points.GetArrayElementAtIndex(dragged).vector2Value = Degrees(canvas, current.mousePosition, range);
                     }
 
-                    frozenRange = range;
                     current.Use();
                     break;
 
@@ -106,19 +113,6 @@ namespace Shooter.Editing
             return closest;
         }
 
-        private static float Range(SerializedProperty points)
-        {
-            float widest = MinRangeDegrees;
-
-            for (int i = 0; i < points.arraySize; i++)
-            {
-                Vector2 point = points.GetArrayElementAtIndex(i).vector2Value;
-                widest = Mathf.Max(widest, Mathf.Abs(point.x) * 1.2f, Mathf.Abs(point.y) * 1.2f);
-            }
-
-            return widest;
-        }
-
         private static Vector2 Pixel(Rect canvas, Vector2 degrees, float range)
         {
             float half = canvas.width * 0.5f;
@@ -131,17 +125,17 @@ namespace Shooter.Editing
         private static Vector2 Degrees(Rect canvas, Vector2 pixel, float range)
         {
             float half = canvas.width * 0.5f;
-            float limit = range * 0.98f;
 
             return new Vector2(
-                Mathf.Clamp((pixel.x - canvas.center.x) / half * range, -limit, limit),
-                Mathf.Clamp((canvas.center.y - pixel.y) / half * range, -limit, limit));
+                (pixel.x - canvas.center.x) / half * range,
+                (canvas.center.y - pixel.y) / half * range);
         }
 
         private static void Grid(Rect canvas, float range)
         {
             float step = range <= 6f ? 1f : range <= 14f ? 2f : 5f;
             var faint = new Color(1f, 1f, 1f, 0.05f);
+            var mark = EditorStyles.miniLabel;
             float half = canvas.width * 0.5f;
 
             for (float degree = step; degree < range; degree += step)
@@ -152,28 +146,33 @@ namespace Shooter.Editing
                 EditorGUI.DrawRect(new Rect(canvas.center.x - offset, canvas.y, 1f, canvas.height), faint);
                 EditorGUI.DrawRect(new Rect(canvas.x, canvas.center.y + offset, canvas.width, 1f), faint);
                 EditorGUI.DrawRect(new Rect(canvas.x, canvas.center.y - offset, canvas.width, 1f), faint);
+
+                GUI.Label(new Rect(canvas.center.x + offset - 12f, canvas.center.y + 1f, 24f, 13f), $"{degree:0.#}", mark);
+                GUI.Label(new Rect(canvas.center.x - offset - 12f, canvas.center.y + 1f, 24f, 13f), $"-{degree:0.#}", mark);
+                GUI.Label(new Rect(canvas.center.x + 3f, canvas.center.y - offset - 1f, 30f, 13f), $"{degree:0.#}", mark);
+                GUI.Label(new Rect(canvas.center.x + 3f, canvas.center.y + offset - 12f, 30f, 13f), $"-{degree:0.#}", mark);
             }
 
             var axis = new Color(1f, 1f, 1f, 0.15f);
             EditorGUI.DrawRect(new Rect(canvas.center.x, canvas.y, 1f, canvas.height), axis);
             EditorGUI.DrawRect(new Rect(canvas.x, canvas.center.y, canvas.width, 1f), axis);
 
+            float spread = Mathf.Tan(step * Mathf.Deg2Rad) * 10f * 100f;
             GUI.Label(
-                new Rect(canvas.xMax - 44f, canvas.yMax - 18f, 42f, 16f),
+                new Rect(canvas.x + 4f, canvas.yMax - 18f, canvas.width - 8f, 16f),
+                $"{step:0.#}° ≈ {spread:0} cm at 10 m",
+                mark);
+
+            GUI.Label(
+                new Rect(canvas.xMax - 44f, canvas.y + 2f, 42f, 16f),
                 $"±{range:0.#}°",
-                EditorStyles.miniLabel);
+                mark);
         }
 
         private void Pattern(Rect canvas, SerializedProperty points, float range)
         {
             int count = points.arraySize;
-
-            if (count == 0)
-            {
-                var hint = new GUIStyle(EditorStyles.centeredGreyMiniLabel);
-                GUI.Label(canvas, "click to place bullet 1", hint);
-                return;
-            }
+            if (count == 0) return;
 
             var line = new Vector3[count + 1];
             line[0] = Pixel(canvas, Vector2.zero, range);
