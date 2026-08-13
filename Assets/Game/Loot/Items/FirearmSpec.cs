@@ -14,6 +14,7 @@ namespace Shooter.Game.Loot
         [SerializeField] private float fireInterval = 0.1f;
         [SerializeField] private SprayPattern spray = new SprayPattern();
         [SerializeField] private float sprayRecovery = 0.4f;
+        [SerializeField] private float recoilPunch = 0.5f;
         [SerializeField] private float reloadTime = 2.5f;
         [SerializeField] private SoundSpec shotSound;
         [SerializeField] private SoundSpec misfireSound;
@@ -33,6 +34,8 @@ namespace Shooter.Game.Loot
         public SprayPattern Spray => spray;
 
         public float SprayRecovery => sprayRecovery;
+
+        public float RecoilPunch => recoilPunch;
 
         public float ReloadTime => reloadTime;
 
