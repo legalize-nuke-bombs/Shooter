@@ -27,6 +27,7 @@ namespace Shooter.Client.Playing
         private Health health;
         private Mortal mortal;
         private Gunner gunner;
+        private OwnRecoil recoil;
         private Controls controls;
         private bool talking;
         private float pitch;
@@ -43,6 +44,7 @@ namespace Shooter.Client.Playing
             health = GetComponent<Health>();
             mortal = GetComponent<Mortal>();
             gunner = GetComponent<Gunner>();
+            recoil = GetComponent<OwnRecoil>();
         }
 
         public override void OnNetworkSpawn()
@@ -125,8 +127,10 @@ namespace Shooter.Client.Playing
 
         private void LateUpdate()
         {
+            Vector2 punch = recoil == null ? Vector2.zero : recoil.Punch;
+
             view.transform.position = transform.position + Vector3.up * Interactor.EyeHeight;
-            view.transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+            view.transform.rotation = Quaternion.Euler(pitch - punch.y, yaw + punch.x, 0f);
         }
 
         private void Capture()
@@ -180,6 +184,7 @@ namespace Shooter.Client.Playing
         private void Fire(InputAction.CallbackContext context)
         {
             gunner?.FireRpc();
+            recoil?.Kick();
         }
 
         private void Reload(InputAction.CallbackContext context)
