@@ -318,7 +318,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: contents.Array.data[1].amount
-      value: 100
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 6370029383145960073, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: contents.Array.data[2].amount
@@ -403,6 +403,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: -5287795101460196425}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2718281828459045235}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
 --- !u!1 &924064630755534763 stripped
 GameObject:
@@ -578,11 +581,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Player
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!4 &8027223328707039298 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-  m_PrefabInstance: {fileID: 6032461996145085491}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2718281828459045235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,4 +593,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a9c3e7d21b6480fa4d2c8091e63b7f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnRecoil
-  recovery: 14
+  ShowTopMostFoldoutHeaderGroup: 1
+  recovery: 1
+--- !u!4 &8027223328707039298 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+  m_PrefabInstance: {fileID: 6032461996145085491}
+  m_PrefabAsset: {fileID: 0}
