@@ -31,6 +31,7 @@ namespace Shooter.Client.Interface
         private Label coins;
         private Inventory bag;
         private VisualElement ghost;
+        private VisualElement curtain;
         private int dragged;
         private bool draggedFromHands;
         private int pointer;
@@ -94,6 +95,8 @@ namespace Shooter.Client.Interface
 
         private void Close()
         {
+            CloseMenu();
+
             if (bag != null) bag.Changed -= Touch;
             bag = null;
 
@@ -111,6 +114,7 @@ namespace Shooter.Client.Interface
         private void Fill()
         {
             stale = false;
+            CloseMenu();
             grid.Clear();
             held.Clear();
 
@@ -166,7 +170,10 @@ namespace Shooter.Client.Interface
 
                 Pack(taken, spec, out int row, out int column);
 
-                grid.Add(Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot, false, false));
+                VisualElement thing = Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot, false, false);
+                if (spec.Usable) AddMenu(thing, index);
+
+                grid.Add(thing);
             }
 
             coins.text = money.ToString();
@@ -325,6 +332,56 @@ namespace Shooter.Client.Interface
 
             if (held.worldBound.Contains(at) && !draggedFromHands) bag.EquipRpc(dragged);
             else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.NoSlot);
+        }
+
+        private void AddMenu(VisualElement thing, int index)
+        {
+            thing.RegisterCallback<PointerDownEvent>(down =>
+            {
+                if (down.button != 1 || ghost != null) return;
+
+                OpenMenu(down.position, index);
+                down.StopPropagation();
+            });
+        }
+
+        private void OpenMenu(Vector2 at, int index)
+        {
+            CloseMenu();
+
+            curtain = new VisualElement();
+            curtain.AddToClassList("menu-curtain");
+            curtain.RegisterCallback<PointerDownEvent>(down =>
+            {
+                if (down.target == curtain) CloseMenu();
+            });
+
+            var menu = new VisualElement();
+            menu.AddToClassList("context-menu");
+
+            Vector2 local = window.WorldToLocal(at);
+            menu.style.left = local.x;
+            menu.style.top = local.y;
+
+            var use = new Button(() =>
+            {
+                if (bag != null) bag.UseStackableRpc(index);
+
+                CloseMenu();
+            }) { text = "Использовать" };
+            use.AddToClassList("context-menu__item");
+            menu.Add(use);
+
+            curtain.Add(menu);
+            window.Add(curtain);
+        }
+
+        private void CloseMenu()
+        {
+            if (curtain == null) return;
+
+            curtain.RemoveFromHierarchy();
+            curtain = null;
         }
 
         private static VisualElement Slot(ItemSpec spec, string fallback, bool holding, bool equipable)

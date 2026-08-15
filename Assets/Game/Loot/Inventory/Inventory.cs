@@ -172,6 +172,32 @@ namespace Shooter.Game.Loot
             Equip(slot);
         }
 
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void UseStackableRpc(int index)
+        {
+            ItemCatalog catalog = Catalog;
+            if (catalog == null || index < 0 || index >= catalog.Count) return;
+
+            if (catalog.At(index) is not StackableItemSpec spec || !spec.Usable)
+            {
+                Log.Info($"Entity {name} can not use item {index}: it is not a usable stackable");
+                return;
+            }
+
+            if (RemoveStackable(spec, 1, InventoryOnConflict.Rollback) == 0)
+            {
+                Log.Info($"Entity {name} has no {spec.Key} to use");
+                return;
+            }
+
+            foreach (ItemEffect effect in spec.Effects)
+            {
+                if (effect != null) effect.Apply(gameObject);
+            }
+
+            Log.Info($"Entity {name} used one {spec.Key}");
+        }
+
         public UniqueItem Equipped()
         {
             return At(equippedSlot.Value);
