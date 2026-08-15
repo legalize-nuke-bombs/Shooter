@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Shooter.Game.Body;
 using UnityEngine;
 
 namespace Shooter.Game.Loot
@@ -7,8 +8,11 @@ namespace Shooter.Game.Loot
     public class StackableItemSpec : ItemSpec
     {
         [SerializeField] private ItemEffect[] effects = { };
+        [SerializeField] private SoundSpec useSound;
 
         public IReadOnlyList<ItemEffect> Effects => effects;
+
+        public SoundSpec UseSound => useSound;
 
         public bool Usable => effects != null && effects.Length > 0;
     }
