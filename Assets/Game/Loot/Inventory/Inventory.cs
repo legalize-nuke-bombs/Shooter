@@ -195,6 +195,8 @@ namespace Shooter.Game.Loot
                 if (effect != null) effect.Apply(gameObject);
             }
 
+            if (spec.UseSound != null && TryGetComponent(out Speaker speaker)) speaker.Play(spec.UseSound);
+
             Log.Info($"Entity {name} used one {spec.Key}");
         }
 
