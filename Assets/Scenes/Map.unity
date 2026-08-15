@@ -3971,6 +3971,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Integrity
       objectReference: {fileID: 0}
+    - target: {fileID: 2572390830499450415, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4613503650374105542, guid: db551c84fde91be42b0d959659a3f6fe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 34.05806
