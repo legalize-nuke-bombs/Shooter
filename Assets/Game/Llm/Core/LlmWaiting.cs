@@ -13,6 +13,21 @@ namespace Shooter.Game.Llm
 
         public bool Any => pending.Count > 0;
 
+        public List<long> Ids()
+        {
+            var ids = new List<long>();
+            foreach (long id in pending.Keys)
+            {
+                ids.Add(id);
+            }
+            return ids;
+        }
+
+        public bool IsWaiting(long id)
+        {
+            return pending.ContainsKey(id);
+        }
+
         private void Awake()
         {
             history = GetComponent<LlmHistory>();
