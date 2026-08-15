@@ -45,7 +45,7 @@ namespace Shooter.Game.Llm.LookAtWanderer
                 throw new ArgumentException($"Failed to find wanderer {wandererId}");
             }
 
-            return $"Wanderer {wandererId} state\n:" + digester.Of(wanderer.gameObject, DigestionDetail.Full);
+            return $"Wanderer {wandererId} state:\n" + digester.Of(wanderer.gameObject, DigestionDetail.Full);
         }
     }
 }
