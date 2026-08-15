@@ -16,7 +16,7 @@ MonoBehaviour:
   clips:
   - {fileID: 8300000, guid: 21a95f4322b54192a5cf913a7e46b309, type: 3}
   volume: 0.6
-  rolloff: 0
-  minDistance: 8
-  maxDistance: 100
+  rolloff: 1
+  minDistance: 2
+  maxDistance: 40
   pitchVariation: 0.05
