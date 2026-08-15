@@ -18,3 +18,5 @@ MonoBehaviour:
   model: {fileID: 5259299800716398628, guid: bf3411e3b666f18429007662fef6c18d, type: 3}
   icon: {fileID: 11400000, guid: a4915dc5353b4554a10695f592418dd7, type: 2}
   cells: {x: 1, y: 1}
+  effects:
+  - {fileID: 11400000, guid: af6b46a8027c4ebcb9d27c3fc48a05aa, type: 2}
