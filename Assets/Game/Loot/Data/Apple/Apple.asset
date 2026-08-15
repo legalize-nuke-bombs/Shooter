@@ -20,3 +20,4 @@ MonoBehaviour:
   cells: {x: 1, y: 1}
   effects:
   - {fileID: 11400000, guid: af6b46a8027c4ebcb9d27c3fc48a05aa, type: 2}
+  useSound: {fileID: 11400000, guid: af66139ae34989043b05d65ce1cdb2d1, type: 2}
