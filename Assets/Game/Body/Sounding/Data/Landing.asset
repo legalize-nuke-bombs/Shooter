@@ -19,7 +19,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ab22afb67bae2e7a2546be7dfa0c0d06, type: 3}
   - {fileID: 8300000, guid: 2f596b8552aad31b24d9c840cc762ee7, type: 3}
   volume: 0.20
-  rolloff: 0
-  minDistance: 2
-  maxDistance: 30
+  rolloff: 1
+  minDistance: 1
+  maxDistance: 20
   pitchVariation: 0.05
