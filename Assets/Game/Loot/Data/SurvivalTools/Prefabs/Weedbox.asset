@@ -21,4 +21,4 @@ MonoBehaviour:
   effects:
   - {fileID: 11400000, guid: 6d549e7f291ccce4b8e529e34ea317c9, type: 2}
   - {fileID: 11400000, guid: 173dcffcc5bc1f34cb7276b13dcef6b0, type: 2}
-  useSound: {fileID: 0}
+  useSound: {fileID: 11400000, guid: 5ea340f8a85b498ebefbaf73d91d23af, type: 2}

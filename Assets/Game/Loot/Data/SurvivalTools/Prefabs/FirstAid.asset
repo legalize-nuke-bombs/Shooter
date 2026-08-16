@@ -20,4 +20,4 @@ MonoBehaviour:
   promptDescription: First aid kit
   effects:
   - {fileID: 11400000, guid: 0129bb08baf600044980477d11ee657a, type: 2}
-  useSound: {fileID: 0}
+  useSound: {fileID: 11400000, guid: e8c8b05dcd7e49bca59d4f9cdf6c6735, type: 2}
