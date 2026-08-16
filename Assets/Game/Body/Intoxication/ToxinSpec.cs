@@ -7,10 +7,10 @@ namespace Shooter.Game.Body
     public class ToxinSpec : Spec
     {
         [SerializeField] private float halfLife;
-        [SerializeField] private PerceptionEffect[] perceptionEffects;
+        [SerializeField] private PerceptionEffectSpec[] perceptionEffects;
 
         public float HalfLife => halfLife;
 
-        public PerceptionEffect[] PerceptionEffects => perceptionEffects;
+        public PerceptionEffectSpec[] PerceptionEffects => perceptionEffects;
     }
 }
