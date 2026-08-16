@@ -2,6 +2,6 @@
 {
     public class ExploreItemsArguments
     {
-        public string[] ItemIds { get; }
+        public string[] ItemIds { get; set; }
     }
 }

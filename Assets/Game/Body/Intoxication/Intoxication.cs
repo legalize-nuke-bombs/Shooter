@@ -20,7 +20,7 @@ namespace Shooter.Game.Body
 
         public double Level(ToxinSpec toxin)
         {
-            return levels[indexes[toxin.name]];
+            return levels[indexes[toxin.Id]];
         }
 
         private void Awake()
@@ -93,7 +93,7 @@ namespace Shooter.Game.Body
                     continue;
                 }
                 ToxinSpec toxin = toxins.Of(toxinId);
-                sb.Append(toxin.Id + $" {levels[toxinIndex]} / 100. ");
+                sb.Append(toxin.Id + $" {levels[toxinIndex]:F0} / 100. ");
             }
 
             return sb.Length == 0

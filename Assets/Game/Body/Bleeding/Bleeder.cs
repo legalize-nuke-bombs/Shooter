@@ -44,7 +44,7 @@ namespace Shooter.Game.Body.Bleeding
                 return;
             }
 
-            level.Value -= dt * recoverySpeed;
+            level.Value = Math.Max(0, level.Value - dt * recoverySpeed);
 
             health.Damage(level.Value * damageCoefficient * dt, null, true);
         }
@@ -70,7 +70,7 @@ namespace Shooter.Game.Body.Bleeding
 
             return level.Value < 0.01f
                 ? "No bleeding"
-                : $"Bleeding {level.Value} / 100";
+                : $"Bleeding {level.Value:F0} / 100";
         }
 
         public DigestionPriority Priority => DigestionPriority.High;
