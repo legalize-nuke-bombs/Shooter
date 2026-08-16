@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 4715244483815921385}
   - component: {fileID: 8352106744219038612}
   - component: {fileID: 4327895610234871652}
+  - component: {fileID: 6615536903480177054}
+  - component: {fileID: 8440111901261030032}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -49,13 +51,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2252291470
+  GlobalObjectIdHash: 2742469126
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  m_InScenePlaced: 1
+  m_InScenePlaced: 0
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
@@ -76,13 +78,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Environment
   ShowTopMostFoldoutHeaderGroup: 1
+  profiler: {fileID: 0}
   corpse: {fileID: 6108037598719724321, guid: dba187afb26374400bd1ba8b38212115, type: 3}
   items: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
   icons: {fileID: 11400000, guid: 8658d1e4d822487690a43c3f6b39ba67, type: 2}
   notifications: {fileID: 11400000, guid: 9c4087a945ff46c7949660a69b86081d, type: 2}
   sounds: {fileID: 11400000, guid: 2656eaa17af145fd9e66f3e31217db62, type: 2}
+  earSounds: {fileID: 11400000, guid: 5f9cd9f081ac4dd2b3addb48b8ce88c4, type: 2}
   skins: {fileID: 11400000, guid: 9f1c4e7a3b5d40928a6e0c3d7b8f2456, type: 2}
   names: {fileID: 11400000, guid: 9fe339c3786f459680eaba2c2bfaa09c, type: 2}
+  toxins: {fileID: 11400000, guid: d6a7408b34bc69e479d734a7e8e2e066, type: 2}
 --- !u!114 &2934016132358497645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,6 +104,12 @@ MonoBehaviour:
   latitude: 55.75
   declination: 12.33
   solarNoonHours: 12.75
+  beginningYear: 2026
+  beginningMonth: 9
+  beginningDay: 1
+  beginningHour: 22
+  beginningMinutes: 0
+  beginningSeconds: 0
 --- !u!114 &4715244483815921385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,7 +133,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8f95533f978e8e46a00717cceaea45f, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Ambience
   layers:
   - loop: {fileID: 8300000, guid: 660790bb19a97eb4581a05d90c81f369, type: 3}
@@ -157,7 +168,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c37380cbfe4ab382559f4cf9a1c106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.BulletHoles
+  ShowTopMostFoldoutHeaderGroup: 1
   material: {fileID: 2100000, guid: fe92059f79154bc1a2853ba6192f5d9b, type: 2}
   capacity: 1024
   diameter: 0.08
   depth: 0.2
+--- !u!114 &6615536903480177054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047279815154395446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae900e1bd00c3447abe4d1a409abda0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Registers
+--- !u!114 &8440111901261030032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047279815154395446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a208a189140881409e9e67e87e02f6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Sweeper
+  interval: 60
