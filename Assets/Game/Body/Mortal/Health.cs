@@ -1,5 +1,5 @@
 using Shooter.Game.Body.Bleeding;
-using Shooter.Game.Relationship;
+using Shooter.Game.AI;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;

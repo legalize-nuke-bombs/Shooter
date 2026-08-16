@@ -1,4 +1,4 @@
-using Shooter.Game.Relationship;
+using Shooter.Game.AI;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
