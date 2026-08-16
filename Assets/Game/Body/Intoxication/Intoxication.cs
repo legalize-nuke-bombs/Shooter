@@ -71,6 +71,11 @@ namespace Shooter.Game.Body.Intoxication
         [SerializeField] private float digestThreshold = 10f;
         public string Digest(DigestionDetail detail)
         {
+            if (detail == DigestionDetail.Brief)
+            {
+                return null;
+            }
+
             var sb = new StringBuilder();
 
             foreach (string toxinName in indexes.Keys)
