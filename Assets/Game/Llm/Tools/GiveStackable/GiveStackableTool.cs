@@ -26,7 +26,7 @@ The recipient will automatically receive a notification.
 
         protected override string Execute(GiveStackableArguments arguments)
         {
-            ItemSpec item = Environment.Current.Items.FindByPromptName(arguments.Item);
+            ItemSpec item = Environment.Current.Items.Of(arguments.Item);
             if (item == null) return $"There is no item named {arguments.Item}";
 
             if (item is not StackableItemSpec stackable)

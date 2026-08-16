@@ -4,7 +4,6 @@ using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Llm;
 using Shooter.Logging;
-using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
@@ -230,7 +229,7 @@ namespace Shooter.Game.Loot
             StringBuilder digest = new StringBuilder();
             ItemSpec held = EquippedSpec;
 
-            if (held != null) digest.Append("Holding: ").Append(held.PromptName).Append(" (slot " + EquippedSlot + ")");
+            if (held != null) digest.Append("Holding: ").Append(held.Id).Append(" (slot " + EquippedSlot + ")");
 
             if (detail != DigestionDetail.Full) return digest.Length == 0 ? null : digest.ToString();
 
@@ -242,7 +241,7 @@ namespace Shooter.Game.Loot
 
                 ItemSpec spec = catalog == null ? null : catalog.At(index);
 
-                Line(digest).Append(spec == null ? "unknown" : spec.PromptName)
+                Line(digest).Append(spec == null ? "unknown" : spec.Id)
                     .Append(" x ")
                     .Append(stackAmounts[index]);
             }
@@ -254,7 +253,7 @@ namespace Shooter.Game.Loot
 
                 ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
 
-                Line(digest).Append((spec == null ? item.SpecId : spec.PromptName) + " (slot " + index + ")");
+                Line(digest).Append((spec == null ? item.SpecId : spec.Id) + " (slot " + index + ")");
             }
 
             return digest.Length == 0 ? null : digest.ToString();

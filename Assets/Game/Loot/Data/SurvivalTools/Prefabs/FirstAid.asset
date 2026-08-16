@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: first-aid
   title: "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
-  promptName: First aid kit
   model: {fileID: 1987713744733760, guid: b55df95fa6211964e8ad561501250fac, type: 3}
   icon: {fileID: 11400000, guid: 4e8c73df9a659b043ac7ca98a4600a58, type: 2}
   cells: {x: 1, y: 1}
+  promptDescription: First aid kit
   effects:
   - {fileID: 11400000, guid: 0129bb08baf600044980477d11ee657a, type: 2}
   useSound: {fileID: 0}

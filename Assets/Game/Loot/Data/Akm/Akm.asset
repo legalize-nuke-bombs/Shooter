@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.FirearmSpec
   id: akm
   title: "\u0410\u041A\u041C"
-  promptName: AKM
   model: {fileID: 7492422559979336910, guid: a0e48e2f4140fa44ca545664cfbf5726, type: 3}
   icon: {fileID: 11400000, guid: dc2ef63794314c829b091e3628876c5c, type: 2}
   cells: {x: 4, y: 2}
+  promptDescription: Rifle AKM
   equipable: 1
   magazineSize: 30
   ammo: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: bread
   title: "\u0425\u043B\u0435\u0431"
-  promptName: Bread
   model: {fileID: 6093391673720001028, guid: 2475a01d6f14eaf48bd688382a900e55, type: 3}
   icon: {fileID: 11400000, guid: c78fa605bad546c7945ab4cdd95bc907, type: 2}
   cells: {x: 1, y: 1}
+  promptDescription: Bread
   effects:
   - {fileID: 11400000, guid: 42c0150fe0f54c809afb49cc7b1eed46, type: 2}
   useSound: {fileID: 11400000, guid: 44b7ab1c4aa43af40bcbddb4be53a05e, type: 2}

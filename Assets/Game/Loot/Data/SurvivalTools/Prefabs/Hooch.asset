@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: hooch
   title: "\u0421\u0430\u043C\u043E\u0433\u043E\u043D"
-  promptName: Hooch
   model: {fileID: 1216505430168376, guid: 57e3542e6c16dfd40972c0b1b0899afb, type: 3}
   icon: {fileID: 11400000, guid: d2455b761eae7ed499339750c2b320cc, type: 2}
   cells: {x: 1, y: 1}
+  promptDescription: Hooch
   effects:
   - {fileID: 11400000, guid: cd5ba9ed4f68c4c47bc0326f0093ba59, type: 2}
   useSound: {fileID: 0}

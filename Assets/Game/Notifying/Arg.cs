@@ -71,7 +71,7 @@ namespace Shooter.Game.Notifying
 
             if (spec == null) return Value;
 
-            return prompted ? spec.PromptName : spec.Title;
+            return prompted ? spec.Id.ToString() : spec.Title;
         }
     }
 }

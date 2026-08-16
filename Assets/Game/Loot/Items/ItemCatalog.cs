@@ -29,11 +29,6 @@ namespace Shooter.Game.Loot
             return null;
         }
 
-        public ItemSpec Spec(FixedString32Bytes id)
-        {
-            return Of(id);
-        }
-
         public ItemSpec Spec(string id)
         {
             return Of(new FixedString32Bytes(id));
@@ -42,16 +37,6 @@ namespace Shooter.Game.Loot
         public FirearmSpec Firearm(string id)
         {
             return Of(new FixedString32Bytes(id)) as FirearmSpec;
-        }
-
-        public ItemSpec FindByPromptName(string promptName)
-        {
-            ItemSpec found = Find(item => item.PromptName == promptName);
-
-            if (found != null && Find(item => item != found && item.PromptName == promptName) != null)
-                Log.Warn($"Catalog {name} holds several items under prompt name {promptName}");
-
-            return found;
         }
     }
 }
