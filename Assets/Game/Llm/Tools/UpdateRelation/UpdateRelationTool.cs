@@ -28,7 +28,7 @@ If you want to attack a character, change the attitude to zero.";
         protected override string Execute(UpdateRelationArguments arguments)
         {
             int old = characterRelation.Amount(arguments.TargetId);
-            characterRelation.SetAmount(arguments.TargetId, arguments.Amount, arguments.Reason);
+            characterRelation.SetAmount(arguments.TargetId, arguments.Amount);
 
             return $"Your attitude to {arguments.TargetId}: {old} -> {arguments.Amount}";
         }

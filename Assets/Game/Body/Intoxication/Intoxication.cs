@@ -17,6 +17,11 @@ namespace Shooter.Game.Body.Intoxication
         private readonly NetworkList<double> levels = new NetworkList<double>();
         private readonly Dictionary<string, int> indexes = new Dictionary<string, int>();
 
+        public double Level(ToxinSpec toxin)
+        {
+            return levels[indexes[toxin.name]];
+        }
+
         private void Awake()
         {
             toxins = Environment.Current.Toxins;
@@ -40,6 +45,7 @@ namespace Shooter.Game.Body.Intoxication
         [SerializeField] private float timerInterval = 0.25f;
         private void Update()
         {
+            if (!IsServer) return;
             timer += Time.deltaTime;
             if (timer >= timerInterval)
             {

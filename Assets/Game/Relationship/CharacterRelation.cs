@@ -35,11 +35,11 @@ namespace Shooter.Game.Relationship
             return amounts.GetValueOrDefault(characterId, defaultAmount);
         }
 
-        public void SetAmount(long characterId, int amount, string reason)
+        public void SetAmount(long characterId, int amount)
         {
             int currentAmount = Amount(characterId);
 
-            Log.Info($"Entity {name} SetAmount request: character id {characterId} amount {currentAmount} -> {amount} reason {reason}");
+            Log.Info($"Entity {name} SetAmount request: character id {characterId} amount {currentAmount} -> {amount}");
 
             if (amount < 0 || amount > 100)
             {
@@ -80,9 +80,9 @@ namespace Shooter.Game.Relationship
                 .With("after", after));
         }
 
-        public void DecreaseAmount(long characterId, int amount, string reason)
+        public void DecreaseAmount(long characterId, int amount)
         {
-            SetAmount(characterId, Math.Max(0, Amount(characterId) - amount), reason);
+            SetAmount(characterId, Math.Max(0, Amount(characterId) - amount));
         }
 
         [SerializeField] [Range(0, 100)] private int enemyThreshold = 0;

@@ -1,3 +1,4 @@
+using Shooter.Game.Body.Bleeding;
 using Shooter.Game.Relationship;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -13,11 +14,13 @@ namespace Shooter.Game.Body
         [SerializeField] private EarSoundSpec hurtSound;
 
         private CharacterRelation characterRelation;
+        private Bleeder bleeder;
         private EarSpeaker earSpeaker;
 
         protected virtual void Awake()
         {
             characterRelation = GetComponent<CharacterRelation>();
+            bleeder = GetComponent<Bleeder>();
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
@@ -27,13 +30,13 @@ namespace Shooter.Game.Body
         }
         public void RegisterAction(ActionType type, float dt) { }
 
-        public abstract int Hp { get; }
+        public abstract double Hp { get; }
 
-        public abstract int MaxHp { get; }
+        public abstract double MaxHp { get; }
 
         public abstract bool Alive { get; }
 
-        public DamageResult Damage(int amount, long? attackerId)
+        public DamageResult Damage(double amount, long? attackerId, bool silent = false)
         {
             if (!IsServer || !Alive || amount <= 0)
             {
@@ -46,24 +49,32 @@ namespace Shooter.Game.Body
             DamageRaw(amount);
 
             if (!Alive) Die();
-            else earSpeaker.Play(hurtSound);
+            else if (!silent) earSpeaker.Play(hurtSound);
 
             var result = new DamageResult()
             {
                 Murder = !Alive
             };
 
-            if (Alive && characterRelation != null && attackerId != null)
+            if (Alive && !silent)
             {
-                characterRelation.DecreaseAmount(attackerId.Value, amount, $"{attackerId.Value} dealt {amount} damage");
+                if (characterRelation != null && attackerId != null)
+                {
+                    characterRelation.DecreaseAmount(attackerId.Value, (int)amount);
+                }
+
+                if (bleeder != null)
+                {
+                    bleeder.Bleed(2 * amount);
+                }
             }
 
             return result;
         }
 
-        protected abstract void DamageRaw(int amount);
+        protected abstract void DamageRaw(double amount);
 
-        public abstract void Heal(int amount);
+        public abstract void Heal(double amount);
 
         public abstract void Resurrect();
 
@@ -72,9 +83,9 @@ namespace Shooter.Game.Body
             return Alive ? $"Health: {Hp}/{MaxHp}" : "Dead";
         }
 
-        public DigestionPriority Priority => DigestionPriority.Medium;
+        public DigestionPriority Priority => DigestionPriority.High;
 
-        protected void Die()
+        private void Die()
         {
             Log.Info($"Entity {name} died");
 
