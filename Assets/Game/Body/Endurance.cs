@@ -2,6 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 using Shooter.Game.Llm;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Body
 {
@@ -56,7 +57,8 @@ namespace Shooter.Game.Body
 
         private void Update()
         {
-            amount.Value = Mathf.Min(amount.Value + Time.deltaTime * recoverySpeed, MaxAmount);
+            float dt = Time.deltaTime * Environment.Current.Clock.Scale;
+            amount.Value = Mathf.Min(amount.Value + dt * recoverySpeed, MaxAmount);
 
             if (amount.Value >= sprintThreshold) exhausted = false;
         }

@@ -48,7 +48,7 @@ namespace Shooter.Game.Body
         private void Update()
         {
             if (!IsServer) return;
-            timer += Time.deltaTime;
+            timer += Time.deltaTime * Environment.Current.Clock.Scale;
             if (timer >= timerInterval)
             {
                 Tick(timer);

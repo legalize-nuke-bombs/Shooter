@@ -3,6 +3,7 @@ using Shooter.Game.Llm;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Body.Bleeding
 {
@@ -27,7 +28,7 @@ namespace Shooter.Game.Body.Bleeding
         private void Update()
         {
             if (!IsServer) return;
-            timer += Time.deltaTime;
+            timer += Time.deltaTime * Environment.Current.Clock.Scale;
             if (timer >= timerInterval)
             {
                 Tick(timer);

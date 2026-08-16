@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using Shooter.Game.Llm;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
@@ -41,7 +42,7 @@ namespace Shooter.Game.Body
 
         private void Update()
         {
-            Spend(idleCost * Time.deltaTime);
+            Spend(idleCost * Time.deltaTime * Environment.Current.Clock.Scale);
         }
 
         public bool CanPerform(ActionType type, float dt)
