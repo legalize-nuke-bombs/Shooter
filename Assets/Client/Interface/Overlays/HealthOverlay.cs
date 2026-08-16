@@ -30,7 +30,7 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            int hp = (int)own.Hp;
+            int hp = (int)System.Math.Ceiling(own.Hp);
             if (hp == shown) return;
 
             shown = hp;
