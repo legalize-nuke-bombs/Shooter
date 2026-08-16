@@ -9,7 +9,7 @@ using Shooter.Logging;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Relationship
+namespace Shooter.Game.AI
 {
     public class CharacterRelation : MonoBehaviour, IDigestible
     {

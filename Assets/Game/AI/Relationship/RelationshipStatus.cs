@@ -1,4 +1,4 @@
-﻿namespace Shooter.Game.Relationship
+﻿namespace Shooter.Game.AI
 {
     public enum RelationshipStatus
     {
