@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
+  m_Name: AIRelationship
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
+  content: 'You have your own attitude towards every character, expressed by a number
+    from 0 to 100: enemy, neutral, friend.
+
+    You automatically attack characters
+    you consider enemies.
+
+    Your attitude drops automatically when somebody attacks
+    you or your friends.'
