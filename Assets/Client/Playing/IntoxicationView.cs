@@ -8,24 +8,23 @@ using UnityEngine;
 namespace Shooter.Client.Playing
 {
     [RequireComponent(typeof(Intoxication))]
-    public class IntoxicationView : NetworkBehaviour, IPerceiver
+    [RequireComponent(typeof(PerceptionComposer))]
+    public class IntoxicationView : NetworkBehaviour
     {
         private Intoxication intoxication;
+        private PerceptionComposer composer;
         private readonly Dictionary<ToxinSpec, List<PerceptionEffect>> trips =
             new Dictionary<ToxinSpec, List<PerceptionEffect>>();
-
-        public Vector3 CameraSway { get; set; }
 
         private void Awake()
         {
             intoxication = GetComponent<Intoxication>();
+            composer = GetComponent<PerceptionComposer>();
         }
 
         private void Update()
         {
             if (!IsSpawned || !IsOwner) return;
-
-            CameraSway = Vector3.zero;
 
             ToxinCatalog toxins = Environment.Current.Toxins;
 
@@ -57,7 +56,6 @@ namespace Shooter.Client.Playing
                     effect.End();
 
             trips.Clear();
-            CameraSway = Vector3.zero;
         }
 
         private List<PerceptionEffect> Begin(ToxinSpec toxin)
@@ -68,7 +66,7 @@ namespace Shooter.Client.Playing
             {
                 if (spec == null) continue;
 
-                trip.Add(spec.Create(this));
+                trip.Add(spec.Create(composer));
             }
 
             return trip;
