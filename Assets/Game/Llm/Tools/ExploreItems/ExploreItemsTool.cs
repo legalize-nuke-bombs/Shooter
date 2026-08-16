@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Text;
+﻿using System.Text;
 using Shooter.Game.Loot;
 using Shooter.Game.World;
 
@@ -11,7 +10,7 @@ namespace Shooter.Game.Llm.ExploreItems
 
         public override string Description =>
             @"
-Use this tool to get detailed item descriptions based on their IDs.
+Use this tool to examine the item by its ID.
 You can process any number of IDs at once.
 ";
 

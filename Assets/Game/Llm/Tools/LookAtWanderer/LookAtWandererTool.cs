@@ -25,7 +25,10 @@ namespace Shooter.Game.Llm.LookAtWanderer
         public override string Name => "look_at_wanderer";
 
         public override string Description =>
-            "Look at wanderer who is talking to you: their health, stamina, belongings, etc.";
+            @"
+Look at wanderer who is talking to you: their health, stamina, belongings, etc.
+ALWAYS use this tool when a wanderer starts a conversation with you.
+";
 
         public override bool Available => waiting.Any;
 
