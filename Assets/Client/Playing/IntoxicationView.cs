@@ -10,8 +10,8 @@ namespace Shooter.Client.Playing
     public class IntoxicationView : NetworkBehaviour
     {
         private Intoxication intoxication;
-        private readonly Dictionary<ToxinSpec, List<PerceptionEffectInstance>> trips =
-            new Dictionary<ToxinSpec, List<PerceptionEffectInstance>>();
+        private readonly Dictionary<ToxinSpec, List<PerceptionEffect>> trips =
+            new Dictionary<ToxinSpec, List<PerceptionEffect>>();
         private readonly List<ToxinSpec> ended = new List<ToxinSpec>();
 
         public Vector3 CameraSway { get; set; }
@@ -40,13 +40,13 @@ namespace Shooter.Client.Playing
                     continue;
                 }
 
-                if (!trips.TryGetValue(toxin, out List<PerceptionEffectInstance> trip))
+                if (!trips.TryGetValue(toxin, out List<PerceptionEffect> trip))
                 {
                     trip = Begin(toxin);
                     trips.Add(toxin, trip);
                 }
 
-                foreach (PerceptionEffectInstance effect in trip) effect.Tick(strength);
+                foreach (PerceptionEffect effect in trip) effect.Tick(strength);
             }
 
             foreach (ToxinSpec toxin in ended) End(toxin);
@@ -55,23 +55,23 @@ namespace Shooter.Client.Playing
 
         public override void OnNetworkDespawn()
         {
-            foreach (List<PerceptionEffectInstance> trip in trips.Values)
-                foreach (PerceptionEffectInstance effect in trip)
+            foreach (List<PerceptionEffect> trip in trips.Values)
+                foreach (PerceptionEffect effect in trip)
                     effect.End();
 
             trips.Clear();
             CameraSway = Vector3.zero;
         }
 
-        private static List<PerceptionEffectInstance> Begin(ToxinSpec toxin)
+        private static List<PerceptionEffect> Begin(ToxinSpec toxin)
         {
-            var trip = new List<PerceptionEffectInstance>();
+            var trip = new List<PerceptionEffect>();
 
-            foreach (PerceptionEffect effect in toxin.PerceptionEffects)
+            foreach (PerceptionEffectSpec spec in toxin.PerceptionEffects)
             {
-                if (effect == null) continue;
+                if (spec == null) continue;
 
-                trip.Add(effect.Begin());
+                trip.Add(spec.Create());
             }
 
             return trip;
@@ -79,7 +79,7 @@ namespace Shooter.Client.Playing
 
         private void End(ToxinSpec toxin)
         {
-            foreach (PerceptionEffectInstance effect in trips[toxin]) effect.End();
+            foreach (PerceptionEffect effect in trips[toxin]) effect.End();
 
             trips.Remove(toxin);
         }

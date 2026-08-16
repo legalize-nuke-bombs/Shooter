@@ -40,6 +40,7 @@ namespace Shooter.Game.Body
             int index = indexes[toxin.Id];
             amount = Math.Max(0, amount);
             levels[index] = Math.Min(100, levels[index] + amount);
+            Log.Info($"Entity {name} got {toxin.name} {amount}, now {levels[index]}");
         }
 
         private float timer;
