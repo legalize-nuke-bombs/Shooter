@@ -1,8 +1,6 @@
-using Shooter.Client.Playing;
-using Shooter.Game.Body;
 using UnityEngine;
 
-namespace Shooter.Client.Perception
+namespace Shooter.Game.Body.Perception
 {
     public sealed class CameraSway : PerceptionEffect
     {
@@ -10,13 +8,13 @@ namespace Shooter.Client.Perception
         private const float NodFrequencyShare = 0.7f;
 
         private readonly CameraSwaySpec spec;
-        private readonly IntoxicationView view;
+        private readonly IPerceiver perceiver;
         private float felt;
 
-        public CameraSway(CameraSwaySpec spec)
+        public CameraSway(CameraSwaySpec spec, IPerceiver perceiver)
         {
             this.spec = spec;
-            view = OwnPlayer.Find<IntoxicationView>();
+            this.perceiver = perceiver;
         }
 
         public override void Tick(float strength)
@@ -27,7 +25,7 @@ namespace Shooter.Client.Perception
             float roll = Mathf.Sin(phase) * spec.SwayDegrees * felt;
             float nod = Mathf.Sin(phase * NodFrequencyShare) * spec.SwayDegrees * NodShare * felt;
 
-            if (view != null) view.CameraSway += new Vector3(nod, 0f, roll);
+            perceiver.CameraSway += new Vector3(nod, 0f, roll);
         }
 
         public override void End()

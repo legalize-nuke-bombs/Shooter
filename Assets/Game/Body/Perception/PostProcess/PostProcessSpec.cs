@@ -1,8 +1,7 @@
-using Shooter.Game.Body;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Shooter.Client.Perception
+namespace Shooter.Game.Body.Perception
 {
     [CreateAssetMenu(menuName = "Shooter/Perception/Post Process", fileName = "PostProcess")]
     public class PostProcessSpec : PerceptionEffectSpec
@@ -14,7 +13,7 @@ namespace Shooter.Client.Perception
 
         public float SettleSpeed => settleSpeed;
 
-        public override PerceptionEffect Create()
+        public override PerceptionEffect Create(IPerceiver perceiver)
         {
             return new PostProcess(this);
         }

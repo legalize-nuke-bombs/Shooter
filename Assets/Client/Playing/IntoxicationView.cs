@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Shooter.Game.Body;
+using Shooter.Game.Body.Perception;
 using Shooter.Game.World;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,12 +8,11 @@ using UnityEngine;
 namespace Shooter.Client.Playing
 {
     [RequireComponent(typeof(Intoxication))]
-    public class IntoxicationView : NetworkBehaviour
+    public class IntoxicationView : NetworkBehaviour, IPerceiver
     {
         private Intoxication intoxication;
         private readonly Dictionary<ToxinSpec, List<PerceptionEffect>> trips =
             new Dictionary<ToxinSpec, List<PerceptionEffect>>();
-        private readonly List<ToxinSpec> ended = new List<ToxinSpec>();
 
         public Vector3 CameraSway { get; set; }
 
@@ -36,7 +36,7 @@ namespace Shooter.Client.Playing
 
                 if (strength <= 0f)
                 {
-                    if (trips.ContainsKey(toxin)) ended.Add(toxin);
+                    if (trips.ContainsKey(toxin)) End(toxin);
                     continue;
                 }
 
@@ -48,9 +48,6 @@ namespace Shooter.Client.Playing
 
                 foreach (PerceptionEffect effect in trip) effect.Tick(strength);
             }
-
-            foreach (ToxinSpec toxin in ended) End(toxin);
-            ended.Clear();
         }
 
         public override void OnNetworkDespawn()
@@ -63,7 +60,7 @@ namespace Shooter.Client.Playing
             CameraSway = Vector3.zero;
         }
 
-        private static List<PerceptionEffect> Begin(ToxinSpec toxin)
+        private List<PerceptionEffect> Begin(ToxinSpec toxin)
         {
             var trip = new List<PerceptionEffect>();
 
@@ -71,7 +68,7 @@ namespace Shooter.Client.Playing
             {
                 if (spec == null) continue;
 
-                trip.Add(spec.Create());
+                trip.Add(spec.Create(this));
             }
 
             return trip;
