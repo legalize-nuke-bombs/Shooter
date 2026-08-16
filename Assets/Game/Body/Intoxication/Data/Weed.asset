@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Intoxication.ToxinSpec
   id: weed
   halfLife: 60
-  promptName: Weed
+  perceptionEffects:
+  - {fileID: 11400000, guid: 39741a5ae45e49a4a97345bdefb27c0e, type: 2}
