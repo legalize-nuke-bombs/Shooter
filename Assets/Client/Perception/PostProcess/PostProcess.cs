@@ -1,3 +1,4 @@
+using Shooter.Client.Playing;
 using Shooter.Game.Body;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -7,15 +8,13 @@ namespace Shooter.Client.Perception
     public sealed class PostProcess : PerceptionEffect
     {
         private readonly PostProcessSpec spec;
-        private readonly GameObject holder;
         private readonly Volume volume;
 
         public PostProcess(PostProcessSpec spec)
         {
             this.spec = spec;
 
-            holder = new GameObject($"Perception {spec.name}");
-            volume = holder.AddComponent<Volume>();
+            volume = OwnPlayer.Find<IntoxicationView>().gameObject.AddComponent<Volume>();
             volume.priority = 100;
             volume.weight = 0f;
             volume.sharedProfile = spec.Profile;
@@ -28,7 +27,7 @@ namespace Shooter.Client.Perception
 
         public override void End()
         {
-            Object.Destroy(holder);
+            Object.Destroy(volume);
         }
     }
 }
