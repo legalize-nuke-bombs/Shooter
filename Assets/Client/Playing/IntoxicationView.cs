@@ -8,18 +8,15 @@ using UnityEngine;
 namespace Shooter.Client.Playing
 {
     [RequireComponent(typeof(Intoxication))]
-    [RequireComponent(typeof(PerceptionComposer))]
     public class IntoxicationView : NetworkBehaviour
     {
         private Intoxication intoxication;
-        private PerceptionComposer composer;
         private readonly Dictionary<ToxinSpec, List<PerceptionEffect>> trips =
             new Dictionary<ToxinSpec, List<PerceptionEffect>>();
 
         private void Awake()
         {
             intoxication = GetComponent<Intoxication>();
-            composer = GetComponent<PerceptionComposer>();
         }
 
         private void Update()
@@ -66,7 +63,7 @@ namespace Shooter.Client.Playing
             {
                 if (spec == null) continue;
 
-                trip.Add(spec.Create(composer));
+                trip.Add(spec.Create());
             }
 
             return trip;
