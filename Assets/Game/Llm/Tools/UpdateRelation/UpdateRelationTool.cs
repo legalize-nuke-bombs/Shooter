@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(CharacterRelation))]
+    [RequireComponent(typeof(AICharacterRelation))]
     public sealed class UpdateRelationTool : LlmTool<UpdateRelationArguments>
     {
-        private CharacterRelation characterRelation;
+        private AICharacterRelation aiCharacterRelation;
 
         protected override void Awake()
         {
             base.Awake();
-            characterRelation = GetComponent<CharacterRelation>();
+            aiCharacterRelation = GetComponent<AICharacterRelation>();
         }
 
         public override string Name => "update_relation";
@@ -27,8 +27,8 @@ If you want to attack a character, change the attitude to zero.";
 
         protected override string Execute(UpdateRelationArguments arguments)
         {
-            int old = characterRelation.Amount(arguments.TargetId);
-            characterRelation.SetAmount(arguments.TargetId, arguments.Amount);
+            int old = aiCharacterRelation.Amount(arguments.TargetId);
+            aiCharacterRelation.SetAmount(arguments.TargetId, arguments.Amount);
 
             return $"Your attitude to {arguments.TargetId}: {old} -> {arguments.Amount}";
         }
