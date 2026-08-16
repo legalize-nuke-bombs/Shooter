@@ -1,8 +1,6 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Logging;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
@@ -32,12 +30,12 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            int hp = own.Hp;
+            int hp = (int)own.Hp;
             if (hp == shown) return;
 
             shown = hp;
             bar.style.display = DisplayStyle.Flex;
-            fill.style.width = new Length(100f * hp / own.MaxHp, LengthUnit.Percent);
+            fill.style.width = new Length(100f * hp / (int)own.MaxHp, LengthUnit.Percent);
         }
 
         protected override bool Bind(VisualElement root)

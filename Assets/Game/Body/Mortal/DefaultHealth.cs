@@ -8,13 +8,13 @@ namespace Shooter.Game.Body
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private int maxHp = 100;
+        [SerializeField] private double maxHp = 100;
 
-        private readonly NetworkVariable<int> hp = new NetworkVariable<int>();
+        private readonly NetworkVariable<double> hp = new NetworkVariable<double>();
 
-        public override int Hp => hp.Value;
+        public override double Hp => hp.Value;
 
-        public override int MaxHp => Mathf.Max(maxHp, 1);
+        public override double MaxHp => System.Math.Max(maxHp, 1.0d);
 
         public override bool Alive => hp.Value > 0;
 
@@ -25,17 +25,17 @@ namespace Shooter.Game.Body
             hp.Value = MaxHp;
         }
 
-        protected override void DamageRaw(int amount)
+        protected override void DamageRaw(double amount)
         {
-            hp.Value = Mathf.Max(hp.Value - amount, 0);
+            hp.Value = System.Math.Max(hp.Value - amount, 0);
             Log.Info($"Entity {name} took {amount} damage, hp now {hp.Value}/{MaxHp}");
         }
 
-        public override void Heal(int amount)
+        public override void Heal(double amount)
         {
             if (!IsServer || !Alive || amount <= 0) return;
 
-            hp.Value = Mathf.Min(hp.Value + amount, MaxHp);
+            hp.Value = System.Math.Min(hp.Value + amount, MaxHp);
             Log.Info($"Entity {name} healed {amount}, hp now {hp.Value}/{MaxHp}");
         }
 
