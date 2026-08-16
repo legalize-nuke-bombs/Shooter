@@ -10,8 +10,9 @@ namespace Shooter.Client.Playing
     public class IntoxicationView : NetworkBehaviour
     {
         private Intoxication intoxication;
-        private ToxinSpec dominant;
-        private readonly List<PerceptionEffectInstance> trip = new List<PerceptionEffectInstance>();
+        private readonly Dictionary<ToxinSpec, List<PerceptionEffectInstance>> trips =
+            new Dictionary<ToxinSpec, List<PerceptionEffectInstance>>();
+        private readonly List<ToxinSpec> ended = new List<ToxinSpec>();
 
         public Vector3 CameraSway { get; set; }
 
@@ -24,59 +25,63 @@ namespace Shooter.Client.Playing
         {
             if (!IsSpawned || !IsOwner) return;
 
-            ToxinSpec strongest = Strongest();
+            CameraSway = Vector3.zero;
 
-            if (strongest != dominant) Switch(strongest);
-
-            if (dominant == null) return;
-
-            float strength = (float)(intoxication.Level(dominant) / 100d);
-
-            foreach (PerceptionEffectInstance effect in trip) effect.Tick(strength);
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            Switch(null);
-        }
-
-        private ToxinSpec Strongest()
-        {
             ToxinCatalog toxins = Environment.Current.Toxins;
-
-            ToxinSpec strongest = null;
-            double highest = 0;
 
             for (int index = 0; index < toxins.Count; index++)
             {
                 ToxinSpec toxin = toxins.At(index);
-                double level = intoxication.Level(toxin);
+                float strength = (float)(intoxication.Level(toxin) / 100d);
 
-                if (level <= highest) continue;
+                if (strength <= 0f)
+                {
+                    if (trips.ContainsKey(toxin)) ended.Add(toxin);
+                    continue;
+                }
 
-                highest = level;
-                strongest = toxin;
+                if (!trips.TryGetValue(toxin, out List<PerceptionEffectInstance> trip))
+                {
+                    trip = Begin(toxin);
+                    trips.Add(toxin, trip);
+                }
+
+                foreach (PerceptionEffectInstance effect in trip) effect.Tick(strength);
             }
 
-            return strongest;
+            foreach (ToxinSpec toxin in ended) End(toxin);
+            ended.Clear();
         }
 
-        private void Switch(ToxinSpec next)
+        public override void OnNetworkDespawn()
         {
-            foreach (PerceptionEffectInstance effect in trip) effect.End();
-            trip.Clear();
+            foreach (List<PerceptionEffectInstance> trip in trips.Values)
+                foreach (PerceptionEffectInstance effect in trip)
+                    effect.End();
 
+            trips.Clear();
             CameraSway = Vector3.zero;
-            dominant = next;
+        }
 
-            if (next == null) return;
+        private static List<PerceptionEffectInstance> Begin(ToxinSpec toxin)
+        {
+            var trip = new List<PerceptionEffectInstance>();
 
-            foreach (PerceptionEffect effect in next.PerceptionEffects)
+            foreach (PerceptionEffect effect in toxin.PerceptionEffects)
             {
                 if (effect == null) continue;
 
                 trip.Add(effect.Begin());
             }
+
+            return trip;
+        }
+
+        private void End(ToxinSpec toxin)
+        {
+            foreach (PerceptionEffectInstance effect in trips[toxin]) effect.End();
+
+            trips.Remove(toxin);
         }
     }
 }

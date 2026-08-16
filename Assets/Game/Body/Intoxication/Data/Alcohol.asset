@@ -16,4 +16,5 @@ MonoBehaviour:
   halfLife: 30
   promptName: Alcohol
   perceptionEffects:
-  - {fileID: 11400000, guid: 2cca3d5e6ffe7354e848e0094b45fd68, type: 2}
+  - {fileID: 11400000, guid: fdaec9427ed10304fa16b675eba2e008, type: 2}
+  - {fileID: 11400000, guid: f87ee2c92110800489d4ed2365f0df4e, type: 2}
