@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: apple
   title: "\u042F\u0431\u043B\u043E\u043A\u043E"
-  promptName: Apple
   model: {fileID: 5259299800716398628, guid: bf3411e3b666f18429007662fef6c18d, type: 3}
   icon: {fileID: 11400000, guid: a4915dc5353b4554a10695f592418dd7, type: 2}
   cells: {x: 1, y: 1}
+  promptDescription: Apple
   effects:
   - {fileID: 11400000, guid: af6b46a8027c4ebcb9d27c3fc48a05aa, type: 2}
   useSound: {fileID: 11400000, guid: af66139ae34989043b05d65ce1cdb2d1, type: 2}

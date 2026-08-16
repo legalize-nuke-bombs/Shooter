@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: coin
   title: "\u0420\u0443\u0431\u043B\u0438"
-  promptName: rubles
   model: {fileID: 0}
   icon: {fileID: 11400000, guid: 92416472735945f18922ab23d6592ec2, type: 2}
   cells: {x: 1, y: 1}
+  promptDescription: Currency (rubles)
+  effects: []
+  useSound: {fileID: 0}

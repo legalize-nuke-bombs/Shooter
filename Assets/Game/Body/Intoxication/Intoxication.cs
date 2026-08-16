@@ -93,7 +93,7 @@ namespace Shooter.Game.Body
                     continue;
                 }
                 ToxinSpec toxin = toxins.Of(toxinId);
-                sb.Append(toxin.PromptName + $" {levels[toxinIndex]} / 100. ");
+                sb.Append(toxin.Id + $" {levels[toxinIndex]} / 100. ");
             }
 
             return sb.Length == 0

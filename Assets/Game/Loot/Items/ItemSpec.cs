@@ -6,10 +6,10 @@ namespace Shooter.Game.Loot
     public abstract class ItemSpec : Spec
     {
         [SerializeField] private string title;
-        [SerializeField] private string promptName;
         [SerializeField] private GameObject model;
         [SerializeField] private IconSpec icon;
         [SerializeField] private Vector2Int cells = Vector2Int.one;
+        [SerializeField] private string promptDescription;
 
         public GameObject Model => model;
 
@@ -19,6 +19,6 @@ namespace Shooter.Game.Loot
 
         public string Title => string.IsNullOrEmpty(title) ? Key : title;
 
-        public string PromptName => string.IsNullOrEmpty(promptName) ? Key : promptName;
+        public string PromptDescription => string.IsNullOrEmpty(promptDescription) ? Key : promptDescription;
     }
 }

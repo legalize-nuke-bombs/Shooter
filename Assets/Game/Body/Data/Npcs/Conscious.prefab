@@ -144,6 +144,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: -7496335004598485280}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3799144584473767540}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -168,7 +171,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7169eafc621024f46b028be5826ca7a9, type: 2}
   character: 
   knowledges:
-  - {fileID: 11400000, guid: 21782f1b610efc1489b979c6f3ee4547, type: 2}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
   failureCooldown: 2.5
   maxToolRounds: 10
@@ -460,3 +463,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0251aeae737c4a46af35883ab2db4ea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LookAtWanderer.LookAtWandererTool
+--- !u!114 &3799144584473767540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe9895969c846c2a10949133ed5b9ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.ExploreItems.ExploreItemsTool

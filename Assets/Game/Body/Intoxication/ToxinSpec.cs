@@ -7,9 +7,7 @@ namespace Shooter.Game.Body
     public class ToxinSpec : Spec
     {
         [SerializeField] private float halfLife;
-        [SerializeField] private string promptName;
 
         public float HalfLife => halfLife;
-        public string PromptName => promptName;
     }
 }

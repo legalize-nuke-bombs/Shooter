@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: black-magenta
   title: ???
-  promptName: Black-magenta squares
   model: {fileID: 0}
   icon: {fileID: 11400000, guid: 79ce2838301409a46a7611dd4735effd, type: 2}
   cells: {x: 1, y: 1}
+  promptDescription: A strange item; its icon features two black squares and two
+    magenta squares
+  effects: []
+  useSound: {fileID: 0}
