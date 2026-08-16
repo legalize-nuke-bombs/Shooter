@@ -1,4 +1,4 @@
-namespace Shooter.Game.Body
+namespace Shooter.Game.Body.Perception
 {
     public abstract class PerceptionEffect
     {

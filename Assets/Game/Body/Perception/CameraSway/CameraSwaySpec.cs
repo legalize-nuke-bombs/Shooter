@@ -1,7 +1,6 @@
-using Shooter.Game.Body;
 using UnityEngine;
 
-namespace Shooter.Client.Perception
+namespace Shooter.Game.Body.Perception
 {
     [CreateAssetMenu(menuName = "Shooter/Perception/Camera Sway", fileName = "CameraSway")]
     public class CameraSwaySpec : PerceptionEffectSpec
@@ -16,9 +15,9 @@ namespace Shooter.Client.Perception
 
         public float SettleSpeed => settleSpeed;
 
-        public override PerceptionEffect Create()
+        public override PerceptionEffect Create(IPerceiver perceiver)
         {
-            return new CameraSway(this);
+            return new CameraSway(this, perceiver);
         }
     }
 }

@@ -11,6 +11,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27933fcbdf701284ca4b5a45f6db6918, type: 3}
   m_Name: AlcoholPostProcess
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Perception.PostProcessSpec
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Perception.PostProcessSpec
   profile: {fileID: 11400000, guid: 5a4f353a3b694594897ebc8ae5b062fc, type: 2}
   settleSpeed: 0.3

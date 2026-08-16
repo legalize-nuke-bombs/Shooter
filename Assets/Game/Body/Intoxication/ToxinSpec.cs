@@ -1,4 +1,5 @@
-﻿using Shooter.Game.Core;
+﻿using Shooter.Game.Body.Perception;
+using Shooter.Game.Core;
 using UnityEngine;
 
 namespace Shooter.Game.Body

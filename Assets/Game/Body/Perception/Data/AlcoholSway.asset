@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e538eaf112bb3fb4ea17a4297fab16e3, type: 3}
   m_Name: AlcoholSway
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Perception.CameraSwaySpec
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Perception.CameraSwaySpec
   swayDegrees: 4
   swayFrequency: 0.4
   settleSpeed: 0.3
