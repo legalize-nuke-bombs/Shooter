@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8b41c7d95e4a3fb06c1d27e8a45913, type: 3}
+  m_Name: Weedbox
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
+  id: weedbox
+  title: "\u041A\u043E\u0440\u043E\u0431\u043E\u043A \u0441 \u043A\u043E\u043D\u043E\u043F\u043B\u0435\u0439 "
+  promptName: Weedbox
+  model: {fileID: 1124578452033744, guid: 38fb7ded0e1057f438e082c5f655bd53, type: 3}
+  icon: {fileID: 11400000, guid: 60167ca9e841ec046a8545c0d341d6e0, type: 2}
+  cells: {x: 1, y: 1}
+  effects:
+  - {fileID: 11400000, guid: 6d549e7f291ccce4b8e529e34ea317c9, type: 2}
+  - {fileID: 11400000, guid: 173dcffcc5bc1f34cb7276b13dcef6b0, type: 2}
+  useSound: {fileID: 0}

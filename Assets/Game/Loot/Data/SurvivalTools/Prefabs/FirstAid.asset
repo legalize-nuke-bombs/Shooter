@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8b41c7d95e4a3fb06c1d27e8a45913, type: 3}
+  m_Name: FirstAid
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
+  id: first-aid
+  title: "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
+  promptName: First aid kit
+  model: {fileID: 1987713744733760, guid: b55df95fa6211964e8ad561501250fac, type: 3}
+  icon: {fileID: 11400000, guid: 4e8c73df9a659b043ac7ca98a4600a58, type: 2}
+  cells: {x: 1, y: 1}
+  effects:
+  - {fileID: 11400000, guid: 0129bb08baf600044980477d11ee657a, type: 2}
+  useSound: {fileID: 0}

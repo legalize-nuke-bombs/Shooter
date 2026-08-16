@@ -1,8 +1,6 @@
 using Shooter.Configuring;
 using Shooter.Game.Body;
-using Shooter.Game.Body.Intoxication;
 using Shooter.Game.Combat;
-using Shooter.Game.Llm;
 using Shooter.Game.Notifying;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;

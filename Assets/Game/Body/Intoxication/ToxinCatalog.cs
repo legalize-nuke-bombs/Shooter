@@ -1,7 +1,7 @@
 ﻿using Shooter.Game.Core;
 using UnityEngine;
 
-namespace Shooter.Game.Body.Intoxication
+namespace Shooter.Game.Body
 {
     [CreateAssetMenu(menuName = "Shooter/Toxin Catalog", fileName = "ToxinCatalog")]
     public class ToxinCatalog : Catalog<ToxinSpec>
