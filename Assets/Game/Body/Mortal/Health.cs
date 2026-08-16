@@ -13,13 +13,13 @@ namespace Shooter.Game.Body
 
         [SerializeField] private EarSoundSpec hurtSound;
 
-        private CharacterRelation characterRelation;
+        private AICharacterRelation aiCharacterRelation;
         private Bleeder bleeder;
         private EarSpeaker earSpeaker;
 
         protected virtual void Awake()
         {
-            characterRelation = GetComponent<CharacterRelation>();
+            aiCharacterRelation = GetComponent<AICharacterRelation>();
             bleeder = GetComponent<Bleeder>();
             earSpeaker = GetComponent<EarSpeaker>();
         }
@@ -58,9 +58,9 @@ namespace Shooter.Game.Body
 
             if (Alive && !silent)
             {
-                if (characterRelation != null && attackerId != null)
+                if (aiCharacterRelation != null && attackerId != null)
                 {
-                    characterRelation.DecreaseAmount(attackerId.Value, (int)amount);
+                    aiCharacterRelation.DecreaseAmount(attackerId.Value, (int)amount);
                 }
 
                 if (bleeder != null)

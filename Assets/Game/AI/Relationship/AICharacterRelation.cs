@@ -11,7 +11,7 @@ using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.AI
 {
-    public class CharacterRelation : MonoBehaviour, IDigestible
+    public class AICharacterRelation : MonoBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
