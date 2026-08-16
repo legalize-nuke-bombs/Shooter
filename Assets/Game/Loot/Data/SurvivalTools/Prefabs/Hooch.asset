@@ -20,4 +20,4 @@ MonoBehaviour:
   promptDescription: Hooch
   effects:
   - {fileID: 11400000, guid: cd5ba9ed4f68c4c47bc0326f0093ba59, type: 2}
-  useSound: {fileID: 0}
+  useSound: {fileID: 11400000, guid: 45fee7a7be514f508c61c155503329e2, type: 2}
