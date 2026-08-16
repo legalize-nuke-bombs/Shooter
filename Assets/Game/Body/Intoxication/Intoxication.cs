@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Llm;
 using Shooter.Logging;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
 
-namespace Shooter.Game.Body.Intoxication
+namespace Shooter.Game.Body
 {
     public class Intoxication : NetworkBehaviour, IDigestible
     {
@@ -15,7 +16,7 @@ namespace Shooter.Game.Body.Intoxication
 
         private ToxinCatalog toxins;
         private readonly NetworkList<double> levels = new NetworkList<double>();
-        private readonly Dictionary<string, int> indexes = new Dictionary<string, int>();
+        private readonly Dictionary<FixedString32Bytes, int> indexes = new Dictionary<FixedString32Bytes, int>();
 
         public double Level(ToxinSpec toxin)
         {
@@ -27,8 +28,8 @@ namespace Shooter.Game.Body.Intoxication
             toxins = Environment.Current.Toxins;
             for (int i = 0; i < toxins.Count; i++)
             {
-                string toxinName = toxins.At(i).name;
-                indexes.Add(toxinName, i);
+                FixedString32Bytes toxinId = toxins.At(i).Id;
+                indexes.Add(toxinId, i);
                 levels.Add(0);
             }
             Log.Info($"Entity {name} locally registered {levels.Count} - {indexes.Count} toxins");
@@ -36,7 +37,7 @@ namespace Shooter.Game.Body.Intoxication
 
         public void Intoxicate(ToxinSpec toxin, double amount)
         {
-            int index = indexes[toxin.name];
+            int index = indexes[toxin.Id];
             amount = Math.Max(0, amount);
             levels[index] = Math.Min(100, levels[index] + amount);
         }
@@ -57,10 +58,10 @@ namespace Shooter.Game.Body.Intoxication
         [SerializeField] private float lowThreshold = 1f;
         private void Tick(float dt)
         {
-            foreach (string toxinName in indexes.Keys)
+            foreach (FixedString32Bytes toxinId in indexes.Keys)
             {
-                int toxinIndex = indexes[toxinName];
-                ToxinSpec toxin = toxins.Of(toxinName);
+                int toxinIndex = indexes[toxinId];
+                ToxinSpec toxin = toxins.Of(toxinId);
                 if (levels[toxinIndex] < lowThreshold)
                 {
                     continue;
@@ -84,14 +85,14 @@ namespace Shooter.Game.Body.Intoxication
 
             var sb = new StringBuilder();
 
-            foreach (string toxinName in indexes.Keys)
+            foreach (FixedString32Bytes toxinId in indexes.Keys)
             {
-                int toxinIndex = indexes[toxinName];
+                int toxinIndex = indexes[toxinId];
                 if (levels[toxinIndex] < digestThreshold)
                 {
                     continue;
                 }
-                ToxinSpec toxin = toxins.Of(toxinName);
+                ToxinSpec toxin = toxins.Of(toxinId);
                 sb.Append(toxin.PromptName + $" {levels[toxinIndex]} / 100. ");
             }
 
