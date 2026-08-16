@@ -13,7 +13,7 @@ namespace Shooter.Game.Body.Perception
 
         public float SettleSpeed => settleSpeed;
 
-        public override PerceptionEffect Create(IPerceiver perceiver)
+        public override PerceptionEffect Create()
         {
             return new PostProcess(this);
         }

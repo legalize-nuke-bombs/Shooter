@@ -28,7 +28,6 @@ namespace Shooter.Client.Playing
         private Mortal mortal;
         private Gunner gunner;
         private OwnRecoil recoil;
-        private PerceptionComposer perception;
         private Controls controls;
         private bool talking;
         private float pitch;
@@ -46,7 +45,6 @@ namespace Shooter.Client.Playing
             mortal = GetComponent<Mortal>();
             gunner = GetComponent<Gunner>();
             recoil = GetComponent<OwnRecoil>();
-            perception = GetComponent<PerceptionComposer>();
         }
 
         public override void OnNetworkSpawn()
@@ -132,10 +130,9 @@ namespace Shooter.Client.Playing
         private void LateUpdate()
         {
             Vector2 punch = recoil == null ? Vector2.zero : recoil.Punch;
-            Vector3 sway = perception == null ? Vector3.zero : perception.CameraSway;
 
             view.transform.position = transform.position + Vector3.up * Interactor.EyeHeight;
-            view.transform.rotation = Quaternion.Euler(pitch - punch.y + sway.x, yaw + punch.x + sway.y, sway.z);
+            view.transform.rotation = Quaternion.Euler(pitch - punch.y, yaw + punch.x, 0f);
         }
 
         private void Capture()
