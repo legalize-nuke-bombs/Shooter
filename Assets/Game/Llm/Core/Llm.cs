@@ -24,7 +24,7 @@ namespace Shooter.Game.Llm
         private string entityName;
         private readonly CancellationTokenSource life = new CancellationTokenSource();
 
-        [SerializeField] [TextArea(5, 50)] private string persona = "Persona is not set yet";
+        [SerializeField] private SystemPromptSpec[] systemPrompts;
         [SerializeField] [TextArea(5, 20)] private string character;
         [SerializeField] private KnowledgeSpec[] knowledges;
 
@@ -54,6 +54,21 @@ namespace Shooter.Game.Llm
             life.Cancel();
         }
 
+        private string SystemPrompt()
+        {
+            var systemPrompt = new StringBuilder();
+            foreach (SystemPromptSpec sp in systemPrompts)
+            {
+                if (sp == null)
+                {
+                    Log.Warn($"Entity {entityName} has an empty slot among its {systemPrompts.Length} prompts");
+                    continue;
+                }
+                systemPrompt.Append(sp.Content).Append('\n');
+            }
+            return systemPrompt.ToString();
+        }
+
         private string Knowledge()
         {
             var known = new StringBuilder();
@@ -64,7 +79,6 @@ namespace Shooter.Game.Llm
                     Log.Warn($"Entity {entityName} has an empty slot among its {knowledges.Length} knowledges");
                     continue;
                 }
-
                 known.Append(knowledge.Content).Append('\n');
             }
             return known.ToString();
@@ -131,8 +145,14 @@ namespace Shooter.Game.Llm
 
                 for (int round = 0; round < maxToolRounds; round++)
                 {
-                    LlmTurn turn = await LlmProvider.Request(config, $"{entityName}-{(retelling ? "compact" : "live")}",
-                        persona, history.Messages, tools, life.Token);
+                    LlmTurn turn = await LlmProvider.Request(
+                        config,
+                        $"{entityName}-{(retelling ? "compact" : "live")}",
+                        SystemPrompt(),
+                        history.Messages,
+                        tools,
+                        life.Token
+                    );
                     life.Token.ThrowIfCancellationRequested();
 
                     history.Append(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
