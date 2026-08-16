@@ -30,6 +30,7 @@ GameObject:
   - component: {fileID: -8044126811324161911}
   - component: {fileID: -5531865876210179846}
   - component: {fileID: 9191937243433737006}
+  - component: {fileID: -3782230818419827669}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -351,6 +352,7 @@ MonoBehaviour:
   walkCost: 3
   jumpCost: 25
   recoverySpeed: 12
+  sprintThreshold: 10
 --- !u!114 &-8817301132106935022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,3 +405,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c2b21aec3f45beadbb987887991df1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainRestrainable
+--- !u!114 &-3782230818419827669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a76e1aee66f94d8999a49f269ecfd8eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Intoxication.Intoxication
+  ShowTopMostFoldoutHeaderGroup: 1
+  timerInterval: 0.25
+  lowThreshold: 1
+  digestThreshold: 10

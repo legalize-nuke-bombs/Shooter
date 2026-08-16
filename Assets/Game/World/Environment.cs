@@ -1,5 +1,6 @@
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Body.Intoxication;
 using Shooter.Game.Combat;
 using Shooter.Game.Llm;
 using Shooter.Game.Notifying;
@@ -43,6 +44,8 @@ namespace Shooter.Game.World
 
         [SerializeField] private NameCatalog names;
 
+        [SerializeField] private ToxinCatalog toxins;
+
         private MainSpawnPoint spawn;
 
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
@@ -75,6 +78,8 @@ namespace Shooter.Game.World
         public SkinCatalog Skins => skins;
 
         public NameCatalog Names => names;
+
+        public ToxinCatalog Toxins => toxins;
 
         public string World => world.Value.ToString();
 
