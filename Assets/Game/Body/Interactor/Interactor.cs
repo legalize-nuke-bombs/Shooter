@@ -1,3 +1,4 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -105,7 +106,7 @@ namespace Shooter.Game.Body
             if (!TryLook(distance, out RaycastHit hit)) return false;
             if (hit.collider == null) return false;
 
-            found = hit.collider.GetComponentInParent<T>();
+            found = hit.collider.Find<T>();
             return found != null;
         }
     }
