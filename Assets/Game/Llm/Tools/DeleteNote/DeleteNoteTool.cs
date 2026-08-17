@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm.DeleteNote
 {
-    [RequireComponent(typeof(DeleteNoteTool))]
+    [RequireComponent(typeof(LlmNotes))]
     public class DeleteNoteTool : LlmTool<DeleteNoteArguments>
     {
         private LlmNotes notes;

@@ -65,7 +65,7 @@ namespace Shooter.Game.Llm.Notes
 
         public string Matches(string regexPattern)
         {
-            var regex = new Regex(regexPattern);
+            var regex = new Regex(regexPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
             var report = new Dictionary<string, int>();
 
             foreach (KeyValuePair<string, LlmNote> kvp in notes)

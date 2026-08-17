@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -31,6 +32,8 @@ namespace Shooter.Game.Llm
         private static JObject Typed(Type type)
         {
             if (type.IsArray) return new JObject { ["type"] = "array", ["items"] = Typed(type.GetElementType()) };
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+                return new JObject { ["type"] = "object", ["additionalProperties"] = Typed(type.GetGenericArguments()[1]) };
             if (type == typeof(string)) return new JObject { ["type"] = "string" };
             if (type == typeof(bool)) return new JObject { ["type"] = "boolean" };
             if (type == typeof(float) || type == typeof(double)) return new JObject { ["type"] = "number" };
