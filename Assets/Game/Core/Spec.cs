@@ -13,17 +13,18 @@ namespace Shooter.Game.Core
 
         public string Key => string.IsNullOrEmpty(id) ? name : id;
 
-        public FixedString32Bytes Id => new FixedString32Bytes(Key);
-
-        public bool Fits()
-        {
-            return Encoding.UTF8.GetByteCount(Key) <= FixedString32Bytes.UTF8MaxLengthInBytes;
-        }
+        public FixedString32Bytes Id => new(Key);
 
         private void OnValidate()
         {
             if (!Fits())
-                Log.Error($"{name} has an id of {(Encoding.UTF8.GetByteCount(Key))} bytes, longer than the {FixedString32Bytes.UTF8MaxLengthInBytes} the network format holds");
+                Log.Error(
+                    $"{name} has an id of {Encoding.UTF8.GetByteCount(Key)} bytes, longer than the {FixedString32Bytes.UTF8MaxLengthInBytes} the network format holds");
+        }
+
+        public bool Fits()
+        {
+            return Encoding.UTF8.GetByteCount(Key) <= FixedString32Bytes.UTF8MaxLengthInBytes;
         }
     }
 }

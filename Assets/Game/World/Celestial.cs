@@ -11,7 +11,7 @@ namespace Shooter.Game.World
             float latitudeRadians = latitude * Mathf.Deg2Rad;
 
             float height = Mathf.Sin(latitudeRadians) * Mathf.Sin(declinationRadians)
-                + Mathf.Cos(latitudeRadians) * Mathf.Cos(declinationRadians) * Mathf.Cos(hourRadians);
+                           + Mathf.Cos(latitudeRadians) * Mathf.Cos(declinationRadians) * Mathf.Cos(hourRadians);
 
             return Mathf.Asin(Mathf.Clamp(height, -1f, 1f)) * Mathf.Rad2Deg;
         }
@@ -24,7 +24,7 @@ namespace Shooter.Game.World
 
             float toEast = -Mathf.Cos(declinationRadians) * Mathf.Sin(hourRadians);
             float toNorth = Mathf.Sin(declinationRadians) * Mathf.Cos(latitudeRadians)
-                - Mathf.Cos(declinationRadians) * Mathf.Sin(latitudeRadians) * Mathf.Cos(hourRadians);
+                            - Mathf.Cos(declinationRadians) * Mathf.Sin(latitudeRadians) * Mathf.Cos(hourRadians);
 
             return Mathf.Atan2(toEast, toNorth) * Mathf.Rad2Deg;
         }

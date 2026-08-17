@@ -63,10 +63,8 @@ namespace Shooter.Game.Llm
 
     public class OpenAiUsage
     {
-        [JsonProperty("prompt_tokens")]
-        public int PromptTokens { get; set; }
+        [JsonProperty("prompt_tokens")] public int PromptTokens { get; set; }
 
-        [JsonProperty("completion_tokens")]
-        public int CompletionTokens { get; set; }
+        [JsonProperty("completion_tokens")] public int CompletionTokens { get; set; }
     }
 }

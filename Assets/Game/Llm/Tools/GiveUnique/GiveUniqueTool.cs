@@ -1,18 +1,11 @@
-using Shooter.Game.Loot;
-using UnityEngine;
 using Shooter.Game.Core;
+using Shooter.Game.Loot;
 
 namespace Shooter.Game.Llm
 {
     public sealed class GiveUniqueTool : LlmTool<GiveUniqueArguments>
     {
         private InventoryExchanger inventoryExchanger;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            inventoryExchanger = this.Find<InventoryExchanger>();
-        }
 
         public override string Name => "give_unique";
 
@@ -21,6 +14,12 @@ namespace Shooter.Game.Llm
 Give one of your unique items, by its slot number, to a character within {inventoryExchanger.ExchangeRadius} meters.
 The recipient will automatically receive a notification.
 ";
+
+        protected override void Awake()
+        {
+            base.Awake();
+            inventoryExchanger = this.Find<InventoryExchanger>();
+        }
 
         protected override string Execute(GiveUniqueArguments arguments)
         {

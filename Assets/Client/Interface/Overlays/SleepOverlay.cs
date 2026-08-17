@@ -7,13 +7,12 @@ namespace Shooter.Client.Interface
 {
     public class SleepOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string SleepElement = "sleep";
-
-        private SleepView view;
+        private static readonly Journal Log = Logs.Here();
         private VisualElement screen;
         private float shown;
+
+        private SleepView view;
 
         private void Update()
         {

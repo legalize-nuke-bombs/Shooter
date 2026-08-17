@@ -1,6 +1,4 @@
 using Shooter.Client.Playing;
-using Shooter.Game.Core;
-using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -12,8 +10,6 @@ namespace Shooter.Client.Interface
 {
     public class LoadingOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string ScreenElement = "loading";
         private const string TextElement = "loading-text";
 
@@ -23,11 +19,12 @@ namespace Shooter.Client.Interface
         private const string Waiting = "Синхронизация мира";
         private const string Entering = "Вход в мир";
         private const string Lost = "Связь потеряна";
+        private static readonly Journal Log = Logs.Here();
+        private bool entered;
 
         private VisualElement screen;
-        private Label text;
         private string shown;
-        private bool entered;
+        private Label text;
 
         private void Update()
         {
@@ -90,7 +87,7 @@ namespace Shooter.Client.Interface
 
         private static string Address(NetworkManager network)
         {
-            var transport = network.GetComponent<UnityTransport>();
+            UnityTransport transport = network.GetComponent<UnityTransport>();
             if (transport == null) return Nameless;
 
             return transport.ConnectionData.Address + ":" + transport.ConnectionData.Port;

@@ -7,9 +7,8 @@ namespace Shooter.Game.Core
     [DefaultExecutionOrder(-110)]
     public class Registers : MonoBehaviour
     {
+        private readonly Dictionary<Type, object> registers = new();
         public static Registers Current { get; private set; }
-
-        private readonly Dictionary<Type, object> registers = new Dictionary<Type, object>();
 
         private void Awake()
         {

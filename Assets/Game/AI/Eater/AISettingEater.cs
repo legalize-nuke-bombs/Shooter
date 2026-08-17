@@ -7,17 +7,17 @@ namespace Shooter.Game.AI.Eater
     {
         private AIEater eater;
 
-        private void Awake()
-        {
-            eater = GetComponent<AIEater>();
-        }
-
         public override string Name => "eater";
         public override string Range => "False - True";
 
         public override string Description => @"
             If enabled, your character will automatically eat edible items from your inventory when hungry.
          ";
+
+        private void Awake()
+        {
+            eater = GetComponent<AIEater>();
+        }
 
         public override void Set(string content)
         {

@@ -1,6 +1,6 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Loot
 {
@@ -12,7 +12,7 @@ namespace Shooter.Game.Loot
         {
             if (!IsServer || from == null) return;
 
-            var own = GetComponent<Inventory>();
+            Inventory own = GetComponent<Inventory>();
             if (own == null)
             {
                 Log.Warn($"Lootable {this.NameOf()} has no inventory to take the belongings");

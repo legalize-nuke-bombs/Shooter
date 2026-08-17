@@ -28,7 +28,8 @@ namespace Shooter.Editing
             SerializedProperty points = property.FindPropertyRelative("points");
 
             var header = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(header, label.text, $"{points.arraySize} bullets | LMB add/drag, Alt+LMB delete, RMB pan, wheel zoom");
+            EditorGUI.LabelField(header, label.text,
+                $"{points.arraySize} bullets | LMB add/drag, Alt+LMB delete, RMB pan, wheel zoom");
 
             float side = Mathf.Min(CanvasSide, position.width - 4f);
             var canvas = new Rect(position.x + (position.width - side) * 0.5f, header.yMax + 2f, side, side);
@@ -37,7 +38,8 @@ namespace Shooter.Editing
 
             Mouse(canvas, points, range, pan);
 
-            var list = new Rect(position.x, canvas.yMax + 4f, position.width, EditorGUI.GetPropertyHeight(points, true));
+            var list = new Rect(position.x, canvas.yMax + 4f, position.width,
+                EditorGUI.GetPropertyHeight(points, true));
             EditorGUI.PropertyField(list, points, new GUIContent("Points"), true);
 
             if (Event.current.type != EventType.Repaint) return;
@@ -104,14 +106,16 @@ namespace Shooter.Editing
                     {
                         points.arraySize++;
                         dragged = points.arraySize - 1;
-                        points.GetArrayElementAtIndex(dragged).vector2Value = Degrees(canvas, current.mousePosition, range, pan);
+                        points.GetArrayElementAtIndex(dragged).vector2Value =
+                            Degrees(canvas, current.mousePosition, range, pan);
                     }
 
                     current.Use();
                     break;
 
                 case EventType.MouseDrag when current.button == 0 && dragged >= 0:
-                    points.GetArrayElementAtIndex(dragged).vector2Value = Degrees(canvas, current.mousePosition, range, pan);
+                    points.GetArrayElementAtIndex(dragged).vector2Value =
+                        Degrees(canvas, current.mousePosition, range, pan);
                     current.Use();
                     break;
 
@@ -211,7 +215,8 @@ namespace Shooter.Editing
                 Vector2 degrees = points.GetArrayElementAtIndex(i).vector2Value;
                 var pixel = (Vector2)line[i + 1];
 
-                Handles.color = i == dragged ? Color.white : i == 0 ? new Color(0.4f, 0.8f, 1f) : new Color(1f, 0.55f, 0.1f);
+                Handles.color = i == dragged ? Color.white :
+                    i == 0 ? new Color(0.4f, 0.8f, 1f) : new Color(1f, 0.55f, 0.1f);
                 Handles.DrawSolidDisc(pixel, Vector3.forward, 4.5f);
 
                 GUI.Label(

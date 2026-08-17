@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.AI;
-using Shooter.Logging;
 using Shooter.Game.Core;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm.AIPanel
 {
@@ -13,13 +13,6 @@ namespace Shooter.Game.Llm.AIPanel
 
         private AISetting[] settings;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            settings = this.FindAll<AISetting>();
-            Log.Info($"Entity {this.NameOf()} has {settings.Length} ai settings");
-        }
-
         public override string Name => "ai_panel";
 
         public override string Description =>
@@ -28,12 +21,16 @@ Use this tool to customize your AI.
 To get a list of available parameters and their current values, call this tool with an empty dict of overrides.
 ";
 
+        protected override void Awake()
+        {
+            base.Awake();
+            settings = this.FindAll<AISetting>();
+            Log.Info($"Entity {this.NameOf()} has {settings.Length} ai settings");
+        }
+
         protected override string Execute(AIPanelArguments arguments)
         {
-            if (arguments.Overrides == null || arguments.Overrides.Count == 0)
-            {
-                return RepresentSettings();
-            }
+            if (arguments.Overrides == null || arguments.Overrides.Count == 0) return RepresentSettings();
             return Override(arguments.Overrides);
         }
 
@@ -57,7 +54,6 @@ To get a list of available parameters and their current values, call this tool w
 
             var found = new HashSet<string>();
             foreach (AISetting setting in settings)
-            {
                 if (overrides.TryGetValue(setting.Name, out string value))
                 {
                     found.Add(setting.Name);
@@ -71,15 +67,10 @@ To get a list of available parameters and their current values, call this tool w
                         sb.AppendLine($"Failed to update {setting.Name} to {value}: {e.Message}");
                     }
                 }
-            }
 
             foreach (string key in overrides.Keys)
-            {
                 if (!found.Contains(key))
-                {
                     sb.AppendLine($"Failed to find parameter {key}");
-                }
-            }
 
             return sb.ToString();
         }

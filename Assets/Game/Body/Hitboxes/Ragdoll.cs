@@ -1,17 +1,16 @@
 using System.Collections.Generic;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Animator))]
     public class Ragdoll : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const float Damping = 0.5f;
         private const float AngularDamping = 1f;
+        private static readonly Journal Log = Logs.Here();
 
         private void Start()
         {
@@ -22,7 +21,7 @@ namespace Shooter.Game.Body
                 return;
             }
 
-            var animator = GetComponent<Animator>();
+            Animator animator = GetComponent<Animator>();
             animator.enabled = false;
 
             Transform hips = animator.GetBoneTransform(HumanBodyBones.Hips);
@@ -43,7 +42,8 @@ namespace Shooter.Game.Body
                 Transform ending = Skeleton.Ending(animator, segment);
                 if (bone == null || ending == null)
                 {
-                    Log.Warn($"Entity {this.NameOf()} misses bones {segment.From} - {segment.To}, ragdoll part skipped");
+                    Log.Warn(
+                        $"Entity {this.NameOf()} misses bones {segment.From} - {segment.To}, ragdoll part skipped");
                     continue;
                 }
 
@@ -57,7 +57,7 @@ namespace Shooter.Game.Body
             }
 
             Skull(head, hips, Skeleton.HeadRadius * scale, layer, bodies);
-            Log.Info($"Entity {this.NameOf()} turned into a ragdoll of {(built + 1)} parts");
+            Log.Info($"Entity {this.NameOf()} turned into a ragdoll of {built + 1} parts");
         }
 
         private Rigidbody Limb(Transform bone, Vector3 target, Skeleton.Segment segment, float radius, int layer)
@@ -65,7 +65,7 @@ namespace Shooter.Game.Body
             Vector3 local = bone.InverseTransformPoint(target);
             float thickness = radius / Skeleton.BoneScale(bone);
 
-            var pill = bone.gameObject.AddComponent<CapsuleCollider>();
+            CapsuleCollider pill = bone.gameObject.AddComponent<CapsuleCollider>();
             pill.direction = Longest(local);
             pill.radius = thickness;
             pill.height = local.magnitude + thickness * 1.5f;
@@ -79,7 +79,7 @@ namespace Shooter.Game.Body
         {
             Vector3 up = (head.position - hips.position).normalized;
 
-            var ball = head.gameObject.AddComponent<SphereCollider>();
+            SphereCollider ball = head.gameObject.AddComponent<SphereCollider>();
             ball.radius = radius / Skeleton.BoneScale(head);
             ball.center = head.InverseTransformPoint(head.position + up * (radius * 0.5f));
 
@@ -96,7 +96,7 @@ namespace Shooter.Game.Body
 
             bone.AddComponent<Hitbox>().Part = part;
 
-            var body = bone.AddComponent<Rigidbody>();
+            Rigidbody body = bone.AddComponent<Rigidbody>();
             body.mass = mass;
             body.linearDamping = Damping;
             body.angularDamping = AngularDamping;
@@ -105,7 +105,7 @@ namespace Shooter.Game.Body
 
         private static void Connect(Transform bone, Rigidbody parent)
         {
-            var joint = bone.gameObject.AddComponent<CharacterJoint>();
+            CharacterJoint joint = bone.gameObject.AddComponent<CharacterJoint>();
             joint.connectedBody = parent;
             joint.enableProjection = true;
         }

@@ -1,20 +1,20 @@
 {
-    "name": "Shooter.Bootstrap",
-    "rootNamespace": "Shooter",
-    "references": [
-        "Shooter.Client",
-        "Shooter.Configuring",
-        "Shooter.Logging",
-        "Unity.Netcode.Runtime",
-        "Unity.Networking.Transport"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Shooter.Bootstrap",
+  "rootNamespace": "Shooter",
+  "references": [
+    "Shooter.Client",
+    "Shooter.Configuring",
+    "Shooter.Logging",
+    "Unity.Netcode.Runtime",
+    "Unity.Networking.Transport"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
@@ -65,7 +65,7 @@ namespace Shooter.Game.Llm
                 DigestibleSize.Biggest => biggestViewingDistance,
                 DigestibleSize.Large => largeViewingDistance,
                 DigestibleSize.Medium => mediumViewingDistance,
-                _ => smallViewingDistance,
+                _ => smallViewingDistance
             };
         }
     }

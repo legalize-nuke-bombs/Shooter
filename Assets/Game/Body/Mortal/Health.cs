@@ -1,8 +1,8 @@
 using System;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -14,41 +14,49 @@ namespace Shooter.Game.Body
 
         private EarSpeaker earSpeaker;
 
-        public event Action<double, long?, DamageSpec> Damaged;
-
-        protected virtual void Awake()
-        {
-            earSpeaker = GetComponent<EarSpeaker>();
-        }
-
-        public bool CanPerform(ActionType type, float dt)
-        {
-            return Alive;
-        }
-        public void RegisterAction(ActionType type, float dt) { }
-
         public abstract double Hp { get; }
 
         public abstract double MaxHp { get; }
 
         public abstract bool Alive { get; }
 
+        protected virtual void Awake()
+        {
+            earSpeaker = GetComponent<EarSpeaker>();
+        }
+
+        public string Digest(DigestionDetail detail)
+        {
+            return Alive ? $"Health: {Hp}/{MaxHp}" : "Dead";
+        }
+
+        public DigestionPriority Priority => DigestionPriority.High;
+
+        public bool CanPerform(ActionType type, float dt)
+        {
+            return Alive;
+        }
+
+        public void RegisterAction(ActionType type, float dt)
+        {
+        }
+
+        public event Action<double, long?, DamageSpec> Damaged;
+
         public DamageResult Damage(double amount, long? attackerId, DamageSpec type)
         {
             if (!IsServer || !Alive || amount <= 0)
-            {
-                return new DamageResult()
+                return new DamageResult
                 {
                     Murder = false
                 };
-            }
 
             DamageRaw(amount);
 
             if (!Alive) Die();
             else if (type.Loud) earSpeaker.Play(hurtSound);
 
-            var result = new DamageResult()
+            var result = new DamageResult
             {
                 Murder = !Alive
             };
@@ -63,13 +71,6 @@ namespace Shooter.Game.Body
         public abstract void Heal(double amount);
 
         public abstract void Resurrect();
-
-        public string Digest(DigestionDetail detail)
-        {
-            return Alive ? $"Health: {Hp}/{MaxHp}" : "Dead";
-        }
-
-        public DigestionPriority Priority => DigestionPriority.High;
 
         private void Die()
         {

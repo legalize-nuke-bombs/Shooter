@@ -9,12 +9,6 @@ namespace Shooter.Game.Llm.AddNote
     {
         private LlmNotes notes;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
-        }
-
         public override string Name => "add_note";
 
         public override string Description =>
@@ -27,6 +21,12 @@ Max note content size: {notes.ContentLimit}
 Max notes number: {notes.AmountLimit}
 ";
 
+        protected override void Awake()
+        {
+            base.Awake();
+            notes = GetComponent<LlmNotes>();
+        }
+
         protected override string Execute(AddNoteArguments arguments)
         {
             string result;
@@ -34,7 +34,7 @@ Max notes number: {notes.AmountLimit}
             {
                 notes.Add(
                     arguments.Name,
-                    new LlmNote()
+                    new LlmNote
                     {
                         Content = arguments.Content,
                         Description = arguments.Description
@@ -46,6 +46,7 @@ Max notes number: {notes.AmountLimit}
             {
                 result = $"Failed to add a note: {e.Message}";
             }
+
             return result;
         }
     }

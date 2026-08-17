@@ -1,20 +1,19 @@
-using Shooter.Game.Core;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Shooter.Editing
 {
     public static class Scatterer
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string Turn = "Tools/Scatter Rotation";
         private const string Reshuffle = "Tools/Scatter Rotation Anew";
 
         private const float Grow = 0.1f;
+        private static readonly Journal Log = Logs.Here();
 
         [MenuItem(Turn)]
         private static void Keep()
@@ -53,9 +52,9 @@ namespace Shooter.Editing
 
                 Undo.RecordObject(standing, "Scatter Rotation");
 
-                var dice = new System.Random(Seed(standing.position, everyone));
+                var dice = new Random(Seed(standing.position, everyone));
                 Vector3 angles = source == null ? standing.eulerAngles : source.eulerAngles;
-                angles.y = (float) dice.NextDouble() * 360f;
+                angles.y = (float)dice.NextDouble() * 360f;
                 standing.eulerAngles = angles;
                 standing.localScale = Base(standing, source) * (1f + Spread(dice, Grow));
 
@@ -88,16 +87,16 @@ namespace Shooter.Editing
                    || !Mathf.Approximately(standing.localScale.x, source.localScale.x);
         }
 
-        private static float Spread(System.Random dice, float reach)
+        private static float Spread(Random dice, float reach)
         {
-            return (float) (dice.NextDouble() * 2d - 1d) * reach;
+            return (float)(dice.NextDouble() * 2d - 1d) * reach;
         }
 
         private static int Seed(Vector3 at, bool everyone)
         {
-            return Mathf.RoundToInt(at.x * 73.13f) * 73856093
-                   ^ Mathf.RoundToInt(at.y * 73.13f) * 19349663
-                   ^ Mathf.RoundToInt(at.z * 73.13f) * 83492791
+            return (Mathf.RoundToInt(at.x * 73.13f) * 73856093)
+                   ^ (Mathf.RoundToInt(at.y * 73.13f) * 19349663)
+                   ^ (Mathf.RoundToInt(at.z * 73.13f) * 83492791)
                    ^ (everyone ? 1442695040 : 0);
         }
     }

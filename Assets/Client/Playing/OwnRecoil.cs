@@ -1,20 +1,20 @@
 using Shooter.Game.Combat;
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
     public class OwnRecoil : NetworkBehaviour
     {
         [SerializeField] private float recovery = 14f;
+        private bool held;
 
         private Inventory inventory;
+        private float lastShotAt;
 
         private int shot;
-        private float lastShotAt;
-        private bool held;
 
         public Vector2 Punch { get; private set; }
 
@@ -23,16 +23,16 @@ namespace Shooter.Client.Playing
             inventory = this.Find<Inventory>();
         }
 
-        public override void OnNetworkSpawn()
-        {
-            if (!IsOwner) enabled = false;
-        }
-
         private void Update()
         {
             Punch *= Mathf.Exp(-recovery * Time.deltaTime);
 
             if (held) Kick(true);
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsOwner) enabled = false;
         }
 
         public void Press()

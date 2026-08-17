@@ -1,19 +1,17 @@
 using System;
 using System.Globalization;
-using Shooter.Logging;
-using UnityEngine;
-using UnityEngine.UIElements;
 using Shooter.Game.World;
+using Shooter.Logging;
+using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
     public class ClockOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string ClockElement = "clock";
         private const string TimeFormat = "HH:mm";
         private const long Hidden = long.MinValue;
+        private static readonly Journal Log = Logs.Here();
 
         private static readonly string[] Months =
         {
@@ -74,7 +72,8 @@ namespace Shooter.Client.Interface
 
         private static string Describe(DateTimeOffset now)
         {
-            return now.Day + " " + Months[now.Month - 1] + " " + now.Year + ", " + now.ToString(TimeFormat, CultureInfo.InvariantCulture);
+            return now.Day + " " + Months[now.Month - 1] + " " + now.Year + ", " +
+                   now.ToString(TimeFormat, CultureInfo.InvariantCulture);
         }
     }
 }

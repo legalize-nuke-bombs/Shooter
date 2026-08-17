@@ -13,7 +13,7 @@ namespace Shooter.Game.Llm
         private const string Host = "api.polza.ai";
         private const int TimeoutSeconds = 25;
 
-        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings Settings = new()
         {
             Formatting = Formatting.Indented,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -44,16 +44,11 @@ namespace Shooter.Game.Llm
 
                 if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
                     webRequest.result == UnityWebRequest.Result.ProtocolError)
-                {
                     throw new LlmException(
                         $"HTTP {webRequest.responseCode} {webRequest.error}: {webRequest.downloadHandler?.text}");
-                }
 
                 string answered = webRequest.downloadHandler?.text;
-                if (string.IsNullOrEmpty(answered))
-                {
-                    throw new LlmException("Host returned an empty response body");
-                }
+                if (string.IsNullOrEmpty(answered)) throw new LlmException("Host returned an empty response body");
 
                 return answered;
             }

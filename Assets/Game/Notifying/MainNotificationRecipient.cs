@@ -20,12 +20,7 @@ namespace Shooter.Game.Notifying
         public void Receive(Notification notification)
         {
             Log.Info($"Entity {this.NameOf()} received notification {notification.Spec}");
-            foreach (IChildNotificationRecipient recipient in recipients)
-            {
-                recipient.OnReceive(notification);
-            }
+            foreach (IChildNotificationRecipient recipient in recipients) recipient.OnReceive(notification);
         }
     }
 }
-
-

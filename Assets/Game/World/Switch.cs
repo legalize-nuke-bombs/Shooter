@@ -1,8 +1,8 @@
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.World
 {
@@ -14,9 +14,6 @@ namespace Shooter.Game.World
 
         private static readonly int Emissive = Shader.PropertyToID("_EmissiveColor");
 
-        private StructureHealth structureHealth;
-        private Speaker speaker;
-
         [SerializeField] private bool lit = true;
 
         [SerializeField] private GameObject[] powered;
@@ -25,11 +22,12 @@ namespace Shooter.Game.World
 
         [SerializeField] private SoundSpec click;
 
-        private readonly NetworkVariable<bool> shining = new NetworkVariable<bool>(true);
+        private readonly NetworkVariable<bool> shining = new(true);
 
         private Color[] glows;
+        private Speaker speaker;
 
-        public UsageType Usage => shining.Value ? UsageType.TurnOff : UsageType.TurnOn;
+        private StructureHealth structureHealth;
 
         private void Awake()
         {
@@ -39,6 +37,38 @@ namespace Shooter.Game.World
 
             for (int i = 0; i < glowing.Length; i++)
                 glows[i] = glowing[i] == null ? Color.black : glowing[i].material.GetColor(Emissive);
+        }
+
+        public void Broken()
+        {
+            Log.Info($"Entity {this.NameOf()} will be switched off because it was broken");
+            shining.Value = false;
+        }
+
+        public string Digest(DigestionDetail detail)
+        {
+            return shining.Value
+                ? "Turned on"
+                : structureHealth.Broken
+                    ? "Broken"
+                    : "Turned off";
+        }
+
+        public DigestionPriority Priority => DigestionPriority.High;
+
+        public UsageType Usage => shining.Value ? UsageType.TurnOff : UsageType.TurnOn;
+
+        public void Use(NetworkObject user)
+        {
+            if (structureHealth.Broken)
+            {
+                Log.Info($"Entity {user.name} tried to switch {this.NameOf()} but it was broken");
+                return;
+            }
+
+            shining.Value = !shining.Value;
+            speaker.Play(click);
+            Log.Info($"Entity {user.name} switched {this.NameOf()} {(shining.Value ? "on" : "off")}");
         }
 
         public override void OnNetworkSpawn()
@@ -54,50 +84,20 @@ namespace Shooter.Game.World
             shining.OnValueChanged -= Switched;
         }
 
-        public void Use(NetworkObject user)
-        {
-            if (structureHealth.Broken)
-            {
-                Log.Info($"Entity {user.name} tried to switch {this.NameOf()} but it was broken");
-                return;
-            }
-
-            shining.Value = !shining.Value;
-            speaker.Play(click);
-            Log.Info($"Entity {user.name} switched {this.NameOf()} {(shining.Value ? "on" : "off")}");
-        }
-
-        public void Broken()
-        {
-            Log.Info($"Entity {this.NameOf()} will be switched off because it was broken");
-            shining.Value = false;
-        }
-
         private void Switched(bool was, bool now)
         {
             Apply(now);
         }
 
-        public string Digest(DigestionDetail detail)
-        {
-            return shining.Value
-                ? "Turned on"
-                : (structureHealth.Broken ? "Broken" : "Turned off");
-        }
-
-        public DigestionPriority Priority => DigestionPriority.High;
-
         private void Apply(bool now)
         {
             foreach (GameObject part in powered)
-            {
-                if (part != null) part.SetActive(now);
-            }
+                if (part != null)
+                    part.SetActive(now);
 
             for (int i = 0; i < glowing.Length; i++)
-            {
-                if (glowing[i] != null) glowing[i].material.SetColor(Emissive, now ? glows[i] : Color.black);
-            }
+                if (glowing[i] != null)
+                    glowing[i].material.SetColor(Emissive, now ? glows[i] : Color.black);
         }
     }
 }

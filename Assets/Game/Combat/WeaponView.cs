@@ -1,11 +1,10 @@
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Combat
 {
@@ -14,19 +13,39 @@ namespace Shooter.Game.Combat
         private static readonly Journal Log = Logs.Here();
 
         private Inventory inventory;
-        private Skin skin;
-
-        private GameObject shownModel;
-        private GameObject shown;
+        private Transform leftHand;
 
         private WeaponRig rig;
         private Transform rightHand;
-        private Transform leftHand;
+        private GameObject shown;
+
+        private GameObject shownModel;
+        private Skin skin;
 
         private void Awake()
         {
             inventory = this.Find<Inventory>();
             skin = this.Find<Skin>();
+        }
+
+        private void LateUpdate()
+        {
+            if (shown == null || rig == null || rig.Grip == null || rig.Foregrip == null) return;
+            if (rightHand == null || leftHand == null) return;
+
+            Vector3 aim = leftHand.position - rightHand.position;
+            if (aim.sqrMagnitude < 0.0001f) return;
+
+            Transform root = shown.transform;
+            Vector3 gripPoint = root.InverseTransformPoint(rig.Grip.position);
+            Vector3 barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
+            Vector3 barrelUp = root.InverseTransformDirection(rig.Grip.up);
+
+            var look = Quaternion.LookRotation(aim, Vector3.up);
+            var barrel = Quaternion.LookRotation(barrelAxis, barrelUp);
+
+            shown.transform.rotation = look * Quaternion.Inverse(barrel);
+            shown.transform.position = rightHand.position - shown.transform.rotation * gripPoint;
         }
 
         public override void OnNetworkSpawn()
@@ -43,7 +62,8 @@ namespace Shooter.Game.Combat
         private void Refresh()
         {
             GameObject wanted = Wanted();
-            Log.Info($"Entity {this.NameOf()} refresh: wanted {(wanted == null ? "nothing" : wanted.name)}, shown {(shownModel == null ? "nothing" : shownModel.name)}");
+            Log.Info(
+                $"Entity {this.NameOf()} refresh: wanted {(wanted == null ? "nothing" : wanted.name)}, shown {(shownModel == null ? "nothing" : shownModel.name)}");
             if (wanted == shownModel) return;
 
             if (shown != null) Destroy(shown);
@@ -57,7 +77,7 @@ namespace Shooter.Game.Combat
         {
             if (skin.Flesh == null) return;
 
-            var animator = skin.Flesh.GetComponent<Animator>();
+            Animator animator = skin.Flesh.GetComponent<Animator>();
             if (animator == null) return;
 
             int layer = animator.GetLayerIndex("Armed");
@@ -92,7 +112,7 @@ namespace Shooter.Game.Combat
                 return null;
             }
 
-            var animator = skin.Flesh.GetComponent<Animator>();
+            Animator animator = skin.Flesh.GetComponent<Animator>();
             if (animator == null)
             {
                 Log.Warn($"Entity {this.NameOf()} flesh has no animator, weapon stays invisible");
@@ -118,29 +138,9 @@ namespace Shooter.Game.Combat
                 return;
             }
 
-            var animator = skin.Flesh.GetComponent<Animator>();
+            Animator animator = skin.Flesh.GetComponent<Animator>();
             rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-        }
-
-        private void LateUpdate()
-        {
-            if (shown == null || rig == null || rig.Grip == null || rig.Foregrip == null) return;
-            if (rightHand == null || leftHand == null) return;
-
-            Vector3 aim = leftHand.position - rightHand.position;
-            if (aim.sqrMagnitude < 0.0001f) return;
-
-            Transform root = shown.transform;
-            Vector3 gripPoint = root.InverseTransformPoint(rig.Grip.position);
-            Vector3 barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
-            Vector3 barrelUp = root.InverseTransformDirection(rig.Grip.up);
-
-            Quaternion look = Quaternion.LookRotation(aim, Vector3.up);
-            Quaternion barrel = Quaternion.LookRotation(barrelAxis, barrelUp);
-
-            shown.transform.rotation = look * Quaternion.Inverse(barrel);
-            shown.transform.position = rightHand.position - shown.transform.rotation * gripPoint;
         }
 
         private void Conceal(GameObject worn)

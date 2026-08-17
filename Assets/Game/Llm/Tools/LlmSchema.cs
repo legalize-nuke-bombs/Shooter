@@ -8,7 +8,7 @@ namespace Shooter.Game.Llm
 {
     public static class LlmSchema
     {
-        private static readonly SnakeCaseNamingStrategy Snake = new SnakeCaseNamingStrategy();
+        private static readonly SnakeCaseNamingStrategy Snake = new();
 
         public static JObject Of(Type arguments)
         {
@@ -33,7 +33,8 @@ namespace Shooter.Game.Llm
         {
             if (type.IsArray) return new JObject { ["type"] = "array", ["items"] = Typed(type.GetElementType()) };
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
-                return new JObject { ["type"] = "object", ["additionalProperties"] = Typed(type.GetGenericArguments()[1]) };
+                return new JObject
+                    { ["type"] = "object", ["additionalProperties"] = Typed(type.GetGenericArguments()[1]) };
             if (type == typeof(string)) return new JObject { ["type"] = "string" };
             if (type == typeof(bool)) return new JObject { ["type"] = "boolean" };
             if (type == typeof(float) || type == typeof(double)) return new JObject { ["type"] = "number" };

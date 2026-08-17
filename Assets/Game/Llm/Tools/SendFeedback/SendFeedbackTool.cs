@@ -1,6 +1,5 @@
-using System;
-using Shooter.Logging;
 using Shooter.Game.Core;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm
 {
@@ -22,10 +21,7 @@ You NEVER include players' personal information in these reports.";
 
         protected override string Execute(SendFeedbackArguments arguments)
         {
-            if (String.IsNullOrEmpty(arguments.Content))
-            {
-                return "Nothing to send";
-            }
+            if (string.IsNullOrEmpty(arguments.Content)) return "Nothing to send";
 
             Log.Warn($"Entity {this.NameOf()} sent feedback: {arguments.Content}");
 

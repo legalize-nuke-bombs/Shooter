@@ -14,7 +14,7 @@ namespace Shooter.Game.Loot
         {
             base.OnEnable();
 
-            Kinds.Use<UniqueItem>(this);
+            Kinds.Use(this);
         }
 
         public int Of(UniqueItem item)

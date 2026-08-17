@@ -25,9 +25,8 @@ namespace Shooter.Game.World
             float elevation = Celestial.Elevation((float)clock.HourAngle, clock.Declination, clock.Latitude);
 
             for (int i = 0; i < layers.Length; i++)
-            {
-                if (sources[i] != null) sources[i].volume = layers[i].Loudness(elevation);
-            }
+                if (sources[i] != null)
+                    sources[i].volume = layers[i].Loudness(elevation);
         }
 
         private AudioSource Voice(Layer layer)
@@ -50,7 +49,7 @@ namespace Shooter.Game.World
         {
             [SerializeField] private AudioClip loop;
 
-            [SerializeField, Range(0f, 1f)] private float volume = 0.2f;
+            [SerializeField] [Range(0f, 1f)] private float volume = 0.2f;
 
             [SerializeField] private float above = -90f;
 

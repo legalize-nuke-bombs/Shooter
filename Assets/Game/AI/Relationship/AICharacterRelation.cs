@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
-using Shooter.Game.Notifying;
 using Shooter.Game.Core;
+using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -13,9 +13,24 @@ namespace Shooter.Game.AI
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] [Range(0, 100)]
+        private int
+            defaultAmount = 50; // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
+
+        [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
+
+        [SerializeField] private NotificationSpec improved;
+        [SerializeField] private NotificationSpec worsened;
+
+        [SerializeField] [Range(0, 100)] private int enemyThreshold;
+        [SerializeField] [Range(0, 100)] private int friendThreshold = 90;
+
+        private readonly Dictionary<long, int> amounts = new();
+        private Health health;
+
         private PersistentId ownId;
         private Nameable ownNameable;
-        private Health health;
+        public float DamageToReputationCoefficient => damageToReputationCoefficient;
 
         private void Awake()
         {
@@ -34,30 +49,36 @@ namespace Shooter.Game.AI
             health.Damaged -= OnDamaged;
         }
 
+        public string Digest(DigestionDetail detail)
+        {
+            if (detail == DigestionDetail.Brief) return null;
+
+            var sb = new StringBuilder();
+
+            sb.Append("Current relations with other characters. ");
+            sb.Append($"Thresholds. Enemies: <= {enemyThreshold}. Friends: >= {friendThreshold}. ");
+            foreach (KeyValuePair<long, int> kvp in amounts)
+                sb.Append(kvp.Key + " : " + kvp.Value + " (" + Status(kvp.Value) + "). ");
+            sb.Append($"The relation towards characters not listed here is the standard {defaultAmount}.");
+
+            return sb.ToString();
+        }
+
+        public DigestionPriority Priority => DigestionPriority.High;
+
         private void OnDamaged(double amount, long? attackerId, DamageSpec type)
         {
             if (!type.Reputational || attackerId == null) return;
 
-            SetAmount(attackerId.Value, Math.Max(0, Amount(attackerId.Value) - (int)(damageToReputationCoefficient * amount)));
+            SetAmount(attackerId.Value,
+                Math.Max(0, Amount(attackerId.Value) - (int)(damageToReputationCoefficient * amount)));
         }
 
-        private readonly Dictionary<long, int> amounts = new Dictionary<long, int>();
-
-        [SerializeField] [Range(0, 100)] private int defaultAmount = 50; // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
-
-        [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
-        public float DamageToReputationCoefficient => damageToReputationCoefficient;
         public void SetDamageToReputationCoefficient(float amount)
         {
-            if (amount < 0 || amount > 10)
-            {
-                throw new ArgumentException($"Amount must be 0 <= ? <= 10, got {amount}");
-            }
+            if (amount < 0 || amount > 10) throw new ArgumentException($"Amount must be 0 <= ? <= 10, got {amount}");
             damageToReputationCoefficient = amount;
         }
-
-        [SerializeField] private NotificationSpec improved;
-        [SerializeField] private NotificationSpec worsened;
 
         public int Amount(long characterId)
         {
@@ -68,17 +89,12 @@ namespace Shooter.Game.AI
         {
             int currentAmount = Amount(characterId);
 
-            Log.Info($"Entity {this.NameOf()} SetAmount request: character id {characterId} amount {currentAmount} -> {amount}");
+            Log.Info(
+                $"Entity {this.NameOf()} SetAmount request: character id {characterId} amount {currentAmount} -> {amount}");
 
-            if (amount < 0 || amount > 100)
-            {
-                throw new ArgumentException("Amount must be between 0 and 100");
-            }
+            if (amount < 0 || amount > 100) throw new ArgumentException("Amount must be between 0 and 100");
 
-            if (amount == currentAmount)
-            {
-                return;
-            }
+            if (amount == currentAmount) return;
 
             amounts[characterId] = amount;
 
@@ -98,7 +114,8 @@ namespace Shooter.Game.AI
 
             if (spec == null)
             {
-                Log.Warn($"Entity {this.NameOf()} has no notification for an attitude that went {before} -> {after}, the change goes unnoticed");
+                Log.Warn(
+                    $"Entity {this.NameOf()} has no notification for an attitude that went {before} -> {after}, the change goes unnoticed");
                 return;
             }
 
@@ -109,9 +126,6 @@ namespace Shooter.Game.AI
                 .With("after", after));
         }
 
-        [SerializeField] [Range(0, 100)] private int enemyThreshold = 0;
-        [SerializeField] [Range(0, 100)] private int friendThreshold = 90;
-
         public RelationshipStatus Status(long characterId)
         {
             return Status(Amount(characterId));
@@ -119,41 +133,11 @@ namespace Shooter.Game.AI
 
         private RelationshipStatus Status(int amount)
         {
-            if (amount <= enemyThreshold)
-            {
-                return RelationshipStatus.Enemy;
-            }
+            if (amount <= enemyThreshold) return RelationshipStatus.Enemy;
 
-            if (amount >= friendThreshold)
-            {
-                return RelationshipStatus.Friend;
-            }
+            if (amount >= friendThreshold) return RelationshipStatus.Friend;
 
             return RelationshipStatus.Neutral;
         }
-
-        public string Digest(DigestionDetail detail)
-        {
-            if (detail == DigestionDetail.Brief)
-            {
-                return null;
-            }
-
-            var sb = new StringBuilder();
-
-            sb.Append("Current relations with other characters. ");
-            sb.Append($"Thresholds. Enemies: <= {enemyThreshold}. Friends: >= {friendThreshold}. ");
-            foreach (var kvp in amounts)
-            {
-                sb.Append(kvp.Key + " : " + kvp.Value + " (" + Status(kvp.Value) + "). ");
-            }
-            sb.Append($"The relation towards characters not listed here is the standard {defaultAmount}.");
-
-            return sb.ToString();
-        }
-
-        public DigestionPriority Priority => DigestionPriority.High;
     }
 }
-
-

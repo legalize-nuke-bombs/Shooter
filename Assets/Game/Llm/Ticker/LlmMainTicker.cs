@@ -1,10 +1,8 @@
 using System;
-using Shooter.Game.World;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
@@ -12,10 +10,10 @@ namespace Shooter.Game.Llm
     public class LlmMainTicker : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
+        private string entityName;
 
         private Llm llm;
         private NetworkObject netObject;
-        private string entityName;
         private LlmChildTicker[] tickers;
 
         private void Awake()
@@ -23,53 +21,35 @@ namespace Shooter.Game.Llm
             llm = GetComponent<Llm>();
 
             netObject = GetComponentInParent<NetworkObject>();
-            if (netObject == null)
-            {
-                Log.Warn($"Entity {entityName} has no NetworkObject, its llm will never tick");
-            }
+            if (netObject == null) Log.Warn($"Entity {entityName} has no NetworkObject, its llm will never tick");
 
             entityName = this.NameOf();
 
             tickers = GetComponents<LlmChildTicker>();
-            if (tickers.Length == 0)
-            {
-                Log.Warn($"Entity {entityName} does not have any ticker!");
-            }
+            if (tickers.Length == 0) Log.Warn($"Entity {entityName} does not have any ticker!");
+        }
+
+        private void Update()
+        {
+            if (netObject == null || !netObject.IsSpawned || !netObject.NetworkManager.IsServer) return;
+
+            Type type = TickRequired();
+            if (type != null) Tick(type);
         }
 
         private Type TickRequired()
         {
             LlmStatus llmStatus = llm.Status();
             foreach (LlmChildTicker ticker in tickers)
-            {
                 if (ticker.TickRequired(llmStatus))
-                {
                     return ticker.GetType();
-                }
-            }
+
             return null;
         }
 
         private void RegisterTick(Type type)
         {
-            foreach (LlmChildTicker ticker in tickers)
-            {
-                ticker.RegisterTick();
-            }
-        }
-
-        private void Update()
-        {
-            if (netObject == null || !netObject.IsSpawned || !netObject.NetworkManager.IsServer)
-            {
-                return;
-            }
-
-            Type type = TickRequired();
-            if (type != null)
-            {
-                Tick(type);
-            }
+            foreach (LlmChildTicker ticker in tickers) ticker.RegisterTick();
         }
 
         private async void Tick(Type type)
@@ -78,10 +58,7 @@ namespace Shooter.Game.Llm
             {
                 bool success = await llm.Tick();
 
-                if (success)
-                {
-                    RegisterTick(type);
-                }
+                if (success) RegisterTick(type);
             }
             catch (Exception ex)
             {

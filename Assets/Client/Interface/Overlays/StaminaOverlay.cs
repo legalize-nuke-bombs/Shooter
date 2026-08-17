@@ -1,6 +1,5 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,15 +8,14 @@ namespace Shooter.Client.Interface
 {
     public class StaminaOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string BarElement = "stamina";
         private const string FillElement = "stamina-fill";
         private const int Hidden = -1;
+        private static readonly Journal Log = Logs.Here();
 
         private VisualElement bar;
-        private VisualElement fill;
         private Endurance endurance;
+        private VisualElement fill;
         private int shown = Hidden;
 
         private void Update()

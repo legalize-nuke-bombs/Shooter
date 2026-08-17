@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -14,14 +13,13 @@ namespace Shooter.Client.Interface
 
         [SerializeField] private Hint[] hints;
 
-        private readonly HashSet<UsageType> unhinted = new HashSet<UsageType>();
+        private readonly HashSet<UsageType> unhinted = new();
 
         public string Text(UsageType usage)
         {
             foreach (Hint hint in hints)
-            {
-                if (hint.Usage == usage) return hint.Text;
-            }
+                if (hint.Usage == usage)
+                    return hint.Text;
 
             if (unhinted.Add(usage)) Log.Warn($"Hint catalog {name} has no hint for {usage}");
 

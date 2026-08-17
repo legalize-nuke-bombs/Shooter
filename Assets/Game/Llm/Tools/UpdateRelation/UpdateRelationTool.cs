@@ -1,5 +1,4 @@
 using Shooter.Game.AI;
-using UnityEngine;
 using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
@@ -8,18 +7,18 @@ namespace Shooter.Game.Llm
     {
         private AICharacterRelation aiCharacterRelation;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            aiCharacterRelation = this.Find<AICharacterRelation>();
-        }
-
         public override string Name => "update_relation";
 
         public override string Description =>
             @"
 Use this tool to update your relation to character.
 If you want to attack a character, change the attitude to zero.";
+
+        protected override void Awake()
+        {
+            base.Awake();
+            aiCharacterRelation = this.Find<AICharacterRelation>();
+        }
 
         protected override string Execute(UpdateRelationArguments arguments)
         {

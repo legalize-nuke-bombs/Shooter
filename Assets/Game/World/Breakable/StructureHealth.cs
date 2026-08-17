@@ -10,17 +10,24 @@ namespace Shooter.Game.World
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private bool broken;
+
+        [SerializeField] private SoundSpec breakSound;
+
         private Speaker speaker;
-
-        [SerializeField] private bool broken = false;
         public bool Broken => broken;
-
-        [SerializeField] private SoundSpec breakSound = null;
 
         private void Awake()
         {
             speaker = GetComponent<Speaker>();
         }
+
+        public string Digest(DigestionDetail detail)
+        {
+            return Broken ? "Broken" : "Intact";
+        }
+
+        public DigestionPriority Priority => DigestionPriority.Medium;
 
         public void Break()
         {
@@ -39,12 +46,5 @@ namespace Shooter.Game.World
             foreach (IBreakable breakable in GetComponents<IBreakable>())
                 breakable.Broken();
         }
-
-        public string Digest(DigestionDetail detail)
-        {
-            return Broken ? "Broken" : "Intact";
-        }
-
-        public DigestionPriority Priority => DigestionPriority.Medium;
     }
 }

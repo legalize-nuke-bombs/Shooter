@@ -7,15 +7,16 @@ namespace Shooter.Game.Llm
     {
         private WorldDigester worldDigester;
 
+        public override string Name => "look_around";
+
+        public override string Description =>
+            "This tool shows everything near you. The greater the distance, the less detail is visible.";
+
         protected override void Awake()
         {
             base.Awake();
             worldDigester = GetComponent<WorldDigester>();
         }
-
-        public override string Name => "look_around";
-
-        public override string Description => "This tool shows everything near you. The greater the distance, the less detail is visible.";
 
         protected override string Execute(LookAroundArguments arguments)
         {

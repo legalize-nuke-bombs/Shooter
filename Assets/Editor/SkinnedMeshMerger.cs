@@ -4,6 +4,7 @@ using System.Linq;
 using Shooter.Logging;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Shooter.Editing
 {
@@ -34,20 +35,17 @@ namespace Shooter.Editing
             Log.Info($"Merging {sources.Length} skinned meshes of {chosen.name} into materials");
 
             foreach (IGrouping<Material, SkinnedMeshRenderer> group in sources.GroupBy(source => source.sharedMaterial))
-            {
                 Build(chosen.transform, group.Key, group.ToArray(), folder);
-            }
 
             foreach (SkinnedMeshRenderer source in sources)
-            {
                 if (source.transform.childCount == 0) Object.DestroyImmediate(source.gameObject);
                 else Object.DestroyImmediate(source);
-            }
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Log.Info($"Object {chosen.name} now wears {(chosen.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length)} skinned meshes");
+            Log.Info(
+                $"Object {chosen.name} now wears {chosen.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length} skinned meshes");
         }
 
         private static string Folder(SkinnedMeshRenderer source)
@@ -68,7 +66,7 @@ namespace Shooter.Editing
 
         private static Matrix4x4 Blend(Matrix4x4[] posing, BoneWeight weight)
         {
-            Matrix4x4 blended = new Matrix4x4();
+            var blended = new Matrix4x4();
 
             Add(ref blended, posing[weight.boneIndex0], weight.weight0);
             Add(ref blended, posing[weight.boneIndex1], weight.weight1);
@@ -105,7 +103,7 @@ namespace Shooter.Editing
                 Matrix4x4[] poses = mesh.bindposes;
 
                 var posing = new Matrix4x4[own.Length];
-                var remap = new int[own.Length];
+                int[] remap = new int[own.Length];
 
                 for (int i = 0; i < own.Length; i++)
                 {
@@ -139,7 +137,8 @@ namespace Shooter.Editing
                     if (own_tangents.Length == own_vertices.Length)
                     {
                         Vector4 tangent = own_tangents[v];
-                        Vector3 turned = skinning.MultiplyVector(new Vector3(tangent.x, tangent.y, tangent.z)).normalized;
+                        Vector3 turned = skinning.MultiplyVector(new Vector3(tangent.x, tangent.y, tangent.z))
+                            .normalized;
                         tangents.Add(new Vector4(turned.x, turned.y, turned.z, tangent.w));
                     }
 
@@ -159,17 +158,16 @@ namespace Shooter.Editing
                 uv.AddRange(mesh.uv);
 
                 for (int submesh = 0; submesh < mesh.subMeshCount; submesh++)
-                {
-                    foreach (int index in mesh.GetTriangles(submesh)) triangles.Add(index + shift);
-                }
+                    foreach (int index in mesh.GetTriangles(submesh))
+                        triangles.Add(index + shift);
             }
 
             var merged = new Mesh
             {
                 name = material == null ? "Merged" : material.name,
                 indexFormat = vertices.Count > 65000
-                    ? UnityEngine.Rendering.IndexFormat.UInt32
-                    : UnityEngine.Rendering.IndexFormat.UInt16
+                    ? IndexFormat.UInt32
+                    : IndexFormat.UInt16
             };
 
             merged.SetVertices(vertices);
@@ -198,7 +196,8 @@ namespace Shooter.Editing
             room.Expand(new Vector3(room.size.x * 0.5f, 0f, room.size.z * 0.5f));
             renderer.localBounds = room;
 
-            Log.Info($"Material {merged.name} collected {group.Length} meshes into one of {vertices.Count} vertices on {bones.Count} bone slots over {(bones.Distinct().Count())} bones, {merged.bounds.size.y} m tall");
+            Log.Info(
+                $"Material {merged.name} collected {group.Length} meshes into one of {vertices.Count} vertices on {bones.Count} bone slots over {bones.Distinct().Count()} bones, {merged.bounds.size.y} m tall");
         }
     }
 }

@@ -10,14 +10,14 @@ namespace Shooter.Game.Notifying
     {
         private static readonly Journal Log = Logs.Here();
 
-        public event Action<Notification> Shown;
-
         public void OnReceive(Notification notification)
         {
             if (!IsServer || notification.IsEmpty) return;
 
             ShownRpc(notification);
         }
+
+        public event Action<Notification> Shown;
 
         [Rpc(SendTo.Owner)]
         private void ShownRpc(Notification notification)

@@ -10,7 +10,6 @@ namespace Shooter.Game.Body
 
         protected override void DamageRaw(double amount)
         {
-
         }
 
         public override void Heal(double amount)

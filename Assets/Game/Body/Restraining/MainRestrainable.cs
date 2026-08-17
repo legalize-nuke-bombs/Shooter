@@ -1,6 +1,6 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -8,9 +8,9 @@ namespace Shooter.Game.Body
     {
         private static readonly Journal Log = Logs.Here();
 
-        private IRestraint[] restraints;
-
         public static readonly float InstantAction = 0.00000001f;
+
+        private IRestraint[] restraints;
 
         public void Awake()
         {
@@ -21,22 +21,18 @@ namespace Shooter.Game.Body
         public bool CanPerform(ActionType type, float dt)
         {
             foreach (IRestraint restraint in restraints)
-            {
                 if (!restraint.CanPerform(type, dt))
                 {
                     Log.Info($"Entity {this.NameOf()} cant perform {type}, reason: {restraint.GetType().Name}");
                     return false;
                 }
-            }
+
             return true;
         }
 
         public void RegisterAction(ActionType type, float dt)
         {
-            foreach (IRestraint restraint in restraints)
-            {
-                restraint.RegisterAction(type, dt);
-            }
+            foreach (IRestraint restraint in restraints) restraint.RegisterAction(type, dt);
         }
     }
 }

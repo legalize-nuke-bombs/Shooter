@@ -7,19 +7,9 @@ namespace Shooter.Game.World
     [DefaultExecutionOrder(-110)]
     public class Clock : NetworkBehaviour
     {
-        public static Clock Current { get; private set; }
-
-        private void Awake()
-        {
-            Current = this;
-        }
-
-        public override void OnDestroy()
-        {
-            if (Current == this) Current = null;
-
-            base.OnDestroy();
-        }
+        public const long DayLengthSeconds = 86400;
+        private const float DayRealSeconds = 1200f;
+        private const float SyncInterval = 1f;
 
         [SerializeField] private float latitude = 55.75f;
 
@@ -27,27 +17,25 @@ namespace Shooter.Game.World
 
         [SerializeField] private float solarNoonHours = 12.75f;
 
-        public const long DayLengthSeconds = 86400;
-        private const float DayRealSeconds = 1200f;
-        private const float SyncInterval = 1f;
-
         [SerializeField] private int beginningYear = 2026;
         [SerializeField] private int beginningMonth = 9;
         [SerializeField] private int beginningDay = 1;
         [SerializeField] private int beginningHour = 22;
-        [SerializeField] private int beginningMinutes = 0;
-        [SerializeField] private int beginningSeconds = 0;
-        private DateTimeOffset Beginning => new DateTimeOffset(beginningYear, beginningMonth, beginningDay, beginningHour, beginningMinutes, beginningSeconds, TimeSpan.Zero);
+        [SerializeField] private int beginningMinutes;
+        [SerializeField] private int beginningSeconds;
+        private readonly NetworkVariable<float> scale = new(1f);
 
-        private readonly NetworkVariable<double> synced = new NetworkVariable<double>();
-        private readonly NetworkVariable<float> scale = new NetworkVariable<float>(1f);
+        private readonly NetworkVariable<double> synced = new();
 
-        private double timestamp;
         private float untilSync;
+        public static Clock Current { get; private set; }
 
-        public double Timestamp => timestamp;
+        private DateTimeOffset Beginning => new(beginningYear, beginningMonth, beginningDay, beginningHour,
+            beginningMinutes, beginningSeconds, TimeSpan.Zero);
 
-        public DateTimeOffset Now => Beginning.AddSeconds(timestamp);
+        public double Timestamp { get; private set; }
+
+        public DateTimeOffset Now => Beginning.AddSeconds(Timestamp);
 
         public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
 
@@ -72,9 +60,21 @@ namespace Shooter.Game.World
             }
         }
 
+        private void Awake()
+        {
+            Current = this;
+        }
+
+        public override void OnDestroy()
+        {
+            if (Current == this) Current = null;
+
+            base.OnDestroy();
+        }
+
         public override void OnNetworkSpawn()
         {
-            timestamp = synced.Value;
+            Timestamp = synced.Value;
             synced.OnValueChanged += Adjust;
             NetworkManager.NetworkTickSystem.Tick += Step;
         }
@@ -118,7 +118,7 @@ namespace Shooter.Game.World
         private void Step()
         {
             float dt = NetworkManager.LocalTime.FixedDeltaTime;
-            timestamp += dt * scale.Value * (DayLengthSeconds / DayRealSeconds);
+            Timestamp += dt * scale.Value * (DayLengthSeconds / DayRealSeconds);
 
             if (!IsServer) return;
 
@@ -126,14 +126,14 @@ namespace Shooter.Game.World
             if (untilSync > 0f) return;
 
             untilSync = SyncInterval;
-            synced.Value = timestamp;
+            synced.Value = Timestamp;
         }
 
         private void Adjust(double previous, double current)
         {
             if (IsServer) return;
 
-            timestamp = current;
+            Timestamp = current;
         }
     }
 }

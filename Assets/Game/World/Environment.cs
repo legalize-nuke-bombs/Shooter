@@ -10,11 +10,11 @@ namespace Shooter.Game.World
     public class Environment : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
+        private readonly NetworkVariable<FixedString32Bytes> version = new();
+
+        private readonly NetworkVariable<FixedString64Bytes> world = new();
 
         public static Environment Current { get; private set; }
-
-        private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
-        private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
         public string World => world.Value.ToString();
 

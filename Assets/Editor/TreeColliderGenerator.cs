@@ -1,15 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Shooter.Logging;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Shooter.Editing
 {
     public static class TreeColliderGenerator
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string Menu = "Tools/Generate Tree Colliders";
         private const string Mark = "Collider_";
 
@@ -20,11 +20,12 @@ namespace Shooter.Editing
         private const float FootReach = 0.5f;
         private const int Budget = 10;
         private const int LeastSlicePoints = 4;
+        private static readonly Journal Log = Logs.Here();
 
         [MenuItem(Menu)]
         private static void Generate()
         {
-            List<string> paths = Prefabs().ToList();
+            var paths = Prefabs().ToList();
             if (paths.Count == 0)
             {
                 Log.Warn("Nothing selected in the project window, pick a folder or a prefab");
@@ -36,7 +37,7 @@ namespace Shooter.Editing
 
             for (int i = 0; i < paths.Count; i++)
             {
-                if (EditorUtility.DisplayCancelableProgressBar(Menu, paths[i], (float) i / paths.Count))
+                if (EditorUtility.DisplayCancelableProgressBar(Menu, paths[i], (float)i / paths.Count))
                     break;
 
                 int grown = Dress(paths[i]);
@@ -99,7 +100,8 @@ namespace Shooter.Editing
 
             if (!mesh.isReadable)
             {
-                Log.Error($"Mesh {mesh.name} of prefab {path} is not readable from editor code, skipped without touching the import");
+                Log.Error(
+                    $"Mesh {mesh.name} of prefab {path} is not readable from editor code, skipped without touching the import");
                 return 0;
             }
 
@@ -130,7 +132,8 @@ namespace Shooter.Editing
 
             Clear(prefab);
 
-            Log.Info($"Tree {prefab.name}: {barks.Count} bark submeshes on mesh {mesh.name}, {components.Count} components, {twigs} twigs dropped, {limbs.Count} limbs kept, {fitted} capsules fitted, {chosen.Count} placed");
+            Log.Info(
+                $"Tree {prefab.name}: {barks.Count} bark submeshes on mesh {mesh.name}, {components.Count} components, {twigs} twigs dropped, {limbs.Count} limbs kept, {fitted} capsules fitted, {chosen.Count} placed");
 
             Place(prefab, chosen);
 
@@ -146,12 +149,9 @@ namespace Shooter.Editing
                 LOD[] steps = lods.GetLODs();
 
                 if (steps.Length > 0)
-                {
                     foreach (Renderer renderer in steps[0].renderers)
-                    {
-                        if (renderer is MeshRenderer detailed && Meshed(detailed) != null) return detailed;
-                    }
-                }
+                        if (renderer is MeshRenderer detailed && Meshed(detailed) != null)
+                            return detailed;
             }
 
             MeshRenderer best = null;
@@ -263,19 +263,17 @@ namespace Shooter.Editing
             var branchFits = new List<Capsule>();
 
             foreach (Limb limb in limbs)
+            foreach (Capsule capsule in Sliced(limb))
             {
-                foreach (Capsule capsule in Sliced(limb))
-                {
-                    if (capsule.Radius < 0.001f || capsule.Length < 0.001f) continue;
+                if (capsule.Radius < 0.001f || capsule.Length < 0.001f) continue;
 
-                    if (capsule.Trunk) trunkFits.Add(capsule);
-                    else branchFits.Add(capsule);
-                }
+                if (capsule.Trunk) trunkFits.Add(capsule);
+                else branchFits.Add(capsule);
             }
 
             fitted = trunkFits.Count + branchFits.Count;
 
-            List<Capsule> chosen = trunkFits
+            var chosen = trunkFits
                 .OrderBy(capsule => capsule.Center.y)
                 .Take(Budget)
                 .ToList();
@@ -310,7 +308,7 @@ namespace Shooter.Editing
             foreach (Vector3 point in limb.Points)
             {
                 float along = Vector3.Dot(point - middle, limb.Axis);
-                int at = Mathf.Clamp((int) ((along - low) / length * count), 0, count - 1);
+                int at = Mathf.Clamp((int)((along - low) / length * count), 0, count - 1);
                 slices[at].Add(point);
             }
 
@@ -397,10 +395,10 @@ namespace Shooter.Editing
                 double spunX = spreadXX * axis.x + spreadXY * axis.y + spreadXZ * axis.z;
                 double spunY = spreadXY * axis.x + spreadYY * axis.y + spreadYZ * axis.z;
                 double spunZ = spreadXZ * axis.x + spreadYZ * axis.y + spreadZZ * axis.z;
-                double size = System.Math.Sqrt(spunX * spunX + spunY * spunY + spunZ * spunZ);
+                double size = Math.Sqrt(spunX * spunX + spunY * spunY + spunZ * spunZ);
                 if (size < 0.000000000001) return start;
 
-                axis = new Vector3((float) (spunX / size), (float) (spunY / size), (float) (spunZ / size));
+                axis = new Vector3((float)(spunX / size), (float)(spunY / size), (float)(spunZ / size));
             }
 
             return axis.y < 0f ? -axis : axis;
@@ -442,10 +440,7 @@ namespace Shooter.Editing
                 if (child.name.StartsWith(Mark)) Object.DestroyImmediate(child.gameObject);
             }
 
-            foreach (BoxCollider box in prefab.GetComponents<BoxCollider>())
-            {
-                Object.DestroyImmediate(box);
-            }
+            foreach (BoxCollider box in prefab.GetComponents<BoxCollider>()) Object.DestroyImmediate(box);
         }
 
         private static void Place(GameObject prefab, List<Capsule> chosen)
@@ -468,7 +463,8 @@ namespace Shooter.Editing
                 collider.radius = capsule.Radius;
                 collider.height = capsule.Length + capsule.Radius * 2f;
 
-                Log.Info($"Tree {prefab.name}: {name} radius {(Round(capsule.Radius))} m, height {(Round(collider.height))} m, center y {(Round(capsule.Center.y))} m");
+                Log.Info(
+                    $"Tree {prefab.name}: {name} radius {Round(capsule.Radius)} m, height {Round(collider.height)} m, center y {Round(capsule.Center.y)} m");
             }
         }
 
@@ -479,9 +475,9 @@ namespace Shooter.Editing
 
         private sealed class Welder
         {
-            private readonly Dictionary<Vector3Int, int> cells = new Dictionary<Vector3Int, int>();
-            private readonly List<Vector3> positions = new List<Vector3>();
-            private readonly List<int> parents = new List<int>();
+            private readonly Dictionary<Vector3Int, int> cells = new();
+            private readonly List<int> parents = new();
+            private readonly List<Vector3> positions = new();
 
             public int Meet(Vector3 position)
             {
@@ -541,20 +537,20 @@ namespace Shooter.Editing
 
         private sealed class Limb
         {
-            public List<Vector3> Points;
             public Vector3 Axis;
-            public float Radius;
-            public float Length;
             public float FootHeight;
+            public float Length;
+            public List<Vector3> Points;
+            public float Radius;
             public bool Trunk;
         }
 
         private sealed class Capsule
         {
-            public Vector3 Center;
             public Vector3 Axis;
-            public float Radius;
+            public Vector3 Center;
             public float Length;
+            public float Radius;
             public bool Trunk;
 
             public float Volume => Radius * Radius * (Length + Radius);

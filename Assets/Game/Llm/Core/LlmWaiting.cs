@@ -7,19 +7,21 @@ namespace Shooter.Game.Llm
     [RequireComponent(typeof(LlmHistory))]
     public sealed class LlmWaiting : MonoBehaviour
     {
-        private readonly Dictionary<long, Action<string>> pending = new Dictionary<long, Action<string>>();
+        private readonly Dictionary<long, Action<string>> pending = new();
 
         private LlmHistory history;
 
         public bool Any => pending.Count > 0;
 
+        private void Awake()
+        {
+            history = GetComponent<LlmHistory>();
+        }
+
         public List<long> Ids()
         {
             var ids = new List<long>();
-            foreach (long id in pending.Keys)
-            {
-                ids.Add(id);
-            }
+            foreach (long id in pending.Keys) ids.Add(id);
             return ids;
         }
 
@@ -28,15 +30,11 @@ namespace Shooter.Game.Llm
             return pending.ContainsKey(id);
         }
 
-        private void Awake()
-        {
-            history = GetComponent<LlmHistory>();
-        }
-
         public void Listen(long wandererId, string message, Action<string> onAnswer)
         {
             pending[wandererId] = onAnswer;
-            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
+            history.Arrive(new LlmMessage
+                { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
         }
 
         public bool Answer(long wandererId, string text)

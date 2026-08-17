@@ -1,6 +1,6 @@
-using Unity.Netcode;
-using Shooter.Game.Notifying;
 using Shooter.Game.Core;
+using Shooter.Game.Notifying;
+using Unity.Netcode;
 
 namespace Shooter.Game.Body
 {

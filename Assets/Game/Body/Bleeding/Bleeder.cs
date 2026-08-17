@@ -1,9 +1,9 @@
 ﻿using System;
+using Shooter.Game.Core;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Core;
-using Shooter.Game.World;
 
 namespace Shooter.Game.Body.Bleeding
 {
@@ -12,17 +12,34 @@ namespace Shooter.Game.Body.Bleeding
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private DamageSpec bleedingDamage;
+        [SerializeField] private float timerInterval = 0.1f;
+
+        [SerializeField] private float recoverySpeed = 1f;
+        [SerializeField] private float damageCoefficient = 0.025f;
+
+        private readonly NetworkVariable<double> level = new();
+
         private Health health;
 
-        [SerializeField] private DamageSpec bleedingDamage;
-
-        private readonly NetworkVariable<double> level = new NetworkVariable<double>(0);
+        private float timer;
 
         public double Level => level.Value;
 
         private void Awake()
         {
             health = GetComponent<Health>();
+        }
+
+        private void Update()
+        {
+            if (!IsServer) return;
+            timer += Time.deltaTime * Clock.Current.Scale;
+            if (timer >= timerInterval)
+            {
+                Tick(timer);
+                timer = 0;
+            }
         }
 
         private void OnEnable()
@@ -35,6 +52,17 @@ namespace Shooter.Game.Body.Bleeding
             health.Damaged -= OnDamaged;
         }
 
+        public string Digest(DigestionDetail detail)
+        {
+            if (detail == DigestionDetail.Brief) return null;
+
+            return level.Value < 0.01f
+                ? "No bleeding"
+                : $"Bleeding {level.Value:F0} / 100";
+        }
+
+        public DigestionPriority Priority => DigestionPriority.High;
+
         private void OnDamaged(double amount, long? attackerId, DamageSpec type)
         {
             if (type.Bleed <= 0) return;
@@ -42,27 +70,9 @@ namespace Shooter.Game.Body.Bleeding
             Bleed(amount * type.Bleed);
         }
 
-        private float timer = 0;
-        [SerializeField] private float timerInterval = 0.1f;
-        private void Update()
-        {
-            if (!IsServer) return;
-            timer += Time.deltaTime * Clock.Current.Scale;
-            if (timer >= timerInterval)
-            {
-                Tick(timer);
-                timer = 0;
-            }
-        }
-
-        [SerializeField] private float recoverySpeed = 1f;
-        [SerializeField] private float damageCoefficient = 0.025f;
         private void Tick(float dt)
         {
-            if (level.Value < 0.01f)
-            {
-                return;
-            }
+            if (level.Value < 0.01f) return;
 
             level.Value = Math.Max(0, level.Value - dt * recoverySpeed);
 
@@ -80,19 +90,5 @@ namespace Shooter.Game.Body.Bleeding
             force = Math.Max(0, force);
             level.Value = Math.Max(0, level.Value - force);
         }
-
-        public string Digest(DigestionDetail detail)
-        {
-            if (detail == DigestionDetail.Brief)
-            {
-                return null;
-            }
-
-            return level.Value < 0.01f
-                ? "No bleeding"
-                : $"Bleeding {level.Value:F0} / 100";
-        }
-
-        public DigestionPriority Priority => DigestionPriority.High;
     }
 }

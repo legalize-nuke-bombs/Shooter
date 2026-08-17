@@ -1,23 +1,23 @@
 {
-    "name": "Shooter.Client",
-    "rootNamespace": "Shooter",
-    "references": [
-        "Shooter.Configuring",
-        "Shooter.Logging",
-        "Shooter.Game",
-        "Unity.Netcode.Runtime",
-        "Unity.Collections",
-        "Unity.InputSystem",
-        "Unity.RenderPipelines.Core.Runtime",
-        "Unity.RenderPipelines.HighDefinition.Runtime"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Shooter.Client",
+  "rootNamespace": "Shooter",
+  "references": [
+    "Shooter.Configuring",
+    "Shooter.Logging",
+    "Shooter.Game",
+    "Unity.Netcode.Runtime",
+    "Unity.Collections",
+    "Unity.InputSystem",
+    "Unity.RenderPipelines.Core.Runtime",
+    "Unity.RenderPipelines.HighDefinition.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

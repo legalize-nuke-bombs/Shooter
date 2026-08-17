@@ -9,8 +9,8 @@ namespace Shooter.Game.Core
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly Dictionary<int, Type> kinds = new Dictionary<int, Type>();
-        private readonly Dictionary<Type, int> tags = new Dictionary<Type, int>();
+        private readonly Dictionary<int, Type> kinds = new();
+        private readonly Dictionary<Type, int> tags = new();
 
         public TypeKinds()
         {
@@ -28,7 +28,8 @@ namespace Shooter.Game.Core
 
                 if (kinds.TryGetValue(tag, out Type taken))
                 {
-                    Log.Error($"Kinds {taken.FullName} and {type.FullName} share the tag {tag}, the second one will never arrive");
+                    Log.Error(
+                        $"Kinds {taken.FullName} and {type.FullName} share the tag {tag}, the second one will never arrive");
                     continue;
                 }
 
@@ -43,7 +44,8 @@ namespace Shooter.Game.Core
         {
             if (value != null && tags.TryGetValue(value.GetType(), out int tag)) return tag;
 
-            Log.Error($"Kind {(value == null ? "null" : value.GetType().FullName)} is not a known {typeof(TBase).Name}");
+            Log.Error(
+                $"Kind {(value == null ? "null" : value.GetType().FullName)} is not a known {typeof(TBase).Name}");
 
             return 0;
         }

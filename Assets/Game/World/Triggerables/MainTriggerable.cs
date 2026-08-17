@@ -18,10 +18,7 @@ namespace Shooter.Game.World
 
         public void OnTrigger(PersistentId character)
         {
-            foreach (ITriggerable triggerable in triggerables)
-            {
-                triggerable.OnTrigger(character);
-            }
+            foreach (ITriggerable triggerable in triggerables) triggerable.OnTrigger(character);
         }
     }
 }

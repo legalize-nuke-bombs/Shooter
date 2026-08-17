@@ -4,7 +4,6 @@ namespace Shooter.Game.Llm
     {
         public override void RegisterTick()
         {
-
         }
 
         public override bool TickRequired(LlmStatus llmStatus)

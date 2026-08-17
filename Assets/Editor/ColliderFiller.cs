@@ -8,14 +8,13 @@ namespace Shooter.Editing
 {
     public static class ColliderFiller
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string Menu = "Tools/Fill Missing Colliders";
+        private static readonly Journal Log = Logs.Here();
 
         [MenuItem(Menu)]
         private static void Fill()
         {
-            List<string> paths = Prefabs().ToList();
+            var paths = Prefabs().ToList();
             if (paths.Count == 0)
             {
                 Log.Warn("Nothing selected in the project window, pick a folder or a prefab");
@@ -27,7 +26,7 @@ namespace Shooter.Editing
 
             for (int i = 0; i < paths.Count; i++)
             {
-                if (EditorUtility.DisplayCancelableProgressBar(Menu, paths[i], (float) i / paths.Count))
+                if (EditorUtility.DisplayCancelableProgressBar(Menu, paths[i], (float)i / paths.Count))
                     break;
 
                 int grown = Dress(paths[i]);

@@ -9,7 +9,7 @@ namespace Shooter.Configuring
 
         public static LlmConfig LlmBase()
         {
-            return new LlmConfig()
+            return new LlmConfig
             {
                 Key = "",
                 Provider = "Polza",
@@ -19,7 +19,7 @@ namespace Shooter.Configuring
 
         public static LlmConfig LlmMax()
         {
-            return new LlmConfig()
+            return new LlmConfig
             {
                 Key = "",
                 Provider = "Polza",

@@ -8,6 +8,8 @@ namespace Shooter.Game.Loot
     {
         [SerializeField] private float amount = 10f;
 
+        public override int FoodMarker => (int)amount;
+
         public override void Apply(GameObject user)
         {
             Hunger hunger = user.GetComponent<Hunger>();
@@ -16,7 +18,5 @@ namespace Shooter.Game.Loot
 
             hunger.Restore(amount);
         }
-
-        public override int FoodMarker => (int)amount;
     }
 }

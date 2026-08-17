@@ -11,7 +11,7 @@ namespace Shooter.Logging
     {
         private const int SameNameLimit = 10;
 
-        private static readonly object Gate = new object();
+        private static readonly object Gate = new();
 
         private static StreamWriter file;
 

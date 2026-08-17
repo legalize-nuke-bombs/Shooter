@@ -5,10 +5,9 @@ namespace Shooter.Game.Notifying
 {
     public static class Template
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const char Opening = '{';
         private const char Closing = '}';
+        private static readonly Journal Log = Logs.Here();
 
         public static string Filled(string pattern, Notification notification)
         {
@@ -39,7 +38,8 @@ namespace Shooter.Game.Notifying
 
                 if (value == null)
                 {
-                    Log.Warn($"Notification {notification.Spec} carries nothing under {name}, the line keeps the placeholder as it is");
+                    Log.Warn(
+                        $"Notification {notification.Spec} carries nothing under {name}, the line keeps the placeholder as it is");
                     filled.Append(pattern, index, closing - index + 1);
                 }
                 else

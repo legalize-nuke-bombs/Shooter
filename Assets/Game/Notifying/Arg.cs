@@ -1,8 +1,7 @@
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Unity.Netcode;
-using Environment = Shooter.Game.World.Environment;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Notifying
 {

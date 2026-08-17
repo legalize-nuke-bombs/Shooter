@@ -8,7 +8,7 @@ namespace Shooter.Game.Core
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly Dictionary<long, T> members = new Dictionary<long, T>();
+        private readonly Dictionary<long, T> members = new();
 
         private long counter;
 

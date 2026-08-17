@@ -1,5 +1,4 @@
 ﻿using Shooter.Game.Core;
-using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -12,15 +11,16 @@ namespace Shooter.Game.Llm.LookAroundEntity
 
         private WorldDigester worldDigester;
 
+        public override string Name => "look_around_entity";
+
+        public override string Description =>
+            "This tool shows everything around entity whose ID was passed. The greater the distance, the less detail is visible. You can use this tool to observe other characters.";
+
         protected override void Awake()
         {
             base.Awake();
             worldDigester = GetComponent<WorldDigester>();
         }
-
-        public override string Name => "look_around_entity";
-
-        public override string Description => "This tool shows everything around entity whose ID was passed. The greater the distance, the less detail is visible. You can use this tool to observe other characters.";
 
         protected override string Execute(LookAroundEntityArguments arguments)
         {

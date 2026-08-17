@@ -12,17 +12,16 @@ namespace Shooter.Bootstrapping
 {
     internal class Session : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string NetworkPrefab = "NetworkManager";
         private const string OverlayPrefab = "Overlays";
         private const string MenuScene = "Menu";
         private const string BootScene = "Boot";
         private const string WorldScene = "Map";
         private const string AnyAddress = "0.0.0.0";
+        private static readonly Journal Log = Logs.Here();
+        private bool ending;
 
         private GameObject overlays;
-        private bool ending;
 
         private IEnumerator Start()
         {
@@ -35,7 +34,7 @@ namespace Shooter.Bootstrapping
 
             yield return SceneManager.LoadSceneAsync(MenuScene, LoadSceneMode.Single);
 
-            var screen = FindAnyObjectByType<MenuScreen>();
+            MenuScreen screen = FindAnyObjectByType<MenuScreen>();
             if (screen == null)
             {
                 Log.Error($"Scene {MenuScene} carries no menu screen, there is nothing to press");
@@ -134,7 +133,7 @@ namespace Shooter.Bootstrapping
 
         private void Address(NetworkManager network, bool hosting)
         {
-            var transport = network.GetComponent<UnityTransport>();
+            UnityTransport transport = network.GetComponent<UnityTransport>();
             if (transport == null)
             {
                 Log.Warn("No unity transport to configure");
@@ -156,7 +155,7 @@ namespace Shooter.Bootstrapping
 
         private void Overlays()
         {
-            var prefab = Resources.Load<GameObject>(OverlayPrefab);
+            GameObject prefab = Resources.Load<GameObject>(OverlayPrefab);
             if (prefab == null)
             {
                 Log.Error($"No {OverlayPrefab} prefab in Resources, the session goes without overlays");
@@ -173,7 +172,7 @@ namespace Shooter.Bootstrapping
         {
             if (NetworkManager.Singleton != null) return NetworkManager.Singleton;
 
-            var prefab = Resources.Load<GameObject>(NetworkPrefab);
+            GameObject prefab = Resources.Load<GameObject>(NetworkPrefab);
             if (prefab == null)
             {
                 Log.Error($"No {NetworkPrefab} prefab in Resources, refusing to start");
@@ -184,7 +183,7 @@ namespace Shooter.Bootstrapping
             instance.name = NetworkPrefab;
             DontDestroyOnLoad(instance);
 
-            var network = instance.GetComponent<NetworkManager>();
+            NetworkManager network = instance.GetComponent<NetworkManager>();
             if (network == null) Log.Error($"Prefab {NetworkPrefab} has no NetworkManager component");
 
             return network;

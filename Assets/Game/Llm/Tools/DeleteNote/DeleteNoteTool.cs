@@ -9,12 +9,6 @@ namespace Shooter.Game.Llm.DeleteNote
     {
         private LlmNotes notes;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
-        }
-
         public override string Name => "delete_note";
 
         public override string Description =>
@@ -22,6 +16,12 @@ namespace Shooter.Game.Llm.DeleteNote
 Use this tool to delete a note.
 The note with the provided name will be PERMANENTLY DELETED.
 ";
+
+        protected override void Awake()
+        {
+            base.Awake();
+            notes = GetComponent<LlmNotes>();
+        }
 
         protected override string Execute(DeleteNoteArguments arguments)
         {
@@ -35,6 +35,7 @@ The note with the provided name will be PERMANENTLY DELETED.
             {
                 result = $"Failed to delete a note: {e.Message}";
             }
+
             return result;
         }
     }

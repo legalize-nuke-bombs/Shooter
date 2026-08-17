@@ -1,8 +1,8 @@
+using Shooter.Game.Core;
+using Shooter.Game.Notifying;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Notifying;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -10,7 +10,7 @@ namespace Shooter.Game.Body
     {
         [SerializeField] private string absolute;
 
-        private readonly NetworkVariable<FixedString64Bytes> current = new NetworkVariable<FixedString64Bytes>();
+        private readonly NetworkVariable<FixedString64Bytes> current = new();
 
         public string Name => current.Value.ToString();
 

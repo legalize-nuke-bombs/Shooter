@@ -1,5 +1,5 @@
-using UnityEngine;
 using Shooter.Game.Core;
+using UnityEngine;
 
 namespace Shooter.Game.Notifying
 {

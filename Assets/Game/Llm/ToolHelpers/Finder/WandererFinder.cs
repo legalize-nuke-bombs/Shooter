@@ -1,6 +1,5 @@
 ﻿using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -22,6 +21,7 @@ namespace Shooter.Game.Llm.ToolHelpers.Finder
                     Log.Warn($"Player {player.name} does not have persistent id");
                     continue;
                 }
+
                 output.Include(id.Value);
             }
         }

@@ -1,6 +1,5 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Game.Speech;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -11,23 +10,22 @@ namespace Shooter.Client.Interface
 {
     public class TalkOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string WindowElement = "talk";
         private const string NameElement = "talk-name";
         private const string LogElement = "talk-log";
         private const string WaitingElement = "talk-waiting";
         private const string InputElement = "talk-input";
         private const string Stranger = "Незнакомец";
+        private static readonly Journal Log = Logs.Here();
 
-        private readonly NameMapper mapper = new NameMapper();
+        private readonly NameMapper mapper = new();
+        private TextField input;
+        private ScrollView log;
+        private Mouth mouth;
+        private Label speaker;
+        private Label waiting;
 
         private VisualElement window;
-        private Label speaker;
-        private ScrollView log;
-        private Label waiting;
-        private TextField input;
-        private Mouth mouth;
 
         private void Update()
         {
@@ -132,7 +130,7 @@ namespace Shooter.Client.Interface
 
             if (!network.SpawnManager.SpawnedObjects.TryGetValue(talkerId, out NetworkObject talker)) return Stranger;
 
-            var nameable = talker.GetComponentInChildren<Nameable>();
+            Nameable nameable = talker.GetComponentInChildren<Nameable>();
             if (nameable == null) return Stranger;
 
             string named = mapper.Of(nameable);

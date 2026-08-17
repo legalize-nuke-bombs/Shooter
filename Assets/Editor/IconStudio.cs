@@ -114,7 +114,7 @@ namespace Shooter.Editor
 
         private static float Framing(Bounds bounds, IconSetup setup)
         {
-            Quaternion sight = Quaternion.Euler(setup.SightAngles);
+            var sight = Quaternion.Euler(setup.SightAngles);
             Vector3 extents = bounds.extents;
             float widest = 0f;
 
@@ -155,16 +155,16 @@ namespace Shooter.Editor
             var holder = new GameObject("Volume") { layer = Layer };
             holder.transform.SetParent(studio.transform);
 
-            var profile = ScriptableObject.CreateInstance<VolumeProfile>();
+            VolumeProfile profile = ScriptableObject.CreateInstance<VolumeProfile>();
             profile.hideFlags = HideFlags.HideAndDontSave;
 
-            var exposure = profile.Add<Exposure>();
+            Exposure exposure = profile.Add<Exposure>();
             exposure.mode.overrideState = true;
             exposure.mode.value = ExposureMode.Fixed;
             exposure.fixedExposure.overrideState = true;
             exposure.fixedExposure.value = stop;
 
-            var tonemapping = profile.Add<Tonemapping>();
+            Tonemapping tonemapping = profile.Add<Tonemapping>();
             tonemapping.mode.overrideState = true;
             tonemapping.mode.value = TonemappingMode.ACES;
 
@@ -254,16 +254,14 @@ namespace Shooter.Editor
             int top = -1;
 
             for (int y = 0; y < shot.height; y++)
+            for (int x = 0; x < shot.width; x++)
             {
-                for (int x = 0; x < shot.width; x++)
-                {
-                    if (pixels[y * shot.width + x].a <= 0.02f) continue;
+                if (pixels[y * shot.width + x].a <= 0.02f) continue;
 
-                    left = Mathf.Min(left, x);
-                    right = Mathf.Max(right, x);
-                    bottom = Mathf.Min(bottom, y);
-                    top = Mathf.Max(top, y);
-                }
+                left = Mathf.Min(left, x);
+                right = Mathf.Max(right, x);
+                bottom = Mathf.Min(bottom, y);
+                top = Mathf.Max(top, y);
             }
 
             if (right < 0)

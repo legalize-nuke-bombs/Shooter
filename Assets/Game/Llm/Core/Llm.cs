@@ -6,10 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Core;
+using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.World;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
@@ -17,17 +17,25 @@ namespace Shooter.Game.Llm
     [RequireComponent(typeof(LlmWaiting))]
     public class Llm : MonoBehaviour, IMortal
     {
-        private static readonly Journal Log = Logs.Here();
+        private const string RetellingDemand =
+            "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of your whole story: the call itself will remain as the only story of your life, everything older will be erased, and anything you leave out of the retelling is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length.";
 
-        private LlmHistory history;
-        private LlmWaiting waiting;
-        private LlmTool[] abilities;
-        private string entityName;
-        private readonly CancellationTokenSource life = new CancellationTokenSource();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private SystemPromptSpec[] systemPrompts;
         [SerializeField] [TextArea(5, 20)] private string character;
         [SerializeField] private KnowledgeSpec[] knowledges;
+        [SerializeField] private float failureCooldown = 2.5f;
+        [SerializeField] private int maxToolRounds = 10;
+
+        private readonly SemaphoreSlim gate = new(1, 1);
+        private readonly CancellationTokenSource life = new();
+        private LlmTool[] abilities;
+        private string entityName;
+
+        private LlmHistory history;
+        private float retryBlockedUntil;
+        private LlmWaiting waiting;
 
         private void Awake()
         {
@@ -42,17 +50,18 @@ namespace Shooter.Game.Llm
             life.Cancel();
         }
 
+        public void Died()
+        {
+            life.Cancel();
+        }
+
         private void Begin()
         {
             string start = (character + "\n" + Knowledge()).Trim('\n');
             if (start.Length == 0) return;
 
-            history.Append(new LlmMessage { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + start });
-        }
-
-        public void Died()
-        {
-            life.Cancel();
+            history.Append(new LlmMessage
+                { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + start });
         }
 
         private string SystemPrompt()
@@ -65,8 +74,10 @@ namespace Shooter.Game.Llm
                     Log.Warn($"Entity {entityName} has an empty slot among its {systemPrompts.Length} prompts");
                     continue;
                 }
+
                 systemPrompt.Append(sp.Content).Append('\n');
             }
+
             return systemPrompt.ToString();
         }
 
@@ -80,8 +91,10 @@ namespace Shooter.Game.Llm
                     Log.Warn($"Entity {entityName} has an empty slot among its {knowledges.Length} knowledges");
                     continue;
                 }
+
                 known.Append(knowledge.Content).Append('\n');
             }
+
             return known.ToString();
         }
 
@@ -100,14 +113,9 @@ namespace Shooter.Game.Llm
             waiting.Forget(wandererId);
         }
 
-        private readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
-        [SerializeField] private float failureCooldown = 2.5f;
-        [SerializeField] private int maxToolRounds = 10;
-        private float retryBlockedUntil;
-
         public LlmStatus Status()
         {
-            return new LlmStatus()
+            return new LlmStatus
             {
                 PendingCompact = history.Overflowing,
                 PendingMail = history.Unseen
@@ -116,17 +124,11 @@ namespace Shooter.Game.Llm
 
         public async Task<bool> Tick()
         {
-            if (life.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil)
-            {
-                return false;
-            }
+            if (life.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil) return false;
 
             bool entered = await gate.WaitAsync(0, life.Token);
 
-            if (!entered)
-            {
-                return false;
-            }
+            if (!entered) return false;
 
             try
             {
@@ -138,11 +140,12 @@ namespace Shooter.Game.Llm
                 history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
                 history.Snapshot();
 
-                List<LlmTool> selected = abilities.Where(ability => ability.Available).ToList();
+                var selected = abilities.Where(ability => ability.Available).ToList();
                 LlmConfig config = Fitting(selected);
-                List<ILlmTool> tools = selected.Cast<ILlmTool>().ToList();
+                var tools = selected.Cast<ILlmTool>().ToList();
 
-                Log.Info($"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
+                Log.Info(
+                    $"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
 
                 for (int round = 0; round < maxToolRounds; round++)
                 {
@@ -156,20 +159,18 @@ namespace Shooter.Game.Llm
                     );
                     life.Token.ThrowIfCancellationRequested();
 
-                    history.Append(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
+                    history.Append(new LlmMessage
+                        { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
 
                     if (!turn.CallsTools) break;
 
                     foreach (LlmToolCall call in turn.ToolCalls)
-                    {
-                        history.Append(new LlmMessage { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
-                    }
+                        history.Append(new LlmMessage
+                            { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
                 }
 
                 if (retelling && history.Overflowing)
-                {
                     throw new LlmException("The story is still overflowing after the retelling tick");
-                }
 
                 return true;
             }
@@ -190,18 +191,12 @@ namespace Shooter.Game.Llm
             }
         }
 
-        private const string RetellingDemand =
-            "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of your whole story: the call itself will remain as the only story of your life, everything older will be erased, and anything you leave out of the retelling is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length.";
-
         private string Observation()
         {
             var seen = new StringBuilder();
             seen.Append('[').Append(Time()).Append(']');
 
-            if (history.Overflowing)
-            {
-                seen.Append('\n').Append(RetellingDemand);
-            }
+            if (history.Overflowing) seen.Append('\n').Append(RetellingDemand);
 
             return seen.ToString();
         }

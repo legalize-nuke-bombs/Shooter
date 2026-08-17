@@ -15,7 +15,7 @@ namespace Shooter.Game.Loot
 
         public IconSpec Icon => icon;
 
-        public Vector2Int Cells => new Vector2Int(Mathf.Max(cells.x, 1), Mathf.Max(cells.y, 1));
+        public Vector2Int Cells => new(Mathf.Max(cells.x, 1), Mathf.Max(cells.y, 1));
 
         public string Title => string.IsNullOrEmpty(title) ? Key : title;
 

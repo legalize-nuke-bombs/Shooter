@@ -7,18 +7,18 @@ namespace Shooter.Game.Llm
     {
         private LlmWaiting waiting;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            waiting = GetComponent<LlmWaiting>();
-        }
-
         public override string Name => "say_to_wanderer";
 
         public override string Description =>
             "Answer a wanderer who is talking to you. Answer in the language the wanderer speaks.";
 
         public override bool Available => waiting.Any;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            waiting = GetComponent<LlmWaiting>();
+        }
 
         protected override string Execute(SayToWandererArguments arguments)
         {

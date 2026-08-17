@@ -10,7 +10,7 @@ namespace Shooter.Game.World
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject destination;
-        [SerializeField] private EarSoundSpec sound = null;
+        [SerializeField] private EarSoundSpec sound;
 
         public void OnTrigger(PersistentId character)
         {

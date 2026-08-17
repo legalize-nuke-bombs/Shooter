@@ -10,11 +10,11 @@ namespace Shooter.Game.Core
     {
         private static readonly Journal Log = Logs.Here();
 
-        public static Catalogs Current { get; private set; }
-
         [SerializeField] private Catalog[] catalogs;
 
-        private readonly Dictionary<Type, Catalog> known = new Dictionary<Type, Catalog>();
+        private readonly Dictionary<Type, Catalog> known = new();
+
+        public static Catalogs Current { get; private set; }
 
         private void Awake()
         {
@@ -23,9 +23,7 @@ namespace Shooter.Game.Core
                 if (catalog == null) continue;
 
                 if (!known.TryAdd(catalog.GetType(), catalog))
-                {
                     Log.Error($"Catalogs holds two of {catalog.GetType().Name}, {catalog.name} is ignored");
-                }
             }
 
             Log.Info($"Catalogs serve {known.Count} kinds");

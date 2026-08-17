@@ -1,10 +1,9 @@
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Notifying;
+using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
-using Shooter.Game.World;
 
 namespace Shooter.Game.Llm
 {
@@ -33,14 +32,15 @@ namespace Shooter.Game.Llm
             }
 
             IconSpec icon = notification.Icon();
-            string iconDescription = (icon == null) ? "none" : icon.PromptDescription;
+            string iconDescription = icon == null ? "none" : icon.PromptDescription;
 
             EarSoundSpec sound = notification.Sound();
-            string soundDescription = (sound == null) ? "none" : sound.PromptDescription;
+            string soundDescription = sound == null ? "none" : sound.PromptDescription;
 
             string told = Template.Filled(spec.Told, notification);
 
-            llm.Notice($"[{Clock.Current.DateTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}");
+            llm.Notice(
+                $"[{Clock.Current.DateTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}");
         }
 
         private NotificationSpec Spec(Notification notification)
@@ -49,7 +49,8 @@ namespace Shooter.Game.Llm
 
             if (catalog == null)
             {
-                Log.Error($"Entity {this.NameOf()} has no world to ask about {notification.Spec}, the notification is lost");
+                Log.Error(
+                    $"Entity {this.NameOf()} has no world to ask about {notification.Spec}, the notification is lost");
                 return null;
             }
 

@@ -1,8 +1,8 @@
 using System;
-using Unity.Netcode;
-using UnityEngine;
 using Shooter.Game.Core;
 using Shooter.Game.World;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game.Body
 {
@@ -15,20 +15,49 @@ namespace Shooter.Game.Body
         [SerializeField] private float recoverySpeed = 12f;
         [SerializeField] private float sprintThreshold = 10f;
 
-        private readonly NetworkVariable<float> amount = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Owner);
+        private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
 
         private bool exhausted;
+
+        public float Amount => amount.Value;
+
+        public float MaxAmount => Mathf.Max(maxAmount, 1f);
 
         private void Awake()
         {
             enabled = false;
         }
 
-        public float Amount => amount.Value;
+        private void Update()
+        {
+            float dt = Time.deltaTime * Clock.Current.Scale;
+            amount.Value = Mathf.Min(amount.Value + dt * recoverySpeed, MaxAmount);
 
-        public float MaxAmount => Mathf.Max(maxAmount, 1f);
+            if (amount.Value >= sprintThreshold) exhausted = false;
+        }
 
         public DigestionPriority Priority => DigestionPriority.Low;
+
+        public string Digest(DigestionDetail detail)
+        {
+            if (detail != DigestionDetail.Full) return null;
+
+            return $"Stamina: {Mathf.RoundToInt(Amount)}/{Mathf.RoundToInt(MaxAmount)}";
+        }
+
+        public bool CanPerform(ActionType type, float dt)
+        {
+            if (type == ActionType.Sprint && exhausted) return false;
+
+            return !Blocker(type) || amount.Value >= Cost(type, dt);
+        }
+
+        public void RegisterAction(ActionType type, float dt)
+        {
+            amount.Value = Math.Max(0, amount.Value - Cost(type, dt));
+
+            if (amount.Value <= 0f) exhausted = true;
+        }
 
         public override void OnNetworkSpawn()
         {
@@ -46,35 +75,6 @@ namespace Shooter.Game.Body
         public override void OnNetworkDespawn()
         {
             enabled = false;
-        }
-
-        public string Digest(DigestionDetail detail)
-        {
-            if (detail != DigestionDetail.Full) return null;
-
-            return $"Stamina: {Mathf.RoundToInt(Amount)}/{Mathf.RoundToInt(MaxAmount)}";
-        }
-
-        private void Update()
-        {
-            float dt = Time.deltaTime * Clock.Current.Scale;
-            amount.Value = Mathf.Min(amount.Value + dt * recoverySpeed, MaxAmount);
-
-            if (amount.Value >= sprintThreshold) exhausted = false;
-        }
-
-        public bool CanPerform(ActionType type, float dt)
-        {
-            if (type == ActionType.Sprint && exhausted) return false;
-
-            return !Blocker(type) || (amount.Value >= Cost(type, dt));
-        }
-
-        public void RegisterAction(ActionType type, float dt)
-        {
-            amount.Value = Math.Max(0, amount.Value - Cost(type, dt));
-
-            if (amount.Value <= 0f) exhausted = true;
         }
 
         private float Cost(ActionType type, float dt)

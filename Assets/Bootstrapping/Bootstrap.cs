@@ -2,14 +2,14 @@ using System;
 using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Shooter.Bootstrapping
 {
     public static class Bootstrap
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string NameArgument = "-name";
+        private static readonly Journal Log = Logs.Here();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Init()
@@ -25,7 +25,7 @@ namespace Shooter.Bootstrapping
             // later, when that work is certainly done.
             var session = new GameObject(nameof(Session));
             session.AddComponent<Session>();
-            UnityEngine.Object.DontDestroyOnLoad(session);
+            Object.DontDestroyOnLoad(session);
         }
 
         // Virtual players of the multiplayer play mode are handed their name on the command line, and
@@ -35,9 +35,8 @@ namespace Shooter.Bootstrapping
             string[] arguments = Environment.GetCommandLineArgs();
 
             for (int i = 0; i < arguments.Length - 1; i++)
-            {
-                if (arguments[i] == NameArgument) return arguments[i + 1].ToLowerInvariant();
-            }
+                if (arguments[i] == NameArgument)
+                    return arguments[i + 1].ToLowerInvariant();
 
             return Application.isEditor ? "editor" : "game";
         }

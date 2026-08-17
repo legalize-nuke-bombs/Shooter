@@ -5,7 +5,7 @@ namespace Shooter.Game.Speech
 {
     public sealed class Conversation
     {
-        private readonly List<Message> messages = new List<Message>();
+        private readonly List<Message> messages = new();
 
         public Conversation(long wanderer)
         {
