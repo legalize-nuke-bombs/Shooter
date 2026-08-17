@@ -20,7 +20,7 @@ namespace Shooter.Game.Core
         {
             if (!IsServer) return;
 
-            if (Environment.Current != null) Registers.Current.Of<PersistentId>().Remove(value.Value);
+            if (Registers.Current != null) Registers.Current.Of<PersistentId>().Remove(value.Value);
         }
     }
 }

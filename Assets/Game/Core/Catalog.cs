@@ -42,7 +42,7 @@ namespace Shooter.Game.Core
             return null;
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             known.Clear();
             unknown.Clear();

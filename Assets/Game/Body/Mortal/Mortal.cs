@@ -2,7 +2,7 @@ using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
@@ -61,7 +61,7 @@ namespace Shooter.Game.Body
         {
             if (sleeper != null) return sleeper.SpawnPoint;
 
-            return Environment.Current == null ? transform.position : Environment.Current.Spawn.position;
+            return MainSpawnPoint.Current == null ? transform.position : MainSpawnPoint.Current.transform.position;
         }
 
         private void LeaveCorpse()
@@ -100,9 +100,7 @@ namespace Shooter.Game.Body
 
         private GameObject CorpsePrefab()
         {
-            if (corpsePrefab != null) return corpsePrefab;
-
-            return Environment.Current == null ? null : Environment.Current.Corpse;
+            return corpsePrefab;
         }
     }
 }

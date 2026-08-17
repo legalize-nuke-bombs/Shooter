@@ -39,7 +39,7 @@ namespace Shooter.Game.Body
             {
                 if (bedded.HasValue) return bedded.Value;
 
-                return Environment.Current == null ? transform.position : Environment.Current.Spawn.position;
+                return MainSpawnPoint.Current == null ? transform.position : MainSpawnPoint.Current.transform.position;
             }
         }
 

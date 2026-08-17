@@ -27,7 +27,7 @@ namespace Shooter.Game.Body
 
             bool alive = health == null || health.Alive;
             bool handsFree = hands == null || hands.Free;
-            bool night = Environment.Current != null && Clock.Current.IsNight();
+            bool night = Clock.Current != null && Clock.Current.IsNight();
 
             if (!SleepRule.CanSleep(alive, handsFree, night))
             {
