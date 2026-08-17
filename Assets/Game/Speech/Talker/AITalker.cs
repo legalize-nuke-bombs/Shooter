@@ -20,7 +20,7 @@ namespace Shooter.Game.Speech
         {
             if (llm == null)
             {
-                Log.Warn($"Entity {name} has no llm to answer with");
+                Log.Warn($"Entity {this.NameOf()} has no llm to answer with");
                 onAnswer(Fallback);
                 return;
             }

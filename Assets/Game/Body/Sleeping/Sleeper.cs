@@ -51,7 +51,7 @@ namespace Shooter.Game.Body
             sleeping.Value = true;
             bedded = transform.position;
             Sound(bedding);
-            Log.Info($"Entity {name} fell asleep at {SpawnPoint} in a bed at {bedside.Value}");
+            Log.Info($"Entity {this.NameOf()} fell asleep at {SpawnPoint} in a bed at {bedside.Value}");
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -61,7 +61,7 @@ namespace Shooter.Game.Body
 
             if (!SleepRule.CanWake(worldAsleep))
             {
-                Log.Info($"Entity {name} can not wake up on its own, the whole world is asleep");
+                Log.Info($"Entity {this.NameOf()} can not wake up on its own, the whole world is asleep");
                 return;
             }
 
@@ -84,7 +84,7 @@ namespace Shooter.Game.Body
 
             sleeping.Value = false;
             if (heard) Sound(rising);
-            Log.Info($"Entity {name} woke up at {transform.position}");
+            Log.Info($"Entity {this.NameOf()} woke up at {transform.position}");
         }
 
         private void Sound(SoundSpec sound)

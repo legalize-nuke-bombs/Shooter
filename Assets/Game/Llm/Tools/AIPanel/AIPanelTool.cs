@@ -17,7 +17,7 @@ namespace Shooter.Game.Llm.AIPanel
         {
             base.Awake();
             settings = this.FindAll<AISetting>();
-            Log.Info($"Entity {name} has {settings.Length} ai settings");
+            Log.Info($"Entity {this.NameOf()} has {settings.Length} ai settings");
         }
 
         public override string Name => "ai_panel";

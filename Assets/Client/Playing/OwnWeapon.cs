@@ -49,7 +49,7 @@ namespace Shooter.Client.Playing
             layer = LayerMask.NameToLayer(FirstPersonLayer);
             if (layer < 0)
             {
-                Log.Warn($"Own player {name} found no {FirstPersonLayer} layer, weapon stays in the world pass");
+                Log.Warn($"Own player {this.NameOf()} found no {FirstPersonLayer} layer, weapon stays in the world pass");
                 return;
             }
             if (eye == null)
@@ -66,7 +66,7 @@ namespace Shooter.Client.Playing
             var pass = volume.AddPassOfType(typeof(FirstPersonPass)) as FirstPersonPass;
             pass.layer = 1 << layer;
 
-            Log.Info($"Own player {name} draws first person weapon over the world, layer {layer}");
+            Log.Info($"Own player {this.NameOf()} draws first person weapon over the world, layer {layer}");
         }
 
         public override void OnNetworkDespawn()
@@ -93,7 +93,7 @@ namespace Shooter.Client.Playing
         {
             if (eye == null)
             {
-                Log.Warn($"Own player {name} has no camera, first person weapon stays invisible");
+                Log.Warn($"Own player {this.NameOf()} has no camera, first person weapon stays invisible");
                 return null;
             }
 
@@ -109,7 +109,7 @@ namespace Shooter.Client.Playing
                 foreach (Transform part in worn.GetComponentsInChildren<Transform>(true))
                     part.gameObject.layer = layer;
 
-            Log.Info($"Own player {name} sees {model.name} in first person at {worn.transform.localPosition} scaled {worn.transform.localScale} (rest {restScale})");
+            Log.Info($"Own player {this.NameOf()} sees {model.name} in first person at {worn.transform.localPosition} scaled {worn.transform.localScale} (rest {restScale})");
             return worn;
         }
 

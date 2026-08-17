@@ -23,6 +23,11 @@ namespace Shooter.Game.Core
             return Root(member).GetComponentsInChildren<T>();
         }
 
+        public static string NameOf(this Component member)
+        {
+            return Root(member).name;
+        }
+
         private static Transform Root(Component member)
         {
             NetworkObject anchor = member.GetComponentInParent<NetworkObject>();

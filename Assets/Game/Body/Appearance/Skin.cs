@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Shooter.Logging;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -18,7 +19,7 @@ namespace Shooter.Game.Body
         {
             if (spec == null || spec.Model == null)
             {
-                Log.Warn($"Entity {name} has no skin to wear, stays invisible");
+                Log.Warn($"Entity {this.NameOf()} has no skin to wear, stays invisible");
                 return;
             }
 
@@ -30,7 +31,7 @@ namespace Shooter.Game.Body
             var animator = Flesh.GetComponent<Animator>();
             if (animator == null)
             {
-                Log.Warn($"Skin {spec.Id} of entity {name} has no animator, entity stays still");
+                Log.Warn($"Skin {spec.Id} of entity {this.NameOf()} has no animator, entity stays still");
                 return;
             }
 
@@ -40,7 +41,7 @@ namespace Shooter.Game.Body
             Flesh.AddComponent<Poser>();
             Flesh.AddComponent<Hitboxes>();
 
-            Log.Info($"Entity {name} dressed as {spec.Id}, {(Height(Flesh))} m tall");
+            Log.Info($"Entity {this.NameOf()} dressed as {spec.Id}, {(Height(Flesh))} m tall");
         }
 
         private static float Height(GameObject flesh)

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Shooter.Logging;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -17,7 +18,7 @@ namespace Shooter.Game.Body
             int layer = LayerMask.NameToLayer(Hitboxes.Layer);
             if (layer < 0)
             {
-                Log.Error($"Layer {Hitboxes.Layer} is not defined, entity {name} gets no ragdoll");
+                Log.Error($"Layer {Hitboxes.Layer} is not defined, entity {this.NameOf()} gets no ragdoll");
                 return;
             }
 
@@ -28,7 +29,7 @@ namespace Shooter.Game.Body
             Transform head = animator.GetBoneTransform(HumanBodyBones.Head);
             if (hips == null || head == null)
             {
-                Log.Warn($"Entity {name} has no humanoid skeleton, ragdoll skipped");
+                Log.Warn($"Entity {this.NameOf()} has no humanoid skeleton, ragdoll skipped");
                 return;
             }
 
@@ -42,7 +43,7 @@ namespace Shooter.Game.Body
                 Transform ending = Skeleton.Ending(animator, segment);
                 if (bone == null || ending == null)
                 {
-                    Log.Warn($"Entity {name} misses bones {segment.From} - {segment.To}, ragdoll part skipped");
+                    Log.Warn($"Entity {this.NameOf()} misses bones {segment.From} - {segment.To}, ragdoll part skipped");
                     continue;
                 }
 
@@ -56,7 +57,7 @@ namespace Shooter.Game.Body
             }
 
             Skull(head, hips, Skeleton.HeadRadius * scale, layer, bodies);
-            Log.Info($"Entity {name} turned into a ragdoll of {(built + 1)} parts");
+            Log.Info($"Entity {this.NameOf()} turned into a ragdoll of {(built + 1)} parts");
         }
 
         private Rigidbody Limb(Transform bone, Vector3 target, Skeleton.Segment segment, float radius, int layer)

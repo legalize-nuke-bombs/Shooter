@@ -5,6 +5,7 @@ using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
@@ -40,7 +41,7 @@ namespace Shooter.Game.Llm
                 string.IsNullOrEmpty(arguments) ? "{}" : arguments, Settings);
 
             string result = Execute(parsed);
-            Log.Info($"Entity {name} used {Name} {arguments}: {result}");
+            Log.Info($"Entity {this.NameOf()} used {Name} {arguments}: {result}");
 
             return result;
         }

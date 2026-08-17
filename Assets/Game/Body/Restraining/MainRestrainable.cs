@@ -15,7 +15,7 @@ namespace Shooter.Game.Body
         public void Awake()
         {
             restraints = this.FindAll<IRestraint>();
-            Log.Info($"Entity {name} has {restraints.Length} restraints");
+            Log.Info($"Entity {this.NameOf()} has {restraints.Length} restraints");
         }
 
         public bool CanPerform(ActionType type, float dt)
@@ -24,7 +24,7 @@ namespace Shooter.Game.Body
             {
                 if (!restraint.CanPerform(type, dt))
                 {
-                    Log.Info($"Entity {name} cant perform {type}, reason: {restraint.GetType().Name}");
+                    Log.Info($"Entity {this.NameOf()} cant perform {type}, reason: {restraint.GetType().Name}");
                     return false;
                 }
             }

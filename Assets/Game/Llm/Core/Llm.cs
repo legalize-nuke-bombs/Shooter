@@ -9,6 +9,7 @@ using Shooter.Game.Body;
 using Shooter.Logging;
 using UnityEngine;
 using Shooter.Game.World;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
@@ -33,7 +34,7 @@ namespace Shooter.Game.Llm
             history = GetComponent<LlmHistory>();
             waiting = GetComponent<LlmWaiting>();
             abilities = GetComponents<LlmTool>();
-            entityName = name;
+            entityName = this.NameOf();
         }
 
         private void OnDestroy()

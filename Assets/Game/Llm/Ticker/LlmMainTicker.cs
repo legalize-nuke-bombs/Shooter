@@ -4,6 +4,7 @@ using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
@@ -27,7 +28,7 @@ namespace Shooter.Game.Llm
                 Log.Warn($"Entity {entityName} has no NetworkObject, its llm will never tick");
             }
 
-            entityName = name;
+            entityName = this.NameOf();
 
             tickers = GetComponents<LlmChildTicker>();
             if (tickers.Length == 0)

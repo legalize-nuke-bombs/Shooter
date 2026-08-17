@@ -106,7 +106,7 @@ namespace Shooter.Game.Combat
 
             restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantAction);
             speaker?.Play(spec.ReloadSound);
-            Log.Info($"Entity {name} started reload of {firearm.SpecId}, {spec.ReloadTime}s");
+            Log.Info($"Entity {this.NameOf()} started reload of {firearm.SpecId}, {spec.ReloadTime}s");
             return true;
         }
 
@@ -130,7 +130,7 @@ namespace Shooter.Game.Combat
 
             int taken = inventory.RemoveStackable(spec.Ammo, absent, InventoryOnConflict.Partly);
             firearm.Reload(taken, spec.MagazineSize);
-            Log.Info($"Entity {name} reloaded {firearm.SpecId} with {taken} rounds, {(inventory.StackableAmount(spec.Ammo))} left in bag");
+            Log.Info($"Entity {this.NameOf()} reloaded {firearm.SpecId} with {taken} rounds, {(inventory.StackableAmount(spec.Ammo))} left in bag");
         }
 
         private void Hit(FirearmSpec spec)
@@ -141,7 +141,7 @@ namespace Shooter.Game.Combat
             int found = Interactor.Look(interactor.Eyes, direction, spec.Distance, transform, Shots);
             if (!Interactor.TryNearest(Shots, found, out RaycastHit hit))
             {
-                Log.Info($"Shot of entity {name} missed");
+                Log.Info($"Shot of entity {this.NameOf()} missed");
                 return;
             }
 
@@ -149,7 +149,7 @@ namespace Shooter.Game.Combat
             if (health == null)
             {
                 BulletHoles.Current.Add(hit.point, hit.normal);
-                Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
+                Log.Info($"Shot of entity {this.NameOf()} hit {hit.collider.name} without health");
                 return;
             }
 
@@ -158,7 +158,7 @@ namespace Shooter.Game.Combat
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
             health.Damage(damage, id == null ? null : id.Value, spec.DamageType);
-            Log.Info($"Shot of entity {name} hit {health.name} in {part} for {damage} damage");
+            Log.Info($"Shot of entity {this.NameOf()} hit {health.name} in {part} for {damage} damage");
         }
 
         private BodyPart Weakest(int found, Health victim)
