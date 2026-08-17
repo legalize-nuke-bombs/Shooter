@@ -165,6 +165,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: -710703610660615319}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6077178664080955976}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2834569109349338220}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2878090124849971939}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -188,6 +197,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 15dce29c4e723814eb7a5c2a5306561a, type: 2}
   - {fileID: 11400000, guid: 961bd56739dedc546a907e5cd19772e7, type: 2}
   - {fileID: 11400000, guid: de916ee7dd199e245a0042846075dd32, type: 2}
+  - {fileID: 11400000, guid: 8f9c0ec3c3a44a04f9ba4a4767958553, type: 2}
   - {fileID: 11400000, guid: 7169eafc621024f46b028be5826ca7a9, type: 2}
   character: 
   knowledges:
@@ -570,3 +580,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f68fddc98b4dac974772faff16201a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DeleteNote.DeleteNoteTool
+--- !u!114 &-6077178664080955976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caf1079788df4d2d82fbf8564e237293, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.DefaultHunger
+  ShowTopMostFoldoutHeaderGroup: 1
+  sprintCost: 0.5
+  walkCost: 0.25
+  jumpCost: 2
+  idleCost: 0.1
+  maxAmount: 100
+--- !u!114 &2834569109349338220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ac4df7c0a34b9e87b664ad14a2c180, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.Eater.AIEater
+--- !u!114 &-2878090124849971939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8509b0050ed4b72b825fea69beb1508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.Eater.AISettingEater

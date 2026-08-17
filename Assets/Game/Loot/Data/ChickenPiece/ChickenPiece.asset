@@ -19,5 +19,5 @@ MonoBehaviour:
   cells: {x: 1, y: 1}
   promptDescription: Chicken piece
   effects:
-  - {fileID: 11400000, guid: 490468224d1f43a8a9badf98f18a6ef0, type: 2}
+  - {fileID: 11400000, guid: c1b84f5d062ce8e43b43e644f9cd514a, type: 2}
   useSound: {fileID: 11400000, guid: 312e580d395c7794ca4bf670ff0bda80, type: 2}

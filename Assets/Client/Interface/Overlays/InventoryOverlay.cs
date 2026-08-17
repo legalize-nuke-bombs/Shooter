@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using Shooter.Client.Playing;
-using Shooter.Game.Core;
-using Shooter.Game.World;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using UnityEngine;
@@ -365,7 +363,7 @@ namespace Shooter.Client.Interface
 
             var use = new Button(() =>
             {
-                if (bag != null) bag.UseStackableRpc(index);
+                if (bag != null) bag.UseStackableRpc(Environment.Current.Items.At(index).Id);
 
                 CloseMenu();
             }) { text = "Использовать" };

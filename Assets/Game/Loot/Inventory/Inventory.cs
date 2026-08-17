@@ -4,6 +4,7 @@ using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Llm;
 using Shooter.Logging;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
@@ -172,21 +173,24 @@ namespace Shooter.Game.Loot
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void UseStackableRpc(int index)
+        public void UseStackableRpc(FixedString32Bytes stackableId)
         {
-            ItemCatalog catalog = Catalog;
-            if (catalog == null || index < 0 || index >= catalog.Count) return;
-
-            if (catalog.At(index) is not StackableItemSpec spec || !spec.Usable)
+            if (!UseStackable(stackableId))
             {
-                Log.Info($"Entity {name} can not use item {index}: it is not a usable stackable");
-                return;
+                Log.Info($"Entity {name} failed to use stackable {stackableId} rpc");
+            }
+        }
+
+        public bool UseStackable(FixedString32Bytes stackableId)
+        {
+            if (Catalog.Of(stackableId) is not StackableItemSpec spec || !spec.Usable)
+            {
+                return false;
             }
 
             if (RemoveStackable(spec, 1, InventoryOnConflict.Rollback) == 0)
             {
-                Log.Info($"Entity {name} has no {spec.Key} to use");
-                return;
+                return false;
             }
 
             foreach (ItemEffect effect in spec.Effects)
@@ -197,6 +201,7 @@ namespace Shooter.Game.Loot
             if (spec.UseSound != null && TryGetComponent(out Speaker speaker)) speaker.Play(spec.UseSound);
 
             Log.Info($"Entity {name} used one {spec.Key}");
+            return true;
         }
 
         public UniqueItem Equipped()

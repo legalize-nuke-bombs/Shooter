@@ -16,5 +16,7 @@ namespace Shooter.Game.Loot
 
             hunger.Restore(amount);
         }
+
+        public override int FoodMarker => (int)amount;
     }
 }
