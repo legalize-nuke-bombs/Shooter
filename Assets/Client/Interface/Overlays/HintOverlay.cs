@@ -1,5 +1,6 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -74,7 +75,7 @@ namespace Shooter.Client.Interface
             if (!aimer.TryHit(out RaycastHit hit) || hit.distance > interactor.Reach) return string.Empty;
             if (hit.collider == null) return string.Empty;
 
-            IUsable usable = hit.collider.GetComponentInParent<IUsable>();
+            IUsable usable = hit.collider.Find<IUsable>();
             if (usable == null) return string.Empty;
 
             return "[" + key + "] " + hints.Text(usable.Usage);
