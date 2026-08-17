@@ -1,4 +1,5 @@
 ﻿using Shooter.Game.Body;
+using Shooter.Game.Core;
 using UnityEngine;
 
 namespace Shooter.Game.Loot
@@ -11,7 +12,7 @@ namespace Shooter.Game.Loot
 
         public override void Apply(GameObject user)
         {
-            Intoxication intoxication = user.GetComponent<Intoxication>();
+            Intoxication intoxication = user.transform.Find<Intoxication>();
 
             if (intoxication == null) return;
 

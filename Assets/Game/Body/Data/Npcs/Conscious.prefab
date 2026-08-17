@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4631506295885286890, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1544740508
+      value: 3953210236
       objectReference: {fileID: 0}
     - target: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: m_Name
@@ -182,7 +182,10 @@ PrefabInstance:
       addedObject: {fileID: 5039496335208100997}
     - targetCorrespondingSourceObject: {fileID: 4539299645413200480, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6749246589625948657}
+      addedObject: {fileID: 7843635866851778636}
+    - targetCorrespondingSourceObject: {fileID: 4539299645413200480, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3198746749694800202}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &3280335273585051458 stripped
 GameObject:
@@ -246,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8509b0050ed4b72b825fea69beb1508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.Eater.AISettingEater
---- !u!114 &6749246589625948657
+--- !u!114 &7843635866851778636
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -255,15 +258,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 3280335273585051468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce955cba01bd400c8f1604703358d3f0, type: 3}
+  m_Script: {fileID: 11500000, guid: f6ff57c47ff24433a8f96324fb67d3c9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.AICharacterRelation
-  defaultAmount: 50
-  damageToReputationCoefficient: 1
-  improved: {fileID: 0}
-  worsened: {fileID: 0}
-  enemyThreshold: 0
-  friendThreshold: 90
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.Healer.AIHealer
+  ShowTopMostFoldoutHeaderGroup: 1
+  timerInterval: 2.5
+  healthThreshold: 95
+  underHealPenaltyMultiplier: 1
+  overHealBasePenaltyMultiplier: 1
+--- !u!114 &3198746749694800202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3280335273585051468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecac50c81aa843c9ad817dd5b4ad785f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.Healer.AISettingHealer
 --- !u!1 &3280335273585051469 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4539299645413200481, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
@@ -311,6 +325,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 15dce29c4e723814eb7a5c2a5306561a, type: 2}
   - {fileID: 11400000, guid: 961bd56739dedc546a907e5cd19772e7, type: 2}
   - {fileID: 11400000, guid: de916ee7dd199e245a0042846075dd32, type: 2}
+  - {fileID: 11400000, guid: 99d8e860dba5ec443a50f55b4ca7f1a6, type: 2}
   - {fileID: 11400000, guid: 8f9c0ec3c3a44a04f9ba4a4767958553, type: 2}
   - {fileID: 11400000, guid: 7169eafc621024f46b028be5826ca7a9, type: 2}
   character: 

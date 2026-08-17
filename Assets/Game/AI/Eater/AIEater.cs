@@ -12,11 +12,11 @@ namespace Shooter.Game.AI.Eater
     public class AIEater : NetworkBehaviour
     {
         [SerializeField] private float timerInterval = 2.5f;
-
         [SerializeField] private float hungerThreshold = 20f;
-        private List<FixedString32Bytes> foodIds;
+
         private Hunger hunger;
         private Inventory inventory;
+        private List<FixedString32Bytes> foodIds;
 
         private float timer;
 

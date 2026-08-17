@@ -1,4 +1,5 @@
 ﻿using Shooter.Game.Body;
+using Shooter.Game.Core;
 using UnityEngine;
 
 namespace Shooter.Game.Loot
@@ -10,11 +11,13 @@ namespace Shooter.Game.Loot
 
         public override void Apply(GameObject user)
         {
-            Health health = user.GetComponent<Health>();
+            Health health = user.transform.Find<Health>();
 
             if (health == null) return;
 
             health.Heal(amount);
         }
+
+        public override int HealMarker => (int)amount;
     }
 }

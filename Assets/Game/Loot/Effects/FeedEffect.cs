@@ -1,4 +1,5 @@
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using UnityEngine;
 
 namespace Shooter.Game.Loot
@@ -8,15 +9,15 @@ namespace Shooter.Game.Loot
     {
         [SerializeField] private float amount = 10f;
 
-        public override int FoodMarker => (int)amount;
-
         public override void Apply(GameObject user)
         {
-            Hunger hunger = user.GetComponent<Hunger>();
+            Hunger hunger = user.transform.Find<Hunger>();
 
             if (hunger == null) return;
 
             hunger.Restore(amount);
         }
+
+        public override int FoodMarker => (int)amount;
     }
 }
