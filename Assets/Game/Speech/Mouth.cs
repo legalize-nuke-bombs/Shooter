@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 
@@ -13,7 +13,7 @@ namespace Shooter.Game.Speech
 
         private readonly NetworkVariable<ulong> interlocutor = new NetworkVariable<ulong>();
 
-        private Talker heard;
+        private long heardId = PersistentId.Nobody;
 
         public event Action<ulong> Opened;
 
@@ -21,19 +21,28 @@ namespace Shooter.Game.Speech
 
         public event Action Closed;
 
-        public bool Talking => heard != null;
+        public bool Talking => heardId != PersistentId.Nobody;
 
         public ulong Interlocutor => interlocutor.Value;
 
         public void Open(Talker talker, IReadOnlyList<Message> history)
         {
-            if (!IsServer || heard == talker) return;
+            if (!IsServer) return;
 
-            if (heard != null) Close();
+            PersistentId talkerId = talker.Find<PersistentId>();
+            if (talkerId == null)
+            {
+                Log.Warn($"Player {OwnerClientId} can not talk to {talker.NameOf()}: the talker has no persistent id");
+                return;
+            }
 
-            heard = talker;
+            if (heardId == talkerId.Value) return;
+
+            if (Talking) Close();
+
+            heardId = talkerId.Value;
             interlocutor.Value = talker.NetworkObjectId;
-            Log.Info($"Player {OwnerClientId} opened a talk with {talker.name}");
+            Log.Info($"Player {OwnerClientId} opened a talk with {talker.NameOf()}");
 
             OpenedRpc(talker.NetworkObjectId);
             foreach (Message message in history)
@@ -42,11 +51,11 @@ namespace Shooter.Game.Speech
 
         public void Close()
         {
-            if (!IsServer || heard == null) return;
+            if (!IsServer || !Talking) return;
 
-            Log.Info($"Player {OwnerClientId} closed the talk with {heard.name}");
-            heard.Leave(NetworkObject);
-            heard = null;
+            Log.Info($"Player {OwnerClientId} closed the talk with wanderer {heardId}");
+            TalkerOf(heardId)?.Leave(NetworkObject);
+            heardId = PersistentId.Nobody;
             interlocutor.Value = 0;
             ClosedRpc();
         }
@@ -66,6 +75,7 @@ namespace Shooter.Game.Speech
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void SayRpc(string speech)
         {
+            Talker heard = TalkerOf(heardId);
             if (heard == null)
             {
                 Log.Info($"Player {OwnerClientId} said something with no talk open, ignored");
@@ -79,6 +89,14 @@ namespace Shooter.Game.Speech
         public void HangUpRpc()
         {
             Close();
+        }
+
+        private static Talker TalkerOf(long talkerId)
+        {
+            if (talkerId == PersistentId.Nobody || Registers.Current == null) return null;
+
+            PersistentId found = Registers.Current.Of<PersistentId>().Of(talkerId);
+            return found == null ? null : found.GetComponentInChildren<Talker>();
         }
 
         [Rpc(SendTo.Owner)]

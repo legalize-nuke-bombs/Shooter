@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Netcode;
 
 namespace Shooter.Game.Speech
 {
@@ -8,13 +7,10 @@ namespace Shooter.Game.Speech
     {
         private readonly List<Message> messages = new List<Message>();
 
-        public Conversation(NetworkObject user, long wanderer)
+        public Conversation(long wanderer)
         {
-            User = user;
             Wanderer = wanderer;
         }
-
-        public NetworkObject User { get; private set; }
 
         public long Wanderer { get; }
 
@@ -22,14 +18,8 @@ namespace Shooter.Game.Speech
 
         public IReadOnlyList<Message> Messages => messages;
 
-        public void Follow(NetworkObject user)
+        public void Reopen()
         {
-            User = user;
-        }
-
-        public void Reopen(NetworkObject user)
-        {
-            Follow(user);
             Open = true;
         }
 
