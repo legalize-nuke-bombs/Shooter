@@ -4,10 +4,10 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
+using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Inventory))]
     public class OwnWeapon : NetworkBehaviour
     {
         private const string FirstPersonLayer = "FirstPerson";
@@ -27,8 +27,8 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            inventory = GetComponent<Inventory>();
-            eye = GetComponentInChildren<Camera>(true);
+            inventory = this.Find<Inventory>();
+            eye = this.Find<Camera>();
         }
 
         public override void OnNetworkSpawn()

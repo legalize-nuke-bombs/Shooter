@@ -1,5 +1,6 @@
 using System;
 using Shooter.Logging;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Speech
 {
@@ -12,7 +13,7 @@ namespace Shooter.Game.Speech
 
         private void Awake()
         {
-            llm = GetComponent<Llm.Llm>();
+            llm = this.Find<Llm.Llm>();
         }
 
         protected override void RequestAnswer(long wandererId, string message, Action<string> onAnswer)

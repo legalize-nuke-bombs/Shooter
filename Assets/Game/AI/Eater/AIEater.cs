@@ -10,8 +10,6 @@ using Shooter.Game.Core;
 
 namespace Shooter.Game.AI.Eater
 {
-    [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(Hunger))]
     public class AIEater : NetworkBehaviour
     {
         private Inventory inventory;
@@ -20,8 +18,8 @@ namespace Shooter.Game.AI.Eater
 
         private void Awake()
         {
-            inventory = GetComponent<Inventory>();
-            hunger = GetComponent<Hunger>();
+            inventory = this.Find<Inventory>();
+            hunger = this.Find<Hunger>();
             foodIds = Catalogs.Of<ItemCatalog>().FindAll(
                 item => (item is StackableItemSpec stackableItem && stackableItem.FoodMarker > 0))
                 .Cast<StackableItemSpec>()

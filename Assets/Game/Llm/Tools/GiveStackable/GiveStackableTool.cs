@@ -4,7 +4,6 @@ using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(InventoryExchanger))]
     public sealed class GiveStackableTool : LlmTool<GiveStackableArguments>
     {
         private InventoryExchanger inventoryExchanger;
@@ -12,7 +11,7 @@ namespace Shooter.Game.Llm
         protected override void Awake()
         {
             base.Awake();
-            inventoryExchanger = GetComponent<InventoryExchanger>();
+            inventoryExchanger = this.Find<InventoryExchanger>();
         }
 
         public override string Name => "give_stackable";

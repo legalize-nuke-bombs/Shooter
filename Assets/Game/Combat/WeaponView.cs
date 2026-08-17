@@ -5,11 +5,10 @@ using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Combat
 {
-    [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(Skin))]
     public class WeaponView : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -26,8 +25,8 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            inventory = GetComponent<Inventory>();
-            skin = GetComponent<Skin>();
+            inventory = this.Find<Inventory>();
+            skin = this.Find<Skin>();
         }
 
         public override void OnNetworkSpawn()

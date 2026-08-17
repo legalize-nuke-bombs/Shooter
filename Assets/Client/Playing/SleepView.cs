@@ -2,10 +2,10 @@ using Shooter.Game.Body;
 using Shooter.Logging;
 using UnityEngine;
 using Unity.Netcode;
+using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Sleeper))]
     public class SleepView : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -25,7 +25,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            sleeper = GetComponent<Sleeper>();
+            sleeper = this.Find<Sleeper>();
         }
 
         private void Update()

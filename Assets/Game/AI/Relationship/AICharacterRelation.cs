@@ -19,9 +19,9 @@ namespace Shooter.Game.AI
 
         private void Awake()
         {
-            ownId = GetComponent<PersistentId>();
-            ownNameable = GetComponentInChildren<Nameable>();
-            health = GetComponent<Health>();
+            ownId = this.Find<PersistentId>();
+            ownNameable = this.Find<Nameable>();
+            health = this.Find<Health>();
         }
 
         private void OnEnable()

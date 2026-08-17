@@ -13,7 +13,7 @@ namespace Shooter.Client.Playing
             NetworkObject player = network.SpawnManager.GetLocalPlayerObject();
             if (player == null) return null;
 
-            return player.GetComponent<T>();
+            return player.GetComponentInChildren<T>();
         }
     }
 }
