@@ -8,7 +8,6 @@ using Environment = Shooter.Game.World.Environment;
 namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Llm))]
-    [RequireComponent(typeof(MainNotificationRecipient))]
     public class LlmNotificationRecipient : MonoBehaviour, IChildNotificationRecipient
     {
         private static readonly Journal Log = Logs.Here();

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
+  m_Name: Memory
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
+  content: 'Your primary memory is the transcript of your session. It is never erased,
+    but it can be compressed when it becomes too large.
+
+
+    You also have Notes.
+    You have full control over your Notes. The notes are fully persistent; they are
+    never deleted and never automatically compressed. You should save everything
+    important in your Notes.
+
+
+    Notes consist of a set of files. Each file has
+    a name and a brief description that are visible when retrieving the list of notes.
+    To access a file''s content, you must read the file.'
