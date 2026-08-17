@@ -5,9 +5,8 @@ using UnityEngine;
 
 namespace Shooter.Game.World
 {
-    [RequireComponent(typeof(Sweepable))]
     [RequireComponent(typeof(Speaker))]
-    public class StructureHealth : MonoBehaviour, ISweepingRule, IDigestible
+    public class StructureHealth : MonoBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -17,11 +16,6 @@ namespace Shooter.Game.World
         public bool Broken => broken;
 
         [SerializeField] private SoundSpec breakSound = null;
-
-        [SerializeField] private bool useDespawn = false;
-        [SerializeField] private float despawnTime = 10f * 60;
-
-        private float brokenAt;
 
         private void Awake()
         {
@@ -39,7 +33,6 @@ namespace Shooter.Game.World
             Log.Info($"Entity {name} became broken");
 
             broken = true;
-            brokenAt = Time.time;
 
             speaker.Play(breakSound);
 
@@ -53,7 +46,5 @@ namespace Shooter.Game.World
         }
 
         public DigestionPriority Priority => DigestionPriority.Medium;
-
-        public bool Permits => broken && useDespawn && (Time.time - brokenAt >= despawnTime);
     }
 }

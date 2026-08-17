@@ -15,16 +15,12 @@ namespace Shooter.Game.World
     [RequireComponent(typeof(Registers))]
     [RequireComponent(typeof(Clock))]
     [RequireComponent(typeof(SleepCycle))]
-    [RequireComponent(typeof(Sweeper))]
     [RequireComponent(typeof(BulletHoles))]
     public class Environment : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         public static Environment Current { get; private set; }
-
-        [SerializeField] private MainProfiler profiler;
-        public MainProfiler Profiler => profiler;
 
         [SerializeField] private GameObject corpse;
 
@@ -54,8 +50,6 @@ namespace Shooter.Game.World
         public Clock Clock { get; private set; }
 
         public SleepCycle SleepCycle { get; private set; }
-
-        public Sweeper Sweeper { get; private set; }
 
         public BulletHoles BulletHoles { get; private set; }
 
@@ -88,15 +82,11 @@ namespace Shooter.Game.World
             Registers = GetComponent<Registers>();
             Clock = GetComponent<Clock>();
             SleepCycle = GetComponent<SleepCycle>();
-            Sweeper = GetComponent<Sweeper>();
             BulletHoles = GetComponent<BulletHoles>();
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];
 
             if (items != null) Kinds.Use<UniqueItem>(items);
-
-            if (profiler == null)
-                Log.Warn("World has no profiler, nothing will be measured");
 
             if (spawn == null)
                 Log.Warn($"World has no main spawn point, everyone will appear at {transform.position}");
@@ -120,8 +110,6 @@ namespace Shooter.Game.World
                 ServerConfig config = Config.Read().Server;
                 world.Value = new FixedString64Bytes(config.World);
                 version.Value = new FixedString32Bytes(Application.version);
-
-                Sweeper.enabled = true;
             }
 
             Log.Info($"Environment is up: world {World}, version {Version}, clock says {Clock.DateTime()}");
@@ -129,8 +117,6 @@ namespace Shooter.Game.World
 
         public override void OnNetworkDespawn()
         {
-            Sweeper.enabled = false;
-
             Log.Info("Environment is down");
         }
     }

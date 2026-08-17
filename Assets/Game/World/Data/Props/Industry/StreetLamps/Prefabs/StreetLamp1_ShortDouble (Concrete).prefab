@@ -257,7 +257,6 @@ GameObject:
   - component: {fileID: 1369263495528292696}
   - component: {fileID: 5582404725710639054}
   - component: {fileID: 1095720879265826792}
-  - component: {fileID: 270538042983856496}
   m_Layer: 0
   m_Name: StreetLamp1_ShortDouble (Concrete)
   m_TagString: Untagged
@@ -461,19 +460,6 @@ MonoBehaviour:
   breakSound: {fileID: 11400000, guid: 9c77bf221cbd409fbe947692ee46a0c0, type: 2}
   useDespawn: 0
   despawnTime: 600
---- !u!114 &270538042983856496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263881239168321199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e75ea9e04b94231b0582659d315148c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sweeping.AutoSweepable
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1726197021241180716
 GameObject:
   m_ObjectHideFlags: 0

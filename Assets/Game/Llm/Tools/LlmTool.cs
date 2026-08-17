@@ -32,17 +32,10 @@ namespace Shooter.Game.Llm
         private JObject parameters;
         public override JObject Parameters => parameters ??= LlmSchema.Of(typeof(TArguments));
 
-        private LlmToolProfiler profiler;
-
-        protected virtual void Awake()
-        {
-            profiler = Environment.Current.Profiler?.Of<LlmToolProfiler>();
-        }
+        protected virtual void Awake() { }
 
         public override string Execute(string arguments)
         {
-            profiler?.RegisterTool(GetType().Name);
-
             var parsed = JsonConvert.DeserializeObject<TArguments>(
                 string.IsNullOrEmpty(arguments) ? "{}" : arguments, Settings);
 

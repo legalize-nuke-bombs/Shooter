@@ -16,7 +16,6 @@ namespace Shooter.Game.Llm
         private NetworkObject netObject;
         private string entityName;
         private LlmChildTicker[] tickers;
-        private LlmTickProfiler profiler;
 
         private void Awake()
         {
@@ -35,8 +34,6 @@ namespace Shooter.Game.Llm
             {
                 Log.Warn($"Entity {entityName} does not have any ticker!");
             }
-
-            profiler = Environment.Current.Profiler?.Of<LlmTickProfiler>();
         }
 
         private Type TickRequired()
@@ -54,8 +51,6 @@ namespace Shooter.Game.Llm
 
         private void RegisterTick(Type type)
         {
-            profiler?.RegisterTick(type.Name);
-
             foreach (LlmChildTicker ticker in tickers)
             {
                 ticker.RegisterTick();
