@@ -3,6 +3,7 @@ using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using Shooter.Game.World;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -94,7 +95,7 @@ namespace Shooter.Game.Body
                 if (named != null && named.Spec != null) corpse.Rename(named.Spec);
             }
 
-            spawned.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
+            spawned.GetComponent<Lootable>()?.Fill(this.Find<Inventory>());
             Log.Info($"Entity {name} left a corpse at {transform.position}");
         }
 

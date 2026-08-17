@@ -8,7 +8,6 @@ using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Intoxication))]
     public class IntoxicationView : NetworkBehaviour
     {
         private Intoxication intoxication;
@@ -17,7 +16,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            intoxication = GetComponent<Intoxication>();
+            intoxication = this.Find<Intoxication>();
         }
 
         private void Update()

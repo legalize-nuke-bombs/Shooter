@@ -75,7 +75,7 @@ namespace Shooter.Game.Body
         {
             Log.Info($"Entity {name} died");
 
-            foreach (IMortal mortal in GetComponents<IMortal>())
+            foreach (IMortal mortal in this.FindAll<IMortal>())
                 mortal.Died();
         }
     }

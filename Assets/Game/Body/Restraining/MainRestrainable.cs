@@ -1,5 +1,6 @@
 using Shooter.Logging;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -13,7 +14,7 @@ namespace Shooter.Game.Body
 
         public void Awake()
         {
-            restraints = GetComponents<IRestraint>();
+            restraints = this.FindAll<IRestraint>();
             Log.Info($"Entity {name} has {restraints.Length} restraints");
         }
 

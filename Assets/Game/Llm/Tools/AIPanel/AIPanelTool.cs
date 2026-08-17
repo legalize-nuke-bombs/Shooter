@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.AI;
 using Shooter.Logging;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm.AIPanel
 {
@@ -15,7 +16,7 @@ namespace Shooter.Game.Llm.AIPanel
         protected override void Awake()
         {
             base.Awake();
-            settings = GetComponents<AISetting>();
+            settings = this.FindAll<AISetting>();
             Log.Info($"Entity {name} has {settings.Length} ai settings");
         }
 

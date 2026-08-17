@@ -21,7 +21,7 @@ namespace Shooter.Game.Llm
         {
             llm = GetComponent<Llm>();
 
-            netObject = GetComponent<NetworkObject>();
+            netObject = GetComponentInParent<NetworkObject>();
             if (netObject == null)
             {
                 Log.Warn($"Entity {entityName} has no NetworkObject, its llm will never tick");

@@ -6,7 +6,6 @@ using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Inventory))]
     public class OwnRecoil : NetworkBehaviour
     {
         [SerializeField] private float recovery = 14f;
@@ -21,7 +20,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            inventory = GetComponent<Inventory>();
+            inventory = this.Find<Inventory>();
         }
 
         public override void OnNetworkSpawn()

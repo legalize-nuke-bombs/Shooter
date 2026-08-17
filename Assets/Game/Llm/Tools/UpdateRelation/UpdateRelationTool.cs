@@ -1,9 +1,9 @@
 using Shooter.Game.AI;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(AICharacterRelation))]
     public sealed class UpdateRelationTool : LlmTool<UpdateRelationArguments>
     {
         private AICharacterRelation aiCharacterRelation;
@@ -11,7 +11,7 @@ namespace Shooter.Game.Llm
         protected override void Awake()
         {
             base.Awake();
-            aiCharacterRelation = GetComponent<AICharacterRelation>();
+            aiCharacterRelation = this.Find<AICharacterRelation>();
         }
 
         public override string Name => "update_relation";

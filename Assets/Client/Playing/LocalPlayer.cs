@@ -6,11 +6,10 @@ using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Movement))]
-    [RequireComponent(typeof(Interactor))]
     public class LocalPlayer : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -37,13 +36,13 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            movement = GetComponent<Movement>();
-            interactor = GetComponent<Interactor>();
-            mouth = GetComponent<Mouth>();
-            sleeper = GetComponent<Sleeper>();
-            health = GetComponent<Health>();
-            mortal = GetComponent<Mortal>();
-            gunner = GetComponent<Gunner>();
+            movement = this.Find<Movement>();
+            interactor = this.Find<Interactor>();
+            mouth = this.Find<Mouth>();
+            sleeper = this.Find<Sleeper>();
+            health = this.Find<Health>();
+            mortal = this.Find<Mortal>();
+            gunner = this.Find<Gunner>();
             recoil = GetComponent<OwnRecoil>();
         }
 

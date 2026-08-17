@@ -8,12 +8,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Combat
 {
-    [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(Interactor))]
-    [RequireComponent(typeof(Hands))]
-    [RequireComponent(typeof(Speaker))]
-    [RequireComponent(typeof(EarSpeaker))]
-    [RequireComponent(typeof(MainRestrainable))]
     public class Gunner : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -34,13 +28,13 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            id = GetComponent<PersistentId>();
-            inventory = GetComponent<Inventory>();
-            interactor = GetComponent<Interactor>();
-            hands = GetComponent<Hands>();
-            speaker = GetComponent<Speaker>();
-            earSpeaker = GetComponent<EarSpeaker>();
-            restrainable = GetComponent<MainRestrainable>();
+            id = this.Find<PersistentId>();
+            inventory = this.Find<Inventory>();
+            interactor = this.Find<Interactor>();
+            hands = this.Find<Hands>();
+            speaker = this.Find<Speaker>();
+            earSpeaker = this.Find<EarSpeaker>();
+            restrainable = this.Find<MainRestrainable>();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

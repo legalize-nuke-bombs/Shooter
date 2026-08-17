@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(PersistentId))]
     public sealed class SendMessageTool : LlmTool<SendMessageArguments>
     {
         private static readonly Journal Log = Logs.Here();
@@ -22,8 +21,8 @@ namespace Shooter.Game.Llm
         protected override void Awake()
         {
             base.Awake();
-            ownId = GetComponent<PersistentId>();
-            ownNameable = GetComponentInChildren<Nameable>();
+            ownId = this.Find<PersistentId>();
+            ownNameable = this.Find<Nameable>();
         }
 
         public override string Name => "send_message";
@@ -45,7 +44,7 @@ namespace Shooter.Game.Llm
             {
                 PersistentId target = Registers.Current.Of<PersistentId>().Of(targetId);
 
-                if (target == null || target.gameObject == gameObject || !target.TryGetComponent<Llm>(out _))
+                if (target == null || target == ownId || target.GetComponentInChildren<Llm>() == null)
                 {
                     failed.Add($"{targetId}: no resident bears this id");
                     continue;

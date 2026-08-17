@@ -1,9 +1,9 @@
 using Shooter.Game.Loot;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(InventoryExchanger))]
     public sealed class GiveUniqueTool : LlmTool<GiveUniqueArguments>
     {
         private InventoryExchanger inventoryExchanger;
@@ -11,7 +11,7 @@ namespace Shooter.Game.Llm
         protected override void Awake()
         {
             base.Awake();
-            inventoryExchanger = GetComponent<InventoryExchanger>();
+            inventoryExchanger = this.Find<InventoryExchanger>();
         }
 
         public override string Name => "give_unique";

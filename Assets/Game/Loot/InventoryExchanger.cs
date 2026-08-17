@@ -7,7 +7,6 @@ using UnityEngine;
 namespace Shooter.Game.Loot
 {
     [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(PersistentId))]
     public class InventoryExchanger : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -25,14 +24,14 @@ namespace Shooter.Game.Loot
         private void Awake()
         {
             inventory = GetComponent<Inventory>();
-            ownId = GetComponent<PersistentId>();
-            ownNameable = GetComponentInChildren<Nameable>();
+            ownId = this.Find<PersistentId>();
+            ownNameable = this.Find<Nameable>();
         }
 
         public bool GiveStackable(long targetId, StackableItemSpec stackable, int amount)
         {
             PersistentId target = Target(targetId);
-            Inventory targetInventory = target == null ? null : target.GetComponent<Inventory>();
+            Inventory targetInventory = target == null ? null : target.GetComponentInChildren<Inventory>();
             if (targetInventory == null)
             {
                 Log.Info($"Failed to give {stackable.Id} x {amount} from {name} to {targetId} : the target is not around");
@@ -55,7 +54,7 @@ namespace Shooter.Game.Loot
         public bool GiveUnique(long targetId, int slotId)
         {
             PersistentId target = Target(targetId);
-            Inventory targetInventory = target == null ? null : target.GetComponent<Inventory>();
+            Inventory targetInventory = target == null ? null : target.GetComponentInChildren<Inventory>();
             if (targetInventory == null)
             {
                 Log.Info($"Failed to give unique slot {slotId} from {name} to {targetId}: the target is not around");
