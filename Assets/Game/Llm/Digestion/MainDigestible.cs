@@ -30,13 +30,13 @@ namespace Shooter.Game.Llm
 
         private void OnEnable()
         {
-            registered = Environment.Current.Registers.Of<MainDigestible>().Add(this);
+            registered = Registers.Current.Of<MainDigestible>().Add(this);
         }
 
         private void OnDisable()
         {
-            Environment world = Environment.Current;
-            if (world != null) world.Registers.Of<MainDigestible>().Remove(registered);
+            Registers world = Registers.Current;
+            if (world != null) world.Of<MainDigestible>().Remove(registered);
         }
 
         public string Digest(DigestionDetail detail)

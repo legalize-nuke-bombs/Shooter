@@ -44,7 +44,7 @@ namespace Shooter.Game.Loot
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
-        private static ItemCatalog Catalog => Environment.Current == null ? null : Environment.Current.Items;
+        private static ItemCatalog Catalog => Catalogs.Of<ItemCatalog>();
 
         private void Awake()
         {

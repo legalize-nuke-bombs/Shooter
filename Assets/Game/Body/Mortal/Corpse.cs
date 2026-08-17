@@ -3,6 +3,7 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -44,7 +45,7 @@ namespace Shooter.Game.Body
         {
             if (dressed || current.IsEmpty) return;
 
-            SkinCatalog catalog = Environment.Current == null ? null : Environment.Current.Skins;
+            SkinCatalog catalog = Catalogs.Of<SkinCatalog>();
             SkinSpec spec = catalog == null ? null : catalog.Of(current);
             if (spec == null || spec.Model == null)
             {
@@ -67,7 +68,7 @@ namespace Shooter.Game.Body
             var named = GetComponent<TypedNameable>();
             if (named == null || current.IsEmpty) return;
 
-            NameCatalog catalog = Environment.Current == null ? null : Environment.Current.Names;
+            NameCatalog catalog = Catalogs.Of<NameCatalog>();
             NameSpec spec = catalog == null ? null : catalog.Of(current);
             if (spec == null)
             {

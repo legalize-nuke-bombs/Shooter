@@ -5,8 +5,8 @@ using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
 using Shooter.Game.Core;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
@@ -25,7 +25,7 @@ namespace Shooter.Game.Body
 
         private void Awake()
         {
-            toxins = Environment.Current.Toxins;
+            toxins = Catalogs.Of<ToxinCatalog>();
             for (int i = 0; i < toxins.Count; i++)
             {
                 FixedString32Bytes toxinId = toxins.At(i).Id;
@@ -48,7 +48,7 @@ namespace Shooter.Game.Body
         private void Update()
         {
             if (!IsServer) return;
-            timer += Time.deltaTime * Environment.Current.Clock.Scale;
+            timer += Time.deltaTime * Clock.Current.Scale;
             if (timer >= timerInterval)
             {
                 Tick(timer);

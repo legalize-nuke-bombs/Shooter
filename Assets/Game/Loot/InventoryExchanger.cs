@@ -3,7 +3,6 @@ using Shooter.Game.Notifying;
 using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Loot
 {
@@ -88,7 +87,7 @@ namespace Shooter.Game.Loot
                 return;
             }
 
-            ItemSpec item = Environment.Current.Items.Spec(itemSpecId);
+            ItemSpec item = Catalogs.Of<ItemCatalog>().Spec(itemSpecId);
 
             recipient.Receive(spec.Notify()
                 .Under(item == null ? null : item.Icon)
@@ -101,7 +100,7 @@ namespace Shooter.Game.Loot
 
         private PersistentId Target(long targetId)
         {
-            PersistentId target = Environment.Current.Registers.Of<PersistentId>().Of(targetId);
+            PersistentId target = Registers.Current.Of<PersistentId>().Of(targetId);
             if (target == null || target == ownId) return null;
 
             return Vector3.Distance(target.transform.position, transform.position) <= exchangeRadius ? target : null;

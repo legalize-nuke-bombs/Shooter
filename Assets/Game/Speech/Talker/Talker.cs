@@ -8,6 +8,7 @@ using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Speech
 {
@@ -182,7 +183,7 @@ namespace Shooter.Game.Speech
             {
                 Author = author,
                 Content = content,
-                Time = Environment.Current == null ? string.Empty : Environment.Current.Clock.DateTime()
+                Time = Environment.Current == null ? string.Empty : Clock.Current.DateTime()
             };
 
             conversation.Add(message);

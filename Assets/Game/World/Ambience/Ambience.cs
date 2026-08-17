@@ -19,10 +19,9 @@ namespace Shooter.Game.World
 
         private void Update()
         {
-            Environment environment = Environment.Current;
-            if (environment == null) return;
+            Clock clock = Clock.Current;
+            if (clock == null) return;
 
-            Clock clock = environment.Clock;
             float elevation = Celestial.Elevation((float)clock.HourAngle, clock.Declination, clock.Latitude);
 
             for (int i = 0; i < layers.Length; i++)

@@ -4,6 +4,7 @@ using Shooter.Game.Body.Perception;
 using Shooter.Game.World;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
@@ -23,7 +24,7 @@ namespace Shooter.Client.Playing
         {
             if (!IsSpawned || !IsOwner) return;
 
-            ToxinCatalog toxins = Environment.Current.Toxins;
+            ToxinCatalog toxins = Catalogs.Of<ToxinCatalog>();
 
             for (int index = 0; index < toxins.Count; index++)
             {

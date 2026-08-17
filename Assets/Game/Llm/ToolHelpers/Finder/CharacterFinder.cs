@@ -1,6 +1,7 @@
 ﻿using Shooter.Game.Core;
 using Shooter.Game.World;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm.ToolHelpers.Finder
 {
@@ -8,7 +9,7 @@ namespace Shooter.Game.Llm.ToolHelpers.Finder
     {
         public void Find(IFinderOutput output)
         {
-            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+            Register<PersistentId> ids = Registers.Current.Of<PersistentId>();
             int characterLayer = LayerMask.NameToLayer("Character");
 
             foreach (PersistentId id in ids.All)

@@ -2,6 +2,7 @@
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm.LookAroundEntity
 {
@@ -24,7 +25,7 @@ namespace Shooter.Game.Llm.LookAroundEntity
 
         protected override string Execute(LookAroundEntityArguments arguments)
         {
-            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+            Register<PersistentId> ids = Registers.Current.Of<PersistentId>();
             long targetId = arguments.TargetId;
 
             PersistentId id = ids.Of(targetId);

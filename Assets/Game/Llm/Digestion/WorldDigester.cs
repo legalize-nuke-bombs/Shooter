@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using Shooter.Logging;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
 using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
@@ -46,7 +45,7 @@ namespace Shooter.Game.Llm
         {
             var visible = new List<MainDigestible>();
 
-            foreach (MainDigestible entity in Environment.Current.Registers.Of<MainDigestible>().All)
+            foreach (MainDigestible entity in Registers.Current.Of<MainDigestible>().All)
             {
                 if (entity.gameObject == gameObject) continue;
 

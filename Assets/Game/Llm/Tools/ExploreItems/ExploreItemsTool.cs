@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Shooter.Game.Loot;
 using Shooter.Game.World;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm.ExploreItems
 {
@@ -25,7 +26,7 @@ You can process any number of IDs at once.
 
             foreach (string id in arguments.ItemIds)
             {
-                ItemSpec item = Environment.Current.Items.Of(id);
+                ItemSpec item = Catalogs.Of<ItemCatalog>().Of(id);
                 if (item == null)
                 {
                     sb.AppendLine($"{id} does not exist");

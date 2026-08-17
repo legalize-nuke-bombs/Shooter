@@ -3,7 +3,7 @@ using System.Globalization;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.World;
 
 namespace Shooter.Client.Interface
 {
@@ -28,15 +28,15 @@ namespace Shooter.Client.Interface
         {
             if (!Bound) return;
 
-            Environment environment = Environment.Current;
+            Clock world = Clock.Current;
 
-            if (environment == null)
+            if (world == null)
             {
                 Hide();
                 return;
             }
 
-            DateTimeOffset now = environment.Clock.Now;
+            DateTimeOffset now = world.Now;
             long minute = now.Ticks / TimeSpan.TicksPerMinute;
 
             if (minute == shown) return;

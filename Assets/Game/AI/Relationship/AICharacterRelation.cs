@@ -6,7 +6,6 @@ using Shooter.Game.Notifying;
 using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.AI
 {
@@ -90,7 +89,7 @@ namespace Shooter.Game.AI
         {
             if (ownId == null) return;
 
-            PersistentId target = Environment.Current.Registers.Of<PersistentId>().Of(characterId);
+            PersistentId target = Registers.Current.Of<PersistentId>().Of(characterId);
             if (target == null) return;
 
             if (!target.TryGetComponent(out MainNotificationRecipient recipient)) return;
