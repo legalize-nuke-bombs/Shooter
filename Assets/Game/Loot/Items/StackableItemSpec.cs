@@ -17,5 +17,6 @@ namespace Shooter.Game.Loot
 
         public bool Usable => effects.Length > 0;
         public int FoodMarker => effects.Length == 0 ? 0 : effects.Max(effect => effect.FoodMarker);
+        public int HealMarker => effects.Length == 0 ? 0 : effects.Max(effect => effect.HealMarker);
     }
 }

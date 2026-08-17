@@ -51,6 +51,8 @@ namespace Shooter.Game.Body
                     Murder = false
                 };
 
+            Log.Info($"Entity {this.NameOf()} got damage {amount} {type}");
+
             DamageRaw(amount);
 
             if (!Alive) Die();
