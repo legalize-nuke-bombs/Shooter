@@ -1,4 +1,5 @@
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {

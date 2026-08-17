@@ -1,8 +1,8 @@
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Llm;
 using Shooter.Game.Notifying;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {

@@ -3,7 +3,7 @@ using Shooter.Game.AI;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Llm;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {

@@ -1,9 +1,9 @@
 ﻿using System;
-using Shooter.Game.Llm;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body.Bleeding
 {
