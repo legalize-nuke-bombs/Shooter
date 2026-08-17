@@ -2,7 +2,6 @@
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm.LookAroundEntity
 {

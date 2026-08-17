@@ -1,7 +1,6 @@
 ﻿using Shooter.Game.Core;
 using Shooter.Game.World;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm.ToolHelpers.Finder
 {

@@ -1,7 +1,6 @@
 ﻿using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.World
 {
