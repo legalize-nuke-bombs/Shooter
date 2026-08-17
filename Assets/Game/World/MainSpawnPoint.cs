@@ -6,6 +6,18 @@ namespace Shooter.Game.World
 {
     public class MainSpawnPoint : MonoBehaviour
     {
+        public static MainSpawnPoint Current { get; private set; }
+
+        private void Awake()
+        {
+            Current = this;
+        }
+
+        private void OnDestroy()
+        {
+            if (Current == this) Current = null;
+        }
+
         private const float Height = 2f;
         private const float Reach = 2f;
         private const float Barb = 0.3f;

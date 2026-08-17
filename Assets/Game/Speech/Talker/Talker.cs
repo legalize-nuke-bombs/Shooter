@@ -183,7 +183,7 @@ namespace Shooter.Game.Speech
             {
                 Author = author,
                 Content = content,
-                Time = Environment.Current == null ? string.Empty : Clock.Current.DateTime()
+                Time = Clock.Current == null ? string.Empty : Clock.Current.DateTime()
             };
 
             conversation.Add(message);

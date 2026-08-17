@@ -10,6 +10,13 @@ namespace Shooter.Game.Loot
     {
         private static readonly Journal Log = Logs.Here();
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+
+            Kinds.Use<UniqueItem>(this);
+        }
+
         public int Of(UniqueItem item)
         {
             int kind = item == null ? -1 : Index(Spec(item.SpecId));

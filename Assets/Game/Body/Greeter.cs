@@ -3,7 +3,7 @@ using System.Text;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
@@ -63,9 +63,9 @@ namespace Shooter.Game.Body
             connected.PlayerObject.GetComponent<AbsoluteNameable>()?.Rename(name);
             connected.PlayerObject.name = name;
 
-            Transform at = Environment.Current == null
+            Transform at = MainSpawnPoint.Current == null
                 ? connected.PlayerObject.transform
-                : Environment.Current.Spawn;
+                : MainSpawnPoint.Current.transform;
             connected.PlayerObject.GetComponent<Movement>()?.Teleport(at.position, at.eulerAngles.y);
 
             Log.Info($"Client {client} entered the world as {name} at {at.position}, players online {network.ConnectedClients.Count}");
