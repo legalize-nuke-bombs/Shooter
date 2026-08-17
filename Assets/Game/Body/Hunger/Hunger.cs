@@ -42,7 +42,7 @@ namespace Shooter.Game.Body
 
         private void Update()
         {
-            Spend(idleCost * Time.deltaTime * Environment.Current.Clock.Scale);
+            Spend(idleCost * Time.deltaTime * Clock.Current.Scale);
         }
 
         public bool CanPerform(ActionType type, float dt)

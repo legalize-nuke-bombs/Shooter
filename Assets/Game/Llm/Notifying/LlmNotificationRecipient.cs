@@ -4,6 +4,7 @@ using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Llm
 {
@@ -39,12 +40,12 @@ namespace Shooter.Game.Llm
 
             string told = Template.Filled(spec.Told, notification);
 
-            llm.Notice($"[{Environment.Current.Clock.DateTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}");
+            llm.Notice($"[{Clock.Current.DateTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}");
         }
 
         private NotificationSpec Spec(Notification notification)
         {
-            NotificationCatalog catalog = Environment.Current == null ? null : Environment.Current.Notifications;
+            NotificationCatalog catalog = Catalogs.Of<NotificationCatalog>();
 
             if (catalog == null)
             {

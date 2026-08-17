@@ -24,25 +24,25 @@ namespace Shooter.Game.Notifying
         public IconSpec Icon()
         {
             return icon.IsEmpty
-                ? Environment.Current.Notifications.Of(spec).Icon
-                : Environment.Current.Icons.Of(icon);
+                ? Catalogs.Of<NotificationCatalog>().Of(spec).Icon
+                : Catalogs.Of<IconCatalog>().Of(icon);
         }
 
         public EarSoundSpec Sound()
         {
             return sound.IsEmpty
-                ? Environment.Current.Notifications.Of(spec).Sound
-                : Environment.Current.EarSounds.Of(sound);
+                ? Catalogs.Of<NotificationCatalog>().Of(spec).Sound
+                : Catalogs.Of<EarSoundCatalog>().Of(sound);
         }
 
         public string Title()
         {
-            return Environment.Current.Notifications.Of(spec).Title;
+            return Catalogs.Of<NotificationCatalog>().Of(spec).Title;
         }
 
         public string Subtitle()
         {
-            return Environment.Current.Notifications.Of(spec).Subtitle;
+            return Catalogs.Of<NotificationCatalog>().Of(spec).Subtitle;
         }
 
         public FixedString32Bytes Spec => spec;

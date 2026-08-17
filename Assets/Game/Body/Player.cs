@@ -10,15 +10,15 @@ namespace Shooter.Game.Body
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) registered = Environment.Current.Registers.Of<Player>().Add(this);
+            if (IsServer) registered = Registers.Current.Of<Player>().Add(this);
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) return;
 
-            Environment world = Environment.Current;
-            if (world != null) world.Registers.Of<Player>().Remove(registered);
+            Registers world = Registers.Current;
+            if (world != null) world.Of<Player>().Remove(registered);
         }
     }
 }

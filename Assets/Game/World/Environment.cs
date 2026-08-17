@@ -12,10 +12,6 @@ using UnityEngine;
 namespace Shooter.Game.World
 {
     [DefaultExecutionOrder(-100)]
-    [RequireComponent(typeof(Registers))]
-    [RequireComponent(typeof(Clock))]
-    [RequireComponent(typeof(SleepCycle))]
-    [RequireComponent(typeof(BulletHoles))]
     public class Environment : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -24,54 +20,14 @@ namespace Shooter.Game.World
 
         [SerializeField] private GameObject corpse;
 
-        [SerializeField] private ItemCatalog items;
-
-        [SerializeField] private IconCatalog icons;
-
-        [SerializeField] private NotificationCatalog notifications;
-
-        [SerializeField] private SoundCatalog sounds;
-
-        [SerializeField] private EarSoundCatalog earSounds;
-
-        [SerializeField] private SkinCatalog skins;
-
-        [SerializeField] private NameCatalog names;
-
-        [SerializeField] private ToxinCatalog toxins;
-
         private MainSpawnPoint spawn;
 
         private readonly NetworkVariable<FixedString64Bytes> world = new NetworkVariable<FixedString64Bytes>();
         private readonly NetworkVariable<FixedString32Bytes> version = new NetworkVariable<FixedString32Bytes>();
 
-        public Registers Registers { get; private set; }
-
-        public Clock Clock { get; private set; }
-
-        public SleepCycle SleepCycle { get; private set; }
-
-        public BulletHoles BulletHoles { get; private set; }
-
         public Transform Spawn => spawn == null ? transform : spawn.transform;
 
         public GameObject Corpse => corpse;
-
-        public ItemCatalog Items => items;
-
-        public IconCatalog Icons => icons;
-
-        public NotificationCatalog Notifications => notifications;
-
-        public SoundCatalog Sounds => sounds;
-
-        public EarSoundCatalog EarSounds => earSounds;
-
-        public SkinCatalog Skins => skins;
-
-        public NameCatalog Names => names;
-
-        public ToxinCatalog Toxins => toxins;
 
         public string World => world.Value.ToString();
 
@@ -79,13 +35,10 @@ namespace Shooter.Game.World
 
         private void Awake()
         {
-            Registers = GetComponent<Registers>();
-            Clock = GetComponent<Clock>();
-            SleepCycle = GetComponent<SleepCycle>();
-            BulletHoles = GetComponent<BulletHoles>();
             MainSpawnPoint[] points = FindObjectsByType<MainSpawnPoint>();
             spawn = points.Length == 0 ? null : points[0];
 
+            ItemCatalog items = Catalogs.Of<ItemCatalog>();
             if (items != null) Kinds.Use<UniqueItem>(items);
 
             if (spawn == null)
@@ -112,7 +65,7 @@ namespace Shooter.Game.World
                 version.Value = new FixedString32Bytes(Application.version);
             }
 
-            Log.Info($"Environment is up: world {World}, version {Version}, clock says {Clock.DateTime()}");
+            Log.Info($"Environment is up: world {World}, version {Version}, clock says {Clock.Current.DateTime()}");
         }
 
         public override void OnNetworkDespawn()

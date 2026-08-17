@@ -30,7 +30,7 @@ namespace Shooter.Client.Interface
 
             Inventory own = Own();
             var firearm = own == null ? null : own.Equipped() as Firearm;
-            ItemCatalog items = Environment.Current == null ? null : Environment.Current.Items;
+            ItemCatalog items = Catalogs.Of<ItemCatalog>();
             FirearmSpec spec = items == null || firearm == null ? null : items.Firearm(firearm.SpecId);
 
             if (firearm == null || spec == null)

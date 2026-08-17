@@ -1,8 +1,8 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
 using Shooter.Game.Core;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
@@ -57,7 +57,7 @@ namespace Shooter.Game.Body
 
         private void Update()
         {
-            float dt = Time.deltaTime * Environment.Current.Clock.Scale;
+            float dt = Time.deltaTime * Clock.Current.Scale;
             amount.Value = Mathf.Min(amount.Value + dt * recoverySpeed, MaxAmount);
 
             if (amount.Value >= sprintThreshold) exhausted = false;

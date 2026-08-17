@@ -10,6 +10,20 @@ namespace Shooter.Game.Combat
     {
         private static readonly Journal Log = Logs.Here();
 
+        public static BulletHoles Current { get; private set; }
+
+        private void Awake()
+        {
+            Current = this;
+        }
+
+        public override void OnDestroy()
+        {
+            if (Current == this) Current = null;
+
+            base.OnDestroy();
+        }
+
         [SerializeField] private Material material;
         [SerializeField] private int capacity = 1024;
         [SerializeField] private float diameter = 0.08f;

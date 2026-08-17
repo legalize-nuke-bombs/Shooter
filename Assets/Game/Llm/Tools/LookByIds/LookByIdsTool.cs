@@ -1,6 +1,5 @@
 using System.Text;
 using Shooter.Game.Core;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Llm
 {
@@ -28,7 +27,7 @@ namespace Shooter.Game.Llm
 
             foreach (long targetId in targetIds)
             {
-                PersistentId target = Environment.Current.Registers.Of<PersistentId>().Of(targetId);
+                PersistentId target = Registers.Current.Of<PersistentId>().Of(targetId);
 
                 if (target == null)
                 {

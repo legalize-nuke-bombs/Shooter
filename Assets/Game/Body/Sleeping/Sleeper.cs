@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
 using Shooter.Game.Core;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
@@ -56,7 +57,7 @@ namespace Shooter.Game.Body
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void WakeRpc()
         {
-            bool worldAsleep = Environment.Current != null && Environment.Current.SleepCycle.WorldAsleep;
+            bool worldAsleep = SleepCycle.Current != null && SleepCycle.Current.WorldAsleep;
 
             if (!SleepRule.CanWake(worldAsleep))
             {

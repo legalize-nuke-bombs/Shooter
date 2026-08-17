@@ -2,6 +2,7 @@ using Shooter.Game.Body;
 using Shooter.Game.Loot;
 using Unity.Netcode;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Notifying
 {
@@ -56,7 +57,7 @@ namespace Shooter.Game.Notifying
 
         private string Named(bool prompted)
         {
-            NameCatalog catalog = Environment.Current == null ? null : Environment.Current.Names;
+            NameCatalog catalog = Catalogs.Of<NameCatalog>();
             NameSpec spec = catalog == null ? null : catalog.Of(Value);
 
             if (spec == null) return Value;
@@ -66,7 +67,7 @@ namespace Shooter.Game.Notifying
 
         private string Titled(bool prompted)
         {
-            ItemCatalog catalog = Environment.Current == null ? null : Environment.Current.Items;
+            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
             ItemSpec spec = catalog == null ? null : catalog.Of(Value);
 
             if (spec == null) return Value;

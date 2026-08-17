@@ -4,6 +4,7 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -17,7 +18,7 @@ namespace Shooter.Game.Body
 
         private int next;
 
-        private static SoundCatalog Sounds => Environment.Current == null ? null : Environment.Current.Sounds;
+        private static SoundCatalog Sounds => Catalogs.Of<SoundCatalog>();
 
         public void Play(SoundSpec sound)
         {

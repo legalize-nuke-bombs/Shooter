@@ -5,7 +5,6 @@ using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Client.Interface
 {
@@ -57,7 +56,7 @@ namespace Shooter.Client.Interface
 
         private void Show(Notification notification)
         {
-            NotificationSpec spec = Environment.Current.Notifications.Of(notification.Spec);
+            NotificationSpec spec = Catalogs.Of<NotificationCatalog>().Of(notification.Spec);
             if (spec == null || string.IsNullOrEmpty(spec.Title)) return;
 
             VisualElement element = Line(notification);

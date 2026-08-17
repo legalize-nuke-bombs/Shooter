@@ -5,7 +5,11 @@ using UnityEngine;
 
 namespace Shooter.Game.Core
 {
-    public abstract class Catalog<TSpec> : ScriptableObject where TSpec : Spec
+    public abstract class Catalog : ScriptableObject
+    {
+    }
+
+    public abstract class Catalog<TSpec> : Catalog where TSpec : Spec
     {
         private static readonly Journal Log = Logs.Here();
 

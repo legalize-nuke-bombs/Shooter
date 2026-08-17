@@ -5,7 +5,6 @@ using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Combat
 {
@@ -64,7 +63,7 @@ namespace Shooter.Game.Combat
             var firearm = inventory.Equipped() as Firearm;
             if (firearm == null) return;
 
-            FirearmSpec spec = Environment.Current.Items.Firearm(firearm.SpecId);
+            FirearmSpec spec = Catalogs.Of<ItemCatalog>().Firearm(firearm.SpecId);
             if (spec == null || spec.FireMode != FireMode.Auto) return;
 
             TryShoot();
@@ -127,7 +126,7 @@ namespace Shooter.Game.Combat
             firearm = inventory.Equipped() as Firearm;
             if (firearm == null) return false;
 
-            spec = Environment.Current.Items.Firearm(firearm.SpecId);
+            spec = Catalogs.Of<ItemCatalog>().Firearm(firearm.SpecId);
             return spec != null;
         }
 
@@ -155,7 +154,7 @@ namespace Shooter.Game.Combat
             var health = hit.collider.GetComponentInParent<Health>();
             if (health == null)
             {
-                Environment.Current.BulletHoles.Add(hit.point, hit.normal);
+                BulletHoles.Current.Add(hit.point, hit.normal);
                 Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
                 return;
             }

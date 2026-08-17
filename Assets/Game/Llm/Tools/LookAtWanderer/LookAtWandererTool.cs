@@ -2,7 +2,6 @@
 using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Llm.LookAtWanderer
 {
@@ -40,7 +39,7 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
                 return $"Wanderer {wandererId} isn't talking to you right now.";
             }
 
-            Register<PersistentId> ids = Environment.Current.Registers.Of<PersistentId>();
+            Register<PersistentId> ids = Registers.Current.Of<PersistentId>();
             PersistentId wanderer = ids.Of(wandererId);
             if (wanderer == null)
             {

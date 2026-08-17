@@ -4,8 +4,23 @@ using UnityEngine;
 
 namespace Shooter.Game.World
 {
+    [DefaultExecutionOrder(-110)]
     public class Clock : NetworkBehaviour
     {
+        public static Clock Current { get; private set; }
+
+        private void Awake()
+        {
+            Current = this;
+        }
+
+        public override void OnDestroy()
+        {
+            if (Current == this) Current = null;
+
+            base.OnDestroy();
+        }
+
         [SerializeField] private float latitude = 55.75f;
 
         [SerializeField] private float declination = 12.33f;

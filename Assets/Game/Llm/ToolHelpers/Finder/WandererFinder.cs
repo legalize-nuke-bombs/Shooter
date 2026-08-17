@@ -12,7 +12,7 @@ namespace Shooter.Game.Llm.ToolHelpers.Finder
 
         public void Find(IFinderOutput output)
         {
-            Register<Player> players = Environment.Current.Registers.Of<Player>();
+            Register<Player> players = Registers.Current.Of<Player>();
 
             foreach (Player player in players.All)
             {

@@ -6,6 +6,7 @@ using Shooter.Game.World;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.AI.Eater
 {
@@ -21,7 +22,7 @@ namespace Shooter.Game.AI.Eater
         {
             inventory = GetComponent<Inventory>();
             hunger = GetComponent<Hunger>();
-            foodIds = Environment.Current.Items.FindAll(
+            foodIds = Catalogs.Of<ItemCatalog>().FindAll(
                 item => (item is StackableItemSpec stackableItem && stackableItem.FoodMarker > 0))
                 .Cast<StackableItemSpec>()
                 .Select(stackableItem => stackableItem.Id)

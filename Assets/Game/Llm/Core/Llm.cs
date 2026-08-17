@@ -8,7 +8,7 @@ using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Logging;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Llm
 {
@@ -230,7 +230,7 @@ namespace Shooter.Game.Llm
 
         private string Time()
         {
-            return Environment.Current.Clock.DateTime();
+            return Clock.Current.DateTime();
         }
     }
 }

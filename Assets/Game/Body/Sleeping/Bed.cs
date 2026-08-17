@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
 using Shooter.Game.Core;
+using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
@@ -26,7 +27,7 @@ namespace Shooter.Game.Body
 
             bool alive = health == null || health.Alive;
             bool handsFree = hands == null || hands.Free;
-            bool night = Environment.Current != null && Environment.Current.Clock.IsNight();
+            bool night = Environment.Current != null && Clock.Current.IsNight();
 
             if (!SleepRule.CanSleep(alive, handsFree, night))
             {

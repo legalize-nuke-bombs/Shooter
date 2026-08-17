@@ -5,6 +5,7 @@ using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Client.Interface
 {
@@ -125,7 +126,7 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            ItemCatalog catalog = Environment.Current == null ? null : Environment.Current.Items;
+            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
             UniqueItem equipped = bag.Equipped();
             int equippedSlot = bag.EquippedSlot;
             var taken = new bool[Rows, Columns];
@@ -363,7 +364,7 @@ namespace Shooter.Client.Interface
 
             var use = new Button(() =>
             {
-                if (bag != null) bag.UseStackableRpc(Environment.Current.Items.At(index).Id);
+                if (bag != null) bag.UseStackableRpc(Catalogs.Of<ItemCatalog>().At(index).Id);
 
                 CloseMenu();
             }) { text = "Использовать" };

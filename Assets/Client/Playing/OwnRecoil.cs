@@ -2,7 +2,7 @@ using Shooter.Game.Combat;
 using Shooter.Game.Loot;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
@@ -52,7 +52,7 @@ namespace Shooter.Client.Playing
             var firearm = inventory.Equipped() as Firearm;
             if (firearm == null || firearm.Magazine <= 0) return;
 
-            FirearmSpec spec = Environment.Current.Items.Firearm(firearm.SpecId);
+            FirearmSpec spec = Catalogs.Of<ItemCatalog>().Firearm(firearm.SpecId);
             if (spec == null) return;
             if (sustained && spec.FireMode != FireMode.Auto) return;
 

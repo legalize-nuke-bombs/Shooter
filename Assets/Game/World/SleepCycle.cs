@@ -8,19 +8,27 @@ namespace Shooter.Game.World
     {
         private static readonly Journal Log = Logs.Here();
 
+        public static SleepCycle Current { get; private set; }
+
+        private void Awake()
+        {
+            Current = this;
+        }
+
+        public override void OnDestroy()
+        {
+            if (Current == this) Current = null;
+
+            base.OnDestroy();
+        }
+
         private const float SkipTimeScale = 50f;
 
         private readonly NetworkVariable<bool> asleep = new NetworkVariable<bool>();
 
-        private Clock clock;
         private bool wasNight;
 
         public bool WorldAsleep => asleep.Value;
-
-        private void Awake()
-        {
-            clock = GetComponent<Clock>();
-        }
 
         public override void OnNetworkSpawn()
         {
@@ -38,6 +46,8 @@ namespace Shooter.Game.World
 
         private void Step()
         {
+            Clock clock = Clock.Current;
+
             bool everyone = AllAsleep();
             if (everyone != asleep.Value)
             {
