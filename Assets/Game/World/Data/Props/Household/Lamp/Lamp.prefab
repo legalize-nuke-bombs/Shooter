@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: -3063063672073548532}
   - component: {fileID: -5312904471068312254}
   - component: {fileID: 404736587692464908}
-  - component: {fileID: 727325854839542498}
   m_Layer: 0
   m_Name: Lamp
   m_TagString: Untagged
@@ -208,19 +207,6 @@ MonoBehaviour:
   breakSound: {fileID: 11400000, guid: 9c77bf221cbd409fbe947692ee46a0c0, type: 2}
   useDespawn: 0
   despawnTime: 600
---- !u!114 &727325854839542498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7431905612350001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e75ea9e04b94231b0582659d315148c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sweeping.AutoSweepable
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &7431905612350005
 GameObject:
   m_ObjectHideFlags: 0

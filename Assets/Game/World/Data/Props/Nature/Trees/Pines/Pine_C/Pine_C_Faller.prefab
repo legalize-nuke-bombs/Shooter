@@ -61,9 +61,6 @@ PrefabInstance:
       addedObject: {fileID: 8774521708554371097}
     - targetCorrespondingSourceObject: {fileID: 1722164173232303198, guid: 942660f4ebcf9cd438f45122b0ad63eb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 874922210395358986}
-    - targetCorrespondingSourceObject: {fileID: 1722164173232303198, guid: 942660f4ebcf9cd438f45122b0ad63eb, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 3983842648980306864}
     - targetCorrespondingSourceObject: {fileID: 1722164173232303198, guid: 942660f4ebcf9cd438f45122b0ad63eb, type: 3}
       insertIndex: -1
@@ -112,20 +109,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &874922210395358986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1126750274201201837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e75ea9e04b94231b0582659d315148c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Sweeping.AutoSweepable
-  ShowTopMostFoldoutHeaderGroup: 1
-  checkInterval: 1
 --- !u!114 &3983842648980306864
 MonoBehaviour:
   m_ObjectHideFlags: 0

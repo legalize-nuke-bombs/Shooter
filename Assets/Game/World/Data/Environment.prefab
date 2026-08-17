@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 8352106744219038612}
   - component: {fileID: 4327895610234871652}
   - component: {fileID: 6615536903480177054}
-  - component: {fileID: 8440111901261030032}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -78,7 +77,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Environment
   ShowTopMostFoldoutHeaderGroup: 1
-  profiler: {fileID: 0}
   corpse: {fileID: 6108037598719724321, guid: dba187afb26374400bd1ba8b38212115, type: 3}
   items: {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
   icons: {fileID: 11400000, guid: 8658d1e4d822487690a43c3f6b39ba67, type: 2}
@@ -185,16 +183,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aae900e1bd00c3447abe4d1a409abda0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Registers
---- !u!114 &8440111901261030032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9047279815154395446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a208a189140881409e9e67e87e02f6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Sweeper
-  interval: 60
