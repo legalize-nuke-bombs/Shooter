@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Shooter.Game.Body;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace Shooter.Game.Loot
 
         public SoundSpec UseSound => useSound;
 
-        public bool Usable => effects != null && effects.Length > 0;
+        public bool Usable => effects.Length > 0;
+        public int FoodMarker => effects.Length == 0 ? 0 : effects.Max(effect => effect.FoodMarker);
     }
 }

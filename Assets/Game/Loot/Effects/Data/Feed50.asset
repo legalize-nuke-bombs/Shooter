@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 280d5b63746c450cb47acfed7b08f851, type: 3}
-  m_Name: Feed10
+  m_Name: Feed50
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.FeedEffect
-  amount: 10
+  amount: 50
