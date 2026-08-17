@@ -147,6 +147,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3799144584473767540}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9115735643859530228}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5333098322189514972}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -168,6 +174,7 @@ MonoBehaviour:
   systemPrompts:
   - {fileID: 11400000, guid: c73c83677512f0644ad6fcaec67a4593, type: 2}
   - {fileID: 11400000, guid: 15dce29c4e723814eb7a5c2a5306561a, type: 2}
+  - {fileID: 11400000, guid: de916ee7dd199e245a0042846075dd32, type: 2}
   - {fileID: 11400000, guid: 7169eafc621024f46b028be5826ca7a9, type: 2}
   character: 
   knowledges:
@@ -474,3 +481,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbe9895969c846c2a10949133ed5b9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.ExploreItems.ExploreItemsTool
+--- !u!114 &9115735643859530228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cf5c0a7c5994445bb78647969bd01b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.AISettingDamageToReputationCoefficient
+--- !u!114 &5333098322189514972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a7e710e34594a7885f427365f4cadcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.AIPanel.AIPanelTool

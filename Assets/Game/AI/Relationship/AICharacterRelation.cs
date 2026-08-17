@@ -25,10 +25,22 @@ namespace Shooter.Game.AI
         }
 
         private readonly Dictionary<long, int> amounts = new Dictionary<long, int>();
-        [SerializeField] [Range(0, 100)] private int defaultAmount = 50;
+
+        [SerializeField] [Range(0, 100)] private int defaultAmount = 50; // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
+
+        [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
+        public float DamageToReputationCoefficient => damageToReputationCoefficient;
+        public void SetDamageToReputationCoefficient(float amount)
+        {
+            if (amount < 0 || amount > 10)
+            {
+                throw new ArgumentException($"Amount must be 0 <= ? <= 10, got {amount}");
+            }
+            damageToReputationCoefficient = amount;
+        }
+
         [SerializeField] private NotificationSpec improved;
         [SerializeField] private NotificationSpec worsened;
-        // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
 
         public int Amount(long characterId)
         {
@@ -80,9 +92,9 @@ namespace Shooter.Game.AI
                 .With("after", after));
         }
 
-        public void DecreaseAmount(long characterId, int amount)
+        public void OnDamage(long characterId, double amount)
         {
-            SetAmount(characterId, Math.Max(0, Amount(characterId) - amount));
+            SetAmount(characterId, Math.Max(0, Amount(characterId) - (int)(damageToReputationCoefficient * amount)));
         }
 
         [SerializeField] [Range(0, 100)] private int enemyThreshold = 0;

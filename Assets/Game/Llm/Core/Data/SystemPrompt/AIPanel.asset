@@ -10,15 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
-  m_Name: AIRelationship
+  m_Name: AIPanel
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
-  content: 'You have your own attitude towards every character, expressed by a number
-    from 0 to 100: enemy, neutral, friend.
-
-    You automatically attack characters
-    you consider enemies.
-
-    Your attitude drops automatically when somebody attacks
-    you or your friends.
-
-    You can configure these rules.'
+  content: You make macro-level decisions. Your character automatically handles simple
+    actions that require an immediate response. You can configure the rules for these
+    automatic actions using the ai_panel tool.

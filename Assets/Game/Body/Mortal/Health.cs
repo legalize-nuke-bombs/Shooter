@@ -60,7 +60,7 @@ namespace Shooter.Game.Body
             {
                 if (aiCharacterRelation != null && attackerId != null)
                 {
-                    aiCharacterRelation.DecreaseAmount(attackerId.Value, (int)amount);
+                    aiCharacterRelation.OnDamage(attackerId.Value, amount);
                 }
 
                 if (bleeder != null)
