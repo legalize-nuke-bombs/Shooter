@@ -14,12 +14,12 @@ namespace Shooter.Game.Notifying
         private void Awake()
         {
             recipients = GetComponentsInChildren<IChildNotificationRecipient>();
-            Log.Info($"Entity {name} has {recipients.Length} child notification recipients");
+            Log.Info($"Entity {this.NameOf()} has {recipients.Length} child notification recipients");
         }
 
         public void Receive(Notification notification)
         {
-            Log.Info($"Entity {name} received notification {notification.Spec}");
+            Log.Info($"Entity {this.NameOf()} received notification {notification.Spec}");
             foreach (IChildNotificationRecipient recipient in recipients)
             {
                 recipient.OnReceive(notification);

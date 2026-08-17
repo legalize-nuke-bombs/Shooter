@@ -1,6 +1,7 @@
 ﻿using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.World
 {
@@ -13,7 +14,7 @@ namespace Shooter.Game.World
         private void Awake()
         {
             triggerables = GetComponents<ITriggerable>();
-            Log.Info($"Entity {name} has {triggerables.Length} triggerables");
+            Log.Info($"Entity {this.NameOf()} has {triggerables.Length} triggerables");
         }
 
         public void OnTrigger(PersistentId character)

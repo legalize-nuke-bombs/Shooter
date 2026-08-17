@@ -1,5 +1,6 @@
 using System;
 using Shooter.Logging;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
@@ -26,7 +27,7 @@ You NEVER include players' personal information in these reports.";
                 return "Nothing to send";
             }
 
-            Log.Warn($"Entity {name} sent feedback: {arguments.Content}");
+            Log.Warn($"Entity {this.NameOf()} sent feedback: {arguments.Content}");
 
             return "Sent";
         }

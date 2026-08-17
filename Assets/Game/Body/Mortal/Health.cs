@@ -73,7 +73,7 @@ namespace Shooter.Game.Body
 
         private void Die()
         {
-            Log.Info($"Entity {name} died");
+            Log.Info($"Entity {this.NameOf()} died");
 
             foreach (IMortal mortal in this.FindAll<IMortal>())
                 mortal.Died();

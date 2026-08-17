@@ -1,6 +1,7 @@
 using Shooter.Logging;
 using Unity.Netcode.Components;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.World
 {
@@ -38,7 +39,7 @@ namespace Shooter.Game.World
 
         private void Fall()
         {
-            Log.Info($"Entity {name} is falling!");
+            Log.Info($"Entity {this.NameOf()} is falling!");
 
             rigidbody.isKinematic = false;
 

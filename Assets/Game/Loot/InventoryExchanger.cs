@@ -34,20 +34,20 @@ namespace Shooter.Game.Loot
             Inventory targetInventory = target == null ? null : target.GetComponentInChildren<Inventory>();
             if (targetInventory == null)
             {
-                Log.Info($"Failed to give {stackable.Id} x {amount} from {name} to {targetId} : the target is not around");
+                Log.Info($"Failed to give {stackable.Id} x {amount} from {this.NameOf()} to {targetId} : the target is not around");
                 return false;
             }
 
             if (inventory.RemoveStackable(stackable, amount, InventoryOnConflict.Rollback) != amount)
             {
-                Log.Info($"Failed to give {stackable.Id} x {amount} from {name} to {targetId} : insufficient items");
+                Log.Info($"Failed to give {stackable.Id} x {amount} from {this.NameOf()} to {targetId} : insufficient items");
                 return false;
             }
             targetInventory.AddStackable(stackable, amount);
 
             Notify(target, itemsGiven, stackable.Key, amount);
 
-            Log.Info($"{name} gave {stackable.Id} x {amount} to {targetId}");
+            Log.Info($"{this.NameOf()} gave {stackable.Id} x {amount} to {targetId}");
             return true;
         }
 
@@ -57,21 +57,21 @@ namespace Shooter.Game.Loot
             Inventory targetInventory = target == null ? null : target.GetComponentInChildren<Inventory>();
             if (targetInventory == null)
             {
-                Log.Info($"Failed to give unique slot {slotId} from {name} to {targetId}: the target is not around");
+                Log.Info($"Failed to give unique slot {slotId} from {this.NameOf()} to {targetId}: the target is not around");
                 return false;
             }
 
             UniqueItem uniqueItem = inventory.Take(slotId);
             if (uniqueItem == null)
             {
-                Log.Info($"Failed to give unique slot {slotId} from {name} to {targetId}: the specified unique item does not exist");
+                Log.Info($"Failed to give unique slot {slotId} from {this.NameOf()} to {targetId}: the specified unique item does not exist");
                 return false;
             }
             targetInventory.Put(uniqueItem);
 
             Notify(target, itemGiven, uniqueItem.SpecId, 1);
 
-            Log.Info($"{name} gave unique item slot {slotId} ({uniqueItem.SpecId}) to {targetId}");
+            Log.Info($"{this.NameOf()} gave unique item slot {slotId} ({uniqueItem.SpecId}) to {targetId}");
             return true;
         }
 
@@ -82,7 +82,7 @@ namespace Shooter.Game.Loot
 
             if (spec == null)
             {
-                Log.Warn($"{name} has no notification to tell {target.name} about {itemSpecId}, the gift goes unnoticed");
+                Log.Warn($"{this.NameOf()} has no notification to tell {target.name} about {itemSpecId}, the gift goes unnoticed");
                 return;
             }
 

@@ -74,7 +74,7 @@ namespace Shooter.Game.Llm
                     .With("text", arguments.Content));
 
                 delivered.Add(targetId);
-                Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
+                Log.Info($"Entity {this.NameOf()} said to {targetId}: {arguments.Content}");
             }
 
             var answer = new StringBuilder();

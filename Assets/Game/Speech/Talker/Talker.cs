@@ -57,13 +57,13 @@ namespace Shooter.Game.Speech
 
             if (!TalkRule.CanTalk(Alive(user), Alive(NetworkObject), Awake(NetworkObject)))
             {
-                Log.Info($"Entity {name} refused to talk to {user.name}: speaker alive {(Alive(user))}, own alive {(Alive(NetworkObject))}, own awake {(Awake(NetworkObject))}");
+                Log.Info($"Entity {this.NameOf()} refused to talk to {user.name}: speaker alive {(Alive(user))}, own alive {(Alive(NetworkObject))}, own awake {(Awake(NetworkObject))}");
                 return;
             }
 
             if (!user.TryGetComponent(out PersistentId speaker))
             {
-                Log.Warn($"Entity {name} refused to talk to {user.name}: the speaker has no persistent id");
+                Log.Warn($"Entity {this.NameOf()} refused to talk to {user.name}: the speaker has no persistent id");
                 return;
             }
 
@@ -84,13 +84,13 @@ namespace Shooter.Game.Speech
 
             if (!conversations.TryGetValue(user.OwnerClientId, out Conversation conversation) || !conversation.Open)
             {
-                Log.Info($"Entity {user.name} spoke to {name} without an open talk, ignored");
+                Log.Info($"Entity {user.name} spoke to {this.NameOf()} without an open talk, ignored");
                 return;
             }
 
             if (thinking.Contains(user.OwnerClientId))
             {
-                Log.Info($"Entity {user.name} spoke to {name} while the answer is pending, ignored");
+                Log.Info($"Entity {user.name} spoke to {this.NameOf()} while the answer is pending, ignored");
                 return;
             }
 
@@ -119,12 +119,12 @@ namespace Shooter.Game.Speech
 
             if (!conversations.TryGetValue(clientId, out Conversation conversation) || !conversation.Open)
             {
-                Log.Info($"Entity {name} answered client {clientId} whose conversation is gone, dropped");
+                Log.Info($"Entity {this.NameOf()} answered client {clientId} whose conversation is gone, dropped");
                 return;
             }
 
             Say(conversation, conversation.User, MessageAuthor.Talker, content);
-            Log.Info($"Entity {name} answered client {clientId}");
+            Log.Info($"Entity {this.NameOf()} answered client {clientId}");
         }
 
         private void Step()
@@ -142,7 +142,7 @@ namespace Shooter.Game.Speech
 
                 if (!entry.Value.User.TryGetComponent(out PersistentId speaker))
                 {
-                    Log.Warn($"Entity {name} can not answer {entry.Value.User.name}: the speaker has no persistent id");
+                    Log.Warn($"Entity {this.NameOf()} can not answer {entry.Value.User.name}: the speaker has no persistent id");
                     continue;
                 }
 
@@ -157,7 +157,7 @@ namespace Shooter.Game.Speech
                 }
                 catch (Exception e)
                 {
-                    Log.Warn($"Entity {name} failed to request answer for client {entry.Key}: {e.Message}");
+                    Log.Warn($"Entity {this.NameOf()} failed to request answer for client {entry.Key}: {e.Message}");
                     DeliverAnswer(entry.Key, "Not now.");
                 }
             }
@@ -173,7 +173,7 @@ namespace Shooter.Game.Speech
 
             conversation = new Conversation(user, wanderer);
             conversations.Add(user.OwnerClientId, conversation);
-            Log.Info($"Entity {name} started a conversation with client {user.OwnerClientId}");
+            Log.Info($"Entity {this.NameOf()} started a conversation with client {user.OwnerClientId}");
             return conversation;
         }
 
@@ -199,7 +199,7 @@ namespace Shooter.Game.Speech
                 NetworkObject user = conversation.User;
                 if (user != null && Reachable(user) && Alive(user) && Awake(user) && Alive(NetworkObject)) continue;
 
-                Log.Info($"Entity {name} ends the talk with {(user == null ? "a gone player" : user.name)}: out of reach, dead or asleep");
+                Log.Info($"Entity {this.NameOf()} ends the talk with {(user == null ? "a gone player" : user.name)}: out of reach, dead or asleep");
 
                 if (user != null) thinking.Remove(user.OwnerClientId);
 

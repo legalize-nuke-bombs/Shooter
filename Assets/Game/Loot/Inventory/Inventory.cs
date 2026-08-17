@@ -72,7 +72,7 @@ namespace Shooter.Game.Loot
                 Fill(entry);
             }
 
-            Log.Info($"Entity {name} starts with {contents.Length} kinds of things in the bag");
+            Log.Info($"Entity {this.NameOf()} starts with {contents.Length} kinds of things in the bag");
         }
 
         public override void OnNetworkDespawn()
@@ -108,12 +108,12 @@ namespace Shooter.Game.Loot
 
             if (index < 0 || index >= stackAmounts.Count)
             {
-                Log.Error($"Entity {name} can not take {spec.Key}: the world catalog does not know it");
+                Log.Error($"Entity {this.NameOf()} can not take {spec.Key}: the world catalog does not know it");
                 return;
             }
 
             stackAmounts[index] += amount;
-            Log.Info($"Entity {name} took {amount} of {spec.Key}");
+            Log.Info($"Entity {this.NameOf()} took {amount} of {spec.Key}");
         }
 
         public int RemoveStackable(StackableItemSpec spec, int amount, InventoryOnConflict onConflict)
@@ -142,7 +142,7 @@ namespace Shooter.Game.Loot
 
             SlotsShifted();
 
-            Log.Info($"Entity {name} took {item.SpecId} into slot {slot}");
+            Log.Info($"Entity {this.NameOf()} took {item.SpecId} into slot {slot}");
 
             return slot;
         }
@@ -177,7 +177,7 @@ namespace Shooter.Game.Loot
         {
             if (!UseStackable(stackableId))
             {
-                Log.Info($"Entity {name} failed to use stackable {stackableId} rpc");
+                Log.Info($"Entity {this.NameOf()} failed to use stackable {stackableId} rpc");
             }
         }
 
@@ -200,7 +200,7 @@ namespace Shooter.Game.Loot
 
             if (spec.UseSound != null && TryGetComponent(out Speaker speaker)) speaker.Play(spec.UseSound);
 
-            Log.Info($"Entity {name} used one {spec.Key}");
+            Log.Info($"Entity {this.NameOf()} used one {spec.Key}");
             return true;
         }
 
@@ -282,13 +282,13 @@ namespace Shooter.Game.Loot
 
             if (spec == null || !spec.Equipable)
             {
-                Log.Info($"Entity {name} can not put {item.SpecId} in hands");
+                Log.Info($"Entity {this.NameOf()} can not put {item.SpecId} in hands");
                 return false;
             }
 
             equippedSlot.Value = slot;
 
-            Log.Info($"Entity {name} holds {item.SpecId} from slot {slot}");
+            Log.Info($"Entity {this.NameOf()} holds {item.SpecId} from slot {slot}");
 
             return true;
         }
@@ -370,7 +370,7 @@ namespace Shooter.Game.Loot
 
             foreach (Entry entry in contents)
             {
-                if (entry.Spec == null) Log.Error($"Entity {name} has a starting inventory slot without an item spec");
+                if (entry.Spec == null) Log.Error($"Entity {this.NameOf()} has a starting inventory slot without an item spec");
             }
         }
 

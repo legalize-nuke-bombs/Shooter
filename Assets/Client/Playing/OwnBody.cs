@@ -19,7 +19,7 @@ namespace Shooter.Client.Playing
             GameObject flesh = this.Find<Skin>().Flesh;
             if (flesh == null)
             {
-                Log.Warn($"Own player {name} has no flesh to hide");
+                Log.Warn($"Own player {this.NameOf()} has no flesh to hide");
                 return;
             }
 
