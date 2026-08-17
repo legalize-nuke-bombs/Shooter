@@ -1,8 +1,8 @@
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.World
 {

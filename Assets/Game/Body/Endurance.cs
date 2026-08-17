@@ -1,8 +1,8 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.Llm;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {

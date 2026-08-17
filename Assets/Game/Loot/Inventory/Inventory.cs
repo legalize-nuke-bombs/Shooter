@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Loot
 {

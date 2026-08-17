@@ -1,7 +1,7 @@
 using System;
 using Shooter.Logging;
 using Unity.Netcode;
-using Shooter.Game.Llm;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {

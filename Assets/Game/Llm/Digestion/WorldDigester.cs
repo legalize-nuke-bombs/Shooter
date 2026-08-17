@@ -4,6 +4,7 @@ using System.Text;
 using Shooter.Logging;
 using UnityEngine;
 using Environment = Shooter.Game.World.Environment;
+using Shooter.Game.Core;
 
 namespace Shooter.Game.Llm
 {
