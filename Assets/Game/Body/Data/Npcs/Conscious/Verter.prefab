@@ -8,11 +8,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -8397500821482943483, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
-      propertyPath: content
-      value: Verter - a skinny jumpy guy. Constantly looks around and listens, flinches
-        at sharp sounds, keeps away from closed doors.
-      objectReference: {fileID: 0}
     - target: {fileID: 1903426252344384340, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 43.012653
