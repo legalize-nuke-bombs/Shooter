@@ -14,6 +14,8 @@ namespace Shooter.Game.Body.Bleeding
 
         private Health health;
 
+        [SerializeField] private DamageSpec bleedingDamage;
+
         private readonly NetworkVariable<double> level = new NetworkVariable<double>(0);
 
         public double Level => level.Value;
@@ -21,6 +23,23 @@ namespace Shooter.Game.Body.Bleeding
         private void Awake()
         {
             health = GetComponent<Health>();
+        }
+
+        private void OnEnable()
+        {
+            health.Damaged += OnDamaged;
+        }
+
+        private void OnDisable()
+        {
+            health.Damaged -= OnDamaged;
+        }
+
+        private void OnDamaged(double amount, long? attackerId, DamageSpec type)
+        {
+            if (type.Bleed <= 0) return;
+
+            Bleed(amount * type.Bleed);
         }
 
         private float timer = 0;
@@ -47,7 +66,7 @@ namespace Shooter.Game.Body.Bleeding
 
             level.Value = Math.Max(0, level.Value - dt * recoverySpeed);
 
-            health.Damage(level.Value * damageCoefficient * dt, null, true);
+            health.Damage(level.Value * damageCoefficient * dt, null, bleedingDamage);
         }
 
         public void Bleed(double force)

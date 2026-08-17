@@ -16,11 +16,30 @@ namespace Shooter.Game.AI
 
         private PersistentId ownId;
         private Nameable ownNameable;
+        private Health health;
 
         private void Awake()
         {
             ownId = GetComponent<PersistentId>();
             ownNameable = GetComponentInChildren<Nameable>();
+            health = GetComponent<Health>();
+        }
+
+        private void OnEnable()
+        {
+            health.Damaged += OnDamaged;
+        }
+
+        private void OnDisable()
+        {
+            health.Damaged -= OnDamaged;
+        }
+
+        private void OnDamaged(double amount, long? attackerId, DamageSpec type)
+        {
+            if (!type.Reputational || attackerId == null) return;
+
+            SetAmount(attackerId.Value, Math.Max(0, Amount(attackerId.Value) - (int)(damageToReputationCoefficient * amount)));
         }
 
         private readonly Dictionary<long, int> amounts = new Dictionary<long, int>();
@@ -89,11 +108,6 @@ namespace Shooter.Game.AI
                 .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
                 .With("before", before)
                 .With("after", after));
-        }
-
-        public void OnDamage(long characterId, double amount)
-        {
-            SetAmount(characterId, Math.Max(0, Amount(characterId) - (int)(damageToReputationCoefficient * amount)));
         }
 
         [SerializeField] [Range(0, 100)] private int enemyThreshold = 0;

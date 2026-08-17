@@ -14,6 +14,8 @@ namespace Shooter.Game.Body
 
         [SerializeField] private SoundSpec sound;
 
+        [SerializeField] private DamageSpec fallDamage;
+
         private Speaker speaker;
         private Health health;
 
@@ -30,7 +32,7 @@ namespace Shooter.Game.Body
             speaker.Play(sound);
 
             int damage = Mathf.RoundToInt((height - safeHeight) * damagePerMetre);
-            if (damage > 0) health.Damage(damage, null);
+            if (damage > 0) health.Damage(damage, null, fallDamage);
         }
     }
 }

@@ -1,5 +1,4 @@
-using Shooter.Game.Body.Bleeding;
-using Shooter.Game.AI;
+using System;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,14 +12,12 @@ namespace Shooter.Game.Body
 
         [SerializeField] private EarSoundSpec hurtSound;
 
-        private AICharacterRelation aiCharacterRelation;
-        private Bleeder bleeder;
         private EarSpeaker earSpeaker;
+
+        public event Action<double, long?, DamageSpec> Damaged;
 
         protected virtual void Awake()
         {
-            aiCharacterRelation = GetComponent<AICharacterRelation>();
-            bleeder = GetComponent<Bleeder>();
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
@@ -36,7 +33,7 @@ namespace Shooter.Game.Body
 
         public abstract bool Alive { get; }
 
-        public DamageResult Damage(double amount, long? attackerId, bool silent = false)
+        public DamageResult Damage(double amount, long? attackerId, DamageSpec type)
         {
             if (!IsServer || !Alive || amount <= 0)
             {
@@ -49,25 +46,14 @@ namespace Shooter.Game.Body
             DamageRaw(amount);
 
             if (!Alive) Die();
-            else if (!silent) earSpeaker.Play(hurtSound);
+            else if (type.Loud) earSpeaker.Play(hurtSound);
 
             var result = new DamageResult()
             {
                 Murder = !Alive
             };
 
-            if (Alive && !silent)
-            {
-                if (aiCharacterRelation != null && attackerId != null)
-                {
-                    aiCharacterRelation.OnDamage(attackerId.Value, amount);
-                }
-
-                if (bleeder != null)
-                {
-                    bleeder.Bleed(2 * amount);
-                }
-            }
+            if (Alive) Damaged?.Invoke(amount, attackerId, type);
 
             return result;
         }

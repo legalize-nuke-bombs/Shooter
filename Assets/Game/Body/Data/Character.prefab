@@ -239,6 +239,7 @@ MonoBehaviour:
   minHeight: 0.6
   safeHeight: 3
   damagePerMetre: 12
+  fallDamage: {fileID: 11400000, guid: b45614fc18f34f7a98bbf9624a8cd6c3, type: 2}
   sound: {fileID: 11400000, guid: 67f8d0ce98874c0493befcfd4f5e80d9, type: 2}
 --- !u!114 &6600000000000000105
 MonoBehaviour:
@@ -438,3 +439,4 @@ MonoBehaviour:
   timerInterval: 0.1
   recoverySpeed: 1
   damageCoefficient: 0.025
+  bleedingDamage: {fileID: 11400000, guid: c42fce87394f4ea7b3bc29ec3b48324e, type: 2}
