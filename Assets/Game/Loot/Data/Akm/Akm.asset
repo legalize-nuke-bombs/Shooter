@@ -23,6 +23,7 @@ MonoBehaviour:
   ammo: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
   distance: 100
   damage: 25
+  damageType: {fileID: 11400000, guid: 1ecaf51668c54ced8988e03a408cc745, type: 2}
   fireInterval: 0.1
   fireMode: 1
   spray:
