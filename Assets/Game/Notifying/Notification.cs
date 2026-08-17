@@ -1,6 +1,6 @@
+using System;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.World;
 using Unity.Collections;
 using Unity.Netcode;
 
@@ -18,7 +18,7 @@ namespace Shooter.Game.Notifying
             this.spec = spec;
             icon = default;
             sound = default;
-            args = System.Array.Empty<Arg>();
+            args = Array.Empty<Arg>();
         }
 
         public IconSpec Icon()
@@ -54,9 +54,8 @@ namespace Shooter.Game.Notifying
             if (args == null || string.IsNullOrEmpty(name)) return null;
 
             foreach (Arg arg in args)
-            {
-                if (arg.Name == name) return arg.Rendered();
-            }
+                if (arg.Name == name)
+                    return arg.Rendered();
 
             return null;
         }

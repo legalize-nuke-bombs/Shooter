@@ -7,7 +7,7 @@ namespace Shooter.Game.Loot
 {
     public class ItemSlots : INetworkSerializable, IEquatable<ItemSlots>
     {
-        private readonly List<UniqueItem> items = new List<UniqueItem>();
+        private readonly List<UniqueItem> items = new();
 
         private int revision;
 
@@ -20,11 +20,45 @@ namespace Shooter.Game.Loot
             get
             {
                 foreach (UniqueItem item in items)
-                {
-                    if (item != null && item.Dirty) return true;
-                }
+                    if (item != null && item.Dirty)
+                        return true;
 
                 return false;
+            }
+        }
+
+        public bool Equals(ItemSlots other)
+        {
+            return other != null && revision == other.revision;
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref revision);
+
+            byte count = serializer.IsWriter ? (byte)items.Count : (byte)0;
+            serializer.SerializeValue(ref count);
+
+            if (serializer.IsReader)
+            {
+                items.Clear();
+                for (int slot = 0; slot < count; slot++) items.Add(null);
+            }
+
+            for (int slot = 0; slot < count; slot++)
+            {
+                bool filled = serializer.IsWriter && items[slot] != null;
+                serializer.SerializeValue(ref filled);
+
+                if (!filled) continue;
+
+                Packed<UniqueItem> packed = serializer.IsWriter
+                    ? new Packed<UniqueItem>(items[slot])
+                    : default;
+
+                packed.NetworkSerialize(serializer);
+
+                if (serializer.IsReader) items[slot] = packed.Value;
             }
         }
 
@@ -80,46 +114,10 @@ namespace Shooter.Game.Loot
         public void Settle()
         {
             foreach (UniqueItem item in items)
-            {
-                if (item != null) item.Clean();
-            }
+                if (item != null)
+                    item.Clean();
 
             revision++;
-        }
-
-        public bool Equals(ItemSlots other)
-        {
-            return other != null && revision == other.revision;
-        }
-
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref revision);
-
-            byte count = serializer.IsWriter ? (byte)items.Count : (byte)0;
-            serializer.SerializeValue(ref count);
-
-            if (serializer.IsReader)
-            {
-                items.Clear();
-                for (int slot = 0; slot < count; slot++) items.Add(null);
-            }
-
-            for (int slot = 0; slot < count; slot++)
-            {
-                bool filled = serializer.IsWriter && items[slot] != null;
-                serializer.SerializeValue(ref filled);
-
-                if (!filled) continue;
-
-                Packed<UniqueItem> packed = serializer.IsWriter
-                    ? new Packed<UniqueItem>(items[slot])
-                    : default;
-
-                packed.NetworkSerialize(serializer);
-
-                if (serializer.IsReader) items[slot] = packed.Value;
-            }
         }
     }
 }

@@ -6,9 +6,16 @@ namespace Shooter.Game.World
 {
     public class SleepCycle : NetworkBehaviour
     {
+        private const float SkipTimeScale = 50f;
         private static readonly Journal Log = Logs.Here();
 
+        private readonly NetworkVariable<bool> asleep = new();
+
+        private bool wasNight;
+
         public static SleepCycle Current { get; private set; }
+
+        public bool WorldAsleep => asleep.Value;
 
         private void Awake()
         {
@@ -21,14 +28,6 @@ namespace Shooter.Game.World
 
             base.OnDestroy();
         }
-
-        private const float SkipTimeScale = 50f;
-
-        private readonly NetworkVariable<bool> asleep = new NetworkVariable<bool>();
-
-        private bool wasNight;
-
-        public bool WorldAsleep => asleep.Value;
 
         public override void OnNetworkSpawn()
         {
@@ -77,7 +76,7 @@ namespace Shooter.Game.World
                 NetworkObject player = client.PlayerObject;
                 if (player == null) continue;
 
-                var sleeper = player.GetComponent<Sleeper>();
+                Sleeper sleeper = player.GetComponent<Sleeper>();
                 if (sleeper == null || !sleeper.Sleeping) return false;
 
                 anyone = true;

@@ -6,29 +6,22 @@ namespace Shooter.Editing
 {
     public class TerrainRoughener : EditorWindow
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const float Fade = 0.5f;
         private const float Lacunarity = 2f;
         private const float Turn = 0.5f;
         private const float VarietyScale = 0.12f;
+        private static readonly Journal Log = Logs.Here();
 
         private float amplitude = 0.15f;
         private float bump = 25f;
+        private float[,] ground;
+        private float margin = 2.5f;
         private int octaves = 4;
         private float ridges = 0.6f;
-        private float warp = 0.8f;
-        private float variety = 0.7f;
         private float seed = 1f;
         private bool spare = true;
-        private float margin = 2.5f;
-        private float[,] ground;
-
-        [MenuItem("Tools/Roughen Terrain")]
-        private static void Open()
-        {
-            GetWindow<TerrainRoughener>("Roughen Terrain");
-        }
+        private float variety = 0.7f;
+        private float warp = 0.8f;
 
         private void OnEnable()
         {
@@ -50,14 +43,26 @@ namespace Shooter.Editing
             EditorGUILayout.Space();
             spare = EditorGUILayout.Toggle("Spare placed objects", spare);
             using (new EditorGUI.DisabledScope(!spare))
+            {
                 margin = EditorGUILayout.Slider("Spare margin, m", margin, 0f, 12f);
+            }
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField(ground == null ? "Ground not captured yet" : "Ground captured, noise replaces the previous one");
+            EditorGUILayout.LabelField(ground == null
+                ? "Ground not captured yet"
+                : "Ground captured, noise replaces the previous one");
 
             if (GUILayout.Button("Roughen")) Roughen();
             using (new EditorGUI.DisabledScope(ground == null))
+            {
                 if (GUILayout.Button("Restore captured ground")) Restore();
+            }
+        }
+
+        [MenuItem("Tools/Roughen Terrain")]
+        private static void Open()
+        {
+            GetWindow<TerrainRoughener>("Roughen Terrain");
         }
 
         private void Roughen()
@@ -83,22 +88,21 @@ namespace Shooter.Editing
             float highest = 0f;
 
             for (int z = 0; z < resolution; z++)
+            for (int x = 0; x < resolution; x++)
             {
-                for (int x = 0; x < resolution; x++)
-                {
-                    float shift = field[z, x] * scale;
-                    if (spared != null) shift *= 1f - spared[z, x];
+                float shift = field[z, x] * scale;
+                if (spared != null) shift *= 1f - spared[z, x];
 
-                    heights[z, x] = Mathf.Clamp01(ground[z, x] + shift / size.y);
-                    highest = Mathf.Max(highest, Mathf.Abs(shift));
-                }
+                heights[z, x] = Mathf.Clamp01(ground[z, x] + shift / size.y);
+                highest = Mathf.Max(highest, Mathf.Abs(shift));
             }
 
             Undo.RegisterCompleteObjectUndo(data, "Roughen terrain");
             data.SetHeights(0, 0, heights);
             EditorUtility.SetDirty(data);
 
-            Log.Info($"Terrain roughened: bump {bump}m over {octaves} octaves, ridges {ridges}, warp {warp}, variety {variety}, tallest shift {highest}m");
+            Log.Info(
+                $"Terrain roughened: bump {bump}m over {octaves} octaves, ridges {ridges}, warp {warp}, variety {variety}, tallest shift {highest}m");
         }
 
         private void Restore()
@@ -115,18 +119,16 @@ namespace Shooter.Editing
 
         private float[,] Field(int resolution, Vector3 corner, Vector3 size)
         {
-            var field = new float[resolution, resolution];
+            float[,] field = new float[resolution, resolution];
             float stepX = size.x / (resolution - 1);
             float stepZ = size.z / (resolution - 1);
             float span = Mathf.Max(bump, 0.01f);
 
             for (int z = 0; z < resolution; z++)
+            for (int x = 0; x < resolution; x++)
             {
-                for (int x = 0; x < resolution; x++)
-                {
-                    var point = new Vector2((corner.x + x * stepX) / span, (corner.z + z * stepZ) / span);
-                    field[z, x] = Shape(Warped(point)) * Rough(point);
-                }
+                var point = new Vector2((corner.x + x * stepX) / span, (corner.z + z * stepZ) / span);
+                field[z, x] = Shape(Warped(point)) * Rough(point);
             }
 
             return field;
@@ -137,19 +139,17 @@ namespace Shooter.Editing
             double total = 0d;
 
             for (int z = 0; z < resolution; z++)
-                for (int x = 0; x < resolution; x++)
-                    total += field[z, x];
+            for (int x = 0; x < resolution; x++)
+                total += field[z, x];
 
-            var middle = (float)(total / (resolution * (double)resolution));
+            float middle = (float)(total / (resolution * (double)resolution));
             float peak = 0f;
 
             for (int z = 0; z < resolution; z++)
+            for (int x = 0; x < resolution; x++)
             {
-                for (int x = 0; x < resolution; x++)
-                {
-                    field[z, x] -= middle;
-                    peak = Mathf.Max(peak, Mathf.Abs(field[z, x]));
-                }
+                field[z, x] -= middle;
+                peak = Mathf.Max(peak, Mathf.Abs(field[z, x]));
             }
 
             return peak <= 0f ? 0f : amplitude / peak;
@@ -212,7 +212,7 @@ namespace Shooter.Editing
 
         private float[,] Spared(int resolution, Vector3 corner, Vector3 size)
         {
-            var mask = new float[resolution, resolution];
+            float[,] mask = new float[resolution, resolution];
             Renderer[] found = FindObjectsByType<Renderer>(FindObjectsInactive.Include);
             float stepX = size.x / (resolution - 1);
             float stepZ = size.z / (resolution - 1);
@@ -247,18 +247,16 @@ namespace Shooter.Editing
             int tillZ = Mathf.Clamp(Mathf.CeilToInt((bounds.max.z + margin - corner.z) / stepZ), 0, resolution - 1);
 
             for (int z = fromZ; z <= tillZ; z++)
+            for (int x = fromX; x <= tillX; x++)
             {
-                for (int x = fromX; x <= tillX; x++)
-                {
-                    float worldX = corner.x + x * stepX;
-                    float worldZ = corner.z + z * stepZ;
-                    float awayX = Mathf.Max(0f, Mathf.Max(bounds.min.x - worldX, worldX - bounds.max.x));
-                    float awayZ = Mathf.Max(0f, Mathf.Max(bounds.min.z - worldZ, worldZ - bounds.max.z));
-                    float away = Mathf.Sqrt(awayX * awayX + awayZ * awayZ);
-                    float cover = margin <= 0f ? (away <= 0f ? 1f : 0f) : Mathf.SmoothStep(1f, 0f, away / margin);
+                float worldX = corner.x + x * stepX;
+                float worldZ = corner.z + z * stepZ;
+                float awayX = Mathf.Max(0f, Mathf.Max(bounds.min.x - worldX, worldX - bounds.max.x));
+                float awayZ = Mathf.Max(0f, Mathf.Max(bounds.min.z - worldZ, worldZ - bounds.max.z));
+                float away = Mathf.Sqrt(awayX * awayX + awayZ * awayZ);
+                float cover = margin <= 0f ? away <= 0f ? 1f : 0f : Mathf.SmoothStep(1f, 0f, away / margin);
 
-                    if (cover > mask[z, x]) mask[z, x] = cover;
-                }
+                if (cover > mask[z, x]) mask[z, x] = cover;
             }
         }
     }

@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <Style src="Overlays.uss" />
+    <Style src="Overlays.uss"/>
     <ui:VisualElement name="overlays" class="overlays" picking-mode="Ignore">
-        <ui:Label name="target-name" class="line target" picking-mode="Ignore" />
-        <ui:Label name="hint" class="line hint" picking-mode="Ignore" />
+        <ui:Label name="target-name" class="line target" picking-mode="Ignore"/>
+        <ui:Label name="hint" class="line hint" picking-mode="Ignore"/>
         <ui:VisualElement name="crosshair" class="crosshair" picking-mode="Ignore">
-            <ui:VisualElement class="crosshair__bar crosshair__bar--up" picking-mode="Ignore" />
-            <ui:VisualElement class="crosshair__bar crosshair__bar--down" picking-mode="Ignore" />
-            <ui:VisualElement class="crosshair__bar crosshair__bar--left" picking-mode="Ignore" />
-            <ui:VisualElement class="crosshair__bar crosshair__bar--right" picking-mode="Ignore" />
+            <ui:VisualElement class="crosshair__bar crosshair__bar--up" picking-mode="Ignore"/>
+            <ui:VisualElement class="crosshair__bar crosshair__bar--down" picking-mode="Ignore"/>
+            <ui:VisualElement class="crosshair__bar crosshair__bar--left" picking-mode="Ignore"/>
+            <ui:VisualElement class="crosshair__bar crosshair__bar--right" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement name="health" class="bar" picking-mode="Ignore">
-            <ui:VisualElement name="health-fill" class="bar__fill" picking-mode="Ignore" />
+            <ui:VisualElement name="health-fill" class="bar__fill" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement name="stamina" class="bar bar--stamina" picking-mode="Ignore">
-            <ui:VisualElement name="stamina-fill" class="bar__fill bar__fill--stamina" picking-mode="Ignore" />
+            <ui:VisualElement name="stamina-fill" class="bar__fill bar__fill--stamina" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement name="hunger" class="hunger" picking-mode="Ignore">
-            <ui:VisualElement name="hunger-glyph" class="hunger__glyph" picking-mode="Ignore" />
-            <ui:Label name="hunger-amount" class="hunger__amount" picking-mode="Ignore" />
+            <ui:VisualElement name="hunger-glyph" class="hunger__glyph" picking-mode="Ignore"/>
+            <ui:Label name="hunger-amount" class="hunger__amount" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement name="ammo" class="ammo" picking-mode="Ignore">
-            <ui:Label name="ammo-magazine" class="ammo__magazine" picking-mode="Ignore" />
-            <ui:Label name="ammo-reserve" class="ammo__reserve" picking-mode="Ignore" />
+            <ui:Label name="ammo-magazine" class="ammo__magazine" picking-mode="Ignore"/>
+            <ui:Label name="ammo-reserve" class="ammo__reserve" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement name="inventory-screen" class="screen">
             <ui:VisualElement class="inventory">
                 <ui:VisualElement class="inventory__money" picking-mode="Ignore">
-                    <ui:Label text="Рубли" class="line inventory__caption" picking-mode="Ignore" />
-                    <ui:Label name="inventory-coins" text="0" class="line inventory__coins" picking-mode="Ignore" />
+                    <ui:Label text="Рубли" class="line inventory__caption" picking-mode="Ignore"/>
+                    <ui:Label name="inventory-coins" text="0" class="line inventory__coins" picking-mode="Ignore"/>
                 </ui:VisualElement>
-                <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands" />
-                <ui:VisualElement name="inventory-grid" class="inventory__grid" />
+                <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands"/>
+                <ui:VisualElement name="inventory-grid" class="inventory__grid"/>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="talk" class="talk">
-            <ui:Label name="talk-name" class="line talk__name" picking-mode="Ignore" />
-            <ui:ScrollView name="talk-log" class="talk__log" />
-            <ui:Label name="talk-waiting" text="Думает..." class="line talk__waiting" picking-mode="Ignore" />
-            <ui:TextField name="talk-input" class="talk__input" />
-            <ui:Label text="Enter — сказать, Esc — уйти" class="line talk__help" picking-mode="Ignore" />
+            <ui:Label name="talk-name" class="line talk__name" picking-mode="Ignore"/>
+            <ui:ScrollView name="talk-log" class="talk__log"/>
+            <ui:Label name="talk-waiting" text="Думает..." class="line talk__waiting" picking-mode="Ignore"/>
+            <ui:TextField name="talk-input" class="talk__input"/>
+            <ui:Label text="Enter — сказать, Esc — уйти" class="line talk__help" picking-mode="Ignore"/>
         </ui:VisualElement>
-        <ui:VisualElement name="notifications" class="notifications" picking-mode="Ignore" />
-        <ui:VisualElement name="sleep" class="sleep" picking-mode="Ignore" />
+        <ui:VisualElement name="notifications" class="notifications" picking-mode="Ignore"/>
+        <ui:VisualElement name="sleep" class="sleep" picking-mode="Ignore"/>
         <ui:VisualElement name="versions" class="corner" picking-mode="Ignore">
-            <ui:Label name="clock" class="line corner__line" />
-            <ui:Label name="debug" class="line corner__line debug" picking-mode="Ignore" />
+            <ui:Label name="clock" class="line corner__line"/>
+            <ui:Label name="debug" class="line corner__line debug" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement name="loading" class="loading" picking-mode="Ignore">
-            <ui:Label name="loading-text" class="line loading__text" picking-mode="Ignore" />
+            <ui:Label name="loading-text" class="line loading__text" picking-mode="Ignore"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

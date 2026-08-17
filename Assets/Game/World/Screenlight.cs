@@ -1,6 +1,6 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.World
 {
@@ -20,8 +20,8 @@ namespace Shooter.Game.World
         [SerializeField] private float pace = 12f;
 
         private Light glow;
-        private Material picture;
         private float own;
+        private Material picture;
 
         private void Awake()
         {
@@ -30,9 +30,12 @@ namespace Shooter.Game.World
             own = Mathf.Abs(transform.position.x * 0.7f + transform.position.z * 1.3f);
 
             MeshFilter filter = screen == null ? null : screen.GetComponent<MeshFilter>();
-            string mesh = screen == null ? "none" : filter == null ? "no filter" : filter.sharedMesh == null ? "no mesh" : filter.sharedMesh.vertexCount.ToString();
+            string mesh = screen == null ? "none" :
+                filter == null ? "no filter" :
+                filter.sharedMesh == null ? "no mesh" : filter.sharedMesh.vertexCount.ToString();
 
-            Log.Info($"Screen {this.NameOf()}: light {glow.type} enabled {glow.enabled} intensity {glow.intensity} range {glow.range}, renderer {(screen == null ? "none" : screen.name)}, material {(picture == null ? "none" : picture.name)}, shader {(picture == null ? "none" : picture.shader.name)}, mesh {mesh}");
+            Log.Info(
+                $"Screen {this.NameOf()}: light {glow.type} enabled {glow.enabled} intensity {glow.intensity} range {glow.range}, renderer {(screen == null ? "none" : screen.name)}, material {(picture == null ? "none" : picture.name)}, shader {(picture == null ? "none" : picture.shader.name)}, mesh {mesh}");
         }
 
         private void Update()

@@ -1,11 +1,14 @@
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using UnityEngine;
 
 namespace Shooter.Game.World
 {
     public class MainSpawnPoint : MonoBehaviour
     {
+        private const float Height = 2f;
+        private const float Reach = 2f;
+        private const float Barb = 0.3f;
+        private const float Ring = 0.4f;
         public static MainSpawnPoint Current { get; private set; }
 
         private void Awake()
@@ -17,11 +20,6 @@ namespace Shooter.Game.World
         {
             if (Current == this) Current = null;
         }
-
-        private const float Height = 2f;
-        private const float Reach = 2f;
-        private const float Barb = 0.3f;
-        private const float Ring = 0.4f;
 
         private void OnDrawGizmos()
         {

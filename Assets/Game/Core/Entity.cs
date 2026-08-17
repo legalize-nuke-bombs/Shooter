@@ -10,7 +10,7 @@ namespace Shooter.Game.Core
 
         public static T Find<T>(this Component member) where T : class
         {
-            var found = Root(member).GetComponentInChildren<T>();
+            T found = Root(member).GetComponentInChildren<T>();
 
             if (found == null)
                 Log.Warn($"Entity {Root(member).name} has no {typeof(T).Name} wanted by {member.GetType().Name}");

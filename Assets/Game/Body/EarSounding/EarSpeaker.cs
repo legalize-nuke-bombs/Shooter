@@ -1,20 +1,18 @@
 using System.Collections.Generic;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
     public class EarSpeaker : NetworkBehaviour
     {
+        private const int Voices = 4;
         private static readonly Journal Log = Logs.Here();
 
-        private const int Voices = 4;
-
-        private readonly List<AudioSource> sources = new List<AudioSource>();
+        private readonly List<AudioSource> sources = new();
 
         private int next;
 

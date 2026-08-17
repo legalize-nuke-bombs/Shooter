@@ -9,8 +9,6 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(Landing))]
     public class Movement : NetworkBehaviour
     {
-        public event Action<float> Turned;
-
         private const float PitchLimit = 89f;
         private const float GroundedFall = -1f;
 
@@ -19,19 +17,19 @@ namespace Shooter.Game.Body
         [SerializeField] private float jumpSpeed = 5f;
         [SerializeField] private float gravity = -20f;
 
-        private readonly NetworkVariable<float> pitch = new NetworkVariable<float>();
-
-        private CharacterController characterController;
-        private MainRestrainable restrainable;
-        private Landing landing;
-
-        private Vector2 steering;
-        private bool sprinting;
-        private float fall;
-        private bool jumping;
-        private int steeredAt;
+        private readonly NetworkVariable<float> pitch = new();
         private bool airborne;
         private float airborneFrom;
+
+        private CharacterController characterController;
+        private float fall;
+        private bool jumping;
+        private Landing landing;
+        private MainRestrainable restrainable;
+        private bool sprinting;
+        private int steeredAt;
+
+        private Vector2 steering;
 
         public float Pitch => pitch.Value;
 
@@ -47,6 +45,8 @@ namespace Shooter.Game.Body
             restrainable = GetComponent<MainRestrainable>();
             landing = GetComponent<Landing>();
         }
+
+        public event Action<float> Turned;
 
         public override void OnNetworkSpawn()
         {
@@ -132,6 +132,7 @@ namespace Shooter.Game.Body
                 {
                     fall = GroundedFall;
                 }
+
                 jumping = false;
             }
             else
@@ -173,7 +174,8 @@ namespace Shooter.Game.Body
             characterController.Move((wish + Vector3.up * fall) * dt);
 
             GroundTravel = characterController.isGrounded
-                ? Vector3.Distance(new Vector3(before.x, 0f, before.z), new Vector3(transform.position.x, 0f, transform.position.z))
+                ? Vector3.Distance(new Vector3(before.x, 0f, before.z),
+                    new Vector3(transform.position.x, 0f, transform.position.z))
                 : 0f;
         }
 

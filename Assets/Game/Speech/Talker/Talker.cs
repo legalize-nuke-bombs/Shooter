@@ -3,48 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.World;
 
 namespace Shooter.Game.Speech
 {
     public abstract class Talker : NetworkBehaviour, IUsable, IRestraint
     {
-        private static readonly Journal Log = Logs.Here();
-
         public const float TalkReach = 8f;
         public const int SpeechLimit = 300;
+        private static readonly Journal Log = Logs.Here();
+        private readonly Dictionary<long, Conversation> conversations = new();
 
-        private readonly HashSet<long> thinking = new HashSet<long>();
-        private readonly Dictionary<long, Conversation> conversations = new Dictionary<long, Conversation>();
+        private readonly HashSet<long> thinking = new();
 
-        public UsageType Usage => UsageType.Talk;
+        private static bool Awake(NetworkObject body)
+        {
+            Sleeper sleeper = body.GetComponentInChildren<Sleeper>();
+            return sleeper == null || !sleeper.Sleeping;
+        }
 
         public bool CanPerform(ActionType type, float dt)
         {
             return !conversations.Values.Any(c => c.Open);
         }
-        public void RegisterAction(ActionType type, float dt) {}
 
-        public override void OnNetworkSpawn()
+        public void RegisterAction(ActionType type, float dt)
         {
-            if (!IsServer) return;
-            NetworkManager.NetworkTickSystem.Tick += Step;
         }
 
-        public override void OnNetworkDespawn()
-        {
-            if (!IsServer) return;
-            NetworkManager.NetworkTickSystem.Tick -= Step;
-        }
+        public UsageType Usage => UsageType.Talk;
 
         public void Use(NetworkObject user)
         {
             if (!IsServer) return;
 
-            var mouth = user.GetComponentInChildren<Mouth>();
+            Mouth mouth = user.GetComponentInChildren<Mouth>();
             if (mouth == null) return;
 
             if (mouth.Interlocutor == NetworkObjectId)
@@ -55,7 +51,8 @@ namespace Shooter.Game.Speech
 
             if (!TalkRule.CanTalk(Alive(user), Alive(NetworkObject), Awake(NetworkObject)))
             {
-                Log.Info($"Entity {this.NameOf()} refused to talk to {user.name}: speaker alive {(Alive(user))}, own alive {(Alive(NetworkObject))}, own awake {(Awake(NetworkObject))}");
+                Log.Info(
+                    $"Entity {this.NameOf()} refused to talk to {user.name}: speaker alive {Alive(user)}, own alive {Alive(NetworkObject)}, own awake {Awake(NetworkObject)}");
                 return;
             }
 
@@ -68,6 +65,18 @@ namespace Shooter.Game.Speech
             Conversation conversation = Remember(speaker.Value);
             conversation.Reopen();
             mouth.Open(this, conversation.Messages);
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer) return;
+            NetworkManager.NetworkTickSystem.Tick += Step;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (!IsServer) return;
+            NetworkManager.NetworkTickSystem.Tick -= Step;
         }
 
         public void Listen(NetworkObject user, string content)
@@ -150,10 +159,7 @@ namespace Shooter.Game.Speech
 
                 try
                 {
-                    RequestAnswer(entry.Key, last.Content, (answer) =>
-                    {
-                        DeliverAnswer(entry.Key, answer);
-                    });
+                    RequestAnswer(entry.Key, last.Content, answer => { DeliverAnswer(entry.Key, answer); });
                 }
                 catch (Exception e)
                 {
@@ -195,7 +201,8 @@ namespace Shooter.Game.Speech
                 NetworkObject user = UserOf(conversation.Wanderer);
                 if (user != null && Reachable(user) && Alive(user) && Awake(user) && Alive(NetworkObject)) continue;
 
-                Log.Info($"Entity {this.NameOf()} ends the talk with {(user == null ? "a gone wanderer" : user.name)}: out of reach, dead or asleep");
+                Log.Info(
+                    $"Entity {this.NameOf()} ends the talk with {(user == null ? "a gone wanderer" : user.name)}: out of reach, dead or asleep");
 
                 thinking.Remove(conversation.Wanderer);
 
@@ -220,14 +227,8 @@ namespace Shooter.Game.Speech
 
         private static bool Alive(NetworkObject body)
         {
-            var health = body.GetComponent<Health>();
+            Health health = body.GetComponent<Health>();
             return health != null && health.Alive;
-        }
-
-        private static bool Awake(NetworkObject body)
-        {
-            var sleeper = body.GetComponentInChildren<Sleeper>();
-            return sleeper == null || !sleeper.Sleeping;
         }
     }
 }

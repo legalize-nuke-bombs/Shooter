@@ -1,5 +1,5 @@
-using UnityEngine;
 using Shooter.Game.Core;
+using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
@@ -8,16 +8,16 @@ namespace Shooter.Game.Llm
     {
         private Digester digester;
 
+        public override string Name => "look_at_yourself";
+
+        public override string Description =>
+            "Look at yourself: your own health, stamina, belongings and relations.";
+
         protected override void Awake()
         {
             base.Awake();
             digester = GetComponent<Digester>();
         }
-
-        public override string Name => "look_at_yourself";
-
-        public override string Description =>
-            "Look at yourself: your own health, stamina, belongings and relations.";
 
         protected override string Execute(LookAtYourselfArguments arguments)
         {

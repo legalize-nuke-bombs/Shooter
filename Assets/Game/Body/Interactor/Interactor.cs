@@ -7,19 +7,20 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(Movement))]
     public class Interactor : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         public const float EyeHeight = 0.75f;
+        private static readonly Journal Log = Logs.Here();
 
         private static readonly RaycastHit[] Sights = new RaycastHit[16];
 
         private static int lookMask;
 
-        private static int LookMask => lookMask != 0 ? lookMask : lookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character");
-
         [SerializeField] private float reach = 3f;
 
         private Movement movement;
+
+        private static int LookMask => lookMask != 0
+            ? lookMask
+            : lookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character");
 
         public Vector3 Eyes => transform.position + Vector3.up * EyeHeight;
 
@@ -39,15 +40,14 @@ namespace Shooter.Game.Body
             {
                 int seen = Look(reach, Sights);
                 for (int i = 0; i < seen; i++)
-                {
-                    Log.Info($"Player {OwnerClientId} sees {(Sights[i].collider.name)} on layer {(LayerMask.LayerToName(Sights[i].collider.gameObject.layer))} in {(Sights[i].distance)}m, usable {(Sights[i].collider.GetComponentInParent<IUsable>() == null ? "no" : "yes")}");
-                }
+                    Log.Info(
+                        $"Player {OwnerClientId} sees {Sights[i].collider.name} on layer {LayerMask.LayerToName(Sights[i].collider.gameObject.layer)} in {Sights[i].distance}m, usable {(Sights[i].collider.GetComponentInParent<IUsable>() == null ? "no" : "yes")}");
 
                 Log.Info($"Player {OwnerClientId} used nothing within {reach}m, saw {seen} colliders");
                 return;
             }
 
-            Log.Info($"Player {OwnerClientId} uses {(((Component)usable).name)}");
+            Log.Info($"Player {OwnerClientId} uses {((Component)usable).name}");
             usable.Use(NetworkObject);
         }
 
@@ -61,7 +61,8 @@ namespace Shooter.Game.Body
             return Look(Eyes, movement.Look, distance, transform, into);
         }
 
-        public static bool TryLook(Vector3 origin, Vector3 direction, float distance, Transform looker, out RaycastHit hit)
+        public static bool TryLook(Vector3 origin, Vector3 direction, float distance, Transform looker,
+            out RaycastHit hit)
         {
             int found = Look(origin, direction, distance, looker, Sights);
             return TryNearest(Sights, found, out hit);
@@ -69,7 +70,8 @@ namespace Shooter.Game.Body
 
         public static int Look(Vector3 origin, Vector3 direction, float distance, Transform looker, RaycastHit[] into)
         {
-            int found = Physics.RaycastNonAlloc(origin, direction, into, distance, LookMask, QueryTriggerInteraction.Ignore);
+            int found = Physics.RaycastNonAlloc(origin, direction, into, distance, LookMask,
+                QueryTriggerInteraction.Ignore);
             int kept = 0;
 
             for (int i = 0; i < found; i++)

@@ -6,8 +6,8 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(Skin))]
     public class Hider : MonoBehaviour
     {
-        private Health health;
         private GameObject flesh;
+        private Health health;
         private bool hidden;
 
         private void Awake()

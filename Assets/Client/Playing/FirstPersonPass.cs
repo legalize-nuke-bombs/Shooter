@@ -10,7 +10,8 @@ namespace Shooter.Client.Playing
     {
         public LayerMask layer;
 
-        protected override void AggregateCullingParameters(ref ScriptableCullingParameters cullingParameters, HDCamera hdCamera)
+        protected override void AggregateCullingParameters(ref ScriptableCullingParameters cullingParameters,
+            HDCamera hdCamera)
         {
             cullingParameters.cullingMask |= (uint)(int)layer;
         }
@@ -21,9 +22,9 @@ namespace Shooter.Client.Playing
 
             var depth = new RenderStateBlock(RenderStateMask.Depth)
             {
-                depthState = new DepthState(true, CompareFunction.LessEqual),
+                depthState = new DepthState(true, CompareFunction.LessEqual)
             };
-            CustomPassUtils.DrawRenderers(ctx, layer, CustomPass.RenderQueueType.All, null, 0, depth);
+            CustomPassUtils.DrawRenderers(ctx, layer, RenderQueueType.All, null, 0, depth);
         }
     }
 }

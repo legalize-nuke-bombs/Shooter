@@ -1,22 +1,22 @@
 {
-    "name": "Shooter.Game",
-    "rootNamespace": "Shooter",
-    "references": [
-        "Shooter.Logging",
-        "Shooter.Configuring",
-        "Unity.Netcode.Runtime",
-        "Unity.Collections",
-        "Unity.Nuget.Newtonsoft-Json",
-        "Unity.RenderPipelines.Core.Runtime",
-        "Unity.RenderPipelines.HighDefinition.Runtime"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Shooter.Game",
+  "rootNamespace": "Shooter",
+  "references": [
+    "Shooter.Logging",
+    "Shooter.Configuring",
+    "Unity.Netcode.Runtime",
+    "Unity.Collections",
+    "Unity.Nuget.Newtonsoft-Json",
+    "Unity.RenderPipelines.Core.Runtime",
+    "Unity.RenderPipelines.HighDefinition.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

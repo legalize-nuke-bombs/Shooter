@@ -1,7 +1,7 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode.Components;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.World
 {
@@ -11,14 +11,14 @@ namespace Shooter.Game.World
     public class Faller : MonoBehaviour, IBreakable
     {
         private static readonly Journal Log = Logs.Here();
-
-        private StructureHealth structureHealth;
-
-        private Rigidbody rigidbody;
-        private NetworkRigidbody networkRigidbody;
         [SerializeField] private float forceK = 0.001f;
 
         [SerializeField] private float maxDepenetrationSpeed = 1f;
+        private NetworkRigidbody networkRigidbody;
+
+        private Rigidbody rigidbody;
+
+        private StructureHealth structureHealth;
 
         private void Awake()
         {
@@ -44,7 +44,8 @@ namespace Shooter.Game.World
             rigidbody.isKinematic = false;
 
             Vector3 pushDirection = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized;
-            rigidbody.AddForceAtPosition(pushDirection * (forceK * rigidbody.mass), transform.position + Vector3.up * 3f, ForceMode.Impulse);
+            rigidbody.AddForceAtPosition(pushDirection * (forceK * rigidbody.mass),
+                transform.position + Vector3.up * 3f, ForceMode.Impulse);
         }
     }
 }

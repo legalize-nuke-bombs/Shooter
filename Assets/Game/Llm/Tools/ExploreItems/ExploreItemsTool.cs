@@ -1,7 +1,6 @@
 ﻿using System.Text;
-using Shooter.Game.Loot;
-using Shooter.Game.World;
 using Shooter.Game.Core;
+using Shooter.Game.Loot;
 
 namespace Shooter.Game.Llm.ExploreItems
 {
@@ -17,10 +16,7 @@ You can process any number of IDs at once.
 
         protected override string Execute(ExploreItemsArguments arguments)
         {
-            if (arguments.ItemIds == null || arguments.ItemIds.Length == 0)
-            {
-                return "You didn't pass a single ID.";
-            }
+            if (arguments.ItemIds == null || arguments.ItemIds.Length == 0) return "You didn't pass a single ID.";
 
             var sb = new StringBuilder();
 

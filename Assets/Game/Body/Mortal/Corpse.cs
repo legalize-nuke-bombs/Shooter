@@ -1,9 +1,8 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -11,8 +10,8 @@ namespace Shooter.Game.Body
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly NetworkVariable<FixedString32Bytes> skin = new NetworkVariable<FixedString32Bytes>();
-        private readonly NetworkVariable<FixedString32Bytes> title = new NetworkVariable<FixedString32Bytes>();
+        private readonly NetworkVariable<FixedString32Bytes> skin = new();
+        private readonly NetworkVariable<FixedString32Bytes> title = new();
 
         private bool dressed;
 
@@ -65,7 +64,7 @@ namespace Shooter.Game.Body
 
         private void Titled(FixedString32Bytes previous, FixedString32Bytes current)
         {
-            var named = GetComponent<TypedNameable>();
+            TypedNameable named = GetComponent<TypedNameable>();
             if (named == null || current.IsEmpty) return;
 
             NameCatalog catalog = Catalogs.Of<NameCatalog>();

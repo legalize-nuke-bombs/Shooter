@@ -1,27 +1,25 @@
 using Shooter.Game.Body;
-using Shooter.Logging;
-using UnityEngine;
-using Unity.Netcode;
 using Shooter.Game.Core;
+using Shooter.Logging;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
     public class SleepView : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const float EyesClose = 0.45f;
         private const float EyesOpen = 0.7f;
         private const float BedReach = 2f;
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Camera view;
+        private Camera bedside;
 
         private Sleeper sleeper;
-        private Camera bedside;
-        private float blink;
         private bool watching;
 
-        public float Blink => blink;
+        public float Blink { get; private set; }
 
         private void Awake()
         {
@@ -36,8 +34,8 @@ namespace Shooter.Client.Playing
 
             if (asleep != watching)
             {
-                blink = Mathf.MoveTowards(blink, 1f, Time.deltaTime / EyesClose);
-                if (blink < 1f) return;
+                Blink = Mathf.MoveTowards(Blink, 1f, Time.deltaTime / EyesClose);
+                if (Blink < 1f) return;
 
                 watching = asleep;
                 if (asleep) Watch();
@@ -48,14 +46,14 @@ namespace Shooter.Client.Playing
 
             float open = asleep && bedside == null ? 1f : 0f;
 
-            blink = Mathf.MoveTowards(blink, open, Time.deltaTime / EyesOpen);
+            Blink = Mathf.MoveTowards(Blink, open, Time.deltaTime / EyesOpen);
         }
 
         public override void OnNetworkDespawn()
         {
             if (watching) Wake();
 
-            blink = 0f;
+            Blink = 0f;
         }
 
         private void Watch()

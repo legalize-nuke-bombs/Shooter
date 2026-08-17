@@ -1,6 +1,5 @@
 using Shooter.Game.Core;
 using Unity.Netcode;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Body
 {

@@ -7,4 +7,3 @@ namespace Shooter.Game.World
         public void OnTrigger(PersistentId character);
     }
 }
-

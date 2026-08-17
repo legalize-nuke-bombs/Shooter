@@ -1,26 +1,23 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Core;
-using Shooter.Game.World;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using UnityEngine.UIElements;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Client.Interface
 {
     public class AmmoOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string BoxElement = "ammo";
         private const string MagazineElement = "ammo-magazine";
         private const string ReserveElement = "ammo-reserve";
         private const int Hidden = -1;
+        private static readonly Journal Log = Logs.Here();
+        private Inventory bag;
 
         private VisualElement box;
         private Label magazine;
         private Label reserve;
-        private Inventory bag;
         private int shownMagazine = Hidden;
         private int shownReserve = Hidden;
 
@@ -29,7 +26,7 @@ namespace Shooter.Client.Interface
             if (!Bound) return;
 
             Inventory own = Own();
-            var firearm = own == null ? null : own.Equipped() as Firearm;
+            Firearm firearm = own == null ? null : own.Equipped() as Firearm;
             ItemCatalog items = Catalogs.Of<ItemCatalog>();
             FirearmSpec spec = items == null || firearm == null ? null : items.Firearm(firearm.SpecId);
 

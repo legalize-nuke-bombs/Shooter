@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
-using Shooter.Game.World;
 using Shooter.Logging;
-using Environment = Shooter.Game.World.Environment;
+using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
@@ -17,7 +16,7 @@ namespace Shooter.Game.Llm
     {
         private static readonly Journal Log = Logs.Here();
 
-        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings Settings = new()
         {
             Formatting = Formatting.Indented,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -31,13 +30,11 @@ namespace Shooter.Game.Llm
             IReadOnlyList<LlmMessage> history, IReadOnlyList<ILlmTool> tools, CancellationToken until)
         {
             if (string.IsNullOrEmpty(config.Key))
-            {
                 throw new InvalidOperationException($"Llm key is not set in {GameConfig.FileName}");
-            }
 
             string requestId = $"{++requestNumber:d4}-{requestName}";
 
-            var messages = new List<OpenAiMessage> { new OpenAiMessage { Role = "system", Content = system } };
+            var messages = new List<OpenAiMessage> { new() { Role = "system", Content = system } };
             messages.AddRange(history.Select(Mapped));
 
             var body = new OpenAiRequest
@@ -47,7 +44,7 @@ namespace Shooter.Game.Llm
                 Tools = tools == null || tools.Count == 0 ? null : tools.Select(Declared).ToArray()
             };
 
-            string folderPath = Path.Combine(UnityEngine.Application.temporaryCachePath, "LlmRequests", SessionFolder);
+            string folderPath = Path.Combine(Application.temporaryCachePath, "LlmRequests", SessionFolder);
             Directory.CreateDirectory(folderPath);
 
             string sent = JsonConvert.SerializeObject(body, Settings);
@@ -89,7 +86,6 @@ namespace Shooter.Game.Llm
             };
 
             if (message.ToolCalls != null && message.ToolCalls.Length > 0)
-            {
                 mapped.ToolCalls = message.ToolCalls
                     .Select(call => new OpenAiToolCall
                     {
@@ -98,22 +94,17 @@ namespace Shooter.Game.Llm
                         Function = new OpenAiCalledFunction { Name = call.Name, Arguments = call.Arguments }
                     })
                     .ToArray();
-            }
 
             return mapped;
         }
 
         private static LlmTurn Turned(OpenAiMessage answered, string raw)
         {
-            if (answered == null)
-            {
-                throw new LlmException($"The provider response has no message: {raw}");
-            }
+            if (answered == null) throw new LlmException($"The provider response has no message: {raw}");
 
             var calls = new List<LlmToolCall>();
 
             if (answered.ToolCalls != null)
-            {
                 foreach (OpenAiToolCall call in answered.ToolCalls)
                 {
                     if (call?.Function == null) continue;
@@ -125,7 +116,6 @@ namespace Shooter.Game.Llm
                         Arguments = call.Function.Arguments
                     });
                 }
-            }
 
             return new LlmTurn { Content = answered.Content, ToolCalls = calls.ToArray() };
         }

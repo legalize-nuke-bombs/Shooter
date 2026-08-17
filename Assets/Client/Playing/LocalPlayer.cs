@@ -1,35 +1,33 @@
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Game.Combat;
+using Shooter.Game.Core;
 using Shooter.Game.Speech;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
     public class LocalPlayer : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Camera view;
+        private Controls controls;
+        private Gunner gunner;
+        private Health health;
+        private Interactor interactor;
+        private Mortal mortal;
+        private Mouth mouth;
 
         private Movement movement;
-        private Interactor interactor;
-        private Mouth mouth;
-        private Sleeper sleeper;
-        private Health health;
-        private Mortal mortal;
-        private Gunner gunner;
-        private OwnRecoil recoil;
-        private Controls controls;
-        private bool talking;
         private float pitch;
+        private OwnRecoil recoil;
+        private Sleeper sleeper;
+        private bool talking;
         private float yaw;
 
         public bool InventoryOpen { get; private set; }
@@ -44,6 +42,24 @@ namespace Shooter.Client.Playing
             mortal = this.Find<Mortal>();
             gunner = this.Find<Gunner>();
             recoil = GetComponent<OwnRecoil>();
+        }
+
+        private void Update()
+        {
+            if (controls == null) return;
+
+            Vector2 delta = controls.Player.Look.ReadValue<Vector2>() * LookSensitivity;
+
+            yaw += delta.x;
+            pitch = Mathf.Clamp(pitch - delta.y, -MaxPitch, MaxPitch);
+        }
+
+        private void LateUpdate()
+        {
+            Vector2 punch = recoil == null ? Vector2.zero : recoil.Punch;
+
+            view.transform.position = transform.position + Vector3.up * Interactor.EyeHeight;
+            view.transform.rotation = Quaternion.Euler(pitch - punch.y, yaw + punch.x, 0f);
         }
 
         public override void OnNetworkSpawn()
@@ -111,27 +127,9 @@ namespace Shooter.Client.Playing
             Log.Info("Local player despawned");
         }
 
-        private void Update()
-        {
-            if (controls == null) return;
-
-            Vector2 delta = controls.Player.Look.ReadValue<Vector2>() * LookSensitivity;
-
-            yaw += delta.x;
-            pitch = Mathf.Clamp(pitch - delta.y, -MaxPitch, MaxPitch);
-        }
-
         private void Turn(float turned)
         {
             yaw = turned;
-        }
-
-        private void LateUpdate()
-        {
-            Vector2 punch = recoil == null ? Vector2.zero : recoil.Punch;
-
-            view.transform.position = transform.position + Vector3.up * Interactor.EyeHeight;
-            view.transform.rotation = Quaternion.Euler(pitch - punch.y, yaw + punch.x, 0f);
         }
 
         private void Capture()
@@ -142,7 +140,8 @@ namespace Shooter.Client.Playing
             else if (InventoryOpen) Browse();
             else Grab();
 
-            Log.Info($"Local player input is now {(talking ? "on the talk" : InventoryOpen ? "shared with the bag" : "back on the player")}");
+            Log.Info(
+                $"Local player input is now {(talking ? "on the talk" : InventoryOpen ? "shared with the bag" : "back on the player")}");
         }
 
         private void Grab()

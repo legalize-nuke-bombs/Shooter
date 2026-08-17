@@ -1,5 +1,5 @@
-using UnityEngine;
 using Shooter.Game.Core;
+using UnityEngine;
 
 namespace Shooter.Game.Body
 {
@@ -8,9 +8,9 @@ namespace Shooter.Game.Body
     {
         [SerializeField] private AudioClip[] clips;
 
-        [SerializeField, Range(0f, 1f)] private float volume = 1f;
+        [SerializeField] [Range(0f, 1f)] private float volume = 1f;
 
-        [SerializeField, Range(0f, 0.5f)] private float pitchVariation = 0f;
+        [SerializeField] [Range(0f, 0.5f)] private float pitchVariation;
 
         [SerializeField] private string promptDescription;
         public string PromptDescription => promptDescription;

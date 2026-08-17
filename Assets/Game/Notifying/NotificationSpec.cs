@@ -9,9 +9,9 @@ namespace Shooter.Game.Notifying
     {
         [SerializeField] private IconSpec icon;
         [SerializeField] private EarSoundSpec sound;
-        [SerializeField, TextArea] private string title;
-        [SerializeField, TextArea] private string subtitle;
-        [SerializeField, TextArea] private string told;
+        [SerializeField] [TextArea] private string title;
+        [SerializeField] [TextArea] private string subtitle;
+        [SerializeField] [TextArea] private string told;
 
         public IconSpec Icon => icon;
 

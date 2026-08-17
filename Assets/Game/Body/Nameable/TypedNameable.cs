@@ -1,6 +1,6 @@
-using UnityEngine;
-using Shooter.Game.Notifying;
 using Shooter.Game.Core;
+using Shooter.Game.Notifying;
+using UnityEngine;
 
 namespace Shooter.Game.Body
 {

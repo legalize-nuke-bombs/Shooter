@@ -1,17 +1,17 @@
 {
-    "name": "Shooter.Configuring",
-    "rootNamespace": "Shooter",
-    "references": [
-        "Shooter.Logging",
-        "Unity.Nuget.Newtonsoft-Json"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Shooter.Configuring",
+  "rootNamespace": "Shooter",
+  "references": [
+    "Shooter.Logging",
+    "Unity.Nuget.Newtonsoft-Json"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

@@ -1,13 +1,20 @@
 using System.Collections.Generic;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
     public class Skin : MonoBehaviour
     {
+        private const float GizmoRing = 0.4f;
+        private const float GizmoHeight = 2f;
         private static readonly Journal Log = Logs.Here();
+
+        private static readonly Vector3 ModelOffset = new(0f, -1f, 0f);
+        private static readonly Color GizmoTint = new(0.35f, 0.9f, 1f, 0.4f);
+
+        private static readonly Dictionary<SkinSpec, GizmoBody> GizmoCache = new();
 
         [SerializeField] private SkinSpec spec;
 
@@ -28,7 +35,7 @@ namespace Shooter.Game.Body
             Flesh.transform.localPosition = new Vector3(0f, -1f, 0f);
             Flesh.transform.localRotation = Quaternion.identity;
 
-            var animator = Flesh.GetComponent<Animator>();
+            Animator animator = Flesh.GetComponent<Animator>();
             if (animator == null)
             {
                 Log.Warn($"Skin {spec.Id} of entity {this.NameOf()} has no animator, entity stays still");
@@ -41,33 +48,8 @@ namespace Shooter.Game.Body
             Flesh.AddComponent<Poser>();
             Flesh.AddComponent<Hitboxes>();
 
-            Log.Info($"Entity {this.NameOf()} dressed as {spec.Id}, {(Height(Flesh))} m tall");
+            Log.Info($"Entity {this.NameOf()} dressed as {spec.Id}, {Height(Flesh)} m tall");
         }
-
-        private static float Height(GameObject flesh)
-        {
-            var renderers = flesh.GetComponentsInChildren<Renderer>();
-            if (renderers.Length == 0) return 0f;
-
-            Bounds bounds = renderers[0].bounds;
-            foreach (Renderer renderer in renderers) bounds.Encapsulate(renderer.bounds);
-
-            return bounds.size.y;
-        }
-
-        private static readonly Vector3 ModelOffset = new Vector3(0f, -1f, 0f);
-        private static readonly Color GizmoTint = new Color(0.35f, 0.9f, 1f, 0.4f);
-        private const float GizmoRing = 0.4f;
-        private const float GizmoHeight = 2f;
-
-        private struct GizmoBody
-        {
-            public GameObject Model;
-            public Mesh[] Meshes;
-            public Matrix4x4[] Places;
-        }
-
-        private static readonly Dictionary<SkinSpec, GizmoBody> GizmoCache = new Dictionary<SkinSpec, GizmoBody>();
 
         private void OnDrawGizmos()
         {
@@ -95,12 +77,23 @@ namespace Shooter.Game.Body
             Gizmos.matrix = Matrix4x4.identity;
         }
 
+        private static float Height(GameObject flesh)
+        {
+            Renderer[] renderers = flesh.GetComponentsInChildren<Renderer>();
+            if (renderers.Length == 0) return 0f;
+
+            Bounds bounds = renderers[0].bounds;
+            foreach (Renderer renderer in renderers) bounds.Encapsulate(renderer.bounds);
+
+            return bounds.size.y;
+        }
+
         private static GizmoBody Body(SkinSpec spec)
         {
             if (GizmoCache.TryGetValue(spec, out GizmoBody cached) && cached.Model == spec.Model) return cached;
 
             Transform root = spec.Model.transform;
-            Matrix4x4 rootScale = Matrix4x4.Scale(root.localScale);
+            var rootScale = Matrix4x4.Scale(root.localScale);
             var meshes = new List<Mesh>();
             var places = new List<Matrix4x4>();
 
@@ -129,6 +122,13 @@ namespace Shooter.Game.Body
             var body = new GizmoBody { Model = spec.Model, Meshes = meshes.ToArray(), Places = places.ToArray() };
             GizmoCache[spec] = body;
             return body;
+        }
+
+        private struct GizmoBody
+        {
+            public GameObject Model;
+            public Mesh[] Meshes;
+            public Matrix4x4[] Places;
         }
     }
 }

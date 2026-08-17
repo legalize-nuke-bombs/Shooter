@@ -1,5 +1,4 @@
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Shooter.Logging;
@@ -13,17 +12,17 @@ namespace Shooter.Game.Combat
         private static readonly Journal Log = Logs.Here();
 
         private static readonly RaycastHit[] Shots = new RaycastHit[32];
+        private EarSpeaker earSpeaker;
+        private Hands hands;
 
         private PersistentId id;
-        private Inventory inventory;
         private Interactor interactor;
-        private Hands hands;
-        private Speaker speaker;
-        private EarSpeaker earSpeaker;
+        private Inventory inventory;
+        private float lastShotAt;
         private MainRestrainable restrainable;
+        private Speaker speaker;
 
         private int sprayShot;
-        private float lastShotAt;
         private bool triggerHeld;
 
         private void Awake()
@@ -37,19 +36,6 @@ namespace Shooter.Game.Combat
             restrainable = this.Find<MainRestrainable>();
         }
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void PressTriggerRpc()
-        {
-            triggerHeld = true;
-            TryShoot();
-        }
-
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void ReleaseTriggerRpc()
-        {
-            triggerHeld = false;
-        }
-
         private void Update()
         {
             if (!IsServer || !triggerHeld) return;
@@ -61,6 +47,19 @@ namespace Shooter.Game.Combat
             if (spec == null || spec.FireMode != FireMode.Auto) return;
 
             TryShoot();
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void PressTriggerRpc()
+        {
+            triggerHeld = true;
+            TryShoot();
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void ReleaseTriggerRpc()
+        {
+            triggerHeld = false;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -102,7 +101,8 @@ namespace Shooter.Game.Combat
             int absent = spec.MagazineSize - firearm.Magazine;
             if (absent <= 0 || inventory.StackableAmount(spec.Ammo) == 0) return false;
 
-            if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true, () => Reloaded(firearm, spec, absent))) return false;
+            if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true,
+                    () => Reloaded(firearm, spec, absent))) return false;
 
             restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantAction);
             speaker?.Play(spec.ReloadSound);
@@ -130,13 +130,15 @@ namespace Shooter.Game.Combat
 
             int taken = inventory.RemoveStackable(spec.Ammo, absent, InventoryOnConflict.Partly);
             firearm.Reload(taken, spec.MagazineSize);
-            Log.Info($"Entity {this.NameOf()} reloaded {firearm.SpecId} with {taken} rounds, {(inventory.StackableAmount(spec.Ammo))} left in bag");
+            Log.Info(
+                $"Entity {this.NameOf()} reloaded {firearm.SpecId} with {taken} rounds, {inventory.StackableAmount(spec.Ammo)} left in bag");
         }
 
         private void Hit(FirearmSpec spec)
         {
             Vector2 offset = spec.Spray.At(sprayShot);
-            Vector3 direction = Quaternion.LookRotation(interactor.Sight) * Quaternion.Euler(-offset.y, offset.x, 0f) * Vector3.forward;
+            Vector3 direction = Quaternion.LookRotation(interactor.Sight) * Quaternion.Euler(-offset.y, offset.x, 0f) *
+                                Vector3.forward;
 
             int found = Interactor.Look(interactor.Eyes, direction, spec.Distance, transform, Shots);
             if (!Interactor.TryNearest(Shots, found, out RaycastHit hit))
@@ -145,7 +147,7 @@ namespace Shooter.Game.Combat
                 return;
             }
 
-            var health = hit.collider.GetComponentInParent<Health>();
+            Health health = hit.collider.GetComponentInParent<Health>();
             if (health == null)
             {
                 BulletHoles.Current.Add(hit.point, hit.normal);
@@ -171,7 +173,7 @@ namespace Shooter.Game.Combat
                 Collider collider = Shots[i].collider;
                 if (collider.GetComponentInParent<Health>() != victim) continue;
 
-                var hitbox = collider.GetComponent<Hitbox>();
+                Hitbox hitbox = collider.GetComponent<Hitbox>();
                 BodyPart part = hitbox == null ? BodyPart.Torso : hitbox.Part;
                 if (part.Multiplier() <= highest) continue;
 

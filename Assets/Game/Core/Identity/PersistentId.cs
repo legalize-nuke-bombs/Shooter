@@ -1,5 +1,4 @@
 using Unity.Netcode;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Core
 {
@@ -7,7 +6,7 @@ namespace Shooter.Game.Core
     {
         public const long Nobody = -1;
 
-        private readonly NetworkVariable<long> value = new NetworkVariable<long>(Nobody);
+        private readonly NetworkVariable<long> value = new(Nobody);
 
         public long Value => value.Value;
 

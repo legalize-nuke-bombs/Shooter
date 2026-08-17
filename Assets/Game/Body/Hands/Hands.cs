@@ -1,7 +1,7 @@
 using System;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -9,15 +9,27 @@ namespace Shooter.Game.Body
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly NetworkVariable<HandsAction> action = new NetworkVariable<HandsAction>();
+        private readonly NetworkVariable<HandsAction> action = new();
 
         private Action complete;
-        private float remaining;
         private bool interruptible;
+        private float remaining;
 
         public HandsAction Action => action.Value;
 
         public bool Free => action.Value == HandsAction.None;
+
+        public string Digest(DigestionDetail detail)
+        {
+            return Free ? null : "Busy: " + Action;
+        }
+
+        public DigestionPriority Priority => DigestionPriority.Low;
+
+        public void Died()
+        {
+            Interrupt();
+        }
 
         public override void OnNetworkSpawn()
         {
@@ -59,18 +71,6 @@ namespace Shooter.Game.Body
             complete = null;
             remaining = 0f;
         }
-
-        public void Died()
-        {
-            Interrupt();
-        }
-
-        public string Digest(DigestionDetail detail)
-        {
-            return Free ? null : "Busy: " + Action;
-        }
-
-        public DigestionPriority Priority => DigestionPriority.Low;
 
         private void Step()
         {

@@ -10,16 +10,9 @@ namespace Shooter.Game.Llm.LookAtWanderer
     public class LookAtWandererTool : LlmTool<LookAtWandererArguments>
     {
         private static readonly Journal Log = Logs.Here();
-
-        private LlmWaiting waiting;
         private Digester digester;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            waiting = GetComponent<LlmWaiting>();
-            digester = GetComponent<Digester>();
-        }
+        private LlmWaiting waiting;
 
         public override string Name => "look_at_wanderer";
 
@@ -31,13 +24,17 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
 
         public override bool Available => waiting.Any;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            waiting = GetComponent<LlmWaiting>();
+            digester = GetComponent<Digester>();
+        }
+
         protected override string Execute(LookAtWandererArguments arguments)
         {
             long wandererId = arguments.WandererId;
-            if (!waiting.IsWaiting(wandererId))
-            {
-                return $"Wanderer {wandererId} isn't talking to you right now.";
-            }
+            if (!waiting.IsWaiting(wandererId)) return $"Wanderer {wandererId} isn't talking to you right now.";
 
             Register<PersistentId> ids = Registers.Current.Of<PersistentId>();
             PersistentId wanderer = ids.Of(wandererId);

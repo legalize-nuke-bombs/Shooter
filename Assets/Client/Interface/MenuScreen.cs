@@ -7,8 +7,6 @@ namespace Shooter.Client.Interface
 {
     public class MenuScreen : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string MainScreen = "main";
         private const string HostScreen = "host";
         private const string JoinScreen = "join";
@@ -44,42 +42,43 @@ namespace Shooter.Client.Interface
         private const string LlmMaxModelField = "llm-max-model";
         private const string LlmMaxKeyField = "llm-max-key";
         private const string ChosenTab = "menu__tab--chosen";
-
-        private VisualElement mainScreen;
-        private VisualElement hostScreen;
-        private VisualElement joinScreen;
-        private VisualElement settingsScreen;
+        private static readonly Journal Log = Logs.Here();
+        private TextField address;
+        private TextField clientPort;
         private VisualElement clientSettings;
-        private VisualElement serverSettings;
-        private Button openHost;
-        private Button openJoin;
-        private Button openSettings;
-        private Button openClient;
-        private Button openServer;
-        private Button quit;
-        private Button start;
         private Button connect;
         private Button hostBack;
-        private Button joinBack;
-        private Button settingsBack;
         private TextField hostName;
-        private TextField world;
         private TextField hostPort;
+        private VisualElement hostScreen;
+        private Button joinBack;
         private TextField joinName;
-        private TextField address;
         private TextField joinPort;
-        private TextField playerName;
-        private TextField serverAddress;
-        private TextField clientPort;
-        private TextField worldName;
-        private TextField serverPort;
-        private TextField llmBaseProvider;
-        private TextField llmBaseModel;
+        private VisualElement joinScreen;
         private TextField llmBaseKey;
-        private TextField llmMaxProvider;
-        private TextField llmMaxModel;
+        private TextField llmBaseModel;
+        private TextField llmBaseProvider;
         private TextField llmMaxKey;
+        private TextField llmMaxModel;
+        private TextField llmMaxProvider;
+
+        private VisualElement mainScreen;
         private bool missing;
+        private Button openClient;
+        private Button openHost;
+        private Button openJoin;
+        private Button openServer;
+        private Button openSettings;
+        private TextField playerName;
+        private Button quit;
+        private TextField serverAddress;
+        private TextField serverPort;
+        private VisualElement serverSettings;
+        private Button settingsBack;
+        private VisualElement settingsScreen;
+        private Button start;
+        private TextField world;
+        private TextField worldName;
 
         public event Action Hosting;
 
@@ -297,7 +296,8 @@ namespace Shooter.Client.Interface
             config.Server.Port = Number(hostPort.value, config.Server.Port);
             Config.Save();
 
-            Log.Info($"Own world {config.Server.World} on port {config.Server.Port} under the name {config.Client.Name}");
+            Log.Info(
+                $"Own world {config.Server.World} on port {config.Server.Port} under the name {config.Client.Name}");
         }
 
         private void KeepJoin()
@@ -351,7 +351,7 @@ namespace Shooter.Client.Interface
 
         private T Find<T>(VisualElement root, string name) where T : VisualElement
         {
-            var element = root.Q<T>(name);
+            T element = root.Q<T>(name);
             if (element != null) return element;
 
             Log.Error($"Menu document has no element {name}");

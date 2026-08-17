@@ -7,16 +7,16 @@ namespace Shooter.Game.Llm
     {
         private Digester digester;
 
+        public override string Name => "look_by_ids";
+
+        public override string Description =>
+            "Look by IDs: character statuses by their IDs.";
+
         protected override void Awake()
         {
             base.Awake();
             digester = GetComponent<Digester>();
         }
-
-        public override string Name => "look_by_ids";
-
-        public override string Description =>
-            "Look by IDs: character statuses by their IDs.";
 
         protected override string Execute(LookByIdsArguments arguments)
         {
@@ -30,13 +30,9 @@ namespace Shooter.Game.Llm
                 PersistentId target = Registers.Current.Of<PersistentId>().Of(targetId);
 
                 if (target == null)
-                {
                     sb.AppendLine($"Character with ID {targetId} does not exist");
-                }
                 else
-                {
                     sb.AppendLine(digester.Of(target.gameObject, DigestionDetail.Brief));
-                }
             }
 
             return sb.ToString();

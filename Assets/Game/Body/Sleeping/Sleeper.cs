@@ -1,9 +1,8 @@
+using Shooter.Game.Core;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
-using Shooter.Game.Core;
-using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
@@ -15,23 +14,17 @@ namespace Shooter.Game.Body
         [SerializeField] private SoundSpec bedding;
 
         [SerializeField] private SoundSpec rising;
+        private readonly NetworkVariable<Vector3> bedside = new();
 
-        private readonly NetworkVariable<bool> sleeping = new NetworkVariable<bool>();
-        private readonly NetworkVariable<Vector3> bedside = new NetworkVariable<Vector3>();
+        private readonly NetworkVariable<bool> sleeping = new();
+
+        private Vector3? bedded;
 
         private Speaker speaker;
 
         public bool Sleeping => sleeping.Value;
 
-        public bool CanPerform(ActionType type, float dt)
-        {
-            return !Sleeping;
-        }
-        public void RegisterAction(ActionType type, float dt) { }
-
         public Vector3 Bedside => bedside.Value;
-
-        private Vector3? bedded;
 
         public Vector3 SpawnPoint
         {
@@ -41,6 +34,27 @@ namespace Shooter.Game.Body
 
                 return MainSpawnPoint.Current == null ? transform.position : MainSpawnPoint.Current.transform.position;
             }
+        }
+
+        public string Digest(DigestionDetail detail)
+        {
+            return Sleeping ? "Asleep" : null;
+        }
+
+        public DigestionPriority Priority => DigestionPriority.Low;
+
+        public void Died()
+        {
+            Rouse(false);
+        }
+
+        public bool CanPerform(ActionType type, float dt)
+        {
+            return !Sleeping;
+        }
+
+        public void RegisterAction(ActionType type, float dt)
+        {
         }
 
         public void FallAsleep(Bed bed)
@@ -73,11 +87,6 @@ namespace Shooter.Game.Body
             Rouse(true);
         }
 
-        public void Died()
-        {
-            Rouse(false);
-        }
-
         private void Rouse(bool heard)
         {
             if (!IsServer || !Sleeping) return;
@@ -93,12 +102,5 @@ namespace Shooter.Game.Body
 
             if (speaker != null) speaker.Play(sound);
         }
-
-        public string Digest(DigestionDetail detail)
-        {
-            return Sleeping ? "Asleep" : null;
-        }
-
-        public DigestionPriority Priority => DigestionPriority.Low;
     }
 }

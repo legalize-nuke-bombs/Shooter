@@ -4,10 +4,10 @@ namespace Shooter.Configuring
     {
         public const string FileName = "config.json";
 
-        public ServerConfig Server { get; set; } = new ServerConfig();
+        public ServerConfig Server { get; set; } = new();
 
-        public ClientConfig Client { get; set; } = new ClientConfig();
+        public ClientConfig Client { get; set; } = new();
 
-        public LoggingConfig Logging { get; set; } = new LoggingConfig();
+        public LoggingConfig Logging { get; set; } = new();
     }
 }

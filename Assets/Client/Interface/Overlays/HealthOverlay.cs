@@ -1,3 +1,4 @@
+using System;
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
 using Shooter.Logging;
@@ -7,11 +8,10 @@ namespace Shooter.Client.Interface
 {
     public class HealthOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string BarElement = "health";
         private const string FillElement = "health-fill";
         private const int Hidden = -1;
+        private static readonly Journal Log = Logs.Here();
 
         private VisualElement bar;
         private VisualElement fill;
@@ -30,7 +30,7 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            int hp = (int)System.Math.Ceiling(own.Hp);
+            int hp = (int)Math.Ceiling(own.Hp);
             if (hp == shown) return;
 
             shown = hp;

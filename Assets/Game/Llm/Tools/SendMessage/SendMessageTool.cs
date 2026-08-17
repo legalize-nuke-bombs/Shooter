@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Shooter.Game.Body;
-using Shooter.Game.Notifying;
 using Shooter.Game.Core;
+using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -18,6 +18,11 @@ namespace Shooter.Game.Llm
         private PersistentId ownId;
         private Nameable ownNameable;
 
+        public override string Name => "send_message";
+
+        public override string Description =>
+            "Send a message to other residents by their ids. Write in English. Message other residents only to introduce yourself or share new information.";
+
         protected override void Awake()
         {
             base.Awake();
@@ -25,17 +30,10 @@ namespace Shooter.Game.Llm
             ownNameable = this.Find<Nameable>();
         }
 
-        public override string Name => "send_message";
-
-        public override string Description =>
-            "Send a message to other residents by their ids. Write in English. Message other residents only to introduce yourself or share new information.";
-
         protected override string Execute(SendMessageArguments arguments)
         {
-            if (arguments.TargetIds == null || arguments.TargetIds.Length == 0 || string.IsNullOrEmpty(arguments.Content))
-            {
-                return "Nothing to send";
-            }
+            if (arguments.TargetIds == null || arguments.TargetIds.Length == 0 ||
+                string.IsNullOrEmpty(arguments.Content)) return "Nothing to send";
 
             var delivered = new List<long>();
             var failed = new List<string>();

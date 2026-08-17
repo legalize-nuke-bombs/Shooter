@@ -7,7 +7,7 @@ namespace Shooter.Game.Body
     {
         [SerializeField] private float maxAmount = 100f;
 
-        private readonly NetworkVariable<float> amount = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Owner);
+        private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
 
         public override float Amount => amount.Value;
 

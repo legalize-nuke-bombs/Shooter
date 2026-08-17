@@ -1,18 +1,16 @@
 using System.Collections.Generic;
 using Shooter.Game.Body;
 using Shooter.Game.Body.Perception;
-using Shooter.Game.World;
-using Unity.Netcode;
-using UnityEngine;
 using Shooter.Game.Core;
+using Unity.Netcode;
 
 namespace Shooter.Client.Playing
 {
     public class IntoxicationView : NetworkBehaviour
     {
+        private readonly Dictionary<ToxinSpec, List<PerceptionEffect>> trips = new();
+
         private Intoxication intoxication;
-        private readonly Dictionary<ToxinSpec, List<PerceptionEffect>> trips =
-            new Dictionary<ToxinSpec, List<PerceptionEffect>>();
 
         private void Awake()
         {
@@ -49,8 +47,8 @@ namespace Shooter.Client.Playing
         public override void OnNetworkDespawn()
         {
             foreach (List<PerceptionEffect> trip in trips.Values)
-                foreach (PerceptionEffect effect in trip)
-                    effect.End();
+            foreach (PerceptionEffect effect in trip)
+                effect.End();
 
             trips.Clear();
         }

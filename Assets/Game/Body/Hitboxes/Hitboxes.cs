@@ -1,18 +1,17 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Animator))]
     public class Hitboxes : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         public const string Layer = "Hitbox";
 
         private const float LeastScale = 0.6f;
         private const float MostScale = 1.4f;
+        private static readonly Journal Log = Logs.Here();
 
         private void Start()
         {
@@ -23,7 +22,7 @@ namespace Shooter.Game.Body
                 return;
             }
 
-            var animator = GetComponent<Animator>();
+            Animator animator = GetComponent<Animator>();
             Transform hips = animator.GetBoneTransform(HumanBodyBones.Hips);
             Transform head = animator.GetBoneTransform(HumanBodyBones.Head);
             if (hips == null || head == null)
@@ -34,7 +33,8 @@ namespace Shooter.Game.Body
 
             float scale = Skeleton.Scale(hips, head);
             if (scale < LeastScale || scale > MostScale)
-                Log.Error($"Entity {this.NameOf()} measures {(Vector3.Distance(hips.position, head.position))} from hips to head, a humanoid scale of {scale}: its avatar likely maps Hips to a bone that is not the pelvis");
+                Log.Error(
+                    $"Entity {this.NameOf()} measures {Vector3.Distance(hips.position, head.position)} from hips to head, a humanoid scale of {scale}: its avatar likely maps Hips to a bone that is not the pelvis");
 
             int built = 0;
 
@@ -54,7 +54,7 @@ namespace Shooter.Game.Body
 
             Vector3 crown = head.position + (head.position - hips.position).normalized * (Skeleton.HeadRise * scale);
             Pill(head, crown, BodyPart.Head, Skeleton.HeadRadius * scale, layer);
-            Log.Info($"Entity {this.NameOf()} got {(built + 1)} hitboxes, humanoid scale {scale}");
+            Log.Info($"Entity {this.NameOf()} got {built + 1} hitboxes, humanoid scale {scale}");
         }
 
         private void Pill(Transform bone, Vector3 target, BodyPart part, float radius, int layer)
@@ -67,7 +67,7 @@ namespace Shooter.Game.Body
             float length = reach.magnitude / grip;
             float thickness = radius * part.Generosity() / grip;
 
-            var pill = mount.AddComponent<CapsuleCollider>();
+            CapsuleCollider pill = mount.AddComponent<CapsuleCollider>();
             pill.direction = 1;
             pill.radius = thickness;
             pill.height = length + thickness * 1.5f;
@@ -81,7 +81,7 @@ namespace Shooter.Game.Body
             mount.layer = layer;
             mount.transform.SetParent(bone, false);
 
-            var body = mount.AddComponent<Rigidbody>();
+            Rigidbody body = mount.AddComponent<Rigidbody>();
             body.isKinematic = true;
             body.useGravity = false;
 

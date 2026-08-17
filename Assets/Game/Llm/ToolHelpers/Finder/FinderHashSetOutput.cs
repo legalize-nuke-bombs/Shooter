@@ -4,7 +4,7 @@ namespace Shooter.Game.Llm.ToolHelpers.Finder
 {
     public class FinderHashSetOutput : IFinderOutput
     {
-        private readonly HashSet<long> members = new HashSet<long>();
+        private readonly HashSet<long> members = new();
 
         public void Include(long id)
         {

@@ -1,5 +1,4 @@
 ﻿using Shooter.Game.Core;
-using Shooter.Game.World;
 using UnityEngine;
 
 namespace Shooter.Game.Llm.ToolHelpers.Finder
@@ -12,12 +11,8 @@ namespace Shooter.Game.Llm.ToolHelpers.Finder
             int characterLayer = LayerMask.NameToLayer("Character");
 
             foreach (PersistentId id in ids.All)
-            {
                 if (id.gameObject.layer == characterLayer)
-                {
                     output.Include(id.Value);
-                }
-            }
         }
     }
 }

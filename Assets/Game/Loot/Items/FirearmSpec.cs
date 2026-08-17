@@ -14,7 +14,7 @@ namespace Shooter.Game.Loot
         [SerializeField] private DamageSpec damageType;
         [SerializeField] private float fireInterval = 0.1f;
         [SerializeField] private FireMode fireMode = FireMode.Semi;
-        [SerializeField] private SprayPattern spray = new SprayPattern();
+        [SerializeField] private SprayPattern spray = new();
         [SerializeField] private float sprayRecovery = 0.4f;
         [SerializeField] private float recoilPunch = 0.5f;
         [SerializeField] private float reloadTime = 2.5f;

@@ -5,11 +5,10 @@ namespace Shooter.Game.Llm
     public class LlmMailTicker : LlmChildTicker
     {
         [SerializeField] private float pendingInterval = 2.5f;
-        private float? pendingSince = null;
+        private float? pendingSince;
 
         public override void RegisterTick()
         {
-
         }
 
         public override bool TickRequired(LlmStatus llmStatus)
@@ -17,11 +16,8 @@ namespace Shooter.Game.Llm
             if (llmStatus.PendingMail)
             {
                 float now = Time.time;
-                if (pendingSince == null)
-                {
-                    pendingSince = now;
-                }
-                return (now - pendingSince.Value >= pendingInterval);
+                if (pendingSince == null) pendingSince = now;
+                return now - pendingSince.Value >= pendingInterval;
             }
 
             pendingSince = null;

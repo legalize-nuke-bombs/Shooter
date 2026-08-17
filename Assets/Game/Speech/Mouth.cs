@@ -11,19 +11,24 @@ namespace Shooter.Game.Speech
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly NetworkVariable<ulong> interlocutor = new NetworkVariable<ulong>();
+        private readonly NetworkVariable<ulong> interlocutor = new();
 
         private long heardId = PersistentId.Nobody;
+
+        public bool Talking => heardId != PersistentId.Nobody;
+
+        public ulong Interlocutor => interlocutor.Value;
+
+        public void Died()
+        {
+            Close();
+        }
 
         public event Action<ulong> Opened;
 
         public event Action<string, string, bool> Heard;
 
         public event Action Closed;
-
-        public bool Talking => heardId != PersistentId.Nobody;
-
-        public ulong Interlocutor => interlocutor.Value;
 
         public void Open(Talker talker, IReadOnlyList<Message> history)
         {
@@ -65,11 +70,6 @@ namespace Shooter.Game.Speech
             if (!IsServer) return;
 
             HeardRpc(message.Content, message.Time, message.Author == MessageAuthor.Player);
-        }
-
-        public void Died()
-        {
-            Close();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

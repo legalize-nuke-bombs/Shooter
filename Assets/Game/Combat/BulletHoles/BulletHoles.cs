@@ -10,6 +10,17 @@ namespace Shooter.Game.Combat
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private Material material;
+        [SerializeField] private int capacity = 1024;
+        [SerializeField] private float diameter = 0.08f;
+        [SerializeField] private float depth = 0.2f;
+
+        private readonly NetworkList<BulletHole> holes = new();
+
+        private readonly List<DecalProjector> projectors = new();
+
+        private int next;
+
         public static BulletHoles Current { get; private set; }
 
         private void Awake()
@@ -23,17 +34,6 @@ namespace Shooter.Game.Combat
 
             base.OnDestroy();
         }
-
-        [SerializeField] private Material material;
-        [SerializeField] private int capacity = 1024;
-        [SerializeField] private float diameter = 0.08f;
-        [SerializeField] private float depth = 0.2f;
-
-        private readonly NetworkList<BulletHole> holes = new NetworkList<BulletHole>();
-
-        private readonly List<DecalProjector> projectors = new List<DecalProjector>();
-
-        private int next;
 
         public void Add(Vector3 position, Vector3 normal)
         {
@@ -104,10 +104,10 @@ namespace Shooter.Game.Combat
             Quaternion rotation = Quaternion.LookRotation(-hole.Normal, axis) * Quaternion.Euler(0f, 0f, seed % 360);
             projector.transform.SetPositionAndRotation(hole.Position, rotation);
 
-            float scale = 0.8f + (seed >> 2 & 15) / 30f;
+            float scale = 0.8f + ((seed >> 2) & 15) / 30f;
             projector.size = new Vector3(diameter * scale, diameter * scale, depth);
             projector.uvScale = new Vector2(0.5f, 0.5f);
-            projector.uvBias = new Vector2((seed & 1) * 0.5f, (seed >> 1 & 1) * 0.5f);
+            projector.uvBias = new Vector2((seed & 1) * 0.5f, ((seed >> 1) & 1) * 0.5f);
 
             projector.gameObject.SetActive(true);
         }
@@ -120,7 +120,7 @@ namespace Shooter.Game.Combat
                 mount.transform.SetParent(transform, false);
                 mount.SetActive(false);
 
-                var projector = mount.AddComponent<DecalProjector>();
+                DecalProjector projector = mount.AddComponent<DecalProjector>();
                 projector.material = material;
                 projector.pivot = Vector3.zero;
 

@@ -1,5 +1,4 @@
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using UnityEngine;
 
 namespace Shooter.Client.Interface
@@ -9,8 +8,8 @@ namespace Shooter.Client.Interface
         [SerializeField] private float reach = 10f;
 
         private int aimedAt = -1;
-        private bool hits;
         private RaycastHit hit;
+        private bool hits;
 
         public float Reach => reach;
 

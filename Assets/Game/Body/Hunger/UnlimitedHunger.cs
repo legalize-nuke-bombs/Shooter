@@ -10,7 +10,13 @@
         {
             return true;
         }
-        public override void Spend(float a) { }
-        public override void Restore(float a) { }
+
+        public override void Spend(float a)
+        {
+        }
+
+        public override void Restore(float a)
+        {
+        }
     }
 }

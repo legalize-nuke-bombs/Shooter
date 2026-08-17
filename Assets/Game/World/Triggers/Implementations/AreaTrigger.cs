@@ -10,6 +10,7 @@ namespace Shooter.Game.World
         private static readonly Journal Log = Logs.Here();
 
         private static int characterLayer = -1;
+
         private static int CharacterLayer =>
             characterLayer != -1 ? characterLayer : characterLayer = LayerMask.NameToLayer("Character");
 

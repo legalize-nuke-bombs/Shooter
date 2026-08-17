@@ -1,18 +1,15 @@
 using System.Collections.Generic;
 using Shooter.Client.Playing;
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Environment = Shooter.Game.World.Environment;
-using Shooter.Game.Core;
 
 namespace Shooter.Client.Interface
 {
     public class InventoryOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string WindowElement = "inventory-screen";
         private const string GridElement = "inventory-grid";
         private const string HeldElement = "inventory-held";
@@ -23,19 +20,20 @@ namespace Shooter.Client.Interface
         private const int Columns = 10;
         private const int Rows = 6;
         private const int HandRows = 2;
-
-        private VisualElement window;
-        private VisualElement grid;
-        private VisualElement held;
-        private Label coins;
+        private static readonly Journal Log = Logs.Here();
         private Inventory bag;
-        private VisualElement ghost;
+        private Label coins;
         private VisualElement curtain;
         private int dragged;
         private bool draggedFromHands;
-        private int pointer;
+        private VisualElement ghost;
+        private VisualElement grid;
+        private VisualElement held;
         private bool open;
+        private int pointer;
         private bool stale;
+
+        private VisualElement window;
 
         private void Update()
         {
@@ -129,7 +127,7 @@ namespace Shooter.Client.Interface
             ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
             UniqueItem equipped = bag.Equipped();
             int equippedSlot = bag.EquippedSlot;
-            var taken = new bool[Rows, Columns];
+            bool[,] taken = new bool[Rows, Columns];
             int money = 0;
 
             if (equipped != null)
@@ -149,7 +147,8 @@ namespace Shooter.Client.Interface
                 ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
                 Pack(taken, spec, out int row, out int column);
 
-                grid.Add(Thing(spec, item.SpecId, row, column, null, slot, spec is UniqueItemSpec unique && unique.Equipable, false));
+                grid.Add(Thing(spec, item.SpecId, row, column, null, slot,
+                    spec is UniqueItemSpec unique && unique.Equipable, false));
             }
 
             int kinds = catalog == null ? 0 : catalog.Count;
@@ -169,7 +168,8 @@ namespace Shooter.Client.Interface
 
                 Pack(taken, spec, out int row, out int column);
 
-                VisualElement thing = Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot, false, false);
+                VisualElement thing = Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot, false,
+                    false);
                 if (spec.Usable) AddMenu(thing, index);
 
                 grid.Add(thing);
@@ -184,17 +184,15 @@ namespace Shooter.Client.Interface
             host.style.height = rows * Cell;
 
             for (int row = 0; row < rows; row++)
+            for (int column = 0; column < Columns; column++)
             {
-                for (int column = 0; column < Columns; column++)
-                {
-                    var cell = new VisualElement();
-                    cell.AddToClassList("grid__cell");
-                    cell.style.left = column * Cell;
-                    cell.style.top = row * Cell;
-                    cell.style.width = Cell;
-                    cell.style.height = Cell;
-                    host.Add(cell);
-                }
+                var cell = new VisualElement();
+                cell.AddToClassList("grid__cell");
+                cell.style.left = column * Cell;
+                cell.style.top = row * Cell;
+                cell.style.width = Cell;
+                cell.style.height = Cell;
+                host.Add(cell);
             }
         }
 
@@ -203,15 +201,13 @@ namespace Shooter.Client.Interface
             Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
 
             for (row = 0; row + size.y <= Rows; row++)
+            for (column = 0; column + size.x <= Columns; column++)
             {
-                for (column = 0; column + size.x <= Columns; column++)
-                {
-                    if (!Free(taken, row, column, size)) continue;
+                if (!Free(taken, row, column, size)) continue;
 
-                    Fill(taken, row, column, size);
+                Fill(taken, row, column, size);
 
-                    return true;
-                }
+                return true;
             }
 
             row = 0;
@@ -223,12 +219,9 @@ namespace Shooter.Client.Interface
         private static bool Free(bool[,] taken, int row, int column, Vector2Int size)
         {
             for (int down = 0; down < size.y; down++)
-            {
-                for (int right = 0; right < size.x; right++)
-                {
-                    if (taken[row + down, column + right]) return false;
-                }
-            }
+            for (int right = 0; right < size.x; right++)
+                if (taken[row + down, column + right])
+                    return false;
 
             return true;
         }
@@ -236,12 +229,12 @@ namespace Shooter.Client.Interface
         private static void Fill(bool[,] taken, int row, int column, Vector2Int size)
         {
             for (int down = 0; down < size.y; down++)
-            {
-                for (int right = 0; right < size.x; right++) taken[row + down, column + right] = true;
-            }
+            for (int right = 0; right < size.x; right++)
+                taken[row + down, column + right] = true;
         }
 
-        private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, int slot, bool equipable, bool holding)
+        private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, int slot,
+            bool equipable, bool holding)
         {
             Vector2Int cells = spec == null ? Vector2Int.one : spec.Cells;
             var size = new Vector2(cells.x * Cell, cells.y * Cell);
@@ -410,6 +403,5 @@ namespace Shooter.Client.Interface
 
             return slot;
         }
-
     }
 }

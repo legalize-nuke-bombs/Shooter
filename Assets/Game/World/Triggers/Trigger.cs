@@ -11,19 +11,16 @@ namespace Shooter.Game.World
     public abstract class Trigger : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
+        [SerializeField] private bool allowReiteration = true;
+
+        private readonly HashSet<long> done = new();
 
         private MainTriggerable triggerable;
-
-        private readonly HashSet<long> done = new HashSet<long>();
-        [SerializeField] private bool allowReiteration = true;
 
         protected virtual void Awake()
         {
             triggerable = GetComponent<MainTriggerable>();
-            if (triggerable == null)
-            {
-                Log.Warn($"Entity {this.NameOf()} does not have main triggerable");
-            }
+            if (triggerable == null) Log.Warn($"Entity {this.NameOf()} does not have main triggerable");
 
             enabled = false;
         }
@@ -41,12 +38,8 @@ namespace Shooter.Game.World
         protected void OnTrigger(PersistentId character)
         {
             if (!allowReiteration)
-            {
                 if (!done.Add(character.Value))
-                {
                     return;
-                }
-            }
 
             Log.Info($"Entity {this.NameOf()} triggered on {character.name}");
             triggerable.OnTrigger(character);

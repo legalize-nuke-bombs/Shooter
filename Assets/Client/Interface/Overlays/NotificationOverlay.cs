@@ -10,11 +10,10 @@ namespace Shooter.Client.Interface
 {
     public class NotificationOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string FeedElement = "notifications";
         private const long Life = 5000;
         private const int Limit = 4;
+        private static readonly Journal Log = Logs.Here();
 
 
         private VisualElement feed;

@@ -1,6 +1,5 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,10 +10,9 @@ namespace Shooter.Client.Interface
     [RequireComponent(typeof(Aimer))]
     public class HintOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string HintElement = "hint";
         private const string KeyboardScheme = "Keyboard&Mouse";
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private HintCatalog hints;
 
@@ -76,7 +74,7 @@ namespace Shooter.Client.Interface
             if (!aimer.TryHit(out RaycastHit hit) || hit.distance > interactor.Reach) return string.Empty;
             if (hit.collider == null) return string.Empty;
 
-            var usable = hit.collider.GetComponentInParent<IUsable>();
+            IUsable usable = hit.collider.GetComponentInParent<IUsable>();
             if (usable == null) return string.Empty;
 
             return "[" + key + "] " + hints.Text(usable.Usage);

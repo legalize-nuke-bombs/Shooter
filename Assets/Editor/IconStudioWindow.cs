@@ -5,14 +5,8 @@ namespace Shooter.Editor
 {
     public class IconStudioWindow : EditorWindow
     {
-        private IconSetup setup = IconStudio.Default();
         private Vector2 scroll;
-
-        [MenuItem("Tools/Icon Studio")]
-        private static void Open()
-        {
-            GetWindow<IconStudioWindow>("Icon Studio").Show();
-        }
+        private IconSetup setup = IconStudio.Default();
 
         private void OnGUI()
         {
@@ -21,7 +15,8 @@ namespace Shooter.Editor
             EditorGUILayout.LabelField("Sight", EditorStyles.boldLabel);
             setup.SightAngles = EditorGUILayout.Vector3Field("Camera angles", setup.SightAngles);
             setup.Padding = EditorGUILayout.Slider("Padding", setup.Padding, 1f, 2f);
-            setup.Size = EditorGUILayout.IntPopup("Size", setup.Size, new[] { "256", "512", "1024" }, new[] { 256, 512, 1024 });
+            setup.Size = EditorGUILayout.IntPopup("Size", setup.Size, new[] { "256", "512", "1024" },
+                new[] { 256, 512, 1024 });
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Light", EditorStyles.boldLabel);
@@ -55,14 +50,19 @@ namespace Shooter.Editor
             Repaint();
         }
 
+        [MenuItem("Tools/Icon Studio")]
+        private static void Open()
+        {
+            GetWindow<IconStudioWindow>("Icon Studio").Show();
+        }
+
         private void Render(GameObject[] models)
         {
             int drawn = 0;
 
             foreach (GameObject model in models)
-            {
-                if (IconStudio.Shoot(model, setup) != null) drawn++;
-            }
+                if (IconStudio.Shoot(model, setup) != null)
+                    drawn++;
 
             AssetDatabase.SaveAssets();
             Debug.Log($"Icon studio rendered {drawn} icons out of {models.Length} selected prefabs");

@@ -5,8 +5,8 @@ namespace Shooter.Game.Body.Perception
 {
     public sealed class PostProcess : PerceptionEffect
     {
-        private readonly PostProcessSpec spec;
         private readonly GameObject holder;
+        private readonly PostProcessSpec spec;
         private readonly Volume volume;
 
         public PostProcess(PostProcessSpec spec)

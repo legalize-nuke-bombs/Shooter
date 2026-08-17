@@ -1,9 +1,9 @@
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.World;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Body
 {
@@ -18,11 +18,11 @@ namespace Shooter.Game.Body
         [SerializeField] private GameObject corpsePrefab;
 
         [SerializeField] private EarSoundSpec deathSound;
+        private EarSpeaker earSpeaker;
 
         private Health health;
         private Movement movement;
         private Sleeper sleeper;
-        private EarSpeaker earSpeaker;
 
         private void Awake()
         {
@@ -75,7 +75,7 @@ namespace Shooter.Game.Body
             }
 
             GameObject body = Instantiate(prefab, transform.position, transform.rotation);
-            var spawned = body.GetComponent<NetworkObject>();
+            NetworkObject spawned = body.GetComponent<NetworkObject>();
             if (spawned == null)
             {
                 Log.Error($"Corpse prefab of entity {this.NameOf()} has no network object");
@@ -85,13 +85,13 @@ namespace Shooter.Game.Body
 
             spawned.Spawn();
 
-            var corpse = body.GetComponent<Corpse>();
+            Corpse corpse = body.GetComponent<Corpse>();
             if (corpse != null)
             {
-                var skin = GetComponent<Skin>();
+                Skin skin = GetComponent<Skin>();
                 if (skin != null && skin.Spec != null) corpse.Dress(skin.Spec);
 
-                var named = GetComponent<TypedNameable>();
+                TypedNameable named = GetComponent<TypedNameable>();
                 if (named != null && named.Spec != null) corpse.Rename(named.Spec);
             }
 

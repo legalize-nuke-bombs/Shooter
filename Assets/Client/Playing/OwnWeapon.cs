@@ -1,10 +1,10 @@
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
-using Shooter.Game.Core;
 
 namespace Shooter.Client.Playing
 {
@@ -14,21 +14,28 @@ namespace Shooter.Client.Playing
 
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private Vector3 restPosition = new Vector3(0.325f, -0.193f, 0.654f);
+        [SerializeField] private Vector3 restPosition = new(0.325f, -0.193f, 0.654f);
         [SerializeField] private Vector3 restRotation = Vector3.zero;
         [SerializeField] private float restScale = 1f;
+        private Camera eye;
 
         private Inventory inventory;
-        private Camera eye;
         private int layer = -1;
+        private GameObject shown;
 
         private GameObject shownModel;
-        private GameObject shown;
 
         private void Awake()
         {
             inventory = this.Find<Inventory>();
             eye = this.Find<Camera>();
+        }
+
+        private void LateUpdate()
+        {
+            if (shown == null || eye == null) return;
+
+            if (shown.activeSelf != eye.enabled) shown.SetActive(eye.enabled);
         }
 
         public override void OnNetworkSpawn()
@@ -49,17 +56,16 @@ namespace Shooter.Client.Playing
             layer = LayerMask.NameToLayer(FirstPersonLayer);
             if (layer < 0)
             {
-                Log.Warn($"Own player {this.NameOf()} found no {FirstPersonLayer} layer, weapon stays in the world pass");
+                Log.Warn(
+                    $"Own player {this.NameOf()} found no {FirstPersonLayer} layer, weapon stays in the world pass");
                 return;
             }
-            if (eye == null)
-            {
-                return;
-            }
+
+            if (eye == null) return;
 
             eye.cullingMask &= ~(1 << layer);
 
-            var volume = gameObject.AddComponent<CustomPassVolume>();
+            CustomPassVolume volume = gameObject.AddComponent<CustomPassVolume>();
             volume.targetCamera = eye;
             volume.injectionPoint = CustomPassInjectionPoint.BeforePostProcess;
 
@@ -109,15 +115,9 @@ namespace Shooter.Client.Playing
                 foreach (Transform part in worn.GetComponentsInChildren<Transform>(true))
                     part.gameObject.layer = layer;
 
-            Log.Info($"Own player {this.NameOf()} sees {model.name} in first person at {worn.transform.localPosition} scaled {worn.transform.localScale} (rest {restScale})");
+            Log.Info(
+                $"Own player {this.NameOf()} sees {model.name} in first person at {worn.transform.localPosition} scaled {worn.transform.localScale} (rest {restScale})");
             return worn;
-        }
-
-        private void LateUpdate()
-        {
-            if (shown == null || eye == null) return;
-
-            if (shown.activeSelf != eye.enabled) shown.SetActive(eye.enabled);
         }
     }
 }

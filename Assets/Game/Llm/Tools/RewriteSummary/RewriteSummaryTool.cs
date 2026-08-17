@@ -7,12 +7,6 @@ namespace Shooter.Game.Llm
     {
         private LlmHistory history;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            history = GetComponent<LlmHistory>();
-        }
-
         public override string Name => "rewrite_summary";
 
         public override string Description =>
@@ -20,6 +14,12 @@ namespace Shooter.Game.Llm
 
         public override bool Available => history.Overflowing;
         public override LlmLevel Level => LlmLevel.Max;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            history = GetComponent<LlmHistory>();
+        }
 
         protected override string Execute(RewriteSummaryArguments arguments)
         {

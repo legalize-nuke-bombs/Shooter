@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Client.Playing;
-using Shooter.Game.Core;
 using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -15,8 +15,6 @@ namespace Shooter.Client.Interface
 {
     public class DebugOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string DebugElement = "debug";
         private const int FrameSamples = 120;
         private const int Column = 34;
@@ -24,6 +22,7 @@ namespace Shooter.Client.Interface
         private const float ReportSeconds = 60f;
         private const float Megabyte = 1024f * 1024f;
         private const string Unavailable = "—";
+        private static readonly Journal Log = Logs.Here();
 
         private static readonly (ProfilerCategory Category, string Name)[] Counters =
         {
@@ -36,16 +35,17 @@ namespace Shooter.Client.Interface
             (ProfilerCategory.Render, "Vertices Count")
         };
 
-        private readonly Dictionary<string, ProfilerRecorder> recorders = new();
-        private readonly float[] frames = new float[FrameSamples];
         private readonly StringBuilder builder = new();
+        private readonly float[] frames = new float[FrameSamples];
+
+        private readonly Dictionary<string, ProfilerRecorder> recorders = new();
+        private int filled;
+        private int frame;
 
         private Label panel;
-        private bool visible;
-        private int frame;
-        private int filled;
         private float refresh;
         private float report = ReportSeconds;
+        private bool visible;
 
         private void Update()
         {
@@ -59,7 +59,8 @@ namespace Shooter.Client.Interface
             if (report <= 0)
             {
                 report = ReportSeconds;
-                Log.Info($"FPS {Frequency()}, VRAM {Video()}, RAM {(Bytes("System Used Memory"))}, batches {(Count("Batches Count"))}, triangles {(Count("Triangles Count"))}");
+                Log.Info(
+                    $"FPS {Frequency()}, VRAM {Video()}, RAM {Bytes("System Used Memory")}, batches {Count("Batches Count")}, triangles {Count("Triangles Count")}");
             }
 
             if (!visible) return;
@@ -102,7 +103,7 @@ namespace Shooter.Client.Interface
         {
             foreach ((ProfilerCategory category, string name) in Counters)
             {
-                ProfilerRecorder recorder = ProfilerRecorder.StartNew(category, name);
+                var recorder = ProfilerRecorder.StartNew(category, name);
 
                 if (recorder.Valid) recorders[name] = recorder;
                 else recorder.Dispose();
@@ -200,7 +201,7 @@ namespace Shooter.Client.Interface
         {
             return Sampled("GC Used Memory", out long value)
                 ? $"{value / Megabyte:F0} МБ"
-                : $"{System.GC.GetTotalMemory(false) / Megabyte:F0} МБ";
+                : $"{GC.GetTotalMemory(false) / Megabyte:F0} МБ";
         }
 
         private string Frequency()

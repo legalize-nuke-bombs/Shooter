@@ -1,5 +1,4 @@
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,15 +8,14 @@ namespace Shooter.Client.Interface
     [RequireComponent(typeof(Aimer))]
     public class TargetNameOverlay : Overlay
     {
+        private const string TargetElement = "target-name";
         private static readonly Journal Log = Logs.Here();
 
-        private const string TargetElement = "target-name";
-
-        private readonly NameMapper mapper = new NameMapper();
+        private readonly NameMapper mapper = new();
 
         private Aimer aimer;
-        private Label target;
         private string shown = string.Empty;
+        private Label target;
 
         private void Awake()
         {

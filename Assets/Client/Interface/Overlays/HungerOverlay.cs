@@ -1,6 +1,5 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
-using Shooter.Game.Llm;
 using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
@@ -10,17 +9,16 @@ namespace Shooter.Client.Interface
 {
     public class HungerOverlay : Overlay
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const string BoxElement = "hunger";
         private const string GlyphElement = "hunger-glyph";
         private const string AmountElement = "hunger-amount";
         private const int Hidden = -1;
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private IconSpec glyph;
+        private Label amount;
 
         private VisualElement box;
-        private Label amount;
         private Hunger hunger;
         private int shown = Hidden;
 

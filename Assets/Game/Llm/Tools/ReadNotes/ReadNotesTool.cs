@@ -9,12 +9,6 @@ namespace Shooter.Game.Llm.ReadNotes
     {
         private LlmNotes notes;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
-        }
-
         public override string Name => "read_notes";
 
         public override string Description =>
@@ -25,19 +19,19 @@ Pass a `searchPattern` to find matches within the note content based on a regex 
 Pass `noteName` to read the note's content by its name.
 ";
 
+        protected override void Awake()
+        {
+            base.Awake();
+            notes = GetComponent<LlmNotes>();
+        }
+
         protected override string Execute(ReadNotesArguments arguments)
         {
             string searchPattern = arguments.SearchPattern;
             string noteName = arguments.NoteName;
 
-            if (!String.IsNullOrEmpty(searchPattern))
-            {
-                return Search(searchPattern);
-            }
-            if (!String.IsNullOrEmpty(noteName))
-            {
-                return Read(noteName);
-            }
+            if (!string.IsNullOrEmpty(searchPattern)) return Search(searchPattern);
+            if (!string.IsNullOrEmpty(noteName)) return Read(noteName);
             return NotesList();
         }
 
@@ -52,6 +46,7 @@ Pass `noteName` to read the note's content by its name.
             {
                 result = $"Failed to search: {e.Message}";
             }
+
             return result;
         }
 
@@ -66,6 +61,7 @@ Pass `noteName` to read the note's content by its name.
             {
                 result = $"Failed to read: {e.Message}";
             }
+
             return result;
         }
 

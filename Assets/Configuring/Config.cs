@@ -11,7 +11,7 @@ namespace Shooter.Configuring
     {
         private static readonly Journal Log = Logs.Here();
 
-        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings Settings = new()
         {
             Formatting = Formatting.Indented,
             Converters = { new StringEnumConverter() }
@@ -48,8 +48,8 @@ namespace Shooter.Configuring
 
             try
             {
-                var config = JsonConvert.DeserializeObject<GameConfig>(File.ReadAllText(path), Settings)
-                             ?? new GameConfig();
+                GameConfig config = JsonConvert.DeserializeObject<GameConfig>(File.ReadAllText(path), Settings)
+                                    ?? new GameConfig();
                 Log.Info($"Config {path} read");
                 Write(path, config);
                 return config;

@@ -1,13 +1,13 @@
 using System;
-using Shooter.Logging;
 using Shooter.Game.Core;
+using Shooter.Logging;
 
 namespace Shooter.Game.Speech
 {
     public sealed class AITalker : Talker
     {
-        private static readonly Journal Log = Logs.Here();
         private const string Fallback = "Not now.";
+        private static readonly Journal Log = Logs.Here();
 
         private Llm.Llm llm;
 

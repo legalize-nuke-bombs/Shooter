@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <Style src="Menu.uss" />
+    <Style src="Menu.uss"/>
     <ui:VisualElement name="menu" class="menu">
         <ui:VisualElement name="main" class="screen">
-            <ui:Button name="open-host" text="Начать игру" class="menu__button" />
-            <ui:Button name="open-join" text="Присоединиться к игре" class="menu__button" />
-            <ui:Button name="open-settings" text="Настройки" class="menu__button" />
-            <ui:Button name="quit" text="Выйти" class="menu__button" />
+            <ui:Button name="open-host" text="Начать игру" class="menu__button"/>
+            <ui:Button name="open-join" text="Присоединиться к игре" class="menu__button"/>
+            <ui:Button name="open-settings" text="Настройки" class="menu__button"/>
+            <ui:Button name="quit" text="Выйти" class="menu__button"/>
         </ui:VisualElement>
         <ui:VisualElement name="host" class="screen">
-            <ui:TextField name="host-name" label="Имя игрока" class="menu__field" />
-            <ui:TextField name="world" label="Имя мира" class="menu__field" />
-            <ui:TextField name="host-port" label="Порт" class="menu__field" />
-            <ui:Button name="start" text="Начать" class="menu__button" />
-            <ui:Button name="host-back" text="Назад" class="menu__button" />
+            <ui:TextField name="host-name" label="Имя игрока" class="menu__field"/>
+            <ui:TextField name="world" label="Имя мира" class="menu__field"/>
+            <ui:TextField name="host-port" label="Порт" class="menu__field"/>
+            <ui:Button name="start" text="Начать" class="menu__button"/>
+            <ui:Button name="host-back" text="Назад" class="menu__button"/>
         </ui:VisualElement>
         <ui:VisualElement name="join" class="screen">
-            <ui:TextField name="join-name" label="Имя игрока" class="menu__field" />
-            <ui:TextField name="address" label="Адрес" class="menu__field" />
-            <ui:TextField name="join-port" label="Порт" class="menu__field" />
-            <ui:Button name="connect" text="Подключиться" class="menu__button" />
-            <ui:Button name="join-back" text="Назад" class="menu__button" />
+            <ui:TextField name="join-name" label="Имя игрока" class="menu__field"/>
+            <ui:TextField name="address" label="Адрес" class="menu__field"/>
+            <ui:TextField name="join-port" label="Порт" class="menu__field"/>
+            <ui:Button name="connect" text="Подключиться" class="menu__button"/>
+            <ui:Button name="join-back" text="Назад" class="menu__button"/>
         </ui:VisualElement>
         <ui:VisualElement name="settings" class="screen">
             <ui:VisualElement name="tabs" class="menu__tabs">
-                <ui:Button name="open-client" text="Клиент" class="menu__tab" />
-                <ui:Button name="open-server" text="Сервер" class="menu__tab" />
+                <ui:Button name="open-client" text="Клиент" class="menu__tab"/>
+                <ui:Button name="open-server" text="Сервер" class="menu__tab"/>
             </ui:VisualElement>
             <ui:VisualElement name="client-settings">
-                <ui:TextField name="player-name" label="Имя игрока" class="menu__field" />
-                <ui:TextField name="server-address" label="Адрес сервера" class="menu__field" />
-                <ui:TextField name="client-port" label="Порт сервера" class="menu__field" />
+                <ui:TextField name="player-name" label="Имя игрока" class="menu__field"/>
+                <ui:TextField name="server-address" label="Адрес сервера" class="menu__field"/>
+                <ui:TextField name="client-port" label="Порт сервера" class="menu__field"/>
             </ui:VisualElement>
             <ui:VisualElement name="server-settings">
-                <ui:TextField name="world-name" label="Имя мира" class="menu__field" />
-                <ui:TextField name="server-port" label="Порт" class="menu__field" />
-                <ui:Label text="Языковая модель" class="menu__title" />
-                <ui:Label text="Простые операции" class="menu__title" />
-                <ui:TextField name="llm-base-provider" label="Провайдер" class="menu__field" />
-                <ui:TextField name="llm-base-model" label="Модель" class="menu__field" />
-                <ui:TextField name="llm-base-key" label="Ключ" password="true" class="menu__field" />
-                <ui:Label text="Сложные операции" class="menu__title" />
-                <ui:TextField name="llm-max-provider" label="Провайдер" class="menu__field" />
-                <ui:TextField name="llm-max-model" label="Модель" class="menu__field" />
-                <ui:TextField name="llm-max-key" label="Ключ" password="true" class="menu__field" />
+                <ui:TextField name="world-name" label="Имя мира" class="menu__field"/>
+                <ui:TextField name="server-port" label="Порт" class="menu__field"/>
+                <ui:Label text="Языковая модель" class="menu__title"/>
+                <ui:Label text="Простые операции" class="menu__title"/>
+                <ui:TextField name="llm-base-provider" label="Провайдер" class="menu__field"/>
+                <ui:TextField name="llm-base-model" label="Модель" class="menu__field"/>
+                <ui:TextField name="llm-base-key" label="Ключ" password="true" class="menu__field"/>
+                <ui:Label text="Сложные операции" class="menu__title"/>
+                <ui:TextField name="llm-max-provider" label="Провайдер" class="menu__field"/>
+                <ui:TextField name="llm-max-model" label="Модель" class="menu__field"/>
+                <ui:TextField name="llm-max-key" label="Ключ" password="true" class="menu__field"/>
             </ui:VisualElement>
-            <ui:Button name="settings-back" text="Назад" class="menu__button" />
+            <ui:Button name="settings-back" text="Назад" class="menu__button"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

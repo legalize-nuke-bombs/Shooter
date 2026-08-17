@@ -1,21 +1,20 @@
 using System.Collections.Generic;
 using System.Text;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using Shooter.Game.World;
 
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(NetworkManager))]
     public class Greeter : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         private const int NameLimit = 24;
         private const string Nameless = "Player";
+        private static readonly Journal Log = Logs.Here();
 
-        private readonly Dictionary<ulong, string> names = new Dictionary<ulong, string>();
+        private readonly Dictionary<ulong, string> names = new();
 
         private NetworkManager network;
 
@@ -37,7 +36,8 @@ namespace Shooter.Game.Body
             network.OnClientDisconnectCallback -= Forget;
         }
 
-        private void Approve(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
+        private void Approve(NetworkManager.ConnectionApprovalRequest request,
+            NetworkManager.ConnectionApprovalResponse response)
         {
             string given = Encoding.UTF8.GetString(request.Payload ?? new byte[0]).Trim();
             string name = given.Length == 0 ? Nameless : given.Substring(0, Mathf.Min(given.Length, NameLimit));
@@ -53,7 +53,8 @@ namespace Shooter.Game.Body
         {
             if (!network.IsServer) return;
 
-            if (!network.ConnectedClients.TryGetValue(client, out NetworkClient connected) || connected.PlayerObject == null)
+            if (!network.ConnectedClients.TryGetValue(client, out NetworkClient connected) ||
+                connected.PlayerObject == null)
             {
                 Log.Warn($"Client {client} connected without a player object");
                 return;
@@ -68,7 +69,8 @@ namespace Shooter.Game.Body
                 : MainSpawnPoint.Current.transform;
             connected.PlayerObject.GetComponent<Movement>()?.Teleport(at.position, at.eulerAngles.y);
 
-            Log.Info($"Client {client} entered the world as {name} at {at.position}, players online {network.ConnectedClients.Count}");
+            Log.Info(
+                $"Client {client} entered the world as {name} at {at.position}, players online {network.ConnectedClients.Count}");
         }
 
         private void Forget(ulong client)

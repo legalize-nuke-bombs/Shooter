@@ -1,7 +1,6 @@
 using System.Linq;
 using Shooter.Game.Core;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Game.Llm
 {
@@ -10,22 +9,18 @@ namespace Shooter.Game.Llm
         [SerializeField] [TextArea(5, 20)] private string content;
         [SerializeField] private DigestibleSize size;
 
-        private IDigestible[] parts;
-
-        private PersistentId id;
-
         private long registered;
 
         public DigestibleSize Size => size;
 
-        public IDigestible[] Parts => parts;
+        public IDigestible[] Parts { get; private set; }
 
-        public PersistentId Id => id;
+        public PersistentId Id { get; private set; }
 
         private void Awake()
         {
-            parts = this.FindAll<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
-            id = GetComponent<PersistentId>();
+            Parts = this.FindAll<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
+            Id = GetComponent<PersistentId>();
         }
 
         private void OnEnable()

@@ -15,9 +15,9 @@ namespace Shooter.Game.Body
         [SerializeField] private SoundSpec sound;
 
         [SerializeField] private DamageSpec fallDamage;
+        private Health health;
 
         private Speaker speaker;
-        private Health health;
 
         private void Awake()
         {

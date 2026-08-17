@@ -2,31 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using Environment = Shooter.Game.World.Environment;
-using Shooter.Game.Core;
 
 namespace Shooter.Game.Loot
 {
     public class Inventory : NetworkBehaviour, IDigestible
     {
-        private static readonly Journal Log = Logs.Here();
-
         public const int NoSlot = -1;
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Entry[] contents;
 
-        private readonly NetworkList<int> stackAmounts = new NetworkList<int>(
-            null, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
+        private readonly NetworkVariable<int> equippedSlot = new(NoSlot);
 
-        private readonly NetworkVariable<ItemSlots> slots = new NetworkVariable<ItemSlots>(new ItemSlots());
+        private readonly NetworkVariable<ItemSlots> slots = new(new ItemSlots());
 
-        private readonly NetworkVariable<int> equippedSlot = new NetworkVariable<int>(NoSlot);
-
-        public event Action Changed;
+        private readonly NetworkList<int> stackAmounts = new(
+            null, NetworkVariableReadPermission.Owner);
 
         public IReadOnlyList<UniqueItem> UniqueItems => slots.Value.All;
 
@@ -42,14 +38,69 @@ namespace Shooter.Game.Loot
             }
         }
 
-        public DigestionPriority Priority => DigestionPriority.Low;
-
         private static ItemCatalog Catalog => Catalogs.Of<ItemCatalog>();
 
         private void Awake()
         {
             enabled = false;
         }
+
+        private void LateUpdate()
+        {
+            if (!slots.Value.Dirty) return;
+
+            slots.Value.Settle();
+
+            SlotsShifted();
+        }
+
+        private void OnValidate()
+        {
+            if (contents == null) return;
+
+            foreach (Entry entry in contents)
+                if (entry.Spec == null)
+                    Log.Error($"Entity {this.NameOf()} has a starting inventory slot without an item spec");
+        }
+
+        public DigestionPriority Priority => DigestionPriority.Low;
+
+        public string Digest(DigestionDetail detail)
+        {
+            var digest = new StringBuilder();
+            ItemSpec held = EquippedSpec;
+
+            if (held != null) digest.Append("Holding: ").Append(held.Id).Append(" (slot " + EquippedSlot + ")");
+
+            if (detail != DigestionDetail.Full) return digest.Length == 0 ? null : digest.ToString();
+
+            ItemCatalog catalog = Catalog;
+
+            for (int index = 0; index < stackAmounts.Count; index++)
+            {
+                if (stackAmounts[index] == 0) continue;
+
+                ItemSpec spec = catalog == null ? null : catalog.At(index);
+
+                Line(digest).Append(spec == null ? "unknown" : spec.Id)
+                    .Append(" x ")
+                    .Append(stackAmounts[index]);
+            }
+
+            for (int index = 0; index < slots.Value.Count; index++)
+            {
+                UniqueItem item = slots.Value.At(index);
+                if (item == null) continue;
+
+                ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
+
+                Line(digest).Append((spec == null ? item.SpecId : spec.Id) + " (slot " + index + ")");
+            }
+
+            return digest.Length == 0 ? null : digest.ToString();
+        }
+
+        public event Action Changed;
 
         public override void OnNetworkSpawn()
         {
@@ -82,15 +133,6 @@ namespace Shooter.Game.Loot
             equippedSlot.OnValueChanged -= Reequipped;
 
             enabled = false;
-        }
-
-        private void LateUpdate()
-        {
-            if (!slots.Value.Dirty) return;
-
-            slots.Value.Settle();
-
-            SlotsShifted();
         }
 
         public int StackableAmount(StackableItemSpec spec)
@@ -176,27 +218,18 @@ namespace Shooter.Game.Loot
         public void UseStackableRpc(FixedString32Bytes stackableId)
         {
             if (!UseStackable(stackableId))
-            {
                 Log.Info($"Entity {this.NameOf()} failed to use stackable {stackableId} rpc");
-            }
         }
 
         public bool UseStackable(FixedString32Bytes stackableId)
         {
-            if (Catalog.Of(stackableId) is not StackableItemSpec spec || !spec.Usable)
-            {
-                return false;
-            }
+            if (Catalog.Of(stackableId) is not StackableItemSpec spec || !spec.Usable) return false;
 
-            if (RemoveStackable(spec, 1, InventoryOnConflict.Rollback) == 0)
-            {
-                return false;
-            }
+            if (RemoveStackable(spec, 1, InventoryOnConflict.Rollback) == 0) return false;
 
             foreach (ItemEffect effect in spec.Effects)
-            {
-                if (effect != null) effect.Apply(gameObject);
-            }
+                if (effect != null)
+                    effect.Apply(gameObject);
 
             if (spec.UseSound != null && TryGetComponent(out Speaker speaker)) speaker.Play(spec.UseSound);
 
@@ -216,52 +249,14 @@ namespace Shooter.Game.Loot
             ItemCatalog catalog = Catalog;
 
             for (int index = 0; index < stackAmounts.Count; index++)
-            {
                 if (stackAmounts[index] > 0 && catalog.At(index) is StackableItemSpec stackable)
                     target.AddStackable(stackable, stackAmounts[index]);
-            }
 
             foreach (UniqueItem item in slots.Value.All)
-            {
-                if (item != null) target.Put(item);
-            }
+                if (item != null)
+                    target.Put(item);
 
             Clear();
-        }
-
-        public string Digest(DigestionDetail detail)
-        {
-            StringBuilder digest = new StringBuilder();
-            ItemSpec held = EquippedSpec;
-
-            if (held != null) digest.Append("Holding: ").Append(held.Id).Append(" (slot " + EquippedSlot + ")");
-
-            if (detail != DigestionDetail.Full) return digest.Length == 0 ? null : digest.ToString();
-
-            ItemCatalog catalog = Catalog;
-
-            for (int index = 0; index < stackAmounts.Count; index++)
-            {
-                if (stackAmounts[index] == 0) continue;
-
-                ItemSpec spec = catalog == null ? null : catalog.At(index);
-
-                Line(digest).Append(spec == null ? "unknown" : spec.Id)
-                    .Append(" x ")
-                    .Append(stackAmounts[index]);
-            }
-
-            for (int index = 0; index < slots.Value.Count; index++)
-            {
-                UniqueItem item = slots.Value.At(index);
-                if (item == null) continue;
-
-                ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
-
-                Line(digest).Append((spec == null ? item.SpecId : spec.Id) + " (slot " + index + ")");
-            }
-
-            return digest.Length == 0 ? null : digest.ToString();
         }
 
         private bool Equip(int slot)
@@ -301,9 +296,8 @@ namespace Shooter.Game.Loot
         private void Clear()
         {
             for (int index = 0; index < stackAmounts.Count; index++)
-            {
-                if (stackAmounts[index] != 0) stackAmounts[index] = 0;
-            }
+                if (stackAmounts[index] != 0)
+                    stackAmounts[index] = 0;
 
             slots.Value.Clear();
 
@@ -362,16 +356,6 @@ namespace Shooter.Game.Loot
         private void Reequipped(int previous, int current)
         {
             Changed?.Invoke();
-        }
-
-        private void OnValidate()
-        {
-            if (contents == null) return;
-
-            foreach (Entry entry in contents)
-            {
-                if (entry.Spec == null) Log.Error($"Entity {this.NameOf()} has a starting inventory slot without an item spec");
-            }
         }
 
         [Serializable]
