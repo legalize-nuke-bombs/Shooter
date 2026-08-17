@@ -63,7 +63,7 @@ To get a list of available parameters and their current values, call this tool w
                     try
                     {
                         setting.Set(value);
-                        sb.Append($"Successfully updated {setting.Name} to {value}");
+                        sb.AppendLine($"Successfully updated {setting.Name} to {value}");
                     }
                     catch (Exception e)
                     {

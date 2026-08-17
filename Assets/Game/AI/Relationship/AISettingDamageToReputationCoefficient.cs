@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Globalization;
+using UnityEngine;
 
 namespace Shooter.Game.AI
 {
@@ -22,13 +23,13 @@ namespace Shooter.Game.AI
 
         public override void Set(string content)
         {
-            float amount = float.Parse(content);
+            float amount = float.Parse(content, CultureInfo.InvariantCulture);
             relation.SetDamageToReputationCoefficient(amount);
         }
 
         public override string Get()
         {
-            return relation.DamageToReputationCoefficient.ToString();
+            return relation.DamageToReputationCoefficient.ToString(CultureInfo.InvariantCulture);
         }
     }
 }
