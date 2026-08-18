@@ -19,6 +19,6 @@ namespace Shooter.Game.Loot
 
         public string Title => string.IsNullOrEmpty(title) ? Key : title;
 
-        public string PromptDescription => string.IsNullOrEmpty(promptDescription) ? Key : promptDescription;
+        public virtual string PromptDescription => promptDescription;
     }
 }
