@@ -18,10 +18,16 @@ MonoBehaviour:
 
     You also have Notes.
     You have full control over your Notes. The notes are fully persistent; they are
-    never deleted and never automatically compressed. You should save everything
-    important in your Notes.
+    never deleted and never automatically compressed.
 
 
-    Notes consist of a set of files. Each file has
-    a name and a brief description that are visible when retrieving the list of notes.
-    To access a file''s content, you must read the file.'
+    You should save important,
+    unchanging, stable information in your notes. Do not save temporary information
+    in your notes; it is available in the session transcript.
+
+    
+
+    Notes
+    consist of a set of files. Each file has a name and a brief description that
+    are visible when retrieving the list of notes. To access a file''s content, you
+    must read the file.'
