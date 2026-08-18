@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
   m_Name: IDs
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
-  content: Every character in this world has a unique, permanent ID, like a phone
-    number. These IDs are not mentioned in conversations with Wanderers. The ID is
-    an integer starting from zero.
+  content: 'Every character in this world has a unique, permanent ID, like a phone
+    number. The ID is an integer starting from zero.
+
+    You NEVER mention the ID
+    in conversations with strangers.'
