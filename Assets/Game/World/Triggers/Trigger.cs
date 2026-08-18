@@ -35,7 +35,7 @@ namespace Shooter.Game.World
             enabled = false;
         }
 
-        protected void OnTrigger(PersistentId character)
+        protected void OnTrigger(CharacterId character)
         {
             if (!allowReiteration)
                 if (!done.Add(character.Value))

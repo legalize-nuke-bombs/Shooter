@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Shooter.Game.AI
 {
-    [RequireComponent(typeof(PersistentId))]
+    [RequireComponent(typeof(CharacterId))]
     [RequireComponent(typeof(Nameable))]
     public class AICharacterRelation : MonoBehaviour, IDigestible
     {
@@ -29,7 +29,7 @@ namespace Shooter.Game.AI
         private readonly Dictionary<long, int> amounts = new();
         private Health health;
 
-        private PersistentId ownId;
+        private CharacterId ownId;
         private Nameable ownNameable;
         public float DamageToReputationCoefficient => damageToReputationCoefficient;
 
@@ -44,7 +44,7 @@ namespace Shooter.Game.AI
 
         private void Awake()
         {
-            ownId = GetComponent<PersistentId>();
+            ownId = GetComponent<CharacterId>();
             ownNameable = GetComponent<Nameable>();
             health = GetComponent<Health>();
         }
@@ -122,7 +122,7 @@ namespace Shooter.Game.AI
 
         private void Notify(long characterId, int before, int after)
         {
-            PersistentId target = Registers.Current.Of<PersistentId>().Of(characterId);
+            CharacterId target = Registers.Current.Of<CharacterId>().Of(characterId);
             if (target == null)
             {
                 Log.Warn($"Entity {name} failed to notify character {characterId}: not found");
