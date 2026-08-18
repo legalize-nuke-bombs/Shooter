@@ -11,6 +11,7 @@ namespace Shooter.Game.Llm.ExploreItems
         public override string Description =>
             @"
 Use this tool to examine the item by its ID.
+This tool displays a detailed description of the item, including its effects (satiation, healing, etc.).
 You can process any number of IDs at once.
 ";
 
