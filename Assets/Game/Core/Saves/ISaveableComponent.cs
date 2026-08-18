@@ -1,9 +1,13 @@
-﻿namespace Shooter.Game.Core.Saves
+using Newtonsoft.Json.Linq;
+
+namespace Shooter.Game.Core.Saves
 {
     public interface ISaveableComponent
     {
-        string ComponentKey();
+        string ComponentKey { get; }
+
         object SaveComponent();
-        void LoadComponent(object content);
+
+        void LoadComponent(JToken content);
     }
 }
