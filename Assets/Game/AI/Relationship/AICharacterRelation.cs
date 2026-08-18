@@ -9,6 +9,8 @@ using UnityEngine;
 
 namespace Shooter.Game.AI
 {
+    [RequireComponent(typeof(PersistentId))]
+    [RequireComponent(typeof(Nameable))]
     public class AICharacterRelation : MonoBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
@@ -120,25 +122,29 @@ namespace Shooter.Game.AI
 
         private void Notify(long characterId, int before, int after)
         {
-            if (ownId == null) return;
-
             PersistentId target = Registers.Current.Of<PersistentId>().Of(characterId);
-            if (target == null) return;
+            if (target == null)
+            {
+                Log.Warn($"Entity {name} failed to notify character {characterId}: not found");
+                return;
+            }
 
-            if (!target.TryGetComponent(out MainNotificationRecipient recipient)) return;
+            if (!target.TryGetComponent(out MainNotificationRecipient recipient))
+            {
+                Log.Warn($"Entity {name} failed to notify character {characterId}: not a notification recipient");
+            }
 
             NotificationSpec spec = after > before ? improved : worsened;
 
             if (spec == null)
             {
-                Log.Warn(
-                    $"Entity {name} has no notification for an attitude that went {before} -> {after}, the change goes unnoticed");
+                Log.Warn($"Entity {name} has no notification for an attitude that went {before} -> {after}, the change goes unnoticed");
                 return;
             }
 
             recipient.Receive(spec.Notify()
                 .With("actorId", ownId.Value)
-                .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
+                .With(ownNameable.NamedAs("actorName"))
                 .With("before", before)
                 .With("after", after));
         }

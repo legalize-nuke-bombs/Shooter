@@ -176,9 +176,6 @@ PrefabInstance:
       addedObject: {fileID: 6832720465051325686}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5027497962899632166}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6962675620401288912}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
@@ -643,24 +640,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fecc3162bad46f39d2623cffaf9a447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmAIObserver
---- !u!114 &5027497962899632166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce955cba01bd400c8f1604703358d3f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.AICharacterRelation
-  defaultAmount: 50
-  damageToReputationCoefficient: 1
-  improved: {fileID: 0}
-  worsened: {fileID: 0}
-  enemyThreshold: 0
-  friendThreshold: 90
 --- !u!114 &6962675620401288912
 MonoBehaviour:
   m_ObjectHideFlags: 0

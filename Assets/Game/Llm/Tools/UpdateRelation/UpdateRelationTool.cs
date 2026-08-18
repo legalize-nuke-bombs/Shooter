@@ -1,5 +1,4 @@
 using Shooter.Game.AI;
-using Shooter.Game.Core;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
@@ -14,6 +13,7 @@ namespace Shooter.Game.Llm
         public override string Description =>
             @"
 Use this tool to update your relation to character.
+This tool accepts absolute values, not relative ones.
 If you want to attack a character, change the attitude to zero.";
 
         protected override void Awake()
