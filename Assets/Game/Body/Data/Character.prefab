@@ -272,7 +272,6 @@ GameObject:
   - component: {fileID: -5531865876210179846}
   - component: {fileID: 9191937243433737006}
   - component: {fileID: -3782230818419827669}
-  - component: {fileID: 1628016539614347290}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -615,20 +614,3 @@ MonoBehaviour:
   timerInterval: 0.25
   lowThreshold: 1
   digestThreshold: 10
---- !u!114 &1628016539614347290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874027793385663384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ee153ec4f264d74ac1aca8a64536b1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Bleeding.Bleeder
-  ShowTopMostFoldoutHeaderGroup: 1
-  bleedingDamage: {fileID: 11400000, guid: c42fce87394f4ea7b3bc29ec3b48324e, type: 2}
-  timerInterval: 0.1
-  recoverySpeed: 1
-  damageCoefficient: 0.025

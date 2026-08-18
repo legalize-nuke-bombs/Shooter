@@ -1,22 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
+using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Shooter.Game.AI.Eater
 {
     public class AIEater : NetworkBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private float timerInterval = 2.5f;
         [SerializeField] private float hungerThreshold = 20f;
 
         private Hunger hunger;
         private Inventory inventory;
         private List<FixedString32Bytes> foodIds;
+
+        public struct OnAutoEatCallbackData
+        {
+            public StackableItemSpec Item;
+            public int StartSaturation;
+            public int EndSaturation;
+        }
+        public Action<OnAutoEatCallbackData> OnAutoEatCallback;
 
         private float timer;
 
@@ -49,8 +62,23 @@ namespace Shooter.Game.AI.Eater
             if (hungerAmount >= hungerThreshold) return;
 
             foreach (FixedString32Bytes foodId in foodIds)
+            {
                 if (inventory.UseStackable(foodId))
+                {
+                    Log.Info($"Entity {this.NameOf()} decided to eat {foodId} on {hungerAmount} saturation");
+                    if (OnAutoEatCallback != null)
+                    {
+                        OnAutoEatCallback.Invoke(new OnAutoEatCallbackData()
+                        {
+                            Item = Catalogs.Of<ItemCatalog>().Of(foodId) as StackableItemSpec,
+                            StartSaturation = (int)hungerAmount,
+                            EndSaturation = (int)hunger.Amount
+                        });
+                    }
                     break;
+                }
+            }
+
         }
     }
 }

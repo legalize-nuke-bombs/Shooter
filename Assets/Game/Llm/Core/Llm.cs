@@ -98,9 +98,9 @@ namespace Shooter.Game.Llm
             return known.ToString();
         }
 
-        public void Notice(string line)
+        public void Notice(string line, bool urgent)
         {
-            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line });
+            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line }, urgent);
         }
 
         public void Listen(long wandererId, string message, Action<string> onAnswer)

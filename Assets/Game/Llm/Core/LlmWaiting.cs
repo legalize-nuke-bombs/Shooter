@@ -34,7 +34,12 @@ namespace Shooter.Game.Llm
         {
             pending[wandererId] = onAnswer;
             history.Arrive(new LlmMessage
-                { Role = LlmRole.User, Content = $"Wanderer [ID {wandererId}] says: {message}" });
+            {
+                Role = LlmRole.User,
+                Content = $"Wanderer [ID {wandererId}] says: {message}"
+            },
+                true
+            );
         }
 
         public bool Answer(long wandererId, string text)
