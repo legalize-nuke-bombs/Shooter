@@ -82,7 +82,7 @@ namespace Shooter.Game.Core.Saves
 
                 if (!components.TryAdd(saveableKey, saveableData))
                 {
-                    Log.Warn($"Entity {name} found duplicate key {saveableData}");
+                    Log.Warn($"Entity {name} found duplicate key {saveableKey}");
                     continue;
                 }
             }
