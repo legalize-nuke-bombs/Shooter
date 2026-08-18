@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 557d099a4c5645de8f0d8c08f29bb60b, type: 2}
     - target: {fileID: 3188154198145438427, guid: 7cb6cf5df8b9df9449586e80ead35f13, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: Ghoul
       objectReference: {fileID: 0}
     - target: {fileID: 5731423912676386098, guid: 7cb6cf5df8b9df9449586e80ead35f13, type: 3}
       propertyPath: m_LocalPosition.x
