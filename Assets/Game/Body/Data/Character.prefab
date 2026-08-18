@@ -27,10 +27,10 @@ GameObject:
   - component: {fileID: -5531865876210179846}
   - component: {fileID: 9191937243433737006}
   - component: {fileID: -3782230818419827669}
-  - component: {fileID: 7659849616301074502}
-  - component: {fileID: 6908906083587998171}
-  - component: {fileID: 7062881470636239576}
-  - component: {fileID: 1020547249835076822}
+  - component: {fileID: 6403981259524950330}
+  - component: {fileID: -4473180149750321490}
+  - component: {fileID: 6370029383145960073}
+  - component: {fileID: -8044126811324161911}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -367,7 +367,7 @@ MonoBehaviour:
   timerInterval: 0.25
   lowThreshold: 1
   digestThreshold: 10
---- !u!114 &7659849616301074502
+--- !u!114 &6403981259524950330
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -380,7 +380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.Gunner
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &6908906083587998171
+--- !u!114 &-4473180149750321490
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.WeaponView
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &7062881470636239576
+--- !u!114 &6370029383145960073
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -407,7 +407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Inventory
   ShowTopMostFoldoutHeaderGroup: 1
   contents: []
---- !u!114 &1020547249835076822
+--- !u!114 &-8044126811324161911
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
