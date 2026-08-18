@@ -29,7 +29,7 @@ namespace Shooter.Client.Playing
         private void Awake()
         {
             inventory = GetComponent<Inventory>();
-            eye = GetComponent<Camera>();
+            eye = GetComponentInChildren<Camera>();
         }
 
         private void LateUpdate()
