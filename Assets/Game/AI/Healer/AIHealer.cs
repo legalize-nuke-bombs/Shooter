@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
@@ -22,6 +23,14 @@ namespace Shooter.Game.AI.Healer
         private Inventory inventory;
         private Health health;
         private Dictionary<FixedString32Bytes, int> healingItems;
+
+        public struct OnAutoHealCallbackData
+        {
+            public StackableItemSpec Item;
+            public int StartHp;
+            public int EndHp;
+        }
+        public event Action<OnAutoHealCallbackData> OnAutoHealCallback;
 
         private float timer;
 
@@ -83,6 +92,15 @@ namespace Shooter.Game.AI.Healer
             {
                 Log.Info($"Entity {this.NameOf()} decided to use {bestItemId} ({healingItems[bestItemId]}), missing {missing}, safety coefficient {safetyCoefficient}, under heal coefficient {underHealPenaltyMultiplier}, over heal base coefficient {overHealBasePenaltyMultiplier}");
                 inventory.UseStackable(bestItemId);
+                if (OnAutoHealCallback != null)
+                {
+                    OnAutoHealCallback.Invoke(new OnAutoHealCallbackData()
+                    {
+                        Item = itemCatalog.Of(bestItemId) as StackableItemSpec,
+                        StartHp = (int)healthAmount,
+                        EndHp = (int)health.Hp
+                    });
+                }
             }
         }
     }

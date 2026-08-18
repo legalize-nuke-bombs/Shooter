@@ -12,7 +12,6 @@ namespace Shooter.Game.Llm
     {
         private static readonly Journal Log = Logs.Here();
 
-
         private Llm llm;
 
         private void Awake()
@@ -40,7 +39,8 @@ namespace Shooter.Game.Llm
             string told = Template.Filled(spec.Told, notification);
 
             llm.Notice(
-                $"[{Clock.Current.DateTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}");
+                $"[{Clock.Current.DateTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}",
+                true);
         }
 
         private NotificationSpec Spec(Notification notification)

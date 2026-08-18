@@ -56,7 +56,7 @@ namespace Shooter.Game.Body
             DamageRaw(amount);
 
             if (!Alive) Die();
-            else if (type.Loud) earSpeaker.Play(hurtSound);
+            else earSpeaker.Play(hurtSound);
 
             var result = new DamageResult
             {

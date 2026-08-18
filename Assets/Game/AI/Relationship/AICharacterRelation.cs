@@ -14,8 +14,7 @@ namespace Shooter.Game.AI
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] [Range(0, 100)]
-        private int
-            defaultAmount = 50; // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
+        private int defaultAmount = 50; // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
 
         [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
 
@@ -31,6 +30,15 @@ namespace Shooter.Game.AI
         private PersistentId ownId;
         private Nameable ownNameable;
         public float DamageToReputationCoefficient => damageToReputationCoefficient;
+
+        public struct OnDamagedCallbackData
+        {
+            public int RelationDelta { get; set; }
+            public int DamagePoints { get; set; }
+            public DamageSpec DamageType { get; set; }
+            public long AttackerId { get; set; }
+        }
+        public event Action<OnDamagedCallbackData> OnDamagedCallback;
 
         private void Awake()
         {
@@ -68,10 +76,19 @@ namespace Shooter.Game.AI
 
         private void OnDamaged(double amount, long? attackerId, DamageSpec type)
         {
-            if (!type.Reputational || attackerId == null) return;
+            if (attackerId == null) return;
 
-            SetAmount(attackerId.Value,
-                Math.Max(0, Amount(attackerId.Value) - (int)(damageToReputationCoefficient * amount)));
+            int delta = SetAmount(attackerId.Value, Math.Max(0, Amount(attackerId.Value) - (int)(damageToReputationCoefficient * amount)));
+            if (delta != 0 && OnDamagedCallback != null)
+            {
+                OnDamagedCallback.Invoke(new OnDamagedCallbackData()
+                {
+                    RelationDelta = delta,
+                    DamagePoints = (int)Math.Abs(amount),
+                    DamageType = type,
+                    AttackerId = attackerId.Value
+                });
+            }
         }
 
         public void SetDamageToReputationCoefficient(float amount)
@@ -85,20 +102,20 @@ namespace Shooter.Game.AI
             return amounts.GetValueOrDefault(characterId, defaultAmount);
         }
 
-        public void SetAmount(long characterId, int amount)
+        public int SetAmount(long characterId, int amount)
         {
             int currentAmount = Amount(characterId);
 
-            Log.Info(
-                $"Entity {this.NameOf()} SetAmount request: character id {characterId} amount {currentAmount} -> {amount}");
+            Log.Info($"Entity {this.NameOf()} SetAmount request: character id {characterId} amount {currentAmount} -> {amount}");
 
-            if (amount < 0 || amount > 100) throw new ArgumentException("Amount must be between 0 and 100");
+            if (amount < 0 || amount > 100) return 0;
 
-            if (amount == currentAmount) return;
+            if (amount == currentAmount) return 0;
 
             amounts[characterId] = amount;
 
             Notify(characterId, currentAmount, amount);
+            return amount - currentAmount;
         }
 
         private void Notify(long characterId, int before, int after)

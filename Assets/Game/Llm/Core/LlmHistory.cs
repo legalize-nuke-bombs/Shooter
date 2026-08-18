@@ -23,10 +23,10 @@ namespace Shooter.Game.Llm
             Size += Sized(message);
         }
 
-        public void Arrive(LlmMessage message)
+        public void Arrive(LlmMessage message, bool urgent)
         {
             Append(message);
-            Unseen = true;
+            Unseen = Unseen || urgent;
         }
 
         public void Seen()
