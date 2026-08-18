@@ -98,6 +98,7 @@ namespace Shooter.Game.Core.Saves
             {
                 string saveableKey = saveable.ComponentKey;
                 known.Add(saveableKey);
+
                 if (!components.TryGetValue(saveableKey, out JToken componentData))
                 {
                     Log.Warn($"Entity {name} failed to find saved data for {saveableKey}");
@@ -111,6 +112,7 @@ namespace Shooter.Game.Core.Saves
                 catch (Exception e)
                 {
                     Log.Warn($"Entity {name} failed to load component {saveableKey}: {e.Message}");
+                    continue;
                 }
             }
 
