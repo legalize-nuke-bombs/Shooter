@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Notifying
 {
-    [RequireComponent(typeof(PersistentId))]
+    [RequireComponent(typeof(CharacterId))]
     public class MainNotificationRecipient : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();

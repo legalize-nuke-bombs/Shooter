@@ -56,7 +56,7 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            if (!user.TryGetComponent(out PersistentId speaker))
+            if (!user.TryGetComponent(out CharacterId speaker))
             {
                 Log.Warn($"Entity {name} refused to talk to {user.name}: the speaker has no persistent id");
                 return;
@@ -89,7 +89,7 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            if (!user.TryGetComponent(out PersistentId speaker))
+            if (!user.TryGetComponent(out CharacterId speaker))
             {
                 Log.Warn($"Entity {name} ignores speech of {user.name}: the speaker has no persistent id");
                 return;
@@ -114,7 +114,7 @@ namespace Shooter.Game.Speech
         {
             if (!IsServer) return;
 
-            if (!user.TryGetComponent(out PersistentId speaker)) return;
+            if (!user.TryGetComponent(out CharacterId speaker)) return;
 
             if (!conversations.TryGetValue(speaker.Value, out Conversation conversation)) return;
 
@@ -216,7 +216,7 @@ namespace Shooter.Game.Speech
         {
             if (Registers.Current == null) return null;
 
-            PersistentId found = Registers.Current.Of<PersistentId>().Of(wandererId);
+            CharacterId found = Registers.Current.Of<CharacterId>().Of(wandererId);
             return found == null ? null : found.GetComponentInParent<NetworkObject>();
         }
 

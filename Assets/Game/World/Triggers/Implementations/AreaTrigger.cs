@@ -28,14 +28,14 @@ namespace Shooter.Game.World
 
             if (target.gameObject.layer != CharacterLayer) return;
 
-            PersistentId persistentId = target.GetComponentInParent<PersistentId>();
-            if (persistentId == null)
+            CharacterId characterId = target.GetComponentInParent<CharacterId>();
+            if (characterId == null)
             {
                 Log.Warn($"Character {target.name} does not have a persistent id");
                 return;
             }
 
-            OnTrigger(persistentId);
+            OnTrigger(characterId);
         }
     }
 }
