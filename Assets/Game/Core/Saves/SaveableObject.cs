@@ -65,9 +65,25 @@ namespace Shooter.Game.Core.Saves
             var components = new Dictionary<string, object>();
             foreach (ISaveableComponent saveable in saveables)
             {
-                if (!components.TryAdd(saveable.ComponentKey, saveable.SaveComponent()))
+                string saveableKey = saveable.ComponentKey;
+                object saveableData = null;
+                try
                 {
-                    throw new ArgumentException($"Duplicate component key {saveable.ComponentKey} on {name}");
+                    saveableData = saveable.SaveComponent();
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Entity {name} failed to save component {saveableKey}: {e.Message}");
+                }
+                if (saveableData == null)
+                {
+                    continue;
+                }
+
+                if (!components.TryAdd(saveableKey, saveableData))
+                {
+                    Log.Warn($"Entity {name} found duplicate key {saveableData}");
+                    continue;
                 }
             }
 
@@ -80,19 +96,30 @@ namespace Shooter.Game.Core.Saves
             var known = new HashSet<string>();
             foreach (ISaveableComponent saveable in saveables)
             {
-                known.Add(saveable.ComponentKey);
-                if (!components.TryGetValue(saveable.ComponentKey, out JToken componentData))
+                string saveableKey = saveable.ComponentKey;
+                known.Add(saveableKey);
+                if (!components.TryGetValue(saveableKey, out JToken componentData))
                 {
-                    Log.Warn($"No saved data for component {saveable.ComponentKey} of {name}, it keeps defaults");
+                    Log.Warn($"Entity {name} failed to find saved data for {saveableKey}");
                     continue;
                 }
 
-                saveable.LoadComponent(componentData);
+                try
+                {
+                    saveable.LoadComponent(componentData);
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Entity {name} failed to load component {saveableKey}: {e.Message}");
+                }
             }
 
             foreach (JProperty property in components.Properties())
             {
-                if (!known.Contains(property.Name)) Log.Warn($"Orphan component data {property.Name} of {name}, ignored");
+                if (!known.Contains(property.Name))
+                {
+                    Log.Warn($"Entity {name} found unknown saved property {property.Name}");
+                }
             }
         }
     }
