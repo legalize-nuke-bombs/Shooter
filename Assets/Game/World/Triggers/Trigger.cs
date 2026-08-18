@@ -20,7 +20,7 @@ namespace Shooter.Game.World
         protected virtual void Awake()
         {
             triggerable = GetComponent<MainTriggerable>();
-            if (triggerable == null) Log.Warn($"Entity {this.NameOf()} does not have main triggerable");
+            if (triggerable == null) Log.Warn($"Entity {name} does not have main triggerable");
 
             enabled = false;
         }
@@ -41,7 +41,7 @@ namespace Shooter.Game.World
                 if (!done.Add(character.Value))
                     return;
 
-            Log.Info($"Entity {this.NameOf()} triggered on {character.name}");
+            Log.Info($"Entity {name} triggered on {character.name}");
             triggerable.OnTrigger(character);
         }
     }

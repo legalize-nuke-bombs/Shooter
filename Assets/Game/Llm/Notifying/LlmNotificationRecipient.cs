@@ -26,7 +26,7 @@ namespace Shooter.Game.Llm
 
             if (string.IsNullOrEmpty(spec.Told))
             {
-                Log.Info($"Entity {this.NameOf()} has nothing to remember about {notification.Spec}");
+                Log.Info($"Entity {name} has nothing to remember about {notification.Spec}");
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace Shooter.Game.Llm
             if (catalog == null)
             {
                 Log.Error(
-                    $"Entity {this.NameOf()} has no world to ask about {notification.Spec}, the notification is lost");
+                    $"Entity {name} has no world to ask about {notification.Spec}, the notification is lost");
                 return null;
             }
 

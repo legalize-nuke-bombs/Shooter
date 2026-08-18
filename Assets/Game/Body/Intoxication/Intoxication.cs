@@ -35,7 +35,7 @@ namespace Shooter.Game.Body
                 levels.Add(0);
             }
 
-            Log.Info($"Entity {this.NameOf()} locally registered {levels.Count} - {indexes.Count} toxins");
+            Log.Info($"Entity {name} locally registered {levels.Count} - {indexes.Count} toxins");
         }
 
         private void Update()
@@ -80,7 +80,7 @@ namespace Shooter.Game.Body
             int index = indexes[toxin.Id];
             amount = Math.Max(0, amount);
             levels[index] = Math.Min(100, levels[index] + amount);
-            Log.Info($"Entity {this.NameOf()} got {toxin.name} {amount}, now {levels[index]}");
+            Log.Info($"Entity {name} got {toxin.name} {amount}, now {levels[index]}");
         }
 
         private void Tick(float dt)

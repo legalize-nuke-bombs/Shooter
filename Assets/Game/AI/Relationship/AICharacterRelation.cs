@@ -42,9 +42,9 @@ namespace Shooter.Game.AI
 
         private void Awake()
         {
-            ownId = this.Find<PersistentId>();
-            ownNameable = this.Find<Nameable>();
-            health = this.Find<Health>();
+            ownId = GetComponent<PersistentId>();
+            ownNameable = GetComponent<Nameable>();
+            health = GetComponent<Health>();
         }
 
         private void OnEnable()
@@ -106,7 +106,7 @@ namespace Shooter.Game.AI
         {
             int currentAmount = Amount(characterId);
 
-            Log.Info($"Entity {this.NameOf()} SetAmount request: character id {characterId} amount {currentAmount} -> {amount}");
+            Log.Info($"Entity {name} SetAmount request: character id {characterId} amount {currentAmount} -> {amount}");
 
             if (amount < 0 || amount > 100) return 0;
 
@@ -132,7 +132,7 @@ namespace Shooter.Game.AI
             if (spec == null)
             {
                 Log.Warn(
-                    $"Entity {this.NameOf()} has no notification for an attitude that went {before} -> {after}, the change goes unnoticed");
+                    $"Entity {name} has no notification for an attitude that went {before} -> {after}, the change goes unnoticed");
                 return;
             }
 

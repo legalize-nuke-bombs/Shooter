@@ -55,7 +55,7 @@ namespace Shooter.Game.Body
             Vector3 at = SpawnPoint();
             movement?.Teleport(at);
             health.Resurrect();
-            Log.Info($"Entity {this.NameOf()} rose at {at}");
+            Log.Info($"Entity {name} rose at {at}");
         }
 
         private Vector3 SpawnPoint()
@@ -70,7 +70,7 @@ namespace Shooter.Game.Body
             GameObject prefab = CorpsePrefab();
             if (prefab == null)
             {
-                Log.Warn($"Entity {this.NameOf()} died, but neither it nor the world has a corpse prefab");
+                Log.Warn($"Entity {name} died, but neither it nor the world has a corpse prefab");
                 return;
             }
 
@@ -78,7 +78,7 @@ namespace Shooter.Game.Body
             NetworkObject spawned = body.GetComponent<NetworkObject>();
             if (spawned == null)
             {
-                Log.Error($"Corpse prefab of entity {this.NameOf()} has no network object");
+                Log.Error($"Corpse prefab of entity {name} has no network object");
                 Destroy(body);
                 return;
             }
@@ -95,8 +95,8 @@ namespace Shooter.Game.Body
                 if (named != null && named.Spec != null) corpse.Rename(named.Spec);
             }
 
-            spawned.GetComponent<Lootable>()?.Fill(this.Find<Inventory>());
-            Log.Info($"Entity {this.NameOf()} left a corpse at {transform.position}");
+            spawned.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
+            Log.Info($"Entity {name} left a corpse at {transform.position}");
         }
 
         private GameObject CorpsePrefab()

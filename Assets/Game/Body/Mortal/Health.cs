@@ -51,7 +51,7 @@ namespace Shooter.Game.Body
                     Murder = false
                 };
 
-            Log.Info($"Entity {this.NameOf()} got damage {amount} {type}");
+            Log.Info($"Entity {name} got damage {amount} {type}");
 
             DamageRaw(amount);
 
@@ -76,9 +76,9 @@ namespace Shooter.Game.Body
 
         private void Die()
         {
-            Log.Info($"Entity {this.NameOf()} died");
+            Log.Info($"Entity {name} died");
 
-            foreach (IMortal mortal in this.FindAll<IMortal>())
+            foreach (IMortal mortal in GetComponents<IMortal>())
                 mortal.Died();
         }
     }

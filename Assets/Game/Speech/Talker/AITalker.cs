@@ -13,14 +13,14 @@ namespace Shooter.Game.Speech
 
         private void Awake()
         {
-            llm = this.Find<Llm.Llm>();
+            llm = GetComponent<Llm.Llm>();
         }
 
         protected override void RequestAnswer(long wandererId, string message, Action<string> onAnswer)
         {
             if (llm == null)
             {
-                Log.Warn($"Entity {this.NameOf()} has no llm to answer with");
+                Log.Warn($"Entity {name} has no llm to answer with");
                 onAnswer(Fallback);
                 return;
             }

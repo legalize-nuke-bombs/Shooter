@@ -20,9 +20,9 @@ namespace Shooter.Game.Llm
         private void Awake()
         {
             llm = GetComponent<Llm>();
-            healer = this.Find<AIHealer>();
-            eater = this.Find<AIEater>();
-            characterRelation = this.Find<AICharacterRelation>();
+            healer = GetComponent<AIHealer>();
+            eater = GetComponent<AIEater>();
+            characterRelation = GetComponent<AICharacterRelation>();
         }
 
         private void OnEnable()

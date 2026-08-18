@@ -40,7 +40,7 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
             PersistentId wanderer = ids.Of(wandererId);
             if (wanderer == null)
             {
-                Log.Warn($"Unregistered wanderer {wandererId} is waiting for an answer from {this.NameOf()}!");
+                Log.Warn($"Unregistered wanderer {wandererId} is waiting for an answer from {name}!");
                 throw new ArgumentException($"Failed to find wanderer {wandererId}");
             }
 

@@ -33,11 +33,11 @@ namespace Shooter.Game.World
         {
             if (Broken)
             {
-                Log.Warn($"Entity {this.NameOf()} can not be broken because it is already broken");
+                Log.Warn($"Entity {name} can not be broken because it is already broken");
                 return;
             }
 
-            Log.Info($"Entity {this.NameOf()} became broken");
+            Log.Info($"Entity {name} became broken");
 
             broken = true;
 

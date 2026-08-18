@@ -13,7 +13,7 @@ namespace Shooter.Game.World
         private void Awake()
         {
             triggerables = GetComponents<ITriggerable>();
-            Log.Info($"Entity {this.NameOf()} has {triggerables.Length} triggerables");
+            Log.Info($"Entity {name} has {triggerables.Length} triggerables");
         }
 
         public void OnTrigger(PersistentId character)

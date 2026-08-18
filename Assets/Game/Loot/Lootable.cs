@@ -15,12 +15,12 @@ namespace Shooter.Game.Loot
             Inventory own = GetComponent<Inventory>();
             if (own == null)
             {
-                Log.Warn($"Lootable {this.NameOf()} has no inventory to take the belongings");
+                Log.Warn($"Lootable {name} has no inventory to take the belongings");
                 return;
             }
 
             from.DrainInto(own);
-            Log.Info($"Lootable {this.NameOf()} took the belongings");
+            Log.Info($"Lootable {name} took the belongings");
         }
     }
 }

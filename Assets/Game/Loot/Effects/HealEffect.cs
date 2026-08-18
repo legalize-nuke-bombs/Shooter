@@ -11,7 +11,7 @@ namespace Shooter.Game.Loot
 
         public override void Apply(GameObject user)
         {
-            Health health = user.transform.Find<Health>();
+            Health health = user.GetComponent<Health>();
 
             if (health == null) return;
 

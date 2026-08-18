@@ -11,7 +11,7 @@ namespace Shooter.Game.Loot
 
         public override void Apply(GameObject user)
         {
-            Hunger hunger = user.transform.Find<Hunger>();
+            Hunger hunger = user.GetComponent<Hunger>();
 
             if (hunger == null) return;
 

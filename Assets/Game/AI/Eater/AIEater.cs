@@ -12,6 +12,8 @@ using Random = UnityEngine.Random;
 
 namespace Shooter.Game.AI.Eater
 {
+    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Hunger))]
     public class AIEater : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -35,8 +37,8 @@ namespace Shooter.Game.AI.Eater
 
         private void Awake()
         {
-            inventory = this.Find<Inventory>();
-            hunger = this.Find<Hunger>();
+            inventory = GetComponent<Inventory>();
+            hunger = GetComponent<Hunger>();
             foodIds = Catalogs.Of<ItemCatalog>().FindAll(item =>
                     item is StackableItemSpec stackableItem && stackableItem.FoodMarker > 0)
                 .Cast<StackableItemSpec>()
@@ -65,7 +67,7 @@ namespace Shooter.Game.AI.Eater
             {
                 if (inventory.UseStackable(foodId))
                 {
-                    Log.Info($"Entity {this.NameOf()} decided to eat {foodId} on {hungerAmount} saturation");
+                    Log.Info($"Entity {name} decided to eat {foodId} on {hungerAmount} saturation");
                     if (OnAutoEatCallback != null)
                     {
                         OnAutoEatCallback.Invoke(new OnAutoEatCallbackData()

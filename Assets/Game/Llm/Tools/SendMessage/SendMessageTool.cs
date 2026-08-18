@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [RequireComponent(typeof(PersistentId))]
     public sealed class SendMessageTool : LlmTool<SendMessageArguments>
     {
         private static readonly Journal Log = Logs.Here();
@@ -26,8 +27,8 @@ namespace Shooter.Game.Llm
         protected override void Awake()
         {
             base.Awake();
-            ownId = this.Find<PersistentId>();
-            ownNameable = this.Find<Nameable>();
+            ownId = GetComponent<PersistentId>();
+            ownNameable = GetComponent<Nameable>();
         }
 
         protected override string Execute(SendMessageArguments arguments)
@@ -72,7 +73,7 @@ namespace Shooter.Game.Llm
                     .With("text", arguments.Content));
 
                 delivered.Add(targetId);
-                Log.Info($"Entity {this.NameOf()} said to {targetId}: {arguments.Content}");
+                Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
             }
 
             var answer = new StringBuilder();

@@ -52,13 +52,13 @@ namespace Shooter.Game.Speech
             if (!TalkRule.CanTalk(Alive(user), Alive(NetworkObject), Awake(NetworkObject)))
             {
                 Log.Info(
-                    $"Entity {this.NameOf()} refused to talk to {user.name}: speaker alive {Alive(user)}, own alive {Alive(NetworkObject)}, own awake {Awake(NetworkObject)}");
+                    $"Entity {name} refused to talk to {user.name}: speaker alive {Alive(user)}, own alive {Alive(NetworkObject)}, own awake {Awake(NetworkObject)}");
                 return;
             }
 
             if (!user.TryGetComponent(out PersistentId speaker))
             {
-                Log.Warn($"Entity {this.NameOf()} refused to talk to {user.name}: the speaker has no persistent id");
+                Log.Warn($"Entity {name} refused to talk to {user.name}: the speaker has no persistent id");
                 return;
             }
 
@@ -91,19 +91,19 @@ namespace Shooter.Game.Speech
 
             if (!user.TryGetComponent(out PersistentId speaker))
             {
-                Log.Warn($"Entity {this.NameOf()} ignores speech of {user.name}: the speaker has no persistent id");
+                Log.Warn($"Entity {name} ignores speech of {user.name}: the speaker has no persistent id");
                 return;
             }
 
             if (!conversations.TryGetValue(speaker.Value, out Conversation conversation) || !conversation.Open)
             {
-                Log.Info($"Entity {user.name} spoke to {this.NameOf()} without an open talk, ignored");
+                Log.Info($"Entity {user.name} spoke to {name} without an open talk, ignored");
                 return;
             }
 
             if (thinking.Contains(speaker.Value))
             {
-                Log.Info($"Entity {user.name} spoke to {this.NameOf()} while the answer is pending, ignored");
+                Log.Info($"Entity {user.name} spoke to {name} while the answer is pending, ignored");
                 return;
             }
 
@@ -134,12 +134,12 @@ namespace Shooter.Game.Speech
 
             if (!conversations.TryGetValue(wandererId, out Conversation conversation) || !conversation.Open)
             {
-                Log.Info($"Entity {this.NameOf()} answered wanderer {wandererId} whose conversation is gone, dropped");
+                Log.Info($"Entity {name} answered wanderer {wandererId} whose conversation is gone, dropped");
                 return;
             }
 
             Say(conversation, MessageAuthor.Talker, content);
-            Log.Info($"Entity {this.NameOf()} answered wanderer {wandererId}");
+            Log.Info($"Entity {name} answered wanderer {wandererId}");
         }
 
         private void Step()
@@ -163,7 +163,7 @@ namespace Shooter.Game.Speech
                 }
                 catch (Exception e)
                 {
-                    Log.Warn($"Entity {this.NameOf()} failed to request answer for wanderer {entry.Key}: {e.Message}");
+                    Log.Warn($"Entity {name} failed to request answer for wanderer {entry.Key}: {e.Message}");
                     DeliverAnswer(entry.Key, "Not now.");
                 }
             }
@@ -175,7 +175,7 @@ namespace Shooter.Game.Speech
 
             conversation = new Conversation(wanderer);
             conversations.Add(wanderer, conversation);
-            Log.Info($"Entity {this.NameOf()} started a conversation with wanderer {wanderer}");
+            Log.Info($"Entity {name} started a conversation with wanderer {wanderer}");
             return conversation;
         }
 
@@ -202,7 +202,7 @@ namespace Shooter.Game.Speech
                 if (user != null && Reachable(user) && Alive(user) && Awake(user) && Alive(NetworkObject)) continue;
 
                 Log.Info(
-                    $"Entity {this.NameOf()} ends the talk with {(user == null ? "a gone wanderer" : user.name)}: out of reach, dead or asleep");
+                    $"Entity {name} ends the talk with {(user == null ? "a gone wanderer" : user.name)}: out of reach, dead or asleep");
 
                 thinking.Remove(conversation.Wanderer);
 

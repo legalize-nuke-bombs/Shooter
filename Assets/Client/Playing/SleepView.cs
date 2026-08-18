@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
+    [RequireComponent(typeof(Sleeper))]
     public class SleepView : NetworkBehaviour
     {
         private const float EyesClose = 0.45f;
@@ -23,7 +24,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            sleeper = this.Find<Sleeper>();
+            sleeper = GetComponent<Sleeper>();
         }
 
         private void Update()

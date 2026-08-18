@@ -36,8 +36,8 @@ namespace Shooter.Game.AI.Healer
 
         private void Awake()
         {
-            inventory = this.Find<Inventory>();
-            health = this.Find<Health>();
+            inventory = GetComponent<Inventory>();
+            health = GetComponent<Health>();
             healingItems = Catalogs.Of<ItemCatalog>().FindAll(item =>
                     item is StackableItemSpec stackableItem && stackableItem.HealMarker > 0)
                 .Cast<StackableItemSpec>()
@@ -90,7 +90,7 @@ namespace Shooter.Game.AI.Healer
 
             if (bestItemId != null)
             {
-                Log.Info($"Entity {this.NameOf()} decided to use {bestItemId} ({healingItems[bestItemId]}), missing {missing}, safety coefficient {safetyCoefficient}, under heal coefficient {underHealPenaltyMultiplier}, over heal base coefficient {overHealBasePenaltyMultiplier}");
+                Log.Info($"Entity {name} decided to use {bestItemId} ({healingItems[bestItemId]}), missing {missing}, safety coefficient {safetyCoefficient}, under heal coefficient {underHealPenaltyMultiplier}, over heal base coefficient {overHealBasePenaltyMultiplier}");
                 inventory.UseStackable(bestItemId);
                 if (OnAutoHealCallback != null)
                 {

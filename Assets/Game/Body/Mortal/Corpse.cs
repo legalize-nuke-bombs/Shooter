@@ -48,7 +48,7 @@ namespace Shooter.Game.Body
             SkinSpec spec = catalog == null ? null : catalog.Of(current);
             if (spec == null || spec.Model == null)
             {
-                Log.Error($"Corpse {this.NameOf()} cannot find skin {current}, stays invisible");
+                Log.Error($"Corpse {name} cannot find skin {current}, stays invisible");
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace Shooter.Game.Body
             body.transform.localRotation = Quaternion.identity;
             body.AddComponent<Ragdoll>();
 
-            Log.Info($"Corpse {this.NameOf()} dressed as {current}");
+            Log.Info($"Corpse {name} dressed as {current}");
         }
 
         private void Titled(FixedString32Bytes previous, FixedString32Bytes current)
@@ -71,7 +71,7 @@ namespace Shooter.Game.Body
             NameSpec spec = catalog == null ? null : catalog.Of(current);
             if (spec == null)
             {
-                Log.Warn($"Corpse {this.NameOf()} cannot find name {current}, keeps its own");
+                Log.Warn($"Corpse {name} cannot find name {current}, keeps its own");
                 return;
             }
 

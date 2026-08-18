@@ -24,8 +24,8 @@ To get a list of available parameters and their current values, call this tool w
         protected override void Awake()
         {
             base.Awake();
-            settings = this.FindAll<AISetting>();
-            Log.Info($"Entity {this.NameOf()} has {settings.Length} ai settings");
+            settings = GetComponents<AISetting>();
+            Log.Info($"Entity {name} has {settings.Length} ai settings");
         }
 
         protected override string Execute(AIPanelArguments arguments)

@@ -42,7 +42,7 @@ namespace Shooter.Game.Llm
             history = GetComponent<LlmHistory>();
             waiting = GetComponent<LlmWaiting>();
             abilities = GetComponents<LlmTool>();
-            entityName = this.NameOf();
+            entityName = name;
         }
 
         private void OnDestroy()

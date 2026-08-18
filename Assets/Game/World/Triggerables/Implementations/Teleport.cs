@@ -16,7 +16,7 @@ namespace Shooter.Game.World
         {
             if (destination == null)
             {
-                Log.Warn($"Entity {this.NameOf()} does not have proper destination!");
+                Log.Warn($"Entity {name} does not have proper destination!");
                 return;
             }
 
@@ -25,7 +25,7 @@ namespace Shooter.Game.World
 
             Vector3 at = destination.transform.position;
 
-            Log.Info($"Entity {this.NameOf()} teleporting {movement.name} to {at}");
+            Log.Info($"Entity {name} teleporting {movement.name} to {at}");
 
             movement.Teleport(at);
             movement.GetComponent<EarSpeaker>()?.Play(sound);

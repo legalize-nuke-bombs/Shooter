@@ -7,6 +7,12 @@ using UnityEngine;
 
 namespace Shooter.Game.Combat
 {
+    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Interactor))]
+    [RequireComponent(typeof(Hands))]
+    [RequireComponent(typeof(Speaker))]
+    [RequireComponent(typeof(EarSpeaker))]
+    [RequireComponent(typeof(MainRestrainable))]
     public class Gunner : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -27,13 +33,13 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            id = this.Find<PersistentId>();
-            inventory = this.Find<Inventory>();
-            interactor = this.Find<Interactor>();
-            hands = this.Find<Hands>();
-            speaker = this.Find<Speaker>();
-            earSpeaker = this.Find<EarSpeaker>();
-            restrainable = this.Find<MainRestrainable>();
+            id = GetComponent<PersistentId>();
+            inventory = GetComponent<Inventory>();
+            interactor = GetComponent<Interactor>();
+            hands = GetComponent<Hands>();
+            speaker = GetComponent<Speaker>();
+            earSpeaker = GetComponent<EarSpeaker>();
+            restrainable = GetComponent<MainRestrainable>();
         }
 
         private void Update()
@@ -106,7 +112,7 @@ namespace Shooter.Game.Combat
 
             restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantAction);
             speaker?.Play(spec.ReloadSound);
-            Log.Info($"Entity {this.NameOf()} started reload of {firearm.SpecId}, {spec.ReloadTime}s");
+            Log.Info($"Entity {name} started reload of {firearm.SpecId}, {spec.ReloadTime}s");
             return true;
         }
 
@@ -131,7 +137,7 @@ namespace Shooter.Game.Combat
             int taken = inventory.RemoveStackable(spec.Ammo, absent, InventoryOnConflict.Partly);
             firearm.Reload(taken, spec.MagazineSize);
             Log.Info(
-                $"Entity {this.NameOf()} reloaded {firearm.SpecId} with {taken} rounds, {inventory.StackableAmount(spec.Ammo)} left in bag");
+                $"Entity {name} reloaded {firearm.SpecId} with {taken} rounds, {inventory.StackableAmount(spec.Ammo)} left in bag");
         }
 
         private void Hit(FirearmSpec spec)
@@ -143,7 +149,7 @@ namespace Shooter.Game.Combat
             int found = Interactor.Look(interactor.Eyes, direction, spec.Distance, transform, Shots);
             if (!Interactor.TryNearest(Shots, found, out RaycastHit hit))
             {
-                Log.Info($"Shot of entity {this.NameOf()} missed");
+                Log.Info($"Shot of entity {name} missed");
                 return;
             }
 
@@ -151,7 +157,7 @@ namespace Shooter.Game.Combat
             if (health == null)
             {
                 BulletHoles.Current.Add(hit.point, hit.normal);
-                Log.Info($"Shot of entity {this.NameOf()} hit {hit.collider.name} without health");
+                Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
                 return;
             }
 
@@ -160,7 +166,7 @@ namespace Shooter.Game.Combat
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
             health.Damage(damage, id == null ? null : id.Value, spec.DamageType);
-            Log.Info($"Shot of entity {this.NameOf()} hit {health.name} in {part} for {damage} damage");
+            Log.Info($"Shot of entity {name} hit {health.name} in {part} for {damage} damage");
         }
 
         private BodyPart Weakest(int found, Health victim)

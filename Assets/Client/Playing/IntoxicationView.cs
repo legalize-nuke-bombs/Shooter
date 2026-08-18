@@ -3,9 +3,11 @@ using Shooter.Game.Body;
 using Shooter.Game.Body.Perception;
 using Shooter.Game.Core;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
+    [RequireComponent(typeof(Intoxication))]
     public class IntoxicationView : NetworkBehaviour
     {
         private readonly Dictionary<ToxinSpec, List<PerceptionEffect>> trips = new();
@@ -14,7 +16,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            intoxication = this.Find<Intoxication>();
+            intoxication = GetComponent<Intoxication>();
         }
 
         private void Update()

@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
+    [RequireComponent(typeof(Inventory))]
     public class OwnRecoil : NetworkBehaviour
     {
         [SerializeField] private float recovery = 14f;
@@ -20,7 +21,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            inventory = this.Find<Inventory>();
+            inventory = GetComponent<Inventory>();
         }
 
         private void Update()
