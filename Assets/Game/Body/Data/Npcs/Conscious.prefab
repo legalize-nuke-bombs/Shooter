@@ -313,6 +313,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 99d8e860dba5ec443a50f55b4ca7f1a6, type: 2}
   - {fileID: 11400000, guid: 8f9c0ec3c3a44a04f9ba4a4767958553, type: 2}
   - {fileID: 11400000, guid: 7169eafc621024f46b028be5826ca7a9, type: 2}
+  - {fileID: 11400000, guid: 0886e0cc6f07c984a91ef4837c02d77e, type: 2}
   character: 
   knowledges:
   - {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
