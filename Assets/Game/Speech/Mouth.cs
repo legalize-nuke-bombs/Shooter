@@ -34,10 +34,10 @@ namespace Shooter.Game.Speech
         {
             if (!IsServer) return;
 
-            PersistentId talkerId = talker.Find<PersistentId>();
+            PersistentId talkerId = talker.GetComponent<PersistentId>();
             if (talkerId == null)
             {
-                Log.Warn($"Player {OwnerClientId} can not talk to {talker.NameOf()}: the talker has no persistent id");
+                Log.Warn($"Player {OwnerClientId} can not talk to {talker.name}: the talker has no persistent id");
                 return;
             }
 
@@ -47,7 +47,7 @@ namespace Shooter.Game.Speech
 
             heardId = talkerId.Value;
             interlocutor.Value = talker.NetworkObjectId;
-            Log.Info($"Player {OwnerClientId} opened a talk with {talker.NameOf()}");
+            Log.Info($"Player {OwnerClientId} opened a talk with {talker.name}");
 
             OpenedRpc(talker.NetworkObjectId);
             foreach (Message message in history)

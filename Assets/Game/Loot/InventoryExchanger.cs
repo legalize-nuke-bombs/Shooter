@@ -7,6 +7,7 @@ using UnityEngine;
 namespace Shooter.Game.Loot
 {
     [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(PersistentId))]
     public class InventoryExchanger : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -24,8 +25,8 @@ namespace Shooter.Game.Loot
         private void Awake()
         {
             inventory = GetComponent<Inventory>();
-            ownId = this.Find<PersistentId>();
-            ownNameable = this.Find<Nameable>();
+            ownId = GetComponent<PersistentId>();
+            ownNameable = GetComponent<Nameable>();
         }
 
         public bool GiveStackable(long targetId, StackableItemSpec stackable, int amount)
@@ -35,14 +36,14 @@ namespace Shooter.Game.Loot
             if (targetInventory == null)
             {
                 Log.Info(
-                    $"Failed to give {stackable.Id} x {amount} from {this.NameOf()} to {targetId} : the target is not around");
+                    $"Failed to give {stackable.Id} x {amount} from {name} to {targetId} : the target is not around");
                 return false;
             }
 
             if (inventory.RemoveStackable(stackable, amount, InventoryOnConflict.Rollback) != amount)
             {
                 Log.Info(
-                    $"Failed to give {stackable.Id} x {amount} from {this.NameOf()} to {targetId} : insufficient items");
+                    $"Failed to give {stackable.Id} x {amount} from {name} to {targetId} : insufficient items");
                 return false;
             }
 
@@ -50,7 +51,7 @@ namespace Shooter.Game.Loot
 
             Notify(target, itemsGiven, stackable.Key, amount);
 
-            Log.Info($"{this.NameOf()} gave {stackable.Id} x {amount} to {targetId}");
+            Log.Info($"{name} gave {stackable.Id} x {amount} to {targetId}");
             return true;
         }
 
@@ -61,7 +62,7 @@ namespace Shooter.Game.Loot
             if (targetInventory == null)
             {
                 Log.Info(
-                    $"Failed to give unique slot {slotId} from {this.NameOf()} to {targetId}: the target is not around");
+                    $"Failed to give unique slot {slotId} from {name} to {targetId}: the target is not around");
                 return false;
             }
 
@@ -69,7 +70,7 @@ namespace Shooter.Game.Loot
             if (uniqueItem == null)
             {
                 Log.Info(
-                    $"Failed to give unique slot {slotId} from {this.NameOf()} to {targetId}: the specified unique item does not exist");
+                    $"Failed to give unique slot {slotId} from {name} to {targetId}: the specified unique item does not exist");
                 return false;
             }
 
@@ -77,7 +78,7 @@ namespace Shooter.Game.Loot
 
             Notify(target, itemGiven, uniqueItem.SpecId, 1);
 
-            Log.Info($"{this.NameOf()} gave unique item slot {slotId} ({uniqueItem.SpecId}) to {targetId}");
+            Log.Info($"{name} gave unique item slot {slotId} ({uniqueItem.SpecId}) to {targetId}");
             return true;
         }
 
@@ -89,7 +90,7 @@ namespace Shooter.Game.Loot
             if (spec == null)
             {
                 Log.Warn(
-                    $"{this.NameOf()} has no notification to tell {target.name} about {itemSpecId}, the gift goes unnoticed");
+                    $"{name} has no notification to tell {target.name} about {itemSpecId}, the gift goes unnoticed");
                 return;
             }
 

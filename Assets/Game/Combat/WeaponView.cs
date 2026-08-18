@@ -8,6 +8,8 @@ using UnityEngine.Rendering;
 
 namespace Shooter.Game.Combat
 {
+    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Skin))]
     public class WeaponView : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -24,8 +26,8 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            inventory = this.Find<Inventory>();
-            skin = this.Find<Skin>();
+            inventory = GetComponent<Inventory>();
+            skin = GetComponent<Skin>();
         }
 
         private void LateUpdate()
@@ -63,7 +65,7 @@ namespace Shooter.Game.Combat
         {
             GameObject wanted = Wanted();
             Log.Info(
-                $"Entity {this.NameOf()} refresh: wanted {(wanted == null ? "nothing" : wanted.name)}, shown {(shownModel == null ? "nothing" : shownModel.name)}");
+                $"Entity {name} refresh: wanted {(wanted == null ? "nothing" : wanted.name)}, shown {(shownModel == null ? "nothing" : shownModel.name)}");
             if (wanted == shownModel) return;
 
             if (shown != null) Destroy(shown);
@@ -81,7 +83,7 @@ namespace Shooter.Game.Combat
             if (animator == null) return;
 
             int layer = animator.GetLayerIndex("Armed");
-            Log.Info($"Entity {this.NameOf()} armed {armed}, layer index {layer}");
+            Log.Info($"Entity {name} armed {armed}, layer index {layer}");
             if (layer >= 0) animator.SetLayerWeight(layer, armed ? 1f : 0f);
         }
 
@@ -100,7 +102,7 @@ namespace Shooter.Game.Combat
 
             if (IsLocalPlayer) Conceal(worn);
 
-            Log.Info($"Entity {this.NameOf()} now holds {model.name}");
+            Log.Info($"Entity {name} now holds {model.name}");
             return worn;
         }
 
@@ -108,19 +110,19 @@ namespace Shooter.Game.Combat
         {
             if (skin.Flesh == null)
             {
-                Log.Warn($"Entity {this.NameOf()} has no flesh yet, weapon stays invisible");
+                Log.Warn($"Entity {name} has no flesh yet, weapon stays invisible");
                 return null;
             }
 
             Animator animator = skin.Flesh.GetComponent<Animator>();
             if (animator == null)
             {
-                Log.Warn($"Entity {this.NameOf()} flesh has no animator, weapon stays invisible");
+                Log.Warn($"Entity {name} flesh has no animator, weapon stays invisible");
                 return null;
             }
 
             Transform hand = animator.GetBoneTransform(HumanBodyBones.RightHand);
-            if (hand == null) Log.Warn($"Entity {this.NameOf()} has no right hand bone, weapon stays invisible");
+            if (hand == null) Log.Warn($"Entity {name} has no right hand bone, weapon stays invisible");
 
             return hand;
         }
@@ -133,7 +135,7 @@ namespace Shooter.Game.Combat
             rig = worn.GetComponent<WeaponRig>();
             if (rig == null || rig.Grip == null || rig.Foregrip == null)
             {
-                Log.Warn($"Entity {this.NameOf()} weapon {worn.name} has no grip pair, stays glued to the hand bone");
+                Log.Warn($"Entity {name} weapon {worn.name} has no grip pair, stays glued to the hand bone");
                 rig = null;
                 return;
             }

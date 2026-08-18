@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 
 namespace Shooter.Client.Playing
 {
+    [RequireComponent(typeof(Skin))]
     public class OwnBody : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -15,10 +16,10 @@ namespace Shooter.Client.Playing
         {
             if (!IsOwner) return;
 
-            GameObject flesh = this.Find<Skin>().Flesh;
+            GameObject flesh = GetComponent<Skin>().Flesh;
             if (flesh == null)
             {
-                Log.Warn($"Own player {this.NameOf()} has no flesh to hide");
+                Log.Warn($"Own player {name} has no flesh to hide");
                 return;
             }
 

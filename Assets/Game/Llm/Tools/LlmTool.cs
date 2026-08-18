@@ -40,7 +40,7 @@ namespace Shooter.Game.Llm
                 string.IsNullOrEmpty(arguments) ? "{}" : arguments, Settings);
 
             string result = Execute(parsed);
-            Log.Info($"Entity {this.NameOf()} used {Name} {arguments}: {result}");
+            Log.Info($"Entity {name} used {Name} {arguments}: {result}");
 
             return result;
         }

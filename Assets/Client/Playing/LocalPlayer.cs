@@ -9,6 +9,8 @@ using UnityEngine.InputSystem;
 
 namespace Shooter.Client.Playing
 {
+    [RequireComponent(typeof(Movement))]
+    [RequireComponent(typeof(Interactor))]
     public class LocalPlayer : NetworkBehaviour
     {
         private const float LookSensitivity = 0.1f;
@@ -34,13 +36,13 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            movement = this.Find<Movement>();
-            interactor = this.Find<Interactor>();
-            mouth = this.Find<Mouth>();
-            sleeper = this.Find<Sleeper>();
-            health = this.Find<Health>();
-            mortal = this.Find<Mortal>();
-            gunner = this.Find<Gunner>();
+            movement = GetComponent<Movement>();
+            interactor = GetComponent<Interactor>();
+            mouth = GetComponent<Mouth>();
+            sleeper = GetComponent<Sleeper>();
+            health = GetComponent<Health>();
+            mortal = GetComponent<Mortal>();
+            gunner = GetComponent<Gunner>();
             recoil = GetComponent<OwnRecoil>();
         }
 

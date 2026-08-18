@@ -12,7 +12,7 @@ namespace Shooter.Game.Loot
 
         public override void Apply(GameObject user)
         {
-            Intoxication intoxication = user.transform.Find<Intoxication>();
+            Intoxication intoxication = user.GetComponent<Intoxication>();
 
             if (intoxication == null) return;
 

@@ -24,7 +24,7 @@ namespace Shooter.Game.Body
 
             if (sound == null)
             {
-                Log.Warn($"Entity {this.NameOf()} was asked to play a sound without a spec set");
+                Log.Warn($"Entity {name} was asked to play a sound without a spec set");
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace Shooter.Game.Body
             SoundCatalog catalog = Sounds;
             if (catalog == null)
             {
-                Log.Warn($"Entity {this.NameOf()} cannot play {id}: the world has no sound catalog");
+                Log.Warn($"Entity {name} cannot play {id}: the world has no sound catalog");
                 return;
             }
 

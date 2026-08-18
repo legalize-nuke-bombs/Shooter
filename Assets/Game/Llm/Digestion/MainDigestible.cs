@@ -19,7 +19,7 @@ namespace Shooter.Game.Llm
 
         private void Awake()
         {
-            Parts = this.FindAll<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
+            Parts = GetComponents<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
             Id = GetComponent<PersistentId>();
         }
 

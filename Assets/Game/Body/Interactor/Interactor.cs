@@ -106,7 +106,7 @@ namespace Shooter.Game.Body
             if (!TryLook(distance, out RaycastHit hit)) return false;
             if (hit.collider == null) return false;
 
-            found = hit.collider.Find<T>();
+            found = hit.collider.GetComponentInParent<T>();
             return found != null;
         }
     }

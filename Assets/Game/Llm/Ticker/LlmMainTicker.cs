@@ -23,7 +23,7 @@ namespace Shooter.Game.Llm
             netObject = GetComponentInParent<NetworkObject>();
             if (netObject == null) Log.Warn($"Entity {entityName} has no NetworkObject, its llm will never tick");
 
-            entityName = this.NameOf();
+            entityName = name;
 
             tickers = GetComponents<LlmChildTicker>();
             if (tickers.Length == 0) Log.Warn($"Entity {entityName} does not have any ticker!");

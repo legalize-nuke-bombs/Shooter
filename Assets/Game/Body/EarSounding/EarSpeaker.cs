@@ -25,7 +25,7 @@ namespace Shooter.Game.Body
 
             if (sound == null)
             {
-                Log.Warn($"Entity {this.NameOf()} was asked to play an ear sound without a spec set");
+                Log.Warn($"Entity {name} was asked to play an ear sound without a spec set");
                 return;
             }
 
@@ -45,7 +45,7 @@ namespace Shooter.Game.Body
             EarSoundCatalog catalog = Sounds;
             if (catalog == null)
             {
-                Log.Warn($"Entity {this.NameOf()} cannot play {id} in the ear: the world has no ear sound catalog");
+                Log.Warn($"Entity {name} cannot play {id} in the ear: the world has no ear sound catalog");
                 return;
             }
 
@@ -65,7 +65,7 @@ namespace Shooter.Game.Body
             source.volume = sound.Volume;
             source.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
 
-            Log.Info($"Entity {this.NameOf()} plays {sound.Id} variant {variant} in the owner's ear at t={Time.time}");
+            Log.Info($"Entity {name} plays {sound.Id} variant {variant} in the owner's ear at t={Time.time}");
 
             source.Play();
         }

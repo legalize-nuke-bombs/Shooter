@@ -1,8 +1,10 @@
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
+using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [RequireComponent(typeof(InventoryExchanger))]
     public sealed class GiveStackableTool : LlmTool<GiveStackableArguments>
     {
         private InventoryExchanger inventoryExchanger;
@@ -19,7 +21,7 @@ The recipient will automatically receive a notification.
         protected override void Awake()
         {
             base.Awake();
-            inventoryExchanger = this.Find<InventoryExchanger>();
+            inventoryExchanger = GetComponent<InventoryExchanger>();
         }
 
         protected override string Execute(GiveStackableArguments arguments)

@@ -35,7 +35,7 @@ namespace Shooter.Game.World
                 filter.sharedMesh == null ? "no mesh" : filter.sharedMesh.vertexCount.ToString();
 
             Log.Info(
-                $"Screen {this.NameOf()}: light {glow.type} enabled {glow.enabled} intensity {glow.intensity} range {glow.range}, renderer {(screen == null ? "none" : screen.name)}, material {(picture == null ? "none" : picture.name)}, shader {(picture == null ? "none" : picture.shader.name)}, mesh {mesh}");
+                $"Screen {name}: light {glow.type} enabled {glow.enabled} intensity {glow.intensity} range {glow.range}, renderer {(screen == null ? "none" : screen.name)}, material {(picture == null ? "none" : picture.name)}, shader {(picture == null ? "none" : picture.shader.name)}, mesh {mesh}");
         }
 
         private void Update()

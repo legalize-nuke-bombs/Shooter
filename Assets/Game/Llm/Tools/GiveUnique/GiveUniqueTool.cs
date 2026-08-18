@@ -1,8 +1,10 @@
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
+using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [RequireComponent(typeof(InventoryExchanger))]
     public sealed class GiveUniqueTool : LlmTool<GiveUniqueArguments>
     {
         private InventoryExchanger inventoryExchanger;
@@ -18,7 +20,7 @@ The recipient will automatically receive a notification.
         protected override void Awake()
         {
             base.Awake();
-            inventoryExchanger = this.Find<InventoryExchanger>();
+            inventoryExchanger = GetComponent<InventoryExchanger>();
         }
 
         protected override string Execute(GiveUniqueArguments arguments)

@@ -18,7 +18,7 @@ namespace Shooter.Game.Body
             int layer = LayerMask.NameToLayer(Layer);
             if (layer < 0)
             {
-                Log.Error($"Layer {Layer} is not defined, entity {this.NameOf()} gets no hitboxes");
+                Log.Error($"Layer {Layer} is not defined, entity {name} gets no hitboxes");
                 return;
             }
 
@@ -27,14 +27,14 @@ namespace Shooter.Game.Body
             Transform head = animator.GetBoneTransform(HumanBodyBones.Head);
             if (hips == null || head == null)
             {
-                Log.Warn($"Entity {this.NameOf()} has no humanoid skeleton, hitboxes skipped");
+                Log.Warn($"Entity {name} has no humanoid skeleton, hitboxes skipped");
                 return;
             }
 
             float scale = Skeleton.Scale(hips, head);
             if (scale < LeastScale || scale > MostScale)
                 Log.Error(
-                    $"Entity {this.NameOf()} measures {Vector3.Distance(hips.position, head.position)} from hips to head, a humanoid scale of {scale}: its avatar likely maps Hips to a bone that is not the pelvis");
+                    $"Entity {name} measures {Vector3.Distance(hips.position, head.position)} from hips to head, a humanoid scale of {scale}: its avatar likely maps Hips to a bone that is not the pelvis");
 
             int built = 0;
 
@@ -44,7 +44,7 @@ namespace Shooter.Game.Body
                 Transform to = Skeleton.Ending(animator, segment);
                 if (from == null || to == null)
                 {
-                    Log.Warn($"Entity {this.NameOf()} misses bones {segment.From} - {segment.To}, hitbox skipped");
+                    Log.Warn($"Entity {name} misses bones {segment.From} - {segment.To}, hitbox skipped");
                     continue;
                 }
 
@@ -54,7 +54,7 @@ namespace Shooter.Game.Body
 
             Vector3 crown = head.position + (head.position - hips.position).normalized * (Skeleton.HeadRise * scale);
             Pill(head, crown, BodyPart.Head, Skeleton.HeadRadius * scale, layer);
-            Log.Info($"Entity {this.NameOf()} got {built + 1} hitboxes, humanoid scale {scale}");
+            Log.Info($"Entity {name} got {built + 1} hitboxes, humanoid scale {scale}");
         }
 
         private void Pill(Transform bone, Vector3 target, BodyPart part, float radius, int layer)

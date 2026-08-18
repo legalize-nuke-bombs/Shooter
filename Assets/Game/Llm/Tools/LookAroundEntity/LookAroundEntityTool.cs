@@ -30,7 +30,7 @@ namespace Shooter.Game.Llm.LookAroundEntity
             PersistentId id = ids.Of(targetId);
             if (id == null)
             {
-                Log.Info($"Entity {this.NameOf()} tried to look around unknown entity");
+                Log.Info($"Entity {name} tried to look around unknown entity");
                 return $"Failed to find entity with ID {targetId}";
             }
 

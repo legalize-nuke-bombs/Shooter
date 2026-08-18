@@ -56,7 +56,7 @@ namespace Shooter.Game.Body
         public bool TryPreempt(HandsAction wanted, float duration, bool interruptible, Action complete)
         {
             if (!Free && !this.interruptible) return false;
-            if (!Free) Log.Info($"Hands action {Action} of entity {this.NameOf()} preempted by {wanted}");
+            if (!Free) Log.Info($"Hands action {Action} of entity {name} preempted by {wanted}");
 
             Take(wanted, duration, interruptible, complete);
             return true;
@@ -66,7 +66,7 @@ namespace Shooter.Game.Body
         {
             if (Free) return;
 
-            Log.Info($"Hands action {Action} of entity {this.NameOf()} interrupted");
+            Log.Info($"Hands action {Action} of entity {name} interrupted");
             action.Value = HandsAction.None;
             complete = null;
             remaining = 0f;

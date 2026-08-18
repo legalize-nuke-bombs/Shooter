@@ -23,7 +23,7 @@ You NEVER include players' personal information in these reports.";
         {
             if (string.IsNullOrEmpty(arguments.Content)) return "Nothing to send";
 
-            Log.Warn($"Entity {this.NameOf()} sent feedback: {arguments.Content}");
+            Log.Warn($"Entity {name} sent feedback: {arguments.Content}");
 
             return "Sent";
         }
