@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: f2423df601c0a5e707c27791a22b713a, type: 2}
     - target: {fileID: 2672703646387566097, guid: 67b9c8c06b511034bb8f648c4e10064f, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: Zombie2
       objectReference: {fileID: 0}
     - target: {fileID: 5090153049925747192, guid: 67b9c8c06b511034bb8f648c4e10064f, type: 3}
       propertyPath: m_LocalPosition.x

@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4041144560125166562, guid: 4cade8901984c0e4eb9cbe9d13e6927c, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: Tailor
       objectReference: {fileID: 0}
     - target: {fileID: 4388649271729940499, guid: 4cade8901984c0e4eb9cbe9d13e6927c, type: 3}
       propertyPath: spec

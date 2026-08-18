@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8781692597535222973, guid: 0784f79c8275dd040a1b15af285ef60e, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: Alien
       objectReference: {fileID: 0}
     - target: {fileID: 9019667924498876236, guid: 0784f79c8275dd040a1b15af285ef60e, type: 3}
       propertyPath: spec

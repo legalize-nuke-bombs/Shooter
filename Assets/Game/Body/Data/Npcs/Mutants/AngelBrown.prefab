@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 609835fc84a94528b12a904fc80c436f, type: 2}
     - target: {fileID: 1010001818332740058, guid: eb707382ab5a2884cb15df00e6ae44b5, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: AngelBrown
       objectReference: {fileID: 0}
     - target: {fileID: 2658320831826939297, guid: eb707382ab5a2884cb15df00e6ae44b5, type: 3}
       propertyPath: m_InScenePlaced

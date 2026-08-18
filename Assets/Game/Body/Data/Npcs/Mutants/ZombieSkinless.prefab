@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 0aee9a095fbc4fb3a56f28ec06189bea, type: 2}
     - target: {fileID: 8574532585580378652, guid: 1a570cb7e47076744b23e348cf9a48da, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: ZombieSkinless
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

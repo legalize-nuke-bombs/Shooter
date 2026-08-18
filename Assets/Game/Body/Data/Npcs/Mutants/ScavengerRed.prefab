@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1413046883511759060, guid: 5fe6d99e40cf13c45bca8a55597986d5, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: ScavengerRed
       objectReference: {fileID: 0}
     - target: {fileID: 1688494120400509733, guid: 5fe6d99e40cf13c45bca8a55597986d5, type: 3}
       propertyPath: spec

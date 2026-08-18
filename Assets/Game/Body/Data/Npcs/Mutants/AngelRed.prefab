@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 731f030516a543c1b81f46a784b549c2, type: 2}
     - target: {fileID: 4420089269768492483, guid: abf8b7a53af288b429c833d26ee378c7, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: AngelRed
       objectReference: {fileID: 0}
     - target: {fileID: 6837534269916668458, guid: abf8b7a53af288b429c833d26ee378c7, type: 3}
       propertyPath: m_LocalPosition.x

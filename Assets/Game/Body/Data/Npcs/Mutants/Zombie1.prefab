@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: Zombie1
       objectReference: {fileID: 0}
     - target: {fileID: 7594467300387980415, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: m_InScenePlaced

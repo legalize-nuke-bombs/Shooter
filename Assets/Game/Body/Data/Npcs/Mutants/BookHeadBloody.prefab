@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 8922b3072dcc413b8c1a0a82820ec831, type: 2}
     - target: {fileID: 6668695283522811458, guid: 83a749eb9faa9a2468ec4d2c084d72ee, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: BookHeadBloody
       objectReference: {fileID: 0}
     - target: {fileID: 8533064535259169337, guid: 83a749eb9faa9a2468ec4d2c084d72ee, type: 3}
       propertyPath: m_InScenePlaced

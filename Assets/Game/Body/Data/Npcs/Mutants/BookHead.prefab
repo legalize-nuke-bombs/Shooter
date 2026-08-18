@@ -58,7 +58,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 0cd1dde1dd944524b51db62693bba433, type: 2}
     - target: {fileID: 6108216185815782012, guid: c38d7e60da180de489efeadde3909e8f, type: 3}
       propertyPath: m_Name
-      value: Mutant Variant
+      value: BookHead
       objectReference: {fileID: 0}
     - target: {fileID: 9089602949243414023, guid: c38d7e60da180de489efeadde3909e8f, type: 3}
       propertyPath: m_InScenePlaced

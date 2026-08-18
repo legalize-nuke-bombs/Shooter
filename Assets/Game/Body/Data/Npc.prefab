@@ -63,33 +63,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4228232704910921683}
-    - targetCorrespondingSourceObject: {fileID: 810000000000000105, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -618641958357416854}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
---- !u!1 &4539299645413200480 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 810000000000000105, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-  m_PrefabInstance: {fileID: 3874052595869291017}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &-618641958357416854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4539299645413200480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce955cba01bd400c8f1604703358d3f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Relationship.PlayerRelation
-  defaultAmount: 50
-  damageToReputationCoefficient: 1
-  improved: {fileID: 11400000, guid: d83699cab1f34617bd9688666b7cf237, type: 2}
-  worsened: {fileID: 11400000, guid: f38e4c842114467d9bad7f750bb7cac4, type: 2}
-  enemyThreshold: 0
-  friendThreshold: 90
 --- !u!1 &7684853543061305745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
