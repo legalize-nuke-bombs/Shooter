@@ -45,58 +45,28 @@ namespace Shooter.Game.Core.Saves
             saveables = Registers.Current.Of<SaveableObject>();
         }
 
-        private static string Folder(string worldName)
+        private static string Location()
         {
-            return Path.Combine(Config.Root(), Config.Read().Server.SavesFolder, worldName);
+            string stamp = DateTime.Now.ToString(StampFormat, CultureInfo.InvariantCulture);
+
+            return Path.Combine(Config.Root(), Config.Read().Server.SavesFolder, stamp + Extension);
         }
 
-        private static string Stamped()
-        {
-            return DateTime.Now.ToString(StampFormat, CultureInfo.InvariantCulture) + Extension;
-        }
-
-        private static bool Write(string path, WorldSnapshot snapshot)
+        private static void Write(string path, WorldSnapshot snapshot)
         {
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, JsonConvert.SerializeObject(snapshot, Settings));
                 Log.Info($"World saved into {path}: {snapshot.Entities.Count} entities");
-
-                return true;
             }
             catch (Exception e)
             {
                 Log.Error($"World {path} can not be written: {e.Message}");
-
-                return false;
             }
         }
 
-        private static void Sweep(string folder, int kept)
-        {
-            string[] saves = Directory.GetFiles(folder, "*" + Extension);
-            int extra = saves.Length - Math.Max(kept, 1);
-            if (extra <= 0) return;
-
-            Array.Sort(saves, StringComparer.Ordinal);
-
-            for (var i = 0; i < extra; i++)
-            {
-                try
-                {
-                    File.Delete(saves[i]);
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Old save {saves[i]} can not be deleted: {e.Message}");
-                }
-            }
-
-            Log.Info($"Swept {extra} old saves of {saves.Length} in {folder}, keeping {kept}");
-        }
-
-        public void Save(string worldName)
+        public void Save()
         {
             var serializer = JsonSerializer.Create(Settings);
             var snapshot = new WorldSnapshot { Version = Application.version };
@@ -121,14 +91,10 @@ namespace Shooter.Game.Core.Saves
                 }
             }
 
-            string folder = Folder(worldName);
-            if (Write(Path.Combine(folder, Stamped()), snapshot))
-            {
-                Sweep(folder, Config.Read().Server.SavesKept);
-            }
+            Write(Location(), snapshot);
         }
 
-        public void Load(string worldName)
+        public void Load()
         {
         }
     }
