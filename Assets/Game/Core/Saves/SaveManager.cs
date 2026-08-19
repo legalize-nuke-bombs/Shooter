@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
@@ -12,8 +11,6 @@ namespace Shooter.Game.Core.Saves
 {
     public class SaveManager : MonoBehaviour
     {
-        private const int CurrentVersion = 1;
-
         private const string FolderName = "Saves";
 
         private const string Extension = ".json";
@@ -25,8 +22,7 @@ namespace Shooter.Game.Core.Saves
         private static readonly JsonSerializerSettings Settings = new()
         {
             Formatting = Formatting.Indented,
-            NullValueHandling = NullValueHandling.Ignore,
-            ContractResolver = new DefaultContractResolver { NamingStrategy = new CamelCaseNamingStrategy() }
+            NullValueHandling = NullValueHandling.Ignore
         };
 
         private Register<SaveableObject> saveables;
@@ -36,10 +32,10 @@ namespace Shooter.Game.Core.Saves
             saveables = Registers.Current.Of<SaveableObject>();
         }
 
-        public void Save(string world)
+        public void Save(string worldName)
         {
-            JsonSerializer serializer = JsonSerializer.Create(Settings);
-            var snapshot = new WorldSnapshot { Version = CurrentVersion };
+            var serializer = JsonSerializer.Create(Settings);
+            var snapshot = new WorldSnapshot { Version = Application.version };
 
             foreach (SaveableObject saveable in saveables.All)
             {
@@ -56,13 +52,15 @@ namespace Shooter.Game.Core.Saves
                 };
 
                 if (!snapshot.Entities.TryAdd(saveable.Id, entity))
+                {
                     Log.Warn($"Entity {saveable.name} shares id {saveable.Id} with an entity already saved");
+                }
             }
 
-            Write(Location(world), snapshot);
+            Write(Location(worldName), snapshot);
         }
 
-        public void Load(string world)
+        public void Load(string worldName)
         {
         }
 
@@ -74,8 +72,14 @@ namespace Shooter.Game.Core.Saves
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(temporary, JsonConvert.SerializeObject(snapshot, Settings));
-                if (File.Exists(path)) File.Replace(temporary, path, null);
-                else File.Move(temporary, path);
+                if (File.Exists(path))
+                {
+                    File.Replace(temporary, path, null);
+                }
+                else
+                {
+                    File.Move(temporary, path);
+                }
                 Log.Info($"World {path} saved: {snapshot.Entities.Count} entities of {saveables.Count} registered");
             }
             catch (Exception e)
@@ -84,14 +88,14 @@ namespace Shooter.Game.Core.Saves
             }
         }
 
-        private static string Location(string world)
+        private static string Location(string worldName)
         {
-            return Path.Combine(Config.Root(), FolderName, world + Extension);
+            return Path.Combine(Config.Root(), FolderName, worldName + Extension);
         }
 
         private class WorldSnapshot
         {
-            public int Version { get; set; }
+            public string Version { get; set; }
 
             public Dictionary<string, EntitySnapshot> Entities { get; set; } = new();
         }
