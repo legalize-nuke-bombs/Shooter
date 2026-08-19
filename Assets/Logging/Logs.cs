@@ -17,9 +17,6 @@ namespace Shooter.Logging
 
         public static Level Least { get; set; } = Level.Info;
 
-        // The compiler writes down the file the call was made in, so a class pays for its own name once,
-        // at type initialization. Walking the stack for the same answer cost a frame lookup on every line
-        // and told the truth only as long as nothing was inlined or stripped away.
         public static Journal Here([CallerFilePath] string path = null)
         {
             return new Journal(string.IsNullOrEmpty(path) ? "?" : Path.GetFileNameWithoutExtension(path));
@@ -33,8 +30,6 @@ namespace Shooter.Logging
                 file = Opened(Folder(), name);
             }
 
-            // Traces are noise on ordinary lines, but an error without the place it happened in is worth
-            // little, so those keep the managed part of the stack.
             Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
             Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
             Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.ScriptOnly);
@@ -42,8 +37,6 @@ namespace Shooter.Logging
             Application.logMessageReceivedThreaded += OnEngineLog;
         }
 
-        // In the editor logs belong next to Unity's own, in the Logs folder of the project; a built game
-        // keeps them where the platform lets it write, beside the rest of the player data.
         private static string Folder()
         {
             return Application.isEditor
@@ -61,9 +54,6 @@ namespace Shooter.Logging
 
                 try
                 {
-                    // Readers are welcome, other writers are not: the file stays tailable while the game
-                    // runs, and a second process is sent to the next name instead of mixing lines into this
-                    // one.
                     var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read);
                     var writer = new StreamWriter(stream) { AutoFlush = true };
                     writer.WriteLine(Stamped(LogType.Log, "Logs: writing to " + path));
@@ -72,7 +62,7 @@ namespace Shooter.Logging
                 }
                 catch (IOException)
                 {
-                    // Another process of the same game holds that name, the next one is tried.
+
                 }
                 catch (Exception e)
                 {

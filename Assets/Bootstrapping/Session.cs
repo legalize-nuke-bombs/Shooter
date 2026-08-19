@@ -67,15 +67,10 @@ namespace Shooter.Bootstrapping
 
         private IEnumerator Begin(bool hosting)
         {
-            // The menu goes first and only then the heavy scene starts loading: a single load keeps the
-            // old scene alive until the new one is ready, and the two would sit in memory side by side.
             yield return SceneManager.LoadSceneAsync(BootScene, LoadSceneMode.Single);
 
             Overlays();
 
-            // And the world has to stand before the network spawns anyone into it: a player born in the
-            // empty boot scene has no ground under him and falls while the map is still loading. A joining
-            // client waits in the boot scene instead — the server sends him the world itself.
             if (hosting) yield return SceneManager.LoadSceneAsync(WorldScene, LoadSceneMode.Single);
 
             NetworkManager network = Network();
@@ -114,8 +109,6 @@ namespace Shooter.Bootstrapping
         {
             Log.Info("The session is over, heading back to the menu");
 
-            // Netcode is still finishing its own shutdown inside this callback, so the manager is torn
-            // down a frame later, when nothing of it is running any more.
             yield return null;
             yield return ToMenu();
         }
