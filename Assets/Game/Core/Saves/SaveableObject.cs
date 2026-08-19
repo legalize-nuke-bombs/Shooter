@@ -10,6 +10,7 @@ namespace Shooter.Game.Core.Saves
 {
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(GameObjectId))]
+    [RequireComponent(typeof(SaveableTransform))]
     public class SaveableObject : NetworkBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
@@ -22,13 +23,11 @@ namespace Shooter.Game.Core.Saves
         }
 
         public string ComponentKey => "SaveableObject";
-
         private struct SaveDto
         {
             public bool Spawned { get; set; }
             public string Metadata { get; set; }
         }
-
         public object SaveComponent()
         {
             return new SaveDto
@@ -37,7 +36,6 @@ namespace Shooter.Game.Core.Saves
                 Metadata = name
             };
         }
-
         public void LoadComponent(JToken content)
         {
             Spawned = content.ToObject<SaveDto>().Spawned;
