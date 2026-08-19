@@ -1,9 +1,34 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using Shooter.Configuring;
+using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
     public class SaveManager : MonoBehaviour
     {
+        private const int CurrentVersion = 1;
+
+        private const string FolderName = "Saves";
+
+        private const string Extension = ".json";
+
+        private const string TemporaryExtension = ".tmp";
+
+        private static readonly Journal Log = Logs.Here();
+
+        private static readonly JsonSerializerSettings Settings = new()
+        {
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = new DefaultContractResolver { NamingStrategy = new CamelCaseNamingStrategy() }
+        };
+
         private Register<SaveableObject> saveables;
 
         private void Awake()
@@ -11,14 +36,71 @@ namespace Shooter.Game.Core.Saves
             saveables = Registers.Current.Of<SaveableObject>();
         }
 
-        public void Save(string filename)
+        public void Save(string world)
         {
+            JsonSerializer serializer = JsonSerializer.Create(Settings);
+            var snapshot = new WorldSnapshot { Version = CurrentVersion };
 
+            foreach (SaveableObject saveable in saveables.All)
+            {
+                if (string.IsNullOrEmpty(saveable.Id))
+                {
+                    Log.Warn($"Entity {saveable.name} has no id and stays out of the world save");
+                    continue;
+                }
+
+                var entity = new EntitySnapshot
+                {
+                    PrefabKey = saveable.PrefabKey,
+                    Components = JObject.FromObject(saveable.Save(), serializer)
+                };
+
+                if (!snapshot.Entities.TryAdd(saveable.Id, entity))
+                    Log.Warn($"Entity {saveable.name} shares id {saveable.Id} with an entity already saved");
+            }
+
+            Write(Location(world), snapshot);
         }
 
-        public void Load(string filename)
+        public void Load(string world)
         {
+        }
 
+        private void Write(string path, WorldSnapshot snapshot)
+        {
+            string temporary = path + TemporaryExtension;
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.WriteAllText(temporary, JsonConvert.SerializeObject(snapshot, Settings));
+                if (File.Exists(path)) File.Replace(temporary, path, null);
+                else File.Move(temporary, path);
+                Log.Info($"World {path} saved: {snapshot.Entities.Count} entities of {saveables.Count} registered");
+            }
+            catch (Exception e)
+            {
+                Log.Error($"World {path} can not be written: {e.Message}");
+            }
+        }
+
+        private static string Location(string world)
+        {
+            return Path.Combine(Config.Root(), FolderName, world + Extension);
+        }
+
+        private class WorldSnapshot
+        {
+            public int Version { get; set; }
+
+            public Dictionary<string, EntitySnapshot> Entities { get; set; } = new();
+        }
+
+        private class EntitySnapshot
+        {
+            public string PrefabKey { get; set; }
+
+            public JObject Components { get; set; }
         }
     }
 }

@@ -16,6 +16,9 @@ namespace Shooter.Game.Core.Saves
         [SerializeField] private string id;
         public string Id => id;
 
+        [SerializeField] private string prefabKey;
+        public string PrefabKey => prefabKey;
+
 
 
 
