@@ -1,12 +1,14 @@
+using Newtonsoft.Json.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.World
 {
     [RequireComponent(typeof(Speaker))]
-    public class StructureHealth : MonoBehaviour, IDigestible
+    public class StructureHealth : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -16,6 +18,24 @@ namespace Shooter.Game.World
 
         private Speaker speaker;
         public bool Broken => broken;
+
+        public string ComponentKey => "StructureHealth";
+        struct SaveData
+        {
+            public bool Broken { get; set; }
+        }
+        public object SaveComponent()
+        {
+            return new SaveData()
+            {
+                Broken = broken
+            };
+        }
+        public void LoadComponent(JToken jToken)
+        {
+            SaveData sd = jToken.ToObject<SaveData>();
+            broken = sd.Broken;
+        }
 
         private void Awake()
         {

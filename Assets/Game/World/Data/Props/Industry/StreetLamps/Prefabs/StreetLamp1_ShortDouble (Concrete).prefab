@@ -257,6 +257,8 @@ GameObject:
   - component: {fileID: 1369263495528292696}
   - component: {fileID: 5582404725710639054}
   - component: {fileID: 1095720879265826792}
+  - component: {fileID: 3183200403606684273}
+  - component: {fileID: 525879828958535532}
   m_Layer: 0
   m_Name: StreetLamp1_ShortDouble (Concrete)
   m_TagString: Untagged
@@ -458,8 +460,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   broken: 0
   breakSound: {fileID: 11400000, guid: 9c77bf221cbd409fbe947692ee46a0c0, type: 2}
-  useDespawn: 0
-  despawnTime: 600
+--- !u!114 &3183200403606684273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263881239168321199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a0761b85cfc472bae4021d23cdec103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
+  id: 
+  prefabKey: 
+--- !u!114 &525879828958535532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263881239168321199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82861b1ae93f44feae54d0b4f7760118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.NetworkSaveableObject
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1726197021241180716
 GameObject:
   m_ObjectHideFlags: 0
