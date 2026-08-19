@@ -6019,6 +6019,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1952034981905803429, guid: f60828c1e4e808147ba5ce5953b4f671, type: 3}
+      propertyPath: id
+      value: 8c045abf-a268-423e-9ac4-2156a6f42445
+      objectReference: {fileID: 0}
     - target: {fileID: 2099732781091334525, guid: f60828c1e4e808147ba5ce5953b4f671, type: 3}
       propertyPath: forceK
       value: 0.001
@@ -7799,6 +7803,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: tv
       objectReference: {fileID: 0}
+    - target: {fileID: 6837229995733495709, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: id
+      value: 717d0854-61f5-4748-be10-ef799864b22c
+      objectReference: {fileID: 0}
     - target: {fileID: 7487244357921330417, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 45.92677
@@ -8784,6 +8792,10 @@ PrefabInstance:
     - target: {fileID: 3622243103439998288, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_Name
       value: tv (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6837229995733495709, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: id
+      value: bdbcda06-5bcd-4bd8-bbaf-280ef8076e2e
       objectReference: {fileID: 0}
     - target: {fileID: 7487244357921330417, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10960,6 +10972,10 @@ PrefabInstance:
     - target: {fileID: -7162147896932703135, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
+      objectReference: {fileID: 0}
+    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: c53f262b-1813-4dd4-9223-2e375ad57144
       objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
@@ -13560,6 +13576,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5091034317568626846, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: id
+      value: fc509b1e-f3d7-4584-b04b-f270b6fb97aa
+      objectReference: {fileID: 0}
     - target: {fileID: 122826, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
       propertyPath: m_Name
       value: Prop_Lamp_D (1)
@@ -16352,6 +16372,10 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
       objectReference: {fileID: 0}
+    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: 0d1808a5-34ef-4c16-bbd5-27e93591fb49
+      objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
       value: Lamp (2)
@@ -16851,6 +16875,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5091034317568626846, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: id
+      value: cf3704d2-d264-4456-b654-ea825587db78
+      objectReference: {fileID: 0}
     - target: {fileID: 122826, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
       propertyPath: m_Name
       value: Prop_Lamp_D
@@ -18801,6 +18829,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3368437015953145799, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      propertyPath: id
+      value: e60edc11-063d-4990-b7de-90f228e8dfef
+      objectReference: {fileID: 0}
     - target: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
       propertyPath: m_Name
       value: Cube
