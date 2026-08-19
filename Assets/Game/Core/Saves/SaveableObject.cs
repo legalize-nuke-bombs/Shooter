@@ -26,13 +26,15 @@ namespace Shooter.Game.Core.Saves
         private struct SaveDto
         {
             public bool Spawned { get; set; }
+            public string Metadata { get; set; }
         }
 
         public object SaveComponent()
         {
             return new SaveDto
             {
-                Spawned = Spawned
+                Spawned = Spawned,
+                Metadata = name
             };
         }
 

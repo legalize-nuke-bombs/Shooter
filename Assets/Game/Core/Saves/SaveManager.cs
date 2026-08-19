@@ -111,14 +111,14 @@ namespace Shooter.Game.Core.Saves
 
         // TODO Test
         private float timer = 0;
-        private float timerInterval = 10;
+        private float timerInterval = 1;
         public void Update()
         {
            timer += Time.deltaTime;
            if (timer >= timerInterval)
            {
                Save();
-               timer = 0;
+               enabled = false;
            }
         }
     }
