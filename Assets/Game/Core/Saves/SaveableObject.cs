@@ -16,6 +16,8 @@ namespace Shooter.Game.Core.Saves
         [SerializeField] private string id;
         public string Id => id;
 
+        [SerializeField] private string prefabKey;
+
 
 
 
@@ -26,13 +28,16 @@ namespace Shooter.Game.Core.Saves
         private struct SaveDto
         {
             public bool Spawned { get; set; }
+
+            public string PrefabKey { get; set; }
         }
 
         public object SaveComponent()
         {
             return new SaveDto
             {
-                Spawned = Spawned
+                Spawned = Spawned,
+                PrefabKey = prefabKey
             };
         }
 
