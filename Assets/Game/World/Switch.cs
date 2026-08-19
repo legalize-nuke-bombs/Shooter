@@ -1,5 +1,7 @@
+using Newtonsoft.Json.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,7 +10,7 @@ namespace Shooter.Game.World
 {
     [RequireComponent(typeof(StructureHealth))]
     [RequireComponent(typeof(Speaker))]
-    public class Switch : NetworkBehaviour, IUsable, IDigestible, IBreakable
+    public class Switch : NetworkBehaviour, IUsable, IDigestible, IBreakable, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -28,6 +30,24 @@ namespace Shooter.Game.World
         private Speaker speaker;
 
         private StructureHealth structureHealth;
+
+        public string ComponentKey => "Switch";
+        struct SaveData
+        {
+            public bool Shining { get; set; }
+        }
+        public object SaveComponent()
+        {
+            return new SaveData
+            {
+                Shining = shining.Value
+            };
+        }
+        public void LoadComponent(JToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            shining.Value = sd.Shining;
+        }
 
         private void Awake()
         {

@@ -61,6 +61,7 @@ namespace Shooter.Game.Core.Saves
 
         public void Save()
         {
+            Log.Info("Saving...");
             var serializer = JsonSerializer.Create(Settings);
             var snapshot = new WorldSnapshot { Version = Application.version };
 
