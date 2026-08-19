@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 1439108169809779075}
   - component: {fileID: 8537724810945162158}
   - component: {fileID: -3317477117499524711}
-  - component: {fileID: -1540259736939846160}
+  - component: {fileID: 6588986734940429705}
   m_Layer: 0
   m_Name: StreetLamp1_Short (Concrete)
   m_TagString: Untagged
@@ -470,9 +470,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0761b85cfc472bae4021d23cdec103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
-  id: 
-  prefabKey: 
---- !u!114 &-1540259736939846160
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &6588986734940429705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -481,7 +480,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2533964689087174679}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82861b1ae93f44feae54d0b4f7760118, type: 3}
+  m_Script: {fileID: 11500000, guid: 50f3a7296f86462ebf1da8c9e8011a69, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.NetworkSaveableObject
-  ShowTopMostFoldoutHeaderGroup: 1
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObject.GameObjectId
+  id: 
