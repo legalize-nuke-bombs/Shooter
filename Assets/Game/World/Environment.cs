@@ -1,4 +1,3 @@
-using Shooter.Configuring;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -12,11 +11,7 @@ namespace Shooter.Game.World
         private static readonly Journal Log = Logs.Here();
         private readonly NetworkVariable<FixedString32Bytes> version = new();
 
-        private readonly NetworkVariable<FixedString64Bytes> world = new();
-
         public static Environment Current { get; private set; }
-
-        public string World => world.Value.ToString();
 
         public string Version => version.Value.ToString();
 
@@ -36,12 +31,10 @@ namespace Shooter.Game.World
         {
             if (IsServer)
             {
-                ServerConfig config = Config.Read().Server;
-                world.Value = new FixedString64Bytes(config.World);
                 version.Value = new FixedString32Bytes(Application.version);
             }
 
-            Log.Info($"Environment is up: world {World}, version {Version}, clock says {Clock.Current.DateTime()}");
+            Log.Info($"Environment is up: version {Version}");
         }
 
         public override void OnNetworkDespawn()

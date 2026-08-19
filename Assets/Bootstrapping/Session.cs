@@ -144,7 +144,7 @@ namespace Shooter.Bootstrapping
             {
                 ServerConfig server = Config.Read().Server;
                 transport.SetConnectionData(AnyAddress, server.Port, AnyAddress);
-                Log.Info($"World {server.World} listens on port {server.Port}");
+                Log.Info($"World listens on port {server.Port}");
                 return;
             }
 

@@ -25,7 +25,6 @@ namespace Shooter.Client.Interface
         private const string JoinBackButton = "join-back";
         private const string SettingsBackButton = "settings-back";
         private const string HostNameField = "host-name";
-        private const string WorldField = "world";
         private const string HostPortField = "host-port";
         private const string JoinNameField = "join-name";
         private const string AddressField = "address";
@@ -33,7 +32,6 @@ namespace Shooter.Client.Interface
         private const string PlayerNameField = "player-name";
         private const string ServerAddressField = "server-address";
         private const string ClientPortField = "client-port";
-        private const string WorldNameField = "world-name";
         private const string ServerPortField = "server-port";
         private const string LlmBaseProviderField = "llm-base-provider";
         private const string LlmBaseModelField = "llm-base-model";
@@ -108,7 +106,6 @@ namespace Shooter.Client.Interface
             joinBack = Find<Button>(root, JoinBackButton);
             settingsBack = Find<Button>(root, SettingsBackButton);
             hostName = Find<TextField>(root, HostNameField);
-            world = Find<TextField>(root, WorldField);
             hostPort = Find<TextField>(root, HostPortField);
             joinName = Find<TextField>(root, JoinNameField);
             address = Find<TextField>(root, AddressField);
@@ -116,7 +113,6 @@ namespace Shooter.Client.Interface
             playerName = Find<TextField>(root, PlayerNameField);
             serverAddress = Find<TextField>(root, ServerAddressField);
             clientPort = Find<TextField>(root, ClientPortField);
-            worldName = Find<TextField>(root, WorldNameField);
             serverPort = Find<TextField>(root, ServerPortField);
             llmBaseProvider = Find<TextField>(root, LlmBaseProviderField);
             llmBaseModel = Find<TextField>(root, LlmBaseModelField);
@@ -203,7 +199,6 @@ namespace Shooter.Client.Interface
             GameConfig config = Config.Read();
 
             hostName.value = config.Client.Name;
-            world.value = config.Server.World;
             hostPort.value = config.Server.Port.ToString();
 
             Show(hostScreen);
@@ -227,7 +222,6 @@ namespace Shooter.Client.Interface
             playerName.value = config.Client.Name;
             serverAddress.value = config.Client.Address;
             clientPort.value = config.Client.Port.ToString();
-            worldName.value = config.Server.World;
             serverPort.value = config.Server.Port.ToString();
             llmBaseProvider.value = config.Server.LlmBase.Provider;
             llmBaseModel.value = config.Server.LlmBase.Model;
@@ -292,12 +286,10 @@ namespace Shooter.Client.Interface
             GameConfig config = Config.Read();
 
             config.Client.Name = hostName.value;
-            config.Server.World = world.value;
             config.Server.Port = Number(hostPort.value, config.Server.Port);
             Config.Save();
 
-            Log.Info(
-                $"Own world {config.Server.World} on port {config.Server.Port} under the name {config.Client.Name}");
+            Log.Info($"Own world on port {config.Server.Port} under the name {config.Client.Name}");
         }
 
         private void KeepJoin()
@@ -319,7 +311,6 @@ namespace Shooter.Client.Interface
             config.Client.Name = playerName.value;
             config.Client.Address = serverAddress.value;
             config.Client.Port = Number(clientPort.value, config.Client.Port);
-            config.Server.World = worldName.value;
             config.Server.Port = Number(serverPort.value, config.Server.Port);
             config.Server.LlmBase.Provider = llmBaseProvider.value;
             config.Server.LlmBase.Model = llmBaseModel.value;
