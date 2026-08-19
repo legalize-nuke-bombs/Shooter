@@ -77,6 +77,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6060788920606015911, guid: e730e362773695e408e48f59e6dff87a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3024724033416064714}
+    - targetCorrespondingSourceObject: {fileID: 6060788920606015911, guid: e730e362773695e408e48f59e6dff87a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4502838863805829482}
+    - targetCorrespondingSourceObject: {fileID: 6060788920606015911, guid: e730e362773695e408e48f59e6dff87a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7626143714839949851}
+    - targetCorrespondingSourceObject: {fileID: 6060788920606015911, guid: e730e362773695e408e48f59e6dff87a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5637831999103858339}
   m_SourcePrefab: {fileID: 100100000, guid: e730e362773695e408e48f59e6dff87a, type: 3}
 --- !u!1 &8480270527072406769 stripped
 GameObject:
@@ -123,8 +132,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   broken: 0
   breakSound: {fileID: 11400000, guid: 5b006ad531da93f46bb38d35e89d7e85, type: 2}
-  useDespawn: 0
-  despawnTime: 600
 --- !u!114 &3948809611115218099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,3 +248,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Falling.Faller
   forceK: 0.1
+  maxDepenetrationSpeed: 1
+--- !u!114 &-4502838863805829482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8480270527072406769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f3a7296f86462ebf1da8c9e8011a69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObject.GameObjectId
+  id: 
+--- !u!114 &-7626143714839949851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8480270527072406769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6251fde9ce1640868a49178a9257c30a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableTransform
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &5637831999103858339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8480270527072406769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a0761b85cfc472bae4021d23cdec103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
+  ShowTopMostFoldoutHeaderGroup: 1
