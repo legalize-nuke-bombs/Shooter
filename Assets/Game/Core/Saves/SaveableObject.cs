@@ -21,7 +21,7 @@ namespace Shooter.Game.Core.Saves
 
         public bool Spawned { get; set; } = true;
 
-        public string ComponentKey => "spawned";
+        public string ComponentKey => "SaveableObject";
 
         private struct SaveDto
         {
