@@ -34,6 +34,13 @@ namespace Shooter.Configuring
             Write(Location(), current);
         }
 
+        public static string Root()
+        {
+            return Application.isEditor
+                ? Path.GetFullPath(Path.Combine(Application.dataPath, ".."))
+                : Application.persistentDataPath;
+        }
+
         private static GameConfig Load()
         {
             string path = Location();
@@ -75,11 +82,7 @@ namespace Shooter.Configuring
 
         private static string Location()
         {
-            string folder = Application.isEditor
-                ? Path.GetFullPath(Path.Combine(Application.dataPath, ".."))
-                : Application.persistentDataPath;
-
-            return Path.Combine(folder, GameConfig.FileName);
+            return Path.Combine(Root(), GameConfig.FileName);
         }
     }
 }
