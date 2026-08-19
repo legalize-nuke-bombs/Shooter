@@ -1,13 +1,33 @@
+using Newtonsoft.Json.Linq;
+using Shooter.Game.Core.Saves;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Body
 {
-    public class DefaultHunger : Hunger
+    public class DefaultHunger : Hunger, ISaveableComponent
     {
         [SerializeField] private float maxAmount = 100f;
 
         private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
+
+        public string ComponentKey => "Hunger";
+        struct SaveData
+        {
+            public float Amount { get; set; }
+        }
+        public object SaveComponent()
+        {
+            return new SaveData()
+            {
+                Amount = amount.Value
+            };
+        }
+        public void LoadComponent(JToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            amount.Value = sd.Amount;
+        }
 
         public override float Amount => amount.Value;
 

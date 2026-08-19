@@ -1,12 +1,14 @@
 using System;
+using Newtonsoft.Json.Linq;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Game.World;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Body
 {
-    public class Endurance : NetworkBehaviour, IDigestible, IRestraint
+    public class Endurance : NetworkBehaviour, IDigestible, IRestraint, ISaveableComponent
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
@@ -16,6 +18,24 @@ namespace Shooter.Game.Body
         [SerializeField] private float sprintThreshold = 10f;
 
         private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
+
+        public string ComponentKey => "Endurance";
+        struct SaveData
+        {
+            public float Amount { get; set; }
+        }
+        public object SaveComponent()
+        {
+            return new SaveData()
+            {
+                Amount = amount.Value
+            };
+        }
+        public void LoadComponent(JToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            amount.Value = sd.Amount;
+        }
 
         private bool exhausted;
 
