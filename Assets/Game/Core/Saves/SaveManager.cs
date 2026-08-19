@@ -13,9 +13,10 @@ namespace Shooter.Game.Core.Saves
 {
     public class SaveManager : MonoBehaviour
     {
-        private const string Extension = ".json";
-
-        private const string StampFormat = "yyyy-MM-dd_HH-mm-ss";
+        [SerializeField] private string extension = ".json";
+        [SerializeField] private string folder = "Saves";
+        [SerializeField] private string prefix = "ShooterSave";
+        [SerializeField] private string stampFormat = "yyyy_MM_dd_HH_mm_ss";
 
         private static readonly Journal Log = Logs.Here();
 
@@ -39,11 +40,15 @@ namespace Shooter.Game.Core.Saves
             saveables = Registers.Current.Of<SaveableObject>();
         }
 
-        private static string Location()
+        private string Location()
         {
-            string stamp = DateTime.Now.ToString(StampFormat, CultureInfo.InvariantCulture);
-
-            return Path.Combine(Config.Root(), Config.Read().Server.SavesFolder, stamp + Extension);
+            return
+                Path.Combine(
+                Config.Root(),
+                folder,
+                prefix + "_" +
+                DateTime.Now.ToString(stampFormat, CultureInfo.InvariantCulture) + "_" +
+                Guid.NewGuid() + extension);
         }
 
         private static void Write(string path, WorldSnapshot snapshot)
