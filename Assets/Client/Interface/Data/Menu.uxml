@@ -10,7 +10,6 @@
         </ui:VisualElement>
         <ui:VisualElement name="host" class="screen">
             <ui:TextField name="host-name" label="Имя игрока" class="menu__field"/>
-            <ui:TextField name="world" label="Имя мира" class="menu__field"/>
             <ui:TextField name="host-port" label="Порт" class="menu__field"/>
             <ui:Button name="start" text="Начать" class="menu__button"/>
             <ui:Button name="host-back" text="Назад" class="menu__button"/>
@@ -33,7 +32,6 @@
                 <ui:TextField name="client-port" label="Порт сервера" class="menu__field"/>
             </ui:VisualElement>
             <ui:VisualElement name="server-settings">
-                <ui:TextField name="world-name" label="Имя мира" class="menu__field"/>
                 <ui:TextField name="server-port" label="Порт" class="menu__field"/>
                 <ui:Label text="Языковая модель" class="menu__title"/>
                 <ui:Label text="Простые операции" class="menu__title"/>

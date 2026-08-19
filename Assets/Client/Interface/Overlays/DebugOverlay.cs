@@ -191,8 +191,7 @@ namespace Shooter.Client.Interface
             }
 
             Environment environment = Environment.Current;
-            Line(environment == null ? "Мир не получен" : $"Мир {environment.World}",
-                environment == null
+            Line(environment == null
                     ? $"Клиент {Application.version}"
                     : $"Сервер {environment.Version}   Клиент {Application.version}");
         }
