@@ -1,14 +1,34 @@
 using System;
+using Newtonsoft.Json.Linq;
+using Shooter.Game.Core.Saves;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Body
 {
-    public sealed class DefaultHealth : Health
+    public sealed class DefaultHealth : Health, ISaveableComponent
     {
         [SerializeField] private double maxHp = 100;
 
         private readonly NetworkVariable<double> hp = new();
+
+        public string ComponentKey => "Health";
+        struct SaveData
+        {
+            public double Hp { get; set; }
+        }
+        public object SaveComponent()
+        {
+            return new SaveData()
+            {
+                Hp = hp.Value
+            };
+        }
+        public void LoadComponent(JToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            hp.Value = sd.Hp;
+        }
 
         public override double Hp => hp.Value;
 
