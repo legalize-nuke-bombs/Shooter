@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Collections;
@@ -10,7 +12,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Body
 {
-    public class Intoxication : NetworkBehaviour, IDigestible
+    public class Intoxication : NetworkBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
         [SerializeField] private float timerInterval = 0.25f;
@@ -20,6 +22,45 @@ namespace Shooter.Game.Body
         [SerializeField] private float digestThreshold = 10f;
         private readonly Dictionary<FixedString32Bytes, int> indexes = new();
         private readonly NetworkList<double> levels = new();
+
+        public string ComponentKey => "Intoxication";
+        private struct SaveData
+        {
+            public Dictionary<string, double> Levels { get; set; }
+        }
+        public object SaveComponent()
+        {
+            var sd = new SaveData()
+            {
+                Levels = new Dictionary<string, double>()
+            };
+            foreach (FixedString32Bytes toxinId in indexes.Keys)
+            {
+                double toxinLevel = levels[indexes[toxinId]];
+                if (toxinLevel >= lowThreshold)
+                {
+                    sd.Levels.Add(toxinId.ToString(), toxinLevel);
+                }
+            }
+            return sd;
+        }
+        public void LoadComponent(JToken token)
+        {
+            SaveData sd = token.ToObject<SaveData>();
+            for (int i = 0; i < levels.Count; i++)
+            {
+                levels[i] = 0;
+            }
+            foreach (var kvp in sd.Levels)
+            {
+                if (!indexes.TryGetValue(kvp.Key, out int toxinIndex))
+                {
+                    Log.Warn($"Entity {name} failed to load toxin {kvp.Key}");
+                    continue;
+                }
+                levels[toxinIndex] = kvp.Value;
+            }
+        }
 
         private float timer;
 
