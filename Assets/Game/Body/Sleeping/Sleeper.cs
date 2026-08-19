@@ -1,4 +1,6 @@
+using Newtonsoft.Json.Linq;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -7,7 +9,7 @@ using UnityEngine;
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Speaker))]
-    public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint
+    public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -19,6 +21,30 @@ namespace Shooter.Game.Body
         private readonly NetworkVariable<bool> sleeping = new();
 
         private Vector3? bedded;
+
+        public string ComponentKey => "Sleeper";
+        private struct SaveData
+        {
+            public float[] Bedside;
+            public bool Sleeping;
+            public float[] Bedded;
+        }
+        public object SaveComponent()
+        {
+            return new SaveData()
+            {
+                Bedside = new[] { bedside.Value.x, bedside.Value.y, bedside.Value.z },
+                Sleeping = sleeping.Value,
+                Bedded = (bedded == null ? null : new[] { bedded.Value.x, bedded.Value.y, bedded.Value.z }),
+            };
+        }
+        public void LoadComponent(JToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            bedside.Value = new Vector3(sd.Bedside[0], sd.Bedside[1], sd.Bedside[2]);
+            sleeping.Value = sd.Sleeping;
+            bedded = (sd.Bedded == null ? null: new Vector3(sd.Bedded[0], sd.Bedded[1], sd.Bedded[2]));
+        }
 
         private Speaker speaker;
 
