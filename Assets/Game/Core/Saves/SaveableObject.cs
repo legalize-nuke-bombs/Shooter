@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
+    [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(GameObjectId))]
     public class SaveableObject : NetworkBehaviour, ISaveableComponent
     {
@@ -61,6 +62,8 @@ namespace Shooter.Game.Core.Saves
 
         public Dictionary<string, object> Save()
         {
+            Log.Info($"Entity {name} is saving...");
+
             var components = new Dictionary<string, object>();
             foreach (ISaveableComponent saveable in saveables)
             {
@@ -86,11 +89,14 @@ namespace Shooter.Game.Core.Saves
                 }
             }
 
+            Log.Info($"Entity {name} saved {components.Count} components, spawned = {Spawned}");
             return components;
         }
 
         public void Load(JToken content)
         {
+            Log.Info($"Entity {name} is loading...");
+
             var components = (JObject)content;
             var known = new HashSet<string>();
             foreach (ISaveableComponent saveable in saveables)
@@ -121,6 +127,12 @@ namespace Shooter.Game.Core.Saves
                 {
                     Log.Warn($"Entity {name} found unknown saved property {property.Name}");
                 }
+            }
+
+            Log.Info($"Entity {name} loaded {known.Count} / {saveables.Length} components (provided {components.Count}), spawned = {Spawned}");
+            if (!Spawned)
+            {
+                GetComponent<NetworkObject>().Despawn(false);
             }
         }
     }
