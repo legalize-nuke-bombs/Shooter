@@ -28,14 +28,7 @@ namespace Shooter.Game.Core.Saves
         {
             public string Version { get; set; }
 
-            public Dictionary<string, EntitySnapshot> Entities { get; set; } = new();
-        }
-
-        private class EntitySnapshot
-        {
-            public string PrefabKey { get; set; }
-
-            public JObject Components { get; set; }
+            public Dictionary<string, JObject> Entities { get; set; } = new();
         }
 
         private Register<SaveableObject> saveables;
@@ -79,13 +72,9 @@ namespace Shooter.Game.Core.Saves
                     continue;
                 }
 
-                var entity = new EntitySnapshot
-                {
-                    PrefabKey = saveable.PrefabKey,
-                    Components = JObject.FromObject(saveable.Save(), serializer)
-                };
+                JObject components = JObject.FromObject(saveable.Save(), serializer);
 
-                if (!snapshot.Entities.TryAdd(saveable.Id, entity))
+                if (!snapshot.Entities.TryAdd(saveable.Id, components))
                 {
                     Log.Warn($"Entity {saveable.name} shares id {saveable.Id} with an entity already saved");
                 }
