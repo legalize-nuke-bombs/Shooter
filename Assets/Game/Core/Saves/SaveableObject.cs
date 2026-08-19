@@ -1,43 +1,37 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using Shooter.Game.Core.GameObject;
 using Shooter.Logging;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
-    public class SaveableObject : MonoBehaviour, ISaveableComponent
+    [RequireComponent(typeof(GameObjectId))]
+    public class SaveableObject : NetworkBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
+        private bool Spawned { get; set; } = true;
 
-
-
-        [SerializeField] private string id;
-        public string Id => id;
-
-        [SerializeField] private string prefabKey;
-
-
-
-
-        public bool Spawned { get; set; } = true;
+        public override void OnNetworkDespawn()
+        {
+            Spawned = false;
+        }
 
         public string ComponentKey => "SaveableObject";
 
         private struct SaveDto
         {
             public bool Spawned { get; set; }
-
-            public string PrefabKey { get; set; }
         }
 
         public object SaveComponent()
         {
             return new SaveDto
             {
-                Spawned = Spawned,
-                PrefabKey = prefabKey
+                Spawned = Spawned
             };
         }
 
@@ -50,19 +44,19 @@ namespace Shooter.Game.Core.Saves
 
 
         private ISaveableComponent[] saveables;
-
-        private long registered;
+        private long registerId;
 
         private void Awake()
         {
             saveables = GetComponents<ISaveableComponent>();
-            registered = Registers.Current.Of<SaveableObject>().Add(this);
+            registerId = Registers.Current.Of<SaveableObject>().Add(this);
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
+            base.OnDestroy();
             Registers world = Registers.Current;
-            if (world != null) world.Of<SaveableObject>().Remove(registered);
+            if (world != null) world.Of<SaveableObject>().Remove(registerId);
         }
 
         public Dictionary<string, object> Save()
