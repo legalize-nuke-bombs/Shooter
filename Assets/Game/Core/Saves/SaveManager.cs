@@ -111,7 +111,7 @@ namespace Shooter.Game.Core.Saves
 
         // TODO Test
         private float timer = 0;
-        private float timerInterval = 1;
+        private float timerInterval = 5;
         public void Update()
         {
            timer += Time.deltaTime;
