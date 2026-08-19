@@ -73,11 +73,25 @@ namespace Shooter.Game.Core.Saves
                     continue;
                 }
 
-                JObject components = JObject.FromObject(saveable.Save(), serializer);
+                JObject saveableData = null;
+                try
+                {
+                    Dictionary<string, object> saveableDatRaw = saveable.Save();
+                    saveableData = JObject.FromObject(saveableDatRaw, serializer);
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Entity {saveable.name} can not be serialized: {e.Message}");
+                }
+                if (saveableData == null)
+                {
+                    continue;
+                }
 
-                if (!snapshot.Entities.TryAdd(saveable.Id, components))
+                if (!snapshot.Entities.TryAdd(saveable.Id, saveableData))
                 {
                     Log.Warn($"Entity {saveable.name} shares id {saveable.Id} with an entity already saved");
+                    continue;
                 }
             }
 
