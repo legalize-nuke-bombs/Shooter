@@ -12,6 +12,6 @@ namespace Shooter.Game.Core.Screenshots
             Current = this;
         }
 
-        public abstract IEnumerator SaveCoroutine(string path, ScreenshotSetting setting);
+        public abstract IEnumerator WriteCoroutine(string path, ScreenshotSetting setting);
     }
 }
