@@ -16,6 +16,17 @@ namespace Shooter.Game.Core.Saves
 
         private bool Spawned { get; set; } = true;
 
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer) return;
+
+            GameObjectId id = GetComponent<GameObjectId>();
+            if (!string.IsNullOrEmpty(id.Id) || NetworkObject.InScenePlaced) return;
+
+            id.Assign(Guid.NewGuid().ToString());
+            Log.Info($"Entity {name} got dynamic save id {id.Id}");
+        }
+
         public override void OnNetworkDespawn()
         {
             Spawned = false;
