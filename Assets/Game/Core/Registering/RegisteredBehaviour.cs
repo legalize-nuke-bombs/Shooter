@@ -6,12 +6,13 @@ namespace Shooter.Game.Core
     {
         protected virtual void OnEnable()
         {
-            Registers.Track(this);
+            Registers.Current.Track(this);
         }
 
         protected virtual void OnDisable()
         {
-            Registers.Untrack(this);
+            Registers world = Registers.Current;
+            if (world != null) world.Untrack(this);
         }
     }
 }
