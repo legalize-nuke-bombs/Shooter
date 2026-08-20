@@ -11,7 +11,7 @@ namespace Shooter.Game.Core.Saves
 
         public string Compress(string path)
         {
-            Log.Info($"Compressing {path}...");
+            Log.Info($"Entity {name} is compressing {path}...");
             bool ok = true;
             try
             {
@@ -19,7 +19,7 @@ namespace Shooter.Game.Core.Saves
             }
             catch (Exception e)
             {
-                Log.Info($"Failed to compress {path}: {e.Message}");
+                Log.Info($"Entity {name} failed to compress {path}: {e.Message}");
                 ok = false;
             }
 
@@ -27,7 +27,7 @@ namespace Shooter.Game.Core.Saves
             {
                 return path;
             }
-            Log.Info($"Successfully compressed {path}");
+            Log.Info($"Entity {name} successfully compressed {path}");
 
             Cleanup(path);
             return path + Extension;
@@ -38,11 +38,11 @@ namespace Shooter.Game.Core.Saves
             try
             {
                 Directory.Delete(path, true);
-                Log.Info($"Successfully deleted {path}");
+                Log.Info($"Entity {name} successfully deleted {path}");
             }
             catch (Exception e)
             {
-                Log.Info($"Failed to delete {path}: {e.Message}");
+                Log.Info($"Entity {name} failed to delete {path}: {e.Message}");
             }
         }
 

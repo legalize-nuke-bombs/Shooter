@@ -14,13 +14,13 @@ namespace Shooter.Game.Core.Screenshots
         {
             yield return new WaitForEndOfFrame();
 
-            Log.Info($"Screenshot requested {path} {setting.Width} x {setting.Height} q {setting.Quality}...");
+            Log.Info($"Entity {name} is making screenshot {setting.Width} x {setting.Height} p {path} q {setting.Quality}...");
 
             Texture2D fullScreenshot = ScreenCapture.CaptureScreenshotAsTexture(1);
 
             if (fullScreenshot == null)
             {
-                Log.Warn("Failed to capture screenshot texture");
+                Log.Warn($"Entity {name} failed to capture screenshot texture");
                 yield break;
             }
 
@@ -54,7 +54,7 @@ namespace Shooter.Game.Core.Screenshots
             }
 
             File.WriteAllBytes(finalPath, bytes);
-            Log.Info($"Screenshot {targetWidth} x {targetHeight} written to {finalPath}");
+            Log.Info($"Entity {name} wrote screenshot {targetWidth} x {targetHeight} to {finalPath}");
         }
     }
 }

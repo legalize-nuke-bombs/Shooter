@@ -21,7 +21,7 @@ namespace Shooter.Game.Core.Saves
                 string normalizedKey = manager.Key.ToLower();
                 if (byKey.ContainsKey(normalizedKey) || byExtension.ContainsKey(manager.Extension))
                 {
-                    Log.Warn($"Manager {manager.name} ({normalizedKey} - {manager.Extension}) is a duplicate!");
+                    Log.Warn($"Entity {name} found manager duplicate {manager.name} ({normalizedKey} - {manager.Extension})");
                     continue;
                 }
                 byKey.Add(normalizedKey, manager);
