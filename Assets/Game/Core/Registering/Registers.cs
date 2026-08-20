@@ -14,11 +14,7 @@ namespace Shooter.Game.Core
 
         private readonly HashSet<Component> members = new();
 
-        private long version;
-
         public static Registers Current { get; private set; }
-
-        internal long Version => version;
 
         internal IReadOnlyCollection<Component> Members => members;
 
@@ -41,7 +37,7 @@ namespace Shooter.Game.Core
                 return;
             }
 
-            if (world.members.Add(member)) world.version++;
+            world.members.Add(member);
         }
 
         public static void Untrack(Component member)
@@ -49,7 +45,7 @@ namespace Shooter.Game.Core
             Registers world = Current;
             if (world == null) return;
 
-            if (world.members.Remove(member)) world.version++;
+            world.members.Remove(member);
         }
 
         public Register<T> Of<T>() where T : Component
