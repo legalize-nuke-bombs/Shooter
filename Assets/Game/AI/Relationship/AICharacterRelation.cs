@@ -122,7 +122,7 @@ namespace Shooter.Game.AI
 
         private void Notify(long characterId, int before, int after)
         {
-            Character target = Registers.Current.Of<Character>().Of(characterId);
+            Character target = Character.Of(characterId);
             if (target == null)
             {
                 Log.Warn($"Entity {name} failed to notify character {characterId}: not found");

@@ -34,14 +34,5 @@ namespace Shooter.Game.Core
                         yield return typed;
             }
         }
-
-        public T Of(long id)
-        {
-            foreach (Component member in world.Members)
-                if (member is T typed && typed is IIdentified identified && identified.Id == id)
-                    return typed;
-
-            return null;
-        }
     }
 }
