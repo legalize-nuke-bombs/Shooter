@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Shooter.Configuring;
@@ -32,7 +34,7 @@ namespace Shooter.Game.Core.Saves
         private class WorldSnapshot
         {
             public string Version { get; set; }
-
+            public string Stamp { get; set; }
             public Dictionary<string, JObject> Entities { get; set; } = new();
         }
 
@@ -44,36 +46,15 @@ namespace Shooter.Game.Core.Saves
             Current = this;
         }
 
-        private string BasePath()
+        private WorldSnapshot BuildSnapshot()
         {
-            return
-                Path.Combine(
-                Config.Root(),
-                folder,
-                prefix + "_" +
-                DateTime.Now.ToString(stampFormat, CultureInfo.InvariantCulture)
-                );
-        }
-
-        private static void Write(string path, WorldSnapshot snapshot)
-        {
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-                File.WriteAllText(path, JsonConvert.SerializeObject(snapshot, Settings));
-                Log.Info($"World saved into {path}: {snapshot.Entities.Count} entities");
-            }
-            catch (Exception e)
-            {
-                Log.Error($"World {path} can not be written: {e.Message}");
-            }
-        }
-
-        public void Save()
-        {
-            Log.Info("Saving...");
+            Log.Info("Building snapshot...");
             var serializer = JsonSerializer.Create(Settings);
-            var snapshot = new WorldSnapshot { Version = Application.version };
+            var snapshot = new WorldSnapshot
+            {
+                Version = Application.version,
+                Stamp = DateTime.Now.ToString(stampFormat, CultureInfo.InvariantCulture)
+            };
 
             foreach (SaveableObject saveable in saveables.All)
             {
@@ -111,9 +92,59 @@ namespace Shooter.Game.Core.Saves
                 }
             }
 
-            string basePath = BasePath();
-            Write(basePath + ".json", snapshot);
-            ScreenshotManager.Current.Save(basePath + ".jpg", previewSetting);
+            Log.Info("Snapshot built");
+            return snapshot;
+        }
+
+        private void WriteSnapshot(string path, WorldSnapshot snapshot)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.WriteAllText(path, JsonConvert.SerializeObject(snapshot, Settings));
+                Log.Info($"Snapshot saved into {path}: {snapshot.Entities.Count} entities");
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Snapshot {path} can not be written: {e.Message}");
+            }
+        }
+
+        public IEnumerator SaveCoroutine()
+        {
+            WorldSnapshot snapshot = BuildSnapshot();
+
+            string directory = Path.Combine(Config.Root(), folder, prefix + "_" + snapshot.Stamp);
+
+            WriteSnapshot(Path.Combine(directory, "Snapshot.json"), snapshot);
+
+            yield return StartCoroutine(ScreenshotManager.Current.SaveCoroutine(Path.Combine(directory, "Preview.jpg"), previewSetting));
+
+            Log.Info("Compressing...");
+            bool compressed = false;
+            try
+            {
+                ZipFile.CreateFromDirectory(directory, directory + ".zip");
+                compressed = true;
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"Failed to compress {directory}: {e.Message}");
+            }
+
+            if (compressed)
+            {
+                Log.Info("Compressed successfully, deleting original directory...");
+                try
+                {
+                    Directory.Delete(directory, true);
+                    Log.Info("Original directory deleted successfully");
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Failed to delete original directory: {e.Message}");
+                }
+            }
         }
 
         public void Load()
@@ -128,7 +159,7 @@ namespace Shooter.Game.Core.Saves
            timer += Time.deltaTime;
            if (timer >= timerInterval)
            {
-               Save();
+               StartCoroutine(SaveCoroutine());
                enabled = false;
            }
         }

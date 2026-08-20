@@ -10,14 +10,11 @@ namespace Shooter.Game.Core.Screenshots
     {
         private static readonly Journal Log = Logs.Here();
 
-        public override void Save(string path, ScreenshotSetting setting)
-        {
-            StartCoroutine(SaveCoroutine(path, setting));
-        }
-
-        private IEnumerator SaveCoroutine(string path, ScreenshotSetting setting)
+        public override IEnumerator SaveCoroutine(string path, ScreenshotSetting setting)
         {
             yield return new WaitForEndOfFrame();
+
+            Log.Info($"Screenshot requested {path} {setting.Width} x {setting.Height} q {setting.Quality}...");
 
             Texture2D fullScreenshot = ScreenCapture.CaptureScreenshotAsTexture(1);
 
