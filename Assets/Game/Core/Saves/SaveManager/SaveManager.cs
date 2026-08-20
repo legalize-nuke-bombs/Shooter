@@ -34,7 +34,7 @@ namespace Shooter.Game.Core.Saves
 
         public IEnumerator SaveCoroutine()
         {
-            Log.Info("Saving...");
+            Log.Info($"Entity {name} is making save...");
             Snapshot snapshot = snapshotManager.Build();
 
             string path = Path.Combine(Config.Root(), folder, prefix + "_" + snapshot.Stamp.ToString(stampFormat));
@@ -42,7 +42,7 @@ namespace Shooter.Game.Core.Saves
             snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
             yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg")));
             path = compressionManager.Compress(path);
-            Log.Info($"Saved as {path}");
+            Log.Info($"Entity {name} saved to {path}");
         }
 
         public void Load()

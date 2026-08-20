@@ -13,7 +13,7 @@ namespace Shooter.Game.Core.Saves
 
         public IEnumerator WriteCoroutine(string path)
         {
-            Log.Info($"Writing preview to {path}...");
+            Log.Info($"Entity {name} is writing preview to {path}...");
             yield return StartCoroutine(ScreenshotManager.Current.WriteCoroutine(path, setting));
         }
     }
