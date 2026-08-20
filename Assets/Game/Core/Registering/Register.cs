@@ -7,12 +7,6 @@ namespace Shooter.Game.Core
     {
         private readonly Registers world;
 
-        private readonly List<T> items = new();
-
-        private readonly Dictionary<long, T> ids = new();
-
-        private long version = -1;
-
         internal Register(Registers world)
         {
             this.world = world;
@@ -22,8 +16,12 @@ namespace Shooter.Game.Core
         {
             get
             {
-                Refresh();
-                return items.Count;
+                int count = 0;
+                foreach (Component member in world.Members)
+                    if (member is T)
+                        count++;
+
+                return count;
             }
         }
 
@@ -31,46 +29,19 @@ namespace Shooter.Game.Core
         {
             get
             {
-                Refresh();
-                return items;
+                foreach (Component member in world.Members)
+                    if (member is T typed)
+                        yield return typed;
             }
         }
 
         public T Of(long id)
         {
-            Refresh();
-
-            T found = ids.GetValueOrDefault(id, null);
-            if (found != null && Identity(found) == id) return found;
-
-            Reindex();
-            return ids.GetValueOrDefault(id, null);
-        }
-
-        private void Refresh()
-        {
-            if (version == world.Version) return;
-
-            items.Clear();
             foreach (Component member in world.Members)
-                if (member is T typed)
-                    items.Add(typed);
+                if (member is T typed && typed is IIdentified identified && identified.Id == id)
+                    return typed;
 
-            Reindex();
-            version = world.Version;
-        }
-
-        private void Reindex()
-        {
-            ids.Clear();
-            foreach (T item in items)
-                if (item is IIdentified identified)
-                    ids[identified.Id] = item;
-        }
-
-        private static long Identity(T member)
-        {
-            return member is IIdentified identified ? identified.Id : long.MinValue;
+            return null;
         }
     }
 }
