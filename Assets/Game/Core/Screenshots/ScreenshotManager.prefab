@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9189798060179389163}
   - component: {fileID: -6686656205124872059}
+  - component: {fileID: 5482910376234871001}
   m_Layer: 0
   m_Name: ScreenshotManager
   m_TagString: Untagged
@@ -44,3 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61099ec953b345f29c517dc6a7f51d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Screenshots.HDRPScreenshotManager
+--- !u!114 &5482910376234871001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9025224310171999165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01e8ddc0c6c41dabe1579d4b700f52d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.ScreenshotHotkey
+  setting:
+    width: 0
+    height: 0
+    quality: 90
