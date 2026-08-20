@@ -75,8 +75,6 @@ namespace Shooter.Client.Interface
         private Button settingsBack;
         private VisualElement settingsScreen;
         private Button start;
-        private TextField world;
-        private TextField worldName;
 
         public event Action Hosting;
 
@@ -176,7 +174,6 @@ namespace Shooter.Client.Interface
             joinBack = null;
             settingsBack = null;
             hostName = null;
-            world = null;
             hostPort = null;
             joinName = null;
             address = null;
@@ -184,7 +181,6 @@ namespace Shooter.Client.Interface
             playerName = null;
             serverAddress = null;
             clientPort = null;
-            worldName = null;
             serverPort = null;
             llmBaseProvider = null;
             llmBaseModel = null;
