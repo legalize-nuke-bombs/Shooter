@@ -57,6 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01e8ddc0c6c41dabe1579d4b700f52d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.ScreenshotHotkey
+  sound: {fileID: 11400000, guid: 1732e9efb93c4fb695af248a0b187eb4, type: 2}
   setting:
     width: 0
     height: 0
