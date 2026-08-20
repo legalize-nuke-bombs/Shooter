@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Shooter.Game.Core.Screenshots
 {
@@ -11,6 +12,6 @@ namespace Shooter.Game.Core.Screenshots
             Current = this;
         }
 
-        public abstract void Save(string path, ScreenshotSetting setting);
+        public abstract IEnumerator SaveCoroutine(string path, ScreenshotSetting setting);
     }
 }
