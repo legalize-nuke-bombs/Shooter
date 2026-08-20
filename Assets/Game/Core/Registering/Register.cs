@@ -1,37 +1,76 @@
 using System.Collections.Generic;
-using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Core
 {
     public sealed class Register<T> where T : Component
     {
-        private static readonly Journal Log = Logs.Here();
+        private readonly Registers world;
 
-        private readonly Dictionary<long, T> members = new();
+        private readonly List<T> items = new();
 
-        private long counter;
+        private readonly Dictionary<long, T> ids = new();
 
-        public int Count => members.Count;
+        private long version = -1;
 
-        public IEnumerable<T> All => members.Values;
+        internal Register(Registers world)
+        {
+            this.world = world;
+        }
+
+        public int Count
+        {
+            get
+            {
+                Refresh();
+                return items.Count;
+            }
+        }
+
+        public IEnumerable<T> All
+        {
+            get
+            {
+                Refresh();
+                return items;
+            }
+        }
 
         public T Of(long id)
         {
-            return members.GetValueOrDefault(id, null);
+            Refresh();
+
+            T found = ids.GetValueOrDefault(id, null);
+            if (found != null && Identity(found) == id) return found;
+
+            Reindex();
+            return ids.GetValueOrDefault(id, null);
         }
 
-        public long Add(T member)
+        private void Refresh()
         {
-            long id = counter++;
-            members[id] = member;
+            if (version == world.Version) return;
 
-            return id;
+            items.Clear();
+            foreach (Component member in world.Members)
+                if (member is T typed)
+                    items.Add(typed);
+
+            Reindex();
+            version = world.Version;
         }
 
-        public void Remove(long id)
+        private void Reindex()
         {
-            members.Remove(id);
+            ids.Clear();
+            foreach (T item in items)
+                if (item is IIdentified identified)
+                    ids[identified.Id] = item;
+        }
+
+        private static long Identity(T member)
+        {
+            return member is IIdentified identified ? identified.Id : long.MinValue;
         }
     }
 }

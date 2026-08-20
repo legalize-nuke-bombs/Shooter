@@ -21,13 +21,6 @@ namespace Shooter.Game.Core.Saves
 
 
 
-        private Register<SaveableObject> saveables;
-
-        private void Awake()
-        {
-            saveables = Registers.Current.Of<SaveableObject>();
-        }
-
         public Snapshot Build()
         {
             Log.Info($"Entity {name} is building snapshot...");
@@ -39,7 +32,9 @@ namespace Shooter.Game.Core.Saves
                 GameObjects = new Dictionary<string, JObject>()
             };
 
-            foreach (SaveableObject saveable in saveables.All)
+            SaveableObject[] saveables =
+                FindObjectsByType<SaveableObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (SaveableObject saveable in saveables)
             {
                 if (!saveable.TryGetComponent(out GameObjectId saveableId))
                 {
