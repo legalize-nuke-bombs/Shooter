@@ -13,9 +13,9 @@ namespace Shooter.Game.Speech
 
         private readonly NetworkVariable<ulong> interlocutor = new();
 
-        private long heardId = CharacterId.Nobody;
+        private long heardId = Character.Nobody;
 
-        public bool Talking => heardId != CharacterId.Nobody;
+        public bool Talking => heardId != Character.Nobody;
 
         public ulong Interlocutor => interlocutor.Value;
 
@@ -34,7 +34,7 @@ namespace Shooter.Game.Speech
         {
             if (!IsServer) return;
 
-            CharacterId talkerId = talker.GetComponent<CharacterId>();
+            Character talkerId = talker.GetComponent<Character>();
             if (talkerId == null)
             {
                 Log.Warn($"Player {OwnerClientId} can not talk to {talker.name}: the talker has no persistent id");
@@ -60,7 +60,7 @@ namespace Shooter.Game.Speech
 
             Log.Info($"Player {OwnerClientId} closed the talk with wanderer {heardId}");
             TalkerOf(heardId)?.Leave(NetworkObject);
-            heardId = CharacterId.Nobody;
+            heardId = Character.Nobody;
             interlocutor.Value = 0;
             ClosedRpc();
         }
@@ -93,9 +93,9 @@ namespace Shooter.Game.Speech
 
         private static Talker TalkerOf(long talkerId)
         {
-            if (talkerId == CharacterId.Nobody || Registers.Current == null) return null;
+            if (talkerId == Character.Nobody || Registers.Current == null) return null;
 
-            CharacterId found = Registers.Current.Of<CharacterId>().Of(talkerId);
+            Character found = Registers.Current.Of<Character>().Of(talkerId);
             return found == null ? null : found.GetComponentInChildren<Talker>();
         }
 

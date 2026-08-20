@@ -21,7 +21,7 @@ namespace Shooter.Game.Combat
         private EarSpeaker earSpeaker;
         private Hands hands;
 
-        private CharacterId id;
+        private Character id;
         private Interactor interactor;
         private Inventory inventory;
         private float lastShotAt;
@@ -33,7 +33,7 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            id = GetComponent<CharacterId>();
+            id = GetComponent<Character>();
             inventory = GetComponent<Inventory>();
             interactor = GetComponent<Interactor>();
             hands = GetComponent<Hands>();

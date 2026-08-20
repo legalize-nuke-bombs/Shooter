@@ -12,7 +12,7 @@ namespace Shooter.Game.World
         [SerializeField] private GameObject destination;
         [SerializeField] private EarSoundSpec sound;
 
-        public void OnTrigger(CharacterId character)
+        public void OnTrigger(Character character)
         {
             if (destination == null)
             {
