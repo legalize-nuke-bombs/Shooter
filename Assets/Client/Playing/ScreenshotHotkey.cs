@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using Shooter.Configuring;
+using Shooter.Game.Body;
 using Shooter.Game.Core.Screenshots;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +12,7 @@ namespace Shooter.Client.Playing
     public class ScreenshotHotkey : MonoBehaviour
     {
         [SerializeField] private Key key = Key.F12;
+        [SerializeField] private EarSoundSpec sound;
         [SerializeField] private ScreenshotSetting setting;
         [SerializeField] private string folder = "Screenshots";
         [SerializeField] private string prefix = "Screenshot";
@@ -19,6 +21,9 @@ namespace Shooter.Client.Playing
         private void Update()
         {
             if (Keyboard.current == null || !Keyboard.current[key].wasPressedThisFrame) return;
+
+            EarSpeaker speaker = OwnPlayer.Find<EarSpeaker>();
+            if (speaker != null) speaker.PlayLocal(sound);
 
             string stamp = DateTime.Now.ToString(stampFormat, CultureInfo.InvariantCulture);
             string path = Path.Combine(Config.Root(), folder, prefix + "_" + stamp + ".jpg");

@@ -1,4 +1,5 @@
 using System.Collections;
+using Shooter.Game.Body;
 using Shooter.Game.Core.Saves;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Shooter.Client.Playing
     public class SaveHotkey : MonoBehaviour
     {
         [SerializeField] private Key key = Key.F5;
+        [SerializeField] private EarSoundSpec sound;
 
         private SaveManager saveManager;
         private bool saving;
@@ -26,6 +28,9 @@ namespace Shooter.Client.Playing
 
             NetworkManager network = NetworkManager.Singleton;
             if (network == null || !network.IsServer) return;
+
+            EarSpeaker speaker = OwnPlayer.Find<EarSpeaker>();
+            if (speaker != null) speaker.PlayLocal(sound);
 
             StartCoroutine(GuardedSaveCoroutine());
         }
