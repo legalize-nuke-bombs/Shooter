@@ -10,13 +10,9 @@ namespace Shooter.Game.Core
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly Dictionary<Type, object> registers = new();
-
-        private readonly HashSet<Component> members = new();
+        private readonly Dictionary<Type, List<Component>> registers = new();
 
         public static Registers Current { get; private set; }
-
-        internal IReadOnlyCollection<Component> Members => members;
 
         private void Awake()
         {
@@ -37,7 +33,13 @@ namespace Shooter.Game.Core
                 return;
             }
 
-            world.members.Add(member);
+            if (!world.registers.TryGetValue(member.GetType(), out List<Component> register))
+            {
+                register = new List<Component>();
+                world.registers[member.GetType()] = register;
+            }
+
+            register.Add(member);
         }
 
         public static void Untrack(Component member)
@@ -45,17 +47,14 @@ namespace Shooter.Game.Core
             Registers world = Current;
             if (world == null) return;
 
-            world.members.Remove(member);
+            if (world.registers.TryGetValue(member.GetType(), out List<Component> register)) register.Remove(member);
         }
 
-        public Register<T> Of<T>() where T : Component
+        public IEnumerable<T> Of<T>() where T : Component
         {
-            if (registers.TryGetValue(typeof(T), out object found)) return (Register<T>)found;
+            if (!registers.TryGetValue(typeof(T), out List<Component> register)) yield break;
 
-            var created = new Register<T>(this);
-            registers[typeof(T)] = created;
-
-            return created;
+            foreach (Component member in register) yield return (T)member;
         }
     }
 }

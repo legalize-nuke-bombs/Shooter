@@ -17,7 +17,7 @@ namespace Shooter.Game.Core
             Registers world = Registers.Current;
             if (world == null) return null;
 
-            foreach (Character character in world.Of<Character>().All)
+            foreach (Character character in world.Of<Character>())
                 if (character.Value == id)
                     return character;
 
