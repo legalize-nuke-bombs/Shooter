@@ -6,12 +6,13 @@ namespace Shooter.Game.Core
     {
         public override void OnNetworkSpawn()
         {
-            Registers.Track(this);
+            Registers.Current.Track(this);
         }
 
         public override void OnNetworkDespawn()
         {
-            Registers.Untrack(this);
+            Registers world = Registers.Current;
+            if (world != null) world.Untrack(this);
         }
     }
 }
