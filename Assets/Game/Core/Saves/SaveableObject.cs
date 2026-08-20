@@ -54,26 +54,11 @@ namespace Shooter.Game.Core.Saves
 
 
 
-        private ISaveableComponent[] saveables;
-        private long registerId;
-
-        private void Awake()
-        {
-            saveables = GetComponents<ISaveableComponent>();
-            registerId = Registers.Current.Of<SaveableObject>().Add(this);
-        }
-
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
-            Registers world = Registers.Current;
-            if (world != null) world.Of<SaveableObject>().Remove(registerId);
-        }
-
         public Dictionary<string, object> Save()
         {
             Log.Info($"Entity {name} is saving...");
 
+            ISaveableComponent[] saveables = GetComponents<ISaveableComponent>();
             var components = new Dictionary<string, object>();
             foreach (ISaveableComponent saveable in saveables)
             {
@@ -107,6 +92,7 @@ namespace Shooter.Game.Core.Saves
         {
             Log.Info($"Entity {name} is loading...");
 
+            ISaveableComponent[] saveables = GetComponents<ISaveableComponent>();
             var components = (JObject)content;
             var known = new HashSet<string>();
             foreach (ISaveableComponent saveable in saveables)
