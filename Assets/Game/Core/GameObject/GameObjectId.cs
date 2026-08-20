@@ -6,5 +6,10 @@ namespace Shooter.Game.Core.GameObject
     {
         [SerializeField] private string id;
         public string Id => id;
+
+        public void Assign(string newId)
+        {
+            id = newId;
+        }
     }
 }
