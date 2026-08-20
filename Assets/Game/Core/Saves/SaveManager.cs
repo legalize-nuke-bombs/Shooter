@@ -20,6 +20,8 @@ namespace Shooter.Game.Core.Saves
 
         private static readonly Journal Log = Logs.Here();
 
+        public static SaveManager Current { get; private set; }
+
         private static readonly JsonSerializerSettings Settings = new()
         {
             Formatting = Formatting.Indented,
@@ -38,6 +40,7 @@ namespace Shooter.Game.Core.Saves
         private void Awake()
         {
             saveables = Registers.Current.Of<SaveableObject>();
+            Current = this;
         }
 
         private string Location()
