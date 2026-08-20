@@ -9,14 +9,14 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(CharacterId))]
+    [RequireComponent(typeof(Character))]
     public sealed class SendMessageTool : LlmTool<SendMessageArguments>
     {
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private NotificationSpec mail;
 
-        private CharacterId ownId;
+        private Character ownId;
         private Nameable ownNameable;
 
         public override string Name => "send_message";
@@ -27,7 +27,7 @@ namespace Shooter.Game.Llm
         protected override void Awake()
         {
             base.Awake();
-            ownId = GetComponent<CharacterId>();
+            ownId = GetComponent<Character>();
             ownNameable = GetComponent<Nameable>();
         }
 
@@ -41,7 +41,7 @@ namespace Shooter.Game.Llm
 
             foreach (long targetId in arguments.TargetIds.Distinct())
             {
-                CharacterId target = Registers.Current.Of<CharacterId>().Of(targetId);
+                Character target = Registers.Current.Of<Character>().Of(targetId);
 
                 if (target == null || target == ownId || target.GetComponentInChildren<Llm>() == null)
                 {

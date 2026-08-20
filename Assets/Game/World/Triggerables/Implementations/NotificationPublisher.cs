@@ -11,7 +11,7 @@ namespace Shooter.Game.World
 
         [SerializeField] private NotificationSpec notificationSpec;
 
-        public void OnTrigger(CharacterId character)
+        public void OnTrigger(Character character)
         {
             if (notificationSpec == null)
             {

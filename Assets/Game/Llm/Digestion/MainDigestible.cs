@@ -15,12 +15,12 @@ namespace Shooter.Game.Llm
 
         public IDigestible[] Parts { get; private set; }
 
-        public CharacterId Id { get; private set; }
+        public Character Id { get; private set; }
 
         private void Awake()
         {
             Parts = GetComponents<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
-            Id = GetComponent<CharacterId>();
+            Id = GetComponent<Character>();
         }
 
         private void OnEnable()

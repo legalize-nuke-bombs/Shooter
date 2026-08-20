@@ -45,7 +45,7 @@ namespace Shooter.Game.Llm
 
             if (digest.Length == 0) return null;
 
-            CharacterId id = entity.Id;
+            Character id = entity.Id;
             if (id == null) return digest.ToString();
 
             return "[ID " + id.Value + "] " + digest;

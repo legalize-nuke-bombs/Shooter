@@ -61,7 +61,7 @@ namespace Shooter.Game.World
             enabled = false;
         }
 
-        protected void OnTrigger(CharacterId character)
+        protected void OnTrigger(Character character)
         {
             if (!allowReiteration)
                 if (!done.Add(character.Value))

@@ -16,7 +16,7 @@ namespace Shooter.Game.World
             Log.Info($"Entity {name} has {triggerables.Length} triggerables");
         }
 
-        public void OnTrigger(CharacterId character)
+        public void OnTrigger(Character character)
         {
             foreach (ITriggerable triggerable in triggerables) triggerable.OnTrigger(character);
         }

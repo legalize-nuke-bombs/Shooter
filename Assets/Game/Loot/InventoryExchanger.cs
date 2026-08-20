@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game.Loot
 {
     [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(CharacterId))]
+    [RequireComponent(typeof(Character))]
     public class InventoryExchanger : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -18,20 +18,20 @@ namespace Shooter.Game.Loot
         [SerializeField] private NotificationSpec itemGiven;
 
         private Inventory inventory;
-        private CharacterId ownId;
+        private Character ownId;
         private Nameable ownNameable;
         public float ExchangeRadius => exchangeRadius;
 
         private void Awake()
         {
             inventory = GetComponent<Inventory>();
-            ownId = GetComponent<CharacterId>();
+            ownId = GetComponent<Character>();
             ownNameable = GetComponent<Nameable>();
         }
 
         public bool GiveStackable(long targetId, StackableItemSpec stackable, int amount)
         {
-            CharacterId target = Target(targetId);
+            Character target = Target(targetId);
             Inventory targetInventory = target == null ? null : target.GetComponentInChildren<Inventory>();
             if (targetInventory == null)
             {
@@ -57,7 +57,7 @@ namespace Shooter.Game.Loot
 
         public bool GiveUnique(long targetId, int slotId)
         {
-            CharacterId target = Target(targetId);
+            Character target = Target(targetId);
             Inventory targetInventory = target == null ? null : target.GetComponentInChildren<Inventory>();
             if (targetInventory == null)
             {
@@ -82,7 +82,7 @@ namespace Shooter.Game.Loot
             return true;
         }
 
-        private void Notify(CharacterId target, NotificationSpec spec, string itemSpecId, int amount)
+        private void Notify(Character target, NotificationSpec spec, string itemSpecId, int amount)
         {
             MainNotificationRecipient recipient = target.GetComponent<MainNotificationRecipient>();
             if (recipient == null) return;
@@ -105,9 +105,9 @@ namespace Shooter.Game.Loot
                 .With("amount", amount));
         }
 
-        private CharacterId Target(long targetId)
+        private Character Target(long targetId)
         {
-            CharacterId target = Registers.Current.Of<CharacterId>().Of(targetId);
+            Character target = Registers.Current.Of<Character>().Of(targetId);
             if (target == null || target == ownId) return null;
 
             return Vector3.Distance(target.transform.position, transform.position) <= exchangeRadius ? target : null;
