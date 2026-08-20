@@ -10,7 +10,7 @@ namespace Shooter.Game.Core.Screenshots
     {
         private static readonly Journal Log = Logs.Here();
 
-        public override IEnumerator SaveCoroutine(string path, ScreenshotSetting setting)
+        public override IEnumerator WriteCoroutine(string path, ScreenshotSetting setting)
         {
             yield return new WaitForEndOfFrame();
 
@@ -54,7 +54,7 @@ namespace Shooter.Game.Core.Screenshots
             }
 
             File.WriteAllBytes(finalPath, bytes);
-            Log.Info($"Screenshot {targetWidth} x {targetHeight} saved to {finalPath}");
+            Log.Info($"Screenshot {targetWidth} x {targetHeight} written to {finalPath}");
         }
     }
 }
