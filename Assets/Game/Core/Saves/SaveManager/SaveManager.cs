@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.IO;
-using System.IO.Compression;
 using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
