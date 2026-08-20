@@ -9,6 +9,7 @@ namespace Shooter.Game.Core.Saves
             ZipFile.CreateFromDirectory(path, path + Extension);
         }
 
+        public override string Key => "Zip";
         public override string Extension => ".zip";
     }
 }

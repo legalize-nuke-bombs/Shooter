@@ -8,7 +8,7 @@ namespace Shooter.Game.Core.Saves
 {
     [RequireComponent(typeof(SnapshotManager))]
     [RequireComponent(typeof(PreviewManager))]
-    [RequireComponent(typeof(CompressionManager))]
+    [RequireComponent(typeof(MainCompressionManager))]
     public class SaveManager : MonoBehaviour
     {
         [SerializeField] private string folder = "Saves";
@@ -19,7 +19,7 @@ namespace Shooter.Game.Core.Saves
 
         private SnapshotManager snapshotManager;
         private PreviewManager previewManager;
-        private CompressionManager compressionManager;
+        private MainCompressionManager compressionManager;
 
         public static SaveManager Current { get; private set; }
 
@@ -27,7 +27,8 @@ namespace Shooter.Game.Core.Saves
         {
             snapshotManager = GetComponent<SnapshotManager>();
             previewManager = GetComponent<PreviewManager>();
-            compressionManager = GetComponent<CompressionManager>();
+            compressionManager = GetComponent<MainCompressionManager>();
+
             Current = this;
         }
 
@@ -36,12 +37,12 @@ namespace Shooter.Game.Core.Saves
             Log.Info("Saving...");
             Snapshot snapshot = snapshotManager.Build();
 
-            string directory = Path.Combine(Config.Root(), folder, prefix + "_" + snapshot.Stamp.ToString(stampFormat));
+            string path = Path.Combine(Config.Root(), folder, prefix + "_" + snapshot.Stamp.ToString(stampFormat));
 
-            snapshotManager.Write(Path.Combine(directory, "Snapshot.json"), snapshot);
-            yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(directory, "Preview.jpg")));
-            compressionManager.Compress(directory);
-            Log.Info($"Saved as {directory + compressionManager.Extension}");
+            snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
+            yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg")));
+            path = compressionManager.Compress(path);
+            Log.Info($"Saved as {path}");
         }
 
         public void Load()

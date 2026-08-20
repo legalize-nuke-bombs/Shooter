@@ -9,7 +9,7 @@ namespace Shooter.Game.Core.Saves
     {
         private static readonly Journal Log = Logs.Here();
 
-        public void Compress(string path)
+        public string Compress(string path)
         {
             Log.Info($"Compressing {path}...");
             bool ok = true;
@@ -25,11 +25,12 @@ namespace Shooter.Game.Core.Saves
 
             if (!ok)
             {
-                return;
+                return path;
             }
             Log.Info($"Successfully compressed {path}");
 
             Cleanup(path);
+            return path + Extension;
         }
 
         private void Cleanup(string path)
@@ -47,6 +48,7 @@ namespace Shooter.Game.Core.Saves
 
         protected abstract void CompressRaw(string path);
 
+        public abstract string Key { get; }
         public abstract string Extension { get; }
     }
 }

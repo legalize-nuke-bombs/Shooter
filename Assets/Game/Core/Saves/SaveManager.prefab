@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3222327310595822177}
   - component: {fileID: -2373994080936298691}
   - component: {fileID: -4023391308148537080}
+  - component: {fileID: 587150530260669440}
   - component: {fileID: 5699736446279087383}
   m_Layer: 0
   m_Name: SaveManager
@@ -78,6 +79,18 @@ MonoBehaviour:
     width: 640
     height: 360
     quality: 80
+--- !u!114 &587150530260669440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7650620364452858409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15447df296534001a84f1fb4dc42b3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.MainCompressionManager
 --- !u!114 &5699736446279087383
 MonoBehaviour:
   m_ObjectHideFlags: 0
