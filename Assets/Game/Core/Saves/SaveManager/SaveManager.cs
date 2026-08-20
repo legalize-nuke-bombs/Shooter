@@ -48,18 +48,5 @@ namespace Shooter.Game.Core.Saves
         public void Load()
         {
         }
-
-        // TODO Test
-        private float timer = 0;
-        private float timerInterval = 5;
-        public void Update()
-        {
-           timer += Time.deltaTime;
-           if (timer >= timerInterval)
-           {
-               StartCoroutine(SaveCoroutine());
-               enabled = false;
-           }
-        }
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.IO;
-using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -45,16 +44,15 @@ namespace Shooter.Game.Core.Screenshots
             byte[] bytes = previewTexture.EncodeToJPG((setting.Quality <= 0) ? 80 : setting.Quality);
             Destroy(previewTexture);
 
-            string finalPath = Path.Combine(Config.Root(), path);
-            string directoryPath = Path.GetDirectoryName(finalPath);
+            string directoryPath = Path.GetDirectoryName(path);
 
             if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
 
-            File.WriteAllBytes(finalPath, bytes);
-            Log.Info($"Entity {name} wrote screenshot {targetWidth} x {targetHeight} to {finalPath}");
+            File.WriteAllBytes(path, bytes);
+            Log.Info($"Entity {name} wrote screenshot {targetWidth} x {targetHeight} to {path}");
         }
     }
 }
