@@ -216,7 +216,7 @@ namespace Shooter.Game.Speech
         {
             if (Registers.Current == null) return null;
 
-            Character found = Registers.Current.Of<Character>().Of(wandererId);
+            Character found = Character.Of(wandererId);
             return found == null ? null : found.GetComponentInParent<NetworkObject>();
         }
 

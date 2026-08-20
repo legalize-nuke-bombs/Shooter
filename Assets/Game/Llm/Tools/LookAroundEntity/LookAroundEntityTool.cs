@@ -24,10 +24,9 @@ namespace Shooter.Game.Llm.LookAroundEntity
 
         protected override string Execute(LookAroundEntityArguments arguments)
         {
-            Register<Character> ids = Registers.Current.Of<Character>();
             long targetId = arguments.TargetId;
 
-            Character id = ids.Of(targetId);
+            Character id = Character.Of(targetId);
             if (id == null)
             {
                 Log.Info($"Entity {name} tried to look around unknown entity");

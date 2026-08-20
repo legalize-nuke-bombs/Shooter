@@ -107,7 +107,7 @@ namespace Shooter.Game.Loot
 
         private Character Target(long targetId)
         {
-            Character target = Registers.Current.Of<Character>().Of(targetId);
+            Character target = Character.Of(targetId);
             if (target == null || target == ownId) return null;
 
             return Vector3.Distance(target.transform.position, transform.position) <= exchangeRadius ? target : null;

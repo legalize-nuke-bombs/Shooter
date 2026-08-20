@@ -4,7 +4,7 @@ using Unity.Netcode;
 
 namespace Shooter.Game.Core
 {
-    public class Character : RegisteredNetworkBehaviour, ISaveableComponent, IIdentified
+    public class Character : RegisteredNetworkBehaviour, ISaveableComponent
     {
         public const long Nobody = -1;
 
@@ -12,7 +12,17 @@ namespace Shooter.Game.Core
 
         public long Value => value.Value;
 
-        long IIdentified.Id => value.Value;
+        public static Character Of(long id)
+        {
+            Registers world = Registers.Current;
+            if (world == null) return null;
+
+            foreach (Character character in world.Of<Character>().All)
+                if (character.Value == id)
+                    return character;
+
+            return null;
+        }
 
         public string ComponentKey => "Character";
         private struct SaveData

@@ -27,7 +27,7 @@ namespace Shooter.Game.Llm
 
             foreach (long targetId in targetIds)
             {
-                Character target = Registers.Current.Of<Character>().Of(targetId);
+                Character target = Character.Of(targetId);
 
                 if (target == null)
                     sb.AppendLine($"Character with ID {targetId} does not exist");
