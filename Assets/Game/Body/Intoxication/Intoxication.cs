@@ -71,12 +71,20 @@ namespace Shooter.Game.Body
             toxins = Catalogs.Of<ToxinCatalog>();
             for (int i = 0; i < toxins.Count; i++)
             {
-                FixedString32Bytes toxinId = toxins.At(i).Id;
-                indexes.Add(toxinId, i);
-                levels.Add(0);
+                indexes.Add(toxins.At(i).Id, i);
             }
 
-            Log.Info($"Entity {name} locally registered {levels.Count} - {indexes.Count} toxins");
+            Log.Info($"Entity {name} indexed {indexes.Count} toxins");
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer || levels.Count > 0) return;
+
+            for (int i = 0; i < indexes.Count; i++)
+            {
+                levels.Add(0);
+            }
         }
 
         private void Update()
