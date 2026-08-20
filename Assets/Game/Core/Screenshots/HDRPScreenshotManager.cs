@@ -64,7 +64,7 @@ namespace Shooter.Game.Core.Screenshots
             timer += Time.deltaTime;
             if (timer >= timerInterval)
             {
-                Save("Screenshot/123.jpg", 480, 270);
+                Save("Screenshots/123.jpg", 480, 270);
                 timer = 0;
             }
         }
