@@ -11,6 +11,6 @@ namespace Shooter.Game.Core.Screenshots
             Current = this;
         }
 
-        public abstract void Save(string path, int width = 0, int height = 0);
+        public abstract void Save(string path, ScreenshotSetting setting);
     }
 }

@@ -44,3 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48cba7900d8547dbb99f6096634ada7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveManager
+  folder: Saves
+  prefix: ShooterSave
+  stampFormat: yyyy_MM_dd_HH_mm_ss
+  previewSetting:
+    width: 640
+    height: 360
+    quality: 80

@@ -1,30 +1,34 @@
 using System.Collections;
 using System.IO;
 using Shooter.Configuring;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Core.Screenshots
 {
     public class HDRPScreenshotManager : ScreenshotManager
     {
-        public override void Save(string path, int width = 0, int height = 0)
+        private static readonly Journal Log = Logs.Here();
+
+        public override void Save(string path, ScreenshotSetting setting)
         {
-            StartCoroutine(SaveCoroutine(path, width, height));
+            StartCoroutine(SaveCoroutine(path, setting));
         }
 
-        private IEnumerator SaveCoroutine(string path, int width, int height)
+        private IEnumerator SaveCoroutine(string path, ScreenshotSetting setting)
         {
+            yield return new WaitForEndOfFrame();
+
             Texture2D fullScreenshot = ScreenCapture.CaptureScreenshotAsTexture(1);
-            yield return null;
 
             if (fullScreenshot == null)
             {
-                Debug.LogWarning("Failed to capture screenshot texture");
+                Log.Warn("Failed to capture screenshot texture");
                 yield break;
             }
 
-            int targetWidth = (width <= 0) ? fullScreenshot.width : width;
-            int targetHeight = (height <= 0) ? fullScreenshot.height : height;
+            int targetWidth = (setting.Width <= 0) ? fullScreenshot.width : setting.Width;
+            int targetHeight = (setting.Height <= 0) ? fullScreenshot.height : setting.Height;
 
             var previewTexture = new Texture2D(targetWidth, targetHeight, TextureFormat.RGB24, false);
 
@@ -41,7 +45,7 @@ namespace Shooter.Game.Core.Screenshots
             RenderTexture.ReleaseTemporary(rt);
             Destroy(fullScreenshot);
 
-            byte[] bytes = previewTexture.EncodeToJPG(70);
+            byte[] bytes = previewTexture.EncodeToJPG((setting.Quality <= 0) ? 80 : setting.Quality);
             Destroy(previewTexture);
 
             string finalPath = Path.Combine(Config.Root(), path);
@@ -53,20 +57,7 @@ namespace Shooter.Game.Core.Screenshots
             }
 
             File.WriteAllBytes(finalPath, bytes);
-            Debug.Log($"Screenshot saved to: {finalPath}");
-        }
-
-        private float timer = 0;
-        private float timerInterval = 5f;
-
-        private void Update()
-        {
-            timer += Time.deltaTime;
-            if (timer >= timerInterval)
-            {
-                Save("Screenshots/123.jpg", 480, 270);
-                timer = 0;
-            }
+            Log.Info($"Screenshot {targetWidth} x {targetHeight} saved to {finalPath}");
         }
     }
 }
