@@ -10,7 +10,6 @@ namespace Shooter.Game.Core.Saves
 {
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(GameObjectId))]
-    [RequireComponent(typeof(SaveableTransform))]
     public class SaveableObject : NetworkBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();

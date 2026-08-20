@@ -33,6 +33,7 @@ GameObject:
   - component: {fileID: -8044126811324161911}
   - component: {fileID: 2104373744681545555}
   - component: {fileID: -6602629386385626499}
+  - component: {fileID: 6251458730921147201}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -450,3 +451,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &6251458730921147201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6251fde9ce1640868a49178a9257c30a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableTransform
