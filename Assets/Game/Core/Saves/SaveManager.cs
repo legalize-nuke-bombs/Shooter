@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Shooter.Configuring;
 using Shooter.Game.Core.GameObject;
+using Shooter.Game.Core.Screenshots;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -13,10 +14,10 @@ namespace Shooter.Game.Core.Saves
 {
     public class SaveManager : MonoBehaviour
     {
-        [SerializeField] private string extension = ".json";
         [SerializeField] private string folder = "Saves";
         [SerializeField] private string prefix = "ShooterSave";
         [SerializeField] private string stampFormat = "yyyy_MM_dd_HH_mm_ss";
+        [SerializeField] private ScreenshotSetting previewSetting;
 
         private static readonly Journal Log = Logs.Here();
 
@@ -43,15 +44,15 @@ namespace Shooter.Game.Core.Saves
             Current = this;
         }
 
-        private string Location()
+        private string BasePath()
         {
             return
                 Path.Combine(
                 Config.Root(),
                 folder,
                 prefix + "_" +
-                DateTime.Now.ToString(stampFormat, CultureInfo.InvariantCulture) + "_" +
-                Guid.NewGuid() + extension);
+                DateTime.Now.ToString(stampFormat, CultureInfo.InvariantCulture)
+                );
         }
 
         private static void Write(string path, WorldSnapshot snapshot)
@@ -110,7 +111,9 @@ namespace Shooter.Game.Core.Saves
                 }
             }
 
-            Write(Location(), snapshot);
+            string basePath = BasePath();
+            Write(basePath + ".json", snapshot);
+            ScreenshotManager.Current.Save(basePath + ".jpg", previewSetting);
         }
 
         public void Load()
