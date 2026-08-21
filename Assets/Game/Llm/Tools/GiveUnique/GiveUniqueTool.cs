@@ -23,7 +23,7 @@ The recipient will automatically receive a notification.
             inventoryExchanger = GetComponent<InventoryExchanger>();
         }
 
-        protected override string Execute(GiveUniqueArguments arguments)
+        protected override string Execute(GiveUniqueArguments arguments, LlmCallContext context)
         {
             return inventoryExchanger.GiveUnique(arguments.TargetId, arguments.Slot)
                 ? $"Gave the item from slot {arguments.Slot} to {arguments.TargetId}"

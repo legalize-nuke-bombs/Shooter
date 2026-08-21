@@ -31,7 +31,7 @@ namespace Shooter.Game.Llm
             ownNameable = GetComponent<Nameable>();
         }
 
-        protected override string Execute(SendMessageArguments arguments)
+        protected override string Execute(SendMessageArguments arguments, LlmCallContext context)
         {
             if (arguments.TargetIds == null || arguments.TargetIds.Length == 0 ||
                 string.IsNullOrEmpty(arguments.Content)) return "Nothing to send";

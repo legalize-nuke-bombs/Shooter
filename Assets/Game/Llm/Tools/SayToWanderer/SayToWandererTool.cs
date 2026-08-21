@@ -20,7 +20,7 @@ namespace Shooter.Game.Llm
             waiting = GetComponent<LlmWaiting>();
         }
 
-        protected override string Execute(SayToWandererArguments arguments)
+        protected override string Execute(SayToWandererArguments arguments, LlmCallContext context)
         {
             if (string.IsNullOrEmpty(arguments.Text)) return "Nothing to say";
 

@@ -22,7 +22,7 @@ namespace Shooter.Game.Llm.LookAroundEntity
             worldDigester = GetComponent<WorldDigester>();
         }
 
-        protected override string Execute(LookAroundEntityArguments arguments)
+        protected override string Execute(LookAroundEntityArguments arguments, LlmCallContext context)
         {
             long targetId = arguments.TargetId;
 

@@ -22,7 +22,7 @@ If you want to attack a character, change the attitude to zero.";
             aiCharacterRelation = GetComponent<AICharacterRelation>();
         }
 
-        protected override string Execute(UpdateRelationArguments arguments)
+        protected override string Execute(UpdateRelationArguments arguments, LlmCallContext context)
         {
             int old = aiCharacterRelation.Amount(arguments.TargetId);
             aiCharacterRelation.SetAmount(arguments.TargetId, arguments.Amount);

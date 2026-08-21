@@ -19,7 +19,7 @@ namespace Shooter.Game.Llm
             digester = GetComponent<Digester>();
         }
 
-        protected override string Execute(LookAtYourselfArguments arguments)
+        protected override string Execute(LookAtYourselfArguments arguments, LlmCallContext context)
         {
             return "Your state:\n" + digester.Of(gameObject, DigestionDetail.Full);
         }

@@ -18,7 +18,7 @@ namespace Shooter.Game.Llm
             digester = GetComponent<Digester>();
         }
 
-        protected override string Execute(LookByIdsArguments arguments)
+        protected override string Execute(LookByIdsArguments arguments, LlmCallContext context)
         {
             long[] targetIds = arguments.TargetIds;
             if (targetIds == null || targetIds.Length == 0) return "Nothing to look at";

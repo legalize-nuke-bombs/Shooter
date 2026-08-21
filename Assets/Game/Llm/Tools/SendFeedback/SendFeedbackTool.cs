@@ -19,7 +19,7 @@ namespace Shooter.Game.Llm
 The world is under active development; any feedback is valuable and will be read.
 You NEVER include players' personal information in these reports.";
 
-        protected override string Execute(SendFeedbackArguments arguments)
+        protected override string Execute(SendFeedbackArguments arguments, LlmCallContext context)
         {
             if (string.IsNullOrEmpty(arguments.Content)) return "Nothing to send";
 

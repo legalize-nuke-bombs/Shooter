@@ -23,7 +23,7 @@ The note with the provided name will be PERMANENTLY DELETED.
             notes = GetComponent<LlmNotes>();
         }
 
-        protected override string Execute(DeleteNoteArguments arguments)
+        protected override string Execute(DeleteNoteArguments arguments, LlmCallContext context)
         {
             string result;
             try

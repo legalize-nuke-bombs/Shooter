@@ -8,6 +8,6 @@ namespace Shooter.Game.Llm
         string Description { get; }
         JObject Parameters { get; }
 
-        string Execute(string arguments);
+        string Execute(string arguments, LlmCallContext context);
     }
 }
