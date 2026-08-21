@@ -616,19 +616,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5738104920184771057, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.5838942
+      value: -0.25751898
       objectReference: {fileID: 0}
     - target: {fileID: 5738104920184771057, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.11349753
+      value: -0.07141633
       objectReference: {fileID: 0}
     - target: {fileID: 5738104920184771057, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.78908783
+      value: 0.9285837
       objectReference: {fileID: 0}
     - target: {fileID: 5738104920184771057, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.15338315
+      value: -0.25751907
       objectReference: {fileID: 0}
     - target: {fileID: 5738104920184771057, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -644,7 +644,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5738104920184771058, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
       propertyPath: m_Intensity
-      value: 30
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5738104920184771058, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
       propertyPath: m_Shadows.m_Type
@@ -1331,8 +1331,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.MenuMoon
   view: {fileID: 1120131900}
-  elevation: 22
-  sideways: 28
+  elevation: 31
+  sideways: -14
 --- !u!1001 &1672208848
 PrefabInstance:
   m_ObjectHideFlags: 0
