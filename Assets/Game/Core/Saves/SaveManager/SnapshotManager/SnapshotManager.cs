@@ -13,18 +13,9 @@ namespace Shooter.Game.Core.Saves
     {
         private static readonly Journal Log = Logs.Here();
 
-        private static readonly JsonSerializerSettings Settings = new()
-        {
-            Formatting = Formatting.Indented,
-            Converters = { new Vector3Converter(), new QuaternionConverter() }
-        };
-
-
-
         public Snapshot Build()
         {
             Log.Info($"Entity {name} is building snapshot...");
-            var serializer = JsonSerializer.Create(Settings);
             var snapshot = new Snapshot
             {
                 GameObjects = new Dictionary<string, JObject>()
@@ -49,7 +40,7 @@ namespace Shooter.Game.Core.Saves
                 try
                 {
                     Dictionary<string, object> saveableDatRaw = saveable.Save();
-                    saveableData = JObject.FromObject(saveableDatRaw, serializer);
+                    saveableData = JObject.FromObject(saveableDatRaw, SaveJson.Serializer);
                 }
                 catch (Exception e)
                 {
@@ -76,7 +67,7 @@ namespace Shooter.Game.Core.Saves
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
-                File.WriteAllText(path, JsonConvert.SerializeObject(snapshot, SnapshotManager.Settings));
+                File.WriteAllText(path, JsonConvert.SerializeObject(snapshot, SaveJson.Settings));
                 Log.Info($"Entity {name} wrote snapshot into {path}: {snapshot.GameObjects.Count} entities");
             }
             catch (Exception e)

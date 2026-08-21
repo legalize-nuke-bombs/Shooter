@@ -15,7 +15,7 @@ namespace Shooter.Game.Core.Saves
             public Quaternion Rotation { get; set; }
             public Vector3 Scale { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveDto
             {
@@ -24,9 +24,9 @@ namespace Shooter.Game.Core.Saves
                 Scale = transform.localScale
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            SaveDto sd = content.ToObject<SaveDto>();
+            SaveDto sd = content.To<SaveDto>();
             GetComponent<NetworkTransform>().Teleport(sd.Position, sd.Rotation, sd.Scale);
         }
     }

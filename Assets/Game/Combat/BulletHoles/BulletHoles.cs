@@ -23,29 +23,24 @@ namespace Shooter.Game.Combat
         public string ComponentKey => "BulletHoles";
         private struct SaveData
         {
-            public List<HoleData> Holes { get; set; }
+            public List<BulletHole> Holes { get; set; }
         }
-        private struct HoleData
-        {
-            public Vector3 Position { get; set; }
-            public Vector3 Normal { get; set; }
-        }
-        public object SaveComponent()
+        public object SaveObject()
         {
             var sd = new SaveData()
             {
-                Holes = new List<HoleData>(holes.Count)
+                Holes = new List<BulletHole>(holes.Count)
             };
             for (int i = 0; i < holes.Count; i++)
-                sd.Holes.Add(new HoleData { Position = holes[i].Position, Normal = holes[i].Normal });
+                sd.Holes.Add(holes[i]);
             return sd;
         }
-        public void LoadComponent(JToken token)
+        public void LoadObject(JToken token)
         {
-            SaveData sd = token.ToObject<SaveData>();
+            SaveData sd = token.To<SaveData>();
             holes.Clear();
-            foreach (HoleData hole in sd.Holes)
-                holes.Add(new BulletHole { Position = hole.Position, Normal = hole.Normal });
+            foreach (BulletHole hole in sd.Holes)
+                holes.Add(hole);
         }
 
         private readonly List<DecalProjector> projectors = new();

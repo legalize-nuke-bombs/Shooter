@@ -29,16 +29,16 @@ namespace Shooter.Game.Core
         {
             public long Id { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData
             {
                 Id = value.Value
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            value.Value = content.ToObject<SaveData>().Id;
+            value.Value = content.To<SaveData>().Id;
         }
 
         public override void OnNetworkSpawn()
