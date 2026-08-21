@@ -14,6 +14,7 @@ namespace Shooter.Editing
 
         private float amplitude = 0.15f;
         private float bump = 25f;
+        private TerrainData captured;
         private float[,] ground;
         private float margin = 2.5f;
         private int octaves = 4;
@@ -26,6 +27,7 @@ namespace Shooter.Editing
         private void OnEnable()
         {
             ground = null;
+            captured = null;
         }
 
         private void OnGUI()
@@ -50,7 +52,7 @@ namespace Shooter.Editing
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(ground == null
                 ? "Ground not captured yet"
-                : "Ground captured, noise replaces the previous one");
+                : $"Ground of {captured.name} captured, noise replaces the previous one");
 
             if (GUILayout.Button("Roughen")) Roughen();
             using (new EditorGUI.DisabledScope(ground == null))
@@ -67,17 +69,19 @@ namespace Shooter.Editing
 
         private void Roughen()
         {
-            Terrain terrain = Terrain.activeTerrain;
-            if (terrain == null)
-            {
-                Log.Error("Scene has no active terrain, nothing to roughen");
-                return;
-            }
+            Terrain terrain = Target();
+            if (terrain == null) return;
 
             TerrainData data = terrain.terrainData;
             int resolution = data.heightmapResolution;
             Vector3 size = data.size;
             Vector3 corner = terrain.transform.position;
+
+            if (captured != data)
+            {
+                ground = null;
+                captured = data;
+            }
 
             if (ground == null) ground = data.GetHeights(0, 0, resolution, resolution);
 
@@ -107,14 +111,29 @@ namespace Shooter.Editing
 
         private void Restore()
         {
-            Terrain terrain = Terrain.activeTerrain;
-            if (terrain == null || ground == null) return;
+            if (ground == null || captured == null) return;
 
-            Undo.RegisterCompleteObjectUndo(terrain.terrainData, "Restore terrain");
-            terrain.terrainData.SetHeights(0, 0, ground);
-            EditorUtility.SetDirty(terrain.terrainData);
+            Undo.RegisterCompleteObjectUndo(captured, "Restore terrain");
+            captured.SetHeights(0, 0, ground);
+            EditorUtility.SetDirty(captured);
 
-            Log.Info("Terrain restored to the ground captured before roughening");
+            Log.Info($"Terrain {captured.name} restored to the ground captured before roughening");
+        }
+
+        private Terrain Target()
+        {
+            GameObject chosen = Selection.activeGameObject;
+            Terrain terrain = chosen == null ? null : chosen.GetComponentInParent<Terrain>();
+            if (terrain != null) return terrain;
+
+            Terrain[] all = FindObjectsByType<Terrain>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            if (all.Length == 1) return all[0];
+
+            Log.Error(all.Length == 0
+                ? "Scene has no terrain, nothing to roughen"
+                : $"Scene has {all.Length} terrains, select the one to roughen");
+
+            return null;
         }
 
         private float[,] Field(int resolution, Vector3 corner, Vector3 size)
