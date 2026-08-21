@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label text="Присоединиться" class="screen__title"/>
+    <ui:VisualElement class="screen__body">
+        <ui:TextField label="Имя игрока" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Name" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Адрес" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Address" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Порт" is-delayed="true" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Port" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+    </ui:VisualElement>
+    <ui:VisualElement class="screen__footer">
+        <ui:Button name="connect" text="Подключиться" class="action"/>
+        <ui:Button name="back" text="Назад" class="action"/>
+    </ui:VisualElement>
+</ui:UXML>

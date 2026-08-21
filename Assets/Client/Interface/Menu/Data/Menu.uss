@@ -1,0 +1,208 @@
+.menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -unity-font-definition: url("../../Overlays/Data/RobotoMono-Regular.ttf");
+}
+
+.menu__panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 460px;
+    padding: 80px 44px 64px 44px;
+    background-color: var(--color-panel);
+    border-right-width: 1px;
+    border-right-color: var(--color-line);
+}
+
+.menu__panel--wide {
+    width: 820px;
+}
+
+.menu__version {
+    position: absolute;
+    left: 60px;
+    bottom: 28px;
+    font-size: var(--text-small);
+    color: var(--color-text-faint);
+}
+
+.screen {
+    flex-grow: 1;
+}
+
+.screen__title {
+    margin-bottom: var(--space-6);
+    font-size: var(--text-title);
+    color: var(--color-text);
+}
+
+.screen__body {
+    flex-grow: 1;
+}
+
+.screen__caption {
+    margin: var(--space-6) 0 var(--space-2) 0;
+    font-size: var(--text-small);
+    color: var(--color-text-faint);
+}
+
+.screen__footer {
+    flex-direction: row;
+    margin-top: var(--space-6);
+}
+
+.menu__item {
+    margin-bottom: 2px;
+    padding: 10px 16px;
+    border-left-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0);
+    font-size: var(--text-large);
+    color: var(--color-text-dim);
+}
+
+.menu__item:hover {
+    border-left-color: var(--color-accent);
+    background-color: var(--color-hover);
+    color: var(--color-text);
+}
+
+.menu__item:active {
+    background-color: var(--color-accent-soft);
+}
+
+.menu__item--primary {
+    color: var(--color-text);
+}
+
+.menu__note {
+    margin: -4px 0 12px 18px;
+    font-size: var(--text-small);
+    color: var(--color-text-faint);
+}
+
+.menu__spacer {
+    height: var(--space-6);
+}
+
+.field {
+    margin-bottom: var(--space-2);
+}
+
+.tabs {
+    flex-direction: row;
+    margin-bottom: var(--space-4);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-line);
+}
+
+.tab {
+    margin-bottom: -1px;
+    padding: 8px 14px;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(0, 0, 0, 0);
+    color: var(--color-text-dim);
+}
+
+.tab:hover {
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--color-text);
+}
+
+.tab--chosen {
+    border-bottom-color: var(--color-accent);
+    color: var(--color-text);
+}
+
+.action {
+    margin-right: var(--space-2);
+    padding: 8px 16px;
+    border-width: 1px;
+    border-color: var(--color-line-strong);
+    color: var(--color-text);
+}
+
+.action:hover {
+    border-color: var(--color-text);
+}
+
+.worlds__list {
+    flex-grow: 1;
+}
+
+.worlds__empty {
+    color: var(--color-text-faint);
+}
+
+.world {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-line);
+}
+
+.world:hover {
+    background-color: var(--color-hover);
+}
+
+.world__preview {
+    width: 160px;
+    height: 90px;
+    flex-shrink: 0;
+    margin-right: 14px;
+    background-color: rgba(255, 255, 255, 0.04);
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.world__info {
+    flex-grow: 1;
+}
+
+.world__stamp {
+    font-size: var(--text-base);
+    color: var(--color-text);
+}
+
+.world__clock {
+    margin-top: 2px;
+    font-size: var(--text-small);
+    color: var(--color-text-dim);
+}
+
+.world__version {
+    margin-top: 2px;
+    font-size: var(--text-small);
+    color: var(--color-text-faint);
+}
+
+.world__version--foreign {
+    color: var(--color-accent);
+}
+
+.world__actions {
+    flex-direction: row;
+}
+
+.world__action {
+    margin-left: 6px;
+    padding: 6px 10px;
+    border-width: 1px;
+    border-color: var(--color-line);
+    font-size: var(--text-small);
+    color: var(--color-text-dim);
+}
+
+.world__action:hover {
+    border-color: var(--color-text);
+    color: var(--color-text);
+}
+
+.world__action--armed {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}

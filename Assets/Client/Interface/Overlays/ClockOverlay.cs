@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine.UIElements;
@@ -9,15 +8,8 @@ namespace Shooter.Client.Interface
     public class ClockOverlay : Overlay
     {
         private const string ClockElement = "clock";
-        private const string TimeFormat = "HH:mm";
         private const long Hidden = long.MinValue;
         private static readonly Journal Log = Logs.Here();
-
-        private static readonly string[] Months =
-        {
-            "января", "февраля", "марта", "апреля", "мая", "июня",
-            "июля", "августа", "сентября", "октября", "ноября", "декабря"
-        };
 
         private Label clock;
         private long shown = Hidden;
@@ -40,7 +32,7 @@ namespace Shooter.Client.Interface
             if (minute == shown) return;
 
             shown = minute;
-            clock.text = Describe(now);
+            clock.text = RussianDate.Moment(now);
         }
 
         protected override bool Bind(VisualElement root)
@@ -68,12 +60,6 @@ namespace Shooter.Client.Interface
 
             shown = Hidden;
             clock.text = string.Empty;
-        }
-
-        private static string Describe(DateTime now)
-        {
-            return now.Day + " " + Months[now.Month - 1] + " " + now.Year + ", " +
-                   now.ToString(TimeFormat, CultureInfo.InvariantCulture);
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Text;
 using Shooter.Client.Interface;
 using Shooter.Configuring;
+using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -18,6 +19,8 @@ namespace Shooter.Bootstrapping
         private const string BootScene = "Boot";
         private const string WorldScene = "Map";
         private const string AnyAddress = "0.0.0.0";
+        private const int MenuFrameRate = 60;
+        private const int UnlimitedFrameRate = -1;
         private static readonly Journal Log = Logs.Here();
         private bool ending;
 
@@ -31,6 +34,7 @@ namespace Shooter.Bootstrapping
         private IEnumerator ToMenu()
         {
             Drop();
+            Application.targetFrameRate = MenuFrameRate;
 
             yield return SceneManager.LoadSceneAsync(MenuScene, LoadSceneMode.Single);
 
@@ -49,14 +53,14 @@ namespace Shooter.Bootstrapping
             Log.Info("Menu is up");
         }
 
-        private void Host()
+        private void Host(string save)
         {
-            StartCoroutine(Begin(true));
+            StartCoroutine(Begin(true, save));
         }
 
         private void Join()
         {
-            StartCoroutine(Begin(false));
+            StartCoroutine(Begin(false, null));
         }
 
         private void Quit()
@@ -65,8 +69,9 @@ namespace Shooter.Bootstrapping
             Application.Quit();
         }
 
-        private IEnumerator Begin(bool hosting)
+        private IEnumerator Begin(bool hosting, string save)
         {
+            Application.targetFrameRate = UnlimitedFrameRate;
             yield return SceneManager.LoadSceneAsync(BootScene, LoadSceneMode.Single);
 
             Overlays();
@@ -95,6 +100,21 @@ namespace Shooter.Bootstrapping
             }
 
             Log.Info($"{(hosting ? "Host" : "Client")} is up as {client.Name}");
+
+            if (save != null) Load(save);
+        }
+
+        private static void Load(string save)
+        {
+            SaveManager saves = SaveManager.Current;
+            if (saves == null)
+            {
+                Log.Error($"World has no save manager, {save} stays unloaded");
+                return;
+            }
+
+            Log.Info($"Loading the world from {save}");
+            saves.Load(save);
         }
 
         private void Stopped(bool ignored)

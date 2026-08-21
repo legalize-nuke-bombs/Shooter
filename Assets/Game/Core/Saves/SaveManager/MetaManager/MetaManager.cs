@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using Shooter.Logging;
 using UnityEngine;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Shooter.Game.World;
 
 namespace Shooter.Game.Core.Saves
@@ -11,12 +10,6 @@ namespace Shooter.Game.Core.Saves
     public class MetaManager : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
-
-        private static readonly JsonSerializerSettings Settings = new()
-        {
-            Formatting = Formatting.Indented,
-            ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() }
-        };
 
         public Meta Build()
         {
@@ -34,7 +27,7 @@ namespace Shooter.Game.Core.Saves
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
-                File.WriteAllText(path, JsonConvert.SerializeObject(meta, Settings));
+                File.WriteAllText(path, JsonConvert.SerializeObject(meta, Meta.Json));
                 Log.Info($"Entity {name} wrote meta into {path}");
             }
             catch (Exception e)

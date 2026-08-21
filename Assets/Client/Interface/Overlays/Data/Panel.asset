@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 19101, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Panel
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.PanelSettings
-  themeUss: {fileID: -4733365628477956816, guid: 700b9ffd80f944ff3a2e8f4d40919478, type: 3}
+  themeUss: {fileID: -4733365628477956816, guid: b909cc65beee43a49a89f1af30464711, type: 3}
   m_DisableNoThemeWarning: 0
   m_TargetTexture: {fileID: 0}
   m_RenderMode: 0
   m_ColliderUpdateMode: 0
   m_ColliderIsTrigger: 1
-  m_ScaleMode: 0
+  m_ScaleMode: 2
   m_ReferenceSpritePixelsPerUnit: 100
   m_PixelsPerUnit: 100
   m_Scale: 1
@@ -26,7 +26,7 @@ MonoBehaviour:
   m_FallbackDpi: 96
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_Match: 0
+  m_Match: 1
   m_SortingOrder: 0
   m_TargetDisplay: 0
   m_BindingLogLevel: 0
