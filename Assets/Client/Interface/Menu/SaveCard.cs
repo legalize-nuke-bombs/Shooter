@@ -42,13 +42,13 @@ namespace Shooter.Client.Interface
             stamp.AddToClassList(StampClass);
             info.Add(stamp);
 
+            version = new Label();
+            version.AddToClassList(VersionClass);
+            info.Add(version);
+
             var actions = new VisualElement();
             actions.AddToClassList(ActionsClass);
             Add(actions);
-
-            version = new Label();
-            version.AddToClassList(VersionClass);
-            actions.Add(version);
 
             var delete = new Button(() => onDelete?.Invoke(entry)) { text = DeleteText };
             delete.AddToClassList(ActionClass);
