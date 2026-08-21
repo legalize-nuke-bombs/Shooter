@@ -46,13 +46,13 @@ namespace Shooter.Client.Interface
             actions.AddToClassList(ActionsClass);
             Add(actions);
 
-            var load = new Button(() => onLoad?.Invoke(entry)) { text = LoadText };
-            load.AddToClassList(ActionClass);
-            actions.Add(load);
-
             var delete = new Button(() => onDelete?.Invoke(entry)) { text = DeleteText };
             delete.AddToClassList(ActionClass);
             actions.Add(delete);
+
+            var load = new Button(() => onLoad?.Invoke(entry)) { text = LoadText };
+            load.AddToClassList(ActionClass);
+            actions.Add(load);
 
             version = new Label();
             version.AddToClassList(VersionClass);
