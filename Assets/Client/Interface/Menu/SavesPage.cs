@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
@@ -13,6 +14,8 @@ namespace Shooter.Client.Interface
         private const string BackButton = "back";
         private const string DeleteQuestion = "Удалить сохранение?";
         private const string DeleteLabel = "Удалить";
+        private const string ForeignQuestion = "Версии не совпадают";
+        private const string ForeignLabel = "Загрузить";
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dialog dialog;
@@ -27,7 +30,7 @@ namespace Shooter.Client.Interface
             empty = Require<Label>(EmptyElement);
 
             saves.makeItem = () => new SaveCard();
-            saves.bindItem = (element, index) => ((SaveCard)element).Show(entries[index], Load, AskToDelete);
+            saves.bindItem = (element, index) => ((SaveCard)element).Show(entries[index], AskToLoad, AskToDelete);
             saves.unbindItem = (element, index) => ((SaveCard)element).Release();
             saves.destroyItem = element => ((SaveCard)element).Release();
 
@@ -56,6 +59,19 @@ namespace Shooter.Client.Interface
             empty.style.display = any ? DisplayStyle.None : DisplayStyle.Flex;
 
             Log.Info($"Saves page lists {entries.Count} saves");
+        }
+
+        private void AskToLoad(SaveEntry entry)
+        {
+            if (!entry.Foreign)
+            {
+                Load(entry);
+                return;
+            }
+
+            dialog.Ask(ForeignQuestion,
+                $"Сохранение сделано в версии {entry.Meta.Version}, сейчас {Application.version}. Мир может загрузиться некорректно.",
+                ForeignLabel, () => Load(entry));
         }
 
         private void Load(SaveEntry entry)

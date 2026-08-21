@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Text;
 using Newtonsoft.Json;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
@@ -25,6 +26,8 @@ namespace Shooter.Game.Core.Saves
         public bool Compressed { get; }
 
         public Meta Meta { get; }
+
+        public bool Foreign => Meta.Version != Application.version;
 
         public static SaveEntry Read(string location, bool compressed)
         {
