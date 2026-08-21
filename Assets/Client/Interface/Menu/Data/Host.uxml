@@ -1,34 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label text="Настройки" class="screen__title"/>
-    <ui:VisualElement class="tabs">
-        <ui:Button name="tab-client" text="Клиент" class="tab"/>
-        <ui:Button name="tab-server" text="Сервер" class="tab"/>
-    </ui:VisualElement>
-    <ui:VisualElement name="client" class="screen__body">
-        <ui:TextField label="Имя игрока" class="field">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Name" binding-mode="TwoWay"/>
-            </Bindings>
-        </ui:TextField>
-        <ui:TextField label="Адрес сервера" class="field">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Address" binding-mode="TwoWay"/>
-            </Bindings>
-        </ui:TextField>
-        <ui:TextField label="Порт сервера" is-delayed="true" class="field">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Port" binding-mode="TwoWay"/>
-            </Bindings>
-        </ui:TextField>
-    </ui:VisualElement>
-    <ui:VisualElement name="server" class="screen__body">
-        <ui:TextField label="Порт" is-delayed="true" class="field">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="Server.Port" binding-mode="TwoWay"/>
-            </Bindings>
-        </ui:TextField>
-        <ui:Label text="Языковая модель, простые операции" class="screen__caption"/>
+    <ui:Label text="Хост" class="screen__title"/>
+    <ui:TextField label="Имя игрока" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Client.Name" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+    <ui:TextField label="Порт" is-delayed="true" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.Port" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+    <ui:Foldout text="Языковая модель" value="false" class="llm">
+        <ui:Label text="Простые операции" class="screen__caption"/>
         <ui:TextField label="Провайдер" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Server.LlmBase.Provider" binding-mode="TwoWay"/>
@@ -44,7 +28,7 @@
                 <ui:DataBinding property="value" data-source-path="Server.LlmBase.Key" binding-mode="TwoWay"/>
             </Bindings>
         </ui:TextField>
-        <ui:Label text="Языковая модель, сложные операции" class="screen__caption"/>
+        <ui:Label text="Сложные операции" class="screen__caption"/>
         <ui:TextField label="Провайдер" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Server.LlmMax.Provider" binding-mode="TwoWay"/>
@@ -60,8 +44,12 @@
                 <ui:DataBinding property="value" data-source-path="Server.LlmMax.Key" binding-mode="TwoWay"/>
             </Bindings>
         </ui:TextField>
-    </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Label text="Сохранения" class="screen__caption"/>
+    <ui:ListView name="saves" class="saves__list" fixed-item-height="108" selection-type="None"/>
+    <ui:Label name="empty" text="Сохранений пока нет" class="saves__empty"/>
     <ui:VisualElement class="screen__footer">
+        <ui:Button name="new" text="Новая игра" class="action"/>
         <ui:Button name="back" text="Назад" class="action"/>
     </ui:VisualElement>
 </ui:UXML>

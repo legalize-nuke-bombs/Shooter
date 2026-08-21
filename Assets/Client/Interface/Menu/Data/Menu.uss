@@ -25,8 +25,8 @@
 
 .menu__version {
     position: absolute;
-    left: 60px;
-    bottom: 28px;
+    right: 28px;
+    bottom: 20px;
     font-size: var(--text-small);
     color: var(--color-text-faint);
 }
@@ -79,12 +79,6 @@
     color: var(--color-text);
 }
 
-.menu__note {
-    margin: -4px 0 12px 18px;
-    font-size: var(--text-small);
-    color: var(--color-text-faint);
-}
-
 .menu__spacer {
     height: var(--space-6);
 }
@@ -93,29 +87,22 @@
     margin-bottom: var(--space-2);
 }
 
-.tabs {
-    flex-direction: row;
-    margin-bottom: var(--space-4);
-    border-bottom-width: 1px;
-    border-bottom-color: var(--color-line);
+.llm {
+    margin: var(--space-2) 0 0 0;
 }
 
-.tab {
-    margin-bottom: -1px;
-    padding: 8px 14px;
-    border-bottom-width: 2px;
-    border-bottom-color: rgba(0, 0, 0, 0);
-    color: var(--color-text-dim);
+.llm > .unity-foldout__toggle {
+    margin: 0;
+    padding: 6px 0;
 }
 
-.tab:hover {
-    background-color: rgba(0, 0, 0, 0);
-    color: var(--color-text);
+.llm .unity-foldout__text {
+    font-size: var(--text-small);
+    color: var(--color-text-faint);
 }
 
-.tab--chosen {
-    border-bottom-color: var(--color-accent);
-    color: var(--color-text);
+.llm > .unity-foldout__content {
+    margin-left: 0;
 }
 
 .action {
@@ -130,15 +117,15 @@
     border-color: var(--color-text);
 }
 
-.worlds__list {
+.saves__list {
     flex-grow: 1;
 }
 
-.worlds__empty {
+.saves__empty {
     color: var(--color-text-faint);
 }
 
-.world {
+.save {
     flex-direction: row;
     align-items: center;
     padding: 8px 10px;
@@ -146,11 +133,11 @@
     border-bottom-color: var(--color-line);
 }
 
-.world:hover {
+.save:hover {
     background-color: var(--color-hover);
 }
 
-.world__preview {
+.save__preview {
     width: 160px;
     height: 90px;
     flex-shrink: 0;
@@ -159,36 +146,36 @@
     -unity-background-scale-mode: scale-and-crop;
 }
 
-.world__info {
+.save__info {
     flex-grow: 1;
 }
 
-.world__stamp {
+.save__stamp {
     font-size: var(--text-base);
     color: var(--color-text);
 }
 
-.world__clock {
+.save__clock {
     margin-top: 2px;
     font-size: var(--text-small);
     color: var(--color-text-dim);
 }
 
-.world__version {
+.save__version {
     margin-top: 2px;
     font-size: var(--text-small);
     color: var(--color-text-faint);
 }
 
-.world__version--foreign {
+.save__version--foreign {
     color: var(--color-accent);
 }
 
-.world__actions {
+.save__actions {
     flex-direction: row;
 }
 
-.world__action {
+.save__action {
     margin-left: 6px;
     padding: 6px 10px;
     border-width: 1px;
@@ -197,12 +184,12 @@
     color: var(--color-text-dim);
 }
 
-.world__action:hover {
+.save__action:hover {
     border-color: var(--color-text);
     color: var(--color-text);
 }
 
-.world__action--armed {
+.save__action--armed {
     border-color: var(--color-accent);
     color: var(--color-accent);
 }

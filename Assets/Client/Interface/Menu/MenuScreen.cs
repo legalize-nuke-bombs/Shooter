@@ -12,17 +12,15 @@ namespace Shooter.Client.Interface
         private const string PanelElement = "panel";
         private const string VersionElement = "version";
         private const string MainElement = "page-main";
-        private const string WorldsElement = "page-worlds";
-        private const string JoinElement = "page-join";
-        private const string SettingsElement = "page-settings";
+        private const string HostElement = "page-host";
+        private const string ClientElement = "page-client";
         private const string WideClass = "menu__panel--wide";
         private static readonly Journal Log = Logs.Here();
         private readonly PageStack pages = new();
-        private JoinPage join;
+        private ClientPage client;
+        private HostPage host;
         private MainPage main;
         private VisualElement panel;
-        private SettingsPage settings;
-        private WorldsPage worlds;
 
         public event Action<string> Hosting;
 
@@ -47,12 +45,10 @@ namespace Shooter.Client.Interface
             panel = root.Q<VisualElement>(PanelElement);
             Label version = root.Q<Label>(VersionElement);
             VisualElement mainRoot = root.Q<VisualElement>(MainElement);
-            VisualElement worldsRoot = root.Q<VisualElement>(WorldsElement);
-            VisualElement joinRoot = root.Q<VisualElement>(JoinElement);
-            VisualElement settingsRoot = root.Q<VisualElement>(SettingsElement);
+            VisualElement hostRoot = root.Q<VisualElement>(HostElement);
+            VisualElement clientRoot = root.Q<VisualElement>(ClientElement);
 
-            if (panel == null || version == null || mainRoot == null || worldsRoot == null || joinRoot == null ||
-                settingsRoot == null)
+            if (panel == null || version == null || mainRoot == null || hostRoot == null || clientRoot == null)
             {
                 Log.Error("Menu document is incomplete, the menu stays dead");
                 return false;
@@ -61,9 +57,8 @@ namespace Shooter.Client.Interface
             try
             {
                 main = new MainPage(mainRoot);
-                worlds = new WorldsPage(worldsRoot);
-                join = new JoinPage(joinRoot);
-                settings = new SettingsPage(settingsRoot);
+                host = new HostPage(hostRoot);
+                client = new ClientPage(clientRoot);
             }
             catch (InvalidOperationException e)
             {
@@ -74,17 +69,14 @@ namespace Shooter.Client.Interface
             root.dataSource = Config.Read();
             version.text = Application.version;
 
-            main.Continuing += Host;
-            main.Browsing += OpenWorlds;
-            main.Starting += HostFresh;
-            main.Joining += OpenJoin;
-            main.Configuring += OpenSettings;
+            main.HostOpening += OpenHost;
+            main.ClientOpening += OpenClient;
             main.Quitting += Quit;
-            worlds.Loading += Host;
-            worlds.Backing += Back;
-            join.Connecting += Connect;
-            join.Backing += Back;
-            settings.Backing += Back;
+            host.Loading += Host;
+            host.Starting += HostFresh;
+            host.Backing += Back;
+            client.Connecting += Connect;
+            client.Backing += Back;
 
             pages.Changed += Resize;
             pages.Push(main);
@@ -98,25 +90,19 @@ namespace Shooter.Client.Interface
             pages.Clear();
 
             main = null;
-            worlds = null;
-            join = null;
-            settings = null;
+            host = null;
+            client = null;
             panel = null;
         }
 
-        private void OpenWorlds()
+        private void OpenHost()
         {
-            pages.Push(worlds);
+            pages.Push(host);
         }
 
-        private void OpenJoin()
+        private void OpenClient()
         {
-            pages.Push(join);
-        }
-
-        private void OpenSettings()
-        {
-            pages.Push(settings);
+            pages.Push(client);
         }
 
         private void Back()
@@ -131,19 +117,19 @@ namespace Shooter.Client.Interface
 
         private void HostFresh()
         {
-            Log.Info("The player starts a fresh world");
+            Log.Info("The player starts a fresh game");
             Hosting?.Invoke(null);
         }
 
         private void Host(string save)
         {
-            Log.Info($"The player continues the world saved at {save}");
+            Log.Info($"The player continues the game saved at {save}");
             Hosting?.Invoke(save);
         }
 
         private void Connect()
         {
-            Log.Info("The player joins a world of someone else");
+            Log.Info("The player joins a game of someone else");
             Joining?.Invoke();
         }
 

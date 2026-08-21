@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label text="Миры" class="screen__title"/>
-    <ui:ListView name="list" class="worlds__list" fixed-item-height="108" selection-type="None"/>
-    <ui:Label name="empty" text="Сохранений пока нет" class="worlds__empty"/>
-    <ui:VisualElement class="screen__footer">
-        <ui:Button name="back" text="Назад" class="action"/>
-    </ui:VisualElement>
-</ui:UXML>
