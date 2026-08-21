@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using Newtonsoft.Json.Linq;
 using Shooter.Game.Core.Saves;
 using Unity.Netcode;
@@ -13,7 +12,6 @@ namespace Shooter.Game.World
         public const long DayLengthSeconds = 86400;
         private const float DayRealSeconds = 1200f;
         private const float GameSecondsPerRealSecond = DayLengthSeconds / DayRealSeconds;
-        private const string PromptTimeFormat = "yyyy.MM.dd HH:mm:ss";
 
         [SerializeField] private float latitude = 55.75f;
 
@@ -31,6 +29,27 @@ namespace Shooter.Game.World
         private readonly NetworkVariable<double> timestamp = new();
         private readonly NetworkVariable<float> scale = new(1f);
 
+        public string ComponentKey => "Clock";
+        struct SaveData
+        {
+            public double Timestamp { get; set; }
+            public float Scale { get; set; }
+        }
+        public object SaveComponent()
+        {
+            return new SaveData()
+            {
+                Timestamp = timestamp.Value,
+                Scale = scale.Value
+            };
+        }
+        public void LoadComponent(JToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            timestamp.Value = sd.Timestamp;
+            scale.Value = sd.Scale;
+        }
+
         public static Clock Current { get; private set; }
 
         private DateTime Beginning => new(beginningYear, beginningMonth, beginningDay, beginningHour,
@@ -39,8 +58,6 @@ namespace Shooter.Game.World
         public double Timestamp => timestamp.Value;
 
         public DateTime Now => Beginning.AddSeconds(Timestamp);
-
-        public string PromptTime => Now.ToString(PromptTimeFormat, CultureInfo.InvariantCulture);
 
         public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
 
@@ -64,8 +81,6 @@ namespace Shooter.Game.World
                 if (IsServer) scale.Value = value;
             }
         }
-
-        public string ComponentKey => "Clock";
 
         private void Awake()
         {
@@ -91,16 +106,6 @@ namespace Shooter.Game.World
             if (!IsServer) return;
 
             NetworkManager.NetworkTickSystem.Tick -= Step;
-        }
-
-        public object SaveComponent()
-        {
-            return new SaveData { Timestamp = timestamp.Value };
-        }
-
-        public void LoadComponent(JToken content)
-        {
-            timestamp.Value = content.ToObject<SaveData>().Timestamp;
         }
 
         [ContextMenu("Fast forward x10")]
@@ -131,11 +136,6 @@ namespace Shooter.Game.World
         private void Step()
         {
             timestamp.Value += NetworkManager.LocalTime.FixedDeltaTime * scale.Value * GameSecondsPerRealSecond;
-        }
-
-        private struct SaveData
-        {
-            public double Timestamp { get; set; }
         }
     }
 }

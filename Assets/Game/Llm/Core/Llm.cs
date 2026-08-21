@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -18,6 +19,8 @@ namespace Shooter.Game.Llm
     {
         private const string RetellingDemand =
             "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of your whole story: the call itself will remain as the only story of your life, everything older will be erased, and anything you leave out of the retelling is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length.";
+
+        private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
 
         private static readonly Journal Log = Logs.Here();
 
@@ -193,7 +196,7 @@ namespace Shooter.Game.Llm
         private string Observation()
         {
             var seen = new StringBuilder();
-            seen.Append('[').Append(Time()).Append(']');
+            seen.Append('[').Append(Stamp()).Append(']');
 
             if (history.Overflowing) seen.Append('\n').Append(RetellingDemand);
 
@@ -223,9 +226,9 @@ namespace Shooter.Game.Llm
             }
         }
 
-        private string Time()
+        public static string Stamp()
         {
-            return Clock.Current.PromptTime;
+            return Clock.Current.Now.ToString(StampFormat, CultureInfo.InvariantCulture);
         }
     }
 }
