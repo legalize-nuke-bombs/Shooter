@@ -126,7 +126,7 @@ namespace Shooter.Editing
             Terrain terrain = chosen == null ? null : chosen.GetComponentInParent<Terrain>();
             if (terrain != null) return terrain;
 
-            Terrain[] all = FindObjectsByType<Terrain>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            Terrain[] all = FindObjectsByType<Terrain>(FindObjectsInactive.Exclude);
             if (all.Length == 1) return all[0];
 
             Log.Error(all.Length == 0

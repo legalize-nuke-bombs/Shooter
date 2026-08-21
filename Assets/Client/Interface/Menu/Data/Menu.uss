@@ -132,6 +132,7 @@
 }
 
 .save {
+    position: relative;
     flex-direction: row;
     align-items: center;
     padding: 8px 10px;
@@ -161,14 +162,10 @@
     color: var(--color-text);
 }
 
-.save__clock {
-    margin-top: 2px;
-    font-size: var(--text-small);
-    color: var(--color-text-dim);
-}
-
 .save__version {
-    margin-top: 2px;
+    position: absolute;
+    right: 10px;
+    top: 6px;
     font-size: var(--text-small);
     color: var(--color-text-faint);
 }
@@ -179,6 +176,7 @@
 
 .save__actions {
     flex-direction: row;
+    margin-top: 18px;
 }
 
 .save__action {

@@ -19,7 +19,7 @@
         </ui:TextField>
     </ui:VisualElement>
     <ui:VisualElement class="screen__footer">
-        <ui:Button name="connect" text="Подключиться" class="action"/>
         <ui:Button name="back" text="Назад" class="action"/>
+        <ui:Button name="connect" text="Подключиться" class="action"/>
     </ui:VisualElement>
 </ui:UXML>

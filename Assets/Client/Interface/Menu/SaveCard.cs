@@ -11,7 +11,6 @@ namespace Shooter.Client.Interface
         private const string PreviewClass = "save__preview";
         private const string InfoClass = "save__info";
         private const string StampClass = "save__stamp";
-        private const string ClockClass = "save__clock";
         private const string VersionClass = "save__version";
         private const string ForeignClass = "save__version--foreign";
         private const string ActionsClass = "save__actions";
@@ -19,7 +18,6 @@ namespace Shooter.Client.Interface
         private const string LoadText = "Загрузить";
         private const string DeleteText = "Удалить";
 
-        private readonly Label clock;
         private readonly VisualElement preview;
         private readonly Label stamp;
         private readonly Label version;
@@ -44,14 +42,6 @@ namespace Shooter.Client.Interface
             stamp.AddToClassList(StampClass);
             info.Add(stamp);
 
-            clock = new Label();
-            clock.AddToClassList(ClockClass);
-            info.Add(clock);
-
-            version = new Label();
-            version.AddToClassList(VersionClass);
-            info.Add(version);
-
             var actions = new VisualElement();
             actions.AddToClassList(ActionsClass);
             Add(actions);
@@ -63,6 +53,10 @@ namespace Shooter.Client.Interface
             var delete = new Button(() => onDelete?.Invoke(entry)) { text = DeleteText };
             delete.AddToClassList(ActionClass);
             actions.Add(delete);
+
+            version = new Label();
+            version.AddToClassList(VersionClass);
+            Add(version);
         }
 
         public void Show(SaveEntry shown, Action<SaveEntry> load, Action<SaveEntry> remove)
@@ -74,13 +68,8 @@ namespace Shooter.Client.Interface
             onDelete = remove;
 
             stamp.text = RussianDate.Moment(shown.Meta.Stamp);
-            clock.text = "В игре " + RussianDate.Moment(shown.Meta.Clock);
-
-            bool foreign = shown.Meta.Version != Application.version;
-            version.text = foreign
-                ? $"Версия {shown.Meta.Version}, сейчас {Application.version}"
-                : $"Версия {shown.Meta.Version}";
-            version.EnableInClassList(ForeignClass, foreign);
+            version.text = shown.Meta.Version;
+            version.EnableInClassList(ForeignClass, shown.Foreign);
 
             byte[] bytes = shown.ReadPreview();
             if (bytes == null) return;

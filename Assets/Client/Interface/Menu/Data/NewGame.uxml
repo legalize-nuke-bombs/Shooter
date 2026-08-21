@@ -48,7 +48,7 @@
         </ui:TextField>
     </ui:VisualElement>
     <ui:VisualElement class="screen__footer">
-        <ui:Button name="start" text="Начать" class="action"/>
         <ui:Button name="back" text="Назад" class="action"/>
+        <ui:Button name="start" text="Начать" class="action"/>
     </ui:VisualElement>
 </ui:UXML>

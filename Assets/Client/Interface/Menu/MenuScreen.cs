@@ -11,12 +11,15 @@ namespace Shooter.Client.Interface
     {
         private const string PanelElement = "panel";
         private const string VersionElement = "version";
-        private const string MainElement = "page-main";
-        private const string NewGameElement = "page-new";
-        private const string SavesElement = "page-saves";
-        private const string ClientElement = "page-client";
+        private const string PageClass = "screen";
         private const string WideClass = "menu__panel--wide";
         private static readonly Journal Log = Logs.Here();
+
+        [SerializeField] private VisualTreeAsset mainPage;
+        [SerializeField] private VisualTreeAsset newGamePage;
+        [SerializeField] private VisualTreeAsset savesPage;
+        [SerializeField] private VisualTreeAsset clientPage;
+
         private readonly PageStack pages = new();
         private ClientPage client;
         private Dialog dialog;
@@ -49,25 +52,26 @@ namespace Shooter.Client.Interface
 
             panel = root.Q<VisualElement>(PanelElement);
             Label version = root.Q<Label>(VersionElement);
-            VisualElement mainRoot = root.Q<VisualElement>(MainElement);
-            VisualElement newGameRoot = root.Q<VisualElement>(NewGameElement);
-            VisualElement savesRoot = root.Q<VisualElement>(SavesElement);
-            VisualElement clientRoot = root.Q<VisualElement>(ClientElement);
 
-            if (panel == null || version == null || mainRoot == null || newGameRoot == null || savesRoot == null ||
-                clientRoot == null)
+            if (panel == null || version == null)
             {
                 Log.Error("Menu document is incomplete, the menu stays dead");
+                return false;
+            }
+
+            if (mainPage == null || newGamePage == null || savesPage == null || clientPage == null)
+            {
+                Log.Error("Menu screen misses a page template, the menu stays dead");
                 return false;
             }
 
             try
             {
                 dialog = new Dialog(root);
-                main = new MainPage(mainRoot);
-                newGame = new NewGamePage(newGameRoot);
-                saves = new SavesPage(savesRoot, dialog);
-                client = new ClientPage(clientRoot);
+                main = new MainPage(Mount(mainPage));
+                newGame = new NewGamePage(Mount(newGamePage));
+                saves = new SavesPage(Mount(savesPage), dialog);
+                client = new ClientPage(Mount(clientPage));
             }
             catch (InvalidOperationException e)
             {
@@ -77,7 +81,6 @@ namespace Shooter.Client.Interface
 
             version.text = Application.version;
 
-            main.Continuing += Host;
             main.NewGameOpening += OpenNewGame;
             main.SavesOpening += OpenSaves;
             main.JoinOpening += OpenClient;
@@ -99,6 +102,7 @@ namespace Shooter.Client.Interface
         {
             pages.Changed -= Resize;
             pages.Clear();
+            panel?.Clear();
 
             dialog = null;
             main = null;
@@ -106,6 +110,16 @@ namespace Shooter.Client.Interface
             saves = null;
             client = null;
             panel = null;
+        }
+
+        private VisualElement Mount(VisualTreeAsset template)
+        {
+            TemplateContainer page = template.Instantiate();
+            page.name = template.name;
+            page.AddToClassList(PageClass);
+            panel.Add(page);
+
+            return page;
         }
 
         private void OpenNewGame()
