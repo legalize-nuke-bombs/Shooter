@@ -17,16 +17,16 @@ namespace Shooter.Game.Core
         {
             public long Next { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData
             {
                 Next = next
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            next = Math.Max(next, content.ToObject<SaveData>().Next);
+            next = Math.Max(next, content.To<SaveData>().Next);
         }
 
         private void Awake()

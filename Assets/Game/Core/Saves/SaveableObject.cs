@@ -38,7 +38,7 @@ namespace Shooter.Game.Core.Saves
             public bool Spawned { get; set; }
             public string Metadata { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveDto
             {
@@ -46,9 +46,9 @@ namespace Shooter.Game.Core.Saves
                 Metadata = name
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            Spawned = content.ToObject<SaveDto>().Spawned;
+            Spawned = content.To<SaveDto>().Spawned;
         }
 
 
@@ -66,7 +66,7 @@ namespace Shooter.Game.Core.Saves
                 object saveableData = null;
                 try
                 {
-                    saveableData = saveable.SaveComponent();
+                    saveableData = saveable.SaveObject();
                 }
                 catch (Exception e)
                 {
@@ -108,7 +108,7 @@ namespace Shooter.Game.Core.Saves
 
                 try
                 {
-                    saveable.LoadComponent(componentData);
+                    saveable.LoadObject(componentData);
                 }
                 catch (Exception e)
                 {

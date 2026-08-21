@@ -24,16 +24,16 @@ namespace Shooter.Game.World
         {
             public List<long> Done { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData()
             {
                 Done = done.ToList()
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             done.Clear();
             foreach (long id in sd.Done)
             {

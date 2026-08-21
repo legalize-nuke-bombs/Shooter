@@ -36,16 +36,16 @@ namespace Shooter.Game.World
         {
             public bool Shining { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData
             {
                 Shining = shining.Value
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             shining.Value = sd.Shining;
         }
 

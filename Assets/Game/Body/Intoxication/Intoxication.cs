@@ -28,7 +28,7 @@ namespace Shooter.Game.Body
         {
             public Dictionary<string, double> Levels { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             var sd = new SaveData()
             {
@@ -44,9 +44,9 @@ namespace Shooter.Game.Body
             }
             return sd;
         }
-        public void LoadComponent(JToken token)
+        public void LoadObject(JToken token)
         {
-            SaveData sd = token.ToObject<SaveData>();
+            SaveData sd = token.To<SaveData>();
             for (int i = 0; i < levels.Count; i++)
             {
                 levels[i] = 0;

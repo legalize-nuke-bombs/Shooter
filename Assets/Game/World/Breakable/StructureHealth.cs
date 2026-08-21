@@ -24,16 +24,16 @@ namespace Shooter.Game.World
         {
             public bool Broken { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData()
             {
                 Broken = broken
             };
         }
-        public void LoadComponent(JToken jToken)
+        public void LoadObject(JToken jToken)
         {
-            SaveData sd = jToken.ToObject<SaveData>();
+            SaveData sd = jToken.To<SaveData>();
             broken = sd.Broken;
         }
 

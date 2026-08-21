@@ -17,16 +17,16 @@ namespace Shooter.Game.Body
         {
             public double Hp { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData()
             {
                 Hp = hp.Value
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             hp.Value = sd.Hp;
         }
 

@@ -35,7 +35,7 @@ namespace Shooter.Game.World
             public double Timestamp { get; set; }
             public float Scale { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData()
             {
@@ -43,9 +43,9 @@ namespace Shooter.Game.World
                 Scale = scale.Value
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             timestamp.Value = sd.Timestamp;
             scale.Value = sd.Scale;
         }

@@ -29,7 +29,7 @@ namespace Shooter.Game.Body
             public bool Sleeping;
             public float[] Bedded;
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData()
             {
@@ -38,9 +38,9 @@ namespace Shooter.Game.Body
                 Bedded = (bedded == null ? null : new[] { bedded.Value.x, bedded.Value.y, bedded.Value.z }),
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             bedside.Value = new Vector3(sd.Bedside[0], sd.Bedside[1], sd.Bedside[2]);
             sleeping.Value = sd.Sleeping;
             bedded = (sd.Bedded == null ? null: new Vector3(sd.Bedded[0], sd.Bedded[1], sd.Bedded[2]));

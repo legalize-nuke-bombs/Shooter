@@ -16,16 +16,16 @@ namespace Shooter.Game.Body
         {
             public float Amount { get; set; }
         }
-        public object SaveComponent()
+        public object SaveObject()
         {
             return new SaveData()
             {
                 Amount = amount.Value
             };
         }
-        public void LoadComponent(JToken content)
+        public void LoadObject(JToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             amount.Value = sd.Amount;
         }
 
