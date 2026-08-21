@@ -1,4 +1,3 @@
-using System;
 using Shooter.Game.Core.Saves;
 
 namespace Shooter.Game.Llm
@@ -12,7 +11,7 @@ namespace Shooter.Game.Llm
 
         private struct SaveData
         {
-            public string Role { get; set; }
+            public LlmRole Role { get; set; }
             public string Content { get; set; }
             public LlmToolCall[] ToolCalls { get; set; }
             public string ToolCallId { get; set; }
@@ -21,7 +20,7 @@ namespace Shooter.Game.Llm
         {
             return new SaveData()
             {
-                Role = Role.ToString(),
+                Role = Role,
                 Content = Content,
                 ToolCalls = ToolCalls,
                 ToolCallId = ToolCallId
@@ -30,7 +29,7 @@ namespace Shooter.Game.Llm
         public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
-            Role = Enum.Parse<LlmRole>(sd.Role);
+            Role = sd.Role;
             Content = sd.Content;
             ToolCalls = sd.ToolCalls;
             ToolCallId = sd.ToolCallId;
