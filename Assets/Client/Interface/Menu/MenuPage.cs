@@ -13,8 +13,6 @@ namespace Shooter.Client.Interface
 
         public VisualElement Root { get; }
 
-        public virtual bool Wide => false;
-
         internal void Show()
         {
             Root.style.display = DisplayStyle.Flex;

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Shooter.Client.Interface
@@ -7,8 +6,6 @@ namespace Shooter.Client.Interface
     {
         private readonly List<MenuPage> pages = new();
 
-        public event Action<MenuPage> Changed;
-
         public MenuPage Top => pages.Count == 0 ? null : pages[pages.Count - 1];
 
         public void Push(MenuPage page)
@@ -16,7 +13,6 @@ namespace Shooter.Client.Interface
             Top?.Hide();
             pages.Add(page);
             page.Show();
-            Changed?.Invoke(page);
         }
 
         public bool Pop()
@@ -26,7 +22,6 @@ namespace Shooter.Client.Interface
             Top.Hide();
             pages.RemoveAt(pages.Count - 1);
             Top.Show();
-            Changed?.Invoke(Top);
 
             return true;
         }

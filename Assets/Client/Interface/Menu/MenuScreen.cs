@@ -12,7 +12,6 @@ namespace Shooter.Client.Interface
         private const string PanelElement = "panel";
         private const string VersionElement = "version";
         private const string PageClass = "screen";
-        private const string WideClass = "menu__panel--wide";
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private VisualTreeAsset mainPage;
@@ -92,7 +91,6 @@ namespace Shooter.Client.Interface
             client.Connecting += Connect;
             client.Backing += Back;
 
-            pages.Changed += Resize;
             pages.Push(main);
 
             return true;
@@ -100,7 +98,6 @@ namespace Shooter.Client.Interface
 
         protected override void Unbind()
         {
-            pages.Changed -= Resize;
             pages.Clear();
             panel?.Clear();
 
@@ -140,11 +137,6 @@ namespace Shooter.Client.Interface
         private void Back()
         {
             pages.Pop();
-        }
-
-        private void Resize(MenuPage page)
-        {
-            panel.EnableInClassList(WideClass, page.Wide);
         }
 
         private void HostFresh()
