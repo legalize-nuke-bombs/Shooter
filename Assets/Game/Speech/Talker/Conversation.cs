@@ -10,20 +10,27 @@ namespace Shooter.Game.Speech
 
         private struct SaveData
         {
+            public long Wanderer { get; set; }
             public List<Message> Messages { get; set; }
         }
         public object SaveObject()
         {
             return new SaveData()
             {
+                Wanderer = Wanderer,
                 Messages = messages.ToList()
             };
         }
         public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
+            Wanderer = sd.Wanderer;
             messages.Clear();
             foreach (Message message in sd.Messages) messages.Add(message);
+        }
+
+        public Conversation()
+        {
         }
 
         public Conversation(long wanderer)
@@ -31,7 +38,7 @@ namespace Shooter.Game.Speech
             Wanderer = wanderer;
         }
 
-        public long Wanderer { get; }
+        public long Wanderer { get; private set; }
 
         public bool Open { get; private set; }
 

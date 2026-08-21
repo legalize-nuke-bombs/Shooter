@@ -24,24 +24,22 @@ namespace Shooter.Game.Speech
         public string ComponentKey => "Talker";
         private struct SaveData
         {
-            public Dictionary<long, Conversation> Conversations { get; set; }
-            public HashSet<long> Thinking { get; set; }
+            public List<Conversation> Conversations { get; set; }
         }
         public object SaveObject()
         {
             return new SaveData()
             {
-                Conversations = conversations.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
-                Thinking = thinking.ToHashSet()
+                Conversations = conversations.Values.ToList()
             };
         }
         public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
             conversations.Clear();
-            foreach (var kvp in sd.Conversations) conversations.Add(kvp.Key, kvp.Value);
             thinking.Clear();
-            foreach (long id in sd.Thinking) thinking.Add(id);
+            foreach (Conversation conversation in sd.Conversations)
+                conversations.Add(conversation.Wanderer, conversation);
         }
 
         private static bool Awake(NetworkObject body)
