@@ -22,7 +22,10 @@ namespace Shooter.Game.Llm
         public override string Name => "send_message";
 
         public override string Description =>
-            "Send a message to other residents by their ids. Write in English. Message other residents only to introduce yourself or share new information.";
+            @"
+Send a message to other RESIDENTS by their ids (this tool cannot be used to send messages to wanderers).
+Write in English.
+Message other residents only to introduce yourself or share new information.";
 
         protected override void Awake()
         {
