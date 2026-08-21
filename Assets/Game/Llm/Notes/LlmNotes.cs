@@ -3,17 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
+using Shooter.Game.Core.Saves;
 using UnityEngine;
 
 namespace Shooter.Game.Llm.Notes
 {
-    public class LlmNotes : MonoBehaviour
+    public class LlmNotes : MonoBehaviour, ISaveableComponent
     {
         [SerializeField] private int nameLimit = 25;
         [SerializeField] private int descriptionLimit = 100;
         [SerializeField] private int contentLimit = 5000;
         [SerializeField] private int amountLimit = 100;
+
         private readonly Dictionary<string, LlmNote> notes = new();
+
+        public string ComponentKey => "LlmNotes";
+        private struct SaveData
+        {
+            public Dictionary<string, LlmNote> Notes { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData
+            {
+                Notes = notes
+            };
+        }
+        public void LoadObject(JToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            notes.Clear();
+            foreach (var kvp in sd.Notes) notes.Add(kvp.Key, kvp.Value);
+        }
+
         public int Count => notes.Count;
 
         public int NameLimit => nameLimit;
