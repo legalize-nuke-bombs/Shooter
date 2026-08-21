@@ -25,25 +25,25 @@ namespace Shooter.Game.Body
         public string ComponentKey => "Sleeper";
         private struct SaveData
         {
-            public float[] Bedside;
-            public bool Sleeping;
-            public float[] Bedded;
+            public Vector3 Bedside { get; set; }
+            public bool Sleeping { get; set; }
+            public Vector3? Bedded { get; set; }
         }
         public object SaveObject()
         {
             return new SaveData()
             {
-                Bedside = new[] { bedside.Value.x, bedside.Value.y, bedside.Value.z },
+                Bedside = bedside.Value,
                 Sleeping = sleeping.Value,
-                Bedded = (bedded == null ? null : new[] { bedded.Value.x, bedded.Value.y, bedded.Value.z }),
+                Bedded = bedded
             };
         }
         public void LoadObject(JToken content)
         {
             SaveData sd = content.To<SaveData>();
-            bedside.Value = new Vector3(sd.Bedside[0], sd.Bedside[1], sd.Bedside[2]);
+            bedside.Value = sd.Bedside;
             sleeping.Value = sd.Sleeping;
-            bedded = (sd.Bedded == null ? null: new Vector3(sd.Bedded[0], sd.Bedded[1], sd.Bedded[2]));
+            bedded = sd.Bedded;
         }
 
         private Speaker speaker;
