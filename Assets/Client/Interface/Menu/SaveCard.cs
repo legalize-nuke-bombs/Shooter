@@ -16,19 +16,13 @@ namespace Shooter.Client.Interface
         private const string ForeignClass = "save__version--foreign";
         private const string ActionsClass = "save__actions";
         private const string ActionClass = "save__action";
-        private const string ArmedClass = "save__action--armed";
         private const string LoadText = "Загрузить";
         private const string DeleteText = "Удалить";
-        private const string ConfirmText = "Точно?";
-        private const long ArmedFor = 3000;
 
         private readonly Label clock;
-        private readonly Button delete;
         private readonly VisualElement preview;
         private readonly Label stamp;
         private readonly Label version;
-        private bool armed;
-        private IVisualElementScheduledItem disarming;
         private SaveEntry entry;
         private Action<SaveEntry> onDelete;
         private Action<SaveEntry> onLoad;
@@ -66,7 +60,7 @@ namespace Shooter.Client.Interface
             load.AddToClassList(ActionClass);
             actions.Add(load);
 
-            delete = new Button(Delete) { text = DeleteText };
+            var delete = new Button(() => onDelete?.Invoke(entry)) { text = DeleteText };
             delete.AddToClassList(ActionClass);
             actions.Add(delete);
         }
@@ -97,7 +91,6 @@ namespace Shooter.Client.Interface
 
         public void Release()
         {
-            Disarm();
             entry = null;
             onLoad = null;
             onDelete = null;
@@ -107,31 +100,6 @@ namespace Shooter.Client.Interface
 
             UnityEngine.Object.Destroy(texture);
             texture = null;
-        }
-
-        private void Delete()
-        {
-            if (!armed)
-            {
-                armed = true;
-                delete.text = ConfirmText;
-                delete.AddToClassList(ArmedClass);
-                disarming = schedule.Execute(Disarm).StartingIn(ArmedFor);
-                return;
-            }
-
-            SaveEntry doomed = entry;
-            Disarm();
-            onDelete?.Invoke(doomed);
-        }
-
-        private void Disarm()
-        {
-            disarming?.Pause();
-            disarming = null;
-            armed = false;
-            delete.text = DeleteText;
-            delete.RemoveFromClassList(ArmedClass);
         }
     }
 }

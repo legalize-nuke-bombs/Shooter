@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement class="screen__body">
-        <ui:Button name="host" text="Хост" class="menu__item menu__item--primary"/>
-        <ui:Button name="client" text="Клиент" class="menu__item"/>
+        <ui:Button name="continue" text="Продолжить" class="menu__item menu__item--primary"/>
+        <ui:Label name="continue-note" class="menu__note"/>
+        <ui:Button name="new" text="Новая игра" class="menu__item"/>
+        <ui:Button name="load" text="Загрузить" class="menu__item"/>
+        <ui:Button name="join" text="Присоединиться" class="menu__item"/>
         <ui:VisualElement class="menu__spacer"/>
         <ui:Button name="quit" text="Выйти" class="menu__item"/>
     </ui:VisualElement>

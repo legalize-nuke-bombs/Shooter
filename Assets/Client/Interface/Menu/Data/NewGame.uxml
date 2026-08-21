@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label text="Хост" class="screen__title"/>
-    <ui:TextField label="Имя игрока" class="field">
-        <Bindings>
-            <ui:DataBinding property="value" data-source-path="Client.Name" binding-mode="TwoWay"/>
-        </Bindings>
-    </ui:TextField>
-    <ui:TextField label="Порт" is-delayed="true" class="field">
-        <Bindings>
-            <ui:DataBinding property="value" data-source-path="Server.Port" binding-mode="TwoWay"/>
-        </Bindings>
-    </ui:TextField>
-    <ui:Foldout text="Языковая модель" value="false" class="llm">
+    <ui:Label text="Новая игра" class="screen__title"/>
+    <ui:VisualElement class="screen__body">
+        <ui:TextField label="Имя игрока" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Name" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Порт" is-delayed="true" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Server.Port" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:Label text="Языковая модель" class="screen__section"/>
+        <ui:Label text="Жители думают и говорят через неё. Без ключа они молчат." class="screen__hint"/>
         <ui:Label text="Простые операции" class="screen__caption"/>
         <ui:TextField label="Провайдер" class="field">
             <Bindings>
@@ -44,12 +46,9 @@
                 <ui:DataBinding property="value" data-source-path="Server.LlmMax.Key" binding-mode="TwoWay"/>
             </Bindings>
         </ui:TextField>
-    </ui:Foldout>
-    <ui:Label text="Сохранения" class="screen__caption"/>
-    <ui:ListView name="saves" class="saves__list" fixed-item-height="108" selection-type="None"/>
-    <ui:Label name="empty" text="Сохранений пока нет" class="saves__empty"/>
+    </ui:VisualElement>
     <ui:VisualElement class="screen__footer">
-        <ui:Button name="new" text="Новая игра" class="action"/>
+        <ui:Button name="start" text="Начать" class="action"/>
         <ui:Button name="back" text="Назад" class="action"/>
     </ui:VisualElement>
 </ui:UXML>

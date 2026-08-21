@@ -45,8 +45,21 @@
     flex-grow: 1;
 }
 
+.screen__section {
+    margin: var(--space-8) 0 var(--space-1) 0;
+    font-size: var(--text-base);
+    color: var(--color-text);
+}
+
+.screen__hint {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-small);
+    color: var(--color-text-dim);
+    white-space: normal;
+}
+
 .screen__caption {
-    margin: var(--space-6) 0 var(--space-2) 0;
+    margin: var(--space-4) 0 var(--space-2) 0;
     font-size: var(--text-small);
     color: var(--color-text-faint);
 }
@@ -79,30 +92,18 @@
     color: var(--color-text);
 }
 
+.menu__note {
+    margin: -4px 0 12px 18px;
+    font-size: var(--text-small);
+    color: var(--color-text-faint);
+}
+
 .menu__spacer {
     height: var(--space-6);
 }
 
 .field {
     margin-bottom: var(--space-2);
-}
-
-.llm {
-    margin: var(--space-2) 0 0 0;
-}
-
-.llm > .unity-foldout__toggle {
-    margin: 0;
-    padding: 6px 0;
-}
-
-.llm .unity-foldout__text {
-    font-size: var(--text-small);
-    color: var(--color-text-faint);
-}
-
-.llm > .unity-foldout__content {
-    margin-left: 0;
 }
 
 .action {
@@ -115,6 +116,11 @@
 
 .action:hover {
     border-color: var(--color-text);
+}
+
+.action--danger:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
 }
 
 .saves__list {
@@ -189,7 +195,45 @@
     color: var(--color-text);
 }
 
-.save__action--armed {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
+.dialog {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+}
+
+.dialog__window {
+    width: 480px;
+    padding: 24px 28px 20px 28px;
+    border-width: 1px;
+    border-color: var(--color-line-strong);
+    background-color: var(--color-panel-solid);
+}
+
+.dialog__title {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-large);
+    color: var(--color-text);
+}
+
+.dialog__text {
+    margin-bottom: var(--space-6);
+    font-size: var(--text-base);
+    color: var(--color-text-dim);
+    white-space: normal;
+}
+
+.dialog__actions {
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.dialog__actions > .action {
+    margin-right: 0;
+    margin-left: var(--space-2);
 }
