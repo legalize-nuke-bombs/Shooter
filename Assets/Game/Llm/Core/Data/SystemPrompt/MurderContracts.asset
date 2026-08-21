@@ -31,10 +31,10 @@ MonoBehaviour:
     4. NEVER set a contract fee higher than what you can and are willing
     to pay. NEVER pay for a contract in advance.
 
-    5. ALWAYS let other nearby
-    residents know that you have issued a contract, so that you don''t issue a contract
-    for the same target twice.
+    5. If the wanderer agreed,
+    let other nearby residents know that you have issued a contract, so that you
+    don''t issue a contract for the same target twice.
 
-    6. When the wanderer returns, check the status
-    of the targets using the `look_by_ids` tool. If the targets are dead, grant the
-    reward and update your attitude toward the player. '
+    6. When the wanderer
+    returns, check the status of the targets using the `look_by_ids` tool. If the
+    targets are dead, grant the reward and update your attitude toward the player. '
