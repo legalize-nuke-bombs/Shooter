@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Shooter.Game.AI
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Nameable))]
-    public class AICharacterRelation : MonoBehaviour, IDigestible
+    public class AICharacterRelation : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -31,6 +32,25 @@ namespace Shooter.Game.AI
 
         private Character ownId;
         private Nameable ownNameable;
+
+        public string ComponentKey => "AICharacterRelation";
+        private struct SaveData
+        {
+            public float Coefficient { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData()
+            {
+                Coefficient = damageToReputationCoefficient
+            };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            SaveData sd = content.To<SaveData>();
+            SetDamageToReputationCoefficient(sd.Coefficient);
+        }
+
         public float DamageToReputationCoefficient => damageToReputationCoefficient;
 
         public struct OnDamagedCallbackData
