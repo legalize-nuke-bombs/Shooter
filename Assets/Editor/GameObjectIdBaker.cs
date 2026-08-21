@@ -19,7 +19,7 @@ namespace Shooter.Editor
             Scene scene = SceneManager.GetActiveScene();
             Log.Info($"Starting baking {scene.name}...");
 
-            GameObjectId[] components = UnityEngine.Object.FindObjectsByType<GameObjectId>();
+            GameObjectId[] components = UnityEngine.Object.FindObjectsByType<GameObjectId>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             List<GameObject> modified = BakeIds(components);
             List<GameObject> duplicates = FindDuplicates(components);
 
