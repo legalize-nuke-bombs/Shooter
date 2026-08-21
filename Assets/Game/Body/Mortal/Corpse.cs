@@ -1,4 +1,5 @@
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Body
 {
-    public class Corpse : NetworkBehaviour
+    public class Corpse : NetworkBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -14,6 +15,27 @@ namespace Shooter.Game.Body
         private readonly NetworkVariable<FixedString32Bytes> title = new();
 
         private bool dressed;
+
+        public string ComponentKey => "Corpse";
+        private struct SaveData
+        {
+            public string Skin { get; set; }
+            public string Title { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData()
+            {
+                Skin = skin.Value.ToString(),
+                Title = title.Value.ToString()
+            };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            SaveData sd = content.To<SaveData>();
+            skin.Value = sd.Skin;
+            title.Value = sd.Title;
+        }
 
         public void Dress(SkinSpec spec)
         {
