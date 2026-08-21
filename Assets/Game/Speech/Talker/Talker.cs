@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
@@ -185,7 +186,9 @@ namespace Shooter.Game.Speech
             {
                 Author = author,
                 Content = content,
-                Time = Clock.Current == null ? string.Empty : Clock.Current.PromptTime
+                Time = Clock.Current == null
+                    ? string.Empty
+                    : Clock.Current.Now.ToString(Message.TimeFormat, CultureInfo.InvariantCulture)
             };
 
             conversation.Add(message);

@@ -39,7 +39,7 @@ namespace Shooter.Game.Llm
             string told = Template.Filled(spec.Told, notification);
 
             llm.Notice(
-                $"[{Clock.Current.PromptTime}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}",
+                $"[{Llm.Stamp()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}",
                 true);
         }
 
