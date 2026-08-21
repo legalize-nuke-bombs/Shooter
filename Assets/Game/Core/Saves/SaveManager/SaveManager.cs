@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.IO;
 using Shooter.Configuring;
 using Shooter.Logging;
@@ -12,7 +12,6 @@ namespace Shooter.Game.Core.Saves
     [RequireComponent(typeof(MainCompressionManager))]
     public class SaveManager : MonoBehaviour
     {
-        [SerializeField] private string folder = "Saves";
         [SerializeField] private string prefix = "ShooterSave";
         [SerializeField] private string stampFormat = "yyyy_MM_dd_HH_mm_ss";
 
@@ -41,7 +40,7 @@ namespace Shooter.Game.Core.Saves
             Snapshot snapshot = snapshotManager.Build();
             Meta meta = metaManager.Build();
 
-            string path = Path.Combine(Config.Root(), folder, prefix + "_" + meta.Stamp.ToString(stampFormat));
+            string path = Path.Combine(SaveLibrary.Location, prefix + "_" + meta.Stamp.ToString(stampFormat));
 
             snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
             metaManager.Write(Path.Combine(path, "Meta.json"), meta);
@@ -50,7 +49,7 @@ namespace Shooter.Game.Core.Saves
             Log.Info($"Entity {name} saved to {path}");
         }
 
-        public void Load()
+        public void Load(string path)
         {
         }
     }

@@ -1,0 +1,106 @@
+@import url("unity-theme://default");
+
+:root {
+    --color-text: rgb(236, 232, 224);
+    --color-text-dim: rgba(236, 232, 224, 0.55);
+    --color-text-faint: rgba(236, 232, 224, 0.32);
+    --color-accent: rgb(168, 51, 51);
+    --color-accent-soft: rgba(168, 51, 51, 0.5);
+    --color-panel: rgba(6, 6, 8, 0.76);
+    --color-panel-solid: rgb(10, 10, 12);
+    --color-line: rgba(255, 255, 255, 0.1);
+    --color-line-strong: rgba(255, 255, 255, 0.24);
+    --color-field: rgba(255, 255, 255, 0.06);
+    --color-hover: rgba(255, 255, 255, 0.08);
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --text-small: 12px;
+    --text-base: 15px;
+    --text-large: 18px;
+    --text-title: 26px;
+}
+
+.unity-button {
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    border-width: 0;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--color-text);
+    font-size: var(--text-base);
+    -unity-text-align: middle-left;
+}
+
+.unity-button:hover {
+    background-color: var(--color-hover);
+}
+
+.unity-button:active {
+    background-color: var(--color-accent-soft);
+}
+
+.unity-button:disabled {
+    opacity: 0.35;
+}
+
+.unity-text-field {
+    margin: 0;
+}
+
+.unity-text-field__label {
+    min-width: 160px;
+    padding: 0;
+    color: var(--color-text-dim);
+    font-size: var(--text-base);
+    -unity-text-align: middle-left;
+}
+
+.unity-text-field__input {
+    padding: 6px 8px;
+    border-width: 1px;
+    border-radius: 0;
+    border-color: var(--color-line-strong);
+    background-color: var(--color-field);
+    color: var(--color-text);
+    font-size: var(--text-base);
+    --unity-cursor-color: var(--color-text);
+    --unity-selection-color: var(--color-accent-soft);
+}
+
+.unity-text-field__input:focus {
+    border-color: var(--color-accent);
+}
+
+.unity-list-view__item:hover {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-list-view__item--selected {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-scroller--vertical {
+    width: 8px;
+}
+
+.unity-scroller--vertical .unity-base-slider__dragger {
+    width: 4px;
+    left: 2px;
+    border-width: 0;
+    border-radius: 0;
+    background-color: var(--color-line-strong);
+}
+
+.unity-scroller--vertical .unity-base-slider__tracker {
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-scroller__low-button,
+.unity-scroller__high-button {
+    display: none;
+}

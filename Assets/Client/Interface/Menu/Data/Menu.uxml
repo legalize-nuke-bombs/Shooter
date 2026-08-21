@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="Menu.uss"/>
+    <ui:Template name="Main" src="Main.uxml"/>
+    <ui:Template name="Worlds" src="Worlds.uxml"/>
+    <ui:Template name="Join" src="Join.uxml"/>
+    <ui:Template name="Settings" src="Settings.uxml"/>
+    <ui:VisualElement name="menu" class="menu" picking-mode="Ignore">
+        <ui:VisualElement name="panel" class="menu__panel">
+            <ui:Instance template="Main" name="page-main" class="screen"/>
+            <ui:Instance template="Worlds" name="page-worlds" class="screen"/>
+            <ui:Instance template="Join" name="page-join" class="screen"/>
+            <ui:Instance template="Settings" name="page-settings" class="screen"/>
+        </ui:VisualElement>
+        <ui:Label name="version" class="menu__version" picking-mode="Ignore"/>
+    </ui:VisualElement>
+</ui:UXML>

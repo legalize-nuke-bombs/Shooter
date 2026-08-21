@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label text="Настройки" class="screen__title"/>
+    <ui:VisualElement class="tabs">
+        <ui:Button name="tab-client" text="Клиент" class="tab"/>
+        <ui:Button name="tab-server" text="Сервер" class="tab"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="client" class="screen__body">
+        <ui:TextField label="Имя игрока" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Name" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Адрес сервера" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Address" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Порт сервера" is-delayed="true" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Port" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+    </ui:VisualElement>
+    <ui:VisualElement name="server" class="screen__body">
+        <ui:TextField label="Порт" is-delayed="true" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Server.Port" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:Label text="Языковая модель, простые операции" class="screen__caption"/>
+        <ui:TextField label="Провайдер" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Server.LlmBase.Provider" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Модель" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Server.LlmBase.Model" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Ключ" password="true" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Server.LlmBase.Key" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:Label text="Языковая модель, сложные операции" class="screen__caption"/>
+        <ui:TextField label="Провайдер" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Server.LlmMax.Provider" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Модель" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Server.LlmMax.Model" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+        <ui:TextField label="Ключ" password="true" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Server.LlmMax.Key" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:TextField>
+    </ui:VisualElement>
+    <ui:VisualElement class="screen__footer">
+        <ui:Button name="back" text="Назад" class="action"/>
+    </ui:VisualElement>
+</ui:UXML>
