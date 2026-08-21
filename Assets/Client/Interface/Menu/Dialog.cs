@@ -10,6 +10,7 @@ namespace Shooter.Client.Interface
         private const string TextElement = "dialog-text";
         private const string ConfirmButton = "dialog-confirm";
         private const string CancelButton = "dialog-cancel";
+        private const string DangerClass = "dialog__title--danger";
 
         private readonly Button confirm;
         private readonly VisualElement root;
@@ -32,18 +33,29 @@ namespace Shooter.Client.Interface
 
         public void Ask(string question, string details, string confirmLabel, Action onConfirm)
         {
+            Show(question, details, confirmLabel, onConfirm, false);
+        }
+
+        public void Warn(string question, string details, string confirmLabel, Action onConfirm)
+        {
+            Show(question, details, confirmLabel, onConfirm, true);
+        }
+
+        public void Cancel()
+        {
+            Close();
+        }
+
+        private void Show(string question, string details, string confirmLabel, Action onConfirm, bool danger)
+        {
             title.text = question;
+            title.EnableInClassList(DangerClass, danger);
             text.text = details;
             confirm.text = confirmLabel;
             confirmed = onConfirm;
 
             Open = true;
             root.style.display = DisplayStyle.Flex;
-        }
-
-        public void Cancel()
-        {
-            Close();
         }
 
         private void Confirm()

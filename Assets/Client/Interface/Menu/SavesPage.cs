@@ -14,7 +14,7 @@ namespace Shooter.Client.Interface
         private const string BackButton = "back";
         private const string DeleteQuestion = "Удалить сохранение?";
         private const string DeleteLabel = "Удалить";
-        private const string ForeignQuestion = "Версии не совпадают";
+        private const string ForeignQuestion = "Другая версия";
         private const string ForeignLabel = "Загрузить";
         private static readonly Journal Log = Logs.Here();
 
@@ -69,8 +69,8 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            dialog.Ask(ForeignQuestion,
-                $"Сохранение сделано в версии {entry.Meta.Version}, сейчас {Application.version}. Мир может загрузиться некорректно.",
+            dialog.Warn(ForeignQuestion,
+                $"Сохранение {entry.Meta.Version}, игра {Application.version}. Совместимость не гарантируется.",
                 ForeignLabel, () => Load(entry));
         }
 
@@ -81,7 +81,7 @@ namespace Shooter.Client.Interface
 
         private void AskToDelete(SaveEntry entry)
         {
-            dialog.Ask(DeleteQuestion, RussianDate.Moment(entry.Meta.Stamp), DeleteLabel, () => Delete(entry));
+            dialog.Warn(DeleteQuestion, RussianDate.Moment(entry.Meta.Stamp), DeleteLabel, () => Delete(entry));
         }
 
         private void Delete(SaveEntry entry)
