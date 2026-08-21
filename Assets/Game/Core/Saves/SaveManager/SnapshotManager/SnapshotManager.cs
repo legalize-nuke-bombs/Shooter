@@ -15,7 +15,8 @@ namespace Shooter.Game.Core.Saves
 
         private static readonly JsonSerializerSettings Settings = new()
         {
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
+            Converters = { new Vector3Converter(), new QuaternionConverter() }
         };
 
 
