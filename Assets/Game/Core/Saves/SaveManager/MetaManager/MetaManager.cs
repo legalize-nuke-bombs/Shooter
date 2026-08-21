@@ -25,7 +25,7 @@ namespace Shooter.Game.Core.Saves
             {
                 Version = Application.version,
                 Stamp = DateTime.Now,
-                Clock = Clock.Current.DateTime()
+                Clock = Clock.Current.Now
             };
         }
 

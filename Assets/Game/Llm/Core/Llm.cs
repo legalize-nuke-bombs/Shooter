@@ -225,7 +225,7 @@ namespace Shooter.Game.Llm
 
         private string Time()
         {
-            return Clock.Current.DateTime().ToString();
+            return Clock.Current.PromptTime;
         }
     }
 }

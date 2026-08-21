@@ -1,15 +1,19 @@
 using System;
+using System.Globalization;
+using Newtonsoft.Json.Linq;
+using Shooter.Game.Core.Saves;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.World
 {
     [DefaultExecutionOrder(-110)]
-    public class Clock : NetworkBehaviour
+    public class Clock : NetworkBehaviour, ISaveableComponent
     {
         public const long DayLengthSeconds = 86400;
         private const float DayRealSeconds = 1200f;
-        private const float SyncInterval = 1f;
+        private const float GameSecondsPerRealSecond = DayLengthSeconds / DayRealSeconds;
+        private const string PromptTimeFormat = "yyyy.MM.dd HH:mm:ss";
 
         [SerializeField] private float latitude = 55.75f;
 
@@ -23,19 +27,20 @@ namespace Shooter.Game.World
         [SerializeField] private int beginningHour = 22;
         [SerializeField] private int beginningMinutes;
         [SerializeField] private int beginningSeconds;
+
+        private readonly NetworkVariable<double> timestamp = new();
         private readonly NetworkVariable<float> scale = new(1f);
 
-        private readonly NetworkVariable<double> synced = new();
-
-        private float untilSync;
         public static Clock Current { get; private set; }
 
-        private DateTime Beginning => new DateTimeOffset(beginningYear, beginningMonth, beginningDay, beginningHour,
-            beginningMinutes, beginningSeconds, TimeSpan.Zero).Date;
+        private DateTime Beginning => new(beginningYear, beginningMonth, beginningDay, beginningHour,
+            beginningMinutes, beginningSeconds);
 
-        public double Timestamp { get; private set; }
+        public double Timestamp => timestamp.Value;
 
         public DateTime Now => Beginning.AddSeconds(Timestamp);
+
+        public string PromptTime => Now.ToString(PromptTimeFormat, CultureInfo.InvariantCulture);
 
         public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
 
@@ -60,6 +65,8 @@ namespace Shooter.Game.World
             }
         }
 
+        public string ComponentKey => "Clock";
+
         private void Awake()
         {
             Current = this;
@@ -74,15 +81,26 @@ namespace Shooter.Game.World
 
         public override void OnNetworkSpawn()
         {
-            Timestamp = synced.Value;
-            synced.OnValueChanged += Adjust;
+            if (!IsServer) return;
+
             NetworkManager.NetworkTickSystem.Tick += Step;
         }
 
         public override void OnNetworkDespawn()
         {
-            synced.OnValueChanged -= Adjust;
+            if (!IsServer) return;
+
             NetworkManager.NetworkTickSystem.Tick -= Step;
+        }
+
+        public object SaveComponent()
+        {
+            return new SaveData { Timestamp = timestamp.Value };
+        }
+
+        public void LoadComponent(JToken content)
+        {
+            timestamp.Value = content.ToObject<SaveData>().Timestamp;
         }
 
         [ContextMenu("Fast forward x10")]
@@ -110,30 +128,14 @@ namespace Shooter.Game.World
             return fraction >= DuskFraction || fraction < DawnFraction;
         }
 
-        public DateTime DateTime()
-        {
-            return Now;
-        }
-
         private void Step()
         {
-            float dt = NetworkManager.LocalTime.FixedDeltaTime;
-            Timestamp += dt * scale.Value * (DayLengthSeconds / DayRealSeconds);
-
-            if (!IsServer) return;
-
-            untilSync -= dt;
-            if (untilSync > 0f) return;
-
-            untilSync = SyncInterval;
-            synced.Value = Timestamp;
+            timestamp.Value += NetworkManager.LocalTime.FixedDeltaTime * scale.Value * GameSecondsPerRealSecond;
         }
 
-        private void Adjust(double previous, double current)
+        private struct SaveData
         {
-            if (IsServer) return;
-
-            Timestamp = current;
+            public double Timestamp { get; set; }
         }
     }
 }
