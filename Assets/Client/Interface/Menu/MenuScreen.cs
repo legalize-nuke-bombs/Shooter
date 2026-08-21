@@ -12,15 +12,18 @@ namespace Shooter.Client.Interface
         private const string PanelElement = "panel";
         private const string VersionElement = "version";
         private const string MainElement = "page-main";
-        private const string HostElement = "page-host";
+        private const string NewGameElement = "page-new";
+        private const string SavesElement = "page-saves";
         private const string ClientElement = "page-client";
         private const string WideClass = "menu__panel--wide";
         private static readonly Journal Log = Logs.Here();
         private readonly PageStack pages = new();
         private ClientPage client;
-        private HostPage host;
+        private Dialog dialog;
         private MainPage main;
+        private NewGamePage newGame;
         private VisualElement panel;
+        private SavesPage saves;
 
         public event Action<string> Hosting;
 
@@ -35,20 +38,24 @@ namespace Shooter.Client.Interface
             Keyboard keyboard = Keyboard.current;
             if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame) return;
 
-            pages.Pop();
+            if (dialog.Open) dialog.Cancel();
+            else pages.Pop();
         }
 
         protected override bool Bind(VisualElement root)
         {
             PortConverters.Register();
+            root.dataSource = Config.Read();
 
             panel = root.Q<VisualElement>(PanelElement);
             Label version = root.Q<Label>(VersionElement);
             VisualElement mainRoot = root.Q<VisualElement>(MainElement);
-            VisualElement hostRoot = root.Q<VisualElement>(HostElement);
+            VisualElement newGameRoot = root.Q<VisualElement>(NewGameElement);
+            VisualElement savesRoot = root.Q<VisualElement>(SavesElement);
             VisualElement clientRoot = root.Q<VisualElement>(ClientElement);
 
-            if (panel == null || version == null || mainRoot == null || hostRoot == null || clientRoot == null)
+            if (panel == null || version == null || mainRoot == null || newGameRoot == null || savesRoot == null ||
+                clientRoot == null)
             {
                 Log.Error("Menu document is incomplete, the menu stays dead");
                 return false;
@@ -56,8 +63,10 @@ namespace Shooter.Client.Interface
 
             try
             {
+                dialog = new Dialog(root);
                 main = new MainPage(mainRoot);
-                host = new HostPage(hostRoot);
+                newGame = new NewGamePage(newGameRoot);
+                saves = new SavesPage(savesRoot, dialog);
                 client = new ClientPage(clientRoot);
             }
             catch (InvalidOperationException e)
@@ -66,15 +75,17 @@ namespace Shooter.Client.Interface
                 return false;
             }
 
-            root.dataSource = Config.Read();
             version.text = Application.version;
 
-            main.HostOpening += OpenHost;
-            main.ClientOpening += OpenClient;
+            main.Continuing += Host;
+            main.NewGameOpening += OpenNewGame;
+            main.SavesOpening += OpenSaves;
+            main.JoinOpening += OpenClient;
             main.Quitting += Quit;
-            host.Loading += Host;
-            host.Starting += HostFresh;
-            host.Backing += Back;
+            newGame.Starting += HostFresh;
+            newGame.Backing += Back;
+            saves.Loading += Host;
+            saves.Backing += Back;
             client.Connecting += Connect;
             client.Backing += Back;
 
@@ -89,15 +100,22 @@ namespace Shooter.Client.Interface
             pages.Changed -= Resize;
             pages.Clear();
 
+            dialog = null;
             main = null;
-            host = null;
+            newGame = null;
+            saves = null;
             client = null;
             panel = null;
         }
 
-        private void OpenHost()
+        private void OpenNewGame()
         {
-            pages.Push(host);
+            pages.Push(newGame);
+        }
+
+        private void OpenSaves()
+        {
+            pages.Push(saves);
         }
 
         private void OpenClient()

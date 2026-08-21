@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label text="Клиент" class="screen__title"/>
+    <ui:Label text="Присоединиться" class="screen__title"/>
     <ui:VisualElement class="screen__body">
         <ui:TextField label="Имя игрока" class="field">
             <Bindings>
