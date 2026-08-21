@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -11,14 +12,37 @@ using UnityEngine;
 
 namespace Shooter.Game.Speech
 {
-    public abstract class Talker : NetworkBehaviour, IUsable, IRestraint
+    public abstract class Talker : NetworkBehaviour, IUsable, IRestraint, ISaveableComponent
     {
         public const float TalkReach = 8f;
         public const int SpeechLimit = 300;
         private static readonly Journal Log = Logs.Here();
-        private readonly Dictionary<long, Conversation> conversations = new();
 
+        private readonly Dictionary<long, Conversation> conversations = new();
         private readonly HashSet<long> thinking = new();
+
+        public string ComponentKey => "Talker";
+        private struct SaveData
+        {
+            public Dictionary<long, Conversation> Conversations { get; set; }
+            public HashSet<long> Thinking { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData()
+            {
+                Conversations = conversations.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
+                Thinking = thinking.ToHashSet()
+            };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            SaveData sd = content.To<SaveData>();
+            conversations.Clear();
+            foreach (var kvp in sd.Conversations) conversations.Add(kvp.Key, kvp.Value);
+            thinking.Clear();
+            foreach (long id in sd.Thinking) thinking.Add(id);
+        }
 
         private static bool Awake(NetworkObject body)
         {

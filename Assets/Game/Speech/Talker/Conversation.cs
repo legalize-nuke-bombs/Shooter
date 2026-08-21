@@ -1,11 +1,30 @@
 using System.Collections.Generic;
 using System.Linq;
+using Shooter.Game.Core.Saves;
 
 namespace Shooter.Game.Speech
 {
-    public sealed class Conversation
+    public sealed class Conversation : ISaveable
     {
         private readonly List<Message> messages = new();
+
+        private struct SaveData
+        {
+            public List<Message> Messages { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData()
+            {
+                Messages = messages.ToList()
+            };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            SaveData sd = content.To<SaveData>();
+            messages.Clear();
+            foreach (Message message in sd.Messages) messages.Add(message);
+        }
 
         public Conversation(long wanderer)
         {
