@@ -23,45 +23,29 @@ namespace Shooter.Game.Combat
         public string ComponentKey => "BulletHoles";
         private struct SaveData
         {
-            public float[] Positions;
-            public float[] Normals;
+            public List<HoleData> Holes { get; set; }
+        }
+        private struct HoleData
+        {
+            public Vector3 Position { get; set; }
+            public Vector3 Normal { get; set; }
         }
         public object SaveComponent()
         {
             var sd = new SaveData()
             {
-                Positions = new float[holes.Count * 3],
-                Normals = new float[holes.Count * 3]
+                Holes = new List<HoleData>(holes.Count)
             };
             for (int i = 0; i < holes.Count; i++)
-            {
-                BulletHole hole = holes[i];
-                sd.Positions[i * 3 + 0] = hole.Position.x;
-                sd.Positions[i * 3 + 1] = hole.Position.y;
-                sd.Positions[i * 3 + 2] = hole.Position.z;
-                sd.Normals[i * 3 + 0] = hole.Normal.x;
-                sd.Normals[i * 3 + 1] = hole.Normal.y;
-                sd.Normals[i * 3 + 2] = hole.Normal.z;
-            }
+                sd.Holes.Add(new HoleData { Position = holes[i].Position, Normal = holes[i].Normal });
             return sd;
         }
         public void LoadComponent(JToken token)
         {
             SaveData sd = token.ToObject<SaveData>();
-            int hn = Math.Min(sd.Positions.Length, sd.Normals.Length) / 3;
-            if (sd.Positions.Length != sd.Normals.Length || sd.Positions.Length % 3 != 0 || sd.Normals.Length % 3 != 0)
-            {
-                Log.Warn($"Entity {name} has unexpected bullet holes position-normal array sizes {sd.Positions.Length} - {sd.Normals.Length}");
-            }
             holes.Clear();
-            for (int i = 0; i < hn; i++)
-            {
-                holes.Add(new BulletHole()
-                {
-                    Position = new Vector3(sd.Positions[i * 3 + 0], sd.Positions[i * 3 + 1], sd.Positions[i * 3 + 2]),
-                    Normal = new Vector3(sd.Normals[i * 3 + 0], sd.Normals[i * 3 + 1], sd.Normals[i * 3 + 2])
-                });
-            }
+            foreach (HoleData hole in sd.Holes)
+                holes.Add(new BulletHole { Position = hole.Position, Normal = hole.Normal });
         }
 
         private readonly List<DecalProjector> projectors = new();
