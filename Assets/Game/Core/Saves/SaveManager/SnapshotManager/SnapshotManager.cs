@@ -15,8 +15,7 @@ namespace Shooter.Game.Core.Saves
 
         private static readonly JsonSerializerSettings Settings = new()
         {
-            Formatting = Formatting.Indented,
-            NullValueHandling = NullValueHandling.Ignore
+            Formatting = Formatting.Indented
         };
 
 
@@ -24,16 +23,13 @@ namespace Shooter.Game.Core.Saves
         public Snapshot Build()
         {
             Log.Info($"Entity {name} is building snapshot...");
-            var serializer = JsonSerializer.Create(SnapshotManager.Settings);
+            var serializer = JsonSerializer.Create(Settings);
             var snapshot = new Snapshot
             {
-                Version = Application.version,
-                Stamp = DateTime.Now,
                 GameObjects = new Dictionary<string, JObject>()
             };
 
-            SaveableObject[] saveables =
-                FindObjectsByType<SaveableObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            SaveableObject[] saveables = FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
             foreach (SaveableObject saveable in saveables)
             {
                 if (!saveable.TryGetComponent(out GameObjectId saveableId))

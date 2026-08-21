@@ -30,12 +30,12 @@ namespace Shooter.Game.World
         private float untilSync;
         public static Clock Current { get; private set; }
 
-        private DateTimeOffset Beginning => new(beginningYear, beginningMonth, beginningDay, beginningHour,
-            beginningMinutes, beginningSeconds, TimeSpan.Zero);
+        private DateTime Beginning => new DateTimeOffset(beginningYear, beginningMonth, beginningDay, beginningHour,
+            beginningMinutes, beginningSeconds, TimeSpan.Zero).Date;
 
         public double Timestamp { get; private set; }
 
-        public DateTimeOffset Now => Beginning.AddSeconds(Timestamp);
+        public DateTime Now => Beginning.AddSeconds(Timestamp);
 
         public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
 
@@ -110,9 +110,9 @@ namespace Shooter.Game.World
             return fraction >= DuskFraction || fraction < DawnFraction;
         }
 
-        public string DateTime()
+        public DateTime DateTime()
         {
-            return Now.ToString("yyyy.MM.dd HH:mm:ss");
+            return Now;
         }
 
         private void Step()
