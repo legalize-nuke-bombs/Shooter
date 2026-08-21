@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shooter.Configuring;
 using Shooter.Game.Body;
-using Shooter.Game.Core;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
@@ -226,7 +225,7 @@ namespace Shooter.Game.Llm
 
         private string Time()
         {
-            return Clock.Current.DateTime();
+            return Clock.Current.DateTime().ToString();
         }
     }
 }

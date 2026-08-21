@@ -7,6 +7,7 @@ using UnityEngine;
 namespace Shooter.Game.Core.Saves
 {
     [RequireComponent(typeof(SnapshotManager))]
+    [RequireComponent(typeof(MetaManager))]
     [RequireComponent(typeof(PreviewManager))]
     [RequireComponent(typeof(MainCompressionManager))]
     public class SaveManager : MonoBehaviour
@@ -18,6 +19,7 @@ namespace Shooter.Game.Core.Saves
         private static readonly Journal Log = Logs.Here();
 
         private SnapshotManager snapshotManager;
+        private MetaManager metaManager;
         private PreviewManager previewManager;
         private MainCompressionManager compressionManager;
 
@@ -26,6 +28,7 @@ namespace Shooter.Game.Core.Saves
         private void Awake()
         {
             snapshotManager = GetComponent<SnapshotManager>();
+            metaManager = GetComponent<MetaManager>();
             previewManager = GetComponent<PreviewManager>();
             compressionManager = GetComponent<MainCompressionManager>();
 
@@ -36,10 +39,12 @@ namespace Shooter.Game.Core.Saves
         {
             Log.Info($"Entity {name} is making save...");
             Snapshot snapshot = snapshotManager.Build();
+            Meta meta = metaManager.Build();
 
-            string path = Path.Combine(Config.Root(), folder, prefix + "_" + snapshot.Stamp.ToString(stampFormat));
+            string path = Path.Combine(Config.Root(), folder, prefix + "_" + meta.Stamp.ToString(stampFormat));
 
             snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
+            metaManager.Write(Path.Combine(path, "Meta.json"), meta);
             yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg")));
             path = compressionManager.Compress(path);
             Log.Info($"Entity {name} saved to {path}");
