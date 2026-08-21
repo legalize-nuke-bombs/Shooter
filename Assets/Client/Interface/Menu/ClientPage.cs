@@ -5,13 +5,13 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
-    public class JoinPage : MenuPage
+    public class ClientPage : MenuPage
     {
         private const string ConnectButton = "connect";
         private const string BackButton = "back";
         private static readonly Journal Log = Logs.Here();
 
-        public JoinPage(VisualElement root) : base(root)
+        public ClientPage(VisualElement root) : base(root)
         {
             Require<Button>(ConnectButton).clicked += () => Connecting?.Invoke();
             Require<Button>(BackButton).clicked += () => Backing?.Invoke();

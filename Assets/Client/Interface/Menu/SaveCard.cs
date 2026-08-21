@@ -5,18 +5,18 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
-    public class WorldCard : VisualElement
+    public class SaveCard : VisualElement
     {
-        private const string CardClass = "world";
-        private const string PreviewClass = "world__preview";
-        private const string InfoClass = "world__info";
-        private const string StampClass = "world__stamp";
-        private const string ClockClass = "world__clock";
-        private const string VersionClass = "world__version";
-        private const string ForeignClass = "world__version--foreign";
-        private const string ActionsClass = "world__actions";
-        private const string ActionClass = "world__action";
-        private const string ArmedClass = "world__action--armed";
+        private const string CardClass = "save";
+        private const string PreviewClass = "save__preview";
+        private const string InfoClass = "save__info";
+        private const string StampClass = "save__stamp";
+        private const string ClockClass = "save__clock";
+        private const string VersionClass = "save__version";
+        private const string ForeignClass = "save__version--foreign";
+        private const string ActionsClass = "save__actions";
+        private const string ActionClass = "save__action";
+        private const string ArmedClass = "save__action--armed";
         private const string LoadText = "Загрузить";
         private const string DeleteText = "Удалить";
         private const string ConfirmText = "Точно?";
@@ -34,7 +34,7 @@ namespace Shooter.Client.Interface
         private Action<SaveEntry> onLoad;
         private Texture2D texture;
 
-        public WorldCard()
+        public SaveCard()
         {
             AddToClassList(CardClass);
 
@@ -80,7 +80,7 @@ namespace Shooter.Client.Interface
             onDelete = remove;
 
             stamp.text = RussianDate.Moment(shown.Meta.Stamp);
-            clock.text = "В мире " + RussianDate.Moment(shown.Meta.Clock);
+            clock.text = "В игре " + RussianDate.Moment(shown.Meta.Clock);
 
             bool foreign = shown.Meta.Version != Application.version;
             version.text = foreign

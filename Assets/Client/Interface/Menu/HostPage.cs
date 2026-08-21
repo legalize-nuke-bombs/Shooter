@@ -1,36 +1,41 @@
 using System;
 using System.Collections.Generic;
+using Shooter.Configuring;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
-    public class WorldsPage : MenuPage
+    public class HostPage : MenuPage
     {
-        private const string ListElement = "list";
+        private const string SavesElement = "saves";
         private const string EmptyElement = "empty";
+        private const string NewButton = "new";
         private const string BackButton = "back";
         private static readonly Journal Log = Logs.Here();
 
         private readonly Label empty;
-        private readonly ListView list;
+        private readonly ListView saves;
         private List<SaveEntry> entries = new();
 
-        public WorldsPage(VisualElement root) : base(root)
+        public HostPage(VisualElement root) : base(root)
         {
-            list = Require<ListView>(ListElement);
+            saves = Require<ListView>(SavesElement);
             empty = Require<Label>(EmptyElement);
 
-            list.makeItem = () => new WorldCard();
-            list.bindItem = (element, index) => ((WorldCard)element).Show(entries[index], Load, Delete);
-            list.unbindItem = (element, index) => ((WorldCard)element).Release();
-            list.destroyItem = element => ((WorldCard)element).Release();
+            saves.makeItem = () => new SaveCard();
+            saves.bindItem = (element, index) => ((SaveCard)element).Show(entries[index], Load, Delete);
+            saves.unbindItem = (element, index) => ((SaveCard)element).Release();
+            saves.destroyItem = element => ((SaveCard)element).Release();
 
+            Require<Button>(NewButton).clicked += () => Starting?.Invoke();
             Require<Button>(BackButton).clicked += () => Backing?.Invoke();
         }
 
         public event Action<string> Loading;
+
+        public event Action Starting;
 
         public event Action Backing;
 
@@ -41,17 +46,25 @@ namespace Shooter.Client.Interface
             Refresh();
         }
 
+        protected override void Closed()
+        {
+            Config.Save();
+
+            GameConfig config = Config.Read();
+            Log.Info($"Own world on port {config.Server.Port} under the name {config.Client.Name}");
+        }
+
         private void Refresh()
         {
             entries = SaveLibrary.All();
-            list.itemsSource = entries;
-            list.RefreshItems();
+            saves.itemsSource = entries;
+            saves.RefreshItems();
 
             bool any = entries.Count > 0;
-            list.style.display = any ? DisplayStyle.Flex : DisplayStyle.None;
+            saves.style.display = any ? DisplayStyle.Flex : DisplayStyle.None;
             empty.style.display = any ? DisplayStyle.None : DisplayStyle.Flex;
 
-            Log.Info($"Worlds page lists {entries.Count} saves");
+            Log.Info($"Host page lists {entries.Count} saves");
         }
 
         private void Load(SaveEntry entry)
