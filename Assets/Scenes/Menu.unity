@@ -823,7 +823,6 @@ GameObject:
   - component: {fileID: 1120131901}
   - component: {fileID: 1120131900}
   - component: {fileID: 1120131899}
-  - component: {fileID: 1120131903}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -905,22 +904,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -74.115, y: 165.003, z: -121.467}
---- !u!114 &1120131903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120131898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0b3784c4e118254c8bf96c19140cee0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.MenuCamera
-  swayDegrees: 1.2
-  swayPeriod: 19
-  bobMeters: 0.02
-  bobPeriod: 7
 --- !u!1 &1406102022
 GameObject:
   m_ObjectHideFlags: 0
