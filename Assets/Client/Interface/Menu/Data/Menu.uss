@@ -151,6 +151,8 @@
 
 .save__info {
     flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
 }
 
 .save__stamp {
@@ -159,7 +161,7 @@
 }
 
 .save__version {
-    margin-right: var(--space-3);
+    margin-top: 2px;
     font-size: var(--text-small);
     color: var(--color-text-faint);
 }
@@ -170,6 +172,7 @@
 
 .save__actions {
     flex-direction: row;
+    flex-shrink: 0;
     align-items: center;
 }
 
