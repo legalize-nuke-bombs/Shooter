@@ -24,7 +24,7 @@ namespace Shooter.Game.Combat
                 Normal = Normal
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
             Position = sd.Position;

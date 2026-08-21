@@ -24,7 +24,7 @@ namespace Shooter.Game.Core
                 Next = next
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             next = Math.Max(next, content.To<SaveData>().Next);
         }

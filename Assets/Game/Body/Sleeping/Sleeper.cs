@@ -38,7 +38,7 @@ namespace Shooter.Game.Body
                 Bedded = bedded
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
             bedside.Value = sd.Bedside;

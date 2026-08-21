@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Shooter.Game.Core.Saves
 {
@@ -12,10 +11,5 @@ namespace Shooter.Game.Core.Saves
         };
 
         public static readonly JsonSerializer Serializer = JsonSerializer.Create(Settings);
-
-        public static T To<T>(this JToken token)
-        {
-            return token.ToObject<T>(Serializer);
-        }
     }
 }

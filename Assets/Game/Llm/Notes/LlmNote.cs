@@ -21,9 +21,9 @@ namespace Shooter.Game.Llm.Notes
                 Content = Content
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             Description = sd.Description;
             Content = sd.Content;
         }

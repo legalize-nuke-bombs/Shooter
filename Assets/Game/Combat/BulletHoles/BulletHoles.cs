@@ -35,7 +35,7 @@ namespace Shooter.Game.Combat
                 sd.Holes.Add(holes[i]);
             return sd;
         }
-        public void LoadObject(JToken token)
+        public void LoadObject(SaveToken token)
         {
             SaveData sd = token.To<SaveData>();
             holes.Clear();

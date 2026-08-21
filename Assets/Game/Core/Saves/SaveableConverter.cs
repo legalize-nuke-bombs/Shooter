@@ -22,7 +22,7 @@ namespace Shooter.Game.Core.Saves
             if (reader.TokenType == JsonToken.Null) return null;
 
             var saveable = (ISaveable)Activator.CreateInstance(objectType);
-            saveable.LoadObject(JToken.Load(reader));
+            saveable.LoadObject(new SaveToken(JToken.Load(reader)));
             return saveable;
         }
     }

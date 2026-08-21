@@ -24,7 +24,7 @@ namespace Shooter.Game.Body
                 Hp = hp.Value
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
             hp.Value = sd.Hp;

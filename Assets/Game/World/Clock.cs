@@ -43,7 +43,7 @@ namespace Shooter.Game.World
                 Scale = scale.Value
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
             timestamp.Value = sd.Timestamp;

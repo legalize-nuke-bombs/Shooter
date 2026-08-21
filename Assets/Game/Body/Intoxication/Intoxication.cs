@@ -44,7 +44,7 @@ namespace Shooter.Game.Body
             }
             return sd;
         }
-        public void LoadObject(JToken token)
+        public void LoadObject(SaveToken token)
         {
             SaveData sd = token.To<SaveData>();
             for (int i = 0; i < levels.Count; i++)

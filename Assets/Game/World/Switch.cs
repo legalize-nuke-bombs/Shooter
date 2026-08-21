@@ -43,7 +43,7 @@ namespace Shooter.Game.World
                 Shining = shining.Value
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
             shining.Value = sd.Shining;
