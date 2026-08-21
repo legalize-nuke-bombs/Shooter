@@ -1,14 +1,35 @@
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using Shooter.Game.Core.Saves;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    public sealed class LlmHistory : MonoBehaviour
+    public sealed class LlmHistory : MonoBehaviour, ISaveableComponent
     {
         [SerializeField] private int maxSize = 30000;
 
         private readonly List<LlmMessage> messages = new();
+
+        public string ComponentKey => "LlmHistory";
+        private struct SaveData
+        {
+            public List<LlmMessage> Messages { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData
+            {
+                Messages = messages
+            };
+        }
+        public void LoadObject(JToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            messages.Clear();
+            foreach (LlmMessage message in sd.Messages) messages.Add(message);
+        }
 
         public int Count => messages.Count;
         public int Size { get; private set; }
