@@ -33,21 +33,18 @@ namespace Shooter.Game.World
         struct SaveData
         {
             public double Timestamp { get; set; }
-            public float Scale { get; set; }
         }
         public object SaveObject()
         {
             return new SaveData()
             {
-                Timestamp = timestamp.Value,
-                Scale = scale.Value
+                Timestamp = timestamp.Value
             };
         }
         public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
             timestamp.Value = sd.Timestamp;
-            scale.Value = sd.Scale;
         }
 
         public static Clock Current { get; private set; }
