@@ -46,6 +46,10 @@ namespace Shooter.Client.Interface
             actions.AddToClassList(ActionsClass);
             Add(actions);
 
+            version = new Label();
+            version.AddToClassList(VersionClass);
+            actions.Add(version);
+
             var delete = new Button(() => onDelete?.Invoke(entry)) { text = DeleteText };
             delete.AddToClassList(ActionClass);
             actions.Add(delete);
@@ -53,10 +57,6 @@ namespace Shooter.Client.Interface
             var load = new Button(() => onLoad?.Invoke(entry)) { text = LoadText };
             load.AddToClassList(ActionClass);
             actions.Add(load);
-
-            version = new Label();
-            version.AddToClassList(VersionClass);
-            Add(version);
         }
 
         public void Show(SaveEntry shown, Action<SaveEntry> load, Action<SaveEntry> remove)

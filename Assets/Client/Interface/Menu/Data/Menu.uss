@@ -159,9 +159,7 @@
 }
 
 .save__version {
-    position: absolute;
-    right: 10px;
-    top: 6px;
+    margin-right: var(--space-3);
     font-size: var(--text-small);
     color: var(--color-text-faint);
 }
@@ -172,6 +170,7 @@
 
 .save__actions {
     flex-direction: row;
+    align-items: center;
 }
 
 .save__action {
