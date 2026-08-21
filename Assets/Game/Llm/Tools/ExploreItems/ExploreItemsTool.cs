@@ -15,7 +15,7 @@ This tool displays a detailed description of the item, including its effects (sa
 You can process any number of IDs at once.
 ";
 
-        protected override string Execute(ExploreItemsArguments arguments)
+        protected override string Execute(ExploreItemsArguments arguments, LlmCallContext context)
         {
             if (arguments.ItemIds == null || arguments.ItemIds.Length == 0) return "You didn't pass a single ID.";
 

@@ -140,7 +140,7 @@ namespace Shooter.Game.Llm
 
                 history.Seen();
                 history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
-                history.Snapshot();
+                var context = new LlmCallContext { PromptedCount = history.Count };
 
                 var selected = abilities.Where(ability => ability.Available).ToList();
                 LlmConfig config = Fitting(selected);
@@ -168,7 +168,7 @@ namespace Shooter.Game.Llm
 
                     foreach (LlmToolCall call in turn.ToolCalls)
                         history.Append(new LlmMessage
-                            { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call) });
+                            { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call, context) });
                 }
 
                 if (retelling && history.Overflowing)
@@ -210,14 +210,14 @@ namespace Shooter.Game.Llm
                 : Config.Read().Server.LlmBase;
         }
 
-        private string Execute(IReadOnlyList<ILlmTool> tools, LlmToolCall call)
+        private string Execute(IReadOnlyList<ILlmTool> tools, LlmToolCall call, LlmCallContext context)
         {
             ILlmTool tool = tools.FirstOrDefault(known => known.Name == call.Name);
             if (tool == null) return $"There is no tool named {call.Name}";
 
             try
             {
-                return tool.Execute(call.Arguments);
+                return tool.Execute(call.Arguments, context);
             }
             catch (Exception e)
             {

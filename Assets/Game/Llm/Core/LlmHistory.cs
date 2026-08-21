@@ -9,7 +9,6 @@ namespace Shooter.Game.Llm
         [SerializeField] private int maxSize = 30000;
 
         private readonly List<LlmMessage> messages = new();
-        private int snapshot;
 
         public int Count => messages.Count;
         public int Size { get; private set; }
@@ -34,21 +33,14 @@ namespace Shooter.Game.Llm
             Unseen = false;
         }
 
-        public void Snapshot()
+        public void Forget(int keepFrom)
         {
-            snapshot = messages.Count;
-        }
-
-        public void Forget()
-        {
-            var fresh = messages.Skip(snapshot).ToList();
+            var fresh = messages.Skip(keepFrom).ToList();
 
             messages.Clear();
             Size = 0;
 
             foreach (LlmMessage message in fresh) Append(message);
-
-            snapshot = messages.Count;
         }
 
         private static int Sized(LlmMessage message)

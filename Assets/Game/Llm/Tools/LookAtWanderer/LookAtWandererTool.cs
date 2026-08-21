@@ -31,7 +31,7 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
             digester = GetComponent<Digester>();
         }
 
-        protected override string Execute(LookAtWandererArguments arguments)
+        protected override string Execute(LookAtWandererArguments arguments, LlmCallContext context)
         {
             long wandererId = arguments.WandererId;
             if (!waiting.IsWaiting(wandererId)) return $"Wanderer {wandererId} isn't talking to you right now.";

@@ -15,7 +15,7 @@ namespace Shooter.Game.Llm
         public abstract string Description { get; }
         public abstract JObject Parameters { get; }
 
-        public abstract string Execute(string arguments);
+        public abstract string Execute(string arguments, LlmCallContext context);
     }
 
     public abstract class LlmTool<TArguments> : LlmTool
@@ -34,17 +34,17 @@ namespace Shooter.Game.Llm
         {
         }
 
-        public override string Execute(string arguments)
+        public override string Execute(string arguments, LlmCallContext context)
         {
             TArguments parsed = JsonConvert.DeserializeObject<TArguments>(
                 string.IsNullOrEmpty(arguments) ? "{}" : arguments, Settings);
 
-            string result = Execute(parsed);
+            string result = Execute(parsed, context);
             Log.Info($"Entity {name} used {Name} {arguments}: {result}");
 
             return result;
         }
 
-        protected abstract string Execute(TArguments arguments);
+        protected abstract string Execute(TArguments arguments, LlmCallContext context);
     }
 }

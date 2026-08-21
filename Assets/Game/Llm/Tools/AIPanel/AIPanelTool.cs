@@ -28,7 +28,7 @@ To get a list of available parameters and their current values, call this tool w
             Log.Info($"Entity {name} has {settings.Length} ai settings");
         }
 
-        protected override string Execute(AIPanelArguments arguments)
+        protected override string Execute(AIPanelArguments arguments, LlmCallContext context)
         {
             if (arguments.Overrides == null || arguments.Overrides.Count == 0) return RepresentSettings();
             return Override(arguments.Overrides);

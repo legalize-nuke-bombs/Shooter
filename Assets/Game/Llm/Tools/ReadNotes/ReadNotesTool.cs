@@ -25,7 +25,7 @@ Pass `noteName` to read the note's content by its name.
             notes = GetComponent<LlmNotes>();
         }
 
-        protected override string Execute(ReadNotesArguments arguments)
+        protected override string Execute(ReadNotesArguments arguments, LlmCallContext context)
         {
             string searchPattern = arguments.SearchPattern;
             string noteName = arguments.NoteName;

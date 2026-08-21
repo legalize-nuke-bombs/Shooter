@@ -18,7 +18,7 @@ namespace Shooter.Game.Llm
             worldDigester = GetComponent<WorldDigester>();
         }
 
-        protected override string Execute(LookAroundArguments arguments)
+        protected override string Execute(LookAroundArguments arguments, LlmCallContext context)
         {
             return "Objects around you:\n" + worldDigester.Digest();
         }

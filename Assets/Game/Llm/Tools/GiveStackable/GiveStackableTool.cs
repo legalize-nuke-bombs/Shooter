@@ -24,7 +24,7 @@ The recipient will automatically receive a notification.
             inventoryExchanger = GetComponent<InventoryExchanger>();
         }
 
-        protected override string Execute(GiveStackableArguments arguments)
+        protected override string Execute(GiveStackableArguments arguments, LlmCallContext context)
         {
             ItemSpec item = Catalogs.Of<ItemCatalog>().Of(arguments.Item);
             if (item == null) return $"There is no item named {arguments.Item}";

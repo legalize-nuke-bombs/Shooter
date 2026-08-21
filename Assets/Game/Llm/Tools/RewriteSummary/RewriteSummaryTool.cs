@@ -21,11 +21,11 @@ namespace Shooter.Game.Llm
             history = GetComponent<LlmHistory>();
         }
 
-        protected override string Execute(RewriteSummaryArguments arguments)
+        protected override string Execute(RewriteSummaryArguments arguments, LlmCallContext context)
         {
             if (string.IsNullOrEmpty(arguments.Text)) return "Nothing to retell";
 
-            history.Forget();
+            history.Forget(context.PromptedCount);
             return "Rewritten";
         }
     }

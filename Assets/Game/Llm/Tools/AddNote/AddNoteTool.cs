@@ -27,7 +27,7 @@ Max notes number: {notes.AmountLimit}
             notes = GetComponent<LlmNotes>();
         }
 
-        protected override string Execute(AddNoteArguments arguments)
+        protected override string Execute(AddNoteArguments arguments, LlmCallContext context)
         {
             string result;
             try
