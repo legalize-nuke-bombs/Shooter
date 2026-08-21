@@ -34,7 +34,7 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            DateTimeOffset now = world.Now;
+            DateTime now = world.Now;
             long minute = now.Ticks / TimeSpan.TicksPerMinute;
 
             if (minute == shown) return;
@@ -70,7 +70,7 @@ namespace Shooter.Client.Interface
             clock.text = string.Empty;
         }
 
-        private static string Describe(DateTimeOffset now)
+        private static string Describe(DateTime now)
         {
             return now.Day + " " + Months[now.Month - 1] + " " + now.Year + ", " +
                    now.ToString(TimeFormat, CultureInfo.InvariantCulture);
