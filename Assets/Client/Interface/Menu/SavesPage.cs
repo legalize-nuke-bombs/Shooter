@@ -41,8 +41,6 @@ namespace Shooter.Client.Interface
 
         public event Action Backing;
 
-        public override bool Wide => true;
-
         protected override void Opened()
         {
             Refresh();
