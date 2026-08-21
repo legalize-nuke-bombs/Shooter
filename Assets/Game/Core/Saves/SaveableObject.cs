@@ -46,7 +46,7 @@ namespace Shooter.Game.Core.Saves
                 Metadata = name
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             Spawned = content.To<SaveDto>().Spawned;
         }
@@ -108,7 +108,7 @@ namespace Shooter.Game.Core.Saves
 
                 try
                 {
-                    saveable.LoadObject(componentData);
+                    saveable.LoadObject(new SaveToken(componentData));
                 }
                 catch (Exception e)
                 {

@@ -27,12 +27,12 @@ namespace Shooter.Game.Llm.Notes
         {
             return new SaveData
             {
-                Notes = notes
+                Notes = new Dictionary<string, LlmNote>(notes)
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             notes.Clear();
             foreach (var kvp in sd.Notes) notes.Add(kvp.Key, kvp.Value);
         }

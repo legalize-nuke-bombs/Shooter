@@ -24,9 +24,9 @@ namespace Shooter.Game.Llm
                 Arguments = Arguments
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             Id = sd.Id;
             Name = sd.Name;
             Arguments = sd.Arguments;

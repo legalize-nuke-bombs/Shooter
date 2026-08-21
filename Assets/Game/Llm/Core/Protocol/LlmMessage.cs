@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+using System;
 using Shooter.Game.Core.Saves;
 
 namespace Shooter.Game.Llm
@@ -12,7 +12,7 @@ namespace Shooter.Game.Llm
 
         private struct SaveData
         {
-            public LlmRole Role { get; set; }
+            public string Role { get; set; }
             public string Content { get; set; }
             public LlmToolCall[] ToolCalls { get; set; }
             public string ToolCallId { get; set; }
@@ -21,16 +21,16 @@ namespace Shooter.Game.Llm
         {
             return new SaveData()
             {
-                Role = Role,
+                Role = Role.ToString(),
                 Content = Content,
                 ToolCalls = ToolCalls,
                 ToolCallId = ToolCallId
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            Role = sd.Role;
+            SaveData sd = content.To<SaveData>();
+            Role = Enum.Parse<LlmRole>(sd.Role);
             Content = sd.Content;
             ToolCalls = sd.ToolCalls;
             ToolCallId = sd.ToolCallId;

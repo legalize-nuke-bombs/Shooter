@@ -24,7 +24,7 @@ namespace Shooter.Game.Core.Saves
                 Scale = transform.localScale
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             SaveDto sd = content.To<SaveDto>();
             GetComponent<NetworkTransform>().Teleport(sd.Position, sd.Rotation, sd.Scale);

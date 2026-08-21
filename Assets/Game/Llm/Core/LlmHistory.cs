@@ -16,19 +16,23 @@ namespace Shooter.Game.Llm
         private struct SaveData
         {
             public List<LlmMessage> Messages { get; set; }
+            public bool Unseen { get; set; }
         }
         public object SaveObject()
         {
             return new SaveData
             {
-                Messages = messages
+                Messages = new List<LlmMessage>(messages),
+                Unseen = Unseen
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData sd = content.To<SaveData>();
             messages.Clear();
-            foreach (LlmMessage message in sd.Messages) messages.Add(message);
+            Size = 0;
+            Unseen = sd.Unseen;
+            foreach (LlmMessage message in sd.Messages) Append(message);
         }
 
         public int Count => messages.Count;

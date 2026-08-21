@@ -36,7 +36,7 @@ namespace Shooter.Game.Core
                 Id = value.Value
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             value.Value = content.To<SaveData>().Id;
         }

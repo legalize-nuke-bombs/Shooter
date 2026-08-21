@@ -31,7 +31,7 @@ namespace Shooter.Game.World
                 Broken = broken
             };
         }
-        public void LoadObject(JToken jToken)
+        public void LoadObject(SaveToken jToken)
         {
             SaveData sd = jToken.To<SaveData>();
             broken = sd.Broken;

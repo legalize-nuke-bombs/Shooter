@@ -31,7 +31,7 @@ namespace Shooter.Game.Body
                 Amount = amount.Value
             };
         }
-        public void LoadObject(JToken content)
+        public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
             amount.Value = sd.Amount;
