@@ -37,6 +37,8 @@ namespace Shooter.Game.Body
 
         private void Step()
         {
+            if (!isActiveAndEnabled) return;
+
             stride += movement.GroundTravel;
             if (stride < strideLength) return;
 

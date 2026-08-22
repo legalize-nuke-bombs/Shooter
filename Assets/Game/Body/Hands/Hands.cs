@@ -2,6 +2,7 @@ using System;
 using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game.Body
 {
@@ -31,18 +32,23 @@ namespace Shooter.Game.Body
             Interrupt();
         }
 
+        private void Awake()
+        {
+            enabled = false;
+        }
+
         public override void OnNetworkSpawn()
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick += Step;
+            enabled = true;
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick -= Step;
+            enabled = false;
         }
 
         public bool TryTake(HandsAction wanted, float duration, bool interruptible, Action complete)
@@ -72,11 +78,11 @@ namespace Shooter.Game.Body
             remaining = 0f;
         }
 
-        private void Step()
+        private void Update()
         {
             if (Free) return;
 
-            remaining -= NetworkManager.LocalTime.FixedDeltaTime;
+            remaining -= Time.deltaTime;
             if (remaining > 0f) return;
 
             Action finished = complete;

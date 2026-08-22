@@ -90,16 +90,21 @@ namespace Shooter.Game.Speech
             mouth.Open(this, conversation.Messages);
         }
 
+        private void Awake()
+        {
+            enabled = false;
+        }
+
         public override void OnNetworkSpawn()
         {
             if (!IsServer) return;
-            NetworkManager.NetworkTickSystem.Tick += Step;
+            enabled = true;
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) return;
-            NetworkManager.NetworkTickSystem.Tick -= Step;
+            enabled = false;
         }
 
         public void Listen(NetworkObject user, string content)
@@ -165,7 +170,7 @@ namespace Shooter.Game.Speech
             Log.Info($"Entity {name} answered wanderer {wandererId}");
         }
 
-        private void Step()
+        private void Update()
         {
             Watch();
 
