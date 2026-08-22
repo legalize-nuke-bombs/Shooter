@@ -24,6 +24,7 @@ namespace Shooter.Bootstrapping
         private const int UnlimitedFrameRate = -1;
         private static readonly Journal Log = Logs.Here();
         private bool ending;
+        private bool loadFailed;
         private LoadingOverlay loading;
 
         private GameObject overlays;
@@ -51,6 +52,12 @@ namespace Shooter.Bootstrapping
             screen.Hosting += Host;
             screen.Joining += Join;
             screen.Quitting += Quit;
+
+            if (loadFailed)
+            {
+                loadFailed = false;
+                screen.Warn("Сохранение не загрузилось", "Файл повреждён или несовместим с этой версией.");
+            }
 
             ending = false;
             Log.Info("Menu is up");
@@ -129,6 +136,7 @@ namespace Shooter.Bootstrapping
             if (saves == null)
             {
                 Log.Error($"World has no save manager, {save} stays unloaded, shutting the host down");
+                loadFailed = true;
                 network.Shutdown();
                 return;
             }
@@ -139,6 +147,7 @@ namespace Shooter.Bootstrapping
             if (saves.Load(world, save)) return;
 
             Log.Error($"The world failed to load {save}, shutting the host down");
+            loadFailed = true;
             network.Shutdown();
         }
 

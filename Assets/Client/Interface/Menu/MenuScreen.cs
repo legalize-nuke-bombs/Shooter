@@ -28,12 +28,21 @@ namespace Shooter.Client.Interface
         private VisualElement panel;
         private SavesPage saves;
         private ServerSettingsPage serverSettings;
+        private string warnDetails;
+        private string warnTitle;
 
         public event Action<string> Hosting;
 
         public event Action Joining;
 
         public event Action Quitting;
+
+        public void Warn(string title, string details)
+        {
+            warnTitle = title;
+            warnDetails = details;
+            ShowWarning();
+        }
 
         private void Update()
         {
@@ -98,7 +107,18 @@ namespace Shooter.Client.Interface
 
             pages.Push(main);
 
+            ShowWarning();
+
             return true;
+        }
+
+        private void ShowWarning()
+        {
+            if (dialog == null || warnTitle == null) return;
+
+            dialog.Notice(warnTitle, warnDetails, "Понятно");
+            warnTitle = null;
+            warnDetails = null;
         }
 
         protected override void Unbind()
