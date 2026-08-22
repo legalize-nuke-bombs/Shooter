@@ -1,5 +1,6 @@
 using System.Collections;
 using System.IO;
+using System.Threading;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -15,11 +16,15 @@ namespace Shooter.Game.Core.Saves
 
         private static readonly Journal Log = Logs.Here();
 
+        private readonly SemaphoreSlim gate = new(1, 1);
+
         private SnapshotManager snapshotManager;
         private MetaManager metaManager;
         private PreviewManager previewManager;
 
         public static SaveManager Current { get; private set; }
+
+        public bool Saving => gate.CurrentCount == 0;
 
         private void Awake()
         {
@@ -32,17 +37,30 @@ namespace Shooter.Game.Core.Saves
 
         public IEnumerator SaveCoroutine()
         {
-            Log.Info($"Entity {name} is making save...");
-            Snapshot snapshot = snapshotManager.Build();
-            Meta meta = metaManager.Build();
+            if (!gate.Wait(0))
+            {
+                Log.Info($"Entity {name} is already saving, this request is dropped");
+                yield break;
+            }
 
-            string path = Path.Combine(SaveLibrary.Location, prefix + "_" + meta.Stamp.ToString(stampFormat));
+            try
+            {
+                Log.Info($"Entity {name} is making save...");
+                Snapshot snapshot = snapshotManager.Build();
+                Meta meta = metaManager.Build();
 
-            snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
-            metaManager.Write(Path.Combine(path, "Meta.json"), meta);
-            yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg")));
-            path = MainCompressionManager.Current.Compress(path);
-            Log.Info($"Entity {name} saved to {path}");
+                string path = Path.Combine(SaveLibrary.Location, prefix + "_" + meta.Stamp.ToString(stampFormat));
+
+                snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
+                metaManager.Write(Path.Combine(path, "Meta.json"), meta);
+                yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg")));
+                path = MainCompressionManager.Current.Compress(path);
+                Log.Info($"Entity {name} saved to {path}");
+            }
+            finally
+            {
+                gate.Release();
+            }
         }
 
         public FrozenWorld Freeze()
