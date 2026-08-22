@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Core
 {
-    public abstract class RegisteredBehaviour : MonoBehaviour
+    public abstract class RegisteredBehaviour : MonoBehaviour, IRegistered
     {
         private static readonly Journal Log = Logs.Here();
 
