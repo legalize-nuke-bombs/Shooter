@@ -3,6 +3,7 @@ using System.Text;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Security;
+using Shooter.Accounts.Mnemonics;
 
 namespace Shooter.Accounts
 {
@@ -25,9 +26,16 @@ namespace Shooter.Accounts
             return new Account(new Ed25519PrivateKeyParameters(Convert.FromBase64String(secret), 0));
         }
 
+        public static Account FromPhrase(string phrase)
+        {
+            return new Account(new Ed25519PrivateKeyParameters(Mnemonic.ToEntropy(phrase), 0));
+        }
+
         public string Key => Convert.ToBase64String(key.GetEncoded());
 
         public string Public => Convert.ToBase64String(key.GeneratePublicKey().GetEncoded());
+
+        public string Phrase => Mnemonic.FromEntropy(key.GetEncoded());
 
         public byte[] Sign(string context, byte[] data)
         {

@@ -240,3 +240,35 @@
     margin-right: 0;
     margin-left: var(--space-2);
 }
+
+.secret {
+    margin-top: var(--space-4);
+}
+
+.secret > .unity-foldout__toggle {
+    margin: 0;
+    padding: 6px 0;
+}
+
+.secret .unity-foldout__text {
+    font-size: var(--text-base);
+    color: var(--color-text);
+}
+
+.secret > .unity-foldout__content {
+    margin-left: 0;
+}
+
+.secret__warning {
+    color: var(--color-accent);
+}
+
+.secret__phrase {
+    margin-top: var(--space-2);
+}
+
+.secret__status {
+    margin-top: var(--space-1);
+    font-size: var(--text-small);
+    color: var(--color-accent);
+}

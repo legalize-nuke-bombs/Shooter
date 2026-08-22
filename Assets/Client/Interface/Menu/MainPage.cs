@@ -9,6 +9,7 @@ namespace Shooter.Client.Interface
         private const string LoadButton = "load";
         private const string SettingsButton = "settings";
         private const string JoinButton = "join";
+        private const string AccountButton = "account";
         private const string QuitButton = "quit";
 
         public MainPage(VisualElement root) : base(root)
@@ -17,6 +18,7 @@ namespace Shooter.Client.Interface
             Require<Button>(LoadButton).clicked += () => SavesOpening?.Invoke();
             Require<Button>(SettingsButton).clicked += () => ServerSettingsOpening?.Invoke();
             Require<Button>(JoinButton).clicked += () => JoinOpening?.Invoke();
+            Require<Button>(AccountButton).clicked += () => AccountOpening?.Invoke();
             Require<Button>(QuitButton).clicked += () => Quitting?.Invoke();
         }
 
@@ -27,6 +29,8 @@ namespace Shooter.Client.Interface
         public event Action ServerSettingsOpening;
 
         public event Action JoinOpening;
+
+        public event Action AccountOpening;
 
         public event Action Quitting;
     }

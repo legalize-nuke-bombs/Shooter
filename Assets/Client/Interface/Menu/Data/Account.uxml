@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label text="Аккаунт" class="screen__title"/>
+    <ui:VisualElement class="screen__body">
+        <ui:Label text="Аккаунт — криптографическая пара ключей, единая во всех мирах. По публичному ключу игрока узнают, приватным подтверждают владение." class="screen__hint"/>
+        <ui:Label text="Публичный ключ" class="screen__caption"/>
+        <ui:Label name="identity" class="screen__hint"/>
+        <ui:Foldout name="secret" text="Резервная фраза" value="false" class="secret">
+            <ui:Label text="Приватный ключ словами: им аккаунт переносят и восстанавливают. Кто знает фразу — владеет аккаунтом. Потеря фразы или ошибка в слове — аккаунт не вернуть." class="screen__hint secret__warning"/>
+            <ui:TextField name="phrase" is-delayed="true" class="field secret__phrase"/>
+            <ui:Label name="status" class="secret__status"/>
+        </ui:Foldout>
+    </ui:VisualElement>
+    <ui:VisualElement class="screen__footer">
+        <ui:Button name="back" text="Назад" class="action"/>
+    </ui:VisualElement>
+</ui:UXML>
