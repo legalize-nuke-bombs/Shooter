@@ -29,7 +29,7 @@ namespace Shooter.Game.Core.Saves
             return saveables.TryGetValue(id, out target);
         }
 
-        internal void Adopt(SaveableObject saveable)
+        private void Adopt(SaveableObject saveable)
         {
             string id = saveable.GetComponent<GameObjectId>().Id;
             if (string.IsNullOrEmpty(id))
