@@ -18,6 +18,7 @@ namespace Shooter.Client.Interface
         [SerializeField] private VisualTreeAsset newGamePage;
         [SerializeField] private VisualTreeAsset savesPage;
         [SerializeField] private VisualTreeAsset clientPage;
+        [SerializeField] private VisualTreeAsset serverSettingsPage;
 
         private readonly PageStack pages = new();
         private ClientPage client;
@@ -26,6 +27,7 @@ namespace Shooter.Client.Interface
         private NewGamePage newGame;
         private VisualElement panel;
         private SavesPage saves;
+        private ServerSettingsPage serverSettings;
 
         public event Action<string> Hosting;
 
@@ -58,7 +60,7 @@ namespace Shooter.Client.Interface
                 return false;
             }
 
-            if (mainPage == null || newGamePage == null || savesPage == null || clientPage == null)
+            if (mainPage == null || newGamePage == null || savesPage == null || clientPage == null || serverSettingsPage == null)
             {
                 Log.Error("Menu screen misses a page template, the menu stays dead");
                 return false;
@@ -71,6 +73,7 @@ namespace Shooter.Client.Interface
                 newGame = new NewGamePage(Mount(newGamePage));
                 saves = new SavesPage(Mount(savesPage), dialog);
                 client = new ClientPage(Mount(clientPage));
+                serverSettings = new ServerSettingsPage(Mount(serverSettingsPage));
             }
             catch (InvalidOperationException e)
             {
@@ -82,6 +85,7 @@ namespace Shooter.Client.Interface
 
             main.NewGameOpening += OpenNewGame;
             main.SavesOpening += OpenSaves;
+            main.ServerSettingsOpening += OpenServerSettings;
             main.JoinOpening += OpenClient;
             main.Quitting += Quit;
             newGame.Starting += HostFresh;
@@ -90,6 +94,7 @@ namespace Shooter.Client.Interface
             saves.Backing += Back;
             client.Connecting += Connect;
             client.Backing += Back;
+            serverSettings.Backing += Back;
 
             pages.Push(main);
 
@@ -106,6 +111,7 @@ namespace Shooter.Client.Interface
             newGame = null;
             saves = null;
             client = null;
+            serverSettings = null;
             panel = null;
         }
 
@@ -132,6 +138,11 @@ namespace Shooter.Client.Interface
         private void OpenClient()
         {
             pages.Push(client);
+        }
+
+        private void OpenServerSettings()
+        {
+            pages.Push(serverSettings);
         }
 
         private void Back()
