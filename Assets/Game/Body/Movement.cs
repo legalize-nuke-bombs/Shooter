@@ -113,6 +113,8 @@ namespace Shooter.Game.Body
 
         private void Step()
         {
+            if (!isActiveAndEnabled) return;
+
             float dt = NetworkManager.LocalTime.FixedDeltaTime;
 
             if (characterController.isGrounded)
