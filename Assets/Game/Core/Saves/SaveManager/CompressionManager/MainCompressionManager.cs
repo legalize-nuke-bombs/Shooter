@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
@@ -13,8 +14,11 @@ namespace Shooter.Game.Core.Saves
 
         private Dictionary<string, CompressionManager> byKey = new Dictionary<string, CompressionManager>();
         private Dictionary<string, CompressionManager> byExtension = new Dictionary<string, CompressionManager>();
+        private List<CompressionManager> known = new List<CompressionManager>();
 
         public static MainCompressionManager Current { get; private set; }
+
+        public IEnumerable<string> Keys => known.Select(manager => manager.Key);
 
         private void Awake()
         {
@@ -30,6 +34,7 @@ namespace Shooter.Game.Core.Saves
                 }
                 byKey.Add(normalizedKey, manager);
                 byExtension.Add(normalizedExtension, manager);
+                known.Add(manager);
             }
             Log.Info($"Entity {name} knows {byKey.Count} - {byExtension.Count} compression managers");
 
