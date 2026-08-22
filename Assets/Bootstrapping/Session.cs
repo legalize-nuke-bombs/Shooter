@@ -15,6 +15,7 @@ namespace Shooter.Bootstrapping
     {
         private const string NetworkPrefab = "NetworkManager";
         private const string OverlayPrefab = "Overlays";
+        private const string CompressionPrefab = "Compression";
         private const string MenuScene = "Menu";
         private const string BootScene = "Boot";
         private const string WorldScene = "Map";
@@ -28,6 +29,7 @@ namespace Shooter.Bootstrapping
 
         private IEnumerator Start()
         {
+            Compression();
             yield return ToMenu();
         }
 
@@ -164,6 +166,21 @@ namespace Shooter.Bootstrapping
             ClientConfig client = Config.Read().Client;
             transport.SetConnectionData(client.Address, client.Port);
             Log.Info($"Heading for {client.Address}:{client.Port}");
+        }
+
+        private void Compression()
+        {
+            GameObject prefab = Resources.Load<GameObject>(CompressionPrefab);
+            if (prefab == null)
+            {
+                Log.Error($"No {CompressionPrefab} prefab in Resources, saves stay folders");
+                return;
+            }
+
+            GameObject instance = Instantiate(prefab);
+            instance.name = CompressionPrefab;
+            DontDestroyOnLoad(instance);
+            Log.Info("Compression is up");
         }
 
         private void Overlays()

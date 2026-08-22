@@ -10,7 +10,6 @@ namespace Shooter.Game.Core.Saves
     [RequireComponent(typeof(SnapshotManager))]
     [RequireComponent(typeof(MetaManager))]
     [RequireComponent(typeof(PreviewManager))]
-    [RequireComponent(typeof(MainCompressionManager))]
     public class SaveManager : MonoBehaviour
     {
         [SerializeField] private string prefix = "ShooterSave";
@@ -21,7 +20,6 @@ namespace Shooter.Game.Core.Saves
         private SnapshotManager snapshotManager;
         private MetaManager metaManager;
         private PreviewManager previewManager;
-        private MainCompressionManager compressionManager;
 
         public static SaveManager Current { get; private set; }
 
@@ -30,7 +28,6 @@ namespace Shooter.Game.Core.Saves
             snapshotManager = GetComponent<SnapshotManager>();
             metaManager = GetComponent<MetaManager>();
             previewManager = GetComponent<PreviewManager>();
-            compressionManager = GetComponent<MainCompressionManager>();
 
             Current = this;
         }
@@ -46,7 +43,11 @@ namespace Shooter.Game.Core.Saves
             snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
             metaManager.Write(Path.Combine(path, "Meta.json"), meta);
             yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg")));
-            path = compressionManager.Compress(path);
+
+            MainCompressionManager compression = MainCompressionManager.Current;
+            if (compression == null) Log.Warn($"Entity {name} found no compression manager, {path} stays a folder");
+            else path = compression.Compress(path);
+
             Log.Info($"Entity {name} saved to {path}");
         }
 
