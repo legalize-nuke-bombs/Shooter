@@ -146,7 +146,7 @@ namespace Shooter.Bootstrapping
             FrozenWorld world = saves.Freeze();
             if (saves.Load(world, save)) return;
 
-            Log.Error($"The world failed to load {save}, shutting the host down");
+            Log.Warn($"The world failed to load {save}, shutting the host down");
             loadFailed = true;
             network.Shutdown();
         }

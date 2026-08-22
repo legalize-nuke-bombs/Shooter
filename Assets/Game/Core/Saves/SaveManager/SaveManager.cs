@@ -76,7 +76,7 @@ namespace Shooter.Game.Core.Saves
             byte[] snapshot = MainCompressionManager.Current.Read(path, "Snapshot.json");
             if (snapshot == null)
             {
-                Log.Error($"Entity {name} found no snapshot in {path}, the world stays frozen");
+                Log.Warn($"Entity {name} found no snapshot in {path}, the world stays frozen");
                 return false;
             }
 
