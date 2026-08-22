@@ -56,7 +56,7 @@ namespace Shooter.Bootstrapping
             if (loadFailed)
             {
                 loadFailed = false;
-                screen.Warn("Сохранение не загрузилось", "Файл повреждён или несовместим с этой версией.");
+                screen.Warn("Не удалось загрузить сохранение", "Файл повреждён или несовместим с этой версией");
             }
 
             ending = false;
