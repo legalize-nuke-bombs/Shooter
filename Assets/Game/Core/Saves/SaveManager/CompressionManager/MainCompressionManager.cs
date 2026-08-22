@@ -44,12 +44,7 @@ namespace Shooter.Game.Core.Saves
         public string Compress(string path)
         {
             string algorithm = Config.Read().Server.SaveCompressionAlgorithm.ToLowerInvariant();
-            CompressionManager manager;
-            bool found = String.IsNullOrEmpty(algorithm)
-                ? byExtension.TryGetValue("", out manager)
-                : byKey.TryGetValue(algorithm, out manager);
-
-            if (!found)
+            if (!byKey.TryGetValue(algorithm, out CompressionManager manager))
             {
                 Log.Warn($"Entity {name} found no compression manager for '{algorithm}', {path} stays as is");
                 return path;
@@ -59,10 +54,24 @@ namespace Shooter.Game.Core.Saves
             return manager.Compress(path);
         }
 
-        public CompressionManager Resolve(string location)
+        public byte[] Read(string location, string file)
+        {
+            CompressionManager manager = Resolve(location);
+            return manager == null ? null : manager.Read(location, file);
+        }
+
+        public void Delete(string location)
+        {
+            Resolve(location)?.Delete(location);
+        }
+
+        private CompressionManager Resolve(string location)
         {
             string extension = Directory.Exists(location) ? "" : Path.GetExtension(location).ToLowerInvariant();
-            return byExtension.TryGetValue(extension, out CompressionManager manager) ? manager : null;
+            if (byExtension.TryGetValue(extension, out CompressionManager manager)) return manager;
+
+            Log.Warn($"Entity {name} found no compression manager for '{extension}' of {location}");
+            return null;
         }
     }
 }
