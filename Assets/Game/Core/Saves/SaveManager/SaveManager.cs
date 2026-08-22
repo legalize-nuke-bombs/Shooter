@@ -1,5 +1,6 @@
 using System.Collections;
 using System.IO;
+using System.Threading;
 using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
@@ -51,6 +52,8 @@ namespace Shooter.Game.Core.Saves
 
         public void Load(string path)
         {
+            Log.Info($"Entity {name} is loading from {path}...");
+            Thread.Sleep(5000);
         }
     }
 }
