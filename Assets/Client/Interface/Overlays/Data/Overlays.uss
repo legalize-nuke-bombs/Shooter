@@ -380,30 +380,25 @@
     right: 0;
     bottom: 0;
     background-color: rgb(0, 0, 0);
-}
-
-.loading__footer {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 48px;
+    justify-content: center;
     align-items: center;
 }
 
-.loading__text {
-    font-size: var(--text-base);
+.loading__status {
+    font-size: 30px;
     color: var(--color-text);
     -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
 .loading__tip {
-    margin-top: var(--space-3);
-    max-width: 720px;
-    padding: 0 var(--space-8);
+    position: absolute;
+    right: var(--space-6);
+    bottom: var(--space-6);
+    max-width: 360px;
     white-space: normal;
-    -unity-text-align: middle-center;
+    -unity-text-align: middle-right;
     font-size: var(--text-small);
-    color: var(--color-text-dim);
+    color: var(--color-text-faint);
     -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
