@@ -124,7 +124,10 @@
     -unity-text-align: middle-left;
 }
 
-.unity-base-popup-field__input {
+.unity-base-popup-field.unity-popup-field > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input,
+.unity-base-popup-field.unity-popup-field:hover > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input,
+.unity-base-popup-field.unity-popup-field:active > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input,
+.unity-base-popup-field.unity-popup-field:focus > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input {
     padding: 6px 8px;
     border-width: 1px;
     border-radius: 0;
@@ -132,20 +135,15 @@
     background-color: var(--color-field);
 }
 
-.unity-base-popup-field:hover > .unity-base-popup-field__input,
-.unity-base-popup-field:active > .unity-base-popup-field__input,
-.unity-base-popup-field:focus > .unity-base-popup-field__input,
-.unity-base-popup-field__input:hover,
-.unity-base-popup-field__input:active,
-.unity-base-popup-field__input:focus {
-    background-color: var(--color-field);
+.unity-base-popup-field.unity-popup-field:hover > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input,
+.unity-base-popup-field.unity-popup-field:focus > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input {
     border-color: var(--color-accent);
 }
 
-.unity-base-popup-field__text,
-.unity-base-popup-field:hover .unity-base-popup-field__text,
-.unity-base-popup-field:active .unity-base-popup-field__text,
-.unity-base-popup-field:focus .unity-base-popup-field__text {
+.unity-base-popup-field.unity-popup-field > .unity-base-popup-field__input > .unity-text-element.unity-base-popup-field__text,
+.unity-base-popup-field.unity-popup-field:hover > .unity-base-popup-field__input > .unity-text-element.unity-base-popup-field__text,
+.unity-base-popup-field.unity-popup-field:active > .unity-base-popup-field__input > .unity-text-element.unity-base-popup-field__text,
+.unity-base-popup-field.unity-popup-field:focus > .unity-base-popup-field__input > .unity-text-element.unity-base-popup-field__text {
     margin: 0;
     color: var(--color-text);
     font-size: var(--text-base);
