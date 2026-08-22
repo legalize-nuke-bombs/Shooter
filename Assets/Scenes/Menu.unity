@@ -9613,6 +9613,10 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
       objectReference: {fileID: 0}
+    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: bb07bd5b-ba8d-466f-b4ee-f513e0c73a7a
+      objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
       value: Lamp

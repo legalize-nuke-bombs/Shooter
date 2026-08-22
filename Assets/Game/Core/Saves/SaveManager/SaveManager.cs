@@ -1,6 +1,5 @@
 using System.Collections;
 using System.IO;
-using System.Threading;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -51,6 +50,7 @@ namespace Shooter.Game.Core.Saves
             Log.Info($"Entity {name} is loading from {path}...");
 
             byte[] snapshot = MainCompressionManager.Current.Read(path, "Snapshot.json");
+            snapshotManager.Load(snapshot);
         }
     }
 }
