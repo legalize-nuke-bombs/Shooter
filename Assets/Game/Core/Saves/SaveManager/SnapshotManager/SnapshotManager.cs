@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Shooter.Game.Core.GameObject;
 using Shooter.Logging;
 using UnityEngine;
@@ -19,7 +18,7 @@ namespace Shooter.Game.Core.Saves
             Log.Info($"Entity {name} is building snapshot...");
             var snapshot = new Snapshot
             {
-                GameObjects = new Dictionary<string, JObject>()
+                GameObjects = new Dictionary<string, Dictionary<string, SaveToken>>()
             };
 
             SaveableObject[] saveables = FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
@@ -37,26 +36,8 @@ namespace Shooter.Game.Core.Saves
                     continue;
                 }
 
-                JObject saveableData = null;
-                try
-                {
-                    Dictionary<string, object> saveableDatRaw = saveable.Save();
-                    saveableData = JObject.FromObject(saveableDatRaw, SaveJson.Serializer);
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Entity {name} found that {saveable.name} can not be serialized: {e.Message}");
-                }
-                if (saveableData == null)
-                {
-                    continue;
-                }
-
-                if (!snapshot.GameObjects.TryAdd(saveableId.Id, saveableData))
-                {
+                if (!snapshot.GameObjects.TryAdd(saveableId.Id, saveable.Save()))
                     Log.Warn($"Entity {name} found that {saveable.name} shares id {saveableId.Id} with an entity already saved");
-                    continue;
-                }
             }
 
             Log.Info($"Entity {name} built snapshot");
@@ -77,7 +58,7 @@ namespace Shooter.Game.Core.Saves
             }
         }
 
-        public void Load(byte[] bytes)
+        public bool Load(FrozenWorld world, byte[] bytes)
         {
             Log.Info($"Entity {name} is loading from snapshot...");
 
@@ -90,41 +71,24 @@ namespace Shooter.Game.Core.Saves
             catch (Exception e)
             {
                 Log.Error($"Entity {name} failed to decode snapshot, world will not be loaded: {e.Message}");
-                return;
+                return false;
             }
-            Log.Info($"Entity {name} decoded snapshot, snapshot game object count {snapshot.GameObjects.Count}");
 
-            var dict = new Dictionary<string, SaveableObject>();
-            foreach (SaveableObject saveableObject in FindObjectsByType<SaveableObject>(FindObjectsInactive.Include))
-            {
-                if (!saveableObject.TryGetComponent(out GameObjectId saveableObjectId))
-                {
-                    Log.Warn($"Entity {name} found saveable object {saveableObject.name} with not id");
-                    continue;
-                }
-                if (!dict.TryAdd(saveableObjectId.Id, saveableObject))
-                {
-                    Log.Warn($"Entity {name} found saveable object {saveableObject.name} with id duplicate: {saveableObjectId.Id}");
-                    continue;
-                }
-            }
-            Log.Info($"Entity {name} found {dict.Count} in scene saveable objects");
+            Log.Info($"Entity {name} decoded snapshot, snapshot game object count {snapshot.GameObjects.Count}");
 
             int inSceneOk = 0;
             int inSceneFailed = 0;
             int nonSceneOk = 0;
             int nonSceneFailed = 0;
-            foreach (var kvp in snapshot.GameObjects)
+            foreach (KeyValuePair<string, Dictionary<string, SaveToken>> record in snapshot.GameObjects)
             {
-                string targetId = kvp.Key;
-                JObject targetPayload = kvp.Value;
-
-                if (dict.TryGetValue(targetId, out SaveableObject target))
+                string targetId = record.Key;
+                if (world.TryGet(targetId, out SaveableObject target))
                 {
                     Log.Info($"Entity {name} is loading {target.name} {targetId}...");
                     try
                     {
-                        target.Load(targetPayload);
+                        target.Load(record.Value);
                         inSceneOk++;
                     }
                     catch (Exception e)
@@ -140,7 +104,9 @@ namespace Shooter.Game.Core.Saves
                     nonSceneOk++;
                 }
             }
+
             Log.Info($"Entity {name} loaded from snapshot, inSceneOk {inSceneOk} inSceneFailed {inSceneFailed} nonSceneOk {nonSceneOk} nonSceneFailed {nonSceneFailed}");
+            return true;
         }
     }
 }

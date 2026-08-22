@@ -45,12 +45,28 @@ namespace Shooter.Game.Core.Saves
             Log.Info($"Entity {name} saved to {path}");
         }
 
-        public void Load(string path)
+        public FrozenWorld Freeze()
+        {
+            Log.Info($"Entity {name} is freezing the world...");
+            return FrozenWorld.Freeze();
+        }
+
+        public bool Load(FrozenWorld world, string path)
         {
             Log.Info($"Entity {name} is loading from {path}...");
 
             byte[] snapshot = MainCompressionManager.Current.Read(path, "Snapshot.json");
-            snapshotManager.Load(snapshot);
+            if (snapshot == null)
+            {
+                Log.Error($"Entity {name} found no snapshot in {path}, the world stays frozen");
+                return false;
+            }
+
+            if (!snapshotManager.Load(world, snapshot)) return false;
+
+            world.Thaw();
+            Log.Info($"Entity {name} loaded {path}");
+            return true;
         }
     }
 }

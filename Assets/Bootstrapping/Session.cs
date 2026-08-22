@@ -103,20 +103,25 @@ namespace Shooter.Bootstrapping
 
             Log.Info($"{(hosting ? "Host" : "Client")} is up as {client.Name}");
 
-            if (save != null) Load(save);
+            if (save != null && !Load(save))
+            {
+                Log.Error($"The world failed to load {save}, shutting the host down");
+                network.Shutdown();
+            }
         }
 
-        private static void Load(string save)
+        private static bool Load(string save)
         {
             SaveManager saves = SaveManager.Current;
             if (saves == null)
             {
                 Log.Error($"World has no save manager, {save} stays unloaded");
-                return;
+                return false;
             }
 
             Log.Info($"Loading the world from {save}");
-            saves.Load(save);
+            FrozenWorld world = saves.Freeze();
+            return saves.Load(world, save);
         }
 
         private void Stopped(bool ignored)

@@ -10,7 +10,8 @@ namespace Shooter.Game.Core.Saves
             Formatting = Formatting.Indented,
             Converters =
             {
-                new Vector3Converter(), new QuaternionConverter(), new SaveableConverter(), new StringEnumConverter()
+                new Vector3Converter(), new QuaternionConverter(), new SaveableConverter(), new SaveTokenConverter(),
+                new StringEnumConverter()
             }
         };
 

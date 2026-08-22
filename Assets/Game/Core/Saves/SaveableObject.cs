@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 using Shooter.Game.Core.GameObject;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -33,11 +32,13 @@ namespace Shooter.Game.Core.Saves
         }
 
         public string ComponentKey => "SaveableObject";
+
         private struct SaveDto
         {
             public bool Spawned { get; set; }
             public string Metadata { get; set; }
         }
+
         public object SaveObject()
         {
             return new SaveDto
@@ -46,61 +47,55 @@ namespace Shooter.Game.Core.Saves
                 Metadata = name
             };
         }
+
         public void LoadObject(SaveToken content)
         {
             Spawned = content.To<SaveDto>().Spawned;
         }
 
-
-
-
-        public Dictionary<string, object> Save()
+        public Dictionary<string, SaveToken> Save()
         {
             Log.Info($"Entity {name} is saving...");
 
             ISaveableComponent[] saveables = GetComponents<ISaveableComponent>();
-            var components = new Dictionary<string, object>();
+            var components = new Dictionary<string, SaveToken>();
             foreach (ISaveableComponent saveable in saveables)
             {
                 string saveableKey = saveable.ComponentKey;
-                object saveableData = null;
+                SaveToken saveableData;
                 try
                 {
-                    saveableData = saveable.SaveObject();
+                    object saved = saveable.SaveObject();
+                    if (saved == null) continue;
+
+                    saveableData = SaveToken.From(saved);
                 }
                 catch (Exception e)
                 {
                     Log.Warn($"Entity {name} failed to save component {saveableKey}: {e.Message}");
-                }
-                if (saveableData == null)
-                {
                     continue;
                 }
 
                 if (!components.TryAdd(saveableKey, saveableData))
-                {
                     Log.Warn($"Entity {name} found duplicate key {saveableKey}");
-                    continue;
-                }
             }
 
             Log.Info($"Entity {name} saved {components.Count} components, spawned = {Spawned}");
             return components;
         }
 
-        public void Load(JToken content)
+        public void Load(Dictionary<string, SaveToken> components)
         {
             Log.Info($"Entity {name} is loading...");
 
             ISaveableComponent[] saveables = GetComponents<ISaveableComponent>();
-            var components = (JObject)content;
             var known = new HashSet<string>();
             foreach (ISaveableComponent saveable in saveables)
             {
                 string saveableKey = saveable.ComponentKey;
                 known.Add(saveableKey);
 
-                if (!components.TryGetValue(saveableKey, out JToken componentData))
+                if (!components.TryGetValue(saveableKey, out SaveToken componentData))
                 {
                     Log.Warn($"Entity {name} failed to find saved data for {saveableKey}");
                     continue;
@@ -108,28 +103,20 @@ namespace Shooter.Game.Core.Saves
 
                 try
                 {
-                    saveable.LoadObject(new SaveToken(componentData));
+                    saveable.LoadObject(componentData);
                 }
                 catch (Exception e)
                 {
                     Log.Warn($"Entity {name} failed to load component {saveableKey}: {e.Message}");
-                    continue;
                 }
             }
 
-            foreach (JProperty property in components.Properties())
-            {
-                if (!known.Contains(property.Name))
-                {
-                    Log.Warn($"Entity {name} found unknown saved property {property.Name}");
-                }
-            }
+            foreach (string key in components.Keys)
+                if (!known.Contains(key))
+                    Log.Warn($"Entity {name} found unknown saved property {key}");
 
             Log.Info($"Entity {name} loaded {known.Count} / {saveables.Length} components (provided {components.Count}), spawned = {Spawned}");
-            if (!Spawned)
-            {
-                GetComponent<NetworkObject>().Despawn(false);
-            }
+            if (!Spawned) NetworkObject.Despawn(false);
         }
     }
 }
