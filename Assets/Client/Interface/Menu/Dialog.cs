@@ -12,6 +12,7 @@ namespace Shooter.Client.Interface
         private const string CancelButton = "dialog-cancel";
         private const string DangerClass = "dialog__title--danger";
 
+        private readonly Button cancel;
         private readonly Button confirm;
         private readonly VisualElement root;
         private readonly Label text;
@@ -24,21 +25,27 @@ namespace Shooter.Client.Interface
             title = Require<Label>(document, TitleElement);
             text = Require<Label>(document, TextElement);
             confirm = Require<Button>(document, ConfirmButton);
+            cancel = Require<Button>(document, CancelButton);
 
             confirm.clicked += Confirm;
-            Require<Button>(document, CancelButton).clicked += Cancel;
+            cancel.clicked += Cancel;
         }
 
         public bool Open { get; private set; }
 
         public void Ask(string question, string details, string confirmLabel, Action onConfirm)
         {
-            Show(question, details, confirmLabel, onConfirm, false);
+            Show(question, details, confirmLabel, onConfirm, false, false);
         }
 
         public void Warn(string question, string details, string confirmLabel, Action onConfirm)
         {
-            Show(question, details, confirmLabel, onConfirm, true);
+            Show(question, details, confirmLabel, onConfirm, true, false);
+        }
+
+        public void Notice(string question, string details, string confirmLabel)
+        {
+            Show(question, details, confirmLabel, null, true, true);
         }
 
         public void Cancel()
@@ -46,12 +53,13 @@ namespace Shooter.Client.Interface
             Close();
         }
 
-        private void Show(string question, string details, string confirmLabel, Action onConfirm, bool danger)
+        private void Show(string question, string details, string confirmLabel, Action onConfirm, bool danger, bool notice)
         {
             title.text = question;
             title.EnableInClassList(DangerClass, danger);
             text.text = details;
             confirm.text = confirmLabel;
+            cancel.style.display = notice ? DisplayStyle.None : DisplayStyle.Flex;
             confirmed = onConfirm;
 
             Open = true;
