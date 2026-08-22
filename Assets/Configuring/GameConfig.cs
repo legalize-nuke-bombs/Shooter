@@ -7,6 +7,9 @@ namespace Shooter.Configuring
         public const string FileName = "config.json";
 
         [CreateProperty]
+        public string Key { get; set; } = "";
+
+        [CreateProperty]
         public ServerConfig Server { get; set; } = new();
 
         [CreateProperty]

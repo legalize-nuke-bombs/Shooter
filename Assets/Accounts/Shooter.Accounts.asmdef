@@ -1,11 +1,7 @@
 {
-  "name": "Shooter.Configuring",
+  "name": "Shooter.Accounts",
   "rootNamespace": "Shooter",
-  "references": [
-    "Shooter.Logging",
-    "Shooter.Accounts",
-    "Unity.Nuget.Newtonsoft-Json"
-  ],
+  "references": [],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,
