@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: TipCatalog
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.TipCatalog
   specs:
-  - {fileID: 11400000, guid: ae2b32278e3444fca3fb62f158a03f23, type: 2}
-  - {fileID: 11400000, guid: 7b7c9bd2807844289519bec62d38c1b7, type: 2}
-  - {fileID: 11400000, guid: d076cfb5321441be9c68df1d1d3c645f, type: 2}
+  - {fileID: 11400000, guid: f97db07b8f2d93a4ab29d97c353f1945, type: 2}
   - {fileID: 11400000, guid: d6ee05d0356d492c89642d8db282d061, type: 2}
-  - {fileID: 11400000, guid: 20a6fc1a85964b10b64b66a1fbb9e623, type: 2}
+  - {fileID: 11400000, guid: d9959b4e9e952a0449d4fa814663f29a, type: 2}
+  - {fileID: 11400000, guid: c1daf93ae3935bf4ba689c9ac896c6cf, type: 2}
+  - {fileID: 11400000, guid: 5936f17783ac5fe43b179942c2323922, type: 2}
   - {fileID: 11400000, guid: 4a8e8b6ffac74ab393360809beaba60c, type: 2}
+  - {fileID: 11400000, guid: a97821fa2593a3f4baabba69b1d39eac, type: 2}
   - {fileID: 11400000, guid: e047ac7e7a654a52aeff73de0e4c6084, type: 2}
-  - {fileID: 11400000, guid: 2d527d8e51a24cd4878f04fdb58acfb2, type: 2}
-  - {fileID: 11400000, guid: 721199b8816c4893aa79cfe408194b52, type: 2}
