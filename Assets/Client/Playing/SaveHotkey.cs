@@ -14,7 +14,6 @@ namespace Shooter.Client.Playing
         [SerializeField] private EarSoundSpec sound;
 
         private SaveManager saveManager;
-        private bool saving;
 
         private void Awake()
         {
@@ -23,7 +22,7 @@ namespace Shooter.Client.Playing
 
         private void Update()
         {
-            if (saving) return;
+            if (saveManager.Saving) return;
             if (Keyboard.current == null || !Keyboard.current[key].wasPressedThisFrame) return;
 
             NetworkManager network = NetworkManager.Singleton;
@@ -32,14 +31,7 @@ namespace Shooter.Client.Playing
             EarSpeaker speaker = OwnPlayer.Find<EarSpeaker>();
             if (speaker != null) speaker.PlayLocal(sound);
 
-            StartCoroutine(GuardedSaveCoroutine());
-        }
-
-        private IEnumerator GuardedSaveCoroutine()
-        {
-            saving = true;
-            yield return saveManager.SaveCoroutine();
-            saving = false;
+            StartCoroutine(saveManager.SaveCoroutine());
         }
     }
 }

@@ -1,6 +1,8 @@
+using System.Collections;
 using Shooter.Game.Body;
 using Shooter.Game.Combat;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Game.Speech;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -245,7 +247,22 @@ namespace Shooter.Client.Playing
                 return;
             }
 
+            if (IsServer)
+            {
+                Log.Info("Escape with nothing open, saving the world before the menu");
+                StartCoroutine(SaveThenLeave());
+                return;
+            }
+
             Log.Info("Escape with nothing open, leaving the world for the menu");
+            NetworkManager.Shutdown();
+        }
+
+        private IEnumerator SaveThenLeave()
+        {
+            yield return SaveManager.Current.SaveCoroutine();
+            while (SaveManager.Current.Saving) yield return null;
+
             NetworkManager.Shutdown();
         }
 
