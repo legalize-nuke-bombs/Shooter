@@ -48,7 +48,13 @@
             <ui:Label name="debug" class="line corner__line debug" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement name="loading" class="loading" picking-mode="Ignore">
-            <ui:Label name="loading-text" class="line loading__text" picking-mode="Ignore"/>
+            <ui:Label name="loading-tip" class="line loading__tip" picking-mode="Ignore"/>
+            <ui:VisualElement class="loading__footer" picking-mode="Ignore">
+                <ui:Label name="loading-text" class="line loading__text" picking-mode="Ignore"/>
+                <ui:VisualElement name="loading-progress" class="loading__progress" picking-mode="Ignore">
+                    <ui:VisualElement name="loading-progress-fill" class="loading__progress-fill" picking-mode="Ignore"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff9d9aab8104702b4d3baaf4a6aec60, type: 3}
+  m_Name: Memory
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.TipSpec
+  id: 
+  text: "\u0416\u0438\u0442\u0435\u043b\u0438 \u043f\u043e\u043c\u043d\u044f\u0442 \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u044b \u2014 \u0438 \u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u0442\u043e\u0436\u0435."
