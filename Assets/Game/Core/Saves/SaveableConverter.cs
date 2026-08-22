@@ -1,6 +1,5 @@
 using System;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Shooter.Game.Core.Saves
 {
@@ -22,7 +21,7 @@ namespace Shooter.Game.Core.Saves
             if (reader.TokenType == JsonToken.Null) return null;
 
             var saveable = (ISaveable)Activator.CreateInstance(objectType);
-            saveable.LoadObject(new SaveToken(JToken.Load(reader)));
+            saveable.LoadObject(SaveToken.Read(reader));
             return saveable;
         }
     }
