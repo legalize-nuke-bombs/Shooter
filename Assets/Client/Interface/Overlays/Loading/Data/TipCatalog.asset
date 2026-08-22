@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.TipCatalog
   specs:
   - {fileID: 11400000, guid: f97db07b8f2d93a4ab29d97c353f1945, type: 2}
+  - {fileID: 11400000, guid: d076cfb5321441be9c68df1d1d3c645f, type: 2}
   - {fileID: 11400000, guid: d6ee05d0356d492c89642d8db282d061, type: 2}
   - {fileID: 11400000, guid: d9959b4e9e952a0449d4fa814663f29a, type: 2}
   - {fileID: 11400000, guid: c1daf93ae3935bf4ba689c9ac896c6cf, type: 2}
