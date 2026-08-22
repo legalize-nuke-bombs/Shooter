@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
@@ -20,14 +21,15 @@ namespace Shooter.Game.Core.Saves
             CompressionManager[] managers = GetComponents<CompressionManager>();
             foreach (CompressionManager manager in managers)
             {
-                string normalizedKey = manager.Key.ToLower();
-                if (byKey.ContainsKey(normalizedKey) || byExtension.ContainsKey(manager.Extension))
+                string normalizedKey = manager.Key.ToLowerInvariant();
+                string normalizedExtension = manager.Extension.ToLowerInvariant();
+                if (byKey.ContainsKey(normalizedKey) || byExtension.ContainsKey(normalizedExtension))
                 {
-                    Log.Warn($"Entity {name} found manager duplicate {manager.name} ({normalizedKey} - {manager.Extension})");
+                    Log.Warn($"Entity {name} found manager duplicate {manager.name} ({normalizedKey} - {normalizedExtension})");
                     continue;
                 }
                 byKey.Add(normalizedKey, manager);
-                byExtension.Add(manager.Extension, manager);
+                byExtension.Add(normalizedExtension, manager);
             }
             Log.Info($"Entity {name} knows {byKey.Count} - {byExtension.Count} compression managers");
 
@@ -41,21 +43,26 @@ namespace Shooter.Game.Core.Saves
 
         public string Compress(string path)
         {
-            string algorithm = Config.Read().Server.SaveCompressionAlgorithm.ToLower();
-            if (String.IsNullOrEmpty(algorithm))
+            string algorithm = Config.Read().Server.SaveCompressionAlgorithm.ToLowerInvariant();
+            CompressionManager manager;
+            bool found = String.IsNullOrEmpty(algorithm)
+                ? byExtension.TryGetValue("", out manager)
+                : byKey.TryGetValue(algorithm, out manager);
+
+            if (!found)
             {
-                Log.Info($"Entity {name} will not search CompressionManager because algorithm is not set");
+                Log.Warn($"Entity {name} found no compression manager for '{algorithm}', {path} stays as is");
                 return path;
             }
 
-            if (!byKey.TryGetValue(algorithm, out CompressionManager manager))
-            {
-                Log.Warn($"Failed to find compression manager {algorithm}");
-                return path;
-            }
-
-            Log.Info($"Entity {name} will compress {path} with {manager.Key}");
+            Log.Info($"Entity {name} will store {path} with {manager.Key}");
             return manager.Compress(path);
+        }
+
+        public CompressionManager Resolve(string location)
+        {
+            string extension = Directory.Exists(location) ? "" : Path.GetExtension(location).ToLowerInvariant();
+            return byExtension.TryGetValue(extension, out CompressionManager manager) ? manager : null;
         }
     }
 }
