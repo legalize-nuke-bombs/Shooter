@@ -14,7 +14,7 @@ namespace Shooter.Game.Core.Saves
         {
         }
 
-        internal static FrozenWorld Freeze()
+        public static FrozenWorld Freeze()
         {
             var world = new FrozenWorld();
             foreach (SaveableObject saveable in Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include))
@@ -24,7 +24,7 @@ namespace Shooter.Game.Core.Saves
             return world;
         }
 
-        internal bool TryGet(string id, out SaveableObject target)
+        public bool TryGet(string id, out SaveableObject target)
         {
             return saveables.TryGetValue(id, out target);
         }
@@ -47,7 +47,7 @@ namespace Shooter.Game.Core.Saves
             saveable.gameObject.SetActive(false);
         }
 
-        internal void Thaw()
+        public void Thaw()
         {
             int woken = 0;
             foreach (SaveableObject saveable in saveables.Values)
