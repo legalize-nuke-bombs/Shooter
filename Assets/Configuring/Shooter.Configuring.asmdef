@@ -3,6 +3,7 @@
   "rootNamespace": "Shooter",
   "references": [
     "Shooter.Logging",
+    "Shooter.Accounts",
     "Unity.Nuget.Newtonsoft-Json"
   ],
   "includePlatforms": [],
