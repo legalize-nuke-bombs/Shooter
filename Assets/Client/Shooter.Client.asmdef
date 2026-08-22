@@ -2,6 +2,7 @@
   "name": "Shooter.Client",
   "rootNamespace": "Shooter",
   "references": [
+    "Shooter.Accounts",
     "Shooter.Configuring",
     "Shooter.Logging",
     "Shooter.Game",
