@@ -21,7 +21,7 @@ namespace Shooter.Game.Core
             if (Current == this) Current = null;
         }
 
-        public void Track(Component member)
+        public void Track<T>(T member) where T : Component, IRegistered
         {
             if (!registers.TryGetValue(member.GetType(), out Register register))
             {
@@ -32,12 +32,12 @@ namespace Shooter.Game.Core
             register.Add(member);
         }
 
-        public void Untrack(Component member)
+        public void Untrack<T>(T member) where T : Component, IRegistered
         {
             if (registers.TryGetValue(member.GetType(), out Register register)) register.Remove(member);
         }
 
-        public IEnumerable<T> Of<T>() where T : Component
+        public IEnumerable<T> Of<T>() where T : Component, IRegistered
         {
             if (!registers.TryGetValue(typeof(T), out Register register)) yield break;
 
