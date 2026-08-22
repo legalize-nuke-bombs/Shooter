@@ -1,7 +1,6 @@
 using System.Collections;
 using System.IO;
 using System.Threading;
-using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -43,18 +42,15 @@ namespace Shooter.Game.Core.Saves
             snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
             metaManager.Write(Path.Combine(path, "Meta.json"), meta);
             yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg")));
-
-            MainCompressionManager compression = MainCompressionManager.Current;
-            if (compression == null) Log.Warn($"Entity {name} found no compression manager, {path} stays a folder");
-            else path = compression.Compress(path);
-
+            path = MainCompressionManager.Current.Compress(path);
             Log.Info($"Entity {name} saved to {path}");
         }
 
         public void Load(string path)
         {
             Log.Info($"Entity {name} is loading from {path}...");
-            Thread.Sleep(5000);
+
+            byte[] snapshot = MainCompressionManager.Current.Read(path, "Snapshot.json");
         }
     }
 }

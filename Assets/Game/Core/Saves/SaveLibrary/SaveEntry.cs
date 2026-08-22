@@ -13,24 +13,21 @@ namespace Shooter.Game.Core.Saves
         private const string PreviewFile = "Preview.jpg";
         private static readonly Journal Log = Logs.Here();
 
-        private SaveEntry(string location, CompressionManager manager, Meta meta)
+        private SaveEntry(string location, Meta meta)
         {
             Location = location;
-            Manager = manager;
             Meta = meta;
         }
 
         public string Location { get; }
 
-        public CompressionManager Manager { get; }
-
         public Meta Meta { get; }
 
         public bool Foreign => Meta.Version != Application.version;
 
-        public static SaveEntry Read(string location, CompressionManager manager)
+        public static SaveEntry Read(string location)
         {
-            byte[] bytes = manager.Read(location, MetaFile);
+            byte[] bytes = MainCompressionManager.Current.Read(location, MetaFile);
             if (bytes == null)
             {
                 Log.Warn($"Save {location} has no {MetaFile}, skipped");
@@ -42,7 +39,7 @@ namespace Shooter.Game.Core.Saves
                 using var reader = new StreamReader(new MemoryStream(bytes), Encoding.UTF8, true);
                 Meta meta = JsonConvert.DeserializeObject<Meta>(reader.ReadToEnd(), Meta.Json);
 
-                return new SaveEntry(location, manager, meta);
+                return new SaveEntry(location, meta);
             }
             catch (Exception e)
             {
@@ -53,7 +50,7 @@ namespace Shooter.Game.Core.Saves
 
         public byte[] ReadPreview()
         {
-            return Manager.Read(Location, PreviewFile);
+            return MainCompressionManager.Current.Read(Location, PreviewFile);
         }
     }
 }
