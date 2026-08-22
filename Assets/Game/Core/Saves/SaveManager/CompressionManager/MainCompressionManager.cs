@@ -13,6 +13,8 @@ namespace Shooter.Game.Core.Saves
         private Dictionary<string, CompressionManager> byKey = new Dictionary<string, CompressionManager>();
         private Dictionary<string, CompressionManager> byExtension = new Dictionary<string, CompressionManager>();
 
+        public static MainCompressionManager Current { get; private set; }
+
         private void Awake()
         {
             CompressionManager[] managers = GetComponents<CompressionManager>();
@@ -28,6 +30,13 @@ namespace Shooter.Game.Core.Saves
                 byExtension.Add(manager.Extension, manager);
             }
             Log.Info($"Entity {name} knows {byKey.Count} - {byExtension.Count} compression managers");
+
+            Current = this;
+        }
+
+        private void OnDestroy()
+        {
+            if (Current == this) Current = null;
         }
 
         public string Compress(string path)
