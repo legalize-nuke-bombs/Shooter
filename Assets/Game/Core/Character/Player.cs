@@ -1,6 +1,4 @@
-using Shooter.Game.Core;
-
-namespace Shooter.Game.Body
+namespace Shooter.Game.Core
 {
     public class Player : RegisteredNetworkBehaviour
     {
