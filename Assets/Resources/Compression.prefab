@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8204917356010358427}
   - component: {fileID: 587150530260669440}
   - component: {fileID: 5699736446279087383}
+  - component: {fileID: 6173049582716390244}
   m_Layer: 0
   m_Name: Compression
   m_TagString: Untagged
@@ -57,3 +58,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1322040eda2a4014a77e440e33dab465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.ZipManager
+--- !u!114 &6173049582716390244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3519062183946072211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c3e9a1d4b5f4e2a9d8c6b1a2f3e4d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.NoCompressionManager

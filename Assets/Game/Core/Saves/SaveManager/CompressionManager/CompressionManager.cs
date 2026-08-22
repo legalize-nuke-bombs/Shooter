@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Shooter.Logging;
 using UnityEngine;
@@ -11,26 +11,48 @@ namespace Shooter.Game.Core.Saves
 
         public string Compress(string path)
         {
-            Log.Info($"Entity {name} is compressing {path}...");
-            bool ok = true;
+            string target = path + Extension;
+            Log.Info($"Entity {name} is storing {path} as {target}...");
             try
             {
                 CompressRaw(path);
             }
             catch (Exception e)
             {
-                Log.Info($"Entity {name} failed to compress {path}: {e.Message}");
-                ok = false;
-            }
-
-            if (!ok)
-            {
+                Log.Info($"Entity {name} failed to store {path} as {target}: {e.Message}");
                 return path;
             }
-            Log.Info($"Entity {name} successfully compressed {path}");
 
-            Cleanup(path);
-            return path + Extension;
+            Log.Info($"Entity {name} successfully stored {path} as {target}");
+
+            if (target != path) Cleanup(path);
+            return target;
+        }
+
+        public byte[] Read(string location, string file)
+        {
+            try
+            {
+                return ReadRaw(location, file);
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"Entity {name} failed to read {file} from {location}: {e.Message}");
+                return null;
+            }
+        }
+
+        public void Delete(string location)
+        {
+            try
+            {
+                DeleteRaw(location);
+                Log.Info($"Entity {name} deleted {location}");
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Entity {name} failed to delete {location}: {e.Message}");
+            }
         }
 
         private void Cleanup(string path)
@@ -47,6 +69,13 @@ namespace Shooter.Game.Core.Saves
         }
 
         protected abstract void CompressRaw(string path);
+
+        protected abstract byte[] ReadRaw(string location, string file);
+
+        protected virtual void DeleteRaw(string location)
+        {
+            File.Delete(location);
+        }
 
         public abstract string Key { get; }
         public abstract string Extension { get; }
