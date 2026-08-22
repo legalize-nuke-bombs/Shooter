@@ -82,9 +82,7 @@ namespace Shooter.Bootstrapping
             if (hosting)
             {
                 loading.Show(LoadingStage.Scene);
-                AsyncOperation world = SceneManager.LoadSceneAsync(WorldScene, LoadSceneMode.Single);
-                loading.Track(world);
-                yield return world;
+                yield return SceneManager.LoadSceneAsync(WorldScene, LoadSceneMode.Single);
             }
 
             NetworkManager network = Network();
@@ -101,8 +99,7 @@ namespace Shooter.Bootstrapping
             network.OnServerStopped += Stopped;
             network.OnClientStopped += Stopped;
 
-            if (hosting) loading.Show(LoadingStage.Server);
-            else loading.Show(LoadingStage.Connection, client.Address + ":" + client.Port);
+            loading.Show(hosting ? LoadingStage.Server : LoadingStage.Connection);
 
             if (!(hosting ? network.StartHost() : network.StartClient()))
             {
@@ -151,7 +148,6 @@ namespace Shooter.Bootstrapping
             {
                 case SceneEventType.Load:
                     loading.Show(LoadingStage.Scene);
-                    loading.Track(sceneEvent.AsyncOperation);
                     break;
                 case SceneEventType.LoadComplete:
                     loading.Show(LoadingStage.Synchronization);

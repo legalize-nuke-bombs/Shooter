@@ -380,25 +380,13 @@
     right: 0;
     bottom: 0;
     background-color: rgb(0, 0, 0);
-    justify-content: center;
-    align-items: center;
-}
-
-.loading__tip {
-    max-width: 720px;
-    padding: 0 var(--space-6);
-    white-space: normal;
-    -unity-text-align: middle-center;
-    font-size: var(--text-base);
-    color: var(--color-text-dim);
-    -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
 .loading__footer {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 64px;
+    bottom: 48px;
     align-items: center;
 }
 
@@ -408,17 +396,15 @@
     -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
-.loading__progress {
-    width: 320px;
-    height: 2px;
+.loading__tip {
     margin-top: var(--space-3);
-    background-color: var(--color-line);
-}
-
-.loading__progress-fill {
-    height: 100%;
-    width: 0;
-    background-color: var(--color-accent);
+    max-width: 720px;
+    padding: 0 var(--space-8);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    font-size: var(--text-small);
+    color: var(--color-text-dim);
+    -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
 .debug {
