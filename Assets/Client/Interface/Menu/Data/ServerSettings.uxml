@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:Template name="ServerBlock" src="ServerBlock.uxml"/>
-    <ui:Label text="Новая игра" class="screen__title"/>
+    <ui:Label text="Настройки сервера" class="screen__title"/>
     <ui:VisualElement class="screen__body">
-        <ui:TextField label="Имя игрока" class="field">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Name" binding-mode="TwoWay"/>
-            </Bindings>
-        </ui:TextField>
         <ui:Instance template="ServerBlock"/>
     </ui:VisualElement>
     <ui:VisualElement class="screen__footer">
         <ui:Button name="back" text="Назад" class="action"/>
-        <ui:Button name="start" text="Начать" class="action"/>
     </ui:VisualElement>
 </ui:UXML>

@@ -94,8 +94,12 @@
     color: var(--color-text-faint);
 }
 
-.menu__spacer {
-    height: var(--space-6);
+.menu__group {
+    margin-bottom: var(--space-6);
+}
+
+.menu__group--last {
+    margin-bottom: 0;
 }
 
 .field {

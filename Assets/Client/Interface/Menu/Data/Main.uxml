@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement class="screen__body">
-        <ui:Button name="new" text="Новая игра" class="menu__item menu__item--primary"/>
-        <ui:Button name="load" text="Загрузить игру" class="menu__item"/>
-        <ui:Button name="join" text="Присоединиться к игре" class="menu__item"/>
-        <ui:VisualElement class="menu__spacer"/>
-        <ui:Button name="quit" text="Выйти" class="menu__item"/>
+        <ui:VisualElement class="menu__group">
+            <ui:Button name="new" text="Новая игра" class="menu__item menu__item--primary"/>
+            <ui:Button name="load" text="Загрузить игру" class="menu__item"/>
+            <ui:Button name="settings" text="Настройки сервера" class="menu__item"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="menu__group">
+            <ui:Button name="join" text="Присоединиться к игре" class="menu__item"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="menu__group menu__group--last">
+            <ui:Button name="quit" text="Выйти" class="menu__item"/>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

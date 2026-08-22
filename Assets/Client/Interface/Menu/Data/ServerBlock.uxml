@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:TextField label="Порт" is-delayed="true" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.Port" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+    <ui:DropdownField name="compression" label="Сохранения" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.SaveCompressionAlgorithm" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:DropdownField>
+    <ui:Label text="Языковая модель" class="screen__section"/>
+    <ui:Label text="Жители думают и говорят через неё. Без ключа они молчат." class="screen__hint"/>
+    <ui:Label text="Простые операции" class="screen__caption"/>
+    <ui:DropdownField name="base-provider" label="Провайдер" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.LlmBase.Provider" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:DropdownField>
+    <ui:TextField label="Модель" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.LlmBase.Model" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+    <ui:TextField label="Ключ" password="true" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.LlmBase.Key" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+    <ui:Label text="Сложные операции" class="screen__caption"/>
+    <ui:DropdownField name="max-provider" label="Провайдер" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.LlmMax.Provider" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:DropdownField>
+    <ui:TextField label="Модель" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.LlmMax.Model" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+    <ui:TextField label="Ключ" password="true" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.LlmMax.Key" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+</ui:UXML>

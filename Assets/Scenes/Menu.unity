@@ -4304,6 +4304,7 @@ MonoBehaviour:
   newGamePage: {fileID: 9197481963319205126, guid: f112e3a1054f8ac409e1b0a6e436f597, type: 3}
   savesPage: {fileID: 9197481963319205126, guid: 197d7fe8b6f6e5c49867176abc29fcea, type: 3}
   clientPage: {fileID: 9197481963319205126, guid: d0fc9e260010eb340a4ae6fa546c9961, type: 3}
+  serverSettingsPage: {fileID: 9197481963319205126, guid: c8e1d3f5a7b94d2cae4f6a8b2d3c5e7f, type: 3}
 --- !u!1931382934 &767148947
 PanelRenderer:
   m_ObjectHideFlags: 0
