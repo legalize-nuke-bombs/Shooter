@@ -70,7 +70,7 @@ namespace Shooter.Game.Core.Saves
             }
             catch (Exception e)
             {
-                Log.Error($"Entity {name} failed to decode snapshot, world will not be loaded: {e.Message}");
+                Log.Warn($"Entity {name} failed to decode snapshot, world will not be loaded: {e.Message}");
                 return false;
             }
 
