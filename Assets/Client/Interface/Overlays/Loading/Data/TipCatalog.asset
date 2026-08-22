@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fbcdce0b2484cd4b79bd6ca00196fbf, type: 3}
+  m_Name: TipCatalog
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.TipCatalog
+  specs:
+  - {fileID: 11400000, guid: ae2b32278e3444fca3fb62f158a03f23, type: 2}
+  - {fileID: 11400000, guid: 7b7c9bd2807844289519bec62d38c1b7, type: 2}
+  - {fileID: 11400000, guid: d076cfb5321441be9c68df1d1d3c645f, type: 2}
+  - {fileID: 11400000, guid: d6ee05d0356d492c89642d8db282d061, type: 2}
+  - {fileID: 11400000, guid: 20a6fc1a85964b10b64b66a1fbb9e623, type: 2}
+  - {fileID: 11400000, guid: 4a8e8b6ffac74ab393360809beaba60c, type: 2}
+  - {fileID: 11400000, guid: e047ac7e7a654a52aeff73de0e4c6084, type: 2}
+  - {fileID: 11400000, guid: 2d527d8e51a24cd4878f04fdb58acfb2, type: 2}
+  - {fileID: 11400000, guid: 721199b8816c4893aa79cfe408194b52, type: 2}

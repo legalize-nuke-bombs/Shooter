@@ -24,6 +24,7 @@ namespace Shooter.Bootstrapping
         private const int UnlimitedFrameRate = -1;
         private static readonly Journal Log = Logs.Here();
         private bool ending;
+        private LoadingOverlay loading;
 
         private GameObject overlays;
 
@@ -78,7 +79,13 @@ namespace Shooter.Bootstrapping
 
             Overlays();
 
-            if (hosting) yield return SceneManager.LoadSceneAsync(WorldScene, LoadSceneMode.Single);
+            if (hosting)
+            {
+                loading.Show(LoadingStage.Scene);
+                AsyncOperation world = SceneManager.LoadSceneAsync(WorldScene, LoadSceneMode.Single);
+                loading.Track(world);
+                yield return world;
+            }
 
             NetworkManager network = Network();
             if (network == null)
@@ -94,6 +101,9 @@ namespace Shooter.Bootstrapping
             network.OnServerStopped += Stopped;
             network.OnClientStopped += Stopped;
 
+            if (hosting) loading.Show(LoadingStage.Server);
+            else loading.Show(LoadingStage.Connection, client.Address + ":" + client.Port);
+
             if (!(hosting ? network.StartHost() : network.StartClient()))
             {
                 Log.Error($"The {(hosting ? "host" : "client")} refused to start");
@@ -103,25 +113,55 @@ namespace Shooter.Bootstrapping
 
             Log.Info($"{(hosting ? "Host" : "Client")} is up as {client.Name}");
 
-            if (save != null && !Load(save))
+            if (!hosting)
             {
-                Log.Error($"The world failed to load {save}, shutting the host down");
-                network.Shutdown();
+                network.SceneManager.OnSceneEvent += Synchronizing;
+                network.OnClientConnectedCallback += Entered;
+                yield break;
             }
+
+            if (save != null) Restore(network, save);
+            if (network.ShutdownInProgress) yield break;
+
+            loading.Hide();
         }
 
-        private static bool Load(string save)
+        private void Restore(NetworkManager network, string save)
         {
             SaveManager saves = SaveManager.Current;
             if (saves == null)
             {
-                Log.Error($"World has no save manager, {save} stays unloaded");
-                return false;
+                Log.Error($"World has no save manager, {save} stays unloaded, shutting the host down");
+                network.Shutdown();
+                return;
             }
 
             Log.Info($"Loading the world from {save}");
+            loading.Show(LoadingStage.Save);
             FrozenWorld world = saves.Freeze();
-            return saves.Load(world, save);
+            if (saves.Load(world, save)) return;
+
+            Log.Error($"The world failed to load {save}, shutting the host down");
+            network.Shutdown();
+        }
+
+        private void Synchronizing(SceneEvent sceneEvent)
+        {
+            switch (sceneEvent.SceneEventType)
+            {
+                case SceneEventType.Load:
+                    loading.Show(LoadingStage.Scene);
+                    loading.Track(sceneEvent.AsyncOperation);
+                    break;
+                case SceneEventType.LoadComplete:
+                    loading.Show(LoadingStage.Synchronization);
+                    break;
+            }
+        }
+
+        private void Entered(ulong ignored)
+        {
+            loading.Hide();
         }
 
         private void Stopped(bool ignored)
@@ -146,6 +186,7 @@ namespace Shooter.Bootstrapping
             {
                 Destroy(overlays);
                 overlays = null;
+                loading = null;
             }
 
             if (NetworkManager.Singleton != null) Destroy(NetworkManager.Singleton.gameObject);
@@ -191,15 +232,11 @@ namespace Shooter.Bootstrapping
         private void Overlays()
         {
             GameObject prefab = Resources.Load<GameObject>(OverlayPrefab);
-            if (prefab == null)
-            {
-                Log.Error($"No {OverlayPrefab} prefab in Resources, the session goes without overlays");
-                return;
-            }
 
             overlays = Instantiate(prefab);
             overlays.name = OverlayPrefab;
             DontDestroyOnLoad(overlays);
+            loading = overlays.GetComponentInChildren<LoadingOverlay>();
             Log.Info("Overlays are up");
         }
 
