@@ -8,8 +8,7 @@ namespace Shooter.Game.Core.Saves
     public class FrozenWorld
     {
         private static readonly Journal Log = Logs.Here();
-        private readonly Dictionary<string, SaveableObject> byId = new();
-        private readonly List<SaveableObject> frozen = new();
+        private readonly Dictionary<string, SaveableObject> saveables = new();
 
         private FrozenWorld()
         {
@@ -19,54 +18,48 @@ namespace Shooter.Game.Core.Saves
         {
             var world = new FrozenWorld();
             foreach (SaveableObject saveable in Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include))
-            {
-                world.Index(saveable);
                 world.Adopt(saveable);
-            }
 
-            Log.Info($"World is frozen: {world.frozen.Count} saveable objects went dark, {world.byId.Count} answer by id");
+            Log.Info($"World is frozen: {world.saveables.Count} saveable objects went dark");
             return world;
         }
 
         internal bool TryGet(string id, out SaveableObject target)
         {
-            return byId.TryGetValue(id, out target);
+            return saveables.TryGetValue(id, out target);
         }
 
         internal void Adopt(SaveableObject saveable)
         {
-            if (!saveable.gameObject.activeSelf) return;
+            string id = saveable.GetComponent<GameObjectId>().Id;
+            if (string.IsNullOrEmpty(id))
+            {
+                Log.Warn($"Saveable {saveable.name} has no id, stays awake and unknown to the save");
+                return;
+            }
+
+            if (!saveables.TryAdd(id, saveable))
+            {
+                Log.Warn($"Saveable {saveable.name} shares id {id} with {saveables[id].name}, stays awake and unknown to the save");
+                return;
+            }
 
             saveable.gameObject.SetActive(false);
-            frozen.Add(saveable);
         }
 
         internal void Thaw()
         {
             int woken = 0;
-            foreach (SaveableObject saveable in frozen)
+            foreach (SaveableObject saveable in saveables.Values)
             {
-                if (saveable == null || !saveable.IsSpawned) continue;
+                if (!saveable.IsSpawned) continue;
 
                 saveable.gameObject.SetActive(true);
                 woken++;
             }
 
-            Log.Info($"World is thawed: {woken} of {frozen.Count} saveable objects woke up");
-            frozen.Clear();
-        }
-
-        private void Index(SaveableObject saveable)
-        {
-            string id = saveable.GetComponent<GameObjectId>().Id;
-            if (string.IsNullOrEmpty(id))
-            {
-                Log.Warn($"Saveable {saveable.name} has no id and answers to no record");
-                return;
-            }
-
-            if (!byId.TryAdd(id, saveable))
-                Log.Warn($"Saveable {saveable.name} shares id {id} with {byId[id].name}, only the first answers");
+            Log.Info($"World is thawed: {woken} of {saveables.Count} saveable objects woke up");
+            saveables.Clear();
         }
     }
 }
