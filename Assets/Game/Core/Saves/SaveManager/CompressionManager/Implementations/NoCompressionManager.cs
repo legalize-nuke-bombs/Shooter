@@ -19,7 +19,7 @@ namespace Shooter.Game.Core.Saves
             Directory.Delete(location, true);
         }
 
-        public override string Key => "None";
+        public override string Key => "";
         public override string Extension => "";
     }
 }
