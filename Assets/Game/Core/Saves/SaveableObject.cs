@@ -151,6 +151,11 @@ namespace Shooter.Game.Core.Saves
                 throw new ArgumentException($"Failed to find main component {MainComponentKey} in provided components");
             }
             SaveData mainSd = mainSt.To<SaveData>();
+            if (!mainSd.Spawned)
+            {
+                Log.Warn($"Found non-scene despawned object {id}, ignoring");
+                return;
+            }
             string prefabId = mainSd.PrefabId;
             if (String.IsNullOrEmpty(prefabId))
             {
