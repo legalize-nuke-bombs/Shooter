@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0312528d8ea145f78b3b0677edaeb788, type: 3}
+  m_Name: SaveablePrefabCatalog
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveablePrefabCatalog
+  specs:
+  - {fileID: 11400000, guid: 17d5e974aeb2c8542beea3c1a37b9bd1, type: 2}
+  - {fileID: 11400000, guid: 007b10f05dfb7c14388e492a3e53cbb8, type: 2}

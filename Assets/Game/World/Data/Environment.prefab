@@ -79,7 +79,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Environment
   ShowTopMostFoldoutHeaderGroup: 1
-  corpse: {fileID: 6108037598719724321, guid: dba187afb26374400bd1ba8b38212115, type: 3}
 --- !u!114 &2934016132358497645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,7 +186,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1c55598071c4cd0b05252ed28a385de, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Catalogs
   catalogs:
   - {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
@@ -198,6 +197,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9f1c4e7a3b5d40928a6e0c3d7b8f2456, type: 2}
   - {fileID: 11400000, guid: 9fe339c3786f459680eaba2c2bfaa09c, type: 2}
   - {fileID: 11400000, guid: d6a7408b34bc69e479d734a7e8e2e066, type: 2}
+  - {fileID: 11400000, guid: 4ce008b5b721438499fb8c149aaa62fb, type: 2}
 --- !u!114 &5482910376234871004
 MonoBehaviour:
   m_ObjectHideFlags: 0

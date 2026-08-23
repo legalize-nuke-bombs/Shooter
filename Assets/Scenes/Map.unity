@@ -18673,6 +18673,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 911500011150001115, guid: 872c1b546323d42fbb6dc742702c4f44, type: 3}
+      propertyPath: catalogs.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 911500011150001115, guid: 872c1b546323d42fbb6dc742702c4f44, type: 3}
+      propertyPath: 'catalogs.Array.data[8]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ce008b5b721438499fb8c149aaa62fb, type: 2}
     - target: {fileID: 2934016132358497645, guid: 872c1b546323d42fbb6dc742702c4f44, type: 3}
       propertyPath: beginningHour
       value: 22
