@@ -99,9 +99,17 @@ namespace Shooter.Game.Core.Saves
                 }
                 else
                 {
-                    Log.Info($"Entity {name} found non-scene object {targetId}");
-                    // TODO Spawn
-                    nonSceneOk++;
+                    Log.Info($"Entity {name} is spawning non-scene object {targetId}...");
+                    try
+                    {
+                        SaveableObject.Spawn(world, targetId, record.Value);
+                        nonSceneOk++;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warn($"Entity {name} failed to spawn {targetId} : {e.Message}");
+                        nonSceneFailed++;
+                    }
                 }
             }
 

@@ -53,9 +53,10 @@ namespace Shooter.Game.Core.Saves
             spawned = false;
         }
 
-        public string ComponentKey => "SaveableObject";
+        private const string MainComponentKey = "SaveableObject";
+        public string ComponentKey => MainComponentKey;
 
-        private struct SaveDto
+        private struct SaveData
         {
             public bool Spawned { get; set; }
             public string PrefabId { get; set; }
@@ -64,7 +65,7 @@ namespace Shooter.Game.Core.Saves
 
         public object SaveObject()
         {
-            return new SaveDto
+            return new SaveData
             {
                 Spawned = spawned,
                 PrefabId = prefabId,
@@ -74,7 +75,7 @@ namespace Shooter.Game.Core.Saves
 
         public void LoadObject(SaveToken content)
         {
-            spawned = content.To<SaveDto>().Spawned;
+            spawned = content.To<SaveData>().Spawned;
         }
 
         public Dictionary<string, SaveToken> Save()
@@ -141,6 +142,55 @@ namespace Shooter.Game.Core.Saves
 
             Log.Info($"Entity {name} loaded {known.Count} / {saveables.Length} components (provided {components.Count}), spawned = {spawned}");
             if (!spawned) NetworkObject.Despawn(false);
+        }
+
+        public static void Spawn(FrozenWorld world, string id, Dictionary<string, SaveToken> components)
+        {
+            if (!components.TryGetValue(MainComponentKey, out SaveToken mainSt))
+            {
+                throw new ArgumentException($"Failed to find main component {MainComponentKey} in provided components");
+            }
+            SaveData mainSd = mainSt.To<SaveData>();
+            string prefabId = mainSd.PrefabId;
+            if (String.IsNullOrEmpty(prefabId))
+            {
+                throw new ArgumentException("Serialized prefab id is null or empty");
+            }
+            SaveablePrefabCatalog catalog = Catalogs.Of<SaveablePrefabCatalog>();
+            UnityEngine.GameObject prefab = catalog.Of(prefabId).Prefab;
+            if (prefab == null)
+            {
+                throw new ArgumentException($"Failed to find prefab {prefabId}");
+            }
+
+            prefab = Instantiate(prefab);
+            if (prefab.TryGetComponent(out GameObjectId gameObjectId))
+            {
+                gameObjectId.Assign(id);
+            }
+            else
+            {
+                Log.Warn($"Prefab {prefabId} does not have game object id");
+            }
+
+            if (prefab.TryGetComponent(out NetworkObject networkObject))
+            {
+                networkObject.Spawn();
+            }
+            else
+            {
+                Log.Warn($"Prefab {prefabId} does not have network object");
+            }
+
+            if (prefab.TryGetComponent(out SaveableObject saveableObject))
+            {
+                world.Adopt(saveableObject);
+                saveableObject.Load(components);
+            }
+            else
+            {
+                Log.Warn($"Prefab {prefabId} does not have saveable object");
+            }
         }
     }
 }
