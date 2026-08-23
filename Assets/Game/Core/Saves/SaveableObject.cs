@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Shooter.Game.Core.GameObject;
 using Shooter.Logging;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,22 +14,43 @@ namespace Shooter.Game.Core.Saves
     {
         private static readonly Journal Log = Logs.Here();
 
-        private bool Spawned { get; set; } = true;
+        private bool spawned = true;
+        private string prefabId;
 
         public override void OnNetworkSpawn()
         {
             if (!IsServer) return;
 
+            AssignId();
+            AssignPrefabId();
+        }
+
+        private void AssignId()
+        {
             GameObjectId id = GetComponent<GameObjectId>();
             if (!string.IsNullOrEmpty(id.Id) || NetworkObject.InScenePlaced) return;
-
             id.Assign(Guid.NewGuid().ToString());
             Log.Info($"Entity {name} got dynamic save id {id.Id}");
         }
 
+        private void AssignPrefabId()
+        {
+            NetworkObject networkObject = GetComponent<NetworkObject>();
+            if (networkObject.InScenePlaced) return;
+            SaveablePrefabCatalog catalog = Catalogs.Of<SaveablePrefabCatalog>();
+            FixedString32Bytes result = catalog.PrefabId(networkObject.PrefabIdHash);
+            if (result == null)
+            {
+                Log.Error($"Entity {name} is not registered as saveable prefab!");
+                return;
+            }
+            Log.Info($"Entity {name} got prefab id `{result}`");
+            prefabId = result.ToString();
+        }
+
         public override void OnNetworkDespawn()
         {
-            Spawned = false;
+            spawned = false;
         }
 
         public string ComponentKey => "SaveableObject";
@@ -36,6 +58,7 @@ namespace Shooter.Game.Core.Saves
         private struct SaveDto
         {
             public bool Spawned { get; set; }
+            public string PrefabId { get; set; }
             public string Metadata { get; set; }
         }
 
@@ -43,14 +66,15 @@ namespace Shooter.Game.Core.Saves
         {
             return new SaveDto
             {
-                Spawned = Spawned,
+                Spawned = spawned,
+                PrefabId = prefabId,
                 Metadata = name
             };
         }
 
         public void LoadObject(SaveToken content)
         {
-            Spawned = content.To<SaveDto>().Spawned;
+            spawned = content.To<SaveDto>().Spawned;
         }
 
         public Dictionary<string, SaveToken> Save()
@@ -80,7 +104,7 @@ namespace Shooter.Game.Core.Saves
                     Log.Warn($"Entity {name} found duplicate key {saveableKey}");
             }
 
-            Log.Info($"Entity {name} saved {components.Count} components, spawned = {Spawned}");
+            Log.Info($"Entity {name} saved {components.Count} components, spawned = {spawned}");
             return components;
         }
 
@@ -115,8 +139,8 @@ namespace Shooter.Game.Core.Saves
                 if (!known.Contains(key))
                     Log.Warn($"Entity {name} found unknown saved property {key}");
 
-            Log.Info($"Entity {name} loaded {known.Count} / {saveables.Length} components (provided {components.Count}), spawned = {Spawned}");
-            if (!Spawned) NetworkObject.Despawn(false);
+            Log.Info($"Entity {name} loaded {known.Count} / {saveables.Length} components (provided {components.Count}), spawned = {spawned}");
+            if (!spawned) NetworkObject.Despawn(false);
         }
     }
 }
