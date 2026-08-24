@@ -27,6 +27,10 @@ namespace Shooter.Game.Core.Saves
         private bool Spawned => networkObject.IsSpawned;
         private string PrefabId()
         {
+            if (Static)
+            {
+                return null;
+            }
             SaveablePrefabCatalog catalog = Catalogs.Of<SaveablePrefabCatalog>();
             FixedString32Bytes result = catalog.PrefabId(networkObject.PrefabIdHash);
             if (result == null)
