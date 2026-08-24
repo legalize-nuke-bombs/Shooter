@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Shooter.Game.Core.GameObject;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEditor;
 using UnityEditor.SceneManagement;

@@ -74,16 +74,12 @@ namespace Shooter.Game.Body
                 return;
             }
 
-            GameObject body = Instantiate(prefab, transform.position, transform.rotation);
-            NetworkObject spawned = body.GetComponent<NetworkObject>();
-            if (spawned == null)
+            GameObject body = Spawner.Current.Spawn(prefab, transform.position, transform.rotation);
+            if (body == null)
             {
-                Log.Error($"Corpse prefab of entity {name} has no network object");
-                Destroy(body);
+                Log.Error($"Entity {name} failed to spawn corpse");
                 return;
             }
-
-            spawned.Spawn();
 
             Corpse corpse = body.GetComponent<Corpse>();
             if (corpse != null)
@@ -95,7 +91,7 @@ namespace Shooter.Game.Body
                 if (named != null && named.Spec != null) corpse.Rename(named.Spec);
             }
 
-            spawned.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
+            body.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
             Log.Info($"Entity {name} left a corpse at {transform.position}");
         }
 
