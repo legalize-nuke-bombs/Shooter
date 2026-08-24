@@ -45,7 +45,7 @@ namespace Shooter.Game.Llm
 
             if (digest.Length == 0) return null;
 
-            Character id = entity.Id;
+            GameObjectRuntimeId id = entity.GetComponent<GameObjectRuntimeId>();
             if (id == null) return digest.ToString();
 
             return "[ID " + id.Value + "] " + digest;

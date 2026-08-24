@@ -30,7 +30,7 @@ namespace Shooter.Game.AI
         private readonly Dictionary<long, int> amounts = new();
         private Health health;
 
-        private Character ownId;
+        private Character ownCharacter;
         private Nameable ownNameable;
 
         public string ComponentKey => "AICharacterRelation";
@@ -64,7 +64,7 @@ namespace Shooter.Game.AI
 
         private void Awake()
         {
-            ownId = GetComponent<Character>();
+            ownCharacter = GetComponent<Character>();
             ownNameable = GetComponent<Nameable>();
             health = GetComponent<Health>();
         }
@@ -142,7 +142,7 @@ namespace Shooter.Game.AI
 
         private void Notify(long characterId, int before, int after)
         {
-            Character target = Character.Of(characterId);
+            var target = Character.Of(characterId);
             if (target == null)
             {
                 Log.Warn($"Entity {name} failed to notify character {characterId}: not found");
@@ -163,7 +163,7 @@ namespace Shooter.Game.AI
             }
 
             recipient.Receive(spec.Notify()
-                .With("actorId", ownId.Value)
+                .With("actorId", ownCharacter.Id)
                 .With(ownNameable.NamedAs("actorName"))
                 .With("before", before)
                 .With("after", after));

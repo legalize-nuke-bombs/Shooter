@@ -13,9 +13,9 @@ namespace Shooter.Game.Speech
 
         private readonly NetworkVariable<ulong> interlocutor = new();
 
-        private long heardId = Character.Nobody;
+        private long heardId = GameObjectRuntimeId.Default;
 
-        public bool Talking => heardId != Character.Nobody;
+        public bool Talking => heardId != GameObjectRuntimeId.Default;
 
         public ulong Interlocutor => interlocutor.Value;
 
@@ -34,18 +34,18 @@ namespace Shooter.Game.Speech
         {
             if (!IsServer) return;
 
-            Character talkerId = talker.GetComponent<Character>();
-            if (talkerId == null)
+            Character talkerCharacter = talker.GetComponent<Character>();
+            if (talkerCharacter == null)
             {
                 Log.Warn($"Player {OwnerClientId} can not talk to {talker.name}: the talker has no persistent id");
                 return;
             }
 
-            if (heardId == talkerId.Value) return;
+            if (heardId == talkerCharacter.Id) return;
 
             if (Talking) Close();
 
-            heardId = talkerId.Value;
+            heardId = talkerCharacter.Id;
             interlocutor.Value = talker.NetworkObjectId;
             Log.Info($"Player {OwnerClientId} opened a talk with {talker.name}");
 
@@ -60,7 +60,7 @@ namespace Shooter.Game.Speech
 
             Log.Info($"Player {OwnerClientId} closed the talk with wanderer {heardId}");
             TalkerOf(heardId)?.Leave(NetworkObject);
-            heardId = Character.Nobody;
+            heardId = GameObjectRuntimeId.Default;
             interlocutor.Value = 0;
             ClosedRpc();
         }
@@ -93,7 +93,7 @@ namespace Shooter.Game.Speech
 
         private static Talker TalkerOf(long talkerId)
         {
-            if (talkerId == Character.Nobody || Registers.Current == null) return null;
+            if (talkerId == GameObjectRuntimeId.Default || Registers.Current == null) return null;
 
             Character found = Character.Of(talkerId);
             return found == null ? null : found.GetComponentInChildren<Talker>();

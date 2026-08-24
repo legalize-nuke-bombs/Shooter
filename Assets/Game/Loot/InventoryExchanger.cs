@@ -18,14 +18,14 @@ namespace Shooter.Game.Loot
         [SerializeField] private NotificationSpec itemGiven;
 
         private Inventory inventory;
-        private Character ownId;
+        private Character ownCharacter;
         private Nameable ownNameable;
         public float ExchangeRadius => exchangeRadius;
 
         private void Awake()
         {
             inventory = GetComponent<Inventory>();
-            ownId = GetComponent<Character>();
+            ownCharacter = GetComponent<Character>();
             ownNameable = GetComponent<Nameable>();
         }
 
@@ -98,7 +98,7 @@ namespace Shooter.Game.Loot
 
             recipient.Receive(spec.Notify()
                 .Under(item == null ? null : item.Icon)
-                .With("actorId", ownId.Value)
+                .With("actorId", ownCharacter.Id)
                 .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
                 .With("subject", itemSpecId, ArgType.Item)
                 .With("subjectPrompt", itemSpecId, ArgType.ItemPrompt)
@@ -108,7 +108,7 @@ namespace Shooter.Game.Loot
         private Character Target(long targetId)
         {
             Character target = Character.Of(targetId);
-            if (target == null || target == ownId) return null;
+            if (target == null || target == ownCharacter) return null;
 
             return Vector3.Distance(target.transform.position, transform.position) <= exchangeRadius ? target : null;
         }

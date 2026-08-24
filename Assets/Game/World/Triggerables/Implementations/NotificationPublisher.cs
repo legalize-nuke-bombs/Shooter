@@ -46,7 +46,7 @@ namespace Shooter.Game.World
             MainNotificationRecipient notificationRecipient = character.GetComponent<MainNotificationRecipient>();
             if (notificationRecipient == null) return;
 
-            if (oncePerCharacter && !characters.Add(character.Value))
+            if (oncePerCharacter && !characters.Add(character.Id))
             {
                 return;
             }

@@ -16,7 +16,7 @@ namespace Shooter.Game.Llm
 
         [SerializeField] private NotificationSpec mail;
 
-        private Character ownId;
+        private Character ownCharacter;
         private Nameable ownNameable;
 
         public override string Name => "send_message";
@@ -43,7 +43,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
         protected override void Awake()
         {
             base.Awake();
-            ownId = GetComponent<Character>();
+            ownCharacter = GetComponent<Character>();
             ownNameable = GetComponent<Nameable>();
         }
 
@@ -66,7 +66,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                     failed.Add($"{targetId} : character does not exist");
                     continue;
                 }
-                if (targetId == ownId.Value)
+                if (targetId == ownCharacter.Id)
                 {
                     failed.Add($"{targetId}: it's you");
                     continue;
@@ -83,7 +83,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                 }
 
                 recipient.Receive(mail.Notify()
-                    .With("actorId", ownId.Value)
+                    .With("actorId", ownCharacter.Id)
                     .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
                     .With("text", arguments.Content)
                     .Urgened(arguments.Urgent)

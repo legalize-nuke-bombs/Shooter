@@ -1,51 +1,31 @@
-using Newtonsoft.Json.Linq;
-using Shooter.Game.Core.Saves;
-using Unity.Netcode;
+using System;
+using UnityEngine;
 
 namespace Shooter.Game.Core
 {
-    public class Character : RegisteredNetworkBehaviour, ISaveableComponent
+    [RequireComponent(typeof(GameObjectRuntimeId))]
+    public class Character : RegisteredBehaviour
     {
-        public const long Nobody = -1;
+        private GameObjectRuntimeId id;
 
-        private readonly NetworkVariable<long> value = new(Nobody);
+        private void Awake()
+        {
+            id = GetComponent<GameObjectRuntimeId>();
+        }
 
-        public long Value => value.Value;
+        public long Id => id.Value;
 
         public static Character Of(long id)
         {
-            Registers world = Registers.Current;
-            if (world == null) return null;
-
-            foreach (Character character in world.Of<Character>())
-                if (character.Value == id)
-                    return character;
-
-            return null;
-        }
-
-        public string ComponentKey => "Character";
-        private struct SaveData
-        {
-            public long Id { get; set; }
-        }
-        public object SaveObject()
-        {
-            return new SaveData
+            foreach (Character character in Registers.Current.Of<Character>())
             {
-                Id = value.Value
-            };
-        }
-        public void LoadObject(SaveToken content)
-        {
-            value.Value = content.To<SaveData>().Id;
-        }
+                if (character.Id == id)
+                {
+                    return character;
+                }
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-
-            if (IsServer) value.Value = CharacterIds.Current.Next();
+            }
+            return null;
         }
     }
 }
