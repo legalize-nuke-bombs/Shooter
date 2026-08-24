@@ -151,6 +151,7 @@ namespace Shooter.Client.Playing
         private void Grab()
         {
             controls.UI.Disable();
+            controls.UI.Cancel.Enable();
             controls.Player.Enable();
             Point(false);
         }
