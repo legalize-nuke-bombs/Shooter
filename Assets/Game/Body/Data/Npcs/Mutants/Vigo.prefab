@@ -23,7 +23,7 @@ PrefabInstance:
     - target: {fileID: 3085216801473785071, guid: 0f0d555f11919d142a609ebd859b9aa1, type: 3}
       propertyPath: spec
       value: 
-      objectReference: {fileID: 11400000, guid: f2cb18773d5bcffd89c26e32124cd661, type: 2}
+      objectReference: {fileID: 11400000, guid: 3e9d5a7c1f2b48e0a6c8d3b5e9f74162, type: 2}
     - target: {fileID: 3324358589205137182, guid: 0f0d555f11919d142a609ebd859b9aa1, type: 3}
       propertyPath: m_Name
       value: Vigo
@@ -71,7 +71,7 @@ PrefabInstance:
     - target: {fileID: 9091035010296901980, guid: 0f0d555f11919d142a609ebd859b9aa1, type: 3}
       propertyPath: spec
       value: 
-      objectReference: {fileID: 11400000, guid: 73ebcce2cc552da4dac557329c3f0632, type: 2}
+      objectReference: {fileID: 11400000, guid: 6fe9815648e747a98d9da3461e0b2886, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
