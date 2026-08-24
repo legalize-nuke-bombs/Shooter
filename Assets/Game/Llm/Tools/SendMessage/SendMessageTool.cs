@@ -27,12 +27,17 @@ Send a message to other characters by their ids.
 
 This tool is your primary way of communicating with other residents.
 Write to other residents in English.
-Each of your messages triggers that resident's LLM tick, so write only to introduce yourself or share new information.
+Write to introduce yourself or share new information.
 
 You can use this tool to communicate with the wanderers, but it is not the primary method of communicating with them.
 The primary way to communicate with wanderers is the `say_to_wanderer` tool, which is available only when a wanderer has approached you and initiated a dialogue.
 Use this method to communicate with wanderers like a walkie-talkie to share new information or call them over for a face-to-face conversation.
 Write to the wanderer in the language that, to the best of your knowledge, they speak.
+
+If you mark your message as urgent, other residents will see it almost immediately.
+If you don't mark it as urgent, other residents will still see it, but only on the next LLM tick (e.g., upon receiving an urgent message, the next time a wanderer addresses them, or at the next interval tick).
+Mark messages as urgent only when truly necessary.
+Wanderers receive your messages immediately, regardless of the value of the `urgent` field.
 ";
 
         protected override void Awake()
@@ -80,7 +85,9 @@ Write to the wanderer in the language that, to the best of your knowledge, they 
                 recipient.Receive(mail.Notify()
                     .With("actorId", ownId.Value)
                     .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
-                    .With("text", arguments.Content));
+                    .With("text", arguments.Content)
+                    .Urgened(arguments.Urgent)
+                );
                 delivered.Add(targetId);
                 Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
             }

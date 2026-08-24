@@ -1,7 +1,6 @@
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Notifying;
-using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -21,26 +20,18 @@ namespace Shooter.Game.Llm
 
         public void OnReceive(Notification notification)
         {
-            NotificationSpec spec = Spec(notification);
-            if (spec == null) return;
-
-            if (string.IsNullOrEmpty(spec.Told))
-            {
-                Log.Info($"Entity {name} has nothing to remember about {notification.Spec}");
-                return;
-            }
-
             IconSpec icon = notification.Icon();
             string iconDescription = icon == null ? "none" : icon.PromptDescription;
 
             EarSoundSpec sound = notification.Sound();
             string soundDescription = sound == null ? "none" : sound.PromptDescription;
 
-            string told = Template.Filled(spec.Told, notification);
+            string told = Template.Filled(notification.Told(), notification);
 
             llm.Notice(
                 $"[{Llm.Stamp()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {told}",
-                true);
+                notification.Urgent()
+            );
         }
 
         private NotificationSpec Spec(Notification notification)
