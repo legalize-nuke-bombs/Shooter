@@ -18,7 +18,7 @@ namespace Shooter.Game.Core.Saves
             Log.Info($"Entity {name} is building snapshot...");
             var snapshot = new Snapshot
             {
-                GameObjects = new Dictionary<string, Dictionary<string, SaveToken>>()
+                GameObjects = new Dictionary<string, object>()
             };
 
             SaveableObject[] saveables = FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
@@ -36,8 +36,10 @@ namespace Shooter.Game.Core.Saves
                     continue;
                 }
 
-                if (!snapshot.GameObjects.TryAdd(saveableId.Id, saveable.Save()))
+                if (!snapshot.GameObjects.TryAdd(saveableId.Id, saveable.SaveObject()))
+                {
                     Log.Warn($"Entity {name} found that {saveable.name} shares id {saveableId.Id} with an entity already saved");
+                }
             }
 
             Log.Info($"Entity {name} built snapshot");
@@ -80,15 +82,17 @@ namespace Shooter.Game.Core.Saves
             int inSceneFailed = 0;
             int nonSceneOk = 0;
             int nonSceneFailed = 0;
-            foreach (KeyValuePair<string, Dictionary<string, SaveToken>> record in snapshot.GameObjects)
+            foreach (KeyValuePair<string, object> record in snapshot.GameObjects)
             {
                 string targetId = record.Key;
+                var targetValue = SaveToken.From(record.Value);
+
                 if (world.TryGet(targetId, out SaveableObject target))
                 {
                     Log.Info($"Entity {name} is loading {target.name} {targetId}...");
                     try
                     {
-                        target.Load(record.Value);
+                        target.LoadObject(targetValue);
                         inSceneOk++;
                     }
                     catch (Exception e)
@@ -102,7 +106,7 @@ namespace Shooter.Game.Core.Saves
                     Log.Info($"Entity {name} is spawning non-scene object {targetId}...");
                     try
                     {
-                        SaveableObject.Spawn(world, targetId, record.Value);
+                        SaveableObject.Spawn(world, targetId, targetValue);
                         nonSceneOk++;
                     }
                     catch (Exception e)
