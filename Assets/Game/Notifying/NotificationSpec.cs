@@ -9,6 +9,7 @@ namespace Shooter.Game.Notifying
     {
         [SerializeField] private IconSpec icon;
         [SerializeField] private EarSoundSpec sound;
+        [SerializeField] private bool urgent;
         [SerializeField] [TextArea] private string title;
         [SerializeField] [TextArea] private string subtitle;
         [SerializeField] [TextArea] private string told;
@@ -16,6 +17,8 @@ namespace Shooter.Game.Notifying
         public IconSpec Icon => icon;
 
         public EarSoundSpec Sound => sound;
+
+        public bool Urgent => urgent;
 
         public string Title => title;
 

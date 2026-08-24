@@ -11,6 +11,7 @@ namespace Shooter.Game.Notifying
         private FixedString32Bytes spec;
         private FixedString32Bytes icon;
         private FixedString32Bytes sound;
+        private bool? urgent;
         private Arg[] args;
 
         public Notification(FixedString32Bytes spec)
@@ -18,6 +19,7 @@ namespace Shooter.Game.Notifying
             this.spec = spec;
             icon = default;
             sound = default;
+            urgent = null;
             args = Array.Empty<Arg>();
         }
 
@@ -35,6 +37,13 @@ namespace Shooter.Game.Notifying
                 : Catalogs.Of<EarSoundCatalog>().Of(sound);
         }
 
+        public bool Urgent()
+        {
+            return urgent == null
+                ? Catalogs.Of<NotificationCatalog>().Of(spec).Urgent
+                : urgent.Value;
+        }
+
         public string Title()
         {
             return Catalogs.Of<NotificationCatalog>().Of(spec).Title;
@@ -43,6 +52,11 @@ namespace Shooter.Game.Notifying
         public string Subtitle()
         {
             return Catalogs.Of<NotificationCatalog>().Of(spec).Subtitle;
+        }
+
+        public string Told()
+        {
+            return Catalogs.Of<NotificationCatalog>().Of(spec).Told;
         }
 
         public FixedString32Bytes Spec => spec;
@@ -92,6 +106,14 @@ namespace Shooter.Game.Notifying
         {
             Notification copy = this;
             copy.sound = own == null ? default : own.Id;
+
+            return copy;
+        }
+
+        public Notification Urgened(bool value)
+        {
+            Notification copy = this;
+            copy.urgent = value;
 
             return copy;
         }
