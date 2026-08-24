@@ -23,9 +23,17 @@ namespace Shooter.Game.Llm
 
         public override string Description =>
             @"
-Send a message to other RESIDENTS by their ids (this tool cannot be used to send messages to wanderers).
-Write in English.
-Message other residents only to introduce yourself or share new information.";
+Send a message to other characters by their ids.
+
+This tool is your primary way of communicating with other residents.
+Write to other residents in English.
+Each of your messages triggers that resident's LLM tick, so write only to introduce yourself or share new information.
+
+You can use this tool to communicate with the wanderers, but it is not the primary method of communicating with them.
+The primary way to communicate with wanderers is the `say_to_wanderer` tool, which is available only when a wanderer has approached you and initiated a dialogue.
+Use this method to communicate with wanderers like a walkie-talkie to share new information or call them over for a face-to-face conversation.
+Write to the wanderer in the language that, to the best of your knowledge, they speak.
+";
 
         protected override void Awake()
         {
@@ -36,37 +44,36 @@ Message other residents only to introduce yourself or share new information.";
 
         protected override string Execute(SendMessageArguments arguments, LlmCallContext context)
         {
-            if (arguments.TargetIds == null || arguments.TargetIds.Length == 0 ||
-                string.IsNullOrEmpty(arguments.Content)) return "Nothing to send";
+            if (arguments.TargetIds == null || arguments.TargetIds.Length == 0 || string.IsNullOrEmpty(arguments.Content))
+            {
+                return "Nothing to send";
+            }
 
             var delivered = new List<long>();
             var failed = new List<string>();
 
             foreach (long targetId in arguments.TargetIds.Distinct())
             {
-                Character target = Character.Of(targetId);
+                var target = Character.Of(targetId);
 
-                if (target == null || target == ownId || target.GetComponentInChildren<Llm>() == null)
+                if (target == null)
                 {
-                    failed.Add($"{targetId}: no resident bears this id");
+                    failed.Add($"{targetId} : character does not exist");
                     continue;
                 }
-
+                if (targetId == ownId.Value)
+                {
+                    failed.Add($"{targetId}: it's you");
+                    continue;
+                }
                 if (!target.TryGetComponent(out Health health) || !health.Alive)
                 {
-                    failed.Add($"{targetId}: the resident is dead");
+                    failed.Add($"{targetId}: character is dead");
                     continue;
                 }
-
                 if (!target.TryGetComponent(out MainNotificationRecipient recipient))
                 {
-                    failed.Add($"{targetId}: the resident hears nothing");
-                    continue;
-                }
-
-                if (mail == null)
-                {
-                    failed.Add($"{targetId}: this world knows no mail");
+                    failed.Add($"{targetId}: character does not have main notification recipient");
                     continue;
                 }
 
@@ -74,16 +81,21 @@ Message other residents only to introduce yourself or share new information.";
                     .With("actorId", ownId.Value)
                     .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
                     .With("text", arguments.Content));
-
                 delivered.Add(targetId);
                 Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
             }
 
             var answer = new StringBuilder();
-            if (delivered.Count > 0) answer.Append("Delivered to ").Append(string.Join(", ", delivered));
+            if (delivered.Count > 0)
+            {
+                answer.Append("Delivered to ").Append(string.Join(", ", delivered));
+            }
             foreach (string failure in failed)
             {
-                if (answer.Length > 0) answer.Append('\n');
+                if (answer.Length > 0)
+                {
+                    answer.Append('\n');
+                }
                 answer.Append("Not delivered to ").Append(failure);
             }
 
