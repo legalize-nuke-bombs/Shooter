@@ -111,9 +111,13 @@ namespace Shooter.Game.Core.Saves
 
         public void LoadObject(SaveToken content)
         {
+            LoadObject(content.To<SaveData>());
+        }
+
+        private void LoadObject(SaveData sd)
+        {
             Log.Info($"Entity {name} is loading...");
 
-            SaveData sd = content.To<SaveData>();
             Metadata = sd.Metadata;
 
             if (Dynamic && !sd.Spawned)
@@ -198,7 +202,7 @@ namespace Shooter.Game.Core.Saves
             if (body.TryGetComponent(out SaveableObject saveableObject))
             {
                 world.Adopt(saveableObject);
-                saveableObject.LoadObject(content);
+                saveableObject.LoadObject(saveData);
             }
             else
             {

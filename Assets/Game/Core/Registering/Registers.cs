@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Core
 {
-    [DefaultExecutionOrder(-110)]
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Registers : MonoBehaviour
     {
         private readonly Dictionary<Type, Register> registers = new();

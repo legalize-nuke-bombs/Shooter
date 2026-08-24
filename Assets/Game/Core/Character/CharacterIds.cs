@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Core
 {
-    [DefaultExecutionOrder(-110)]
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class CharacterIds : MonoBehaviour, ISaveableComponent
     {
         private long next;
