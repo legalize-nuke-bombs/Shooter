@@ -21,7 +21,7 @@ namespace Shooter.Game.Combat
         private EarSpeaker earSpeaker;
         private Hands hands;
 
-        private Character id;
+        private Character character;
         private Interactor interactor;
         private Inventory inventory;
         private float lastShotAt;
@@ -33,7 +33,7 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            id = GetComponent<Character>();
+            character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();
             interactor = GetComponent<Interactor>();
             hands = GetComponent<Hands>();
@@ -165,7 +165,7 @@ namespace Shooter.Game.Combat
             if (part == BodyPart.Head) earSpeaker.Play(spec.HeadshotSound);
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
-            health.Damage(damage, id == null ? null : id.Value, spec.DamageType);
+            health.Damage(damage, character == null ? null : character.Id, spec.DamageType);
             Log.Info($"Shot of entity {name} hit {health.name} in {part} for {damage} damage");
         }
 

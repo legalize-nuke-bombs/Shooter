@@ -47,7 +47,7 @@ namespace Shooter.Game.World
             Movement movement = character.GetComponent<Movement>();
             if (movement == null) return;
 
-            if (oncePerCharacter && !characters.Add(character.Value))
+            if (oncePerCharacter && !characters.Add(character.Id))
             {
                 return;
             }

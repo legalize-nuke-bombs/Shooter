@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4327895610234871652}
   - component: {fileID: 6615536903480177054}
   - component: {fileID: 911500011150001115}
-  - component: {fileID: 5482910376234871004}
+  - component: {fileID: 6731183384941312830}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -198,7 +198,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9fe339c3786f459680eaba2c2bfaa09c, type: 2}
   - {fileID: 11400000, guid: d6a7408b34bc69e479d734a7e8e2e066, type: 2}
   - {fileID: 11400000, guid: 4ce008b5b721438499fb8c149aaa62fb, type: 2}
---- !u!114 &5482910376234871004
+--- !u!114 &6731183384941312830
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,6 +207,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 9047279815154395446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e39505c714e44ca08bdbf88c97a2e2eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 69bfb7ad3d144db6bc178140dadd7999, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CharacterIds
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectRuntimeIds

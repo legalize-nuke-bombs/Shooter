@@ -85,7 +85,7 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            Conversation conversation = Remember(speaker.Value);
+            Conversation conversation = Remember(speaker.Id);
             conversation.Reopen();
             mouth.Open(this, conversation.Messages);
         }
@@ -123,13 +123,13 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            if (!conversations.TryGetValue(speaker.Value, out Conversation conversation) || !conversation.Open)
+            if (!conversations.TryGetValue(speaker.Id, out Conversation conversation) || !conversation.Open)
             {
                 Log.Info($"Entity {user.name} spoke to {name} without an open talk, ignored");
                 return;
             }
 
-            if (thinking.Contains(speaker.Value))
+            if (thinking.Contains(speaker.Id))
             {
                 Log.Info($"Entity {user.name} spoke to {name} while the answer is pending, ignored");
                 return;
@@ -144,7 +144,7 @@ namespace Shooter.Game.Speech
 
             if (!user.TryGetComponent(out Character speaker)) return;
 
-            if (!conversations.TryGetValue(speaker.Value, out Conversation conversation)) return;
+            if (!conversations.TryGetValue(speaker.Id, out Conversation conversation)) return;
 
             conversation.Close();
             Forget(conversation.Wanderer);

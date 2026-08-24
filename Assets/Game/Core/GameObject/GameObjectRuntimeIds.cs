@@ -1,18 +1,14 @@
-using System;
-using Newtonsoft.Json.Linq;
-using Shooter.Game.Core.Saves;
+﻿using Shooter.Game.Core.Saves;
 using UnityEngine;
 
 namespace Shooter.Game.Core
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class CharacterIds : MonoBehaviour, ISaveableComponent
+    public class GameObjectRuntimeIds : MonoBehaviour, ISaveableComponent
     {
         private long next;
 
-        public static CharacterIds Current { get; private set; }
-
-        public string ComponentKey => "CharacterIds";
+        public string ComponentKey => "GameObjectRuntimeIds";
         private struct SaveData
         {
             public long Next { get; set; }
@@ -26,8 +22,11 @@ namespace Shooter.Game.Core
         }
         public void LoadObject(SaveToken content)
         {
-            next = Math.Max(next, content.To<SaveData>().Next);
+            SaveData sd = content.To<SaveData>();
+            next = sd.Next;
         }
+
+        public static GameObjectRuntimeIds Current { get; private set; }
 
         private void Awake()
         {
