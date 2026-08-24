@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Shooter.Game.Core.GameObject;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -18,7 +17,9 @@ namespace Shooter.Game.Core.Saves
         {
             var world = new FrozenWorld();
             foreach (SaveableObject saveable in Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include))
+            {
                 world.Adopt(saveable);
+            }
 
             Log.Info($"World is frozen: {world.saveables.Count} saveable objects went dark");
             return world;

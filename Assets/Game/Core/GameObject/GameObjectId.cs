@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Shooter.Game.Core.GameObject
+namespace Shooter.Game.Core
 {
     public class GameObjectId : MonoBehaviour
     {

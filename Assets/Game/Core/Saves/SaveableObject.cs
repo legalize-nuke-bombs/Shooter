@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Shooter.Game.Core.GameObject;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -176,14 +175,14 @@ namespace Shooter.Game.Core.Saves
                 throw new ArgumentException("Serialized prefab id is null or empty");
             }
             SaveablePrefabCatalog catalog = Catalogs.Of<SaveablePrefabCatalog>();
-            UnityEngine.GameObject prefab = catalog.Of(prefabId).Prefab;
+            GameObject prefab = catalog.Of(prefabId).Prefab;
             if (prefab == null)
             {
                 throw new ArgumentException($"Failed to find prefab {prefabId}");
             }
 
-            prefab = Instantiate(prefab);
-            if (prefab.TryGetComponent(out GameObjectId gameObjectId))
+            GameObject body = Spawner.Current.Spawn(prefab);
+            if (body.TryGetComponent(out GameObjectId gameObjectId))
             {
                 gameObjectId.Assign(id);
             }
@@ -192,16 +191,7 @@ namespace Shooter.Game.Core.Saves
                 Log.Warn($"Prefab {prefabId} does not have game object id");
             }
 
-            if (prefab.TryGetComponent(out NetworkObject networkObject))
-            {
-                networkObject.Spawn();
-            }
-            else
-            {
-                Log.Warn($"Prefab {prefabId} does not have network object");
-            }
-
-            if (prefab.TryGetComponent(out SaveableObject saveableObject))
+            if (body.TryGetComponent(out SaveableObject saveableObject))
             {
                 world.Adopt(saveableObject);
                 saveableObject.LoadObject(content);
