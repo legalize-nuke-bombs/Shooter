@@ -1,3 +1,4 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game.World
 {
-    [DefaultExecutionOrder(-100)]
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Environment : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();

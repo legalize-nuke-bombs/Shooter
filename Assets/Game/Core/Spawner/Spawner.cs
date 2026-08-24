@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Core
 {
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Spawner : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -15,7 +16,17 @@ namespace Shooter.Game.Core
             Current = this;
         }
 
-        public GameObject Spawn(GameObject prefab, Vector3 position = new Vector3(), Quaternion rotation = new Quaternion())
+        private void OnDestroy()
+        {
+            if (Current == this) Current = null;
+        }
+
+        public GameObject Spawn(GameObject prefab)
+        {
+            return Spawn(prefab, Vector3.zero, Quaternion.identity);
+        }
+
+        public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
         {
             Log.Info($"Spawning {prefab.name} at {position} rotation {rotation}...");
             GameObject body = Instantiate(prefab, position, rotation);

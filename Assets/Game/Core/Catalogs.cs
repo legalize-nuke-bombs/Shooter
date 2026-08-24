@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Core
 {
-    [DefaultExecutionOrder(-110)]
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Catalogs : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();

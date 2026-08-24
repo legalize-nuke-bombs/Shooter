@@ -1,12 +1,13 @@
 using System;
 using Newtonsoft.Json.Linq;
+using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.World
 {
-    [DefaultExecutionOrder(-110)]
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Clock : NetworkBehaviour, ISaveableComponent
     {
         public const long DayLengthSeconds = 86400;
