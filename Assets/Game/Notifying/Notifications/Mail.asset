@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Notifying.NotificationSpec
   id: mail
   icon: {fileID: 11400000, guid: cd084102a8f49e545900fdd76f4576e5, type: 2}
-  sound: {fileID: 11400000, guid: 3fec1d5b75597b84493683778a5d28c8, type: 2}
+  sound: {fileID: 11400000, guid: 7c280fb930ed408eb88b8d22842678f3, type: 2}
   title: '{text}'
   subtitle: "\u043E\u0442 {actorName}"
   told: 'Mail from Character {actorId} ({actorName}): {text}'
