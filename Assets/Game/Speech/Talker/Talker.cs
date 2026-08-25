@@ -21,6 +21,10 @@ namespace Shooter.Game.Speech
         private readonly Dictionary<long, Conversation> conversations = new();
         private readonly HashSet<long> thinking = new();
 
+        [SerializeField] private SoundSpec muttering;
+
+        private Speaker speaker;
+
         public string ComponentKey => "Talker";
         private struct SaveData
         {
@@ -90,8 +94,9 @@ namespace Shooter.Game.Speech
             mouth.Open(this, conversation.Messages);
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
+            speaker = GetComponent<Speaker>();
             enabled = false;
         }
 
@@ -167,6 +172,7 @@ namespace Shooter.Game.Speech
             }
 
             Say(conversation, MessageAuthor.Talker, content);
+            if (muttering != null) speaker?.Play(muttering);
             Log.Info($"Entity {name} answered wanderer {wandererId}");
         }
 

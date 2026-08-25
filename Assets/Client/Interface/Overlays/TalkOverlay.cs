@@ -1,3 +1,4 @@
+using System.Collections;
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
 using Shooter.Game.Speech;
@@ -17,6 +18,8 @@ namespace Shooter.Client.Interface
         private const string InputElement = "talk-input";
         private const string Stranger = "Незнакомец";
         private static readonly Journal Log = Logs.Here();
+
+        [SerializeField] private float charInterval = 0.01f;
 
         private readonly NameMapper mapper = new();
         private TextField input;
@@ -85,14 +88,26 @@ namespace Shooter.Client.Interface
 
         private void Line(string content, string time, bool mine)
         {
-            var line = new Label(content);
+            var line = new Label();
             line.AddToClassList("talk__line");
             if (mine) line.AddToClassList("talk__line--mine");
 
             log.Add(line);
-            log.schedule.Execute(() => log.ScrollTo(line));
 
+            if (mine) line.text = content;
+            else StartCoroutine(Type(line, content));
+
+            log.schedule.Execute(() => log.ScrollTo(line));
             Wait(mine);
+        }
+
+        private IEnumerator Type(Label line, string content)
+        {
+            for (int i = 1; i <= content.Length; i++)
+            {
+                line.text = content.Substring(0, i);
+                yield return new WaitForSeconds(charInterval);
+            }
         }
 
         private void Close()

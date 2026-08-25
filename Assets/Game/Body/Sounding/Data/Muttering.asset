@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: Muttering
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SoundSpec
+  id: 
+  clips:
+  - {fileID: 8300000, guid: eeb4e40bf29a794408dff8fc7df73b7a, type: 3}
+  - {fileID: 8300000, guid: ed6d1aaf2b79aa5499533e9e9bf0a0c5, type: 3}
+  - {fileID: 8300000, guid: 4d394fa444bb0cb40a76d26b86e8dce0, type: 3}
+  - {fileID: 8300000, guid: 759365671fca7f94b858995986d539a0, type: 3}
+  - {fileID: 8300000, guid: 72412cab26454154ba0aab0438cc4c46, type: 3}
+  - {fileID: 8300000, guid: 85ecdea6cd869004c89e7dc8ead6e9ba, type: 3}
+  - {fileID: 8300000, guid: c165cda28d419a548ada4632fcac75f3, type: 3}
+  - {fileID: 8300000, guid: 75ea4a7dd2f651b419ab42571c8ddbcd, type: 3}
+  - {fileID: 8300000, guid: 5a9de7022850e954381bf2529f2e9961, type: 3}
+  - {fileID: 8300000, guid: 8f16e7d9c85c8b94791a4eaa3268d0d5, type: 3}
+  - {fileID: 8300000, guid: 8a0a5184184971840b9fdaedc5fea776, type: 3}
+  - {fileID: 8300000, guid: 9898f7f10354e194c96737ecf3d84be2, type: 3}
+  - {fileID: 8300000, guid: 45935882be4a49c4794e35b1f5c5d51c, type: 3}
+  - {fileID: 8300000, guid: f71dcb3c50aad0248ba07371f8498544, type: 3}
+  - {fileID: 8300000, guid: 1953dc1ad62a2d4458c39f10f222c957, type: 3}
+  - {fileID: 8300000, guid: d160862afbe03ee40aa90291e78d3812, type: 3}
+  - {fileID: 8300000, guid: 629663045d1280b428a5da4144851e07, type: 3}
+  - {fileID: 8300000, guid: 3aa7911576f79864d856fe827afdee31, type: 3}
+  - {fileID: 8300000, guid: 783718b21f02a4c478846b113bf27265, type: 3}
+  - {fileID: 8300000, guid: 2aace0bebb93fc549971e00a1366d382, type: 3}
+  - {fileID: 8300000, guid: e5a5a9e2542fe9540ad75ae82ad23b7e, type: 3}
+  - {fileID: 8300000, guid: 2120fd3c13228af43a2baf5d736b3775, type: 3}
+  - {fileID: 8300000, guid: 525d9fc7d3eb4ef41a99d044b3b88f67, type: 3}
+  - {fileID: 8300000, guid: fb5d358e59aad414894253a0b489ac13, type: 3}
+  - {fileID: 8300000, guid: de5d530c5b9ce3346bd54e8a5db67dd7, type: 3}
+  - {fileID: 8300000, guid: 518f9bfa047c8be4484c5e0fb632467d, type: 3}
+  - {fileID: 8300000, guid: ae24a3017df096e40a54206f90c19b52, type: 3}
+  - {fileID: 8300000, guid: 346f6e9d8b3793b4bb593918c9163e2c, type: 3}
+  - {fileID: 8300000, guid: 012bf030ed1ec0b4ca4fc04f7cd5ee54, type: 3}
+  - {fileID: 8300000, guid: c20de43f596afaf4ea4c0be85f6f8f42, type: 3}
+  volume: 1
+  rolloff: 0
+  minDistance: 1
+  maxDistance: 100
+  pitchVariation: 0.05

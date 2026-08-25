@@ -237,6 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Speech.AITalker
   ShowTopMostFoldoutHeaderGroup: 1
+  muttering: {fileID: 11400000, guid: 2a66697da734c424898b7d31e453929f, type: 2}
 --- !u!114 &6266837280944903342
 MonoBehaviour:
   m_ObjectHideFlags: 0
