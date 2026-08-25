@@ -15,8 +15,10 @@ namespace Shooter.Game.Core.Saves
 
         private GameObjectId id;
         private NetworkObject networkObject;
+        private bool active = true;
 
         public string Id => id.Id;
+        public bool Active => active;
         private string Metadata
         {
             get => name;
@@ -59,6 +61,7 @@ namespace Shooter.Game.Core.Saves
         {
             public string Metadata { get; set; }
             public bool Spawned { get; set; }
+            public bool Active { get; set; }
             public string PrefabId { get; set; }
             public Dictionary<string, SaveToken> Components { get; set; }
         }
@@ -77,6 +80,7 @@ namespace Shooter.Game.Core.Saves
             {
                 Metadata = Metadata,
                 Spawned = Spawned,
+                Active = gameObject.activeSelf,
                 PrefabId = PrefabId(),
                 Components = new Dictionary<string, SaveToken>()
             };
@@ -118,6 +122,7 @@ namespace Shooter.Game.Core.Saves
         {
             Log.Info($"Entity {name} is loading...");
 
+            active = sd.Active;
             Metadata = sd.Metadata;
 
             if (Dynamic && !sd.Spawned)

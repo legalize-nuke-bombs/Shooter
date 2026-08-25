@@ -55,8 +55,8 @@ namespace Shooter.Game.Core.Saves
             {
                 if (!saveable.IsSpawned) continue;
 
-                saveable.gameObject.SetActive(true);
-                woken++;
+                saveable.gameObject.SetActive(saveable.Active);
+                if (saveable.Active) woken++;
             }
 
             Log.Info($"World is thawed: {woken} of {saveables.Count} saveable objects woke up");
