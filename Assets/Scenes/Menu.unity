@@ -2916,7 +2916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.MenuMusic
   tracks:
   - {fileID: 8300000, guid: 4d7a43d0064f0a74ab11990ee99afd7b, type: 3}
-  volume: 0.35
+  volume: 0.15
   fadeInSeconds: 4
 --- !u!82 &522876685
 AudioSource:
