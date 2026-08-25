@@ -32,6 +32,7 @@ namespace Shooter.Bootstrapping
         private IEnumerator Start()
         {
             Compression();
+            Vhs();
             yield return ToMenu();
         }
 
@@ -236,6 +237,21 @@ namespace Shooter.Bootstrapping
             instance.name = CompressionPrefab;
             DontDestroyOnLoad(instance);
             Log.Info("Compression is up");
+        }
+
+        private void Vhs()
+        {
+            GameObject prefab = Resources.Load<GameObject>("VHS");
+            if (prefab == null)
+            {
+                Log.Error("No VHS prefab in Resources, screen stays clean");
+                return;
+            }
+
+            GameObject instance = Instantiate(prefab);
+            instance.name = "VHS";
+            DontDestroyOnLoad(instance);
+            Log.Info("VHS is up");
         }
 
         private void Overlays()
