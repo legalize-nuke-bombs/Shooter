@@ -1,56 +1,60 @@
 using System;
 using System.Text;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Crypto.Signers;
+using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
-using Shooter.Accounts.Mnemonics;
+using Org.BouncyCastle.X509;
 
 namespace Shooter.Accounts
 {
     public class Account
     {
-        private readonly Ed25519PrivateKeyParameters key;
+        private const int KeyBits = 4096;
+        private const string Algorithm = "SHA256withRSA";
 
-        private Account(Ed25519PrivateKeyParameters key)
+        private readonly AsymmetricCipherKeyPair keys;
+
+        private Account(AsymmetricCipherKeyPair keys)
         {
-            this.key = key;
+            this.keys = keys;
         }
 
         public static Account Generate()
         {
-            return new Account(new Ed25519PrivateKeyParameters(new SecureRandom()));
+            var generator = new RsaKeyPairGenerator();
+            generator.Init(new KeyGenerationParameters(new SecureRandom(), KeyBits));
+            return new Account(generator.GenerateKeyPair());
         }
 
         public static Account FromKey(string secret)
         {
-            return new Account(new Ed25519PrivateKeyParameters(Convert.FromBase64String(secret), 0));
+            var key = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(secret));
+            var pub = new RsaKeyParameters(false, key.Modulus, key.PublicExponent);
+            return new Account(new AsymmetricCipherKeyPair(pub, key));
         }
 
-        public static Account FromPhrase(string phrase)
-        {
-            return new Account(new Ed25519PrivateKeyParameters(Mnemonic.ToEntropy(phrase), 0));
-        }
+        public string Key => Convert.ToBase64String(
+            PrivateKeyInfoFactory.CreatePrivateKeyInfo(keys.Private).GetDerEncoded());
 
-        public string Key => Convert.ToBase64String(key.GetEncoded());
-
-        public string Public => Convert.ToBase64String(key.GeneratePublicKey().GetEncoded());
-
-        public string Phrase => Mnemonic.FromEntropy(key.GetEncoded());
+        public string Public => Convert.ToBase64String(
+            SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keys.Public).GetDerEncoded());
 
         public byte[] Sign(string context, byte[] data)
         {
             byte[] message = Framed(context, data);
-            var signer = new Ed25519Signer();
-            signer.Init(true, key);
+            ISigner signer = SignerUtilities.GetSigner(Algorithm);
+            signer.Init(true, keys.Private);
             signer.BlockUpdate(message, 0, message.Length);
             return signer.GenerateSignature();
         }
 
         public static bool Verify(string publicKey, string context, byte[] data, byte[] signature)
         {
-            var pub = new Ed25519PublicKeyParameters(Convert.FromBase64String(publicKey), 0);
+            AsymmetricKeyParameter pub = PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKey));
             byte[] message = Framed(context, data);
-            var verifier = new Ed25519Signer();
+            ISigner verifier = SignerUtilities.GetSigner(Algorithm);
             verifier.Init(false, pub);
             verifier.BlockUpdate(message, 0, message.Length);
             return verifier.VerifySignature(signature);

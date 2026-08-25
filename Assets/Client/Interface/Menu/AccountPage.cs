@@ -13,7 +13,7 @@ namespace Shooter.Client.Interface
         private const string IdentityLabel = "identity";
         private const string PhraseField = "phrase";
         private const string StatusLabel = "status";
-        private const string InvalidPhrase = "Недействительная фраза";
+        private const string InvalidKey = "Недействительный ключ";
         private static readonly Journal Log = Logs.Here();
 
         private readonly Foldout secret;
@@ -45,8 +45,18 @@ namespace Shooter.Client.Interface
 
         private void Load()
         {
-            Account account = Account.FromKey(Config.Read().Key);
-            current = account.Phrase;
+            string secret = Config.Read().Key;
+            if (string.IsNullOrEmpty(secret))
+            {
+                current = "";
+                identity.text = "";
+                phrase.SetValueWithoutNotify("");
+                status.text = "";
+                return;
+            }
+
+            Account account = Account.FromKey(secret);
+            current = account.Key;
             identity.text = account.Public;
             phrase.SetValueWithoutNotify(current);
             status.text = "";
@@ -57,11 +67,11 @@ namespace Shooter.Client.Interface
             Account account;
             try
             {
-                account = Account.FromPhrase(entered);
+                account = Account.FromKey(entered);
             }
-            catch (FormatException)
+            catch (Exception)
             {
-                status.text = InvalidPhrase;
+                status.text = InvalidKey;
                 return;
             }
 

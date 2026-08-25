@@ -214,6 +214,13 @@
     background-color: var(--color-panel-solid);
 }
 
+.dialog__window--busy {
+    width: 560px;
+    min-height: 240px;
+    justify-content: center;
+    align-items: center;
+}
+
 .dialog__title {
     margin-bottom: var(--space-2);
     font-size: var(--text-large);
