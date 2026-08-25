@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using Shooter.Accounts;
 using Shooter.Configuring;
 using Shooter.Logging;
 using UnityEngine;
@@ -114,6 +116,8 @@ namespace Shooter.Client.Interface
 
             ShowWarning();
 
+            if (string.IsNullOrEmpty(Config.Read().Key)) GenerateKey();
+
             return true;
         }
 
@@ -124,6 +128,24 @@ namespace Shooter.Client.Interface
             dialog.Notice(warnTitle, warnDetails, "Понятно");
             warnTitle = null;
             warnDetails = null;
+        }
+
+        private async void GenerateKey()
+        {
+            dialog.Busy("Создание аккаунта...", "Пожалуйста, подождите. Может занять несколько секунд");
+            try
+            {
+                string key = await Task.Run(() => Account.Generate().Key);
+                Config.Read().Key = key;
+                Config.Save();
+                Log.Info("Account key generated");
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Account key generation failed: {e.Message}");
+            }
+
+            dialog?.Release();
         }
 
         protected override void Unbind()
