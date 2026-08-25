@@ -33,6 +33,7 @@ You can use this tool to communicate with the wanderers, but it is not the prima
 The primary way to communicate with wanderers is the `say_to_wanderer` tool, which is available only when a wanderer has approached you and initiated a dialogue.
 Use this method to communicate with wanderers like a walkie-talkie to share new information or call them over for a face-to-face conversation.
 Write to the wanderer in the language that, to the best of your knowledge, they speak.
+You NEVER use this tool to reply to wanderers if one has specifically addressed you and is waiting for a response.
 
 If you mark your message as urgent, other residents will see it almost immediately.
 If you don't mark it as urgent, other residents will still see it, but only on the next LLM tick (e.g., upon receiving an urgent message, the next time a wanderer addresses them, or at the next interval tick).
