@@ -5,6 +5,7 @@ namespace Shooter.Client.Interface
     [RequireComponent(typeof(AudioSource))]
     public class MenuMusic : MonoBehaviour
     {
+        [SerializeField] private AudioClip[] tracks;
         [SerializeField] private float volume = 0.35f;
         [SerializeField] private float fadeInSeconds = 4f;
 
@@ -22,8 +23,9 @@ namespace Shooter.Client.Interface
 
         private void Start()
         {
-            if (source.clip == null) return;
+            if (tracks == null || tracks.Length == 0) return;
 
+            source.clip = tracks[Random.Range(0, tracks.Length)];
             source.Play();
         }
 
