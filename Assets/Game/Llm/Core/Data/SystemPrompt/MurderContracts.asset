@@ -37,4 +37,5 @@ MonoBehaviour:
 
     6. When the wanderer
     returns, check the status of the targets using the `look_by_ids` tool. If the
-    targets are dead, grant the reward and update your attitude toward the player. '
+    targets are dead, grant the reward, update your attitude toward the player and
+    tell other nearby residents about this. '
