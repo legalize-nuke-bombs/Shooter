@@ -47,6 +47,7 @@
             <ui:VisualElement class="pause__panel">
                 <ui:Button name="pause-resume" text="Продолжить игру" class="pause__item"/>
                 <ui:Button name="pause-save" text="Сохранить игру" class="pause__item"/>
+                <ui:Button name="pause-invite" text="Пригласить игроков" class="pause__item"/>
                 <ui:Button name="pause-leave" text="Сохранить и выйти" class="pause__item"/>
             </ui:VisualElement>
         </ui:VisualElement>

@@ -10,11 +10,13 @@ namespace Shooter.Client.Interface
         private const string WindowElement = "pause";
         private const string ResumeElement = "pause-resume";
         private const string SaveElement = "pause-save";
+        private const string InviteElement = "pause-invite";
         private const string LeaveElement = "pause-leave";
         private const string LeaveHost = "Сохранить и выйти";
         private const string LeaveClient = "Покинуть мир";
         private static readonly Journal Log = Logs.Here();
 
+        private Button invite;
         private Button leave;
         private bool open;
         private Button resume;
@@ -41,9 +43,10 @@ namespace Shooter.Client.Interface
             window = root.Q<VisualElement>(WindowElement);
             resume = root.Q<Button>(ResumeElement);
             save = root.Q<Button>(SaveElement);
+            invite = root.Q<Button>(InviteElement);
             leave = root.Q<Button>(LeaveElement);
 
-            if (window == null || resume == null || save == null || leave == null)
+            if (window == null || resume == null || save == null || invite == null || leave == null)
             {
                 Log.Error($"Overlay document has no {WindowElement} window, the pause menu stays hidden");
                 return false;
@@ -51,6 +54,7 @@ namespace Shooter.Client.Interface
 
             resume.clicked += Resume;
             save.clicked += Save;
+            invite.clicked += Invite;
             leave.clicked += Leave;
             window.style.display = DisplayStyle.None;
 
@@ -68,6 +72,7 @@ namespace Shooter.Client.Interface
             bool host = player.IsServer;
 
             save.style.display = host ? DisplayStyle.Flex : DisplayStyle.None;
+            invite.style.display = host ? DisplayStyle.Flex : DisplayStyle.None;
             leave.text = host ? LeaveHost : LeaveClient;
 
             window.style.display = DisplayStyle.Flex;
@@ -86,6 +91,11 @@ namespace Shooter.Client.Interface
         private void Save()
         {
             OwnPlayer.Find<LocalPlayer>()?.SaveWorld();
+        }
+
+        private void Invite()
+        {
+            Log.Info("Invite pressed - the invite window ships with the crypto step");
         }
 
         private void Leave()
