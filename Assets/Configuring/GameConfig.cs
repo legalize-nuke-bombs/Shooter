@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Shooter.Accounts;
 using Unity.Properties;
 
 namespace Shooter.Configuring
@@ -6,8 +8,8 @@ namespace Shooter.Configuring
     {
         public const string FileName = "config.json";
 
-        [CreateProperty]
-        public string Key { get; set; } = "";
+        [JsonConverter(typeof(AccountConverter))]
+        public Account Account { get; set; }
 
         [CreateProperty]
         public ServerConfig Server { get; set; } = new();

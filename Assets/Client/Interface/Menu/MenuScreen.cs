@@ -116,7 +116,7 @@ namespace Shooter.Client.Interface
 
             ShowWarning();
 
-            if (string.IsNullOrEmpty(Config.Read().Key)) GenerateKey();
+            if (Config.Read().Account == null) GenerateKey();
 
             return true;
         }
@@ -135,8 +135,8 @@ namespace Shooter.Client.Interface
             dialog.Busy("Создание аккаунта...", "Пожалуйста, подождите. Может занять несколько секунд");
             try
             {
-                string key = await Task.Run(() => Account.Generate().Key);
-                Config.Read().Key = key;
+                Account account = await Task.Run(() => Account.Generate());
+                Config.Read().Account = account;
                 Config.Save();
                 Log.Info("Account key generated");
             }
