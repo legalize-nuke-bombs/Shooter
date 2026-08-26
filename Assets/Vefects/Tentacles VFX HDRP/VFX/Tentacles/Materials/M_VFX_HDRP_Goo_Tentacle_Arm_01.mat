@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_VFX_HDRP_Goo_Tentacle_Arm_01
+  m_Shader: {fileID: 4800000, guid: 30337cf7f894999458549b810c738ada, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _ADD_PRECOMPUTED_VELOCITY
+  - _CONSERVATIVE_DEPTH_OFFSET
+  - _DEPTHOFFSET_ON
+  - _DISABLE_SSR_TRANSPARENT
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2225
+  stringTagMap: {}
+  disabledShaderPasses:
+  - TransparentBackface
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _NoiseTexture:
+        m_Texture: {fileID: 2800000, guid: 41ba19f5235ee1144b157e24413cb2e3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTextureDistortion:
+        m_Texture: {fileID: 2800000, guid: 41ba19f5235ee1144b157e24413cb2e3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTextureNormal:
+        m_Texture: {fileID: 2800000, guid: 01e3d7d7afbd17f41a0bbff8cf39653a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WPOTriplanarTexture:
+        m_Texture: {fileID: 2800000, guid: 41ba19f5235ee1144b157e24413cb2e3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AddPrecomputedVelocity: 1
+    - _AlphaCutoff: 0.5
+    - _AlphaCutoffEnable: 0
+    - _AlphaDstBlend: 0
+    - _AlphaSrcBlend: 1
+    - _AlphaToMask: 0
+    - _AlphaToMaskInspectorValue: 0
+    - _BlendMode: 0
+    - _ConservativeDepthOffsetEnable: 1
+    - _CullMode: 2
+    - _CullModeForward: 2
+    - _DepthOffsetEnable: 1
+    - _DoubleSidedEnable: 0
+    - _DoubleSidedGIMode: 0
+    - _DoubleSidedNormalMode: 2
+    - _DstBlend: 0
+    - _Emission: 0.05
+    - _EnableBlendModePreserveSpecularLighting: 1
+    - _EnableFogOnTransparent: 1
+    - _EnvironmentReflections: 1
+    - _FresnelBias: 0
+    - _FresnelPower: 3
+    - _FresnelScale: 1
+    - _HueShift: 1
+    - _NoiseDistortionLerp: 0.2
+    - _NormalIntensity: 1
+    - _OpaqueCullMode: 2
+    - _OverallTilesMultiply: 1
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
+    - _ReceivesSSR: 1
+    - _ReceivesSSRTransparent: 0
+    - _RenderQueueType: 1
+    - _RequireSplitLighting: 0
+    - _RoughnessMax: 1
+    - _RoughnessMin: 0.8
+    - _Smoothness: 0.96
+    - _SmoothnessMax: 1
+    - _SmoothnessMin: 0.8
+    - _Specular: 0.01
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _StencilRef: 0
+    - _StencilRefDepth: 8
+    - _StencilRefDistortionVec: 4
+    - _StencilRefGBuffer: 10
+    - _StencilRefMV: 40
+    - _StencilWriteMask: 6
+    - _StencilWriteMaskDepth: 9
+    - _StencilWriteMaskDistortionVec: 4
+    - _StencilWriteMaskGBuffer: 15
+    - _StencilWriteMaskMV: 41
+    - _SupportDecals: 1
+    - _SurfaceType: 0
+    - _TransparentBackfaceEnable: 0
+    - _TransparentCullMode: 2
+    - _TransparentSortPriority: 0
+    - _TransparentWritingMotionVec: 0
+    - _TransparentZWrite: 0
+    - _UseShadowThreshold: 0
+    - _UseWorldSpace1: 0
+    - _WPOBandErosion: 0
+    - _WPOBandErosionSmoothness: 3
+    - _WPOCollapseLerp: 1
+    - _WPOCollapseWidth: -1
+    - _WPOIntensity: 0.5
+    - _WPOIntensity1: 0.05
+    - _WPOMax: 0.5
+    - _WPOMin: 0
+    - _WPOSineIntensity: 1
+    - _WPOSineTime: 3.77
+    - _WPOTriplanarContrast: 1
+    - _ZTestDepthEqualForOpaque: 3
+    - _ZTestGBuffer: 4
+    - _ZTestTransparent: 4
+    - _ZWrite: 1
+    m_Colors:
+    - _Color01: {r: 0.39607838, g: 0.43529406, b: 0.090196066, a: 1}
+    - _Color02: {r: 0.30980387, g: 0.37254897, b: 0.12941176, a: 1}
+    - _Color03: {r: 0.9882354, g: 0.9843138, b: 0.27058816, a: 1}
+    - _ColorFresnel: {r: 0, g: 1, b: 0.92718434, a: 1}
+    - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _NoiseTextureDistortionPan: {r: 0.05, g: -0.5, b: 0, a: 0}
+    - _NoiseTextureDistortionScale: {r: 1, g: 2, b: 0, a: 0}
+    - _NoiseTexturePan: {r: -0.1, g: -0.4, b: 0, a: 0}
+    - _NoiseTextureScale: {r: 1, g: 2, b: 0, a: 0}
+    - _WPOTile: {r: 1, g: 0.5, b: 1, a: 0}
+    - _WPOTileOffsetCustom: {r: 0, g: 0, b: 0, a: 0}
+    - _WPOTileSpeed: {r: 0.1, g: -1, b: -0.1, a: 0}
+  m_BuildTextureStacks: []

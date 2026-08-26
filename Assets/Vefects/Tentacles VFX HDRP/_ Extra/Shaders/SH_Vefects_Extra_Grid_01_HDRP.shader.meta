@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c3275c12d85fa0a42b82dc3ec045babe
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 303498
+  packageName: Tentacles VFX - HDRP
+  packageVersion: 1.0.1
+  assetPath: Assets/Vefects/Tentacles VFX HDRP/_ Extra/Shaders/SH_Vefects_Extra_Grid_01_HDRP.shader
+  uploadId: 782350
