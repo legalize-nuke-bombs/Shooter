@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 30337cf7f894999458549b810c738ada
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _NoiseTexture: {fileID: 2800000, guid: b028ad42bde5e55438e580eee0862e1b, type: 3}
+  - _NoiseTextureDistortion: {fileID: 2800000, guid: 1f0e4d7c9fccb3545b652c6042307b03,
+      type: 3}
+  - _NoiseTextureNormal: {fileID: 2800000, guid: 0cd6908c8fcc9a947a5cad7796277dc1,
+      type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 303498
+  packageName: Tentacles VFX - HDRP
+  packageVersion: 1.0.1
+  assetPath: Assets/Vefects/Tentacles VFX HDRP/VFX/Tentacles/Shaders/SH_Vefects_VFX_HDRP_Goo_Arm_01.shader
+  uploadId: 782350
