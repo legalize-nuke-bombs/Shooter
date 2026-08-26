@@ -30,6 +30,8 @@ namespace Shooter.Client.Interface
 
         private VisualElement window;
 
+        private bool opening;
+
         private void Update()
         {
             if (!Bound) return;
@@ -82,6 +84,9 @@ namespace Shooter.Client.Interface
             speaker.text = Named(talkerId);
             window.style.display = DisplayStyle.Flex;
 
+            opening = true;
+            log.schedule.Execute(() => opening = false);
+
             input.Focus();
             Log.Info($"Talk window opened with {speaker.text}");
         }
@@ -94,7 +99,7 @@ namespace Shooter.Client.Interface
 
             log.Add(line);
 
-            if (mine) line.text = content;
+            if (mine || opening) line.text = content;
             else StartCoroutine(Type(line, content));
 
             log.schedule.Execute(() => log.ScrollTo(line));
@@ -106,6 +111,7 @@ namespace Shooter.Client.Interface
             for (int i = 1; i <= content.Length; i++)
             {
                 line.text = content.Substring(0, i);
+                log.ScrollTo(line);
                 yield return new WaitForSeconds(charInterval);
             }
         }
