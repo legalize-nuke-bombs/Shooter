@@ -18,7 +18,7 @@ namespace Shooter.Accounts
     {
         private const int KeyBits = 4096;
         private const string Algorithm = "SHA256withRSA";
-        private const string CommonName = "CN=shooter-host";
+        public const string CommonName = "shooter-host";
         private static readonly DateTime NotBefore = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private static readonly DateTime NotAfter = new(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
@@ -87,7 +87,7 @@ namespace Shooter.Accounts
 
         private string BuildCertificate()
         {
-            var name = new X509Name(CommonName);
+            var name = new X509Name("CN=" + CommonName);
             var generator = new X509V3CertificateGenerator();
             generator.SetSerialNumber(BigInteger.One);
             generator.SetIssuerDN(name);

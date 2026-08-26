@@ -28,7 +28,7 @@ namespace Shooter.Client.Interface
             if (!Bound) return;
 
             LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            bool wanted = player != null && player.Paused;
+            bool wanted = player != null && player.Paused && !player.Inviting;
 
             if (wanted == open) return;
 
@@ -95,7 +95,7 @@ namespace Shooter.Client.Interface
 
         private void Invite()
         {
-            Log.Info("Invite pressed - the invite window ships with the crypto step");
+            OwnPlayer.Find<LocalPlayer>()?.OpenInvite();
         }
 
         private void Leave()

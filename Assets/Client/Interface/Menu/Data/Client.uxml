@@ -7,14 +7,9 @@
                 <ui:DataBinding property="value" data-source-path="Client.Name" binding-mode="TwoWay"/>
             </Bindings>
         </ui:TextField>
-        <ui:TextField label="Адрес" class="field">
+        <ui:TextField label="Код подключения" multiline="true" class="field">
             <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Address" binding-mode="TwoWay"/>
-            </Bindings>
-        </ui:TextField>
-        <ui:TextField label="Порт" is-delayed="true" class="field">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Port" binding-mode="TwoWay"/>
+                <ui:DataBinding property="value" data-source-path="Client.Invite" binding-mode="TwoWay"/>
             </Bindings>
         </ui:TextField>
     </ui:VisualElement>
