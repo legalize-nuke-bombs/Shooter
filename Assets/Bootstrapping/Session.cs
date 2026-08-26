@@ -16,6 +16,8 @@ namespace Shooter.Bootstrapping
         private const string NetworkPrefab = "NetworkManager";
         private const string OverlayPrefab = "Overlays";
         private const string CompressionPrefab = "Compression";
+        private const string VhsPrefab = "VHS";
+        private const string ScreenshotPrefab = "Screenshots";
         private const string MenuScene = "Menu";
         private const string BootScene = "Boot";
         private const string WorldScene = "Map";
@@ -31,8 +33,9 @@ namespace Shooter.Bootstrapping
 
         private IEnumerator Start()
         {
-            Compression();
-            Vhs();
+            Raise(CompressionPrefab);
+            Raise(VhsPrefab);
+            Raise(ScreenshotPrefab);
             yield return ToMenu();
         }
 
@@ -224,34 +227,19 @@ namespace Shooter.Bootstrapping
             Log.Info($"Heading for {client.Address}:{client.Port}, channel encrypted");
         }
 
-        private void Compression()
+        private void Raise(string prefabName)
         {
-            GameObject prefab = Resources.Load<GameObject>(CompressionPrefab);
+            GameObject prefab = Resources.Load<GameObject>(prefabName);
             if (prefab == null)
             {
-                Log.Error($"No {CompressionPrefab} prefab in Resources, saves stay folders");
+                Log.Error($"No {prefabName} prefab in Resources, that service stays down");
                 return;
             }
 
             GameObject instance = Instantiate(prefab);
-            instance.name = CompressionPrefab;
+            instance.name = prefabName;
             DontDestroyOnLoad(instance);
-            Log.Info("Compression is up");
-        }
-
-        private void Vhs()
-        {
-            GameObject prefab = Resources.Load<GameObject>("VHS");
-            if (prefab == null)
-            {
-                Log.Error("No VHS prefab in Resources, screen stays clean");
-                return;
-            }
-
-            GameObject instance = Instantiate(prefab);
-            instance.name = "VHS";
-            DontDestroyOnLoad(instance);
-            Log.Info("VHS is up");
+            Log.Info($"{prefabName} is up");
         }
 
         private void Overlays()
