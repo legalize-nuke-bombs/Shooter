@@ -43,6 +43,13 @@
         </ui:VisualElement>
         <ui:VisualElement name="notifications" class="notifications" picking-mode="Ignore"/>
         <ui:VisualElement name="sleep" class="sleep" picking-mode="Ignore"/>
+        <ui:VisualElement name="pause" class="pause">
+            <ui:VisualElement class="pause__panel">
+                <ui:Button name="pause-resume" text="Продолжить игру" class="pause__item"/>
+                <ui:Button name="pause-save" text="Сохранить игру" class="pause__item"/>
+                <ui:Button name="pause-leave" text="Сохранить и выйти" class="pause__item"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement name="versions" class="corner" picking-mode="Ignore">
             <ui:Label name="clock" class="line corner__line"/>
             <ui:Label name="debug" class="line corner__line debug" picking-mode="Ignore"/>

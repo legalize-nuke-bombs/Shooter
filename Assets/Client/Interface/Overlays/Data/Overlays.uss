@@ -454,3 +454,43 @@
     color: rgba(255, 255, 255, 0.45);
     -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
+
+.pause {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+}
+
+.pause__panel {
+    width: 340px;
+    padding: 24px 20px;
+    background-color: var(--color-panel-solid);
+    border-width: 1px;
+    border-color: var(--color-line-strong);
+}
+
+.pause__item {
+    margin-bottom: 2px;
+    padding: 10px 16px;
+    border-left-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0);
+    font-size: var(--text-large);
+    color: var(--color-text-dim);
+    -unity-text-align: middle-left;
+}
+
+.pause__item:hover {
+    border-left-color: var(--color-accent);
+    background-color: var(--color-hover);
+    color: var(--color-text);
+}
+
+.pause__item:active {
+    background-color: var(--color-accent-soft);
+}
