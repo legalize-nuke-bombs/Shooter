@@ -38,6 +38,8 @@ namespace Shooter.Client.Playing
 
         public bool Paused { get; private set; }
 
+        public bool Inviting { get; private set; }
+
         private void Awake()
         {
             movement = GetComponent<Movement>();
@@ -142,12 +144,12 @@ namespace Shooter.Client.Playing
         {
             if (controls == null) return;
 
-            if (talking || Paused) Listen();
+            if (talking || Paused || Inviting) Listen();
             else if (InventoryOpen) Browse();
             else Grab();
 
             Log.Info(
-                $"Local player input is now {(talking ? "on the talk" : Paused ? "on the pause menu" : InventoryOpen ? "shared with the bag" : "back on the player")}");
+                $"Local player input is now {(talking ? "on the talk" : Inviting ? "on the invite window" : Paused ? "on the pause menu" : InventoryOpen ? "shared with the bag" : "back on the player")}");
         }
 
         private void Grab()
@@ -250,8 +252,30 @@ namespace Shooter.Client.Playing
                 return;
             }
 
+            if (Inviting)
+            {
+                CloseInvite();
+                return;
+            }
+
             if (Paused) Resume();
             else OpenPause();
+        }
+
+        public void OpenInvite()
+        {
+            Inviting = true;
+            Capture();
+            Log.Info("Invite window opened");
+        }
+
+        public void CloseInvite()
+        {
+            if (!Inviting) return;
+
+            Inviting = false;
+            Capture();
+            Log.Info("Invite window closed");
         }
 
         private void OpenPause()

@@ -51,6 +51,18 @@
                 <ui:Button name="pause-leave" text="Сохранить и выйти" class="pause__item"/>
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="invite" class="pause">
+            <ui:VisualElement class="pause__panel">
+                <ui:Label text="Пригласить игроков" class="invite__title"/>
+                <ui:TextField name="invite-address" label="Адрес" class="invite__field"/>
+                <ui:TextField name="invite-port" label="Порт" is-delayed="true" class="invite__field"/>
+                <ui:Label name="invite-status" class="invite__status"/>
+                <ui:VisualElement class="invite__actions">
+                    <ui:Button name="invite-back" text="Назад" class="invite__button"/>
+                    <ui:Button name="invite-copy" text="Скопировать ссылку" class="invite__button"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement name="versions" class="corner" picking-mode="Ignore">
             <ui:Label name="clock" class="line corner__line"/>
             <ui:Label name="debug" class="line corner__line debug" picking-mode="Ignore"/>

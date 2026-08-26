@@ -26,7 +26,7 @@ namespace Shooter.Client.Interface
             Config.Save();
 
             ClientConfig client = Config.Read().Client;
-            Log.Info($"World of {client.Address}:{client.Port} under the name {client.Name}");
+            Log.Info($"Joining under the name {client.Name}");
         }
     }
 }

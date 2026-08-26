@@ -494,3 +494,39 @@
 .pause__item:active {
     background-color: var(--color-accent-soft);
 }
+
+.invite__title {
+    margin-bottom: var(--space-6);
+    font-size: 21px;
+    color: var(--color-text);
+}
+
+.invite__field {
+    margin-bottom: var(--space-3);
+}
+
+.invite__status {
+    min-height: 16px;
+    margin: var(--space-2) 0;
+    font-size: var(--text-small);
+    color: var(--color-text-dim);
+}
+
+.invite__actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: var(--space-4);
+}
+
+.invite__button {
+    margin-left: var(--space-2);
+    padding: 10px 18px;
+    border-width: 1px;
+    border-color: var(--color-line-strong);
+    font-size: var(--text-base);
+    color: var(--color-text);
+}
+
+.invite__button:hover {
+    border-color: var(--color-text);
+}

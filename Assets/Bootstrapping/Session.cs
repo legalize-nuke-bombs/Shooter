@@ -225,9 +225,15 @@ namespace Shooter.Bootstrapping
             }
 
             ClientConfig client = Config.Read().Client;
-            transport.SetConnectionData(client.Address, client.Port);
-            transport.SetClientSecrets(WorldCommonName, WorldCert);
-            Log.Info($"Heading for {client.Address}:{client.Port}, channel encrypted");
+            if (!Invite.TryDecode(client.Invite, out string address, out ushort port, out string certificate))
+            {
+                Log.Error("Invite code is missing or malformed, staying in the menu");
+                return;
+            }
+
+            transport.SetConnectionData(address, port);
+            transport.SetClientSecrets(Account.CommonName, certificate);
+            Log.Info($"Heading for {address}:{port}, channel encrypted");
         }
 
         private void Raise(string prefabName)
@@ -277,27 +283,5 @@ namespace Shooter.Bootstrapping
             return network;
         }
 
-        // TEMP: одноразовый self-signed серт для smoke-test DTLS. Убрать при переходе на генерацию серта мира.
-        private const string WorldCommonName = "shooter-world";
-
-        private const string WorldCert = @"-----BEGIN CERTIFICATE-----
-MIIDETCCAfmgAwIBAgIUJVqA8vnKMVXxOVzYO+2d1Uu3+gcwDQYJKoZIhvcNAQEL
-BQAwGDEWMBQGA1UEAwwNc2hvb3Rlci13b3JsZDAeFw0yNjA4MjUxMjI1NDZaFw0z
-NjA4MjIxMjI1NDZaMBgxFjAUBgNVBAMMDXNob290ZXItd29ybGQwggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQC0X6RXU5SMcS5mS1NVc7loXQ22ydwff3Yf
-jdefJ7hsmM3o5XOW0sctX2HmE+191Kutw49SHzFhNWTY8d3Tlt7zcqQSKGCLU9UA
-iL1yQ3hXXVa7MiBigERl67YnsXJdOFdf96sCpZzyprd1pepsNbUlUSkVvcalawiL
-Qzak69tv3f77D8sDP6Ch4jyeQfVB6gCwwhy1AbLxc21gEPw4VtYtwn6KYdm6hbNr
-Q0DOteD9p3KLPuvYtVVNlu2uGjz1MSgpEImVvtPV/TorMaqRIEn57k5TSoHsnNVs
-hTxkgfbmgE9oL2IpGcgCTU6WUyh3+5zuSfpl5psxnuYPfqZr1+XNAgMBAAGjUzBR
-MB0GA1UdDgQWBBTVipY2TwVGO6C3DVqrID4ukBlYrTAfBgNVHSMEGDAWgBTVipY2
-TwVGO6C3DVqrID4ukBlYrTAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUA
-A4IBAQAm5EBiBeCYgciMsnJYz4WexIWa0nI7BYIlaD8GXYJqs56wPHOO/pOeN/+t
-kr1tlV00teWvn+CnDBICV50zQDiqMQ5PZLqaYEw87mIHSuS8dgXWAJLK+tWM2Sxw
-hzIdmuZw11f9oG546yXEsqECU2jkWxsTkG5U0LtKlKPVYo1pn+Lr/EGl+2gXYNqz
-VHqFXDuCJh8xdKEaDAF9mSvMh60sGbKkvDov7pnIRyo+TnqvsQPFcq3aGqNqF/BG
-6rTQjrfWQzyHTC92TpjzhiSc8z2m2H2JRn2eNVudBrcIBwJFqDxlx1oGTp961rKY
-WboWi8GanF7YUbYrYYPz1/F4vFBW
------END CERTIFICATE-----";
     }
 }
