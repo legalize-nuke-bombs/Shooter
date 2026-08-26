@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Shooter.Accounts;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -33,6 +34,8 @@ namespace Shooter.Configuring
 
             Write(Location(), current);
         }
+
+        public static Account Account => Read().Account;
 
         public static string Root()
         {

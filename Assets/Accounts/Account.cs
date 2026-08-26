@@ -1,8 +1,13 @@
 using System;
+using System.IO;
 using System.Text;
+using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Math;
+using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
@@ -13,8 +18,14 @@ namespace Shooter.Accounts
     {
         private const int KeyBits = 4096;
         private const string Algorithm = "SHA256withRSA";
+        private const string CommonName = "CN=shooter-host";
+        private static readonly DateTime NotBefore = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime NotAfter = new(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         private readonly AsymmetricCipherKeyPair keys;
+
+        private string certificate;
+        private string privateKeyPem;
 
         private Account(AsymmetricCipherKeyPair keys)
         {
@@ -40,6 +51,10 @@ namespace Shooter.Accounts
 
         public string Public => Convert.ToBase64String(
             SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keys.Public).GetDerEncoded());
+
+        public string Certificate => certificate ??= BuildCertificate();
+
+        public string PrivateKeyPem => privateKeyPem ??= Pem(keys.Private);
 
         public byte[] Sign(string context, byte[] data)
         {
@@ -68,6 +83,27 @@ namespace Shooter.Accounts
             message[tag.Length] = 0x00;
             Buffer.BlockCopy(data, 0, message, tag.Length + 1, data.Length);
             return message;
+        }
+
+        private string BuildCertificate()
+        {
+            var name = new X509Name(CommonName);
+            var generator = new X509V3CertificateGenerator();
+            generator.SetSerialNumber(BigInteger.One);
+            generator.SetIssuerDN(name);
+            generator.SetSubjectDN(name);
+            generator.SetNotBefore(NotBefore);
+            generator.SetNotAfter(NotAfter);
+            generator.SetPublicKey(keys.Public);
+            var signature = new Asn1SignatureFactory(Algorithm, keys.Private);
+            return Pem(generator.Generate(signature));
+        }
+
+        private static string Pem(object subject)
+        {
+            using var writer = new StringWriter();
+            new PemWriter(writer).WriteObject(subject);
+            return writer.ToString();
         }
     }
 }

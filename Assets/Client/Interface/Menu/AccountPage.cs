@@ -45,8 +45,8 @@ namespace Shooter.Client.Interface
 
         private void Load()
         {
-            string secret = Config.Read().Key;
-            if (string.IsNullOrEmpty(secret))
+            Account account = Config.Account;
+            if (account == null)
             {
                 current = "";
                 identity.text = "";
@@ -55,7 +55,6 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            Account account = Account.FromKey(secret);
             current = account.Key;
             identity.text = account.Public;
             phrase.SetValueWithoutNotify(current);
@@ -75,7 +74,7 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            Config.Read().Key = account.Key;
+            Config.Read().Account = account;
             Config.Save();
             Log.Info("Account restored from a recovery phrase");
             Load();

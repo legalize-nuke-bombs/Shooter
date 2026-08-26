@@ -5,6 +5,7 @@
         "Shooter.Client",
         "Shooter.Game",
         "Shooter.Configuring",
+        "Shooter.Accounts",
         "Shooter.Logging",
         "Unity.Netcode.Runtime",
         "Unity.Networking.Transport"
