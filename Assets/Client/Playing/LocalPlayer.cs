@@ -36,6 +36,8 @@ namespace Shooter.Client.Playing
 
         public bool InventoryOpen { get; private set; }
 
+        public bool Paused { get; private set; }
+
         private void Awake()
         {
             movement = GetComponent<Movement>();
@@ -140,12 +142,12 @@ namespace Shooter.Client.Playing
         {
             if (controls == null) return;
 
-            if (talking) Listen();
+            if (talking || Paused) Listen();
             else if (InventoryOpen) Browse();
             else Grab();
 
             Log.Info(
-                $"Local player input is now {(talking ? "on the talk" : InventoryOpen ? "shared with the bag" : "back on the player")}");
+                $"Local player input is now {(talking ? "on the talk" : Paused ? "on the pause menu" : InventoryOpen ? "shared with the bag" : "back on the player")}");
         }
 
         private void Grab()
@@ -248,14 +250,44 @@ namespace Shooter.Client.Playing
                 return;
             }
 
+            if (Paused) Resume();
+            else OpenPause();
+        }
+
+        private void OpenPause()
+        {
+            Paused = true;
+            Capture();
+            Log.Info("Pause menu opened");
+        }
+
+        public void Resume()
+        {
+            if (!Paused) return;
+
+            Paused = false;
+            Capture();
+            Log.Info("Pause menu closed");
+        }
+
+        public void SaveWorld()
+        {
+            if (!IsServer) return;
+
+            Log.Info("Saving the world from the pause menu");
+            StartCoroutine(SaveManager.Current.SaveCoroutine());
+        }
+
+        public void LeaveWorld()
+        {
             if (IsServer)
             {
-                Log.Info("Escape with nothing open, saving the world before the menu");
+                Log.Info("Leaving the world from the pause menu, saving first");
                 StartCoroutine(SaveThenLeave());
                 return;
             }
 
-            Log.Info("Escape with nothing open, leaving the world for the menu");
+            Log.Info("Leaving the world from the pause menu");
             NetworkManager.Shutdown();
         }
 
