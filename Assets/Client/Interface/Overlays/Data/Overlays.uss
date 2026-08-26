@@ -468,19 +468,19 @@
 }
 
 .pause__panel {
-    width: 340px;
-    padding: 24px 20px;
+    width: 440px;
+    padding: 32px 28px;
     background-color: var(--color-panel-solid);
     border-width: 1px;
     border-color: var(--color-line-strong);
 }
 
 .pause__item {
-    margin-bottom: 2px;
-    padding: 10px 16px;
-    border-left-width: 2px;
+    margin-bottom: 6px;
+    padding: 16px 22px;
+    border-left-width: 3px;
     border-left-color: rgba(0, 0, 0, 0);
-    font-size: var(--text-large);
+    font-size: 21px;
     color: var(--color-text-dim);
     -unity-text-align: middle-left;
 }
