@@ -79,6 +79,32 @@ namespace Shooter.Client.Playing
                 return;
             }
 
+            Activate();
+        }
+
+        public override void OnGainedOwnership()
+        {
+            view.gameObject.SetActive(true);
+            enabled = true;
+            Activate();
+        }
+
+        public override void OnLostOwnership()
+        {
+            Deactivate();
+            view.gameObject.SetActive(false);
+            enabled = false;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            Deactivate();
+        }
+
+        private void Activate()
+        {
+            if (controls != null) return;
+
             yaw = transform.eulerAngles.y;
             movement.Turned += Turn;
 
@@ -101,12 +127,12 @@ namespace Shooter.Client.Playing
             Grab();
 
             NetworkManager.NetworkTickSystem.Tick += Send;
-            Log.Info($"Local player spawned as network object {NetworkObjectId} owned by client {OwnerClientId}");
+            Log.Info($"Local player active on network object {NetworkObjectId} owned by client {OwnerClientId}");
         }
 
-        public override void OnNetworkDespawn()
+        private void Deactivate()
         {
-            if (!IsOwner) return;
+            if (controls == null) return;
 
             NetworkManager.NetworkTickSystem.Tick -= Send;
             movement.Turned -= Turn;
@@ -132,7 +158,7 @@ namespace Shooter.Client.Playing
             talking = false;
 
             Point(true);
-            Log.Info("Local player despawned");
+            Log.Info("Local player inactive");
         }
 
         private void Turn(float turned)

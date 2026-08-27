@@ -33,7 +33,19 @@ namespace Shooter.Client.Playing
 
         public override void OnNetworkSpawn()
         {
-            if (!IsOwner) enabled = false;
+            enabled = IsOwner;
+        }
+
+        public override void OnGainedOwnership()
+        {
+            enabled = true;
+        }
+
+        public override void OnLostOwnership()
+        {
+            enabled = false;
+            held = false;
+            Punch = Vector2.zero;
         }
 
         public void Press()

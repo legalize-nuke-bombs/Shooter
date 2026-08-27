@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Text;
-using Shooter.Accounts;
 using Shooter.Configuring;
+using Shooter.Game.Core;
 using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -17,6 +16,7 @@ namespace Shooter.Game.Body
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<ulong, string> names = new();
+        private readonly Dictionary<ulong, string> keys = new();
         private readonly Dictionary<ulong, NetworkObject> bodies = new();
 
         private NetworkManager network;
@@ -51,44 +51,59 @@ namespace Shooter.Game.Body
 
             given = given.Trim();
             string name = given.Length == 0 ? Nameless : given.Substring(0, Mathf.Min(given.Length, NameLimit));
-
             names[request.ClientNetworkId] = name;
-            response.Approved = true;
-            response.CreatePlayerObject = true;
+            keys[request.ClientNetworkId] = publicKey;
 
-            Log.Info($"Client {request.ClientNetworkId} proved key ownership {Account.Fingerprint(publicKey)}, approved as {name}");
+            response.Approved = true;
+            response.CreatePlayerObject = Player.OfKey(publicKey, Inactive.Include) == null;
+
+            Log.Info(
+                $"Client {request.ClientNetworkId} proved key ownership, approved as {name}, {(response.CreatePlayerObject ? "fresh body" : "reclaiming a body")}");
         }
 
         private void Welcome(ulong client)
         {
             if (!network.IsServer) return;
-
-            if (!network.ConnectedClients.TryGetValue(client, out NetworkClient connected) ||
-                connected.PlayerObject == null)
-            {
-                Log.Warn($"Client {client} connected without a player object");
-                return;
-            }
-
-            connected.PlayerObject.DontDestroyWithOwner = true;
-            bodies[client] = connected.PlayerObject;
+            if (!network.ConnectedClients.TryGetValue(client, out NetworkClient connected)) return;
 
             string name = names.TryGetValue(client, out string known) ? known : Nameless;
-            connected.PlayerObject.GetComponent<AbsoluteNameable>()?.Rename(name);
-            connected.PlayerObject.name = name;
+            string key = keys.TryGetValue(client, out string carried) ? carried : null;
 
-            Transform at = MainSpawnPoint.Current == null
-                ? connected.PlayerObject.transform
-                : MainSpawnPoint.Current.transform;
-            connected.PlayerObject.GetComponent<Movement>()?.Teleport(at.position, at.eulerAngles.y);
+            NetworkObject body = connected.PlayerObject;
+            if (body != null)
+            {
+                Player fresh = body.GetComponent<Player>();
+                if (fresh != null) fresh.PublicKey = key;
 
-            Log.Info(
-                $"Client {client} entered the world as {name} at {at.position}, players online {network.ConnectedClients.Count}");
+                Transform at = MainSpawnPoint.Current == null ? body.transform : MainSpawnPoint.Current.transform;
+                body.GetComponent<Movement>()?.Teleport(at.position, at.eulerAngles.y);
+            }
+            else
+            {
+                Player returning = key == null ? null : Player.OfKey(key, Inactive.Include);
+                if (returning == null)
+                {
+                    Log.Warn($"Client {client} returned but no body carried the key, entering without one");
+                    return;
+                }
+
+                body = returning.GetComponent<NetworkObject>();
+                body.gameObject.SetActive(true);
+                body.ChangeOwnership(client);
+            }
+
+            body.DontDestroyWithOwner = true;
+            bodies[client] = body;
+            body.GetComponent<AbsoluteNameable>()?.Rename(name);
+            body.name = name;
+
+            Log.Info($"Client {client} entered the world as {name}, players online {network.ConnectedClients.Count}");
         }
 
         private void Forget(ulong client)
         {
             names.Remove(client);
+            keys.Remove(client);
             if (!bodies.Remove(client, out NetworkObject body) || body == null) return;
 
             body.gameObject.SetActive(false);
