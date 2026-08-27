@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: dfd15a475aa92cc4aa4f8c3724fbf710
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 155339
+  packageName: Secret Radio Room - The Swamp House
+  packageVersion: 3.0
+  assetPath: Assets/SwampHouse/Models/Radio/Tex/Materials/Power.mat
+  uploadId: 432706
