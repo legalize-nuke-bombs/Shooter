@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Shooter.Game.Body
@@ -7,6 +8,7 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(MainRestrainable))]
     [RequireComponent(typeof(Landing))]
+    [RequireComponent(typeof(NetworkTransform))]
     public class Movement : NetworkBehaviour
     {
         private const float PitchLimit = 89f;
@@ -25,6 +27,7 @@ namespace Shooter.Game.Body
         private float fall;
         private bool jumping;
         private Landing landing;
+        private NetworkTransform networkTransform;
         private MainRestrainable restrainable;
         private bool sprinting;
         private int steeredAt;
@@ -44,6 +47,7 @@ namespace Shooter.Game.Body
             characterController = GetComponent<CharacterController>();
             restrainable = GetComponent<MainRestrainable>();
             landing = GetComponent<Landing>();
+            networkTransform = GetComponent<NetworkTransform>();
         }
 
         public event Action<float> Turned;
@@ -97,12 +101,17 @@ namespace Shooter.Game.Body
 
         public void Teleport(Vector3 position, float yaw)
         {
+            Quaternion rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
+
             characterController.enabled = false;
-            transform.SetPositionAndRotation(position, Quaternion.Euler(0f, Finite(yaw), 0f));
+            transform.SetPositionAndRotation(position, rotation);
             characterController.enabled = true;
             fall = 0f;
 
-            if (IsServer) TurnRpc(Yaw);
+            if (!IsServer) return;
+
+            networkTransform.Teleport(position, rotation, transform.localScale);
+            TurnRpc(Yaw);
         }
 
         [Rpc(SendTo.Owner)]
