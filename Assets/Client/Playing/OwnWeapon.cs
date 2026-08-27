@@ -25,6 +25,8 @@ namespace Shooter.Client.Playing
         private GameObject shown;
 
         private GameObject shownModel;
+        private CustomPassVolume volume;
+        private bool active;
 
         private void Awake()
         {
@@ -41,19 +43,52 @@ namespace Shooter.Client.Playing
 
         public override void OnNetworkSpawn()
         {
-            if (!IsOwner)
-            {
-                enabled = false;
-                return;
-            }
+            if (IsOwner) Activate();
+            else enabled = false;
+        }
+
+        public override void OnGainedOwnership()
+        {
+            enabled = true;
+            Activate();
+        }
+
+        public override void OnLostOwnership()
+        {
+            Deactivate();
+            enabled = false;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            Deactivate();
+        }
+
+        private void Activate()
+        {
+            if (active) return;
+            active = true;
 
             Overlay();
             inventory.Changed += Refresh;
             Refresh();
         }
 
+        private void Deactivate()
+        {
+            if (!active) return;
+            active = false;
+
+            inventory.Changed -= Refresh;
+            if (shown != null) Destroy(shown);
+            shown = null;
+            shownModel = null;
+        }
+
         private void Overlay()
         {
+            if (volume != null) return;
+
             layer = LayerMask.NameToLayer(FirstPersonLayer);
             if (layer < 0)
             {
@@ -66,7 +101,7 @@ namespace Shooter.Client.Playing
 
             eye.cullingMask &= ~(1 << layer);
 
-            CustomPassVolume volume = gameObject.AddComponent<CustomPassVolume>();
+            volume = gameObject.AddComponent<CustomPassVolume>();
             volume.targetCamera = eye;
             volume.injectionPoint = CustomPassInjectionPoint.BeforePostProcess;
 
@@ -74,11 +109,6 @@ namespace Shooter.Client.Playing
             pass.layer = 1 << layer;
 
             Log.Info($"Own player {name} draws first person weapon over the world, layer {layer}");
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            inventory.Changed -= Refresh;
         }
 
         private void Refresh()
