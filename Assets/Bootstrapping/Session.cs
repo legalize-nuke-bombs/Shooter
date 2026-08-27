@@ -3,6 +3,7 @@ using System.Text;
 using Shooter.Accounts;
 using Shooter.Client.Interface;
 using Shooter.Configuring;
+using Shooter.Game.Body;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -138,6 +139,7 @@ namespace Shooter.Bootstrapping
             if (save != null) Restore(network, save);
             if (network.ShutdownInProgress) yield break;
 
+            network.GetComponent<Greeter>().Ready();
             loading.Hide();
         }
 
