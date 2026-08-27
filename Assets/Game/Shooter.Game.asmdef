@@ -4,6 +4,7 @@
   "references": [
     "Shooter.Logging",
     "Shooter.Configuring",
+    "Shooter.Accounts",
     "Unity.Netcode.Runtime",
     "Unity.Collections",
     "Unity.Nuget.Newtonsoft-Json",

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
@@ -73,6 +74,15 @@ namespace Shooter.Accounts
             verifier.Init(false, pub);
             verifier.BlockUpdate(message, 0, message.Length);
             return verifier.VerifySignature(signature);
+        }
+
+        public static string Fingerprint(string publicKey)
+        {
+            using var sha = SHA256.Create();
+            byte[] hash = sha.ComputeHash(Convert.FromBase64String(publicKey));
+            var text = new StringBuilder(12);
+            for (int i = 0; i < 6; i++) text.Append(hash[i].ToString("x2"));
+            return text.ToString();
         }
 
         private static byte[] Framed(string context, byte[] data)

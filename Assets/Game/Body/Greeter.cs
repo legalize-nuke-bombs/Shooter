@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
+using Shooter.Accounts;
+using Shooter.Configuring;
 using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -39,14 +41,21 @@ namespace Shooter.Game.Body
         private void Approve(NetworkManager.ConnectionApprovalRequest request,
             NetworkManager.ConnectionApprovalResponse response)
         {
-            string given = Encoding.UTF8.GetString(request.Payload ?? new byte[0]).Trim();
+            if (!Handshake.TryDecode(request.Payload, Config.Account.Certificate, out string given, out string publicKey))
+            {
+                response.Approved = false;
+                Log.Warn($"Client {request.ClientNetworkId} rejected, could not prove key ownership");
+                return;
+            }
+
+            given = given.Trim();
             string name = given.Length == 0 ? Nameless : given.Substring(0, Mathf.Min(given.Length, NameLimit));
 
             names[request.ClientNetworkId] = name;
             response.Approved = true;
             response.CreatePlayerObject = true;
 
-            Log.Info($"Client {request.ClientNetworkId} approved as {name}");
+            Log.Info($"Client {request.ClientNetworkId} proved key ownership {Account.Fingerprint(publicKey)}, approved as {name}");
         }
 
         private void Welcome(ulong client)

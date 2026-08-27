@@ -106,8 +106,14 @@ namespace Shooter.Bootstrapping
 
             ClientConfig client = Config.Read().Client;
 
-            Address(network, hosting);
-            network.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(client.Name);
+            string certificate = Address(network, hosting);
+            if (certificate == null)
+            {
+                yield return ToMenu();
+                yield break;
+            }
+
+            network.NetworkConfig.ConnectionData = Handshake.Encode(client.Name, Config.Account, certificate);
             network.OnServerStopped += Stopped;
             network.OnClientStopped += Stopped;
 
@@ -202,13 +208,13 @@ namespace Shooter.Bootstrapping
             if (NetworkManager.Singleton != null) Destroy(NetworkManager.Singleton.gameObject);
         }
 
-        private void Address(NetworkManager network, bool hosting)
+        private string Address(NetworkManager network, bool hosting)
         {
             UnityTransport transport = network.GetComponent<UnityTransport>();
             if (transport == null)
             {
                 Log.Warn("No unity transport to configure");
-                return;
+                return null;
             }
 
             transport.UseEncryption = true;
@@ -221,19 +227,20 @@ namespace Shooter.Bootstrapping
                 Account account = Config.Account;
                 transport.SetServerSecrets(account.Certificate, account.PrivateKeyPem);
                 Log.Info($"World listens on port {server.Port}, channel encrypted");
-                return;
+                return account.Certificate;
             }
 
             ClientConfig client = Config.Read().Client;
             if (!Invite.TryDecode(client.Invite, out string address, out ushort port, out string certificate))
             {
                 Log.Error("Invite code is missing or malformed, staying in the menu");
-                return;
+                return null;
             }
 
             transport.SetConnectionData(address, port);
             transport.SetClientSecrets(Account.CommonName, certificate);
             Log.Info($"Heading for {address}:{port}, channel encrypted");
+            return certificate;
         }
 
         private void Raise(string prefabName)
