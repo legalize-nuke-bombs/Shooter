@@ -5,7 +5,7 @@
             <ui:DataBinding property="value" data-source-path="Server.Port" binding-mode="TwoWay"/>
         </Bindings>
     </ui:TextField>
-    <ui:DropdownField name="compression" label="Сохранения" class="field">
+    <ui:DropdownField name="compression" label="Алгоритм сжатия" class="field">
         <Bindings>
             <ui:DataBinding property="value" data-source-path="Server.SaveCompressionAlgorithm" binding-mode="TwoWay"/>
         </Bindings>
