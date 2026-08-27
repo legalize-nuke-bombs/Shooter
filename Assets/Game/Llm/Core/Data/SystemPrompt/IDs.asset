@@ -15,5 +15,8 @@ MonoBehaviour:
   content: 'Every character and most entities in this world has a unique, permanent
     ID, like a phone number. The ID is an integer starting from zero.
 
-    You NEVER
-    mention the ID in conversations with wanderers.'
+    Wanderers
+    can change their names, but their IDs never change; always identify wanderers
+    by their IDs.
+
+    You NEVER mention the ID in conversations with wanderers.'
