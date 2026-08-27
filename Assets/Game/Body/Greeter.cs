@@ -18,8 +18,10 @@ namespace Shooter.Game.Body
         private readonly Dictionary<ulong, string> names = new();
         private readonly Dictionary<ulong, string> keys = new();
         private readonly Dictionary<ulong, NetworkObject> bodies = new();
+        private readonly List<ulong> pending = new();
 
         private NetworkManager network;
+        private bool ready;
 
         private void Awake()
         {
@@ -39,6 +41,23 @@ namespace Shooter.Game.Body
             network.OnClientDisconnectCallback -= Forget;
         }
 
+        // The world is loaded and open for business; anyone who connected earlier gets a body now.
+        public void Ready()
+        {
+            if (!network.IsServer) return;
+
+            ready = true;
+            foreach (ulong client in pending) Embody(client);
+            pending.Clear();
+
+            // Loaded bodies of players who are not here switch off until their owner returns to reclaim them.
+            foreach (Player player in Registers.Current.Of<Player>(Inactive.Include))
+            {
+                NetworkObject body = player.GetComponent<NetworkObject>();
+                if (!bodies.ContainsValue(body)) body.gameObject.SetActive(false);
+            }
+        }
+
         private void Approve(NetworkManager.ConnectionApprovalRequest request,
             NetworkManager.ConnectionApprovalResponse response)
         {
@@ -50,48 +69,51 @@ namespace Shooter.Game.Body
             }
 
             given = given.Trim();
-            string name = given.Length == 0 ? Nameless : given.Substring(0, Mathf.Min(given.Length, NameLimit));
-            names[request.ClientNetworkId] = name;
+            names[request.ClientNetworkId] = given.Length == 0 ? Nameless : given.Substring(0, Mathf.Min(given.Length, NameLimit));
             keys[request.ClientNetworkId] = publicKey;
 
             response.Approved = true;
-            response.CreatePlayerObject = Player.OfKey(publicKey, Inactive.Include) == null;
+            response.CreatePlayerObject = false;
 
-            Log.Info(
-                $"Client {request.ClientNetworkId} proved key ownership, approved as {name}, {(response.CreatePlayerObject ? "fresh body" : "reclaiming a body")}");
+            Log.Info($"Client {request.ClientNetworkId} proved key ownership, approved as {names[request.ClientNetworkId]}");
         }
 
         private void Welcome(ulong client)
         {
             if (!network.IsServer) return;
-            if (!network.ConnectedClients.TryGetValue(client, out NetworkClient connected)) return;
 
+            if (ready) Embody(client);
+            else pending.Add(client);
+        }
+
+        private void Embody(ulong client)
+        {
             string name = names.TryGetValue(client, out string known) ? known : Nameless;
             string key = keys.TryGetValue(client, out string carried) ? carried : null;
 
-            NetworkObject body = connected.PlayerObject;
-            if (body != null)
+            Player returning = key == null ? null : Player.OfKey(key, Inactive.Include);
+            NetworkObject body;
+            if (returning != null)
             {
-                Player fresh = body.GetComponent<Player>();
-                if (fresh != null) fresh.PublicKey = key;
-
-                Transform at = MainSpawnPoint.Current == null ? body.transform : MainSpawnPoint.Current.transform;
-                body.GetComponent<Movement>()?.Teleport(at.position, at.eulerAngles.y);
+                body = returning.GetComponent<NetworkObject>();
+                body.gameObject.SetActive(true);
             }
             else
             {
-                Player returning = key == null ? null : Player.OfKey(key, Inactive.Include);
-                if (returning == null)
+                Transform at = MainSpawnPoint.Current == null ? transform : MainSpawnPoint.Current.transform;
+                GameObject fresh = Spawner.Current.Spawn(network.NetworkConfig.PlayerPrefab, at.position, at.rotation);
+                if (fresh == null)
                 {
-                    Log.Warn($"Client {client} returned but no body carried the key, entering without one");
+                    Log.Error($"Client {client} could not be given a body");
                     return;
                 }
 
-                body = returning.GetComponent<NetworkObject>();
-                body.gameObject.SetActive(true);
-                body.ChangeOwnership(client);
+                body = fresh.GetComponent<NetworkObject>();
+                Player player = fresh.GetComponent<Player>();
+                if (player != null) player.PublicKey = key;
             }
 
+            body.ChangeOwnership(client);
             body.DontDestroyWithOwner = true;
             bodies[client] = body;
             body.GetComponent<AbsoluteNameable>()?.Rename(name);
@@ -104,6 +126,7 @@ namespace Shooter.Game.Body
         {
             names.Remove(client);
             keys.Remove(client);
+            pending.Remove(client);
             if (!bodies.Remove(client, out NetworkObject body) || body == null) return;
 
             body.gameObject.SetActive(false);
