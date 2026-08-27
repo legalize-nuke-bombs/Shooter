@@ -6,13 +6,13 @@ namespace Shooter.Client.Interface
     {
         private static readonly Dictionary<string, string> Compressions = new()
         {
-            [""] = "Папка",
-            ["Zip"] = "Zip-архив"
+            [""] = "Выкл",
+            ["Zip"] = "Zip"
         };
 
         private static readonly Dictionary<string, string> Providers = new()
         {
-            [""] = "Нет"
+            [""] = "Выкл"
         };
 
         public static string Compression(string key)
