@@ -17,6 +17,7 @@ namespace Shooter.Game.Body
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<ulong, string> names = new();
+        private readonly Dictionary<ulong, NetworkObject> bodies = new();
 
         private NetworkManager network;
 
@@ -69,6 +70,9 @@ namespace Shooter.Game.Body
                 return;
             }
 
+            connected.PlayerObject.DontDestroyWithOwner = true;
+            bodies[client] = connected.PlayerObject;
+
             string name = names.TryGetValue(client, out string known) ? known : Nameless;
             connected.PlayerObject.GetComponent<AbsoluteNameable>()?.Rename(name);
             connected.PlayerObject.name = name;
@@ -84,9 +88,11 @@ namespace Shooter.Game.Body
 
         private void Forget(ulong client)
         {
-            if (!names.Remove(client)) return;
+            names.Remove(client);
+            if (!bodies.Remove(client, out NetworkObject body) || body == null) return;
 
-            Log.Info($"Client {client} left the world");
+            body.gameObject.SetActive(false);
+            Log.Info($"Client {client} left the world, body switched off");
         }
     }
 }
