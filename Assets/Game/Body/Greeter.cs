@@ -41,7 +41,6 @@ namespace Shooter.Game.Body
             network.OnClientDisconnectCallback -= Forget;
         }
 
-        // The world is loaded and open for business; anyone who connected earlier gets a body now.
         public void Ready()
         {
             if (!network.IsServer) return;
@@ -50,7 +49,6 @@ namespace Shooter.Game.Body
             foreach (ulong client in pending) Embody(client);
             pending.Clear();
 
-            // Loaded bodies of players who are not here switch off until their owner returns to reclaim them.
             foreach (Player player in Registers.Current.Of<Player>(Inactive.Include))
             {
                 NetworkObject body = player.GetComponent<NetworkObject>();
