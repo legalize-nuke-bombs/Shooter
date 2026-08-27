@@ -38,7 +38,7 @@ namespace Shooter.Client.Playing
 
         public override void OnGainedOwnership()
         {
-            enabled = true;
+            if (IsOwner) enabled = true;
         }
 
         public override void OnLostOwnership()

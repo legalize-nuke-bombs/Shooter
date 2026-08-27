@@ -49,6 +49,8 @@ namespace Shooter.Client.Playing
 
         public override void OnGainedOwnership()
         {
+            if (!IsOwner) return;
+
             enabled = true;
             Activate();
         }

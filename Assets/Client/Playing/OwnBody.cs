@@ -19,7 +19,7 @@ namespace Shooter.Client.Playing
 
         public override void OnGainedOwnership()
         {
-            Shadow(ShadowCastingMode.ShadowsOnly);
+            if (IsOwner) Shadow(ShadowCastingMode.ShadowsOnly);
         }
 
         public override void OnLostOwnership()
