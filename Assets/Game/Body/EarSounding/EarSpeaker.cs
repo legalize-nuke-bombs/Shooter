@@ -21,7 +21,7 @@ namespace Shooter.Game.Body
         public void Play(EarSoundSpec sound)
         {
             if (!IsServer) return;
-            if (!NetworkObject.IsPlayerObject) return;
+            if (GetComponent<Player>() == null) return;
 
             if (sound == null)
             {
