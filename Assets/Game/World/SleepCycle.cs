@@ -1,4 +1,5 @@
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 
@@ -71,11 +72,8 @@ namespace Shooter.Game.World
         private bool AllAsleep()
         {
             bool anyone = false;
-            foreach (NetworkClient client in NetworkManager.ConnectedClientsList)
+            foreach (Player player in Registers.Current.Of<Player>(Inactive.Exclude))
             {
-                NetworkObject player = client.PlayerObject;
-                if (player == null) continue;
-
                 Sleeper sleeper = player.GetComponent<Sleeper>();
                 if (sleeper == null || !sleeper.Sleeping) return false;
 
@@ -87,8 +85,8 @@ namespace Shooter.Game.World
 
         private void WakeAll()
         {
-            foreach (NetworkClient client in NetworkManager.ConnectedClientsList)
-                client.PlayerObject?.GetComponent<Sleeper>()?.WakeUp();
+            foreach (Player player in Registers.Current.Of<Player>(Inactive.Exclude))
+                player.GetComponent<Sleeper>()?.WakeUp();
         }
     }
 }
