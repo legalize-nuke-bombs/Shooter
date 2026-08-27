@@ -84,6 +84,8 @@ namespace Shooter.Client.Playing
 
         public override void OnGainedOwnership()
         {
+            if (!IsOwner) return;
+
             view.gameObject.SetActive(true);
             enabled = true;
             Activate();
