@@ -26,7 +26,7 @@ namespace Shooter.Game.Llm.LookAroundEntity
         {
             long targetId = arguments.TargetId;
 
-            Character id = Character.Of(targetId);
+            Character id = Character.Of(targetId, Inactive.Exclude);
             if (id == null)
             {
                 Log.Info($"Entity {name} tried to look around unknown entity");

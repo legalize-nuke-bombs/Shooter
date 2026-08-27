@@ -7,7 +7,7 @@ namespace Shooter.Game.Core
     {
         private static readonly Journal Log = Logs.Here();
 
-        protected virtual void OnEnable()
+        protected virtual void Awake()
         {
             Registers registers = Registers.Current;
             if (registers == null)
@@ -19,7 +19,7 @@ namespace Shooter.Game.Core
             Registers.Current.Track(this);
         }
 
-        protected virtual void OnDisable()
+        protected virtual void OnDestroy()
         {
             Registers registers = Registers.Current;
             if (registers == null)
