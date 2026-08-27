@@ -22,6 +22,7 @@ namespace Shooter.Game.Body
 
         private Health health;
         private Movement movement;
+        private Player player;
         private Sleeper sleeper;
 
         private void Awake()
@@ -30,6 +31,7 @@ namespace Shooter.Game.Body
             movement = GetComponent<Movement>();
             sleeper = GetComponent<Sleeper>();
             earSpeaker = GetComponent<EarSpeaker>();
+            player = GetComponent<Player>();
         }
 
         public void Died()
@@ -39,7 +41,7 @@ namespace Shooter.Game.Body
             earSpeaker.Play(deathSound);
             LeaveCorpse();
 
-            if (!NetworkObject.IsPlayerObject) NetworkObject.Despawn(!NetworkObject.InScenePlaced);
+            if (player == null) NetworkObject.Despawn(!NetworkObject.InScenePlaced);
         }
 
         public override void OnNetworkDespawn()
