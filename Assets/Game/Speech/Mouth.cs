@@ -95,7 +95,7 @@ namespace Shooter.Game.Speech
         {
             if (talkerId == GameObjectRuntimeId.Default || Registers.Current == null) return null;
 
-            Character found = Character.Of(talkerId);
+            Character found = Character.Of(talkerId, Inactive.Exclude);
             return found == null ? null : found.GetComponentInChildren<Talker>();
         }
 

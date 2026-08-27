@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Shooter.Game.Core
@@ -7,7 +8,12 @@ namespace Shooter.Game.Core
     {
         private readonly List<Component> members = new();
 
-        public IEnumerable<Component> All => members;
+        public IEnumerable<Component> All(Inactive gate)
+        {
+            return gate == Inactive.Include
+                ? members
+                : members.Where(member => member.gameObject.activeInHierarchy);
+        }
 
         public void Add(Component member)
         {

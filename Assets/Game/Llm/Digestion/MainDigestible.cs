@@ -15,8 +15,9 @@ namespace Shooter.Game.Llm
 
         public Character Id { get; private set; }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             Parts = GetComponents<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
             Id = GetComponent<Character>();
         }

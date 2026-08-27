@@ -45,7 +45,7 @@ namespace Shooter.Game.Llm
         {
             var visible = new List<MainDigestible>();
 
-            foreach (MainDigestible entity in Registers.Current.Of<MainDigestible>())
+            foreach (MainDigestible entity in Registers.Current.Of<MainDigestible>(Inactive.Exclude))
             {
                 if (entity.gameObject == gameObject) continue;
 

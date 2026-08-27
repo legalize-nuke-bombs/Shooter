@@ -142,7 +142,7 @@ namespace Shooter.Game.AI
 
         private void Notify(long characterId, int before, int after)
         {
-            var target = Character.Of(characterId);
+            var target = Character.Of(characterId, Inactive.Exclude);
             if (target == null)
             {
                 Log.Warn($"Entity {name} failed to notify character {characterId}: not found");

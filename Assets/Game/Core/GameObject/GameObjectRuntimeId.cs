@@ -32,8 +32,9 @@ namespace Shooter.Game.Core
             Value = content.To<SaveData>().Id;
         }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             GameObjectRuntimeIds ids = GameObjectRuntimeIds.Current;
             if (ids == null)
             {
@@ -45,9 +46,9 @@ namespace Shooter.Game.Core
             }
         }
 
-        public static GameObjectRuntimeId Of(long id)
+        public static GameObjectRuntimeId Of(long id, Inactive gate)
         {
-            foreach (GameObjectRuntimeId component in Registers.Current.Of<GameObjectRuntimeId>())
+            foreach (GameObjectRuntimeId component in Registers.Current.Of<GameObjectRuntimeId>(gate))
             {
                 if (component.Value == id)
                 {

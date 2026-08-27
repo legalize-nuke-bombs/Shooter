@@ -7,16 +7,17 @@ namespace Shooter.Game.Core
     {
         private GameObjectRuntimeId id;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             id = GetComponent<GameObjectRuntimeId>();
         }
 
         public long Id => id.Value;
 
-        public static Player Of(long id)
+        public static Player Of(long id, Inactive gate)
         {
-            foreach (Player player in Registers.Current.Of<Player>())
+            foreach (Player player in Registers.Current.Of<Player>(gate))
             {
                 if (player.Id == id)
                 {

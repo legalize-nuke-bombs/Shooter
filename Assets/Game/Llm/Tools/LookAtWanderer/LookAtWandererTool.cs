@@ -36,7 +36,7 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
             long wandererId = arguments.WandererId;
             if (!waiting.IsWaiting(wandererId)) return $"Wanderer {wandererId} isn't talking to you right now.";
 
-            Character wanderer = Character.Of(wandererId);
+            Character wanderer = Character.Of(wandererId, Inactive.Exclude);
             if (wanderer == null)
             {
                 Log.Warn($"Unregistered wanderer {wandererId} is waiting for an answer from {name}!");

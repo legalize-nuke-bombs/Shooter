@@ -37,11 +37,11 @@ namespace Shooter.Game.Core
             if (registers.TryGetValue(member.GetType(), out Register register)) register.Remove(member);
         }
 
-        public IEnumerable<T> Of<T>() where T : Component, IRegistered
+        public IEnumerable<T> Of<T>(Inactive gate) where T : Component, IRegistered
         {
             if (!registers.TryGetValue(typeof(T), out Register register)) yield break;
 
-            foreach (Component member in register.All) yield return (T)member;
+            foreach (Component member in register.All(gate)) yield return (T)member;
         }
     }
 }
