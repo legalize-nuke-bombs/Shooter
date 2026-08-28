@@ -11,76 +11,75 @@ namespace Shooter.Client.Playing
     [RequireComponent(typeof(Skin))]
     public class OwnBody : NetworkBehaviour
     {
+        private const string ReflectionOnlyLayer = "ReflectionOnly";
+        private const string ReflectionName = "Reflection";
+
         private static readonly Journal Log = Logs.Here();
 
-        private readonly List<Renderer> pieces = new();
-        private readonly List<ShadowCastingMode> modes = new();
+        private readonly List<GameObject> reflections = new();
 
         private Skin skin;
         private Inventory inventory;
-        private Camera eye;
         private GameObject flesh;
-        private bool watching;
+        private int reflectionLayer = -1;
+        private bool owning;
         private bool dirty;
 
         private void Awake()
         {
             skin = GetComponent<Skin>();
             inventory = GetComponent<Inventory>();
-            eye = GetComponentInChildren<Camera>(true);
+            reflectionLayer = LayerMask.NameToLayer(ReflectionOnlyLayer);
+            enabled = false;
+        }
+
+        private void LateUpdate()
+        {
+            if (dirty || flesh != skin.Flesh) Rebuild();
         }
 
         public override void OnNetworkSpawn()
         {
-            if (IsOwner) Watch();
+            if (IsOwner) Own();
         }
 
         public override void OnGainedOwnership()
         {
-            if (IsOwner) Watch();
+            if (IsOwner) Own();
         }
 
         public override void OnLostOwnership()
         {
-            Drop();
+            Disown();
         }
 
         public override void OnNetworkDespawn()
         {
-            Drop();
+            Disown();
         }
 
-        public override void OnDestroy()
+        private void Own()
         {
-            Drop();
-            base.OnDestroy();
-        }
-
-        private void Watch()
-        {
-            if (watching) return;
-            watching = true;
+            if (owning) return;
+            owning = true;
             dirty = true;
+            enabled = true;
 
             if (inventory != null) inventory.Changed += Invalidate;
-            RenderPipelineManager.beginCameraRendering += Hide;
-            RenderPipelineManager.endCameraRendering += Show;
 
-            Log.Info($"Own player {name} hides its body from the eye camera only");
+            Log.Info($"Own player {name} hides its body and mirrors it on the {ReflectionOnlyLayer} layer");
         }
 
-        private void Drop()
+        private void Disown()
         {
-            if (!watching) return;
-            watching = false;
+            if (!owning) return;
+            owning = false;
+            enabled = false;
 
             if (inventory != null) inventory.Changed -= Invalidate;
-            RenderPipelineManager.beginCameraRendering -= Hide;
-            RenderPipelineManager.endCameraRendering -= Show;
 
-            Restore();
-            pieces.Clear();
-            modes.Clear();
+            Clear();
+            Shadow(ShadowCastingMode.On);
             flesh = null;
         }
 
@@ -89,37 +88,11 @@ namespace Shooter.Client.Playing
             dirty = true;
         }
 
-        private void Hide(ScriptableRenderContext context, Camera rendering)
-        {
-            if (rendering != eye) return;
-
-            if (dirty || flesh != skin.Flesh) Rebuild();
-
-            foreach (Renderer piece in pieces)
-                if (piece != null)
-                    piece.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-        }
-
-        private void Show(ScriptableRenderContext context, Camera rendering)
-        {
-            if (rendering != eye) return;
-
-            Restore();
-        }
-
-        private void Restore()
-        {
-            for (int i = 0; i < pieces.Count; i++)
-                if (pieces[i] != null)
-                    pieces[i].shadowCastingMode = modes[i];
-        }
-
         private void Rebuild()
         {
             dirty = false;
             flesh = skin.Flesh;
-            pieces.Clear();
-            modes.Clear();
+            Clear();
 
             if (flesh == null)
             {
@@ -129,9 +102,70 @@ namespace Shooter.Client.Playing
 
             foreach (Renderer piece in flesh.GetComponentsInChildren<Renderer>(true))
             {
-                pieces.Add(piece);
-                modes.Add(piece.shadowCastingMode);
+                if (piece.gameObject.layer == reflectionLayer) continue;
+
+                piece.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+
+                GameObject mirror = Mirror(piece);
+                if (mirror != null) reflections.Add(mirror);
             }
+
+            Log.Info($"Own player {name} rebuilt its reflection from {reflections.Count} pieces");
+        }
+
+        private GameObject Mirror(Renderer piece)
+        {
+            if (reflectionLayer < 0) return null;
+
+            var mirror = new GameObject(ReflectionName);
+            mirror.layer = reflectionLayer;
+            mirror.transform.SetParent(piece.transform, false);
+
+            if (piece is SkinnedMeshRenderer skinned)
+            {
+                var clone = mirror.AddComponent<SkinnedMeshRenderer>();
+                clone.sharedMesh = skinned.sharedMesh;
+                clone.sharedMaterials = skinned.sharedMaterials;
+                clone.bones = skinned.bones;
+                clone.rootBone = skinned.rootBone;
+                clone.localBounds = skinned.localBounds;
+                clone.quality = skinned.quality;
+                clone.updateWhenOffscreen = skinned.updateWhenOffscreen;
+                clone.shadowCastingMode = ShadowCastingMode.Off;
+                return mirror;
+            }
+
+            MeshFilter filter = piece.GetComponent<MeshFilter>();
+            if (piece is MeshRenderer flat && filter != null)
+            {
+                mirror.AddComponent<MeshFilter>().sharedMesh = filter.sharedMesh;
+                var clone = mirror.AddComponent<MeshRenderer>();
+                clone.sharedMaterials = flat.sharedMaterials;
+                clone.shadowCastingMode = ShadowCastingMode.Off;
+                return mirror;
+            }
+
+            Destroy(mirror);
+            return null;
+        }
+
+        private void Clear()
+        {
+            foreach (GameObject mirror in reflections)
+                if (mirror != null)
+                    Destroy(mirror);
+
+            reflections.Clear();
+        }
+
+        private void Shadow(ShadowCastingMode mode)
+        {
+            GameObject body = skin.Flesh;
+            if (body == null) return;
+
+            foreach (Renderer piece in body.GetComponentsInChildren<Renderer>(true))
+                if (piece.gameObject.layer != reflectionLayer)
+                    piece.shadowCastingMode = mode;
         }
     }
 }

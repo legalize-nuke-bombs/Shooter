@@ -3,17 +3,18 @@ using UnityEngine.Rendering;
 
 namespace Shooter.Client.Playing
 {
-    public static class FirstPersonCulling
+    public static class CameraCulling
     {
         private const string FirstPersonLayer = "FirstPerson";
+        private const string ReflectionOnlyLayer = "ReflectionOnly";
 
-        private static int layer = -1;
+        private static int hidden;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Watch()
         {
-            layer = LayerMask.NameToLayer(FirstPersonLayer);
-            if (layer < 0) return;
+            hidden = LayerMask.GetMask(FirstPersonLayer, ReflectionOnlyLayer);
+            if (hidden == 0) return;
 
             RenderPipelineManager.beginCameraRendering -= Strip;
             RenderPipelineManager.beginCameraRendering += Strip;
@@ -21,7 +22,7 @@ namespace Shooter.Client.Playing
 
         private static void Strip(ScriptableRenderContext context, Camera camera)
         {
-            camera.cullingMask &= ~(1 << layer);
+            camera.cullingMask &= ~hidden;
         }
     }
 }
