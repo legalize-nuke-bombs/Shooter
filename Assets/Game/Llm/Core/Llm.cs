@@ -14,7 +14,7 @@ using UnityEngine;
 namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(LlmHistory))]
-    [RequireComponent(typeof(LlmWaiting))]
+    [RequireComponent(typeof(LlmPendingTable))]
     public class Llm : MonoBehaviour, IMortal
     {
         private const string RetellingDemand =
@@ -37,12 +37,16 @@ namespace Shooter.Game.Llm
 
         private LlmHistory history;
         private float retryBlockedUntil;
-        private LlmWaiting waiting;
+        private LlmPendingTable table;
+
+        public bool Busy { get; private set; }
+
+        public event Action<long, string> Answered;
 
         private void Awake()
         {
             history = GetComponent<LlmHistory>();
-            waiting = GetComponent<LlmWaiting>();
+            table = GetComponent<LlmPendingTable>();
             abilities = GetComponents<LlmTool>();
             entityName = name;
         }
@@ -55,6 +59,7 @@ namespace Shooter.Game.Llm
         public void Died()
         {
             life.Cancel();
+            Abandon(table.Ids());
         }
 
         private void Begin()
@@ -100,19 +105,18 @@ namespace Shooter.Game.Llm
             return known.ToString();
         }
 
-        public void Notice(string line, bool urgent)
+        public void Notice(string line, bool urgent, long? askerId = null)
         {
             history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line }, urgent);
+            if (askerId != null) table.Mark(askerId.Value);
         }
 
-        public void Listen(long wandererId, string message, Action<string> onAnswer)
+        public bool Answer(long wandererId, string text)
         {
-            waiting.Listen(wandererId, message, onAnswer);
-        }
+            if (!table.Clear(wandererId)) return false;
 
-        public void Forget(long wandererId)
-        {
-            waiting.Forget(wandererId);
+            Answered?.Invoke(wandererId, text);
+            return true;
         }
 
         public LlmStatus Status()
@@ -133,6 +137,9 @@ namespace Shooter.Game.Llm
 
             if (!entered) return false;
 
+            List<long> asked = table.Ids();
+            Busy = true;
+
             try
             {
                 bool retelling = history.Overflowing;
@@ -140,7 +147,7 @@ namespace Shooter.Game.Llm
                 if (history.Count == 0) Begin();
 
                 history.Seen();
-                history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
+                history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation(asked) });
                 var context = new LlmCallContext { PromptedCount = history.Count };
 
                 var selected = abilities.Where(ability => ability.Available).ToList();
@@ -190,16 +197,33 @@ namespace Shooter.Game.Llm
             }
             finally
             {
+                Abandon(asked);
+                Busy = false;
                 gate.Release();
             }
         }
 
-        private string Observation()
+        private void Abandon(List<long> asked)
+        {
+            foreach (long id in asked)
+            {
+                if (!table.Clear(id)) continue;
+
+                Log.Warn($"Entity {entityName} has not answered wanderer {id}, the fallback is said instead");
+                Answered?.Invoke(id, null);
+            }
+        }
+
+        private string Observation(List<long> asked)
         {
             var seen = new StringBuilder();
             seen.Append('[').Append(Stamp()).Append(']');
 
             if (history.Overflowing) seen.Append('\n').Append(RetellingDemand);
+
+            if (asked.Count > 0)
+                seen.Append('\n').Append("You MUST answer the waiting wanderer(s) RIGHT NOW using the say_to_wanderer tool: ")
+                    .Append(string.Join(", ", asked)).Append('.');
 
             return seen.ToString();
         }

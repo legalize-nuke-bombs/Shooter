@@ -1,12 +1,9 @@
-using System;
-using Shooter.Game.Core;
 using Shooter.Logging;
 
 namespace Shooter.Game.Speech
 {
     public sealed class AITalker : Talker
     {
-        private const string Fallback = "Not now.";
         private static readonly Journal Log = Logs.Here();
 
         private Llm.Llm llm;
@@ -17,21 +14,34 @@ namespace Shooter.Game.Speech
             llm = GetComponent<Llm.Llm>();
         }
 
-        protected override void RequestAnswer(long wandererId, string message, Action<string> onAnswer)
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            if (!IsServer || llm == null) return;
+            llm.Answered += DeliverAnswer;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (IsServer && llm != null) llm.Answered -= DeliverAnswer;
+            base.OnNetworkDespawn();
+        }
+
+        protected override bool Busy()
+        {
+            return llm != null && llm.Busy;
+        }
+
+        protected override void RequestAnswer(long wandererId, string message)
         {
             if (llm == null)
             {
                 Log.Warn($"Entity {name} has no llm to answer with");
-                onAnswer(Fallback);
+                DeliverAnswer(wandererId, null);
                 return;
             }
 
-            llm.Listen(wandererId, message, onAnswer);
-        }
-
-        protected override void Forget(long wandererId)
-        {
-            if (llm != null) llm.Forget(wandererId);
+            llm.Notice($"Wanderer [ID {wandererId}] says: {message}", true, wandererId);
         }
     }
 }
