@@ -198,9 +198,15 @@ namespace Shooter.Game.Llm
             }
             finally
             {
-                Abandon(asked);
-                Busy = false;
-                gate.Release();
+                try
+                {
+                    Abandon(asked);
+                }
+                finally
+                {
+                    Busy = false;
+                    gate.Release();
+                }
             }
         }
 
