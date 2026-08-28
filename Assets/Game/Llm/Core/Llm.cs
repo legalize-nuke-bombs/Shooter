@@ -132,12 +132,6 @@ namespace Shooter.Game.Llm
         {
             if (life.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil) return false;
 
-            if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider))
-            {
-                Abandon(table.Ids());
-                return false;
-            }
-
             bool entered = await gate.WaitAsync(0, life.Token);
 
             if (!entered) return false;
@@ -147,6 +141,8 @@ namespace Shooter.Game.Llm
 
             try
             {
+                if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider)) return false;
+
                 bool retelling = history.Overflowing;
 
                 if (history.Count == 0) Begin();
