@@ -16,6 +16,20 @@ namespace Shooter.Game.Loot
         public const int NoSlot = -1;
         private static readonly Journal Log = Logs.Here();
 
+        [Serializable]
+        private struct Entry
+        {
+            [SerializeField] private ItemSpec spec;
+            [SerializeField] private int amount;
+            [SerializeField] private bool equip;
+
+            public ItemSpec Spec => spec;
+
+            public int Amount => amount;
+
+            public bool Equip => equip;
+        }
+
         [SerializeField] private Entry[] contents;
 
         private readonly NetworkVariable<int> equippedSlot = new(NoSlot);
@@ -24,6 +38,95 @@ namespace Shooter.Game.Loot
 
         private readonly NetworkList<int> stackAmounts = new(
             null, NetworkVariableReadPermission.Owner);
+
+        public string ComponentKey => "Inventory";
+        private struct SaveData
+        {
+            public Dictionary<string, int> Stacks { get; set; }
+            public List<SlotData> Slots { get; set; }
+            public int EquippedSlot { get; set; }
+        }
+        private struct SlotData
+        {
+            public string SpecId { get; set; }
+            public SaveToken State { get; set; }
+        }
+        public object SaveObject()
+        {
+            ItemCatalog catalog = Catalog;
+
+            var stacks = new Dictionary<string, int>();
+            for (int index = 0; index < stackAmounts.Count; index++)
+            {
+                if (stackAmounts[index] == 0) continue;
+
+                ItemSpec spec = catalog == null ? null : catalog.At(index);
+
+                if (spec == null)
+                {
+                    Log.Warn($"Entity {name} does not save {stackAmounts[index]} things: the world catalog has no index {index}");
+                    continue;
+                }
+
+                stacks[spec.Key] = stackAmounts[index];
+            }
+
+            var kept = new List<SlotData>();
+            int equipped = NoSlot;
+
+            for (int index = 0; index < slots.Value.Count; index++)
+            {
+                UniqueItem item = slots.Value.At(index);
+                if (item == null) continue;
+
+                if (index == equippedSlot.Value) equipped = kept.Count;
+
+                object state = item.SaveObject();
+
+                kept.Add(new SlotData
+                {
+                    SpecId = item.SpecId,
+                    State = state == null ? default : SaveToken.From(state)
+                });
+            }
+
+            return new SaveData { Stacks = stacks, Slots = kept, EquippedSlot = equipped };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            SaveData sd = content.To<SaveData>();
+            ItemCatalog catalog = Catalog;
+
+            Clear();
+
+            foreach (KeyValuePair<string, int> stack in sd.Stacks)
+            {
+                if (catalog.Spec(stack.Key) is not StackableItemSpec spec)
+                {
+                    Log.Warn($"Entity {name} lost {stack.Value} of {stack.Key}: the world catalog does not know it");
+                    continue;
+                }
+
+                AddStackable(spec, stack.Value);
+            }
+
+            for (int index = 0; index < sd.Slots.Count; index++)
+            {
+                SlotData slotData = sd.Slots[index];
+
+                if (catalog.Spec(slotData.SpecId) is not UniqueItemSpec spec)
+                {
+                    Log.Warn($"Entity {name} lost {slotData.SpecId}: the world catalog does not know it");
+                    continue;
+                }
+
+                UniqueItem item = spec.Create();
+                if (!slotData.State.Empty) item.LoadObject(slotData.State);
+
+                int slot = Put(item);
+                if (index == sd.EquippedSlot) Equip(slot);
+            }
+        }
 
         public IReadOnlyList<UniqueItem> UniqueItems => slots.Value.All;
 
@@ -102,86 +205,6 @@ namespace Shooter.Game.Loot
         }
 
         public event Action Changed;
-
-        public string ComponentKey => "Inventory";
-
-        public object SaveObject()
-        {
-            ItemCatalog catalog = Catalog;
-
-            var stacks = new Dictionary<string, int>();
-            for (int index = 0; index < stackAmounts.Count; index++)
-            {
-                if (stackAmounts[index] == 0) continue;
-
-                ItemSpec spec = catalog == null ? null : catalog.At(index);
-
-                if (spec == null)
-                {
-                    Log.Warn($"Entity {name} does not save {stackAmounts[index]} things: the world catalog has no index {index}");
-                    continue;
-                }
-
-                stacks[spec.Key] = stackAmounts[index];
-            }
-
-            var kept = new List<SlotData>();
-            int equipped = NoSlot;
-
-            for (int index = 0; index < slots.Value.Count; index++)
-            {
-                UniqueItem item = slots.Value.At(index);
-                if (item == null) continue;
-
-                if (index == equippedSlot.Value) equipped = kept.Count;
-
-                object state = item.SaveObject();
-
-                kept.Add(new SlotData
-                {
-                    SpecId = item.SpecId,
-                    State = state == null ? default : SaveToken.From(state)
-                });
-            }
-
-            return new SaveData { Stacks = stacks, Slots = kept, EquippedSlot = equipped };
-        }
-
-        public void LoadObject(SaveToken content)
-        {
-            SaveData sd = content.To<SaveData>();
-            ItemCatalog catalog = Catalog;
-
-            Clear();
-
-            foreach (KeyValuePair<string, int> stack in sd.Stacks)
-            {
-                if (catalog.Spec(stack.Key) is not StackableItemSpec spec)
-                {
-                    Log.Warn($"Entity {name} lost {stack.Value} of {stack.Key}: the world catalog does not know it");
-                    continue;
-                }
-
-                AddStackable(spec, stack.Value);
-            }
-
-            for (int index = 0; index < sd.Slots.Count; index++)
-            {
-                SlotData slotData = sd.Slots[index];
-
-                if (catalog.Spec(slotData.SpecId) is not UniqueItemSpec spec)
-                {
-                    Log.Warn($"Entity {name} lost {slotData.SpecId}: the world catalog does not know it");
-                    continue;
-                }
-
-                UniqueItem item = spec.Create();
-                if (!slotData.State.Empty) item.LoadObject(slotData.State);
-
-                int slot = Put(item);
-                if (index == sd.EquippedSlot) Equip(slot);
-            }
-        }
 
         public override void OnNetworkSpawn()
         {
@@ -438,36 +461,6 @@ namespace Shooter.Game.Loot
         private void Reequipped(int previous, int current)
         {
             Changed?.Invoke();
-        }
-
-        private struct SaveData
-        {
-            public Dictionary<string, int> Stacks { get; set; }
-
-            public List<SlotData> Slots { get; set; }
-
-            public int EquippedSlot { get; set; }
-        }
-
-        private struct SlotData
-        {
-            public string SpecId { get; set; }
-
-            public SaveToken State { get; set; }
-        }
-
-        [Serializable]
-        private struct Entry
-        {
-            [SerializeField] private ItemSpec spec;
-            [SerializeField] private int amount;
-            [SerializeField] private bool equip;
-
-            public ItemSpec Spec => spec;
-
-            public int Amount => amount;
-
-            public bool Equip => equip;
         }
     }
 }
