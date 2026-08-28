@@ -12,6 +12,19 @@ namespace Shooter.Game.Loot
         {
         }
 
+        private struct SaveData
+        {
+            public int Magazine { get; set; }
+        }
+        public override object SaveObject()
+        {
+            return new SaveData { Magazine = magazine };
+        }
+        public override void LoadObject(SaveToken content)
+        {
+            magazine = content.To<SaveData>().Magazine;
+        }
+
         public int Magazine => magazine;
 
         public bool Spend()
@@ -38,21 +51,6 @@ namespace Shooter.Game.Loot
         public override void NetworkSerialize<T>(BufferSerializer<T> serializer)
         {
             serializer.SerializeValue(ref magazine);
-        }
-
-        public override object SaveObject()
-        {
-            return new SaveData { Magazine = magazine };
-        }
-
-        public override void LoadObject(SaveToken content)
-        {
-            magazine = content.To<SaveData>().Magazine;
-        }
-
-        private struct SaveData
-        {
-            public int Magazine { get; set; }
         }
     }
 }
