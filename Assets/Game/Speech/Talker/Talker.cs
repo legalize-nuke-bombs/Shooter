@@ -106,21 +106,19 @@ namespace Shooter.Game.Speech
 
         public override void OnNetworkSpawn()
         {
-            thinking.OnValueChanged += Thought;
-            if (!IsServer) return;
-            enabled = true;
+            thinking.OnValueChanged += RelayThinking;
+            if (IsServer) enabled = true;
         }
 
         public override void OnNetworkDespawn()
         {
-            thinking.OnValueChanged -= Thought;
-            if (!IsServer) return;
+            thinking.OnValueChanged -= RelayThinking;
             enabled = false;
         }
 
-        private void Thought(bool was, bool now)
+        private void RelayThinking(bool previous, bool current)
         {
-            ThinkingChanged?.Invoke(now);
+            ThinkingChanged?.Invoke(current);
         }
 
         public void Listen(NetworkObject user, string content)
@@ -169,10 +167,7 @@ namespace Shooter.Game.Speech
             Watch();
         }
 
-        protected virtual bool Busy()
-        {
-            return false;
-        }
+        protected abstract bool Busy();
 
         private Conversation Remember(long wanderer)
         {
