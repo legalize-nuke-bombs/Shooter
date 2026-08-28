@@ -99,8 +99,7 @@ namespace Shooter.Game.Combat
 
             GameObject worn = Instantiate(model, hand);
             Anchor(worn);
-
-            if (IsLocalPlayer) Conceal(worn);
+            MatchBodyShadows(worn);
 
             Log.Info($"Entity {name} now holds {model.name}");
             return worn;
@@ -145,10 +144,13 @@ namespace Shooter.Game.Combat
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
         }
 
-        private void Conceal(GameObject worn)
+        private void MatchBodyShadows(GameObject worn)
         {
-            foreach (Renderer renderer in worn.GetComponentsInChildren<Renderer>())
-                renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+            SkinnedMeshRenderer body = skin.Flesh.GetComponentInChildren<SkinnedMeshRenderer>();
+            if (body == null) return;
+
+            foreach (Renderer renderer in worn.GetComponentsInChildren<Renderer>(true))
+                renderer.shadowCastingMode = body.shadowCastingMode;
         }
     }
 }
