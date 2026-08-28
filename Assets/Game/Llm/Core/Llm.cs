@@ -138,76 +138,74 @@ namespace Shooter.Game.Llm
 
             List<long> asked = table.Ids();
             Busy = true;
+            bool ticked = false;
 
             try
             {
-                if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider)) return false;
-
-                bool retelling = history.Overflowing;
-
-                if (history.Count == 0) Begin();
-
-                history.Seen();
-                history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation(asked) });
-                var context = new LlmCallContext { PromptedCount = history.Count };
-
-                var selected = abilities.Where(ability => ability.Available).ToList();
-                LlmConfig config = Fitting(selected);
-                var tools = selected.Cast<ILlmTool>().ToList();
-
-                Log.Info(
-                    $"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
-
-                for (int round = 0; round < maxToolRounds; round++)
-                {
-                    LlmTurn turn = await LlmProvider.Request(
-                        config,
-                        $"{entityName}-{(retelling ? "compact" : "live")}",
-                        SystemPrompt(),
-                        history.Messages,
-                        tools,
-                        life.Token
-                    );
-                    life.Token.ThrowIfCancellationRequested();
-
-                    history.Append(new LlmMessage
-                        { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
-
-                    if (!turn.CallsTools) break;
-
-                    foreach (LlmToolCall call in turn.ToolCalls)
-                        history.Append(new LlmMessage
-                            { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call, context) });
-                }
-
-                if (retelling && history.Overflowing)
-                    throw new LlmException("The story is still overflowing after the retelling tick");
-
-                return true;
+                ticked = await Think(asked);
             }
             catch (OperationCanceledException)
             {
                 Log.Info($"Entity {entityName} dropped its request, the entity is gone");
-                return false;
             }
             catch (Exception e)
             {
                 retryBlockedUntil = UnityEngine.Time.time + failureCooldown;
                 Log.Warn($"Entity {entityName} failed to respond, next attempt in {failureCooldown} s: {e}");
-                return false;
             }
-            finally
+
+            Abandon(asked);
+            Busy = false;
+            gate.Release();
+
+            return ticked;
+        }
+
+        private async Task<bool> Think(List<long> asked)
+        {
+            if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider)) return false;
+
+            bool retelling = history.Overflowing;
+
+            if (history.Count == 0) Begin();
+
+            history.Seen();
+            history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation(asked) });
+            var context = new LlmCallContext { PromptedCount = history.Count };
+
+            var selected = abilities.Where(ability => ability.Available).ToList();
+            LlmConfig config = Fitting(selected);
+            var tools = selected.Cast<ILlmTool>().ToList();
+
+            Log.Info(
+                $"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
+
+            for (int round = 0; round < maxToolRounds; round++)
             {
-                try
-                {
-                    Abandon(asked);
-                }
-                finally
-                {
-                    Busy = false;
-                    gate.Release();
-                }
+                LlmTurn turn = await LlmProvider.Request(
+                    config,
+                    $"{entityName}-{(retelling ? "compact" : "live")}",
+                    SystemPrompt(),
+                    history.Messages,
+                    tools,
+                    life.Token
+                );
+                life.Token.ThrowIfCancellationRequested();
+
+                history.Append(new LlmMessage
+                    { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
+
+                if (!turn.CallsTools) break;
+
+                foreach (LlmToolCall call in turn.ToolCalls)
+                    history.Append(new LlmMessage
+                        { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call, context) });
             }
+
+            if (retelling && history.Overflowing)
+                throw new LlmException("The story is still overflowing after the retelling tick");
+
+            return true;
         }
 
         private void Abandon(List<long> asked)
@@ -217,7 +215,15 @@ namespace Shooter.Game.Llm
                 if (!table.Clear(id)) continue;
 
                 Log.Warn($"Entity {entityName} has not answered wanderer {id}, the fallback is said instead");
-                Answered?.Invoke(id, null);
+
+                try
+                {
+                    Answered?.Invoke(id, null);
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Entity {entityName} failed to deliver the fallback to wanderer {id}: {e.Message}");
+                }
             }
         }
 
