@@ -26,6 +26,7 @@ namespace Shooter.Client.Interface
         private ScrollView log;
         private Mouth mouth;
         private Label speaker;
+        private Talker talker;
         private Label waiting;
 
         private VisualElement window;
@@ -79,13 +80,14 @@ namespace Shooter.Client.Interface
         private void Open(ulong talkerId)
         {
             log.Clear();
-            Wait(false);
             input.value = string.Empty;
             speaker.text = Named(talkerId);
             window.style.display = DisplayStyle.Flex;
 
             opening = true;
             log.schedule.Execute(() => opening = false);
+
+            Follow(talkerId);
 
             input.Focus();
             Log.Info($"Talk window opened with {speaker.text}");
@@ -103,7 +105,6 @@ namespace Shooter.Client.Interface
             else StartCoroutine(Type(line, content));
 
             log.schedule.Execute(() => log.ScrollTo(line));
-            Wait(mine);
         }
 
         private IEnumerator Type(Label line, string content)
@@ -118,6 +119,7 @@ namespace Shooter.Client.Interface
 
         private void Close()
         {
+            Unfollow();
             window.style.display = DisplayStyle.None;
             log.Clear();
             Wait(false);
@@ -126,9 +128,38 @@ namespace Shooter.Client.Interface
             Log.Info("Talk window closed");
         }
 
-        private void Wait(bool answering)
+        private void Follow(ulong talkerId)
         {
-            waiting.style.display = answering ? DisplayStyle.Flex : DisplayStyle.None;
+            Unfollow();
+
+            NetworkManager network = NetworkManager.Singleton;
+            if (network != null && network.SpawnManager != null &&
+                network.SpawnManager.SpawnedObjects.TryGetValue(talkerId, out NetworkObject found))
+                talker = found.GetComponentInChildren<Talker>();
+
+            if (talker == null)
+            {
+                Wait(false);
+                return;
+            }
+
+            talker.ThinkingChanged += Wait;
+            Wait(talker.Thinking);
+        }
+
+        private void Unfollow()
+        {
+            if (talker == null) return;
+
+            talker.ThinkingChanged -= Wait;
+            talker = null;
+        }
+
+        private void Wait(bool thinking)
+        {
+            waiting.style.display = thinking ? DisplayStyle.Flex : DisplayStyle.None;
+            input.SetEnabled(!thinking);
+            if (!thinking && window.style.display == DisplayStyle.Flex) input.Focus();
         }
 
         private void Typed(KeyDownEvent typed)
@@ -161,6 +192,8 @@ namespace Shooter.Client.Interface
 
         private void Forget()
         {
+            Unfollow();
+
             if (mouth == null) return;
 
             mouth.Opened -= Open;

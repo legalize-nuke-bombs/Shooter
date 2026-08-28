@@ -16,14 +16,19 @@ namespace Shooter.Game.Speech
     {
         public const float TalkReach = 8f;
         public const int SpeechLimit = 300;
+        protected const string Fallback = "Not now.";
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<long, Conversation> conversations = new();
-        private readonly HashSet<long> thinking = new();
+        private readonly NetworkVariable<bool> thinking = new();
 
         [SerializeField] private SoundSpec muttering;
 
         private Speaker speaker;
+
+        public bool Thinking => thinking.Value;
+
+        public event Action<bool> ThinkingChanged;
 
         public string ComponentKey => "Talker";
         private struct SaveData
@@ -41,7 +46,6 @@ namespace Shooter.Game.Speech
         {
             SaveData sd = content.To<SaveData>();
             conversations.Clear();
-            thinking.Clear();
             foreach (Conversation conversation in sd.Conversations)
                 conversations.Add(conversation.Wanderer, conversation);
         }
@@ -102,14 +106,21 @@ namespace Shooter.Game.Speech
 
         public override void OnNetworkSpawn()
         {
+            thinking.OnValueChanged += Thought;
             if (!IsServer) return;
             enabled = true;
         }
 
         public override void OnNetworkDespawn()
         {
+            thinking.OnValueChanged -= Thought;
             if (!IsServer) return;
             enabled = false;
+        }
+
+        private void Thought(bool was, bool now)
+        {
+            ThinkingChanged?.Invoke(now);
         }
 
         public void Listen(NetworkObject user, string content)
@@ -128,19 +139,8 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            if (!conversations.TryGetValue(speaker.Id, out Conversation conversation) || !conversation.Open)
-            {
-                Log.Info($"Entity {user.name} spoke to {name} without an open talk, ignored");
-                return;
-            }
-
-            if (thinking.Contains(speaker.Id))
-            {
-                Log.Info($"Entity {user.name} spoke to {name} while the answer is pending, ignored");
-                return;
-            }
-
-            Say(conversation, MessageAuthor.Player, content);
+            Say(Remember(speaker.Id), MessageAuthor.Player, content);
+            RequestAnswer(speaker.Id, content);
         }
 
         public void Leave(NetworkObject user)
@@ -152,55 +152,26 @@ namespace Shooter.Game.Speech
             if (!conversations.TryGetValue(speaker.Id, out Conversation conversation)) return;
 
             conversation.Close();
-            Forget(conversation.Wanderer);
         }
 
-        protected abstract void RequestAnswer(long wandererId, string message, Action<string> onAnswer);
+        protected abstract void RequestAnswer(long wandererId, string message);
 
-        protected virtual void Forget(long wandererId)
+        protected void DeliverAnswer(long wandererId, string content)
         {
-        }
-
-        private void DeliverAnswer(long wandererId, string content)
-        {
-            thinking.Remove(wandererId);
-
-            if (!conversations.TryGetValue(wandererId, out Conversation conversation) || !conversation.Open)
-            {
-                Log.Info($"Entity {name} answered wanderer {wandererId} whose conversation is gone, dropped");
-                return;
-            }
-
-            Say(conversation, MessageAuthor.Talker, content);
+            Say(Remember(wandererId), MessageAuthor.Talker, content ?? Fallback);
             if (muttering != null) speaker?.Play(muttering);
             Log.Info($"Entity {name} answered wanderer {wandererId}");
         }
 
         private void Update()
         {
+            thinking.Value = Busy();
             Watch();
+        }
 
-            if (!Alive(NetworkObject)) return;
-
-            foreach (KeyValuePair<long, Conversation> entry in conversations)
-            {
-                if (!entry.Value.Open || thinking.Contains(entry.Key)) continue;
-
-                Message last = entry.Value.Last();
-                if (last == null || last.Author == MessageAuthor.Talker) continue;
-
-                thinking.Add(entry.Key);
-
-                try
-                {
-                    RequestAnswer(entry.Key, last.Content, answer => { DeliverAnswer(entry.Key, answer); });
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Entity {name} failed to request answer for wanderer {entry.Key}: {e.Message}");
-                    DeliverAnswer(entry.Key, "Not now.");
-                }
-            }
+        protected virtual bool Busy()
+        {
+            return false;
         }
 
         private Conversation Remember(long wanderer)
@@ -225,7 +196,9 @@ namespace Shooter.Game.Speech
             };
 
             conversation.Add(message);
-            UserOf(conversation.Wanderer)?.GetComponentInChildren<Mouth>()?.Hear(message);
+
+            Mouth mouth = UserOf(conversation.Wanderer)?.GetComponentInChildren<Mouth>();
+            if (mouth != null && mouth.Interlocutor == NetworkObjectId) mouth.Hear(message);
         }
 
         private void Watch()
@@ -240,10 +213,7 @@ namespace Shooter.Game.Speech
                 Log.Info(
                     $"Entity {name} ends the talk with {(user == null ? "a gone wanderer" : user.name)}: out of reach, dead or asleep");
 
-                thinking.Remove(conversation.Wanderer);
-
                 conversation.Close();
-                Forget(conversation.Wanderer);
                 if (user != null) user.GetComponentInChildren<Mouth>()?.Close();
             }
         }

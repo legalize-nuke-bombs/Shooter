@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(LlmWaiting))]
+    [RequireComponent(typeof(LlmPendingTable))]
     public class LlmTalkTicker : LlmChildTicker
     {
-        private LlmWaiting waiting;
+        private LlmPendingTable table;
 
         private void Awake()
         {
-            waiting = GetComponent<LlmWaiting>();
+            table = GetComponent<LlmPendingTable>();
         }
 
         public override void RegisterTick()
@@ -18,7 +18,7 @@ namespace Shooter.Game.Llm
 
         public override bool TickRequired(LlmStatus llmStatus)
         {
-            return waiting.Any;
+            return table.Any;
         }
     }
 }
