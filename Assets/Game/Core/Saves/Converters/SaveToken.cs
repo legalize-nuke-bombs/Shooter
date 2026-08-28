@@ -12,6 +12,8 @@ namespace Shooter.Game.Core.Saves
             this.token = token;
         }
 
+        public bool Empty => token == null || token.Type == JTokenType.Null;
+
         public static SaveToken From(object value)
         {
             return new SaveToken(JToken.FromObject(value, SaveJson.Serializer));

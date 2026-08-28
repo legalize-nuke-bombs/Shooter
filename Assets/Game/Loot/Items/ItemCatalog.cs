@@ -6,25 +6,18 @@ using UnityEngine;
 namespace Shooter.Game.Loot
 {
     [CreateAssetMenu(menuName = "Shooter/Item Catalog", fileName = "ItemCatalog")]
-    public class ItemCatalog : Catalog<ItemSpec>, IKinds<UniqueItem>
+    public class ItemCatalog : Catalog<ItemSpec>
     {
         private static readonly Journal Log = Logs.Here();
 
-        protected override void OnEnable()
+        public int Kind(UniqueItem item)
         {
-            base.OnEnable();
+            if (item == null) return -1;
 
-            Kinds.Use(this);
-        }
+            int kind = Index(Spec(item.SpecId));
+            if (kind < 0) Log.Error($"Catalog {name} has no place for a thing of kind {item.SpecId}");
 
-        public int Of(UniqueItem item)
-        {
-            int kind = item == null ? -1 : Index(Spec(item.SpecId));
-            if (kind >= 0) return kind;
-
-            Log.Error($"Catalog {name} has no place for a thing of kind {(item == null ? "null" : item.SpecId)}");
-
-            return 0;
+            return kind;
         }
 
         public UniqueItem Create(int kind)

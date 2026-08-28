@@ -7,6 +7,12 @@ namespace Shooter.Game.Core.Saves
     {
         public override void WriteJson(JsonWriter writer, SaveToken value, JsonSerializer serializer)
         {
+            if (value.Empty)
+            {
+                writer.WriteNull();
+                return;
+            }
+
             value.Write(writer);
         }
 

@@ -1,4 +1,5 @@
 using System;
+using Shooter.Game.Core.Saves;
 using Unity.Netcode;
 
 namespace Shooter.Game.Loot
@@ -37,6 +38,21 @@ namespace Shooter.Game.Loot
         public override void NetworkSerialize<T>(BufferSerializer<T> serializer)
         {
             serializer.SerializeValue(ref magazine);
+        }
+
+        public override object SaveObject()
+        {
+            return new SaveData { Magazine = magazine };
+        }
+
+        public override void LoadObject(SaveToken content)
+        {
+            magazine = content.To<SaveData>().Magazine;
+        }
+
+        private struct SaveData
+        {
+            public int Magazine { get; set; }
         }
     }
 }

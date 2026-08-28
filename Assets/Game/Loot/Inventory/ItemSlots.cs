@@ -45,20 +45,23 @@ namespace Shooter.Game.Loot
                 for (int slot = 0; slot < count; slot++) items.Add(null);
             }
 
+            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+
             for (int slot = 0; slot < count; slot++)
             {
-                bool filled = serializer.IsWriter && items[slot] != null;
+                int kind = serializer.IsWriter && catalog != null ? catalog.Kind(items[slot]) : -1;
+
+                bool filled = serializer.IsWriter && kind >= 0;
                 serializer.SerializeValue(ref filled);
 
                 if (!filled) continue;
 
-                Packed<UniqueItem> packed = serializer.IsWriter
-                    ? new Packed<UniqueItem>(items[slot])
-                    : default;
+                serializer.SerializeValue(ref kind);
 
-                packed.NetworkSerialize(serializer);
+                if (serializer.IsReader && catalog != null) items[slot] = catalog.Create(kind);
+                if (items[slot] == null) continue;
 
-                if (serializer.IsReader) items[slot] = packed.Value;
+                items[slot].NetworkSerialize(serializer);
             }
         }
 
