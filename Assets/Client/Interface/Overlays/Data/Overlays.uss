@@ -424,6 +424,7 @@
     margin-top: 4px;
     padding: 0 10px 0 0;
     min-width: 176px;
+    max-width: 400px;
     background-color: rgba(8, 8, 8, 0.78);
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.06);
@@ -441,17 +442,20 @@
 
 .notification__body {
     flex-direction: column;
+    flex-shrink: 1;
     padding: 6px 0;
 }
 
 .notification__title {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.92);
+    white-space: normal;
 }
 
 .notification__from {
     font-size: 10px;
     color: rgba(255, 255, 255, 0.45);
+    white-space: normal;
     -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
