@@ -3,9 +3,9 @@ using Unity.Netcode;
 
 namespace Shooter.Game.Loot
 {
-    public class UniqueItem : INetworkSerializable, ISaveable
+    public abstract class UniqueItem : INetworkSerializable, ISaveable
     {
-        public UniqueItem(string specId)
+        protected UniqueItem(string specId)
         {
             SpecId = specId;
         }
@@ -14,18 +14,11 @@ namespace Shooter.Game.Loot
 
         public bool Dirty { get; private set; }
 
-        public virtual void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-        }
+        public abstract void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter;
 
-        public virtual object SaveObject()
-        {
-            return null;
-        }
+        public abstract object SaveObject();
 
-        public virtual void LoadObject(SaveToken content)
-        {
-        }
+        public abstract void LoadObject(SaveToken content);
 
         public void Clean()
         {
