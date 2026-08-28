@@ -4,7 +4,6 @@ using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Shooter.Game.Combat
 {
@@ -99,7 +98,6 @@ namespace Shooter.Game.Combat
 
             GameObject worn = Instantiate(model, hand);
             Anchor(worn);
-            MatchBodyShadows(worn);
 
             Log.Info($"Entity {name} now holds {model.name}");
             return worn;
@@ -144,13 +142,5 @@ namespace Shooter.Game.Combat
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
         }
 
-        private void MatchBodyShadows(GameObject worn)
-        {
-            SkinnedMeshRenderer body = skin.Flesh.GetComponentInChildren<SkinnedMeshRenderer>();
-            if (body == null) return;
-
-            foreach (Renderer renderer in worn.GetComponentsInChildren<Renderer>(true))
-                renderer.shadowCastingMode = body.shadowCastingMode;
-        }
     }
 }
