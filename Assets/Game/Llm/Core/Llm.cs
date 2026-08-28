@@ -131,7 +131,12 @@ namespace Shooter.Game.Llm
         public async Task<bool> Tick()
         {
             if (life.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil) return false;
-            if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider)) return false;
+
+            if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider))
+            {
+                Abandon(table.Ids());
+                return false;
+            }
 
             bool entered = await gate.WaitAsync(0, life.Token);
 
