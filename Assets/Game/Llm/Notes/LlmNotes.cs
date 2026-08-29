@@ -48,7 +48,12 @@ namespace Shooter.Game.Llm.Notes
         {
             var sb = new StringBuilder();
 
-            foreach (KeyValuePair<string, LlmNote> kvp in notes) sb.AppendLine(kvp.Key + ": " + kvp.Value.Description);
+            foreach (KeyValuePair<string, LlmNote> kvp in notes)
+            {
+                sb.Append(kvp.Key).Append(": ").Append(kvp.Value.Description);
+                if (!string.IsNullOrEmpty(kvp.Value.Updated)) sb.Append(" (").Append(kvp.Value.Updated).Append(')');
+                sb.AppendLine();
+            }
 
             return sb.Length > 0
                 ? sb.ToString()
@@ -65,7 +70,16 @@ namespace Shooter.Game.Llm.Notes
         {
             ValidateCount();
             ValidateNote(key, note);
+            note.Updated = Llm.Stamp();
             if (!notes.TryAdd(key, note)) throw new ArgumentException($"Note named {key} already exists");
+        }
+
+        public void Update(string key, LlmNote note)
+        {
+            if (!notes.ContainsKey(key)) throw new ArgumentException($"Note named {key} does not exist");
+            ValidateNote(key, note);
+            note.Updated = Llm.Stamp();
+            notes[key] = note;
         }
 
         public void Remove(string key)
