@@ -28,7 +28,9 @@ namespace Shooter.Game.Body
 
         public string Digest(DigestionDetail detail)
         {
-            return detail == DigestionDetail.Full ? $"Hunger: {Amount} / {MaxAmount}" : null;
+            return detail == DigestionDetail.Full
+                ? $"Hunger: {Mathf.RoundToInt(Amount)} / {Mathf.RoundToInt(MaxAmount)}"
+                : null;
         }
 
         public bool CanPerform(ActionType type, float dt)

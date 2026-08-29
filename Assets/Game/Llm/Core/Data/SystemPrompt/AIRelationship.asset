@@ -15,10 +15,10 @@ MonoBehaviour:
   content: 'You have your own attitude towards every character, expressed by a number
     from 0 to 100: enemy, neutral, friend.
 
+
     You automatically attack characters
     you consider enemies.
 
-    Your attitude drops automatically when somebody attacks
-    you or your friends.
 
-    You can configure these rules.'
+    Your attitude drops automatically when somebody attacks
+    you or your friends.'

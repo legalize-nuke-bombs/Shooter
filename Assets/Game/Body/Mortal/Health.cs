@@ -27,7 +27,7 @@ namespace Shooter.Game.Body
 
         public string Digest(DigestionDetail detail)
         {
-            return Alive ? $"Health: {Hp}/{MaxHp}" : "Dead";
+            return Alive ? $"Health: {Math.Round(Hp)}/{Math.Round(MaxHp)}" : "Dead";
         }
 
         public DigestionPriority Priority => DigestionPriority.High;
