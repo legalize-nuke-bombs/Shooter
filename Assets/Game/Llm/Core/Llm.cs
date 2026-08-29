@@ -67,6 +67,11 @@ namespace Shooter.Game.Llm
 
         private void Begin()
         {
+            if (String.IsNullOrEmpty(character))
+            {
+                Log.Warn($"Entity {name} does not have character!");
+            }
+
             string start = (character + "\n" + Knowledge()).Trim('\n');
             if (start.Length == 0) return;
 
