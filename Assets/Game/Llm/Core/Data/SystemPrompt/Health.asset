@@ -15,8 +15,6 @@ MonoBehaviour:
   content: 'You have a health value ranging from 0 to 100. If your health drops to
     zero, you die. To restore health, you need to use health-restoring items.
 
-    
 
     Your
-    character automatically uses healing items from your inventory when injured.
-    You can customize this rule.'
+    character automatically uses healing items from your inventory when injured.'

@@ -16,5 +16,6 @@ MonoBehaviour:
     the saturation level reaches 0, you won''t be able to run or jump. To restore
     your saturation level, you need to eat edible items.
 
+
     Your character automatically
-    eats edible items from your inventory if hungry. You can customize this rule.'
+    eats edible items from your inventory if hungry.'
