@@ -19,7 +19,6 @@ Call this only when your notes are complete.
 ";
 
         public override bool Available => history.Overflowing;
-        public override LlmLevel Level => LlmLevel.Max;
 
         protected override void Awake()
         {

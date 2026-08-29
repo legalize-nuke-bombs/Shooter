@@ -11,8 +11,6 @@ namespace Shooter.Configuring
         public string SaveCompressionAlgorithm { get; set; } = "Zip";
 
         [CreateProperty]
-        public LlmConfig LlmBase { get; set; } = LlmConfig.LlmBase();
-        [CreateProperty]
-        public LlmConfig LlmMax { get; set; } = LlmConfig.LlmMax();
+        public LlmConfig Llm { get; set; } = LlmConfig.Default();
     }
 }

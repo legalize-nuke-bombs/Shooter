@@ -173,7 +173,7 @@ namespace Shooter.Game.Llm
 
         private async Task<bool> Think(List<long> asked)
         {
-            if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider)) return false;
+            if (String.IsNullOrEmpty(Config.Read().Server.Llm.Provider)) return false;
 
             bool clearing = history.Overflowing;
 
@@ -181,9 +181,8 @@ namespace Shooter.Game.Llm
             history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation(asked) });
             var context = new LlmCallContext { PromptedCount = history.Count };
 
-            var selected = abilities.Where(ability => ability.Available).ToList();
-            LlmConfig config = Fitting(selected);
-            var tools = selected.Cast<ILlmTool>().ToList();
+            LlmConfig config = Config.Read().Server.Llm;
+            var tools = abilities.Where(ability => ability.Available).Cast<ILlmTool>().ToList();
 
             Log.Info(
                 $"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
@@ -247,13 +246,6 @@ namespace Shooter.Game.Llm
                     .Append(string.Join(", ", asked)).Append('.');
 
             return seen.ToString();
-        }
-
-        private static LlmConfig Fitting(List<LlmTool> tools)
-        {
-            return tools.Any(tool => tool.Level == LlmLevel.Max)
-                ? Config.Read().Server.LlmMax
-                : Config.Read().Server.LlmBase;
         }
 
         private string Execute(IReadOnlyList<ILlmTool> tools, LlmToolCall call, LlmCallContext context)
