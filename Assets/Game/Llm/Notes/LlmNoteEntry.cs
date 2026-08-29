@@ -1,6 +1,6 @@
-﻿namespace Shooter.Game.Llm.AddNote
+namespace Shooter.Game.Llm.Notes
 {
-    public class AddNoteArguments
+    public class LlmNoteEntry
     {
         public string Name { get; set; }
         public string Description { get; set; }
