@@ -20,6 +20,9 @@ namespace Shooter.Game.Llm
         private const string ClearHeadDemand =
             "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date, then call clear_head.";
 
+        private const string StoryWarning =
+            "This story will be erased by the first clearing of your head and will never return. Save its heart into your notes - in your own words.";
+
         private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
 
         private static readonly Journal Log = Logs.Here();
@@ -68,7 +71,7 @@ namespace Shooter.Game.Llm
             if (start.Length == 0) return;
 
             history.Append(new LlmMessage
-                { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + start });
+                { Role = LlmRole.User, Content = "THE STORY OF YOUR LIFE SO FAR:\n" + start + "\n\n" + StoryWarning });
         }
 
         private string SystemPrompt()
