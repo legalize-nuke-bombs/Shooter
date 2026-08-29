@@ -82,6 +82,7 @@ namespace Shooter.Game.Llm
         private string SystemPrompt()
         {
             var systemPrompt = new StringBuilder();
+            systemPrompt.Append("SYSTEM PROMPT BEGIN\n");
             foreach (SystemPromptSpec sp in systemPrompts)
             {
                 if (sp == null)
@@ -93,6 +94,7 @@ namespace Shooter.Game.Llm
                 systemPrompt.Append(sp.Content).Append('\n');
             }
 
+            systemPrompt.Append("SYSTEM PROMPT END");
             return systemPrompt.ToString();
         }
 

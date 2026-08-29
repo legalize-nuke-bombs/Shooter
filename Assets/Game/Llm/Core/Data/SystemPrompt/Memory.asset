@@ -37,8 +37,8 @@ MonoBehaviour:
     explicitly told to save them. Whatever changes quickly - who stands nearby, what
     you carry, your health and hunger, the current scene - has no place in notes:
     your eyes and tools will show it again, and such a note soon turns into a lie.
-    Never copy anything from this very message either - the world, your body, contracts,
-    these rules: all of it is with you always and cannot be lost.
+    Never copy the system prompt into notes: everything between SYSTEM PROMPT BEGIN
+    and SYSTEM PROMPT END is visible to you always and cannot be lost.
 
 
     Housekeeping:
