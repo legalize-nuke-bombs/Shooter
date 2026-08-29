@@ -28,7 +28,7 @@ Fails if the note does not exist. To create a new note, use add_note. The same s
             string result;
             try
             {
-                notes.Update(
+                notes.Replace(
                     arguments.Name,
                     new LlmNote
                     {

@@ -74,7 +74,7 @@ namespace Shooter.Game.Llm.Notes
             if (!notes.TryAdd(key, note)) throw new ArgumentException($"Note named {key} already exists");
         }
 
-        public void Update(string key, LlmNote note)
+        public void Replace(string key, LlmNote note)
         {
             if (!notes.ContainsKey(key)) throw new ArgumentException($"Note named {key} does not exist");
             ValidateNote(key, note);
