@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e316d1881d24b44aae7524829da8141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmHistory
-  maxSize: 30000
+  maxSize: 100000
 --- !u!114 &2118777413684301810
 MonoBehaviour:
   m_ObjectHideFlags: 0
