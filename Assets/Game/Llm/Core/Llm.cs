@@ -17,8 +17,8 @@ namespace Shooter.Game.Llm
     [RequireComponent(typeof(LlmPendingTable))]
     public class Llm : MonoBehaviour, IMortal
     {
-        private const string RetellingDemand =
-            "Your story became too long and MUST be retold. Call rewrite_summary with a full retelling of your whole story: the call itself will remain as the only story of your life, everything older will be erased, and anything you leave out of the retelling is lost FOREVER. Keep all the details important for the continuity of your life and deep communication. Keep your voice exactly as it is now: your manner of speech, your verbal quirks, a few literal sample phrases. Weave what you know and what you lived through into one story. Pay special attention to the most recent events and to the questions you have not answered yet: they must survive in full detail. Compress to at most half the length.";
+        private const string WipeDemand =
+            "Your story became too long and MUST be wiped. Update your notes first: when you call forget, everything outside your notes is lost FOREVER. Save the recent events, the questions you have not answered yet and your unfinished business. Keep a note about who you are now: your voice with a few literal sample phrases, what you believe, how you have changed and why - nothing else will carry your personality across the wipe. Rewrite stale notes instead of piling up new ones. When your notes are complete, call forget.";
 
         private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
 
@@ -165,7 +165,7 @@ namespace Shooter.Game.Llm
         {
             if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider)) return false;
 
-            bool retelling = history.Overflowing;
+            bool wiping = history.Overflowing;
 
             if (history.Count == 0) Begin();
 
@@ -184,7 +184,7 @@ namespace Shooter.Game.Llm
             {
                 LlmTurn turn = await LlmProvider.Request(
                     config,
-                    $"{entityName}-{(retelling ? "compact" : "live")}",
+                    $"{entityName}-{(wiping ? "compact" : "live")}",
                     SystemPrompt(),
                     history.Messages,
                     tools,
@@ -202,8 +202,8 @@ namespace Shooter.Game.Llm
                         { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call, context) });
             }
 
-            if (retelling && history.Overflowing)
-                throw new LlmException("The story is still overflowing after the retelling tick");
+            if (wiping && history.Overflowing)
+                throw new LlmException("The story is still overflowing after the wipe tick");
 
             return true;
         }
@@ -232,7 +232,7 @@ namespace Shooter.Game.Llm
             var seen = new StringBuilder();
             seen.Append('[').Append(Stamp()).Append(']');
 
-            if (history.Overflowing) seen.Append('\n').Append(RetellingDemand);
+            if (history.Overflowing) seen.Append('\n').Append(WipeDemand);
 
             if (asked.Count > 0)
                 seen.Append('\n').Append("You MUST answer the waiting wanderer(s) RIGHT NOW using the say_to_wanderer tool: ")

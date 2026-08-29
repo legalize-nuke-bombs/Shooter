@@ -14,7 +14,8 @@ namespace Shooter.Game.Llm.AddNote
         public override string Description =>
             @$"
 Use this tool to add a new note.
-This tool only adds a note, it doesn't modify it. To modify a note, delete it and add it again.
+The name is a short id: you will retype it exactly to address the note. The description is shown in the notes list: write what is inside and why to open it.
+Keep one subject per note. To change an existing note, use update_note.
 Max note name size: {notes.NameLimit}
 Max note description size: {notes.DescriptionLimit}
 Max note content size: {notes.ContentLimit}
