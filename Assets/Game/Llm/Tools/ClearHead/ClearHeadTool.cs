@@ -1,20 +1,20 @@
 using Shooter.Game.Llm.Notes;
 using UnityEngine;
 
-namespace Shooter.Game.Llm.Forget
+namespace Shooter.Game.Llm.ClearHead
 {
     [RequireComponent(typeof(LlmHistory))]
     [RequireComponent(typeof(LlmNotes))]
-    public class ForgetTool : LlmTool<ForgetArguments>
+    public class ClearHeadTool : LlmTool<ClearHeadArguments>
     {
         private LlmHistory history;
         private LlmNotes notes;
 
-        public override string Name => "forget";
+        public override string Name => "clear_head";
 
         public override string Description =>
             @"
-Erase your whole story. Everything not saved in your notes is lost FOREVER.
+Clear your head. Your notes stay with you; everything else is gone for good.
 Call this only when your notes are complete.
 ";
 
@@ -28,10 +28,10 @@ Call this only when your notes are complete.
             notes = GetComponent<LlmNotes>();
         }
 
-        protected override string Execute(ForgetArguments arguments, LlmCallContext context)
+        protected override string Execute(ClearHeadArguments arguments, LlmCallContext context)
         {
             history.Forget(context.PromptedCount);
-            return "Erased. Your past now exists only in your notes. Before you act or speak, read the ones you need - start with who you are.\nYour notes:\n" + notes.List();
+            return "You have just cleared your head. Your story so far is gone; everything you chose to keep is written in your notes, and your notes are your memory now. Read the ones you need before you act or speak - start with the one about who you are.\nYour notes:\n" + notes.List();
         }
     }
 }

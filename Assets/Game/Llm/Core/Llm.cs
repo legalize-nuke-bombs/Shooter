@@ -17,18 +17,19 @@ namespace Shooter.Game.Llm
     [RequireComponent(typeof(LlmPendingTable))]
     public class Llm : MonoBehaviour, IMortal
     {
-        private const string WipeDemand =
-            @"Your story became too long and MUST be wiped: everything outside your notes will be lost FOREVER. What you do not write down will never have happened to you.
-Go through your whole story and save everything you still need:
-- every person who matters: what they did to you and you to them, what you agreed on, what they owe you and what you owe them, who you trust and who wronged you;
-- every promise you gave and every promise given to you, everything you said you would do and have not done yet;
+        private const string ClearHeadDemand =
+            @"You are holding too much in your head and it MUST be cleared: only what is written in your notes will stay with you, ALL THE REST is lost for good. What you do not write down will never have happened to you.
+Go through your whole story and write down everything you still need:
+- the wanderers you have met, each one by name: what they did to you, what they traded and promised, whether their word held, how you parted. Wanderers come back - and you are expected to remember them;
+- your neighbors: what you agreed on, who owes whom, who you trust and who wronged you;
+- every promise you gave and everything you said you would do and have not done yet;
 - your work and your dealings: prices, goods, favors, how you make your living;
 - the world: places, dangers, discoveries - everything you found out that you did not know before;
 - the turning points of your life: the events that made you who you are;
-- yourself: a note about who you are now - your voice with a few literal sample phrases, what you believe, what you fear, what you want, how you have changed and why. Nothing else will carry your personality across the wipe.
+- yourself: a note about who you are now - your voice with a few literal sample phrases, what you believe, what you fear, what you want, how you have changed and why. Nothing else of who you are will survive.
 Names, numbers and exact words matter: keep them, do not summarize them away.
 Update the notes you already have; add new ones for what has no home yet. If in doubt, write it down.
-When and only when your notes are complete, call forget.";
+When and only when your notes are complete, call clear_head.";
 
         private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
 
@@ -175,7 +176,7 @@ When and only when your notes are complete, call forget.";
         {
             if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider)) return false;
 
-            bool wiping = history.Overflowing;
+            bool clearing = history.Overflowing;
 
             if (history.Count == 0) Begin();
 
@@ -194,7 +195,7 @@ When and only when your notes are complete, call forget.";
             {
                 LlmTurn turn = await LlmProvider.Request(
                     config,
-                    $"{entityName}-{(wiping ? "compact" : "live")}",
+                    $"{entityName}-{(clearing ? "compact" : "live")}",
                     SystemPrompt(),
                     history.Messages,
                     tools,
@@ -212,8 +213,8 @@ When and only when your notes are complete, call forget.";
                         { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call, context) });
             }
 
-            if (wiping && history.Overflowing)
-                throw new LlmException("The story is still overflowing after the wipe tick");
+            if (clearing && history.Overflowing)
+                throw new LlmException("The story is still overflowing after the clearing tick");
 
             return true;
         }
@@ -242,7 +243,7 @@ When and only when your notes are complete, call forget.";
             var seen = new StringBuilder();
             seen.Append('[').Append(Stamp()).Append(']');
 
-            if (history.Overflowing) seen.Append('\n').Append(WipeDemand);
+            if (history.Overflowing) seen.Append('\n').Append(ClearHeadDemand);
 
             if (asked.Count > 0)
                 seen.Append('\n').Append("You MUST answer the waiting wanderer(s) RIGHT NOW using the say_to_wanderer tool: ")
