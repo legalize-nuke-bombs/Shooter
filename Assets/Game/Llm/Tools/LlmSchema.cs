@@ -38,6 +38,7 @@ namespace Shooter.Game.Llm
             if (type == typeof(string)) return new JObject { ["type"] = "string" };
             if (type == typeof(bool)) return new JObject { ["type"] = "boolean" };
             if (type == typeof(float) || type == typeof(double)) return new JObject { ["type"] = "number" };
+            if (type.IsClass) return Of(type);
 
             return new JObject { ["type"] = "integer" };
         }

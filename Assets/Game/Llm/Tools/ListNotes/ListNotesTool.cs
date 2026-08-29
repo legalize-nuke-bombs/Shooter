@@ -13,7 +13,7 @@ namespace Shooter.Game.Llm.ListNotes
         public override string Description =>
             @"
 Use this tool to list your notes: the name, the description and the last update time of each.
-To see a note's content, use read_note.
+To see the content, use read_notes.
 ";
 
         protected override void Awake()
