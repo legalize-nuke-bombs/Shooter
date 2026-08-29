@@ -18,16 +18,7 @@ namespace Shooter.Game.Llm
     public class Llm : MonoBehaviour, IMortal
     {
         private const string ClearHeadDemand =
-            @"You are holding too much in your head and it MUST be cleared: only what is written in your notes will stay with you. ALL THE REST is lost for good - what you do not write down will never have happened to you.
-Some things need no note: the rules standing above your story are given to you always, and what your eyes and tools can show again - your surroundings, your belongings, your standing with people - is one look away. Never copy those.
-Write down, in this order:
-- who you are: your voice with a few literal sample phrases, what you hold true, what you fear and want, how you have changed and why. The story you were born with dies too - carry its heart forward in your own words. Nothing else will keep you being you;
-- what is open: promises given and received, debts, anything you said you would do and have not done;
-- the people of your life, each by name: what they did to you and you to them, what you agreed on, whose word held. Wanderers come back - you are expected to remember them;
-- what you came to understand: discoveries, lessons, conclusions - not the scenery around you.
-Exact names, numbers and words matter: keep them, do not summarize them away.
-Update the notes you already have; add new ones for what has no home yet. If in doubt, write it down.
-When and only when your notes are complete, call clear_head.";
+            "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date, then call clear_head.";
 
         private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
 
