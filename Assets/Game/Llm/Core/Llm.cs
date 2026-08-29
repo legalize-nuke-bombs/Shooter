@@ -19,10 +19,11 @@ namespace Shooter.Game.Llm
     {
         private const string WipeDemand =
             @"Your story became too long and MUST be wiped: everything outside your notes will be lost FOREVER.
-Update your notes first:
-- save the recent events, the questions you have not answered yet and your unfinished business;
-- keep a note about who you are now: your voice with a few literal sample phrases, what you believe, how you have changed and why - nothing else will carry your personality across the wipe;
-- rewrite stale notes instead of piling up new ones.
+Bring your notes up to date first. What deserves to survive:
+- people: who did what to you, what you agreed on, who owes whom;
+- the world: what you found out that you did not know before;
+- yourself: your plans, your unfinished business, and a note about who you are now - your voice with a few literal sample phrases, what you believe, how you have changed. Nothing else will carry your personality across the wipe.
+Update the notes you already have before adding new ones.
 When your notes are complete, call forget.";
 
         private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
