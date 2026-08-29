@@ -31,7 +31,7 @@ Call this only when your notes are complete.
         protected override string Execute(ForgetArguments arguments, LlmCallContext context)
         {
             history.Forget(context.PromptedCount);
-            return "Erased. Check your notes before doing anything else. Your notes:\n" + notes.List();
+            return "Erased. Your past now exists only in your notes. Before you act or speak, read the ones you need - start with who you are.\nYour notes:\n" + notes.List();
         }
     }
 }

@@ -18,13 +18,17 @@ namespace Shooter.Game.Llm
     public class Llm : MonoBehaviour, IMortal
     {
         private const string WipeDemand =
-            @"Your story became too long and MUST be wiped: everything outside your notes will be lost FOREVER.
-Bring your notes up to date first. What deserves to survive:
-- people: who did what to you, what you agreed on, who owes whom;
-- the world: what you found out that you did not know before;
-- yourself: your plans, your unfinished business, and a note about who you are now - your voice with a few literal sample phrases, what you believe, how you have changed. Nothing else will carry your personality across the wipe.
-Update the notes you already have before adding new ones.
-When your notes are complete, call forget.";
+            @"Your story became too long and MUST be wiped: everything outside your notes will be lost FOREVER. What you do not write down will never have happened to you.
+Go through your whole story and save everything you still need:
+- every person who matters: what they did to you and you to them, what you agreed on, what they owe you and what you owe them, who you trust and who wronged you;
+- every promise you gave and every promise given to you, everything you said you would do and have not done yet;
+- your work and your dealings: prices, goods, favors, how you make your living;
+- the world: places, dangers, discoveries - everything you found out that you did not know before;
+- the turning points of your life: the events that made you who you are;
+- yourself: a note about who you are now - your voice with a few literal sample phrases, what you believe, what you fear, what you want, how you have changed and why. Nothing else will carry your personality across the wipe.
+Names, numbers and exact words matter: keep them, do not summarize them away.
+Update the notes you already have; add new ones for what has no home yet. If in doubt, write it down.
+When and only when your notes are complete, call forget.";
 
         private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
 
