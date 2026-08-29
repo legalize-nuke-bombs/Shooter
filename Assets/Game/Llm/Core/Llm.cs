@@ -18,7 +18,12 @@ namespace Shooter.Game.Llm
     public class Llm : MonoBehaviour, IMortal
     {
         private const string WipeDemand =
-            "Your story became too long and MUST be wiped. Update your notes first: when you call forget, everything outside your notes is lost FOREVER. Save the recent events, the questions you have not answered yet and your unfinished business. Keep a note about who you are now: your voice with a few literal sample phrases, what you believe, how you have changed and why - nothing else will carry your personality across the wipe. Rewrite stale notes instead of piling up new ones. When your notes are complete, call forget.";
+            @"Your story became too long and MUST be wiped: everything outside your notes will be lost FOREVER.
+Update your notes first:
+- save the recent events, the questions you have not answered yet and your unfinished business;
+- keep a note about who you are now: your voice with a few literal sample phrases, what you believe, how you have changed and why - nothing else will carry your personality across the wipe;
+- rewrite stale notes instead of piling up new ones.
+When your notes are complete, call forget.";
 
         private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
 
