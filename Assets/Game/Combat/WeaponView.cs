@@ -156,8 +156,11 @@ namespace Shooter.Game.Combat
             root.localPosition = Vector3.zero;
             root.localRotation = Quaternion.identity;
 
+            Transform back = rig.Bolt == null ? rig.Grip : rig.Bolt;
+            Transform front = rig.Muzzle == null ? rig.Foregrip : rig.Muzzle;
+
             Vector3 gripPoint = root.InverseTransformPoint(rig.Grip.position);
-            Vector3 barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
+            Vector3 barrelAxis = root.InverseTransformDirection((front.position - back.position).normalized);
             Vector3 barrelUp = root.InverseTransformDirection(rig.Grip.up);
 
             var barrel = Quaternion.LookRotation(barrelAxis, barrelUp);
