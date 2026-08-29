@@ -52,6 +52,7 @@ namespace Shooter.Game.Llm
             table = GetComponent<LlmPendingTable>();
             abilities = GetComponents<LlmTool>();
             entityName = name;
+            Begin();
         }
 
         private void OnDestroy()
@@ -173,8 +174,6 @@ namespace Shooter.Game.Llm
             if (String.IsNullOrEmpty(Config.Read().Server.LlmBase.Provider)) return false;
 
             bool clearing = history.Overflowing;
-
-            if (history.Count == 0) Begin();
 
             history.Seen();
             history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation(asked) });
