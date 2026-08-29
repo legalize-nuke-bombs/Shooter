@@ -18,10 +18,10 @@ namespace Shooter.Game.Llm
     public class Llm : MonoBehaviour, IMortal
     {
         private const string ClearHeadDemand =
-            "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date, then call clear_head.";
+            "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date in full detail, including the very latest context - what is happening right now and where you left off. Then call clear_head.";
 
         private const string StoryHeader =
-            "THE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - save its heart into your notes, in your own words):\n";
+            "THE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
 
         private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
 
