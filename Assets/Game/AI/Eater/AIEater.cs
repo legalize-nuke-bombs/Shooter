@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.Core.Saves;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Collections;
@@ -15,7 +14,7 @@ namespace Shooter.Game.AI.Eater
 {
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Hunger))]
-    public class AIEater : NetworkBehaviour, ISaveableComponent
+    public class AIEater : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -35,24 +34,6 @@ namespace Shooter.Game.AI.Eater
         public Action<OnAutoEatCallbackData> OnAutoEatCallback;
 
         private float timer;
-
-        public string ComponentKey => "AIEater";
-        private struct SaveData
-        {
-            public bool Enabled { get; set; }
-        }
-        public object SaveObject()
-        {
-            return new SaveData()
-            {
-                Enabled = enabled
-            };
-        }
-        public void LoadObject(SaveToken content)
-        {
-            SaveData sd = content.To<SaveData>();
-            enabled = sd.Enabled;
-        }
 
         private void Awake()
         {

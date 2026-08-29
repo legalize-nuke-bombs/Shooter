@@ -30,7 +30,7 @@ Call this only when your notes are complete.
 
         protected override string Execute(ClearHeadArguments arguments, LlmCallContext context)
         {
-            history.Forget(context.PromptedCount);
+            history.Forget(history.LastTurn());
             return "You have just cleared your head. Your story so far is gone; everything you chose to keep is written in your notes, and your notes are your memory now. Read the ones you need before you act or speak - start with the one about who you are.\nYour notes:\n" + notes.List();
         }
     }

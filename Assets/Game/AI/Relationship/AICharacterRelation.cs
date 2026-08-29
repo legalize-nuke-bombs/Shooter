@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.Core.Saves;
 using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
@@ -12,7 +11,7 @@ namespace Shooter.Game.AI
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Nameable))]
-    public class AICharacterRelation : MonoBehaviour, IDigestible, ISaveableComponent
+    public class AICharacterRelation : MonoBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -32,26 +31,6 @@ namespace Shooter.Game.AI
 
         private Character ownCharacter;
         private Nameable ownNameable;
-
-        public string ComponentKey => "AICharacterRelation";
-        private struct SaveData
-        {
-            public float Coefficient { get; set; }
-        }
-        public object SaveObject()
-        {
-            return new SaveData()
-            {
-                Coefficient = damageToReputationCoefficient
-            };
-        }
-        public void LoadObject(SaveToken content)
-        {
-            SaveData sd = content.To<SaveData>();
-            SetDamageToReputationCoefficient(sd.Coefficient);
-        }
-
-        public float DamageToReputationCoefficient => damageToReputationCoefficient;
 
         public struct OnDamagedCallbackData
         {
@@ -111,12 +90,6 @@ namespace Shooter.Game.AI
                     AttackerId = attackerId.Value
                 });
             }
-        }
-
-        public void SetDamageToReputationCoefficient(float amount)
-        {
-            if (amount < 0 || amount > 10) throw new ArgumentException($"Amount must be 0 <= ? <= 10, got {amount}");
-            damageToReputationCoefficient = amount;
         }
 
         public int Amount(long characterId)
