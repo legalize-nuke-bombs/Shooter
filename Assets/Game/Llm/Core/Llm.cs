@@ -22,7 +22,7 @@ namespace Shooter.Game.Llm
 Know what needs no note: the rules standing above your story are given to you always, and whatever your eyes and tools can show again - your surroundings, your belongings, your standing with people - is one look away. Never copy any of that. Everything else dies, INCLUDING the story of the life you were born with at the very start: carry its heart forward in your own words - where you come from, what you hold true, what is yours alone.
 Go through your whole story and write down everything you still need:
 - the wanderers you have met, each one by name: what they did to you, what they traded and promised, whether their word held, how you parted. Wanderers come back - and you are expected to remember them;
-- your neighbors: what you agreed on, who owes whoыm, who you trust and who wronged you;
+- your neighbors: what you agreed on, who owes whom, who you trust and who wronged you;
 - every promise you gave and everything you said you would do and have not done yet;
 - your work and your dealings: prices, goods, favors, how you make your living;
 - what you came to understand that no look around will bring back: discoveries, conclusions, lessons - not the scenery;
