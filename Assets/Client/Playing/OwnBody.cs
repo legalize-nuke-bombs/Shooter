@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Shooter.Game.Body;
+using Shooter.Game.Combat;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -20,6 +21,7 @@ namespace Shooter.Client.Playing
 
         private Skin skin;
         private Inventory inventory;
+        private WeaponView view;
         private GameObject flesh;
         private int reflectionLayer = -1;
         private bool owning;
@@ -29,6 +31,7 @@ namespace Shooter.Client.Playing
         {
             skin = GetComponent<Skin>();
             inventory = GetComponent<Inventory>();
+            view = GetComponent<WeaponView>();
             reflectionLayer = LayerMask.NameToLayer(ReflectionOnlyLayer);
             enabled = false;
         }
@@ -100,7 +103,7 @@ namespace Shooter.Client.Playing
                 return;
             }
 
-            foreach (Renderer piece in flesh.GetComponentsInChildren<Renderer>(true))
+            foreach (Renderer piece in Pieces(flesh))
             {
                 if (piece.gameObject.layer == reflectionLayer) continue;
 
@@ -160,12 +163,22 @@ namespace Shooter.Client.Playing
 
         private void Shadow(ShadowCastingMode mode)
         {
-            GameObject body = skin.Flesh;
-            if (body == null) return;
-
-            foreach (Renderer piece in body.GetComponentsInChildren<Renderer>(true))
+            foreach (Renderer piece in Pieces(skin.Flesh))
                 if (piece.gameObject.layer != reflectionLayer)
                     piece.shadowCastingMode = mode;
+        }
+
+        private IEnumerable<Renderer> Pieces(GameObject body)
+        {
+            if (body != null)
+                foreach (Renderer piece in body.GetComponentsInChildren<Renderer>(true))
+                    yield return piece;
+
+            GameObject held = view == null ? null : view.Shown;
+            if (held == null) yield break;
+
+            foreach (Renderer piece in held.GetComponentsInChildren<Renderer>(true))
+                yield return piece;
         }
     }
 }

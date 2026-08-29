@@ -4,6 +4,7 @@ using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Shooter.Game.Combat
 {
@@ -13,15 +14,25 @@ namespace Shooter.Game.Combat
     {
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private Vector3 gripAnchor = new(0.12f, -0.28f, 0.3f);
+        [SerializeField] private Vector3 rightElbow = new(0.55f, 0.25f, -0.25f);
+        [SerializeField] private Vector3 leftElbow = new(-0.35f, 0f, 0.15f);
+
+        private Transform anchor;
+        private Transform leftHint;
+        private Transform leftShoulder;
+        private Transform rightHint;
+        private Transform rightShoulder;
+
         private Inventory inventory;
-        private Transform leftHand;
+        private Skin skin;
 
         private WeaponRig rig;
-        private Transform rightHand;
+        private Rig hold;
         private GameObject shown;
-
         private GameObject shownModel;
-        private Skin skin;
+
+        public GameObject Shown => shown;
 
         private void Awake()
         {
@@ -29,24 +40,16 @@ namespace Shooter.Game.Combat
             skin = GetComponent<Skin>();
         }
 
-        private void LateUpdate()
+        private void Update()
         {
-            if (shown == null || rig == null || rig.Grip == null || rig.Foregrip == null) return;
-            if (rightHand == null || leftHand == null) return;
+            if (shown == null || anchor == null) return;
+            if (rightShoulder == null || leftShoulder == null) return;
 
-            Vector3 aim = leftHand.position - rightHand.position;
-            if (aim.sqrMagnitude < 0.0001f) return;
+            rightHint.localPosition = rightElbow;
+            leftHint.localPosition = leftElbow;
 
-            Transform root = shown.transform;
-            Vector3 gripPoint = root.InverseTransformPoint(rig.Grip.position);
-            Vector3 barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
-            Vector3 barrelUp = root.InverseTransformDirection(rig.Grip.up);
-
-            var look = Quaternion.LookRotation(aim, Vector3.up);
-            var barrel = Quaternion.LookRotation(barrelAxis, barrelUp);
-
-            shown.transform.rotation = look * Quaternion.Inverse(barrel);
-            shown.transform.position = rightHand.position - shown.transform.rotation * gripPoint;
+            Vector3 chest = (rightShoulder.position + leftShoulder.position) / 2f;
+            anchor.SetPositionAndRotation(chest + transform.rotation * gripAnchor, transform.rotation);
         }
 
         public override void OnNetworkSpawn()
@@ -67,11 +70,14 @@ namespace Shooter.Game.Combat
                 $"Entity {name} refresh: wanted {(wanted == null ? "nothing" : wanted.name)}, shown {(shownModel == null ? "nothing" : shownModel.name)}");
             if (wanted == shownModel) return;
 
+            Unbuild();
             if (shown != null) Destroy(shown);
             shownModel = wanted;
             shown = wanted == null ? null : Wear(wanted);
 
-            Armed(wanted != null);
+            if (rig != null) Build();
+            Rebuild();
+            Armed(shown != null);
         }
 
         private void Armed(bool armed)
@@ -93,17 +99,132 @@ namespace Shooter.Game.Combat
 
         private GameObject Wear(GameObject model)
         {
-            Transform hand = Hand();
-            if (hand == null) return null;
+            Animator animator = Puppet();
+            if (animator == null) return null;
 
-            GameObject worn = Instantiate(model, hand);
-            Anchor(worn);
+            GameObject worn = Instantiate(model);
+            rig = worn.GetComponent<WeaponRig>();
+
+            if (rig == null || rig.Grip == null || rig.Foregrip == null)
+            {
+                rig = null;
+                Glue(worn, animator);
+            }
+            else
+            {
+                Raise(animator);
+                Mount(worn);
+            }
 
             Log.Info($"Entity {name} now holds {model.name}");
             return worn;
         }
 
-        private Transform Hand()
+        private void Glue(GameObject worn, Animator animator)
+        {
+            Log.Warn($"Entity {name} weapon {worn.name} has no grip pair, stays glued to the hand bone");
+
+            Transform hand = animator.GetBoneTransform(HumanBodyBones.RightHand);
+            worn.transform.SetParent(hand == null ? transform : hand, false);
+            worn.transform.localPosition = Vector3.zero;
+            worn.transform.localRotation = Quaternion.identity;
+        }
+
+        private void Raise(Animator animator)
+        {
+            rightShoulder = animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
+            leftShoulder = animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
+            if (rightShoulder == null || leftShoulder == null)
+                Log.Warn($"Entity {name} has no shoulder bones, weapon anchor stays at the root");
+
+            if (anchor != null) return;
+
+            anchor = new GameObject("WeaponAnchor").transform;
+            anchor.SetParent(transform, false);
+
+            rightHint = new GameObject("RightElbowHint").transform;
+            rightHint.SetParent(transform, false);
+
+            leftHint = new GameObject("LeftElbowHint").transform;
+            leftHint.SetParent(transform, false);
+        }
+
+        private void Mount(GameObject worn)
+        {
+            Transform root = worn.transform;
+            root.SetParent(anchor, false);
+            root.localPosition = Vector3.zero;
+            root.localRotation = Quaternion.identity;
+
+            Vector3 gripPoint = root.InverseTransformPoint(rig.Grip.position);
+            Vector3 barrelAxis = root.InverseTransformDirection((rig.Foregrip.position - rig.Grip.position).normalized);
+            Vector3 barrelUp = root.InverseTransformDirection(rig.Grip.up);
+
+            var barrel = Quaternion.LookRotation(barrelAxis, barrelUp);
+            root.localRotation = Quaternion.Inverse(barrel);
+            root.localPosition = -(root.localRotation * gripPoint);
+        }
+
+        private void Build()
+        {
+            Animator animator = Puppet();
+            if (animator == null) return;
+
+            if (!animator.TryGetComponent(out RigBuilder builder)) builder = animator.gameObject.AddComponent<RigBuilder>();
+
+            var holder = new GameObject("WeaponHold");
+            holder.transform.SetParent(animator.transform, false);
+            hold = holder.AddComponent<Rig>();
+
+            Arm(holder.transform, "RightArmGrip", animator, HumanBodyBones.RightUpperArm, HumanBodyBones.RightLowerArm,
+                HumanBodyBones.RightHand, rig.Grip, rightHint);
+            Arm(holder.transform, "LeftArmGrip", animator, HumanBodyBones.LeftUpperArm, HumanBodyBones.LeftLowerArm,
+                HumanBodyBones.LeftHand, rig.Foregrip, leftHint);
+
+            builder.layers.Add(new RigLayer(hold));
+        }
+
+        private static void Arm(Transform holder, string name, Animator animator, HumanBodyBones root,
+            HumanBodyBones mid, HumanBodyBones tip, Transform target, Transform hint)
+        {
+            var constrained = new GameObject(name);
+            constrained.transform.SetParent(holder, false);
+
+            var ik = constrained.AddComponent<TwoBoneIKConstraint>();
+            TwoBoneIKConstraintData data = ik.data;
+            data.root = animator.GetBoneTransform(root);
+            data.mid = animator.GetBoneTransform(mid);
+            data.tip = animator.GetBoneTransform(tip);
+            data.target = target;
+            data.hint = hint;
+            data.targetPositionWeight = 1f;
+            data.targetRotationWeight = 1f;
+            data.hintWeight = 1f;
+            data.maintainTargetPositionOffset = false;
+            data.maintainTargetRotationOffset = true;
+            ik.data = data;
+        }
+
+        private void Unbuild()
+        {
+            if (hold == null) return;
+
+            Animator animator = Puppet();
+            if (animator != null && animator.TryGetComponent(out RigBuilder builder))
+                builder.layers.RemoveAll(layer => layer.rig == hold);
+
+            Destroy(hold.gameObject);
+            hold = null;
+            rig = null;
+        }
+
+        private void Rebuild()
+        {
+            Animator animator = Puppet();
+            if (animator != null && animator.TryGetComponent(out RigBuilder builder)) builder.Build();
+        }
+
+        private Animator Puppet()
         {
             if (skin.Flesh == null)
             {
@@ -112,35 +233,9 @@ namespace Shooter.Game.Combat
             }
 
             Animator animator = skin.Flesh.GetComponent<Animator>();
-            if (animator == null)
-            {
-                Log.Warn($"Entity {name} flesh has no animator, weapon stays invisible");
-                return null;
-            }
+            if (animator == null) Log.Warn($"Entity {name} flesh has no animator, weapon stays invisible");
 
-            Transform hand = animator.GetBoneTransform(HumanBodyBones.RightHand);
-            if (hand == null) Log.Warn($"Entity {name} has no right hand bone, weapon stays invisible");
-
-            return hand;
+            return animator;
         }
-
-        private void Anchor(GameObject worn)
-        {
-            worn.transform.localPosition = Vector3.zero;
-            worn.transform.localRotation = Quaternion.identity;
-
-            rig = worn.GetComponent<WeaponRig>();
-            if (rig == null || rig.Grip == null || rig.Foregrip == null)
-            {
-                Log.Warn($"Entity {name} weapon {worn.name} has no grip pair, stays glued to the hand bone");
-                rig = null;
-                return;
-            }
-
-            Animator animator = skin.Flesh.GetComponent<Animator>();
-            rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
-            leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-        }
-
     }
 }
