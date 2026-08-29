@@ -52,7 +52,7 @@ namespace Shooter.Game.Llm.Notes
             {
                 sb.Append(kvp.Key).Append(": ").Append(kvp.Value.Description);
                 if (!string.IsNullOrEmpty(kvp.Value.Updated)) sb.Append(" (").Append(kvp.Value.Updated).Append(')');
-                sb.AppendLine();
+                sb.Append('\n');
             }
 
             return sb.Length > 0
@@ -106,7 +106,7 @@ namespace Shooter.Game.Llm.Notes
                 string noteName = kvp.Key;
                 int matchesCount = kvp.Value;
 
-                sb.AppendLine($"{noteName} ({notes[noteName].Description}) : {matchesCount} matches");
+                sb.Append($"{noteName} ({notes[noteName].Description}) : {matchesCount} matches").Append('\n');
             }
 
             return sb.Length > 0

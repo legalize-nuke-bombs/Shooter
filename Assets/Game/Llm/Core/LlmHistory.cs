@@ -58,6 +58,15 @@ namespace Shooter.Game.Llm
             Unseen = false;
         }
 
+        public int LastTurn()
+        {
+            for (int i = messages.Count - 1; i >= 0; i--)
+                if (messages[i].Role == LlmRole.Assistant)
+                    return i;
+
+            return 0;
+        }
+
         public void Forget(int keepFrom)
         {
             var fresh = messages.Skip(keepFrom).ToList();

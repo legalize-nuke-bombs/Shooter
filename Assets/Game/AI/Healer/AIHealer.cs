@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.Core.Saves;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Collections;
@@ -12,7 +11,7 @@ using UnityEngine;
 
 namespace Shooter.Game.AI.Healer
 {
-    public class AIHealer : NetworkBehaviour, ISaveableComponent
+    public class AIHealer : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -34,24 +33,6 @@ namespace Shooter.Game.AI.Healer
         public event Action<OnAutoHealCallbackData> OnAutoHealCallback;
 
         private float timer;
-
-        public string ComponentKey => "AIHealer";
-        private struct SaveData
-        {
-            public bool Enabled { get; set; }
-        }
-        public object SaveObject()
-        {
-            return new SaveData()
-            {
-                Enabled = enabled
-            };
-        }
-        public void LoadObject(SaveToken content)
-        {
-            SaveData sd = content.To<SaveData>();
-            enabled = sd.Enabled;
-        }
 
         private void Awake()
         {
