@@ -12,8 +12,7 @@ namespace Shooter.Client.Interface
     public abstract class ServerPage : MenuPage
     {
         private const string CompressionField = "compression";
-        private const string BaseProviderField = "base-provider";
-        private const string MaxProviderField = "max-provider";
+        private const string ProviderField = "provider";
         private const string NoProvider = "";
         private static readonly Journal Log = Logs.Here();
 
@@ -22,8 +21,7 @@ namespace Shooter.Client.Interface
             Offer(Require<DropdownField>(CompressionField), MainCompressionManager.Current.Keys, Titles.Compression);
 
             IEnumerable<string> providers = new[] { NoProvider }.Concat(OpenAiHosts.Providers);
-            Offer(Require<DropdownField>(BaseProviderField), providers, Titles.Provider);
-            Offer(Require<DropdownField>(MaxProviderField), providers, Titles.Provider);
+            Offer(Require<DropdownField>(ProviderField), providers, Titles.Provider);
         }
 
         protected override void Closed()
@@ -32,7 +30,7 @@ namespace Shooter.Client.Interface
 
             ServerConfig server = Config.Read().Server;
             Log.Info(
-                $"Server settings: port {server.Port}, saves as '{server.SaveCompressionAlgorithm}', models {server.LlmBase.Provider}/{server.LlmBase.Model} and {server.LlmMax.Provider}/{server.LlmMax.Model}");
+                $"Server settings: port {server.Port}, saves as '{server.SaveCompressionAlgorithm}', model {server.Llm.Provider}/{server.Llm.Model}");
         }
 
         private static void Offer(DropdownField field, IEnumerable<string> keys, Func<string, string> title)

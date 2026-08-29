@@ -10,7 +10,6 @@ namespace Shooter.Game.Llm
     public abstract class LlmTool : MonoBehaviour, ILlmTool
     {
         public virtual bool Available => true;
-        public virtual LlmLevel Level => LlmLevel.Base;
         public abstract string Name { get; }
         public abstract string Description { get; }
         public abstract JObject Parameters { get; }

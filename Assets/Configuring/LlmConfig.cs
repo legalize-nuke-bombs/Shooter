@@ -12,23 +12,13 @@ namespace Shooter.Configuring
         [CreateProperty]
         public string Model { get; set; }
 
-        public static LlmConfig LlmBase()
+        public static LlmConfig Default()
         {
             return new LlmConfig
             {
                 Key = "",
                 Provider = "Polza",
                 Model = "google/gemini-3.6-flash"
-            };
-        }
-
-        public static LlmConfig LlmMax()
-        {
-            return new LlmConfig
-            {
-                Key = "",
-                Provider = "Polza",
-                Model = "anthropic/claude-opus-5"
             };
         }
     }
