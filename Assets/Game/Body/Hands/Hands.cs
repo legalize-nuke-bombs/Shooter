@@ -13,6 +13,7 @@ namespace Shooter.Game.Body
         private const float ActionFade = 0.05f;
         private static readonly Journal Log = Logs.Here();
         private static readonly int[] ActionStates = BuildActionStates();
+        private static readonly int ActionSpeed = Animator.StringToHash("ActionSpeed");
 
         private readonly NetworkVariable<Work> work = new();
 
@@ -103,7 +104,7 @@ namespace Shooter.Game.Body
 
         private void Take(HandsAction wanted, float duration, bool interruptible, Action complete)
         {
-            work.Value = new Work { Action = wanted, Round = work.Value.Round + 1 };
+            work.Value = new Work { Action = wanted, Round = work.Value.Round + 1, Duration = duration };
             remaining = duration;
             this.interruptible = interruptible;
             this.complete = complete;
@@ -129,6 +130,20 @@ namespace Shooter.Game.Body
             if (!animator.HasState(layer, state)) return;
 
             animator.CrossFadeInFixedTime(state, ActionFade, layer);
+            StartCoroutine(Pace(animator, layer, now.Duration));
+        }
+
+        private static System.Collections.IEnumerator Pace(Animator animator, int layer, float duration)
+        {
+            yield return null;
+
+            if (animator == null || duration <= 0f) yield break;
+
+            AnimatorClipInfo[] clips = animator.GetNextAnimatorClipInfo(layer);
+            if (clips.Length == 0) clips = animator.GetCurrentAnimatorClipInfo(layer);
+            if (clips.Length == 0 || clips[0].clip == null) yield break;
+
+            animator.SetFloat(ActionSpeed, clips[0].clip.length / duration);
         }
 
         private static int[] BuildActionStates()
@@ -143,10 +158,11 @@ namespace Shooter.Game.Body
         {
             public HandsAction Action;
             public int Round;
+            public float Duration;
 
             public bool Equals(Work other)
             {
-                return Action == other.Action && Round == other.Round;
+                return Action == other.Action && Round == other.Round && Duration.Equals(other.Duration);
             }
         }
     }
