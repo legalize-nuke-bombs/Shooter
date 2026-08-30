@@ -193,7 +193,7 @@ namespace Shooter.Game.Combat
             data.targetRotationWeight = 1f;
             data.hintWeight = 1f;
             data.maintainTargetPositionOffset = false;
-            data.maintainTargetRotationOffset = true;
+            data.maintainTargetRotationOffset = false;
             ik.data = data;
         }
 
