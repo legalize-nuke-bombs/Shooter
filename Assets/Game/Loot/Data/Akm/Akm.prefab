@@ -24,8 +24,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3117919675617634549}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.66190374, y: -0.6787268, z: -0.2999212, w: -0.106116556}
-  m_LocalPosition: {x: -0.028, y: -0.296, z: 0.097}
+  m_LocalRotation: {x: -0.037746012, y: 0.4292206, z: -0.7887155, w: 0.4384893}
+  m_LocalPosition: {x: -0.1499995, y: -0.05622052, z: 0.02692428}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -55,8 +55,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4751106764056360830}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2962547, y: 0.7422098, z: 0.47815043, w: -0.36432135}
-  m_LocalPosition: {x: 0.077, y: -0.0959, z: -0.2034}
+  m_LocalRotation: {x: -0.58579177, y: -0.6117433, z: -0.13122621, w: -0.51516783}
+  m_LocalPosition: {x: 0.1314, y: -0.08931659, z: -0.155}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -208,6 +208,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a431f5e3df945c29d0ad1819aac84a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.WeaponRig
+  seatPosition: {x: 0.045, y: 0.217, z: 0.215}
+  seatEuler: {x: 0, y: 0, z: 0}
   grip: {fileID: 229997308623269783}
   foregrip: {fileID: 631862383260552613}
   muzzle: {fileID: 8496135449635595360}
