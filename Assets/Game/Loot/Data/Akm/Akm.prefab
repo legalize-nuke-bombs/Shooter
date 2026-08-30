@@ -149,6 +149,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Akm
       objectReference: {fileID: 0}
+    - target: {fileID: 7403520151987920501, guid: 0fa2946de33644fe83379bac79ed2d48, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
