@@ -6,19 +6,24 @@ using UnityEngine;
 
 namespace Shooter.Game.Body
 {
+    [RequireComponent(typeof(Skin))]
     public class Hands : NetworkBehaviour, IMortal, IDigestible
     {
+        private const string ActionLayer = "Armed";
+        private const float ActionFade = 0.05f;
         private static readonly Journal Log = Logs.Here();
+        private static readonly int[] ActionStates = BuildActionStates();
 
-        private readonly NetworkVariable<HandsAction> action = new();
+        private readonly NetworkVariable<Work> work = new();
 
         private Action complete;
         private bool interruptible;
         private float remaining;
+        private Skin skin;
 
-        public HandsAction Action => action.Value;
+        public HandsAction Action => work.Value.Action;
 
-        public bool Free => action.Value == HandsAction.None;
+        public bool Free => Action == HandsAction.None;
 
         public string Digest(DigestionDetail detail)
         {
@@ -34,11 +39,14 @@ namespace Shooter.Game.Body
 
         private void Awake()
         {
+            skin = GetComponent<Skin>();
             enabled = false;
         }
 
         public override void OnNetworkSpawn()
         {
+            work.OnValueChanged += Show;
+
             if (!IsServer) return;
 
             enabled = true;
@@ -46,6 +54,8 @@ namespace Shooter.Game.Body
 
         public override void OnNetworkDespawn()
         {
+            work.OnValueChanged -= Show;
+
             if (!IsServer) return;
 
             enabled = false;
@@ -73,7 +83,7 @@ namespace Shooter.Game.Body
             if (Free) return;
 
             Log.Info($"Hands action {Action} of entity {name} interrupted");
-            action.Value = HandsAction.None;
+            Drop();
             complete = null;
             remaining = 0f;
         }
@@ -86,17 +96,55 @@ namespace Shooter.Game.Body
             if (remaining > 0f) return;
 
             Action finished = complete;
-            action.Value = HandsAction.None;
+            Drop();
             complete = null;
             finished?.Invoke();
         }
 
         private void Take(HandsAction wanted, float duration, bool interruptible, Action complete)
         {
-            action.Value = wanted;
+            work.Value = new Work { Action = wanted, Round = work.Value.Round + 1 };
             remaining = duration;
             this.interruptible = interruptible;
             this.complete = complete;
+        }
+
+        private void Drop()
+        {
+            work.Value = new Work { Action = HandsAction.None, Round = work.Value.Round + 1 };
+        }
+
+        private void Show(Work before, Work now)
+        {
+            if (now.Action == HandsAction.None) return;
+            if (skin.Flesh == null) return;
+
+            Animator animator = skin.Flesh.GetComponent<Animator>();
+            if (animator == null) return;
+
+            int layer = animator.GetLayerIndex(ActionLayer);
+            if (layer < 0) return;
+
+            animator.CrossFadeInFixedTime(ActionStates[(int)now.Action], ActionFade, layer);
+        }
+
+        private static int[] BuildActionStates()
+        {
+            string[] names = Enum.GetNames(typeof(HandsAction));
+            var states = new int[names.Length];
+            for (int i = 0; i < names.Length; i++) states[i] = Animator.StringToHash(names[i]);
+            return states;
+        }
+
+        public struct Work : INetworkSerializeByMemcpy, IEquatable<Work>
+        {
+            public HandsAction Action;
+            public int Round;
+
+            public bool Equals(Work other)
+            {
+                return Action == other.Action && Round == other.Round;
+            }
         }
     }
 }
