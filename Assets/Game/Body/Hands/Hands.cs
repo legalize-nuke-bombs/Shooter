@@ -125,7 +125,10 @@ namespace Shooter.Game.Body
             int layer = animator.GetLayerIndex(ActionLayer);
             if (layer < 0) return;
 
-            animator.CrossFadeInFixedTime(ActionStates[(int)now.Action], ActionFade, layer);
+            int state = ActionStates[(int)now.Action];
+            if (!animator.HasState(layer, state)) return;
+
+            animator.CrossFadeInFixedTime(state, ActionFade, layer);
         }
 
         private static int[] BuildActionStates()
