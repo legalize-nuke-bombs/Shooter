@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.Children.LlmIntervalTicker
   interval: 300
-  firstTickDelay: 5
+  firstTickDelay: 60
 --- !u!114 &4460536371454554518
 MonoBehaviour:
   m_ObjectHideFlags: 0
