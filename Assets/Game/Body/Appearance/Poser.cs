@@ -5,7 +5,8 @@ namespace Shooter.Game.Body
     [RequireComponent(typeof(Animator))]
     public class Poser : MonoBehaviour
     {
-        private static readonly int SpeedParameter = Animator.StringToHash("Speed");
+        private static readonly int SpeedXParameter = Animator.StringToHash("SpeedX");
+        private static readonly int SpeedZParameter = Animator.StringToHash("SpeedZ");
 
         [SerializeField] private float speedDamping = 0.15f;
 
@@ -25,8 +26,11 @@ namespace Shooter.Game.Body
             previousPosition = position;
             travel.y = 0f;
 
-            float traveledSpeed = Time.deltaTime > 0f ? travel.magnitude / Time.deltaTime : 0f;
-            animator.SetFloat(SpeedParameter, traveledSpeed, speedDamping, Time.deltaTime);
+            if (Time.deltaTime <= 0f) return;
+
+            Vector3 velocity = travel / Time.deltaTime;
+            animator.SetFloat(SpeedXParameter, Vector3.Dot(velocity, transform.right), speedDamping, Time.deltaTime);
+            animator.SetFloat(SpeedZParameter, Vector3.Dot(velocity, transform.forward), speedDamping, Time.deltaTime);
         }
     }
 }
