@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
@@ -7,14 +6,9 @@ namespace Shooter.Game.Body
 {
     public class Skin : MonoBehaviour
     {
-        private const float GizmoRing = 0.4f;
-        private const float GizmoHeight = 2f;
         private static readonly Journal Log = Logs.Here();
 
         private static readonly Vector3 ModelOffset = new(0f, -1f, 0f);
-        private static readonly Color GizmoTint = new(0.35f, 0.9f, 1f, 0.4f);
-
-        private static readonly Dictionary<SkinSpec, GizmoBody> GizmoCache = new();
 
         [SerializeField] private SkinSpec spec;
 
@@ -55,26 +49,7 @@ namespace Shooter.Game.Body
         {
             if (Application.isPlaying) return;
 
-            Gizmos.color = GizmoTint;
-
-            if (spec == null || spec.Model == null)
-            {
-                Vector3 feet = transform.position + ModelOffset;
-                Gizmos.DrawWireSphere(feet, GizmoRing);
-                Gizmos.DrawLine(feet, feet + Vector3.up * GizmoHeight);
-                return;
-            }
-
-            Matrix4x4 place = transform.localToWorldMatrix * Matrix4x4.Translate(ModelOffset);
-            GizmoBody body = Body(spec);
-
-            for (int part = 0; part < body.Meshes.Length; part++)
-            {
-                Gizmos.matrix = place * body.Places[part];
-                Gizmos.DrawMesh(body.Meshes[part]);
-            }
-
-            Gizmos.matrix = Matrix4x4.identity;
+            CharacterMarker.Draw(transform.position + ModelOffset, gameObject.name);
         }
 
         private static float Height(GameObject flesh)
@@ -86,49 +61,6 @@ namespace Shooter.Game.Body
             foreach (Renderer renderer in renderers) bounds.Encapsulate(renderer.bounds);
 
             return bounds.size.y;
-        }
-
-        private static GizmoBody Body(SkinSpec spec)
-        {
-            if (GizmoCache.TryGetValue(spec, out GizmoBody cached) && cached.Model == spec.Model) return cached;
-
-            Transform root = spec.Model.transform;
-            var rootScale = Matrix4x4.Scale(root.localScale);
-            var meshes = new List<Mesh>();
-            var places = new List<Matrix4x4>();
-
-            foreach (SkinnedMeshRenderer skinned in spec.Model.GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                if (skinned.sharedMesh == null) continue;
-
-                Transform[] bones = skinned.bones;
-                Matrix4x4[] binds = skinned.sharedMesh.bindposes;
-                Matrix4x4 pose = bones.Length > 0 && binds.Length > 0 && bones[0] != null
-                    ? bones[0].localToWorldMatrix * binds[0]
-                    : skinned.transform.localToWorldMatrix;
-
-                meshes.Add(skinned.sharedMesh);
-                places.Add(rootScale * root.worldToLocalMatrix * pose);
-            }
-
-            foreach (MeshFilter filter in spec.Model.GetComponentsInChildren<MeshFilter>())
-            {
-                if (filter.sharedMesh == null) continue;
-
-                meshes.Add(filter.sharedMesh);
-                places.Add(rootScale * root.worldToLocalMatrix * filter.transform.localToWorldMatrix);
-            }
-
-            var body = new GizmoBody { Model = spec.Model, Meshes = meshes.ToArray(), Places = places.ToArray() };
-            GizmoCache[spec] = body;
-            return body;
-        }
-
-        private struct GizmoBody
-        {
-            public GameObject Model;
-            public Mesh[] Meshes;
-            public Matrix4x4[] Places;
         }
     }
 }
