@@ -113,7 +113,7 @@ namespace Shooter.Game.Combat
             else
             {
                 Raise(animator);
-                Mount(worn);
+                Seat(worn);
             }
 
             Log.Info($"Entity {name} now holds {model.name}");
@@ -149,23 +149,12 @@ namespace Shooter.Game.Combat
             leftHint.SetParent(transform, false);
         }
 
-        private void Mount(GameObject worn)
+        private void Seat(GameObject worn)
         {
             Transform root = worn.transform;
             root.SetParent(anchor, false);
-            root.localPosition = Vector3.zero;
-            root.localRotation = Quaternion.identity;
-
-            Transform back = rig.Bolt == null ? rig.Grip : rig.Bolt;
-            Transform front = rig.Muzzle == null ? rig.Foregrip : rig.Muzzle;
-
-            Vector3 gripPoint = root.InverseTransformPoint(rig.Grip.position);
-            Vector3 barrelAxis = root.InverseTransformDirection((front.position - back.position).normalized);
-            Vector3 barrelUp = root.InverseTransformDirection(rig.Grip.up);
-
-            var barrel = Quaternion.LookRotation(barrelAxis, barrelUp);
-            root.localRotation = Quaternion.Inverse(barrel);
-            root.localPosition = -(root.localRotation * gripPoint);
+            root.localPosition = rig.SeatPosition;
+            root.localRotation = rig.SeatRotation;
         }
 
         private void Build()
