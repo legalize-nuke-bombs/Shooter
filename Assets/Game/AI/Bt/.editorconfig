@@ -1,0 +1,4 @@
+# Behavior graph nodes follow the Unity.Behavior package convention:
+# public PascalCase fields are the node UI surface bound to story slots.
+[*.cs]
+resharper_inconsistent_naming_highlighting = none
