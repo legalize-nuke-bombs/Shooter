@@ -38,6 +38,7 @@ namespace Shooter.Game.AI.Bt.Healing
 
             FixedString32Bytes? bestItemId = null;
             double lowestScore = missing * UnderHealPenalty.Value;
+            int candidates = 0;
 
             foreach (ItemSpec item in Catalogs.Of<ItemCatalog>().FindAll(item =>
                          item is StackableItemSpec stackableItem && stackableItem.HealMarker > 0))
@@ -45,6 +46,7 @@ namespace Shooter.Game.AI.Bt.Healing
                 StackableItemSpec stackableItem = (StackableItemSpec)item;
                 if (inventory.StackableAmount(stackableItem) <= 0) continue;
 
+                candidates++;
                 double healAmount = stackableItem.HealMarker;
                 double score = healAmount <= missing
                     ? (missing - healAmount) * UnderHealPenalty.Value
@@ -57,7 +59,11 @@ namespace Shooter.Game.AI.Bt.Healing
                 }
             }
 
-            if (bestItemId == null) return Status.Failure;
+            if (bestItemId == null)
+            {
+                Log.Info($"Entity {Agent.Value.name} refused healing: {candidates} candidates in the bag, missing {missing}, safety {safetyCoefficient}");
+                return Status.Failure;
+            }
 
             Log.Info($"Entity {Agent.Value.name} used heal {bestItemId.Value} by behavior graph, missing {missing}");
             inventory.UseStackable(bestItemId.Value);
