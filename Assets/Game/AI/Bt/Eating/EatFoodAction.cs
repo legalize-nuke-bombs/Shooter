@@ -1,4 +1,5 @@
 using System;
+using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Shooter.Logging;
@@ -26,14 +27,24 @@ namespace Shooter.Game.AI.Bt.Eating
         {
             if (Agent.Value == null) return Status.Failure;
             Inventory inventory = Agent.Value.GetComponent<Inventory>();
-            if (inventory == null) return Status.Failure;
+            Hunger hunger = Agent.Value.GetComponent<Hunger>();
+            if (inventory == null || hunger == null) return Status.Failure;
 
             foreach (ItemSpec item in Catalogs.Of<ItemCatalog>().FindAll(item =>
                          item is StackableItemSpec stackableItem && stackableItem.FoodMarker > 0))
             {
+                int startSaturation = (int)hunger.Amount;
                 if (inventory.UseStackable(item.Id))
                 {
                     Log.Info($"Entity {Agent.Value.name} ate {item.Id} by behavior graph");
+                    BtReports reports = Agent.Value.GetComponent<BtReports>();
+                    if (reports != null)
+                    {
+                        reports.Report(new BtReport
+                        {
+                            Prompt = $"Your character automatically ate {item.Id} ({startSaturation} saturation -> {(int)hunger.Amount} saturation)"
+                        });
+                    }
                     return Status.Success;
                 }
             }

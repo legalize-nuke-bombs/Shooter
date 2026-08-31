@@ -1,4 +1,5 @@
 ﻿using Shooter.Game.AI;
+using Shooter.Game.AI.Bt;
 using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
@@ -12,21 +13,31 @@ namespace Shooter.Game.Llm
 
         private Llm llm;
         private AICharacterRelation characterRelation;
+        private BtReports btReports;
 
         private void Awake()
         {
             llm = GetComponent<Llm>();
             characterRelation = GetComponent<AICharacterRelation>();
+            btReports = GetComponent<BtReports>();
         }
 
         private void OnEnable()
         {
             characterRelation.OnDamagedCallback += OnDamaged;
+            btReports.OnReport += OnBtReport;
         }
 
         private void OnDisable()
         {
             characterRelation.OnDamagedCallback -= OnDamaged;
+            btReports.OnReport -= OnBtReport;
+        }
+
+        private void OnBtReport(BtReport report)
+        {
+            Log.Info("OnBtReport");
+            llm.Notice(report.Prompt, report.Urgent);
         }
 
         private void OnDamaged(AICharacterRelation.OnDamagedCallbackData data)
