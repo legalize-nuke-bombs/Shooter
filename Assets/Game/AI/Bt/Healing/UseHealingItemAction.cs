@@ -66,7 +66,16 @@ namespace Shooter.Game.AI.Bt.Healing
             }
 
             Log.Info($"Entity {Agent.Value.name} used heal {bestItemId.Value} by behavior graph, missing {missing}");
+            int startHp = (int)health.Hp;
             inventory.UseStackable(bestItemId.Value);
+            BtReports reports = Agent.Value.GetComponent<BtReports>();
+            if (reports != null)
+            {
+                reports.Report(new BtReport
+                {
+                    Prompt = $"Your character automatically healed using {bestItemId.Value} ({startHp}hp -> {(int)health.Hp}hp)"
+                });
+            }
             return Status.Success;
         }
     }
