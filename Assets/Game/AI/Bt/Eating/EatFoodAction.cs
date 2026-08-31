@@ -7,7 +7,7 @@ using Unity.Properties;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
 
-namespace Shooter.Game.AI.Bt
+namespace Shooter.Game.AI.Bt.Eating
 {
     [Serializable, GeneratePropertyBag]
     [NodeDescription(

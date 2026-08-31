@@ -161,12 +161,6 @@ PrefabInstance:
       addedObject: {fileID: 6832720465051325686}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3419955365628013121}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7200842630456071910}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6825654874020954133}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
@@ -570,38 +564,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fecc3162bad46f39d2623cffaf9a447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmAIObserver
---- !u!114 &3419955365628013121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ac4df7c0a34b9e87b664ad14a2c180, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.Eater.AIEater
-  ShowTopMostFoldoutHeaderGroup: 1
-  timerInterval: 2.5
-  hungerThreshold: 20
---- !u!114 &7200842630456071910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6ff57c47ff24433a8f96324fb67d3c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.Healer.AIHealer
-  ShowTopMostFoldoutHeaderGroup: 1
-  timerInterval: 2.5
-  healthThreshold: 95
-  underHealPenaltyMultiplier: 1
-  overHealBasePenaltyMultiplier: 1
 --- !u!114 &6825654874020954133
 MonoBehaviour:
   m_ObjectHideFlags: 0
