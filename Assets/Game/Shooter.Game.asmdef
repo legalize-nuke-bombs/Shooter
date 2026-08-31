@@ -6,6 +6,7 @@
     "Shooter.Configuring",
     "Shooter.Accounts",
     "Unity.Netcode.Runtime",
+    "Unity.Behavior",
     "Unity.Animation.Rigging",
     "Unity.Collections",
     "Unity.Nuget.Newtonsoft-Json",
