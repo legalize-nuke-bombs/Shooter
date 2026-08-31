@@ -4,7 +4,7 @@ using Unity.Behavior;
 using Unity.Properties;
 using UnityEngine;
 
-namespace Shooter.Game.AI.Bt
+namespace Shooter.Game.AI.Bt.Eating
 {
     [Serializable, GeneratePropertyBag]
     [Condition(
