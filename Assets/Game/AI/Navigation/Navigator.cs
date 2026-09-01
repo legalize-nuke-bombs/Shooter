@@ -56,17 +56,7 @@ namespace Shooter.Game.AI.Navigation
             NetworkManager.NetworkTickSystem.Tick -= Step;
         }
 
-        public State Walk(Vector3 target)
-        {
-            return Go(target, false);
-        }
-
-        public State Run(Vector3 target)
-        {
-            return Go(target, true);
-        }
-
-        private State Go(Vector3 target, bool sprint)
+        public State Walk(Vector3 target, bool sprint = false)
         {
             sprinting = sprint;
 
@@ -123,7 +113,7 @@ namespace Shooter.Game.AI.Navigation
             if (Strayed(position))
             {
                 Log.Info($"Entity {name} strayed off its path, replotting");
-                Go(destination, sprinting);
+                Walk(destination, sprinting);
                 return;
             }
 
