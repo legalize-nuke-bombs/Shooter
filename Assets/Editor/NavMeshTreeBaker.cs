@@ -1,8 +1,11 @@
 using System.Diagnostics;
+using System.IO;
 using Shooter.Logging;
 using Unity.AI.Navigation;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Shooter.Editing
 {
@@ -32,10 +35,34 @@ namespace Shooter.Editing
                 Object.DestroyImmediate(proxies);
             }
 
-            foreach (NavMeshSurface surface in surfaces) EditorUtility.SetDirty(surface);
+            foreach (NavMeshSurface surface in surfaces)
+            {
+                Persist(surface);
+                EditorUtility.SetDirty(surface);
+            }
+
             AssetDatabase.SaveAssets();
 
             Log.Info($"Baked {surfaces.Length} navmesh surfaces with tree proxies in {stopwatch.ElapsedMilliseconds} ms");
+        }
+
+        private static void Persist(NavMeshSurface surface)
+        {
+            NavMeshData data = surface.navMeshData;
+            if (data == null || EditorUtility.IsPersistent(data)) return;
+
+            string scenePath = surface.gameObject.scene.path;
+            string sceneDirectory = Path.GetDirectoryName(scenePath);
+            string sceneName = Path.GetFileNameWithoutExtension(scenePath);
+            string folder = $"{sceneDirectory}/{sceneName}";
+            if (!AssetDatabase.IsValidFolder(folder)) AssetDatabase.CreateFolder(sceneDirectory, sceneName);
+
+            string path = $"{folder}/NavMesh-{surface.name}.asset";
+            data.name = $"NavMesh-{surface.name}";
+            AssetDatabase.CreateAsset(data, path);
+            EditorSceneManager.MarkSceneDirty(surface.gameObject.scene);
+
+            Log.Info($"Navmesh data of {surface.name} saved to {path}");
         }
 
         private static GameObject BuildTreeProxies()
