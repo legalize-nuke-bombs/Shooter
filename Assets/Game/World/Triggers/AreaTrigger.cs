@@ -13,12 +13,15 @@ namespace Shooter.Game.World
 
         private MainTriggerable mainTriggerable;
 
+        private Character owner;
+
         private static int characterLayer = -1;
         private static int CharacterLayer => characterLayer != -1 ? characterLayer : characterLayer = LayerMask.NameToLayer("Character");
 
         private void Awake()
         {
             mainTriggerable = GetComponent<MainTriggerable>();
+            owner = GetComponentInParent<Character>();
 
             SphereCollider sphere = GetComponent<SphereCollider>();
             if (!sphere.isTrigger) Log.Warn("Sphere must have a trigger!");
@@ -36,6 +39,8 @@ namespace Shooter.Game.World
                 Log.Warn($"Body {target.name} has no Character component");
                 return;
             }
+
+            if (character == owner) return;
 
             mainTriggerable.OnTrigger(character);
         }

@@ -13,11 +13,6 @@ namespace Shooter.Game.World
 
         public void OnTrigger(Character character)
         {
-            if (gameObject == character.gameObject)
-            {
-                return;
-            }
-
             Movement movement = character.GetComponent<Movement>();
             if (movement == null) return;
 
