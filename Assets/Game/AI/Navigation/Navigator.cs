@@ -1,9 +1,10 @@
+using Shooter.Game.Body;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Shooter.Game.Body
+namespace Shooter.Game.AI.Navigation
 {
     [RequireComponent(typeof(Movement))]
     public class Navigator : NetworkBehaviour
