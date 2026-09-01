@@ -56,7 +56,17 @@ namespace Shooter.Game.AI.Navigation
             NetworkManager.NetworkTickSystem.Tick -= Step;
         }
 
-        public void Walk(Vector3 target, bool sprint = false)
+        public State Walk(Vector3 target)
+        {
+            return Go(target, false);
+        }
+
+        public State Run(Vector3 target)
+        {
+            return Go(target, true);
+        }
+
+        private State Go(Vector3 target, bool sprint)
         {
             sprinting = sprint;
 
@@ -65,11 +75,12 @@ namespace Shooter.Game.AI.Navigation
                 Log.Info($"Entity {name} found no path to {target}");
                 Progress = State.Unreachable;
                 movement.Halt();
-                return;
+                return Progress;
             }
 
-            Log.Info($"Entity {name} walks to {destination} over {cornerCount} corners");
+            Log.Info($"Entity {name} {(sprint ? "runs" : "walks")} to {destination} over {cornerCount} corners");
             Progress = State.Walking;
+            return Progress;
         }
 
         public void Stop()
@@ -112,7 +123,7 @@ namespace Shooter.Game.AI.Navigation
             if (Strayed(position))
             {
                 Log.Info($"Entity {name} strayed off its path, replotting");
-                Walk(destination, sprinting);
+                Go(destination, sprinting);
                 return;
             }
 
