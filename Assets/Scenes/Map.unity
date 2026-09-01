@@ -2106,6 +2106,100 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92639011d2d4c504e80f68a4f024006f, type: 3}
+--- !u!1 &500883575
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 500883576}
+  - component: {fileID: 500883580}
+  - component: {fileID: 500883579}
+  - component: {fileID: 500883578}
+  - component: {fileID: 500883577}
+  m_Layer: 0
+  m_Name: CatchTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &500883576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500883575}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1666951743}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &500883577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500883575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4343521fa56040a791814871aff3cd29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.AreaTrigger
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &500883578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500883575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8340a27709c74e679cc0095e7ce2d2c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.SpawnTeleport
+  sound: {fileID: 11400000, guid: 283dbd0dbf7c47e887681ac86f8750d0, type: 2}
+--- !u!114 &500883579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500883575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 658a7dc00bbc4d9997cc3be80a247a2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.MainTriggerable
+--- !u!135 &500883580
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500883575}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &505927907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6132,88 +6226,25 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6542301574840519852, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2319365671940130797, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 500883576}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1666951747}
-    - targetCorrespondingSourceObject: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1666951746}
-    - targetCorrespondingSourceObject: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1666951745}
-    - targetCorrespondingSourceObject: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1666951744}
-    - targetCorrespondingSourceObject: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1666951743}
   m_SourcePrefab: {fileID: 100100000, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
 --- !u!1 &1666951742 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
   m_PrefabInstance: {fileID: 1666951741}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1666951743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!4 &1666951743 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2319365671940130797, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
+  m_PrefabInstance: {fileID: 1666951741}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666951742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8340a27709c74e679cc0095e7ce2d2c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.SpawnTeleport
-  sound: {fileID: 11400000, guid: 283dbd0dbf7c47e887681ac86f8750d0, type: 2}
---- !u!114 &1666951744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666951742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4343521fa56040a791814871aff3cd29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.AreaTrigger
-  ShowTopMostFoldoutHeaderGroup: 1
---- !u!135 &1666951745
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666951742}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1666951746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666951742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 658a7dc00bbc4d9997cc3be80a247a2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.MainTriggerable
 --- !u!114 &1666951747
 MonoBehaviour:
   m_ObjectHideFlags: 0
