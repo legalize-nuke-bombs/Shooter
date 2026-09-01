@@ -1,3 +1,4 @@
+using System;
 using Shooter.Game.Body;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -36,11 +37,15 @@ namespace Shooter.Game.AI.Navigation
 
         public State Progress { get; private set; } = State.Idle;
 
+        public Vector3 Destination => destination;
+
         private void Awake()
         {
             movement = GetComponent<Movement>();
             path = new NavMeshPath();
         }
+
+        public event Action<State> Finished;
 
         public override void OnNetworkSpawn()
         {
@@ -107,13 +112,14 @@ namespace Shooter.Game.AI.Navigation
                 Log.Info($"Entity {name} arrived at {destination}");
                 Progress = State.Arrived;
                 movement.Halt();
+                Finished?.Invoke(Progress);
                 return;
             }
 
             if (Strayed(position))
             {
                 Log.Info($"Entity {name} strayed off its path, replotting");
-                Walk(destination, sprinting);
+                if (Walk(destination, sprinting) == State.Unreachable) Finished?.Invoke(Progress);
                 return;
             }
 
