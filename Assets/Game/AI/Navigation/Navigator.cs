@@ -10,14 +10,6 @@ namespace Shooter.Game.AI.Navigation
     [RequireComponent(typeof(Movement))]
     public class Navigator : NetworkBehaviour
     {
-        public enum State
-        {
-            Idle,
-            Walking,
-            Arrived,
-            Unreachable
-        }
-
         private const float CornerReach = 0.35f;
         private const float SampleReach = 2f;
         private const float StrayLimit = 2.5f;
@@ -25,27 +17,36 @@ namespace Shooter.Game.AI.Navigation
         private const int MaxCorners = 64;
 
         private static readonly Journal Log = Logs.Here();
+        
+        private Movement movement;
+        private NavMeshPath path;
 
         private readonly Vector3[] corners = new Vector3[MaxCorners];
         private int cornerCount;
-        private Vector3 destination;
-
-        private Movement movement;
         private int nextCorner;
-        private NavMeshPath path;
-        private bool sprinting;
 
-        public State Progress { get; private set; } = State.Idle;
+        public NavigatorStatus Status { get; private set; } = NavigatorStatus.Idle;
+        public string TaskName { get; private set; }
+        public bool Sprinting { get; private set; }
+        public Vector3 Destination { get; private set; }
 
-        public Vector3 Destination => destination;
+        public struct CallbackData
+        {
+            public NavigatorStatus Status { get; set; }
+            public string TaskName { get; set; }
+            public bool Sprinting { get; set; }
+            public Vector3 Destination { get; set; }
+            public string InterrupterName { get; set; }
+        }
+
+        private Action<CallbackData> onFinished;
+        private bool finishing;
 
         private void Awake()
         {
             movement = GetComponent<Movement>();
             path = new NavMeshPath();
         }
-
-        public event Action<State> Finished;
 
         public override void OnNetworkSpawn()
         {
@@ -61,27 +62,77 @@ namespace Shooter.Game.AI.Navigation
             NetworkManager.NetworkTickSystem.Tick -= Step;
         }
 
-        public State Walk(Vector3 target, bool sprint = false)
+        public void GoTo(string taskName, bool sprint, Action<CallbackData> onFinish, Vector3 target)
         {
-            sprinting = sprint;
+            if (finishing)
+            {
+                Log.Error($"Entity {name} rejects task {taskName}: GoTo called from a finish callback");
+                return;
+            }
 
+            Interrupt(taskName);
+
+            TaskName = taskName;
+            Sprinting = sprint;
+            onFinished = onFinish;
+
+            Replot(target);
+        }
+
+        public void Interrupt(string interrupterName)
+        {
+            if (Status != NavigatorStatus.Walking) return;
+
+            Log.Info($"Entity {name} interrupted task {TaskName} by {interrupterName}");
+            Status = NavigatorStatus.Interrupted;
+            movement.Halt();
+            Finish(Snapshot(NavigatorStatus.Interrupted, Destination, interrupterName));
+        }
+
+        private void Replot(Vector3 target)
+        {
             if (!TryPlot(target))
             {
                 Log.Info($"Entity {name} found no path to {target}");
-                Progress = State.Unreachable;
+                Status = NavigatorStatus.Unreachable;
                 movement.Halt();
-                return Progress;
+                Finish(Snapshot(NavigatorStatus.Unreachable, target));
+                return;
             }
 
-            Log.Info($"Entity {name} {(sprint ? "runs" : "walks")} to {destination} over {cornerCount} corners");
-            Progress = State.Walking;
-            return Progress;
+            Log.Info($"Entity {name} going to {Destination} over {cornerCount} corners");
+            Status = NavigatorStatus.Walking;
         }
 
-        public void Stop()
+        private void Finish(CallbackData data)
         {
-            Progress = State.Idle;
-            movement.Halt();
+            Action<CallbackData> callback = onFinished;
+            if (callback == null) return;
+
+            finishing = true;
+
+            try
+            {
+                callback.Invoke(data);
+            }
+            catch (Exception exception)
+            {
+                Log.Error($"Entity {name} finish callback of task {data.TaskName} failed: {exception}");
+            }
+
+            finishing = false;
+        }
+
+        private CallbackData Snapshot(NavigatorStatus status, Vector3 destination, string interrupterName = null)
+        {
+            return new CallbackData
+            {
+                Status = status,
+                TaskName = TaskName,
+                Sprinting = Sprinting,
+                Destination = destination,
+                InterrupterName = interrupterName
+            };
         }
 
         private bool TryPlot(Vector3 target)
@@ -94,7 +145,7 @@ namespace Shooter.Game.AI.Navigation
             cornerCount = path.GetCornersNonAlloc(corners);
             if (cornerCount == 0) return false;
 
-            destination = to.position;
+            Destination = to.position;
             nextCorner = 0;
             return true;
         }
@@ -102,24 +153,24 @@ namespace Shooter.Game.AI.Navigation
         private void Step()
         {
             if (!isActiveAndEnabled) return;
-            if (Progress != State.Walking) return;
+            if (Status != NavigatorStatus.Walking) return;
 
             Vector3 position = transform.position;
             while (nextCorner < cornerCount && Flat(corners[nextCorner] - position).magnitude < CornerReach) nextCorner++;
 
             if (nextCorner >= cornerCount)
             {
-                Log.Info($"Entity {name} arrived at {destination}");
-                Progress = State.Arrived;
+                Log.Info($"Entity {name} arrived at {Destination}");
+                Status = NavigatorStatus.Arrived;
                 movement.Halt();
-                Finished?.Invoke(Progress);
+                Finish(Snapshot(NavigatorStatus.Arrived, Destination));
                 return;
             }
 
             if (Strayed(position))
             {
                 Log.Info($"Entity {name} strayed off its path, replotting");
-                if (Walk(destination, sprinting) == State.Unreachable) Finished?.Invoke(Progress);
+                Replot(Destination);
                 return;
             }
 
@@ -128,7 +179,7 @@ namespace Shooter.Game.AI.Navigation
             float dt = NetworkManager.LocalTime.FixedDeltaTime;
             float yaw = Mathf.MoveTowardsAngle(movement.Yaw, wantedYaw, TurnSpeed * dt);
 
-            movement.Steer(Vector2.up, yaw, 0f, sprinting);
+            movement.Steer(Vector2.up, yaw, 0f, Sprinting);
         }
 
         private bool Strayed(Vector3 position)
