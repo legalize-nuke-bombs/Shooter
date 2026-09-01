@@ -72,6 +72,11 @@ namespace Shooter.Game.Body
             if (tick <= steeredAt) return;
             steeredAt = tick;
 
+            Steer(move, yaw, look, sprint);
+        }
+
+        public void Steer(Vector2 move, float yaw, float look, bool sprint)
+        {
             steering = Vector2.ClampMagnitude(Finite(move), 1f);
             transform.rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
             pitch.Value = Mathf.Clamp(Finite(look), -PitchLimit, PitchLimit);
