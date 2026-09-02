@@ -7,26 +7,26 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 {
     [Serializable, GeneratePropertyBag]
     [Condition(
-        name: "Order Changed",
+        name: "Custom Order Changed",
         category: "Conditions",
-        story: "[Agent] order has changed",
+        story: "[Agent] custom order has changed",
         id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a06")]
-    public partial class OrderChangedCondition : Condition
+    public partial class BtCustomOrderChangedCondition : Condition
     {
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
-        private BtCustomOrderQueue orders;
+        private BtCustomOrderQueue customOrders;
         private BtCustomOrder seen;
 
         public override void OnStart()
         {
-            orders = Agent.Value == null ? null : Agent.Value.GetComponent<BtCustomOrderQueue>();
-            seen = orders == null ? null : orders.Current;
+            customOrders = Agent.Value == null ? null : Agent.Value.GetComponent<BtCustomOrderQueue>();
+            seen = customOrders == null ? null : customOrders.Current;
         }
 
         public override bool IsTrue()
         {
-            return orders != null && !ReferenceEquals(orders.Current, seen);
+            return customOrders != null && !ReferenceEquals(customOrders.Current, seen);
         }
     }
 }
