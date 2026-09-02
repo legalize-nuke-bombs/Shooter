@@ -53,8 +53,7 @@ namespace Shooter.Game.Llm
 
         private string Whereabouts(MainDigestible entity, Vector3 eyes)
         {
-            Vector3 offset = entity.transform.position - eyes;
-            return Mathf.RoundToInt(offset.magnitude) + " m, " + Cardinal.Side(offset);
+            return Cardinal.Whereabouts(entity.transform.position - eyes);
         }
     }
 }

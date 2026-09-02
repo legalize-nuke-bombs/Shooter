@@ -4,12 +4,12 @@ namespace Shooter.Game.World
 {
     public static class Cardinal
     {
+        public const string Degree = "\u00B0";
+
         private static readonly string[] Sides =
         {
             "north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"
         };
-
-        public static readonly string Listed = string.Join(", ", Sides);
 
         public static string Side(float yaw)
         {
@@ -18,28 +18,23 @@ namespace Shooter.Game.World
 
         public static string Side(Vector3 direction)
         {
-            return Side(Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
+            return Side(Yaw(direction));
         }
 
-        public static bool TryYaw(string side, out float yaw)
+        public static float Yaw(Vector3 direction)
         {
-            string wanted = Plain(side);
-
-            for (int i = 0; i < Sides.Length; i++)
-            {
-                if (Plain(Sides[i]) != wanted) continue;
-
-                yaw = i * 45f;
-                return true;
-            }
-
-            yaw = 0f;
-            return false;
+            return Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         }
 
-        private static string Plain(string side)
+        public static int Bearing(float yaw)
         {
-            return (side ?? "").Trim().ToLowerInvariant().Replace("-", "").Replace(" ", "");
+            return (Mathf.RoundToInt(yaw) % 360 + 360) % 360;
+        }
+
+        public static string Whereabouts(Vector3 offset)
+        {
+            float yaw = Yaw(offset);
+            return Mathf.RoundToInt(offset.magnitude) + " m, " + Side(yaw) + " (" + Bearing(yaw) + Degree + ")";
         }
     }
 }
