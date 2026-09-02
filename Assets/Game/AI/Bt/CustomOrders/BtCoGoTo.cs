@@ -1,4 +1,5 @@
 ﻿using Shooter.Game.Core.Saves;
+using Shooter.Game.World;
 using UnityEngine;
 
 namespace Shooter.Game.AI.Bt.CustomOrders
@@ -33,9 +34,10 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             Sprint = sd.Sprint;
         }
 
-        protected override string PromptRawDescription()
+        protected override string PromptRawDescription(Vector3 origin)
         {
-            return (Sprint ? "Running" : "Walking") + " to " + Destination + " (" + Name + ")";
+            Vector3 offset = Destination - origin;
+            return (Sprint ? "Running" : "Walking") + " to " + Name + ": " + Mathf.RoundToInt(offset.magnitude) + " m, " + Cardinal.Side(offset) + " left";
         }
     }
 }
