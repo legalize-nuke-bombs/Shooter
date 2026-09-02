@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.AI.Bt.CustomOrders
 {
@@ -26,10 +27,10 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             Status = BtCustomOrderStatus.Pending;
         }
 
-        protected abstract string PromptRawDescription();
-        public string PromptDescription()
+        protected abstract string PromptRawDescription(Vector3 origin);
+        public string PromptDescription(Vector3 origin)
         {
-            return $"[{Status.ToString()}] " + PromptRawDescription();
+            return $"[{Status.ToString()}] " + PromptRawDescription(origin);
         }
 
         public static BtCustomOrder Create(string kind)

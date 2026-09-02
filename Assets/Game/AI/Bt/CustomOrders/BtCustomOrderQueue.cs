@@ -88,11 +88,16 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 
         public string Digest(DigestionDetail detail)
         {
-            if (detail == DigestionDetail.Brief || order == null)
+            if (detail == DigestionDetail.Brief)
             {
                 return null;
             }
-            return order.PromptDescription();
+
+            if (order == null)
+            {
+                return "No active second-level behavior tree actions";
+            }
+            return "Second-level behaviour tree action: " + order.PromptDescription(transform.position);
         }
 
         public DigestionPriority Priority => DigestionPriority.High;

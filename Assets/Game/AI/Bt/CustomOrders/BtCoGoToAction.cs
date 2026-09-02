@@ -74,7 +74,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
                     Complete($"You have arrived at {customOrder.Name}");
                     return Status.Success;
                 case NavigatorStatus.Unreachable:
-                    Complete($"You could not reach {customOrder.Name}: there is no way there, the order is dropped");
+                    Complete($"You could not reach {customOrder.Name}: there is no way there, the action is dropped");
                     return Status.Failure;
                 default:
                     Log.Info($"Entity {Agent.Value.name} lost the way to {customOrder.Name}: {outcome.Value.Status} by {outcome.Value.InterrupterName}");
