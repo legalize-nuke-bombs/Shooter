@@ -97,7 +97,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             {
                 return "No active second-level behavior tree actions";
             }
-            return "Second-level behaviour tree action: " + order.PromptDescription(transform.position);
+            return "Second-level behaviour tree action: " + order.PromptDescription(gameObject);
         }
 
         public DigestionPriority Priority => DigestionPriority.High;
