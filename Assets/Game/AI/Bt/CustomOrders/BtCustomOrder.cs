@@ -27,10 +27,10 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             Status = BtCustomOrderStatus.Pending;
         }
 
-        protected abstract string PromptRawDescription(Vector3 origin);
-        public string PromptDescription(Vector3 origin)
+        protected abstract string PromptRawDescription(GameObject body);
+        public string PromptDescription(GameObject body)
         {
-            return $"[{Status.ToString()}] " + PromptRawDescription(origin);
+            return $"[{Status.ToString()}] " + PromptRawDescription(body);
         }
 
         public static BtCustomOrder Create(string kind)

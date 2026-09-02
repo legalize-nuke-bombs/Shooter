@@ -34,9 +34,9 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             Sprint = sd.Sprint;
         }
 
-        protected override string PromptRawDescription(Vector3 origin)
+        protected override string PromptRawDescription(GameObject body)
         {
-            Vector3 offset = Destination - origin;
+            Vector3 offset = Destination - body.transform.position;
             return (Sprint ? "Running" : "Walking") + " to " + Name + ": " + Mathf.RoundToInt(offset.magnitude) + " m, " + Cardinal.Side(offset) + " left";
         }
     }
