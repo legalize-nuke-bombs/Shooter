@@ -78,6 +78,14 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             order = null;
         }
 
+        public bool Complete(BtCustomOrder finished)
+        {
+            if (!ReferenceEquals(order, finished)) return false;
+
+            order = null;
+            return true;
+        }
+
         public string Digest(DigestionDetail detail)
         {
             if (detail == DigestionDetail.Brief || order == null)
