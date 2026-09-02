@@ -1,7 +1,68 @@
-﻿namespace Shooter.Game.Llm.GoTo
+﻿using Shooter.Game.AI.Bt.CustomOrders;
+using Shooter.Game.AI.Navigation;
+using Shooter.Game.World;
+using UnityEngine;
+using UnityEngine.AI;
+
+namespace Shooter.Game.Llm
 {
-    public class GoToTool
+    [RequireComponent(typeof(BtCustomOrderQueue))]
+    [RequireComponent(typeof(Navigator))]
+    public sealed class GoToTool : LlmTool<GoToArguments>
     {
-        
+        private const float GroundReach = 5f;
+
+        private BtCustomOrderQueue customOrders;
+        private Navigator navigator;
+
+        public override string Name => "go_to";
+
+        public override string Description =>
+            @$"
+Walk in a direction for a distance by starting a second-level behavior tree action.
+direction: one of {Cardinal.Listed}, the same words your senses use.
+distance: whole meters.
+sprint: true to run; running burns stamina fast.
+force: by default the call is refused while another second-level action is active; set force to true to drop it and start this one at once.
+The result comes at once, the walk itself takes time: you will be notified when you arrive or when the way turns out blocked. Use look_at_yourself to check the active second-level action.
+";
+
+        protected override void Awake()
+        {
+            base.Awake();
+            customOrders = GetComponent<BtCustomOrderQueue>();
+            navigator = GetComponent<Navigator>();
+        }
+
+        protected override string Execute(GoToArguments arguments, LlmCallContext context)
+        {
+            if (!Cardinal.TryYaw(arguments.Direction, out float yaw))
+                return $"Unknown direction {arguments.Direction}, use one of {Cardinal.Listed}";
+            if (arguments.Distance < 1) return "Distance must be at least 1 meter";
+
+            string label = $"the point {arguments.Distance} m {Cardinal.Side(yaw)}";
+            Vector3 target = transform.position + Quaternion.Euler(0f, yaw, 0f) * Vector3.forward * arguments.Distance;
+
+            if (!NavMesh.SamplePosition(target, out NavMeshHit ground, GroundReach, NavMesh.AllAreas))
+                return $"There is no walkable ground at {label}";
+            if (!navigator.CanReach(ground.position))
+                return $"There is no way from here to {label}";
+
+            var order = new BtCoGoTo { Name = label, Destination = ground.position, Sprint = arguments.Sprint };
+            string started = order.PromptDescription(gameObject);
+
+            if (arguments.Force)
+            {
+                BtCustomOrder dropped = customOrders.Current;
+                customOrders.ForcePut(order);
+                return dropped == null
+                    ? $"Started: {started}"
+                    : $"Dropped: {dropped.PromptDescription(gameObject)}\nStarted: {started}";
+            }
+
+            if (customOrders.TryPut(order)) return $"Started: {started}";
+
+            return $"Refused, another second-level action is active: {customOrders.Current.PromptDescription(gameObject)}\nCall again with force=true to replace it, or halt_bt to stop it";
+        }
     }
 }
