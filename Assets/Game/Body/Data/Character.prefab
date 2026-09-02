@@ -34,6 +34,7 @@ GameObject:
   - component: {fileID: 2104373744681545555}
   - component: {fileID: -6602629386385626499}
   - component: {fileID: 6251458730921147201}
+  - component: {fileID: 2519498067671057823}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -147,7 +148,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -329,7 +330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c4f0350a0545bea50bbfcc987b88f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Identity.PersistentId
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &-5531865876210179846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,6 +396,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.WeaponView
   ShowTopMostFoldoutHeaderGroup: 1
+  gripAnchor: {x: 0.12, y: -0.28, z: 0.3}
+  rightElbow: {x: 0.55, y: 0.25, z: -0.25}
+  leftElbow: {x: -0.35, y: 0, z: 0.15}
 --- !u!114 &6370029383145960073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,3 +466,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6251fde9ce1640868a49178a9257c30a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableTransform
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &2519498067671057823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6822d4cb2224f5bbd96ebc54848aef7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectRuntimeId
