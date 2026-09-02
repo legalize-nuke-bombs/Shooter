@@ -13,7 +13,6 @@ namespace Shooter.Editing
     {
         private const string CharacterPrefabPath = "Assets/Game/Body/Data/Character.prefab";
         private const string AgentSettingsPath = "ProjectSettings/NavMeshAreas.asset";
-        private const float RadiusForgiveness = 0.1f;
         private const float SlopeForgiveness = 5f;
         private static readonly Journal Log = Logs.Here();
 
@@ -76,13 +75,13 @@ namespace Shooter.Editing
 
             var serialized = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath(AgentSettingsPath)[0]);
             SerializedProperty agent = serialized.FindProperty("m_Settings").GetArrayElementAtIndex(0);
-            agent.FindPropertyRelative("agentRadius").floatValue = controller.radius - RadiusForgiveness;
+            agent.FindPropertyRelative("agentRadius").floatValue = controller.radius;
             agent.FindPropertyRelative("agentHeight").floatValue = controller.height;
             agent.FindPropertyRelative("agentClimb").floatValue = controller.stepOffset;
             agent.FindPropertyRelative("agentSlope").floatValue = controller.slopeLimit - SlopeForgiveness;
             serialized.ApplyModifiedPropertiesWithoutUndo();
 
-            Log.Info($"Navmesh agent follows {character.name}: radius {controller.radius - RadiusForgiveness}, height {controller.height}, climb {controller.stepOffset}, slope {controller.slopeLimit - SlopeForgiveness}");
+            Log.Info($"Navmesh agent follows {character.name}: radius {controller.radius}, height {controller.height}, climb {controller.stepOffset}, slope {controller.slopeLimit - SlopeForgiveness}");
             return true;
         }
 
