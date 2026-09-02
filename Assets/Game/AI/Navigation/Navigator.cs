@@ -20,6 +20,7 @@ namespace Shooter.Game.AI.Navigation
         
         private Movement movement;
         private NavMeshPath path;
+        private NavMeshPath scratch;
 
         private readonly Vector3[] corners = new Vector3[MaxCorners];
         private int cornerCount;
@@ -46,6 +47,7 @@ namespace Shooter.Game.AI.Navigation
         {
             movement = GetComponent<Movement>();
             path = new NavMeshPath();
+            scratch = new NavMeshPath();
         }
 
         public override void OnNetworkSpawn()
@@ -87,6 +89,11 @@ namespace Shooter.Game.AI.Navigation
             Status = NavigatorStatus.Interrupted;
             movement.Halt();
             Finish(Snapshot(NavigatorStatus.Interrupted, Destination, interrupterName));
+        }
+
+        public bool CanReach(Vector3 target)
+        {
+            return Plot(target, scratch, out _);
         }
 
         private void Replot(Vector3 target)
@@ -137,16 +144,26 @@ namespace Shooter.Game.AI.Navigation
 
         private bool TryPlot(Vector3 target)
         {
-            if (!NavMesh.SamplePosition(transform.position, out NavMeshHit from, SampleReach, NavMesh.AllAreas)) return false;
-            if (!NavMesh.SamplePosition(target, out NavMeshHit to, SampleReach, NavMesh.AllAreas)) return false;
-            if (!NavMesh.CalculatePath(from.position, to.position, NavMesh.AllAreas, path)) return false;
-            if (path.status != NavMeshPathStatus.PathComplete) return false;
+            if (!Plot(target, path, out Vector3 destination)) return false;
 
             cornerCount = path.GetCornersNonAlloc(corners);
             if (cornerCount == 0) return false;
 
-            Destination = to.position;
+            Destination = destination;
             nextCorner = 0;
+            return true;
+        }
+
+        private bool Plot(Vector3 target, NavMeshPath into, out Vector3 destination)
+        {
+            destination = target;
+
+            if (!NavMesh.SamplePosition(transform.position, out NavMeshHit from, SampleReach, NavMesh.AllAreas)) return false;
+            if (!NavMesh.SamplePosition(target, out NavMeshHit to, SampleReach, NavMesh.AllAreas)) return false;
+            if (!NavMesh.CalculatePath(from.position, to.position, NavMesh.AllAreas, into)) return false;
+            if (into.status != NavMeshPathStatus.PathComplete) return false;
+
+            destination = to.position;
             return true;
         }
 
