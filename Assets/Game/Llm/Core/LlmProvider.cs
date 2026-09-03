@@ -29,9 +29,6 @@ namespace Shooter.Game.Llm
         public static async Task<LlmTurn> Request(LlmConfig config, string requestName, string system,
             IReadOnlyList<LlmMessage> history, IReadOnlyList<ILlmTool> tools, CancellationToken until)
         {
-            if (string.IsNullOrEmpty(config.Key))
-                throw new InvalidOperationException($"Llm key is not set in {GameConfig.FileName}");
-
             string requestId = $"{++requestNumber:d4}-{requestName}";
 
             var messages = new List<OpenAiMessage> { new() { Role = "system", Content = system } };

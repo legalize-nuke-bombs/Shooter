@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Shooter.Configuring;
 using UnityEngine.Networking;
 
 namespace Shooter.Game.Llm
@@ -21,6 +22,9 @@ namespace Shooter.Game.Llm
 
         public async Task<string> Request(string key, OpenAiRequest body, CancellationToken until)
         {
+            if (string.IsNullOrEmpty(key))
+                throw new InvalidOperationException($"Polza requires a key. Set it in {GameConfig.FileName}");
+
             var uri = new Uri($"https://{Host}/v1/chat/completions");
 
             using (var webRequest = new UnityWebRequest(uri, "POST"))
