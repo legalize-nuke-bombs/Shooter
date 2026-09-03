@@ -10,6 +10,9 @@ namespace Shooter.Game.Llm
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public OpenAiTool[] Tools { get; set; }
+
+        [JsonProperty("reasoning_effort", NullValueHandling = NullValueHandling.Ignore)]
+        public string ReasoningEffort { get; set; }
     }
 
     public class OpenAiMessage
