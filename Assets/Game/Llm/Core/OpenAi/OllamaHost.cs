@@ -30,7 +30,7 @@ namespace Shooter.Game.Llm
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.timeout = TimeoutSeconds;
                 webRequest.SetRequestHeader("Content-Type", "application/json");
-                webRequest.SetRequestHeader("Authorization", $"Bearer {key}");
+                if (!string.IsNullOrEmpty(key)) webRequest.SetRequestHeader("Authorization", $"Bearer {key}");
 
                 var completion = new TaskCompletionSource<bool>();
                 webRequest.SendWebRequest().completed += _ => completion.TrySetResult(true);
