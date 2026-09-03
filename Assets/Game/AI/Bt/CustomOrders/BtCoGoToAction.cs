@@ -10,7 +10,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 {
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
-        name: "Custom Order: Go To",
+        name: "Custom Order Go To",
         description: "Walks to the point of the current go_to custom order, then completes the custom order and reports the outcome.",
         story: "[Agent] follows the go_to custom order",
         category: "Action",
