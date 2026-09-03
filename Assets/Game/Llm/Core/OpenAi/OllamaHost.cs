@@ -11,7 +11,7 @@ namespace Shooter.Game.Llm
     public sealed class OllamaHost : IOpenAiHost
     {
         private const string Host = "localhost:11434";
-        private const int TimeoutSeconds = 90;
+        private const int TimeoutSeconds = 300;
 
         private static readonly JsonSerializerSettings Settings = new()
         {
@@ -21,6 +21,8 @@ namespace Shooter.Game.Llm
 
         public async Task<string> Request(string key, OpenAiRequest body, CancellationToken until)
         {
+            body.ReasoningEffort = "none";
+
             var uri = new Uri($"http://{Host}/v1/chat/completions");
 
             using (var webRequest = new UnityWebRequest(uri, "POST"))
