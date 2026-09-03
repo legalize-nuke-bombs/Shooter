@@ -8,7 +8,8 @@ namespace Shooter.Game.Llm
     {
         private static readonly Dictionary<string, Func<IOpenAiHost>> Hosts = new(StringComparer.OrdinalIgnoreCase)
         {
-            ["Polza"] = () => new PolzaHost()
+            ["Polza"] = () => new PolzaHost(),
+            ["Ollama"] = () => new OllamaHost()
         };
 
         public static IEnumerable<string> Providers => Hosts.Keys;
