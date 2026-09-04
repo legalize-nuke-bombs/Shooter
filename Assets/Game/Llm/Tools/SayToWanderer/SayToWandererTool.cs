@@ -1,4 +1,5 @@
 using System;
+using Shooter.Game.Core;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm.SayToWanderer
@@ -35,6 +36,12 @@ namespace Shooter.Game.Llm.SayToWanderer
         protected override string Execute(SayToWandererArguments arguments, LlmCallContext context)
         {
             if (string.IsNullOrEmpty(arguments.Text)) return "Nothing to say";
+
+            Character wanderer = Character.Of(arguments.WandererId, Inactive.Exclude);
+            if (wanderer == null || !wanderer.TryGetComponent(out Player _))
+            {
+                return $"Failed to find wanderer {arguments.WandererId}";
+            }
 
             llm.Answer(arguments.WandererId, arguments.Text);
             return $"Said to {arguments.WandererId}";
