@@ -51,18 +51,18 @@ namespace Shooter.Game.Llm
             return null;
         }
 
-        private void RegisterTick()
+        private void RegisterTick(Type req)
         {
+            Log.Info($"Entity {entityName} ticked, reason {req}");
             foreach (LlmChildTicker ticker in tickers) ticker.RegisterTick();
         }
 
         private async void Tick(Type req)
         {
-            Log.Info($"Entity {name} will tick, ticker {req}");
             try
             {
                 bool success = await llm.Tick();
-                if (success) RegisterTick();
+                if (success) RegisterTick(req);
             }
             catch (Exception ex)
             {
