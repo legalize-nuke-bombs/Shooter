@@ -9,6 +9,10 @@ namespace Shooter.Game.Llm
         [SerializeField] private float pendingInterval = 2.5f;
         private float? pendingSince;
 
+        public override void OnStart()
+        {
+        }
+
         public override void RegisterTick()
         {
         }
