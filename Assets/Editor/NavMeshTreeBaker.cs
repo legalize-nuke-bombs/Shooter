@@ -108,39 +108,55 @@ namespace Shooter.Editing
         {
             var root = new GameObject("TreeBakeProxies");
             int built = 0;
+            int shapes = 0;
 
             foreach (Terrain terrain in Terrain.activeTerrains)
             {
                 TerrainData data = terrain.terrainData;
 
                 TreePrototype[] prototypes = data.treePrototypes;
-                var capsules = new CapsuleCollider[prototypes.Length];
+                var colliders = new Collider[prototypes.Length][];
                 for (int i = 0; i < prototypes.Length; i++)
-                    capsules[i] = prototypes[i].prefab == null
-                        ? null
-                        : prototypes[i].prefab.GetComponentInChildren<CapsuleCollider>(true);
+                    colliders[i] = prototypes[i].prefab == null
+                        ? new Collider[0]
+                        : prototypes[i].prefab.GetComponentsInChildren<Collider>(true);
 
                 foreach (TreeInstance tree in data.treeInstances)
                 {
-                    CapsuleCollider capsule = capsules[tree.prototypeIndex];
-                    if (capsule == null) continue;
+                    if (colliders[tree.prototypeIndex].Length == 0) continue;
 
-                    var proxy = new GameObject("TreeProxy");
-                    proxy.transform.SetParent(root.transform, false);
-                    proxy.transform.position = terrain.transform.position + Vector3.Scale(tree.position, data.size);
+                    Transform proxy = new GameObject("TreeProxy").transform;
+                    proxy.SetParent(root.transform, false);
+                    proxy.SetPositionAndRotation(
+                        terrain.transform.position + Vector3.Scale(tree.position, data.size),
+                        Quaternion.Euler(0f, tree.rotation * Mathf.Rad2Deg, 0f));
+                    proxy.localScale = new Vector3(tree.widthScale, tree.heightScale, tree.widthScale);
 
-                    var collider = proxy.AddComponent<CapsuleCollider>();
-                    collider.radius = capsule.radius * tree.widthScale;
-                    collider.height = capsule.height * tree.heightScale;
-                    collider.center = Vector3.Scale(capsule.center,
-                        new Vector3(tree.widthScale, tree.heightScale, tree.widthScale));
+                    Transform prefab = prototypes[tree.prototypeIndex].prefab.transform;
+                    foreach (Collider collider in colliders[tree.prototypeIndex])
+                    {
+                        if (!collider.enabled) continue;
+
+                        Transform part = new GameObject(collider.name).transform;
+                        part.SetParent(proxy, false);
+                        part.localPosition = prefab.InverseTransformPoint(collider.transform.position);
+                        part.localRotation = Quaternion.Inverse(prefab.rotation) * collider.transform.rotation;
+                        part.localScale = Relative(collider.transform.lossyScale, prefab.lossyScale);
+                        EditorUtility.CopySerialized(collider, part.gameObject.AddComponent(collider.GetType()));
+                        shapes++;
+                    }
 
                     built++;
                 }
             }
 
-            Log.Info($"Built {built} tree proxies for the bake");
+            Log.Info($"Built {built} tree proxies carrying {shapes} colliders for the bake");
             return root;
+        }
+
+        private static Vector3 Relative(Vector3 scale, Vector3 root)
+        {
+            return new Vector3(scale.x / root.x, scale.y / root.y, scale.z / root.z);
         }
     }
 }
