@@ -21,8 +21,6 @@ namespace Shooter.Game.Llm
 
         public async Task<string> Request(string key, OpenAiRequest body, CancellationToken until)
         {
-            body.ReasoningEffort = "none";
-
             var uri = new Uri($"http://{Host}/v1/chat/completions");
 
             using (var webRequest = new UnityWebRequest(uri, "POST"))
