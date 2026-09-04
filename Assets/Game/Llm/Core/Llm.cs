@@ -125,12 +125,10 @@ namespace Shooter.Game.Llm
             if (askerId != null) table.Mark(askerId.Value);
         }
 
-        public bool Answer(long wandererId, string text)
+        public void Answer(long wandererId, string text)
         {
-            if (!table.Clear(wandererId)) return false;
-
+            table.Clear(wandererId);
             Answered?.Invoke(wandererId, text);
-            return true;
         }
 
         public LlmStatus Status()
@@ -247,7 +245,7 @@ namespace Shooter.Game.Llm
             if (history.Overflowing) seen.Append('\n').Append(ClearHeadDemand);
 
             if (asked.Count > 0)
-                seen.Append('\n').Append("You MUST answer the waiting wanderer(s) RIGHT NOW using the say_to_wanderer tool: ")
+                seen.Append('\n').Append("You must answer the waiting wanderer(s) using the say_to_wanderer tool: ")
                     .Append(string.Join(", ", asked)).Append('.');
 
             return seen.ToString();

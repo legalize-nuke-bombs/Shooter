@@ -21,11 +21,11 @@ namespace Shooter.Game.Llm.SayToWanderer
         protected override void OnStart()
         {
             llm = Self.GetComponent<Llm>();
+            table = Self.GetComponent<LlmPendingTable>();
             if (llm == null)
             {
                 Log.Error($"Entity {Self.name} does not have Llm component required by tool {Name}");
             }
-            table = Self.GetComponent<LlmPendingTable>();
             if (table == null)
             {
                 Log.Error($"Entity {Self.name} does not have LlmPendingTable component required by tool {Name}");
@@ -36,9 +36,8 @@ namespace Shooter.Game.Llm.SayToWanderer
         {
             if (string.IsNullOrEmpty(arguments.Text)) return "Nothing to say";
 
-            return llm.Answer(arguments.WandererId, arguments.Text)
-                ? $"Said to {arguments.WandererId}"
-                : $"No wanderer {arguments.WandererId} is waiting for your answer";
+            llm.Answer(arguments.WandererId, arguments.Text);
+            return $"Said to {arguments.WandererId}";
         }
     }
 }
