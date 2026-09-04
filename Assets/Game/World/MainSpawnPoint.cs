@@ -1,10 +1,13 @@
 using Shooter.Game.Body;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.World
 {
     public class MainSpawnPoint : MonoBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private const float Height = 2f;
         private const float Reach = 2f;
         private const float Barb = 0.3f;
@@ -13,6 +16,10 @@ namespace Shooter.Game.World
 
         private void Awake()
         {
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
             Current = this;
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Shooter.Game.Llm
+﻿namespace Shooter.Game.Llm.HaltBt
 {
     public class HaltBtArguments
     {

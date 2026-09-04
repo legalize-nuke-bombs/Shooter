@@ -33,9 +33,10 @@ namespace Shooter.Game.Llm
         [SerializeField] private float failureCooldown = 2.5f;
         [SerializeField] private int maxToolRounds = 10;
 
+        [SerializeReference, SubclassSelector] private List<LlmTool> abilities;
+
         private readonly SemaphoreSlim gate = new(1, 1);
         private readonly CancellationTokenSource life = new();
-        private LlmTool[] abilities;
         private string entityName;
 
         private LlmHistory history;
@@ -50,8 +51,14 @@ namespace Shooter.Game.Llm
         {
             history = GetComponent<LlmHistory>();
             table = GetComponent<LlmPendingTable>();
-            abilities = GetComponents<LlmTool>();
             entityName = name;
+            foreach (LlmTool ability in abilities)
+            {
+                ability.OnStart(new LlmInitContext()
+                {
+                    Self = gameObject
+                });
+            }
             Begin();
         }
 
@@ -179,7 +186,11 @@ namespace Shooter.Game.Llm
 
             history.Seen();
             history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation(asked) });
-            var context = new LlmCallContext { PromptedCount = history.Count };
+            var context = new LlmCallContext
+            {
+                Self = gameObject,
+                PromptedCount = history.Count
+            };
 
             LlmConfig config = Config.Read().Server.Llm;
             var tools = abilities.Where(ability => ability.Available).Cast<ILlmTool>().ToList();

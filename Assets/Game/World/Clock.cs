@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
+using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace Shooter.Game.World
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Clock : NetworkBehaviour, ISaveableComponent
     {
+        private static readonly Journal Log = Logs.Here();
+
         public const long DayLengthSeconds = 86400;
         private const float DayRealSeconds = 1200f;
         private const float GameSecondsPerRealSecond = DayLengthSeconds / DayRealSeconds;
@@ -82,6 +85,10 @@ namespace Shooter.Game.World
 
         private void Awake()
         {
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
             Current = this;
         }
 

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.mackysoft.serializereference-extensions": "https://github.com/mackysoft/Unity-SerializeReferenceExtensions.git?path=Assets/MackySoft/MackySoft.SerializeReferenceExtensions",
     "com.unity.ai.navigation": "2.0.14",
     "com.unity.animation.rigging": "1.4.1",
     "com.unity.behavior": "1.0.16",

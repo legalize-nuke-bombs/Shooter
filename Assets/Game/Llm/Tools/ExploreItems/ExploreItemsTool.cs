@@ -1,9 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
 
 namespace Shooter.Game.Llm.ExploreItems
 {
+    [Serializable]
     public class ExploreItemsTool : LlmTool<ExploreItemsArguments>
     {
         public override string Name => "explore_items";
@@ -14,6 +16,8 @@ Use this tool to examine the item by its ID.
 This tool displays a detailed description of the item, including its effects (satiation, healing, etc.).
 You can process any number of IDs at once.
 ";
+
+        public override void OnStart(LlmInitContext context) { }
 
         protected override string Execute(ExploreItemsArguments arguments, LlmCallContext context)
         {

@@ -1,16 +1,13 @@
 ﻿using System;
 using Shooter.Game.Core;
 using Shooter.Logging;
-using UnityEngine;
 
 namespace Shooter.Game.Llm.LookAtWanderer
 {
-    [RequireComponent(typeof(LlmPendingTable))]
-    [RequireComponent(typeof(Digester))]
+    [Serializable]
     public class LookAtWandererTool : LlmTool<LookAtWandererArguments>
     {
         private static readonly Journal Log = Logs.Here();
-        private Digester digester;
 
         private LlmPendingTable table;
 
@@ -24,11 +21,13 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
 
         public override bool Available => table.Any;
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            table = GetComponent<LlmPendingTable>();
-            digester = GetComponent<Digester>();
+            table = context.Self.GetComponent<LlmPendingTable>();
+            if (table == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have llm pending table component required by tool {Name}");
+            }
         }
 
         protected override string Execute(LookAtWandererArguments arguments, LlmCallContext context)
@@ -39,11 +38,11 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
             Character wanderer = Character.Of(wandererId, Inactive.Exclude);
             if (wanderer == null)
             {
-                Log.Warn($"Unregistered wanderer {wandererId} is waiting for an answer from {name}!");
+                Log.Warn($"Unregistered wanderer {wandererId} is waiting for an answer from {context.Self.name}!");
                 throw new ArgumentException($"Failed to find wanderer {wandererId}");
             }
 
-            return $"Wanderer {wandererId} state:\n" + digester.Of(wanderer.gameObject, DigestionDetail.Full);
+            return $"Wanderer {wandererId} state:\n" + Digester.Current.Of(wanderer.gameObject, DigestionDetail.Full);
         }
     }
 }

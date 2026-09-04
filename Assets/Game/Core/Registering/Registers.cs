@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Core
@@ -7,12 +8,18 @@ namespace Shooter.Game.Core
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Registers : MonoBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private readonly Dictionary<Type, Register> registers = new();
 
         public static Registers Current { get; private set; }
 
         private void Awake()
         {
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
             Current = this;
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +8,9 @@ using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.SendMessage
 {
-    [RequireComponent(typeof(Character))]
+    [Serializable]
     public sealed class SendMessageTool : LlmTool<SendMessageArguments>
     {
         private static readonly Journal Log = Logs.Here();
@@ -41,11 +42,18 @@ Mark messages as urgent only when truly necessary.
 Wanderers receive your messages immediately, regardless of the value of the `urgent` field.
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            ownCharacter = GetComponent<Character>();
-            ownNameable = GetComponent<Nameable>();
+            ownCharacter = context.Self.GetComponent<Character>();
+            ownNameable = context.Self.GetComponent<Nameable>();
+            if (ownCharacter == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have component character required by tool {Name}");
+            }
+            if (ownNameable == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have component nameable required by tool {Name}");
+            }
         }
 
         protected override string Execute(SendMessageArguments arguments, LlmCallContext context)
@@ -90,7 +98,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                     .Urgened(arguments.Urgent)
                 );
                 delivered.Add(targetId);
-                Log.Info($"Entity {name} said to {targetId}: {arguments.Content}");
+                Log.Info($"Entity {context.Self.name} said to {targetId}: {arguments.Content}");
             }
 
             var answer = new StringBuilder();

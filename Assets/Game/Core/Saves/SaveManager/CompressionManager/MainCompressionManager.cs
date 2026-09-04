@@ -38,6 +38,10 @@ namespace Shooter.Game.Core.Saves
             }
             Log.Info($"Entity {name} knows {byKey.Count} - {byExtension.Count} compression managers");
 
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
             Current = this;
         }
 

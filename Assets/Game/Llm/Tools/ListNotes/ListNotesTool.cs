@@ -1,11 +1,14 @@
+using System;
 using Shooter.Game.Llm.Notes;
-using UnityEngine;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm.ListNotes
 {
-    [RequireComponent(typeof(LlmNotes))]
+    [Serializable]
     public class ListNotesTool : LlmTool<ListNotesArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private LlmNotes notes;
 
         public override string Name => "list_notes";
@@ -16,10 +19,13 @@ Use this tool to list your notes: the name, the description and the last update 
 To see the content, use read_notes.
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
+            notes = context.Self.GetComponent<LlmNotes>();
+            if (notes == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have LlmNotes component required by tool {Name}");
+            }
         }
 
         protected override string Execute(ListNotesArguments arguments, LlmCallContext context)

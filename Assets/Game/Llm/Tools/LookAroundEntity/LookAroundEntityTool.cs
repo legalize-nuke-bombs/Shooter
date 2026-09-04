@@ -1,39 +1,34 @@
-﻿using Shooter.Game.Core;
+﻿using System;
+using Shooter.Game.Core;
 using Shooter.Logging;
-using UnityEngine;
 
 namespace Shooter.Game.Llm.LookAroundEntity
 {
-    [RequireComponent(typeof(WorldDigester))]
+    [Serializable]
     public class LookAroundEntityTool : LlmTool<LookAroundEntityArguments>
     {
         private static readonly Journal Log = Logs.Here();
-
-        private WorldDigester worldDigester;
 
         public override string Name => "look_around_entity";
 
         public override string Description =>
             "This tool shows everything around entity whose ID was passed. The greater the distance, the less detail is visible. You can use this tool to observe other characters.";
 
-        protected override void Awake()
-        {
-            base.Awake();
-            worldDigester = GetComponent<WorldDigester>();
-        }
+        public override void OnStart(LlmInitContext context)
+        {}
 
         protected override string Execute(LookAroundEntityArguments arguments, LlmCallContext context)
         {
             long targetId = arguments.TargetId;
 
-            Character id = Character.Of(targetId, Inactive.Exclude);
+            var id = Character.Of(targetId, Inactive.Exclude);
             if (id == null)
             {
-                Log.Info($"Entity {name} tried to look around unknown entity");
+                Log.Info($"Entity {context.Self.name} tried to look around unknown entity");
                 return $"Failed to find entity with ID {targetId}";
             }
 
-            return $"Objects around entity {targetId}:\n" + worldDigester.Digest(id.transform.position);
+            return $"Objects around entity {targetId}:\n" + WorldDigester.Current.Digest(id.transform.position);
         }
     }
 }

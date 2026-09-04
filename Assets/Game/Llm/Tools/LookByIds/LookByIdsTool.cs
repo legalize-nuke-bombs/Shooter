@@ -1,22 +1,19 @@
+using System;
 using System.Text;
 using Shooter.Game.Core;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.LookByIds
 {
+    [Serializable]
     public class LookByIdsTool : LlmTool<LookByIdsArguments>
     {
-        private Digester digester;
-
         public override string Name => "look_by_ids";
 
         public override string Description =>
             "Look by IDs: character statuses by their IDs.";
 
-        protected override void Awake()
-        {
-            base.Awake();
-            digester = GetComponent<Digester>();
-        }
+        public override void OnStart(LlmInitContext context)
+        {}
 
         protected override string Execute(LookByIdsArguments arguments, LlmCallContext context)
         {
@@ -27,12 +24,16 @@ namespace Shooter.Game.Llm
 
             foreach (long targetId in targetIds)
             {
-                Character target = Character.Of(targetId, Inactive.Exclude);
+                var target = Character.Of(targetId, Inactive.Exclude);
 
                 if (target == null)
+                {
                     sb.AppendLine($"Character with ID {targetId} does not exist");
+                }
                 else
-                    sb.AppendLine(digester.Of(target.gameObject, DigestionDetail.Brief));
+                {
+                    sb.AppendLine(Digester.Current.Of(target.gameObject, DigestionDetail.Brief));
+                }
             }
 
             return sb.ToString();

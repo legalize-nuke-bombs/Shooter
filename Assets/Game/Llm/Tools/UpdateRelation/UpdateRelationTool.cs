@@ -1,11 +1,14 @@
+using System;
 using Shooter.Game.AI;
-using UnityEngine;
+using Shooter.Logging;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.UpdateRelation
 {
-    [RequireComponent(typeof(AICharacterRelation))]
+    [Serializable]
     public sealed class UpdateRelationTool : LlmTool<UpdateRelationArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private AICharacterRelation aiCharacterRelation;
 
         public override string Name => "update_relation";
@@ -16,11 +19,15 @@ Use this tool to update your relation to character.
 This tool accepts absolute values, not relative ones.
 If you want to attack a character, change the attitude to zero.";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            aiCharacterRelation = GetComponent<AICharacterRelation>();
+            aiCharacterRelation = context.Self.GetComponent<AICharacterRelation>();
+            if (aiCharacterRelation == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have ai character relation component required by tool {Name}");
+            }
         }
+
 
         protected override string Execute(UpdateRelationArguments arguments, LlmCallContext context)
         {

@@ -1,15 +1,17 @@
-﻿using Shooter.Game.AI.Bt.CustomOrders;
+﻿using System;
+using Shooter.Game.AI.Bt.CustomOrders;
 using Shooter.Game.AI.Navigation;
 using Shooter.Game.World;
+using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.GoTo
 {
-    [RequireComponent(typeof(BtCustomOrderQueue))]
-    [RequireComponent(typeof(Navigator))]
+    [Serializable]
     public sealed class GoToTool : LlmTool<GoToArguments>
     {
+        private static readonly Journal Log = Logs.Here();
         private const float GroundReach = 5f;
 
         private BtCustomOrderQueue customOrders;
@@ -27,11 +29,18 @@ force: by default the call is refused while another second-level action is activ
 The result comes at once, the walk itself takes time: you will be notified when you arrive or when the way turns out blocked. Use look_at_yourself to check the active second-level action.
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            customOrders = GetComponent<BtCustomOrderQueue>();
-            navigator = GetComponent<Navigator>();
+            customOrders = context.Self.GetComponent<BtCustomOrderQueue>();
+            if (customOrders == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
+            }
+            navigator = context.Self.GetComponent<Navigator>();
+            if (navigator == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have Navigator component required by tool {Name}");
+            }
         }
 
         protected override string Execute(GoToArguments arguments, LlmCallContext context)
@@ -40,7 +49,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
 
             int bearing = Cardinal.Bearing(arguments.Bearing);
             string label = $"the point {arguments.Distance} m {Cardinal.Side(bearing)} ({bearing}{Cardinal.Degree})";
-            Vector3 target = transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance;
+            Vector3 target = context.Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance;
 
             if (!NavMesh.SamplePosition(target, out NavMeshHit ground, GroundReach, NavMesh.AllAreas))
                 return $"There is no walkable ground at {label}";
@@ -48,7 +57,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
                 return $"There is no way from here to {label}";
 
             var order = new BtCoGoTo { Name = label, Destination = ground.position, Sprint = arguments.Sprint };
-            string started = order.PromptDescription(gameObject);
+            string started = order.PromptDescription(context.Self);
 
             if (arguments.Force)
             {
@@ -56,12 +65,12 @@ The result comes at once, the walk itself takes time: you will be notified when 
                 customOrders.ForcePut(order);
                 return dropped == null
                     ? $"Started: {started}"
-                    : $"Dropped: {dropped.PromptDescription(gameObject)}\nStarted: {started}";
+                    : $"Dropped: {dropped.PromptDescription(context.Self)}\nStarted: {started}";
             }
 
             if (customOrders.TryPut(order)) return $"Started: {started}";
 
-            return $"Refused, another second-level action is active: {customOrders.Current.PromptDescription(gameObject)}\nCall again with force=true to replace it, or halt_bt to stop it";
+            return $"Refused, another second-level action is active: {customOrders.Current.PromptDescription(context.Self)}\nCall again with force=true to replace it, or halt_bt to stop it";
         }
     }
 }

@@ -1,27 +1,22 @@
+using System;
 using Shooter.Game.Core;
-using UnityEngine;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.LookAtYourself
 {
-    [RequireComponent(typeof(Digester))]
+    [Serializable]
     public sealed class LookAtYourselfTool : LlmTool<LookAtYourselfArguments>
     {
-        private Digester digester;
-
         public override string Name => "look_at_yourself";
 
         public override string Description =>
             "Look at yourself: your own health, stamina, belongings and relations.";
 
-        protected override void Awake()
-        {
-            base.Awake();
-            digester = GetComponent<Digester>();
-        }
+        public override void OnStart(LlmInitContext context)
+        { }
 
         protected override string Execute(LookAtYourselfArguments arguments, LlmCallContext context)
         {
-            return "Your state:\n" + digester.Of(gameObject, DigestionDetail.Full);
+            return "Your state:\n" + Digester.Current.Of(context.Self, DigestionDetail.Full);
         }
     }
 }

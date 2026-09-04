@@ -1,13 +1,15 @@
 using System;
 using System.Text;
 using Shooter.Game.Llm.Notes;
-using UnityEngine;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm.DeleteNotes
 {
-    [RequireComponent(typeof(LlmNotes))]
+    [Serializable]
     public class DeleteNotesTool : LlmTool<DeleteNotesArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private LlmNotes notes;
 
         public override string Name => "delete_notes";
@@ -18,10 +20,13 @@ Use this tool to delete notes, one or many in a single call.
 The notes with the provided names will be PERMANENTLY DELETED.
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
+            notes = context.Self.GetComponent<LlmNotes>();
+            if (notes == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have llm notes component required by tool {Name}");
+            }
         }
 
         protected override string Execute(DeleteNotesArguments arguments, LlmCallContext context)

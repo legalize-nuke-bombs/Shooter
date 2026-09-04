@@ -1,13 +1,16 @@
 using System;
 using System.Text;
 using Shooter.Game.Llm.Notes;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Llm.ReadNotes
 {
-    [RequireComponent(typeof(LlmNotes))]
+    [Serializable]
     public class ReadNotesTool : LlmTool<ReadNotesArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private LlmNotes notes;
 
         public override string Name => "read_notes";
@@ -17,10 +20,13 @@ namespace Shooter.Game.Llm.ReadNotes
 Use this tool to read the full content of notes by their names, one or many in a single call.
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
+            notes = context.Self.GetComponent<LlmNotes>();
+            if (notes == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have LlmNotes component required by tool {Name}");
+            }
         }
 
         protected override string Execute(ReadNotesArguments arguments, LlmCallContext context)

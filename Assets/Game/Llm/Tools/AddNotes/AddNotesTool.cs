@@ -1,13 +1,15 @@
 using System;
 using System.Text;
 using Shooter.Game.Llm.Notes;
-using UnityEngine;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm.AddNotes
 {
-    [RequireComponent(typeof(LlmNotes))]
+    [Serializable]
     public class AddNotesTool : LlmTool<AddNotesArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private LlmNotes notes;
 
         public override string Name => "add_notes";
@@ -23,10 +25,13 @@ Max note content size: {notes.ContentLimit}
 Max notes number: {notes.AmountLimit}
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
+            notes = context.Self.GetComponent<LlmNotes>();
+            if (notes == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have llm notes component required by tool {Name}");
+            }
         }
 
         protected override string Execute(AddNotesArguments arguments, LlmCallContext context)
