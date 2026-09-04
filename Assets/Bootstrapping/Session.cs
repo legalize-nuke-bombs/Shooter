@@ -29,6 +29,7 @@ namespace Shooter.Bootstrapping
         private static readonly Journal Log = Logs.Here();
         private bool ending;
         private bool loadFailed;
+        private bool worldLoaded;
         private LoadingOverlay loading;
 
         private GameObject overlays;
@@ -92,12 +93,6 @@ namespace Shooter.Bootstrapping
 
             Overlays();
 
-            if (hosting)
-            {
-                loading.Show(LoadingStage.Scene);
-                yield return SceneManager.LoadSceneAsync(WorldScene, LoadSceneMode.Single);
-            }
-
             NetworkManager network = Network();
             if (network == null)
             {
@@ -136,11 +131,39 @@ namespace Shooter.Bootstrapping
                 yield break;
             }
 
+            loading.Show(LoadingStage.Scene);
+            yield return LoadWorld(network);
+            if (network.ShutdownInProgress) yield break;
+
             if (save != null) Restore(network, save);
             if (network.ShutdownInProgress) yield break;
 
             network.GetComponent<Greeter>().Ready();
             loading.Hide();
+        }
+
+        private IEnumerator LoadWorld(NetworkManager network)
+        {
+            worldLoaded = false;
+            network.SceneManager.OnLoadComplete += Loaded;
+
+            SceneEventProgressStatus status = network.SceneManager.LoadScene(WorldScene, LoadSceneMode.Single);
+            if (status != SceneEventProgressStatus.Started)
+            {
+                network.SceneManager.OnLoadComplete -= Loaded;
+                Log.Error($"The world refused to load: {status}, shutting the host down");
+                network.Shutdown();
+                yield break;
+            }
+
+            yield return new WaitUntil(() => worldLoaded || network.ShutdownInProgress);
+            network.SceneManager.OnLoadComplete -= Loaded;
+            Log.Info($"World {WorldScene} is up");
+        }
+
+        private void Loaded(ulong clientId, string sceneName, LoadSceneMode mode)
+        {
+            if (clientId == NetworkManager.ServerClientId && sceneName == WorldScene) worldLoaded = true;
         }
 
         private void Restore(NetworkManager network, string save)
