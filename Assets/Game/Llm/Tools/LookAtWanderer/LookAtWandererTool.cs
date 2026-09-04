@@ -21,12 +21,12 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
 
         public override bool Available => table.Any;
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            table = context.Self.GetComponent<LlmPendingTable>();
+            table = Self.GetComponent<LlmPendingTable>();
             if (table == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have llm pending table component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have llm pending table component required by tool {Name}");
             }
         }
 
@@ -38,7 +38,7 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
             Character wanderer = Character.Of(wandererId, Inactive.Exclude);
             if (wanderer == null)
             {
-                Log.Warn($"Unregistered wanderer {wandererId} is waiting for an answer from {context.Self.name}!");
+                Log.Warn($"Unregistered wanderer {wandererId} is waiting for an answer from {Self.name}!");
                 throw new ArgumentException($"Failed to find wanderer {wandererId}");
             }
 

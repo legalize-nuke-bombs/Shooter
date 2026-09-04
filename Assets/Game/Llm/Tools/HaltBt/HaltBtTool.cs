@@ -16,12 +16,12 @@ namespace Shooter.Game.Llm.HaltBt
         public override string Description =>
             "Instantly stops the active second-level behavior tree action, if there is one.";
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            customOrders = context.Self.GetComponent<BtCustomOrderQueue>();
+            customOrders = Self.GetComponent<BtCustomOrderQueue>();
             if (customOrders == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
             }
         }
 
@@ -30,7 +30,7 @@ namespace Shooter.Game.Llm.HaltBt
             BtCustomOrder current = customOrders.Current;
             if (current == null) return "There is no active second-level action to stop";
 
-            string stopped = current.PromptDescription(context.Self);
+            string stopped = current.PromptDescription(Self);
             customOrders.Clear();
             return $"Stopped: {stopped}";
         }

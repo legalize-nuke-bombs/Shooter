@@ -3,18 +3,27 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
     [Serializable]
     public abstract class LlmTool : ILlmTool
     {
+        protected GameObject Self { get; private set; }
+
         public virtual bool Available => true;
         public abstract string Name { get; }
         public abstract string Description { get; }
         public abstract JObject Parameters { get; }
 
-        public abstract void OnStart(LlmInitContext context);
+        public void Attach(GameObject self)
+        {
+            Self = self;
+            OnStart();
+        }
+
+        protected abstract void OnStart();
 
         public abstract string Execute(string arguments, LlmCallContext context);
     }
@@ -38,7 +47,7 @@ namespace Shooter.Game.Llm
                 string.IsNullOrEmpty(arguments) ? "{}" : arguments, Settings);
 
             string result = Execute(parsed, context);
-            Log.Info($"Entity {context.Self.name} used {Name} {arguments}: {result}");
+            Log.Info($"Entity {Self.name} used {Name} {arguments}: {result}");
 
             return result;
         }

@@ -42,17 +42,17 @@ Mark messages as urgent only when truly necessary.
 Wanderers receive your messages immediately, regardless of the value of the `urgent` field.
 ";
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            ownCharacter = context.Self.GetComponent<Character>();
-            ownNameable = context.Self.GetComponent<Nameable>();
+            ownCharacter = Self.GetComponent<Character>();
+            ownNameable = Self.GetComponent<Nameable>();
             if (ownCharacter == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have component character required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have component character required by tool {Name}");
             }
             if (ownNameable == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have component nameable required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have component nameable required by tool {Name}");
             }
         }
 
@@ -98,7 +98,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                     .Urgened(arguments.Urgent)
                 );
                 delivered.Add(targetId);
-                Log.Info($"Entity {context.Self.name} said to {targetId}: {arguments.Content}");
+                Log.Info($"Entity {Self.name} said to {targetId}: {arguments.Content}");
             }
 
             var answer = new StringBuilder();

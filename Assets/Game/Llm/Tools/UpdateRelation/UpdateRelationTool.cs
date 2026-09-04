@@ -19,12 +19,12 @@ Use this tool to update your relation to character.
 This tool accepts absolute values, not relative ones.
 If you want to attack a character, change the attitude to zero.";
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            aiCharacterRelation = context.Self.GetComponent<AICharacterRelation>();
+            aiCharacterRelation = Self.GetComponent<AICharacterRelation>();
             if (aiCharacterRelation == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have ai character relation component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have ai character relation component required by tool {Name}");
             }
         }
 

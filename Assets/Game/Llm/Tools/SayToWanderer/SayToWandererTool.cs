@@ -1,6 +1,5 @@
 using System;
 using Shooter.Logging;
-using UnityEngine;
 
 namespace Shooter.Game.Llm.SayToWanderer
 {
@@ -19,18 +18,17 @@ namespace Shooter.Game.Llm.SayToWanderer
 
         public override bool Available => table.Any;
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            GameObject gameObject = context.Self;
-            llm = gameObject.GetComponent<Llm>();
+            llm = Self.GetComponent<Llm>();
             if (llm == null)
             {
-                Log.Error($"Entity {gameObject.name} does not have Llm component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have Llm component required by tool {Name}");
             }
-            table = gameObject.GetComponent<LlmPendingTable>();
+            table = Self.GetComponent<LlmPendingTable>();
             if (table == null)
             {
-                Log.Error($"Entity {gameObject.name} does not have LlmPendingTable component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have LlmPendingTable component required by tool {Name}");
             }
         }
 

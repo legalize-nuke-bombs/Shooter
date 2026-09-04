@@ -20,12 +20,12 @@ namespace Shooter.Game.Llm.ReadNotes
 Use this tool to read the full content of notes by their names, one or many in a single call.
 ";
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            notes = context.Self.GetComponent<LlmNotes>();
+            notes = Self.GetComponent<LlmNotes>();
             if (notes == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have LlmNotes component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have LlmNotes component required by tool {Name}");
             }
         }
 

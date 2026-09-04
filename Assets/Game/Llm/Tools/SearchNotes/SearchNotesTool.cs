@@ -18,12 +18,12 @@ namespace Shooter.Game.Llm.SearchNotes
 Use this tool to find which notes mention something: searches all notes with a regex pattern and returns match counts per note.
 ";
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            notes = context.Self.GetComponent<LlmNotes>();
+            notes = Self.GetComponent<LlmNotes>();
             if (notes == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have LlmNotes component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have LlmNotes component required by tool {Name}");
             }
         }
 
