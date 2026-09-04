@@ -4,5 +4,6 @@
     {
         public bool PendingCompact { get; set; }
         public bool PendingMail { get; set; }
+        public bool PendingTable { get; set; }
     }
 }

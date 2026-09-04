@@ -1,5 +1,8 @@
+using System;
+
 namespace Shooter.Game.Llm
 {
+    [Serializable]
     public class LlmCompactTicker : LlmChildTicker
     {
         public override void RegisterTick()

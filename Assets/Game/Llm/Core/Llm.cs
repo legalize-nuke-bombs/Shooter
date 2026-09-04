@@ -141,7 +141,8 @@ namespace Shooter.Game.Llm
             return new LlmStatus
             {
                 PendingCompact = history.Overflowing,
-                PendingMail = history.Unseen
+                PendingMail = history.Unseen,
+                PendingTable = table.Any
             };
         }
 

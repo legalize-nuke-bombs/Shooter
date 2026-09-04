@@ -1,8 +1,9 @@
-using UnityEngine;
+using System;
 
 namespace Shooter.Game.Llm
 {
-    public abstract class LlmChildTicker : MonoBehaviour
+    [Serializable]
+    public abstract class LlmChildTicker
     {
         public abstract void RegisterTick();
         public abstract bool TickRequired(LlmStatus llmStatus);

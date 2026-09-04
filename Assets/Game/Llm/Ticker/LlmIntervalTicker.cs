@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [Serializable]
     public class LlmIntervalTicker : LlmChildTicker
     {
         [SerializeField] private float interval = 300f;

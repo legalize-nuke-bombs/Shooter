@@ -95,19 +95,7 @@ PrefabInstance:
       addedObject: {fileID: 7426902805887786745}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 187448353915020508}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1039143143450717388}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4460536371454554518}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1836113554761253754}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6252240842151477809}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 69484080511219595}
@@ -330,45 +318,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6747aaee1fd43ceb16bddd15e894aaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.LlmMainTicker
---- !u!114 &187448353915020508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d1defa35a9c4101b4e92cdfeae18167, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.Children.LlmInboxTicker
-  pendingInterval: 2.5
---- !u!114 &1039143143450717388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d291c19d12f349c2a566020a06185313, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.Children.LlmIntervalTicker
-  interval: 300
-  firstTickDelay: 60
---- !u!114 &4460536371454554518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63f69690e0dd4f71986cc5cd47fc2700, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.Children.LlmCompactTicker
+  tickers:
+  - rid: 2635107260138258859
+  - rid: 2635107260138258860
+  - rid: 2635107260138258861
+  - rid: 2635107260138258862
+  references:
+    version: 2
+    RefIds:
+    - rid: 2635107260138258859
+      type: {class: LlmCompactTicker, ns: Shooter.Game.Llm, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258860
+      type: {class: LlmIntervalTicker, ns: Shooter.Game.Llm, asm: Shooter.Game}
+      data:
+        interval: 300
+        firstTickDelay: 60
+    - rid: 2635107260138258861
+      type: {class: LlmMailTicker, ns: Shooter.Game.Llm, asm: Shooter.Game}
+      data:
+        pendingInterval: 2.5
+    - rid: 2635107260138258862
+      type: {class: LlmTalkTicker, ns: Shooter.Game.Llm, asm: Shooter.Game}
+      data: 
 --- !u!114 &1836113554761253754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,18 +353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25cb96991571da4489950187cdb2a4e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Notifying.LlmNotificationRecipient
---- !u!114 &6252240842151477809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bd34b7499c5cb3478456cdd08d0c854, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmTalkTicker
 --- !u!114 &69484080511219595
 MonoBehaviour:
   m_ObjectHideFlags: 0
