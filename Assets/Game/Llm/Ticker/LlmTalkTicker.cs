@@ -5,6 +5,10 @@ namespace Shooter.Game.Llm
     [Serializable]
     public class LlmTalkTicker : LlmChildTicker
     {
+        public override void OnStart()
+        {
+        }
+
         public override void RegisterTick()
         {
         }

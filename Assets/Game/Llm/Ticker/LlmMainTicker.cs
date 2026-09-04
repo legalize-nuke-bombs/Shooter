@@ -20,25 +20,35 @@ namespace Shooter.Game.Llm
             entityName = name;
 
             llm = GetComponent<Llm>();
+
+            foreach (LlmChildTicker ticker in tickers)
+            {
+                ticker.OnStart();
+            }
         }
 
         private void Update()
         {
             if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsServer) return;
-            if (TickRequired()) Tick();
+            Type req = TickRequired();
+            if (req != null)
+            {
+                Tick(req);
+            }
         }
 
-        private bool TickRequired()
+        private Type TickRequired()
         {
             LlmStatus llmStatus = llm.Status();
             foreach (LlmChildTicker ticker in tickers)
             {
                 if (ticker.TickRequired(llmStatus))
                 {
-                    return true;
+                    return ticker.GetType();
                 }
             }
-            return false;
+
+            return null;
         }
 
         private void RegisterTick()
@@ -46,8 +56,9 @@ namespace Shooter.Game.Llm
             foreach (LlmChildTicker ticker in tickers) ticker.RegisterTick();
         }
 
-        private async void Tick()
+        private async void Tick(Type req)
         {
+            Log.Info($"Entity {name} will tick, ticker {req}");
             try
             {
                 bool success = await llm.Tick();

@@ -8,26 +8,29 @@ namespace Shooter.Game.Llm
     {
         [SerializeField] private float interval = 300f;
         [SerializeField] private float firstTickDelay = 60f;
-        private float timer;
 
-        private void Awake()
-        {
-            timer = firstTickDelay;
-        }
+        private float lastTickTime;
+        private bool first;
 
-        private void Update()
+        public override void OnStart()
         {
-            timer -= Time.deltaTime;
+            lastTickTime = Time.time;
+            first = true;
         }
 
         public override void RegisterTick()
         {
-            timer = interval;
+            lastTickTime = Time.time;
+            first = false;
         }
 
         public override bool TickRequired(LlmStatus llmStatus)
         {
-            return timer <= 0f;
+            if (first)
+            {
+                return Time.time - lastTickTime >= firstTickDelay;
+            }
+            return Time.time - lastTickTime >= interval;
         }
     }
 }
