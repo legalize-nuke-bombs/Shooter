@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [RequireComponent(typeof(Digester))]
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class WorldDigester : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -17,14 +17,26 @@ namespace Shooter.Game.Llm
         [SerializeField] private float largeViewingDistance = 500f;
         [SerializeField] private float biggestViewingDistance = 1e+9f;
 
-        private Digester digester;
+        public static WorldDigester Current { get; private set; }
 
         private void Awake()
         {
-            digester = GetComponent<Digester>();
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
+            Current = this;
         }
 
-        public string Digest(Vector3? position = null)
+        private void OnDestroy()
+        {
+            if (Current == this)
+            {
+                Current = null;
+            }
+        }
+
+        public string Digest(Vector3? position)
         {
             Vector3 origin = position ?? transform.position;
 
@@ -32,7 +44,7 @@ namespace Shooter.Game.Llm
 
             foreach (MainDigestible entity in FindVisible(origin))
             {
-                string seen = digester.Seen(entity, DigestionDetail.Brief, origin);
+                string seen = Digester.Current.Seen(entity, DigestionDetail.Brief, origin);
                 if (seen != null) digest.Append(seen).Append('\n');
             }
 

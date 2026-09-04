@@ -1,12 +1,14 @@
 using System;
 using Shooter.Game.Llm.Notes;
-using UnityEngine;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm.SearchNotes
 {
-    [RequireComponent(typeof(LlmNotes))]
+    [Serializable]
     public class SearchNotesTool : LlmTool<SearchNotesArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private LlmNotes notes;
 
         public override string Name => "search_notes";
@@ -16,10 +18,13 @@ namespace Shooter.Game.Llm.SearchNotes
 Use this tool to find which notes mention something: searches all notes with a regex pattern and returns match counts per note.
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
+            notes = context.Self.GetComponent<LlmNotes>();
+            if (notes == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have LlmNotes component required by tool {Name}");
+            }
         }
 
         protected override string Execute(SearchNotesArguments arguments, LlmCallContext context)

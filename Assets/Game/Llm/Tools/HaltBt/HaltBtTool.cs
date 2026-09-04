@@ -1,11 +1,14 @@
-﻿using Shooter.Game.AI.Bt.CustomOrders;
-using UnityEngine;
+﻿using System;
+using Shooter.Game.AI.Bt.CustomOrders;
+using Shooter.Logging;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.HaltBt
 {
-    [RequireComponent(typeof(BtCustomOrderQueue))]
+    [Serializable]
     public sealed class HaltBtTool : LlmTool<HaltBtArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private BtCustomOrderQueue customOrders;
 
         public override string Name => "halt_bt";
@@ -13,10 +16,13 @@ namespace Shooter.Game.Llm
         public override string Description =>
             "Instantly stops the active second-level behavior tree action, if there is one.";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            customOrders = GetComponent<BtCustomOrderQueue>();
+            customOrders = context.Self.GetComponent<BtCustomOrderQueue>();
+            if (customOrders == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
+            }
         }
 
         protected override string Execute(HaltBtArguments arguments, LlmCallContext context)
@@ -24,7 +30,7 @@ namespace Shooter.Game.Llm
             BtCustomOrder current = customOrders.Current;
             if (current == null) return "There is no active second-level action to stop";
 
-            string stopped = current.PromptDescription(gameObject);
+            string stopped = current.PromptDescription(context.Self);
             customOrders.Clear();
             return $"Stopped: {stopped}";
         }

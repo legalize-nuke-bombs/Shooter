@@ -1,13 +1,15 @@
 using System;
 using System.Text;
 using Shooter.Game.Llm.Notes;
-using UnityEngine;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm.UpdateNotes
 {
-    [RequireComponent(typeof(LlmNotes))]
+    [Serializable]
     public class UpdateNotesTool : LlmTool<UpdateNotesArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private LlmNotes notes;
 
         public override string Name => "update_notes";
@@ -18,10 +20,13 @@ Use this tool to replace existing notes, one or many in a single call: the descr
 Fails on notes that do not exist. To create new notes, use add_notes. The same size limits apply.
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            notes = GetComponent<LlmNotes>();
+            notes = context.Self.GetComponent<LlmNotes>();
+            if (notes == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have llm notes component required by tool {Name}");
+            }
         }
 
         protected override string Execute(UpdateNotesArguments arguments, LlmCallContext context)

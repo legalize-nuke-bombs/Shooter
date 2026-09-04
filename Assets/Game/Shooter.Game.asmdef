@@ -2,6 +2,7 @@
   "name": "Shooter.Game",
   "rootNamespace": "Shooter",
   "references": [
+    "MackySoft.SerializeReferenceExtensions",
     "Shooter.Logging",
     "Shooter.Configuring",
     "Shooter.Accounts",

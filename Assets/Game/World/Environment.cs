@@ -10,6 +10,7 @@ namespace Shooter.Game.World
     public class Environment : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
+
         private readonly NetworkVariable<FixedString32Bytes> version = new();
 
         public static Environment Current { get; private set; }
@@ -18,13 +19,16 @@ namespace Shooter.Game.World
 
         private void Awake()
         {
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
             Current = this;
         }
 
         public override void OnDestroy()
         {
             if (Current == this) Current = null;
-
             base.OnDestroy();
         }
 

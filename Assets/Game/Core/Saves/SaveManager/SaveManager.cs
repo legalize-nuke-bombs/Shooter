@@ -32,6 +32,10 @@ namespace Shooter.Game.Core.Saves
             metaManager = GetComponent<MetaManager>();
             previewManager = GetComponent<PreviewManager>();
 
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
             Current = this;
         }
 

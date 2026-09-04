@@ -92,12 +92,6 @@ PrefabInstance:
       addedObject: {fileID: 3131132399333746512}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8399810809723941370}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7910915754501650105}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7426902805887786745}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
@@ -110,70 +104,16 @@ PrefabInstance:
       addedObject: {fileID: 4460536371454554518}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4053478290964503823}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 18341065030792710}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5134104532175644444}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6452978652199100052}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6052884948129317585}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6528267243605938305}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1836113554761253754}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6130739551092714751}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 114556013557901197}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3206064397969808817}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6252240842151477809}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6041556781329341948}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7210956844316725490}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 69484080511219595}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6102894833410778550}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3942745630942511356}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6832720465051325686}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6825654874020954133}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4777889293386872636}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7933959717329444333}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 330453992467290910}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8466878009486630552}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4009133535889036596}
@@ -186,12 +126,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2603333273147114634}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 597474298703707419}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3887216676180220732}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -295,34 +229,95 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
   failureCooldown: 2.5
   maxToolRounds: 10
---- !u!114 &8399810809723941370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b488ec62424492ca226a5e76c93bf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Digester
---- !u!114 &7910915754501650105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00a395f81da244a6bf9c0256b55636f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.WorldDigester
-  smallViewingDistance: 50
-  mediumViewingDistance: 150
-  largeViewingDistance: 500
-  biggestViewingDistance: 1e+9
+  abilities:
+  - rid: 2635107260138258838
+  - rid: 2635107260138258839
+  - rid: 2635107260138258840
+  - rid: 2635107260138258841
+  - rid: 2635107260138258842
+  - rid: 2635107260138258843
+  - rid: 2635107260138258844
+  - rid: 2635107260138258845
+  - rid: 2635107260138258846
+  - rid: 2635107260138258847
+  - rid: 2635107260138258848
+  - rid: 2635107260138258849
+  - rid: 2635107260138258850
+  - rid: 2635107260138258851
+  - rid: 2635107260138258852
+  - rid: 2635107260138258853
+  - rid: 2635107260138258854
+  - rid: 2635107260138258855
+  - rid: 2635107260138258856
+  - rid: 2635107260138258857
+  - rid: 2635107260138258858
+  references:
+    version: 2
+    RefIds:
+    - rid: 2635107260138258838
+      type: {class: AddNotesTool, ns: Shooter.Game.Llm.AddNotes, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258839
+      type: {class: ClearHeadTool, ns: Shooter.Game.Llm.ClearHead, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258840
+      type: {class: DeleteNotesTool, ns: Shooter.Game.Llm.DeleteNotes, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258841
+      type: {class: ExploreItemsTool, ns: Shooter.Game.Llm.ExploreItems, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258842
+      type: {class: GiveStackableTool, ns: Shooter.Game.Llm.GiveStackable, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258843
+      type: {class: GiveUniqueTool, ns: Shooter.Game.Llm.GiveUnique, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258844
+      type: {class: GoToTool, ns: Shooter.Game.Llm.GoTo, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258845
+      type: {class: HaltBtTool, ns: Shooter.Game.Llm.HaltBt, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258846
+      type: {class: ListNotesTool, ns: Shooter.Game.Llm.ListNotes, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258847
+      type: {class: LookAroundEntityTool, ns: Shooter.Game.Llm.LookAroundEntity, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258848
+      type: {class: LookAroundTool, ns: Shooter.Game.Llm.LookAround, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258849
+      type: {class: LookAtWandererTool, ns: Shooter.Game.Llm.LookAtWanderer, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258850
+      type: {class: LookAtYourselfTool, ns: Shooter.Game.Llm.LookAtYourself, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258851
+      type: {class: LookByIdsTool, ns: Shooter.Game.Llm.LookByIds, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258852
+      type: {class: ReadNotesTool, ns: Shooter.Game.Llm.ReadNotes, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258853
+      type: {class: SayToWandererTool, ns: Shooter.Game.Llm.SayToWanderer, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258854
+      type: {class: SearchNotesTool, ns: Shooter.Game.Llm.SearchNotes, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258855
+      type: {class: SendFeedbackTool, ns: Shooter.Game.Llm.SendFeedback, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258856
+      type: {class: SendMessageTool, ns: Shooter.Game.Llm.SendMessage, asm: Shooter.Game}
+      data:
+        mail: {fileID: 11400000, guid: 6479b6a260af1bf4fa62bba94fa5258f, type: 2}
+    - rid: 2635107260138258857
+      type: {class: UpdateNotesTool, ns: Shooter.Game.Llm.UpdateNotes, asm: Shooter.Game}
+      data: 
+    - rid: 2635107260138258858
+      type: {class: UpdateRelationTool, ns: Shooter.Game.Llm.UpdateRelation, asm: Shooter.Game}
+      data: 
 --- !u!114 &7426902805887786745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,79 +369,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f69690e0dd4f71986cc5cd47fc2700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.Children.LlmCompactTicker
---- !u!114 &4053478290964503823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 272fd0c78fa178a4196c476700e562fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.LookAroundTool
---- !u!114 &18341065030792710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670617944c4035a499a00d663e6d0d65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.SendMessageTool
-  mail: {fileID: 11400000, guid: c1fc30e789f54ad6ac9774afffa22fab, type: 2}
---- !u!114 &5134104532175644444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ebca220cede8044182f3326ee88b712, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.UpdateRelationTool
---- !u!114 &6452978652199100052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f9180adde0dc8d48bb4e520befeade8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.GiveStackableTool
---- !u!114 &6052884948129317585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 532666c12038a8547bbcd8de20fb085c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.GiveUniqueTool
---- !u!114 &6528267243605938305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62d7cc1824d02db48b430de0d4ed5135, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.SayToWandererTool
 --- !u!114 &1836113554761253754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,42 +381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25cb96991571da4489950187cdb2a4e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Notifying.LlmNotificationRecipient
---- !u!114 &6130739551092714751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed039a17447247f28c331726e390bce6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.LookByIdsTool
---- !u!114 &114556013557901197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3854cc592fee4e6c9468dfb8ea18c857, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.LookAtYourselfTool
---- !u!114 &3206064397969808817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a1e8309a89444a89fd309d969cebd66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Tools.SendFeedback.SendFeedbackTool
 --- !u!114 &6252240842151477809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,30 +393,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd34b7499c5cb3478456cdd08d0c854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmTalkTicker
---- !u!114 &6041556781329341948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0251aeae737c4a46af35883ab2db4ea9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LookAtWanderer.LookAtWandererTool
---- !u!114 &7210956844316725490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbe9895969c846c2a10949133ed5b9ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.ExploreItems.ExploreItemsTool
 --- !u!114 &69484080511219595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,30 +409,6 @@ MonoBehaviour:
   descriptionLimit: 100
   contentLimit: 5000
   amountLimit: 100
---- !u!114 &6102894833410778550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49da1aa0fd224e4d86d01bcd7e98f1f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.AddNote.AddNoteTool
---- !u!114 &3942745630942511356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04f68fddc98b4dac974772faff16201a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DeleteNote.DeleteNoteTool
 --- !u!114 &6832720465051325686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -583,66 +421,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fecc3162bad46f39d2623cffaf9a447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmAIObserver
---- !u!114 &6825654874020954133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5fc8a0715e994e4ea4b5a416eacdb5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Forget.ForgetTool
---- !u!114 &4777889293386872636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 435d23fa3980206448ac8c4021777d03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.UpdateNote.UpdateNoteTool
---- !u!114 &7933959717329444333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1d5678435c644849b40b0282a8f41a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.ListNotes.ListNotesTool
---- !u!114 &330453992467290910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f324383cc9e766948b046b28470b9113, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.ReadNote.ReadNoteTool
---- !u!114 &8466878009486630552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5019b7cf10de3b744b5c0c9af1e8f374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SearchNotes.SearchNotesTool
 --- !u!114 &4009133535889036596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -711,27 +489,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ca13b5f2804c4298fb39b37dcb9e65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.Bt.CustomOrders.BtCustomOrderQueue
---- !u!114 &597474298703707419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31b4fb6d7f9a48508b7268f6e8c2378f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.GoToTool
---- !u!114 &3887216676180220732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd0ae13497164aaeaceb3a45fc201be7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.HaltBtTool

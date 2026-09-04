@@ -1,12 +1,15 @@
+using System;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
-using UnityEngine;
+using Shooter.Logging;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.GiveStackable
 {
-    [RequireComponent(typeof(InventoryExchanger))]
+    [Serializable]
     public sealed class GiveStackableTool : LlmTool<GiveStackableArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private InventoryExchanger inventoryExchanger;
 
         public override string Name => "give_stackable";
@@ -18,10 +21,13 @@ The item is addressed by its exact name from your bag.
 The recipient will automatically receive a notification.
 ";
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            inventoryExchanger = GetComponent<InventoryExchanger>();
+            inventoryExchanger = context.Self.GetComponent<InventoryExchanger>();
+            if (inventoryExchanger == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have inventory exchanger component required by tool {Name}");
+            }
         }
 
         protected override string Execute(GiveStackableArguments arguments, LlmCallContext context)

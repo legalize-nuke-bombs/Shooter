@@ -1,11 +1,15 @@
-using Shooter.Game.Core;
+using System;
 using Shooter.Logging;
+using UnityEngine;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.SendFeedback
 {
+    [Serializable]
     public sealed class SendFeedbackTool : LlmTool<SendFeedbackArguments>
     {
         private static readonly Journal Log = Logs.Here();
+
+        private GameObject gameObject;
 
         public override string Name => "send_feedback";
 
@@ -19,11 +23,16 @@ namespace Shooter.Game.Llm
 The world is under active development; any feedback is valuable and will be read.
 You NEVER include players' personal information in these reports.";
 
+        public override void OnStart(LlmInitContext context)
+        {
+            gameObject = context.Self;
+        }
+
         protected override string Execute(SendFeedbackArguments arguments, LlmCallContext context)
         {
             if (string.IsNullOrEmpty(arguments.Content)) return "Nothing to send";
 
-            Log.Warn($"Entity {name} sent feedback: {arguments.Content}");
+            Log.Warn($"Entity {gameObject.name} sent feedback: {arguments.Content}");
 
             return "Sent";
         }

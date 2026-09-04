@@ -1,10 +1,14 @@
+using System;
+using Shooter.Logging;
 using UnityEngine;
 
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.SayToWanderer
 {
-    [RequireComponent(typeof(Llm))]
+    [Serializable]
     public sealed class SayToWandererTool : LlmTool<SayToWandererArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private Llm llm;
         private LlmPendingTable table;
 
@@ -15,11 +19,19 @@ namespace Shooter.Game.Llm
 
         public override bool Available => table.Any;
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            llm = GetComponent<Llm>();
-            table = GetComponent<LlmPendingTable>();
+            GameObject gameObject = context.Self;
+            llm = gameObject.GetComponent<Llm>();
+            if (llm == null)
+            {
+                Log.Error($"Entity {gameObject.name} does not have Llm component required by tool {Name}");
+            }
+            table = gameObject.GetComponent<LlmPendingTable>();
+            if (table == null)
+            {
+                Log.Error($"Entity {gameObject.name} does not have LlmPendingTable component required by tool {Name}");
+            }
         }
 
         protected override string Execute(SayToWandererArguments arguments, LlmCallContext context)

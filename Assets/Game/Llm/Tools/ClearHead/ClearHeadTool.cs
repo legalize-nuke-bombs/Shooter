@@ -1,12 +1,14 @@
+using System;
 using Shooter.Game.Llm.Notes;
-using UnityEngine;
+using Shooter.Logging;
 
 namespace Shooter.Game.Llm.ClearHead
 {
-    [RequireComponent(typeof(LlmHistory))]
-    [RequireComponent(typeof(LlmNotes))]
+    [Serializable]
     public class ClearHeadTool : LlmTool<ClearHeadArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
         private LlmHistory history;
         private LlmNotes notes;
 
@@ -20,11 +22,18 @@ Call this only when your notes are complete.
 
         public override bool Available => history.Overflowing;
 
-        protected override void Awake()
+        public override void OnStart(LlmInitContext context)
         {
-            base.Awake();
-            history = GetComponent<LlmHistory>();
-            notes = GetComponent<LlmNotes>();
+            history = context.Self.GetComponent<LlmHistory>();
+            notes = context.Self.GetComponent<LlmNotes>();
+            if (history == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have llm history component required by tool {Name}");
+            }
+            if (notes == null)
+            {
+                Log.Error($"Entity {context.Self.name} does not have llm notes component required by tool {Name}");
+            }
         }
 
         protected override string Execute(ClearHeadArguments arguments, LlmCallContext context)

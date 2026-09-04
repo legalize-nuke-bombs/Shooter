@@ -20,6 +20,10 @@ namespace Shooter.Game.World
 
         private void Awake()
         {
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
             Current = this;
         }
 

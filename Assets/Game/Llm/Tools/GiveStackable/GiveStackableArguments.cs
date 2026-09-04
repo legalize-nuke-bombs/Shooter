@@ -1,4 +1,4 @@
-namespace Shooter.Game.Llm
+namespace Shooter.Game.Llm.GiveStackable
 {
     public class GiveStackableArguments
     {
