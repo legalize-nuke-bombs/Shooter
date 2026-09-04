@@ -12,8 +12,9 @@ namespace Shooter.Game.Llm.LookByIds
         public override string Description =>
             "Look by IDs: character statuses by their IDs.";
 
-        public override void OnStart(LlmInitContext context)
-        {}
+        protected override void OnStart()
+        {
+        }
 
         protected override string Execute(LookByIdsArguments arguments, LlmCallContext context)
         {

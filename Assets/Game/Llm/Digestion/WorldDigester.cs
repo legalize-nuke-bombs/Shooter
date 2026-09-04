@@ -36,30 +36,30 @@ namespace Shooter.Game.Llm
             }
         }
 
-        public string Digest(Vector3? position)
+        public string Digest(GameObject around)
         {
-            Vector3 origin = position ?? transform.position;
+            Vector3 origin = around.transform.position;
 
             var digest = new StringBuilder();
 
-            foreach (MainDigestible entity in FindVisible(origin))
+            foreach (MainDigestible entity in FindVisible(around, origin))
             {
                 string seen = Digester.Current.Seen(entity, DigestionDetail.Brief, origin);
                 if (seen != null) digest.Append(seen).Append('\n');
             }
 
             string result = digest.ToString();
-            Log.Info($"Digestion finished, length: {result.Length}");
+            Log.Info($"Digestion around {around.name} finished, length: {result.Length}");
             return result;
         }
 
-        private List<MainDigestible> FindVisible(Vector3 origin)
+        private List<MainDigestible> FindVisible(GameObject around, Vector3 origin)
         {
             var visible = new List<MainDigestible>();
 
             foreach (MainDigestible entity in Registers.Current.Of<MainDigestible>(Inactive.Exclude))
             {
-                if (entity.gameObject == gameObject) continue;
+                if (entity.gameObject == around) continue;
 
                 float reach = ViewingDistance(entity.Size);
                 if ((origin - entity.transform.position).sqrMagnitude > reach * reach) continue;

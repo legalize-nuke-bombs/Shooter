@@ -19,12 +19,12 @@ Give one of your unique items, by its slot number, to a character within {invent
 The recipient will automatically receive a notification.
 ";
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            inventoryExchanger = context.Self.GetComponent<InventoryExchanger>();
+            inventoryExchanger = Self.GetComponent<InventoryExchanger>();
             if (inventoryExchanger == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have inventory exchanger component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have inventory exchanger component required by tool {Name}");
             }
         }
 

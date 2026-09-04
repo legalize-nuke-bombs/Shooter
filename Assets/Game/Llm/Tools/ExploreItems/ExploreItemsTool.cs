@@ -17,7 +17,9 @@ This tool displays a detailed description of the item, including its effects (sa
 You can process any number of IDs at once.
 ";
 
-        public override void OnStart(LlmInitContext context) { }
+        protected override void OnStart()
+        {
+        }
 
         protected override string Execute(ExploreItemsArguments arguments, LlmCallContext context)
         {

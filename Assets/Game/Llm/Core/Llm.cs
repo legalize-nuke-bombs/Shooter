@@ -54,10 +54,7 @@ namespace Shooter.Game.Llm
             entityName = name;
             foreach (LlmTool ability in abilities)
             {
-                ability.OnStart(new LlmInitContext()
-                {
-                    Self = gameObject
-                });
+                ability.Attach(gameObject);
             }
             Begin();
         }
@@ -187,11 +184,7 @@ namespace Shooter.Game.Llm
 
             history.Seen();
             history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation(asked) });
-            var context = new LlmCallContext
-            {
-                Self = gameObject,
-                PromptedCount = history.Count
-            };
+            var context = new LlmCallContext { PromptedCount = history.Count };
 
             LlmConfig config = Config.Read().Server.Llm;
             var tools = abilities.Where(ability => ability.Available).Cast<ILlmTool>().ToList();

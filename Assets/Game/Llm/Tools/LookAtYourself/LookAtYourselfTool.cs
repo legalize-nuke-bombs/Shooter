@@ -11,12 +11,13 @@ namespace Shooter.Game.Llm.LookAtYourself
         public override string Description =>
             "Look at yourself: your own health, stamina, belongings and relations.";
 
-        public override void OnStart(LlmInitContext context)
-        { }
+        protected override void OnStart()
+        {
+        }
 
         protected override string Execute(LookAtYourselfArguments arguments, LlmCallContext context)
         {
-            return "Your state:\n" + Digester.Current.Of(context.Self, DigestionDetail.Full);
+            return "Your state:\n" + Digester.Current.Of(Self, DigestionDetail.Full);
         }
     }
 }

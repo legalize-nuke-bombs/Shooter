@@ -25,12 +25,12 @@ Max note content size: {notes.ContentLimit}
 Max notes number: {notes.AmountLimit}
 ";
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            notes = context.Self.GetComponent<LlmNotes>();
+            notes = Self.GetComponent<LlmNotes>();
             if (notes == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have llm notes component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have llm notes component required by tool {Name}");
             }
         }
 

@@ -14,8 +14,9 @@ namespace Shooter.Game.Llm.LookAroundEntity
         public override string Description =>
             "This tool shows everything around entity whose ID was passed. The greater the distance, the less detail is visible. You can use this tool to observe other characters.";
 
-        public override void OnStart(LlmInitContext context)
-        {}
+        protected override void OnStart()
+        {
+        }
 
         protected override string Execute(LookAroundEntityArguments arguments, LlmCallContext context)
         {
@@ -24,11 +25,11 @@ namespace Shooter.Game.Llm.LookAroundEntity
             var id = Character.Of(targetId, Inactive.Exclude);
             if (id == null)
             {
-                Log.Info($"Entity {context.Self.name} tried to look around unknown entity");
+                Log.Info($"Entity {Self.name} tried to look around unknown entity");
                 return $"Failed to find entity with ID {targetId}";
             }
 
-            return $"Objects around entity {targetId}:\n" + WorldDigester.Current.Digest(id.transform.position);
+            return $"Objects around entity {targetId}:\n" + WorldDigester.Current.Digest(id.gameObject);
         }
     }
 }

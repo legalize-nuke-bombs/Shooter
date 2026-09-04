@@ -29,17 +29,17 @@ force: by default the call is refused while another second-level action is activ
 The result comes at once, the walk itself takes time: you will be notified when you arrive or when the way turns out blocked. Use look_at_yourself to check the active second-level action.
 ";
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            customOrders = context.Self.GetComponent<BtCustomOrderQueue>();
+            customOrders = Self.GetComponent<BtCustomOrderQueue>();
             if (customOrders == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
             }
-            navigator = context.Self.GetComponent<Navigator>();
+            navigator = Self.GetComponent<Navigator>();
             if (navigator == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have Navigator component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have Navigator component required by tool {Name}");
             }
         }
 
@@ -49,7 +49,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
 
             int bearing = Cardinal.Bearing(arguments.Bearing);
             string label = $"the point {arguments.Distance} m {Cardinal.Side(bearing)} ({bearing}{Cardinal.Degree})";
-            Vector3 target = context.Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance;
+            Vector3 target = Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance;
 
             if (!NavMesh.SamplePosition(target, out NavMeshHit ground, GroundReach, NavMesh.AllAreas))
                 return $"There is no walkable ground at {label}";
@@ -57,7 +57,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
                 return $"There is no way from here to {label}";
 
             var order = new BtCoGoTo { Name = label, Destination = ground.position, Sprint = arguments.Sprint };
-            string started = order.PromptDescription(context.Self);
+            string started = order.PromptDescription(Self);
 
             if (arguments.Force)
             {
@@ -65,12 +65,12 @@ The result comes at once, the walk itself takes time: you will be notified when 
                 customOrders.ForcePut(order);
                 return dropped == null
                     ? $"Started: {started}"
-                    : $"Dropped: {dropped.PromptDescription(context.Self)}\nStarted: {started}";
+                    : $"Dropped: {dropped.PromptDescription(Self)}\nStarted: {started}";
             }
 
             if (customOrders.TryPut(order)) return $"Started: {started}";
 
-            return $"Refused, another second-level action is active: {customOrders.Current.PromptDescription(context.Self)}\nCall again with force=true to replace it, or halt_bt to stop it";
+            return $"Refused, another second-level action is active: {customOrders.Current.PromptDescription(Self)}\nCall again with force=true to replace it, or halt_bt to stop it";
         }
     }
 }

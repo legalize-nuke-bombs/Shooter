@@ -22,17 +22,17 @@ Call this only when your notes are complete.
 
         public override bool Available => history.Overflowing;
 
-        public override void OnStart(LlmInitContext context)
+        protected override void OnStart()
         {
-            history = context.Self.GetComponent<LlmHistory>();
-            notes = context.Self.GetComponent<LlmNotes>();
+            history = Self.GetComponent<LlmHistory>();
+            notes = Self.GetComponent<LlmNotes>();
             if (history == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have llm history component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have llm history component required by tool {Name}");
             }
             if (notes == null)
             {
-                Log.Error($"Entity {context.Self.name} does not have llm notes component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have llm notes component required by tool {Name}");
             }
         }
 
