@@ -22,11 +22,12 @@ namespace Shooter.Game.Llm.GoTo
         public override string Description =>
             @"
 Walk in a direction for a distance by starting a second-level behavior tree action.
+Your character automatically finds the path to the target and travels any distance, no matter how far.
 bearing: degrees clockwise from north, 0 north, 90 east, 180 south, 270 west; the number in parentheses next to everything you see.
 distance: whole meters.
-sprint: true to run; running burns stamina fast.
+sprint: true to run.
 force: by default the call is refused while another second-level action is active; set force to true to drop it and start this one at once.
-The result comes at once, the walk itself takes time: you will be notified when you arrive or when the way turns out blocked. Use look_at_yourself to check the active second-level action.
+The result comes at once, the walk itself takes time: you will be notified when you arrive or when your character failed to find path. Use look_at_yourself to check the active second-level action.
 ";
 
         protected override void OnStart()
@@ -45,16 +46,23 @@ The result comes at once, the walk itself takes time: you will be notified when 
 
         protected override string Execute(GoToArguments arguments, LlmCallContext context)
         {
-            if (arguments.Distance < 1) return "Distance must be at least 1 meter";
+            if (arguments.Distance < 1)
+            {
+                return "Distance must be at least 1 meter";
+            }
 
             int bearing = Cardinal.Bearing(arguments.Bearing);
             string label = $"the point {arguments.Distance} m {Cardinal.Side(bearing)} ({bearing}{Cardinal.Degree})";
             Vector3 target = Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance;
 
             if (!NavMesh.SamplePosition(target, out NavMeshHit ground, GroundReach, NavMesh.AllAreas))
+            {
                 return $"There is no walkable ground at {label}";
+            }
             if (!navigator.CanReach(ground.position))
+            {
                 return $"There is no way from here to {label}";
+            }
 
             var order = new BtCoGoTo { Name = label, Destination = ground.position, Sprint = arguments.Sprint };
             string started = order.PromptDescription(Self);
@@ -70,7 +78,8 @@ The result comes at once, the walk itself takes time: you will be notified when 
 
             if (customOrders.TryPut(order)) return $"Started: {started}";
 
-            return $"Refused, another second-level action is active: {customOrders.Current.PromptDescription(Self)}\nCall again with force=true to replace it, or halt_bt to stop it";
+            return @$"Refused, another second-level action is active: {customOrders.Current.PromptDescription(Self)}
+Call again with force=true to replace it, or halt_bt to stop it";
         }
     }
 }
