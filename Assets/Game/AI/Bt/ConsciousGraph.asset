@@ -185,7 +185,7 @@ MonoBehaviour:
         m_Parent:
           rid: 2635107240049639571
         m_Children:
-        - rid: 2635107240049639579
+        - rid: 2635107240049639585
         - rid: 2635107240049639580
         m_RegisteredObservers: []
     - rid: 2635107240049639576
@@ -228,22 +228,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 2.5
-    - rid: 2635107240049639579
-      type: {class: RestartModifier, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        ID:
-          m_Value0: 17920980002412956530
-          m_Value1: 14427240576452351037
-        Graph:
-          rid: 5215485742385201652
-        m_Parent:
-          rid: 2635107240049639575
-        m_Child:
-          rid: 2635107240049639585
-        m_Conditions:
-        - rid: 2635107240049639586
-        m_RequiresAllConditions: 0
-        m_ObserverType: 0
     - rid: 2635107240049639580
       type: {class: WaitAction, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -311,14 +295,7 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201652
         m_Parent:
-          rid: 2635107240049639579
-        Agent:
-          rid: 2635107240049639569
-    - rid: 2635107240049639586
-      type: {class: BtCustomOrderChangedCondition, ns: Shooter.Game.AI.Bt.CustomOrders, asm: Shooter.Game}
-      data:
-        Graph:
-          rid: 5215485742385201652
+          rid: 2635107240049639575
         Agent:
           rid: 2635107240049639569
     - rid: 2635107240049639587
@@ -449,7 +426,6 @@ MonoBehaviour:
   - rid: 2635107217961123978
   - rid: 2635107217961124020
   - rid: 2635107217961124042
-  - rid: 2635107217961124084
   - rid: 2635107217961124128
   - rid: 2635107217961124177
   m_VersionTimestamp: 639240500071844122
@@ -511,16 +487,6 @@ MonoBehaviour:
     RuntimeTypeID:
       m_Value0: 11477120919463386923
       m_Value1: 7730102824742023565
-    Variables: []
-    NamedChildren: []
-    IsPlaceholder: 0
-  - Name: Restart
-    Story: 
-    RuntimeTypeString: Unity.Behavior.RestartModifier, Unity.Behavior, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    RuntimeTypeID:
-      m_Value0: 13639978763537614925
-      m_Value1: 3904329925062786712
     Variables: []
     NamedChildren: []
     IsPlaceholder: 0
@@ -693,56 +659,12 @@ MonoBehaviour:
         m_NodeModel:
           rid: 2635107217961124042
         m_Connections:
-        - rid: 2635107217961124085
-        - rid: 2635107217961124178
-    - rid: 2635107217961124084
-      type: {class: AbortNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 540.7996, y: 314.10022}
-        ID:
-          m_Value0: 17920980002412956530
-          m_Value1: 14427240576452351037
-        Parents: []
-        PortModels:
-        - rid: 2635107217961124085
-        - rid: 2635107217961124086
-        NodeType:
-          m_SerializableType: Unity.Behavior.RestartModifier, Unity.Behavior, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 13639978763537614925
-          m_Value1: 3904329925062786712
-        m_FieldValues: []
-        m_ModelAbortType: 1
-        <ConditionModels>k__BackingField:
-        - rid: 2635107217961124320
-        <RequiresAllConditionsTrue>k__BackingField: 0
-        <ShouldTruncateNodeUI>k__BackingField: 0
-        <ObserverType>k__BackingField: 0
-    - rid: 2635107217961124085
-      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
-      data:
-        m_Name: InputPort
-        m_PortDataFlowType: 0
-        m_IsFloating: 0
-        m_NodeModel:
-          rid: 2635107217961124084
-        m_Connections:
-        - rid: 2635107217961124044
-    - rid: 2635107217961124086
-      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
-      data:
-        m_Name: OutputPort
-        m_PortDataFlowType: 1
-        m_IsFloating: 0
-        m_NodeModel:
-          rid: 2635107217961124084
-        m_Connections:
         - rid: 2635107217961124129
+        - rid: 2635107217961124178
     - rid: 2635107217961124128
       type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: 532.0632, y: 408.48877}
+        Position: {x: 540.7996, y: 314.10022}
         ID:
           m_Value0: 3816026304808104660
           m_Value1: 5972536959013148359
@@ -767,7 +689,7 @@ MonoBehaviour:
         m_NodeModel:
           rid: 2635107217961124128
         m_Connections:
-        - rid: 2635107217961124086
+        - rid: 2635107217961124044
     - rid: 2635107217961124130
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -862,40 +784,6 @@ MonoBehaviour:
         Name: Self
         IsExposed: 1
         m_IsShared: 0
-        m_Value: {fileID: 0}
-    - rid: 2635107217961124320
-      type: {class: ConditionModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        ConditionType:
-          m_SerializableType: Shooter.Game.AI.Bt.CustomOrders.BtCustomOrderChangedCondition,
-            Shooter.Game, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        ConditionTypeID:
-          m_Value0: 2904291017835359900
-          m_Value1: 435427365829719973
-        NodeModel:
-          rid: 2635107217961124084
-        m_FieldValues:
-        - rid: 2635107217961124321
-        OperatorFieldModel:
-          rid: -2
-    - rid: 2635107217961124321
-      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        FieldName: Agent
-        Type:
-          m_SerializableType: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        LocalValue:
-          rid: 2635107217961124322
-        LinkedVariable:
-          rid: 2635107217961124296
-    - rid: 2635107217961124322
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
         m_Value: {fileID: 0}
     - rid: 5215485742385201658
       type: {class: StartNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
