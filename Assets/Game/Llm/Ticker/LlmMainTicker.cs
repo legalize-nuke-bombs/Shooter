@@ -12,11 +12,11 @@ namespace Shooter.Game.Llm
         private string entityName;
 
         private Llm llm;
-        private NetworkObject netObject;
         [SerializeReference, SubclassSelector] private LlmChildTicker[] tickers;
 
         private void Awake()
         {
+            enabled = NetworkManager.Singleton.IsServer;
             entityName = name;
 
             llm = GetComponent<Llm>();
@@ -29,7 +29,6 @@ namespace Shooter.Game.Llm
 
         private void Update()
         {
-            if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsServer) return;
             Type req = TickRequired();
             if (req != null)
             {
