@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [Serializable]
     public class LlmMailTicker : LlmChildTicker
     {
         [SerializeField] private float pendingInterval = 2.5f;

@@ -1,5 +1,4 @@
 using System;
-using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,51 +13,45 @@ namespace Shooter.Game.Llm
 
         private Llm llm;
         private NetworkObject netObject;
-        private LlmChildTicker[] tickers;
+        [SerializeReference, SubclassSelector] private LlmChildTicker[] tickers;
 
         private void Awake()
         {
-            llm = GetComponent<Llm>();
-
-            netObject = GetComponentInParent<NetworkObject>();
-            if (netObject == null) Log.Warn($"Entity {entityName} has no NetworkObject, its llm will never tick");
-
             entityName = name;
 
-            tickers = GetComponents<LlmChildTicker>();
-            if (tickers.Length == 0) Log.Warn($"Entity {entityName} does not have any ticker!");
+            llm = GetComponent<Llm>();
         }
 
         private void Update()
         {
-            if (netObject == null || !netObject.IsSpawned || !netObject.NetworkManager.IsServer) return;
-
-            Type type = TickRequired();
-            if (type != null) Tick(type);
+            if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsServer) return;
+            if (TickRequired()) Tick();
         }
 
-        private Type TickRequired()
+        private bool TickRequired()
         {
             LlmStatus llmStatus = llm.Status();
             foreach (LlmChildTicker ticker in tickers)
+            {
                 if (ticker.TickRequired(llmStatus))
-                    return ticker.GetType();
-
-            return null;
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        private void RegisterTick(Type type)
+        private void RegisterTick()
         {
             foreach (LlmChildTicker ticker in tickers) ticker.RegisterTick();
         }
 
-        private async void Tick(Type type)
+        private async void Tick()
         {
             try
             {
                 bool success = await llm.Tick();
-
-                if (success) RegisterTick(type);
+                if (success) RegisterTick();
             }
             catch (Exception ex)
             {
