@@ -241,6 +241,7 @@ MonoBehaviour:
   - rid: 2635107260138258858
   - rid: 2635107283221348552
   - rid: 2635107283221348553
+  - rid: 2635107283221348554
   references:
     version: 2
     RefIds:
@@ -315,6 +316,9 @@ MonoBehaviour:
       type: {class: ReadConversationTool, ns: Shooter.Game.Llm.ReadConversation, asm: Shooter.Game}
       data:
         maxOutput: 10000
+    - rid: 2635107283221348554
+      type: {class: SearchConversationsTool, ns: Shooter.Game.Llm.SearchConversations, asm: Shooter.Game}
+      data: 
 --- !u!114 &7426902805887786745
 MonoBehaviour:
   m_ObjectHideFlags: 0
