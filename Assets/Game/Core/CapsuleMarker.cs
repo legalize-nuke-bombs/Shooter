@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Core
 {
-    public class CharacterMarker : MonoBehaviour
+    public class CapsuleMarker : MonoBehaviour
     {
         private const float Height = 2f;
         private const float Ring = 0.4f;

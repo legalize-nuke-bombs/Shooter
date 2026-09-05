@@ -1745,6 +1745,7 @@ GameObject:
   m_Component:
   - component: {fileID: 410730917}
   - component: {fileID: 410730918}
+  - component: {fileID: 410730919}
   m_Layer: 0
   m_Name: MainSpawnPoint
   m_TagString: Untagged
@@ -1761,7 +1762,7 @@ Transform:
   m_GameObject: {fileID: 410730915}
   serializedVersion: 2
   m_LocalRotation: {x: -0.03935837, y: 0.27859116, z: -0.04150183, w: 0.9587051}
-  m_LocalPosition: {x: -39.907, y: 1.346, z: -60.364}
+  m_LocalPosition: {x: -39.907, y: 0.181, z: -60.364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1779,6 +1780,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12420b3095cffd34fa5a5ddfc47580ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainSpawnPoint
+--- !u!114 &410730919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410730915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af21de618049e2e42b85bb3ca293fc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CharacterMarker
+  label: 
+  tint: {r: 0.35, g: 0.9, b: 1, a: 1}
 --- !u!1001 &469482538
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4114,6 +4129,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 915082299}
+  - component: {fileID: 915082300}
   m_Layer: 0
   m_Name: CorridorsSpawnPoint
   m_TagString: Untagged
@@ -4130,12 +4146,26 @@ Transform:
   m_GameObject: {fileID: 915082298}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.138, y: 2.007, z: 10066.96}
+  m_LocalPosition: {x: 26.986, y: 0.2, z: 10066.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &915082300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915082298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af21de618049e2e42b85bb3ca293fc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CharacterMarker
+  label: 
+  tint: {r: 0.35, g: 0.9, b: 1, a: 1}
 --- !u!1001 &976557650
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7615,7 +7645,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.13333334
+  m_VoxelSize: 0.16000001
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 1f5a3f31b7eb8f04eb3ba440ca771a54, type: 2}
   m_BuildHeightMesh: 0
@@ -7894,8 +7924,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2002334509}
+  - component: {fileID: 2002334510}
   m_Layer: 0
-  m_Name: SpawnDestination
+  m_Name: VigoSpawnDestination
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7910,12 +7941,26 @@ Transform:
   m_GameObject: {fileID: 2002334508}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -61.67, y: 2.07, z: -46.23932}
+  m_LocalPosition: {x: -61.67, y: 0.196, z: -46.23932}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2002334510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002334508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af21de618049e2e42b85bb3ca293fc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CapsuleMarker
+  label: 
+  tint: {r: 0.35, g: 0.9, b: 1, a: 1}
 --- !u!1001 &2016207100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8201,6 +8246,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2071401414}
+  - component: {fileID: 2071401415}
   m_Layer: 0
   m_Name: TeleportDestination
   m_TagString: Untagged
@@ -8216,13 +8262,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2071401413}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66.28, y: 1.16, z: 2.43}
+  m_LocalRotation: {x: -0, y: -0.51866555, z: -0, w: 0.85497725}
+  m_LocalPosition: {x: 68.162, y: 0.151, z: 6.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -62.486, z: 0}
+--- !u!114 &2071401415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071401413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af21de618049e2e42b85bb3ca293fc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CharacterMarker
+  label: 
+  tint: {r: 0.35, g: 0.9, b: 1, a: 1}
 --- !u!1001 &2125857277
 PrefabInstance:
   m_ObjectHideFlags: 0
