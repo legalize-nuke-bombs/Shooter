@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Speech;
+using Shooter.Game.World;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm.ListConversations
@@ -66,7 +68,10 @@ To see the content, use read_conversation.
             foreach (Conversation conversation in sortedConversations)
             {
                 long partner = conversation.Partner(ownCharacter.Id);
-                sb.AppendLine($"ID {partner} ({partnerNames[partner]}) | {conversation.Messages.Count} messages, last message at {conversation.Messages.LastOrDefault()?.Time ?? DateTime.MinValue}");
+                string partnerName = partnerNames.TryGetValue(partner, out string known) ? known : "Unknown";
+                Message last = conversation.Messages.LastOrDefault();
+                string lastAt = last == null ? "never" : last.Time.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
+                sb.AppendLine($"ID {partner} ({partnerName}) | {conversation.Messages.Count} messages, last message at {lastAt}");
             }
             return sb.ToString();
         }

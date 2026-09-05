@@ -85,7 +85,10 @@ namespace Shooter.Game.Speech
             OpenedRpc(talker.NetworkObjectId);
 
             conversations = ConversationManager.Current;
-            foreach (Message message in conversations.GetOrCreate(CharacterId, talker.CharacterId).Messages) Hear(message);
+            Conversation history = conversations.GetIfPresent(CharacterId, talker.CharacterId);
+            if (history != null)
+                foreach (Message message in history.Messages)
+                    Hear(message);
             conversations.Said += Relay;
         }
 

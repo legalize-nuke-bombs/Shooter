@@ -13,6 +13,7 @@ namespace Shooter.Game.World
     {
         private static readonly Journal Log = Logs.Here();
 
+        public const string StampFormat = "yyyy.MM.dd HH:mm:ss";
         public const long DayLengthSeconds = 86400;
         private const float DayRealSeconds = 1200f;
         private const float GameSecondsPerRealSecond = DayLengthSeconds / DayRealSeconds;

@@ -5,8 +5,6 @@ namespace Shooter.Game.Speech
 {
     public class Message : ISaveable
     {
-        public const string TimeFormat = "yyyy.MM.dd HH:mm:ss";
-
         public long AuthorId { get; set; }
         public string Content { get; set; }
         public DateTime Time { get; set; }
