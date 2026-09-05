@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Logging;
@@ -12,14 +11,15 @@ namespace Shooter.Game.Speech
     [RequireComponent(typeof(Speaker))]
     public abstract class Talker : NetworkBehaviour, IUsable
     {
+        public const string Refusal = "Not now.";
         private static readonly Journal Log = Logs.Here();
 
-        private readonly List<PlayerMouth> engaged = new();
         private readonly NetworkVariable<bool> thinking = new();
 
         [SerializeField] private SoundSpec muttering;
 
         private Character character;
+        private ConversationManager conversations;
         private Speaker speaker;
 
         public bool Thinking => thinking.Value;
@@ -40,13 +40,24 @@ namespace Shooter.Game.Speech
         public override void OnNetworkSpawn()
         {
             thinking.OnValueChanged += RelayThinking;
-            if (IsServer) enabled = true;
+            if (!IsServer) return;
+
+            enabled = true;
+            conversations = ConversationManager.Current;
+            if (conversations == null)
+            {
+                Log.Warn($"Entity {name} finds no conversations in the world and stays mute");
+                return;
+            }
+
+            conversations.Said += Mutter;
         }
 
         public override void OnNetworkDespawn()
         {
             thinking.OnValueChanged -= RelayThinking;
-            engaged.Clear();
+            if (conversations != null) conversations.Said -= Mutter;
+            conversations = null;
             enabled = false;
         }
 
@@ -59,16 +70,6 @@ namespace Shooter.Game.Speech
             else mouth.Open(this);
         }
 
-        public void Engage(PlayerMouth mouth)
-        {
-            if (!engaged.Contains(mouth)) engaged.Add(mouth);
-        }
-
-        public void Release(PlayerMouth mouth)
-        {
-            engaged.Remove(mouth);
-        }
-
         public void Listen(PlayerMouth mouth, string content)
         {
             if (!IsServer) return;
@@ -76,28 +77,15 @@ namespace Shooter.Game.Speech
             RequestAnswer(mouth.CharacterId, content);
         }
 
-        public struct Answer
+        protected void Refuse(long wandererId)
         {
-            public string Content { get; set; }
-            public bool Loud { get; set; }
-        }
-
-        protected void DeliverAnswer(long wandererId, Answer answer)
-        {
-            ConversationManager conversations = ConversationManager.Current;
             if (conversations == null)
             {
-                Log.Warn($"Entity {name} answers wanderer {wandererId} into the void: the world keeps no conversations");
+                Log.Warn($"Entity {name} can not even refuse wanderer {wandererId}: the world keeps no conversations");
                 return;
             }
 
-            Message message = conversations.Between(CharacterId, wandererId).Say(CharacterId, answer.Content);
-            foreach (PlayerMouth mouth in engaged)
-                if (mouth.CharacterId == wandererId)
-                    mouth.Hear(message);
-
-            if (answer.Loud && muttering != null) speaker.Play(muttering);
-            Log.Info($"Entity {name} answered wanderer {wandererId}");
+            conversations.Say(CharacterId, wandererId, Refusal, false);
         }
 
         protected abstract void RequestAnswer(long wandererId, string message);
@@ -107,6 +95,13 @@ namespace Shooter.Game.Speech
         private void Update()
         {
             thinking.Value = Busy();
+        }
+
+        private void Mutter(Conversation conversation, Message message)
+        {
+            if (!message.Spoken || message.AuthorId != CharacterId || muttering == null) return;
+
+            speaker.Play(muttering);
         }
 
         private void RelayThinking(bool previous, bool current)

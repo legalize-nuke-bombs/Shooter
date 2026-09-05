@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Game.Speech;
 using Shooter.Game.World;
 using Shooter.Logging;
@@ -14,6 +15,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(LlmHistory))]
     [RequireComponent(typeof(LlmPendingTable))]
     public class Llm : MonoBehaviour, IMortal
@@ -40,16 +42,16 @@ namespace Shooter.Game.Llm
         private readonly CancellationTokenSource life = new();
         private string entityName;
 
+        private Character ownCharacter;
         private LlmHistory history;
         private float retryBlockedUntil;
         private LlmPendingTable table;
 
         public bool Busy { get; private set; }
 
-        public event Action<long, Talker.Answer> Answered;
-
         private void Awake()
         {
+            ownCharacter = GetComponent<Character>();
             history = GetComponent<LlmHistory>();
             table = GetComponent<LlmPendingTable>();
             entityName = name;
@@ -124,12 +126,6 @@ namespace Shooter.Game.Llm
         {
             history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line }, urgent);
             if (askerId != null) table.Mark(askerId.Value);
-        }
-
-        public void Answer(long characterId, Talker.Answer answer)
-        {
-            table.Clear(characterId);
-            Answered?.Invoke(characterId, answer);
         }
 
         public LlmStatus Status()
@@ -220,24 +216,16 @@ namespace Shooter.Game.Llm
 
         private void Abandon(List<long> asked)
         {
+            ConversationManager conversations = ConversationManager.Current;
+
             foreach (long id in asked)
             {
                 if (!table.Clear(id)) continue;
 
-                Log.Warn($"Entity {entityName} has not answered wanderer {id}, the fallback is said instead");
+                Log.Warn($"Entity {entityName} has not answered wanderer {id}, the refusal is said instead");
+                if (conversations == null) continue;
 
-                try
-                {
-                    Answered?.Invoke(id, new Talker.Answer()
-                    {
-                        Content = "Not now.",
-                        Loud = false
-                    });
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Entity {entityName} failed to deliver the fallback to wanderer {id}: {e.Message}");
-                }
+                conversations.Say(ownCharacter.Id, id, Talker.Refusal, false);
             }
         }
 

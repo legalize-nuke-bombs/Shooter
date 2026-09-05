@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Shooter.Game.Core.Saves;
-using Shooter.Game.World;
 
 namespace Shooter.Game.Speech
 {
@@ -47,21 +45,18 @@ namespace Shooter.Game.Speech
 
         public long Second { get; private set; }
 
+        public (long, long) Key => (First, Second);
+
         public IReadOnlyList<Message> Messages => messages;
 
-        public Message Say(long authorId, string content)
+        public long Other(long participantId)
         {
-            var message = new Message
-            {
-                AuthorId = authorId,
-                Content = content,
-                Time = Clock.Current == null
-                    ? string.Empty
-                    : Clock.Current.Now.ToString(Message.TimeFormat, CultureInfo.InvariantCulture)
-            };
+            return participantId == First ? Second : First;
+        }
 
+        public void Add(Message message)
+        {
             messages.Add(message);
-            return message;
         }
 
         public static (long, long) Pair(long first, long second)

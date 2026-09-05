@@ -17,6 +17,7 @@ namespace Shooter.Game.Speech
         private readonly NetworkVariable<ulong> interlocutor = new();
 
         private Character character;
+        private ConversationManager conversations;
         private Talker talker;
 
         public bool Talking => talker != null;
@@ -73,12 +74,11 @@ namespace Shooter.Game.Speech
 
             this.talker = talker;
             interlocutor.Value = talker.NetworkObjectId;
-            talker.Engage(this);
             Log.Info($"Player {OwnerClientId} opened a talk with {talker.name}");
 
             OpenedRpc(talker.NetworkObjectId);
 
-            ConversationManager conversations = ConversationManager.Current;
+            conversations = ConversationManager.Current;
             if (conversations == null)
             {
                 Log.Warn($"Player {OwnerClientId} starts blank: the world keeps no conversations");
@@ -86,6 +86,7 @@ namespace Shooter.Game.Speech
             }
 
             foreach (Message message in conversations.Between(CharacterId, talker.CharacterId).Messages) Hear(message);
+            conversations.Said += Relay;
         }
 
         public void Close()
@@ -120,14 +121,13 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            ConversationManager conversations = ConversationManager.Current;
             if (conversations == null)
             {
                 Log.Warn($"Player {OwnerClientId} speaks into the void: the world keeps no conversations");
                 return;
             }
 
-            Hear(conversations.Between(CharacterId, talker.CharacterId).Say(CharacterId, speech));
+            conversations.Say(CharacterId, talker.CharacterId, speech, true);
             talker.Listen(this, speech);
         }
 
@@ -148,10 +148,16 @@ namespace Shooter.Game.Speech
 
         private void Forget()
         {
-            if (talker == null) return;
-
-            talker.Release(this);
+            if (conversations != null) conversations.Said -= Relay;
+            conversations = null;
             talker = null;
+        }
+
+        private void Relay(Conversation conversation, Message message)
+        {
+            if (talker == null || conversation.Key != Conversation.Pair(CharacterId, talker.CharacterId)) return;
+
+            Hear(message);
         }
 
         private bool Fit(Talker talker)

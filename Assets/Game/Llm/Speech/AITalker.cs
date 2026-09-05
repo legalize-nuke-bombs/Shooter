@@ -1,30 +1,18 @@
+using Shooter.Game.Speech;
 using Shooter.Logging;
 
-namespace Shooter.Game.Speech
+namespace Shooter.Game.Llm
 {
     public sealed class AITalker : Talker
     {
         private static readonly Journal Log = Logs.Here();
 
-        private Llm.Llm llm;
+        private Llm llm;
 
         protected override void Awake()
         {
             base.Awake();
-            llm = GetComponent<Llm.Llm>();
-        }
-
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-            if (!IsServer || llm == null) return;
-            llm.Answered += DeliverAnswer;
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            if (IsServer && llm != null) llm.Answered -= DeliverAnswer;
-            base.OnNetworkDespawn();
+            llm = GetComponent<Llm>();
         }
 
         protected override bool Busy()
@@ -37,11 +25,7 @@ namespace Shooter.Game.Speech
             if (llm == null)
             {
                 Log.Warn($"Entity {name} has no llm to answer with");
-                DeliverAnswer(wandererId, new Answer()
-                {
-                    Content = "Not now.",
-                    Loud = false
-                });
+                Refuse(wandererId);
                 return;
             }
 
