@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Shooter.Game.Core.Saves;
 
 namespace Shooter.Game.Speech
@@ -62,6 +63,19 @@ namespace Shooter.Game.Speech
         public static (long, long) Pair(long first, long second)
         {
             return first <= second ? (first, second) : (second, first);
+        }
+
+        public List<int> Matches(Regex regex)
+        {
+            var result = new List<int>();
+            for (int i = 0; i < messages.Count; i++)
+            {
+                if (regex.IsMatch(messages[i].Content))
+                {
+                    result.Add(i);
+                }
+            }
+            return result;
         }
     }
 }
