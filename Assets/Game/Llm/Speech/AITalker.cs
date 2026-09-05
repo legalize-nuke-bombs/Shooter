@@ -1,12 +1,11 @@
 using Shooter.Game.Speech;
-using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [RequireComponent(typeof(Llm))]
     public sealed class AITalker : Talker
     {
-        private static readonly Journal Log = Logs.Here();
-
         private Llm llm;
 
         protected override void Awake()
@@ -17,18 +16,11 @@ namespace Shooter.Game.Llm
 
         protected override bool Busy()
         {
-            return llm != null && llm.Busy;
+            return llm.Busy;
         }
 
         protected override void RequestAnswer(long wandererId, string message)
         {
-            if (llm == null)
-            {
-                Log.Warn($"Entity {name} has no llm to answer with");
-                Refuse(wandererId);
-                return;
-            }
-
             llm.Notice($"Wanderer [ID {wandererId}] says: {message}", true, wandererId);
         }
     }

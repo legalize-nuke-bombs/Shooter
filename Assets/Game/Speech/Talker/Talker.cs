@@ -1,30 +1,33 @@
 using System;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Speech
 {
     [RequireComponent(typeof(Character))]
+    [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Speaker))]
     public abstract class Talker : NetworkBehaviour, IUsable
     {
-        public const string Refusal = "Not now.";
-        private static readonly Journal Log = Logs.Here();
-
         private readonly NetworkVariable<bool> thinking = new();
 
         [SerializeField] private SoundSpec muttering;
 
         private Character character;
         private ConversationManager conversations;
+        private Health health;
+        private Sleeper sleeper;
         private Speaker speaker;
 
         public bool Thinking => thinking.Value;
 
         public long CharacterId => character.Id;
+
+        public bool Alive => health.Alive;
+
+        public bool Sleeping => sleeper != null && sleeper.Sleeping;
 
         public UsageType Usage => UsageType.Talk;
 
@@ -33,6 +36,8 @@ namespace Shooter.Game.Speech
         protected virtual void Awake()
         {
             character = GetComponent<Character>();
+            health = GetComponent<Health>();
+            sleeper = GetComponent<Sleeper>();
             speaker = GetComponent<Speaker>();
             enabled = false;
         }
@@ -44,19 +49,13 @@ namespace Shooter.Game.Speech
 
             enabled = true;
             conversations = ConversationManager.Current;
-            if (conversations == null)
-            {
-                Log.Warn($"Entity {name} finds no conversations in the world and stays mute");
-                return;
-            }
-
             conversations.Said += Mutter;
         }
 
         public override void OnNetworkDespawn()
         {
             thinking.OnValueChanged -= RelayThinking;
-            if (conversations != null) conversations.Said -= Mutter;
+            if (IsServer) conversations.Said -= Mutter;
             conversations = null;
             enabled = false;
         }
@@ -75,17 +74,6 @@ namespace Shooter.Game.Speech
             if (!IsServer) return;
 
             RequestAnswer(mouth.CharacterId, content);
-        }
-
-        protected void Refuse(long wandererId)
-        {
-            if (conversations == null)
-            {
-                Log.Warn($"Entity {name} can not even refuse wanderer {wandererId}: the world keeps no conversations");
-                return;
-            }
-
-            conversations.Say(CharacterId, wandererId, Refusal, false);
         }
 
         protected abstract void RequestAnswer(long wandererId, string message);

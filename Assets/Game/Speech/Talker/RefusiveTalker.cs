@@ -9,7 +9,7 @@ namespace Shooter.Game.Speech
 
         protected override void RequestAnswer(long wandererId, string message)
         {
-            Refuse(wandererId);
+            ConversationManager.Current.Say(CharacterId, wandererId, "Not now.", false);
         }
     }
 }

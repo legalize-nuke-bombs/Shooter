@@ -68,7 +68,6 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
             var failed = new List<string>();
 
             ConversationManager conversations = ConversationManager.Current;
-            if (conversations == null) Log.Warn($"Entity {Self.name} sends messages the world will not remember: it keeps no conversations");
 
             foreach (long targetId in arguments.TargetIds.Distinct())
             {
@@ -102,7 +101,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                     .Urgened(arguments.Urgent)
                 );
 
-                if (conversations != null) conversations.Say(ownCharacter.Id, targetId, arguments.Content, false);
+                conversations.Say(ownCharacter.Id, targetId, arguments.Content, false);
 
                 delivered.Add(targetId);
                 Log.Info($"Entity {Self.name} said to {targetId}: {arguments.Content}");
