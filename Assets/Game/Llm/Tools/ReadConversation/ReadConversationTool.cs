@@ -6,7 +6,6 @@ using Shooter.Game.Core;
 using Shooter.Game.Speech;
 using Shooter.Game.World;
 using Shooter.Logging;
-using UnityEngine;
 
 namespace Shooter.Game.Llm.ReadConversation
 {
@@ -14,8 +13,6 @@ namespace Shooter.Game.Llm.ReadConversation
     public class ReadConversationTool : LlmTool<ReadConversationArguments>
     {
         private static readonly Journal Log = Logs.Here();
-
-        [SerializeField] private int maxOutput = 10000;
 
         private Character ownCharacter;
         public override string Name => "read_conversation";
@@ -77,11 +74,6 @@ Specify `from` (the message number from which you want to retrieve the conversat
                 Message message = messages[i];
                 string stamp = message.Time.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
                 sb.AppendLine($"[{stamp}]{(message.Spoken ? "" : " (radio)")} ID {message.AuthorId}: {message.Content}");
-            }
-
-            if (sb.Length > maxOutput)
-            {
-                return $"Result is too long {sb.Length} ch (max is {maxOutput} ch), consider invoking this tool with a smaller page size.";
             }
 
             return sb.ToString();

@@ -315,7 +315,6 @@ MonoBehaviour:
     - rid: 2635107283221348553
       type: {class: ReadConversationTool, ns: Shooter.Game.Llm.ReadConversation, asm: Shooter.Game}
       data:
-        maxOutput: 10000
     - rid: 2635107283221348554
       type: {class: SearchConversationsTool, ns: Shooter.Game.Llm.SearchConversations, asm: Shooter.Game}
       data: 
