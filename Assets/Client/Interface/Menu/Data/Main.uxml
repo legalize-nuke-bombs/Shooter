@@ -8,9 +8,9 @@
         </ui:VisualElement>
         <ui:VisualElement class="menu__group">
             <ui:Button name="join" text="Присоединиться к игре" class="menu__item"/>
+            <ui:Button name="client-settings" text="Настройки клиента" class="menu__item"/>
         </ui:VisualElement>
         <ui:VisualElement class="menu__group">
-            <ui:Button name="client-settings" text="Настройки клиента" class="menu__item"/>
             <ui:Button name="account" text="Аккаунт" class="menu__item"/>
         </ui:VisualElement>
         <ui:VisualElement class="menu__group menu__group--last">
