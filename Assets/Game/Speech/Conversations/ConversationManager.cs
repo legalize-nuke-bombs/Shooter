@@ -65,7 +65,7 @@ namespace Shooter.Game.Speech
             if (Current == this) Current = null;
         }
 
-        public Conversation Between(long first, long second)
+        public Conversation GetOrCreate(long first, long second)
         {
             (long, long) pair = Conversation.Pair(first, second);
             if (conversations.TryGetValue(pair, out Conversation conversation)) return conversation;
@@ -75,6 +75,12 @@ namespace Shooter.Game.Speech
             UpdateIndex(conversation);
             Log.Info($"Characters {pair.Item1} and {pair.Item2} start a conversation");
             return conversation;
+        }
+
+        public Conversation GetIfPresent(long first, long second)
+        {
+            (long, long) pair = Conversation.Pair(first, second);
+            return conversations.GetValueOrDefault(pair, null);
         }
 
         public List<Conversation> Of(long id)
@@ -92,7 +98,7 @@ namespace Shooter.Game.Speech
 
         public Message Say(long authorId, long listenerId, string content, bool spoken)
         {
-            Conversation conversation = Between(authorId, listenerId);
+            Conversation conversation = GetOrCreate(authorId, listenerId);
             var message = new Message
             {
                 AuthorId = authorId,
