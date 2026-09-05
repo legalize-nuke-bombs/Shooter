@@ -14,7 +14,6 @@ namespace Shooter.Configuring
         private float music = 0.25f;
         private float ambience = 1f;
         private float sounds = 1f;
-        private float vhs = 0.35f;
 
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
@@ -58,13 +57,6 @@ namespace Shooter.Configuring
         {
             get => sounds;
             set => Change(ref sounds, value);
-        }
-
-        [CreateProperty]
-        public float Vhs
-        {
-            get => vhs;
-            set => Change(ref vhs, value);
         }
 
         private void Change<T>(ref T field, T value, [CallerMemberName] string property = "")

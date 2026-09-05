@@ -23,12 +23,6 @@
                 <ui:DataBinding property="value" data-source-path="Client.Sounds" binding-mode="TwoWay"/>
             </Bindings>
         </ui:Slider>
-        <ui:Label text="Изображение" class="screen__section"/>
-        <ui:Slider label="Эффект VHS" low-value="0" high-value="1" fill="true" class="field">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Vhs" binding-mode="TwoWay"/>
-            </Bindings>
-        </ui:Slider>
     </ui:VisualElement>
     <ui:VisualElement class="screen__footer">
         <ui:Button name="back" text="Назад" class="action"/>
