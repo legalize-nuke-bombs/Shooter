@@ -37,7 +37,11 @@ namespace Shooter.Game.Speech
             if (llm == null)
             {
                 Log.Warn($"Entity {name} has no llm to answer with");
-                DeliverAnswer(wandererId, null);
+                DeliverAnswer(wandererId, new Answer()
+                {
+                    Content = "Not now.",
+                    Loud = false
+                });
                 return;
             }
 

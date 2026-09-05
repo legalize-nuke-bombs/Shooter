@@ -9,7 +9,11 @@ namespace Shooter.Game.Speech
 
         protected override void RequestAnswer(long wandererId, string message)
         {
-            DeliverAnswer(wandererId, null);
+            DeliverAnswer(wandererId, new Answer()
+            {
+                Content = "Not now.",
+                Loud = false
+            });
         }
     }
 }

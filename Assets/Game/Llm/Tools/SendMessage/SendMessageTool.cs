@@ -5,6 +5,7 @@ using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Notifying;
+using Shooter.Game.Speech;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -106,7 +107,11 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
 
                 if (target.TryGetComponent(out Player player))
                 {
-                    llm.Answer(player.Id, arguments.Content);
+                    llm.Answer(targetId, new Talker.Answer()
+                    {
+                        Content = arguments.Content,
+                        Loud = false
+                    });
                 }
 
                 delivered.Add(targetId);
