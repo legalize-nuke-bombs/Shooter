@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
 using Shooter.Game.World;
@@ -87,6 +87,34 @@ namespace Shooter.Game.Speech
         {
             return conversationsById.TryGetValue(id, out List<Conversation> found) ? found.ToList() : new List<Conversation>();
         }
+
+        public Dictionary<long, List<int>> Matches(long id, string pattern)
+        {
+            List<Conversation> input = Of(id);
+            var regex = new Regex(pattern, RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+
+            var result = new Dictionary<long, List<int>>();
+
+            for (int i = 0; i < input.Count; i++)
+            {
+                Conversation conversation = input[i];
+                long conversationPartner = conversation.Partner(id);
+                List<int> messageIds = conversation.Matches(regex);
+                result.TryAdd(conversationPartner, new List<int>());
+                foreach (int messageId in messageIds)
+                {
+                    result[conversationPartner].Add(messageId);
+                }
+            }
+
+            return result;
+        }
+        public List<int> Matches(long id1, long id2, string pattern)
+        {
+            var regex = new Regex(pattern, RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+            return conversations.GetValueOrDefault(Conversation.Pair(id1, id2), new Conversation()).Matches(regex);
+        }
+
 
         private void UpdateIndex(Conversation conversation)
         {
