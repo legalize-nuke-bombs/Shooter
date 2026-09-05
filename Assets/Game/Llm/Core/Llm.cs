@@ -23,6 +23,9 @@ namespace Shooter.Game.Llm
         private const string ClearHeadDemand =
             "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date in full detail, including the very latest context - what is happening right now and where you left off. Then call clear_head.";
 
+        private const string ForcedClearing =
+            "Your head overflowed and has been cleared by force: your story so far is gone, only your notes remain. Your notes are your memory now - read the ones you need before you act or speak, start with the one about who you are.";
+
         private const string StoryHeader =
             "THE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
 
@@ -171,6 +174,13 @@ namespace Shooter.Game.Llm
         private async Task<bool> Think(List<long> asked)
         {
             if (String.IsNullOrEmpty(Config.Read().Server.Llm.Provider)) return false;
+
+            if (history.Bursting)
+            {
+                Log.Warn($"Entity {entityName} has not cleared its head at {history.Size} chars, the story is cut by force");
+                history.Forget(history.Count);
+                history.Append(new LlmMessage { Role = LlmRole.User, Content = ForcedClearing });
+            }
 
             bool clearing = history.Overflowing;
 

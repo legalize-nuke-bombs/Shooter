@@ -2,13 +2,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using Shooter.Game.Core.Saves;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
     public sealed class LlmHistory : MonoBehaviour, ISaveableComponent
     {
+        public const int MessageLimit = 10000;
+        private static readonly Journal Log = Logs.Here();
+
         [SerializeField] private int maxSize = 100000;
+        [SerializeField] private int hardSize = 200000;
 
         private readonly List<LlmMessage> messages = new();
 
@@ -39,10 +44,12 @@ namespace Shooter.Game.Llm
         public int Size { get; private set; }
         public bool Unseen { get; private set; }
         public bool Overflowing => Size >= maxSize;
+        public bool Bursting => Size >= hardSize;
         public IReadOnlyList<LlmMessage> Messages => messages;
 
         public void Append(LlmMessage message)
         {
+            Gate(message);
             messages.Add(message);
             Size += Sized(message);
         }
@@ -75,6 +82,16 @@ namespace Shooter.Game.Llm
             Size = 0;
 
             foreach (LlmMessage message in fresh) Append(message);
+        }
+
+        private void Gate(LlmMessage message)
+        {
+            int length = message.Content?.Length ?? 0;
+            if (length <= MessageLimit) return;
+
+            Log.Warn($"Entity {name} takes a {length} character message, cut to {MessageLimit}");
+            string marker = $"\n[output truncated, original length {length} characters]";
+            message.Content = message.Content.Substring(0, MessageLimit - marker.Length) + marker;
         }
 
         private static int Sized(LlmMessage message)
