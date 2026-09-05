@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using UnityEngine;
@@ -9,9 +8,9 @@ namespace Shooter.Game.Llm
 {
     public sealed class LlmHistory : MonoBehaviour, ISaveableComponent
     {
-        public const int MessageLimit = 10000;
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private int messageLimit = 10000;
         [SerializeField] private int maxSize = 100000;
         [SerializeField] private int hardSize = 200000;
 
@@ -86,21 +85,25 @@ namespace Shooter.Game.Llm
 
         private void Gate(LlmMessage message)
         {
-            int length = message.Content?.Length ?? 0;
-            if (length <= MessageLimit) return;
+            int length = message.Content.Length;
+            if (length <= messageLimit) return;
 
-            Log.Warn($"Entity {name} takes a {length} character message, cut to {MessageLimit}");
+            Log.Warn($"Entity {name} takes a {length} character message, cut to {messageLimit}");
             string marker = $"\n[output truncated, original length {length} characters]";
-            message.Content = message.Content.Substring(0, MessageLimit - marker.Length) + marker;
+            message.Content = message.Content.Substring(0, messageLimit - marker.Length) + marker;
         }
 
         private static int Sized(LlmMessage message)
         {
-            int size = (message.Content?.Length ?? 0) + 20;
+            int size = message.Content.Length + 20;
 
             if (message.ToolCalls != null)
+            {
                 foreach (LlmToolCall call in message.ToolCalls)
+                {
                     size += (call.Name?.Length ?? 0) + (call.Arguments?.Length ?? 0) + 20;
+                }
+            }
 
             return size;
         }
