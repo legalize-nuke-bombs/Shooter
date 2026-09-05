@@ -19,7 +19,6 @@ namespace Shooter.Bootstrapping
         private const string OverlayPrefab = "Overlays";
         private const string CompressionPrefab = "Compression";
         private const string MixerPrefab = "Mixer";
-        private const string VhsPrefab = "VHS";
         private const string ScreenshotPrefab = "Screenshots";
         private const string MenuScene = "Menu";
         private const string BootScene = "Boot";
@@ -39,7 +38,6 @@ namespace Shooter.Bootstrapping
         {
             Raise(CompressionPrefab);
             Raise(MixerPrefab);
-            Raise(VhsPrefab);
             Raise(ScreenshotPrefab);
             yield return ToMenu();
         }
