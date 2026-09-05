@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Shooter.Game.Core;
+using Shooter.Game.Core.Mixing;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -77,6 +78,7 @@ namespace Shooter.Game.Body
             AudioSource source = gameObject.AddComponent<AudioSource>();
             source.playOnAwake = false;
             source.spatialBlend = 1f;
+            source.outputAudioMixerGroup = Mixer.Sounds;
             sources.Add(source);
 
             return source;
