@@ -49,7 +49,7 @@ namespace Shooter.Game.Speech
 
         public IReadOnlyList<Message> Messages => messages;
 
-        public long Other(long participantId)
+        public long Partner(long participantId)
         {
             return participantId == First ? Second : First;
         }

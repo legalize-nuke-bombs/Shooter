@@ -82,7 +82,7 @@ namespace Shooter.Game.Llm
         {
             if (message.AuthorId != character.Id) return;
 
-            long wandererId = conversation.Other(character.Id);
+            long wandererId = conversation.Partner(character.Id);
             if (pending.Remove(wandererId)) Log.Info($"Entity {name} has answered wanderer {wandererId}");
         }
     }

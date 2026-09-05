@@ -1,3 +1,4 @@
+using System;
 using Shooter.Game.Core.Saves;
 
 namespace Shooter.Game.Speech
@@ -8,14 +9,14 @@ namespace Shooter.Game.Speech
 
         public long AuthorId { get; set; }
         public string Content { get; set; }
-        public string Time { get; set; }
+        public DateTime Time { get; set; }
         public bool Spoken { get; set; }
 
         private struct SaveData
         {
             public long AuthorId { get; set; }
             public string Content { get; set; }
-            public string Time { get; set; }
+            public DateTime Time { get; set; }
             public bool Spoken { get; set; }
         }
         public object SaveObject()

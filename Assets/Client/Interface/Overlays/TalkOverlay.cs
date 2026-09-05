@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
@@ -93,7 +94,7 @@ namespace Shooter.Client.Interface
             Log.Info($"Talk window opened with {speaker.text}");
         }
 
-        private void Line(string content, string time, bool mine)
+        private void Line(string content, DateTime time, bool mine)
         {
             var line = new Label();
             line.AddToClassList("talk__line");
