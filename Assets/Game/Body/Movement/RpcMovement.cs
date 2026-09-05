@@ -5,7 +5,7 @@ namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(Landing))]
-    public class PhysicsMovement : Movement
+    public class RpcMovement : Movement
     {
         private const float GroundedFall = -1f;
 
@@ -51,7 +51,7 @@ namespace Shooter.Game.Body
             jumping = false;
         }
 
-        protected override bool Advance(Vector3 wish, float dt)
+        protected override bool Tick(Vector3 wish, float dt)
         {
             if (characterController.isGrounded)
             {
@@ -92,7 +92,7 @@ namespace Shooter.Game.Body
             return characterController.isGrounded;
         }
 
-        protected override void Relocate(Vector3 position, Quaternion rotation)
+        protected override void TeleportRaw(Vector3 position, Quaternion rotation)
         {
             characterController.enabled = false;
             transform.SetPositionAndRotation(position, rotation);
