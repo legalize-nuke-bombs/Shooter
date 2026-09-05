@@ -24,7 +24,7 @@ namespace Shooter.Client.Interface
         private readonly NameMapper mapper = new();
         private TextField input;
         private ScrollView log;
-        private Mouth mouth;
+        private PlayerMouth playerMouth;
         private Label speaker;
         private Talker talker;
         private Label waiting;
@@ -37,17 +37,17 @@ namespace Shooter.Client.Interface
         {
             if (!Bound) return;
 
-            Mouth own = OwnPlayer.Find<Mouth>();
-            if (own == mouth) return;
+            PlayerMouth own = OwnPlayer.Find<PlayerMouth>();
+            if (own == playerMouth) return;
 
             Forget();
-            mouth = own;
+            playerMouth = own;
 
-            if (mouth == null) return;
+            if (playerMouth == null) return;
 
-            mouth.Opened += Open;
-            mouth.Heard += Line;
-            mouth.Closed += Close;
+            playerMouth.Opened += Open;
+            playerMouth.Heard += Line;
+            playerMouth.Closed += Close;
         }
 
         protected override bool Bind(VisualElement root)
@@ -64,7 +64,7 @@ namespace Shooter.Client.Interface
                 return false;
             }
 
-            input.maxLength = Talker.SpeechLimit;
+            input.maxLength = PlayerMouth.SpeechLimit;
             input.RegisterCallback<KeyDownEvent>(Typed);
             window.style.display = DisplayStyle.None;
 
@@ -170,9 +170,9 @@ namespace Shooter.Client.Interface
             input.value = string.Empty;
             typed.StopPropagation();
 
-            if (speech.Length == 0 || mouth == null) return;
+            if (speech.Length == 0 || playerMouth == null) return;
 
-            mouth.SayRpc(speech);
+            playerMouth.SayRpc(speech);
         }
 
         private string Named(ulong talkerId)
@@ -194,12 +194,12 @@ namespace Shooter.Client.Interface
         {
             Unfollow();
 
-            if (mouth == null) return;
+            if (playerMouth == null) return;
 
-            mouth.Opened -= Open;
-            mouth.Heard -= Line;
-            mouth.Closed -= Close;
-            mouth = null;
+            playerMouth.Opened -= Open;
+            playerMouth.Heard -= Line;
+            playerMouth.Closed -= Close;
+            playerMouth = null;
         }
     }
 }

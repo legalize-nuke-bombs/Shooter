@@ -105,13 +105,17 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                     .Urgened(arguments.Urgent)
                 );
 
-                if (target.TryGetComponent(out Player player))
+                if (target.TryGetComponent(out Player _))
                 {
                     llm.Answer(targetId, new Talker.Answer()
                     {
                         Content = arguments.Content,
                         Loud = false
                     });
+                }
+                else if (ConversationManager.Current != null)
+                {
+                    ConversationManager.Current.Between(ownCharacter.Id, targetId).Say(ownCharacter.Id, arguments.Content);
                 }
 
                 delivered.Add(targetId);

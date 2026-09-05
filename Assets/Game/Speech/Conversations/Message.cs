@@ -6,13 +6,13 @@ namespace Shooter.Game.Speech
     {
         public const string TimeFormat = "yyyy.MM.dd HH:mm:ss";
 
-        public MessageAuthor Author { get; set; }
+        public long AuthorId { get; set; }
         public string Content { get; set; }
         public string Time { get; set; }
 
         private struct SaveData
         {
-            public MessageAuthor Author { get; set; }
+            public long AuthorId { get; set; }
             public string Content { get; set; }
             public string Time { get; set; }
         }
@@ -20,7 +20,7 @@ namespace Shooter.Game.Speech
         {
             return new SaveData()
             {
-                Author = Author,
+                AuthorId = AuthorId,
                 Content = Content,
                 Time = Time
             };
@@ -28,7 +28,7 @@ namespace Shooter.Game.Speech
         public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
-            Author = sd.Author;
+            AuthorId = sd.AuthorId;
             Content = sd.Content;
             Time = sd.Time;
         }
