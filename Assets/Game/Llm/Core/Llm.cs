@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Speech;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Shooter.Game.Llm
 
         public bool Busy { get; private set; }
 
-        public event Action<long, string> Answered;
+        public event Action<long, Talker.Answer> Answered;
 
         private void Awake()
         {
@@ -125,10 +126,10 @@ namespace Shooter.Game.Llm
             if (askerId != null) table.Mark(askerId.Value);
         }
 
-        public void Answer(long wandererId, string text)
+        public void Answer(long characterId, Talker.Answer answer)
         {
-            table.Clear(wandererId);
-            Answered?.Invoke(wandererId, text);
+            table.Clear(characterId);
+            Answered?.Invoke(characterId, answer);
         }
 
         public LlmStatus Status()
@@ -227,7 +228,11 @@ namespace Shooter.Game.Llm
 
                 try
                 {
-                    Answered?.Invoke(id, null);
+                    Answered?.Invoke(id, new Talker.Answer()
+                    {
+                        Content = "Not now.",
+                        Loud = false
+                    });
                 }
                 catch (Exception e)
                 {

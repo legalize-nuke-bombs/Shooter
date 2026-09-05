@@ -16,7 +16,6 @@ namespace Shooter.Game.Speech
     {
         public const float TalkReach = 8f;
         public const int SpeechLimit = 300;
-        protected const string Fallback = "Not now.";
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<long, Conversation> conversations = new();
@@ -154,10 +153,15 @@ namespace Shooter.Game.Speech
 
         protected abstract void RequestAnswer(long wandererId, string message);
 
-        protected void DeliverAnswer(long wandererId, string content)
+        public struct Answer
         {
-            Say(Remember(wandererId), MessageAuthor.Talker, content ?? Fallback);
-            if (muttering != null) speaker?.Play(muttering);
+            public string Content { get; set; }
+            public bool Loud { get; set; }
+        }
+        protected void DeliverAnswer(long wandererId, Answer answer)
+        {
+            Say(Remember(wandererId), MessageAuthor.Talker, answer.Content);
+            if (answer.Loud && muttering != null) speaker?.Play(muttering);
             Log.Info($"Entity {name} answered wanderer {wandererId}");
         }
 

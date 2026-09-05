@@ -1,5 +1,6 @@
 using System;
 using Shooter.Game.Core;
+using Shooter.Game.Speech;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm.SayToWanderer
@@ -43,7 +44,11 @@ namespace Shooter.Game.Llm.SayToWanderer
                 return $"Failed to find wanderer {arguments.WandererId}";
             }
 
-            llm.Answer(arguments.WandererId, arguments.Text);
+            llm.Answer(arguments.WandererId, new Talker.Answer()
+            {
+                Content = arguments.Text,
+                Loud = true
+            });
             return $"Said to {arguments.WandererId}";
         }
     }
