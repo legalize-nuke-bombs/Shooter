@@ -85,7 +85,7 @@ namespace Shooter.Game.Speech
 
         public List<Conversation> Of(long id)
         {
-            return conversationsById[id].ToList();
+            return conversationsById.TryGetValue(id, out List<Conversation> found) ? found.ToList() : new List<Conversation>();
         }
 
         private void UpdateIndex(Conversation conversation)

@@ -26,8 +26,6 @@ namespace Shooter.Game.Llm
         private const string StoryHeader =
             "THE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
 
-        private const string StampFormat = "yyyy.MM.dd HH:mm:ss";
-
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private SystemPromptSpec[] systemPrompts;
@@ -259,7 +257,7 @@ namespace Shooter.Game.Llm
 
         public static string Stamp()
         {
-            return Clock.Current.Now.ToString(StampFormat, CultureInfo.InvariantCulture);
+            return Clock.Current.Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
         }
     }
 }

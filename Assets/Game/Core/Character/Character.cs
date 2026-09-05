@@ -29,18 +29,6 @@ namespace Shooter.Game.Core
             return null;
         }
 
-        public static Character Of(Predicate<Character> match, Inactive gate)
-        {
-            foreach (Character character in Registers.Current.Of<Character>(gate))
-            {
-                if (match(character))
-                {
-                    return character;
-                }
-            }
-            return null;
-        }
-
         public static void ForEach(Action<Character> action, Inactive gate)
         {
             foreach (Character character in Registers.Current.Of<Character>(gate))

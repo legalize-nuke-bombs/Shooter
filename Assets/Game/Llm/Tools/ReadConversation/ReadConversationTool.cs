@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Shooter.Game.Core;
 using Shooter.Game.Speech;
+using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -60,6 +62,10 @@ Specify `from` (the message number from which you want to retrieve the conversat
             }
 
             IReadOnlyList<Message> messages = conversation.Messages;
+            if (messages.Count == 0)
+            {
+                return $"The conversation with ID {targetId} is empty";
+            }
             if (from >= messages.Count)
             {
                 return $"Invalid `from`: specified conversation has {messages.Count} messages, `from` is {from}";
@@ -69,12 +75,13 @@ Specify `from` (the message number from which you want to retrieve the conversat
             for (int i = from; i < Math.Min(messages.Count, from + size); i++)
             {
                 Message message = messages[i];
-                sb.AppendLine($"[{message.Time}] ID {message.AuthorId}: {message.Content}");
+                string stamp = message.Time.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
+                sb.AppendLine($"[{stamp}]{(message.Spoken ? "" : " (radio)")} ID {message.AuthorId}: {message.Content}");
             }
 
             if (sb.Length > maxOutput)
             {
-                return $"Result is too long {sb.Length} ch (max is {maxOutput} ch), сonsider invoking this tool with a smaller page size.";
+                return $"Result is too long {sb.Length} ch (max is {maxOutput} ch), consider invoking this tool with a smaller page size.";
             }
 
             return sb.ToString();
