@@ -2598,7 +2598,7 @@ MonoBehaviour:
   smallViewingDistance: 50
   mediumViewingDistance: 150
   largeViewingDistance: 500
-  biggestViewingDistance: 1e+9
+  biggestViewingDistance: 5000
 --- !u!4 &594786787
 Transform:
   m_ObjectHideFlags: 0
