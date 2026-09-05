@@ -4,12 +4,13 @@
         <ui:VisualElement class="menu__group">
             <ui:Button name="new" text="Новая игра" class="menu__item menu__item--primary"/>
             <ui:Button name="load" text="Загрузить игру" class="menu__item"/>
-            <ui:Button name="settings" text="Настройки сервера" class="menu__item"/>
+            <ui:Button name="server-settings" text="Настройки сервера" class="menu__item"/>
         </ui:VisualElement>
         <ui:VisualElement class="menu__group">
             <ui:Button name="join" text="Присоединиться к игре" class="menu__item"/>
         </ui:VisualElement>
         <ui:VisualElement class="menu__group">
+            <ui:Button name="client-settings" text="Настройки" class="menu__item"/>
             <ui:Button name="account" text="Аккаунт" class="menu__item"/>
         </ui:VisualElement>
         <ui:VisualElement class="menu__group menu__group--last">

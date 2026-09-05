@@ -7,7 +7,8 @@ namespace Shooter.Client.Interface
     {
         private const string NewButton = "new";
         private const string LoadButton = "load";
-        private const string SettingsButton = "settings";
+        private const string ServerSettingsButton = "server-settings";
+        private const string ClientSettingsButton = "client-settings";
         private const string JoinButton = "join";
         private const string AccountButton = "account";
         private const string QuitButton = "quit";
@@ -16,7 +17,8 @@ namespace Shooter.Client.Interface
         {
             Require<Button>(NewButton).clicked += () => NewGameOpening?.Invoke();
             Require<Button>(LoadButton).clicked += () => SavesOpening?.Invoke();
-            Require<Button>(SettingsButton).clicked += () => ServerSettingsOpening?.Invoke();
+            Require<Button>(ServerSettingsButton).clicked += () => ServerSettingsOpening?.Invoke();
+            Require<Button>(ClientSettingsButton).clicked += () => ClientSettingsOpening?.Invoke();
             Require<Button>(JoinButton).clicked += () => JoinOpening?.Invoke();
             Require<Button>(AccountButton).clicked += () => AccountOpening?.Invoke();
             Require<Button>(QuitButton).clicked += () => Quitting?.Invoke();
@@ -27,6 +29,8 @@ namespace Shooter.Client.Interface
         public event Action SavesOpening;
 
         public event Action ServerSettingsOpening;
+
+        public event Action ClientSettingsOpening;
 
         public event Action JoinOpening;
 

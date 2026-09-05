@@ -21,11 +21,13 @@ namespace Shooter.Client.Interface
         [SerializeField] private VisualTreeAsset savesPage;
         [SerializeField] private VisualTreeAsset clientPage;
         [SerializeField] private VisualTreeAsset serverSettingsPage;
+        [SerializeField] private VisualTreeAsset clientSettingsPage;
         [SerializeField] private VisualTreeAsset accountPage;
 
         private readonly PageStack pages = new();
         private AccountPage account;
         private ClientPage client;
+        private ClientSettingsPage clientSettings;
         private Dialog dialog;
         private MainPage main;
         private NewGamePage newGame;
@@ -73,7 +75,7 @@ namespace Shooter.Client.Interface
                 return false;
             }
 
-            if (mainPage == null || newGamePage == null || savesPage == null || clientPage == null || serverSettingsPage == null || accountPage == null)
+            if (mainPage == null || newGamePage == null || savesPage == null || clientPage == null || serverSettingsPage == null || clientSettingsPage == null || accountPage == null)
             {
                 Log.Error("Menu screen misses a page template, the menu stays dead");
                 return false;
@@ -87,6 +89,7 @@ namespace Shooter.Client.Interface
                 saves = new SavesPage(Mount(savesPage), dialog);
                 client = new ClientPage(Mount(clientPage));
                 serverSettings = new ServerSettingsPage(Mount(serverSettingsPage));
+                clientSettings = new ClientSettingsPage(Mount(clientSettingsPage));
                 account = new AccountPage(Mount(accountPage));
             }
             catch (InvalidOperationException e)
@@ -100,6 +103,7 @@ namespace Shooter.Client.Interface
             main.NewGameOpening += OpenNewGame;
             main.SavesOpening += OpenSaves;
             main.ServerSettingsOpening += OpenServerSettings;
+            main.ClientSettingsOpening += OpenClientSettings;
             main.JoinOpening += OpenClient;
             main.AccountOpening += OpenAccount;
             main.Quitting += Quit;
@@ -110,6 +114,7 @@ namespace Shooter.Client.Interface
             client.Connecting += Connect;
             client.Backing += Back;
             serverSettings.Backing += Back;
+            clientSettings.Backing += Back;
             account.Backing += Back;
 
             pages.Push(main);
@@ -159,6 +164,7 @@ namespace Shooter.Client.Interface
             saves = null;
             client = null;
             serverSettings = null;
+            clientSettings = null;
             account = null;
             panel = null;
         }
@@ -191,6 +197,11 @@ namespace Shooter.Client.Interface
         private void OpenServerSettings()
         {
             pages.Push(serverSettings);
+        }
+
+        private void OpenClientSettings()
+        {
+            pages.Push(clientSettings);
         }
 
         private void OpenAccount()

@@ -720,6 +720,7 @@ MonoBehaviour:
   clientPage: {fileID: 9197481963319205126, guid: d0fc9e260010eb340a4ae6fa546c9961, type: 3}
   serverSettingsPage: {fileID: 9197481963319205126, guid: c8e1d3f5a7b94d2cae4f6a8b2d3c5e7f, type: 3}
   accountPage: {fileID: 9197481963319205126, guid: acc0117a9e5b4d2c8f1a6b3c5d7e9f00, type: 3}
+  clientSettingsPage: {fileID: 9197481963319205126, guid: 8eb4ec251dba4567b1bdb4d76b3f168b, type: 3}
 --- !u!1931382934 &767148947
 PanelRenderer:
   m_ObjectHideFlags: 0
