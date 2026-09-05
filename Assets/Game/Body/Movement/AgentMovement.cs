@@ -18,7 +18,7 @@ namespace Shooter.Game.Body
             agent.updateRotation = false;
         }
 
-        protected override bool Advance(Vector3 wish, float dt)
+        protected override bool Tick(Vector3 wish, float dt)
         {
             if (agent.nextPosition != transform.position && !agent.Warp(transform.position))
                 throw new InvalidOperationException($"Entity {name} stands off the navmesh at {transform.position}");
@@ -28,7 +28,7 @@ namespace Shooter.Game.Body
             return true;
         }
 
-        protected override void Relocate(Vector3 position, Quaternion rotation)
+        protected override void TeleportRaw(Vector3 position, Quaternion rotation)
         {
             transform.SetPositionAndRotation(position, rotation);
         }

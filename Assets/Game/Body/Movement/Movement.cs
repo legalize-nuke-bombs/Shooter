@@ -75,7 +75,7 @@ namespace Shooter.Game.Body
         {
             Quaternion rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
 
-            Relocate(position, rotation);
+            TeleportRaw(position, rotation);
 
             if (!IsServer) return;
 
@@ -83,9 +83,9 @@ namespace Shooter.Game.Body
             TurnRpc(Yaw);
         }
 
-        protected abstract bool Advance(Vector3 wish, float dt);
+        protected abstract bool Tick(Vector3 wish, float dt);
 
-        protected abstract void Relocate(Vector3 position, Quaternion rotation);
+        protected abstract void TeleportRaw(Vector3 position, Quaternion rotation);
 
         [Rpc(SendTo.Owner)]
         private void TurnRpc(float yaw)
@@ -120,7 +120,7 @@ namespace Shooter.Game.Body
 
             Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
             Vector3 before = transform.position;
-            bool grounded = Advance(wish, dt);
+            bool grounded = Tick(wish, dt);
 
             GroundTravel = grounded
                 ? Vector3.Distance(new Vector3(before.x, 0f, before.z),

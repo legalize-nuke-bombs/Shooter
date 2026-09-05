@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(PhysicsMovement))]
+    [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Interactor))]
     public class LocalPlayer : NetworkBehaviour
     {
@@ -27,7 +27,7 @@ namespace Shooter.Client.Playing
         private Mortal mortal;
         private PlayerMouth playerMouth;
 
-        private PhysicsMovement movement;
+        private RpcMovement movement;
         private float pitch;
         private OwnRecoil recoil;
         private Sleeper sleeper;
@@ -42,7 +42,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            movement = GetComponent<PhysicsMovement>();
+            movement = GetComponent<RpcMovement>();
             interactor = GetComponent<Interactor>();
             playerMouth = GetComponent<PlayerMouth>();
             sleeper = GetComponent<Sleeper>();
