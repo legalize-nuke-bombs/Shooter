@@ -5,34 +5,21 @@ using UnityEngine;
 
 namespace Shooter.Game.Body
 {
-    [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(MainRestrainable))]
-    [RequireComponent(typeof(Landing))]
     [RequireComponent(typeof(NetworkTransform))]
-    public class Movement : NetworkBehaviour
+    public abstract class Movement : NetworkBehaviour
     {
         private const float PitchLimit = 89f;
-        private const float GroundedFall = -1f;
 
-        [SerializeField] private float walkSpeed = 5f;
+        [SerializeField] private float walkSpeed = 4f;
         [SerializeField] private float sprintSpeed = 8f;
-        [SerializeField] private float jumpSpeed = 5f;
-        [SerializeField] private float gravity = -20f;
 
         private readonly NetworkVariable<float> pitch = new();
-        private bool airborne;
-        private float airborneFrom;
-
-        private CharacterController characterController;
-        private float fall;
-        private bool jumping;
-        private Landing landing;
         private NetworkTransform networkTransform;
-        private MainRestrainable restrainable;
         private bool sprinting;
-        private int steeredAt;
-
         private Vector2 steering;
+
+        protected MainRestrainable Restrainable { get; private set; }
 
         public float Pitch => pitch.Value;
 
@@ -42,11 +29,9 @@ namespace Shooter.Game.Body
 
         public Vector3 Look => Quaternion.Euler(pitch.Value, Yaw, 0f) * Vector3.forward;
 
-        private void Awake()
+        protected virtual void Awake()
         {
-            characterController = GetComponent<CharacterController>();
-            restrainable = GetComponent<MainRestrainable>();
-            landing = GetComponent<Landing>();
+            Restrainable = GetComponent<MainRestrainable>();
             networkTransform = GetComponent<NetworkTransform>();
         }
 
@@ -66,15 +51,6 @@ namespace Shooter.Game.Body
             NetworkManager.NetworkTickSystem.Tick -= Step;
         }
 
-        [Rpc(SendTo.Server, Delivery = RpcDelivery.Unreliable, InvokePermission = RpcInvokePermission.Owner)]
-        public void SteerRpc(Vector2 move, float yaw, float look, bool sprint, int tick)
-        {
-            if (tick <= steeredAt) return;
-            steeredAt = tick;
-
-            Steer(move, yaw, look, sprint);
-        }
-
         public void Steer(Vector2 move, float yaw, float look, bool sprint)
         {
             steering = Vector2.ClampMagnitude(Finite(move), 1f);
@@ -84,19 +60,10 @@ namespace Shooter.Game.Body
             sprinting = sprint;
         }
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void JumpRpc()
-        {
-            if (!characterController.isGrounded) return;
-
-            jumping = true;
-        }
-
-        public void Halt()
+        public virtual void Halt()
         {
             steering = Vector2.zero;
             sprinting = false;
-            jumping = false;
         }
 
         public void Teleport(Vector3 position)
@@ -108,16 +75,17 @@ namespace Shooter.Game.Body
         {
             Quaternion rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
 
-            characterController.enabled = false;
-            transform.SetPositionAndRotation(position, rotation);
-            characterController.enabled = true;
-            fall = 0f;
+            Relocate(position, rotation);
 
             if (!IsServer) return;
 
             networkTransform.Teleport(position, rotation, transform.localScale);
             TurnRpc(Yaw);
         }
+
+        protected abstract bool Advance(Vector3 wish, float dt);
+
+        protected abstract void Relocate(Vector3 position, Quaternion rotation);
 
         [Rpc(SendTo.Owner)]
         private void TurnRpc(float yaw)
@@ -131,53 +99,18 @@ namespace Shooter.Game.Body
 
             float dt = NetworkManager.LocalTime.FixedDeltaTime;
 
-            if (characterController.isGrounded)
-            {
-                if (airborne)
-                {
-                    airborne = false;
-                    landing.Land(airborneFrom - transform.position.y);
-                }
-
-                if (jumping && restrainable.CanPerform(ActionType.Jump, MainRestrainable.InstantAction))
-                {
-                    restrainable.RegisterAction(ActionType.Jump, MainRestrainable.InstantAction);
-                    fall = jumpSpeed;
-                }
-                else
-                {
-                    fall = GroundedFall;
-                }
-
-                jumping = false;
-            }
-            else
-            {
-                if (!airborne)
-                {
-                    airborne = true;
-                    airborneFrom = transform.position.y;
-                }
-                else if (transform.position.y > airborneFrom)
-                {
-                    airborneFrom = transform.position.y;
-                }
-
-                fall += gravity * dt;
-            }
-
             bool walking = steering.SqrMagnitude() > 0f;
             sprinting = sprinting && walking;
 
             float speed;
-            if (sprinting && restrainable.CanPerform(ActionType.Sprint, dt))
+            if (sprinting && Restrainable.CanPerform(ActionType.Sprint, dt))
             {
-                restrainable.RegisterAction(ActionType.Sprint, dt);
+                Restrainable.RegisterAction(ActionType.Sprint, dt);
                 speed = sprintSpeed;
             }
-            else if (walking && restrainable.CanPerform(ActionType.Walk, dt))
+            else if (walking && Restrainable.CanPerform(ActionType.Walk, dt))
             {
-                restrainable.RegisterAction(ActionType.Walk, dt);
+                Restrainable.RegisterAction(ActionType.Walk, dt);
                 speed = walkSpeed;
             }
             else
@@ -187,9 +120,9 @@ namespace Shooter.Game.Body
 
             Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
             Vector3 before = transform.position;
-            characterController.Move((wish + Vector3.up * fall) * dt);
+            bool grounded = Advance(wish, dt);
 
-            GroundTravel = characterController.isGrounded
+            GroundTravel = grounded
                 ? Vector3.Distance(new Vector3(before.x, 0f, before.z),
                     new Vector3(transform.position.x, 0f, transform.position.z))
                 : 0f;
