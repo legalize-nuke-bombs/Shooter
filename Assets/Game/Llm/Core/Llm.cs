@@ -223,9 +223,7 @@ namespace Shooter.Game.Llm
                 if (!table.Clear(id)) continue;
 
                 Log.Warn($"Entity {entityName} has not answered wanderer {id}, the refusal is said instead");
-                if (conversations == null) continue;
-
-                conversations.Say(ownCharacter.Id, id, Talker.Refusal, false);
+                conversations.Say(ownCharacter.Id, id, "Not now.", false);
             }
         }
 

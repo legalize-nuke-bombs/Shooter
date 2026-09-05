@@ -49,18 +49,12 @@ namespace Shooter.Game.Llm
         private void OnEnable()
         {
             conversations = ConversationManager.Current;
-            if (conversations == null)
-            {
-                Log.Warn($"Entity {name} finds no conversations in the world, its debts will never settle by speech");
-                return;
-            }
-
             conversations.Said += Settle;
         }
 
         private void OnDisable()
         {
-            if (conversations != null) conversations.Said -= Settle;
+            conversations.Said -= Settle;
             conversations = null;
         }
 

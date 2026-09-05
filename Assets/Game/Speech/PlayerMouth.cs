@@ -8,6 +8,8 @@ using UnityEngine;
 namespace Shooter.Game.Speech
 {
     [RequireComponent(typeof(Character))]
+    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Sleeper))]
     public class PlayerMouth : NetworkBehaviour, IMortal
     {
         public const float TalkReach = 8f;
@@ -18,6 +20,8 @@ namespace Shooter.Game.Speech
 
         private Character character;
         private ConversationManager conversations;
+        private Health health;
+        private Sleeper sleeper;
         private Talker talker;
 
         public bool Talking => talker != null;
@@ -35,6 +39,8 @@ namespace Shooter.Game.Speech
         private void Awake()
         {
             character = GetComponent<Character>();
+            health = GetComponent<Health>();
+            sleeper = GetComponent<Sleeper>();
             enabled = false;
         }
 
@@ -79,12 +85,6 @@ namespace Shooter.Game.Speech
             OpenedRpc(talker.NetworkObjectId);
 
             conversations = ConversationManager.Current;
-            if (conversations == null)
-            {
-                Log.Warn($"Player {OwnerClientId} starts blank: the world keeps no conversations");
-                return;
-            }
-
             foreach (Message message in conversations.Between(CharacterId, talker.CharacterId).Messages) Hear(message);
             conversations.Said += Relay;
         }
@@ -121,12 +121,6 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            if (conversations == null)
-            {
-                Log.Warn($"Player {OwnerClientId} speaks into the void: the world keeps no conversations");
-                return;
-            }
-
             conversations.Say(CharacterId, talker.CharacterId, speech, true);
             talker.Listen(this, speech);
         }
@@ -148,38 +142,28 @@ namespace Shooter.Game.Speech
 
         private void Forget()
         {
-            if (conversations != null) conversations.Said -= Relay;
+            if (!Talking) return;
+
+            conversations.Said -= Relay;
             conversations = null;
             talker = null;
         }
 
         private void Relay(Conversation conversation, Message message)
         {
-            if (talker == null || conversation.Key != Conversation.Pair(CharacterId, talker.CharacterId)) return;
+            if (conversation.Key != Conversation.Pair(CharacterId, talker.CharacterId)) return;
 
             Hear(message);
         }
 
         private bool Fit(Talker talker)
         {
-            return TalkRule.CanTalk(Alive(NetworkObject), IsAwake(NetworkObject), Alive(talker.NetworkObject), IsAwake(talker.NetworkObject));
+            return TalkRule.CanTalk(health.Alive, !sleeper.Sleeping, talker.Alive, !talker.Sleeping);
         }
 
         private bool Reachable(Talker talker)
         {
             return Vector3.Distance(talker.transform.position, transform.position) <= TalkReach;
-        }
-
-        private static bool Alive(NetworkObject body)
-        {
-            Health health = body.GetComponent<Health>();
-            return health != null && health.Alive;
-        }
-
-        private static bool IsAwake(NetworkObject body)
-        {
-            Sleeper sleeper = body.GetComponent<Sleeper>();
-            return sleeper == null || !sleeper.Sleeping;
         }
 
         [Rpc(SendTo.Owner)]

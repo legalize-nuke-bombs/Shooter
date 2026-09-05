@@ -44,14 +44,7 @@ namespace Shooter.Game.Llm.SayToWanderer
                 return $"Failed to find wanderer {arguments.WandererId}";
             }
 
-            ConversationManager conversations = ConversationManager.Current;
-            if (conversations == null)
-            {
-                Log.Warn($"Entity {Self.name} can not speak: the world keeps no conversations");
-                return "Failed to speak";
-            }
-
-            conversations.Say(ownCharacter.Id, arguments.WandererId, arguments.Text, true);
+            ConversationManager.Current.Say(ownCharacter.Id, arguments.WandererId, arguments.Text, true);
             return $"Said to {arguments.WandererId}";
         }
     }
