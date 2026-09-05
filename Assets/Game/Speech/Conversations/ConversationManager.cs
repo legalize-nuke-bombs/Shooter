@@ -34,7 +34,10 @@ namespace Shooter.Game.Speech
         public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
+
             conversations.Clear();
+            conversationsById.Clear();
+
             foreach (Conversation conversation in sd.Conversations)
             {
                 conversations[conversation.Key] = conversation;
