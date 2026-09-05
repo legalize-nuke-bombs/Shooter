@@ -178,7 +178,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e316d1881d24b44aae7524829da8141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmHistory
+  messageLimit: 10000
   maxSize: 100000
+  hardSize: 200000
 --- !u!114 &2118777413684301810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,30 +220,30 @@ MonoBehaviour:
   failureCooldown: 2.5
   maxToolRounds: 10
   abilities:
-  - rid: 2635107260138258838
   - rid: 2635107260138258839
+  - rid: 2635107260138258848
+  - rid: 2635107260138258850
+  - rid: 2635107260138258849
+  - rid: 2635107260138258851
+  - rid: 2635107260138258847
+  - rid: 2635107260138258846
+  - rid: 2635107260138258852
+  - rid: 2635107260138258838
+  - rid: 2635107260138258857
   - rid: 2635107260138258840
+  - rid: 2635107260138258854
+  - rid: 2635107260138258856
+  - rid: 2635107260138258853
+  - rid: 2635107260138258858
+  - rid: 2635107260138258844
+  - rid: 2635107260138258845
   - rid: 2635107260138258841
   - rid: 2635107260138258842
   - rid: 2635107260138258843
-  - rid: 2635107260138258844
-  - rid: 2635107260138258845
-  - rid: 2635107260138258846
-  - rid: 2635107260138258847
-  - rid: 2635107260138258848
-  - rid: 2635107260138258849
-  - rid: 2635107260138258850
-  - rid: 2635107260138258851
-  - rid: 2635107260138258852
-  - rid: 2635107260138258853
-  - rid: 2635107260138258854
-  - rid: 2635107260138258855
-  - rid: 2635107260138258856
-  - rid: 2635107260138258857
-  - rid: 2635107260138258858
   - rid: 2635107283221348552
   - rid: 2635107283221348553
   - rid: 2635107283221348554
+  - rid: 2635107260138258855
   references:
     version: 2
     RefIds:
@@ -314,7 +316,7 @@ MonoBehaviour:
       data: 
     - rid: 2635107283221348553
       type: {class: ReadConversationTool, ns: Shooter.Game.Llm.ReadConversation, asm: Shooter.Game}
-      data:
+      data: 
     - rid: 2635107283221348554
       type: {class: SearchConversationsTool, ns: Shooter.Game.Llm.SearchConversations, asm: Shooter.Game}
       data: 
