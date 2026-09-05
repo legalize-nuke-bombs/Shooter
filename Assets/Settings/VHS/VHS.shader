@@ -3,11 +3,11 @@ Shader "FullScreen/VHS"
     Properties
     {
         _Scanline("Scanline", Range(0, 1)) = 0.4
-        _Chroma("Chroma", Range(0, 3)) = 1.2
-        _Wobble("Wobble", Range(0, 3)) = 1.0
-        _Jitter("Jitter", Range(0, 3)) = 1.0
-        _Noise("Noise", Range(0, 0.5)) = 0.08
-        _Desat("Desaturate", Range(0, 1)) = 0.2
+        _Chroma("Chroma", Range(0, 3)) = 2
+        _Wobble("Wobble", Range(0, 3)) = 1.6
+        _Jitter("Jitter", Range(0, 3)) = 2
+        _Noise("Noise", Range(0, 0.5)) = 0.06
+        _Desat("Desaturate", Range(0, 1)) = 0.4
     }
 
     HLSLINCLUDE
@@ -40,7 +40,7 @@ Shader "FullScreen/VHS"
         float2 uv = posInput.positionNDC.xy;
         float t = _Time.y;
         float row = uv.y;
-        float strength = saturate(_VhsStrength);
+        float strength = _VhsStrength;
 
         // horizontal tracking wobble per row, with occasional jitter bursts
         float wob = sin(row * 720.0 + t * 4.0) * _Wobble * strength * 0.0025;

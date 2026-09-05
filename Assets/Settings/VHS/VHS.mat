@@ -25,12 +25,12 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Chroma: 1
-    - _Desat: 0.2
-    - _Jitter: 1
-    - _Noise: 0.03
-    - _Scanline: 0.2
-    - _Wobble: 0.8
+    - _Chroma: 2
+    - _Desat: 0.4
+    - _Jitter: 2
+    - _Noise: 0.06
+    - _Scanline: 0.4
+    - _Wobble: 1.6
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
