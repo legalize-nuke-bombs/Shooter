@@ -85,6 +85,11 @@ namespace Shooter.Game.Llm
 
         private void Gate(LlmMessage message)
         {
+            if (message.Content == null)
+            {
+                return;
+            }
+
             int length = message.Content.Length;
             if (length <= messageLimit) return;
 
@@ -95,7 +100,7 @@ namespace Shooter.Game.Llm
 
         private static int Sized(LlmMessage message)
         {
-            int size = message.Content.Length + 20;
+            int size = (message.Content == null ? 0 : message.Content.Length) + 20;
 
             if (message.ToolCalls != null)
             {
