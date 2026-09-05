@@ -32,7 +32,7 @@ namespace Shooter.Game.Speech
 
         public event Action<ulong> Opened;
 
-        public event Action<string, string, bool> Heard;
+        public event Action<string, DateTime, bool> Heard;
 
         public event Action Closed;
 
@@ -174,7 +174,7 @@ namespace Shooter.Game.Speech
         }
 
         [Rpc(SendTo.Owner)]
-        private void HeardRpc(string content, string time, bool mine)
+        private void HeardRpc(string content, DateTime time, bool mine)
         {
             Log.Info($"Talk line at {time} from {(mine ? "me" : "them")}: {content}");
             Heard?.Invoke(content, time, mine);

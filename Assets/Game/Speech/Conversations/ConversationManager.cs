@@ -98,7 +98,7 @@ namespace Shooter.Game.Speech
                 AuthorId = authorId,
                 Content = content,
                 Spoken = spoken,
-                Time = Clock.Current.Now.ToString(Message.TimeFormat, CultureInfo.InvariantCulture)
+                Time = Clock.Current.Now
             };
 
             conversation.Add(message);
