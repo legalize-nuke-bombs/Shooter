@@ -180,3 +180,72 @@
 .unity-base-dropdown__checkmark {
     -unity-background-image-tint-color: var(--color-accent);
 }
+
+.unity-slider {
+    margin: 0;
+}
+
+.unity-slider__label {
+    min-width: 160px;
+    padding: 0;
+    color: var(--color-text-dim);
+    font-size: var(--text-base);
+    -unity-text-align: middle-left;
+}
+
+.unity-base-slider.unity-slider .unity-base-slider__drag-container,
+.unity-base-slider.unity-slider:hover .unity-base-slider__drag-container,
+.unity-base-slider.unity-slider:active .unity-base-slider__drag-container,
+.unity-base-slider.unity-slider:focus .unity-base-slider__drag-container {
+    min-height: 30px;
+}
+
+.unity-base-slider.unity-slider .unity-base-slider__tracker,
+.unity-base-slider.unity-slider:hover .unity-base-slider__tracker,
+.unity-base-slider.unity-slider:active .unity-base-slider__tracker,
+.unity-base-slider.unity-slider:focus .unity-base-slider__tracker {
+    top: 50%;
+    height: 2px;
+    margin-top: -1px;
+    border-width: 0;
+    border-radius: 0;
+    background-color: var(--color-line);
+}
+
+.unity-base-slider.unity-slider .unity-base-slider__fill,
+.unity-base-slider.unity-slider:hover .unity-base-slider__fill,
+.unity-base-slider.unity-slider:active .unity-base-slider__fill,
+.unity-base-slider.unity-slider:focus .unity-base-slider__fill {
+    top: 50%;
+    height: 2px;
+    margin-top: -1px;
+    border-width: 0;
+    border-radius: 0;
+    background-color: var(--color-text-dim);
+}
+
+.unity-base-slider.unity-slider .unity-base-slider__dragger,
+.unity-base-slider.unity-slider:hover .unity-base-slider__dragger,
+.unity-base-slider.unity-slider:active .unity-base-slider__dragger,
+.unity-base-slider.unity-slider:focus .unity-base-slider__dragger {
+    top: 50%;
+    width: 4px;
+    height: 16px;
+    margin-top: -8px;
+    border-width: 0;
+    border-radius: 0;
+    background-color: var(--color-text);
+}
+
+.unity-base-slider.unity-slider:hover .unity-base-slider__dragger,
+.unity-base-slider.unity-slider:active .unity-base-slider__dragger,
+.unity-base-slider.unity-slider:focus .unity-base-slider__dragger {
+    background-color: var(--color-accent);
+}
+
+.unity-base-slider.unity-slider .unity-base-slider__dragger-border,
+.unity-base-slider.unity-slider:hover .unity-base-slider__dragger-border,
+.unity-base-slider.unity-slider:active .unity-base-slider__dragger-border,
+.unity-base-slider.unity-slider:focus .unity-base-slider__dragger-border {
+    display: none;
+}

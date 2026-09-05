@@ -47,6 +47,10 @@
     color: var(--color-text);
 }
 
+.screen__section--first {
+    margin-top: 0;
+}
+
 .screen__hint {
     margin-bottom: var(--space-2);
     font-size: var(--text-small);
