@@ -49,7 +49,7 @@ namespace Shooter.Game.Body
         {
             if (Application.isPlaying) return;
 
-            CharacterMarker.Draw(transform.position + ModelOffset, gameObject.name);
+            CapsuleMarker.Draw(transform.position + ModelOffset, gameObject.name);
         }
 
         private static float Height(GameObject flesh)
