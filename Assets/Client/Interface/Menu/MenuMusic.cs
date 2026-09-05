@@ -7,7 +7,6 @@ namespace Shooter.Client.Interface
     public class MenuMusic : MonoBehaviour
     {
         [SerializeField] private AudioClip[] tracks;
-        [SerializeField] private float volume = 0.35f;
         [SerializeField] private float fadeInSeconds = 4f;
 
         private float elapsed;
@@ -33,10 +32,10 @@ namespace Shooter.Client.Interface
 
         private void Update()
         {
-            if (!source.isPlaying || source.volume >= volume) return;
+            if (!source.isPlaying || source.volume >= 1f) return;
 
             elapsed += Time.deltaTime;
-            source.volume = Mathf.Lerp(0f, volume, fadeInSeconds <= 0f ? 1f : elapsed / fadeInSeconds);
+            source.volume = Mathf.Lerp(0f, 1f, fadeInSeconds <= 0f ? 1f : elapsed / fadeInSeconds);
         }
     }
 }

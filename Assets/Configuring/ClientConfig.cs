@@ -11,10 +11,10 @@ namespace Shooter.Configuring
         private string name = "Player";
         private string invite = "";
         private float master = 1f;
-        private float music = 1f;
+        private float music = 0.35f;
         private float ambience = 1f;
         private float sounds = 1f;
-        private float vhs = 1f;
+        private float vhs = 0.5f;
 
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
