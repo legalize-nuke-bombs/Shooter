@@ -25,7 +25,7 @@ namespace Shooter.Client.Playing
         private Health health;
         private Interactor interactor;
         private Mortal mortal;
-        private Mouth mouth;
+        private PlayerMouth playerMouth;
 
         private Movement movement;
         private float pitch;
@@ -44,7 +44,7 @@ namespace Shooter.Client.Playing
         {
             movement = GetComponent<Movement>();
             interactor = GetComponent<Interactor>();
-            mouth = GetComponent<Mouth>();
+            playerMouth = GetComponent<PlayerMouth>();
             sleeper = GetComponent<Sleeper>();
             health = GetComponent<Health>();
             mortal = GetComponent<Mortal>();
@@ -120,10 +120,10 @@ namespace Shooter.Client.Playing
             controls.UI.Inventory.performed += CloseBag;
             controls.UI.Cancel.performed += Escape;
 
-            if (mouth != null)
+            if (playerMouth != null)
             {
-                mouth.Opened += OpenTalk;
-                mouth.Closed += CloseTalk;
+                playerMouth.Opened += OpenTalk;
+                playerMouth.Closed += CloseTalk;
             }
 
             Grab();
@@ -148,10 +148,10 @@ namespace Shooter.Client.Playing
             controls.UI.Inventory.performed -= CloseBag;
             controls.UI.Cancel.performed -= Escape;
 
-            if (mouth != null)
+            if (playerMouth != null)
             {
-                mouth.Opened -= OpenTalk;
-                mouth.Closed -= CloseTalk;
+                playerMouth.Opened -= OpenTalk;
+                playerMouth.Closed -= CloseTalk;
             }
 
             controls.Dispose();
@@ -270,7 +270,7 @@ namespace Shooter.Client.Playing
         {
             if (talking)
             {
-                mouth.HangUpRpc();
+                playerMouth.HangUpRpc();
                 return;
             }
 

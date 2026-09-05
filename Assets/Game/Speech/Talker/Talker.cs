@@ -1,104 +1,38 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.Core.Saves;
-using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Speech
 {
-    public abstract class Talker : NetworkBehaviour, IUsable, IRestraint, ISaveableComponent
+    [RequireComponent(typeof(Character))]
+    [RequireComponent(typeof(Speaker))]
+    public abstract class Talker : NetworkBehaviour, IUsable
     {
-        public const float TalkReach = 8f;
-        public const int SpeechLimit = 300;
         private static readonly Journal Log = Logs.Here();
 
-        private readonly Dictionary<long, Conversation> conversations = new();
+        private readonly List<PlayerMouth> engaged = new();
         private readonly NetworkVariable<bool> thinking = new();
 
         [SerializeField] private SoundSpec muttering;
 
+        private Character character;
         private Speaker speaker;
 
         public bool Thinking => thinking.Value;
 
-        public event Action<bool> ThinkingChanged;
-
-        public string ComponentKey => "Talker";
-        private struct SaveData
-        {
-            public List<Conversation> Conversations { get; set; }
-        }
-        public object SaveObject()
-        {
-            return new SaveData()
-            {
-                Conversations = conversations.Values.ToList()
-            };
-        }
-        public void LoadObject(SaveToken content)
-        {
-            SaveData sd = content.To<SaveData>();
-            conversations.Clear();
-            foreach (Conversation conversation in sd.Conversations)
-                conversations.Add(conversation.Wanderer, conversation);
-        }
-
-        private static bool Awake(NetworkObject body)
-        {
-            Sleeper sleeper = body.GetComponentInChildren<Sleeper>();
-            return sleeper == null || !sleeper.Sleeping;
-        }
-
-        public bool CanPerform(ActionType type, float dt)
-        {
-            return !conversations.Values.Any(c => c.Open);
-        }
-
-        public void RegisterAction(ActionType type, float dt)
-        {
-        }
+        public long CharacterId => character.Id;
 
         public UsageType Usage => UsageType.Talk;
 
-        public void Use(NetworkObject user)
-        {
-            if (!IsServer) return;
-
-            Mouth mouth = user.GetComponentInChildren<Mouth>();
-            if (mouth == null) return;
-
-            if (mouth.Interlocutor == NetworkObjectId)
-            {
-                mouth.Close();
-                return;
-            }
-
-            if (!TalkRule.CanTalk(Alive(user), Alive(NetworkObject), Awake(NetworkObject)))
-            {
-                Log.Info(
-                    $"Entity {name} refused to talk to {user.name}: speaker alive {Alive(user)}, own alive {Alive(NetworkObject)}, own awake {Awake(NetworkObject)}");
-                return;
-            }
-
-            if (!user.TryGetComponent(out Character speaker))
-            {
-                Log.Warn($"Entity {name} refused to talk to {user.name}: the speaker has no persistent id");
-                return;
-            }
-
-            Conversation conversation = Remember(speaker.Id);
-            conversation.Reopen();
-            mouth.Open(this, conversation.Messages);
-        }
+        public event Action<bool> ThinkingChanged;
 
         protected virtual void Awake()
         {
+            character = GetComponent<Character>();
             speaker = GetComponent<Speaker>();
             enabled = false;
         }
@@ -112,128 +46,72 @@ namespace Shooter.Game.Speech
         public override void OnNetworkDespawn()
         {
             thinking.OnValueChanged -= RelayThinking;
+            engaged.Clear();
             enabled = false;
         }
 
-        private void RelayThinking(bool previous, bool current)
+        public void Use(NetworkObject user)
         {
-            ThinkingChanged?.Invoke(current);
+            if (!IsServer) return;
+            if (!user.TryGetComponent(out PlayerMouth mouth)) return;
+
+            if (mouth.Interlocutor == NetworkObjectId) mouth.Close();
+            else mouth.Open(this);
         }
 
-        public void Listen(NetworkObject user, string content)
+        public void Engage(PlayerMouth mouth)
+        {
+            if (!engaged.Contains(mouth)) engaged.Add(mouth);
+        }
+
+        public void Release(PlayerMouth mouth)
+        {
+            engaged.Remove(mouth);
+        }
+
+        public void Listen(PlayerMouth mouth, string content)
         {
             if (!IsServer) return;
 
-            if (content == null || content.Length > SpeechLimit)
-            {
-                Log.Info($"Speech of entity {user.name} is over {SpeechLimit} characters, ignored");
-                return;
-            }
-
-            if (!user.TryGetComponent(out Character speaker))
-            {
-                Log.Warn($"Entity {name} ignores speech of {user.name}: the speaker has no persistent id");
-                return;
-            }
-
-            Say(Remember(speaker.Id), MessageAuthor.Player, content);
-            RequestAnswer(speaker.Id, content);
+            RequestAnswer(mouth.CharacterId, content);
         }
-
-        public void Leave(NetworkObject user)
-        {
-            if (!IsServer) return;
-
-            if (!user.TryGetComponent(out Character speaker)) return;
-
-            if (!conversations.TryGetValue(speaker.Id, out Conversation conversation)) return;
-
-            conversation.Close();
-        }
-
-        protected abstract void RequestAnswer(long wandererId, string message);
 
         public struct Answer
         {
             public string Content { get; set; }
             public bool Loud { get; set; }
         }
+
         protected void DeliverAnswer(long wandererId, Answer answer)
         {
-            Say(Remember(wandererId), MessageAuthor.Talker, answer.Content);
-            if (answer.Loud && muttering != null) speaker?.Play(muttering);
+            ConversationManager conversations = ConversationManager.Current;
+            if (conversations == null)
+            {
+                Log.Warn($"Entity {name} answers wanderer {wandererId} into the void: the world keeps no conversations");
+                return;
+            }
+
+            Message message = conversations.Between(CharacterId, wandererId).Say(CharacterId, answer.Content);
+            foreach (PlayerMouth mouth in engaged)
+                if (mouth.CharacterId == wandererId)
+                    mouth.Hear(message);
+
+            if (answer.Loud && muttering != null) speaker.Play(muttering);
             Log.Info($"Entity {name} answered wanderer {wandererId}");
         }
+
+        protected abstract void RequestAnswer(long wandererId, string message);
+
+        protected abstract bool Busy();
 
         private void Update()
         {
             thinking.Value = Busy();
-            Watch();
         }
 
-        protected abstract bool Busy();
-
-        private Conversation Remember(long wanderer)
+        private void RelayThinking(bool previous, bool current)
         {
-            if (conversations.TryGetValue(wanderer, out Conversation conversation)) return conversation;
-
-            conversation = new Conversation(wanderer);
-            conversations.Add(wanderer, conversation);
-            Log.Info($"Entity {name} started a conversation with wanderer {wanderer}");
-            return conversation;
-        }
-
-        private void Say(Conversation conversation, MessageAuthor author, string content)
-        {
-            var message = new Message
-            {
-                Author = author,
-                Content = content,
-                Time = Clock.Current == null
-                    ? string.Empty
-                    : Clock.Current.Now.ToString(Message.TimeFormat, CultureInfo.InvariantCulture)
-            };
-
-            conversation.Add(message);
-
-            Mouth mouth = UserOf(conversation.Wanderer)?.GetComponentInChildren<Mouth>();
-            if (mouth != null && mouth.Interlocutor == NetworkObjectId) mouth.Hear(message);
-        }
-
-        private void Watch()
-        {
-            foreach (Conversation conversation in conversations.Values)
-            {
-                if (!conversation.Open) continue;
-
-                NetworkObject user = UserOf(conversation.Wanderer);
-                if (user != null && Reachable(user) && Alive(user) && Awake(user) && Alive(NetworkObject)) continue;
-
-                Log.Info(
-                    $"Entity {name} ends the talk with {(user == null ? "a gone wanderer" : user.name)}: out of reach, dead or asleep");
-
-                conversation.Close();
-                if (user != null) user.GetComponentInChildren<Mouth>()?.Close();
-            }
-        }
-
-        private static NetworkObject UserOf(long wandererId)
-        {
-            if (Registers.Current == null) return null;
-
-            Character found = Character.Of(wandererId, Inactive.Exclude);
-            return found == null ? null : found.GetComponentInParent<NetworkObject>();
-        }
-
-        private bool Reachable(NetworkObject user)
-        {
-            return Vector3.Distance(user.transform.position, transform.position) <= TalkReach;
-        }
-
-        private static bool Alive(NetworkObject body)
-        {
-            Health health = body.GetComponent<Health>();
-            return health != null && health.Alive;
+            ThinkingChanged?.Invoke(current);
         }
     }
 }
