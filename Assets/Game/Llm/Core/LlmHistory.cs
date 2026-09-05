@@ -8,7 +8,7 @@ namespace Shooter.Game.Llm
 {
     public sealed class LlmHistory : MonoBehaviour, ISaveableComponent
     {
-        [SerializeField] private int maxSize = 30000;
+        [SerializeField] private int maxSize = 100000;
 
         private readonly List<LlmMessage> messages = new();
 
