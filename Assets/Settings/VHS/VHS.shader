@@ -24,6 +24,7 @@ Shader "FullScreen/VHS"
     float _Jitter;
     float _Noise;
     float _Desat;
+    float _VhsStrength;
 
     float Hash(float2 p)
     {
@@ -39,15 +40,16 @@ Shader "FullScreen/VHS"
         float2 uv = posInput.positionNDC.xy;
         float t = _Time.y;
         float row = uv.y;
+        float strength = saturate(_VhsStrength);
 
         // horizontal tracking wobble per row, with occasional jitter bursts
-        float wob = sin(row * 720.0 + t * 4.0) * _Wobble * 0.0025;
+        float wob = sin(row * 720.0 + t * 4.0) * _Wobble * strength * 0.0025;
         float jseed = Hash(float2(floor(t * 11.0), floor(row * 36.0)));
-        float jit = step(0.985, jseed) * _Jitter * 0.03 * (Hash(float2(t, row)) - 0.5);
+        float jit = step(0.985, jseed) * _Jitter * strength * 0.03 * (Hash(float2(t, row)) - 0.5);
         float ux = frac(uv.x + wob + jit);
 
         // per-row chromatic split
-        float cs = _Chroma * 0.0035 * (0.6 + 0.4 * sin(row * 240.0 + t * 2.0));
+        float cs = _Chroma * strength * 0.0035 * (0.6 + 0.4 * sin(row * 240.0 + t * 2.0));
         float3 col;
         col.r = CustomPassSampleCameraColor(float2(frac(ux + cs), uv.y), 0).r;
         col.g = CustomPassSampleCameraColor(float2(ux, uv.y), 0).g;
@@ -55,16 +57,16 @@ Shader "FullScreen/VHS"
 
         // analog wash
         float luma = dot(col, float3(0.299, 0.587, 0.114));
-        col = lerp(col, luma.xxx, _Desat);
+        col = lerp(col, luma.xxx, _Desat * strength);
 
         // scanlines
         float scan = 0.5 + 0.5 * sin(uv.y * _ScreenSize.y * 1.2);
-        col *= lerp(1.0, 0.55 + 0.45 * scan, saturate(_Scanline));
+        col *= lerp(1.0, 0.55 + 0.45 * scan, saturate(_Scanline * strength));
 
         // vhs grain, scaled by luma so black stays black
         float lum = dot(col, float3(0.299, 0.587, 0.114));
         float n = Hash(uv * _ScreenSize.xy * 0.7 + t * 57.0);
-        col += (n - 0.5) * _Noise * (lum + 0.12);
+        col += (n - 0.5) * _Noise * strength * (lum + 0.12);
 
         return float4(col, 1.0);
     }
