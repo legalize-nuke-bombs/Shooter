@@ -10,7 +10,7 @@ namespace Shooter.Game.Llm.SayToWanderer
     {
         private static readonly Journal Log = Logs.Here();
 
-        private Llm llm;
+        private Character ownCharacter;
         private LlmPendingTable table;
 
         public override string Name => "say_to_wanderer";
@@ -22,11 +22,11 @@ namespace Shooter.Game.Llm.SayToWanderer
 
         protected override void OnStart()
         {
-            llm = Self.GetComponent<Llm>();
+            ownCharacter = Self.GetComponent<Character>();
             table = Self.GetComponent<LlmPendingTable>();
-            if (llm == null)
+            if (ownCharacter == null)
             {
-                Log.Error($"Entity {Self.name} does not have Llm component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have Character component required by tool {Name}");
             }
             if (table == null)
             {
@@ -44,11 +44,14 @@ namespace Shooter.Game.Llm.SayToWanderer
                 return $"Failed to find wanderer {arguments.WandererId}";
             }
 
-            llm.Answer(arguments.WandererId, new Talker.Answer()
+            ConversationManager conversations = ConversationManager.Current;
+            if (conversations == null)
             {
-                Content = arguments.Text,
-                Loud = true
-            });
+                Log.Warn($"Entity {Self.name} can not speak: the world keeps no conversations");
+                return "Failed to speak";
+            }
+
+            conversations.Say(ownCharacter.Id, arguments.WandererId, arguments.Text, true);
             return $"Said to {arguments.WandererId}";
         }
     }
