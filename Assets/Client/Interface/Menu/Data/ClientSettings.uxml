@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label text="Настройки" class="screen__title"/>
+    <ui:Label text="Настройки клиента" class="screen__title"/>
     <ui:VisualElement class="screen__body">
         <ui:Label text="Звук" class="screen__section screen__section--first"/>
         <ui:Slider label="Общая громкость" low-value="0" high-value="1" fill="true" class="field">
