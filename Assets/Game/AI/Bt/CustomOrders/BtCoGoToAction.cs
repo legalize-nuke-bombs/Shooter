@@ -1,4 +1,5 @@
 using System;
+using Shooter.Game.AI.Bt.Legs;
 using Shooter.Game.Body;
 using Shooter.Game.World;
 using Shooter.Logging;
@@ -12,7 +13,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Custom Order Go To",
-        description: "Keeps the navigator on the current go_to custom order every tick: issues a new order, stops a cleared one, completes a finished one and reports the outcome.",
+        description: "Keeps the legs on the current go_to custom order every tick: issues a new order, stops a cleared one, completes a finished one and reports the outcome.",
         story: "[Agent] follows the go_to custom order",
         category: "Action",
         id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a05")]
@@ -25,73 +26,48 @@ namespace Shooter.Game.AI.Bt.CustomOrders
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
         private BtCustomOrderQueue customOrders;
-        private AgentMovement movement;
         private BtReports reports;
+        private BtWalk walk;
         private BtCoGoTo walking;
-        private string task;
-        private int issued;
-        private AgentMovement.CallbackData? outcome;
 
         protected override Status OnStart()
         {
             if (Agent.Value == null) return Status.Failure;
 
-            if (customOrders == null)
+            if (walk == null)
             {
                 customOrders = Agent.Value.GetComponent<BtCustomOrderQueue>();
-                movement = Agent.Value.GetComponent<AgentMovement>();
                 reports = Agent.Value.GetComponent<BtReports>();
+                AgentMovement movement = Agent.Value.GetComponent<AgentMovement>();
+                if (customOrders == null || movement == null) return Status.Failure;
+
+                walk = new BtWalk(movement, TaskPrefix);
             }
 
-            if (customOrders == null || movement == null) return Status.Failure;
-
-            if (outcome != null) Settle();
+            if (walk.Take(out AgentMovement.CallbackData outcome)) Settle(outcome);
 
             var wanted = customOrders.Current as BtCoGoTo;
             if (wanted == null)
             {
-                Halt();
+                walk.Stop("custom order cleared");
+                walking = null;
                 return Status.Failure;
             }
 
-            if (!ReferenceEquals(wanted, walking)) Issue(wanted);
+            if (!ReferenceEquals(wanted, walking))
+            {
+                walking = wanted;
+                wanted.Begin();
+                walk.Go(wanted.Destination, wanted.Sprint);
+            }
+
             return Status.Success;
         }
 
-        private void Issue(BtCoGoTo order)
+        private void Settle(AgentMovement.CallbackData data)
         {
-            issued++;
-            task = TaskPrefix + issued;
-            walking = order;
-            outcome = null;
-            order.Begin();
-            movement.GoTo(task, order.Sprint, OnFinished, order.Destination);
-        }
-
-        private void Halt()
-        {
-            if (walking == null) return;
-
-            if (movement.Status == AgentMovementStatus.Walking && movement.TaskName == task)
-                movement.Interrupt("custom order cleared");
-
-            task = null;
-            walking = null;
-            outcome = null;
-        }
-
-        private void OnFinished(AgentMovement.CallbackData data)
-        {
-            if (walking != null && data.TaskName == task) outcome = data;
-        }
-
-        private void Settle()
-        {
-            AgentMovement.CallbackData data = outcome.Value;
             BtCoGoTo order = walking;
-            task = null;
             walking = null;
-            outcome = null;
 
             switch (data.Status)
             {
