@@ -8,6 +8,7 @@ using UnityEngine;
 namespace Shooter.Game.AI.Bt.CustomOrders
 {
     [RequireComponent(typeof(AgentMovement))]
+    [RequireComponent(typeof(BtReports))]
     public class BtCustomOrderQueue : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
@@ -24,14 +25,18 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 
         private void Update()
         {
+            Settle();
+        }
+
+        private void Settle()
+        {
             if (!movement.IsSpawned || !movement.IsServer) return;
             if (order == null || !order.Done(gameObject)) return;
 
-            string report = order.Report(gameObject);
-            Log.Info($"Entity {name} finished {order.Kind} custom order: {report}");
+            string outcome = order.PromptOutcome(gameObject);
+            Log.Info($"Entity {name} finished {order.Kind} custom order: {outcome}");
             order = null;
-
-            if (reports != null) reports.Report(new BtReport { Prompt = report, Urgent = true });
+            reports.Report(new BtReport { Prompt = outcome, Urgent = true });
         }
 
         public string ComponentKey => "BtCustomOrderQueue";
@@ -78,6 +83,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             {
                 throw new ArgumentNullException(nameof(newOrder));
             }
+            Settle();
             order = newOrder;
         }
 
@@ -87,6 +93,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             {
                 throw new ArgumentNullException(nameof(newOrder));
             }
+            Settle();
             if (order == null)
             {
                 order = newOrder;

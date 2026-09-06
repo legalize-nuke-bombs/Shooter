@@ -18,7 +18,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
         public abstract void LoadObject(SaveToken content);
 
         public abstract bool Done(GameObject body);
-        public abstract string Report(GameObject body);
+        public abstract string PromptOutcome(GameObject body);
 
         public void Begin()
         {
