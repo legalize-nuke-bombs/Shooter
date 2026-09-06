@@ -259,6 +259,7 @@ GameObject:
   - component: {fileID: 8537724810945162158}
   - component: {fileID: -3317477117499524711}
   - component: {fileID: 6588986734940429705}
+  - component: {fileID: 3799816325666231720}
   m_Layer: 0
   m_Name: StreetLamp1_Short (Concrete)
   m_TagString: Untagged
@@ -484,3 +485,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObject.GameObjectId
   id: 
+--- !u!114 &3799816325666231720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533964689087174679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
