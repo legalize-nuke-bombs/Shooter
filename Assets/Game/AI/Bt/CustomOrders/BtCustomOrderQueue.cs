@@ -1,4 +1,5 @@
 ﻿using System;
+using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
@@ -6,11 +7,32 @@ using UnityEngine;
 
 namespace Shooter.Game.AI.Bt.CustomOrders
 {
+    [RequireComponent(typeof(AgentMovement))]
     public class BtCustomOrderQueue : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         private BtCustomOrder order = null;
+        private AgentMovement movement;
+        private BtReports reports;
+
+        private void Awake()
+        {
+            movement = GetComponent<AgentMovement>();
+            reports = GetComponent<BtReports>();
+        }
+
+        private void Update()
+        {
+            if (!movement.IsSpawned || !movement.IsServer) return;
+            if (order == null || !order.Done(gameObject)) return;
+
+            string report = order.Report(gameObject);
+            Log.Info($"Entity {name} finished {order.Kind} custom order: {report}");
+            order = null;
+
+            if (reports != null) reports.Report(new BtReport { Prompt = report, Urgent = true });
+        }
 
         public string ComponentKey => "BtCustomOrderQueue";
         private struct SaveData
@@ -76,14 +98,6 @@ namespace Shooter.Game.AI.Bt.CustomOrders
         public void Clear()
         {
             order = null;
-        }
-
-        public bool Complete(BtCustomOrder finished)
-        {
-            if (!ReferenceEquals(order, finished)) return false;
-
-            order = null;
-            return true;
         }
 
         public string Digest(DigestionDetail detail)

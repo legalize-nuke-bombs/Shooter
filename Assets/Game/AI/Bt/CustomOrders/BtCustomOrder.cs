@@ -17,6 +17,9 @@ namespace Shooter.Game.AI.Bt.CustomOrders
         public abstract object SaveObject();
         public abstract void LoadObject(SaveToken content);
 
+        public abstract bool Done(GameObject body);
+        public abstract string Report(GameObject body);
+
         public void Begin()
         {
             Status = BtCustomOrderStatus.Running;
