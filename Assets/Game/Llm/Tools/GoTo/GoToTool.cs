@@ -65,6 +65,12 @@ The result comes at once, the walk itself takes time: you will be notified when 
                 return $"There is no way from here to {arguments.TaskName}";
             }
 
+            float rest = Vector3.Distance(end, ground.position);
+            if (rest > movement.ShortfallLimit)
+            {
+                return $"There is no way from here to {arguments.TaskName}: the nearest walkable ground is {rest:F0} m short of it";
+            }
+
             string shortfall = Cardinal.Shortfall(ground.position - end);
             if (shortfall.Length > 0 && Vector3.Distance(end, Self.transform.position) < Cardinal.ArrivalTolerance)
             {

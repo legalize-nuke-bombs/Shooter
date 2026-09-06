@@ -13,9 +13,13 @@ namespace Shooter.Game.Body
 
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private float shortfallLimit = 50f;
+
         private NavMeshAgent agent;
         private NavMeshPath scratch;
         private Vector3 written;
+
+        public float ShortfallLimit => shortfallLimit;
 
         public AgentMovementStatus Status { get; private set; } = AgentMovementStatus.Idle;
         public string TaskName { get; private set; }
@@ -168,6 +172,19 @@ namespace Shooter.Game.Body
                 agent.ResetPath();
                 Finish(Snapshot(AgentMovementStatus.Unreachable, Destination));
                 return;
+            }
+
+            if (agent.pathStatus == NavMeshPathStatus.PathPartial)
+            {
+                float shortfall = Vector3.Distance(agent.pathEndPosition, Destination);
+                if (shortfall > shortfallLimit)
+                {
+                    Log.Info($"Entity {name} found no way to {Destination}: the nearest walkable ground is {shortfall:F0} m short of it");
+                    Status = AgentMovementStatus.Unreachable;
+                    agent.ResetPath();
+                    Finish(Snapshot(AgentMovementStatus.Unreachable, Destination));
+                    return;
+                }
             }
 
             if (agent.remainingDistance > agent.stoppingDistance) return;
