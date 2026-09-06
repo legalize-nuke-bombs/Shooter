@@ -9,6 +9,7 @@ namespace Shooter.Game.Body
     public class AgentMovement : Movement
     {
         private const float SampleReach = 2f;
+        private const float GroundRing = 1f;
 
         private static readonly Journal Log = Logs.Here();
 
@@ -64,7 +65,7 @@ namespace Shooter.Game.Body
             Sprinting = sprint;
             onFinished = onFinish;
 
-            if (!NavMesh.SamplePosition(target, out NavMeshHit ground, SampleReach, NavMesh.AllAreas))
+            if (!NearestGround(target, SampleReach, out NavMeshHit ground))
             {
                 Log.Info($"Entity {name} found no navmesh near {target}");
                 Status = AgentMovementStatus.Unreachable;
@@ -92,7 +93,7 @@ namespace Shooter.Game.Body
         {
             end = target;
 
-            if (!NavMesh.SamplePosition(target, out NavMeshHit ground, SampleReach, NavMesh.AllAreas)) return false;
+            if (!NearestGround(target, SampleReach, out NavMeshHit ground)) return false;
             if (!agent.CalculatePath(ground.position, scratch) || scratch.status == NavMeshPathStatus.PathInvalid) return false;
 
             Vector3[] corners = scratch.corners;
@@ -100,6 +101,17 @@ namespace Shooter.Game.Body
 
             end = corners[corners.Length - 1];
             return true;
+        }
+
+        public static bool NearestGround(Vector3 position, float reach, out NavMeshHit ground)
+        {
+            for (float ring = GroundRing; ring <= reach; ring += GroundRing)
+            {
+                if (NavMesh.SamplePosition(position, out ground, ring, NavMesh.AllAreas)) return true;
+            }
+
+            ground = default;
+            return false;
         }
 
         protected override float Tick(float dt)
