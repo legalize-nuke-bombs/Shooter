@@ -18,7 +18,9 @@ namespace Shooter.Game.Body
         private float fall;
         private bool jumping;
         private Landing landing;
+        private bool sprinting;
         private int steeredAt;
+        private Vector2 steering;
 
         protected override void Awake()
         {
@@ -34,7 +36,10 @@ namespace Shooter.Game.Body
             if (tick <= steeredAt) return;
             steeredAt = tick;
 
-            Steer(move, yaw, look, sprint);
+            steering = Vector2.ClampMagnitude(Finite(move), 1f);
+            transform.rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
+            Pitch = look;
+            sprinting = sprint;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -45,14 +50,12 @@ namespace Shooter.Game.Body
             jumping = true;
         }
 
-        public override void Halt()
+        protected override float Tick(float dt)
         {
-            base.Halt();
-            jumping = false;
-        }
+            bool walking = steering.sqrMagnitude > 0f;
+            float speed = AffordSpeed(walking, sprinting, dt);
+            Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
 
-        protected override bool Tick(Vector3 wish, float dt)
-        {
             if (characterController.isGrounded)
             {
                 if (airborne)
@@ -88,8 +91,12 @@ namespace Shooter.Game.Body
                 fall += gravity * dt;
             }
 
+            Vector3 before = transform.position;
             characterController.Move((wish + Vector3.up * fall) * dt);
-            return characterController.isGrounded;
+
+            return characterController.isGrounded
+                ? Vector2.Distance(new Vector2(before.x, before.z), new Vector2(transform.position.x, transform.position.z))
+                : 0f;
         }
 
         protected override void TeleportRaw(Vector3 position, Quaternion rotation)
@@ -98,6 +105,11 @@ namespace Shooter.Game.Body
             transform.SetPositionAndRotation(position, rotation);
             characterController.enabled = true;
             fall = 0f;
+        }
+
+        private static Vector2 Finite(Vector2 value)
+        {
+            return new Vector2(Finite(value.x), Finite(value.y));
         }
     }
 }
