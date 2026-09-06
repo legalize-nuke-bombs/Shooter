@@ -3,12 +3,16 @@ using Shooter.Game.Core;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Shooter.Game.Llm
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Digester : MonoBehaviour
     {
+        private const float FloorReach = 5f;
+        private const float FloorAbove = 0.5f;
+
         private static readonly Journal Log = Logs.Here();
 
         public static Digester Current { get; private set; }
@@ -35,12 +39,12 @@ namespace Shooter.Game.Llm
             return entity == null ? null : Block(entity.GetComponent<MainDigestible>(), detail, null);
         }
 
-        public string Seen(MainDigestible entity, DigestionDetail detail, Vector3 eyes)
+        public string Seen(MainDigestible entity, DigestionDetail detail, Vector3 feet)
         {
-            return Block(entity, detail, eyes);
+            return Block(entity, detail, feet);
         }
 
-        private string Block(MainDigestible entity, DigestionDetail detail, Vector3? eyes)
+        private string Block(MainDigestible entity, DigestionDetail detail, Vector3? feet)
         {
             if (entity == null) return null;
 
@@ -58,7 +62,7 @@ namespace Shooter.Game.Llm
                     if (digest.Length == 0)
                     {
                         digest.Append(line.TrimEnd());
-                        if (eyes != null) digest.Append(" (").Append(Whereabouts(entity, eyes.Value)).Append(")");
+                        if (feet != null) digest.Append(" (").Append(Whereabouts(entity, feet.Value)).Append(")");
                         continue;
                     }
 
@@ -74,9 +78,20 @@ namespace Shooter.Game.Llm
             return "[ID " + id.Value + "] " + digest;
         }
 
-        private string Whereabouts(MainDigestible entity, Vector3 eyes)
+        private string Whereabouts(MainDigestible entity, Vector3 feet)
         {
-            return Cardinal.Whereabouts(entity.transform.position - eyes);
+            Vector3 offset = entity.transform.position - feet;
+            float rise = Level(entity.transform.position) - Level(feet);
+            offset.y = float.IsNaN(rise) ? 0f : rise;
+            return Cardinal.Whereabouts(offset);
+        }
+
+        private static float Level(Vector3 position)
+        {
+            if (!NavMesh.SamplePosition(position, out NavMeshHit floor, FloorReach, NavMesh.AllAreas)) return float.NaN;
+            if (floor.position.y > position.y + FloorAbove) return float.NaN;
+
+            return floor.position.y;
         }
     }
 }

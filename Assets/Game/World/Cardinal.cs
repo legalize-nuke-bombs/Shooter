@@ -37,7 +37,7 @@ namespace Shooter.Game.World
         public static string Whereabouts(Vector3 offset)
         {
             float yaw = Yaw(offset);
-            return Mathf.RoundToInt(offset.magnitude) + " m, " + Side(yaw) + " (" + Bearing(yaw) + Degree + ")";
+            return Mathf.RoundToInt(offset.magnitude) + " m, " + Side(yaw) + " (" + Bearing(yaw) + Degree + ")" + Rise(offset.y);
         }
 
         public static string Shortfall(Vector3 rest)

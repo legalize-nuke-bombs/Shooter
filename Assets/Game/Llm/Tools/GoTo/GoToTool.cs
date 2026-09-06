@@ -26,6 +26,7 @@ Your character automatically finds the path to the target and travels any distan
 taskName: arbitrary name of the action
 bearing: degrees clockwise from north, 0 north, 90 east, 180 south, 270 west; the number in parentheses next to everything you see.
 distance: whole meters.
+height: whole meters the point lies above your own feet, negative below, 0 for your own level; things on another level show it next to them as ""3 m up"" or ""3 m down"", pass that number, otherwise leave 0.
 sprint: true to run.
 force: by default the call is refused while another second-level action is active; set force to true to drop it and start this one at once.
 The result comes at once, the walk itself takes time: you will be notified when you arrive or when your character failed to find path. Use look_at_yourself to check the active second-level action.
@@ -53,7 +54,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
             }
 
             int bearing = Cardinal.Bearing(arguments.Bearing);
-            Vector3 target = Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance;
+            Vector3 target = Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance + Vector3.up * arguments.Height;
 
             if (!NavMesh.SamplePosition(target, out NavMeshHit ground, GroundReach, NavMesh.AllAreas))
             {

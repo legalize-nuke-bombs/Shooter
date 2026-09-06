@@ -5,6 +5,7 @@
         public string TaskName { get; set; }
         public int Bearing { get; set; }
         public int Distance { get; set; }
+        public int Height { get; set; }
         public bool Sprint { get; set; }
         public bool Force { get; set; }
     }
