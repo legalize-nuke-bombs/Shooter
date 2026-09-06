@@ -120,6 +120,14 @@ namespace Shooter.Game.Body
         protected override void TeleportRaw(Vector3 position, Quaternion rotation)
         {
             transform.SetPositionAndRotation(position, rotation);
+            Place(position);
+
+            if (Status != AgentMovementStatus.Walking) return;
+
+            Log.Info($"Entity {name} displaced during task {TaskName}, the walk to {Destination} is over");
+            Status = AgentMovementStatus.Displaced;
+            agent.ResetPath();
+            Finish(Snapshot(AgentMovementStatus.Displaced, Destination));
         }
 
         private void Place(Vector3 position)
@@ -129,7 +137,7 @@ namespace Shooter.Game.Body
                 throw new InvalidOperationException($"Entity {name} stands off the navmesh at {position}");
             }
 
-            if (Status == AgentMovementStatus.Walking) agent.SetDestination(Destination);
+            written = position;
         }
 
         private void Judge()

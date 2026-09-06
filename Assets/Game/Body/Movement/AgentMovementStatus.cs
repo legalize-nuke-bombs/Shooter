@@ -6,6 +6,7 @@ namespace Shooter.Game.Body
         Walking,
         Arrived,
         Unreachable,
-        Interrupted
+        Interrupted,
+        Displaced
     }
 }
