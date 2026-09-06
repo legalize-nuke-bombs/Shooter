@@ -1,5 +1,6 @@
 using System;
 using Shooter.Game.Body;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Behavior;
 using Unity.Properties;
@@ -95,7 +96,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             switch (data.Status)
             {
                 case AgentMovementStatus.Arrived:
-                    Complete(order, data, $"You have arrived at {order.Name}");
+                    Complete(order, data, Arrival(order));
                     return;
                 case AgentMovementStatus.Unreachable:
                     Complete(order, data, $"Failed to find path to {order.Name}");
@@ -108,6 +109,14 @@ namespace Shooter.Game.AI.Bt.CustomOrders
                     Log.Info($"Entity {Agent.Value.name} lost the way to {order.Name}: {data.Status} by {data.InterrupterName}");
                     return;
             }
+        }
+
+        private string Arrival(BtCoGoTo order)
+        {
+            string shortfall = Cardinal.Shortfall(order.Destination - Agent.Value.transform.position);
+            return shortfall.Length == 0
+                ? $"You have arrived at {order.Name}"
+                : $"You have arrived as close to {order.Name} as the ground allows, {shortfall}";
         }
 
         private void Complete(BtCoGoTo order, AgentMovement.CallbackData data, string report)
