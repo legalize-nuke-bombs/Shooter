@@ -44,7 +44,7 @@ namespace Shooter.Game.Llm
 
             foreach (MainDigestible entity in FindVisible(around, origin))
             {
-                string seen = Digester.Current.Seen(entity, DigestionDetail.Brief, origin);
+                string seen = Digester.Current.Of(entity, DigestionDetail.Brief);
                 if (seen != null) digest.Append(seen).Append('\n');
             }
 

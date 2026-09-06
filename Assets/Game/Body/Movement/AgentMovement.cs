@@ -1,7 +1,9 @@
 using System;
 using Shooter.Logging;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.AI;
 
 namespace Shooter.Game.Body
 {
@@ -9,7 +11,8 @@ namespace Shooter.Game.Body
     public class AgentMovement : Movement
     {
         private const float SampleReach = 2f;
-        private const float GroundRing = 1f;
+        private const float LevelSlack = 1.5f;
+        private const float BelowReach = 30f;
 
         private static readonly Journal Log = Logs.Here();
 
@@ -32,6 +35,7 @@ namespace Shooter.Game.Body
             public string TaskName { get; set; }
             public bool Sprinting { get; set; }
             public Vector3 Destination { get; set; }
+            public Vector3 Position { get; set; }
             public string InterrupterName { get; set; }
         }
 
@@ -69,7 +73,7 @@ namespace Shooter.Game.Body
             Sprinting = sprint;
             onFinished = onFinish;
 
-            if (!NearestGround(target, SampleReach, out NavMeshHit ground))
+            if (!NearestGround(target, SampleReach, out Vector3 ground))
             {
                 Log.Info($"Entity {name} found no navmesh near {target}");
                 Status = AgentMovementStatus.Unreachable;
@@ -77,7 +81,7 @@ namespace Shooter.Game.Body
                 return;
             }
 
-            Destination = ground.position;
+            Destination = ground;
             Status = AgentMovementStatus.Walking;
             agent.SetDestination(Destination);
             Log.Info($"Entity {name} going to {Destination}");
@@ -97,8 +101,8 @@ namespace Shooter.Game.Body
         {
             end = target;
 
-            if (!NearestGround(target, SampleReach, out NavMeshHit ground)) return false;
-            if (!agent.CalculatePath(ground.position, scratch) || scratch.status == NavMeshPathStatus.PathInvalid) return false;
+            if (!NearestGround(target, SampleReach, out Vector3 ground)) return false;
+            if (!agent.CalculatePath(ground, scratch) || scratch.status == NavMeshPathStatus.PathInvalid) return false;
 
             Vector3[] corners = scratch.corners;
             if (corners.Length == 0) return false;
@@ -107,15 +111,19 @@ namespace Shooter.Game.Body
             return true;
         }
 
-        public static bool NearestGround(Vector3 position, float reach, out NavMeshHit ground)
+        public static bool NearestGround(Vector3 position, float reach, out Vector3 ground)
         {
-            for (float ring = GroundRing; ring <= reach; ring += GroundRing)
+            var query = new NavMeshQuery(NavMeshWorld.GetDefaultWorld(), Allocator.Temp);
+            NavMeshLocation found = query.MapLocation(position, new Vector3(reach, LevelSlack, reach), 0);
+            if (!query.IsValid(found))
             {
-                if (NavMesh.SamplePosition(position, out ground, ring, NavMesh.AllAreas)) return true;
+                found = query.MapLocation(position + Vector3.down * (BelowReach / 2f), new Vector3(reach, BelowReach / 2f, reach), 0);
             }
+            bool valid = query.IsValid(found);
+            query.Dispose();
 
-            ground = default;
-            return false;
+            ground = valid ? found.position : position;
+            return valid;
         }
 
         protected override float Tick(float dt)
@@ -189,7 +197,7 @@ namespace Shooter.Game.Body
 
             if (agent.remainingDistance > agent.stoppingDistance) return;
 
-            Log.Info($"Entity {name} arrived {Vector3.Distance(transform.position, Destination):F1} m from {Destination}");
+            Log.Info($"Entity {name} arrived {Vector3.Distance(Feet(), Destination):F1} m from {Destination}");
             Status = AgentMovementStatus.Arrived;
             agent.ResetPath();
             Finish(Snapshot(AgentMovementStatus.Arrived, Destination));
@@ -214,6 +222,11 @@ namespace Shooter.Game.Body
             finishing = false;
         }
 
+        private Vector3 Feet()
+        {
+            return agent.nextPosition - Vector3.up * agent.baseOffset;
+        }
+
         private CallbackData Snapshot(AgentMovementStatus status, Vector3 destination, string interrupterName = null)
         {
             return new CallbackData
@@ -222,6 +235,7 @@ namespace Shooter.Game.Body
                 TaskName = TaskName,
                 Sprinting = Sprinting,
                 Destination = destination,
+                Position = Feet(),
                 InterrupterName = interrupterName
             };
         }

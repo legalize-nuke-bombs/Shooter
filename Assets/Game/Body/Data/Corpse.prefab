@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: -563601233449484908}
   - component: {fileID: 5245172202499617556}
   - component: {fileID: -2762150791985947945}
+  - component: {fileID: 603369317153100443}
   m_Layer: 0
   m_Name: Corpse
   m_TagString: Untagged
@@ -235,3 +236,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &603369317153100443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6108037598719724321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform

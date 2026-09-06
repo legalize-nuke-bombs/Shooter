@@ -731,6 +731,7 @@ GameObject:
   - component: {fileID: 1805363375214341228}
   - component: {fileID: -546587721238944315}
   - component: {fileID: 1030110593025508114}
+  - component: {fileID: 6525472243262678585}
   m_Layer: 0
   m_Name: Cypress
   m_TagString: Untagged
@@ -825,7 +826,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.MainLlmMeta
   content: Cypress
-  distanceScore: 10
+  size: 0
+--- !u!114 &6525472243262678585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6060788920606015911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
 --- !u!1 &6272038357832284317
 GameObject:
   m_ObjectHideFlags: 0

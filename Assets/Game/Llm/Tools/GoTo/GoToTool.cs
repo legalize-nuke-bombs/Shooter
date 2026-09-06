@@ -4,7 +4,6 @@ using Shooter.Game.Body;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Shooter.Game.Llm.GoTo
 {
@@ -21,12 +20,10 @@ namespace Shooter.Game.Llm.GoTo
 
         public override string Description =>
             @"
-Walk in a direction for a distance by starting a second-level behavior tree action.
-Your character automatically finds the path to the target and travels any distance, no matter how far.
-taskName: arbitrary name of the action
-bearing: degrees clockwise from north, 0 north, 90 east, 180 south, 270 west; the number in parentheses next to everything you see.
-distance: whole meters.
-height: whole meters the point lies above your own feet, negative below, 0 for your own level; things on another level show it next to them as ""3 m up"" or ""3 m down"", pass that number, otherwise leave 0.
+Walk to a point of the world by starting a second-level behavior tree action.
+Your character automatically finds the path to the point and travels any distance, no matter how far.
+task_name: arbitrary name of the walk, it comes back in the reports.
+x, y, z: whole meters, the world coordinates shown next to everything you see and next to yourself in look_at_yourself; y is height. To reach a thing, pass its coordinates.
 sprint: true to run.
 force: by default the call is refused while another second-level action is active; set force to true to drop it and start this one at once.
 The result comes at once, the walk itself takes time: you will be notified when you arrive or when your character failed to find path. Use look_at_yourself to check the active second-level action.
@@ -48,36 +45,31 @@ The result comes at once, the walk itself takes time: you will be notified when 
 
         protected override string Execute(GoToArguments arguments, LlmCallContext context)
         {
-            if (arguments.Distance < 1)
+            var target = new Vector3(arguments.X, arguments.Y, arguments.Z);
+            string point = Whereabouts.Coordinates(target);
+
+            if (!AgentMovement.NearestGround(target, GroundReach, out Vector3 ground))
             {
-                return "Distance must be at least 1 meter";
+                return $"There is no walkable ground at {point}";
+            }
+            if (!movement.TryPlan(ground, out Vector3 end))
+            {
+                return $"There is no way from here to {point}";
             }
 
-            int bearing = Cardinal.Bearing(arguments.Bearing);
-            Vector3 target = Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance + Vector3.up * arguments.Height;
-
-            if (!AgentMovement.NearestGround(target, GroundReach, out NavMeshHit ground))
-            {
-                return $"There is no walkable ground at {arguments.TaskName}";
-            }
-            if (!movement.TryPlan(ground.position, out Vector3 end))
-            {
-                return $"There is no way from here to {arguments.TaskName}";
-            }
-
-            float rest = Vector3.Distance(end, ground.position);
+            float rest = Vector3.Distance(end, ground);
             if (rest > movement.ShortfallLimit)
             {
-                return $"There is no way from here to {arguments.TaskName}: the nearest walkable ground is {rest:F0} m short of it";
+                return $"There is no way from here to {point}: the nearest walkable ground is {rest:F0} m short of it";
             }
 
-            string shortfall = Cardinal.Shortfall(ground.position - end);
-            if (shortfall.Length > 0 && Vector3.Distance(end, Self.transform.position) < Cardinal.ArrivalTolerance)
+            string shortfall = Whereabouts.Shortfall(ground - end);
+            if (shortfall.Length > 0 && Vector3.Distance(end, Self.transform.position) < Whereabouts.ArrivalTolerance)
             {
-                return $"There is no way from here toward {arguments.TaskName}: the walkable ground ends right here, {shortfall}";
+                return $"There is no way from here toward {point}: the walkable ground ends right here, {shortfall}";
             }
 
-            var order = new BtCoGoTo { Name = arguments.TaskName, Destination = ground.position, Sprint = arguments.Sprint };
+            var order = new BtCoGoTo { Name = arguments.TaskName, Destination = ground, Sprint = arguments.Sprint };
             string started = order.PromptDescription(Self);
             if (shortfall.Length > 0) started += $"\nThe walkable ground ends {shortfall}";
 

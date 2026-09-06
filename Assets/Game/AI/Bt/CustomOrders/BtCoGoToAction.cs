@@ -96,7 +96,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             switch (data.Status)
             {
                 case AgentMovementStatus.Arrived:
-                    Complete(order, data, Arrival(order));
+                    Complete(order, data, Arrival(order, data));
                     return;
                 case AgentMovementStatus.Unreachable:
                     Complete(order, data, $"Failed to find path to {order.Name}");
@@ -111,9 +111,9 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             }
         }
 
-        private string Arrival(BtCoGoTo order)
+        private string Arrival(BtCoGoTo order, AgentMovement.CallbackData data)
         {
-            string shortfall = Cardinal.Shortfall(order.Destination - Agent.Value.transform.position);
+            string shortfall = Whereabouts.Shortfall(order.Destination - data.Position);
             return shortfall.Length == 0
                 ? $"You have arrived at {order.Name}"
                 : $"You have arrived as close to {order.Name} as the ground allows, {shortfall}";

@@ -36,7 +36,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 
         protected override string PromptRawDescription(GameObject body)
         {
-            return (Sprint ? "Running" : "Walking") + " to " + Name + ": " + Cardinal.Whereabouts(Destination - body.transform.position) + " left";
+            return (Sprint ? "Running" : "Walking") + " to " + Name + " at " + Whereabouts.Coordinates(Destination) + ": " + Mathf.RoundToInt(Vector3.Distance(Destination, body.transform.position)) + " m left";
         }
     }
 }

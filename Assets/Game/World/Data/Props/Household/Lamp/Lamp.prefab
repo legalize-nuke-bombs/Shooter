@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 404736587692464908}
   - component: {fileID: -6338337530893885036}
   - component: {fileID: 619626251006798639}
+  - component: {fileID: 990665624612003098}
   m_Layer: 0
   m_Name: Lamp
   m_TagString: Untagged
@@ -233,6 +234,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &990665624612003098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7431905612350001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
 --- !u!1 &7431905612350005
 GameObject:
   m_ObjectHideFlags: 0
