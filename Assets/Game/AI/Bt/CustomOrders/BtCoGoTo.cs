@@ -43,7 +43,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             return movement.Status is AgentMovementStatus.Arrived or AgentMovementStatus.Unreachable or AgentMovementStatus.Displaced;
         }
 
-        public override string Report(GameObject body)
+        public override string PromptOutcome(GameObject body)
         {
             AgentMovement movement = body.GetComponent<AgentMovement>();
             switch (movement.Status)
