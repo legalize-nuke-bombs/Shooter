@@ -59,13 +59,20 @@ The result comes at once, the walk itself takes time: you will be notified when 
             {
                 return $"There is no walkable ground at {arguments.TaskName}";
             }
-            if (!movement.CanReach(ground.position))
+            if (!movement.TryPlan(ground.position, out Vector3 end))
             {
                 return $"There is no way from here to {arguments.TaskName}";
             }
 
+            string shortfall = Cardinal.Shortfall(ground.position - end);
+            if (shortfall.Length > 0 && Vector3.Distance(end, Self.transform.position) < Cardinal.ArrivalTolerance)
+            {
+                return $"There is no way from here toward {arguments.TaskName}: the walkable ground ends right here, {shortfall}";
+            }
+
             var order = new BtCoGoTo { Name = arguments.TaskName, Destination = ground.position, Sprint = arguments.Sprint };
             string started = order.PromptDescription(Self);
+            if (shortfall.Length > 0) started += $"\nThe walkable ground ends {shortfall}";
 
             if (arguments.Force)
             {

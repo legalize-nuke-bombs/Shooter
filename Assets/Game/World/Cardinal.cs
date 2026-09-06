@@ -5,6 +5,9 @@ namespace Shooter.Game.World
     public static class Cardinal
     {
         public const string Degree = "\u00B0";
+        public const float ArrivalTolerance = 1f;
+
+        private const float RiseThreshold = 2f;
 
         private static readonly string[] Sides =
         {
@@ -35,6 +38,20 @@ namespace Shooter.Game.World
         {
             float yaw = Yaw(offset);
             return Mathf.RoundToInt(offset.magnitude) + " m, " + Side(yaw) + " (" + Bearing(yaw) + Degree + ")";
+        }
+
+        public static string Shortfall(Vector3 rest)
+        {
+            if (rest.magnitude < ArrivalTolerance) return "";
+
+            return Mathf.RoundToInt(rest.magnitude) + " m short of the point" + Rise(rest.y);
+        }
+
+        private static string Rise(float dy)
+        {
+            if (Mathf.Abs(dy) < RiseThreshold) return "";
+
+            return ", " + Mathf.RoundToInt(Mathf.Abs(dy)) + " m " + (dy > 0f ? "up" : "down");
         }
     }
 }

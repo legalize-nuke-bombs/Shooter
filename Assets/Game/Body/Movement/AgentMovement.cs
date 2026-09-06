@@ -88,11 +88,18 @@ namespace Shooter.Game.Body
             Finish(Snapshot(AgentMovementStatus.Interrupted, Destination, interrupterName));
         }
 
-        public bool CanReach(Vector3 target)
+        public bool TryPlan(Vector3 target, out Vector3 end)
         {
-            return NavMesh.SamplePosition(target, out NavMeshHit ground, SampleReach, NavMesh.AllAreas)
-                   && agent.CalculatePath(ground.position, scratch)
-                   && scratch.status == NavMeshPathStatus.PathComplete;
+            end = target;
+
+            if (!NavMesh.SamplePosition(target, out NavMeshHit ground, SampleReach, NavMesh.AllAreas)) return false;
+            if (!agent.CalculatePath(ground.position, scratch) || scratch.status == NavMeshPathStatus.PathInvalid) return false;
+
+            Vector3[] corners = scratch.corners;
+            if (corners.Length == 0) return false;
+
+            end = corners[corners.Length - 1];
+            return true;
         }
 
         protected override float Tick(float dt)
@@ -142,7 +149,7 @@ namespace Shooter.Game.Body
 
         private void Judge()
         {
-            if (!agent.hasPath || agent.pathStatus != NavMeshPathStatus.PathComplete)
+            if (!agent.hasPath || agent.pathStatus == NavMeshPathStatus.PathInvalid)
             {
                 Log.Info($"Entity {name} found no path to {Destination}");
                 Status = AgentMovementStatus.Unreachable;
@@ -153,7 +160,7 @@ namespace Shooter.Game.Body
 
             if (agent.remainingDistance > agent.stoppingDistance) return;
 
-            Log.Info($"Entity {name} arrived at {Destination}");
+            Log.Info($"Entity {name} arrived {Vector3.Distance(transform.position, Destination):F1} m from {Destination}");
             Status = AgentMovementStatus.Arrived;
             agent.ResetPath();
             Finish(Snapshot(AgentMovementStatus.Arrived, Destination));
