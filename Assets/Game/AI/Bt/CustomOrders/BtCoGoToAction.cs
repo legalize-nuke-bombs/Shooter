@@ -1,5 +1,5 @@
 using System;
-using Shooter.Game.AI.Navigation;
+using Shooter.Game.Body;
 using Shooter.Logging;
 using Unity.Behavior;
 using Unity.Properties;
@@ -24,12 +24,12 @@ namespace Shooter.Game.AI.Bt.CustomOrders
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
         private BtCustomOrderQueue customOrders;
-        private Navigator navigator;
+        private AgentMovement movement;
         private BtReports reports;
         private BtCoGoTo walking;
         private string task;
         private int issued;
-        private Navigator.CallbackData? outcome;
+        private AgentMovement.CallbackData? outcome;
 
         protected override Status OnStart()
         {
@@ -38,11 +38,11 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             if (customOrders == null)
             {
                 customOrders = Agent.Value.GetComponent<BtCustomOrderQueue>();
-                navigator = Agent.Value.GetComponent<Navigator>();
+                movement = Agent.Value.GetComponent<AgentMovement>();
                 reports = Agent.Value.GetComponent<BtReports>();
             }
 
-            if (customOrders == null || navigator == null) return Status.Failure;
+            if (customOrders == null || movement == null) return Status.Failure;
 
             if (outcome != null) Settle();
 
@@ -64,29 +64,29 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             walking = order;
             outcome = null;
             order.Begin();
-            navigator.GoTo(task, order.Sprint, OnFinished, order.Destination);
+            movement.GoTo(task, order.Sprint, OnFinished, order.Destination);
         }
 
         private void Halt()
         {
             if (walking == null) return;
 
-            if (navigator.Status == NavigatorStatus.Walking && navigator.TaskName == task)
-                navigator.Interrupt("custom order cleared");
+            if (movement.Status == AgentMovementStatus.Walking && movement.TaskName == task)
+                movement.Interrupt("custom order cleared");
 
             task = null;
             walking = null;
             outcome = null;
         }
 
-        private void OnFinished(Navigator.CallbackData data)
+        private void OnFinished(AgentMovement.CallbackData data)
         {
             if (walking != null && data.TaskName == task) outcome = data;
         }
 
         private void Settle()
         {
-            Navigator.CallbackData data = outcome.Value;
+            AgentMovement.CallbackData data = outcome.Value;
             BtCoGoTo order = walking;
             task = null;
             walking = null;
@@ -94,10 +94,10 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 
             switch (data.Status)
             {
-                case NavigatorStatus.Arrived:
+                case AgentMovementStatus.Arrived:
                     Complete(order, data, $"You have arrived at {order.Name}");
                     return;
-                case NavigatorStatus.Unreachable:
+                case AgentMovementStatus.Unreachable:
                     Complete(order, data, $"Failed to find path to {order.Name}");
                     return;
                 default:
@@ -107,7 +107,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             }
         }
 
-        private void Complete(BtCoGoTo order, Navigator.CallbackData data, string report)
+        private void Complete(BtCoGoTo order, AgentMovement.CallbackData data, string report)
         {
             bool cleared = customOrders.Complete(order);
             Log.Info($"Entity {Agent.Value.name} finished go_to custom order {order.Name}: {data.Status}, custom order cleared {cleared}");

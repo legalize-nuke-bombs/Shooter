@@ -16,12 +16,14 @@ namespace Shooter.Game.Body
 
         private readonly NetworkVariable<float> pitch = new();
         private NetworkTransform networkTransform;
-        private bool sprinting;
-        private Vector2 steering;
 
         protected MainRestrainable Restrainable { get; private set; }
 
-        public float Pitch => pitch.Value;
+        public float Pitch
+        {
+            get => pitch.Value;
+            protected set => pitch.Value = Mathf.Clamp(Finite(value), -PitchLimit, PitchLimit);
+        }
 
         public float GroundTravel { get; private set; }
 
@@ -51,21 +53,6 @@ namespace Shooter.Game.Body
             NetworkManager.NetworkTickSystem.Tick -= Step;
         }
 
-        public void Steer(Vector2 move, float yaw, float look, bool sprint)
-        {
-            steering = Vector2.ClampMagnitude(Finite(move), 1f);
-            transform.rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
-            pitch.Value = Mathf.Clamp(Finite(look), -PitchLimit, PitchLimit);
-
-            sprinting = sprint;
-        }
-
-        public virtual void Halt()
-        {
-            steering = Vector2.zero;
-            sprinting = false;
-        }
-
         public void Teleport(Vector3 position)
         {
             Teleport(position, Yaw);
@@ -83,9 +70,33 @@ namespace Shooter.Game.Body
             TurnRpc(Yaw);
         }
 
-        protected abstract bool Tick(Vector3 wish, float dt);
+        protected abstract float Tick(float dt);
 
         protected abstract void TeleportRaw(Vector3 position, Quaternion rotation);
+
+        protected float AffordSpeed(bool walking, bool sprinting, float dt)
+        {
+            if (!walking) return 0f;
+
+            if (sprinting && Restrainable.CanPerform(ActionType.Sprint, dt))
+            {
+                Restrainable.RegisterAction(ActionType.Sprint, dt);
+                return sprintSpeed;
+            }
+
+            if (Restrainable.CanPerform(ActionType.Walk, dt))
+            {
+                Restrainable.RegisterAction(ActionType.Walk, dt);
+                return walkSpeed;
+            }
+
+            return 0f;
+        }
+
+        protected static float Finite(float value)
+        {
+            return float.IsFinite(value) ? value : 0f;
+        }
 
         [Rpc(SendTo.Owner)]
         private void TurnRpc(float yaw)
@@ -97,45 +108,7 @@ namespace Shooter.Game.Body
         {
             if (!isActiveAndEnabled) return;
 
-            float dt = NetworkManager.LocalTime.FixedDeltaTime;
-
-            bool walking = steering.SqrMagnitude() > 0f;
-            sprinting = sprinting && walking;
-
-            float speed;
-            if (sprinting && Restrainable.CanPerform(ActionType.Sprint, dt))
-            {
-                Restrainable.RegisterAction(ActionType.Sprint, dt);
-                speed = sprintSpeed;
-            }
-            else if (walking && Restrainable.CanPerform(ActionType.Walk, dt))
-            {
-                Restrainable.RegisterAction(ActionType.Walk, dt);
-                speed = walkSpeed;
-            }
-            else
-            {
-                speed = 0;
-            }
-
-            Vector3 wish = transform.TransformDirection(new Vector3(steering.x, 0f, steering.y)) * speed;
-            Vector3 before = transform.position;
-            bool grounded = Tick(wish, dt);
-
-            GroundTravel = grounded
-                ? Vector3.Distance(new Vector3(before.x, 0f, before.z),
-                    new Vector3(transform.position.x, 0f, transform.position.z))
-                : 0f;
-        }
-
-        private static float Finite(float value)
-        {
-            return float.IsFinite(value) ? value : 0f;
-        }
-
-        private static Vector2 Finite(Vector2 value)
-        {
-            return new Vector2(Finite(value.x), Finite(value.y));
+            GroundTravel = Tick(NetworkManager.LocalTime.FixedDeltaTime);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using Shooter.Game.AI.Bt.CustomOrders;
-using Shooter.Game.AI.Navigation;
+using Shooter.Game.Body;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace Shooter.Game.Llm.GoTo
         private const float GroundReach = 5f;
 
         private BtCustomOrderQueue customOrders;
-        private Navigator navigator;
+        private AgentMovement movement;
 
         public override string Name => "go_to";
 
@@ -38,10 +38,10 @@ The result comes at once, the walk itself takes time: you will be notified when 
             {
                 Log.Error($"Entity {Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
             }
-            navigator = Self.GetComponent<Navigator>();
-            if (navigator == null)
+            movement = Self.GetComponent<AgentMovement>();
+            if (movement == null)
             {
-                Log.Error($"Entity {Self.name} does not have Navigator component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have AgentMovement component required by tool {Name}");
             }
         }
 
@@ -59,7 +59,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
             {
                 return $"There is no walkable ground at {arguments.TaskName}";
             }
-            if (!navigator.CanReach(ground.position))
+            if (!movement.CanReach(ground.position))
             {
                 return $"There is no way from here to {arguments.TaskName}";
             }

@@ -1,6 +1,6 @@
-﻿namespace Shooter.Game.AI.Navigation
+namespace Shooter.Game.Body
 {
-    public enum NavigatorStatus
+    public enum AgentMovementStatus
     {
         Idle,
         Walking,
