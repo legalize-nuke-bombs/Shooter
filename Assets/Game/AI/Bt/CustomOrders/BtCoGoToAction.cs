@@ -100,6 +100,9 @@ namespace Shooter.Game.AI.Bt.CustomOrders
                 case AgentMovementStatus.Unreachable:
                     Complete(order, data, $"Failed to find path to {order.Name}");
                     return;
+                case AgentMovementStatus.Displaced:
+                    Complete(order, data, $"Your walk to {order.Name} was cut short: you have been moved somewhere else");
+                    return;
                 default:
                     order.Suspend();
                     Log.Info($"Entity {Agent.Value.name} lost the way to {order.Name}: {data.Status} by {data.InterrupterName}");
