@@ -23,6 +23,7 @@ namespace Shooter.Game.Llm.GoTo
             @"
 Walk in a direction for a distance by starting a second-level behavior tree action.
 Your character automatically finds the path to the target and travels any distance, no matter how far.
+taskName: arbitrary name of the action
 bearing: degrees clockwise from north, 0 north, 90 east, 180 south, 270 west; the number in parentheses next to everything you see.
 distance: whole meters.
 sprint: true to run.
@@ -52,19 +53,18 @@ The result comes at once, the walk itself takes time: you will be notified when 
             }
 
             int bearing = Cardinal.Bearing(arguments.Bearing);
-            string label = $"the point {arguments.Distance} m {Cardinal.Side(bearing)} ({bearing}{Cardinal.Degree})";
             Vector3 target = Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance;
 
             if (!NavMesh.SamplePosition(target, out NavMeshHit ground, GroundReach, NavMesh.AllAreas))
             {
-                return $"There is no walkable ground at {label}";
+                return $"There is no walkable ground at {arguments.TaskName}";
             }
             if (!navigator.CanReach(ground.position))
             {
-                return $"There is no way from here to {label}";
+                return $"There is no way from here to {arguments.TaskName}";
             }
 
-            var order = new BtCoGoTo { Name = label, Destination = ground.position, Sprint = arguments.Sprint };
+            var order = new BtCoGoTo { Name = arguments.TaskName, Destination = ground.position, Sprint = arguments.Sprint };
             string started = order.PromptDescription(Self);
 
             if (arguments.Force)
