@@ -1,4 +1,5 @@
 using System.Text;
+using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.World;
 using Shooter.Logging;
@@ -10,7 +11,7 @@ namespace Shooter.Game.Llm
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Digester : MonoBehaviour
     {
-        private const float FloorReach = 5f;
+        private const float FloorReach = 2f;
         private const float FloorAbove = 0.5f;
 
         private static readonly Journal Log = Logs.Here();
@@ -88,7 +89,7 @@ namespace Shooter.Game.Llm
 
         private static float Level(Vector3 position)
         {
-            if (!NavMesh.SamplePosition(position, out NavMeshHit floor, FloorReach, NavMesh.AllAreas)) return float.NaN;
+            if (!AgentMovement.NearestGround(position, FloorReach, out NavMeshHit floor)) return float.NaN;
             if (floor.position.y > position.y + FloorAbove) return float.NaN;
 
             return floor.position.y;

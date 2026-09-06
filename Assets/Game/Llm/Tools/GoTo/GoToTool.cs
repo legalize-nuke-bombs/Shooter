@@ -56,7 +56,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
             int bearing = Cardinal.Bearing(arguments.Bearing);
             Vector3 target = Self.transform.position + Quaternion.Euler(0f, bearing, 0f) * Vector3.forward * arguments.Distance + Vector3.up * arguments.Height;
 
-            if (!NavMesh.SamplePosition(target, out NavMeshHit ground, GroundReach, NavMesh.AllAreas))
+            if (!AgentMovement.NearestGround(target, GroundReach, out NavMeshHit ground))
             {
                 return $"There is no walkable ground at {arguments.TaskName}";
             }
