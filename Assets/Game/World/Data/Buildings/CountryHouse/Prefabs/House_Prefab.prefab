@@ -2456,6 +2456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2594713235056830955}
   - component: {fileID: -1392617128932919474}
+  - component: {fileID: 7521392599662819723}
   m_Layer: 0
   m_Name: House_Prefab
   m_TagString: Untagged
@@ -2498,6 +2499,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
   content: A village house
   size: 2
+--- !u!114 &7521392599662819723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2594713235057194443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
 --- !u!1 &2594713235057194445
 GameObject:
   m_ObjectHideFlags: 0

@@ -218,9 +218,14 @@ namespace Shooter.Client.Interface
             return $"{Bytes("Gfx Used Memory")} / {SystemInfo.graphicsMemorySize} МБ";
         }
 
+        private static readonly string[] Sides =
+        {
+            "north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"
+        };
+
         private static string Facing(float yaw)
         {
-            return $"{Cardinal.Side(yaw)} ({yaw:F0}°)";
+            return $"{Sides[Mathf.RoundToInt(yaw / 45f) & 7]} ({yaw:F0}°)";
         }
 
         private string Bytes(string name)

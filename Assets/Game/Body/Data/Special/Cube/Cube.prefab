@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: 6188320145048159165}
   - component: {fileID: 3545692209479366608}
   - component: {fileID: -1508299866133183944}
+  - component: {fileID: 2232584987689059584}
+  - component: {fileID: 3519299769182243449}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -172,7 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c4f0350a0545bea50bbfcc987b88f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Identity.PersistentId
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &-3368437015953145799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,6 +259,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &2232584987689059584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475251358202894423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
+--- !u!114 &3519299769182243449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475251358202894423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6822d4cb2224f5bbd96ebc54848aef7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectRuntimeId
 --- !u!1 &4402097373001482622
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,6 +5,8 @@ namespace Shooter.Game.Core
         Low = 0,
         Medium = 1,
         High = 2,
-        Highest = 3
+        Place = 3,
+        Head = 4,
+        Handle = 5
     }
 }

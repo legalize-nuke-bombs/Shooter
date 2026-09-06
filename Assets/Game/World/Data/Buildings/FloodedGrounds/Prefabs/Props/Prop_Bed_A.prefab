@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 20580684}
   - component: {fileID: -3193297862660732539}
   - component: {fileID: -5986380376990888116}
+  - component: {fileID: 7665433910397134130}
   m_Layer: 8
   m_Name: Prop_Bed_A
   m_TagString: Untagged
@@ -198,7 +199,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
-  content: "A bed"
+  content: A bed
+  size: 0
+--- !u!114 &7665433910397134130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
 --- !u!1 &196794
 GameObject:
   m_ObjectHideFlags: 0

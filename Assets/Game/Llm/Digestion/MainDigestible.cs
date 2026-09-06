@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    [RequireComponent(typeof(DigestibleTransform))]
     public class MainDigestible : RegisteredBehaviour, IDigestible
     {
         [SerializeField] [TextArea(5, 20)] private string content;
@@ -27,6 +28,6 @@ namespace Shooter.Game.Llm
             return content;
         }
 
-        public DigestionPriority Priority => DigestionPriority.Highest;
+        public DigestionPriority Priority => DigestionPriority.Head;
     }
 }

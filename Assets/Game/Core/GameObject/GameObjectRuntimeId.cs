@@ -4,7 +4,7 @@ using Shooter.Logging;
 
 namespace Shooter.Game.Core
 {
-    public class GameObjectRuntimeId : RegisteredBehaviour, ISaveableComponent
+    public class GameObjectRuntimeId : RegisteredBehaviour, ISaveableComponent, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -13,6 +13,8 @@ namespace Shooter.Game.Core
         public long Value { get; private set; } = Default;
 
         public string ComponentKey => "GameObjectRuntimeId";
+
+        public DigestionPriority Priority => DigestionPriority.Handle;
 
         private struct SaveData
         {
@@ -30,6 +32,11 @@ namespace Shooter.Game.Core
         public void LoadObject(SaveToken content)
         {
             Value = content.To<SaveData>().Id;
+        }
+
+        public string Digest(DigestionDetail detail)
+        {
+            return "[ID " + Value + "]";
         }
 
         protected override void Awake()
