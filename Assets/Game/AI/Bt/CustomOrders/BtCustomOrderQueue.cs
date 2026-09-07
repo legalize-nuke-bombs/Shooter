@@ -33,6 +33,16 @@ namespace Shooter.Game.AI.Bt.CustomOrders
             if (!movement.IsSpawned || !movement.IsServer) return;
             if (order == null || !order.Done(gameObject)) return;
 
+            Finish();
+        }
+
+        public void Finish()
+        {
+            if (order == null)
+            {
+                throw new InvalidOperationException($"Entity {name} has no custom order to finish");
+            }
+
             string outcome = order.PromptOutcome(gameObject);
             Log.Info($"Entity {name} finished {order.Kind} custom order: {outcome}");
             order = null;
@@ -104,6 +114,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 
         public void Clear()
         {
+            Settle();
             order = null;
         }
 
