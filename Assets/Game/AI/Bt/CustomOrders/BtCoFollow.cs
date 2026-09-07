@@ -1,3 +1,4 @@
+using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
 using Shooter.Game.World;
@@ -56,7 +57,12 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 
         public override string PromptOutcome(GameObject body)
         {
-            return Handle + " is gone, you are no longer following it";
+            if (Target == null) return Handle + " is gone, you are no longer following it";
+
+            AgentMovement movement = body.GetComponent<AgentMovement>();
+            return movement.Status == AgentMovementStatus.Unreachable
+                ? "There is no way toward " + Handle + " from where you stand, you are no longer following it"
+                : "You are no longer following " + Handle;
         }
 
         protected override string PromptRawDescription(GameObject body)
