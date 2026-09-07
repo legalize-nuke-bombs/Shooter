@@ -236,6 +236,7 @@ MonoBehaviour:
   - rid: 2635107260138258853
   - rid: 2635107260138258858
   - rid: 2635107260138258844
+  - rid: 2635107283221348555
   - rid: 2635107260138258845
   - rid: 2635107260138258841
   - rid: 2635107260138258842
@@ -258,6 +259,9 @@ MonoBehaviour:
       data: 
     - rid: 2635107260138258841
       type: {class: ExploreItemsTool, ns: Shooter.Game.Llm.ExploreItems, asm: Shooter.Game}
+      data: 
+    - rid: 2635107283221348555
+      type: {class: FollowTool, ns: Shooter.Game.Llm.Follow, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258842
       type: {class: GiveStackableTool, ns: Shooter.Game.Llm.GiveStackable, asm: Shooter.Game}
