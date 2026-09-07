@@ -11,7 +11,7 @@ namespace Shooter.Game.AI.Bt.Legs
     [NodeDescription(
         name: "Walk To Point",
         description: "Asks the legs for the point every tick it runs; the body walks only while asked. Fails while the body reports no way to the point.",
-        story: "[Agent] walks to [Destination]",
+        story: "[Agent] walks to [Destination], running if [Sprint]",
         category: "Action",
         id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a08")]
     public partial class WalkToPointAction : Action

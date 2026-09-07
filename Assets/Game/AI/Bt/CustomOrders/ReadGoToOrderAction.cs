@@ -10,7 +10,7 @@ namespace Shooter.Game.AI.Bt.CustomOrders
     [NodeDescription(
         name: "Read Go To Order",
         description: "Reads the go_to custom order from the slot: its destination and pace go into the variables; fails when the slot holds no go_to order.",
-        story: "[Agent] reads the go_to order into [Destination]",
+        story: "[Agent] reads the go_to order into [Destination] and [Sprint]",
         category: "Action",
         id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a09")]
     public partial class ReadGoToOrderAction : Action
