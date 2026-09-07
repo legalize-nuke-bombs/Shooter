@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
+  m_Name: LLMs
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
+  content: 'Every resident of this world operates via an LLM. LLM ticks occur either
+    every few minutes of real time or when there is an urgent event.
+
+
+    At the
+    end of each request, you must ensure you have done everything you intended to
+    do, because the next request might not happen for a while.
+
+
+    You can speak
+    with other residents. Generally, you will have the option to choose whether your
+    message is urgent or not. An urgent message instantly triggers that resident''s
+    LLM tick. A non-urgent message is stored in the resident''s memory but is only
+    processed during their next LLM tick. Try to use non-urgent messages by default,
+    but always use urgent messages in situations where the character needs to react
+    immediately.'
