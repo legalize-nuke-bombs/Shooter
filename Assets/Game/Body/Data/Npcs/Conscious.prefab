@@ -207,6 +207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Llm
   systemPrompts:
   - {fileID: 11400000, guid: c73c83677512f0644ad6fcaec67a4593, type: 2}
+  - {fileID: 11400000, guid: deaa5f34e6307c943b1b29ed0e8081bc, type: 2}
+  - {fileID: 11400000, guid: f9381fea87786d149963881bb2484b5f, type: 2}
   - {fileID: 11400000, guid: 15dce29c4e723814eb7a5c2a5306561a, type: 2}
   - {fileID: 11400000, guid: 961bd56739dedc546a907e5cd19772e7, type: 2}
   - {fileID: 11400000, guid: 943e48c625773e644ab127f9be160ef2, type: 2}
@@ -259,9 +261,6 @@ MonoBehaviour:
       data: 
     - rid: 2635107260138258841
       type: {class: ExploreItemsTool, ns: Shooter.Game.Llm.ExploreItems, asm: Shooter.Game}
-      data: 
-    - rid: 2635107283221348555
-      type: {class: FollowTool, ns: Shooter.Game.Llm.Follow, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258842
       type: {class: GiveStackableTool, ns: Shooter.Game.Llm.GiveStackable, asm: Shooter.Game}
@@ -323,6 +322,9 @@ MonoBehaviour:
       data: 
     - rid: 2635107283221348554
       type: {class: SearchConversationsTool, ns: Shooter.Game.Llm.SearchConversations, asm: Shooter.Game}
+      data: 
+    - rid: 2635107283221348555
+      type: {class: FollowTool, ns: Shooter.Game.Llm.Follow, asm: Shooter.Game}
       data: 
 --- !u!114 &7426902805887786745
 MonoBehaviour:
