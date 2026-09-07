@@ -54,7 +54,15 @@ namespace Shooter.Game.Body
             askedFrame = Time.frameCount;
             Sprinting = sprint;
 
-            if (target == Target && Status != AgentMovementStatus.Idle) return;
+            if (target == Target && Status != AgentMovementStatus.Idle)
+            {
+                if (Status == AgentMovementStatus.Walking && !agent.hasPath && !agent.pathPending)
+                {
+                    Log.Info($"Entity {name} asks again for the path to {Destination}");
+                    agent.SetDestination(Destination);
+                }
+                return;
+            }
 
             Target = target;
 
@@ -163,19 +171,7 @@ namespace Shooter.Game.Body
                 return;
             }
 
-            if (!agent.hasPath)
-            {
-                if (agent.SetDestination(Destination))
-                {
-                    Log.Info($"Entity {name} asks again for the path to {Destination}: the corridor is gone without a verdict");
-                    return;
-                }
-
-                Log.Info($"Entity {name} could not request a path to {Destination}");
-                Status = AgentMovementStatus.Unreachable;
-                agent.ResetPath();
-                return;
-            }
+            if (!agent.hasPath) return;
 
             if (agent.pathStatus == NavMeshPathStatus.PathPartial)
             {
