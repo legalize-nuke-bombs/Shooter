@@ -155,9 +155,23 @@ namespace Shooter.Game.Body
 
         private void Judge()
         {
-            if (!agent.hasPath || agent.pathStatus == NavMeshPathStatus.PathInvalid)
+            if (agent.pathStatus == NavMeshPathStatus.PathInvalid)
             {
                 Log.Info($"Entity {name} found no path to {Destination}");
+                Status = AgentMovementStatus.Unreachable;
+                agent.ResetPath();
+                return;
+            }
+
+            if (!agent.hasPath)
+            {
+                if (agent.SetDestination(Destination))
+                {
+                    Log.Info($"Entity {name} asks again for the path to {Destination}: the corridor is gone without a verdict");
+                    return;
+                }
+
+                Log.Info($"Entity {name} could not request a path to {Destination}");
                 Status = AgentMovementStatus.Unreachable;
                 agent.ResetPath();
                 return;
