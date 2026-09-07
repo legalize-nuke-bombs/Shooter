@@ -1,25 +1,23 @@
 ﻿using System;
-using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.AI.Bt.CustomOrders
 {
-    [RequireComponent(typeof(AgentMovement))]
     [RequireComponent(typeof(BtReports))]
     public class BtCustomOrderQueue : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         private BtCustomOrder order = null;
-        private AgentMovement movement;
         private BtReports reports;
 
         private void Awake()
         {
-            movement = GetComponent<AgentMovement>();
+            enabled = NetworkManager.Singleton.IsServer;
             reports = GetComponent<BtReports>();
         }
 
@@ -30,7 +28,6 @@ namespace Shooter.Game.AI.Bt.CustomOrders
 
         private void Settle()
         {
-            if (!movement.IsSpawned || !movement.IsServer) return;
             if (order == null || !order.Done(gameObject)) return;
 
             Finish();
