@@ -7854,6 +7854,15 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 879873498
       objectReference: {fileID: 0}
+    - target: {fileID: 427411115658280303, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
+      propertyPath: size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 427411115658280303, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
+      propertyPath: content
+      value: An old street lamp, two bulbs. The center of a strange dimension, a
+        white corridor with a mirrored wall.
+      objectReference: {fileID: 0}
     - target: {fileID: 1263881239168321199, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_ShortDouble (Concrete)
