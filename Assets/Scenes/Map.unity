@@ -6264,9 +6264,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1666951747}
-    - targetCorrespondingSourceObject: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1666951779}
   m_SourcePrefab: {fileID: 100100000, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
 --- !u!1 &1666951742 stripped
 GameObject:
@@ -6292,37 +6289,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.ImmortalHealth
   ShowTopMostFoldoutHeaderGroup: 1
   hurtSound: {fileID: 0}
---- !u!114 &1666951779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666951742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
-  ShowTopMostFoldoutHeaderGroup: 1
-  m_Graph: {fileID: -1925619244854811568, guid: a2d5bef9b0c0cd14998d6945b74efb9c, type: 2}
-  m_BlackboardVariableOverridesList:
-  - rid: 2635107353297158458
-  m_OriginalGraph: {fileID: 0}
-  m_IsInitialised: 0
-  m_IsStarted: 0
-  NetcodeRunOnlyOnOwner: 1
-  references:
-    version: 2
-    RefIds:
-    - rid: 2635107353297158458
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1
-          m_Value1: 0
-        Name: Self
-        m_Value: {fileID: 1666951742}
 --- !u!1001 &1701559108
 PrefabInstance:
   m_ObjectHideFlags: 0
