@@ -2,7 +2,6 @@ using System;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Unity.Behavior;
-using Unity.Netcode;
 using Unity.Properties;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
@@ -12,7 +11,7 @@ namespace Shooter.Game.AI.Bt.Eyes
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Spot Nearest Character",
-        description: "Looks over the characters of the world for the nearest living one, other than the agent, within the radius; its transform goes into the variable. Fails when nobody is within the radius. The eyes work on the server only.",
+        description: "Looks over the characters of the world for the nearest living one, other than the agent, within the radius; its transform goes into the variable. Fails when nobody is within the radius.",
         story: "[Agent] spots the nearest character within [Radius] into [Target]",
         category: "Action",
         id: "7d3b9e15c6a24f0d8b2e4c6a1f9d3e51")]
@@ -27,7 +26,6 @@ namespace Shooter.Game.AI.Bt.Eyes
         protected override Status OnStart()
         {
             if (Agent.Value == null) return Status.Failure;
-            if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsServer) return Status.Failure;
             if (self == null)
             {
                 self = Agent.Value.GetComponent<Character>();
