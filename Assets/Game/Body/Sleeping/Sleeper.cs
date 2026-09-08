@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
 using Shooter.Game.World;
@@ -8,6 +7,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Body
 {
+    [RequireComponent(typeof(SpawnPoint))]
     [RequireComponent(typeof(Speaker))]
     public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint, ISaveableComponent
     {
@@ -20,14 +20,11 @@ namespace Shooter.Game.Body
 
         private readonly NetworkVariable<bool> sleeping = new();
 
-        private Vector3? bedded;
-
         public string ComponentKey => "Sleeper";
         private struct SaveData
         {
             public Vector3 Bedside { get; set; }
             public bool Sleeping { get; set; }
-            public Vector3? Bedded { get; set; }
         }
         public object SaveObject()
         {
@@ -35,7 +32,6 @@ namespace Shooter.Game.Body
             {
                 Bedside = bedside.Value,
                 Sleeping = sleeping.Value,
-                Bedded = bedded
             };
         }
         public void LoadObject(SaveToken content)
@@ -43,24 +39,20 @@ namespace Shooter.Game.Body
             SaveData sd = content.To<SaveData>();
             bedside.Value = sd.Bedside;
             sleeping.Value = sd.Sleeping;
-            bedded = sd.Bedded;
         }
 
+        private SpawnPoint spawnPoint;
         private Speaker speaker;
+
+        private void Awake()
+        {
+            spawnPoint = GetComponent<SpawnPoint>();
+            speaker = GetComponent<Speaker>();
+        }
 
         public bool Sleeping => sleeping.Value;
 
         public Vector3 Bedside => bedside.Value;
-
-        public Vector3 SpawnPoint
-        {
-            get
-            {
-                if (bedded.HasValue) return bedded.Value;
-
-                return MainSpawnPoint.Current == null ? transform.position : MainSpawnPoint.Current.transform.position;
-            }
-        }
 
         public string Digest(DigestionDetail detail)
         {
@@ -89,9 +81,9 @@ namespace Shooter.Game.Body
 
             bedside.Value = bed == null ? transform.position : bed.transform.position;
             sleeping.Value = true;
-            bedded = transform.position;
-            Sound(bedding);
-            Log.Info($"Entity {name} fell asleep at {SpawnPoint} in a bed at {bedside.Value}");
+            spawnPoint.SetPosition(transform.position);
+            speaker.Play(bedding);
+            Log.Info($"Entity {name} fell asleep at {transform.position} in a bed at {bedside.Value}");
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -118,15 +110,8 @@ namespace Shooter.Game.Body
             if (!IsServer || !Sleeping) return;
 
             sleeping.Value = false;
-            if (heard) Sound(rising);
+            if (heard) speaker.Play(rising);
             Log.Info($"Entity {name} woke up at {transform.position}");
-        }
-
-        private void Sound(SoundSpec sound)
-        {
-            if (speaker == null) speaker = GetComponent<Speaker>();
-
-            if (speaker != null) speaker.Play(sound);
         }
     }
 }

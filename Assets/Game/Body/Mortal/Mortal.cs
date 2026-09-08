@@ -1,6 +1,5 @@
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
-using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,9 +7,9 @@ using UnityEngine;
 namespace Shooter.Game.Body
 {
     [RequireComponent(typeof(Health))]
-    // Movement is not required
+    [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(EarSpeaker))]
-    // Sleeper is not required
+    [RequireComponent(typeof(SpawnPoint))]
     public class Mortal : NetworkBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
@@ -23,13 +22,13 @@ namespace Shooter.Game.Body
         private Health health;
         private Movement movement;
         private Player player;
-        private Sleeper sleeper;
+        private SpawnPoint spawnPoint;
 
         private void Awake()
         {
             health = GetComponent<Health>();
             movement = GetComponent<Movement>();
-            sleeper = GetComponent<Sleeper>();
+            spawnPoint = GetComponent<SpawnPoint>();
             earSpeaker = GetComponent<EarSpeaker>();
             player = GetComponent<Player>();
         }
@@ -54,17 +53,10 @@ namespace Shooter.Game.Body
         {
             if (health == null || health.Alive) return;
 
-            Vector3 at = SpawnPoint();
-            movement?.Teleport(at);
+            Vector3 at = spawnPoint.GetPosition();
+            movement.Teleport(at);
             health.Resurrect();
             Log.Info($"Entity {name} rose at {at}");
-        }
-
-        private Vector3 SpawnPoint()
-        {
-            if (sleeper != null) return sleeper.SpawnPoint;
-
-            return MainSpawnPoint.Current == null ? transform.position : MainSpawnPoint.Current.transform.position;
         }
 
         private void LeaveCorpse()
