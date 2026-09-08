@@ -35,6 +35,7 @@ GameObject:
   - component: {fileID: -6602629386385626499}
   - component: {fileID: 6251458730921147201}
   - component: {fileID: 2519498067671057823}
+  - component: {fileID: 5388064838481061285}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -479,3 +480,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6822d4cb2224f5bbd96ebc54848aef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectRuntimeId
+--- !u!114 &5388064838481061285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e948922319a45c88c43827d0be69505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SpawnPoint
