@@ -25,7 +25,7 @@ namespace Shooter.Game.Llm.LookByIds
 
             foreach (long targetId in targetIds)
             {
-                var target = Character.Of(targetId, Inactive.Exclude);
+                var target = Character.Of(targetId, Inactive.Include);
 
                 if (target == null)
                 {
