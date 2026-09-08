@@ -11,8 +11,8 @@ namespace Shooter.Game.AI.Bt.Eyes
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Spot Nearest Character",
-        description: "Looks over the characters of the world for the nearest living one, other than the agent, within the radius; its transform goes into the variable. Fails when nobody is within the radius.",
-        story: "[Agent] spots the nearest character within [Radius] into [Target]",
+        description: "Looks over the characters of the world for the nearest living one, other than the agent, within the radius; its transform goes into the variable; with the priority on, the nearest player within the radius wins over any nearer character. Fails when nobody is within the radius.",
+        story: "[Agent] spots the nearest character within [Radius] into [Target], preferring players if [PlayerPriority]",
         category: "Action",
         id: "7d3b9e15c6a24f0d8b2e4c6a1f9d3e51")]
     public partial class SpotNearestCharacterAction : Action
@@ -20,6 +20,7 @@ namespace Shooter.Game.AI.Bt.Eyes
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<float> Radius = new(30f);
         [SerializeReference] public BlackboardVariable<Transform> Target = new();
+        [SerializeReference] public BlackboardVariable<bool> PlayerPriority = new(true);
 
         private Character self;
 
@@ -33,8 +34,12 @@ namespace Shooter.Game.AI.Bt.Eyes
             }
 
             Vector3 here = Agent.Value.transform.position;
-            float nearest = Radius.Value * Radius.Value;
-            Character spotted = null;
+
+            float nearestCharacter = Radius.Value * Radius.Value;
+            Character spottedCharacter = null;
+
+            float nearestPlayer = nearestCharacter;
+            Player spottedPlayer = null;
 
             foreach (Character character in Registers.Current.Of<Character>(Inactive.Exclude))
             {
@@ -42,15 +47,31 @@ namespace Shooter.Game.AI.Bt.Eyes
                 if (character.TryGetComponent(out Health health) && !health.Alive) continue;
 
                 float apart = (character.transform.position - here).sqrMagnitude;
-                if (apart > nearest) continue;
 
-                nearest = apart;
-                spotted = character;
+                if (apart < nearestCharacter)
+                {
+                    nearestCharacter = apart;
+                    spottedCharacter = character;
+                }
+
+                if (PlayerPriority.Value && character.TryGetComponent(out Player player) && apart < nearestPlayer)
+                {
+                    nearestPlayer = apart;
+                    spottedPlayer = player;
+                }
             }
 
-            if (spotted == null) return Status.Failure;
+            if (spottedCharacter == null) return Status.Failure;
 
-            Target.Value = spotted.transform;
+            if (PlayerPriority.Value && spottedPlayer != null)
+            {
+                Target.Value = spottedPlayer.transform;
+            }
+            else
+            {
+                Target.Value = spottedCharacter.transform;
+            }
+
             return Status.Success;
         }
     }
