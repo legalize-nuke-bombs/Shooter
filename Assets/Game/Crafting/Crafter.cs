@@ -20,6 +20,8 @@ namespace Shooter.Game.Crafting
             inventory = GetComponent<Inventory>();
         }
 
+        public List<Craft> AvailableCrafts => availableCrafts;
+
         public bool TryCraft(StackableItemSpec[] input)
         {
             if (input.Length != 9)
@@ -66,6 +68,7 @@ namespace Shooter.Game.Crafting
             }
 
             inventory.AddStackable(craft.Output, 1);
+            Log.Info($"Entity {name} crafted {craft.Id}");
             return true;
         }
     }
