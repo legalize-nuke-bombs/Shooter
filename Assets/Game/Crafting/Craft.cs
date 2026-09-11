@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
@@ -20,6 +21,10 @@ namespace Shooter.Game.Crafting
             var result = new Dictionary<StackableItemSpec, int>();
             foreach (StackableItemSpec item in input)
             {
+                if (item == null)
+                {
+                    continue;
+                }
                 result.TryAdd(item, 0);
                 result[item]++;
             }
@@ -36,6 +41,35 @@ namespace Shooter.Game.Crafting
             sb.Append("-> ");
             sb.Append(output.Id);
             return sb.ToString();
+        }
+
+        public bool Match(List<string> pattern)
+        {
+            if (pattern.Count != 9)
+            {
+                throw new ArgumentException("pattern length must be 9");
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                bool patternSet = (!String.IsNullOrEmpty(pattern[i]) && pattern[i] != "null");
+                bool valueSet = (input[i] != null);
+
+                if (patternSet != valueSet)
+                {
+                    return false;
+                }
+
+                if (patternSet)
+                {
+                    if (pattern[i] != input[i].Id)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }
