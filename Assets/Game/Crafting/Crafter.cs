@@ -13,6 +13,7 @@ namespace Shooter.Game.Crafting
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private List<Craft> availableCrafts;
+        private Dictionary<string, Craft> craftsById = new Dictionary<string, Craft>();
 
         private Inventory inventory;
         private Speaker speaker;
@@ -21,6 +22,10 @@ namespace Shooter.Game.Crafting
         {
             inventory = GetComponent<Inventory>();
             speaker = GetComponent<Speaker>();
+            foreach (Craft craft in availableCrafts)
+            {
+                craftsById.Add(craft.Key, craft);
+            }
         }
 
         public List<Craft> AvailableCrafts => availableCrafts;
@@ -28,16 +33,7 @@ namespace Shooter.Game.Crafting
         public Craft Known(string id)
         {
             if (string.IsNullOrEmpty(id)) return null;
-
-            foreach (Craft craft in availableCrafts)
-            {
-                if (craft != null && craft.Key == id)
-                {
-                    return craft;
-                }
-            }
-
-            return null;
+            return craftsById.GetValueOrDefault(id, null);
         }
 
         public bool TryCraft(Craft craft)
