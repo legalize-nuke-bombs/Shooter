@@ -22,7 +22,7 @@ namespace Shooter.Game.Crafting
 
         public List<Craft> AvailableCrafts => availableCrafts;
 
-        public bool TryCraft(StackableItemSpec[] input)
+        public ItemSpec TryCraft(string[] input)
         {
             if (input.Length != 9)
             {
@@ -34,7 +34,7 @@ namespace Shooter.Game.Crafting
                 bool match = true;
                 for (int i = 0; i < 9; i++)
                 {
-                    if (craft.Input[i] != input[i])
+                    if ((input[i] != null && input[i] != "" && input[i] != "null" && craft.Input[i] == null) || craft.Input[i].Id != input[i])
                     {
                         match = false;
                         break;
@@ -47,10 +47,10 @@ namespace Shooter.Game.Crafting
                 }
             }
 
-            return false;
+            return null;
         }
 
-        private bool TryCraft(Craft craft)
+        private ItemSpec TryCraft(Craft craft)
         {
             Dictionary<StackableItemSpec, int> amountMap = craft.AmountMap();
 
@@ -58,7 +58,7 @@ namespace Shooter.Game.Crafting
             {
                 if (inventory.StackableAmount(kvp.Key) < kvp.Value)
                 {
-                    return false;
+                    return null;
                 }
             }
 
@@ -67,9 +67,21 @@ namespace Shooter.Game.Crafting
                 inventory.RemoveStackable(kvp.Key, kvp.Value, InventoryOnConflict.Partly);
             }
 
-            inventory.AddStackable(craft.Output, 1);
+            if (craft.Output is StackableItemSpec stackableOutput)
+            {
+                inventory.AddStackable(stackableOutput, 1);
+            }
+            else if (craft.Output is UniqueItemSpec uniqueOutput)
+            {
+                inventory.Put(uniqueOutput.Create());
+            }
+            else
+            {
+                Log.Error("Unexpected craft item output");
+            }
+
             Log.Info($"Entity {name} crafted {craft.Id}");
-            return true;
+            return craft.Output;
         }
     }
 }
