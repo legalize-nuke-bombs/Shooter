@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Shooter.Game.Crafting;
 using Shooter.Logging;
 
@@ -15,8 +16,8 @@ namespace Shooter.Game.Llm.ToCraft
 
         public override string Description =>
             @"
-Craft an item by the exact id of a craft you know, see list_crafts.
-The ingredients are taken from your bag, the result goes into your bag.
+Use this tool to create items.
+Pass a dictionary of ratios as an argument, mapping the exact recipe name to the quantity.
 ";
 
         protected override void OnStart()
@@ -30,20 +31,40 @@ The ingredients are taken from your bag, the result goes into your bag.
 
         protected override string Execute(CraftArguments arguments, LlmCallContext context)
         {
-            if (string.IsNullOrEmpty(arguments.Craft)) return "Nothing to craft";
+            if (arguments.Crafts.Length == 0) return "Nothing to craft";
 
-            Craft craft = crafter.Known(arguments.Craft);
-            if (craft == null)
+            var sb = new StringBuilder();
+
+            foreach (CraftDto craftDto in arguments.Crafts)
             {
-                return $"You don't know the craft {arguments.Craft}, see list_crafts";
+                string craftId = craftDto.CraftName;
+                int craftAmount = craftDto.CraftAmount;
+                if (craftAmount <= 0)
+                {
+                    sb.AppendLine($"Bad craft amount ({craftAmount}) for craft {craftId}, craft amount must be positive.");
+                    continue;
+                }
+                Craft craft = crafter.Known(craftId);
+                if (craft == null)
+                {
+                    sb.AppendLine($"You don't know the craft {craftId}, see list_crafts.");
+                    continue;
+                }
+
+                for (int j = 0; j < craftAmount; j++)
+                {
+                    if (crafter.TryCraft(craft))
+                    {
+                        sb.AppendLine($"Crafted {craftId}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"Failed to craft {craftId}, make sure you have all the ingredients in your bag");
+                    }
+                }
             }
 
-            if (!crafter.TryCraft(craft))
-            {
-                return $"Failed to craft {arguments.Craft}, make sure you have all the ingredients in your bag";
-            }
-
-            return $"Crafted {craft.Key}";
+            return sb.ToString();
         }
     }
 }

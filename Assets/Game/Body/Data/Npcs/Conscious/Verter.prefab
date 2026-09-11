@@ -152,7 +152,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: f2c81b5d9e3a4706b8d4c1e7a593f028, type: 2}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.size
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[0].spec
@@ -177,7 +177,7 @@ PrefabInstance:
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[5].spec
       value: 
-      objectReference: {fileID: 11400000, guid: a02c9384fcf50074bb76aa0c768d3ace, type: 2}
+      objectReference: {fileID: 11400000, guid: 6342412c3cb2e464092512397c238ca0, type: 2}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[6].spec
       value: 
@@ -196,19 +196,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[2].amount
-      value: 150
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[3].amount
-      value: 6
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[4].amount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[5].amount
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[6].amount

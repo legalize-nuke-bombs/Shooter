@@ -2,6 +2,12 @@
 {
     public class CraftArguments
     {
-        public string Craft { get; set; }
+        public CraftDto[] Crafts { get; set; }
+    }
+
+    public class CraftDto
+    {
+        public string CraftName { get; set; }
+        public int CraftAmount { get; set; }
     }
 }
