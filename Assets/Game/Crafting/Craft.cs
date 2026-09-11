@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using UnityEngine;
@@ -23,6 +24,18 @@ namespace Shooter.Game.Crafting
                 result[item]++;
             }
             return result;
+        }
+
+        public string PromptDescription()
+        {
+            var sb = new StringBuilder();
+            foreach (StackableItemSpec item in input)
+            {
+                sb.Append((item == null ? "null" : item.Id) + " ");
+            }
+            sb.Append("-> ");
+            sb.Append(output.Id);
+            return sb.ToString();
         }
     }
 }
