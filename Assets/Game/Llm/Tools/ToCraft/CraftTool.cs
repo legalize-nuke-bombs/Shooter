@@ -33,7 +33,7 @@ Craft an item using its recipe.
 
         protected override string Execute(CraftArguments arguments, LlmCallContext context)
         {
-            ItemSpec result = crafter.TryCraft(arguments.Recipe.ToArray());
+            ItemSpec result = crafter.TryCraft(arguments.Recipe.ToList());
             if (result == null)
             {
                 return "Failed to craft";

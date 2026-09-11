@@ -22,26 +22,20 @@ namespace Shooter.Game.Crafting
 
         public List<Craft> AvailableCrafts => availableCrafts;
 
-        public ItemSpec TryCraft(string[] input)
+        public ItemSpec TryCraft(List<string> input)
         {
-            if (input.Length != 9)
+            if (input.Count > 9)
             {
-                throw new ArgumentException("input length must be 9");
+                throw new ArgumentException("input length must be <= 9");
+            }
+            while (input.Count < 9)
+            {
+                input.Add(null);
             }
 
             foreach (Craft craft in availableCrafts)
             {
-                bool match = true;
-                for (int i = 0; i < 9; i++)
-                {
-                    if ((input[i] != null && input[i] != "" && input[i] != "null" && craft.Input[i] == null) || craft.Input[i].Id != input[i])
-                    {
-                        match = false;
-                        break;
-                    }
-                }
-
-                if (match)
+                if (craft.Match(input))
                 {
                     return TryCraft(craft);
                 }
