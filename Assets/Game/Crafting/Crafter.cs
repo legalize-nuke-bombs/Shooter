@@ -13,7 +13,7 @@ namespace Shooter.Game.Crafting
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private List<Craft> availableCrafts;
-        private Dictionary<string, Craft> craftsById = new Dictionary<string, Craft>();
+        private readonly Dictionary<string, Craft> craftsById = new Dictionary<string, Craft>();
 
         private Inventory inventory;
         private Speaker speaker;
