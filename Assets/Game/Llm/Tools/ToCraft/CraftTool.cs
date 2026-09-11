@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Shooter.Game.Crafting;
-using Shooter.Game.Loot;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm.ToCraft
@@ -19,7 +15,8 @@ namespace Shooter.Game.Llm.ToCraft
 
         public override string Description =>
             @"
-Craft an item using its recipe.
+Craft an item by the exact id of a craft you know, see list_crafts.
+The ingredients are taken from your bag, the result goes into your bag.
 ";
 
         protected override void OnStart()
@@ -33,12 +30,20 @@ Craft an item using its recipe.
 
         protected override string Execute(CraftArguments arguments, LlmCallContext context)
         {
-            ItemSpec result = crafter.TryCraft(arguments.Recipe.ToList());
-            if (result == null)
+            if (string.IsNullOrEmpty(arguments.Craft)) return "Nothing to craft";
+
+            Craft craft = crafter.Known(arguments.Craft);
+            if (craft == null)
             {
-                return "Failed to craft";
+                return $"You don't know the craft {arguments.Craft}, see list_crafts";
             }
-            return $"Successfully crafted {result.Id}";
+
+            if (!crafter.TryCraft(craft))
+            {
+                return $"Failed to craft {arguments.Craft}, make sure you have all the ingredients in your bag";
+            }
+
+            return $"Crafted {craft.Key}";
         }
     }
 }

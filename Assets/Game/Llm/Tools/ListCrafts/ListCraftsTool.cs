@@ -17,7 +17,7 @@ namespace Shooter.Game.Llm.ListCrafts
 
         public override string Description =>
             @"
-Get a list of the crafting recipes you can make.
+List the crafts you know: the id of each craft, its ingredients and its result.
 ";
 
         protected override void OnStart()

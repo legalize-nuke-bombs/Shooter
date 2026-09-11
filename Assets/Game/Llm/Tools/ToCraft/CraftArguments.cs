@@ -2,6 +2,6 @@
 {
     public class CraftArguments
     {
-        public string[] Recipe { get; set; }
+        public string Craft { get; set; }
     }
 }
