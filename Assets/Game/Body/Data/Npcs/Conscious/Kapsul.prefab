@@ -138,11 +138,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[1].amount
-      value: 90
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[2].amount
-      value: 400
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 9141540613997376940, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: contents.Array.data[3].amount
