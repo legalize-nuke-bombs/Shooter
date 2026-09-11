@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
@@ -37,42 +36,19 @@ namespace Shooter.Game.Crafting
         public string PromptDescription()
         {
             var sb = new StringBuilder();
-            foreach (StackableItemSpec item in input)
+            sb.Append(Key).Append(": ");
+
+            bool first = true;
+            foreach (KeyValuePair<StackableItemSpec, int> amount in AmountMap())
             {
-                sb.Append((item == null ? "null" : item.Id) + " ");
+                if (!first) sb.Append(", ");
+                sb.Append(amount.Key.Key).Append(" x ").Append(amount.Value);
+                first = false;
             }
-            sb.Append("-> ");
-            sb.Append(output.Id);
+            if (first) sb.Append("nothing");
+
+            sb.Append(" -> ").Append(output == null ? "nothing" : output.Key);
             return sb.ToString();
-        }
-
-        public bool Match(List<string> pattern)
-        {
-            if (pattern.Count != 9)
-            {
-                throw new ArgumentException("pattern length must be 9");
-            }
-
-            for (int i = 0; i < 9; i++)
-            {
-                bool patternSet = (!String.IsNullOrEmpty(pattern[i]) && pattern[i] != "null");
-                bool valueSet = (input[i] != null);
-
-                if (patternSet != valueSet)
-                {
-                    return false;
-                }
-
-                if (patternSet)
-                {
-                    if (pattern[i] != input[i].Id)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
     }
 }

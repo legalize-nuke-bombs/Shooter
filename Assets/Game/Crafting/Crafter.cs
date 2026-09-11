@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Shooter.Game.Body;
 using Shooter.Game.Loot;
 using Shooter.Logging;
@@ -21,41 +20,43 @@ namespace Shooter.Game.Crafting
         private void Awake()
         {
             inventory = GetComponent<Inventory>();
+            speaker = GetComponent<Speaker>();
         }
 
         public List<Craft> AvailableCrafts => availableCrafts;
 
-        public ItemSpec TryCraft(List<string> input)
+        public Craft Known(string id)
         {
-            if (input.Count > 9)
-            {
-                throw new ArgumentException("input length must be <= 9");
-            }
-            while (input.Count < 9)
-            {
-                input.Add(null);
-            }
+            if (string.IsNullOrEmpty(id)) return null;
 
             foreach (Craft craft in availableCrafts)
             {
-                if (craft.Match(input))
+                if (craft != null && craft.Key == id)
                 {
-                    return TryCraft(craft);
+                    return craft;
                 }
             }
 
             return null;
         }
 
-        private ItemSpec TryCraft(Craft craft)
+        public bool TryCraft(Craft craft)
         {
+            if (craft == null || !availableCrafts.Contains(craft))
+            {
+                Log.Info($"Entity {name} does not know the craft {(craft == null ? "null" : craft.Key)}");
+                return false;
+            }
+
             Dictionary<StackableItemSpec, int> amountMap = craft.AmountMap();
 
             foreach (var kvp in amountMap)
             {
-                if (inventory.StackableAmount(kvp.Key) < kvp.Value)
+                int available = inventory.StackableAmount(kvp.Key);
+                if (available < kvp.Value)
                 {
-                    return null;
+                    Log.Info($"Entity {name} lacks {kvp.Key.Key} for {craft.Key}: {available} of {kvp.Value}");
+                    return false;
                 }
             }
 
@@ -77,9 +78,9 @@ namespace Shooter.Game.Crafting
                 Log.Error("Unexpected craft item output");
             }
 
-            Log.Info($"Entity {name} crafted {craft.Id}");
-            speaker.Play(craft.Sound);
-            return craft.Output;
+            Log.Info($"Entity {name} crafted {craft.Key}");
+            if (craft.Sound != null) speaker.Play(craft.Sound);
+            return true;
         }
     }
 }
