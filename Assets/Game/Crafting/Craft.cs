@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using UnityEngine;
@@ -12,9 +13,11 @@ namespace Shooter.Game.Crafting
     {
         [SerializeField] private StackableItemSpec[] input = new StackableItemSpec[9];
         [SerializeField] private ItemSpec output;
+        [SerializeField] private SoundSpec sound;
 
         public StackableItemSpec[] Input => input;
         public ItemSpec Output => output;
+        public SoundSpec Sound => sound;
 
         public Dictionary<StackableItemSpec, int> AmountMap()
         {

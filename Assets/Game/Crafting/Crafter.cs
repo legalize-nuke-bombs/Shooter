@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Shooter.Game.Body;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using UnityEngine;
@@ -7,6 +8,7 @@ using UnityEngine;
 namespace Shooter.Game.Crafting
 {
     [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Speaker))]
     public class Crafter : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -14,6 +16,7 @@ namespace Shooter.Game.Crafting
         [SerializeField] private List<Craft> availableCrafts;
 
         private Inventory inventory;
+        private Speaker speaker;
 
         private void Awake()
         {
@@ -75,6 +78,7 @@ namespace Shooter.Game.Crafting
             }
 
             Log.Info($"Entity {name} crafted {craft.Id}");
+            speaker.Play(craft.Sound);
             return craft.Output;
         }
     }
