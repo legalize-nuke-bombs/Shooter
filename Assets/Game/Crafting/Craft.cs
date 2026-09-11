@@ -10,10 +10,10 @@ namespace Shooter.Game.Crafting
     public class Craft : Spec
     {
         [SerializeField] private StackableItemSpec[] input = new StackableItemSpec[9];
-        [SerializeField] private StackableItemSpec output;
+        [SerializeField] private ItemSpec output;
 
         public StackableItemSpec[] Input => input;
-        public StackableItemSpec Output => output;
+        public ItemSpec Output => output;
 
         public Dictionary<StackableItemSpec, int> AmountMap()
         {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Crafting;
-using Shooter.Game.Llm.ListNotes;
 using Shooter.Logging;
 
 namespace Shooter.Game.Llm.ListCrafts
