@@ -47,3 +47,9 @@ shooter-logs/
 
 /Saves
 /Screenshots
+
+# MapMagic: demos and manual stay local
+Assets/MapMagic/Demo/
+Assets/MapMagic/Demo.meta
+Assets/MapMagic/Manual.pdf
+Assets/MapMagic/Manual.pdf.meta
