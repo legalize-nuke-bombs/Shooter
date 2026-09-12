@@ -21,6 +21,7 @@ namespace Shooter.Game.Body
         private NavMeshAgent agent;
         private NavMeshPath scratch;
         private Vector3 written;
+        private bool stranded;
         private int askedFrame = int.MinValue;
 
         public float ShortfallLimit => shortfallLimit;
@@ -111,7 +112,7 @@ namespace Shooter.Game.Body
         protected override float Tick(float dt)
         {
             Vector3 position = transform.position;
-            if (position != written) Place(position);
+            if ((position != written || stranded) && !Place(position)) return 0f;
 
             if (Status != AgentMovementStatus.Idle && Time.frameCount - askedFrame > AskingLag) Stand();
             if (Status == AgentMovementStatus.Walking && !agent.pathPending) Judge();
@@ -143,14 +144,19 @@ namespace Shooter.Game.Body
             agent.ResetPath();
         }
 
-        private void Place(Vector3 position)
+        private bool Place(Vector3 position)
         {
+            written = position;
             if (!agent.Warp(position))
             {
-                throw new InvalidOperationException($"Entity {name} stands off the navmesh at {position}");
+                if (!stranded) Log.Error($"Entity {name} stands off the navmesh at {position}, it stays put until it is back on it");
+                stranded = true;
+                return false;
             }
 
-            written = position;
+            if (stranded) Log.Info($"Entity {name} is back on the navmesh at {position}");
+            stranded = false;
+            return true;
         }
 
         private void Stand()
