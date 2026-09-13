@@ -14,13 +14,10 @@ namespace Shooter.Game.Llm
 
         public IDigestible[] Parts { get; private set; }
 
-        public Character Id { get; private set; }
-
         protected override void Awake()
         {
             base.Awake();
             Parts = GetComponents<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
-            Id = GetComponent<Character>();
         }
 
         public string Digest(DigestionDetail detail)
