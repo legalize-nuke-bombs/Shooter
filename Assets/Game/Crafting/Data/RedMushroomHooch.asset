@@ -24,4 +24,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   output: {fileID: 11400000, guid: a02c9384fcf50074bb76aa0c768d3ace, type: 2}
-  sound: {fileID: 0}
+  sound: {fileID: 11400000, guid: fc0a765777c24602b3aaa04a007239a2, type: 2}

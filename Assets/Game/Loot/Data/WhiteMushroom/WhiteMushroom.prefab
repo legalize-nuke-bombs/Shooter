@@ -182,4 +182,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Pickupable
   item: {fileID: 11400000, guid: 314690ee51c010a4c9086b5088a07004, type: 2}
-  sound: {fileID: 0}
+  sound: {fileID: 11400000, guid: 709616bf9706402ea32906bcb77f2564, type: 2}
