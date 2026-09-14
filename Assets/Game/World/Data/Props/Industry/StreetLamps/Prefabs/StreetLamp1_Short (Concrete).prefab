@@ -417,7 +417,8 @@ MonoBehaviour:
   lit: 1
   powered:
   - {fileID: 1267723492455859063}
-  glowing: []
+  glowing:
+  - {fileID: 4257772437841554635}
   click: {fileID: 11400000, guid: f2a77689d95042398fdb128bc738c2a0, type: 2}
 --- !u!114 &6756454469674120541
 MonoBehaviour:
