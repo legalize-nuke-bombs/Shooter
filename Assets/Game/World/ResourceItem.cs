@@ -35,20 +35,19 @@ namespace Shooter
         }
         public void LoadObject(SaveToken content)
         {
+            // The world is frozen while it loads, so a body saved alive is grown by the first Update after the thaw
             SaveData sd = content.To<SaveData>();
-            if (sd.Alive)
-            {
-                Respawn();
-            }
-            timer = sd.Timer;
+            alive = false;
+            timer = sd.Alive ? respawnDelay : sd.Timer;
+        }
+
+        private void Awake()
+        {
+            enabled = NetworkManager.Singleton.IsServer;
         }
 
         private void Update()
         {
-            if (!NetworkManager.Singleton.IsServer)
-            {
-                return;
-            }
             if (!alive)
             {
                 timer += Time.deltaTime;
@@ -68,9 +67,14 @@ namespace Shooter
                 {
                     body = Spawner.Current.Spawn(bodyPrefab.gameObject, transform);
                 }
+                timer = 0;
+                if (body == null)
+                {
+                    Log.Error($"Entity {name} failed to spawn its body, retrying in {respawnDelay} s");
+                    return;
+                }
                 alive = true;
                 body.GetComponent<Pickupable>().OnPickup += MarkDead;
-                timer = 0;
             }
         }
 
