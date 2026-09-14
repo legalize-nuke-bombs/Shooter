@@ -26,7 +26,7 @@ namespace Shooter.Client.Interface
         private static readonly Dictionary<string, string> Upscalers = new()
         {
             [Configuring.Upscalers.Off] = "Выкл",
-            [Configuring.Upscalers.Dlaa] = "DLAA",
+            [Configuring.Upscalers.Dlaa] = "Максимум",
             [Configuring.Upscalers.Quality] = "Качество",
             [Configuring.Upscalers.Balanced] = "Баланс",
             [Configuring.Upscalers.Performance] = "Производительность"

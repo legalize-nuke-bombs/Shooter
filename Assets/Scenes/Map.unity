@@ -199,6 +199,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
       value: bcc9584d-4239-4ce7-b68e-21dfff99ce5c
@@ -276,6 +280,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
@@ -297,6 +305,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4171235088484316754, guid: d559c4ba34aac7844b02666f292574d9, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079610805037604273, guid: d559c4ba34aac7844b02666f292574d9, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5910797334850143800, guid: d559c4ba34aac7844b02666f292574d9, type: 3}
       propertyPath: m_Name
       value: street_vase
@@ -505,6 +521,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1829944209842336651, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528797026179463302, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6166011037729637089, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -601.3
@@ -549,6 +573,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: fortified_wall (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8332901017545698297, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715550410959439157, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -565,6 +597,10 @@ PrefabInstance:
     - target: {fileID: 1062339710358336084, guid: 6d0d85c7125dc534380e6015547d6bd9, type: 3}
       propertyPath: m_Name
       value: book_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6981180098166672556, guid: 6d0d85c7125dc534380e6015547d6bd9, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7585476487642147347, guid: 6d0d85c7125dc534380e6015547d6bd9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -674,7 +710,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 55880194cd9760f4cb179731fc624960, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -829,7 +865,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -942,6 +978,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23000011485286364, guid: 4944c29dadd7e02468c053eafe48e485, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1010,7 +1050,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 0989be67e30a2c04aa776e7bd4cc07c8, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -1092,6 +1132,10 @@ PrefabInstance:
     - target: {fileID: 4302097084834570, guid: d219a61a51bb6d74e8758ffb3efead37, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23512113537394514, guid: d219a61a51bb6d74e8758ffb3efead37, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1177,6 +1221,10 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
@@ -1296,7 +1344,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1425,6 +1473,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
@@ -1446,6 +1498,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1829944209842336651, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528797026179463302, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6166011037729637089, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -796.07
@@ -1489,6 +1549,14 @@ PrefabInstance:
     - target: {fileID: 7189257511947247628, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_Name
       value: fortified_wall (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332901017545698297, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715550410959439157, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1546,6 +1614,10 @@ PrefabInstance:
     - target: {fileID: 4196016720406884, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23719656865238534, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6455169651016141147, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1640,6 +1712,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -180
       objectReference: {fileID: 0}
+    - target: {fileID: 23967991916645226, guid: 5989ab8b158243445aef3657bfd64840, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1725,6 +1801,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
       value: 39833c82-ec71-4833-9e77-6eefc5b6f56c
@@ -1797,7 +1877,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: be77d481da5a6314bbc6496bc82875e4, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -1953,6 +2033,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23000010885306988, guid: f5be68f92137da247b5d8228eab16f79, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23000011029279620, guid: f5be68f92137da247b5d8228eab16f79, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2009,6 +2097,10 @@ PrefabInstance:
     - target: {fileID: 4306056515154094, guid: cd0dec594d983fb4e818009695f46b1c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23188852847424236, guid: cd0dec594d983fb4e818009695f46b1c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2163,6 +2255,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6977903666567791669, guid: 16781257d64bef643a5a15220e6cb72d, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7156182268723906934, guid: 16781257d64bef643a5a15220e6cb72d, type: 3}
       propertyPath: m_Name
       value: vase_2
@@ -2292,6 +2388,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
       value: c55a800a-152c-4d34-aaf6-52a184a95663
@@ -2353,6 +2453,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23826028267806562, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2369,6 +2473,10 @@ PrefabInstance:
     - target: {fileID: 3722319660728123607, guid: 692a8bf78fb9b3948880c338a5fbcb5b, type: 3}
       propertyPath: m_Name
       value: vase_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7922229512917339483, guid: 692a8bf78fb9b3948880c338a5fbcb5b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8054520921511641542, guid: 692a8bf78fb9b3948880c338a5fbcb5b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2479,6 +2587,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5124290190200962185, guid: 3ead4d3e53590444a801c918a0ab2945, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6821540546594180396, guid: 3ead4d3e53590444a801c918a0ab2945, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.93
@@ -2547,6 +2659,10 @@ PrefabInstance:
     - target: {fileID: 4196016720406884, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 23719656865238534, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6455169651016141147, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2667,6 +2783,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
@@ -2823,6 +2943,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
@@ -2903,6 +3027,10 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
@@ -2997,6 +3125,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
       value: e62dfe0e-a3b2-4b8e-a0d6-b3367d092f26
@@ -3085,6 +3217,10 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
@@ -3309,7 +3445,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: a5ce31776c63da149b4c17d64600dc05, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -3392,6 +3528,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 23826028267806562, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3465,6 +3605,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
@@ -3489,6 +3633,10 @@ PrefabInstance:
     - target: {fileID: 688370038557031223, guid: 2ff2233ffafc41a45ae5e2dae0af74e2, type: 3}
       propertyPath: m_ProbeSettings.influence.m_BoxSize.x
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231659682783909616, guid: 2ff2233ffafc41a45ae5e2dae0af74e2, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4564967326303008705, guid: 2ff2233ffafc41a45ae5e2dae0af74e2, type: 3}
       propertyPath: m_Name
@@ -3672,6 +3820,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23716429806630976, guid: 507f04481eb98524fbb0f9ba6384815d, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3701,9 +3853,17 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2802167914
       objectReference: {fileID: 0}
+    - target: {fileID: 2161080503177255291, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3622243103439998288, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_Name
       value: tv
+      objectReference: {fileID: 0}
+    - target: {fileID: 5318310806012582442, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6837229995733495709, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: id
@@ -3879,6 +4039,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23719656865238534, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6455169651016141147, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.21303877
@@ -3983,7 +4147,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 9759c5e33c5675e4a8d58406eeb8ca36, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -4022,6 +4186,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 418526670742450432, guid: 8eade45c1990818478b97a026d8bd5d8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1733502103614881885, guid: 8eade45c1990818478b97a026d8bd5d8, type: 3}
       propertyPath: m_Name
       value: vase_1
@@ -4180,7 +4348,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 4ce9be8f5a9f9704c8785a7dce283bd0, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -4235,9 +4403,17 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2802167914
       objectReference: {fileID: 0}
+    - target: {fileID: 2161080503177255291, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3622243103439998288, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_Name
       value: tv (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5318310806012582442, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6837229995733495709, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: id
@@ -4296,6 +4472,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1829944209842336651, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528797026179463302, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6166011037729637089, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -536.6
@@ -4340,6 +4524,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: fortified_wall (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8332901017545698297, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715550410959439157, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4353,6 +4545,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1829944209842336651, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528797026179463302, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6166011037729637089, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -342.49567
@@ -4396,6 +4596,14 @@ PrefabInstance:
     - target: {fileID: 7189257511947247628, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_Name
       value: fortified_wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332901017545698297, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715550410959439157, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4454,6 +4662,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Box_3
       objectReference: {fileID: 0}
+    - target: {fileID: 6277336363441878173, guid: 6ea21a7ad97f8ab41bcc4f77f90bbf1f, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4511,6 +4723,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23000010768947382, guid: a50af88759b02d74b8328377b33ab3e8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4524,6 +4740,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1829944209842336651, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528797026179463302, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6166011037729637089, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -667.04
@@ -4567,6 +4791,14 @@ PrefabInstance:
     - target: {fileID: 7189257511947247628, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_Name
       value: fortified_wall (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332901017545698297, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715550410959439157, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4620,6 +4852,10 @@ PrefabInstance:
     - target: {fileID: 2107542214269984365, guid: b3770a25f84a3274ca3848a0e16463a1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7738922595297678057, guid: b3770a25f84a3274ca3848a0e16463a1, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8077967208893431752, guid: b3770a25f84a3274ca3848a0e16463a1, type: 3}
       propertyPath: m_Name
@@ -4693,7 +4929,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 720b87a09ae4def4480a2d40d01ea6c9, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -4775,6 +5011,10 @@ PrefabInstance:
     - target: {fileID: 4241979589122758, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 23826028267806562, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4861,6 +5101,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
       value: df92a399-db02-4177-b835-d6293b49f716
@@ -4933,7 +5177,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: dd7971cbbdf06ad419635b7d0509cc47, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -5036,6 +5280,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7431905612350004, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5049,6 +5297,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1829944209842336651, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528797026179463302, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6166011037729637089, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -407.2157
@@ -5093,6 +5349,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: fortified_wall (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8332901017545698297, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715550410959439157, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5106,6 +5370,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1829944209842336651, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528797026179463302, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6166011037729637089, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -471.8357
@@ -5149,6 +5421,14 @@ PrefabInstance:
     - target: {fileID: 7189257511947247628, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_Name
       value: fortified_wall (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332901017545698297, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715550410959439157, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5218,7 +5498,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: f3007c0dd1acda94199231fee41eb3d4, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -5312,7 +5592,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: a57bf9d3dee8e374690fbe212ca0690f, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -5394,6 +5674,10 @@ PrefabInstance:
     - target: {fileID: 5738327382467238617, guid: 9c5bae8b85a897242bf43786c980d021, type: 3}
       propertyPath: m_Name
       value: SM_Electrical_Substation
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098540378862189324, guid: 9c5bae8b85a897242bf43786c980d021, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5604,6 +5888,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 23826028267806562, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5617,6 +5905,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 59395597555709573, guid: 7dfae768926735443a5eca3ef6690ebf, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 772631205478615112, guid: 7dfae768926735443a5eca3ef6690ebf, type: 3}
       propertyPath: m_Name
       value: SovietWashMachine
@@ -5661,6 +5953,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 4450875236965458149, guid: 7dfae768926735443a5eca3ef6690ebf, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628706664976472597, guid: 7dfae768926735443a5eca3ef6690ebf, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6023168923370841266, guid: 7dfae768926735443a5eca3ef6690ebf, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5674,6 +5978,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4171235088484316754, guid: d559c4ba34aac7844b02666f292574d9, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079610805037604273, guid: d559c4ba34aac7844b02666f292574d9, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5910797334850143800, guid: d559c4ba34aac7844b02666f292574d9, type: 3}
       propertyPath: m_Name
       value: street_vase (1)
@@ -5795,6 +6107,10 @@ PrefabInstance:
       propertyPath: m_CastShadows
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
@@ -5888,6 +6204,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
       value: d050d3e7-57f2-415b-8c0e-872a38abf17c
@@ -5905,6 +6225,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 126482274968170051, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 157284601282637038, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400981672646828676, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720678466638736939, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2004693800611039153, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4134642257265687960, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4134642257404055491, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5831017995559834528, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -452.57916
@@ -5951,6 +6299,126 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5831017995560193920, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127680, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127682, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127684, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127686, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127688, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127690, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127692, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127694, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127698, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127700, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127708, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127710, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127776, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127778, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127792, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127794, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127796, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127798, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127800, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127802, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127804, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831017995562127806, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5836702750440344114, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5836702751631853547, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064311962212145353, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064311962212145355, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064311962212145357, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064311962212145359, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237512265794352035, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8620545822770519056, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+      propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6010,6 +6478,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7833135264971222052, guid: 6c99f9347e8e63d4096fd68e28ac7f0b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6066,7 +6538,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -6251,7 +6723,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -6368,6 +6840,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2263991320108097357, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4697082321187291139, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -6397,6 +6873,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 942912600871670786, guid: dd3392c11f58ebd459f866d47de6ac0f, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1933297280396201637, guid: dd3392c11f58ebd459f866d47de6ac0f, type: 3}
       propertyPath: m_Name
       value: Box_2
@@ -6525,6 +7005,10 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: id
@@ -6695,6 +7179,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 23719656865238534, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6455169651016141147, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.21304035
@@ -6799,7 +7287,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 93dc234bbea09754a8f9e4e03c7800f8, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -6898,6 +7386,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
@@ -6979,6 +7471,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
@@ -7055,7 +7551,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: bf99c7d929e2e8e4994c22d197035bf1, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -7137,7 +7633,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -7323,6 +7819,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23997794517291048, guid: d03ac8239a200d94f9c8e954396e63fa, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4677285398372048332, guid: d03ac8239a200d94f9c8e954396e63fa, type: 3}
       propertyPath: size
       value: 3
@@ -7388,6 +7888,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7833135264971222052, guid: 6c99f9347e8e63d4096fd68e28ac7f0b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7401,6 +7905,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1829944209842336651, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528797026179463302, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6166011037729637089, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -731.62
@@ -7444,6 +7956,14 @@ PrefabInstance:
     - target: {fileID: 7189257511947247628, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
       propertyPath: m_Name
       value: fortified_wall (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332901017545698297, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715550410959439157, guid: 8f62c69dd249d6c489951a6e050ee38c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7595,6 +8115,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7431905612350004, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7663,7 +8187,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: f2f4a7b56ab1a2242b9dd54e8b4dbed6, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -7745,6 +8269,10 @@ PrefabInstance:
     - target: {fileID: 4196016720406884, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 23719656865238534, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6455169651016141147, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7842,7 +8370,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -8055,6 +8583,10 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 3707110902
       objectReference: {fileID: 0}
+    - target: {fileID: 2263991320108097357, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4697082321187291139, guid: 85bb8601e5e500b4d944c4ac64c546c2, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -8201,6 +8733,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8576363591057995952, guid: 84f186186acadc941a2e59ce12ace979, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8238,6 +8774,10 @@ PrefabInstance:
       propertyPath: content
       value: An old street lamp, two bulbs. The center of a strange dimension, a
         white corridor with a mirrored wall.
+      objectReference: {fileID: 0}
+    - target: {fileID: 699996685639266931, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1263881239168321199, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
       propertyPath: m_Name
@@ -8375,7 +8915,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 20831ad209ef47541b2e6af8750aa291, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -8515,7 +9055,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: c14f3c9cfacab314d8162b9bd3a85d0e, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -8682,7 +9222,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 99022709f9278cc4faca70c1aed9b2b8, type: 2}
-  m_TreeDistance: 400
+  m_TreeDistance: 150
   m_TreeBillboardDistance: 200
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 150
@@ -8765,6 +9305,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23719656865238534, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6455169651016141147, guid: 60985fdc46b91334597bfd17e5341791, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.21303877
@@ -8814,6 +9358,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 723667004726477914, guid: 65496b5ffa15dd549810df20a0f3e7c7, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1931607504750776534, guid: 65496b5ffa15dd549810df20a0f3e7c7, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5948371143710941384, guid: 65496b5ffa15dd549810df20a0f3e7c7, type: 3}
       propertyPath: m_Name
       value: house_ruined
@@ -8861,6 +9413,14 @@ PrefabInstance:
     - target: {fileID: 7161471920529591100, guid: 65496b5ffa15dd549810df20a0f3e7c7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8088802727737147817, guid: 65496b5ffa15dd549810df20a0f3e7c7, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8746468569696483363, guid: 65496b5ffa15dd549810df20a0f3e7c7, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9136,6 +9696,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
+    - target: {fileID: 2680711642121456672, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      propertyPath: m_TreeDistance
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609138131334480235, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7723478074634143434, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -9201,6 +9769,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2843284256102983752, guid: 3a1f0ef8b456ecb48a40bcbc7293ef72, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4033817210898094732, guid: 3a1f0ef8b456ecb48a40bcbc7293ef72, type: 3}
       propertyPath: m_LocalPosition.x
       value: -435.0547
@@ -9240,6 +9812,18 @@ PrefabInstance:
     - target: {fileID: 4033817210898094732, guid: 3a1f0ef8b456ecb48a40bcbc7293ef72, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4188429449541748372, guid: 3a1f0ef8b456ecb48a40bcbc7293ef72, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230323287542893892, guid: 3a1f0ef8b456ecb48a40bcbc7293ef72, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6181776349399808510, guid: 3a1f0ef8b456ecb48a40bcbc7293ef72, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6710955801578307064, guid: 3a1f0ef8b456ecb48a40bcbc7293ef72, type: 3}
       propertyPath: m_Name
