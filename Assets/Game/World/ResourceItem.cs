@@ -78,6 +78,7 @@ namespace Shooter
         {
             Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback");
             alive = false;
+            timer = 0;
             pickupable.OnPickup -= MarkDead;
         }
     }
