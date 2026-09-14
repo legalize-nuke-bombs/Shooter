@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8b41c7d95e4a3fb06c1d27e8a45913, type: 3}
+  m_Name: WhiteMushroom
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
+  id: white-mushroom
+  title: "\u0411\u0435\u043B\u044B\u0439 \u0433\u0440\u0438\u0431"
+  model: {fileID: 185280, guid: f37617cacbbdd7044a7ead5889c835b8, type: 3}
+  icon: {fileID: 11400000, guid: b4600218e5ad50e4dbeda76f04b8ba5c, type: 2}
+  cells: {x: 1, y: 1}
+  promptDescription: White mushroom
+  effects:
+  - {fileID: 11400000, guid: 42c0150fe0f54c809afb49cc7b1eed46, type: 2}
+  useSound: {fileID: 0}
