@@ -81,12 +81,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3256169723902780699, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: availableCrafts.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3256169723902780699, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: 'availableCrafts.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: ed34a7a9cdcc5f845a4c300f592e59db, type: 2}
+    - target: {fileID: 3256169723902780699, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
+      propertyPath: 'availableCrafts.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 8a61ebac8b67ead4f890824801ce0ce9, type: 2}
+    - target: {fileID: 3256169723902780699, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
+      propertyPath: 'availableCrafts.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 9951e74ad42ea794cbcdb78dee194a37, type: 2}
     - target: {fileID: 5998417678525257926, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: m_InScenePlaced
       value: 0
