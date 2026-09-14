@@ -19,7 +19,6 @@ namespace Shooter.Game.World
         private void Update()
         {
             Clock clock = Clock.Current;
-            if (clock == null) return;
 
             float hourAngle = (float)clock.HourAngle - lagBehindSun;
             float elevation = Celestial.Elevation(hourAngle, clock.Declination, clock.Latitude);
