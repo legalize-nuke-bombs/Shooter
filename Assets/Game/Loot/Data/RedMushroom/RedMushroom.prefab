@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -2756196156096060293}
   - component: {fileID: -548172686522659228}
   - component: {fileID: -9067010271887292737}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RedMushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 4845693445521390343}
   - component: {fileID: 5988021783681704285}
   - component: {fileID: 2469307325892157218}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

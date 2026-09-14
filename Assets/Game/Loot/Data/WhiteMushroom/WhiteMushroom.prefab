@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -7144323633725208756}
   - component: {fileID: -5026217229558190974}
   - component: {fileID: 4905489273699766606}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WhiteMushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 7873113419073462891}
   - component: {fileID: 5483648790964403062}
   - component: {fileID: 7494436876999450288}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
