@@ -32,12 +32,5 @@ namespace Shooter.Client.Interface
             Log.Info(
                 $"Server settings: port {server.Port}, saves as '{server.SaveCompressionAlgorithm}', model {server.Llm.Provider}/{server.Llm.Model}");
         }
-
-        private static void Offer(DropdownField field, IEnumerable<string> keys, Func<string, string> title)
-        {
-            field.choices = keys.ToList();
-            field.formatSelectedValueCallback = title;
-            field.formatListItemCallback = title;
-        }
     }
 }

@@ -14,6 +14,8 @@ namespace Shooter.Configuring
         private float music = 0.25f;
         private float ambience = 1f;
         private float sounds = 1f;
+        private string antialiasing = Antialiasings.Default;
+        private string upscaler = Upscalers.Default;
 
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
@@ -57,6 +59,20 @@ namespace Shooter.Configuring
         {
             get => sounds;
             set => Change(ref sounds, value);
+        }
+
+        [CreateProperty]
+        public string Antialiasing
+        {
+            get => antialiasing;
+            set => Change(ref antialiasing, value);
+        }
+
+        [CreateProperty]
+        public string Upscaler
+        {
+            get => upscaler;
+            set => Change(ref upscaler, value);
         }
 
         private void Change<T>(ref T field, T value, [CallerMemberName] string property = "")

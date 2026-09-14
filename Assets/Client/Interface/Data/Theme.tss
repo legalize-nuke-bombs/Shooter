@@ -181,6 +181,39 @@
     -unity-background-image-tint-color: var(--color-accent);
 }
 
+/* The same for the popup, as full chains so the default runtime theme cannot outrank them in any state */
+.unity-base-dropdown > .unity-base-dropdown__container-outer {
+    border-width: 1px;
+    border-radius: 0;
+    border-color: var(--color-line-strong);
+    background-color: var(--color-panel-solid);
+}
+
+.unity-base-dropdown > .unity-base-dropdown__container-outer > .unity-base-dropdown__container-inner {
+    background-color: var(--color-panel-solid);
+}
+
+.unity-base-dropdown .unity-base-dropdown__item {
+    padding: 6px 8px;
+    background-color: var(--color-panel-solid);
+}
+
+.unity-base-dropdown .unity-base-dropdown__item:hover,
+.unity-base-dropdown .unity-base-dropdown__item:hover:enabled {
+    background-color: var(--color-hover);
+}
+
+.unity-base-dropdown .unity-base-dropdown__item > .unity-base-dropdown__item-content > .unity-base-dropdown__label,
+.unity-base-dropdown .unity-base-dropdown__item:hover:enabled > .unity-base-dropdown__item-content > .unity-base-dropdown__label {
+    color: var(--color-text);
+    font-size: var(--text-base);
+}
+
+.unity-base-dropdown .unity-base-dropdown__item > .unity-base-dropdown__item-content > .unity-base-dropdown__checkmark,
+.unity-base-dropdown .unity-base-dropdown__item:hover:enabled > .unity-base-dropdown__item-content > .unity-base-dropdown__checkmark {
+    -unity-background-image-tint-color: var(--color-accent);
+}
+
 .unity-slider {
     margin: 0;
 }
