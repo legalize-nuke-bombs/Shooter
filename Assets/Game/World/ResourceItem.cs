@@ -81,5 +81,28 @@ namespace Shooter
             timer = 0;
             pickupable.OnPickup -= MarkDead;
         }
+
+        private void OnDrawGizmos()
+        {
+            if (bodyPrefab == null) return;
+
+            Gizmos.color = new Color(0, 1, 1, 0.5f);
+
+            MeshFilter meshFilter = bodyPrefab.GetComponentInChildren<MeshFilter>();
+
+            if (meshFilter != null && meshFilter.sharedMesh != null)
+            {
+                Transform prefabTransform = meshFilter.transform;
+                Vector3 position = transform.TransformPoint(prefabTransform.localPosition);
+                Quaternion rotation = transform.rotation * prefabTransform.localRotation;
+                Vector3 scale = Vector3.Scale(transform.lossyScale, prefabTransform.localScale);
+
+                Gizmos.DrawMesh(meshFilter.sharedMesh, position, rotation, scale);
+            }
+            else
+            {
+                Gizmos.DrawWireCube(transform.position, Vector3.one * 0.5f);
+            }
+        }
     }
 }
