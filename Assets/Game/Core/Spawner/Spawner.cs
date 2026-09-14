@@ -27,12 +27,23 @@ namespace Shooter.Game.Core
 
         public GameObject Spawn(GameObject prefab)
         {
-            return Spawn(prefab, Vector3.zero, Quaternion.identity);
+            return Spawn(prefab, Vector3.zero, Quaternion.identity, null);
         }
 
         public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
         {
-            Log.Info($"Spawning {prefab.name} at {position} rotation {rotation}...");
+            return Spawn(prefab, position, rotation, null);
+        }
+
+        public GameObject Spawn(GameObject prefab, Transform parent)
+        {
+            return Spawn(prefab, Vector3.zero, Quaternion.identity, parent);
+        }
+
+        public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
+        {
+            Log.Info($"Spawning {prefab.name} at {position} with parent {(parent != null ? parent.name : "None")}...");
+
             GameObject body = Instantiate(prefab, position, rotation);
 
             NetworkObject networkObject = body.GetComponent<NetworkObject>();
@@ -42,7 +53,26 @@ namespace Shooter.Game.Core
                 Destroy(body);
                 return null;
             }
+
             networkObject.Spawn(true);
+
+            if (parent != null)
+            {
+                NetworkObject parentNetObj = parent.GetComponentInParent<NetworkObject>();
+                if (parentNetObj != null && parentNetObj.IsSpawned)
+                {
+                    bool success = networkObject.TrySetParent(parent, false);
+
+                    if (!success)
+                    {
+                        Log.Error($"Failed to parent {body.name} to {parent.name} via Netcode!");
+                    }
+                }
+                else
+                {
+                    Log.Warn($"Parent {parent.name} does not have a spawned NetworkObject. Cannot attach child in Netcode!");
+                }
+            }
 
             return body;
         }

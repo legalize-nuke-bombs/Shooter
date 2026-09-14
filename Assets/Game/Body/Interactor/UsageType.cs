@@ -5,6 +5,7 @@ namespace Shooter.Game.Body
         Sleep,
         Talk,
         TurnOn,
-        TurnOff
+        TurnOff,
+        PickUp
     }
 }
