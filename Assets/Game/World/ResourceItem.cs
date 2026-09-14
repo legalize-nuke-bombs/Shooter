@@ -16,8 +16,8 @@ namespace Shooter
         [SerializeField] private Pickupable bodyPrefab;
 
         private bool alive = false;
-        private float timer;
-        [SerializeField] private float respawnDelay = 5f;
+        private float? timer = null;
+        [SerializeField] private float respawnDelay = 600f;
 
         public string ComponentKey => "ResourceItem";
         private struct SaveData
@@ -30,7 +30,7 @@ namespace Shooter
             return new SaveData()
             {
                 Alive = alive,
-                Timer = timer
+                Timer = timer.GetValueOrDefault(respawnDelay)
             };
         }
         public void LoadObject(SaveToken content)
@@ -50,7 +50,7 @@ namespace Shooter
         {
             if (!alive)
             {
-                timer += Time.deltaTime;
+                timer = (timer.GetValueOrDefault(respawnDelay) + Time.deltaTime);
                 if (timer >= respawnDelay)
                 {
                     Respawn();
