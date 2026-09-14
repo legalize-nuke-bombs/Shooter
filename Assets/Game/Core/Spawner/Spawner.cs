@@ -44,6 +44,19 @@ namespace Shooter.Game.Core
         {
             Log.Info($"Spawning {prefab.name} at {position} with parent {(parent != null ? parent.name : "None")}...");
 
+            // Netcode parents only under a spawned network object sitting on this very transform;
+            // GetComponent (unlike GetComponentInParent) also finds it on a frozen, inactive parent
+            NetworkObject parentNetworkObject = null;
+            if (parent != null)
+            {
+                parentNetworkObject = parent.GetComponent<NetworkObject>();
+                if (parentNetworkObject == null || !parentNetworkObject.IsSpawned)
+                {
+                    Log.Error($"Parent {parent.name} does not have a spawned network object, {prefab.name} is not spawned");
+                    return null;
+                }
+            }
+
             GameObject body = Instantiate(prefab, position, rotation);
 
             NetworkObject networkObject = body.GetComponent<NetworkObject>();
@@ -56,22 +69,11 @@ namespace Shooter.Game.Core
 
             networkObject.Spawn(true);
 
-            if (parent != null)
+            if (parentNetworkObject != null && !networkObject.TrySetParent(parentNetworkObject, false))
             {
-                NetworkObject parentNetObj = parent.GetComponentInParent<NetworkObject>();
-                if (parentNetObj != null && parentNetObj.IsSpawned)
-                {
-                    bool success = networkObject.TrySetParent(parent, false);
-
-                    if (!success)
-                    {
-                        Log.Error($"Failed to parent {body.name} to {parent.name} via Netcode!");
-                    }
-                }
-                else
-                {
-                    Log.Warn($"Parent {parent.name} does not have a spawned NetworkObject. Cannot attach child in Netcode!");
-                }
+                Log.Error($"Failed to parent {body.name} to {parent.name} via Netcode, despawning...");
+                networkObject.Despawn(true);
+                return null;
             }
 
             return body;
