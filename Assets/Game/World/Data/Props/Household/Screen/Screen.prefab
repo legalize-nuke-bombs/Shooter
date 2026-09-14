@@ -124,26 +124,26 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.000000
-      value: 1.000000
-      inSlope: 0.000000
-      outSlope: 0.000000
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.041667
-      value: 1.000000
-      inSlope: 0.000000
-      outSlope: 0.000000
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.083333
-      value: 0.500000
+      value: 0.5
       inSlope: -4.327869
       outSlope: -4.327869
       tangentMode: 0
@@ -152,7 +152,7 @@ AudioSource:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.166667
-      value: 0.280000
+      value: 0.28
       inSlope: -1.342373
       outSlope: -1.342373
       tangentMode: 0
@@ -161,7 +161,7 @@ AudioSource:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.333333
-      value: 0.130000
+      value: 0.13
       inSlope: -0.472131
       outSlope: -0.472131
       tangentMode: 0
@@ -170,7 +170,7 @@ AudioSource:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.583333
-      value: 0.050000
+      value: 0.05
       inSlope: -0.174545
       outSlope: -0.174545
       tangentMode: 0
@@ -178,10 +178,10 @@ AudioSource:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.000000
-      value: 0.000000
-      inSlope: -0.120000
-      outSlope: -0.120000
+      time: 1
+      value: 0
+      inSlope: -0.12
+      outSlope: -0.12
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
@@ -326,7 +326,7 @@ Light:
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 10.225}
   m_UseBoundingSphereOverride: 1
-  m_UseViewFrustumForShadowCasterCull: 1
+  m_UseViewFrustumForShadowCasterCull: 0
   m_ForceVisible: 0
   m_ShapeRadius: 0
   m_ShadowAngle: 0
@@ -432,7 +432,7 @@ MonoBehaviour:
   m_LightAngle: 1
   m_MaxDepthBias: 0.001
   m_ShadowResolution:
-    m_Override: 512
+    m_Override: 256
     m_UseOverride: 1
     m_Level: 0
   m_ShadowDimmer: 1
@@ -447,8 +447,8 @@ MonoBehaviour:
   m_PenumbraTint: 0
   m_NormalBias: 0.75
   m_SlopeBias: 0.5
-  m_ShadowUpdateMode: 0
-  m_AlwaysDrawDynamicShadows: 0
+  m_ShadowUpdateMode: 1
+  m_AlwaysDrawDynamicShadows: 1
   m_UpdateShadowOnLightMovement: 0
   m_CachedShadowTranslationThreshold: 0.01
   m_CachedShadowAngularThreshold: 0.5
