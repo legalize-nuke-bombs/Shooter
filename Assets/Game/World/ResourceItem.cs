@@ -1,6 +1,7 @@
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
 using Shooter.Game.Loot;
+using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,27 +11,30 @@ namespace Shooter
     [RequireComponent(typeof(NetworkObject))]
     public class ResourceItem : MonoBehaviour, ISaveableComponent
     {
+        private const double SecondsPerHour = 3600.0;
+
         private static readonly Journal Log = Logs.Here();
 
         private GameObject body;
         [SerializeField] private Pickupable bodyPrefab;
 
         private bool alive = false;
-        private float? timer = null;
-        [SerializeField] private float respawnDelay = 600f;
+        // World time (clock seconds) when the body was taken; null = never taken, so the body grows at once
+        private double? takenAt;
+        [SerializeField] private float respawnHours = 12f;
 
         public string ComponentKey => "ResourceItem";
         private struct SaveData
         {
             public bool Alive { get; set; }
-            public float Timer { get; set; }
+            public double? TakenAt { get; set; }
         }
         public object SaveObject()
         {
             return new SaveData()
             {
                 Alive = alive,
-                Timer = timer.GetValueOrDefault(respawnDelay)
+                TakenAt = takenAt
             };
         }
         public void LoadObject(SaveToken content)
@@ -38,7 +42,7 @@ namespace Shooter
             // The world is frozen while it loads, so a body saved alive is grown by the first Update after the thaw
             SaveData sd = content.To<SaveData>();
             alive = false;
-            timer = sd.Alive ? respawnDelay : sd.Timer;
+            takenAt = sd.Alive ? null : sd.TakenAt;
         }
 
         private void Awake()
@@ -48,13 +52,11 @@ namespace Shooter
 
         private void Update()
         {
-            if (!alive)
+            if (alive) return;
+
+            if (takenAt == null || Clock.Current.Timestamp - takenAt.Value >= respawnHours * SecondsPerHour)
             {
-                timer = (timer.GetValueOrDefault(respawnDelay) + Time.deltaTime);
-                if (timer >= respawnDelay)
-                {
-                    Respawn();
-                }
+                Respawn();
             }
         }
 
@@ -67,22 +69,23 @@ namespace Shooter
                 {
                     body = Spawner.Current.Spawn(bodyPrefab.gameObject, transform);
                 }
-                timer = 0;
                 if (body == null)
                 {
-                    Log.Error($"Entity {name} failed to spawn its body, retrying in {respawnDelay} s");
+                    Log.Error($"Entity {name} failed to spawn its body, retrying in {respawnHours} h of world time");
+                    takenAt = Clock.Current.Timestamp;
                     return;
                 }
                 alive = true;
+                takenAt = null;
                 body.GetComponent<Pickupable>().OnPickup += MarkDead;
             }
         }
 
         private void MarkDead(Pickupable pickupable)
         {
-            Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback");
+            Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, grows back in {respawnHours} h of world time");
             alive = false;
-            timer = 0;
+            takenAt = Clock.Current.Timestamp;
             pickupable.OnPickup -= MarkDead;
         }
 
