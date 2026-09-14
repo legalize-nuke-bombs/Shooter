@@ -2177,6 +2177,10 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
       objectReference: {fileID: 0}
+    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: 87f7093c-faa6-465b-b448-2168baf418d5
+      objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
       value: Lamp
@@ -2249,6 +2253,10 @@ PrefabInstance:
     - target: {fileID: -7162147896932703135, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
+      objectReference: {fileID: 0}
+    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: 3d67fb55-2682-4019-951e-7b1d178d8370
       objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
