@@ -23,6 +23,17 @@
                 <ui:DataBinding property="value" data-source-path="Client.Sounds" binding-mode="TwoWay"/>
             </Bindings>
         </ui:Slider>
+        <ui:Label text="Изображение" class="screen__section"/>
+        <ui:DropdownField name="antialiasing" label="Сглаживание" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Antialiasing" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="upscaler" label="DLSS" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Upscaler" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
     </ui:VisualElement>
     <ui:VisualElement class="screen__footer">
         <ui:Button name="back" text="Назад" class="action"/>

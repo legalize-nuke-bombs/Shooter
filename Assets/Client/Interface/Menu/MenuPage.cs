@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
@@ -31,6 +33,13 @@ namespace Shooter.Client.Interface
 
         protected virtual void Closed()
         {
+        }
+
+        protected static void Offer(DropdownField field, IEnumerable<string> keys, Func<string, string> title)
+        {
+            field.choices = keys.ToList();
+            field.formatSelectedValueCallback = title;
+            field.formatListItemCallback = title;
         }
 
         protected T Require<T>(string name) where T : VisualElement
