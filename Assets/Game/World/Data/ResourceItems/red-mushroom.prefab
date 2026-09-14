@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2617244099721317815}
   - component: {fileID: 2165350704611589699}
   - component: {fileID: 8965076715847265801}
-  - component: {fileID: -8624936951409396853}
   m_Layer: 0
   m_Name: red-mushroom
   m_TagString: Untagged
@@ -75,7 +74,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.ResourceItem
   bodyPrefab: {fileID: -372838991472394059, guid: c79a726f1bf80484a859f6bb4ce4959f, type: 3}
-  respawnDelay: 600
+  respawnHours: 24
 --- !u!114 &2165350704611589699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,15 +101,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &-8624936951409396853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7674606266702496447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0994b96bab5f474394fb7847ac2cf72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.Scattered

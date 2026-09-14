@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4845693445521390343}
@@ -72,7 +72,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7e594332552d8404fa158c997fe8bb50, type: 2}
+  - {fileID: 2100000, guid: d24beaa7f19346c5931a008417488768, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -228,8 +228,8 @@ Light:
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 0.7294118, g: 0.3333333, b: 0.8274511, a: 1}
-  m_Intensity: 47.746483
-  m_Range: 1
+  m_Intensity: 6.3661976
+  m_Range: 3
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
@@ -277,7 +277,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShapeRadius: 0.005
+  m_ShapeRadius: 0.1
   m_ShadowAngle: 0
   m_LightUnit: 0
   m_LuxAtDistance: 1
@@ -313,7 +313,7 @@ MonoBehaviour:
   m_ObsoleteContactShadows: 0
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 1
+  m_VolumetricDimmer: 0.5
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
   m_AffectDiffuse: 1
