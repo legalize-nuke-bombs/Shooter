@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: d466aa6221f95894899ce797d3e9e3f2
+AssetOrigin:
+  serializedVersion: 1
+  productId: 325572
+  packageName: Street vase
+  packageVersion: 1.0
+  assetPath: Assets/H&L Assets/Street vase/Textures/street_vase_01_color_2048.png
+  uploadId: 770299
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -22,7 +29,7 @@ TextureImporter:
     normalMapFilter: 0
     flipGreenChannel: 0
   isReadable: 0
-  streamingMipmaps: 0
+  streamingMipmaps: 1
   streamingMipmapsPriority: 0
   vTOnly: 0
   ignoreMipmapLimit: 0
@@ -128,10 +135,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 325572
-  packageName: Street vase
-  packageVersion: 1.0
-  assetPath: Assets/H&L Assets/Street vase/Textures/street_vase_01_color_2048.png
-  uploadId: 770299

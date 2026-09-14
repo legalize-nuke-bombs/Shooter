@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 199f5d792c70f744ba9d046685be46fa
+AssetOrigin:
+  serializedVersion: 1
+  productId: 213198
+  packageName: Unity Terrain - HDRP Demo Scene
+  packageVersion: 1.0.3
+  assetPath: Assets/TerrainDemoScene_HDRP/Prefabs/Trees/Cypress/Textures/Bark_Extra.tif
+  uploadId: 727864
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -22,7 +29,7 @@ TextureImporter:
     normalMapFilter: 0
     flipGreenChannel: 0
   isReadable: 0
-  streamingMipmaps: 0
+  streamingMipmaps: 1
   streamingMipmapsPriority: 0
   vTOnly: 0
   ignoreMipmapLimit: 0
@@ -106,6 +113,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
@@ -128,10 +148,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 213198
-  packageName: Unity Terrain - HDRP Demo Scene
-  packageVersion: 1.0.3
-  assetPath: Assets/TerrainDemoScene_HDRP/Prefabs/Trees/Cypress/Textures/Bark_Extra.tif
-  uploadId: 727864
