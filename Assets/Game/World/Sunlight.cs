@@ -1,3 +1,4 @@
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.World
@@ -5,6 +6,8 @@ namespace Shooter.Game.World
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         internal const float ShadowHandover = -6f;
 
         [SerializeField] private float brightest = 120000f;
@@ -14,6 +17,11 @@ namespace Shooter.Game.World
         private void Awake()
         {
             sun = GetComponent<Light>();
+            if (Clock.Current == null)
+            {
+                Log.Info($"Entity {name} did not find clock, disabling...");
+                enabled = false;
+            }
         }
 
         private void Update()
