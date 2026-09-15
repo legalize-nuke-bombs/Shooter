@@ -12,14 +12,14 @@ namespace Shooter.Game.Core
 
         private GameObjectRuntimeId id;
 
-        [SerializeField] private Group group;
-        public Group Group => group;
+        [SerializeField] private Fraction fraction;
+        public Fraction Fraction => fraction;
 
         protected override void Awake()
         {
             base.Awake();
             id = GetComponent<GameObjectRuntimeId>();
-            if (group == null)
+            if (fraction == null)
             {
                 Log.Error($"Entity {name} does not have a group");
             }
@@ -51,7 +51,7 @@ namespace Shooter.Game.Core
         public DigestionPriority Priority => DigestionPriority.High;
         public string Digest(DigestionDetail detail)
         {
-            return $"Character. Group: {group.PromptName}";
+            return $"Character. Fraction: {fraction.PromptName}";
         }
     }
 }
