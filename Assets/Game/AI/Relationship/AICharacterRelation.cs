@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
+using Shooter.Game.Core.FractionsRelations;
+using Shooter.Game.Core.Groups;
 using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
@@ -14,9 +16,6 @@ namespace Shooter.Game.AI
     public class AICharacterRelation : MonoBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
-
-        [SerializeField] [Range(0, 100)]
-        private int defaultAmount = 50; // TODO логика стандартного отношения сильно упрощена, ее надо будет потом переделать
 
         [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
 
@@ -67,19 +66,29 @@ namespace Shooter.Game.AI
             sb.Append("Current relations with other characters. ");
             sb.Append($"Thresholds. Enemies: <= {enemyThreshold}. Friends: >= {friendThreshold}. ");
             foreach (KeyValuePair<long, int> kvp in amounts)
+            {
                 sb.Append(kvp.Key + " : " + kvp.Value + " (" + Status(kvp.Value) + "). ");
-            sb.Append($"The relation towards characters not listed here is the standard {defaultAmount}.");
+            }
+
+            sb.Append("The relation towards characters not listed here by fractions: ");
+            FractionCatalog fractions = Catalogs.Of<FractionCatalog>();
+            FractionRelationCatalog fractionRelations = Catalogs.Of<FractionRelationCatalog>();
+            for (int i = 0; i < fractions.Count; i++)
+            {
+                Fraction targetFraction = fractions.At(i);
+                sb.Append($"[{targetFraction.Id}: {fractionRelations.Amount(ownCharacter.Fraction, targetFraction)}], ");
+            }
 
             return sb.ToString();
         }
 
         public DigestionPriority Priority => DigestionPriority.High;
 
-        private void OnDamaged(double amount, long? attackerId, DamageSpec type)
+        private void OnDamaged(double amount, Character attacker, DamageSpec type)
         {
-            if (attackerId == null) return;
+            if (attacker == null) return;
 
-            int delta = SetAmount(attackerId.Value, Math.Max(0, Amount(attackerId.Value) - (int)(damageToReputationCoefficient * amount)));
+            int delta = SetAmount(attacker, Math.Max(0, Amount(attacker) - (int)(damageToReputationCoefficient * amount)));
             if (delta != 0 && OnDamagedCallback != null)
             {
                 OnDamagedCallback.Invoke(new OnDamagedCallbackData()
@@ -87,44 +96,43 @@ namespace Shooter.Game.AI
                     RelationDelta = delta,
                     DamagePoints = (int)Math.Abs(amount),
                     DamageType = type,
-                    AttackerId = attackerId.Value
+                    AttackerId = attacker.Id
                 });
             }
         }
 
-        public int Amount(long characterId)
+        public int Amount(Character targetCharacter)
         {
-            return amounts.GetValueOrDefault(characterId, defaultAmount);
+            if (amounts.TryGetValue(targetCharacter.Id, out int amount))
+            {
+                return amount;
+            }
+            FractionRelationCatalog fractionRelations = Catalogs.Of<FractionRelationCatalog>();
+            return fractionRelations.Amount(ownCharacter.Fraction, targetCharacter.Fraction);
         }
 
-        public int SetAmount(long characterId, int amount)
+        public int SetAmount(Character targetCharacter, int amount)
         {
-            int currentAmount = Amount(characterId);
+            int currentAmount = Amount(targetCharacter);
 
-            Log.Info($"Entity {name} SetAmount request: character id {characterId} amount {currentAmount} -> {amount}");
+            Log.Info($"Entity {name} SetAmount request: character id {targetCharacter.Id} amount {currentAmount} -> {amount}");
 
             if (amount < 0 || amount > 100) return 0;
 
             if (amount == currentAmount) return 0;
 
-            amounts[characterId] = amount;
+            amounts[targetCharacter.Id] = amount;
 
-            Notify(characterId, currentAmount, amount);
+            Notify(targetCharacter, currentAmount, amount);
             return amount - currentAmount;
         }
 
-        private void Notify(long characterId, int before, int after)
+        private void Notify(Character targetCharacter, int before, int after)
         {
-            var target = Character.Of(characterId, Inactive.Exclude);
-            if (target == null)
+            if (!targetCharacter.TryGetComponent(out MainNotificationRecipient recipient))
             {
-                Log.Warn($"Entity {name} failed to notify character {characterId}: not found");
+                Log.Warn($"Entity {name} failed to notify character {targetCharacter.Id}: not a notification recipient");
                 return;
-            }
-
-            if (!target.TryGetComponent(out MainNotificationRecipient recipient))
-            {
-                Log.Warn($"Entity {name} failed to notify character {characterId}: not a notification recipient");
             }
 
             NotificationSpec spec = after > before ? improved : worsened;
@@ -142,9 +150,9 @@ namespace Shooter.Game.AI
                 .With("after", after));
         }
 
-        public RelationshipStatus Status(long characterId)
+        public RelationshipStatus Status(Character targetCharacter)
         {
-            return Status(Amount(characterId));
+            return Status(Amount(targetCharacter));
         }
 
         private RelationshipStatus Status(int amount)
