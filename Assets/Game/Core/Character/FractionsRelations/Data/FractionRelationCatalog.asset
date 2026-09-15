@@ -12,4 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b353aa803e4411184e1e64dd949ec95, type: 3}
   m_Name: FractionRelationCatalog
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.FractionsRelations.FractionRelationCatalog
-  specs: []
+  specs:
+  - {fileID: 11400000, guid: 6f474c2e2214d2849bbd6ad974f27453, type: 2}
+  - {fileID: 11400000, guid: a7a55f711f8094848bbb35954bcf1e7b, type: 2}
+  - {fileID: 11400000, guid: 1df635ac328e7a4498167749238e7c5d, type: 2}
+  - {fileID: 11400000, guid: 7caec24cbddaa8d449d63bbbfbd0e07f, type: 2}
+  - {fileID: 11400000, guid: 94b0b31331b661844ac1a0c7de8393fa, type: 2}
+  - {fileID: 11400000, guid: 15a81fcac610c414f95dc3f7627ffe1e, type: 2}
+  - {fileID: 11400000, guid: 53617031ced1a0244a0ac3008be36201, type: 2}
+  - {fileID: 11400000, guid: 4c8e14331e5178a4f86038eb13922283, type: 2}
+  - {fileID: 11400000, guid: 9fd491dfa1e7e294d982d460c0d34361, type: 2}
+  - {fileID: 11400000, guid: e100b1e5acd5d904e9938415bd7c21f1, type: 2}
+  defaultAmount: 50
