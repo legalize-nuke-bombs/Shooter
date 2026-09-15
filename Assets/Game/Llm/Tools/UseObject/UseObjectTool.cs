@@ -19,8 +19,8 @@ namespace Shooter.Game.Llm.UseObject
 
         public override string Description =>
             @$"
-Use (turn on / off, pickup, etc.) the usable object on the map.
-This tool attempts to use the nearest usable object on the map within a {radius}-meter radius. Get right up close to the object and then use this tool to try using it.
+Use (turn on / off, pickup, etc.) a specific usable object on the map by its coordinates.
+You must provide the exact X, Y, and Z coordinates of the object. The object must be within a {{radius}}-meter radius from your current position.
 ";
 
         protected override void OnStart()
@@ -32,36 +32,46 @@ This tool attempts to use the nearest usable object on the map within a {radius}
             }
         }
 
+
         protected override string Execute(UseObjectArguments arguments, LlmCallContext context)
         {
-            Vector3 center = Self.transform.position;
+            Vector3 selfPosition = Self.transform.position;
+            var targetPosition = new Vector3(arguments.X, arguments.Y, arguments.Z);
 
-            Collider[] colliders = Physics.OverlapSphere(center, radius);
+            Collider[] colliders = Physics.OverlapSphere(targetPosition, 1.0f);
 
-            IUsable nearestUsable = null;
-            float minDistanceSqr = Mathf.Infinity;
+            IUsable targetUsable = null;
+            float minDistanceToTargetSqr = Mathf.Infinity;
+            Vector3 finalObjectPosition = Vector3.zero;
 
             foreach (Collider col in colliders)
             {
                 if (col.TryGetComponent(out IUsable usable))
                 {
-                    float distanceSqr = (col.transform.position - center).sqrMagnitude;
+                    float distanceSqr = (col.transform.position - targetPosition).sqrMagnitude;
 
-                    if (distanceSqr < minDistanceSqr)
+                    if (distanceSqr < minDistanceToTargetSqr)
                     {
-                        minDistanceSqr = distanceSqr;
-                        nearestUsable = usable;
+                        minDistanceToTargetSqr = distanceSqr;
+                        targetUsable = usable;
+                        finalObjectPosition = col.transform.position;
                     }
                 }
             }
 
-            if (nearestUsable != null)
+            if (targetUsable == null)
             {
-                nearestUsable.Use(networkObject, out string result);
-                return result;
+                return $"Failed to find any usable object at the coordinates ({arguments.X}, {arguments.Y}, {arguments.Z}). Make sure the coordinates are precise.";
             }
 
-            return $"No usable objects found within a {radius}-meter radius around you.";
+            float distanceToPlayer = Vector3.Distance(selfPosition, finalObjectPosition);
+            if (distanceToPlayer > radius)
+            {
+                return $"The object is too far away ({distanceToPlayer} meters). You must come closer than {radius} meters to use it. Current distance: {distanceToPlayer}m.";
+            }
+
+            targetUsable.Use(networkObject, out string result);
+            return result;
         }
     }
 }
