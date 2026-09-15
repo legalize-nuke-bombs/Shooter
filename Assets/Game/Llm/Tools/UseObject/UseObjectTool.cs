@@ -88,7 +88,7 @@ You must provide the exact X, Y, and Z coordinates of the objects. The objects m
             float distance = Vector3.Distance(selfPosition, finalObjectPosition);
             if (distance > radius)
             {
-                sb.AppendLine($"The object is too far away ({distance} meters). You must come closer than {radius} meters to use it. Current distance: {distance}m.");
+                sb.AppendLine($"The object is {distance:F1} meters away. You must come closer than {radius} meters to use it.");
                 return;
             }
 
