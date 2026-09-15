@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game.Core
 {
     [RequireComponent(typeof(GameObjectRuntimeId))]
-    public class Character : RegisteredBehaviour
+    public class Character : RegisteredBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -46,6 +46,12 @@ namespace Shooter.Game.Core
             {
                 action(character);
             }
+        }
+
+        public DigestionPriority Priority => DigestionPriority.High;
+        public string Digest(DigestionDetail detail)
+        {
+            return $"Character. Group: {group.PromptName}";
         }
     }
 }
