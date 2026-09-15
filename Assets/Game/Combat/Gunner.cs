@@ -165,7 +165,7 @@ namespace Shooter.Game.Combat
             if (part == BodyPart.Head) earSpeaker.Play(spec.HeadshotSound);
             int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
 
-            health.Damage(damage, character == null ? null : character.Id, spec.DamageType);
+            health.Damage(damage, character, spec.DamageType);
             Log.Info($"Shot of entity {name} hit {health.name} in {part} for {damage} damage");
         }
 

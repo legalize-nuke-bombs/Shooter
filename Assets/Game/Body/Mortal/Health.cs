@@ -41,9 +41,9 @@ namespace Shooter.Game.Body
         {
         }
 
-        public event Action<double, long?, DamageSpec> Damaged;
+        public event Action<double, Character, DamageSpec> Damaged;
 
-        public DamageResult Damage(double amount, long? attackerId, DamageSpec type)
+        public DamageResult Damage(double amount, Character attacker, DamageSpec type)
         {
             if (!IsServer || !Alive || amount <= 0)
                 return new DamageResult
@@ -63,7 +63,7 @@ namespace Shooter.Game.Body
                 Murder = !Alive
             };
 
-            if (Alive) Damaged?.Invoke(amount, attackerId, type);
+            if (Alive) Damaged?.Invoke(amount, attacker, type);
 
             return result;
         }
