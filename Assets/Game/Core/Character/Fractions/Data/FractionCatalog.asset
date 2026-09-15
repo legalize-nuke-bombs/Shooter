@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e1c9094a05549d9a3a1730a32af00b5, type: 3}
+  m_Name: FractionCatalog
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Groups.FractionCatalog
+  specs:
+  - {fileID: 11400000, guid: 7a2c8878960749d44a025c7f467dd1d4, type: 2}
+  - {fileID: 11400000, guid: 5dbcde0bfe115b74b8b3dedcc123493d, type: 2}
+  - {fileID: 11400000, guid: f13ac3862bb50eb48bd3618281e45ff7, type: 2}
+  - {fileID: 11400000, guid: 309a54d15a091d049b3d341927fc1e18, type: 2}
