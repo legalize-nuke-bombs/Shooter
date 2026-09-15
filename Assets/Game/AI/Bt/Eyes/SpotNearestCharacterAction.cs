@@ -12,7 +12,7 @@ namespace Shooter.Game.AI.Bt.Eyes
     [NodeDescription(
         name: "Spot Nearest Character",
         description: "Looks over the characters of the world for the nearest living one, other than the agent, within the radius; its transform goes into the variable; with the priority on, the nearest player within the radius wins over any nearer character. Fails when nobody is within the radius.",
-        story: "[Agent] spots the nearest character within [Radius] into [Target], preferring players if [PlayerPriority]",
+        story: "[Agent] spots the nearest character within [Radius] into [Target], only spots enemies if [OnlyEnemies]",
         category: "Action",
         id: "7d3b9e15c6a24f0d8b2e4c6a1f9d3e51")]
     public partial class SpotNearestCharacterAction : Action
@@ -20,17 +20,24 @@ namespace Shooter.Game.AI.Bt.Eyes
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<float> Radius = new(30f);
         [SerializeReference] public BlackboardVariable<Transform> Target = new();
-        [SerializeReference] public BlackboardVariable<bool> PlayerPriority = new(true);
+        [SerializeReference] public BlackboardVariable<bool> OnlyEnemies = new(true);
 
         private Character self;
+        private AICharacterRelation characterRelation;
 
         protected override Status OnStart()
         {
-            if (Agent.Value == null) return Status.Failure;
+            if (Agent.Value == null)
+            {
+                return Status.Failure;
+            }
             if (self == null)
             {
                 self = Agent.Value.GetComponent<Character>();
-                if (self == null) return Status.Failure;
+            }
+            if (characterRelation == null)
+            {
+                characterRelation = Agent.Value.GetComponent<AICharacterRelation>();
             }
 
             Vector3 here = Agent.Value.transform.position;
@@ -38,40 +45,36 @@ namespace Shooter.Game.AI.Bt.Eyes
             float nearestCharacter = Radius.Value * Radius.Value;
             Character spottedCharacter = null;
 
-            float nearestPlayer = nearestCharacter;
-            Player spottedPlayer = null;
-
-            foreach (Character character in Registers.Current.Of<Character>(Inactive.Exclude))
+            foreach (Character targetCharacter in Registers.Current.Of<Character>(Inactive.Exclude))
             {
-                if (character == self) continue;
-                if (character.TryGetComponent(out Health health) && !health.Alive) continue;
+                if (targetCharacter == self) continue;
+                if (targetCharacter.TryGetComponent(out Health health) && !health.Alive) continue;
 
-                float apart = (character.transform.position - here).sqrMagnitude;
+                float apart = (targetCharacter.transform.position - here).sqrMagnitude;
 
-                if (apart < nearestCharacter)
+                if (apart >= nearestCharacter)
                 {
-                    nearestCharacter = apart;
-                    spottedCharacter = character;
+                    continue;
                 }
 
-                if (PlayerPriority.Value && character.TryGetComponent(out Player player) && apart < nearestPlayer)
+                if (OnlyEnemies.Value)
                 {
-                    nearestPlayer = apart;
-                    spottedPlayer = player;
+                    if (characterRelation.Status(targetCharacter) != RelationshipStatus.Enemy)
+                    {
+                        continue;
+                    }
                 }
+
+                nearestCharacter = apart;
+                spottedCharacter = targetCharacter;
             }
 
-            if (spottedCharacter == null) return Status.Failure;
-
-            if (PlayerPriority.Value && spottedPlayer != null)
+            if (spottedCharacter == null)
             {
-                Target.Value = spottedPlayer.transform;
-            }
-            else
-            {
-                Target.Value = spottedCharacter.transform;
+                return Status.Failure;
             }
 
+            Target.Value = spottedCharacter.transform;
             return Status.Success;
         }
     }
