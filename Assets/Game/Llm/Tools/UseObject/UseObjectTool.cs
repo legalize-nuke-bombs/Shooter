@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Shooter.Game.Body;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -19,8 +20,8 @@ namespace Shooter.Game.Llm.UseObject
 
         public override string Description =>
             @$"
-Use (turn on / off, pickup, etc.) a specific usable object on the map by its coordinates.
-You must provide the exact X, Y, and Z coordinates of the object. The object must be within a {{radius}}-meter radius from your current position.
+Use (turn on / off, pickup, etc.) usable objects on the map by their coordinates.
+You must provide the exact X, Y, and Z coordinates of the objects. The objects must be within a {{radius}}-meter radius from your current position.
 ";
 
         protected override void OnStart()
@@ -35,8 +36,22 @@ You must provide the exact X, Y, and Z coordinates of the object. The object mus
 
         protected override string Execute(UseObjectArguments arguments, LlmCallContext context)
         {
+            if (arguments.Points == null || arguments.Points.Length == 0)
+            {
+                return "You didn't pass a single point.";
+            }
+            var sb = new StringBuilder();
+            foreach (Point3D point in arguments.Points)
+            {
+                HandlePoint(point, sb);
+            }
+            return sb.ToString();
+        }
+
+        private void HandlePoint(Point3D point, StringBuilder sb)
+        {
             Vector3 selfPosition = Self.transform.position;
-            var targetPosition = new Vector3(arguments.X, arguments.Y, arguments.Z);
+            var targetPosition = new Vector3(point.X, point.Y, point.Z);
 
             Collider[] colliders = Physics.OverlapSphere(targetPosition, 1.0f);
 
@@ -59,19 +74,23 @@ You must provide the exact X, Y, and Z coordinates of the object. The object mus
                 }
             }
 
+            sb.Append($"[{point.X}, {point.Y}, {point.Z}] ");
+
             if (targetUsable == null)
             {
-                return $"Failed to find any usable object at the coordinates ({arguments.X}, {arguments.Y}, {arguments.Z}). Make sure the coordinates are precise.";
+                sb.AppendLine("Failed to find usable object here. Make sure the coordinates are precise.");
+                return;
             }
 
-            float distanceToPlayer = Vector3.Distance(selfPosition, finalObjectPosition);
-            if (distanceToPlayer > radius)
+            float distance = Vector3.Distance(selfPosition, finalObjectPosition);
+            if (distance > radius)
             {
-                return $"The object is too far away ({distanceToPlayer} meters). You must come closer than {radius} meters to use it. Current distance: {distanceToPlayer}m.";
+                sb.AppendLine($"The object is too far away ({distance} meters). You must come closer than {radius} meters to use it. Current distance: {distance}m.");
+                return;
             }
 
             targetUsable.Use(networkObject, out string result);
-            return result;
+            sb.AppendLine(result);
         }
     }
 }
