@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
   m_Name: Crafts
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
-  content: Some residents and wanderers know how to craft / produce items. To see
+  content: "Some residents and wanderers know how to craft / produce items. To see
     which items you can craft and how, use the `list_crafts` tool. To craft an item,
-    use the `craft` tool.
+    use the `craft` tool.\nYou have to hunt for crafting ingredients, craft items,
+    and sell them, because that\u2019s how you make a living."
