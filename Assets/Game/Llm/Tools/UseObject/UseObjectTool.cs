@@ -21,7 +21,7 @@ namespace Shooter.Game.Llm.UseObject
         public override string Description =>
             @$"
 Use (turn on / off, pickup, etc.) usable objects on the map by their coordinates.
-You must provide the exact X, Y, and Z coordinates of the objects. The objects must be within a {{radius}}-meter radius from your current position.
+You must provide the exact X, Y, and Z coordinates of the objects. The objects must be within a {radius}-meter radius from your current position.
 ";
 
         protected override void OnStart()
