@@ -78,17 +78,17 @@ namespace Shooter.Game.World
 
         public UsageType Usage => shining.Value ? UsageType.TurnOff : UsageType.TurnOn;
 
-        public void Use(NetworkObject user)
+        public void Use(NetworkObject user, out string promptResult)
         {
             if (structureHealth.Broken)
             {
-                Log.Info($"Entity {user.name} tried to switch {name} but it was broken");
+                promptResult = "Failed to switch: this entity is broken";
                 return;
             }
 
             shining.Value = !shining.Value;
             speaker.Play(click);
-            Log.Info($"Entity {user.name} switched {name} {(shining.Value ? "on" : "off")}");
+            promptResult = $"Switched to {shining.Value}";
         }
 
         public override void OnNetworkSpawn()

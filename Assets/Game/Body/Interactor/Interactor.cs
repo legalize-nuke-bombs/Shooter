@@ -1,4 +1,3 @@
-using Shooter.Game.Core;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -49,7 +48,7 @@ namespace Shooter.Game.Body
             }
 
             Log.Info($"Player {OwnerClientId} uses {((Component)usable).name}");
-            usable.Use(NetworkObject);
+            usable.Use(NetworkObject, out _);
         }
 
         public bool TryLook(float distance, out RaycastHit hit)

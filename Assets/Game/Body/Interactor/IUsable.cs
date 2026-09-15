@@ -6,6 +6,6 @@ namespace Shooter.Game.Body
     {
         UsageType Usage { get; }
 
-        void Use(NetworkObject user);
+        void Use(NetworkObject user, out string promptResult);
     }
 }
