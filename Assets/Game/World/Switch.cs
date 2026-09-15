@@ -82,12 +82,14 @@ namespace Shooter.Game.World
         {
             if (structureHealth.Broken)
             {
+                Log.Info($"Entity {user.name} tried to switch {name} but it was broken");
                 promptResult = "Failed to switch: this entity is broken";
                 return;
             }
 
             shining.Value = !shining.Value;
             speaker.Play(click);
+            Log.Info($"Entity {user.name} switched {name} {(shining.Value ? "on" : "off")}");
             promptResult = $"Switched to {shining.Value}";
         }
 
