@@ -242,6 +242,7 @@ MonoBehaviour:
   - rid: 2635107260138258844
   - rid: 2635107283221348555
   - rid: 2635107260138258845
+  - rid: 2635107507791986832
   - rid: 2635107260138258841
   - rid: 2635107378325880972
   - rid: 2635107419933376652
@@ -340,6 +341,10 @@ MonoBehaviour:
     - rid: 2635107419933376653
       type: {class: CraftTool, ns: Shooter.Game.Llm.ToCraft, asm: Shooter.Game}
       data: 
+    - rid: 2635107507791986832
+      type: {class: UseObjectTool, ns: Shooter.Game.Llm.UseObject, asm: Shooter.Game}
+      data:
+        radius: 5
 --- !u!114 &7426902805887786745
 MonoBehaviour:
   m_ObjectHideFlags: 0
