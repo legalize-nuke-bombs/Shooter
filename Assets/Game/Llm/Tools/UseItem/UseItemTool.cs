@@ -1,6 +1,4 @@
 ﻿using System;
-using Shooter.Game.Core;
-using Shooter.Game.Llm.GiveStackable;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 
