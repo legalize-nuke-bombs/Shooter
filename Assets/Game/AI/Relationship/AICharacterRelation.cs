@@ -113,7 +113,7 @@ namespace Shooter.Game.AI
             for (int i = 0; i < fractions.Count; i++)
             {
                 Fraction targetFraction = fractions.At(i);
-                sb.Append($"[{targetFraction.Id}: {fractionRelations.Amount(ownCharacter.Fraction, targetFraction)}], ");
+                sb.Append($"[{targetFraction.PromptName}: {fractionRelations.Amount(ownCharacter.Fraction, targetFraction)}], ");
             }
 
             return sb.ToString();
