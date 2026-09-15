@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: group
       value: 
       objectReference: {fileID: 11400000, guid: 5dbcde0bfe115b74b8b3dedcc123493d, type: 2}
+    - target: {fileID: 8423325645246871956, guid: 0f0d555f11919d142a609ebd859b9aa1, type: 3}
+      propertyPath: fraction
+      value: 
+      objectReference: {fileID: 11400000, guid: 5dbcde0bfe115b74b8b3dedcc123493d, type: 2}
     - target: {fileID: 9091035010296901980, guid: 0f0d555f11919d142a609ebd859b9aa1, type: 3}
       propertyPath: spec
       value: 
