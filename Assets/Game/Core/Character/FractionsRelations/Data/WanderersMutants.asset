@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f476a0a45c3419ba04c53a7e68c5189, type: 3}
+  m_Name: WanderersMutants
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.FractionsRelations.FractionRelation
+  id: 
+  fraction1: {fileID: 11400000, guid: 309a54d15a091d049b3d341927fc1e18, type: 2}
+  fraction2: {fileID: 11400000, guid: 7a2c8878960749d44a025c7f467dd1d4, type: 2}
+  defaultAmount: 0
