@@ -1,4 +1,6 @@
 using System;
+using Shooter.Game.Core.Groups;
+using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Core
@@ -6,12 +8,21 @@ namespace Shooter.Game.Core
     [RequireComponent(typeof(GameObjectRuntimeId))]
     public class Character : RegisteredBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private GameObjectRuntimeId id;
+
+        [SerializeField] private Group group;
+        public Group Group => group;
 
         protected override void Awake()
         {
             base.Awake();
             id = GetComponent<GameObjectRuntimeId>();
+            if (group == null)
+            {
+                Log.Error($"Entity {name} does not have a group");
+            }
         }
 
         public long Id => id.Value;
