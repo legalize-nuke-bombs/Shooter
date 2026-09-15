@@ -60,13 +60,30 @@ namespace Shooter.Game.Speech
             enabled = false;
         }
 
-        public void Use(NetworkObject user)
+        public void Use(NetworkObject user, out string promptResult)
         {
-            if (!IsServer) return;
-            if (!user.TryGetComponent(out PlayerMouth mouth)) return;
+            if (!IsServer)
+            {
+                promptResult = "You are not a server";
+                return;
+            }
 
-            if (mouth.Interlocutor == NetworkObjectId) mouth.Close();
-            else mouth.Open(this);
+            if (!user.TryGetComponent(out PlayerMouth mouth))
+            {
+                promptResult = "Failed to talk: you are not a player";
+                return;
+            }
+
+            if (mouth.Interlocutor == NetworkObjectId)
+            {
+                mouth.Close();
+                promptResult = "Dialogue was closed";
+            }
+            else
+            {
+                mouth.Open(this);
+                promptResult = "Dialogue was opened";
+            }
         }
 
         public void Listen(PlayerMouth mouth, string content)

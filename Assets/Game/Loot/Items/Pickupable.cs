@@ -32,7 +32,7 @@ namespace Shooter.Game.Loot
         }
 
         public UsageType Usage => UsageType.PickUp;
-        public void Use(NetworkObject user)
+        public void Use(NetworkObject user, out string promptResult)
         {
             Log.Info($"Entity {name} has been picked up by {user.name}");
             if (user.TryGetComponent(out Speaker speaker))
@@ -53,6 +53,7 @@ namespace Shooter.Game.Loot
             }
             OnPickup?.Invoke(this);
             networkObject.Despawn(!networkObject.InScenePlaced);
+            promptResult = $"You picked up {item.Id}";
         }
 
         public DigestionPriority Priority => DigestionPriority.High;

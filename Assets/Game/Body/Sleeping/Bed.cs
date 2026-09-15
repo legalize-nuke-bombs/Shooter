@@ -23,10 +23,14 @@ namespace Shooter.Game.Body
 
         public UsageType Usage => UsageType.Sleep;
 
-        public void Use(NetworkObject user)
+        public void Use(NetworkObject user, out string promptResult)
         {
             Sleeper sleeper = user.GetComponent<Sleeper>();
-            if (sleeper == null) return;
+            if (sleeper == null)
+            {
+                promptResult = "Failed to sleep: your character does not sleep";
+                return;
+            }
 
             Health health = user.GetComponent<Health>();
             Hands hands = user.GetComponent<Hands>();
@@ -37,12 +41,13 @@ namespace Shooter.Game.Body
 
             if (!SleepRule.CanSleep(alive, handsFree, night))
             {
-                Log.Info(
-                    $"Entity {user.name} can not sleep in {name}: alive {alive}, hands free {handsFree}, night {night}");
+                Log.Info($"Entity {user.name} can not sleep in {name}: alive {alive}, hands free {handsFree}, night {night}");
+                promptResult = $"Failed to sleep: alive {alive} (must be true) hands free {handsFree} (must be true) night {night} (must be true)";
                 return;
             }
 
             sleeper.FallAsleep(this);
+            promptResult = "You fell asleep";
         }
     }
 }
