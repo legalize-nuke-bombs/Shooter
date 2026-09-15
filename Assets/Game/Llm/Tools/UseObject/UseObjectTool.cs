@@ -61,16 +61,17 @@ You must provide the exact X, Y, and Z coordinates of the objects. The objects m
 
             foreach (Collider col in colliders)
             {
-                if (col.TryGetComponent(out IUsable usable))
-                {
-                    float distanceSqr = (col.transform.position - targetPosition).sqrMagnitude;
+                var usable = col.GetComponentInParent<IUsable>();
+                if (usable == null) continue;
 
-                    if (distanceSqr < minDistanceToTargetSqr)
-                    {
-                        minDistanceToTargetSqr = distanceSqr;
-                        targetUsable = usable;
-                        finalObjectPosition = col.transform.position;
-                    }
+                Vector3 usablePosition = ((Component)usable).transform.position;
+                float distanceSqr = (usablePosition - targetPosition).sqrMagnitude;
+
+                if (distanceSqr < minDistanceToTargetSqr)
+                {
+                    minDistanceToTargetSqr = distanceSqr;
+                    targetUsable = usable;
+                    finalObjectPosition = usablePosition;
                 }
             }
 
