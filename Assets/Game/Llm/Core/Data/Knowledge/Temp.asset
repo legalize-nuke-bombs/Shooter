@@ -13,6 +13,4 @@ MonoBehaviour:
   m_Name: Temp
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.KnowledgeSpec
   id: 
-  content: The developer is currently adding the `use_object` tool. This tool may
-    not work correctly. Please test it and report the results using the `send_feedback`
-    tool.
+  content: 
