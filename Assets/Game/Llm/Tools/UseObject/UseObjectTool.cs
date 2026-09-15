@@ -10,6 +10,8 @@ namespace Shooter.Game.Llm.UseObject
     [Serializable]
     public sealed class UseObjectTool : LlmTool<UseObjectArguments>
     {
+        private const float SearchRadius = 1.5f;
+
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float radius = 5;
@@ -53,7 +55,7 @@ You must provide the exact X, Y, and Z coordinates of the objects. The objects m
             Vector3 selfPosition = Self.transform.position;
             var targetPosition = new Vector3(point.X, point.Y, point.Z);
 
-            Collider[] colliders = Physics.OverlapSphere(targetPosition, 1.0f);
+            Collider[] colliders = Physics.OverlapSphere(targetPosition, SearchRadius);
 
             IUsable targetUsable = null;
             float minDistanceToTargetSqr = Mathf.Infinity;
