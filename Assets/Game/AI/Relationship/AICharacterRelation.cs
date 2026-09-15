@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Core.FractionsRelations;
 using Shooter.Game.Core.Groups;
+using Shooter.Game.Core.Saves;
 using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
@@ -13,7 +15,7 @@ namespace Shooter.Game.AI
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Nameable))]
-    public class AICharacterRelation : MonoBehaviour, IDigestible
+    public class AICharacterRelation : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -26,8 +28,43 @@ namespace Shooter.Game.AI
         [SerializeField] [Range(0, 100)] private int friendThreshold = 90;
 
         private readonly Dictionary<long, int> amounts = new();
-        private Health health;
 
+        public string ComponentKey => "AICharacterRelation";
+        private struct SaveData
+        {
+            public struct Entry
+            {
+                public long Id { get; set; }
+                public int Amount { get; set; }
+            }
+            public List<Entry> Entries { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData()
+            {
+                Entries = amounts.Select(pair => new SaveData.Entry
+                {
+                    Id = pair.Key,
+                    Amount = pair.Value
+                }).ToList()
+            };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            SaveData sd = content.To<SaveData>();
+            amounts.Clear();
+            if (sd.Entries == null) return;
+            foreach (SaveData.Entry entry in sd.Entries)
+            {
+                if (!amounts.TryAdd(entry.Id, entry.Amount))
+                {
+                    Log.Warn($"Save token contains multiple definitions of relation with {entry.Id}");
+                }
+            }
+        }
+
+        private Health health;
         private Character ownCharacter;
         private Nameable ownNameable;
 
