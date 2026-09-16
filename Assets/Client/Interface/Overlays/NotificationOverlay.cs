@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
+    // The feed in the corner of the screen: it knows no domains, whoever wants the player's attention hands it a toast
     public class NotificationOverlay : Overlay
     {
         private const string FeedElement = "notifications";
@@ -15,9 +16,24 @@ namespace Shooter.Client.Interface
         private const int Limit = 4;
         private static readonly Journal Log = Logs.Here();
 
-
         private VisualElement feed;
         private PlayerNotificationRecipient recipient;
+
+        public static NotificationOverlay Current { get; private set; }
+
+        private void Awake()
+        {
+            if (Current != null)
+            {
+                Log.Error("Singleton class has more than one instance");
+            }
+            Current = this;
+        }
+
+        private void OnDestroy()
+        {
+            if (Current == this) Current = null;
+        }
 
         private void Update()
         {
@@ -29,7 +45,7 @@ namespace Shooter.Client.Interface
             Forget();
             recipient = own;
 
-            if (recipient != null) recipient.Shown += Show;
+            if (recipient != null) recipient.Shown += Relay;
         }
 
         protected override bool Bind(VisualElement root)
@@ -53,28 +69,36 @@ namespace Shooter.Client.Interface
             feed = null;
         }
 
-        private void Show(Notification notification)
+        public void Show(Toast toast)
         {
-            NotificationSpec spec = Catalogs.Of<NotificationCatalog>().Of(notification.Spec);
-            if (spec == null || string.IsNullOrEmpty(spec.Title)) return;
+            if (!Bound || string.IsNullOrEmpty(toast.Title)) return;
 
-            VisualElement element = Line(notification);
+            VisualElement element = Line(toast);
             feed.Add(element);
 
             while (feed.childCount > Limit) feed.RemoveAt(0);
 
             feed.schedule.Execute(element.RemoveFromHierarchy).StartingIn(Life);
 
-            Ring(notification.Sound());
+            Ring(toast.Sound);
         }
 
-        private VisualElement Line(Notification notification)
+        // A server notification with arguments, until those move to observers of their own domains
+        private void Relay(Notification notification)
+        {
+            Show(new Toast(
+                notification.Icon(),
+                notification.Sound(),
+                Template.Filled(notification.Title(), notification),
+                Template.Filled(notification.Subtitle(), notification)));
+        }
+
+        private static VisualElement Line(Toast toast)
         {
             var line = new VisualElement();
             line.AddToClassList("notification");
 
-            IconSpec icon = notification.Icon();
-            Sprite image = icon == null ? null : icon.Sprite;
+            Sprite image = toast.Icon == null ? null : toast.Icon.Sprite;
 
             if (image != null)
             {
@@ -87,16 +111,14 @@ namespace Shooter.Client.Interface
             var body = new VisualElement();
             body.AddToClassList("notification__body");
 
-            var caption = new Label(Template.Filled(notification.Title(), notification));
+            var caption = new Label(toast.Title);
             caption.AddToClassList("line");
             caption.AddToClassList("notification__title");
             body.Add(caption);
 
-            string under = Template.Filled(notification.Subtitle(), notification);
-
-            if (!string.IsNullOrEmpty(under))
+            if (!string.IsNullOrEmpty(toast.Subtitle))
             {
-                var from = new Label(under);
+                var from = new Label(toast.Subtitle);
                 from.AddToClassList("notification__from");
                 body.Add(from);
             }
@@ -106,7 +128,7 @@ namespace Shooter.Client.Interface
             return line;
         }
 
-        private void Ring(EarSoundSpec sound)
+        private static void Ring(EarSoundSpec sound)
         {
             if (sound == null) return;
 
@@ -120,7 +142,7 @@ namespace Shooter.Client.Interface
         {
             if (recipient == null) return;
 
-            recipient.Shown -= Show;
+            recipient.Shown -= Relay;
             recipient = null;
         }
     }
