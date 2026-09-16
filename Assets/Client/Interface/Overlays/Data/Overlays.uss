@@ -168,10 +168,14 @@
     top: 0;
     right: 0;
     bottom: 0;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     display: none;
+}
+
+.inventory__row {
+    flex-direction: row;
+    align-items: flex-start;
 }
 
 .inventory {
@@ -231,6 +235,10 @@
     border-color: rgba(255, 255, 255, 0.14);
     flex-direction: row;
     align-items: center;
+}
+
+.craft__output--ready {
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .craft__grid {
