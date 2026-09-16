@@ -9,8 +9,6 @@ namespace Shooter.Game.Speech
         public string Content { get; set; }
         public DateTime Time { get; set; }
         public bool Spoken { get; set; }
-
-        // Whether the listener's mind is woken by the line right away or reads it on its next tick
         public bool Urgent { get; set; }
 
         private struct SaveData

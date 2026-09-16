@@ -8,8 +8,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Speech
 {
-    // The player's own conversations mirrored to the owning client: the server keeps the truth in
-    // ConversationManager, the owner pulls a snapshot and then receives every new line by its index
     [RequireComponent(typeof(Character))]
     public class PlayerConversations : NetworkBehaviour
     {
@@ -29,7 +27,7 @@ namespace Shooter.Game.Speech
 
         public event Action<long> Arrived;
 
-        // A line said after the mirror was filled, as opposed to the history brought by the snapshot
+        // A line said live, not brought by the snapshot
         public event Action<long, Line> Heard;
 
         public event Action Cleared;
@@ -106,7 +104,7 @@ namespace Shooter.Game.Speech
         {
             if (conversation.First != CharacterId && conversation.Second != CharacterId) return;
 
-            // A switched-off body has nobody to hear it; the snapshot brings the line when the owner returns
+            // An offline body is owned by the host; the line comes with the snapshot when its owner returns
             if (!gameObject.activeInHierarchy) return;
 
             LineRpc(conversation.Partner(CharacterId), conversation.IndexOf(message), Line.Of(message));
@@ -121,8 +119,7 @@ namespace Shooter.Game.Speech
             snapshot = StartCoroutine(Snapshot());
         }
 
-        // A copy at the moment of the request, one batch per frame so the transport queue never overflows;
-        // lines said meanwhile arrive through Relay and land by their index
+        // One batch per frame: an overflowing reliable queue drops the connection
         private IEnumerator Snapshot()
         {
             int sent = 0;

@@ -43,10 +43,8 @@ namespace Shooter.Client.Playing
 
         public bool RadioOpen { get; private set; }
 
-        // The partner of the open radio talk, null when the window is closed
         public long? RadioPartner => radioPartner;
 
-        // The partner of the talk on screen, face to face or over the radio; null when no talk is open
         public long? TalkPartner
         {
             get

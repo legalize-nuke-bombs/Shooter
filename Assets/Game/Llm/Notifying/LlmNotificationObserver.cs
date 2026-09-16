@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    // The mind is told a static notification with its picture and sound in words
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(NotificationRecipient))]
     public class LlmNotificationObserver : MonoBehaviour

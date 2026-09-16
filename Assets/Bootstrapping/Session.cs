@@ -171,9 +171,8 @@ namespace Shooter.Bootstrapping
 
             worldLoaded = true;
 
-            // Netcode raises this right after spawning the in-scene objects and still before their first Update;
-            // the coroutine waiting on worldLoaded resumes only after that Update, and one frame of work on a
-            // world that is not loaded yet is enough for a resource item to grow a body the save says was taken
+            // Netcode calls this before the scene's first Update, the coroutine waiting on worldLoaded resumes after it:
+            // freezing here keeps that one Update from running on a world the save has not loaded yet
             if (freezing && SaveManager.Current != null) frozen = SaveManager.Current.Freeze();
         }
 

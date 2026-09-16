@@ -198,8 +198,7 @@ namespace Shooter.Game.Llm
 
                 if (!turn.CallsTools)
                 {
-                    // The closing text of a tick has no listener: speech goes through tools only, so keeping it
-                    // would store an unspoken double of every line (or a stage direction) in the story
+                    // Speech goes through tools only: the closing text is an unspoken double of a line or a stage direction
                     if (!String.IsNullOrEmpty(turn.Content))
                         Log.Info($"Entity {entityName} closed the tick with unspoken text: {turn.Content}");
                     break;

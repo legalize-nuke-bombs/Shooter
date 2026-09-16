@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Speech
 {
-    // The player speaks from afar: only to those the player has already exchanged a line with, in either direction
     [RequireComponent(typeof(Character))]
     public class PlayerRadio : NetworkBehaviour
     {
@@ -34,7 +33,6 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            // A dead or gone partner keeps the line in the history and answers with silence
             conversations.Say(character.Id, partnerId, text, false, true);
         }
     }

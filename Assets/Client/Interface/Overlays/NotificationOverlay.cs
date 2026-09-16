@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
-    // The feed in the corner of the screen: it knows no domains, whoever wants the player's attention hands it a toast
     public class NotificationOverlay : Overlay
     {
         private const string FeedElement = "notifications";

@@ -5,7 +5,6 @@ namespace Shooter.Client.Interface
 {
     public sealed class NameMapper
     {
-        // The name the player sees for a character, empty when it is not around or has none
         public string Of(long characterId)
         {
             Character character = Character.Of(characterId, Inactive.Include);

@@ -2,7 +2,6 @@ using Shooter.Game.Core;
 
 namespace Shooter.Game.Speech
 {
-    // Never thinks and turns every wanderer away
     public sealed class RefusiveTalker : Talker
     {
         public override void OnNetworkSpawn()

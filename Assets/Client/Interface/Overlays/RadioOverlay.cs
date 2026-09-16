@@ -9,7 +9,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
-    // The radio: everyone the player has ever exchanged a line with, latest talk first; a pick opens the talk window
     public class RadioOverlay : Overlay
     {
         private const string WindowElement = "radio";

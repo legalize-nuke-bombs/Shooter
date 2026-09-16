@@ -10,8 +10,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
-    // A view over the player's mirror of conversations: one partner's lines on screen,
-    // everything known drawn at once, only what arrives while the window is open gets typed out
     public class TalkOverlay : Overlay
     {
         private const string WindowElement = "talk";
@@ -37,11 +35,9 @@ namespace Shooter.Client.Interface
         private PlayerRadio playerRadio;
         private Talker talker;
 
-        // The pair on screen, null while the window is closed, and how many of its lines are drawn
         private Contact contact;
         private int drawn;
 
-        // Over the radio the window shows whoever the local player picked, face to face whoever the server opened
         private bool radio;
         private long? radioShown;
 
@@ -171,7 +167,6 @@ namespace Shooter.Client.Interface
             Log.Info("Talk window closed");
         }
 
-        // Everything known goes on screen at once
         private void Fill()
         {
             log.Clear();
@@ -191,8 +186,7 @@ namespace Shooter.Client.Interface
             Close();
         }
 
-        // Lines go on screen in index order and stop at the first gap: whatever is still on its way
-        // will be drawn when it lands, so the log never shows a later line above an earlier one
+        // Stops at the first gap, so a later line never shows above one that is still on its way
         private void Draw(bool typing)
         {
             while (drawn < contact.Count && contact.TryGet(drawn, out Line line))
