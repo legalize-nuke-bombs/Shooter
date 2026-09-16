@@ -1095,14 +1095,14 @@ namespace Shooter.Client.Interface
             var head = new VisualElement();
             head.AddToClassList("split__head");
 
+            var close = new Button(EndPrompt) { text = "×" };
+            close.AddToClassList("split__close");
+            head.Add(close);
+
             var title = new Label($"Разделить: {spec.Title}");
             title.AddToClassList("line");
             title.AddToClassList("split__title");
             head.Add(title);
-
-            var close = new Button(EndPrompt) { text = "×" };
-            close.AddToClassList("split__close");
-            head.Add(close);
             box.Add(head);
 
             int free = bag.Count(spec) - Reserved(spec);
