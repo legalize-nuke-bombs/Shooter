@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
@@ -10,6 +9,8 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
+    // A view over the player's mirror of conversations: one partner's lines on screen,
+    // everything known drawn at once, only what arrives while the window is open gets typed out
     public class TalkOverlay : Overlay
     {
         private const string WindowElement = "talk";
@@ -25,14 +26,17 @@ namespace Shooter.Client.Interface
         private readonly NameMapper mapper = new();
         private TextField input;
         private ScrollView log;
-        private PlayerMouth playerMouth;
         private Label speaker;
-        private Talker talker;
         private Label waiting;
-
         private VisualElement window;
 
-        private bool opening;
+        private PlayerMouth playerMouth;
+        private PlayerConversations conversations;
+        private Talker talker;
+
+        // The pair on screen, null while the window is closed, and how many of its lines are drawn
+        private Contact contact;
+        private int drawn;
 
         private void Update()
         {
@@ -47,8 +51,17 @@ namespace Shooter.Client.Interface
             if (playerMouth == null) return;
 
             playerMouth.Opened += Open;
-            playerMouth.Heard += Line;
             playerMouth.Closed += Close;
+
+            conversations = playerMouth.GetComponent<PlayerConversations>();
+            if (conversations == null)
+            {
+                Log.Error($"Player {playerMouth.name} has no conversations, talks stay empty");
+                return;
+            }
+
+            conversations.Arrived += Arrived;
+            conversations.Cleared += Cleared;
         }
 
         protected override bool Bind(VisualElement root)
@@ -80,32 +93,95 @@ namespace Shooter.Client.Interface
 
         private void Open(ulong talkerId)
         {
-            log.Clear();
+            Talker found = TalkerOf(talkerId);
+            if (found == null || conversations == null)
+            {
+                Log.Warn($"Talk with network object {talkerId} opened, but the talker or the mirror is missing");
+                return;
+            }
+
+            Show(conversations.ContactOf(found.CharacterId), found);
+        }
+
+        private void Show(Contact pair, Talker with)
+        {
+            Unfollow();
+
+            contact = pair;
+            speaker.text = Named(with);
             input.value = string.Empty;
-            speaker.text = Named(talkerId);
             window.style.display = DisplayStyle.Flex;
 
-            opening = true;
-            log.schedule.Execute(() => opening = false);
-
-            Follow(talkerId);
+            Fill();
+            Follow(with);
 
             input.Focus();
             Log.Info($"Talk window opened with {speaker.text}");
         }
 
-        private void Line(string content, DateTime time, bool mine)
+        private void Close()
         {
-            var line = new Label();
-            line.AddToClassList("talk__line");
-            if (mine) line.AddToClassList("talk__line--mine");
+            if (contact == null) return;
 
-            log.Add(line);
+            Unfollow();
+            contact = null;
+            drawn = 0;
+            log.Clear();
+            window.style.display = DisplayStyle.None;
+            Wait(false);
+            input.value = string.Empty;
 
-            if (mine || opening) line.text = content;
-            else StartCoroutine(Type(line, content));
+            Log.Info("Talk window closed");
+        }
 
-            log.schedule.Execute(() => log.ScrollTo(line));
+        // Everything known goes on screen at once
+        private void Fill()
+        {
+            log.Clear();
+            drawn = 0;
+            Draw(false);
+        }
+
+        private void Arrived(long partnerId)
+        {
+            if (contact == null || partnerId != contact.PartnerId) return;
+
+            Draw(true);
+        }
+
+        private void Cleared()
+        {
+            Close();
+        }
+
+        // Lines go on screen in index order and stop at the first gap: whatever is still on its way
+        // will be drawn when it lands, so the log never shows a later line above an earlier one
+        private void Draw(bool typing)
+        {
+            while (drawn < contact.Count && contact.TryGet(drawn, out Line line))
+            {
+                Put(line, typing);
+                drawn++;
+            }
+
+            contact.Seen = contact.Count;
+        }
+
+        private void Put(Line line, bool typing)
+        {
+            bool mine = line.AuthorId == conversations.CharacterId;
+
+            var label = new Label();
+            label.AddToClassList("talk__line");
+            if (mine) label.AddToClassList("talk__line--mine");
+            if (!line.Spoken) label.AddToClassList("talk__line--radio");
+
+            log.Add(label);
+
+            if (mine || !typing) label.text = line.Content;
+            else StartCoroutine(Type(label, line.Content));
+
+            log.schedule.Execute(() => log.ScrollTo(label));
         }
 
         private IEnumerator Type(Label line, string content)
@@ -118,32 +194,9 @@ namespace Shooter.Client.Interface
             }
         }
 
-        private void Close()
+        private void Follow(Talker with)
         {
-            Unfollow();
-            window.style.display = DisplayStyle.None;
-            log.Clear();
-            Wait(false);
-            input.value = string.Empty;
-
-            Log.Info("Talk window closed");
-        }
-
-        private void Follow(ulong talkerId)
-        {
-            Unfollow();
-
-            NetworkManager network = NetworkManager.Singleton;
-            if (network != null && network.SpawnManager != null &&
-                network.SpawnManager.SpawnedObjects.TryGetValue(talkerId, out NetworkObject found))
-                talker = found.GetComponentInChildren<Talker>();
-
-            if (talker == null)
-            {
-                Wait(false);
-                return;
-            }
-
+            talker = with;
             talker.ThinkingChanged += Wait;
             Wait(talker.Thinking);
         }
@@ -176,14 +229,19 @@ namespace Shooter.Client.Interface
             playerMouth.SayRpc(speech);
         }
 
-        private string Named(ulong talkerId)
+        private static Talker TalkerOf(ulong talkerId)
         {
             NetworkManager network = NetworkManager.Singleton;
-            if (network == null || network.SpawnManager == null) return Stranger;
+            if (network == null || network.SpawnManager == null) return null;
 
-            if (!network.SpawnManager.SpawnedObjects.TryGetValue(talkerId, out NetworkObject talker)) return Stranger;
+            return network.SpawnManager.SpawnedObjects.TryGetValue(talkerId, out NetworkObject found)
+                ? found.GetComponentInChildren<Talker>()
+                : null;
+        }
 
-            Nameable nameable = talker.GetComponentInChildren<Nameable>();
+        private string Named(Component character)
+        {
+            Nameable nameable = character == null ? null : character.GetComponentInChildren<Nameable>();
             if (nameable == null) return Stranger;
 
             string named = mapper.Of(nameable);
@@ -193,12 +251,18 @@ namespace Shooter.Client.Interface
 
         private void Forget()
         {
-            Unfollow();
+            Close();
+
+            if (conversations != null)
+            {
+                conversations.Arrived -= Arrived;
+                conversations.Cleared -= Cleared;
+                conversations = null;
+            }
 
             if (playerMouth == null) return;
 
             playerMouth.Opened -= Open;
-            playerMouth.Heard -= Line;
             playerMouth.Closed -= Close;
             playerMouth = null;
         }
