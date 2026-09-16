@@ -473,13 +473,7 @@
 
 .talk__footer {
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.talk__help {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.4);
+    justify-content: flex-end;
 }
 
 .radio {
