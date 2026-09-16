@@ -27,8 +27,15 @@ namespace Shooter.Client.Interface
         private const int Rows = 6;
         private const int HandRows = 2;
         private static readonly Journal Log = Logs.Here();
-        // One unit per cell, every unit backed by the bag: the bag shows what is left, a craft is paid from the bag
-        private readonly StackableItemSpec[] bench = new StackableItemSpec[CraftSide * CraftSide];
+
+        // A cell of the bench: a kind and how many of it stand there, every one backed by the bag
+        private struct Unit
+        {
+            public StackableItemSpec Spec;
+            public int Count;
+        }
+
+        private readonly Unit[] bench = new Unit[CraftSide * CraftSide];
         private Aimer aimer;
         private Inventory bag;
         private Crafter crafter;
@@ -37,6 +44,8 @@ namespace Shooter.Client.Interface
         private StackableItemSpec draggedStack;
         private int draggedCell = -1;
         private bool draggedOutput;
+        private Craft pendingCraft;
+        private int outputBefore;
         private Label coins;
         private VisualElement curtain;
         private int dragged;
@@ -120,6 +129,7 @@ namespace Shooter.Client.Interface
             if (bag != null) bag.Changed -= Touch;
             bag = null;
             crafter = null;
+            pendingCraft = null;
             Array.Clear(bench, 0, bench.Length);
 
             if (window != null) window.style.display = DisplayStyle.None;
@@ -198,6 +208,7 @@ namespace Shooter.Client.Interface
                     continue;
                 }
 
+                // What stands on the bench is not in the bag any more, as far as the eye goes
                 amount -= Placed(spec);
                 if (amount == 0) continue;
 
@@ -214,18 +225,19 @@ namespace Shooter.Client.Interface
             Bench();
         }
 
-        // Units on the bench of a kind
+        // Units of a kind on the bench
         private int Placed(StackableItemSpec spec)
         {
             int placed = 0;
-            foreach (StackableItemSpec cell in bench)
-                if (cell == spec)
-                    placed++;
+            foreach (Unit unit in bench)
+                if (unit.Spec == spec)
+                    placed += unit.Count;
 
             return placed;
         }
 
-        // After a craft the bag is lighter: cells the bag can no longer back go empty, last placed first
+        // The bag changed under the bench: a taken result pays one unit from every cell, and whatever the bag
+        // can no longer back leaves the bench, last placed first
         private void Settle()
         {
             if (bag == null)
@@ -234,11 +246,43 @@ namespace Shooter.Client.Interface
                 return;
             }
 
+            if (pendingCraft != null && Counted(pendingCraft.Output) > outputBefore)
+            {
+                for (int i = 0; i < bench.Length; i++)
+                    if (bench[i].Spec != null)
+                        Take(i, 1);
+
+                pendingCraft = null;
+            }
+
             for (int i = bench.Length - 1; i >= 0; i--)
             {
-                StackableItemSpec spec = bench[i];
-                if (spec != null && Placed(spec) > bag.StackableAmount(spec)) bench[i] = null;
+                StackableItemSpec spec = bench[i].Spec;
+                if (spec == null) continue;
+
+                int over = Placed(spec) - bag.StackableAmount(spec);
+                if (over > 0) Take(i, Math.Min(over, bench[i].Count));
             }
+        }
+
+        private void Take(int cell, int count)
+        {
+            bench[cell].Count -= count;
+            if (bench[cell].Count <= 0) bench[cell] = default;
+        }
+
+        // How many of an item the bag holds, whatever its kind
+        private int Counted(ItemSpec spec)
+        {
+            if (bag == null) return 0;
+            if (spec is StackableItemSpec stackable) return bag.StackableAmount(stackable);
+
+            int uniques = 0;
+            foreach (UniqueItem item in bag.UniqueItems)
+                if (item != null)
+                    uniques++;
+
+            return uniques;
         }
 
         private void Bench()
@@ -251,17 +295,24 @@ namespace Shooter.Client.Interface
 
             for (int i = 0; i < bench.Length; i++)
             {
-                StackableItemSpec spec = bench[i];
-                if (spec == null) continue;
+                Unit unit = bench[i];
+                if (unit.Spec == null) continue;
 
                 int cell = i;
-                VisualElement thing = Placed(spec, i / CraftSide, i % CraftSide);
-                Draggable(thing, Icon(spec), new Vector2(Cell, Cell), () => draggedCell = cell);
+                VisualElement thing = Standing(unit.Spec, i / CraftSide, i % CraftSide);
+                if (unit.Count > 1)
+                {
+                    var label = new Label(unit.Count.ToString());
+                    label.AddToClassList("slot__amount");
+                    thing.Add(label);
+                }
+
+                Draggable(thing, Icon(unit.Spec), new Vector2(Cell, Cell), () => draggedCell = cell);
                 thing.RegisterCallback<PointerDownEvent>(down =>
                 {
                     if (down.button != 1 || ghost != null) return;
 
-                    bench[cell] = null;
+                    bench[cell] = default;
                     stale = true;
                     down.StopPropagation();
                 });
@@ -273,12 +324,12 @@ namespace Shooter.Client.Interface
             if (match == null) return;
 
             // The result is taken by dragging it into the bag; that is the craft
-            VisualElement output = Placed(match.Output, 0, 0);
+            VisualElement output = Standing(match.Output, 0, 0);
             Draggable(output, Icon(match.Output), new Vector2(Cell, Cell), () => draggedOutput = true);
             craftOutput.Add(output);
         }
 
-        private static VisualElement Placed(ItemSpec spec, int row, int column)
+        private static VisualElement Standing(ItemSpec spec, int row, int column)
         {
             VisualElement thing = Slot(spec, spec.Key, false, true);
             thing.style.position = Position.Absolute;
@@ -291,11 +342,15 @@ namespace Shooter.Client.Interface
         }
 
         // A known recipe whose shape stands on the bench, wherever it stands: the filled cells' bounding box
-        // is compared to the recipe's, so a one-cell recipe matches in any cell
+        // is compared to the recipe's, so a one-cell recipe matches in any cell; counts do not matter
         private Craft Match()
         {
             if (crafter == null || bag == null) return null;
-            if (!Shape(bench, out StackableItemSpec[] placed, out int width, out int height)) return null;
+
+            var standing = new StackableItemSpec[bench.Length];
+            for (int i = 0; i < bench.Length; i++) standing[i] = bench[i].Spec;
+
+            if (!Shape(standing, out StackableItemSpec[] placed, out int width, out int height)) return null;
 
             foreach (Craft craft in crafter.AvailableCrafts)
             {
@@ -519,14 +574,30 @@ namespace Shooter.Client.Interface
             if (draggedOutput)
             {
                 Craft match = Match();
-                if (match != null && overBag) bag.CraftRpc(match.Id);
+                if (match == null || !overBag) return;
+
+                // The bench pays when the bag confirms the result arrived
+                pendingCraft = match;
+                outputBefore = Counted(match.Output);
+                bag.CraftRpc(match.Id);
                 return;
             }
 
             if (draggedCell >= 0)
             {
-                if (cell < 0) bench[draggedCell] = null;
-                else if (cell != draggedCell && bench[cell] == null) (bench[cell], bench[draggedCell]) = (bench[draggedCell], null);
+                Unit moved = bench[draggedCell];
+
+                if (cell < 0) bench[draggedCell] = default;
+                else if (cell != draggedCell && bench[cell].Spec == null)
+                {
+                    bench[cell] = moved;
+                    bench[draggedCell] = default;
+                }
+                else if (cell != draggedCell && bench[cell].Spec == moved.Spec)
+                {
+                    bench[cell].Count += moved.Count;
+                    bench[draggedCell] = default;
+                }
 
                 stale = true;
                 return;
@@ -534,13 +605,15 @@ namespace Shooter.Client.Interface
 
             if (draggedStack != null)
             {
-                // One more unit than the bag has never goes on the bench
-                if (cell >= 0 && bench[cell] == null && Placed(draggedStack) < bag.StackableAmount(draggedStack))
-                {
-                    bench[cell] = draggedStack;
-                    stale = true;
-                }
+                // The whole stack the bag still shows goes onto the bench, never a unit more than the bag has
+                int free = bag.StackableAmount(draggedStack) - Placed(draggedStack);
+                if (cell < 0 || free <= 0) return;
 
+                if (bench[cell].Spec == null) bench[cell] = new Unit { Spec = draggedStack, Count = free };
+                else if (bench[cell].Spec == draggedStack) bench[cell].Count += free;
+                else return;
+
+                stale = true;
                 return;
             }
 
