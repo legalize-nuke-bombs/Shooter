@@ -32,8 +32,6 @@ namespace Shooter.Game.Speech
 
         public event Action<ulong> Opened;
 
-        public event Action<string, DateTime, bool> Heard;
-
         public event Action Closed;
 
         private void Awake()
@@ -85,11 +83,6 @@ namespace Shooter.Game.Speech
             OpenedRpc(talker.NetworkObjectId);
 
             conversations = ConversationManager.Current;
-            Conversation history = conversations.GetIfPresent(CharacterId, talker.CharacterId);
-            if (history != null)
-                foreach (Message message in history.Messages)
-                    Hear(message);
-            conversations.Said += Relay;
         }
 
         public void Close()
@@ -100,13 +93,6 @@ namespace Shooter.Game.Speech
             Forget();
             interlocutor.Value = 0;
             ClosedRpc();
-        }
-
-        public void Hear(Message message)
-        {
-            if (!IsServer) return;
-
-            HeardRpc(message.Content, message.Time, message.AuthorId == CharacterId);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -147,16 +133,8 @@ namespace Shooter.Game.Speech
         {
             if (!Talking) return;
 
-            conversations.Said -= Relay;
             conversations = null;
             talker = null;
-        }
-
-        private void Relay(Conversation conversation, Message message)
-        {
-            if (conversation.Key != Conversation.Pair(CharacterId, talker.CharacterId)) return;
-
-            Hear(message);
         }
 
         private bool Fit(Talker talker)
@@ -174,13 +152,6 @@ namespace Shooter.Game.Speech
         {
             Log.Info($"Talk with network object {talkerId} opened");
             Opened?.Invoke(talkerId);
-        }
-
-        [Rpc(SendTo.Owner)]
-        private void HeardRpc(string content, DateTime time, bool mine)
-        {
-            Log.Info($"Talk line at {time} from {(mine ? "me" : "them")}: {content}");
-            Heard?.Invoke(content, time, mine);
         }
 
         [Rpc(SendTo.Owner)]

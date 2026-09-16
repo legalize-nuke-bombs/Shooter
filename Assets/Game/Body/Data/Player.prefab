@@ -438,6 +438,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6575625867718952421}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1855004116307513184}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
 --- !u!1 &924064630755534763 stripped
 GameObject:
@@ -637,6 +640,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
+--- !u!114 &1855004116307513184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d07adbddc849204699ecf4b32c4914d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Speech.PlayerConversations
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
