@@ -25,6 +25,7 @@
             <ui:Label name="ammo-reserve" class="ammo__reserve" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement name="inventory-screen" class="screen">
+          <ui:VisualElement class="inventory__row">
             <ui:VisualElement class="inventory">
                 <ui:VisualElement class="inventory__money" picking-mode="Ignore">
                     <ui:Label text="Рубли" class="line inventory__caption" picking-mode="Ignore"/>
@@ -37,6 +38,7 @@
                 <ui:VisualElement name="craft-grid" class="craft__grid"/>
                 <ui:VisualElement name="craft-output" class="craft__output"/>
             </ui:VisualElement>
+          </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="talk" class="talk">
             <ui:Label name="talk-name" class="line talk__name" picking-mode="Ignore"/>
