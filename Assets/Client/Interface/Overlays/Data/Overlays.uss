@@ -296,9 +296,28 @@
     border-color: rgba(255, 255, 255, 0.22);
 }
 
+.split__head {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
 .split__title {
     font-size: 13px;
-    margin-bottom: 8px;
+}
+
+.split__close {
+    margin: 0;
+    padding: 0 4px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+}
+
+.split__close:hover {
+    color: rgb(255, 255, 255);
 }
 
 .split__field {
