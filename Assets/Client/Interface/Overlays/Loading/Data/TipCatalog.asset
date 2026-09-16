@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.TipCatalog
   specs:
   - {fileID: 11400000, guid: f97db07b8f2d93a4ab29d97c353f1945, type: 2}
-  - {fileID: 11400000, guid: d076cfb5321441be9c68df1d1d3c645f, type: 2}
   - {fileID: 11400000, guid: d6ee05d0356d492c89642d8db282d061, type: 2}
   - {fileID: 11400000, guid: d9959b4e9e952a0449d4fa814663f29a, type: 2}
   - {fileID: 11400000, guid: c1daf93ae3935bf4ba689c9ac896c6cf, type: 2}
+  - {fileID: 11400000, guid: 552e45de73bdd3045a86f8a554fee288, type: 2}
+  - {fileID: 11400000, guid: 705e4952514ff8b42aedd8e6ec0fd6c1, type: 2}
   - {fileID: 11400000, guid: 5936f17783ac5fe43b179942c2323922, type: 2}
   - {fileID: 11400000, guid: 4a8e8b6ffac74ab393360809beaba60c, type: 2}
   - {fileID: 11400000, guid: a97821fa2593a3f4baabba69b1d39eac, type: 2}
