@@ -261,6 +261,22 @@ PrefabInstance:
       propertyPath: fraction
       value: 
       objectReference: {fileID: 11400000, guid: 309a54d15a091d049b3d341927fc1e18, type: 2}
+    - target: {fileID: -8391446196736826818, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: availableCrafts.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391446196736826818, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: 'availableCrafts.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: ed34a7a9cdcc5f845a4c300f592e59db, type: 2}
+    - target: {fileID: -8391446196736826818, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: 'availableCrafts.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 8a61ebac8b67ead4f890824801ce0ce9, type: 2}
+    - target: {fileID: -8391446196736826818, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      propertyPath: 'availableCrafts.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 9951e74ad42ea794cbcdb78dee194a37, type: 2}
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
