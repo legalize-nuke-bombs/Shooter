@@ -325,6 +325,24 @@ namespace Shooter.Game.Loot
                 Log.Info($"Entity {name} failed to use stackable {stackableId} rpc");
         }
 
+        // Giving goes through the exchanger like a resident's gift: radius, rollback, notification to the taker
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void GiveStackableRpc(long targetId, FixedString32Bytes stackableId, int amount)
+        {
+            InventoryExchanger exchanger = GetComponent<InventoryExchanger>();
+            if (exchanger == null || amount <= 0 || Catalog.Of(stackableId) is not StackableItemSpec spec ||
+                !exchanger.GiveStackable(targetId, spec, amount))
+                Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {targetId} rpc");
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void GiveUniqueRpc(long targetId, int slot)
+        {
+            InventoryExchanger exchanger = GetComponent<InventoryExchanger>();
+            if (exchanger == null || !exchanger.GiveUnique(targetId, slot))
+                Log.Info($"Entity {name} failed to give slot {slot} to {targetId} rpc");
+        }
+
         public bool UseStackable(FixedString32Bytes stackableId)
         {
             if (Catalog.Of(stackableId) is not StackableItemSpec spec || !spec.Usable) return false;
