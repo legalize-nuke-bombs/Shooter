@@ -49,7 +49,6 @@
             <ui:Label name="talk-waiting" text="Думает..." class="line talk__waiting" picking-mode="Ignore"/>
             <ui:TextField name="talk-input" class="talk__input"/>
             <ui:VisualElement class="talk__footer">
-                <ui:Label text="Enter — сказать, Esc — уйти" class="line talk__help" picking-mode="Ignore"/>
                 <ui:Button name="talk-give" text="Передать" class="talk__give"/>
             </ui:VisualElement>
         </ui:VisualElement>
