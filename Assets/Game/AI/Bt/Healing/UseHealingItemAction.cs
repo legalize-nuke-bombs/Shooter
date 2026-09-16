@@ -4,7 +4,6 @@ using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Behavior;
-using Unity.Collections;
 using Unity.Properties;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
@@ -36,7 +35,7 @@ namespace Shooter.Game.AI.Bt.Healing
             double missing = health.MaxHp - health.Hp;
             double safetyCoefficient = health.Hp / health.MaxHp;
 
-            FixedString32Bytes? bestItemId = null;
+            StackableItemSpec best = null;
             double lowestScore = missing * UnderHealPenalty.Value;
             int candidates = 0;
 
@@ -44,7 +43,7 @@ namespace Shooter.Game.AI.Bt.Healing
                          item is StackableItemSpec stackableItem && stackableItem.HealMarker > 0))
             {
                 StackableItemSpec stackableItem = (StackableItemSpec)item;
-                if (inventory.StackableAmount(stackableItem) <= 0) continue;
+                if (inventory.Count(stackableItem) <= 0) continue;
 
                 candidates++;
                 double healAmount = stackableItem.HealMarker;
@@ -55,25 +54,25 @@ namespace Shooter.Game.AI.Bt.Healing
                 if (score < lowestScore)
                 {
                     lowestScore = score;
-                    bestItemId = stackableItem.Id;
+                    best = stackableItem;
                 }
             }
 
-            if (bestItemId == null)
+            if (best == null)
             {
                 Log.Info($"Entity {Agent.Value.name} refused healing: {candidates} candidates in the bag, missing {missing}, safety {safetyCoefficient}");
                 return Status.Failure;
             }
 
-            Log.Info($"Entity {Agent.Value.name} used heal {bestItemId.Value} by behavior graph, missing {missing}");
+            Log.Info($"Entity {Agent.Value.name} used heal {best.Id} by behavior graph, missing {missing}");
             int startHp = (int)health.Hp;
-            inventory.UseStackable(bestItemId.Value);
+            inventory.Use(best);
             BtReports reports = Agent.Value.GetComponent<BtReports>();
             if (reports != null)
             {
                 reports.Report(new BtReport
                 {
-                    Prompt = $"Your character automatically healed using {bestItemId.Value} ({startHp}hp -> {(int)health.Hp}hp)"
+                    Prompt = $"Your character automatically healed using {best.Id} ({startHp}hp -> {(int)health.Hp}hp)"
                 });
             }
             return Status.Success;

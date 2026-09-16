@@ -45,7 +45,7 @@ namespace Shooter.Game.Loot
             }
             if (user.TryGetComponent(out Inventory inventory))
             {
-                inventory.AddStackable(item, 1);
+                inventory.Add(item, 1);
             }
             else
             {

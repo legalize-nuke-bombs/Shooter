@@ -34,7 +34,7 @@ namespace Shooter.Game.AI.Bt.Eating
                          item is StackableItemSpec stackableItem && stackableItem.FoodMarker > 0))
             {
                 int startSaturation = (int)hunger.Amount;
-                if (inventory.UseStackable(item.Id))
+                if (inventory.Use((StackableItemSpec)item))
                 {
                     Log.Info($"Entity {Agent.Value.name} ate {item.Id} by behavior graph");
                     BtReports reports = Agent.Value.GetComponent<BtReports>();

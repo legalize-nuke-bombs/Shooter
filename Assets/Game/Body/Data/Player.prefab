@@ -463,6 +463,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 227574647247211924}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4767933737110017048}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
 --- !u!1 &924064630755534763 stripped
 GameObject:
@@ -702,6 +705,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.PlayerConversationObserver
   icon: {fileID: 11400000, guid: cd084102a8f49e545900fdd76f4576e5, type: 2}
   sound: {fileID: 11400000, guid: 7c280fb930ed408eb88b8d22842678f3, type: 2}
+--- !u!114 &4767933737110017048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2c69aad689c3bd4a8ef986e766d9b78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.PlayerInventoryObserver
+  ShowTopMostFoldoutHeaderGroup: 1
+  sound: {fileID: 11400000, guid: 44e6e460e1cb44d98f376b7e174c5e4d, type: 2}
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}

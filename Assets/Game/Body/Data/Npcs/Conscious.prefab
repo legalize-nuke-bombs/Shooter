@@ -119,6 +119,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7468732416786538195}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7337323769322132093}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -472,3 +475,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbb6e8de3a0f6f24986bd7a7df54f882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmConversationObserver
+--- !u!114 &7337323769322132093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ba0eb21b8f4a3041a6aef5831ef3ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmInventoryObserver

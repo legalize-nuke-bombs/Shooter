@@ -1,4 +1,5 @@
 ﻿using System;
+using Shooter.Game.Core;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 
@@ -30,7 +31,7 @@ The item is addressed by its exact name from your bag.
 
         protected override string Execute(UseItemArguments arguments, LlmCallContext context)
         {
-            if (inventory.UseStackable(arguments.Item))
+            if (Catalogs.Of<ItemCatalog>().Of(arguments.Item) is StackableItemSpec item && inventory.Use(item))
             {
                 return $"{arguments.Item} was used";
             }
