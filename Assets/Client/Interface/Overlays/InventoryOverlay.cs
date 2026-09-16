@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Client.Playing;
+using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Crafting;
 using Shooter.Game.Loot;
@@ -10,23 +11,33 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
-    [RequireComponent(typeof(Aimer))]
     public class InventoryOverlay : Overlay
     {
         private const string WindowElement = "inventory-screen";
         private const string GridElement = "inventory-grid";
         private const string HeldElement = "inventory-held";
-        private const string CoinsElement = "inventory-coins";
         private const string CraftGridElement = "craft-grid";
         private const string CraftOutputElement = "craft-output";
+        private const string GiveElement = "give";
+        private const string GiveTitleElement = "give-title";
+        private const string GiveGridElement = "give-grid";
+        private const string GiveButtonElement = "give-button";
         private const int CraftSide = 3;
-        private const string Coins = "coin";
+        private const int GiveColumns = 4;
+        private const int GiveRows = 3;
         private const float Cell = 48f;
         private const float Bezel = 8f;
         private const int Columns = 10;
         private const int Rows = 6;
         private const int HandRows = 2;
+        private const float ConeAngle = 12f;
+        private const float BodyRadius = 0.6f;
+        private const float SendPatience = 3f;
+        private const int SplitDigits = 7;
         private static readonly Journal Log = Logs.Here();
+
+        // Points along a body from feet to head around its root, which sits at the middle of the body for players and residents alike
+        private static readonly float[] BodyHeights = { -0.8f, -0.4f, 0f, 0.4f, 0.8f };
 
         private struct Unit
         {
@@ -34,19 +45,45 @@ namespace Shooter.Client.Interface
             public int Count;
         }
 
+        private struct Offer
+        {
+            public ItemSpec Spec;
+            public string Key;
+            public int Count;
+            public int Slot;
+            public int Expected;
+            public float SentAt;
+
+            public StackableItemSpec Stack => Slot == Inventory.NoSlot ? Spec as StackableItemSpec : null;
+        }
+
         private readonly Unit[] bench = new Unit[CraftSide * CraftSide];
-        private Aimer aimer;
+        private readonly List<Unit> splits = new();
+        private readonly List<Offer> offers = new();
+        private readonly NameMapper names = new();
+        private readonly RaycastHit[] sights = new RaycastHit[16];
         private Inventory bag;
         private Crafter crafter;
+        private Character own;
+        private Character taker;
+        private Health takerHealth;
         private VisualElement craftGrid;
         private VisualElement craftOutput;
+        private VisualElement give;
+        private Label giveTitle;
+        private VisualElement giveGrid;
+        private Button giveButton;
         private StackableItemSpec draggedStack;
+        private int draggedSplit = -1;
         private int draggedCell = -1;
+        private int draggedOffer = -1;
         private bool draggedOutput;
+        private bool draggedUnique;
+        private bool draggedEquipable;
         private Craft pendingCraft;
         private int outputBefore;
-        private Label coins;
         private VisualElement curtain;
+        private VisualElement prompt;
         private int dragged;
         private bool draggedFromHands;
         private VisualElement ghost;
@@ -57,11 +94,6 @@ namespace Shooter.Client.Interface
         private bool stale;
 
         private VisualElement window;
-
-        private void Awake()
-        {
-            aimer = GetComponent<Aimer>();
-        }
 
         private void Update()
         {
@@ -78,7 +110,12 @@ namespace Shooter.Client.Interface
                 else Close();
             }
 
-            if (open && stale) Fill();
+            if (!open) return;
+
+            if (prompt != null && (player == null || !player.Prompting)) HidePrompt();
+
+            Watch();
+            if (stale) Fill();
         }
 
         protected override bool Bind(VisualElement root)
@@ -86,17 +123,23 @@ namespace Shooter.Client.Interface
             window = root.Q<VisualElement>(WindowElement);
             grid = root.Q<VisualElement>(GridElement);
             held = root.Q<VisualElement>(HeldElement);
-            coins = root.Q<Label>(CoinsElement);
             craftGrid = root.Q<VisualElement>(CraftGridElement);
             craftOutput = root.Q<VisualElement>(CraftOutputElement);
+            give = root.Q<VisualElement>(GiveElement);
+            giveTitle = root.Q<Label>(GiveTitleElement);
+            giveGrid = root.Q<VisualElement>(GiveGridElement);
+            giveButton = root.Q<Button>(GiveButtonElement);
 
-            if (window == null || grid == null || held == null || coins == null || craftGrid == null || craftOutput == null)
+            if (window == null || grid == null || held == null || craftGrid == null || craftOutput == null ||
+                give == null || giveTitle == null || giveGrid == null || giveButton == null)
             {
                 Log.Error($"Overlay document has no {WindowElement} window, the bag stays hidden");
                 return false;
             }
 
             window.style.display = DisplayStyle.None;
+            give.style.display = DisplayStyle.None;
+            giveButton.clicked += HandOver;
 
             return true;
         }
@@ -104,6 +147,8 @@ namespace Shooter.Client.Interface
         protected override void Unbind()
         {
             if (open) Close();
+
+            if (giveButton != null) giveButton.clicked -= HandOver;
 
             open = false;
             window = null;
@@ -113,35 +158,83 @@ namespace Shooter.Client.Interface
         {
             bag = OwnPlayer.Find<Inventory>();
             crafter = OwnPlayer.Find<Crafter>();
+            own = OwnPlayer.Find<Character>();
+            taker = Taker();
+            takerHealth = taker == null ? null : taker.GetComponent<Health>();
 
             if (bag != null) bag.Changed += Touch;
 
             window.style.display = DisplayStyle.Flex;
             stale = true;
-            Log.Info("The bag is open");
+            Log.Info(taker == null ? "The bag is open" : $"The bag is open, {taker.name} can take things from it");
         }
 
         private void Close()
         {
             CloseMenu();
+            EndPrompt();
 
             if (bag != null) bag.Changed -= Touch;
             bag = null;
             crafter = null;
+            own = null;
+            taker = null;
+            takerHealth = null;
             pendingCraft = null;
             Array.Clear(bench, 0, bench.Length);
+            splits.Clear();
+            offers.Clear();
 
             if (window != null) window.style.display = DisplayStyle.None;
+            if (give != null) give.style.display = DisplayStyle.None;
             grid?.Clear();
             held?.Clear();
             craftGrid?.Clear();
             craftOutput?.Clear();
+            giveGrid?.Clear();
             Log.Info("The bag is closed");
         }
 
         private void Touch()
         {
             stale = true;
+        }
+
+        private void Watch()
+        {
+            if (ReferenceEquals(taker, null)) return;
+
+            if (taker == null || !taker.gameObject.activeInHierarchy || takerHealth != null && !takerHealth.Alive)
+            {
+                Log.Info("The one taking things is gone, the offer returns to the bag");
+                taker = null;
+                takerHealth = null;
+                offers.Clear();
+                stale = true;
+                return;
+            }
+
+            bool ready = false;
+            for (int i = 0; i < offers.Count; i++)
+            {
+                Offer offer = offers[i];
+                if (offer.SentAt <= 0f)
+                {
+                    ready = true;
+                    continue;
+                }
+
+                if (Time.unscaledTime - offer.SentAt <= SendPatience) continue;
+
+                Log.Info($"The bag never let {offer.Key} x {offer.Count} go, it is back in the offer");
+                offer.SentAt = 0f;
+                offers[i] = offer;
+                stale = true;
+            }
+
+            bool near = own != null && bag != null &&
+                        Vector3.Distance(own.transform.position, taker.transform.position) <= bag.GiveRadius;
+            giveButton.SetEnabled(near && ready);
         }
 
         private void Fill()
@@ -155,19 +248,14 @@ namespace Shooter.Client.Interface
             Paper(held, HandRows);
             Paper(grid, Rows);
 
-            if (bag == null)
-            {
-                coins.text = "0";
-                return;
-            }
+            if (bag == null) return;
 
             ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
             UniqueItem equipped = bag.Equipped();
             int equippedSlot = bag.EquippedSlot;
             bool[,] taken = new bool[Rows, Columns];
-            int money = 0;
 
-            if (equipped != null)
+            if (equipped != null && !Offered(equippedSlot))
             {
                 ItemSpec spec = catalog == null ? null : catalog.Spec(equipped.SpecId);
 
@@ -181,10 +269,10 @@ namespace Shooter.Client.Interface
             for (int slot = 0; slot < items.Count; slot++)
             {
                 UniqueItem item = items[slot];
-                if (item == null || slot == equippedSlot) continue;
+                if (item == null || slot == equippedSlot || Offered(slot)) continue;
 
                 ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
-                Pack(taken, spec, out int row, out int column);
+                Pack(taken, spec, Rows, Columns, out int row, out int column);
 
                 VisualElement thing = Thing(spec, item.SpecId, row, column, null, slot,
                     spec is UniqueItemSpec unique && unique.Equipable, false);
@@ -198,29 +286,29 @@ namespace Shooter.Client.Interface
             {
                 if (catalog.At(index) is not StackableItemSpec spec) continue;
 
-                int amount = bag.Count(spec);
-                if (amount == 0) continue;
-
-                if (spec.Key == Coins)
+                int amount = bag.Count(spec) - Reserved(spec);
+                if (amount > 0)
                 {
-                    money += amount;
-                    continue;
+                    Pack(taken, spec, Rows, Columns, out int row, out int column);
+
+                    VisualElement thing = Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot,
+                        false, false, spec);
+                    AddMenu(thing, spec, amount, Inventory.NoSlot);
+                    grid.Add(thing);
                 }
 
-                amount -= Placed(spec);
-                if (amount == 0) continue;
+                for (int i = 0; i < splits.Count; i++)
+                {
+                    if (splits[i].Spec != spec) continue;
 
-                Pack(taken, spec, out int row, out int column);
-
-                VisualElement thing = Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot, false,
-                    false, spec);
-                AddMenu(thing, spec, amount, Inventory.NoSlot);
-
-                grid.Add(thing);
+                    Pack(taken, spec, Rows, Columns, out int row, out int column);
+                    grid.Add(Thing(spec, spec.Key, row, column, splits[i].Count.ToString(), Inventory.NoSlot, false,
+                        false, spec, i));
+                }
             }
 
-            coins.text = money.ToString();
             Bench();
+            Offers();
         }
 
         private int Placed(StackableItemSpec spec)
@@ -233,12 +321,39 @@ namespace Shooter.Client.Interface
             return placed;
         }
 
-        // A result that reached the bag pays one unit from every cell; what the bag no longer backs leaves the bench
+        private int Reserved(StackableItemSpec spec)
+        {
+            int reserved = Placed(spec);
+
+            foreach (Unit split in splits)
+                if (split.Spec == spec)
+                    reserved += split.Count;
+
+            foreach (Offer offer in offers)
+                if (offer.Stack == spec)
+                    reserved += offer.Count;
+
+            return reserved;
+        }
+
+        private bool Offered(int slot)
+        {
+            foreach (Offer offer in offers)
+                if (offer.Slot != Inventory.NoSlot && offer.Slot == slot)
+                    return true;
+
+            return false;
+        }
+
+        // A result that reached the bag pays one unit from every cell; an offer the bag let go is done;
+        // what the bag no longer backs leaves the splits first, then the offer, then the bench
         private void Settle()
         {
             if (bag == null)
             {
                 Array.Clear(bench, 0, bench.Length);
+                splits.Clear();
+                offers.Clear();
                 return;
             }
 
@@ -251,12 +366,51 @@ namespace Shooter.Client.Interface
                 pendingCraft = null;
             }
 
+            IReadOnlyList<UniqueItem> items = bag.UniqueItems;
+
+            for (int i = offers.Count - 1; i >= 0; i--)
+            {
+                Offer offer = offers[i];
+                StackableItemSpec stack = offer.Stack;
+
+                bool done = stack == null
+                    ? offer.Slot >= items.Count || items[offer.Slot] == null || items[offer.Slot].SpecId != offer.Key
+                    : offer.SentAt > 0f && bag.Count(stack) <= offer.Expected;
+
+                if (done) offers.RemoveAt(i);
+            }
+
+            for (int i = splits.Count - 1; i >= 0; i--)
+            {
+                Unit split = splits[i];
+                int over = Reserved(split.Spec) - bag.Count(split.Spec);
+                if (over <= 0) continue;
+
+                split.Count -= Math.Min(over, split.Count);
+                if (split.Count <= 0) splits.RemoveAt(i);
+                else splits[i] = split;
+            }
+
+            for (int i = offers.Count - 1; i >= 0; i--)
+            {
+                Offer offer = offers[i];
+                StackableItemSpec stack = offer.Stack;
+                if (stack == null || offer.SentAt > 0f) continue;
+
+                int over = Reserved(stack) - bag.Count(stack);
+                if (over <= 0) continue;
+
+                offer.Count -= Math.Min(over, offer.Count);
+                if (offer.Count <= 0) offers.RemoveAt(i);
+                else offers[i] = offer;
+            }
+
             for (int i = bench.Length - 1; i >= 0; i--)
             {
                 StackableItemSpec spec = bench[i].Spec;
                 if (spec == null) continue;
 
-                int over = Placed(spec) - bag.Count(spec);
+                int over = Reserved(spec) - bag.Count(spec);
                 if (over > 0) Take(i, Math.Min(over, bench[i].Count));
             }
         }
@@ -295,12 +449,7 @@ namespace Shooter.Client.Interface
 
                 int cell = i;
                 VisualElement thing = Standing(unit.Spec, i / CraftSide, i % CraftSide);
-                if (unit.Count > 1)
-                {
-                    var label = new Label(unit.Count.ToString());
-                    label.AddToClassList("slot__amount");
-                    thing.Add(label);
-                }
+                if (unit.Count > 1) Amount(thing, unit.Count);
 
                 Draggable(thing, Icon(unit.Spec), new Vector2(Cell, Cell), () => draggedCell = cell);
                 thing.RegisterCallback<PointerDownEvent>(down =>
@@ -323,6 +472,184 @@ namespace Shooter.Client.Interface
             craftOutput.Add(output);
         }
 
+        private void Offers()
+        {
+            giveGrid.Clear();
+            give.style.display = taker == null ? DisplayStyle.None : DisplayStyle.Flex;
+            if (taker == null) return;
+
+            string named = names.Of(taker.Id);
+            giveTitle.text = string.IsNullOrEmpty(named) ? "Передать" : $"Передать: {named}";
+            Paper(giveGrid, GiveRows, GiveColumns);
+
+            bool[,] taken = new bool[GiveRows, GiveColumns];
+
+            for (int i = 0; i < offers.Count; i++)
+            {
+                Offer offer = offers[i];
+                Pack(taken, offer.Spec, GiveRows, GiveColumns, out int row, out int column);
+
+                Vector2Int cells = offer.Spec == null ? Vector2Int.one : offer.Spec.Cells;
+                var size = new Vector2(cells.x * Cell, cells.y * Cell);
+                VisualElement thing = Slot(offer.Spec, offer.Key, false, offer.SentAt <= 0f);
+                thing.style.position = Position.Absolute;
+                thing.style.left = column * Cell;
+                thing.style.top = row * Cell;
+                thing.style.width = size.x;
+                thing.style.height = size.y;
+
+                if (offer.Stack != null) Amount(thing, offer.Count);
+
+                if (offer.SentAt > 0f)
+                {
+                    thing.AddToClassList("slot--sent");
+                    giveGrid.Add(thing);
+                    continue;
+                }
+
+                int index = i;
+                Draggable(thing, Icon(offer.Spec), size, () => draggedOffer = index);
+                thing.RegisterCallback<PointerDownEvent>(down =>
+                {
+                    if (down.button != 1 || ghost != null) return;
+
+                    if (index < offers.Count) offers.RemoveAt(index);
+                    stale = true;
+                    down.StopPropagation();
+                });
+                giveGrid.Add(thing);
+            }
+        }
+
+        private bool Propose(StackableItemSpec spec, int amount)
+        {
+            for (int i = 0; i < offers.Count; i++)
+            {
+                Offer offer = offers[i];
+                if (offer.Stack != spec || offer.SentAt > 0f) continue;
+
+                offer.Count += amount;
+                offers[i] = offer;
+                return true;
+            }
+
+            if (!Fits(spec)) return false;
+
+            offers.Add(new Offer { Spec = spec, Key = spec.Key, Count = amount, Slot = Inventory.NoSlot });
+            return true;
+        }
+
+        private bool Propose(int slot)
+        {
+            if (bag == null || Offered(slot)) return false;
+
+            IReadOnlyList<UniqueItem> items = bag.UniqueItems;
+            UniqueItem item = slot >= 0 && slot < items.Count ? items[slot] : null;
+            if (item == null) return false;
+
+            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
+            if (!Fits(spec)) return false;
+
+            offers.Add(new Offer { Spec = spec, Key = item.SpecId, Count = 1, Slot = slot });
+            return true;
+        }
+
+        private bool Fits(ItemSpec extra)
+        {
+            bool[,] taken = new bool[GiveRows, GiveColumns];
+
+            foreach (Offer offer in offers)
+                if (!Pack(taken, offer.Spec, GiveRows, GiveColumns, out _, out _))
+                    return false;
+
+            return Pack(taken, extra, GiveRows, GiveColumns, out _, out _);
+        }
+
+        // The bag only lets go once the server confirms; until then the offer stays greyed out where it was
+        private void HandOver()
+        {
+            if (bag == null || taker == null) return;
+
+            long takerId = taker.Id;
+            int sent = 0;
+
+            for (int i = 0; i < offers.Count; i++)
+            {
+                Offer offer = offers[i];
+                if (offer.SentAt > 0f) continue;
+
+                StackableItemSpec stack = offer.Stack;
+                if (stack != null)
+                {
+                    offer.Expected = bag.Count(stack) - offer.Count;
+                    bag.GiveStackableRpc(takerId, stack.Id, offer.Count);
+                }
+                else
+                {
+                    bag.GiveUniqueRpc(takerId, offer.Slot);
+                }
+
+                offer.SentAt = Time.unscaledTime;
+                offers[i] = offer;
+                sent++;
+            }
+
+            stale = true;
+            Log.Info($"Handed {sent} things over to {taker.name}");
+        }
+
+        // The living character nearest to the middle of the view; at arm's length a body covers more than the cone
+        private Character Taker()
+        {
+            Camera view = Camera.main;
+            if (view == null || own == null || bag == null) return null;
+
+            Transform eyes = view.transform;
+            Character best = null;
+            float bestScore = float.PositiveInfinity;
+
+            Character.ForEach(candidate =>
+            {
+                if (candidate == own || !candidate.gameObject.activeInHierarchy) return;
+                if (candidate.GetComponentInChildren<Inventory>() == null) return;
+
+                Health health = candidate.GetComponent<Health>();
+                if (health != null && !health.Alive) return;
+
+                if (Vector3.Distance(own.transform.position, candidate.transform.position) > bag.GiveRadius) return;
+
+                Vector3 toward = candidate.transform.position - eyes.position;
+                float distance = toward.magnitude;
+                if (distance < 0.01f) return;
+
+                float off = float.PositiveInfinity;
+                foreach (float height in BodyHeights)
+                    off = Mathf.Min(off, Vector3.Angle(eyes.forward, toward + Vector3.up * height));
+
+                float allowed = Mathf.Max(ConeAngle, Mathf.Atan2(BodyRadius, distance) * Mathf.Rad2Deg);
+                float score = off / allowed;
+                if (score > 1f || score >= bestScore || !Visible(eyes, candidate, toward / distance, distance)) return;
+
+                best = candidate;
+                bestScore = score;
+            }, Inactive.Exclude);
+
+            return best;
+        }
+
+        private bool Visible(Transform eyes, Character candidate, Vector3 direction, float distance)
+        {
+            int found = Interactor.Look(eyes.position, direction, distance, eyes.root, sights);
+            Transform body = candidate.transform.root;
+
+            for (int i = 0; i < found; i++)
+                if (!sights[i].transform.IsChildOf(body) && sights[i].distance < distance - BodyRadius)
+                    return false;
+
+            return true;
+        }
+
         private static VisualElement Standing(ItemSpec spec, int row, int column)
         {
             VisualElement thing = Slot(spec, spec.Key, false, true);
@@ -333,6 +660,13 @@ namespace Shooter.Client.Interface
             thing.style.height = Cell;
 
             return thing;
+        }
+
+        private static void Amount(VisualElement thing, int count)
+        {
+            var label = new Label(count.ToString());
+            label.AddToClassList("slot__amount");
+            thing.Add(label);
         }
 
         // The bounding box of the filled cells against the recipe's, so a one-cell recipe matches in any cell
@@ -423,12 +757,12 @@ namespace Shooter.Client.Interface
             }
         }
 
-        private static bool Pack(bool[,] taken, ItemSpec spec, out int row, out int column)
+        private static bool Pack(bool[,] taken, ItemSpec spec, int rows, int columns, out int row, out int column)
         {
             Vector2Int size = spec == null ? Vector2Int.one : spec.Cells;
 
-            for (row = 0; row + size.y <= Rows; row++)
-            for (column = 0; column + size.x <= Columns; column++)
+            for (row = 0; row + size.y <= rows; row++)
+            for (column = 0; column + size.x <= columns; column++)
             {
                 if (!Free(taken, row, column, size)) continue;
 
@@ -461,7 +795,7 @@ namespace Shooter.Client.Interface
         }
 
         private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, int slot,
-            bool equipable, bool holding, StackableItemSpec stack = null)
+            bool equipable, bool holding, StackableItemSpec stack = null, int split = -1)
         {
             Vector2Int cells = spec == null ? Vector2Int.one : spec.Cells;
             var size = new Vector2(cells.x * Cell, cells.y * Cell);
@@ -480,13 +814,20 @@ namespace Shooter.Client.Interface
                 thing.Add(label);
             }
 
-            if (equipable)
+            if (stack != null)
+                Draggable(thing, Icon(spec), size, () =>
+                {
+                    draggedStack = stack;
+                    draggedSplit = split;
+                });
+            else
                 Draggable(thing, Icon(spec), size, () =>
                 {
                     dragged = slot;
+                    draggedUnique = true;
+                    draggedEquipable = equipable;
                     draggedFromHands = holding;
                 });
-            else if (stack != null) Draggable(thing, Icon(spec), size, () => draggedStack = stack);
 
             return thing;
         }
@@ -555,13 +896,18 @@ namespace Shooter.Client.Interface
             if (bag != null) Dropped(at);
 
             draggedStack = null;
+            draggedSplit = -1;
             draggedCell = -1;
+            draggedOffer = -1;
             draggedOutput = false;
+            draggedUnique = false;
+            draggedEquipable = false;
         }
 
         private void Dropped(Vector2 at)
         {
             bool overBag = grid.worldBound.Contains(at) || held.worldBound.Contains(at);
+            bool overGive = taker != null && give.worldBound.Contains(at);
             int cell = BenchCellAt(at);
 
             if (draggedOutput)
@@ -576,11 +922,23 @@ namespace Shooter.Client.Interface
                 return;
             }
 
+            if (draggedOffer >= 0)
+            {
+                if (!overGive && draggedOffer < offers.Count) offers.RemoveAt(draggedOffer);
+
+                stale = true;
+                return;
+            }
+
             if (draggedCell >= 0)
             {
                 Unit moved = bench[draggedCell];
 
-                if (cell < 0) bench[draggedCell] = default;
+                if (overGive)
+                {
+                    if (moved.Spec != null && Propose(moved.Spec, moved.Count)) bench[draggedCell] = default;
+                }
+                else if (cell < 0) bench[draggedCell] = default;
                 else if (cell != draggedCell && bench[cell].Spec == null)
                 {
                     bench[cell] = moved;
@@ -598,19 +956,39 @@ namespace Shooter.Client.Interface
 
             if (draggedStack != null)
             {
-                int free = bag.Count(draggedStack) - Placed(draggedStack);
-                if (cell < 0 || free <= 0) return;
+                bool splitOff = draggedSplit >= 0 && draggedSplit < splits.Count;
+                int amount = splitOff ? splits[draggedSplit].Count : bag.Count(draggedStack) - Reserved(draggedStack);
+                if (amount <= 0) return;
 
-                if (bench[cell].Spec == null) bench[cell] = new Unit { Spec = draggedStack, Count = free };
-                else if (bench[cell].Spec == draggedStack) bench[cell].Count += free;
-                else return;
+                bool moved = overGive ? Propose(draggedStack, amount) : cell >= 0 && Lay(cell, draggedStack, amount);
+                if (!moved) return;
 
+                if (splitOff) splits.RemoveAt(draggedSplit);
                 stale = true;
                 return;
             }
 
+            if (!draggedUnique) return;
+
+            if (overGive)
+            {
+                if (Propose(dragged)) stale = true;
+                return;
+            }
+
+            if (!draggedEquipable) return;
+
             if (held.worldBound.Contains(at) && !draggedFromHands) bag.EquipRpc(dragged);
             else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.NoSlot);
+        }
+
+        private bool Lay(int cell, StackableItemSpec spec, int amount)
+        {
+            if (bench[cell].Spec == null) bench[cell] = new Unit { Spec = spec, Count = amount };
+            else if (bench[cell].Spec == spec) bench[cell].Count += amount;
+            else return false;
+
+            return true;
         }
 
         private void AddMenu(VisualElement thing, StackableItemSpec stack, int amount, int slot)
@@ -643,17 +1021,7 @@ namespace Shooter.Client.Interface
             menu.style.top = local.y;
 
             if (stack != null && stack.Usable) Item(menu, "Использовать", () => bag.UseRpc(stack.Id));
-
-            Character taker = Aimed();
-            if (taker != null)
-            {
-                long takerId = taker.Id;
-
-                if (stack != null) Item(menu, "Отдать", () => bag.GiveStackableRpc(takerId, stack.Id, 1));
-                if (stack != null && amount > 1)
-                    Item(menu, "Отдать все", () => bag.GiveStackableRpc(takerId, stack.Id, amount));
-                if (stack == null) Item(menu, "Отдать", () => bag.GiveUniqueRpc(takerId, slot));
-            }
+            if (stack != null && amount > 1) Item(menu, "Разделить", () => AskSplit(stack));
 
             if (menu.childCount == 0) return;
 
@@ -673,19 +1041,106 @@ namespace Shooter.Client.Interface
             menu.Add(item);
         }
 
-        private Character Aimed()
-        {
-            if (!aimer.TryHit(out RaycastHit hit) || hit.collider == null) return null;
-
-            return hit.collider.GetComponentInParent<Character>();
-        }
-
         private void CloseMenu()
         {
             if (curtain == null) return;
 
             curtain.RemoveFromHierarchy();
             curtain = null;
+        }
+
+        // While the number is typed the player's keys belong to the field: Escape closes only this box
+        private void AskSplit(StackableItemSpec spec)
+        {
+            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
+            if (player == null) return;
+
+            HidePrompt();
+            player.OpenPrompt();
+
+            prompt = new VisualElement();
+            prompt.AddToClassList("menu-curtain");
+            prompt.AddToClassList("split-curtain");
+            prompt.RegisterCallback<PointerDownEvent>(down =>
+            {
+                if (down.target == prompt) EndPrompt();
+            });
+
+            var box = new VisualElement();
+            box.AddToClassList("split");
+
+            var title = new Label($"Разделить: {spec.Title}");
+            title.AddToClassList("line");
+            title.AddToClassList("split__title");
+            box.Add(title);
+
+            int free = bag.Count(spec) - Reserved(spec);
+            var field = new TextField { maxLength = SplitDigits, value = Math.Max(1, free / 2).ToString() };
+            field.AddToClassList("split__field");
+            field.RegisterValueChangedCallback(changed =>
+            {
+                string digits = Digits(changed.newValue);
+                if (digits != changed.newValue) field.SetValueWithoutNotify(digits);
+            });
+            field.RegisterCallback<KeyDownEvent>(typed =>
+            {
+                if (typed.keyCode != KeyCode.Return && typed.keyCode != KeyCode.KeypadEnter) return;
+
+                typed.StopPropagation();
+                Split(spec, field.value);
+            });
+            box.Add(field);
+
+            var confirm = new Button(() => Split(spec, field.value)) { text = "Разделить" };
+            confirm.AddToClassList("split__button");
+            box.Add(confirm);
+
+            prompt.Add(box);
+            window.Add(prompt);
+            field.schedule.Execute(() =>
+            {
+                field.Focus();
+                field.SelectAll();
+            });
+        }
+
+        private void Split(StackableItemSpec spec, string typed)
+        {
+            int free = bag == null ? 0 : bag.Count(spec) - Reserved(spec);
+            if (!int.TryParse(typed, out int count) || count <= 0 || count >= free) return;
+
+            splits.Add(new Unit { Spec = spec, Count = count });
+            EndPrompt();
+            stale = true;
+            Log.Info($"Split {count} of {free} {spec.Key} off in the bag");
+        }
+
+        private static string Digits(string typed)
+        {
+            if (string.IsNullOrEmpty(typed)) return string.Empty;
+
+            var digits = new System.Text.StringBuilder(typed.Length);
+            foreach (char c in typed)
+                if (c >= '0' && c <= '9')
+                    digits.Append(c);
+
+            return digits.ToString();
+        }
+
+        private void EndPrompt()
+        {
+            if (prompt == null) return;
+
+            OwnPlayer.Find<LocalPlayer>()?.ClosePrompt();
+            HidePrompt();
+        }
+
+        private void HidePrompt()
+        {
+            if (prompt == null) return;
+
+            prompt.RemoveFromHierarchy();
+            prompt = null;
         }
 
         private static VisualElement Slot(ItemSpec spec, string fallback, bool holding, bool equipable)

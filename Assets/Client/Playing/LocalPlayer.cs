@@ -43,6 +43,8 @@ namespace Shooter.Client.Playing
 
         public bool RadioOpen { get; private set; }
 
+        public bool Prompting { get; private set; }
+
         public long? RadioPartner => radioPartner;
 
         public long? TalkPartner
@@ -182,6 +184,7 @@ namespace Shooter.Client.Playing
             controls = null;
             InventoryOpen = false;
             RadioOpen = false;
+            Prompting = false;
             talking = false;
             radioPartner = null;
 
@@ -198,12 +201,12 @@ namespace Shooter.Client.Playing
         {
             if (controls == null) return;
 
-            if (talking || Paused || Inviting || RadioOpen) Listen();
+            if (talking || Paused || Inviting || RadioOpen || Prompting) Listen();
             else if (InventoryOpen) Browse();
             else Grab();
 
             Log.Info(
-                $"Local player input is now {(talking ? "on the talk" : Inviting ? "on the invite window" : Paused ? "on the pause menu" : RadioOpen ? "on the radio" : InventoryOpen ? "shared with the bag" : "back on the player")}");
+                $"Local player input is now {(talking ? "on the talk" : Inviting ? "on the invite window" : Paused ? "on the pause menu" : RadioOpen ? "on the radio" : Prompting ? "on a prompt" : InventoryOpen ? "shared with the bag" : "back on the player")}");
         }
 
         private void Grab()
@@ -267,17 +270,47 @@ namespace Shooter.Client.Playing
             Capture();
         }
 
+        public void OpenInventory()
+        {
+            if (radioPartner != null) return;
+
+            if (talking) playerMouth.HangUpRpc();
+
+            InventoryOpen = true;
+            Capture();
+            Log.Info("Bag opened from the talk");
+        }
+
         public void CloseInventory()
         {
             if (!InventoryOpen) return;
 
             InventoryOpen = false;
+            Prompting = false;
             Capture();
         }
 
         private void CloseBag(InputAction.CallbackContext context)
         {
+            if (Prompting) return;
+
             CloseInventory();
+        }
+
+        public void OpenPrompt()
+        {
+            if (Prompting) return;
+
+            Prompting = true;
+            Capture();
+        }
+
+        public void ClosePrompt()
+        {
+            if (!Prompting) return;
+
+            Prompting = false;
+            Capture();
         }
 
         private void OpenTalk(ulong talkerId)
@@ -339,6 +372,12 @@ namespace Shooter.Client.Playing
 
         private void Escape(InputAction.CallbackContext context)
         {
+            if (Prompting)
+            {
+                ClosePrompt();
+                return;
+            }
+
             if (talking)
             {
                 if (radioPartner != null) CloseRadioTalk();
