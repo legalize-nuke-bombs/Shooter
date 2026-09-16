@@ -30,6 +30,8 @@ namespace Shooter.Bootstrapping
         private bool ending;
         private bool loadFailed;
         private bool worldLoaded;
+        private bool freezing;
+        private FrozenWorld frozen;
         private LoadingOverlay loading;
 
         private GameObject overlays;
@@ -132,7 +134,7 @@ namespace Shooter.Bootstrapping
             }
 
             loading.Show(LoadingStage.Scene);
-            yield return LoadWorld(network);
+            yield return LoadWorld(network, save != null);
             if (network.ShutdownInProgress) yield break;
 
             if (save != null) Restore(network, save);
@@ -142,9 +144,11 @@ namespace Shooter.Bootstrapping
             loading.Hide();
         }
 
-        private IEnumerator LoadWorld(NetworkManager network)
+        private IEnumerator LoadWorld(NetworkManager network, bool freeze)
         {
             worldLoaded = false;
+            freezing = freeze;
+            frozen = null;
             network.SceneManager.OnLoadComplete += Loaded;
 
             SceneEventProgressStatus status = network.SceneManager.LoadScene(WorldScene, LoadSceneMode.Single);
@@ -163,15 +167,22 @@ namespace Shooter.Bootstrapping
 
         private void Loaded(ulong clientId, string sceneName, LoadSceneMode mode)
         {
-            if (clientId == NetworkManager.ServerClientId && sceneName == WorldScene) worldLoaded = true;
+            if (clientId != NetworkManager.ServerClientId || sceneName != WorldScene) return;
+
+            worldLoaded = true;
+
+            // Netcode raises this right after spawning the in-scene objects and still before their first Update;
+            // the coroutine waiting on worldLoaded resumes only after that Update, and one frame of work on a
+            // world that is not loaded yet is enough for a resource item to grow a body the save says was taken
+            if (freezing && SaveManager.Current != null) frozen = SaveManager.Current.Freeze();
         }
 
         private void Restore(NetworkManager network, string save)
         {
             SaveManager saves = SaveManager.Current;
-            if (saves == null)
+            if (saves == null || frozen == null)
             {
-                Log.Error($"World has no save manager, {save} stays unloaded, shutting the host down");
+                Log.Error($"World has no save manager or was not frozen on load, {save} stays unloaded, shutting the host down");
                 loadFailed = true;
                 network.Shutdown();
                 return;
@@ -179,7 +190,8 @@ namespace Shooter.Bootstrapping
 
             Log.Info($"Loading the world from {save}");
             loading.Show(LoadingStage.Save);
-            FrozenWorld world = saves.Freeze();
+            FrozenWorld world = frozen;
+            frozen = null;
             if (saves.Load(world, save)) return;
 
             Log.Warn($"The world failed to load {save}, shutting the host down");
