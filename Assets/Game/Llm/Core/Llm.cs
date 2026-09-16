@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Shooter.Configuring;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.Speech;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine;
@@ -17,7 +16,6 @@ namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(LlmHistory))]
-    [RequireComponent(typeof(LlmPendingTable))]
     public class Llm : MonoBehaviour, IMortal
     {
         private const string ClearHeadDemand =
@@ -43,18 +41,14 @@ namespace Shooter.Game.Llm
         private readonly CancellationTokenSource life = new();
         private string entityName;
 
-        private Character ownCharacter;
         private LlmHistory history;
         private float retryBlockedUntil;
-        private LlmPendingTable table;
 
         public bool Busy { get; private set; }
 
         private void Awake()
         {
-            ownCharacter = GetComponent<Character>();
             history = GetComponent<LlmHistory>();
-            table = GetComponent<LlmPendingTable>();
             entityName = name;
             foreach (LlmTool ability in abilities)
             {
@@ -71,7 +65,6 @@ namespace Shooter.Game.Llm
         public void Died()
         {
             life.Cancel();
-            Abandon(table.Ids());
         }
 
         private void Begin()
@@ -123,10 +116,9 @@ namespace Shooter.Game.Llm
             return known.ToString();
         }
 
-        public void Notice(string line, bool urgent, long? askerId = null)
+        public void Notice(string line, bool urgent)
         {
             history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line }, urgent);
-            if (askerId != null) table.Mark(askerId.Value);
         }
 
         public LlmStatus Status()
@@ -146,13 +138,12 @@ namespace Shooter.Game.Llm
 
             if (!entered) return false;
 
-            List<long> asked = table.Ids();
             Busy = true;
             bool ticked = false;
 
             try
             {
-                ticked = await Think(asked);
+                ticked = await Think();
             }
             catch (OperationCanceledException)
             {
@@ -164,14 +155,13 @@ namespace Shooter.Game.Llm
                 Log.Warn($"Entity {entityName} failed to respond, next attempt in {failureCooldown} s: {e}");
             }
 
-            Abandon(asked);
             Busy = false;
             gate.Release();
 
             return ticked;
         }
 
-        private async Task<bool> Think(List<long> asked)
+        private async Task<bool> Think()
         {
             if (String.IsNullOrEmpty(Config.Read().Server.Llm.Provider)) return false;
 
@@ -185,7 +175,7 @@ namespace Shooter.Game.Llm
             bool clearing = history.Overflowing;
 
             history.Seen();
-            history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation(asked) });
+            history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
             var context = new LlmCallContext { PromptedCount = history.Count };
 
             LlmConfig config = Config.Read().Server.Llm;
@@ -229,29 +219,12 @@ namespace Shooter.Game.Llm
             return true;
         }
 
-        private void Abandon(List<long> asked)
-        {
-            ConversationManager conversations = ConversationManager.Current;
-
-            foreach (long id in asked)
-            {
-                if (!table.Clear(id)) continue;
-
-                Log.Warn($"Entity {entityName} has not answered wanderer {id}, the refusal is said instead");
-                conversations.Say(ownCharacter.Id, id, "Not now.", false);
-            }
-        }
-
-        private string Observation(List<long> asked)
+        private string Observation()
         {
             var seen = new StringBuilder();
             seen.Append('[').Append(Stamp()).Append(']');
 
             if (history.Overflowing) seen.Append('\n').Append(ClearHeadDemand);
-
-            if (asked.Count > 0)
-                seen.Append('\n').Append("You must answer the waiting wanderer(s) using the say_to_wanderer tool: ")
-                    .Append(string.Join(", ", asked)).Append('.');
 
             return seen.ToString();
         }

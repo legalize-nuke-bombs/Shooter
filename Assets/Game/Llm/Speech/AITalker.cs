@@ -21,7 +21,7 @@ namespace Shooter.Game.Llm
 
         protected override void RequestAnswer(long wandererId, string message)
         {
-            llm.Notice($"Wanderer [ID {wandererId}] says: {message}", true, wandererId);
+            llm.Notice($"Wanderer [ID {wandererId}] says: {message}", true);
         }
     }
 }

@@ -11,26 +11,18 @@ namespace Shooter.Game.Llm.SayToWanderer
         private static readonly Journal Log = Logs.Here();
 
         private Character ownCharacter;
-        private LlmPendingTable table;
 
         public override string Name => "say_to_wanderer";
 
         public override string Description =>
             "Answer a wanderer who is talking to you. Answer in the language the wanderer speaks.";
 
-        public override bool Available => table.Any;
-
         protected override void OnStart()
         {
             ownCharacter = Self.GetComponent<Character>();
-            table = Self.GetComponent<LlmPendingTable>();
             if (ownCharacter == null)
             {
                 Log.Error($"Entity {Self.name} does not have Character component required by tool {Name}");
-            }
-            if (table == null)
-            {
-                Log.Error($"Entity {Self.name} does not have LlmPendingTable component required by tool {Name}");
             }
         }
 
