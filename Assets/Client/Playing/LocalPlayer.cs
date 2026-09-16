@@ -41,6 +41,8 @@ namespace Shooter.Client.Playing
 
         public bool Inviting { get; private set; }
 
+        public bool RadioOpen { get; private set; }
+
         // The partner of the open radio talk, null when the window is closed
         public long? RadioPartner => radioPartner;
 
@@ -122,6 +124,8 @@ namespace Shooter.Client.Playing
             controls.Player.Interact.performed += Use;
             controls.Player.Inventory.performed += OpenBag;
             controls.UI.Inventory.performed += CloseBag;
+            controls.Player.Radio.performed += OpenRadio;
+            controls.UI.Radio.performed += CloseRadio;
             controls.UI.Cancel.performed += Escape;
 
             if (playerMouth != null)
@@ -150,6 +154,8 @@ namespace Shooter.Client.Playing
             controls.Player.Interact.performed -= Use;
             controls.Player.Inventory.performed -= OpenBag;
             controls.UI.Inventory.performed -= CloseBag;
+            controls.Player.Radio.performed -= OpenRadio;
+            controls.UI.Radio.performed -= CloseRadio;
             controls.UI.Cancel.performed -= Escape;
 
             if (playerMouth != null)
@@ -161,6 +167,7 @@ namespace Shooter.Client.Playing
             controls.Dispose();
             controls = null;
             InventoryOpen = false;
+            RadioOpen = false;
             talking = false;
             radioPartner = null;
 
@@ -177,12 +184,12 @@ namespace Shooter.Client.Playing
         {
             if (controls == null) return;
 
-            if (talking || Paused || Inviting) Listen();
+            if (talking || Paused || Inviting || RadioOpen) Listen();
             else if (InventoryOpen) Browse();
             else Grab();
 
             Log.Info(
-                $"Local player input is now {(talking ? "on the talk" : Inviting ? "on the invite window" : Paused ? "on the pause menu" : InventoryOpen ? "shared with the bag" : "back on the player")}");
+                $"Local player input is now {(talking ? "on the talk" : Inviting ? "on the invite window" : Paused ? "on the pause menu" : RadioOpen ? "on the radio" : InventoryOpen ? "shared with the bag" : "back on the player")}");
         }
 
         private void Grab()
@@ -271,8 +278,35 @@ namespace Shooter.Client.Playing
             Capture();
         }
 
+        private void OpenRadio(InputAction.CallbackContext context)
+        {
+            OpenRadio();
+        }
+
+        private void CloseRadio(InputAction.CallbackContext context)
+        {
+            CloseRadio();
+        }
+
+        public void OpenRadio()
+        {
+            RadioOpen = true;
+            Capture();
+            Log.Info("Radio opened");
+        }
+
+        public void CloseRadio()
+        {
+            if (!RadioOpen) return;
+
+            RadioOpen = false;
+            Capture();
+            Log.Info("Radio closed");
+        }
+
         public void OpenRadioTalk(long partnerId)
         {
+            RadioOpen = false;
             radioPartner = partnerId;
             talking = true;
             Capture();
@@ -295,6 +329,12 @@ namespace Shooter.Client.Playing
             {
                 if (radioPartner != null) CloseRadioTalk();
                 else playerMouth.HangUpRpc();
+                return;
+            }
+
+            if (RadioOpen)
+            {
+                CloseRadio();
                 return;
             }
 

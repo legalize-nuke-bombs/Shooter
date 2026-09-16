@@ -28,6 +28,7 @@ GameObject:
   - component: {fileID: 6600000000000000119}
   - component: {fileID: 582697031381551377}
   - component: {fileID: 8113226400939475344}
+  - component: {fileID: 3347146998605163575}
   m_Layer: 0
   m_Name: Overlays
   m_TagString: Untagged
@@ -351,3 +352,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd7ac35c4e163e4aba074d9426c8a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.InviteOverlay
+--- !u!114 &3347146998605163575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155463033436812329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9ebde81f5492e247adf55709af1acbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.RadioOverlay
