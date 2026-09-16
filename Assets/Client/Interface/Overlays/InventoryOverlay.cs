@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Shooter.Client.Playing;
 using Shooter.Game.Core;
+using Shooter.Game.Crafting;
 using Shooter.Game.Loot;
 using Shooter.Logging;
 using UnityEngine;
@@ -16,6 +18,9 @@ namespace Shooter.Client.Interface
         private const string GridElement = "inventory-grid";
         private const string HeldElement = "inventory-held";
         private const string CoinsElement = "inventory-coins";
+        private const string CraftGridElement = "craft-grid";
+        private const string CraftOutputElement = "craft-output";
+        private const int CraftSide = 3;
         private const string Coins = "coin";
         private const float Cell = 48f;
         private const float Bezel = 8f;
@@ -23,8 +28,13 @@ namespace Shooter.Client.Interface
         private const int Rows = 6;
         private const int HandRows = 2;
         private static readonly Journal Log = Logs.Here();
+        private readonly StackableItemSpec[] bench = new StackableItemSpec[CraftSide * CraftSide];
         private Aimer aimer;
         private Inventory bag;
+        private Crafter crafter;
+        private VisualElement craftGrid;
+        private VisualElement craftOutput;
+        private StackableItemSpec draggedStack;
         private Label coins;
         private VisualElement curtain;
         private int dragged;
@@ -67,8 +77,10 @@ namespace Shooter.Client.Interface
             grid = root.Q<VisualElement>(GridElement);
             held = root.Q<VisualElement>(HeldElement);
             coins = root.Q<Label>(CoinsElement);
+            craftGrid = root.Q<VisualElement>(CraftGridElement);
+            craftOutput = root.Q<VisualElement>(CraftOutputElement);
 
-            if (window == null || grid == null || held == null || coins == null)
+            if (window == null || grid == null || held == null || coins == null || craftGrid == null || craftOutput == null)
             {
                 Log.Error($"Overlay document has no {WindowElement} window, the bag stays hidden");
                 return false;
@@ -90,6 +102,7 @@ namespace Shooter.Client.Interface
         private void Open()
         {
             bag = OwnPlayer.Find<Inventory>();
+            crafter = OwnPlayer.Find<Crafter>();
 
             if (bag != null) bag.Changed += Touch;
 
@@ -104,10 +117,14 @@ namespace Shooter.Client.Interface
 
             if (bag != null) bag.Changed -= Touch;
             bag = null;
+            crafter = null;
+            Array.Clear(bench, 0, bench.Length);
 
             if (window != null) window.style.display = DisplayStyle.None;
             grid?.Clear();
             held?.Clear();
+            craftGrid?.Clear();
+            craftOutput?.Clear();
             Log.Info("The bag is closed");
         }
 
@@ -181,22 +198,124 @@ namespace Shooter.Client.Interface
                 Pack(taken, spec, out int row, out int column);
 
                 VisualElement thing = Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot, false,
-                    false);
+                    false, spec);
                 AddMenu(thing, spec, amount, Inventory.NoSlot);
 
                 grid.Add(thing);
             }
 
             coins.text = money.ToString();
+            Bench();
+        }
+
+        // The bench is a picture of what the player wants to combine: the stacks stay in the bag, the server
+        // takes them at the craft; a recipe matches by amounts, like the residents describe it
+        private void Bench()
+        {
+            craftGrid.Clear();
+            craftOutput.Clear();
+
+            Paper(craftGrid, CraftSide, CraftSide);
+            Paper(craftOutput, 1, 1);
+
+            for (int i = 0; i < bench.Length; i++)
+            {
+                StackableItemSpec spec = bench[i];
+                if (spec == null) continue;
+
+                int cell = i;
+                VisualElement thing = Placed(spec, i / CraftSide, i % CraftSide);
+                thing.RegisterCallback<PointerDownEvent>(down =>
+                {
+                    if (down.button != 0 || ghost != null) return;
+
+                    bench[cell] = null;
+                    Bench();
+                    down.StopPropagation();
+                });
+                craftGrid.Add(thing);
+            }
+
+            Craft match = Match();
+            if (match == null) return;
+
+            VisualElement output = Placed(match.Output, 0, 0);
+            output.RegisterCallback<PointerDownEvent>(down =>
+            {
+                if (down.button != 0 || ghost != null || bag == null) return;
+
+                bag.CraftRpc(match.Id);
+                down.StopPropagation();
+            });
+            craftOutput.Add(output);
+        }
+
+        private static VisualElement Placed(ItemSpec spec, int row, int column)
+        {
+            VisualElement thing = Slot(spec, spec.Key, false, true);
+            thing.style.position = Position.Absolute;
+            thing.style.left = column * Cell;
+            thing.style.top = row * Cell;
+            thing.style.width = Cell;
+            thing.style.height = Cell;
+
+            return thing;
+        }
+
+        // A known recipe whose amounts equal the bench and whose ingredients the bag can pay
+        private Craft Match()
+        {
+            if (crafter == null || bag == null) return null;
+
+            var wanted = new Dictionary<StackableItemSpec, int>();
+            foreach (StackableItemSpec spec in bench)
+            {
+                if (spec == null) continue;
+
+                wanted.TryAdd(spec, 0);
+                wanted[spec]++;
+            }
+
+            if (wanted.Count == 0) return null;
+
+            foreach (Craft craft in crafter.AvailableCrafts)
+            {
+                if (craft == null || craft.Output == null) continue;
+
+                Dictionary<StackableItemSpec, int> needed = craft.AmountMap();
+                if (needed.Count != wanted.Count) continue;
+                if (!needed.All(pair => wanted.TryGetValue(pair.Key, out int amount) && amount == pair.Value)) continue;
+                if (!needed.All(pair => bag.StackableAmount(pair.Key) >= pair.Value)) continue;
+
+                return craft;
+            }
+
+            return null;
+        }
+
+        private int BenchCellAt(Vector2 at)
+        {
+            Rect bounds = craftGrid.worldBound;
+            if (!bounds.Contains(at)) return -1;
+
+            int column = Mathf.Clamp((int)((at.x - bounds.x) / Cell), 0, CraftSide - 1);
+            int row = Mathf.Clamp((int)((at.y - bounds.y) / Cell), 0, CraftSide - 1);
+
+            return row * CraftSide + column;
         }
 
         private static void Paper(VisualElement host, int rows)
         {
-            host.style.width = Columns * Cell;
+            Paper(host, rows, Columns);
+        }
+
+        private static void Paper(VisualElement host, int rows, int columns)
+        {
+            host.style.width = columns * Cell;
             host.style.height = rows * Cell;
 
             for (int row = 0; row < rows; row++)
-            for (int column = 0; column < Columns; column++)
+            for (int column = 0; column < columns; column++)
             {
                 var cell = new VisualElement();
                 cell.AddToClassList("grid__cell");
@@ -246,7 +365,7 @@ namespace Shooter.Client.Interface
         }
 
         private VisualElement Thing(ItemSpec spec, string fallback, int row, int column, string amount, int slot,
-            bool equipable, bool holding)
+            bool equipable, bool holding, StackableItemSpec stack = null)
         {
             Vector2Int cells = spec == null ? Vector2Int.one : spec.Cells;
             var size = new Vector2(cells.x * Cell, cells.y * Cell);
@@ -265,7 +384,7 @@ namespace Shooter.Client.Interface
                 thing.Add(label);
             }
 
-            if (equipable) Draggable(thing, slot, holding, Icon(spec), size);
+            if (equipable || stack != null) Draggable(thing, slot, holding, stack, Icon(spec), size);
 
             return thing;
         }
@@ -275,7 +394,8 @@ namespace Shooter.Client.Interface
             return spec == null || spec.Icon == null ? null : spec.Icon.Sprite;
         }
 
-        private void Draggable(VisualElement thing, int slot, bool holding, Sprite icon, Vector2 size)
+        private void Draggable(VisualElement thing, int slot, bool holding, StackableItemSpec stack, Sprite icon,
+            Vector2 size)
         {
             thing.RegisterCallback<PointerDownEvent>(down =>
             {
@@ -283,6 +403,7 @@ namespace Shooter.Client.Interface
 
                 dragged = slot;
                 draggedFromHands = holding;
+                draggedStack = stack;
                 pointer = down.pointerId;
 
                 ghost = Ghost(icon, size);
@@ -333,6 +454,20 @@ namespace Shooter.Client.Interface
             ghost = null;
 
             if (bag == null) return;
+
+            // A stack goes onto the bench, a unique between the hands and the bag
+            if (draggedStack != null)
+            {
+                int cell = BenchCellAt(at);
+                if (cell >= 0)
+                {
+                    bench[cell] = draggedStack;
+                    Bench();
+                }
+
+                draggedStack = null;
+                return;
+            }
 
             if (held.worldBound.Contains(at) && !draggedFromHands) bag.EquipRpc(dragged);
             else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.NoSlot);
