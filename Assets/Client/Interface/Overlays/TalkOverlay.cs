@@ -164,6 +164,7 @@ namespace Shooter.Client.Interface
             if (contact == null) return;
 
             Unfollow();
+            StopAllCoroutines();
             contact = null;
             radio = false;
             drawn = 0;
@@ -177,6 +178,7 @@ namespace Shooter.Client.Interface
 
         private void Fill()
         {
+            StopAllCoroutines();
             log.Clear();
             drawn = 0;
             Draw(false);
@@ -220,7 +222,10 @@ namespace Shooter.Client.Interface
             if (mine || !typing) label.text = line.Content;
             else StartCoroutine(Type(label, line.Content));
 
-            log.schedule.Execute(() => log.ScrollTo(label));
+            log.schedule.Execute(() =>
+            {
+                if (label.parent != null) log.ScrollTo(label);
+            });
         }
 
         private IEnumerator Type(Label line, string content)
