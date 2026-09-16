@@ -4,7 +4,6 @@ using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
-using Shooter.Game.Crafting;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -32,6 +31,7 @@ namespace Shooter.Game.Loot
         }
 
         [SerializeField] private Entry[] contents;
+        [SerializeField] private float giveRadius = 10f;
 
         private readonly NetworkVariable<int> equippedSlot = new(NoSlot);
 
@@ -108,7 +108,7 @@ namespace Shooter.Game.Loot
                     continue;
                 }
 
-                AddStackable(spec, stack.Value);
+                Add(spec, stack.Value);
             }
 
             for (int index = 0; index < sd.Slots.Count; index++)
@@ -124,12 +124,14 @@ namespace Shooter.Game.Loot
                 UniqueItem item = spec.Create();
                 if (!slotData.State.Empty) item.LoadObject(slotData.State);
 
-                int slot = Put(item);
+                int slot = Add(item);
                 if (index == sd.EquippedSlot) Equip(slot);
             }
         }
 
         public IReadOnlyList<UniqueItem> UniqueItems => slots.Value.All;
+
+        public float GiveRadius => giveRadius;
 
         public int EquippedSlot => equippedSlot.Value;
 
@@ -207,6 +209,9 @@ namespace Shooter.Game.Loot
 
         public event Action Changed;
 
+        // Things handed over by another character: who gave, what, how many; picking up and crafting stay silent
+        public event Action<Character, ItemSpec, int> Received;
+
         public override void OnNetworkSpawn()
         {
             stackAmounts.OnListChanged += StackAmountsShifted;
@@ -240,14 +245,14 @@ namespace Shooter.Game.Loot
             enabled = false;
         }
 
-        public int StackableAmount(StackableItemSpec spec)
+        public int Count(StackableItemSpec spec)
         {
             int index = IndexOf(spec);
 
             return index < 0 || index >= stackAmounts.Count ? 0 : stackAmounts[index];
         }
 
-        public void AddStackable(StackableItemSpec spec, int amount)
+        public void Add(StackableItemSpec spec, int amount)
         {
             if (!IsServer || amount <= 0 || spec == null) return;
 
@@ -263,7 +268,7 @@ namespace Shooter.Game.Loot
             Log.Info($"Entity {name} took {amount} of {spec.Key}");
         }
 
-        public int RemoveStackable(StackableItemSpec spec, int amount, InventoryOnConflict onConflict)
+        public int Remove(StackableItemSpec spec, int amount, InventoryOnConflict onConflict)
         {
             if (!IsServer || amount <= 0 || spec == null) return 0;
 
@@ -281,7 +286,7 @@ namespace Shooter.Game.Loot
             return taken;
         }
 
-        public int Put(UniqueItem item)
+        public int Add(UniqueItem item)
         {
             if (!IsServer || item == null) return NoSlot;
 
@@ -294,7 +299,7 @@ namespace Shooter.Game.Loot
             return slot;
         }
 
-        public UniqueItem Take(int slot)
+        public UniqueItem Remove(int slot)
         {
             if (!IsServer) return null;
 
@@ -313,6 +318,61 @@ namespace Shooter.Game.Loot
             return slots.Value.Contains(item);
         }
 
+        // Hands things to a character nearby: all of the amount or nothing, the taker's bag tells who gave it
+        public bool Give(Character to, StackableItemSpec spec, int amount)
+        {
+            if (!IsServer || amount <= 0 || spec == null) return false;
+            if (!Reaches(to, out Inventory taker)) return false;
+
+            if (IndexOf(spec) < 0)
+            {
+                Log.Info($"Entity {name} can not give {spec.Key}: the world catalog does not know it");
+                return false;
+            }
+
+            if (Remove(spec, amount, InventoryOnConflict.Rollback) != amount)
+            {
+                Log.Info($"Entity {name} can not give {spec.Key} x {amount} to {to.name}: not enough in the bag");
+                return false;
+            }
+
+            taker.Receive(GetComponent<Character>(), spec, amount);
+            Log.Info($"Entity {name} gave {spec.Key} x {amount} to {to.name}");
+            return true;
+        }
+
+        public bool Give(Character to, int slot)
+        {
+            if (!IsServer || !Reaches(to, out Inventory taker)) return false;
+
+            UniqueItem item = Remove(slot);
+            if (item == null)
+            {
+                Log.Info($"Entity {name} can not give slot {slot} to {to.name}: the slot is empty");
+                return false;
+            }
+
+            taker.Receive(GetComponent<Character>(), item);
+            Log.Info($"Entity {name} gave {item.SpecId} from slot {slot} to {to.name}");
+            return true;
+        }
+
+        public void Receive(Character from, StackableItemSpec spec, int amount)
+        {
+            if (!IsServer || amount <= 0 || spec == null) return;
+
+            Add(spec, amount);
+            Received?.Invoke(from, spec, amount);
+        }
+
+        public void Receive(Character from, UniqueItem item)
+        {
+            if (!IsServer || item == null) return;
+
+            Add(item);
+            Received?.Invoke(from, Catalog == null ? null : Catalog.Spec(item.SpecId), 1);
+        }
+
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void EquipRpc(int slot)
         {
@@ -320,43 +380,32 @@ namespace Shooter.Game.Loot
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void UseStackableRpc(FixedString32Bytes stackableId)
+        public void UseRpc(FixedString32Bytes stackableId)
         {
-            if (!UseStackable(stackableId))
-                Log.Info($"Entity {name} failed to use stackable {stackableId} rpc");
+            if (Catalog.Of(stackableId) is not StackableItemSpec spec || !Use(spec))
+                Log.Info($"Entity {name} failed to use {stackableId} rpc");
         }
 
-        // Giving goes through the exchanger like a resident's gift: radius, rollback, notification to the taker
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void GiveStackableRpc(long targetId, FixedString32Bytes stackableId, int amount)
         {
-            InventoryExchanger exchanger = GetComponent<InventoryExchanger>();
-            if (exchanger == null || amount <= 0 || Catalog.Of(stackableId) is not StackableItemSpec spec ||
-                !exchanger.GiveStackable(targetId, spec, amount))
+            if (Catalog.Of(stackableId) is not StackableItemSpec spec ||
+                !Give(Character.Of(targetId, Inactive.Exclude), spec, amount))
                 Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {targetId} rpc");
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void GiveUniqueRpc(long targetId, int slot)
         {
-            InventoryExchanger exchanger = GetComponent<InventoryExchanger>();
-            if (exchanger == null || !exchanger.GiveUnique(targetId, slot))
+            if (!Give(Character.Of(targetId, Inactive.Exclude), slot))
                 Log.Info($"Entity {name} failed to give slot {slot} to {targetId} rpc");
         }
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void CraftRpc(FixedString32Bytes craftId)
+        public bool Use(StackableItemSpec spec)
         {
-            Crafter crafter = GetComponent<Crafter>();
-            if (crafter == null || !crafter.TryCraft(crafter.Known(craftId.ToString())))
-                Log.Info($"Entity {name} failed to craft {craftId} rpc");
-        }
+            if (spec == null || !spec.Usable) return false;
 
-        public bool UseStackable(FixedString32Bytes stackableId)
-        {
-            if (Catalog.Of(stackableId) is not StackableItemSpec spec || !spec.Usable) return false;
-
-            if (RemoveStackable(spec, 1, InventoryOnConflict.Rollback) == 0) return false;
+            if (Remove(spec, 1, InventoryOnConflict.Rollback) == 0) return false;
 
             foreach (ItemEffect effect in spec.Effects)
                 if (effect != null)
@@ -382,11 +431,11 @@ namespace Shooter.Game.Loot
 
             for (int index = 0; index < stackAmounts.Count; index++)
                 if (stackAmounts[index] > 0 && catalog.At(index) is StackableItemSpec stackable)
-                    target.AddStackable(stackable, stackAmounts[index]);
+                    target.Add(stackable, stackAmounts[index]);
 
             foreach (UniqueItem item in slots.Value.All)
                 if (item != null)
-                    target.Put(item);
+                    target.Add(item);
 
             Clear();
         }
@@ -425,6 +474,30 @@ namespace Shooter.Game.Loot
             return slots.Value.At(slot);
         }
 
+        private bool Reaches(Character to, out Inventory taker)
+        {
+            taker = null;
+            Character own = GetComponent<Character>();
+
+            if (to == null || own == null || to == own || !to.gameObject.activeInHierarchy)
+            {
+                Log.Info($"Entity {name} has nobody to give things to");
+                return false;
+            }
+
+            if (Vector3.Distance(to.transform.position, transform.position) > giveRadius)
+            {
+                Log.Info($"Entity {name} can not give things to {to.name}: farther than {giveRadius} m");
+                return false;
+            }
+
+            taker = to.GetComponentInChildren<Inventory>();
+            if (taker != null) return true;
+
+            Log.Info($"Entity {name} can not give things to {to.name}: it has no bag");
+            return false;
+        }
+
         private void Clear()
         {
             for (int index = 0; index < stackAmounts.Count; index++)
@@ -444,7 +517,7 @@ namespace Shooter.Game.Loot
 
             if (entry.Spec is StackableItemSpec stackable)
             {
-                AddStackable(stackable, amount);
+                Add(stackable, amount);
                 return;
             }
 
@@ -452,7 +525,7 @@ namespace Shooter.Game.Loot
 
             for (int made = 0; made < amount; made++)
             {
-                int slot = Put(unique.Create());
+                int slot = Add(unique.Create());
 
                 if (slot != NoSlot && entry.Equip && equippedSlot.Value == NoSlot) Equip(slot);
             }

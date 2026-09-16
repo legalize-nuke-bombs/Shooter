@@ -10,23 +10,23 @@ namespace Shooter.Game.Llm.GiveStackable
     {
         private static readonly Journal Log = Logs.Here();
 
-        private InventoryExchanger inventoryExchanger;
+        private Inventory inventory;
 
         public override string Name => "give_stackable";
 
         public override string Description =>
             @$"
-Give some of your stackable items to a character within {inventoryExchanger.ExchangeRadius} meters.
+Give some of your stackable items to a character within {inventory.GiveRadius} meters.
 The item is addressed by its exact name from your bag.
 The recipient will automatically receive a notification.
 ";
 
         protected override void OnStart()
         {
-            inventoryExchanger = Self.GetComponent<InventoryExchanger>();
-            if (inventoryExchanger == null)
+            inventory = Self.GetComponent<Inventory>();
+            if (inventory == null)
             {
-                Log.Error($"Entity {Self.name} does not have inventory exchanger component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have inventory component required by tool {Name}");
             }
         }
 
@@ -39,7 +39,7 @@ The recipient will automatically receive a notification.
                 return
                     $"{arguments.Item} does not come in counted amounts, hand it over by its slot number with give_unique";
 
-            return inventoryExchanger.GiveStackable(arguments.TargetId, stackable, arguments.Amount)
+            return inventory.Give(Character.Of(arguments.TargetId, Inactive.Exclude), stackable, arguments.Amount)
                 ? $"Gave {arguments.Amount} x {arguments.Item} to {arguments.TargetId}"
                 : "Could not give: the receiver is not around or you lack the items";
         }

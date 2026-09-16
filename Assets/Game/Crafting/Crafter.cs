@@ -2,13 +2,15 @@
 using Shooter.Game.Body;
 using Shooter.Game.Loot;
 using Shooter.Logging;
+using Unity.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game.Crafting
 {
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Speaker))]
-    public class Crafter : MonoBehaviour
+    public class Crafter : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -36,6 +38,13 @@ namespace Shooter.Game.Crafting
             return craftsById.GetValueOrDefault(id, null);
         }
 
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void CraftRpc(FixedString32Bytes craftId)
+        {
+            if (!TryCraft(Known(craftId.ToString())))
+                Log.Info($"Entity {name} failed to craft {craftId} rpc");
+        }
+
         public bool TryCraft(Craft craft)
         {
             if (craft == null || !availableCrafts.Contains(craft))
@@ -48,7 +57,7 @@ namespace Shooter.Game.Crafting
 
             foreach (var kvp in amountMap)
             {
-                int available = inventory.StackableAmount(kvp.Key);
+                int available = inventory.Count(kvp.Key);
                 if (available < kvp.Value)
                 {
                     Log.Info($"Entity {name} lacks {kvp.Key.Key} for {craft.Key}: {available} of {kvp.Value}");
@@ -58,16 +67,16 @@ namespace Shooter.Game.Crafting
 
             foreach (var kvp in amountMap)
             {
-                inventory.RemoveStackable(kvp.Key, kvp.Value, InventoryOnConflict.Partly);
+                inventory.Remove(kvp.Key, kvp.Value, InventoryOnConflict.Partly);
             }
 
             if (craft.Output is StackableItemSpec stackableOutput)
             {
-                inventory.AddStackable(stackableOutput, 1);
+                inventory.Add(stackableOutput, 1);
             }
             else if (craft.Output is UniqueItemSpec uniqueOutput)
             {
-                inventory.Put(uniqueOutput.Create());
+                inventory.Add(uniqueOutput.Create());
             }
             else
             {

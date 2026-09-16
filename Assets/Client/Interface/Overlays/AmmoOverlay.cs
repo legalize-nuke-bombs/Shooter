@@ -37,7 +37,7 @@ namespace Shooter.Client.Interface
             }
 
             int held = firearm.Magazine;
-            int left = spec.Ammo == null ? 0 : own.StackableAmount(spec.Ammo);
+            int left = spec.Ammo == null ? 0 : own.Count(spec.Ammo);
 
             if (held == shownMagazine && left == shownReserve) return;
 

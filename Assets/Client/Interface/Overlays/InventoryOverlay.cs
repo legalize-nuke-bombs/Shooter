@@ -199,7 +199,7 @@ namespace Shooter.Client.Interface
             {
                 if (catalog.At(index) is not StackableItemSpec spec) continue;
 
-                int amount = bag.StackableAmount(spec);
+                int amount = bag.Count(spec);
                 if (amount == 0) continue;
 
                 if (spec.Key == Coins)
@@ -260,7 +260,7 @@ namespace Shooter.Client.Interface
                 StackableItemSpec spec = bench[i].Spec;
                 if (spec == null) continue;
 
-                int over = Placed(spec) - bag.StackableAmount(spec);
+                int over = Placed(spec) - bag.Count(spec);
                 if (over > 0) Take(i, Math.Min(over, bench[i].Count));
             }
         }
@@ -275,7 +275,7 @@ namespace Shooter.Client.Interface
         private int Counted(ItemSpec spec)
         {
             if (bag == null) return 0;
-            if (spec is StackableItemSpec stackable) return bag.StackableAmount(stackable);
+            if (spec is StackableItemSpec stackable) return bag.Count(stackable);
 
             int uniques = 0;
             foreach (UniqueItem item in bag.UniqueItems)
@@ -579,7 +579,7 @@ namespace Shooter.Client.Interface
                 // The bench pays when the bag confirms the result arrived
                 pendingCraft = match;
                 outputBefore = Counted(match.Output);
-                bag.CraftRpc(match.Id);
+                crafter.CraftRpc(match.Id);
                 return;
             }
 
@@ -606,7 +606,7 @@ namespace Shooter.Client.Interface
             if (draggedStack != null)
             {
                 // The whole stack the bag still shows goes onto the bench, never a unit more than the bag has
-                int free = bag.StackableAmount(draggedStack) - Placed(draggedStack);
+                int free = bag.Count(draggedStack) - Placed(draggedStack);
                 if (cell < 0 || free <= 0) return;
 
                 if (bench[cell].Spec == null) bench[cell] = new Unit { Spec = draggedStack, Count = free };
@@ -651,7 +651,7 @@ namespace Shooter.Client.Interface
             menu.style.left = local.x;
             menu.style.top = local.y;
 
-            if (stack != null && stack.Usable) Item(menu, "Использовать", () => bag.UseStackableRpc(stack.Id));
+            if (stack != null && stack.Usable) Item(menu, "Использовать", () => bag.UseRpc(stack.Id));
 
             // Giving is offered only while somebody stands in the crosshair; the server checks the reach again
             Character taker = Aimed();
