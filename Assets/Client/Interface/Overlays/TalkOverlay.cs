@@ -34,6 +34,7 @@ namespace Shooter.Client.Interface
 
         private PlayerMouth playerMouth;
         private PlayerConversations conversations;
+        private PlayerRadio playerRadio;
         private Talker talker;
 
         // The pair on screen, null while the window is closed, and how many of its lines are drawn
@@ -76,6 +77,7 @@ namespace Shooter.Client.Interface
             playerMouth.Opened += Open;
             playerMouth.Closed += Close;
 
+            playerRadio = playerMouth.GetComponent<PlayerRadio>();
             conversations = playerMouth.GetComponent<PlayerConversations>();
             if (conversations == null)
             {
@@ -267,7 +269,7 @@ namespace Shooter.Client.Interface
 
             if (speech.Length == 0 || contact == null) return;
 
-            if (radio) conversations.RadioRpc(contact.PartnerId, speech);
+            if (radio && playerRadio != null) playerRadio.SayRpc(contact.PartnerId, speech);
             else playerMouth.SayRpc(speech);
         }
 
@@ -307,6 +309,7 @@ namespace Shooter.Client.Interface
             playerMouth.Opened -= Open;
             playerMouth.Closed -= Close;
             playerMouth = null;
+            playerRadio = null;
         }
     }
 }

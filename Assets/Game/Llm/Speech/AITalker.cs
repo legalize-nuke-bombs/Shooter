@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
+    // A resident one can talk with thinks while its mind is busy; what it hears comes through LlmConversationObserver
     [RequireComponent(typeof(Llm))]
     public sealed class AITalker : Talker
     {
@@ -17,13 +18,6 @@ namespace Shooter.Game.Llm
         protected override bool Busy()
         {
             return llm.Busy;
-        }
-
-        protected override void RequestAnswer(long wandererId, string message, bool spoken)
-        {
-            llm.Notice(spoken
-                ? $"Wanderer [ID {wandererId}] says: {message}"
-                : $"Wanderer [ID {wandererId}] says over the radio: {message}", true);
         }
     }
 }
