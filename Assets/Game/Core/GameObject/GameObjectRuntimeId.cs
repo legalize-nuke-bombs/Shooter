@@ -1,16 +1,20 @@
 ﻿using System;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
+using Unity.Netcode;
 
 namespace Shooter.Game.Core
 {
-    public class GameObjectRuntimeId : RegisteredBehaviour, ISaveableComponent, IDigestible
+    public class GameObjectRuntimeId : RegisteredNetworkBehaviour, ISaveableComponent, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
         public const long Default = -1;
 
-        public long Value { get; private set; } = Default;
+        // The server hands the id out, so every client reads the same number as the server
+        private readonly NetworkVariable<long> value = new(Default);
+
+        public long Value => value.Value;
 
         public string ComponentKey => "GameObjectRuntimeId";
 
@@ -31,7 +35,7 @@ namespace Shooter.Game.Core
 
         public void LoadObject(SaveToken content)
         {
-            Value = content.To<SaveData>().Id;
+            value.Value = content.To<SaveData>().Id;
         }
 
         public string Digest(DigestionDetail detail)
@@ -39,18 +43,15 @@ namespace Shooter.Game.Core
             return "[ID " + Value + "]";
         }
 
-        protected override void Awake()
+        public override void OnNetworkSpawn()
         {
-            base.Awake();
+            base.OnNetworkSpawn();
+            if (!IsServer || value.Value != Default) return;
+
+            // Handed out at the spawn, not in Awake: the variable knows its behaviour by now, and the value
+            // still rides in the spawn message itself; a save loaded afterwards overrides it
             GameObjectRuntimeIds ids = GameObjectRuntimeIds.Current;
-            if (ids == null)
-            {
-                Value = UnityEngine.Random.Range(0, int.MaxValue);
-            }
-            else
-            {
-                Value = GameObjectRuntimeIds.Current.Next();
-            }
+            value.Value = ids == null ? UnityEngine.Random.Range(0, int.MaxValue) : ids.Next();
         }
 
         public static GameObjectRuntimeId Of(long id, Inactive gate)
