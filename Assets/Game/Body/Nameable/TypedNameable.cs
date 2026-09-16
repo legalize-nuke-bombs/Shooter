@@ -1,5 +1,4 @@
 using Shooter.Game.Core;
-using Shooter.Game.Notifying;
 using UnityEngine;
 
 namespace Shooter.Game.Body
@@ -23,13 +22,6 @@ namespace Shooter.Game.Body
         public override string PromptName()
         {
             return spec == null ? null : spec.Prompt();
-        }
-
-        public override Arg NamedAs(string key)
-        {
-            return spec == null
-                ? new Arg(key, string.Empty)
-                : new Arg(key, spec.Id.ToString(), ArgType.Name);
         }
     }
 }

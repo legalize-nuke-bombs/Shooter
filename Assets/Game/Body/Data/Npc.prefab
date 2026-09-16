@@ -105,10 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce955cba01bd400c8f1604703358d3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.AICharacterRelation
-  defaultAmount: 50
   damageToReputationCoefficient: 1
-  improved: {fileID: 11400000, guid: d83699cab1f34617bd9688666b7cf237, type: 2}
-  worsened: {fileID: 11400000, guid: f38e4c842114467d9bad7f750bb7cac4, type: 2}
   enemyThreshold: 0
   friendThreshold: 90
 --- !u!195 &1027279326229136173
@@ -148,3 +145,4 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   walkSpeed: 5
   sprintSpeed: 8
+  shortfallLimit: 50

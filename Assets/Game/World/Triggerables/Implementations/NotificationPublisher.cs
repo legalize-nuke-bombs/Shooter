@@ -43,7 +43,7 @@ namespace Shooter.Game.World
                 return;
             }
 
-            MainNotificationRecipient notificationRecipient = character.GetComponent<MainNotificationRecipient>();
+            NotificationRecipient notificationRecipient = character.GetComponent<NotificationRecipient>();
             if (notificationRecipient == null) return;
 
             if (oncePerCharacter && !characters.Add(character.Id))
@@ -52,7 +52,7 @@ namespace Shooter.Game.World
             }
 
             Log.Info($"Entity {name} is sending notification to {notificationRecipient.name}...");
-            notificationRecipient.Receive(notificationSpec.Notify());
+            notificationRecipient.Receive(notificationSpec);
         }
     }
 }

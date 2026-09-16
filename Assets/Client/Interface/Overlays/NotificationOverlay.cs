@@ -1,7 +1,6 @@
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,7 +16,6 @@ namespace Shooter.Client.Interface
         private static readonly Journal Log = Logs.Here();
 
         private VisualElement feed;
-        private PlayerNotificationRecipient recipient;
 
         public static NotificationOverlay Current { get; private set; }
 
@@ -33,19 +31,6 @@ namespace Shooter.Client.Interface
         private void OnDestroy()
         {
             if (Current == this) Current = null;
-        }
-
-        private void Update()
-        {
-            if (!Bound) return;
-
-            PlayerNotificationRecipient own = OwnPlayer.Find<PlayerNotificationRecipient>();
-            if (own == recipient) return;
-
-            Forget();
-            recipient = own;
-
-            if (recipient != null) recipient.Shown += Relay;
         }
 
         protected override bool Bind(VisualElement root)
@@ -65,7 +50,6 @@ namespace Shooter.Client.Interface
 
         protected override void Unbind()
         {
-            Forget();
             feed = null;
         }
 
@@ -81,16 +65,6 @@ namespace Shooter.Client.Interface
             feed.schedule.Execute(element.RemoveFromHierarchy).StartingIn(Life);
 
             Ring(toast.Sound);
-        }
-
-        // A server notification with arguments, until those move to observers of their own domains
-        private void Relay(Notification notification)
-        {
-            Show(new Toast(
-                notification.Icon(),
-                notification.Sound(),
-                Template.Filled(notification.Title(), notification),
-                Template.Filled(notification.Subtitle(), notification)));
         }
 
         private static VisualElement Line(Toast toast)
@@ -136,14 +110,6 @@ namespace Shooter.Client.Interface
             if (ear == null) return;
 
             ear.PlayLocal(sound);
-        }
-
-        private void Forget()
-        {
-            if (recipient == null) return;
-
-            recipient.Shown -= Relay;
-            recipient = null;
         }
     }
 }
