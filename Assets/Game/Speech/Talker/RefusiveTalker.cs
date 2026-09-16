@@ -7,7 +7,7 @@ namespace Shooter.Game.Speech
             return false;
         }
 
-        protected override void RequestAnswer(long wandererId, string message)
+        protected override void RequestAnswer(long wandererId, string message, bool spoken)
         {
             ConversationManager.Current.Say(CharacterId, wandererId, "Not now.", false);
         }

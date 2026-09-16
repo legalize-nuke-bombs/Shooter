@@ -111,7 +111,7 @@ namespace Shooter.Game.Speech
             }
 
             conversations.Say(CharacterId, talker.CharacterId, speech, true);
-            talker.Listen(this, speech);
+            talker.Hear(CharacterId, speech, true);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

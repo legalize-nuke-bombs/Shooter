@@ -1,6 +1,7 @@
 using System.Collections;
 using Shooter.Client.Playing;
 using Shooter.Game.Body;
+using Shooter.Game.Core;
 using Shooter.Game.Speech;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -19,6 +20,7 @@ namespace Shooter.Client.Interface
         private const string WaitingElement = "talk-waiting";
         private const string InputElement = "talk-input";
         private const string Stranger = "Незнакомец";
+        private const string Radio = "рация";
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float charInterval = 0.01f;
@@ -38,10 +40,31 @@ namespace Shooter.Client.Interface
         private Contact contact;
         private int drawn;
 
+        // Over the radio the window shows whoever the local player picked, face to face whoever the server opened
+        private bool radio;
+        private long? radioShown;
+
         private void Update()
         {
             if (!Bound) return;
 
+            Follow();
+            PollRadio();
+        }
+
+        private void PollRadio()
+        {
+            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
+            long? wanted = player == null ? null : player.RadioPartner;
+            if (wanted == radioShown) return;
+
+            radioShown = wanted;
+            if (wanted != null) OpenRadio(wanted.Value);
+            else if (radio) Close();
+        }
+
+        private void Follow()
+        {
             PlayerMouth own = OwnPlayer.Find<PlayerMouth>();
             if (own == playerMouth) return;
 
@@ -100,15 +123,26 @@ namespace Shooter.Client.Interface
                 return;
             }
 
-            Show(conversations.ContactOf(found.CharacterId), found);
+            radio = false;
+            Show(conversations.ContactOf(found.CharacterId), found, Named(found));
         }
 
-        private void Show(Contact pair, Talker with)
+        private void OpenRadio(long partnerId)
+        {
+            if (conversations == null) return;
+
+            Character partner = Character.Of(partnerId, Inactive.Exclude);
+            radio = true;
+            Show(conversations.ContactOf(partnerId), partner == null ? null : partner.GetComponent<Talker>(),
+                $"{Named(partner)} ({Radio})");
+        }
+
+        private void Show(Contact pair, Talker with, string title)
         {
             Unfollow();
 
             contact = pair;
-            speaker.text = Named(with);
+            speaker.text = title;
             input.value = string.Empty;
             window.style.display = DisplayStyle.Flex;
 
@@ -125,6 +159,7 @@ namespace Shooter.Client.Interface
 
             Unfollow();
             contact = null;
+            radio = false;
             drawn = 0;
             log.Clear();
             window.style.display = DisplayStyle.None;
@@ -196,6 +231,12 @@ namespace Shooter.Client.Interface
 
         private void Follow(Talker with)
         {
+            if (with == null)
+            {
+                Wait(false);
+                return;
+            }
+
             talker = with;
             talker.ThinkingChanged += Wait;
             Wait(talker.Thinking);
@@ -224,9 +265,10 @@ namespace Shooter.Client.Interface
             input.value = string.Empty;
             typed.StopPropagation();
 
-            if (speech.Length == 0 || playerMouth == null) return;
+            if (speech.Length == 0 || contact == null) return;
 
-            playerMouth.SayRpc(speech);
+            if (radio) conversations.RadioRpc(contact.PartnerId, speech);
+            else playerMouth.SayRpc(speech);
         }
 
         private static Talker TalkerOf(ulong talkerId)

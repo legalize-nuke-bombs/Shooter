@@ -2,6 +2,7 @@ using System;
 using Shooter.Game.Core;
 using Shooter.Game.Speech;
 using Shooter.Logging;
+using UnityEngine;
 
 namespace Shooter.Game.Llm.SayToWanderer
 {
@@ -34,6 +35,11 @@ namespace Shooter.Game.Llm.SayToWanderer
             if (wanderer == null || !wanderer.TryGetComponent(out Player _))
             {
                 return $"Failed to find wanderer {arguments.WandererId}";
+            }
+
+            if (Vector3.Distance(ownCharacter.transform.position, wanderer.transform.position) > PlayerMouth.TalkReach)
+            {
+                return $"Wanderer {arguments.WandererId} is too far to hear you, use send_message to reach them over the radio";
             }
 
             ConversationManager.Current.Say(ownCharacter.Id, arguments.WandererId, arguments.Text, true);
