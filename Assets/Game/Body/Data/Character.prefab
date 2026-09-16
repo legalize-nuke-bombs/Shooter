@@ -417,6 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Inventory
   ShowTopMostFoldoutHeaderGroup: 1
   contents: []
+  giveRadius: 10
 --- !u!114 &2104373744681545555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,6 +494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 412b91588e364b2dbcbbb74539f1823b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Crafting.Crafter
+  ShowTopMostFoldoutHeaderGroup: 1
   availableCrafts: []
 --- !u!114 &-7306219323992828894
 MonoBehaviour:

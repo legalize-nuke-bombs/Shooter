@@ -7,7 +7,6 @@ using Shooter.Game.Core;
 using Shooter.Game.Core.FractionsRelations;
 using Shooter.Game.Core.Groups;
 using Shooter.Game.Core.Saves;
-using Shooter.Game.Notifying;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -20,9 +19,6 @@ namespace Shooter.Game.AI
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
-
-        [SerializeField] private NotificationSpec improved;
-        [SerializeField] private NotificationSpec worsened;
 
         [SerializeField] [Range(0, 100)] private int enemyThreshold;
         [SerializeField] [Range(0, 100)] private int friendThreshold = 90;
@@ -66,7 +62,6 @@ namespace Shooter.Game.AI
 
         private Health health;
         private Character ownCharacter;
-        private Nameable ownNameable;
 
         public struct OnDamagedCallbackData
         {
@@ -80,7 +75,6 @@ namespace Shooter.Game.AI
         private void Awake()
         {
             ownCharacter = GetComponent<Character>();
-            ownNameable = GetComponent<Nameable>();
             health = GetComponent<Health>();
         }
 
@@ -160,31 +154,7 @@ namespace Shooter.Game.AI
 
             amounts[targetCharacter.Id] = amount;
 
-            Notify(targetCharacter, currentAmount, amount);
             return amount - currentAmount;
-        }
-
-        private void Notify(Character targetCharacter, int before, int after)
-        {
-            if (!targetCharacter.TryGetComponent(out MainNotificationRecipient recipient))
-            {
-                Log.Warn($"Entity {name} failed to notify character {targetCharacter.Id}: not a notification recipient");
-                return;
-            }
-
-            NotificationSpec spec = after > before ? improved : worsened;
-
-            if (spec == null)
-            {
-                Log.Warn($"Entity {name} has no notification for an attitude that went {before} -> {after}, the change goes unnoticed");
-                return;
-            }
-
-            recipient.Receive(spec.Notify()
-                .With("actorId", ownCharacter.Id)
-                .With(ownNameable.NamedAs("actorName"))
-                .With("before", before)
-                .With("after", after));
         }
 
         public RelationshipStatus Status(Character targetCharacter)

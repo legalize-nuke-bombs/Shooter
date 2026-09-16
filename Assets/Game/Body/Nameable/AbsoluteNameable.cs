@@ -1,5 +1,4 @@
 using Shooter.Game.Core;
-using Shooter.Game.Notifying;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -36,11 +35,6 @@ namespace Shooter.Game.Body
         public override string PromptName()
         {
             return Name;
-        }
-
-        public override Arg NamedAs(string key)
-        {
-            return new Arg(key, Name);
         }
     }
 }
