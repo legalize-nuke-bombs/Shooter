@@ -10,12 +10,16 @@ namespace Shooter.Game.Speech
         public DateTime Time { get; set; }
         public bool Spoken { get; set; }
 
+        // Whether the listener's mind is woken by the line right away or reads it on its next tick
+        public bool Urgent { get; set; }
+
         private struct SaveData
         {
             public long AuthorId { get; set; }
             public string Content { get; set; }
             public DateTime Time { get; set; }
             public bool Spoken { get; set; }
+            public bool Urgent { get; set; }
         }
         public object SaveObject()
         {
@@ -24,7 +28,8 @@ namespace Shooter.Game.Speech
                 AuthorId = AuthorId,
                 Content = Content,
                 Time = Time,
-                Spoken = Spoken
+                Spoken = Spoken,
+                Urgent = Urgent
             };
         }
         public void LoadObject(SaveToken content)
@@ -34,6 +39,7 @@ namespace Shooter.Game.Speech
             Content = sd.Content;
             Time = sd.Time;
             Spoken = sd.Spoken;
+            Urgent = sd.Urgent;
         }
     }
 }

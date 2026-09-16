@@ -29,6 +29,9 @@ namespace Shooter.Game.Speech
 
         public event Action<long> Arrived;
 
+        // A line said after the mirror was filled, as opposed to the history brought by the snapshot
+        public event Action<long, Line> Heard;
+
         public event Action Cleared;
 
         private void Awake()
@@ -106,37 +109,7 @@ namespace Shooter.Game.Speech
             // A switched-off body has nobody to hear it; the snapshot brings the line when the owner returns
             if (!gameObject.activeInHierarchy) return;
 
-            LineRpc(conversation.Partner(CharacterId), conversation.Messages.Count - 1, Line.Of(message));
-        }
-
-        // The radio reaches only those the player has already exchanged a line with, in either direction
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void RadioRpc(long partnerId, string text)
-        {
-            if (string.IsNullOrEmpty(text) || text.Length > PlayerMouth.SpeechLimit)
-            {
-                Log.Info($"Player {OwnerClientId} radioed an empty or overlong line, ignored");
-                return;
-            }
-
-            if (conversations.GetIfPresent(CharacterId, partnerId) == null)
-            {
-                Log.Info($"Player {OwnerClientId} radioed {partnerId} without ever talking to them, ignored");
-                return;
-            }
-
-            conversations.Say(CharacterId, partnerId, text, false);
-
-            // A dead or gone partner keeps the line in the history and answers with silence
-            Character partner = Character.Of(partnerId, Inactive.Exclude);
-            Talker talker = partner == null ? null : partner.GetComponent<Talker>();
-            if (talker == null || !talker.Alive)
-            {
-                Log.Info($"Player {OwnerClientId} radioed {partnerId}, but nobody is there to hear it");
-                return;
-            }
-
-            talker.Hear(CharacterId, text, false);
+            LineRpc(conversation.Partner(CharacterId), conversation.IndexOf(message), Line.Of(message));
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -198,6 +171,7 @@ namespace Shooter.Game.Speech
             ContactOf(partnerId).Put(index, line);
 
             Arrived?.Invoke(partnerId);
+            Heard?.Invoke(partnerId, line);
         }
     }
 }

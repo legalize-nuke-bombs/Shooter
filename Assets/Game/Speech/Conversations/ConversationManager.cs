@@ -95,7 +95,7 @@ namespace Shooter.Game.Speech
             conversationsById[conversation.Second].Add(conversation);
         }
 
-        public Message Say(long authorId, long listenerId, string content, bool spoken)
+        public Message Say(long authorId, long listenerId, string content, bool spoken, bool urgent)
         {
             Conversation conversation = GetOrCreate(authorId, listenerId);
             var message = new Message
@@ -103,6 +103,7 @@ namespace Shooter.Game.Speech
                 AuthorId = authorId,
                 Content = content,
                 Spoken = spoken,
+                Urgent = urgent,
                 Time = Clock.Current.Now
             };
 

@@ -46,6 +46,22 @@ namespace Shooter.Client.Playing
         // The partner of the open radio talk, null when the window is closed
         public long? RadioPartner => radioPartner;
 
+        // The partner of the talk on screen, face to face or over the radio; null when no talk is open
+        public long? TalkPartner
+        {
+            get
+            {
+                if (!talking) return null;
+                if (radioPartner != null) return radioPartner;
+                if (playerMouth == null || playerMouth.Interlocutor == 0) return null;
+                if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(playerMouth.Interlocutor, out NetworkObject found))
+                    return null;
+
+                Character partner = found.GetComponent<Character>();
+                return partner == null ? null : partner.Id;
+            }
+        }
+
         private void Awake()
         {
             movement = GetComponent<RpcMovement>();

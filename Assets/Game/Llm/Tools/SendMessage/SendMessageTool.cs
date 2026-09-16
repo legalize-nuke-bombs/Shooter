@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
-using Shooter.Game.Notifying;
 using Shooter.Game.Speech;
 using Shooter.Logging;
 using UnityEngine;
@@ -16,10 +15,7 @@ namespace Shooter.Game.Llm.SendMessage
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private NotificationSpec mail;
-
         private Character ownCharacter;
-        private Nameable ownNameable;
 
         public override string Name => "send_message";
 
@@ -46,14 +42,9 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
         protected override void OnStart()
         {
             ownCharacter = Self.GetComponent<Character>();
-            ownNameable = Self.GetComponent<Nameable>();
             if (ownCharacter == null)
             {
                 Log.Error($"Entity {Self.name} does not have component character required by tool {Name}");
-            }
-            if (ownNameable == null)
-            {
-                Log.Error($"Entity {Self.name} does not have component nameable required by tool {Name}");
             }
         }
 
@@ -88,20 +79,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                     failed.Add($"{targetId}: character is dead");
                     continue;
                 }
-                if (!target.TryGetComponent(out MainNotificationRecipient recipient))
-                {
-                    failed.Add($"{targetId}: character does not have main notification recipient");
-                    continue;
-                }
-
-                recipient.Receive(mail.Notify()
-                    .With("actorId", ownCharacter.Id)
-                    .With(ownNameable == null ? new Arg("actorName", string.Empty) : ownNameable.NamedAs("actorName"))
-                    .With("text", arguments.Content)
-                    .Urgened(arguments.Urgent)
-                );
-
-                conversations.Say(ownCharacter.Id, targetId, arguments.Content, false);
+                conversations.Say(ownCharacter.Id, targetId, arguments.Content, false, arguments.Urgent);
 
                 delivered.Add(targetId);
                 Log.Info($"Entity {Self.name} said to {targetId}: {arguments.Content}");

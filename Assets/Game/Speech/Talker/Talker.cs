@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace Shooter.Game.Speech
 {
+    // A character one can walk up to and talk with: opens the talk, shows that it thinks, mutters what it says aloud.
+    // What it hears is not its business: lines reach whoever listens to the conversations
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Speaker))]
@@ -85,16 +87,6 @@ namespace Shooter.Game.Speech
                 promptResult = "Dialogue was opened";
             }
         }
-
-        // Face to face when spoken, over the radio when not
-        public void Hear(long wandererId, string content, bool spoken)
-        {
-            if (!IsServer) return;
-
-            RequestAnswer(wandererId, content, spoken);
-        }
-
-        protected abstract void RequestAnswer(long wandererId, string message, bool spoken);
 
         protected abstract bool Busy();
 
