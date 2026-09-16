@@ -206,10 +206,17 @@ namespace Shooter.Game.Llm
                 );
                 life.Token.ThrowIfCancellationRequested();
 
+                if (!turn.CallsTools)
+                {
+                    // The closing text of a tick has no listener: speech goes through tools only, so keeping it
+                    // would store an unspoken double of every line (or a stage direction) in the story
+                    if (!String.IsNullOrEmpty(turn.Content))
+                        Log.Info($"Entity {entityName} closed the tick with unspoken text: {turn.Content}");
+                    break;
+                }
+
                 history.Append(new LlmMessage
                     { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
-
-                if (!turn.CallsTools) break;
 
                 foreach (LlmToolCall call in turn.ToolCalls)
                     history.Append(new LlmMessage
