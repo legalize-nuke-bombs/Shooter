@@ -35,7 +35,7 @@ namespace Shooter.Game.Llm
 
             llm.Notice(item is StackableItemSpec
                 ? $"[{Llm.Stamp()}] Character {giver} gave you {item.Key} x {amount}"
-                : $"[{Llm.Stamp()}] Character {giver} gave you {item.Key}", false);
+                : $"[{Llm.Stamp()}] Character {giver} gave you {item.Key}", true);
         }
     }
 }
