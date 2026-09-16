@@ -9,8 +9,6 @@ namespace Shooter.Game.Llm.LookAtWanderer
     {
         private static readonly Journal Log = Logs.Here();
 
-        private LlmPendingTable table;
-
         public override string Name => "look_at_wanderer";
 
         public override string Description =>
@@ -19,22 +17,14 @@ Look at wanderer who is talking to you: their health, stamina, belongings, etc.
 ALWAYS use this tool when a wanderer starts a conversation with you.
 ";
 
-        public override bool Available => table.Any;
 
         protected override void OnStart()
         {
-            table = Self.GetComponent<LlmPendingTable>();
-            if (table == null)
-            {
-                Log.Error($"Entity {Self.name} does not have llm pending table component required by tool {Name}");
-            }
         }
 
         protected override string Execute(LookAtWandererArguments arguments, LlmCallContext context)
         {
             long wandererId = arguments.WandererId;
-            if (!table.Has(wandererId)) return $"Wanderer {wandererId} isn't talking to you right now.";
-
             Character wanderer = Character.Of(wandererId, Inactive.Exclude);
             if (wanderer == null)
             {
