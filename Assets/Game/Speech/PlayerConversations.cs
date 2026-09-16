@@ -109,6 +109,36 @@ namespace Shooter.Game.Speech
             LineRpc(conversation.Partner(CharacterId), conversation.Messages.Count - 1, Line.Of(message));
         }
 
+        // The radio reaches only those the player has already exchanged a line with, in either direction
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void RadioRpc(long partnerId, string text)
+        {
+            if (string.IsNullOrEmpty(text) || text.Length > PlayerMouth.SpeechLimit)
+            {
+                Log.Info($"Player {OwnerClientId} radioed an empty or overlong line, ignored");
+                return;
+            }
+
+            if (conversations.GetIfPresent(CharacterId, partnerId) == null)
+            {
+                Log.Info($"Player {OwnerClientId} radioed {partnerId} without ever talking to them, ignored");
+                return;
+            }
+
+            conversations.Say(CharacterId, partnerId, text, false);
+
+            // A dead or gone partner keeps the line in the history and answers with silence
+            Character partner = Character.Of(partnerId, Inactive.Exclude);
+            Talker talker = partner == null ? null : partner.GetComponent<Talker>();
+            if (talker == null || !talker.Alive)
+            {
+                Log.Info($"Player {OwnerClientId} radioed {partnerId}, but nobody is there to hear it");
+                return;
+            }
+
+            talker.Hear(CharacterId, text, false);
+        }
+
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         private void RequestRpc()
         {

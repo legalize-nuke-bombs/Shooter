@@ -86,14 +86,15 @@ namespace Shooter.Game.Speech
             }
         }
 
-        public void Listen(PlayerMouth mouth, string content)
+        // Face to face when spoken, over the radio when not
+        public void Hear(long wandererId, string content, bool spoken)
         {
             if (!IsServer) return;
 
-            RequestAnswer(mouth.CharacterId, content);
+            RequestAnswer(wandererId, content, spoken);
         }
 
-        protected abstract void RequestAnswer(long wandererId, string message);
+        protected abstract void RequestAnswer(long wandererId, string message, bool spoken);
 
         protected abstract bool Busy();
 

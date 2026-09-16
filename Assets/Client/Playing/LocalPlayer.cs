@@ -32,6 +32,7 @@ namespace Shooter.Client.Playing
         private OwnRecoil recoil;
         private Sleeper sleeper;
         private bool talking;
+        private long? radioPartner;
         private float yaw;
 
         public bool InventoryOpen { get; private set; }
@@ -39,6 +40,9 @@ namespace Shooter.Client.Playing
         public bool Paused { get; private set; }
 
         public bool Inviting { get; private set; }
+
+        // The partner of the open radio talk, null when the window is closed
+        public long? RadioPartner => radioPartner;
 
         private void Awake()
         {
@@ -158,6 +162,7 @@ namespace Shooter.Client.Playing
             controls = null;
             InventoryOpen = false;
             talking = false;
+            radioPartner = null;
 
             Point(true);
             Log.Info("Local player inactive");
@@ -266,11 +271,30 @@ namespace Shooter.Client.Playing
             Capture();
         }
 
+        public void OpenRadioTalk(long partnerId)
+        {
+            radioPartner = partnerId;
+            talking = true;
+            Capture();
+            Log.Info($"Radio talk with {partnerId} opened");
+        }
+
+        public void CloseRadioTalk()
+        {
+            if (radioPartner == null) return;
+
+            radioPartner = null;
+            talking = false;
+            Capture();
+            Log.Info("Radio talk closed");
+        }
+
         private void Escape(InputAction.CallbackContext context)
         {
             if (talking)
             {
-                playerMouth.HangUpRpc();
+                if (radioPartner != null) CloseRadioTalk();
+                else playerMouth.HangUpRpc();
                 return;
             }
 

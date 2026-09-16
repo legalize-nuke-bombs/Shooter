@@ -19,9 +19,11 @@ namespace Shooter.Game.Llm
             return llm.Busy;
         }
 
-        protected override void RequestAnswer(long wandererId, string message)
+        protected override void RequestAnswer(long wandererId, string message, bool spoken)
         {
-            llm.Notice($"Wanderer [ID {wandererId}] says: {message}", true);
+            llm.Notice(spoken
+                ? $"Wanderer [ID {wandererId}] says: {message}"
+                : $"Wanderer [ID {wandererId}] says over the radio: {message}", true);
         }
     }
 }
