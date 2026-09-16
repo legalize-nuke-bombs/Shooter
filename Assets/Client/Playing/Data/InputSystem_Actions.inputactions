@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Radio",
+                    "type": "Button",
+                    "id": "c9a90c59-3585-4c27-977b-bb1644a2bc5e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -523,6 +532,17 @@
                     "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "34027120-de26-4466-88d1-3c85eefed802",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Radio",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -624,6 +644,15 @@
                     "name": "Inventory",
                     "type": "Button",
                     "id": "be58cfb9-b46f-4429-8094-297bc0694926",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Radio",
+                    "type": "Button",
+                    "id": "d01f8869-3599-4a7b-9069-7fec5adf2637",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1057,6 +1086,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7edbebf4-e9f7-4ad1-8542-fb973d318878",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Radio",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
