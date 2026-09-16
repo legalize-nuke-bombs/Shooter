@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Shooter.Client.Playing;
 using Shooter.Game.Core;
@@ -8,6 +9,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
+    [RequireComponent(typeof(Aimer))]
     public class InventoryOverlay : Overlay
     {
         private const string WindowElement = "inventory-screen";
@@ -21,6 +23,7 @@ namespace Shooter.Client.Interface
         private const int Rows = 6;
         private const int HandRows = 2;
         private static readonly Journal Log = Logs.Here();
+        private Aimer aimer;
         private Inventory bag;
         private Label coins;
         private VisualElement curtain;
@@ -34,6 +37,11 @@ namespace Shooter.Client.Interface
         private bool stale;
 
         private VisualElement window;
+
+        private void Awake()
+        {
+            aimer = GetComponent<Aimer>();
+        }
 
         private void Update()
         {
@@ -134,7 +142,9 @@ namespace Shooter.Client.Interface
             {
                 ItemSpec spec = catalog == null ? null : catalog.Spec(equipped.SpecId);
 
-                held.Add(Thing(spec, equipped.SpecId, 0, 0, null, equippedSlot, true, true));
+                VisualElement thing = Thing(spec, equipped.SpecId, 0, 0, null, equippedSlot, true, true);
+                AddMenu(thing, null, 0, equippedSlot);
+                held.Add(thing);
             }
 
             IReadOnlyList<UniqueItem> items = bag.UniqueItems;
@@ -147,8 +157,10 @@ namespace Shooter.Client.Interface
                 ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
                 Pack(taken, spec, out int row, out int column);
 
-                grid.Add(Thing(spec, item.SpecId, row, column, null, slot,
-                    spec is UniqueItemSpec unique && unique.Equipable, false));
+                VisualElement thing = Thing(spec, item.SpecId, row, column, null, slot,
+                    spec is UniqueItemSpec unique && unique.Equipable, false);
+                AddMenu(thing, null, 0, slot);
+                grid.Add(thing);
             }
 
             int kinds = catalog == null ? 0 : catalog.Count;
@@ -170,7 +182,7 @@ namespace Shooter.Client.Interface
 
                 VisualElement thing = Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot, false,
                     false);
-                if (spec.Usable) AddMenu(thing, index);
+                AddMenu(thing, spec, amount, Inventory.NoSlot);
 
                 grid.Add(thing);
             }
@@ -326,18 +338,19 @@ namespace Shooter.Client.Interface
             else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.NoSlot);
         }
 
-        private void AddMenu(VisualElement thing, int index)
+        // A stack comes with its spec and amount, a unique with its slot
+        private void AddMenu(VisualElement thing, StackableItemSpec stack, int amount, int slot)
         {
             thing.RegisterCallback<PointerDownEvent>(down =>
             {
                 if (down.button != 1 || ghost != null) return;
 
-                OpenMenu(down.position, index);
+                OpenMenu(down.position, stack, amount, slot);
                 down.StopPropagation();
             });
         }
 
-        private void OpenMenu(Vector2 at, int index)
+        private void OpenMenu(Vector2 at, StackableItemSpec stack, int amount, int slot)
         {
             CloseMenu();
 
@@ -355,17 +368,43 @@ namespace Shooter.Client.Interface
             menu.style.left = local.x;
             menu.style.top = local.y;
 
-            var use = new Button(() =>
-            {
-                if (bag != null) bag.UseStackableRpc(Catalogs.Of<ItemCatalog>().At(index).Id);
+            if (stack != null && stack.Usable) Item(menu, "Использовать", () => bag.UseStackableRpc(stack.Id));
 
-                CloseMenu();
-            }) { text = "Использовать" };
-            use.AddToClassList("context-menu__item");
-            menu.Add(use);
+            // Giving is offered only while somebody stands in the crosshair; the server checks the reach again
+            Character taker = Aimed();
+            if (taker != null)
+            {
+                long takerId = taker.Id;
+
+                if (stack != null) Item(menu, "Отдать", () => bag.GiveStackableRpc(takerId, stack.Id, 1));
+                if (stack != null && amount > 1)
+                    Item(menu, "Отдать все", () => bag.GiveStackableRpc(takerId, stack.Id, amount));
+                if (stack == null) Item(menu, "Отдать", () => bag.GiveUniqueRpc(takerId, slot));
+            }
+
+            if (menu.childCount == 0) return;
 
             curtain.Add(menu);
             window.Add(curtain);
+        }
+
+        private void Item(VisualElement menu, string text, Action action)
+        {
+            var item = new Button(() =>
+            {
+                if (bag != null) action();
+
+                CloseMenu();
+            }) { text = text };
+            item.AddToClassList("context-menu__item");
+            menu.Add(item);
+        }
+
+        private Character Aimed()
+        {
+            if (!aimer.TryHit(out RaycastHit hit) || hit.collider == null) return null;
+
+            return hit.collider.GetComponentInParent<Character>();
         }
 
         private void CloseMenu()
