@@ -4,6 +4,7 @@ using System.Text;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
+using Shooter.Game.Crafting;
 using Shooter.Logging;
 using Unity.Collections;
 using Unity.Netcode;
@@ -341,6 +342,14 @@ namespace Shooter.Game.Loot
             InventoryExchanger exchanger = GetComponent<InventoryExchanger>();
             if (exchanger == null || !exchanger.GiveUnique(targetId, slot))
                 Log.Info($"Entity {name} failed to give slot {slot} to {targetId} rpc");
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void CraftRpc(FixedString32Bytes craftId)
+        {
+            Crafter crafter = GetComponent<Crafter>();
+            if (crafter == null || !crafter.TryCraft(crafter.Known(craftId.ToString())))
+                Log.Info($"Entity {name} failed to craft {craftId} rpc");
         }
 
         public bool UseStackable(FixedString32Bytes stackableId)

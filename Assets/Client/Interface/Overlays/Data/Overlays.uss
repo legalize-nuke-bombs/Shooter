@@ -168,6 +168,7 @@
     top: 0;
     right: 0;
     bottom: 0;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     display: none;
@@ -220,6 +221,25 @@
 
 .inventory__empty {
     color: rgba(255, 255, 255, 0.45);
+}
+
+.craft {
+    margin-left: 14px;
+    padding: 18px 20px;
+    background-color: rgba(8, 8, 10, 0.94);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.14);
+    flex-direction: row;
+    align-items: center;
+}
+
+.craft__grid {
+    position: relative;
+}
+
+.craft__output {
+    position: relative;
+    margin-left: 24px;
 }
 
 .slot {

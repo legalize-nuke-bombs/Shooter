@@ -33,6 +33,10 @@
                 <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands"/>
                 <ui:VisualElement name="inventory-grid" class="inventory__grid"/>
             </ui:VisualElement>
+            <ui:VisualElement class="craft">
+                <ui:VisualElement name="craft-grid" class="craft__grid"/>
+                <ui:VisualElement name="craft-output" class="craft__output"/>
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="talk" class="talk">
             <ui:Label name="talk-name" class="line talk__name" picking-mode="Ignore"/>
