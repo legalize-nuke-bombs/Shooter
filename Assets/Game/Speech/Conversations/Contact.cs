@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Shooter.Game.Speech
 {
-    // One partner's side of the mirror: lines by their index in the pair, gaps allowed until they arrive
     public sealed class Contact
     {
         private readonly Dictionary<int, Line> lines = new();
@@ -20,7 +19,6 @@ namespace Shooter.Game.Speech
 
         public DateTime LastTime { get; private set; }
 
-        // How far the player has read, by index
         public int Seen { get; set; }
 
         public int Unread => Math.Max(0, Count - Seen);

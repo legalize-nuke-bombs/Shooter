@@ -28,7 +28,6 @@ namespace Shooter.Client.Interface
         private const int HandRows = 2;
         private static readonly Journal Log = Logs.Here();
 
-        // A cell of the bench: a kind and how many of it stand there, every one backed by the bag
         private struct Unit
         {
             public StackableItemSpec Spec;
@@ -208,7 +207,6 @@ namespace Shooter.Client.Interface
                     continue;
                 }
 
-                // What stands on the bench is not in the bag any more, as far as the eye goes
                 amount -= Placed(spec);
                 if (amount == 0) continue;
 
@@ -225,7 +223,6 @@ namespace Shooter.Client.Interface
             Bench();
         }
 
-        // Units of a kind on the bench
         private int Placed(StackableItemSpec spec)
         {
             int placed = 0;
@@ -236,8 +233,7 @@ namespace Shooter.Client.Interface
             return placed;
         }
 
-        // The bag changed under the bench: a taken result pays one unit from every cell, and whatever the bag
-        // can no longer back leaves the bench, last placed first
+        // A result that reached the bag pays one unit from every cell; what the bag no longer backs leaves the bench
         private void Settle()
         {
             if (bag == null)
@@ -271,7 +267,6 @@ namespace Shooter.Client.Interface
             if (bench[cell].Count <= 0) bench[cell] = default;
         }
 
-        // How many of an item the bag holds, whatever its kind
         private int Counted(ItemSpec spec)
         {
             if (bag == null) return 0;
@@ -323,7 +318,6 @@ namespace Shooter.Client.Interface
             craftOutput.EnableInClassList("craft__output--ready", match != null);
             if (match == null) return;
 
-            // The result is taken by dragging it into the bag; that is the craft
             VisualElement output = Standing(match.Output, 0, 0);
             Draggable(output, Icon(match.Output), new Vector2(Cell, Cell), () => draggedOutput = true);
             craftOutput.Add(output);
@@ -341,8 +335,7 @@ namespace Shooter.Client.Interface
             return thing;
         }
 
-        // A known recipe whose shape stands on the bench, wherever it stands: the filled cells' bounding box
-        // is compared to the recipe's, so a one-cell recipe matches in any cell; counts do not matter
+        // The bounding box of the filled cells against the recipe's, so a one-cell recipe matches in any cell
         private Craft Match()
         {
             if (crafter == null || bag == null) return null;
@@ -605,7 +598,6 @@ namespace Shooter.Client.Interface
 
             if (draggedStack != null)
             {
-                // The whole stack the bag still shows goes onto the bench, never a unit more than the bag has
                 int free = bag.Count(draggedStack) - Placed(draggedStack);
                 if (cell < 0 || free <= 0) return;
 
@@ -621,7 +613,6 @@ namespace Shooter.Client.Interface
             else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.NoSlot);
         }
 
-        // A stack comes with its spec and amount, a unique with its slot
         private void AddMenu(VisualElement thing, StackableItemSpec stack, int amount, int slot)
         {
             thing.RegisterCallback<PointerDownEvent>(down =>
@@ -653,7 +644,6 @@ namespace Shooter.Client.Interface
 
             if (stack != null && stack.Usable) Item(menu, "Использовать", () => bag.UseRpc(stack.Id));
 
-            // Giving is offered only while somebody stands in the crosshair; the server checks the reach again
             Character taker = Aimed();
             if (taker != null)
             {

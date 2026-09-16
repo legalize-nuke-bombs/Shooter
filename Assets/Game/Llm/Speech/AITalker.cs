@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    // A resident one can talk with thinks while its mind is busy; what it hears comes through LlmConversationObserver
     [RequireComponent(typeof(Llm))]
     public sealed class AITalker : Talker
     {

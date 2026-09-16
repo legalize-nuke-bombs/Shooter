@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
-    // Things handed over to the player show up in the corner: what, how many and from whom
     [RequireComponent(typeof(Inventory))]
     public class PlayerInventoryObserver : NetworkBehaviour
     {
@@ -36,7 +35,7 @@ namespace Shooter.Client.Playing
 
         private void Relay(Character from, ItemSpec item, int amount)
         {
-            // A switched-off body has nobody to show it to
+            // An offline body is owned by the host
             if (item == null || !gameObject.activeInHierarchy) return;
 
             ReceivedRpc(from == null ? GameObjectRuntimeId.Default : from.Id, item.Id, amount);

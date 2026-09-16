@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    // The mind learns who handed it what; it does not wake for that
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(Inventory))]
     public class LlmInventoryObserver : MonoBehaviour

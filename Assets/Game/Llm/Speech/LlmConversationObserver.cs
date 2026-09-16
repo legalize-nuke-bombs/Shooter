@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    // The mind hears every line addressed to it: a wanderer face to face or over the radio, a resident's mail
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]

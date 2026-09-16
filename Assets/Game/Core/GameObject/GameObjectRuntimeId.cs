@@ -11,7 +11,6 @@ namespace Shooter.Game.Core
 
         public const long Default = -1;
 
-        // The server hands the id out, so every client reads the same number as the server
         private readonly NetworkVariable<long> value = new(Default);
 
         public long Value => value.Value;
@@ -48,8 +47,7 @@ namespace Shooter.Game.Core
             base.OnNetworkSpawn();
             if (!IsServer || value.Value != Default) return;
 
-            // Handed out at the spawn, not in Awake: the variable knows its behaviour by now, and the value
-            // still rides in the spawn message itself; a save loaded afterwards overrides it
+            // Not in Awake: a network variable written before the spawn does not know its behaviour yet
             GameObjectRuntimeIds ids = GameObjectRuntimeIds.Current;
             value.Value = ids == null ? UnityEngine.Random.Range(0, int.MaxValue) : ids.Next();
         }

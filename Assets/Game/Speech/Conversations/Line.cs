@@ -3,7 +3,6 @@ using Unity.Netcode;
 
 namespace Shooter.Game.Speech
 {
-    // A message as it travels to the owning client: the same four fields, nothing resolved on the way
     public struct Line : INetworkSerializable
     {
         public long AuthorId;

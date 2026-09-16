@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
-    // A static notification shows up in the corner of the owner's screen as its asset describes it
     [RequireComponent(typeof(NotificationRecipient))]
     public class PlayerNotificationObserver : NetworkBehaviour
     {
@@ -30,7 +29,7 @@ namespace Shooter.Client.Playing
 
         private void Relay(NotificationSpec spec)
         {
-            // A switched-off body has nobody to show it to
+            // An offline body is owned by the host
             if (!gameObject.activeInHierarchy) return;
 
             ShownRpc(spec.Id);

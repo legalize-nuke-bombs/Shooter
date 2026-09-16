@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Notifying
 {
-    // A fixed message with a picture and a sound: the same for every character it reaches
     [CreateAssetMenu(menuName = "Shooter/Notification", fileName = "Notification")]
     public class NotificationSpec : Spec
     {

@@ -209,7 +209,7 @@ namespace Shooter.Game.Loot
 
         public event Action Changed;
 
-        // Things handed over by another character: who gave, what, how many; picking up and crafting stay silent
+        // Raised by Receive only: picking up, crafting and looting add silently
         public event Action<Character, ItemSpec, int> Received;
 
         public override void OnNetworkSpawn()
@@ -318,7 +318,6 @@ namespace Shooter.Game.Loot
             return slots.Value.Contains(item);
         }
 
-        // Hands things to a character nearby: all of the amount or nothing, the taker's bag tells who gave it
         public bool Give(Character to, StackableItemSpec spec, int amount)
         {
             if (!IsServer || amount <= 0 || spec == null) return false;

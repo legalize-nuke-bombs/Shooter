@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
-    // A line over the radio asks for the player's attention, unless its conversation is already on screen
     [RequireComponent(typeof(PlayerConversations))]
     [RequireComponent(typeof(LocalPlayer))]
     public class PlayerConversationObserver : MonoBehaviour

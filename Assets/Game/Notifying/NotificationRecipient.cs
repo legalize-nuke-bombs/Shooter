@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Shooter.Game.Notifying
 {
-    // A static notification reaches a character here; the observers of each audience decide how to show or tell it
     [RequireComponent(typeof(Character))]
     public class NotificationRecipient : MonoBehaviour
     {
