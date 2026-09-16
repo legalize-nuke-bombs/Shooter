@@ -105,6 +105,7 @@ namespace Shooter.Game.Body
             transform.SetPositionAndRotation(position, rotation);
             characterController.enabled = true;
             fall = 0f;
+            airborne = false;
         }
 
         private static Vector2 Finite(Vector2 value)
