@@ -33,6 +33,8 @@ namespace Shooter.Client.Interface
         private const float ConeAngle = 12f;
         private const float BodyRadius = 0.6f;
         private const float SendPatience = 3f;
+        private const float LookInterval = 0.2f;
+        private const float Stickiness = 1.25f;
         private const int SplitDigits = 7;
         private static readonly Journal Log = Logs.Here();
 
@@ -66,7 +68,7 @@ namespace Shooter.Client.Interface
         private Crafter crafter;
         private Character own;
         private Character taker;
-        private Health takerHealth;
+        private float nextLook;
         private VisualElement craftGrid;
         private VisualElement craftOutput;
         private VisualElement give;
@@ -159,8 +161,8 @@ namespace Shooter.Client.Interface
             bag = OwnPlayer.Find<Inventory>();
             crafter = OwnPlayer.Find<Crafter>();
             own = OwnPlayer.Find<Character>();
-            taker = Taker();
-            takerHealth = taker == null ? null : taker.GetComponent<Health>();
+            taker = Taker(null);
+            nextLook = Time.unscaledTime + LookInterval;
 
             if (bag != null) bag.Changed += Touch;
 
@@ -179,7 +181,6 @@ namespace Shooter.Client.Interface
             crafter = null;
             own = null;
             taker = null;
-            takerHealth = null;
             pendingCraft = null;
             Array.Clear(bench, 0, bench.Length);
             splits.Clear();
@@ -202,17 +203,13 @@ namespace Shooter.Client.Interface
 
         private void Watch()
         {
-            if (ReferenceEquals(taker, null)) return;
-
-            if (taker == null || !taker.gameObject.activeInHierarchy || takerHealth != null && !takerHealth.Alive)
+            if (Time.unscaledTime >= nextLook)
             {
-                Log.Info("The one taking things is gone, the offer returns to the bag");
-                taker = null;
-                takerHealth = null;
-                offers.Clear();
-                stale = true;
-                return;
+                nextLook = Time.unscaledTime + LookInterval;
+                Look();
             }
+
+            if (taker == null) return;
 
             bool ready = false;
             for (int i = 0; i < offers.Count; i++)
@@ -599,43 +596,69 @@ namespace Shooter.Client.Interface
             Log.Info($"Handed {sent} things over to {taker.name}");
         }
 
-        // The living character nearest to the middle of the view; at arm's length a body covers more than the cone
-        private Character Taker()
+        private void Look()
+        {
+            Character seen = Taker(taker);
+            if (ReferenceEquals(seen, taker)) return;
+
+            Log.Info(seen == null
+                ? "Nobody in view can take things now, the offer returns to the bag"
+                : $"The bag offers things to {seen.name} now");
+
+            taker = seen;
+            offers.RemoveAll(offer => offer.SentAt <= 0f);
+            stale = true;
+        }
+
+        // The living character nearest to the middle of the view; the one already chosen keeps a margin,
+        // so the panel does not blink at the edge of the cone or the radius
+        private Character Taker(Character current)
         {
             Camera view = Camera.main;
             if (view == null || own == null || bag == null) return null;
 
             Transform eyes = view.transform;
+            if (current != null && Offside(current, eyes, Stickiness) <= 1f) return current;
+
             Character best = null;
             float bestScore = float.PositiveInfinity;
 
             Character.ForEach(candidate =>
             {
-                if (candidate == own || !candidate.gameObject.activeInHierarchy) return;
-                if (candidate.GetComponentInChildren<Inventory>() == null) return;
-
-                Health health = candidate.GetComponent<Health>();
-                if (health != null && !health.Alive) return;
-
-                if (Vector3.Distance(own.transform.position, candidate.transform.position) > bag.GiveRadius) return;
-
-                Vector3 toward = candidate.transform.position - eyes.position;
-                float distance = toward.magnitude;
-                if (distance < 0.01f) return;
-
-                float off = float.PositiveInfinity;
-                foreach (float height in BodyHeights)
-                    off = Mathf.Min(off, Vector3.Angle(eyes.forward, toward + Vector3.up * height));
-
-                float allowed = Mathf.Max(ConeAngle, Mathf.Atan2(BodyRadius, distance) * Mathf.Rad2Deg);
-                float score = off / allowed;
-                if (score > 1f || score >= bestScore || !Visible(eyes, candidate, toward / distance, distance)) return;
+                float score = Offside(candidate, eyes, 1f);
+                if (score > 1f || score >= bestScore) return;
 
                 best = candidate;
                 bestScore = score;
             }, Inactive.Exclude);
 
             return best;
+        }
+
+        // A share of the cone, above 1 is out of reach; at arm's length a body covers more than the cone
+        private float Offside(Character candidate, Transform eyes, float slack)
+        {
+            if (candidate == null || candidate == own || !candidate.gameObject.activeInHierarchy) return float.PositiveInfinity;
+            if (candidate.GetComponentInChildren<Inventory>() == null) return float.PositiveInfinity;
+
+            Health health = candidate.GetComponent<Health>();
+            if (health != null && !health.Alive) return float.PositiveInfinity;
+
+            if (Vector3.Distance(own.transform.position, candidate.transform.position) > bag.GiveRadius * slack)
+                return float.PositiveInfinity;
+
+            Vector3 toward = candidate.transform.position - eyes.position;
+            float distance = toward.magnitude;
+            if (distance < 0.01f) return float.PositiveInfinity;
+
+            float off = float.PositiveInfinity;
+            foreach (float height in BodyHeights)
+                off = Mathf.Min(off, Vector3.Angle(eyes.forward, toward + Vector3.up * height));
+
+            float allowed = Mathf.Max(ConeAngle, Mathf.Atan2(BodyRadius, distance) * Mathf.Rad2Deg) * slack;
+            float score = off / allowed;
+
+            return score <= 1f && Visible(eyes, candidate, toward / distance, distance) ? score : float.PositiveInfinity;
         }
 
         private bool Visible(Transform eyes, Character candidate, Vector3 direction, float distance)
