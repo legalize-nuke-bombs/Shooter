@@ -17,6 +17,7 @@ namespace Shooter.Client.Interface
         private const string LogElement = "talk-log";
         private const string WaitingElement = "talk-waiting";
         private const string InputElement = "talk-input";
+        private const string GiveElement = "talk-give";
         private const string Stranger = "Незнакомец";
         private const string Radio = "рация";
         private static readonly Journal Log = Logs.Here();
@@ -24,6 +25,7 @@ namespace Shooter.Client.Interface
         [SerializeField] private float charInterval = 0.01f;
 
         private readonly NameMapper mapper = new();
+        private Button give;
         private TextField input;
         private ScrollView log;
         private Label speaker;
@@ -92,8 +94,9 @@ namespace Shooter.Client.Interface
             log = root.Q<ScrollView>(LogElement);
             waiting = root.Q<Label>(WaitingElement);
             input = root.Q<TextField>(InputElement);
+            give = root.Q<Button>(GiveElement);
 
-            if (window == null || speaker == null || log == null || waiting == null || input == null)
+            if (window == null || speaker == null || log == null || waiting == null || input == null || give == null)
             {
                 Log.Error($"Overlay document has no {WindowElement} window, talks stay invisible");
                 return false;
@@ -101,6 +104,7 @@ namespace Shooter.Client.Interface
 
             input.maxLength = PlayerMouth.SpeechLimit;
             input.RegisterCallback<KeyDownEvent>(Typed);
+            give.clicked += Give;
             window.style.display = DisplayStyle.None;
 
             return true;
@@ -109,6 +113,9 @@ namespace Shooter.Client.Interface
         protected override void Unbind()
         {
             Forget();
+
+            if (give != null) give.clicked -= Give;
+            give = null;
             window = null;
         }
 
@@ -141,6 +148,7 @@ namespace Shooter.Client.Interface
 
             contact = pair;
             speaker.text = title;
+            give.style.display = radio ? DisplayStyle.None : DisplayStyle.Flex;
             input.value = string.Empty;
             window.style.display = DisplayStyle.Flex;
 
@@ -265,6 +273,12 @@ namespace Shooter.Client.Interface
 
             if (radio && playerRadio != null) playerRadio.SayRpc(contact.PartnerId, speech);
             else playerMouth.SayRpc(speech);
+        }
+
+        private void Give()
+        {
+            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
+            if (player != null) player.OpenInventory();
         }
 
         private static Talker TalkerOf(ulong talkerId)
