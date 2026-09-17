@@ -8,11 +8,13 @@ namespace Shooter.Game.World
     public class SleepCycle : NetworkBehaviour
     {
         private const float SkipTimeScale = 50f;
+        private const double BedtimeHours = 22;
+        private const double WakeHours = 8;
         private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkVariable<bool> asleep = new();
 
-        private bool wasNight;
+        private bool wasBedtime;
 
         public static SleepCycle Current { get; private set; }
 
@@ -60,17 +62,24 @@ namespace Shooter.Game.World
                 Log.Info($"World asleep is now {everyone}");
             }
 
-            if (clock.IsNight())
+            if (IsBedtime())
             {
-                wasNight = true;
+                wasBedtime = true;
                 return;
             }
 
-            if (!wasNight) return;
+            if (!wasBedtime) return;
 
-            wasNight = false;
-            Log.Info("Dawn broke, waking sleepers");
+            wasBedtime = false;
+            Log.Info("Bedtime is over, waking sleepers");
             WakeAll();
+        }
+
+        public bool IsBedtime()
+        {
+            double hours = Clock.Current.Now.TimeOfDay.TotalHours;
+
+            return hours >= BedtimeHours || hours < WakeHours;
         }
 
         private bool AllAsleep()
