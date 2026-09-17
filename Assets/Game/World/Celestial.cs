@@ -36,12 +36,5 @@ namespace Shooter.Game.World
 
             return Quaternion.Euler(elevation, azimuth + 180f, 0f);
         }
-
-        public static float HalfDayAngle(float declination, float latitude)
-        {
-            float horizonCrossing = -Mathf.Tan(latitude * Mathf.Deg2Rad) * Mathf.Tan(declination * Mathf.Deg2Rad);
-
-            return Mathf.Acos(Mathf.Clamp(horizonCrossing, -1f, 1f)) * Mathf.Rad2Deg;
-        }
     }
 }

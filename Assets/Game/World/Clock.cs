@@ -69,12 +69,6 @@ namespace Shooter.Game.World
 
         public double HourAngle => (DayFraction - solarNoonHours / 24.0) * 360.0;
 
-        public double DawnFraction => (solarNoonHours - HalfDayHours) / 24.0;
-
-        public double DuskFraction => (solarNoonHours + HalfDayHours) / 24.0;
-
-        private double HalfDayHours => Celestial.HalfDayAngle(declination, latitude) / 15.0;
-
         public float Scale
         {
             get => scale.Value;
@@ -130,13 +124,6 @@ namespace Shooter.Game.World
         private void NormalSpeed()
         {
             Scale = 1f;
-        }
-
-        public bool IsNight()
-        {
-            double fraction = DayFraction;
-
-            return fraction >= DuskFraction || fraction < DawnFraction;
         }
 
         private void Step()
