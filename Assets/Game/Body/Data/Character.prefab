@@ -551,5 +551,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af21de618049e2e42b85bb3ca293fc8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CapsuleMarker
-  label: 
-  tint: {r: 0.35, g: 0.9, b: 1, a: 1}
+  offset: {x: 0, y: -1, z: 0}

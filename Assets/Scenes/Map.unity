@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af21de618049e2e42b85bb3ca293fc8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CapsuleMarker
+  offset: {x: 0, y: 0, z: 0}
 --- !u!4 &41839212
 Transform:
   m_ObjectHideFlags: 0
@@ -325,7 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.TextMarker
   label: 
   textColor: {r: 1, g: 1, b: 1, a: 1}
-  offset: {x: 0, y: 1.2, z: 0}
+  offset: {x: 0, y: 2.2, z: 0}
 --- !u!1001 &49294110
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4917,6 +4918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af21de618049e2e42b85bb3ca293fc8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CharacterMarker
+  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &915082301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4931,7 +4933,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.TextMarker
   label: 
   textColor: {r: 1, g: 1, b: 1, a: 1}
-  offset: {x: 0, y: 1.2, z: 0}
+  offset: {x: 0, y: 2.2, z: 0}
 --- !u!1 &933635220
 GameObject:
   m_ObjectHideFlags: 0
