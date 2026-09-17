@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1409396421700863558, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
+      propertyPath: spec
+      value: 
+      objectReference: {fileID: 11400000, guid: 73ebcce2cc552da4dac557329c3f0632, type: 2}
+    - target: {fileID: 1820400599769648782, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
+      propertyPath: fraction
+      value: 
+      objectReference: {fileID: 11400000, guid: 7a2c8878960749d44a025c7f467dd1d4, type: 2}
     - target: {fileID: 2319365671940130797, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: m_LocalPosition.x
       value: 30.448093
@@ -52,13 +60,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie1
       objectReference: {fileID: 0}
+    - target: {fileID: 5149324034548456437, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
+      propertyPath: spec
+      value: 
+      objectReference: {fileID: 11400000, guid: f2cb18773d5bcffd89c26e32124cd661, type: 2}
     - target: {fileID: 7594467300387980415, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: m_InScenePlaced
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7594467300387980415, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3248596003
+      value: 1633887880
       objectReference: {fileID: 0}
     - target: {fileID: 7594467300387980415, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
