@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GreenHamlet
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Knowledge.KnowledgeSpec
   id: 
-  content: 'The green hamlet is a small old abandoned hamlet in the forest. A big
-    strange cube stands nearby. Three residents live in the green hamlet: Kapsul,
+  content: 'The green hamlet is a small old abandoned hamlet in the Chernolesye valley.
+    A big strange cube stands nearby. Three residents live in the green hamlet: Kapsul,
     Verter, Martin. All have known each other for a long time. Martin guards the
     hamlet.'

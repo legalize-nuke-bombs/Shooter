@@ -1,4 +1,3 @@
-using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -43,13 +42,6 @@ namespace Shooter.Game.Body
             Flesh.AddComponent<Hitboxes>();
 
             Log.Info($"Entity {name} dressed as {spec.Id}, {Height(Flesh)} m tall");
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (Application.isPlaying) return;
-
-            CapsuleMarker.Draw(transform.position + ModelOffset, gameObject.name);
         }
 
         private static float Height(GameObject flesh)
