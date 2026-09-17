@@ -202,6 +202,7 @@ MonoBehaviour:
   character: 
   knowledges:
   - {fileID: 11400000, guid: 82964d30b5269894da0f91d49e11cf31, type: 2}
+  - {fileID: 11400000, guid: ca9037783428011468b97a13050c44e0, type: 2}
   - {fileID: 11400000, guid: 19563b44737efe64ca3fe03fcd3fd202, type: 2}
   failureCooldown: 2.5
   maxToolRounds: 10

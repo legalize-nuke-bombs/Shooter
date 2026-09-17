@@ -94,6 +94,14 @@ PrefabInstance:
         *
         Kapsul: you do not believe his stories.'
       objectReference: {fileID: 0}
+    - target: {fileID: 3131132399333746512, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
+      propertyPath: knowledges.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131132399333746512, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
+      propertyPath: 'knowledges.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 3f71e5c9648419545be7a8ce670966cc, type: 2}
     - target: {fileID: 5998417678525257926, guid: f0d11ce8293a94d47bac71a905767fa6, type: 3}
       propertyPath: m_InScenePlaced
       value: 0
