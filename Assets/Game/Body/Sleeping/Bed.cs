@@ -37,12 +37,12 @@ namespace Shooter.Game.Body
 
             bool alive = health == null || health.Alive;
             bool handsFree = hands == null || hands.Free;
-            bool night = Clock.Current != null && Clock.Current.IsNight();
+            bool bedtime = SleepCycle.Current != null && Clock.Current != null && SleepCycle.Current.IsBedtime();
 
-            if (!SleepRule.CanSleep(alive, handsFree, night))
+            if (!SleepRule.CanSleep(alive, handsFree, bedtime))
             {
-                Log.Info($"Entity {user.name} can not sleep in {name}: alive {alive}, hands free {handsFree}, night {night}");
-                promptResult = $"Failed to sleep: alive {alive} (must be true) hands free {handsFree} (must be true) night {night} (must be true)";
+                Log.Info($"Entity {user.name} can not sleep in {name}: alive {alive}, hands free {handsFree}, bedtime {bedtime}");
+                promptResult = $"Failed to sleep: alive {alive} (must be true) hands free {handsFree} (must be true) bedtime {bedtime} (must be true)";
                 return;
             }
 
