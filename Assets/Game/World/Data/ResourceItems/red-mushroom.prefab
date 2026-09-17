@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.ResourceItem
   bodyPrefab: {fileID: -372838991472394059, guid: c79a726f1bf80484a859f6bb4ce4959f, type: 3}
-  respawnHours: 24
+  respawnHours: 48
 --- !u!114 &2165350704611589699
 MonoBehaviour:
   m_ObjectHideFlags: 0

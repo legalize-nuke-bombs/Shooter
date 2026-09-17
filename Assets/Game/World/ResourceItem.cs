@@ -21,7 +21,7 @@ namespace Shooter
         private bool alive = false;
         // World time (clock seconds) when the body was taken; null = never taken, so the body grows at once
         private double? takenAt;
-        [SerializeField] private float respawnHours = 12f;
+        [SerializeField] private float respawnHours = 48f;
 
         public string ComponentKey => "ResourceItem";
         private struct SaveData
