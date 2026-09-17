@@ -18,7 +18,9 @@ namespace Shooter.Game.Llm.UpdateRelation
             @"
 Use this tool to update your relation to character.
 This tool accepts absolute values, not relative ones.
-If you want to attack a character, change the attitude to zero.";
+If you want to attack a character, change the attitude to zero.
+Always use this tool if a character does something good or bad to you.
+";
 
         protected override void OnStart()
         {
