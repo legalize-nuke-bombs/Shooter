@@ -24,8 +24,8 @@ namespace Shooter.Game.Llm
         private const string ForcedClearing =
             "Your head overflowed and has been cleared by force: your story so far is gone, only your notes remain. Your notes are your memory now - read the ones you need before you act or speak, start with the one about who you are.";
 
-        private const string StoryHeader =
-            "THE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
+        private const string InitHeader =
+            "YOU MUST INTRODUCE YOURSELF TO YOUR FRIENDS NOW. YOU MUST UPDATE RELATION TO YOUR FRIENDS NOW.\nTHE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
 
         private static readonly Journal Log = Logs.Here();
 
@@ -77,7 +77,7 @@ namespace Shooter.Game.Llm
             string start = (character + "\n" + Knowledge()).Trim('\n');
             if (start.Length == 0) return;
 
-            history.Append(new LlmMessage { Role = LlmRole.User, Content = StoryHeader + start });
+            history.Append(new LlmMessage { Role = LlmRole.User, Content = InitHeader + start });
         }
 
         private string SystemPrompt()
