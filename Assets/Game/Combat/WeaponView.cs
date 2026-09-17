@@ -4,6 +4,7 @@ using Shooter.Game.Loot;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
 
 namespace Shooter.Game.Combat
@@ -205,6 +206,8 @@ namespace Shooter.Game.Combat
             if (animator != null && animator.TryGetComponent(out RigBuilder builder))
                 builder.layers.RemoveAll(layer => layer.rig == hold);
 
+            // Destroy waits for the end of the frame, and until then a new WeaponHold would bind to this one by name
+            hold.transform.SetParent(null, false);
             Destroy(hold.gameObject);
             hold = null;
             rig = null;
@@ -213,7 +216,12 @@ namespace Shooter.Game.Combat
         private void Rebuild()
         {
             Animator animator = Puppet();
-            if (animator != null && animator.TryGetComponent(out RigBuilder builder)) builder.Build();
+            if (animator == null || !animator.TryGetComponent(out RigBuilder builder)) return;
+
+            // Animation Rigging never unbinds its handles: left alone, they outlive a removed WeaponHold and warn on every rebind
+            animator.UnbindAllStreamHandles();
+            animator.UnbindAllSceneHandles();
+            builder.Build();
         }
 
         private Animator Puppet()
