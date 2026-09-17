@@ -10,9 +10,11 @@ namespace Shooter.Game.Core
 
         private static readonly Color DefaultTint = new(0.35f, 0.9f, 1f);
 
+        [SerializeField] private Vector3 offset;
+
         private void OnDrawGizmos()
         {
-            Draw(transform.position, DefaultTint);
+            Draw(transform.position + offset, DefaultTint);
         }
 
         public static void Draw(Vector3 feet, Color tint)
