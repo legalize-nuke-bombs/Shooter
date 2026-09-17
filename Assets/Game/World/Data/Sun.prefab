@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5957707968789750128}
   - component: {fileID: 3936451717357740143}
   - component: {fileID: 3650058678281968514}
+  - component: {fileID: 527848293690976060}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -253,3 +254,16 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &527848293690976060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829309952582066585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88445db36f056784d873b2149f97794f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.Skylight
+  angleStep: 0.25
