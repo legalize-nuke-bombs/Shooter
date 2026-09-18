@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SoundSpec
   id: footstepsrock
   clips:
-  - {fileID: 8300000, guid: 4dc82a7d54bb4c9e809f9457168bf459, type: 3}
-  - {fileID: 8300000, guid: 7ec7615e9ce94928868b7677dd4f4626, type: 3}
-  - {fileID: 8300000, guid: 4bd82831e9b64c63a1eb53004990bd6f, type: 3}
-  - {fileID: 8300000, guid: 8577ebfc277643cb9ad2b4953f0978da, type: 3}
-  - {fileID: 8300000, guid: e80d8350dd314e7cb55812bdbd418ab2, type: 3}
-  volume: 0.12
+  - {fileID: 8300000, guid: af61b96f513f4004b1d025c40f75c7d5, type: 3}
+  - {fileID: 8300000, guid: 4ef6904e06444ec7b42ca0571620825d, type: 3}
+  - {fileID: 8300000, guid: 5b3c7c439a8f441a9b84a8b5207dab15, type: 3}
+  - {fileID: 8300000, guid: 3872c338be424b60b293e005fd74c5d2, type: 3}
+  - {fileID: 8300000, guid: 3dcc2f48a2ac4dc3a85894fb2284bc38, type: 3}
+  - {fileID: 8300000, guid: d9884b65eed849f5a1cfaa57f99810c5, type: 3}
+  - {fileID: 8300000, guid: 7935eed6b9f24b148bb2dde19b3d91a3, type: 3}
+  - {fileID: 8300000, guid: f1eae53be8974a7185ea3d300d8278dc, type: 3}
+  - {fileID: 8300000, guid: 8854878309674cb9942b0a390f186ef6, type: 3}
+  volume: 0.36
   rolloff: 1
   minDistance: 1
   maxDistance: 20
