@@ -19,7 +19,7 @@ namespace Shooter.Game.Body
 
         private static SoundCatalog Sounds => Catalogs.Of<SoundCatalog>();
 
-        public void Play(SoundSpec sound)
+        public void Play(SoundSpec sound, float gain = 1f)
         {
             if (!IsServer) return;
 
@@ -29,11 +29,11 @@ namespace Shooter.Game.Body
                 return;
             }
 
-            PlayRpc(sound.Id, sound.Pick());
+            PlayRpc(sound.Id, sound.Pick(), gain);
         }
 
         [Rpc(SendTo.Everyone)]
-        private void PlayRpc(FixedString32Bytes id, byte variant)
+        private void PlayRpc(FixedString32Bytes id, byte variant, float gain)
         {
             SoundCatalog catalog = Sounds;
             if (catalog == null)
@@ -50,7 +50,7 @@ namespace Shooter.Game.Body
 
             AudioSource source = Free();
             source.clip = clip;
-            source.volume = sound.Volume;
+            source.volume = sound.Volume * gain;
             source.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
             source.rolloffMode = sound.Rolloff;
             source.minDistance = sound.MinDistance;

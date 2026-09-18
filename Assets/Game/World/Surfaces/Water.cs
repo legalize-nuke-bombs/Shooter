@@ -9,6 +9,8 @@ namespace Shooter.Game.World
     {
         private static readonly Journal Log = Logs.Here();
 
+        private static bool missed;
+
         public static Water Current { get; private set; }
 
         private void Awake()
@@ -18,6 +20,7 @@ namespace Shooter.Game.World
                 Log.Error("Singleton class has more than one instance");
             }
             Current = this;
+            missed = false;
         }
 
         private void OnDestroy()
@@ -27,7 +30,12 @@ namespace Shooter.Game.World
 
         public static float Depth(Vector3 point)
         {
-            if (Current == null) return 0f;
+            if (Current == null)
+            {
+                if (!missed) Log.Warn("The world has no Water component on its water surface, every lake sounds like its bed");
+                missed = true;
+                return 0f;
+            }
 
             Transform surface = Current.transform;
             Vector3 offset = point - surface.position;
