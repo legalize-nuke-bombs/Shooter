@@ -26,6 +26,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: beb68e5c72b34bdea80539b6e7635594, type: 3}
   - {fileID: 8300000, guid: f9d8bec52bfb4d3081c308fbdf3e5295, type: 3}
   - {fileID: 8300000, guid: 2cef4db0393c4080acdf816360ad262e, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 0.36
   rolloff: 1
   minDistance: 1

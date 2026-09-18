@@ -11,14 +11,16 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
   m_Name: Footsteps
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: footsteps
   clips:
   - {fileID: 8300000, guid: 4e2bc74d8399619a50c9f85f758d9f24, type: 3}
   - {fileID: 8300000, guid: 7c0027e0a2a8cb698a6c4e097605b40e, type: 3}
   - {fileID: 8300000, guid: ab22afb67bae2e7a2546be7dfa0c0d06, type: 3}
   - {fileID: 8300000, guid: 2f596b8552aad31b24d9c840cc762ee7, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 0.12
   rolloff: 1
   minDistance: 1
   maxDistance: 20
+  pitchVariation: 0.05

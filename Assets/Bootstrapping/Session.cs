@@ -4,6 +4,7 @@ using Shooter.Accounts;
 using Shooter.Client.Interface;
 using Shooter.Configuring;
 using Shooter.Game.Body;
+using Shooter.Game.Core.Mixing;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -17,7 +18,6 @@ namespace Shooter.Bootstrapping
     {
         private const string NetworkPrefab = "NetworkManager";
         private const string OverlayPrefab = "Overlays";
-        private const string MixerPrefab = "Mixer";
         private const string MenuScene = "Menu";
         private const string BootScene = "Boot";
         private const string WorldScene = "Map";
@@ -36,7 +36,7 @@ namespace Shooter.Bootstrapping
 
         private IEnumerator Start()
         {
-            Raise(MixerPrefab);
+            Mixer.Tune();
             yield return ToMenu();
         }
 
@@ -273,21 +273,6 @@ namespace Shooter.Bootstrapping
             transport.SetClientSecrets(Account.CommonName, certificate);
             Log.Info($"Heading for {address}:{port}, channel encrypted");
             return certificate;
-        }
-
-        private void Raise(string prefabName)
-        {
-            GameObject prefab = Resources.Load<GameObject>(prefabName);
-            if (prefab == null)
-            {
-                Log.Error($"No {prefabName} prefab in Resources, that service stays down");
-                return;
-            }
-
-            GameObject instance = Instantiate(prefab);
-            instance.name = prefabName;
-            DontDestroyOnLoad(instance);
-            Log.Info($"{prefabName} is up");
         }
 
         private void Overlays()

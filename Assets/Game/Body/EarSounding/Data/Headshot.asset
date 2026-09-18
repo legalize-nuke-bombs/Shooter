@@ -15,6 +15,7 @@ MonoBehaviour:
   id: headshot
   clips:
   - {fileID: 8300000, guid: 507e2e13fa79649498847022e381d680, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   pitchVariation: 0
   promptDescription: Headshot sound

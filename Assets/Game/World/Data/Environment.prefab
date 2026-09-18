@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 4715244483815921385}
   - component: {fileID: 8352106744219038612}
   - component: {fileID: 4327895610234871652}
-  - component: {fileID: 911500011150001115}
   - component: {fileID: 6731183384941312830}
   - component: {fileID: 5541826623691720299}
   - component: {fileID: 2955095885271429373}
@@ -161,31 +160,6 @@ MonoBehaviour:
   capacity: 1024
   diameter: 0.08
   depth: 0.2
---- !u!114 &911500011150001115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9047279815154395446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1c55598071c4cd0b05252ed28a385de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Catalogs
-  catalogs:
-  - {fileID: 11400000, guid: 0c3b2e15d8b494c6391430a289510247, type: 2}
-  - {fileID: 11400000, guid: 8658d1e4d822487690a43c3f6b39ba67, type: 2}
-  - {fileID: 11400000, guid: 9c4087a945ff46c7949660a69b86081d, type: 2}
-  - {fileID: 11400000, guid: 2656eaa17af145fd9e66f3e31217db62, type: 2}
-  - {fileID: 11400000, guid: 5f9cd9f081ac4dd2b3addb48b8ce88c4, type: 2}
-  - {fileID: 11400000, guid: 9f1c4e7a3b5d40928a6e0c3d7b8f2456, type: 2}
-  - {fileID: 11400000, guid: 9fe339c3786f459680eaba2c2bfaa09c, type: 2}
-  - {fileID: 11400000, guid: d6a7408b34bc69e479d734a7e8e2e066, type: 2}
-  - {fileID: 11400000, guid: 4ce008b5b721438499fb8c149aaa62fb, type: 2}
-  - {fileID: 11400000, guid: 7600b7e6e941c2947afad2ff06ab2dbb, type: 2}
-  - {fileID: 11400000, guid: f5492f703a37ed8458c14ca81988a841, type: 2}
-  - {fileID: 11400000, guid: 59ff35d5c0de38c4cb71364944e7d59e, type: 2}
 --- !u!114 &6731183384941312830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +181,7 @@ AudioSource:
   m_GameObject: {fileID: 9047279815154395446}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5370633123619606822, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1

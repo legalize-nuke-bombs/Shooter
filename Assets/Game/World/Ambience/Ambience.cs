@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Shooter.Game.Core.Mixing;
 using UnityEngine;
 
 namespace Shooter.Game.World
@@ -19,7 +18,6 @@ namespace Shooter.Game.World
             source.loop = false;
             source.playOnAwake = false;
             source.spatialBlend = 0f;
-            source.outputAudioMixerGroup = Mixer.Ambience;
             source.volume = volume;
         }
 

@@ -1,4 +1,3 @@
-using Shooter.Game.Core.Mixing;
 using UnityEngine;
 
 namespace Shooter.Client.Interface
@@ -18,7 +17,6 @@ namespace Shooter.Client.Interface
             source.loop = true;
             source.spatialBlend = 0f;
             source.playOnAwake = false;
-            source.outputAudioMixerGroup = Mixer.Music;
             source.volume = 0f;
         }
 

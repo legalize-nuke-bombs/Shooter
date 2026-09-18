@@ -11,13 +11,15 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
   m_Name: AkmMisfire
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: akmmisfire
   clips:
   - {fileID: 8300000, guid: 696a81d252bb45299d8a49f2bf8a0652, type: 3}
   - {fileID: 8300000, guid: 30c193e73f3a4e1b9c1d4157648af120, type: 3}
   - {fileID: 8300000, guid: 672ef0c2551e4c0696ca2b108aef67db, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 0.35
   rolloff: 1
   minDistance: 1
   maxDistance: 15
+  pitchVariation: 0.05

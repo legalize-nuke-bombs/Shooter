@@ -11,10 +11,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
   m_Name: Weedbox
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: weedbox
   clips:
   - {fileID: 8300000, guid: 8342faee3ad84ad9adca801c44022486, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 0.2
   rolloff: 1
   minDistance: 1

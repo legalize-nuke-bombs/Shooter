@@ -11,10 +11,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc5282e42563459281557c6a6f6a63aa, type: 3}
   m_Name: Mail
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: mail
   clips:
   - {fileID: 8300000, guid: 35b1d31bec9943a0baf436f2686f0b52, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   pitchVariation: 0
   promptDescription: A short, dry two-way radio chirp

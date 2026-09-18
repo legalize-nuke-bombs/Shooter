@@ -15,6 +15,7 @@ MonoBehaviour:
   id: items_given
   clips:
   - {fileID: 8300000, guid: bf292fe08b0b4254ba8c392c9e84a4a7, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   pitchVariation: 0.03
   promptDescription: Equipment sound

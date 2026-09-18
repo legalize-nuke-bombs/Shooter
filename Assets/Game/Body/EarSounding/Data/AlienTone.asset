@@ -15,6 +15,7 @@ MonoBehaviour:
   id: alientone
   clips:
   - {fileID: 8300000, guid: 4990186f08e46184594304393f95a8ad, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   pitchVariation: 0
   promptDescription: String sound with an alien effect
