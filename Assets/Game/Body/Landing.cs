@@ -16,6 +16,8 @@ namespace Shooter.Game.Body
 
         [SerializeField] private SurfaceSounds sounds;
 
+        [SerializeField] private float gain = 1.7f;
+
         [SerializeField] private DamageSpec fallDamage;
         private CharacterController body;
         private Health health;
@@ -33,7 +35,7 @@ namespace Shooter.Game.Body
         {
             if (height < minHeight) return;
 
-            speaker.Play(sounds == null ? null : sounds.On(Surface.Under(body)));
+            speaker.Play(sounds == null ? null : sounds.On(Surface.Under(body)), gain);
 
             int damage = Mathf.RoundToInt((height - safeHeight) * damagePerMetre);
             if (damage > 0) health.Damage(damage, null, fallDamage);

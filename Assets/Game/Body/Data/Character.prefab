@@ -247,7 +247,8 @@ MonoBehaviour:
   minHeight: 0.6
   safeHeight: 3
   damagePerMetre: 12
-  sounds: {fileID: 11400000, guid: 9956ace936357224cbfbfcf6ce58ed5f, type: 2}
+  sounds: {fileID: 11400000, guid: b61324db85195d94687c05ceb97044b0, type: 2}
+  gain: 1.7
   fallDamage: {fileID: 11400000, guid: b45614fc18f34f7a98bbf9624a8cd6c3, type: 2}
 --- !u!114 &6600000000000000105
 MonoBehaviour:
