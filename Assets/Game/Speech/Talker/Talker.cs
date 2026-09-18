@@ -48,7 +48,7 @@ namespace Shooter.Game.Speech
             if (!IsServer) return;
 
             enabled = true;
-            conversations = ConversationManager.Current;
+            conversations = GameState.Get<ConversationManager>();
             conversations.Said += Mutter;
         }
 

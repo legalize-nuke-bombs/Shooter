@@ -16,25 +16,7 @@ namespace Shooter.Game.World
 
         private bool wasBedtime;
 
-        public static SleepCycle Current { get; private set; }
-
         public bool WorldAsleep => asleep.Value;
-
-        private void Awake()
-        {
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
-        }
-
-        public override void OnDestroy()
-        {
-            if (Current == this) Current = null;
-
-            base.OnDestroy();
-        }
 
         public override void OnNetworkSpawn()
         {
@@ -52,7 +34,7 @@ namespace Shooter.Game.World
 
         private void Step()
         {
-            Clock clock = Clock.Current;
+            Clock clock = GameState.Get<Clock>();
 
             bool everyone = AllAsleep();
             if (everyone != asleep.Value)
@@ -77,7 +59,7 @@ namespace Shooter.Game.World
 
         public bool IsBedtime()
         {
-            double hours = Clock.Current.Now.TimeOfDay.TotalHours;
+            double hours = GameState.Get<Clock>().Now.TimeOfDay.TotalHours;
 
             return hours >= BedtimeHours || hours < WakeHours;
         }

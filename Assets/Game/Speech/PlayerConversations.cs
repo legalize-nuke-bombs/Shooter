@@ -41,7 +41,7 @@ namespace Shooter.Game.Speech
         {
             if (!IsServer) return;
 
-            conversations = ConversationManager.Current;
+            conversations = GameState.Get<ConversationManager>();
             conversations.Said += Relay;
         }
 

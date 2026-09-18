@@ -46,23 +46,7 @@ namespace Shooter.Game.Speech
             Log.Info($"World remembers {conversations.Count} conversations");
         }
 
-        public static ConversationManager Current { get; private set; }
-
         public event Action<Conversation, Message> Said;
-
-        private void Awake()
-        {
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
-        }
-
-        private void OnDestroy()
-        {
-            if (Current == this) Current = null;
-        }
 
         public Conversation GetOrCreate(long first, long second)
         {
@@ -104,7 +88,7 @@ namespace Shooter.Game.Speech
                 Content = content,
                 Spoken = spoken,
                 Urgent = urgent,
-                Time = Clock.Current.Now
+                Time = GameState.Get<Clock>().Now
             };
 
             conversation.Add(message);

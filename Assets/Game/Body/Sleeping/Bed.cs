@@ -37,7 +37,7 @@ namespace Shooter.Game.Body
 
             bool alive = health == null || health.Alive;
             bool handsFree = hands == null || hands.Free;
-            bool bedtime = SleepCycle.Current != null && Clock.Current != null && SleepCycle.Current.IsBedtime();
+            bool bedtime = GameState.Get<SleepCycle>() != null && GameState.Get<Clock>() != null && GameState.Get<SleepCycle>().IsBedtime();
 
             if (!SleepRule.CanSleep(alive, handsFree, bedtime))
             {

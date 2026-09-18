@@ -1,4 +1,5 @@
 using System;
+using Shooter.Game.Core;
 using Shooter.Game.World;
 using Shooter.Logging;
 using UnityEngine.UIElements;
@@ -18,7 +19,7 @@ namespace Shooter.Client.Interface
         {
             if (!Bound) return;
 
-            Clock world = Clock.Current;
+            Clock world = GameState.Get<Clock>();
 
             if (world == null)
             {

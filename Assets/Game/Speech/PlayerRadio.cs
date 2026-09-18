@@ -26,7 +26,7 @@ namespace Shooter.Game.Speech
                 return;
             }
 
-            ConversationManager conversations = ConversationManager.Current;
+            ConversationManager conversations = GameState.Get<ConversationManager>();
             if (conversations.GetIfPresent(character.Id, partnerId) == null)
             {
                 Log.Info($"Player {OwnerClientId} radioed {partnerId} without ever talking to them, ignored");

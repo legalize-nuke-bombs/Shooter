@@ -1,3 +1,4 @@
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ namespace Shooter.Game.World
         private void Awake()
         {
             sun = GetComponent<Light>();
-            if (Clock.Current == null)
+            if (GameState.Get<Clock>() == null)
             {
                 Log.Info($"Entity {name} did not find clock, disabling...");
                 enabled = false;
@@ -26,7 +27,7 @@ namespace Shooter.Game.World
 
         private void Update()
         {
-            Clock clock = Clock.Current;
+            Clock clock = GameState.Get<Clock>();
 
             float hourAngle = (float)clock.HourAngle;
             float elevation = Celestial.Elevation(hourAngle, clock.Declination, clock.Latitude);

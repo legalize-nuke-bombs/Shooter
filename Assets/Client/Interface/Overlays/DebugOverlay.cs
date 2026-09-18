@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Shooter.Client.Playing;
+using Shooter.Game.Core;
 using Shooter.Game.World;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -9,7 +10,6 @@ using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using Environment = Shooter.Game.World.Environment;
 
 namespace Shooter.Client.Interface
 {
@@ -190,10 +190,10 @@ namespace Shooter.Client.Interface
                 Line($"Позиция {at.x:F1} {at.y:F1} {at.z:F1}", Facing(player.eulerAngles.y));
             }
 
-            Environment environment = Environment.Current;
-            Line(environment == null
+            HostVersion host = GameState.Get<HostVersion>();
+            Line(host == null
                     ? $"Клиент {Application.version}"
-                    : $"Сервер {environment.Version}   Клиент {Application.version}");
+                    : $"Сервер {host.Version}   Клиент {Application.version}");
         }
 
         private string Managed()

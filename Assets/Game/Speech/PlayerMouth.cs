@@ -82,7 +82,7 @@ namespace Shooter.Game.Speech
 
             OpenedRpc(talker.NetworkObjectId);
 
-            conversations = ConversationManager.Current;
+            conversations = GameState.Get<ConversationManager>();
         }
 
         public void Close()

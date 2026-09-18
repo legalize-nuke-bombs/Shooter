@@ -1,4 +1,5 @@
 using System;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -18,7 +19,7 @@ namespace Shooter.Game.World
 
         private void Awake()
         {
-            if (Clock.Current == null)
+            if (GameState.Get<Clock>() == null)
             {
                 Log.Info($"Entity {name} did not find clock, disabling...");
                 enabled = false;
@@ -43,7 +44,7 @@ namespace Shooter.Game.World
 
         private void Update()
         {
-            double hourAngle = Clock.Current.HourAngle;
+            double hourAngle = GameState.Get<Clock>().HourAngle;
             bool due = double.IsNaN(updatedAt) || Math.Abs(hourAngle - updatedAt) >= angleStep;
 
             // An HDRP update request reaches only the first camera of a frame, and a mirror renders before the player:

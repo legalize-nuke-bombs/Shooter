@@ -37,7 +37,7 @@ To see the content, use read_conversation.
 
         protected override string Execute(ListConversationsArguments arguments, LlmCallContext context)
         {
-            List<Conversation> conversations = ConversationManager.Current.Of(ownCharacter.Id);
+            List<Conversation> conversations = GameState.Get<ConversationManager>().Of(ownCharacter.Id);
             if (conversations.Count == 0)
             {
                 return "Nothing yet";

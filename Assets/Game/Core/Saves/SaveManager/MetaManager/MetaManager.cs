@@ -18,7 +18,7 @@ namespace Shooter.Game.Core.Saves
             {
                 Version = Application.version,
                 Stamp = DateTime.Now,
-                Clock = Clock.Current.Now
+                Clock = GameState.Get<Clock>().Now
             };
         }
 

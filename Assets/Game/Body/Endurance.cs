@@ -50,7 +50,7 @@ namespace Shooter.Game.Body
 
         private void Update()
         {
-            float dt = Time.deltaTime * Clock.Current.Scale;
+            float dt = Time.deltaTime * GameState.Get<Clock>().Scale;
             amount.Value = Mathf.Min(amount.Value + dt * recoverySpeed, MaxAmount);
 
             if (amount.Value >= sprintThreshold) exhausted = false;
