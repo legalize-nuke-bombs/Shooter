@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8510430610773393489}
   - component: {fileID: 525229798450776084}
   - component: {fileID: 2617244099721317815}
-  - component: {fileID: 2165350704611589699}
   - component: {fileID: 8965076715847265801}
   m_Layer: 0
   m_Name: red-mushroom
@@ -75,19 +74,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.ResourceItem
   bodyPrefab: {fileID: -372838991472394059, guid: c79a726f1bf80484a859f6bb4ce4959f, type: 3}
   respawnHours: 48
---- !u!114 &2165350704611589699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7674606266702496447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f3a7296f86462ebf1da8c9e8011a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectId
-  id: 
 --- !u!114 &8965076715847265801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,3 +87,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
+  id: 

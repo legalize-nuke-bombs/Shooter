@@ -258,7 +258,6 @@ GameObject:
   - component: {fileID: 5582404725710639054}
   - component: {fileID: 1095720879265826792}
   - component: {fileID: 3183200403606684273}
-  - component: {fileID: 3031895072796033239}
   - component: {fileID: 4010349567147579858}
   m_Layer: 0
   m_Name: StreetLamp1_ShortDouble (Concrete)
@@ -475,18 +474,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &3031895072796033239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263881239168321199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f3a7296f86462ebf1da8c9e8011a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObject.GameObjectId
   id: 
 --- !u!114 &4010349567147579858
 MonoBehaviour:

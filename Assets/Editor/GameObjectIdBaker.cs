@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
 using Shooter.Logging;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -19,7 +19,7 @@ namespace Shooter.Editor
             Scene scene = SceneManager.GetActiveScene();
             Log.Info($"Starting baking {scene.name}...");
 
-            GameObjectId[] components = UnityEngine.Object.FindObjectsByType<GameObjectId>(FindObjectsInactive.Include);
+            SaveableObject[] components = UnityEngine.Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
             List<GameObject> modified = BakeIds(components);
             List<GameObject> duplicates = FindDuplicates(components);
 
@@ -51,11 +51,11 @@ Baked {modified.Count} / {components.Length} IDs
             }
         }
 
-        private static List<GameObject> BakeIds(GameObjectId[] components)
+        private static List<GameObject> BakeIds(SaveableObject[] components)
         {
             var modified = new List<GameObject>();
 
-            foreach (GameObjectId component in components)
+            foreach (SaveableObject component in components)
             {
                 if (string.IsNullOrEmpty(component.Id))
                 {
@@ -75,12 +75,12 @@ Baked {modified.Count} / {components.Length} IDs
             return modified;
         }
 
-        private static List<GameObject> FindDuplicates(GameObjectId[] components)
+        private static List<GameObject> FindDuplicates(SaveableObject[] components)
         {
             var usedIds = new HashSet<string>();
             var duplicates = new List<GameObject>();
 
-            foreach (GameObjectId component in components)
+            foreach (SaveableObject component in components)
             {
                 string currentId = component.Id;
 

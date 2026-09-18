@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 2263991320108097357}
   - component: {fileID: 3350394421217206260}
   - component: {fileID: 626969688903366777}
-  - component: {fileID: -5091034317568626846}
   - component: {fileID: -2247415204721118134}
   - component: {fileID: 5222574490137900118}
   m_Layer: 0
@@ -207,19 +206,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
   broken: 0
   breakSound: {fileID: 11400000, guid: 9c77bf221cbd409fbe947692ee46a0c0, type: 2}
---- !u!114 &-5091034317568626846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 122826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f3a7296f86462ebf1da8c9e8011a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObject.GameObjectId
-  id: 
 --- !u!114 &-2247415204721118134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
+  id: 
 --- !u!114 &5222574490137900118
 MonoBehaviour:
   m_ObjectHideFlags: 0

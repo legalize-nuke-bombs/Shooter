@@ -1,3 +1,4 @@
+using System;
 using Shooter.Logging;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,6 +14,11 @@ namespace Shooter.Game.Core
             return Spawn(prefab, Vector3.zero, Quaternion.identity, null);
         }
 
+        public static GameObject Spawn(GameObject prefab, Action<GameObject> prepare)
+        {
+            return Spawn(prefab, Vector3.zero, Quaternion.identity, null, prepare);
+        }
+
         public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
         {
             return Spawn(prefab, position, rotation, null);
@@ -24,6 +30,13 @@ namespace Shooter.Game.Core
         }
 
         public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
+        {
+            return Spawn(prefab, position, rotation, parent, null);
+        }
+
+        // prepare runs between Instantiate and the network spawn: the one moment to set what OnNetworkSpawn will read
+        private static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent,
+            Action<GameObject> prepare)
         {
             Log.Info($"Spawning {prefab.name} at {position} with parent {(parent != null ? parent.name : "None")}...");
 
@@ -40,16 +53,17 @@ namespace Shooter.Game.Core
                 }
             }
 
-            GameObject body = Object.Instantiate(prefab, position, rotation);
+            GameObject body = UnityEngine.Object.Instantiate(prefab, position, rotation);
 
             NetworkObject networkObject = body.GetComponent<NetworkObject>();
             if (networkObject == null)
             {
                 Log.Error($"Spawned {prefab.name} does not have a network object, destroying...");
-                Object.Destroy(body);
+                UnityEngine.Object.Destroy(body);
                 return null;
             }
 
+            prepare?.Invoke(body);
             networkObject.Spawn(true);
 
             if (parentNetworkObject != null && !networkObject.TrySetParent(parentNetworkObject, false))

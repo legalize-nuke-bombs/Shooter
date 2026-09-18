@@ -30,7 +30,6 @@ GameObject:
   - component: {fileID: 6403981259524950330}
   - component: {fileID: -4473180149750321490}
   - component: {fileID: 6370029383145960073}
-  - component: {fileID: 2104373744681545555}
   - component: {fileID: -6602629386385626499}
   - component: {fileID: 6251458730921147201}
   - component: {fileID: 2519498067671057823}
@@ -421,19 +420,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   contents: []
   giveRadius: 10
---- !u!114 &2104373744681545555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874027793385663384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f3a7296f86462ebf1da8c9e8011a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObject.GameObjectId
-  id: 
 --- !u!114 &-6602629386385626499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,6 +433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
+  id: 
 --- !u!114 &6251458730921147201
 MonoBehaviour:
   m_ObjectHideFlags: 0

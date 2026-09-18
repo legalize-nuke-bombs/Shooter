@@ -7,17 +7,17 @@ using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
-    [RequireComponent(typeof(GameObjectId))]
     [RequireComponent(typeof(NetworkObject))]
     public class SaveableObject : NetworkBehaviour, ISaveable
     {
         private static readonly Journal Log = Logs.Here();
 
-        private GameObjectId id;
+        [SerializeField] private string id;
+
         private NetworkObject networkObject;
         private bool active = true;
 
-        public string Id => id.Id;
+        public string Id => id;
         public bool Active => active;
         private string Metadata
         {
@@ -45,16 +45,18 @@ namespace Shooter.Game.Core.Saves
 
         private void Awake()
         {
-            id = GetComponent<GameObjectId>();
             networkObject = GetComponent<NetworkObject>();
         }
 
         public override void OnNetworkSpawn()
         {
             if (!IsServer) return;
-            if (!string.IsNullOrEmpty(id.Id) || NetworkObject.InScenePlaced) return;
-            id.Assign(Guid.NewGuid().ToString());
-            Log.Info($"Entity {name} got dynamic save id {id.Id}");
+
+            // An object of the scene with no id is a forgotten bake: it stays empty and the snapshot warns about it
+            if (!string.IsNullOrEmpty(id) || NetworkObject.InScenePlaced) return;
+
+            id = Guid.NewGuid().ToString();
+            Log.Info($"Entity {name} got dynamic save id {id}");
         }
 
         private struct SaveData
@@ -194,15 +196,11 @@ namespace Shooter.Game.Core.Saves
                 throw new ArgumentException($"Failed to find prefab {prefabId}");
             }
 
-            GameObject body = Spawner.Spawn(prefab);
-            if (body.TryGetComponent(out GameObjectId gameObjectId))
+            // The saved id goes in before the network spawn, so the object never gets a fresh one of its own
+            GameObject body = Spawner.Spawn(prefab, fresh =>
             {
-                gameObjectId.Assign(id);
-            }
-            else
-            {
-                Log.Warn($"Prefab {prefabId} does not have game object id");
-            }
+                if (fresh.TryGetComponent(out SaveableObject saved)) saved.id = id;
+            });
 
             if (body.TryGetComponent(out SaveableObject saveableObject))
             {
