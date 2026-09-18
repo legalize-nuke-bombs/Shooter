@@ -1,4 +1,4 @@
-using Shooter.Client.Interface;
+using System;
 using Shooter.Game.Core;
 using Shooter.Game.Notifying;
 using Unity.Collections;
@@ -8,9 +8,11 @@ using UnityEngine;
 namespace Shooter.Client.Playing
 {
     [RequireComponent(typeof(NotificationRecipient))]
-    public class PlayerNotificationObserver : NetworkBehaviour
+    public class PlayerNotificationObserver : NetworkBehaviour, IToastSource
     {
         private NotificationRecipient recipient;
+
+        public event Action<Toast> Toasted;
 
         private void Awake()
         {
@@ -40,10 +42,9 @@ namespace Shooter.Client.Playing
         {
             NotificationCatalog catalog = Catalogs.Of<NotificationCatalog>();
             NotificationSpec spec = catalog == null ? null : catalog.Of(specId);
-            NotificationOverlay feed = NotificationOverlay.Current;
-            if (spec == null || feed == null) return;
+            if (spec == null) return;
 
-            feed.Show(new Toast(spec.Icon, spec.Sound, spec.Title, spec.Subtitle));
+            Toasted?.Invoke(new Toast(spec.Icon, spec.Sound, spec.Title, spec.Subtitle));
         }
     }
 }

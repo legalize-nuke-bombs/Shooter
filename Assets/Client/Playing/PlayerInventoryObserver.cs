@@ -1,3 +1,4 @@
+using System;
 using Shooter.Client.Interface;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace Shooter.Client.Playing
 {
     [RequireComponent(typeof(Inventory))]
-    public class PlayerInventoryObserver : NetworkBehaviour
+    public class PlayerInventoryObserver : NetworkBehaviour, IToastSource
     {
         private const string Stranger = "Незнакомец";
 
@@ -17,6 +18,8 @@ namespace Shooter.Client.Playing
 
         private readonly NameMapper mapper = new();
         private Inventory inventory;
+
+        public event Action<Toast> Toasted;
 
         private void Awake()
         {
@@ -44,15 +47,14 @@ namespace Shooter.Client.Playing
         [Rpc(SendTo.Owner)]
         private void ReceivedRpc(long giverId, FixedString32Bytes itemId, int amount)
         {
-            NotificationOverlay feed = NotificationOverlay.Current;
             ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
             ItemSpec item = catalog == null ? null : catalog.Of(itemId);
-            if (feed == null || item == null) return;
+            if (item == null) return;
 
             string named = mapper.Of(giverId);
             string title = item is StackableItemSpec ? $"{item.Title} × {amount}" : item.Title;
 
-            feed.Show(new Toast(item.Icon, sound, title, "от " + (string.IsNullOrEmpty(named) ? Stranger : named)));
+            Toasted?.Invoke(new Toast(item.Icon, sound, title, "от " + (string.IsNullOrEmpty(named) ? Stranger : named)));
         }
     }
 }
