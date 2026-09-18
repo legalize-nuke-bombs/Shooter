@@ -107,6 +107,7 @@ namespace Shooter.Editing
         [SerializeField] private TerrainLayer background;
         [SerializeField] private float hollowRadius = 12f;
         [SerializeField] private List<Rule> rules = new();
+        [SerializeField] private TerrainLayer marker;
 
         private string result;
         private SerializedObject serialized;
@@ -124,9 +125,12 @@ namespace Shooter.Editing
             EditorGUILayout.PropertyField(serialized.FindProperty(nameof(background)), new GUIContent("Background"));
             EditorGUILayout.PropertyField(serialized.FindProperty(nameof(hollowRadius)), new GUIContent("Hollow radius, m"));
             EditorGUILayout.PropertyField(serialized.FindProperty(nameof(rules)), new GUIContent("Rules, later over earlier"), true);
+            EditorGUILayout.PropertyField(serialized.FindProperty(nameof(marker)), new GUIContent("Only where painted with"));
             serialized.ApplyModifiedProperties();
 
             EditorGUILayout.LabelField("Slope in degrees, height in world metres, hollow in metres below the ground around",
+                EditorStyles.miniLabel);
+            EditorGUILayout.LabelField("With a marker layer set, only the ground painted with it is repainted, the rest stays as it is",
                 EditorStyles.miniLabel);
 
             EditorGUILayout.Space();
@@ -135,7 +139,7 @@ namespace Shooter.Editing
                 ? $"{targets.Count} selected terrains"
                 : $"{targets.Count} terrains of the landscape");
 
-            if (GUILayout.Button("Paint")) Paint();
+            if (GUILayout.Button(marker == null ? "Paint everything" : $"Paint over {marker.name}")) Paint();
             if (GUILayout.Button("Defaults"))
             {
                 Undo.RecordObject(this, "Terrain painter defaults");
@@ -219,6 +223,7 @@ namespace Shooter.Editing
             var ground = new Ground(around);
             var shares = new Dictionary<TerrainLayer, double>();
             double texels = 0d;
+            int painted = 0;
 
             int group = Undo.GetCurrentGroup();
             Undo.SetCurrentGroupName(UndoName);
@@ -228,7 +233,11 @@ namespace Shooter.Editing
                 for (int i = 0; i < targets.Count; i++)
                 {
                     EditorUtility.DisplayProgressBar("Paint Terrain Layers", targets[i].name, (float)i / targets.Count);
-                    texels += Paint(targets[i], ground, shares);
+                    double covered = Paint(targets[i], ground, shares);
+                    if (covered <= 0d) continue;
+
+                    texels += covered;
+                    painted++;
                 }
             }
             finally
@@ -237,7 +246,14 @@ namespace Shooter.Editing
                 Undo.CollapseUndoOperations(group);
             }
 
-            var summary = new StringBuilder($"Painted {targets.Count} terrains in {(DateTime.Now - started).TotalSeconds:F1} s:");
+            if (painted == 0)
+            {
+                result = marker == null ? "Nothing painted" : $"Nothing painted: no terrain here is painted with {marker.name}";
+                Log.Info(result);
+                return;
+            }
+
+            var summary = new StringBuilder($"Painted {painted} terrains in {(DateTime.Now - started).TotalSeconds:F1} s:");
             foreach (KeyValuePair<TerrainLayer, double> share in shares)
                 summary.Append($" {share.Key.name} {share.Value / texels:P0}");
 
@@ -245,9 +261,12 @@ namespace Shooter.Editing
             Log.Info(result);
         }
 
-        private int Paint(Terrain terrain, Ground ground, Dictionary<TerrainLayer, double> shares)
+        // With a marker the old map stays wherever the marker is absent, and the rules take the marker's share of every texel it touches
+        private double Paint(Terrain terrain, Ground ground, Dictionary<TerrainLayer, double> shares)
         {
             TerrainData data = terrain.terrainData;
+            if (marker != null && !Marked(data)) return 0d;
+
             Undo.RegisterCompleteObjectUndo(data, UndoName);
             Undo.RegisterCompleteObjectUndo(data.alphamapTextures, UndoName);
 
@@ -255,6 +274,8 @@ namespace Shooter.Editing
             TerrainLayer[] palette = data.terrainLayers;
             int layers = palette.Length;
             int resolution = data.alphamapResolution;
+            int marked = marker == null ? -1 : Array.IndexOf(palette, marker);
+            float[,,] before = marked < 0 ? null : data.GetAlphamaps(0, 0, resolution, resolution);
             Vector3 corner = terrain.transform.position;
             Vector3 size = data.size;
             float reach = Mathf.Max(size.x / resolution, 1f);
@@ -270,10 +291,20 @@ namespace Shooter.Editing
             var maps = new float[resolution, resolution, layers];
             var weights = new float[layers];
             var totals = new double[layers];
+            double covered = 0d;
 
             for (int row = 0; row < resolution; row++)
             for (int column = 0; column < resolution; column++)
             {
+                float taken = before == null ? 1f : before[row, column, marked];
+                if (taken <= 0f)
+                {
+                    for (int layer = 0; layer < layers; layer++) maps[row, column, layer] = before[row, column, layer];
+                    continue;
+                }
+
+                covered += taken;
+
                 float x = corner.x + (column + 0.5f) / resolution * size.x;
                 float z = corner.z + (row + 0.5f) / resolution * size.z;
                 float height = ground.Height(x, z);
@@ -298,8 +329,9 @@ namespace Shooter.Editing
 
                 for (int layer = 0; layer < layers; layer++)
                 {
-                    maps[row, column, layer] = weights[layer];
-                    totals[layer] += weights[layer];
+                    float kept = before == null || layer == marked ? 0f : before[row, column, layer];
+                    maps[row, column, layer] = weights[layer] * taken + kept;
+                    totals[layer] += weights[layer] * taken;
                 }
             }
 
@@ -314,7 +346,23 @@ namespace Shooter.Editing
                 shares[palette[layer]] = sum + totals[layer];
             }
 
-            return resolution * resolution;
+            return covered;
+        }
+
+        private bool Marked(TerrainData data)
+        {
+            int channel = Array.IndexOf(data.terrainLayers, marker);
+            if (channel < 0) return false;
+
+            int resolution = data.alphamapResolution;
+            float[,,] maps = data.GetAlphamaps(0, 0, resolution, resolution);
+
+            for (int row = 0; row < resolution; row++)
+            for (int column = 0; column < resolution; column++)
+                if (maps[row, column, channel] > 0f)
+                    return true;
+
+            return false;
         }
 
         // Where the background and every rule's layer sit in the terrain's palette; missing layers are appended, so painted maps keep their meaning
