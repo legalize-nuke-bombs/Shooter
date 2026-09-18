@@ -47,24 +47,6 @@ namespace Shooter.Game.Combat
 
         private int next;
 
-        public static BulletHoles Current { get; private set; }
-
-        private void Awake()
-        {
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
-        }
-
-        public override void OnDestroy()
-        {
-            if (Current == this) Current = null;
-
-            base.OnDestroy();
-        }
-
         public void Add(Vector3 position, Vector3 normal)
         {
             if (!IsServer) return;

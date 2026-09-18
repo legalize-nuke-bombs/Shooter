@@ -42,7 +42,7 @@ namespace Shooter.Game.Llm.SayToWanderer
                 return $"Wanderer {arguments.WandererId} is too far to hear you, use send_message to reach them over the radio";
             }
 
-            ConversationManager.Current.Say(ownCharacter.Id, arguments.WandererId, arguments.Text, true, true);
+            GameState.Get<ConversationManager>().Say(ownCharacter.Id, arguments.WandererId, arguments.Text, true, true);
             return $"Said to {arguments.WandererId}";
         }
     }

@@ -246,7 +246,7 @@ namespace Shooter.Game.Llm
 
         public static string Stamp()
         {
-            return Clock.Current.Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
+            return GameState.Get<Clock>().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
         }
     }
 }

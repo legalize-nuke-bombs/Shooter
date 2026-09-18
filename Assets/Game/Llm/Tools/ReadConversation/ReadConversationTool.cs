@@ -52,7 +52,7 @@ Specify `from` (the message number from which you want to retrieve the conversat
                 return $"The specified ID ({targetId}) belongs to you";
             }
 
-            Conversation conversation = ConversationManager.Current.GetIfPresent(ownCharacter.Id, targetId);
+            Conversation conversation = GameState.Get<ConversationManager>().GetIfPresent(ownCharacter.Id, targetId);
             if (conversation == null)
             {
                 return $"You don't have conversation with ID {targetId}";

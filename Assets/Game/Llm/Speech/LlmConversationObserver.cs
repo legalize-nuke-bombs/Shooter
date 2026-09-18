@@ -29,7 +29,7 @@ namespace Shooter.Game.Llm
 
         private void OnEnable()
         {
-            conversations = ConversationManager.Current;
+            conversations = GameState.Get<ConversationManager>();
             conversations.Said += Heard;
         }
 

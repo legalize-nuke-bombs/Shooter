@@ -18,6 +18,7 @@ namespace Shooter.Bootstrapping
     {
         private const string NetworkPrefab = "NetworkManager";
         private const string OverlayPrefab = "Overlays";
+        private const string StatePrefab = "GameState";
         private const string MenuScene = "Menu";
         private const string BootScene = "Boot";
         private const string WorldScene = "Map";
@@ -130,6 +131,12 @@ namespace Shooter.Bootstrapping
             }
 
             loading.Show(LoadingStage.Scene);
+            if (!State())
+            {
+                network.Shutdown();
+                yield break;
+            }
+
             yield return LoadWorld(network, save != null);
             if (network.ShutdownInProgress) yield break;
 
@@ -273,6 +280,24 @@ namespace Shooter.Bootstrapping
             transport.SetClientSecrets(Account.CommonName, certificate);
             Log.Info($"Heading for {address}:{port}, channel encrypted");
             return certificate;
+        }
+
+        // Spawned before the map loads: everything on the map wakes up into a world that already has its state,
+        // and no scene has to carry it. Netcode takes a spawned object along through the scene change
+        private bool State()
+        {
+            GameObject prefab = Resources.Load<GameObject>(StatePrefab);
+            if (prefab == null)
+            {
+                Log.Error($"No {StatePrefab} prefab in Resources, refusing to start");
+                return false;
+            }
+
+            GameObject instance = Instantiate(prefab);
+            instance.name = StatePrefab;
+            instance.GetComponent<NetworkObject>().Spawn();
+            Log.Info("Game state is up");
+            return true;
         }
 
         private void Overlays()

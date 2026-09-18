@@ -7,12 +7,12 @@ namespace Shooter.Game.Speech
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (IsServer) ConversationManager.Current.Said += Refuse;
+            if (IsServer) GameState.Get<ConversationManager>().Said += Refuse;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (IsServer && ConversationManager.Current != null) ConversationManager.Current.Said -= Refuse;
+            if (IsServer && GameState.Get<ConversationManager>() != null) GameState.Get<ConversationManager>().Said -= Refuse;
             base.OnNetworkDespawn();
         }
 
@@ -28,7 +28,7 @@ namespace Shooter.Game.Speech
             Character author = Character.Of(message.AuthorId, Inactive.Include);
             if (author == null || !author.TryGetComponent(out Player _)) return;
 
-            ConversationManager.Current.Say(CharacterId, message.AuthorId, "Not now.", false, true);
+            GameState.Get<ConversationManager>().Say(CharacterId, message.AuthorId, "Not now.", false, true);
         }
     }
 }

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5003229892802866117}
+  - component: {fileID: 5950155976312360556}
   - component: {fileID: 4938708927321481060}
   - component: {fileID: 7171569104614631660}
   - component: {fileID: 2934016132358497645}
@@ -18,8 +19,10 @@ GameObject:
   - component: {fileID: 6731183384941312830}
   - component: {fileID: 5541826623691720299}
   - component: {fileID: 2955095885271429373}
+  - component: {fileID: 6636161634355679184}
+  - component: {fileID: 8978501885598322036}
   m_Layer: 0
-  m_Name: Environment
+  m_Name: GameState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,6 +43,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5950155976312360556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047279815154395446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66bb61f887610194aad93b97415f9d79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameState
 --- !u!114 &4938708927321481060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,3 +296,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8e84818f624729b8819d773dc64a22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Speech.ConversationManager
+--- !u!114 &6636161634355679184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047279815154395446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f3a7296f86462ebf1da8c9e8011a69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectId
+  id: 00000000-0000-0000-0000-000000000000
+--- !u!114 &8978501885598322036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047279815154395446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a0761b85cfc472bae4021d23cdec103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
+  ShowTopMostFoldoutHeaderGroup: 1

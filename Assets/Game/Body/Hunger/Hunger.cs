@@ -21,7 +21,7 @@ namespace Shooter.Game.Body
 
         private void Update()
         {
-            Spend(idleCost * Time.deltaTime * Clock.Current.Scale);
+            Spend(idleCost * Time.deltaTime * GameState.Get<Clock>().Scale);
         }
 
         public DigestionPriority Priority => DigestionPriority.Medium;

@@ -156,7 +156,7 @@ namespace Shooter.Game.Combat
             Health health = hit.collider.GetComponentInParent<Health>();
             if (health == null)
             {
-                BulletHoles.Current.Add(hit.point, hit.normal);
+                GameState.Get<BulletHoles>().Add(hit.point, hit.normal);
                 Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
                 return;
             }
