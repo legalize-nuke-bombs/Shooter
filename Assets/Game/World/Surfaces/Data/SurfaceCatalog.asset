@@ -20,5 +20,3 @@ MonoBehaviour:
     surface: {fileID: 13400000, guid: 1f98859faec27d04eb0e4a1cdf6494d2, type: 2}
   - layer: {fileID: 8574412962073106934, guid: 823d80b2a8eb07748b59d1aa37a1e7fb, type: 2}
     surface: {fileID: 13400000, guid: 1f98859faec27d04eb0e4a1cdf6494d2, type: 2}
-  - layer: {fileID: 8574412962073106934, guid: ffb94bff813c3c041b5c22cc023fb25e, type: 2}
-    surface: {fileID: 13400000, guid: 3fa232dbfd8ba8e4193773e66cbcb7d7, type: 2}
