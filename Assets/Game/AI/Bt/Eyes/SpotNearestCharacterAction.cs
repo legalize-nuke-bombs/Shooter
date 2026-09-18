@@ -45,7 +45,7 @@ namespace Shooter.Game.AI.Bt.Eyes
             float nearestCharacter = Radius.Value * Radius.Value;
             Character spottedCharacter = null;
 
-            foreach (Character targetCharacter in Registers.Current.Of<Character>(Inactive.Exclude))
+            foreach (Character targetCharacter in Registers.Of<Character>(Inactive.Exclude))
             {
                 if (targetCharacter == self) continue;
                 if (targetCharacter.TryGetComponent(out Health health) && !health.Alive) continue;

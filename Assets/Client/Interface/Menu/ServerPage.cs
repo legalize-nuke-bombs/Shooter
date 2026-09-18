@@ -18,7 +18,7 @@ namespace Shooter.Client.Interface
 
         protected ServerPage(VisualElement root) : base(root)
         {
-            Offer(Require<DropdownField>(CompressionField), MainCompressionManager.Current.Keys, Titles.Compression);
+            Offer(Require<DropdownField>(CompressionField), MainCompressionManager.Keys, Titles.Compression);
 
             IEnumerable<string> providers = new[] { NoProvider }.Concat(OpenAiHosts.Providers);
             Offer(Require<DropdownField>(ProviderField), providers, Titles.Provider);

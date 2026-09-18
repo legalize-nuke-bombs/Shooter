@@ -17,9 +17,7 @@ namespace Shooter.Bootstrapping
     {
         private const string NetworkPrefab = "NetworkManager";
         private const string OverlayPrefab = "Overlays";
-        private const string CompressionPrefab = "Compression";
         private const string MixerPrefab = "Mixer";
-        private const string ScreenshotPrefab = "Screenshots";
         private const string MenuScene = "Menu";
         private const string BootScene = "Boot";
         private const string WorldScene = "Map";
@@ -38,9 +36,7 @@ namespace Shooter.Bootstrapping
 
         private IEnumerator Start()
         {
-            Raise(CompressionPrefab);
             Raise(MixerPrefab);
-            Raise(ScreenshotPrefab);
             yield return ToMenu();
         }
 
@@ -149,6 +145,7 @@ namespace Shooter.Bootstrapping
             worldLoaded = false;
             freezing = freeze;
             frozen = null;
+            SaveManager.Open();
             network.SceneManager.OnLoadComplete += Loaded;
 
             SceneEventProgressStatus status = network.SceneManager.LoadScene(WorldScene, LoadSceneMode.Single);
@@ -173,15 +170,14 @@ namespace Shooter.Bootstrapping
 
             // Netcode calls this before the scene's first Update, the coroutine waiting on worldLoaded resumes after it:
             // freezing here keeps that one Update from running on a world the save has not loaded yet
-            if (freezing && SaveManager.Current != null) frozen = SaveManager.Current.Freeze();
+            if (freezing) frozen = SaveManager.Freeze();
         }
 
         private void Restore(NetworkManager network, string save)
         {
-            SaveManager saves = SaveManager.Current;
-            if (saves == null || frozen == null)
+            if (frozen == null)
             {
-                Log.Error($"World has no save manager or was not frozen on load, {save} stays unloaded, shutting the host down");
+                Log.Error($"World was not frozen on load, {save} stays unloaded, shutting the host down");
                 loadFailed = true;
                 network.Shutdown();
                 return;
@@ -191,7 +187,7 @@ namespace Shooter.Bootstrapping
             loading.Show(LoadingStage.Save);
             FrozenWorld world = frozen;
             frozen = null;
-            if (saves.Load(world, save)) return;
+            if (SaveManager.Load(world, save)) return;
 
             Log.Warn($"The world failed to load {save}, shutting the host down");
             loadFailed = true;

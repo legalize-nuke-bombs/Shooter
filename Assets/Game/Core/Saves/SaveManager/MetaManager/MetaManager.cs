@@ -7,13 +7,13 @@ using Shooter.Game.World;
 
 namespace Shooter.Game.Core.Saves
 {
-    public class MetaManager : MonoBehaviour
+    public static class MetaManager
     {
         private static readonly Journal Log = Logs.Here();
 
-        public Meta Build()
+        public static Meta Build()
         {
-            Log.Info($"Entity {name} is building meta...");
+            Log.Info("Building meta...");
             return new Meta()
             {
                 Version = Application.version,
@@ -22,17 +22,17 @@ namespace Shooter.Game.Core.Saves
             };
         }
 
-        public void Write(string path, Meta meta)
+        public static void Write(string path, Meta meta)
         {
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, JsonConvert.SerializeObject(meta, Meta.Json));
-                Log.Info($"Entity {name} wrote meta into {path}");
+                Log.Info($"Meta is written into {path}");
             }
             catch (Exception e)
             {
-                Log.Error($"Entity {name} failed to wrote meta into {path}: {e.Message}");
+                Log.Error($"Failed to write meta into {path}: {e.Message}");
             }
         }
     }

@@ -194,7 +194,7 @@ namespace Shooter.Game.Core.Saves
                 throw new ArgumentException($"Failed to find prefab {prefabId}");
             }
 
-            GameObject body = Spawner.Current.Spawn(prefab);
+            GameObject body = Spawner.Spawn(prefab);
             if (body.TryGetComponent(out GameObjectId gameObjectId))
             {
                 gameObjectId.Assign(id);

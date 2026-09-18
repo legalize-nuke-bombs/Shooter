@@ -7,36 +7,15 @@ using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class WorldDigester : MonoBehaviour
+    public static class WorldDigester
     {
+        private const float SmallViewingDistance = 50f;
+        private const float MediumViewingDistance = 150f;
+        private const float LargeViewingDistance = 500f;
+        private const float BiggestViewingDistance = 5000f;
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private float smallViewingDistance = 50f;
-        [SerializeField] private float mediumViewingDistance = 150f;
-        [SerializeField] private float largeViewingDistance = 500f;
-        [SerializeField] private float biggestViewingDistance = 5000f;
-
-        public static WorldDigester Current { get; private set; }
-
-        private void Awake()
-        {
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
-        }
-
-        private void OnDestroy()
-        {
-            if (Current == this)
-            {
-                Current = null;
-            }
-        }
-
-        public string Digest(GameObject around)
+        public static string Digest(GameObject around)
         {
             Vector3 origin = around.transform.position;
 
@@ -44,7 +23,7 @@ namespace Shooter.Game.Llm
 
             foreach (MainDigestible entity in FindVisible(around, origin))
             {
-                string seen = Digester.Current.Of(entity, DigestionDetail.Brief);
+                string seen = Digester.Of(entity, DigestionDetail.Brief);
                 if (seen != null) digest.Append(seen).Append('\n');
             }
 
@@ -53,11 +32,11 @@ namespace Shooter.Game.Llm
             return result;
         }
 
-        private List<MainDigestible> FindVisible(GameObject around, Vector3 origin)
+        private static List<MainDigestible> FindVisible(GameObject around, Vector3 origin)
         {
             var visible = new List<MainDigestible>();
 
-            foreach (MainDigestible entity in Registers.Current.Of<MainDigestible>(Inactive.Exclude))
+            foreach (MainDigestible entity in Registers.Of<MainDigestible>(Inactive.Exclude))
             {
                 if (entity.gameObject == around) continue;
 
@@ -70,14 +49,14 @@ namespace Shooter.Game.Llm
             return visible.OrderBy(entity => (origin - entity.transform.position).sqrMagnitude).ToList();
         }
 
-        private float ViewingDistance(DigestibleSize size)
+        private static float ViewingDistance(DigestibleSize size)
         {
             return size switch
             {
-                DigestibleSize.Biggest => biggestViewingDistance,
-                DigestibleSize.Large => largeViewingDistance,
-                DigestibleSize.Medium => mediumViewingDistance,
-                _ => smallViewingDistance
+                DigestibleSize.Biggest => BiggestViewingDistance,
+                DigestibleSize.Large => LargeViewingDistance,
+                DigestibleSize.Medium => MediumViewingDistance,
+                _ => SmallViewingDistance
             };
         }
     }

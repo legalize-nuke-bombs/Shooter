@@ -8,60 +8,60 @@ using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
-    public class SnapshotManager : MonoBehaviour
+    public static class SnapshotManager
     {
         private static readonly Journal Log = Logs.Here();
 
-        public Snapshot Build()
+        public static Snapshot Build()
         {
-            Log.Info($"Entity {name} is building snapshot...");
+            Log.Info("Building snapshot...");
             var snapshot = new Snapshot
             {
                 GameObjects = new Dictionary<string, object>()
             };
 
-            SaveableObject[] saveables = FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
+            SaveableObject[] saveables = UnityEngine.Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
             foreach (SaveableObject saveable in saveables)
             {
                 if (!saveable.TryGetComponent(out GameObjectId saveableId))
                 {
-                    Log.Warn($"Entity {name} found {saveable.name} with no id");
+                    Log.Warn($"Snapshot found {saveable.name} with no id");
                     continue;
                 }
 
                 if (string.IsNullOrEmpty(saveableId.Id))
                 {
-                    Log.Warn($"Entity {name} found {saveable.name} with empty id");
+                    Log.Warn($"Snapshot found {saveable.name} with empty id");
                     continue;
                 }
 
                 if (!snapshot.GameObjects.TryAdd(saveableId.Id, saveable.SaveObject()))
                 {
-                    Log.Warn($"Entity {name} found that {saveable.name} shares id {saveableId.Id} with an entity already saved");
+                    Log.Warn($"Snapshot found that {saveable.name} shares id {saveableId.Id} with an entity already saved");
                 }
             }
 
-            Log.Info($"Entity {name} built snapshot");
+            Log.Info("Snapshot is built");
             return snapshot;
         }
 
-        public void Write(string path, Snapshot snapshot)
+        public static void Write(string path, Snapshot snapshot)
         {
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, JsonConvert.SerializeObject(snapshot, SaveJson.Settings));
-                Log.Info($"Entity {name} wrote snapshot into {path}: {snapshot.GameObjects.Count} entities");
+                Log.Info($"Snapshot is written into {path}: {snapshot.GameObjects.Count} entities");
             }
             catch (Exception e)
             {
-                Log.Error($"Entity {name} failed to wrote snapshot into {path}: {e.Message}");
+                Log.Error($"Failed to write snapshot into {path}: {e.Message}");
             }
         }
 
-        public bool Load(FrozenWorld world, byte[] bytes)
+        public static bool Load(FrozenWorld world, byte[] bytes)
         {
-            Log.Info($"Entity {name} is loading from snapshot...");
+            Log.Info("Loading from snapshot...");
 
             Snapshot snapshot;
             try
@@ -71,11 +71,11 @@ namespace Shooter.Game.Core.Saves
             }
             catch (Exception e)
             {
-                Log.Warn($"Entity {name} failed to decode snapshot, world will not be loaded: {e.Message}");
+                Log.Warn($"Failed to decode snapshot, world will not be loaded: {e.Message}");
                 return false;
             }
 
-            Log.Info($"Entity {name} decoded snapshot, snapshot game object count {snapshot.GameObjects.Count}");
+            Log.Info($"Snapshot is decoded, snapshot game object count {snapshot.GameObjects.Count}");
 
             int inSceneOk = 0;
             int inSceneFailed = 0;
@@ -88,7 +88,7 @@ namespace Shooter.Game.Core.Saves
 
                 if (world.TryGet(targetId, out SaveableObject target))
                 {
-                    Log.Info($"Entity {name} is loading {target.name} {targetId}...");
+                    Log.Info($"Loading {target.name} {targetId}...");
                     try
                     {
                         target.LoadObject(targetValue);
@@ -96,13 +96,13 @@ namespace Shooter.Game.Core.Saves
                     }
                     catch (Exception e)
                     {
-                        Log.Warn($"Entity {name} failed to load {target.name} {targetId} : {e.Message}");
+                        Log.Warn($"Failed to load {target.name} {targetId} : {e.Message}");
                         inSceneFailed++;
                     }
                 }
                 else
                 {
-                    Log.Info($"Entity {name} is spawning non-scene object {targetId}...");
+                    Log.Info($"Spawning non-scene object {targetId}...");
                     try
                     {
                         SaveableObject.Spawn(world, targetId, targetValue);
@@ -110,13 +110,13 @@ namespace Shooter.Game.Core.Saves
                     }
                     catch (Exception e)
                     {
-                        Log.Warn($"Entity {name} failed to spawn {targetId} : {e.Message}");
+                        Log.Warn($"Failed to spawn {targetId} : {e.Message}");
                         nonSceneFailed++;
                     }
                 }
             }
 
-            Log.Info($"Entity {name} loaded from snapshot, inSceneOk {inSceneOk} inSceneFailed {inSceneFailed} nonSceneOk {nonSceneOk} nonSceneFailed {nonSceneFailed}");
+            Log.Info($"Loaded from snapshot, inSceneOk {inSceneOk} inSceneFailed {inSceneFailed} nonSceneOk {nonSceneOk} nonSceneFailed {nonSceneFailed}");
             return true;
         }
     }

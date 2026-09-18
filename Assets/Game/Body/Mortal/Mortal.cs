@@ -68,7 +68,7 @@ namespace Shooter.Game.Body
                 return;
             }
 
-            GameObject body = Spawner.Current.Spawn(prefab, transform.position, transform.rotation);
+            GameObject body = Spawner.Spawn(prefab, transform.position, transform.rotation);
             if (body == null)
             {
                 Log.Error($"Entity {name} failed to spawn corpse");

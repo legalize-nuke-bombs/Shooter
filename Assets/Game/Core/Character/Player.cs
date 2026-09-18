@@ -37,7 +37,7 @@ namespace Shooter.Game.Core
 
         public static Player Of(long id, Inactive gate)
         {
-            foreach (Player player in Registers.Current.Of<Player>(gate))
+            foreach (Player player in Registers.Of<Player>(gate))
             {
                 if (player.Id == id)
                 {
@@ -49,7 +49,7 @@ namespace Shooter.Game.Core
 
         public static Player OfKey(string publicKey, Inactive gate)
         {
-            foreach (Player player in Registers.Current.Of<Player>(gate))
+            foreach (Player player in Registers.Of<Player>(gate))
             {
                 if (player.PublicKey == publicKey)
                 {

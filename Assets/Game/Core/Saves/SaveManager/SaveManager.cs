@@ -2,92 +2,77 @@ using System.Collections;
 using System.IO;
 using System.Threading;
 using Shooter.Logging;
-using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
-    [RequireComponent(typeof(SnapshotManager))]
-    [RequireComponent(typeof(MetaManager))]
-    [RequireComponent(typeof(PreviewManager))]
-    public class SaveManager : MonoBehaviour
+    public static class SaveManager
     {
-        [SerializeField] private string prefix = "ShooterSave";
-        [SerializeField] private string stampFormat = "yyyy_MM_dd_HH_mm_ss";
-
+        private const string Prefix = "ShooterSave";
+        private const string StampFormat = "yyyy_MM_dd_HH_mm_ss";
         private static readonly Journal Log = Logs.Here();
 
-        private readonly SemaphoreSlim gate = new(1, 1);
+        private static readonly SemaphoreSlim Gate = new(1, 1);
 
-        private SnapshotManager snapshotManager;
-        private MetaManager metaManager;
-        private PreviewManager previewManager;
+        public static bool Saving => Gate.CurrentCount == 0;
 
-        public static SaveManager Current { get; private set; }
-
-        public bool Saving => gate.CurrentCount == 0;
-
-        private void Awake()
+        // The gate outlives the world: a save cut short by its runner's death never reaches the finally below
+        public static void Open()
         {
-            snapshotManager = GetComponent<SnapshotManager>();
-            metaManager = GetComponent<MetaManager>();
-            previewManager = GetComponent<PreviewManager>();
+            if (!Saving) return;
 
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
+            Gate.Release();
+            Log.Warn("The previous world left a save unfinished, the gate is open again");
         }
 
-        public IEnumerator SaveCoroutine()
+        public static IEnumerator SaveCoroutine()
         {
-            if (!gate.Wait(0))
+            if (!Gate.Wait(0))
             {
-                Log.Info($"Entity {name} is already saving, this request is dropped");
+                Log.Info("A save is already running, this request is dropped");
                 yield break;
             }
 
             try
             {
-                Log.Info($"Entity {name} is making save...");
-                Snapshot snapshot = snapshotManager.Build();
-                Meta meta = metaManager.Build();
+                Log.Info("Making save...");
+                Snapshot snapshot = SnapshotManager.Build();
+                Meta meta = MetaManager.Build();
 
-                string path = Path.Combine(SaveLibrary.Location, prefix + "_" + meta.Stamp.ToString(stampFormat));
+                string path = Path.Combine(SaveLibrary.Location, Prefix + "_" + meta.Stamp.ToString(StampFormat));
 
-                snapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
-                metaManager.Write(Path.Combine(path, "Meta.json"), meta);
-                yield return StartCoroutine(previewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg")));
-                path = MainCompressionManager.Current.Compress(path);
-                Log.Info($"Entity {name} saved to {path}");
+                SnapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot);
+                MetaManager.Write(Path.Combine(path, "Meta.json"), meta);
+                yield return PreviewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg"));
+                path = MainCompressionManager.Compress(path);
+                Log.Info($"Saved to {path}");
             }
             finally
             {
-                gate.Release();
+                Gate.Release();
             }
         }
 
-        public FrozenWorld Freeze()
+        public static FrozenWorld Freeze()
         {
-            Log.Info($"Entity {name} is freezing the world...");
+            Log.Info("Freezing the world...");
             return FrozenWorld.Freeze();
         }
 
-        public bool Load(FrozenWorld world, string path)
+        public static bool Load(FrozenWorld world, string path)
         {
-            Log.Info($"Entity {name} is loading from {path}...");
+            Log.Info($"Loading from {path}...");
 
-            byte[] snapshot = MainCompressionManager.Current.Read(path, "Snapshot.json");
+            byte[] snapshot = MainCompressionManager.Read(path, "Snapshot.json");
             if (snapshot == null)
             {
-                Log.Warn($"Entity {name} found no snapshot in {path}, the world stays frozen");
+                Log.Warn($"No snapshot in {path}, the world stays frozen");
                 return false;
             }
 
-            if (!snapshotManager.Load(world, snapshot)) return false;
+            if (!SnapshotManager.Load(world, snapshot)) return false;
 
             world.Thaw();
-            Log.Info($"Entity {name} loaded {path}");
+            Log.Info($"Loaded {path}");
             return true;
         }
     }

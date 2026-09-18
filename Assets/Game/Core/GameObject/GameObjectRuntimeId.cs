@@ -54,7 +54,7 @@ namespace Shooter.Game.Core
 
         public static GameObjectRuntimeId Of(long id, Inactive gate)
         {
-            foreach (GameObjectRuntimeId component in Registers.Current.Of<GameObjectRuntimeId>(gate))
+            foreach (GameObjectRuntimeId component in Registers.Of<GameObjectRuntimeId>(gate))
             {
                 if (component.Value == id)
                 {

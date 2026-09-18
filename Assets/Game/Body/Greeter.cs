@@ -49,7 +49,7 @@ namespace Shooter.Game.Body
             foreach (ulong client in pending) Embody(client);
             pending.Clear();
 
-            foreach (Player player in Registers.Current.Of<Player>(Inactive.Include))
+            foreach (Player player in Registers.Of<Player>(Inactive.Include))
             {
                 NetworkObject body = player.GetComponent<NetworkObject>();
                 if (!bodies.ContainsValue(body)) body.gameObject.SetActive(false);
@@ -99,7 +99,7 @@ namespace Shooter.Game.Body
             else
             {
                 Transform at = MainSpawnPoint.Current == null ? transform : MainSpawnPoint.Current.transform;
-                GameObject fresh = Spawner.Current.Spawn(network.NetworkConfig.PlayerPrefab, at.position, at.rotation);
+                GameObject fresh = Spawner.Spawn(network.NetworkConfig.PlayerPrefab, at.position, at.rotation);
                 if (fresh == null)
                 {
                     Log.Error($"Client {client} could not be given a body");

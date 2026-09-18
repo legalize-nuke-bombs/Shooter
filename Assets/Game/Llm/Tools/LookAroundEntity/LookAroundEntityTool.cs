@@ -29,7 +29,7 @@ namespace Shooter.Game.Llm.LookAroundEntity
                 return $"Failed to find entity with ID {targetId}";
             }
 
-            return $"Objects around entity {targetId}:\n" + WorldDigester.Current.Digest(id.gameObject);
+            return $"Objects around entity {targetId}:\n" + WorldDigester.Digest(id.gameObject);
         }
     }
 }

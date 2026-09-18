@@ -17,7 +17,7 @@ namespace Shooter.Game.Llm.LookAtYourself
 
         protected override string Execute(LookAtYourselfArguments arguments, LlmCallContext context)
         {
-            return "Your state:\n" + Digester.Current.Of(Self, DigestionDetail.Full);
+            return "Your state:\n" + Digester.Of(Self, DigestionDetail.Full);
         }
     }
 }
