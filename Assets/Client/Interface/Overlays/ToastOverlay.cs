@@ -9,7 +9,7 @@ namespace Shooter.Client.Interface
 {
     public class ToastOverlay : Overlay
     {
-        private const string FeedElement = "notifications";
+        private const string FeedElement = "toasts";
         private const long Life = 5000;
         private const int Limit = 4;
         private static readonly Journal Log = Logs.Here();
@@ -79,30 +79,30 @@ namespace Shooter.Client.Interface
         private static VisualElement Line(Toast toast)
         {
             var line = new VisualElement();
-            line.AddToClassList("notification");
+            line.AddToClassList("toast");
 
             Sprite image = toast.Icon == null ? null : toast.Icon.Sprite;
 
             if (image != null)
             {
                 var box = new VisualElement();
-                box.AddToClassList("notification__icon");
+                box.AddToClassList("toast__icon");
                 box.style.backgroundImage = Background.FromSprite(image);
                 line.Add(box);
             }
 
             var body = new VisualElement();
-            body.AddToClassList("notification__body");
+            body.AddToClassList("toast__body");
 
             var caption = new Label(toast.Title);
             caption.AddToClassList("line");
-            caption.AddToClassList("notification__title");
+            caption.AddToClassList("toast__title");
             body.Add(caption);
 
             if (!string.IsNullOrEmpty(toast.Subtitle))
             {
                 var from = new Label(toast.Subtitle);
-                from.AddToClassList("notification__from");
+                from.AddToClassList("toast__from");
                 body.Add(from);
             }
 

@@ -602,7 +602,7 @@
     -unity-text-outline-color: rgba(0, 0, 0, 0.9);
 }
 
-.notifications {
+.toasts {
     position: absolute;
     right: 6px;
     top: 4px;
@@ -610,7 +610,7 @@
     align-items: flex-end;
 }
 
-.notification {
+.toast {
     flex-direction: row;
     align-items: center;
     margin-top: 4px;
@@ -622,7 +622,7 @@
     border-color: rgba(255, 255, 255, 0.06);
 }
 
-.notification__icon {
+.toast__icon {
     width: 48px;
     height: 48px;
     margin-right: 9px;
@@ -631,19 +631,19 @@
     background-repeat: no-repeat;
 }
 
-.notification__body {
+.toast__body {
     flex-direction: column;
     flex-shrink: 1;
     padding: 6px 0;
 }
 
-.notification__title {
+.toast__title {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.92);
     white-space: normal;
 }
 
-.notification__from {
+.toast__from {
     font-size: 10px;
     color: rgba(255, 255, 255, 0.45);
     white-space: normal;
