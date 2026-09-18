@@ -17,12 +17,13 @@ namespace Shooter.Game.World
             if (movement == null) return;
 
             SpawnPoint spawnPoint = character.GetComponent<SpawnPoint>();
+            MainSpawnPoint point = spawnPoint == null ? MainSpawnPoint.Pick() : null;
 
-            Vector3 destination = spawnPoint == null
-                ? (MainSpawnPoint.Current == null
+            Vector3 destination = spawnPoint != null
+                ? spawnPoint.GetPosition()
+                : point == null
                     ? character.transform.position
-                    : MainSpawnPoint.Current.transform.position)
-                : spawnPoint.GetPosition();
+                    : point.transform.position;
 
             Log.Info($"Entity {name} teleporting {movement.name} to their spawn point {destination}");
             movement.Teleport(destination);
