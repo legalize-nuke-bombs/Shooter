@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93eca38e2c36124ba285211afd6cfe9, type: 3}
   m_Name: HumanFootsteps
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SurfaceSounds
-  fallback: {fileID: 11400000, guid: 60a77cf24db14f0c9859b8e068598626, type: 2}
+  fallback: {fileID: 11400000, guid: 9a54fed92b404b9e8f86c7f33f2c22b9, type: 2}
   surfaces:
   - surface: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
     sound: {fileID: 11400000, guid: d63527bbbec8415892d5b7ee112e1305, type: 2}
@@ -22,7 +22,5 @@ MonoBehaviour:
     sound: {fileID: 11400000, guid: 982dcd78c522400b867b98c1e54a6866, type: 2}
   - surface: {fileID: 13400000, guid: 709843bcf8454ef4196822b26d8f79ed, type: 2}
     sound: {fileID: 11400000, guid: bbe8ceccbedbc0f408cca3bd5b3a528f, type: 2}
-  - surface: {fileID: 13400000, guid: 3fa232dbfd8ba8e4193773e66cbcb7d7, type: 2}
-    sound: {fileID: 11400000, guid: 9a54fed92b404b9e8f86c7f33f2c22b9, type: 2}
   - surface: {fileID: 13400000, guid: 1f98859faec27d04eb0e4a1cdf6494d2, type: 2}
     sound: {fileID: 11400000, guid: 31e285bef49541478b9f2a6aded07d23, type: 2}
