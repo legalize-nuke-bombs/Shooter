@@ -22,5 +22,3 @@ MonoBehaviour:
     sound: {fileID: 11400000, guid: 982dcd78c522400b867b98c1e54a6866, type: 2}
   - surface: {fileID: 13400000, guid: 709843bcf8454ef4196822b26d8f79ed, type: 2}
     sound: {fileID: 11400000, guid: bbe8ceccbedbc0f408cca3bd5b3a528f, type: 2}
-  - surface: {fileID: 13400000, guid: 1f98859faec27d04eb0e4a1cdf6494d2, type: 2}
-    sound: {fileID: 11400000, guid: 31e285bef49541478b9f2a6aded07d23, type: 2}
