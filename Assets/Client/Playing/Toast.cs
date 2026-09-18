@@ -1,7 +1,7 @@
 using Shooter.Game.Body;
 using Shooter.Game.Core;
 
-namespace Shooter.Client.Interface
+namespace Shooter.Client.Playing
 {
     public readonly struct Toast
     {

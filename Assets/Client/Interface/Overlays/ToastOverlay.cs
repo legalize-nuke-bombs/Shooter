@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Client.Interface
 {
-    public class NotificationOverlay : Overlay
+    public class ToastOverlay : Overlay
     {
         private const string FeedElement = "notifications";
         private const long Life = 5000;
@@ -15,21 +15,30 @@ namespace Shooter.Client.Interface
         private static readonly Journal Log = Logs.Here();
 
         private VisualElement feed;
+        private Player player;
+        private IToastSource[] sources;
 
-        public static NotificationOverlay Current { get; private set; }
-
-        private void Awake()
+        private void Update()
         {
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
+            if (!Bound) return;
+
+            Follow();
         }
 
-        private void OnDestroy()
+        private void Follow()
         {
-            if (Current == this) Current = null;
+            Player own = OwnPlayer.Find<Player>();
+            if (own == player) return;
+
+            Forget();
+            player = own;
+
+            if (player == null) return;
+
+            sources = player.GetComponents<IToastSource>();
+            foreach (IToastSource source in sources) source.Toasted += Show;
+
+            Log.Info($"Toasts follow {sources.Length} sources on {player.name}");
         }
 
         protected override bool Bind(VisualElement root)
@@ -38,7 +47,7 @@ namespace Shooter.Client.Interface
 
             if (feed == null)
             {
-                Log.Error($"Overlay document has no {FeedElement} element, notifications stay hidden");
+                Log.Error($"Overlay document has no {FeedElement} element, toasts stay hidden");
                 return false;
             }
 
@@ -49,10 +58,11 @@ namespace Shooter.Client.Interface
 
         protected override void Unbind()
         {
+            Forget();
             feed = null;
         }
 
-        public void Show(Toast toast)
+        private void Show(Toast toast)
         {
             if (!Bound || string.IsNullOrEmpty(toast.Title)) return;
 
@@ -109,6 +119,16 @@ namespace Shooter.Client.Interface
             if (ear == null) return;
 
             ear.PlayLocal(sound);
+        }
+
+        private void Forget()
+        {
+            if (sources != null)
+                foreach (IToastSource source in sources)
+                    source.Toasted -= Show;
+
+            sources = null;
+            player = null;
         }
     }
 }

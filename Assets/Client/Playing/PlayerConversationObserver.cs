@@ -1,3 +1,4 @@
+using System;
 using Shooter.Client.Interface;
 using Shooter.Game.Body;
 using Shooter.Game.Core;
@@ -8,7 +9,7 @@ namespace Shooter.Client.Playing
 {
     [RequireComponent(typeof(PlayerConversations))]
     [RequireComponent(typeof(LocalPlayer))]
-    public class PlayerConversationObserver : MonoBehaviour
+    public class PlayerConversationObserver : MonoBehaviour, IToastSource
     {
         private const string Stranger = "Незнакомец";
 
@@ -18,6 +19,8 @@ namespace Shooter.Client.Playing
         private readonly NameMapper mapper = new();
         private PlayerConversations conversations;
         private LocalPlayer player;
+
+        public event Action<Toast> Toasted;
 
         private void Awake()
         {
@@ -40,11 +43,8 @@ namespace Shooter.Client.Playing
             if (line.Spoken || line.AuthorId == conversations.CharacterId) return;
             if (player.TalkPartner == partnerId) return;
 
-            NotificationOverlay feed = NotificationOverlay.Current;
-            if (feed == null) return;
-
             string named = mapper.Of(partnerId);
-            feed.Show(new Toast(icon, sound, line.Content, "от " + (string.IsNullOrEmpty(named) ? Stranger : named)));
+            Toasted?.Invoke(new Toast(icon, sound, line.Content, "от " + (string.IsNullOrEmpty(named) ? Stranger : named)));
         }
     }
 }
