@@ -1,26 +1,26 @@
+using System.Collections.Generic;
+using Shooter.Game.Core;
 using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.World
 {
-    public class MainSpawnPoint : MonoBehaviour
+    public class MainSpawnPoint : RegisteredBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
-        public static MainSpawnPoint Current { get; private set; }
-
-        private void Awake()
+        // A map may hold none or several: none is worth a warning, several are so many ways in
+        public static MainSpawnPoint Pick()
         {
-            if (Current != null)
+            var placed = new List<MainSpawnPoint>(Registers.Of<MainSpawnPoint>(Inactive.Exclude));
+
+            if (placed.Count == 0)
             {
-                Log.Error("Singleton class has more than one instance");
+                Log.Warn("The map has no main spawn point");
+                return null;
             }
-            Current = this;
-        }
 
-        private void OnDestroy()
-        {
-            if (Current == this) Current = null;
+            return placed[Random.Range(0, placed.Count)];
         }
     }
 }

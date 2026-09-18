@@ -98,7 +98,8 @@ namespace Shooter.Game.Body
             }
             else
             {
-                Transform at = MainSpawnPoint.Current == null ? transform : MainSpawnPoint.Current.transform;
+                MainSpawnPoint point = MainSpawnPoint.Pick();
+                Transform at = point == null ? transform : point.transform;
                 GameObject fresh = Spawner.Spawn(network.NetworkConfig.PlayerPrefab, at.position, at.rotation);
                 if (fresh == null)
                 {
