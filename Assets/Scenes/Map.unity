@@ -184,6 +184,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 89263c73-e0f4-4636-82a7-a46169c10cb2
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -243,10 +247,6 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (25)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 89263c73-e0f4-4636-82a7-a46169c10cb2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -335,6 +335,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 332dc5c0-2802-4cdd-9896-153c720d5284
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -402,10 +406,6 @@ PrefabInstance:
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 332dc5c0-2802-4cdd-9896-153c720d5284
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -485,6 +485,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 743ca779-e7bd-4dd4-9e5a-005654e336c4
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -556,10 +560,6 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 743ca779-e7bd-4dd4-9e5a-005654e336c4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -849,13 +849,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2827093827336195807, guid: 39a235dd444a20a4388178a34edda890, type: 3}
+      propertyPath: id
+      value: 79741c09-77d8-4298-b1ee-cff56be8054c
+      objectReference: {fileID: 0}
     - target: {fileID: 3143000653327539949, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_Name
       value: white-mushroom (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3238469212995751363, guid: 39a235dd444a20a4388178a34edda890, type: 3}
-      propertyPath: id
-      value: 79741c09-77d8-4298-b1ee-cff56be8054c
       objectReference: {fileID: 0}
     - target: {fileID: 3884089234312814899, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_InScenePlaced
@@ -938,7 +938,7 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1635010665
       objectReference: {fileID: 0}
-    - target: {fileID: 6317565703633069595, guid: 73f36912f8dac7e4a81326e762ca3046, type: 3}
+    - target: {fileID: 7982071522472125237, guid: 73f36912f8dac7e4a81326e762ca3046, type: 3}
       propertyPath: id
       value: 131963c6-dd28-441c-a3a7-8dd5411bb643
       objectReference: {fileID: 0}
@@ -1253,10 +1253,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: ef4eec3d-dc5a-4e1f-b999-4e424d97388c
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (6)
@@ -1301,6 +1297,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: ef4eec3d-dc5a-4e1f-b999-4e424d97388c
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1325,10 +1325,6 @@ PrefabInstance:
     - target: {fileID: 525229798450776084, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
-      objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 5ad65bc5-4c22-458d-a0c6-828da2c2f586
       objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
@@ -1373,6 +1369,10 @@ PrefabInstance:
     - target: {fileID: 8510430610773393489, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 5ad65bc5-4c22-458d-a0c6-828da2c2f586
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1493,10 +1493,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: a66c98d9-25e0-4f45-a529-e7a66cfd30e2
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (9)
@@ -1541,6 +1537,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: a66c98d9-25e0-4f45-a529-e7a66cfd30e2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1565,10 +1565,6 @@ PrefabInstance:
     - target: {fileID: 525229798450776084, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
-      objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: d166b89e-868b-47a6-8f27-48f773526552
       objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
@@ -1613,6 +1609,10 @@ PrefabInstance:
     - target: {fileID: 8510430610773393489, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: d166b89e-868b-47a6-8f27-48f773526552
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1688,6 +1688,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 75e802e7-059e-4506-8215-2cda1376848b
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -1763,10 +1767,6 @@ PrefabInstance:
     - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 75e802e7-059e-4506-8215-2cda1376848b
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2026,6 +2026,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 34af6ee8-98cf-4cfe-b6b4-d234d71990d3
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -2093,10 +2097,6 @@ PrefabInstance:
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 34af6ee8-98cf-4cfe-b6b4-d234d71990d3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2714,10 +2714,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
       objectReference: {fileID: 0}
-    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
-      propertyPath: id
-      value: 87f7093c-faa6-465b-b448-2168baf418d5
-      objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
       value: Lamp
@@ -2762,6 +2758,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 619626251006798639, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: 87f7093c-faa6-465b-b448-2168baf418d5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2790,10 +2790,6 @@ PrefabInstance:
     - target: {fileID: -7162147896932703135, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
-      objectReference: {fileID: 0}
-    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
-      propertyPath: id
-      value: 3d67fb55-2682-4019-951e-7b1d178d8370
       objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
@@ -2838,6 +2834,10 @@ PrefabInstance:
     - target: {fileID: 7431905612350002, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 619626251006798639, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: 3d67fb55-2682-4019-951e-7b1d178d8370
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3477,10 +3477,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 23bed071-a238-4bf3-b8c0-8e2b63f4fa53
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (7)
@@ -3525,6 +3521,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 23bed071-a238-4bf3-b8c0-8e2b63f4fa53
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3538,6 +3538,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: ea0ebd0d-8d55-4932-b7a3-26a55e471610
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -3610,10 +3614,6 @@ PrefabInstance:
       propertyPath: m_Shadows.m_Type
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: ea0ebd0d-8d55-4932-b7a3-26a55e471610
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3643,7 +3643,7 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2510647004
       objectReference: {fileID: 0}
-    - target: {fileID: 6317565703633069595, guid: f6c5244f91a79214d873b612738bdce7, type: 3}
+    - target: {fileID: 7982071522472125237, guid: f6c5244f91a79214d873b612738bdce7, type: 3}
       propertyPath: id
       value: b1d19d98-addd-41de-a1f0-5605a85eefb4
       objectReference: {fileID: 0}
@@ -3700,6 +3700,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 7a4b1618-802d-40ea-aa05-cb018f8cf6d5
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -3768,10 +3772,6 @@ PrefabInstance:
       propertyPath: m_Shadows.m_Type
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 7a4b1618-802d-40ea-aa05-cb018f8cf6d5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3785,6 +3785,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 64887f3e-d74d-4334-a041-fb0f0e6a63a4
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -3853,10 +3857,6 @@ PrefabInstance:
       propertyPath: m_Shadows.m_Type
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 64887f3e-d74d-4334-a041-fb0f0e6a63a4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3870,6 +3870,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: c61b5b97-5cd9-4dd1-bffc-e7b87e420f3a
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -3945,10 +3949,6 @@ PrefabInstance:
     - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: c61b5b97-5cd9-4dd1-bffc-e7b87e420f3a
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4135,6 +4135,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: abb35cb6-8f5c-4458-92ee-b41b342316d3
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -4194,10 +4198,6 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: abb35cb6-8f5c-4458-92ee-b41b342316d3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4273,6 +4273,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 3b1d75ac-bbd6-4449-a648-e2fb3ac6ffdb
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -4340,10 +4344,6 @@ PrefabInstance:
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 3b1d75ac-bbd6-4449-a648-e2fb3ac6ffdb
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4431,6 +4431,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3928069200239862048, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: id
+      value: 717d0854-61f5-4748-be10-ef799864b22c
+      objectReference: {fileID: 0}
     - target: {fileID: 1410674234807895358, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -4458,10 +4462,6 @@ PrefabInstance:
     - target: {fileID: 5318310806012582442, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6837229995733495709, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
-      propertyPath: id
-      value: 717d0854-61f5-4748-be10-ef799864b22c
       objectReference: {fileID: 0}
     - target: {fileID: 7487244357921330417, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4528,10 +4528,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 0fda0426-7a35-451d-9741-e2fbdefeb771
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (3)
@@ -4576,6 +4572,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 0fda0426-7a35-451d-9741-e2fbdefeb771
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4605,7 +4605,7 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1819091903
       objectReference: {fileID: 0}
-    - target: {fileID: 6317565703633069595, guid: 4cb3dc07b657ff947b2c736903a2f324, type: 3}
+    - target: {fileID: 7982071522472125237, guid: 4cb3dc07b657ff947b2c736903a2f324, type: 3}
       propertyPath: id
       value: d6af72ea-18b8-475c-aa9f-ba1267ed0505
       objectReference: {fileID: 0}
@@ -4674,10 +4674,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 557d59b3-721c-4e83-a075-0b93c1bc3d9b
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (1)
@@ -4721,6 +4717,10 @@ PrefabInstance:
     - target: {fileID: 8510430610773393489, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 557d59b3-721c-4e83-a075-0b93c1bc3d9b
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5142,6 +5142,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3928069200239862048, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: id
+      value: bdbcda06-5bcd-4bd8-bbaf-280ef8076e2e
+      objectReference: {fileID: 0}
     - target: {fileID: 1410674234807895358, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -5169,10 +5173,6 @@ PrefabInstance:
     - target: {fileID: 5318310806012582442, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6837229995733495709, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
-      propertyPath: id
-      value: bdbcda06-5bcd-4bd8-bbaf-280ef8076e2e
       objectReference: {fileID: 0}
     - target: {fileID: 7487244357921330417, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5239,10 +5239,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 00bdbca6-6ab1-4900-a911-975aa5dbdb35
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (13)
@@ -5286,6 +5282,10 @@ PrefabInstance:
     - target: {fileID: 8510430610773393489, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 00bdbca6-6ab1-4900-a911-975aa5dbdb35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5601,10 +5601,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 5e2338e5-0e83-4569-ac68-d93041112076
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (5)
@@ -5648,6 +5644,10 @@ PrefabInstance:
     - target: {fileID: 8510430610773393489, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 5e2338e5-0e83-4569-ac68-d93041112076
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5723,6 +5723,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: df92a399-db02-4177-b835-d6293b49f716
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -5798,10 +5802,6 @@ PrefabInstance:
     - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: df92a399-db02-4177-b835-d6293b49f716
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5926,10 +5926,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
       objectReference: {fileID: 0}
-    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
-      propertyPath: id
-      value: c53f262b-1813-4dd4-9223-2e375ad57144
-      objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
       value: Lamp (1)
@@ -5977,6 +5973,10 @@ PrefabInstance:
     - target: {fileID: 7431905612350004, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 619626251006798639, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: c53f262b-1813-4dd4-9223-2e375ad57144
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6277,13 +6277,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2827093827336195807, guid: 39a235dd444a20a4388178a34edda890, type: 3}
+      propertyPath: id
+      value: 8fe00723-1960-419b-b3e1-1dea2c134ceb
+      objectReference: {fileID: 0}
     - target: {fileID: 3143000653327539949, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_Name
       value: white-mushroom (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3238469212995751363, guid: 39a235dd444a20a4388178a34edda890, type: 3}
-      propertyPath: id
-      value: 8fe00723-1960-419b-b3e1-1dea2c134ceb
       objectReference: {fileID: 0}
     - target: {fileID: 3884089234312814899, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_InScenePlaced
@@ -6350,13 +6350,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2827093827336195807, guid: 39a235dd444a20a4388178a34edda890, type: 3}
+      propertyPath: id
+      value: 94446c8e-a361-44d2-a06b-040b0d823caf
+      objectReference: {fileID: 0}
     - target: {fileID: 3143000653327539949, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_Name
       value: white-mushroom
-      objectReference: {fileID: 0}
-    - target: {fileID: 3238469212995751363, guid: 39a235dd444a20a4388178a34edda890, type: 3}
-      propertyPath: id
-      value: 94446c8e-a361-44d2-a06b-040b0d823caf
       objectReference: {fileID: 0}
     - target: {fileID: 3884089234312814899, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_InScenePlaced
@@ -6684,10 +6684,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: ea6b575a-4e66-4cba-a2a8-ae1f2dbe7207
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (10)
@@ -6731,6 +6727,10 @@ PrefabInstance:
     - target: {fileID: 8510430610773393489, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: ea6b575a-4e66-4cba-a2a8-ae1f2dbe7207
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7049,6 +7049,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 24b311de-26c2-465a-be90-a7be4623ef59
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -7120,10 +7124,6 @@ PrefabInstance:
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 24b311de-26c2-465a-be90-a7be4623ef59
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7837,6 +7837,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: fe3ce7cc-3f4c-4664-b96b-3e9ee56b3f33
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -7897,10 +7901,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (9)
       objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: fe3ce7cc-3f4c-4664-b96b-3e9ee56b3f33
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7925,10 +7925,6 @@ PrefabInstance:
     - target: {fileID: 525229798450776084, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
-      objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 984e69c4-70bd-4a8c-940e-6812b74a2c71
       objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
@@ -7974,6 +7970,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 984e69c4-70bd-4a8c-940e-6812b74a2c71
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7987,6 +7987,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 509c1575-8248-4f04-9cd4-2a96d6578260
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -8062,10 +8066,6 @@ PrefabInstance:
     - target: {fileID: 4257772437841554635, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 509c1575-8248-4f04-9cd4-2a96d6578260
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8226,6 +8226,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 6cec256a-57cc-4901-8f54-4eb351f9fd9e
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -8298,10 +8302,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (8)
       objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 6cec256a-57cc-4901-8f54-4eb351f9fd9e
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8315,10 +8315,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 132230705191498959, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      propertyPath: id
-      value: a5fba030-a09d-4f0b-b5ee-54aada973b0f
-      objectReference: {fileID: 0}
     - target: {fileID: 2319365671940130797, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: m_LocalPosition.x
       value: 120.51
@@ -8358,6 +8354,10 @@ PrefabInstance:
     - target: {fileID: 2319365671940130797, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4089062214871134689, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
+      propertyPath: id
+      value: a5fba030-a09d-4f0b-b5ee-54aada973b0f
       objectReference: {fileID: 0}
     - target: {fileID: 4865163301192626180, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
       propertyPath: m_Name
@@ -8435,10 +8435,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: af1d186f-c078-4c48-8da9-9489ed4a7cd8
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (8)
@@ -8482,6 +8478,10 @@ PrefabInstance:
     - target: {fileID: 8510430610773393489, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: af1d186f-c078-4c48-8da9-9489ed4a7cd8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8687,13 +8687,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2827093827336195807, guid: 39a235dd444a20a4388178a34edda890, type: 3}
+      propertyPath: id
+      value: bda0982b-263d-4be4-959c-8206e194812e
+      objectReference: {fileID: 0}
     - target: {fileID: 3143000653327539949, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_Name
       value: white-mushroom (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3238469212995751363, guid: 39a235dd444a20a4388178a34edda890, type: 3}
-      propertyPath: id
-      value: bda0982b-263d-4be4-959c-8206e194812e
       objectReference: {fileID: 0}
     - target: {fileID: 3884089234312814899, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_InScenePlaced
@@ -8760,6 +8760,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: 81b786ed-30cc-4486-b50f-a444424a9b90
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -8828,10 +8832,6 @@ PrefabInstance:
       propertyPath: m_Shadows.m_Type
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: 81b786ed-30cc-4486-b50f-a444424a9b90
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8845,6 +8845,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: e05a229b-01de-4dee-a8b4-226ebc81472c
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -8912,10 +8916,6 @@ PrefabInstance:
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: e05a229b-01de-4dee-a8b4-226ebc81472c
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9345,10 +9345,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2595353762
       objectReference: {fileID: 0}
-    - target: {fileID: -6338337530893885036, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
-      propertyPath: id
-      value: 0d1808a5-34ef-4c16-bbd5-27e93591fb49
-      objectReference: {fileID: 0}
     - target: {fileID: 7431905612350001, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_Name
       value: Lamp (2)
@@ -9396,6 +9392,10 @@ PrefabInstance:
     - target: {fileID: 7431905612350004, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 619626251006798639, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: id
+      value: 0d1808a5-34ef-4c16-bbd5-27e93591fb49
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9868,10 +9868,6 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
       objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 491f57d8-6220-46e3-9f46-f96d6e80d6eb
-      objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
       value: red-mushroom (4)
@@ -9916,6 +9912,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 491f57d8-6220-46e3-9f46-f96d6e80d6eb
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9940,10 +9940,6 @@ PrefabInstance:
     - target: {fileID: 525229798450776084, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 130749657
-      objectReference: {fileID: 0}
-    - target: {fileID: 2165350704611589699, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
-      propertyPath: id
-      value: 522a7c21-fe7e-4335-8a3c-85f97ed223fb
       objectReference: {fileID: 0}
     - target: {fileID: 7674606266702496447, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_Name
@@ -9988,6 +9984,10 @@ PrefabInstance:
     - target: {fileID: 8510430610773393489, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965076715847265801, guid: b55b901bde0b5a04f8b0ff9cd08025ea, type: 3}
+      propertyPath: id
+      value: 522a7c21-fe7e-4335-8a3c-85f97ed223fb
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10075,6 +10075,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: e78d16fd-f90d-41e4-8533-703fedba9ff5
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -10147,10 +10151,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (4)
       objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: e78d16fd-f90d-41e4-8533-703fedba9ff5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10164,6 +10164,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317477117499524711, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: id
+      value: b3e755e7-123e-485d-90a1-55d7812d25c9
+      objectReference: {fileID: 0}
     - target: {fileID: 795453000195963049, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
@@ -10235,10 +10239,6 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: b3e755e7-123e-485d-90a1-55d7812d25c9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10399,7 +10399,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3031895072796033239, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
+    - target: {fileID: 3183200403606684273, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
       propertyPath: id
       value: 577e4f8f-c1b8-40eb-b933-5fd6c599c940
       objectReference: {fileID: 0}
@@ -10632,13 +10632,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2827093827336195807, guid: 39a235dd444a20a4388178a34edda890, type: 3}
+      propertyPath: id
+      value: d895ae7d-729f-44c2-a33e-3dece81bb41a
+      objectReference: {fileID: 0}
     - target: {fileID: 3143000653327539949, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_Name
       value: white-mushroom (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3238469212995751363, guid: 39a235dd444a20a4388178a34edda890, type: 3}
-      propertyPath: id
-      value: d895ae7d-729f-44c2-a33e-3dece81bb41a
       objectReference: {fileID: 0}
     - target: {fileID: 3884089234312814899, guid: 39a235dd444a20a4388178a34edda890, type: 3}
       propertyPath: m_InScenePlaced
@@ -11189,7 +11189,7 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -3368437015953145799, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+    - target: {fileID: -1508299866133183944, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
       propertyPath: id
       value: e60edc11-063d-4990-b7de-90f228e8dfef
       objectReference: {fileID: 0}

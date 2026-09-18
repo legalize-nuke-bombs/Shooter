@@ -23,21 +23,15 @@ namespace Shooter.Game.Core.Saves
             SaveableObject[] saveables = UnityEngine.Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
             foreach (SaveableObject saveable in saveables)
             {
-                if (!saveable.TryGetComponent(out GameObjectId saveableId))
-                {
-                    Log.Warn($"Snapshot found {saveable.name} with no id");
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(saveableId.Id))
+                if (string.IsNullOrEmpty(saveable.Id))
                 {
                     Log.Warn($"Snapshot found {saveable.name} with empty id");
                     continue;
                 }
 
-                if (!snapshot.GameObjects.TryAdd(saveableId.Id, saveable.SaveObject()))
+                if (!snapshot.GameObjects.TryAdd(saveable.Id, saveable.SaveObject()))
                 {
-                    Log.Warn($"Snapshot found that {saveable.name} shares id {saveableId.Id} with an entity already saved");
+                    Log.Warn($"Snapshot found that {saveable.name} shares id {saveable.Id} with an entity already saved");
                 }
             }
 

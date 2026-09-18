@@ -19,7 +19,6 @@ GameObject:
   - component: {fileID: 6731183384941312830}
   - component: {fileID: 5541826623691720299}
   - component: {fileID: 2955095885271429373}
-  - component: {fileID: 6636161634355679184}
   - component: {fileID: 8978501885598322036}
   m_Layer: 0
   m_Name: GameState
@@ -296,19 +295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8e84818f624729b8819d773dc64a22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Speech.ConversationManager
---- !u!114 &6636161634355679184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9047279815154395446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f3a7296f86462ebf1da8c9e8011a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectId
-  id: 00000000-0000-0000-0000-000000000000
 --- !u!114 &8978501885598322036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,3 +308,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
+  id: 00000000-0000-0000-0000-000000000000

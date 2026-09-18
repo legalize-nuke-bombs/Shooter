@@ -32,7 +32,7 @@ namespace Shooter.Game.Core.Saves
 
         public void Adopt(SaveableObject saveable)
         {
-            string id = saveable.GetComponent<GameObjectId>().Id;
+            string id = saveable.Id;
             if (string.IsNullOrEmpty(id))
             {
                 Log.Warn($"Saveable {saveable.name} has no id, stays awake and unknown to the save");
