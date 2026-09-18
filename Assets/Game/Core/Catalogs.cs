@@ -5,49 +5,35 @@ using UnityEngine;
 
 namespace Shooter.Game.Core
 {
-    [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class Catalogs : MonoBehaviour
+    public static class Catalogs
     {
+        private const string Folder = "Catalogs";
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private Catalog[] catalogs;
-
-        private readonly Dictionary<Type, Catalog> known = new();
-
-        public static Catalogs Current { get; private set; }
-
-        private void Awake()
-        {
-            foreach (Catalog catalog in catalogs)
-            {
-                if (catalog == null) continue;
-
-                if (!known.TryAdd(catalog.GetType(), catalog))
-                    Log.Error($"Catalogs holds two of {catalog.GetType().Name}, {catalog.name} is ignored");
-            }
-
-            Log.Info($"Catalogs serve {known.Count} kinds");
-
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
-        }
-
-        private void OnDestroy()
-        {
-            if (Current == this) Current = null;
-        }
+        private static Dictionary<Type, Catalog> known;
 
         public static TCatalog Of<TCatalog>() where TCatalog : Catalog
         {
-            if (Current == null) return null;
+            known ??= Load();
 
-            if (Current.known.TryGetValue(typeof(TCatalog), out Catalog catalog)) return (TCatalog)catalog;
+            if (known.TryGetValue(typeof(TCatalog), out Catalog catalog)) return (TCatalog)catalog;
 
             Log.Error($"Catalogs serve no {typeof(TCatalog).Name}");
             return null;
+        }
+
+        private static Dictionary<Type, Catalog> Load()
+        {
+            var found = new Dictionary<Type, Catalog>();
+
+            foreach (Catalog catalog in Resources.LoadAll<Catalog>(Folder))
+            {
+                if (!found.TryAdd(catalog.GetType(), catalog))
+                    Log.Error($"Catalogs hold two of {catalog.GetType().Name}, {catalog.name} is ignored");
+            }
+
+            Log.Info($"Catalogs serve {found.Count} kinds");
+            return found;
         }
     }
 }

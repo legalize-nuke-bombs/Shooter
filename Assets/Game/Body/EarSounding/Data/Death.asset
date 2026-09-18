@@ -15,6 +15,7 @@ MonoBehaviour:
   id: death
   clips:
   - {fileID: 8300000, guid: db0bd88644b54c3daf39696308e8b918, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   pitchVariation: 0
   promptDescription: Death sound

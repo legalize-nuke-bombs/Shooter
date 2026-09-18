@@ -6,9 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game.Core.Mixing
 {
-    [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class Mixer : MonoBehaviour
+    public static class Mixer
     {
+        private const string Asset = "Mixer";
         private const string MasterVolume = "MasterVolume";
         private const string MusicVolume = "MusicVolume";
         private const string AmbienceVolume = "AmbienceVolume";
@@ -17,70 +17,40 @@ namespace Shooter.Game.Core.Mixing
         private const float DecibelsPerDecade = 20f;
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private AudioMixer mixer;
-        [SerializeField] private AudioMixerGroup music;
-        [SerializeField] private AudioMixerGroup ambience;
-        [SerializeField] private AudioMixerGroup sounds;
+        private static AudioMixer mixer;
+        private static ClientConfig client;
 
-        private ClientConfig client;
-
-        public static Mixer Current { get; private set; }
-
-        public static AudioMixerGroup Music => Current == null ? null : Current.music;
-
-        public static AudioMixerGroup Ambience => Current == null ? null : Current.ambience;
-
-        public static AudioMixerGroup Sounds => Current == null ? null : Current.sounds;
-
-        private void Awake()
+        // Sounds find their group in their own spec; the mixer only has to follow the volume settings
+        public static void Tune()
         {
-            if (mixer == null || music == null || ambience == null || sounds == null)
-                Log.Error("Mixer prefab misses the mixer or a group, sounds will bypass the volume settings");
+            if (mixer != null) return;
 
-            if (Current != null)
+            mixer = Resources.Load<AudioMixer>(Asset);
+            if (mixer == null)
             {
-                Log.Error("Singleton class has more than one instance");
+                Log.Error($"No {Asset} mixer in Resources, the volume settings stay unheard");
+                return;
             }
-            Current = this;
-        }
 
-        private void OnEnable()
-        {
             client = Config.Read().Client;
             client.propertyChanged += Changed;
+            Apply();
         }
 
-        private void Start()
+        private static void Changed(object sender, BindablePropertyChangedEventArgs args)
         {
             Apply();
         }
 
-        private void OnDisable()
+        private static void Apply()
         {
-            client.propertyChanged -= Changed;
-        }
-
-        private void OnDestroy()
-        {
-            if (Current == this) Current = null;
-        }
-
-        private void Changed(object sender, BindablePropertyChangedEventArgs args)
-        {
-            Apply();
-        }
-
-        private void Apply()
-        {
-            if (mixer == null) return;
-
             Set(MasterVolume, client.Master);
             Set(MusicVolume, client.Music);
             Set(AmbienceVolume, client.Ambience);
             Set(SoundsVolume, client.Sounds);
         }
 
-        private void Set(string parameter, float volume)
+        private static void Set(string parameter, float volume)
         {
             float decibels = volume <= 0f ? Silence : Mathf.Max(Silence, DecibelsPerDecade * Mathf.Log10(volume));
             if (!mixer.SetFloat(parameter, decibels)) Log.Warn($"Mixer {mixer.name} exposes no {parameter}, that volume stays as is");

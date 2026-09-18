@@ -15,6 +15,7 @@ MonoBehaviour:
   id: teleporting
   clips:
   - {fileID: 8300000, guid: e28ab3735fea41ce9f0c0d771d3577e1, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   pitchVariation: 0
   promptDescription: Teleporting sound

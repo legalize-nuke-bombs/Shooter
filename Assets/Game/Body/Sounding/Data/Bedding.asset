@@ -11,11 +11,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
   m_Name: Bedding
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   id: bedding
   clips:
   - {fileID: 8300000, guid: 9fdf47e2af1342e19dff72c66d80acb3, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 0.5
   rolloff: 1
   minDistance: 1
   maxDistance: 12
+  pitchVariation: 0.05

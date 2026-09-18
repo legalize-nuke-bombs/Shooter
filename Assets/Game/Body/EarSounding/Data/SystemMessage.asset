@@ -15,6 +15,7 @@ MonoBehaviour:
   id: systemmessage
   clips:
   - {fileID: 8300000, guid: 1ef6a4f7f4184d03b2a19b8f2a81487d, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   pitchVariation: 0.05
   promptDescription: System notification sound
