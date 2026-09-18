@@ -14,13 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: footstepswater
   clips:
-  - {fileID: 8300000, guid: 3f16706936d04de99375b9bc7325a975, type: 3}
-  - {fileID: 8300000, guid: 6f8e2b469efe458a8cea5221a6ae7864, type: 3}
-  - {fileID: 8300000, guid: 1a1ea91c44ae4353819f596cc9ba5946, type: 3}
-  - {fileID: 8300000, guid: 7210622c6d7c46fbb5f924e2edfda781, type: 3}
-  - {fileID: 8300000, guid: 64d2dbe500104b31bff0961e30e22529, type: 3}
-  - {fileID: 8300000, guid: f87310de822944279f3067a6d590d16e, type: 3}
-  volume: 0.2
+  - {fileID: 8300000, guid: fc5edcd1a1404f1c9126492263a1b42b, type: 3}
+  - {fileID: 8300000, guid: 9da0df732b16447ba794ed3833a34bd8, type: 3}
+  - {fileID: 8300000, guid: 4013d4ea5a504a0189f83a462a59de35, type: 3}
+  - {fileID: 8300000, guid: b8db414bd44e4b689c042693524b3aeb, type: 3}
+  - {fileID: 8300000, guid: 717a773654f045e8a1795e7b501654c3, type: 3}
+  - {fileID: 8300000, guid: 86fd8ae648be4c76b01a99c627f948c3, type: 3}
+  - {fileID: 8300000, guid: 4b0b1aef1cae42639f6387552b364e8c, type: 3}
+  - {fileID: 8300000, guid: 2e2062e5bffa4d0ea5c3655cdefcb4ed, type: 3}
+  - {fileID: 8300000, guid: c6453486e39c451c973c4091adefd6a7, type: 3}
+  - {fileID: 8300000, guid: beb68e5c72b34bdea80539b6e7635594, type: 3}
+  - {fileID: 8300000, guid: f9d8bec52bfb4d3081c308fbdf3e5295, type: 3}
+  - {fileID: 8300000, guid: 2cef4db0393c4080acdf816360ad262e, type: 3}
+  volume: 0.36
   rolloff: 1
   minDistance: 1
   maxDistance: 20
