@@ -67,7 +67,7 @@ namespace Shooter
                 Log.Info($"Entity {name} is spawning its body");
                 if (body == null)
                 {
-                    body = Spawner.Current.Spawn(bodyPrefab.gameObject, transform);
+                    body = Spawner.Spawn(bodyPrefab.gameObject, transform);
                 }
                 if (body == null)
                 {

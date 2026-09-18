@@ -16,7 +16,7 @@ namespace Shooter.Game.Llm.LookAround
 
         protected override string Execute(LookAroundArguments arguments, LlmCallContext context)
         {
-            return "Objects around you:\n" + WorldDigester.Current.Digest(Self);
+            return "Objects around you:\n" + WorldDigester.Digest(Self);
         }
     }
 }

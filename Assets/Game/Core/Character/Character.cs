@@ -29,7 +29,7 @@ namespace Shooter.Game.Core
 
         public static Character Of(long id, Inactive gate)
         {
-            foreach (Character character in Registers.Current.Of<Character>(gate))
+            foreach (Character character in Registers.Of<Character>(gate))
             {
                 if (character.Id == id)
                 {
@@ -42,7 +42,7 @@ namespace Shooter.Game.Core
 
         public static void ForEach(Action<Character> action, Inactive gate)
         {
-            foreach (Character character in Registers.Current.Of<Character>(gate))
+            foreach (Character character in Registers.Of<Character>(gate))
             {
                 action(character);
             }

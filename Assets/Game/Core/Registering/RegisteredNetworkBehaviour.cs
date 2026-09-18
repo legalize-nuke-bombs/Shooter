@@ -9,26 +9,14 @@ namespace Shooter.Game.Core
 
         public override void OnNetworkSpawn()
         {
-            Registers registers = Registers.Current;
-            if (registers == null)
-            {
-                Log.Info($"Entity {name} will not be tracked because registers is not set");
-                return;
-            }
             Log.Info($"Entity {name} is tracking");
-            Registers.Current.Track(this);
+            Registers.Track(this);
         }
 
         public override void OnNetworkDespawn()
         {
-            Registers registers = Registers.Current;
-            if (registers == null)
-            {
-                Log.Info($"Entity {name} will not be untracked because registers is not set");
-                return;
-            }
             Log.Info($"Entity {name} is untracking");
-            Registers.Current.Untrack(this);
+            Registers.Untrack(this);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Shooter.Game.Core.Saves
 
         public static SaveEntry Read(string location)
         {
-            byte[] bytes = MainCompressionManager.Current.Read(location, MetaFile);
+            byte[] bytes = MainCompressionManager.Read(location, MetaFile);
             if (bytes == null)
             {
                 Log.Warn($"Save {location} has no {MetaFile}, skipped");
@@ -50,7 +50,7 @@ namespace Shooter.Game.Core.Saves
 
         public byte[] ReadPreview()
         {
-            return MainCompressionManager.Current.Read(Location, PreviewFile);
+            return MainCompressionManager.Read(Location, PreviewFile);
         }
     }
 }

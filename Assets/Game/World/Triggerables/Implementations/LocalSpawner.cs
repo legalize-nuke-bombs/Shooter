@@ -53,8 +53,7 @@ namespace Shooter.Game.World
             fired = true;
 
             Log.Info($"Entity {name} is going to spawn {prefab.name}...");
-            Spawner spawner = Spawner.Current;
-            spawner.Spawn(prefab, destination.transform.position, destination.transform.rotation);
+            Spawner.Spawn(prefab, destination.transform.position, destination.transform.rotation);
         }
     }
 }

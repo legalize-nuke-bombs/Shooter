@@ -1,40 +1,17 @@
 using System.Text;
 using Shooter.Game.Core;
-using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.Llm
 {
-    [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class Digester : MonoBehaviour
+    public static class Digester
     {
-        private static readonly Journal Log = Logs.Here();
-
-        public static Digester Current { get; private set; }
-
-        private void Awake()
-        {
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
-        }
-
-        private void OnDestroy()
-        {
-            if (Current == this)
-            {
-                Current = null;
-            }
-        }
-
-        public string Of(GameObject entity, DigestionDetail detail)
+        public static string Of(GameObject entity, DigestionDetail detail)
         {
             return entity == null ? null : Of(entity.GetComponent<MainDigestible>(), detail);
         }
 
-        public string Of(MainDigestible entity, DigestionDetail detail)
+        public static string Of(MainDigestible entity, DigestionDetail detail)
         {
             if (entity == null) return null;
 

@@ -33,7 +33,7 @@ namespace Shooter.Game.Llm.LookByIds
                 }
                 else
                 {
-                    sb.AppendLine(Digester.Current.Of(target.gameObject, DigestionDetail.Brief));
+                    sb.AppendLine(Digester.Of(target.gameObject, DigestionDetail.Brief));
                 }
             }
 

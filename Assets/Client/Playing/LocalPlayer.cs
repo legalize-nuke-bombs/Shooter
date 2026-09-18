@@ -3,6 +3,7 @@ using Shooter.Game.Body;
 using Shooter.Game.Combat;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
+using Shooter.Game.Core.Screenshots;
 using Shooter.Game.Speech;
 using Shooter.Logging;
 using Unity.Netcode;
@@ -20,7 +21,10 @@ namespace Shooter.Client.Playing
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Camera view;
+        [SerializeField] private EarSoundSpec saveSound;
+        [SerializeField] private EarSoundSpec screenshotSound;
         private Controls controls;
+        private EarSpeaker ear;
         private Gunner gunner;
         private Health health;
         private Interactor interactor;
@@ -72,6 +76,7 @@ namespace Shooter.Client.Playing
             mortal = GetComponent<Mortal>();
             gunner = GetComponent<Gunner>();
             recoil = GetComponent<OwnRecoil>();
+            ear = GetComponent<EarSpeaker>();
         }
 
         private void Update()
@@ -143,6 +148,9 @@ namespace Shooter.Client.Playing
             controls.Player.Radio.performed += OpenRadio;
             controls.UI.Radio.performed += CloseRadio;
             controls.UI.Cancel.performed += Escape;
+            controls.Game.Save.performed += QuickSave;
+            controls.Game.Screenshot.performed += Screenshot;
+            controls.Game.Enable();
 
             if (playerMouth != null)
             {
@@ -173,6 +181,8 @@ namespace Shooter.Client.Playing
             controls.Player.Radio.performed -= OpenRadio;
             controls.UI.Radio.performed -= CloseRadio;
             controls.UI.Cancel.performed -= Escape;
+            controls.Game.Save.performed -= QuickSave;
+            controls.Game.Screenshot.performed -= Screenshot;
 
             if (playerMouth != null)
             {
@@ -201,8 +211,8 @@ namespace Shooter.Client.Playing
         {
             if (controls == null) return;
 
-            if (talking || Paused || Inviting || RadioOpen || Prompting) Listen();
-            else if (InventoryOpen) Browse();
+            if (talking || Paused || Inviting) Listen();
+            else if (InventoryOpen || RadioOpen || Prompting) Browse();
             else Grab();
 
             Log.Info(
@@ -225,6 +235,7 @@ namespace Shooter.Client.Playing
             controls.Player.Reload.Disable();
             controls.Player.Interact.Disable();
             controls.Player.Inventory.Disable();
+            if (RadioOpen) controls.Player.Radio.Disable();
             controls.UI.Enable();
             Point(true);
         }
@@ -444,7 +455,22 @@ namespace Shooter.Client.Playing
             if (!IsServer) return;
 
             Log.Info("Saving the world from the pause menu");
-            StartCoroutine(SaveManager.Current.SaveCoroutine());
+            StartCoroutine(SaveManager.SaveCoroutine());
+        }
+
+        private void QuickSave(InputAction.CallbackContext context)
+        {
+            if (!IsServer || SaveManager.Saving) return;
+
+            if (ear != null) ear.PlayLocal(saveSound);
+            Log.Info("Saving the world by the hotkey");
+            StartCoroutine(SaveManager.SaveCoroutine());
+        }
+
+        private void Screenshot(InputAction.CallbackContext context)
+        {
+            if (ear != null) ear.PlayLocal(screenshotSound);
+            StartCoroutine(ScreenshotManager.ShootCoroutine());
         }
 
         public void LeaveWorld()
@@ -462,8 +488,8 @@ namespace Shooter.Client.Playing
 
         private IEnumerator SaveThenLeave()
         {
-            yield return SaveManager.Current.SaveCoroutine();
-            while (SaveManager.Current.Saving) yield return null;
+            yield return SaveManager.SaveCoroutine();
+            while (SaveManager.Saving) yield return null;
 
             NetworkManager.Shutdown();
         }

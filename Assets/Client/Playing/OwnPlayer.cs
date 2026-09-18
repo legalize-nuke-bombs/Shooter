@@ -15,7 +15,6 @@ namespace Shooter.Client.Playing
         {
             NetworkManager network = NetworkManager.Singleton;
             if (network == null || !network.IsListening) return null;
-            if (Registers.Current == null) return null;
 
             Player player = network.IsServer ? ByKey() : ByOwnership();
             if (player == null) return null;
@@ -31,7 +30,7 @@ namespace Shooter.Client.Playing
 
         private static Player ByOwnership()
         {
-            foreach (Player player in Registers.Current.Of<Player>(Inactive.Exclude))
+            foreach (Player player in Registers.Of<Player>(Inactive.Exclude))
             {
                 NetworkObject net = player.GetComponent<NetworkObject>();
                 if (net != null && net.IsOwner) return player;

@@ -35,7 +35,7 @@ namespace Shooter.Game.Core.Saves
 
         public static void Delete(SaveEntry entry)
         {
-            MainCompressionManager.Current.Delete(entry.Location);
+            MainCompressionManager.Delete(entry.Location);
         }
     }
 }

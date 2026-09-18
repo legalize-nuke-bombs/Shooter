@@ -1,17 +1,16 @@
-﻿using System;
-using UnityEngine;
-
 namespace Shooter.Game.Core.Screenshots
 {
-    [Serializable]
-    public struct ScreenshotSetting
+    public readonly struct ScreenshotSetting
     {
-        [SerializeField] private int width;
-        [SerializeField] private int height;
-        [SerializeField] private int quality;
+        public ScreenshotSetting(int width, int height, int quality)
+        {
+            Width = width;
+            Height = height;
+            Quality = quality;
+        }
 
-        public int Width => width;
-        public int Height => height;
-        public int Quality => quality;
+        public int Width { get; }
+        public int Height { get; }
+        public int Quality { get; }
     }
 }

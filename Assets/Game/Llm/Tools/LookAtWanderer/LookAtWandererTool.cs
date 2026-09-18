@@ -32,7 +32,7 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
                 throw new ArgumentException($"Failed to find wanderer {wandererId}");
             }
 
-            return $"Wanderer {wandererId} state:\n" + Digester.Current.Of(wanderer.gameObject, DigestionDetail.Full);
+            return $"Wanderer {wandererId} state:\n" + Digester.Of(wanderer.gameObject, DigestionDetail.Full);
         }
     }
 }

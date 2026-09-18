@@ -1,86 +1,95 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Shooter.Configuring;
 using Shooter.Logging;
-using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
-    public class MainCompressionManager : MonoBehaviour
+    public static class MainCompressionManager
     {
         private static readonly Journal Log = Logs.Here();
 
-        private Dictionary<string, CompressionManager> byKey = new Dictionary<string, CompressionManager>();
-        private Dictionary<string, CompressionManager> byExtension = new Dictionary<string, CompressionManager>();
-        private List<CompressionManager> known = new List<CompressionManager>();
+        private static Dictionary<string, CompressionManager> byKey;
+        private static Dictionary<string, CompressionManager> byExtension;
+        private static List<CompressionManager> known;
 
-        public static MainCompressionManager Current { get; private set; }
-
-        public IEnumerable<string> Keys => known.Select(manager => manager.Key);
-
-        private void Awake()
+        public static IEnumerable<string> Keys
         {
-            CompressionManager[] managers = GetComponents<CompressionManager>();
-            foreach (CompressionManager manager in managers)
+            get
             {
-                string normalizedKey = manager.Key.ToLowerInvariant();
-                string normalizedExtension = manager.Extension.ToLowerInvariant();
-                if (byKey.ContainsKey(normalizedKey) || byExtension.ContainsKey(normalizedExtension))
-                {
-                    Log.Warn($"Entity {name} found manager duplicate {manager.name} ({normalizedKey} - {normalizedExtension})");
-                    continue;
-                }
-                byKey.Add(normalizedKey, manager);
-                byExtension.Add(normalizedExtension, manager);
-                known.Add(manager);
+                Discover();
+                return known.Select(manager => manager.Key);
             }
-            Log.Info($"Entity {name} knows {byKey.Count} - {byExtension.Count} compression managers");
-
-            if (Current != null)
-            {
-                Log.Error("Singleton class has more than one instance");
-            }
-            Current = this;
         }
 
-        private void OnDestroy()
+        public static string Compress(string path)
         {
-            if (Current == this) Current = null;
-        }
+            Discover();
 
-        public string Compress(string path)
-        {
             string algorithm = Config.Read().Server.SaveCompressionAlgorithm.ToLowerInvariant();
             if (!byKey.TryGetValue(algorithm, out CompressionManager manager))
             {
-                Log.Warn($"Entity {name} found no compression manager for '{algorithm}', {path} stays as is");
+                Log.Warn($"No compression manager for '{algorithm}', {path} stays as is");
                 return path;
             }
 
-            Log.Info($"Entity {name} will store {path} with {manager.Key}");
+            Log.Info($"{path} will be stored with {manager.Key}");
             return manager.Compress(path);
         }
 
-        public byte[] Read(string location, string file)
+        public static byte[] Read(string location, string file)
         {
             CompressionManager manager = Resolve(location);
             return manager == null ? null : manager.Read(location, file);
         }
 
-        public void Delete(string location)
+        public static void Delete(string location)
         {
             Resolve(location)?.Delete(location);
         }
 
-        private CompressionManager Resolve(string location)
+        private static CompressionManager Resolve(string location)
         {
+            Discover();
+
             string extension = Directory.Exists(location) ? "" : Path.GetExtension(location).ToLowerInvariant();
             if (byExtension.TryGetValue(extension, out CompressionManager manager)) return manager;
 
-            Log.Warn($"Entity {name} found no compression manager for '{extension}' of {location}");
+            Log.Warn($"No compression manager for '{extension}' of {location}");
             return null;
+        }
+
+        private static void Discover()
+        {
+            if (known != null) return;
+
+            byKey = new Dictionary<string, CompressionManager>();
+            byExtension = new Dictionary<string, CompressionManager>();
+            known = new List<CompressionManager>();
+
+            IEnumerable<Type> kinds = typeof(CompressionManager).Assembly.GetTypes()
+                .Where(type => !type.IsAbstract && typeof(CompressionManager).IsAssignableFrom(type))
+                .OrderBy(type => type.Name, StringComparer.Ordinal);
+
+            foreach (Type kind in kinds)
+            {
+                var manager = (CompressionManager)Activator.CreateInstance(kind);
+                string normalizedKey = manager.Key.ToLowerInvariant();
+                string normalizedExtension = manager.Extension.ToLowerInvariant();
+                if (byKey.ContainsKey(normalizedKey) || byExtension.ContainsKey(normalizedExtension))
+                {
+                    Log.Warn($"Compression manager {kind.Name} duplicates an already known one ({normalizedKey} - {normalizedExtension})");
+                    continue;
+                }
+
+                byKey.Add(normalizedKey, manager);
+                byExtension.Add(normalizedExtension, manager);
+                known.Add(manager);
+            }
+
+            Log.Info($"{known.Count} compression managers are known");
         }
     }
 }

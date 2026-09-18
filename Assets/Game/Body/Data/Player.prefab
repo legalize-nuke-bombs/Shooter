@@ -596,6 +596,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.LocalPlayer
   ShowTopMostFoldoutHeaderGroup: 1
   view: {fileID: 7320842598891428731}
+  saveSound: {fileID: 11400000, guid: 2bf3a1811a0540a1b4b9b4f4ee59b639, type: 2}
+  screenshotSound: {fileID: 11400000, guid: 1732e9efb93c4fb695af248a0b187eb4, type: 2}
 --- !u!114 &1903172865445453008
 MonoBehaviour:
   m_ObjectHideFlags: 0

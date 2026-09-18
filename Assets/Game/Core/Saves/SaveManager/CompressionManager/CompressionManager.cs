@@ -1,29 +1,33 @@
 using System;
 using System.IO;
 using Shooter.Logging;
-using UnityEngine;
 
 namespace Shooter.Game.Core.Saves
 {
-    public abstract class CompressionManager : MonoBehaviour
+    public abstract class CompressionManager
     {
         private static readonly Journal Log = Logs.Here();
+
+        public abstract string Key { get; }
+        public abstract string Extension { get; }
+
+        private string Name => GetType().Name;
 
         public string Compress(string path)
         {
             string target = path + Extension;
-            Log.Info($"Entity {name} is storing {path} as {target}...");
+            Log.Info($"{Name} is storing {path} as {target}...");
             try
             {
                 CompressRaw(path);
             }
             catch (Exception e)
             {
-                Log.Info($"Entity {name} failed to store {path} as {target}: {e.Message}");
+                Log.Info($"{Name} failed to store {path} as {target}: {e.Message}");
                 return path;
             }
 
-            Log.Info($"Entity {name} successfully stored {path} as {target}");
+            Log.Info($"{Name} successfully stored {path} as {target}");
 
             if (target != path) Cleanup(path);
             return target;
@@ -37,7 +41,7 @@ namespace Shooter.Game.Core.Saves
             }
             catch (Exception e)
             {
-                Log.Warn($"Entity {name} failed to read {file} from {location}: {e.Message}");
+                Log.Warn($"{Name} failed to read {file} from {location}: {e.Message}");
                 return null;
             }
         }
@@ -47,11 +51,11 @@ namespace Shooter.Game.Core.Saves
             try
             {
                 DeleteRaw(location);
-                Log.Info($"Entity {name} deleted {location}");
+                Log.Info($"{Name} deleted {location}");
             }
             catch (Exception e)
             {
-                Log.Error($"Entity {name} failed to delete {location}: {e.Message}");
+                Log.Error($"{Name} failed to delete {location}: {e.Message}");
             }
         }
 
@@ -60,11 +64,11 @@ namespace Shooter.Game.Core.Saves
             try
             {
                 Directory.Delete(path, true);
-                Log.Info($"Entity {name} successfully deleted {path}");
+                Log.Info($"{Name} successfully deleted {path}");
             }
             catch (Exception e)
             {
-                Log.Info($"Entity {name} failed to delete {path}: {e.Message}");
+                Log.Info($"{Name} failed to delete {path}: {e.Message}");
             }
         }
 
@@ -76,8 +80,5 @@ namespace Shooter.Game.Core.Saves
         {
             File.Delete(location);
         }
-
-        public abstract string Key { get; }
-        public abstract string Extension { get; }
     }
 }
