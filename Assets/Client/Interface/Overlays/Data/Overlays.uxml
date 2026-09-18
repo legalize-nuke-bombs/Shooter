@@ -59,7 +59,7 @@
                 <ui:Label name="radio-empty" text="Никого" class="line radio__empty" picking-mode="Ignore"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="notifications" class="notifications" picking-mode="Ignore"/>
+        <ui:VisualElement name="toasts" class="toasts" picking-mode="Ignore"/>
         <ui:VisualElement name="sleep" class="sleep" picking-mode="Ignore"/>
         <ui:VisualElement name="pause" class="pause">
             <ui:VisualElement class="pause__panel">
