@@ -80,6 +80,7 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableInstancedPerPixelNormal: 1
     - _ExcludeFromTUAndAA: 0
+    - _HeightTransition: 0.15
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RenderQueueType: 1
@@ -95,6 +96,7 @@ Material:
     - _StencilWriteMaskGBuffer: 15
     - _StencilWriteMaskMV: 41
     - _SupportDecals: 1
+    - _TERRAIN_BLEND_HEIGHT: 1
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
     - _ZTestDepthEqualForOpaque: 3

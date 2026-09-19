@@ -107,6 +107,7 @@ namespace Shooter.Editing
         [SerializeField] private TerrainLayer background;
         [SerializeField] private float hollowRadius = 12f;
         [SerializeField] private List<Rule> rules = new();
+        [SerializeField] private float softness = 2f;
         [SerializeField] private TerrainLayer marker;
 
         private string result;
@@ -125,11 +126,15 @@ namespace Shooter.Editing
             EditorGUILayout.PropertyField(serialized.FindProperty(nameof(background)), new GUIContent("Background"));
             EditorGUILayout.PropertyField(serialized.FindProperty(nameof(hollowRadius)), new GUIContent("Hollow radius, m"));
             EditorGUILayout.PropertyField(serialized.FindProperty(nameof(rules)), new GUIContent("Rules, later over earlier"), true);
+            EditorGUILayout.PropertyField(serialized.FindProperty(nameof(softness)), new GUIContent("Edge softness, cells"));
             EditorGUILayout.PropertyField(serialized.FindProperty(nameof(marker)), new GUIContent("Only where painted with"));
             serialized.ApplyModifiedProperties();
 
             EditorGUILayout.LabelField("Slope in degrees, height in world metres, hollow in metres below the ground around",
                 EditorStyles.miniLabel);
+            EditorGUILayout.LabelField("Between a ledge and a sheer wall the slope jumps within one map cell and the border comes out as stairs: " +
+                                       "softness blurs it over that many cells, which is the band height blend needs; 0 paints cell to cell",
+                EditorStyles.wordWrappedMiniLabel);
             EditorGUILayout.LabelField("With a marker layer set, only the ground painted with it is repainted, the rest stays as it is",
                 EditorStyles.miniLabel);
 
@@ -160,6 +165,7 @@ namespace Shooter.Editing
         {
             background = Load("Grass_Moss_A");
             hollowRadius = 12f;
+            softness = 2f;
             rules = new List<Rule>
             {
                 new() { layer = Load("Grass_Soil_A"), measure = Measure.Hollow, from = 0.8f, to = 1000f, blend = 0.8f, strength = 0.6f },
@@ -280,16 +286,12 @@ namespace Shooter.Editing
             Vector3 size = data.size;
             float reach = Mathf.Max(size.x / resolution, 1f);
 
-            bool slopes = false;
-            bool hollows = false;
-            foreach (Rule rule in rules)
-            {
-                slopes |= rule.measure == Measure.Slope;
-                hollows |= rule.measure == Measure.Hollow;
-            }
+            // The rules are weighed a margin beyond the tile as well, so the softened edges meet across the seams
+            int margin = Mathf.CeilToInt(Mathf.Max(softness, 0f));
+            float[,,] ruled = Ruled(ground, corner, size, resolution, reach, margin, channels, layers);
+            if (margin > 0) ruled = Softened(ruled, softness, margin);
 
             var maps = new float[resolution, resolution, layers];
-            var weights = new float[layers];
             var totals = new double[layers];
             double covered = 0d;
 
@@ -305,8 +307,50 @@ namespace Shooter.Editing
 
                 covered += taken;
 
-                float x = corner.x + (column + 0.5f) / resolution * size.x;
-                float z = corner.z + (row + 0.5f) / resolution * size.z;
+                for (int layer = 0; layer < layers; layer++)
+                {
+                    float weight = ruled[row + margin, column + margin, layer];
+                    float kept = before == null || layer == marked ? 0f : before[row, column, layer];
+                    maps[row, column, layer] = weight * taken + kept;
+                    totals[layer] += weight * taken;
+                }
+            }
+
+            data.SetAlphamaps(0, 0, maps);
+            EditorUtility.SetDirty(data);
+
+            for (int layer = 0; layer < layers; layer++)
+            {
+                if (palette[layer] == null || totals[layer] <= 0d) continue;
+
+                shares.TryGetValue(palette[layer], out double sum);
+                shares[palette[layer]] = sum + totals[layer];
+            }
+
+            return covered;
+        }
+
+        // What the rules alone say about every cell of the tile and of a margin around it
+        private float[,,] Ruled(Ground ground, Vector3 corner, Vector3 size, int resolution, float reach, int margin, int[] channels,
+            int layers)
+        {
+            bool slopes = false;
+            bool hollows = false;
+            foreach (Rule rule in rules)
+            {
+                slopes |= rule.measure == Measure.Slope;
+                hollows |= rule.measure == Measure.Hollow;
+            }
+
+            int span = resolution + margin * 2;
+            var ruled = new float[span, span, layers];
+            var weights = new float[layers];
+
+            for (int row = 0; row < span; row++)
+            for (int column = 0; column < span; column++)
+            {
+                float x = corner.x + (column - margin + 0.5f) / resolution * size.x;
+                float z = corner.z + (row - margin + 0.5f) / resolution * size.z;
                 float height = ground.Height(x, z);
                 float slope = slopes ? Slope(ground, x, z, reach) : 0f;
                 float hollow = hollows ? Hollow(ground, x, z, height) : 0f;
@@ -327,26 +371,55 @@ namespace Shooter.Editing
                     weights[channels[i + 1]] += share;
                 }
 
-                for (int layer = 0; layer < layers; layer++)
-                {
-                    float kept = before == null || layer == marked ? 0f : before[row, column, layer];
-                    maps[row, column, layer] = weights[layer] * taken + kept;
-                    totals[layer] += weights[layer] * taken;
-                }
+                for (int layer = 0; layer < layers; layer++) ruled[row, column, layer] = weights[layer];
             }
 
-            data.SetAlphamaps(0, 0, maps);
-            EditorUtility.SetDirty(data);
+            return ruled;
+        }
 
+        // A gaussian blur of the weights, rows then columns. The weights of a cell keep adding up to one
+        private static float[,,] Softened(float[,,] ruled, float softness, int margin)
+        {
+            var kernel = new float[margin * 2 + 1];
+            float sigma = softness / 2f;
+            float sum = 0f;
+            for (int i = 0; i < kernel.Length; i++)
+            {
+                float offset = i - margin;
+                kernel[i] = Mathf.Exp(-offset * offset / (2f * sigma * sigma));
+                sum += kernel[i];
+            }
+
+            for (int i = 0; i < kernel.Length; i++) kernel[i] /= sum;
+
+            int span = ruled.GetLength(0);
+            int layers = ruled.GetLength(2);
+            var across = new float[span, span, layers];
+            var along = new float[span, span, layers];
+
+            for (int row = 0; row < span; row++)
+            for (int column = 0; column < span; column++)
             for (int layer = 0; layer < layers; layer++)
             {
-                if (palette[layer] == null || totals[layer] <= 0d) continue;
+                float blurred = 0f;
+                for (int i = 0; i < kernel.Length; i++)
+                    blurred += ruled[row, Mathf.Clamp(column + i - margin, 0, span - 1), layer] * kernel[i];
 
-                shares.TryGetValue(palette[layer], out double sum);
-                shares[palette[layer]] = sum + totals[layer];
+                across[row, column, layer] = blurred;
             }
 
-            return covered;
+            for (int row = 0; row < span; row++)
+            for (int column = 0; column < span; column++)
+            for (int layer = 0; layer < layers; layer++)
+            {
+                float blurred = 0f;
+                for (int i = 0; i < kernel.Length; i++)
+                    blurred += across[Mathf.Clamp(row + i - margin, 0, span - 1), column, layer] * kernel[i];
+
+                along[row, column, layer] = blurred;
+            }
+
+            return along;
         }
 
         private bool Marked(TerrainData data)
