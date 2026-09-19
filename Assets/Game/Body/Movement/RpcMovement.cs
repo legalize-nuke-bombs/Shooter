@@ -71,7 +71,9 @@ namespace Shooter.Game.Body
                 }
                 else
                 {
-                    fall = GroundedFall;
+                    // Pressed down hard enough to stay on any slope the body can walk: with a weak press every step down a hill
+                    // left the ground for a moment, footsteps thinned out and landings rattled instead
+                    fall = Mathf.Min(GroundedFall, -speed * Mathf.Tan(characterController.slopeLimit * Mathf.Deg2Rad));
                 }
 
                 jumping = false;
@@ -82,6 +84,9 @@ namespace Shooter.Game.Body
                 {
                     airborne = true;
                     airborneFrom = transform.position.y;
+
+                    // The ground has really ended: the fall starts gently, as it did, not at the speed of the press. A jump keeps its own
+                    if (fall < 0f) fall = GroundedFall;
                 }
                 else if (transform.position.y > airborneFrom)
                 {
