@@ -271,7 +271,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &41839210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7863,7 +7863,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1545063071326300676, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 93.32844
+      value: 92.37
       objectReference: {fileID: 0}
     - target: {fileID: 1545063071326300676, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9016,6 +9016,80 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!1 &1805115967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1805115971}
+  - component: {fileID: 1805115970}
+  - component: {fileID: 1805115969}
+  - component: {fileID: 1805115968}
+  m_Layer: 0
+  m_Name: TestMainSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1805115968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805115967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af21de618049e2e42b85bb3ca293fc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.CapsuleMarker
+  offset: {x: 0, y: 0, z: 0}
+--- !u!114 &1805115969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805115967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eafaa9b583d4574b25ab7686b7f7665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.TextMarker
+  label: 
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  offset: {x: 0, y: 1.2, z: 0}
+--- !u!114 &1805115970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805115967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12420b3095cffd34fa5a5ddfc47580ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.MainSpawnPoint
+--- !u!4 &1805115971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805115967}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -290.10876, y: 93.46, z: -953.98}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1820979894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10491,7 +10565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4309411630245040, guid: 507f04481eb98524fbb0f9ba6384815d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 93.281
+      value: 92.47
       objectReference: {fileID: 0}
     - target: {fileID: 4309411630245040, guid: 507f04481eb98524fbb0f9ba6384815d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -11460,3 +11534,4 @@ SceneRoots:
   - {fileID: 281182134}
   - {fileID: 991287676}
   - {fileID: 1564415343}
+  - {fileID: 1805115971}
