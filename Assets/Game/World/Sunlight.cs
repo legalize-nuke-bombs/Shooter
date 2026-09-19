@@ -28,6 +28,8 @@ namespace Shooter.Game.World
         private void Update()
         {
             Clock clock = GameState.Get<Clock>();
+            // The world goes before its scene does: for a frame on the way out there is no clock
+            if (clock == null) return;
 
             float hourAngle = (float)clock.HourAngle;
             float elevation = Celestial.Elevation(hourAngle, clock.Declination, clock.Latitude);
