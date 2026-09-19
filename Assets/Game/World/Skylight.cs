@@ -44,7 +44,11 @@ namespace Shooter.Game.World
 
         private void Update()
         {
-            double hourAngle = GameState.Get<Clock>().HourAngle;
+            Clock clock = GameState.Get<Clock>();
+            // The world goes before its scene does: for a frame on the way out there is no clock
+            if (clock == null) return;
+
+            double hourAngle = clock.HourAngle;
             bool due = double.IsNaN(updatedAt) || Math.Abs(hourAngle - updatedAt) >= angleStep;
 
             // An HDRP update request reaches only the first camera of a frame, and a mirror renders before the player:
