@@ -25,3 +25,4 @@ Assets/Scenes/Menu/*.asset filter=lfs diff=lfs merge=lfs -text
 *.ogg filter=lfs diff=lfs merge=lfs -text
 "Assets/Scenes/Map/NavMesh-*.asset" filter=lfs diff=lfs merge=lfs -text
 Assets/Scenes/Map/Landscape/Tiles/*.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Game/Body/Data/Special/Cube/CubeTerrain.asset filter=lfs diff=lfs merge=lfs -text
