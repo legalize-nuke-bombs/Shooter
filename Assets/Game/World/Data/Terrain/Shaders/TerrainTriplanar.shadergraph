@@ -2,7 +2,11 @@
     "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "d5b4bead42e54d299ea50d11f4806039",
-    "m_Properties": [],
+    "m_Properties": [
+        {
+            "m_Id": "a4cf58e31ca542f1b61d5d811ed19b40"
+        }
+    ],
     "m_Keywords": [],
     "m_Dropdowns": [],
     "m_CategoryData": [
@@ -5642,7 +5646,11 @@
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "6832e70254074076b2f9f8afdebe738b",
     "m_Name": "",
-    "m_ChildObjectList": []
+    "m_ChildObjectList": [
+        {
+            "m_Id": "a4cf58e31ca542f1b61d5d811ed19b40"
+        }
+    ]
 }
 
 {
@@ -10705,7 +10713,7 @@
         "m_Position": {
             "serializedVersion": "2",
             "x": -1009.9998779296875,
-            "y": 221.33335876464845,
+            "y": 221.33335876464844,
             "width": 230.0,
             "height": 313.333251953125
         }
@@ -10774,7 +10782,7 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"cc9297ced26790f4a90fcd4aa311e640\",\n        \"type\": 3\n    }\n}",
+    "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"f624d4345c384daebf21bad4879078fb\",\n        \"type\": 3\n    }\n}",
     "m_PropertyGuids": [
         "9a7e9c0b-71d9-4c20-88f6-acee148f8d18",
         "db965959-eff4-403d-97a1-fde27253e353",
@@ -11586,3 +11594,48 @@
 }
 
 
+
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "a4cf58e31ca542f1b61d5d811ed19b40",
+    "m_Guid": {
+        "m_GuidSerialized": "54f167ca-0e46-4c2f-897f-aaff14c610c6"
+    },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
+    "m_Name": "Height Transition",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Blend Focus",
+    "m_DefaultReferenceName": "_HeightTransition",
+    "m_OverrideReferenceName": "_HeightTransition",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": true,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
+    "m_Value": 0.15,
+    "m_FloatType": 1,
+    "m_LiteralFloatMode": false,
+    "m_SliderType": 0,
+    "m_SliderPower": 3.0,
+    "m_EnumType": 0,
+    "m_CSharpEnumString": "",
+    "m_EnumNames": [
+        "Default"
+    ],
+    "m_EnumValues": [
+        0
+    ],
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
+    }
+}
