@@ -90,11 +90,9 @@ namespace Shooter.Editing
             NavMeshData data = surface.navMeshData;
             if (data == null || EditorUtility.IsPersistent(data)) return;
 
-            string scenePath = surface.gameObject.scene.path;
-            string sceneDirectory = Path.GetDirectoryName(scenePath);
-            string sceneName = Path.GetFileNameWithoutExtension(scenePath);
-            string folder = $"{sceneDirectory}/{sceneName}";
-            if (!AssetDatabase.IsValidFolder(folder)) AssetDatabase.CreateFolder(sceneDirectory, sceneName);
+            // A scene lies inside its own folder together with its data, so the navmesh goes next to the scene file,
+            // not into a subfolder named after the scene, which is where the stock Bake button would put it
+            string folder = Path.GetDirectoryName(surface.gameObject.scene.path);
 
             string path = $"{folder}/NavMesh-{surface.name}.asset";
             data.name = $"NavMesh-{surface.name}";
