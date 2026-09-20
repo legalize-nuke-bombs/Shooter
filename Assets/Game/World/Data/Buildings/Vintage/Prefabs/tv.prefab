@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 7487244357921330418}
   - component: {fileID: 4340733874121901550}
   - component: {fileID: -8034441723559104857}
-  - component: {fileID: 131122804043036422}
   - component: {fileID: -3928069200239862048}
   - component: {fileID: 1433919343119068576}
   m_Layer: 0
@@ -192,20 +191,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sounding.Speaker
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &131122804043036422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3622243103439998288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 319fed79a55547928a37881ef49c1c7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
-  broken: 0
-  breakSound: {fileID: 11400000, guid: d0a496466f1147428d7b72010028a171, type: 2}
 --- !u!114 &-3928069200239862048
 MonoBehaviour:
   m_ObjectHideFlags: 0
