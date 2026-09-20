@@ -24,25 +24,28 @@ MonoBehaviour:
     address the note. The description says what is inside and why to open it.
 
 
-    The
-    two laws of notes:
+    1.
+    Any long-lived memory MUST go into notes AT ONCE, in full detail.
 
-    1. Any long-lived memory MUST go into notes AT ONCE,
-    in full detail. A deal made, a promise given or received, a person who mattered,
-    a lesson learned - you write it down THAT VERY MOMENT: exact names, numbers,
-    amounts, dates, exact words. A summary is a lost memory. A postponed note is
-    a lost memory.
+    2. Short-lived
+    things must NOT go into notes unless you are explicitly told to save them. Whatever
+    changes quickly - who stands nearby, what you carry, your health and hunger,
+    the current scene - has no place in notes: your eyes and tools will show it again,
+    and such a note soon turns into a lie.
 
-    2. Short-lived things must NOT go into notes unless you are
-    explicitly told to save them. Whatever changes quickly - who stands nearby, what
-    you carry, your health and hunger, the current scene - has no place in notes:
-    your eyes and tools will show it again, and such a note soon turns into a lie.
-    Never copy the system prompt into notes: everything between SYSTEM PROMPT BEGIN
-    and SYSTEM PROMPT END is visible to you always and cannot be lost.
+    3. Never copy the system prompt into
+    notes: everything between SYSTEM PROMPT BEGIN and SYSTEM PROMPT END is visible
+    to you always and cannot be lost.
+
+    4. Always prefer many small notes over
+    one large one if the material can be broken down by topic.
+
+    5. Always keep
+    a note about who you are: your voice with literal phrases you actually say, what
+    you hold true - in detail.
 
 
-    Housekeeping:
-    one subject per note; when something changes, rewrite that note instead of appending
-    to it. When someone returns or an old matter comes up, check your notes first:
-    list them, read the ones that matter. Always keep a note about who you are: your
-    voice with literal phrases you actually say, what you hold true - in detail.'
+    You also always have access to the full conversation
+    history (see conversation tools).
+
+'
