@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 397099559248927807}
   - component: {fileID: 6637311458064854134}
   - component: {fileID: 8807637872751699558}
-  - component: {fileID: 2345579335697759963}
   - component: {fileID: 7428474188742263382}
   - component: {fileID: 8232364834090655881}
   - component: {fileID: 4846636957397101102}
@@ -100,25 +99,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sounding.Speaker
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &2345579335697759963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 867288258065005220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 762dcd0b160f36a4c88a4b58ec090254, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Switch
-  ShowTopMostFoldoutHeaderGroup: 1
-  lit: 1
-  powered:
-  - {fileID: 8362362164941774454}
-  glowing:
-  - {fileID: 6804879414666937871}
-  click: {fileID: 11400000, guid: 513700c63dd14d38885dab6d5e0cd837, type: 2}
 --- !u!114 &7428474188742263382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466,10 +446,5 @@ PrefabInstance:
 --- !u!4 &6788297256063688329 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4254912646792478, guid: daa1682d1d073b047bea8bd2db60c359, type: 3}
-  m_PrefabInstance: {fileID: 6790299801951116183}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &6804879414666937871 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 23701585479916952, guid: daa1682d1d073b047bea8bd2db60c359, type: 3}
   m_PrefabInstance: {fileID: 6790299801951116183}
   m_PrefabAsset: {fileID: 0}
