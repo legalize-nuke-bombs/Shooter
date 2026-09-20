@@ -253,10 +253,8 @@ GameObject:
   - component: {fileID: 2911259500444725586}
   - component: {fileID: 795453000195963049}
   - component: {fileID: 4511610592625592730}
-  - component: {fileID: 7576730018341829107}
   - component: {fileID: 6756454469674120541}
   - component: {fileID: 1439108169809779075}
-  - component: {fileID: 8537724810945162158}
   - component: {fileID: -3317477117499524711}
   - component: {fileID: 3799816325666231720}
   m_Layer: 0
@@ -400,25 +398,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sounding.Speaker
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &7576730018341829107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2533964689087174679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 762dcd0b160f36a4c88a4b58ec090254, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Switch
-  ShowTopMostFoldoutHeaderGroup: 1
-  lit: 1
-  powered:
-  - {fileID: 1267723492455859063}
-  glowing:
-  - {fileID: 4257772437841554635}
-  click: {fileID: 11400000, guid: f2a77689d95042398fdb128bc738c2a0, type: 2}
 --- !u!114 &6756454469674120541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -445,20 +424,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0994b96bab5f474394fb7847ac2cf72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Scattered
---- !u!114 &8537724810945162158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2533964689087174679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 319fed79a55547928a37881ef49c1c7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.StructureHealth
-  broken: 0
-  breakSound: {fileID: 11400000, guid: 9c77bf221cbd409fbe947692ee46a0c0, type: 2}
 --- !u!114 &-3317477117499524711
 MonoBehaviour:
   m_ObjectHideFlags: 0
