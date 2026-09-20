@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 418150528903143380}
   - component: {fileID: 418150528903127083}
+  - component: {fileID: -3873601585301477384}
+  - component: {fileID: 2724745167176534850}
+  - component: {fileID: 1293473591878619145}
   m_Layer: 0
   m_Name: NVBoids Birds
   m_TagString: Untagged
@@ -72,3 +75,44 @@ MonoBehaviour:
   HelpURL: nvjob.github.io/unity/nvjob-boids
   ReportAProblem: nvjob.github.io/support
   Patrons: nvjob.github.io/patrons
+--- !u!114 &-3873601585301477384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
+--- !u!114 &2724745167176534850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.MainDigestible
+  content: Birds are flying around
+  size: 1
+--- !u!114 &1293473591878619145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eafaa9b583d4574b25ab7686b7f7665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.TextMarker
+  label: 
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  offset: {x: 0, y: 1.2, z: 0}
