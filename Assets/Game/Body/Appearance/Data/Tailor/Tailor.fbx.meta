@@ -476,12 +476,12 @@ ModelImporter:
     - name: hand_l
       parentName: lowerarm_l
       position: {x: -0.26629102, y: 0.012759351, z: 0.02341076}
-      rotation: {x: 0.6008106, y: -0.08882549, z: -0.1225868, w: -0.78492624}
+      rotation: {x: -0.5891891, y: 0.042287573, z: 0.0022182537, w: 0.8068856}
       scale: {x: 1, y: 0.9999997, z: 1.0000002}
     - name: pinky_01_l
       parentName: hand_l
-      position: {x: -0.045108687, y: -0.039351493, z: 0.14503716}
-      rotation: {x: -0.12953776, y: 0.1878969, z: -0.1442131, w: 0.96286935}
+      position: {x: -0.04431568, y: -0.042575493, z: 0.14436953}
+      rotation: {x: 0.17335118, y: -0.13505024, z: 0.032804117, w: -0.9750057}
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_02_l
       parentName: pinky_01_l
@@ -495,8 +495,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: ring_01_l
       parentName: hand_l
-      position: {x: -0.06987328, y: -0.033019625, z: 0.12055216}
-      rotation: {x: -0.09548068, y: 0.11676572, z: -0.18851143, w: 0.9704188}
+      position: {x: -0.06807268, y: -0.04371391, z: 0.11815498}
+      rotation: {x: 0.12953097, y: -0.067305624, z: 0.072737046, w: -0.98661155}
       scale: {x: 1, y: 1, z: 1}
     - name: ring_02_l
       parentName: ring_01_l
@@ -510,8 +510,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: index_01_l
       parentName: hand_l
-      position: {x: -0.06349705, y: 0.014052686, z: 0.0066408613}
-      rotation: {x: 0.13663076, y: 0.19096191, z: -0.28439417, w: 0.92950827}
+      position: {x: -0.0653125, y: -0.0018313868, z: 0.0020925908}
+      rotation: {x: -0.095593326, y: -0.16837457, z: 0.16737075, w: -0.9666956}
       scale: {x: 1.0000001, y: 1.0000007, z: 1.0000006}
     - name: index_02_l
       parentName: index_01_l
@@ -525,8 +525,8 @@ ModelImporter:
       scale: {x: 1.0000001, y: 0.9999997, z: 1.0000001}
     - name: middle_01_l
       parentName: hand_l
-      position: {x: -0.054735355, y: 0.023838088, z: 0.04222273}
-      rotation: {x: 0.0877528, y: 0.20415762, z: -0.15284093, w: 0.96294284}
+      position: {x: -0.06175749, y: 0.011449294, z: 0.03744194}
+      rotation: {x: -0.04032274, y: -0.17789847, z: 0.03474888, w: -0.98260885}
       scale: {x: 1.0000001, y: 1.0000006, z: 1.0000006}
     - name: middle_02_l
       parentName: middle_01_l
@@ -540,8 +540,8 @@ ModelImporter:
       scale: {x: 1.0000002, y: 0.9999996, z: 0.9999996}
     - name: thumb_01_l
       parentName: hand_l
-      position: {x: -0.038835227, y: 0.030077212, z: -0.035541117}
-      rotation: {x: -0.65329665, y: 0.31144395, z: -0.10769987, w: -0.68162084}
+      position: {x: -0.042379864, y: 0.017843481, z: -0.039516352}
+      rotation: {x: 0.66420484, y: -0.24683419, z: 0.22103891, w: 0.67011046}
       scale: {x: 0.99999994, y: 1, z: 1.0000002}
     - name: thumb_02_l
       parentName: thumb_01_l
@@ -591,12 +591,12 @@ ModelImporter:
     - name: hand_r
       parentName: lowerarm_r
       position: {x: 0.26711106, y: -0.009627977, z: -0.024986265}
-      rotation: {x: -0.5986898, y: 0.10298084, z: 0.14057519, w: 0.78179544}
+      rotation: {x: -0.5885696, y: 0.04037134, z: 0.008459306, w: 0.8073946}
       scale: {x: 1.0000002, y: 0.99999994, z: 1}
     - name: pinky_01_r
       parentName: hand_r
-      position: {x: 0.04511003, y: 0.039349556, z: -0.14503764}
-      rotation: {x: -0.12953776, y: 0.1878969, z: -0.1442131, w: 0.96286935}
+      position: {x: 0.040747985, y: 0.04356535, z: -0.14512368}
+      rotation: {x: -0.17827348, y: 0.1380864, z: -0.013260106, w: 0.9741543}
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_02_r
       parentName: pinky_01_r
@@ -610,8 +610,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: ring_01_r
       parentName: hand_r
-      position: {x: 0.06987653, y: 0.033015247, z: -0.120553434}
-      rotation: {x: -0.09548068, y: 0.11676572, z: -0.18851143, w: 0.9704188}
+      position: {x: 0.06478938, y: 0.045733247, z: -0.11923369}
+      rotation: {x: -0.13345416, y: 0.07118445, z: -0.053103022, w: 0.98706865}
       scale: {x: 1, y: 1, z: 1}
     - name: ring_02_r
       parentName: ring_01_r
@@ -625,8 +625,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: index_01_r
       parentName: hand_r
-      position: {x: 0.061987568, y: -0.024244834, z: -0.004398345}
-      rotation: {x: 0.10191633, y: 0.14915378, z: -0.32652518, w: 0.9277649}
+      position: {x: 0.066456236, y: -0.0057584913, z: -0.000159011}
+      rotation: {x: 0.06191333, y: 0.12874924, z: -0.19146128, w: 0.9710483}
       scale: {x: 0.9999996, y: 1, z: 1.0000001}
     - name: index_02_r
       parentName: index_01_r
@@ -640,8 +640,8 @@ ModelImporter:
       scale: {x: 1.0000002, y: 1, z: 1.0000001}
     - name: middle_01_r
       parentName: hand_r
-      position: {x: 0.05449315, y: -0.025966702, z: -0.04310027}
-      rotation: {x: 0.080879174, y: 0.18816161, z: -0.16639702, w: 0.9645548}
+      position: {x: 0.062073737, y: -0.011399512, z: -0.03896549}
+      rotation: {x: 0.030308696, y: 0.16784069, z: -0.029474689, w: 0.9849081}
       scale: {x: 0.9999998, y: 1.0000002, z: 1.0000001}
     - name: middle_02_r
       parentName: middle_01_r
@@ -655,8 +655,8 @@ ModelImporter:
       scale: {x: 1.0000005, y: 0.99999994, z: 1}
     - name: thumb_01_r
       parentName: hand_r
-      position: {x: 0.042124987, y: -0.032933738, z: 0.0349678}
-      rotation: {x: 0.651435, y: -0.31889898, z: 0.103206776, w: 0.6806498}
+      position: {x: 0.04753939, y: -0.01784755, z: 0.038773242}
+      rotation: {x: 0.66815436, y: -0.23686545, z: 0.22555904, w: 0.6682734}
       scale: {x: 0.9999998, y: 1, z: 1.0000002}
     - name: thumb_02_r
       parentName: thumb_01_r
@@ -794,6 +794,6 @@ ModelImporter:
   importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
-  userData: 
+  userData: '{"hands":[{"bone":"hand_r","euler":{"x":3.608696222305298,"y":2.5017662048339845,"z":343.58575439453127}},{"bone":"hand_l","euler":{"x":3.5648529529571535,"y":3.3023219108581545,"z":345.832275390625}}]}'
   assetBundleName: 
   assetBundleVariant: 
