@@ -212,7 +212,6 @@ MonoBehaviour:
   - rid: 2635107260138258850
   - rid: 2635107260138258849
   - rid: 2635107260138258851
-  - rid: 2635107260138258847
   - rid: 2635107260138258846
   - rid: 2635107260138258852
   - rid: 2635107260138258838
@@ -265,9 +264,6 @@ MonoBehaviour:
       data: 
     - rid: 2635107260138258846
       type: {class: ListNotesTool, ns: Shooter.Game.Llm.ListNotes, asm: Shooter.Game}
-      data: 
-    - rid: 2635107260138258847
-      type: {class: LookAroundEntityTool, ns: Shooter.Game.Llm.LookAroundEntity, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258848
       type: {class: LookAroundTool, ns: Shooter.Game.Llm.LookAround, asm: Shooter.Game}
