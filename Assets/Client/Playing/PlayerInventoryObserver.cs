@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Exchanger))]
+    [RequireComponent(typeof(InventoryExchanger))]
     public class PlayerInventoryObserver : NetworkBehaviour, IToastSource
     {
         private const string Stranger = "Незнакомец";
@@ -17,13 +17,13 @@ namespace Shooter.Client.Playing
         [SerializeField] private EarSoundSpec sound;
 
         private readonly NameMapper mapper = new();
-        private Exchanger exchanger;
+        private InventoryExchanger exchanger;
 
         public event Action<Toast> Toasted;
 
         private void Awake()
         {
-            exchanger = GetComponent<Exchanger>();
+            exchanger = GetComponent<InventoryExchanger>();
         }
 
         public override void OnNetworkSpawn()

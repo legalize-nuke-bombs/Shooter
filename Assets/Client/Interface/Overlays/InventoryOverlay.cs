@@ -65,8 +65,9 @@ namespace Shooter.Client.Interface
         private readonly NameMapper names = new();
         private readonly RaycastHit[] sights = new RaycastHit[16];
         private Inventory bag;
-        private Holder holder;
-        private Exchanger exchanger;
+        private InventoryHolder holder;
+        private InventoryExchanger exchanger;
+        private InventoryUser user;
         private Crafter crafter;
         private Character own;
         private Character taker;
@@ -161,8 +162,9 @@ namespace Shooter.Client.Interface
         private void Open()
         {
             bag = OwnPlayer.Find<Inventory>();
-            holder = OwnPlayer.Find<Holder>();
-            exchanger = OwnPlayer.Find<Exchanger>();
+            holder = OwnPlayer.Find<InventoryHolder>();
+            exchanger = OwnPlayer.Find<InventoryExchanger>();
+            user = OwnPlayer.Find<InventoryUser>();
             crafter = OwnPlayer.Find<Crafter>();
             own = OwnPlayer.Find<Character>();
             taker = Taker(null);
@@ -186,6 +188,7 @@ namespace Shooter.Client.Interface
             bag = null;
             holder = null;
             exchanger = null;
+            user = null;
             crafter = null;
             own = null;
             taker = null;
@@ -647,7 +650,7 @@ namespace Shooter.Client.Interface
         private float Offside(Character candidate, Transform eyes, float slack)
         {
             if (candidate == null || candidate == own || !candidate.gameObject.activeInHierarchy) return float.PositiveInfinity;
-            if (candidate.GetComponentInChildren<Exchanger>() == null) return float.PositiveInfinity;
+            if (candidate.GetComponentInChildren<InventoryExchanger>() == null) return float.PositiveInfinity;
 
             Health health = candidate.GetComponent<Health>();
             if (health != null && !health.Alive) return float.PositiveInfinity;
@@ -1051,7 +1054,7 @@ namespace Shooter.Client.Interface
             menu.style.left = local.x;
             menu.style.top = local.y;
 
-            if (stack != null && stack.Usable) Item(menu, "Использовать", () => bag.UseRpc(stack.Id));
+            if (stack != null && stack.Usable) Item(menu, "Использовать", () => user.UseRpc(stack.Id));
             if (stack != null && amount > 1) Item(menu, "Разделить", () => AskSplit(stack));
 
             if (menu.childCount == 0) return;

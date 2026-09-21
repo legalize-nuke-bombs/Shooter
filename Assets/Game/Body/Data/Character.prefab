@@ -41,6 +41,8 @@ GameObject:
   - component: {fileID: -1988690574567136943}
   - component: {fileID: 396262246810956238}
   - component: {fileID: 7161739703394823001}
+  - component: {fileID: 3946889129072610234}
+  - component: {fileID: 32020470772384779}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -420,7 +422,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Inventory
   ShowTopMostFoldoutHeaderGroup: 1
-  contents: []
 --- !u!114 &-6602629386385626499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,7 +555,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Holder
   ShowTopMostFoldoutHeaderGroup: 1
-  startingSpec: {fileID: 0}
 --- !u!114 &7161739703394823001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,3 +569,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Exchanger
   ShowTopMostFoldoutHeaderGroup: 1
   radius: 10
+--- !u!114 &3946889129072610234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adeb937ad53894743a436fc3e26d26f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.InventoryFiller
+  ShowTopMostFoldoutHeaderGroup: 1
+  contents: []
+--- !u!114 &32020470772384779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c8542e130954a9428c264e1fa067450, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.InventoryUser
+  ShowTopMostFoldoutHeaderGroup: 1

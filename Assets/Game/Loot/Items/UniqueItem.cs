@@ -1,3 +1,4 @@
+using System;
 using Shooter.Game.Core.Saves;
 using Unity.Netcode;
 
@@ -12,7 +13,7 @@ namespace Shooter.Game.Loot
 
         public string SpecId { get; private set; }
 
-        public bool Dirty { get; private set; }
+        public event Action Changed;
 
         public abstract void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter;
 
@@ -20,14 +21,9 @@ namespace Shooter.Game.Loot
 
         public abstract void LoadObject(SaveToken content);
 
-        public void Clean()
+        protected void OnChanged()
         {
-            Dirty = false;
-        }
-
-        protected void Touch()
-        {
-            Dirty = true;
+            Changed?.Invoke();
         }
     }
 }

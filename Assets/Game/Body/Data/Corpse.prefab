@@ -141,7 +141,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Items.Inventory
   ShowTopMostFoldoutHeaderGroup: 1
-  contents: []
 --- !u!114 &2657284231240461859
 MonoBehaviour:
   m_ObjectHideFlags: 0

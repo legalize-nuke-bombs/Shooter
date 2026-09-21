@@ -20,7 +20,7 @@ namespace Shooter.Client.Playing
         private readonly List<GameObject> reflections = new();
 
         private Skin skin;
-        private Holder holder;
+        private InventoryHolder holder;
         private WeaponView view;
         private GameObject flesh;
         private int reflectionLayer = -1;
@@ -30,7 +30,7 @@ namespace Shooter.Client.Playing
         private void Awake()
         {
             skin = GetComponent<Skin>();
-            holder = GetComponent<Holder>();
+            holder = GetComponent<InventoryHolder>();
             view = GetComponent<WeaponView>();
             reflectionLayer = LayerMask.NameToLayer(ReflectionOnlyLayer);
             enabled = false;

@@ -10,7 +10,7 @@ namespace Shooter.Game.Llm.UseItem
     {
         private static readonly Journal Log = Logs.Here();
 
-        private Inventory inventory;
+        private InventoryUser user;
 
         public override string Name => "use_item";
 
@@ -22,16 +22,16 @@ The item is addressed by its exact name from your bag.
 
         protected override void OnStart()
         {
-            inventory = Self.GetComponent<Inventory>();
-            if (inventory == null)
+            user = Self.GetComponent<InventoryUser>();
+            if (user == null)
             {
-                Log.Error($"Entity {Self.name} does not have inventory component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have inventory user component required by tool {Name}");
             }
         }
 
         protected override string Execute(UseItemArguments arguments, LlmCallContext context)
         {
-            if (Catalogs.Of<ItemCatalog>().Of(arguments.Item) is StackableItemSpec item && inventory.Use(item))
+            if (Catalogs.Of<ItemCatalog>().Of(arguments.Item) is StackableItemSpec item && user.Use(item))
             {
                 return $"{arguments.Item} was used";
             }

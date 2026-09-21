@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Shooter.Game.Core;
 using Shooter.Game.Core.Saves;
 using Shooter.Logging;
@@ -9,17 +8,15 @@ using UnityEngine;
 namespace Shooter.Game.Loot
 {
     [RequireComponent(typeof(Inventory))]
-    public class Holder : NetworkBehaviour, IDigestible, ISaveableComponent
+    public class InventoryHolder : NetworkBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
-
-        [SerializeField] private UniqueItemSpec startingSpec;
 
         private readonly NetworkVariable<int> heldSlot = new(Inventory.NoSlot);
 
         private Inventory inventory;
 
-        public string ComponentKey => "Holder";
+        public string ComponentKey => "InventoryHolder";
         private struct SaveData
         {
             public int Slot { get; set; }
@@ -43,11 +40,9 @@ namespace Shooter.Game.Loot
             {
                 UniqueItem item = Held;
 
-                return item == null ? null : (UniqueItemSpec)Catalog.Spec(item.SpecId);
+                return item == null ? null : (UniqueItemSpec)Catalogs.Of<ItemCatalog>().Spec(item.SpecId);
             }
         }
-
-        private static ItemCatalog Catalog => Catalogs.Of<ItemCatalog>();
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
@@ -75,23 +70,6 @@ namespace Shooter.Game.Loot
             inventory.Changed += Release;
         }
 
-        protected override void OnNetworkPostSpawn()
-        {
-            if (!IsServer || startingSpec == null) return;
-
-            IReadOnlyList<UniqueItem> items = inventory.UniqueItems;
-
-            for (int slot = 0; slot < items.Count; slot++)
-            {
-                if (items[slot].SpecId != startingSpec.Key) continue;
-
-                Hold(slot);
-                return;
-            }
-
-            Log.Warn($"Entity {name} has no {startingSpec.Key} in the bag to start holding");
-        }
-
         public override void OnNetworkDespawn()
         {
             heldSlot.OnValueChanged -= Moved;
@@ -108,7 +86,7 @@ namespace Shooter.Game.Loot
             Hold(slot);
         }
 
-        private void Hold(int slot)
+        public void Hold(int slot)
         {
             if (slot == Inventory.NoSlot)
             {
@@ -123,7 +101,7 @@ namespace Shooter.Game.Loot
                 return;
             }
 
-            var spec = (UniqueItemSpec)Catalog.Spec(item.SpecId);
+            var spec = (UniqueItemSpec)Catalogs.Of<ItemCatalog>().Spec(item.SpecId);
             if (!spec.Equipable)
             {
                 Log.Info($"Entity {name} can not put {item.SpecId} in hands");

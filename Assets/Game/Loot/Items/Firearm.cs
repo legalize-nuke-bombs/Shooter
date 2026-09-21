@@ -32,7 +32,7 @@ namespace Shooter.Game.Loot
             if (magazine == 0) return false;
 
             magazine--;
-            Touch();
+            OnChanged();
 
             return true;
         }
@@ -43,7 +43,7 @@ namespace Shooter.Game.Loot
             if (taken <= 0) return 0;
 
             magazine += taken;
-            Touch();
+            OnChanged();
 
             return taken;
         }
