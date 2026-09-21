@@ -1,0 +1,155 @@
+using System;
+using System.Collections.Generic;
+using Shooter.Game.Core;
+using Shooter.Game.Core.Saves;
+using Shooter.Logging;
+using Unity.Netcode;
+using UnityEngine;
+
+namespace Shooter.Game.Loot
+{
+    [RequireComponent(typeof(Inventory))]
+    public class Holder : NetworkBehaviour, IDigestible, ISaveableComponent
+    {
+        private static readonly Journal Log = Logs.Here();
+
+        [SerializeField] private UniqueItemSpec startingSpec;
+
+        private readonly NetworkVariable<int> heldSlot = new(Inventory.NoSlot);
+
+        private Inventory inventory;
+
+        public string ComponentKey => "Holder";
+        private struct SaveData
+        {
+            public int Slot { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData { Slot = heldSlot.Value };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            Hold(content.To<SaveData>().Slot);
+        }
+
+        public int Slot => heldSlot.Value;
+
+        public UniqueItem Held => inventory.At(heldSlot.Value);
+
+        public UniqueItemSpec HeldSpec
+        {
+            get
+            {
+                UniqueItem item = Held;
+
+                return item == null ? null : (UniqueItemSpec)Catalog.Spec(item.SpecId);
+            }
+        }
+
+        private static ItemCatalog Catalog => Catalogs.Of<ItemCatalog>();
+
+        public DigestionPriority Priority => DigestionPriority.Low;
+
+        public string Digest(DigestionDetail detail)
+        {
+            UniqueItemSpec held = HeldSpec;
+
+            return held == null ? null : $"Holding: {held.Id} (slot {heldSlot.Value})";
+        }
+
+        public event Action Changed;
+
+        private void Awake()
+        {
+            inventory = GetComponent<Inventory>();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            heldSlot.OnValueChanged += Moved;
+            inventory.Changed += Relay;
+
+            if (!IsServer) return;
+
+            inventory.Changed += Release;
+        }
+
+        protected override void OnNetworkPostSpawn()
+        {
+            if (!IsServer || startingSpec == null) return;
+
+            IReadOnlyList<UniqueItem> items = inventory.UniqueItems;
+
+            for (int slot = 0; slot < items.Count; slot++)
+            {
+                if (items[slot].SpecId != startingSpec.Key) continue;
+
+                Hold(slot);
+                return;
+            }
+
+            Log.Warn($"Entity {name} has no {startingSpec.Key} in the bag to start holding");
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            heldSlot.OnValueChanged -= Moved;
+            inventory.Changed -= Relay;
+
+            if (!IsServer) return;
+
+            inventory.Changed -= Release;
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void HoldRpc(int slot)
+        {
+            Hold(slot);
+        }
+
+        private void Hold(int slot)
+        {
+            if (slot == Inventory.NoSlot)
+            {
+                heldSlot.Value = Inventory.NoSlot;
+                return;
+            }
+
+            UniqueItem item = inventory.At(slot);
+            if (item == null)
+            {
+                Log.Info($"Entity {name} can not hold slot {slot}: the slot is empty");
+                return;
+            }
+
+            var spec = (UniqueItemSpec)Catalog.Spec(item.SpecId);
+            if (!spec.Equipable)
+            {
+                Log.Info($"Entity {name} can not put {item.SpecId} in hands");
+                return;
+            }
+
+            heldSlot.Value = slot;
+            Log.Info($"Entity {name} holds {item.SpecId} from slot {slot}");
+        }
+
+        private void Release()
+        {
+            if (heldSlot.Value == Inventory.NoSlot || Held != null) return;
+
+            Log.Info($"Entity {name} holds nothing now: slot {heldSlot.Value} is empty");
+            heldSlot.Value = Inventory.NoSlot;
+        }
+
+        private void Relay()
+        {
+            Changed?.Invoke();
+        }
+
+        private void Moved(int previous, int current)
+        {
+            Changed?.Invoke();
+        }
+    }
+}

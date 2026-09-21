@@ -9,7 +9,7 @@ using UnityEngine.Animations.Rigging;
 
 namespace Shooter.Game.Combat
 {
-    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Holder))]
     [RequireComponent(typeof(Skin))]
     public class WeaponView : NetworkBehaviour
     {
@@ -25,7 +25,7 @@ namespace Shooter.Game.Combat
         private Transform rightHint;
         private Transform rightShoulder;
 
-        private Inventory inventory;
+        private Holder holder;
         private Skin skin;
 
         private WeaponRig rig;
@@ -37,7 +37,7 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            inventory = GetComponent<Inventory>();
+            holder = GetComponent<Holder>();
             skin = GetComponent<Skin>();
         }
 
@@ -55,13 +55,13 @@ namespace Shooter.Game.Combat
 
         public override void OnNetworkSpawn()
         {
-            inventory.Changed += Refresh;
+            holder.Changed += Refresh;
             Refresh();
         }
 
         public override void OnNetworkDespawn()
         {
-            inventory.Changed -= Refresh;
+            holder.Changed -= Refresh;
         }
 
         private void Refresh()
@@ -95,7 +95,7 @@ namespace Shooter.Game.Combat
 
         private GameObject Wanted()
         {
-            return inventory.EquippedSpec is FirearmSpec firearm ? firearm.Model : null;
+            return holder.HeldSpec is FirearmSpec firearm ? firearm.Model : null;
         }
 
         private GameObject Wear(GameObject model)

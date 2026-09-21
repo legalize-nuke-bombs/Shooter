@@ -8,7 +8,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Holder))]
     public class OwnWeapon : NetworkBehaviour
     {
         private const string FirstPersonLayer = "FirstPerson";
@@ -20,7 +20,7 @@ namespace Shooter.Client.Playing
         [SerializeField] private float restScale = 1f;
         private Camera eye;
 
-        private Inventory inventory;
+        private Holder holder;
         private int layer = -1;
         private GameObject shown;
 
@@ -31,7 +31,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            inventory = GetComponent<Inventory>();
+            holder = GetComponent<Holder>();
             eye = GetComponentInChildren<Camera>();
         }
 
@@ -75,7 +75,7 @@ namespace Shooter.Client.Playing
             active = true;
 
             Overlay();
-            inventory.Changed += Refresh;
+            holder.Changed += Refresh;
             Refresh();
         }
 
@@ -84,7 +84,7 @@ namespace Shooter.Client.Playing
             if (!active) return;
             active = false;
 
-            inventory.Changed -= Refresh;
+            holder.Changed -= Refresh;
             if (shown != null) Destroy(shown);
             if (hold != null) Destroy(hold.gameObject);
             shown = null;
@@ -130,7 +130,7 @@ namespace Shooter.Client.Playing
 
         private GameObject Wanted()
         {
-            return inventory.EquippedSpec is FirearmSpec firearm ? firearm.Model : null;
+            return holder.HeldSpec is FirearmSpec firearm ? firearm.Model : null;
         }
 
         private GameObject Wear(GameObject model)

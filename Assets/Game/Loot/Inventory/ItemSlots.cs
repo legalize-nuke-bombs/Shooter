@@ -97,6 +97,19 @@ namespace Shooter.Game.Loot
             return slot;
         }
 
+        public void Put(int slot, UniqueItem item)
+        {
+            item.Clean();
+            revision++;
+
+            while (items.Count <= slot)
+            {
+                items.Add(null);
+            }
+
+            items[slot] = item;
+        }
+
         public UniqueItem Take(int slot)
         {
             UniqueItem item = At(slot);
