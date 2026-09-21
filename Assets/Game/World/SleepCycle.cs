@@ -7,7 +7,7 @@ namespace Shooter.Game.World
 {
     public class SleepCycle : NetworkBehaviour
     {
-        private const float SkipTimeScale = 50f;
+        private const float SkipTimeScale = 300f;
         private const double BedtimeHours = 22;
         private const double WakeHours = 8;
         private static readonly Journal Log = Logs.Here();
