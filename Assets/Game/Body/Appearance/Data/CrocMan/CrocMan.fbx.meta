@@ -1,552 +1,1647 @@
 fileFormatVersion: 2
 guid: 7c9e38df6f6f48f69be0e94361781022
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186131
+  packageName: Croc men
+  packageVersion: 1.0
+  assetPath: Assets/Game/Body/Appearance/Data/CrocMan/CrocMan.fbx
+  uploadId: 408825
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: _group1polySurface5HeadBase_mesh2
-    100002: ball_l
-    100004: ball_r
-    100006: Base_mesh
-    100008: Body
-    100010: Body_11_RetopoGroup2
-    100012: Body_4_RetopoGroup2
-    100014: calf_l
-    100016: calf_r
-    100018: calf_twist_01_l
-    100020: calf_twist_01_r
-    100022: Character1_Ctrl_ChestEndEffector
-    100024: Character1_Ctrl_ChestOriginEffector
-    100026: Character1_Ctrl_Head
-    100028: Character1_Ctrl_HeadEffector
-    100030: Character1_Ctrl_Hips
-    100032: Character1_Ctrl_HipsEffector
-    100034: Character1_Ctrl_LeftAnkleEffector
-    100036: Character1_Ctrl_LeftArm
-    100038: Character1_Ctrl_LeftElbowEffector
-    100040: Character1_Ctrl_LeftFoot
-    100042: Character1_Ctrl_LeftForeArm
-    100044: Character1_Ctrl_LeftHand
-    100046: Character1_Ctrl_LeftHipEffector
-    100048: Character1_Ctrl_LeftKneeEffector
-    100050: Character1_Ctrl_LeftLeg
-    100052: Character1_Ctrl_LeftShoulder
-    100054: Character1_Ctrl_LeftShoulderEffector
-    100056: Character1_Ctrl_LeftUpLeg
-    100058: Character1_Ctrl_LeftWristEffector
-    100060: Character1_Ctrl_Neck
-    100062: Character1_Ctrl_Reference
-    100064: Character1_Ctrl_RightAnkleEffector
-    100066: Character1_Ctrl_RightArm
-    100068: Character1_Ctrl_RightElbowEffector
-    100070: Character1_Ctrl_RightFoot
-    100072: Character1_Ctrl_RightForeArm
-    100074: Character1_Ctrl_RightHand
-    100076: Character1_Ctrl_RightHipEffector
-    100078: Character1_Ctrl_RightKneeEffector
-    100080: Character1_Ctrl_RightLeg
-    100082: Character1_Ctrl_RightShoulder
-    100084: Character1_Ctrl_RightShoulderEffector
-    100086: Character1_Ctrl_RightUpLeg
-    100088: Character1_Ctrl_RightWristEffector
-    100090: Character1_Ctrl_Spine
-    100092: Character1_Ctrl_Spine1
-    100094: Character1_Ctrl_Spine2
-    100096: clavicle_l
-    100098: clavicle_r
-    100100: foot_l
-    100102: foot_r
-    100104: Group2BodyBase_mesh
-    100106: hand_l
-    100108: hand_r
-    100110: head
-    100112: index_01_l
-    100114: index_01_r
-    100116: index_02_l
-    100118: index_02_r
-    100120: index_03_l
-    100122: index_03_r
-    100124: lowerarm_l
-    100126: lowerarm_r
-    100128: lowerarm_twist_01_l
-    100130: lowerarm_twist_01_r
-    100132: middle_01_l
-    100134: middle_01_r
-    100136: middle_02_l
-    100138: middle_02_r
-    100140: middle_03_l
-    100142: middle_03_r
-    100144: neck_01
-    100146: pants
-    100148: pants_11_RetopoGroup3
-    100150: pants_1_RetopoGroup2
-    100152: pelvis
-    100154: pinky_01_l
-    100156: pinky_01_r
-    100158: pinky_02_l
-    100160: pinky_02_r
-    100162: pinky_03_l
-    100164: pinky_03_r
-    100166: polySurface100
-    100168: polySurface101
-    100170: polySurface102
-    100172: polySurface103
-    100174: polySurface104
-    100176: polySurface11
-    100178: polySurface12
-    100180: polySurface13
-    100182: polySurface14
-    100184: polySurface15
-    100186: polySurface16
-    100188: polySurface17
-    100190: polySurface18
-    100192: polySurface19
-    100194: polySurface20
-    100196: polySurface21
-    100198: polySurface22
-    100200: polySurface23
-    100202: polySurface24
-    100204: polySurface25
-    100206: polySurface27
-    100208: polySurface34
-    100210: polySurface37
-    100212: polySurface38
-    100214: polySurface39
-    100216: polySurface40
-    100218: polySurface41
-    100220: polySurface45
-    100222: polySurface47
-    100224: polySurface48
-    100226: polySurface49
-    100228: polySurface50
-    100230: polySurface51
-    100232: polySurface52
-    100234: polySurface53
-    100236: polySurface54
-    100238: polySurface55
-    100240: polySurface56
-    100242: polySurface57
-    100244: polySurface58
-    100246: polySurface59
-    100248: polySurface60
-    100250: polySurface61
-    100252: polySurface62
-    100254: polySurface64
-    100256: polySurface66
-    100258: polySurface7
-    100260: polySurface70
-    100262: polySurface73
-    100264: polySurface74
-    100266: polySurface75
-    100268: polySurface76
-    100270: polySurface77
-    100272: polySurface78
-    100274: polySurface79
-    100276: polySurface8
-    100278: polySurface80
-    100280: polySurface81
-    100282: polySurface82
-    100284: polySurface83
-    100286: polySurface84
-    100288: polySurface85
-    100290: polySurface86
-    100292: polySurface87
-    100294: polySurface88
-    100296: polySurface89
-    100298: polySurface90
-    100300: polySurface91
-    100302: polySurface92
-    100304: polySurface93
-    100306: polySurface94
-    100308: polySurface95
-    100310: polySurface96
-    100312: polySurface97
-    100314: polySurface98
-    100316: polySurface99
-    100318: RetopoGroup1
-    100320: ring_01_l
-    100322: ring_01_r
-    100324: ring_02_l
-    100326: ring_02_r
-    100328: ring_03_l
-    100330: ring_03_r
-    100332: root
-    100334: //RootNode
-    100336: spine_01
-    100338: spine_02
-    100340: spine_03
-    100342: thigh_l
-    100344: thigh_r
-    100346: thigh_twist_01_l
-    100348: thigh_twist_01_r
-    100350: thumb_01_l
-    100352: thumb_01_r
-    100354: thumb_02_l
-    100356: thumb_02_r
-    100358: thumb_03_l
-    100360: thumb_03_r
-    100362: upperarm_l
-    100364: upperarm_r
-    100366: upperarm_twist_01_l
-    100368: upperarm_twist_01_r
-    100370: waistcoat
-    100372: ZBrushPolyMesh3D
-    400000: _group1polySurface5HeadBase_mesh2
-    400002: ball_l
-    400004: ball_r
-    400006: Base_mesh
-    400008: Body
-    400010: Body_11_RetopoGroup2
-    400012: Body_4_RetopoGroup2
-    400014: calf_l
-    400016: calf_r
-    400018: calf_twist_01_l
-    400020: calf_twist_01_r
-    400022: Character1_Ctrl_ChestEndEffector
-    400024: Character1_Ctrl_ChestOriginEffector
-    400026: Character1_Ctrl_Head
-    400028: Character1_Ctrl_HeadEffector
-    400030: Character1_Ctrl_Hips
-    400032: Character1_Ctrl_HipsEffector
-    400034: Character1_Ctrl_LeftAnkleEffector
-    400036: Character1_Ctrl_LeftArm
-    400038: Character1_Ctrl_LeftElbowEffector
-    400040: Character1_Ctrl_LeftFoot
-    400042: Character1_Ctrl_LeftForeArm
-    400044: Character1_Ctrl_LeftHand
-    400046: Character1_Ctrl_LeftHipEffector
-    400048: Character1_Ctrl_LeftKneeEffector
-    400050: Character1_Ctrl_LeftLeg
-    400052: Character1_Ctrl_LeftShoulder
-    400054: Character1_Ctrl_LeftShoulderEffector
-    400056: Character1_Ctrl_LeftUpLeg
-    400058: Character1_Ctrl_LeftWristEffector
-    400060: Character1_Ctrl_Neck
-    400062: Character1_Ctrl_Reference
-    400064: Character1_Ctrl_RightAnkleEffector
-    400066: Character1_Ctrl_RightArm
-    400068: Character1_Ctrl_RightElbowEffector
-    400070: Character1_Ctrl_RightFoot
-    400072: Character1_Ctrl_RightForeArm
-    400074: Character1_Ctrl_RightHand
-    400076: Character1_Ctrl_RightHipEffector
-    400078: Character1_Ctrl_RightKneeEffector
-    400080: Character1_Ctrl_RightLeg
-    400082: Character1_Ctrl_RightShoulder
-    400084: Character1_Ctrl_RightShoulderEffector
-    400086: Character1_Ctrl_RightUpLeg
-    400088: Character1_Ctrl_RightWristEffector
-    400090: Character1_Ctrl_Spine
-    400092: Character1_Ctrl_Spine1
-    400094: Character1_Ctrl_Spine2
-    400096: clavicle_l
-    400098: clavicle_r
-    400100: foot_l
-    400102: foot_r
-    400104: Group2BodyBase_mesh
-    400106: hand_l
-    400108: hand_r
-    400110: head
-    400112: index_01_l
-    400114: index_01_r
-    400116: index_02_l
-    400118: index_02_r
-    400120: index_03_l
-    400122: index_03_r
-    400124: lowerarm_l
-    400126: lowerarm_r
-    400128: lowerarm_twist_01_l
-    400130: lowerarm_twist_01_r
-    400132: middle_01_l
-    400134: middle_01_r
-    400136: middle_02_l
-    400138: middle_02_r
-    400140: middle_03_l
-    400142: middle_03_r
-    400144: neck_01
-    400146: pants
-    400148: pants_11_RetopoGroup3
-    400150: pants_1_RetopoGroup2
-    400152: pelvis
-    400154: pinky_01_l
-    400156: pinky_01_r
-    400158: pinky_02_l
-    400160: pinky_02_r
-    400162: pinky_03_l
-    400164: pinky_03_r
-    400166: polySurface100
-    400168: polySurface101
-    400170: polySurface102
-    400172: polySurface103
-    400174: polySurface104
-    400176: polySurface11
-    400178: polySurface12
-    400180: polySurface13
-    400182: polySurface14
-    400184: polySurface15
-    400186: polySurface16
-    400188: polySurface17
-    400190: polySurface18
-    400192: polySurface19
-    400194: polySurface20
-    400196: polySurface21
-    400198: polySurface22
-    400200: polySurface23
-    400202: polySurface24
-    400204: polySurface25
-    400206: polySurface27
-    400208: polySurface34
-    400210: polySurface37
-    400212: polySurface38
-    400214: polySurface39
-    400216: polySurface40
-    400218: polySurface41
-    400220: polySurface45
-    400222: polySurface47
-    400224: polySurface48
-    400226: polySurface49
-    400228: polySurface50
-    400230: polySurface51
-    400232: polySurface52
-    400234: polySurface53
-    400236: polySurface54
-    400238: polySurface55
-    400240: polySurface56
-    400242: polySurface57
-    400244: polySurface58
-    400246: polySurface59
-    400248: polySurface60
-    400250: polySurface61
-    400252: polySurface62
-    400254: polySurface64
-    400256: polySurface66
-    400258: polySurface7
-    400260: polySurface70
-    400262: polySurface73
-    400264: polySurface74
-    400266: polySurface75
-    400268: polySurface76
-    400270: polySurface77
-    400272: polySurface78
-    400274: polySurface79
-    400276: polySurface8
-    400278: polySurface80
-    400280: polySurface81
-    400282: polySurface82
-    400284: polySurface83
-    400286: polySurface84
-    400288: polySurface85
-    400290: polySurface86
-    400292: polySurface87
-    400294: polySurface88
-    400296: polySurface89
-    400298: polySurface90
-    400300: polySurface91
-    400302: polySurface92
-    400304: polySurface93
-    400306: polySurface94
-    400308: polySurface95
-    400310: polySurface96
-    400312: polySurface97
-    400314: polySurface98
-    400316: polySurface99
-    400318: RetopoGroup1
-    400320: ring_01_l
-    400322: ring_01_r
-    400324: ring_02_l
-    400326: ring_02_r
-    400328: ring_03_l
-    400330: ring_03_r
-    400332: root
-    400334: //RootNode
-    400336: spine_01
-    400338: spine_02
-    400340: spine_03
-    400342: thigh_l
-    400344: thigh_r
-    400346: thigh_twist_01_l
-    400348: thigh_twist_01_r
-    400350: thumb_01_l
-    400352: thumb_01_r
-    400354: thumb_02_l
-    400356: thumb_02_r
-    400358: thumb_03_l
-    400360: thumb_03_r
-    400362: upperarm_l
-    400364: upperarm_r
-    400366: upperarm_twist_01_l
-    400368: upperarm_twist_01_r
-    400370: waistcoat
-    400372: ZBrushPolyMesh3D
-    2100000: Mat_croc_men_waistcoat
-    2100002: Mat_croc_men_pants
-    2100004: Mat_croc_men_Body
-    2100006: eyebrows
-    2100008: Mat_croc_men_glass
-    4300000: waistcoat
-    4300002: pants_11_RetopoGroup3
-    4300004: polySurface7
-    4300006: pants_1_RetopoGroup2
-    4300008: polySurface11
-    4300010: polySurface12
-    4300012: polySurface13
-    4300014: polySurface14
-    4300016: polySurface15
-    4300018: polySurface16
-    4300020: polySurface17
-    4300022: polySurface18
-    4300024: polySurface19
-    4300026: polySurface20
-    4300028: polySurface21
-    4300030: polySurface22
-    4300032: polySurface23
-    4300034: polySurface24
-    4300036: polySurface25
-    4300038: polySurface27
-    4300040: polySurface38
-    4300042: polySurface39
-    4300044: polySurface40
-    4300046: polySurface41
-    4300048: Body_4_RetopoGroup2
-    4300050: RetopoGroup1
-    4300052: polySurface47
-    4300054: polySurface48
-    4300056: polySurface49
-    4300058: polySurface50
-    4300060: polySurface51
-    4300062: polySurface52
-    4300064: polySurface53
-    4300066: polySurface54
-    4300068: polySurface55
-    4300070: polySurface56
-    4300072: polySurface57
-    4300074: polySurface58
-    4300076: polySurface59
-    4300078: polySurface60
-    4300080: polySurface61
-    4300082: polySurface62
-    4300084: polySurface64
-    4300086: polySurface74
-    4300088: polySurface8
-    4300090: polySurface75
-    4300092: polySurface76
-    4300094: polySurface77
-    4300096: polySurface78
-    4300098: polySurface79
-    4300100: polySurface80
-    4300102: polySurface81
-    4300104: polySurface82
-    4300106: polySurface83
-    4300108: polySurface84
-    4300110: polySurface85
-    4300112: polySurface86
-    4300114: polySurface87
-    4300116: polySurface88
-    4300118: polySurface89
-    4300120: polySurface90
-    4300122: polySurface91
-    4300124: polySurface92
-    4300126: polySurface93
-    4300128: polySurface94
-    4300130: polySurface95
-    4300132: polySurface96
-    4300134: polySurface97
-    4300136: polySurface98
-    4300138: polySurface99
-    4300140: polySurface100
-    4300142: polySurface101
-    4300144: polySurface102
-    4300146: polySurface103
-    4300148: polySurface104
-    4300150: polySurface37
-    4300152: polySurface34
-    4300154: polySurface73
-    4300156: polySurface70
-    4300158: _group1polySurface5HeadBase_mesh2
-    4300160: polySurface45
-    4300162: Group2BodyBase_mesh
-    9500000: //RootNode
-    13700000: _group1polySurface5HeadBase_mesh2
-    13700002: Body_4_RetopoGroup2
-    13700004: Group2BodyBase_mesh
-    13700006: pants_11_RetopoGroup3
-    13700008: pants_1_RetopoGroup2
-    13700010: polySurface100
-    13700012: polySurface101
-    13700014: polySurface102
-    13700016: polySurface103
-    13700018: polySurface104
-    13700020: polySurface11
-    13700022: polySurface12
-    13700024: polySurface13
-    13700026: polySurface14
-    13700028: polySurface15
-    13700030: polySurface16
-    13700032: polySurface17
-    13700034: polySurface18
-    13700036: polySurface19
-    13700038: polySurface20
-    13700040: polySurface21
-    13700042: polySurface22
-    13700044: polySurface23
-    13700046: polySurface24
-    13700048: polySurface25
-    13700050: polySurface27
-    13700052: polySurface34
-    13700054: polySurface37
-    13700056: polySurface38
-    13700058: polySurface39
-    13700060: polySurface40
-    13700062: polySurface41
-    13700064: polySurface45
-    13700066: polySurface47
-    13700068: polySurface48
-    13700070: polySurface49
-    13700072: polySurface50
-    13700074: polySurface51
-    13700076: polySurface52
-    13700078: polySurface53
-    13700080: polySurface54
-    13700082: polySurface55
-    13700084: polySurface56
-    13700086: polySurface57
-    13700088: polySurface58
-    13700090: polySurface59
-    13700092: polySurface60
-    13700094: polySurface61
-    13700096: polySurface62
-    13700098: polySurface64
-    13700100: polySurface7
-    13700102: polySurface70
-    13700104: polySurface73
-    13700106: polySurface74
-    13700108: polySurface75
-    13700110: polySurface76
-    13700112: polySurface77
-    13700114: polySurface78
-    13700116: polySurface79
-    13700118: polySurface8
-    13700120: polySurface80
-    13700122: polySurface81
-    13700124: polySurface82
-    13700126: polySurface83
-    13700128: polySurface84
-    13700130: polySurface85
-    13700132: polySurface86
-    13700134: polySurface87
-    13700136: polySurface88
-    13700138: polySurface89
-    13700140: polySurface90
-    13700142: polySurface91
-    13700144: polySurface92
-    13700146: polySurface93
-    13700148: polySurface94
-    13700150: polySurface95
-    13700152: polySurface96
-    13700154: polySurface97
-    13700156: polySurface98
-    13700158: polySurface99
-    13700160: RetopoGroup1
-    13700162: waistcoat
+  serializedVersion: 24501
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: _group1polySurface5HeadBase_mesh2
+  - first:
+      1: 100002
+    second: ball_l
+  - first:
+      1: 100004
+    second: ball_r
+  - first:
+      1: 100006
+    second: Base_mesh
+  - first:
+      1: 100008
+    second: Body
+  - first:
+      1: 100010
+    second: Body_11_RetopoGroup2
+  - first:
+      1: 100012
+    second: Body_4_RetopoGroup2
+  - first:
+      1: 100014
+    second: calf_l
+  - first:
+      1: 100016
+    second: calf_r
+  - first:
+      1: 100018
+    second: calf_twist_01_l
+  - first:
+      1: 100020
+    second: calf_twist_01_r
+  - first:
+      1: 100022
+    second: Character1_Ctrl_ChestEndEffector
+  - first:
+      1: 100024
+    second: Character1_Ctrl_ChestOriginEffector
+  - first:
+      1: 100026
+    second: Character1_Ctrl_Head
+  - first:
+      1: 100028
+    second: Character1_Ctrl_HeadEffector
+  - first:
+      1: 100030
+    second: Character1_Ctrl_Hips
+  - first:
+      1: 100032
+    second: Character1_Ctrl_HipsEffector
+  - first:
+      1: 100034
+    second: Character1_Ctrl_LeftAnkleEffector
+  - first:
+      1: 100036
+    second: Character1_Ctrl_LeftArm
+  - first:
+      1: 100038
+    second: Character1_Ctrl_LeftElbowEffector
+  - first:
+      1: 100040
+    second: Character1_Ctrl_LeftFoot
+  - first:
+      1: 100042
+    second: Character1_Ctrl_LeftForeArm
+  - first:
+      1: 100044
+    second: Character1_Ctrl_LeftHand
+  - first:
+      1: 100046
+    second: Character1_Ctrl_LeftHipEffector
+  - first:
+      1: 100048
+    second: Character1_Ctrl_LeftKneeEffector
+  - first:
+      1: 100050
+    second: Character1_Ctrl_LeftLeg
+  - first:
+      1: 100052
+    second: Character1_Ctrl_LeftShoulder
+  - first:
+      1: 100054
+    second: Character1_Ctrl_LeftShoulderEffector
+  - first:
+      1: 100056
+    second: Character1_Ctrl_LeftUpLeg
+  - first:
+      1: 100058
+    second: Character1_Ctrl_LeftWristEffector
+  - first:
+      1: 100060
+    second: Character1_Ctrl_Neck
+  - first:
+      1: 100062
+    second: Character1_Ctrl_Reference
+  - first:
+      1: 100064
+    second: Character1_Ctrl_RightAnkleEffector
+  - first:
+      1: 100066
+    second: Character1_Ctrl_RightArm
+  - first:
+      1: 100068
+    second: Character1_Ctrl_RightElbowEffector
+  - first:
+      1: 100070
+    second: Character1_Ctrl_RightFoot
+  - first:
+      1: 100072
+    second: Character1_Ctrl_RightForeArm
+  - first:
+      1: 100074
+    second: Character1_Ctrl_RightHand
+  - first:
+      1: 100076
+    second: Character1_Ctrl_RightHipEffector
+  - first:
+      1: 100078
+    second: Character1_Ctrl_RightKneeEffector
+  - first:
+      1: 100080
+    second: Character1_Ctrl_RightLeg
+  - first:
+      1: 100082
+    second: Character1_Ctrl_RightShoulder
+  - first:
+      1: 100084
+    second: Character1_Ctrl_RightShoulderEffector
+  - first:
+      1: 100086
+    second: Character1_Ctrl_RightUpLeg
+  - first:
+      1: 100088
+    second: Character1_Ctrl_RightWristEffector
+  - first:
+      1: 100090
+    second: Character1_Ctrl_Spine
+  - first:
+      1: 100092
+    second: Character1_Ctrl_Spine1
+  - first:
+      1: 100094
+    second: Character1_Ctrl_Spine2
+  - first:
+      1: 100096
+    second: clavicle_l
+  - first:
+      1: 100098
+    second: clavicle_r
+  - first:
+      1: 100100
+    second: foot_l
+  - first:
+      1: 100102
+    second: foot_r
+  - first:
+      1: 100104
+    second: Group2BodyBase_mesh
+  - first:
+      1: 100106
+    second: hand_l
+  - first:
+      1: 100108
+    second: hand_r
+  - first:
+      1: 100110
+    second: head
+  - first:
+      1: 100112
+    second: index_01_l
+  - first:
+      1: 100114
+    second: index_01_r
+  - first:
+      1: 100116
+    second: index_02_l
+  - first:
+      1: 100118
+    second: index_02_r
+  - first:
+      1: 100120
+    second: index_03_l
+  - first:
+      1: 100122
+    second: index_03_r
+  - first:
+      1: 100124
+    second: lowerarm_l
+  - first:
+      1: 100126
+    second: lowerarm_r
+  - first:
+      1: 100128
+    second: lowerarm_twist_01_l
+  - first:
+      1: 100130
+    second: lowerarm_twist_01_r
+  - first:
+      1: 100132
+    second: middle_01_l
+  - first:
+      1: 100134
+    second: middle_01_r
+  - first:
+      1: 100136
+    second: middle_02_l
+  - first:
+      1: 100138
+    second: middle_02_r
+  - first:
+      1: 100140
+    second: middle_03_l
+  - first:
+      1: 100142
+    second: middle_03_r
+  - first:
+      1: 100144
+    second: neck_01
+  - first:
+      1: 100146
+    second: pants
+  - first:
+      1: 100148
+    second: pants_11_RetopoGroup3
+  - first:
+      1: 100150
+    second: pants_1_RetopoGroup2
+  - first:
+      1: 100152
+    second: pelvis
+  - first:
+      1: 100154
+    second: pinky_01_l
+  - first:
+      1: 100156
+    second: pinky_01_r
+  - first:
+      1: 100158
+    second: pinky_02_l
+  - first:
+      1: 100160
+    second: pinky_02_r
+  - first:
+      1: 100162
+    second: pinky_03_l
+  - first:
+      1: 100164
+    second: pinky_03_r
+  - first:
+      1: 100166
+    second: polySurface100
+  - first:
+      1: 100168
+    second: polySurface101
+  - first:
+      1: 100170
+    second: polySurface102
+  - first:
+      1: 100172
+    second: polySurface103
+  - first:
+      1: 100174
+    second: polySurface104
+  - first:
+      1: 100176
+    second: polySurface11
+  - first:
+      1: 100178
+    second: polySurface12
+  - first:
+      1: 100180
+    second: polySurface13
+  - first:
+      1: 100182
+    second: polySurface14
+  - first:
+      1: 100184
+    second: polySurface15
+  - first:
+      1: 100186
+    second: polySurface16
+  - first:
+      1: 100188
+    second: polySurface17
+  - first:
+      1: 100190
+    second: polySurface18
+  - first:
+      1: 100192
+    second: polySurface19
+  - first:
+      1: 100194
+    second: polySurface20
+  - first:
+      1: 100196
+    second: polySurface21
+  - first:
+      1: 100198
+    second: polySurface22
+  - first:
+      1: 100200
+    second: polySurface23
+  - first:
+      1: 100202
+    second: polySurface24
+  - first:
+      1: 100204
+    second: polySurface25
+  - first:
+      1: 100206
+    second: polySurface27
+  - first:
+      1: 100208
+    second: polySurface34
+  - first:
+      1: 100210
+    second: polySurface37
+  - first:
+      1: 100212
+    second: polySurface38
+  - first:
+      1: 100214
+    second: polySurface39
+  - first:
+      1: 100216
+    second: polySurface40
+  - first:
+      1: 100218
+    second: polySurface41
+  - first:
+      1: 100220
+    second: polySurface45
+  - first:
+      1: 100222
+    second: polySurface47
+  - first:
+      1: 100224
+    second: polySurface48
+  - first:
+      1: 100226
+    second: polySurface49
+  - first:
+      1: 100228
+    second: polySurface50
+  - first:
+      1: 100230
+    second: polySurface51
+  - first:
+      1: 100232
+    second: polySurface52
+  - first:
+      1: 100234
+    second: polySurface53
+  - first:
+      1: 100236
+    second: polySurface54
+  - first:
+      1: 100238
+    second: polySurface55
+  - first:
+      1: 100240
+    second: polySurface56
+  - first:
+      1: 100242
+    second: polySurface57
+  - first:
+      1: 100244
+    second: polySurface58
+  - first:
+      1: 100246
+    second: polySurface59
+  - first:
+      1: 100248
+    second: polySurface60
+  - first:
+      1: 100250
+    second: polySurface61
+  - first:
+      1: 100252
+    second: polySurface62
+  - first:
+      1: 100254
+    second: polySurface64
+  - first:
+      1: 100256
+    second: polySurface66
+  - first:
+      1: 100258
+    second: polySurface7
+  - first:
+      1: 100260
+    second: polySurface70
+  - first:
+      1: 100262
+    second: polySurface73
+  - first:
+      1: 100264
+    second: polySurface74
+  - first:
+      1: 100266
+    second: polySurface75
+  - first:
+      1: 100268
+    second: polySurface76
+  - first:
+      1: 100270
+    second: polySurface77
+  - first:
+      1: 100272
+    second: polySurface78
+  - first:
+      1: 100274
+    second: polySurface79
+  - first:
+      1: 100276
+    second: polySurface8
+  - first:
+      1: 100278
+    second: polySurface80
+  - first:
+      1: 100280
+    second: polySurface81
+  - first:
+      1: 100282
+    second: polySurface82
+  - first:
+      1: 100284
+    second: polySurface83
+  - first:
+      1: 100286
+    second: polySurface84
+  - first:
+      1: 100288
+    second: polySurface85
+  - first:
+      1: 100290
+    second: polySurface86
+  - first:
+      1: 100292
+    second: polySurface87
+  - first:
+      1: 100294
+    second: polySurface88
+  - first:
+      1: 100296
+    second: polySurface89
+  - first:
+      1: 100298
+    second: polySurface90
+  - first:
+      1: 100300
+    second: polySurface91
+  - first:
+      1: 100302
+    second: polySurface92
+  - first:
+      1: 100304
+    second: polySurface93
+  - first:
+      1: 100306
+    second: polySurface94
+  - first:
+      1: 100308
+    second: polySurface95
+  - first:
+      1: 100310
+    second: polySurface96
+  - first:
+      1: 100312
+    second: polySurface97
+  - first:
+      1: 100314
+    second: polySurface98
+  - first:
+      1: 100316
+    second: polySurface99
+  - first:
+      1: 100318
+    second: RetopoGroup1
+  - first:
+      1: 100320
+    second: ring_01_l
+  - first:
+      1: 100322
+    second: ring_01_r
+  - first:
+      1: 100324
+    second: ring_02_l
+  - first:
+      1: 100326
+    second: ring_02_r
+  - first:
+      1: 100328
+    second: ring_03_l
+  - first:
+      1: 100330
+    second: ring_03_r
+  - first:
+      1: 100332
+    second: root
+  - first:
+      1: 100334
+    second: //RootNode
+  - first:
+      1: 100336
+    second: spine_01
+  - first:
+      1: 100338
+    second: spine_02
+  - first:
+      1: 100340
+    second: spine_03
+  - first:
+      1: 100342
+    second: thigh_l
+  - first:
+      1: 100344
+    second: thigh_r
+  - first:
+      1: 100346
+    second: thigh_twist_01_l
+  - first:
+      1: 100348
+    second: thigh_twist_01_r
+  - first:
+      1: 100350
+    second: thumb_01_l
+  - first:
+      1: 100352
+    second: thumb_01_r
+  - first:
+      1: 100354
+    second: thumb_02_l
+  - first:
+      1: 100356
+    second: thumb_02_r
+  - first:
+      1: 100358
+    second: thumb_03_l
+  - first:
+      1: 100360
+    second: thumb_03_r
+  - first:
+      1: 100362
+    second: upperarm_l
+  - first:
+      1: 100364
+    second: upperarm_r
+  - first:
+      1: 100366
+    second: upperarm_twist_01_l
+  - first:
+      1: 100368
+    second: upperarm_twist_01_r
+  - first:
+      1: 100370
+    second: waistcoat
+  - first:
+      1: 100372
+    second: ZBrushPolyMesh3D
+  - first:
+      4: 400000
+    second: _group1polySurface5HeadBase_mesh2
+  - first:
+      4: 400002
+    second: ball_l
+  - first:
+      4: 400004
+    second: ball_r
+  - first:
+      4: 400006
+    second: Base_mesh
+  - first:
+      4: 400008
+    second: Body
+  - first:
+      4: 400010
+    second: Body_11_RetopoGroup2
+  - first:
+      4: 400012
+    second: Body_4_RetopoGroup2
+  - first:
+      4: 400014
+    second: calf_l
+  - first:
+      4: 400016
+    second: calf_r
+  - first:
+      4: 400018
+    second: calf_twist_01_l
+  - first:
+      4: 400020
+    second: calf_twist_01_r
+  - first:
+      4: 400022
+    second: Character1_Ctrl_ChestEndEffector
+  - first:
+      4: 400024
+    second: Character1_Ctrl_ChestOriginEffector
+  - first:
+      4: 400026
+    second: Character1_Ctrl_Head
+  - first:
+      4: 400028
+    second: Character1_Ctrl_HeadEffector
+  - first:
+      4: 400030
+    second: Character1_Ctrl_Hips
+  - first:
+      4: 400032
+    second: Character1_Ctrl_HipsEffector
+  - first:
+      4: 400034
+    second: Character1_Ctrl_LeftAnkleEffector
+  - first:
+      4: 400036
+    second: Character1_Ctrl_LeftArm
+  - first:
+      4: 400038
+    second: Character1_Ctrl_LeftElbowEffector
+  - first:
+      4: 400040
+    second: Character1_Ctrl_LeftFoot
+  - first:
+      4: 400042
+    second: Character1_Ctrl_LeftForeArm
+  - first:
+      4: 400044
+    second: Character1_Ctrl_LeftHand
+  - first:
+      4: 400046
+    second: Character1_Ctrl_LeftHipEffector
+  - first:
+      4: 400048
+    second: Character1_Ctrl_LeftKneeEffector
+  - first:
+      4: 400050
+    second: Character1_Ctrl_LeftLeg
+  - first:
+      4: 400052
+    second: Character1_Ctrl_LeftShoulder
+  - first:
+      4: 400054
+    second: Character1_Ctrl_LeftShoulderEffector
+  - first:
+      4: 400056
+    second: Character1_Ctrl_LeftUpLeg
+  - first:
+      4: 400058
+    second: Character1_Ctrl_LeftWristEffector
+  - first:
+      4: 400060
+    second: Character1_Ctrl_Neck
+  - first:
+      4: 400062
+    second: Character1_Ctrl_Reference
+  - first:
+      4: 400064
+    second: Character1_Ctrl_RightAnkleEffector
+  - first:
+      4: 400066
+    second: Character1_Ctrl_RightArm
+  - first:
+      4: 400068
+    second: Character1_Ctrl_RightElbowEffector
+  - first:
+      4: 400070
+    second: Character1_Ctrl_RightFoot
+  - first:
+      4: 400072
+    second: Character1_Ctrl_RightForeArm
+  - first:
+      4: 400074
+    second: Character1_Ctrl_RightHand
+  - first:
+      4: 400076
+    second: Character1_Ctrl_RightHipEffector
+  - first:
+      4: 400078
+    second: Character1_Ctrl_RightKneeEffector
+  - first:
+      4: 400080
+    second: Character1_Ctrl_RightLeg
+  - first:
+      4: 400082
+    second: Character1_Ctrl_RightShoulder
+  - first:
+      4: 400084
+    second: Character1_Ctrl_RightShoulderEffector
+  - first:
+      4: 400086
+    second: Character1_Ctrl_RightUpLeg
+  - first:
+      4: 400088
+    second: Character1_Ctrl_RightWristEffector
+  - first:
+      4: 400090
+    second: Character1_Ctrl_Spine
+  - first:
+      4: 400092
+    second: Character1_Ctrl_Spine1
+  - first:
+      4: 400094
+    second: Character1_Ctrl_Spine2
+  - first:
+      4: 400096
+    second: clavicle_l
+  - first:
+      4: 400098
+    second: clavicle_r
+  - first:
+      4: 400100
+    second: foot_l
+  - first:
+      4: 400102
+    second: foot_r
+  - first:
+      4: 400104
+    second: Group2BodyBase_mesh
+  - first:
+      4: 400106
+    second: hand_l
+  - first:
+      4: 400108
+    second: hand_r
+  - first:
+      4: 400110
+    second: head
+  - first:
+      4: 400112
+    second: index_01_l
+  - first:
+      4: 400114
+    second: index_01_r
+  - first:
+      4: 400116
+    second: index_02_l
+  - first:
+      4: 400118
+    second: index_02_r
+  - first:
+      4: 400120
+    second: index_03_l
+  - first:
+      4: 400122
+    second: index_03_r
+  - first:
+      4: 400124
+    second: lowerarm_l
+  - first:
+      4: 400126
+    second: lowerarm_r
+  - first:
+      4: 400128
+    second: lowerarm_twist_01_l
+  - first:
+      4: 400130
+    second: lowerarm_twist_01_r
+  - first:
+      4: 400132
+    second: middle_01_l
+  - first:
+      4: 400134
+    second: middle_01_r
+  - first:
+      4: 400136
+    second: middle_02_l
+  - first:
+      4: 400138
+    second: middle_02_r
+  - first:
+      4: 400140
+    second: middle_03_l
+  - first:
+      4: 400142
+    second: middle_03_r
+  - first:
+      4: 400144
+    second: neck_01
+  - first:
+      4: 400146
+    second: pants
+  - first:
+      4: 400148
+    second: pants_11_RetopoGroup3
+  - first:
+      4: 400150
+    second: pants_1_RetopoGroup2
+  - first:
+      4: 400152
+    second: pelvis
+  - first:
+      4: 400154
+    second: pinky_01_l
+  - first:
+      4: 400156
+    second: pinky_01_r
+  - first:
+      4: 400158
+    second: pinky_02_l
+  - first:
+      4: 400160
+    second: pinky_02_r
+  - first:
+      4: 400162
+    second: pinky_03_l
+  - first:
+      4: 400164
+    second: pinky_03_r
+  - first:
+      4: 400166
+    second: polySurface100
+  - first:
+      4: 400168
+    second: polySurface101
+  - first:
+      4: 400170
+    second: polySurface102
+  - first:
+      4: 400172
+    second: polySurface103
+  - first:
+      4: 400174
+    second: polySurface104
+  - first:
+      4: 400176
+    second: polySurface11
+  - first:
+      4: 400178
+    second: polySurface12
+  - first:
+      4: 400180
+    second: polySurface13
+  - first:
+      4: 400182
+    second: polySurface14
+  - first:
+      4: 400184
+    second: polySurface15
+  - first:
+      4: 400186
+    second: polySurface16
+  - first:
+      4: 400188
+    second: polySurface17
+  - first:
+      4: 400190
+    second: polySurface18
+  - first:
+      4: 400192
+    second: polySurface19
+  - first:
+      4: 400194
+    second: polySurface20
+  - first:
+      4: 400196
+    second: polySurface21
+  - first:
+      4: 400198
+    second: polySurface22
+  - first:
+      4: 400200
+    second: polySurface23
+  - first:
+      4: 400202
+    second: polySurface24
+  - first:
+      4: 400204
+    second: polySurface25
+  - first:
+      4: 400206
+    second: polySurface27
+  - first:
+      4: 400208
+    second: polySurface34
+  - first:
+      4: 400210
+    second: polySurface37
+  - first:
+      4: 400212
+    second: polySurface38
+  - first:
+      4: 400214
+    second: polySurface39
+  - first:
+      4: 400216
+    second: polySurface40
+  - first:
+      4: 400218
+    second: polySurface41
+  - first:
+      4: 400220
+    second: polySurface45
+  - first:
+      4: 400222
+    second: polySurface47
+  - first:
+      4: 400224
+    second: polySurface48
+  - first:
+      4: 400226
+    second: polySurface49
+  - first:
+      4: 400228
+    second: polySurface50
+  - first:
+      4: 400230
+    second: polySurface51
+  - first:
+      4: 400232
+    second: polySurface52
+  - first:
+      4: 400234
+    second: polySurface53
+  - first:
+      4: 400236
+    second: polySurface54
+  - first:
+      4: 400238
+    second: polySurface55
+  - first:
+      4: 400240
+    second: polySurface56
+  - first:
+      4: 400242
+    second: polySurface57
+  - first:
+      4: 400244
+    second: polySurface58
+  - first:
+      4: 400246
+    second: polySurface59
+  - first:
+      4: 400248
+    second: polySurface60
+  - first:
+      4: 400250
+    second: polySurface61
+  - first:
+      4: 400252
+    second: polySurface62
+  - first:
+      4: 400254
+    second: polySurface64
+  - first:
+      4: 400256
+    second: polySurface66
+  - first:
+      4: 400258
+    second: polySurface7
+  - first:
+      4: 400260
+    second: polySurface70
+  - first:
+      4: 400262
+    second: polySurface73
+  - first:
+      4: 400264
+    second: polySurface74
+  - first:
+      4: 400266
+    second: polySurface75
+  - first:
+      4: 400268
+    second: polySurface76
+  - first:
+      4: 400270
+    second: polySurface77
+  - first:
+      4: 400272
+    second: polySurface78
+  - first:
+      4: 400274
+    second: polySurface79
+  - first:
+      4: 400276
+    second: polySurface8
+  - first:
+      4: 400278
+    second: polySurface80
+  - first:
+      4: 400280
+    second: polySurface81
+  - first:
+      4: 400282
+    second: polySurface82
+  - first:
+      4: 400284
+    second: polySurface83
+  - first:
+      4: 400286
+    second: polySurface84
+  - first:
+      4: 400288
+    second: polySurface85
+  - first:
+      4: 400290
+    second: polySurface86
+  - first:
+      4: 400292
+    second: polySurface87
+  - first:
+      4: 400294
+    second: polySurface88
+  - first:
+      4: 400296
+    second: polySurface89
+  - first:
+      4: 400298
+    second: polySurface90
+  - first:
+      4: 400300
+    second: polySurface91
+  - first:
+      4: 400302
+    second: polySurface92
+  - first:
+      4: 400304
+    second: polySurface93
+  - first:
+      4: 400306
+    second: polySurface94
+  - first:
+      4: 400308
+    second: polySurface95
+  - first:
+      4: 400310
+    second: polySurface96
+  - first:
+      4: 400312
+    second: polySurface97
+  - first:
+      4: 400314
+    second: polySurface98
+  - first:
+      4: 400316
+    second: polySurface99
+  - first:
+      4: 400318
+    second: RetopoGroup1
+  - first:
+      4: 400320
+    second: ring_01_l
+  - first:
+      4: 400322
+    second: ring_01_r
+  - first:
+      4: 400324
+    second: ring_02_l
+  - first:
+      4: 400326
+    second: ring_02_r
+  - first:
+      4: 400328
+    second: ring_03_l
+  - first:
+      4: 400330
+    second: ring_03_r
+  - first:
+      4: 400332
+    second: root
+  - first:
+      4: 400334
+    second: //RootNode
+  - first:
+      4: 400336
+    second: spine_01
+  - first:
+      4: 400338
+    second: spine_02
+  - first:
+      4: 400340
+    second: spine_03
+  - first:
+      4: 400342
+    second: thigh_l
+  - first:
+      4: 400344
+    second: thigh_r
+  - first:
+      4: 400346
+    second: thigh_twist_01_l
+  - first:
+      4: 400348
+    second: thigh_twist_01_r
+  - first:
+      4: 400350
+    second: thumb_01_l
+  - first:
+      4: 400352
+    second: thumb_01_r
+  - first:
+      4: 400354
+    second: thumb_02_l
+  - first:
+      4: 400356
+    second: thumb_02_r
+  - first:
+      4: 400358
+    second: thumb_03_l
+  - first:
+      4: 400360
+    second: thumb_03_r
+  - first:
+      4: 400362
+    second: upperarm_l
+  - first:
+      4: 400364
+    second: upperarm_r
+  - first:
+      4: 400366
+    second: upperarm_twist_01_l
+  - first:
+      4: 400368
+    second: upperarm_twist_01_r
+  - first:
+      4: 400370
+    second: waistcoat
+  - first:
+      4: 400372
+    second: ZBrushPolyMesh3D
+  - first:
+      21: 2100000
+    second: Mat_croc_men_waistcoat
+  - first:
+      21: 2100002
+    second: Mat_croc_men_pants
+  - first:
+      21: 2100004
+    second: Mat_croc_men_Body
+  - first:
+      21: 2100006
+    second: eyebrows
+  - first:
+      21: 2100008
+    second: Mat_croc_men_glass
+  - first:
+      43: 4300000
+    second: waistcoat
+  - first:
+      43: 4300002
+    second: pants_11_RetopoGroup3
+  - first:
+      43: 4300004
+    second: polySurface7
+  - first:
+      43: 4300006
+    second: pants_1_RetopoGroup2
+  - first:
+      43: 4300008
+    second: polySurface11
+  - first:
+      43: 4300010
+    second: polySurface12
+  - first:
+      43: 4300012
+    second: polySurface13
+  - first:
+      43: 4300014
+    second: polySurface14
+  - first:
+      43: 4300016
+    second: polySurface15
+  - first:
+      43: 4300018
+    second: polySurface16
+  - first:
+      43: 4300020
+    second: polySurface17
+  - first:
+      43: 4300022
+    second: polySurface18
+  - first:
+      43: 4300024
+    second: polySurface19
+  - first:
+      43: 4300026
+    second: polySurface20
+  - first:
+      43: 4300028
+    second: polySurface21
+  - first:
+      43: 4300030
+    second: polySurface22
+  - first:
+      43: 4300032
+    second: polySurface23
+  - first:
+      43: 4300034
+    second: polySurface24
+  - first:
+      43: 4300036
+    second: polySurface25
+  - first:
+      43: 4300038
+    second: polySurface27
+  - first:
+      43: 4300040
+    second: polySurface38
+  - first:
+      43: 4300042
+    second: polySurface39
+  - first:
+      43: 4300044
+    second: polySurface40
+  - first:
+      43: 4300046
+    second: polySurface41
+  - first:
+      43: 4300048
+    second: Body_4_RetopoGroup2
+  - first:
+      43: 4300050
+    second: RetopoGroup1
+  - first:
+      43: 4300052
+    second: polySurface47
+  - first:
+      43: 4300054
+    second: polySurface48
+  - first:
+      43: 4300056
+    second: polySurface49
+  - first:
+      43: 4300058
+    second: polySurface50
+  - first:
+      43: 4300060
+    second: polySurface51
+  - first:
+      43: 4300062
+    second: polySurface52
+  - first:
+      43: 4300064
+    second: polySurface53
+  - first:
+      43: 4300066
+    second: polySurface54
+  - first:
+      43: 4300068
+    second: polySurface55
+  - first:
+      43: 4300070
+    second: polySurface56
+  - first:
+      43: 4300072
+    second: polySurface57
+  - first:
+      43: 4300074
+    second: polySurface58
+  - first:
+      43: 4300076
+    second: polySurface59
+  - first:
+      43: 4300078
+    second: polySurface60
+  - first:
+      43: 4300080
+    second: polySurface61
+  - first:
+      43: 4300082
+    second: polySurface62
+  - first:
+      43: 4300084
+    second: polySurface64
+  - first:
+      43: 4300086
+    second: polySurface74
+  - first:
+      43: 4300088
+    second: polySurface8
+  - first:
+      43: 4300090
+    second: polySurface75
+  - first:
+      43: 4300092
+    second: polySurface76
+  - first:
+      43: 4300094
+    second: polySurface77
+  - first:
+      43: 4300096
+    second: polySurface78
+  - first:
+      43: 4300098
+    second: polySurface79
+  - first:
+      43: 4300100
+    second: polySurface80
+  - first:
+      43: 4300102
+    second: polySurface81
+  - first:
+      43: 4300104
+    second: polySurface82
+  - first:
+      43: 4300106
+    second: polySurface83
+  - first:
+      43: 4300108
+    second: polySurface84
+  - first:
+      43: 4300110
+    second: polySurface85
+  - first:
+      43: 4300112
+    second: polySurface86
+  - first:
+      43: 4300114
+    second: polySurface87
+  - first:
+      43: 4300116
+    second: polySurface88
+  - first:
+      43: 4300118
+    second: polySurface89
+  - first:
+      43: 4300120
+    second: polySurface90
+  - first:
+      43: 4300122
+    second: polySurface91
+  - first:
+      43: 4300124
+    second: polySurface92
+  - first:
+      43: 4300126
+    second: polySurface93
+  - first:
+      43: 4300128
+    second: polySurface94
+  - first:
+      43: 4300130
+    second: polySurface95
+  - first:
+      43: 4300132
+    second: polySurface96
+  - first:
+      43: 4300134
+    second: polySurface97
+  - first:
+      43: 4300136
+    second: polySurface98
+  - first:
+      43: 4300138
+    second: polySurface99
+  - first:
+      43: 4300140
+    second: polySurface100
+  - first:
+      43: 4300142
+    second: polySurface101
+  - first:
+      43: 4300144
+    second: polySurface102
+  - first:
+      43: 4300146
+    second: polySurface103
+  - first:
+      43: 4300148
+    second: polySurface104
+  - first:
+      43: 4300150
+    second: polySurface37
+  - first:
+      43: 4300152
+    second: polySurface34
+  - first:
+      43: 4300154
+    second: polySurface73
+  - first:
+      43: 4300156
+    second: polySurface70
+  - first:
+      43: 4300158
+    second: _group1polySurface5HeadBase_mesh2
+  - first:
+      43: 4300160
+    second: polySurface45
+  - first:
+      43: 4300162
+    second: Group2BodyBase_mesh
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: _group1polySurface5HeadBase_mesh2
+  - first:
+      137: 13700002
+    second: Body_4_RetopoGroup2
+  - first:
+      137: 13700004
+    second: Group2BodyBase_mesh
+  - first:
+      137: 13700006
+    second: pants_11_RetopoGroup3
+  - first:
+      137: 13700008
+    second: pants_1_RetopoGroup2
+  - first:
+      137: 13700010
+    second: polySurface100
+  - first:
+      137: 13700012
+    second: polySurface101
+  - first:
+      137: 13700014
+    second: polySurface102
+  - first:
+      137: 13700016
+    second: polySurface103
+  - first:
+      137: 13700018
+    second: polySurface104
+  - first:
+      137: 13700020
+    second: polySurface11
+  - first:
+      137: 13700022
+    second: polySurface12
+  - first:
+      137: 13700024
+    second: polySurface13
+  - first:
+      137: 13700026
+    second: polySurface14
+  - first:
+      137: 13700028
+    second: polySurface15
+  - first:
+      137: 13700030
+    second: polySurface16
+  - first:
+      137: 13700032
+    second: polySurface17
+  - first:
+      137: 13700034
+    second: polySurface18
+  - first:
+      137: 13700036
+    second: polySurface19
+  - first:
+      137: 13700038
+    second: polySurface20
+  - first:
+      137: 13700040
+    second: polySurface21
+  - first:
+      137: 13700042
+    second: polySurface22
+  - first:
+      137: 13700044
+    second: polySurface23
+  - first:
+      137: 13700046
+    second: polySurface24
+  - first:
+      137: 13700048
+    second: polySurface25
+  - first:
+      137: 13700050
+    second: polySurface27
+  - first:
+      137: 13700052
+    second: polySurface34
+  - first:
+      137: 13700054
+    second: polySurface37
+  - first:
+      137: 13700056
+    second: polySurface38
+  - first:
+      137: 13700058
+    second: polySurface39
+  - first:
+      137: 13700060
+    second: polySurface40
+  - first:
+      137: 13700062
+    second: polySurface41
+  - first:
+      137: 13700064
+    second: polySurface45
+  - first:
+      137: 13700066
+    second: polySurface47
+  - first:
+      137: 13700068
+    second: polySurface48
+  - first:
+      137: 13700070
+    second: polySurface49
+  - first:
+      137: 13700072
+    second: polySurface50
+  - first:
+      137: 13700074
+    second: polySurface51
+  - first:
+      137: 13700076
+    second: polySurface52
+  - first:
+      137: 13700078
+    second: polySurface53
+  - first:
+      137: 13700080
+    second: polySurface54
+  - first:
+      137: 13700082
+    second: polySurface55
+  - first:
+      137: 13700084
+    second: polySurface56
+  - first:
+      137: 13700086
+    second: polySurface57
+  - first:
+      137: 13700088
+    second: polySurface58
+  - first:
+      137: 13700090
+    second: polySurface59
+  - first:
+      137: 13700092
+    second: polySurface60
+  - first:
+      137: 13700094
+    second: polySurface61
+  - first:
+      137: 13700096
+    second: polySurface62
+  - first:
+      137: 13700098
+    second: polySurface64
+  - first:
+      137: 13700100
+    second: polySurface7
+  - first:
+      137: 13700102
+    second: polySurface70
+  - first:
+      137: 13700104
+    second: polySurface73
+  - first:
+      137: 13700106
+    second: polySurface74
+  - first:
+      137: 13700108
+    second: polySurface75
+  - first:
+      137: 13700110
+    second: polySurface76
+  - first:
+      137: 13700112
+    second: polySurface77
+  - first:
+      137: 13700114
+    second: polySurface78
+  - first:
+      137: 13700116
+    second: polySurface79
+  - first:
+      137: 13700118
+    second: polySurface8
+  - first:
+      137: 13700120
+    second: polySurface80
+  - first:
+      137: 13700122
+    second: polySurface81
+  - first:
+      137: 13700124
+    second: polySurface82
+  - first:
+      137: 13700126
+    second: polySurface83
+  - first:
+      137: 13700128
+    second: polySurface84
+  - first:
+      137: 13700130
+    second: polySurface85
+  - first:
+      137: 13700132
+    second: polySurface86
+  - first:
+      137: 13700134
+    second: polySurface87
+  - first:
+      137: 13700136
+    second: polySurface88
+  - first:
+      137: 13700138
+    second: polySurface89
+  - first:
+      137: 13700140
+    second: polySurface90
+  - first:
+      137: 13700142
+    second: polySurface91
+  - first:
+      137: 13700144
+    second: polySurface92
+  - first:
+      137: 13700146
+    second: polySurface93
+  - first:
+      137: 13700148
+    second: polySurface94
+  - first:
+      137: 13700150
+    second: polySurface95
+  - first:
+      137: 13700152
+    second: polySurface96
+  - first:
+      137: 13700154
+    second: polySurface97
+  - first:
+      137: 13700156
+    second: polySurface98
+  - first:
+      137: 13700158
+    second: polySurface99
+  - first:
+      137: 13700160
+    second: RetopoGroup1
+  - first:
+      137: 13700162
+    second: waistcoat
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -574,19 +1669,18 @@ ModelImporter:
       name: eyebrows
     second: {fileID: 2100000, guid: 35b3c6f7fc4249cabb80c2307d549fc9, type: 2}
   materials:
-    importMaterials: 1
     materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
+    searchTexturesGlobally: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -608,25 +1702,41 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    importUVs: -1
+    importVertexColors: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -635,10 +1745,11 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+    calculateBlendshapeNormalsDeltaFromImportedNormals: 1
+  referencedClips: []
   importAnimation: 0
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human:
     - boneName: pelvis
       humanName: Hips
@@ -706,14 +1817,6 @@ ModelImporter:
         modified: 0
     - boneName: spine_02
       humanName: Chest
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: spine_03
-      humanName: UpperChest
       limit:
         min: {x: 0, y: 0, z: 0}
         max: {x: 0, y: 0, z: 0}
@@ -1056,7 +2159,950 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
-    skeleton: []
+    - boneName: spine_03
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: CrocMan(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Base_mesh
+      parentName: CrocMan(Clone)
+      position: {x: 0.00012710941, y: 0.92507297, z: -0.008857711}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 93.17852, y: 93.17852, z: 93.17852}
+    - name: waistcoat
+      parentName: Base_mesh
+      position: {x: -2.9802322e-10, y: 0.000025035142, z: -0.000029869972}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: pants
+      parentName: Base_mesh
+      position: {x: -2.9802322e-10, y: 0.000025035142, z: -0.000029869972}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: pants_11_RetopoGroup3
+      parentName: pants
+      position: {x: -0, y: 1.110223e-18, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface7
+      parentName: pants
+      position: {x: -0, y: 1.110223e-18, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: pants_1_RetopoGroup2
+      parentName: pants
+      position: {x: -0, y: 1.110223e-18, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Body
+      parentName: Base_mesh
+      position: {x: -2.9802322e-10, y: 0.000025035142, z: -0.000029869972}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ZBrushPolyMesh3D
+      parentName: Body
+      position: {x: 0.0038590252, y: 0.0047951196, z: 0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface11
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface12
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface13
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface14
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface15
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface16
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface17
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface18
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface19
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface20
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface21
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface22
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface23
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface24
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface25
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface27
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface38
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface39
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface40
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface41
+      parentName: ZBrushPolyMesh3D
+      position: {x: -0.0038590252, y: -0.0047951196, z: -0.00015165999}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Body_4_RetopoGroup2
+      parentName: Body
+      position: {x: -0, y: 1.110223e-18, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RetopoGroup1
+      parentName: Body
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Body_11_RetopoGroup2
+      parentName: Body
+      position: {x: -0.001123105, y: 0.000050705075, z: -0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface47
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface48
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface49
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface50
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface51
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface52
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface53
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface54
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface55
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface56
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface57
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface58
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface59
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface60
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface61
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface62
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface64
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface74
+      parentName: Body_11_RetopoGroup2
+      position: {x: 0.001123105, y: -0.000050705075, z: 0.000012834966}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface8
+      parentName: Body
+      position: {x: -0.003075895, y: -1.71758, z: 0.036165025}
+      rotation: {x: -0.02828293, y: 0, z: -0, w: 0.9996}
+      scale: {x: 0.010732086, y: 0.010732086, z: 0.010732086}
+    - name: polySurface66
+      parentName: Body
+      position: {x: -0.006983028, y: 0.0016176371, z: 0.0006393356}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.010732086, y: 0.010732086, z: 0.010732086}
+    - name: polySurface75
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface76
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface77
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface78
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface79
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface80
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface81
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface82
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface83
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface84
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface85
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface86
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface87
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface88
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface89
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface90
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface91
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface92
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface93
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface94
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface95
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface96
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface97
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface98
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface99
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface100
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface101
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface102
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface103
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface104
+      parentName: polySurface66
+      position: {x: 0.6505411, y: -1.0781348, z: -0.04793139}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface37
+      parentName: Body
+      position: {x: -0.49348697, y: -1.2238324, z: 0.022538947}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.010732086, y: 0.010732086, z: 0.010732086}
+    - name: polySurface34
+      parentName: Body
+      position: {x: -0.6214406, y: -1.117067, z: -0.03582992}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.010732086, y: 0.010732086, z: 0.010732086}
+    - name: polySurface73
+      parentName: Body
+      position: {x: 0.4932355, y: -1.2238324, z: 0.022538947}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.010732086, y: 0.010732086, z: 0.010732086}
+    - name: polySurface70
+      parentName: Body
+      position: {x: 0.62118906, y: -1.117067, z: -0.035829924}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.010732086, y: 0.010732086, z: 0.010732086}
+    - name: _group1polySurface5HeadBase_mesh2
+      parentName: CrocMan(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface45
+      parentName: CrocMan(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_Reference
+      parentName: CrocMan(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_HipsEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: 0.0000000047683715, y: 0.95299846, z: -0.0053001833}
+      rotation: {x: -0.000000029802322, y: 4.440892e-16, z: -0.000000014901161, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftAnkleEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -0.20859264, y: 0.12594265, z: -0.07527686}
+      rotation: {x: 2.2204456e-15, y: -0.0000000745058, z: -0.000000029802319, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightAnkleEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: 0.20859279, y: 0.12594208, z: -0.07527587}
+      rotation: {x: 2.4825341e-15, y: -0.00000003332001, z: -0.000000074505806, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftWristEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -0.59669966, y: 1.1693238, z: 0.02036047}
+      rotation: {x: -0.00000016018747, y: 0.000000014901159, z: -0.000000047730275, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightWristEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: 0.596719, y: 1.1693487, z: 0.020454783}
+      rotation: {x: -0.00000022444871, y: 0.000000022584569, z: 0.000000029802319, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftKneeEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -0.16052887, y: 0.53343505, z: -0.020728553}
+      rotation: {x: -0.000000014901159, y: 0.0000000745058, z: 0.000000059604638, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightKneeEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: 0.1605289, y: 0.53343517, z: -0.020727621}
+      rotation: {x: -0.000000044703484, y: 0.000000029802322, z: -0.00000010430813, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftElbowEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -0.4036315, y: 1.315364, z: -0.070303485}
+      rotation: {x: -0.00000017881396, y: -0.000000029802326, z: -0.000000029802326, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightElbowEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: 0.40365115, y: 1.3153884, z: -0.070209086}
+      rotation: {x: -0.00000017881393, y: -0.000000022351742, z: 0.000000014901161, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_ChestOriginEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -1.3536848e-30, y: 1.0755633, z: -0.0016523885}
+      rotation: {x: -0.000000029802322, y: -5.251648e-16, z: 0.000000014901161, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_ChestEndEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -0.00000008106232, y: 1.5332581, z: -0.02760395}
+      rotation: {x: -0.00000008940697, y: 1.2804876e-15, z: -0.000000014901161, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftShoulderEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -0.18286481, y: 1.5066574, z: -0.08391324}
+      rotation: {x: -0.00000017881396, y: 5.3308065e-15, z: -0.000000029802326, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightShoulderEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: 0.18286502, y: 1.5066605, z: -0.08391324}
+      rotation: {x: -0.00000014901161, y: -0.000000044703484, z: -6.605827e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_HeadEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -0.00000012397766, y: 1.6664038, z: -0.03977634}
+      rotation: {x: -0.00000013411045, y: 2.0539126e-15, z: -0.000000014901161, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftHipEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: -0.09005809, y: 0.9529987, z: -0.005300178}
+      rotation: {x: 8.345104e-16, y: 7.93636e-17, z: 1.5265567e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightHipEffector
+      parentName: Character1_Ctrl_Reference
+      position: {x: 0.090058096, y: 0.9529983, z: -0.005300188}
+      rotation: {x: -0.000000044703484, y: 6.6526645e-16, z: -0.000000014901161, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_Hips
+      parentName: Character1_Ctrl_Reference
+      position: {x: -1.3536848e-30, y: 0.9675063, z: -0.010561447}
+      rotation: {x: -0.000000029802322, y: 4.440892e-16, z: -0.000000014901161, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftUpLeg
+      parentName: Character1_Ctrl_Hips
+      position: {x: -0.090058096, y: -0.014507598, z: 0.0052612578}
+      rotation: {x: 0.000000029802322, y: 5.3819796e-16, z: 0.000000014901161, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftLeg
+      parentName: Character1_Ctrl_LeftUpLeg
+      position: {x: -0.07047069, y: -0.4195637, z: -0.015427533}
+      rotation: {x: -0.000000014901159, y: 0.0000000745058, z: 0.000000059604638, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftFoot
+      parentName: Character1_Ctrl_LeftLeg
+      position: {x: -0.048063755, y: -0.40749243, z: -0.054548223}
+      rotation: {x: 1.332268e-15, y: -0.000000014901167, z: -0.00000008940695, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightUpLeg
+      parentName: Character1_Ctrl_Hips
+      position: {x: 0.090058096, y: -0.014508056, z: 0.005261253}
+      rotation: {x: -0.000000014901161, y: -7.979728e-17, z: 1.9428903e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightLeg
+      parentName: Character1_Ctrl_RightUpLeg
+      position: {x: 0.07047091, y: -0.41956297, z: -0.015427519}
+      rotation: {x: 2.2871247e-15, y: 0.000000029802326, z: -0.00000008940697, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightFoot
+      parentName: Character1_Ctrl_RightLeg
+      position: {x: 0.048064, y: -0.40749297, z: -0.054548196}
+      rotation: {x: -6.2803697e-16, y: -0.000000021073426, z: 0.00000002980232, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_Spine
+      parentName: Character1_Ctrl_Hips
+      position: {x: -0.000000012988678, y: 0.10805694, z: 0.008909063}
+      rotation: {x: -5.3864476e-17, y: -6.7534435e-16, z: 0.000000029802322, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_Spine1
+      parentName: Character1_Ctrl_Spine
+      position: {x: -0.000000022483983, y: 0.19206847, z: -0.013507669}
+      rotation: {x: -3.651045e-17, y: -6.25656e-17, z: -4.7418592e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_Spine2
+      parentName: Character1_Ctrl_Spine1
+      position: {x: -0.000000015940097, y: 0.14390999, z: -0.019819256}
+      rotation: {x: -0.00000005960465, y: 1.866975e-15, z: -0.00000002980232, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftShoulder
+      parentName: Character1_Ctrl_Spine2
+      position: {x: -0.037819844, y: 0.12171371, z: 0.0073754643}
+      rotation: {x: -0.00000002980232, y: 0.000000026077034, z: -0.0000000372529, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftArm
+      parentName: Character1_Ctrl_LeftShoulder
+      position: {x: -0.14504488, y: -0.026598206, z: -0.05630929}
+      rotation: {x: -0.00000005960467, y: -0.000000026077037, z: 0.000000022351733, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftForeArm
+      parentName: Character1_Ctrl_LeftArm
+      position: {x: -0.22076699, y: -0.19129287, z: 0.013609304}
+      rotation: {x: 9.7144515e-17, y: -0.000000029802326, z: 2.8951325e-24, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_LeftHand
+      parentName: Character1_Ctrl_LeftForeArm
+      position: {x: -0.19306812, y: -0.14604019, z: 0.09066383}
+      rotation: {x: 0.000000018626498, y: 0.000000044703487, z: -0.00000001792794, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightShoulder
+      parentName: Character1_Ctrl_Spine2
+      position: {x: 0.03781985, y: 0.12171859, z: 0.007375495}
+      rotation: {x: 0.000000029802322, y: -0.000000029802326, z: 0.00000004470348, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightArm
+      parentName: Character1_Ctrl_RightShoulder
+      position: {x: 0.1450452, y: -0.026600037, z: -0.0563093}
+      rotation: {x: -0.00000008940697, y: -0.000000014901157, z: -0.00000002980232, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightForeArm
+      parentName: Character1_Ctrl_RightArm
+      position: {x: 0.22076699, y: -0.19130005, z: 0.013609304}
+      rotation: {x: -0.00000002980232, y: 0.00000002235174, z: 0.000000014901167, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_RightHand
+      parentName: Character1_Ctrl_RightForeArm
+      position: {x: 0.19306797, y: -0.14603996, z: 0.09066379}
+      rotation: {x: -0.000000045634778, y: 0.000000044936307, z: 0.000000014901167, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_Neck
+      parentName: Character1_Ctrl_Spine2
+      position: {x: -0.00000002029095, y: 0.16391174, z: -0.023767496}
+      rotation: {x: -3.1072858e-17, y: -8.151244e-17, z: -1.7002062e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Character1_Ctrl_Head
+      parentName: Character1_Ctrl_Neck
+      position: {x: -0.000000010934909, y: 0.09095016, z: 0.018970616}
+      rotation: {x: -0.000000044703498, y: -2.7372998e-24, z: 2.7372998e-24, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Group2BodyBase_mesh
+      parentName: CrocMan(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: root
+      parentName: CrocMan(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: pelvis
+      parentName: root
+      position: {x: -1.3536842e-30, y: 0.010561532, z: 0.967506}
+      rotation: {x: 0.001291927, y: 0.7071056, z: 0.001291927, w: 0.70710564}
+      scale: {x: 1, y: 1, z: 1}
+    - name: spine_01
+      parentName: pelvis
+      position: {x: -0.10808878, y: -0.008514151, z: -6.1043445e-15}
+      rotation: {x: 3.5390866e-17, y: -6.054197e-17, z: 0.06238862, w: 0.99805194}
+      scale: {x: 1, y: 1, z: 1}
+    - name: spine_02
+      parentName: spine_01
+      position: {x: -0.18875349, y: 0.038011584, z: 5.966093e-10}
+      rotation: {x: 3.8750447e-17, y: -6.240571e-17, z: -0.122419804, w: 0.99247843}
+      scale: {x: 1, y: 1, z: 1}
+    - name: spine_03
+      parentName: spine_02
+      position: {x: -0.14523949, y: 0.0028929797, z: 0.0000000013512231}
+      rotation: {x: 4.724254e-17, y: -5.334787e-17, z: -0.02425261, w: 0.9997059}
+      scale: {x: 1, y: 1, z: 1}
+    - name: clavicle_l
+      parentName: spine_03
+      position: {x: -0.11883688, y: -0.027320879, z: -0.03781983}
+      rotation: {x: 0.15051271, y: -0.73440254, z: -0.06825205, w: 0.65828615}
+      scale: {x: 1, y: 1, z: 1}
+    - name: upperarm_l
+      parentName: clavicle_l
+      position: {x: -0.15784872, y: 1.4317944e-11, z: 6.359187e-11}
+      rotation: {x: 0.050087407, y: 0.04203734, z: 0.15655863, w: 0.98550165}
+      scale: {x: 1, y: 1, z: 1}
+    - name: lowerarm_l
+      parentName: upperarm_l
+      position: {x: -0.29241768, y: 0.0026620876, z: 0.0010467948}
+      rotation: {x: -0.06254972, y: 0.02860302, z: 0.027484635, w: 0.9972533}
+      scale: {x: 0.9582947, y: 1, z: 1}
+    - name: hand_l
+      parentName: lowerarm_l
+      position: {x: -0.26975143, y: 1.5729675e-11, z: -9.620692e-11}
+      rotation: {x: -0.6460592, y: -0.0025336796, z: 0.0005122957, w: 0.7632835}
+      scale: {x: 1, y: 1, z: 1}
+    - name: index_01_l
+      parentName: hand_l
+      position: {x: -0.11670553, y: 0.0131191965, z: -0.01763743}
+      rotation: {x: -0.077400625, y: -0.008740929, z: -0.11642881, w: 0.99014044}
+      scale: {x: 1.0560645, y: 1.0041277, z: 1.0041277}
+    - name: index_02_l
+      parentName: index_01_l
+      position: {x: -0.04287498, y: -2.985031e-10, z: 5.0484165e-11}
+      rotation: {x: -0.0117779765, y: -0.0025530194, z: -0.0348071, w: 0.99932146}
+      scale: {x: 1, y: 1, z: 1}
+    - name: index_03_l
+      parentName: index_02_l
+      position: {x: -0.0339379, y: 1.1695447e-10, z: -2.3492248e-11}
+      rotation: {x: 0.010611142, y: -0.007850868, z: 0.08285518, w: 0.9964742}
+      scale: {x: 1, y: 1, z: 1}
+    - name: pinky_01_l
+      parentName: hand_l
+      position: {x: -0.08664281, y: 0.028188111, z: 0.053086754}
+      rotation: {x: -0.12203724, y: 0.10812682, z: -0.09856342, w: 0.98168314}
+      scale: {x: 1.0358047, y: 1, z: 1}
+    - name: pinky_02_l
+      parentName: pinky_01_l
+      position: {x: -0.035709806, y: 1.8669866e-10, z: 3.9182524e-12}
+      rotation: {x: 0.006787831, y: 0.000016398713, z: -0.0327943, w: 0.9994391}
+      scale: {x: 0.8729134, y: 1, z: 1}
+    - name: pinky_03_l
+      parentName: pinky_02_l
+      position: {x: -0.029856307, y: -3.00588e-10, z: -4.037542e-11}
+      rotation: {x: 0.0035809507, y: -0.033796374, z: -0.008930302, w: 0.99938244}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ring_01_l
+      parentName: hand_l
+      position: {x: -0.10305756, y: 0.023807513, z: 0.035713468}
+      rotation: {x: -0.06257742, y: 0.08264379, z: -0.1288745, w: 0.98622835}
+      scale: {x: 0.9663926, y: 1, z: 1}
+    - name: ring_02_l
+      parentName: ring_01_l
+      position: {x: -0.04430177, y: 4.6664752e-11, z: -9.403327e-12}
+      rotation: {x: 0.001674167, y: -0.0038196128, z: -0.022755643, w: 0.99973243}
+      scale: {x: 0.9401412, y: 1, z: 1}
+    - name: ring_03_l
+      parentName: ring_02_l
+      position: {x: -0.03476652, y: -1.6786358e-10, z: 2.76865e-11}
+      rotation: {x: -0.00019882337, y: -0.02625777, z: 0.112213, w: 0.99333715}
+      scale: {x: 1, y: 1, z: 1}
+    - name: thumb_01_l
+      parentName: hand_l
+      position: {x: -0.053045806, y: 0.009410031, z: -0.0379045}
+      rotation: {x: 0.40721434, y: -0.3458511, z: 0.0596353, w: 0.843213}
+      scale: {x: 1, y: 1, z: 1}
+    - name: thumb_02_l
+      parentName: thumb_01_l
+      position: {x: -0.038696717, y: 5.011856e-11, z: 9.98493e-11}
+      rotation: {x: 0.023507524, y: -0.01080125, z: -0.031549506, w: 0.9991673}
+      scale: {x: 0.94977516, y: 1, z: 1}
+    - name: thumb_03_l
+      parentName: thumb_02_l
+      position: {x: -0.040621713, y: 1.0722019e-11, z: -5.1273473e-12}
+      rotation: {x: 0.021399098, y: -0.0018834264, z: 0.107937604, w: 0.9939256}
+      scale: {x: 1, y: 1, z: 1}
+    - name: middle_01_l
+      parentName: hand_l
+      position: {x: -0.11620323, y: 0.016808761, z: 0.011431463}
+      rotation: {x: -0.079943776, y: 0.042863965, z: -0.14055386, w: 0.98590934}
+      scale: {x: 1, y: 1, z: 1}
+    - name: middle_02_l
+      parentName: middle_01_l
+      position: {x: -0.04640374, y: -3.648182e-11, z: 1.830866e-11}
+      rotation: {x: -0.016921109, y: -0.00056849385, z: -0.025991127, w: 0.9995188}
+      scale: {x: 1.0345992, y: 1, z: 1}
+    - name: middle_03_l
+      parentName: middle_02_l
+      position: {x: -0.036488436, y: -1.99894e-10, z: 1.607642e-11}
+      rotation: {x: 0.00162142, y: 0.038867, z: 0.13362382, w: 0.99026835}
+      scale: {x: 1, y: 1, z: 1}
+    - name: lowerarm_twist_01_l
+      parentName: lowerarm_l
+      position: {x: -0.14, y: 1.0658141e-16, z: 4.2632563e-16}
+      rotation: {x: 4.1633363e-17, y: 5.551115e-17, z: -8.326673e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: upperarm_twist_01_l
+      parentName: upperarm_l
+      position: {x: -0.005, y: -1.7763568e-17, z: 0}
+      rotation: {x: -7.2858386e-17, y: 2.2811614e-16, z: -1.110223e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: neck_01
+      parentName: spine_03
+      position: {x: -0.16558783, y: -0.0035531756, z: -5.965974e-10}
+      rotation: {x: 3.7736013e-17, y: -7.220714e-17, z: 0.20371053, w: 0.97903115}
+      scale: {x: 1, y: 1, z: 1}
+    - name: head
+      parentName: neck_01
+      position: {x: -0.09283613, y: 0.0036415686, z: 1.4882741e-17}
+      rotation: {x: 3.2193856e-17, y: -7.1351534e-17, z: -0.1335421, w: 0.99104315}
+      scale: {x: 1, y: 1, z: 1}
+    - name: clavicle_r
+      parentName: spine_03
+      position: {x: -0.118841626, y: -0.027321704, z: 0.037819866}
+      rotation: {x: 0.73440164, y: 0.1505113, z: 0.6582875, w: 0.06825083}
+      scale: {x: 1, y: 1, z: 1}
+    - name: upperarm_r
+      parentName: clavicle_r
+      position: {x: 0.15784931, y: 0.00000006557075, z: 0.0000017693263}
+      rotation: {x: 0.050087567, y: 0.042044915, z: 0.1565574, w: 0.9855016}
+      scale: {x: 1, y: 1, z: 1}
+    - name: lowerarm_r
+      parentName: upperarm_r
+      position: {x: 0.2924223, y: -0.00266217, z: -0.0010415119}
+      rotation: {x: -0.06254873, y: 0.028595256, z: 0.027483767, w: 0.99725354}
+      scale: {x: 0.9582947, y: 1, z: 1}
+    - name: hand_r
+      parentName: lowerarm_r
+      position: {x: 0.26975125, y: 0.00000003013165, z: -0.00000008189303}
+      rotation: {x: -0.6460616, y: -0.0025349557, z: 0.00051171693, w: 0.7632819}
+      scale: {x: 1, y: 1, z: 1}
+    - name: thumb_01_r
+      parentName: hand_r
+      position: {x: 0.05304095, y: -0.009404475, z: 0.03790586}
+      rotation: {x: 0.40721732, y: -0.34585157, z: 0.05963384, w: 0.8432117}
+      scale: {x: 1, y: 1, z: 1}
+    - name: thumb_02_r
+      parentName: thumb_01_r
+      position: {x: 0.038696434, y: 0.0000003130086, z: -0.00000028049155}
+      rotation: {x: 0.023509797, y: -0.010800808, z: -0.031491134, w: 0.9991692}
+      scale: {x: 0.94977516, y: 1, z: 1}
+    - name: thumb_03_r
+      parentName: thumb_02_r
+      position: {x: 0.04062707, y: -0.0000038742464, z: -0.0000008213926}
+      rotation: {x: 0.021405801, y: -0.0018841543, z: 0.107937604, w: 0.99392545}
+      scale: {x: 1, y: 1, z: 1}
+    - name: pinky_01_r
+      parentName: hand_r
+      position: {x: 0.086642385, y: -0.028187664, z: -0.053086836}
+      rotation: {x: -0.12203418, y: 0.10813477, z: -0.098557405, w: 0.9816835}
+      scale: {x: 1.0358047, y: 1, z: 1}
+    - name: pinky_02_r
+      parentName: pinky_01_r
+      position: {x: 0.035710864, y: 0.00000001275408, z: 0.0000005008453}
+      rotation: {x: 0.006791619, y: -0.000013187523, z: -0.03279004, w: 0.99943924}
+      scale: {x: 0.8729134, y: 1, z: 1}
+    - name: pinky_03_r
+      parentName: pinky_02_r
+      position: {x: 0.029850878, y: -0.00000013616008, z: -0.0000014447311}
+      rotation: {x: 0.0035815602, y: -0.033796366, z: -0.008930323, w: 0.99938244}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ring_01_r
+      parentName: hand_r
+      position: {x: 0.103057325, y: -0.023807622, z: -0.03571359}
+      rotation: {x: -0.062573254, y: 0.082644045, z: -0.1288845, w: 0.9862277}
+      scale: {x: 0.9663926, y: 1, z: 1}
+    - name: ring_02_r
+      parentName: ring_01_r
+      position: {x: 0.04429823, y: 0.0000015886617, z: -0.000000064999305}
+      rotation: {x: 0.0016730715, y: -0.0038104854, z: -0.022736225, w: 0.9997329}
+      scale: {x: 0.9401412, y: 1, z: 1}
+    - name: ring_03_r
+      parentName: ring_02_r
+      position: {x: 0.03476198, y: -0.00000010796943, z: 0.00000025944706}
+      rotation: {x: -0.00019820081, y: -0.02625784, z: 0.112212986, w: 0.99333715}
+      scale: {x: 1, y: 1, z: 1}
+    - name: index_01_r
+      parentName: hand_r
+      position: {x: 0.11670569, y: -0.013119387, z: 0.01763719}
+      rotation: {x: -0.07739721, y: -0.008734842, z: -0.11642282, w: 0.9901418}
+      scale: {x: 1.0560645, y: 1.0041277, z: 1.0041277}
+    - name: index_02_r
+      parentName: index_01_r
+      position: {x: 0.042875316, y: -0.00000066239795, z: -0.000000112986406}
+      rotation: {x: -0.011784442, y: -0.002527812, z: -0.034835603, w: 0.9993204}
+      scale: {x: 1, y: 1, z: 1}
+    - name: index_03_r
+      parentName: index_02_r
+      position: {x: 0.03393363, y: 0.0000012466103, z: 0.0000019677482}
+      rotation: {x: 0.010611788, y: -0.007850922, z: 0.08285518, w: 0.9964742}
+      scale: {x: 1, y: 1, z: 1}
+    - name: middle_01_r
+      parentName: hand_r
+      position: {x: 0.11620231, y: -0.016807072, z: -0.011431401}
+      rotation: {x: -0.079942815, y: 0.04286659, z: -0.14057437, w: 0.98590666}
+      scale: {x: 1, y: 1, z: 1}
+    - name: middle_02_r
+      parentName: middle_01_r
+      position: {x: 0.04639974, y: 0.0000023828693, z: 0.0000009538434}
+      rotation: {x: -0.016925056, y: -0.0005752592, z: -0.025950277, w: 0.9995198}
+      scale: {x: 1.0345992, y: 1, z: 1}
+    - name: middle_03_r
+      parentName: middle_02_r
+      position: {x: 0.036487155, y: -0.000000962106, z: 0.0000004858969}
+      rotation: {x: 0.0016220367, y: 0.03886692, z: 0.13362385, w: 0.99026835}
+      scale: {x: 1, y: 1, z: 1}
+    - name: lowerarm_twist_01_r
+      parentName: lowerarm_r
+      position: {x: 0.13999696, y: 0.0000013790102, z: -0.0000029409032}
+      rotation: {x: 4.1633363e-17, y: 5.551115e-17, z: -8.326673e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: upperarm_twist_01_r
+      parentName: upperarm_r
+      position: {x: 0.005003867, y: -0.00000003275441, z: 0.0000046598516}
+      rotation: {x: -7.2858386e-17, y: 2.2811614e-16, z: -1.110223e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: thigh_l
+      parentName: pelvis
+      position: {x: 0.014488286, y: -0.005314235, z: -0.090058096}
+      rotation: {x: 0.07349799, y: 0.084046476, z: 0.010205672, w: 0.9936952}
+      scale: {x: 1, y: 1, z: 1}
+    - name: calf_l
+      parentName: thigh_l
+      position: {x: 0.42572036, y: 1.7074341e-12, z: -4.6679106e-12}
+      rotation: {x: -0.048586227, y: -0.01961881, z: 0.05008025, w: 0.99736977}
+      scale: {x: 1.0297545, y: 1, z: 1}
+    - name: calf_twist_01_l
+      parentName: calf_l
+      position: {x: 0.20476776, y: 2.6645352e-17, z: 3.5527136e-17}
+      rotation: {x: 0.0028089443, y: 0.0019333845, z: 0.0076126903, w: 0.99996525}
+      scale: {x: 1, y: 1, z: 1}
+    - name: foot_l
+      parentName: calf_l
+      position: {x: 0.4019669, y: -3.9338505e-11, z: 1.899423e-12}
+      rotation: {x: 0.10587562, y: -0.039673828, z: -0.06632668, w: 0.99137133}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ball_l
+      parentName: foot_l
+      position: {x: 0.107078224, y: -0.18290201, z: 0.0055148206}
+      rotation: {x: 0.00008008883, y: -0.000029605244, z: 0.7186337, w: 0.6953888}
+      scale: {x: 1, y: 1, z: 1}
+    - name: thigh_twist_01_l
+      parentName: thigh_l
+      position: {x: 0.22094238, y: 4.440892e-18, z: 0}
+      rotation: {x: -0.047443595, y: -0.000021476406, z: 0.00049110875, w: 0.99887383}
+      scale: {x: 1, y: 1, z: 1}
+    - name: thigh_r
+      parentName: pelvis
+      position: {x: 0.014488716, y: -0.005314232, z: 0.090058096}
+      rotation: {x: -0.08404635, y: 0.07349798, z: 0.9936952, w: -0.01020568}
+      scale: {x: 1, y: 1, z: 1}
+    - name: calf_r
+      parentName: thigh_r
+      position: {x: -0.4257197, y: 0.000000035618882, z: 0.0000003160559}
+      rotation: {x: -0.048586227, y: -0.01961881, z: 0.05008025, w: 0.99736977}
+      scale: {x: 1.0297545, y: 1, z: 1}
+    - name: calf_twist_01_r
+      parentName: calf_r
+      position: {x: -0.20476814, y: -0.000000012488329, z: -0.00000042229507}
+      rotation: {x: 0.0028089443, y: 0.0019333845, z: 0.0076126903, w: 0.99996525}
+      scale: {x: 1, y: 1, z: 1}
+    - name: foot_r
+      parentName: calf_r
+      position: {x: -0.4019674, y: 0.000000110518485, z: 0.00000017345799}
+      rotation: {x: 0.10587562, y: -0.039673828, z: -0.06632668, w: 0.99137133}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ball_r
+      parentName: foot_r
+      position: {x: -0.10707792, y: 0.18290168, z: -0.0055149994}
+      rotation: {x: 0.00008048225, y: -0.000030011814, z: 0.7186337, w: 0.6953888}
+      scale: {x: 1, y: 1, z: 1}
+    - name: thigh_twist_01_r
+      parentName: thigh_r
+      position: {x: -0.22094215, y: -0.000000014312262, z: -0.0000002858654}
+      rotation: {x: -0.047443595, y: -0.000021476406, z: 0.00049110875, w: 0.99887383}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -1064,22 +3110,20 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
-  avatarSetup: 1
   humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
-  userData: 
+  userData: '{"hands":[{"bone":"hand_r","euler":{"x":355.8498840332031,"y":0.5614674687385559,"z":2.213853359222412}},{"bone":"hand_l","euler":{"x":355.8501892089844,"y":0.5615493655204773,"z":2.213991641998291}}]}'
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 186131
-  packageName: Croc men
-  packageVersion: 1.0
-  assetPath: Assets/Game/Body/Appearance/Data/CrocMan/CrocMan.fbx
-  uploadId: 408825

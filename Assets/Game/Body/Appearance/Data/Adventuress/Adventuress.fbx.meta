@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: 6394fe946fddfaf41bfac9f21431cf99
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272945
+  packageName: Adventure Female (Free)
+  packageVersion: 1.0
+  assetPath: Assets/Adventures_woman/Mesh/Adventures_woman.FBX
+  uploadId: 633968
 ModelImporter:
-  serializedVersion: 21300
+  serializedVersion: 24501
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -9,6 +16,7 @@ ModelImporter:
     materialName: 0
     materialSearch: 1
     materialLocation: 1
+    searchTexturesGlobally: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -16,8 +24,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 1
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -40,6 +46,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -57,6 +64,11 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    importUVs: -1
+    importVertexColors: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -67,6 +79,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -75,6 +88,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+    calculateBlendshapeNormalsDeltaFromImportedNormals: 1
   referencedClips: []
   importAnimation: 1
   humanDescription:
@@ -595,18 +609,17 @@ ModelImporter:
     - name: lowerarm_twist_01_l
       parentName: lowerarm_l
       position: {x: -0.14000008, y: 0.000000019073486, z: 0}
-      rotation: {x: -1.9775848e-16, y: -0.000000011175871, z: -0.000000017695129,
-        w: 1}
+      rotation: {x: -1.9775848e-16, y: -0.000000011175871, z: -0.000000017695129, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: hand_l
       parentName: lowerarm_l
       position: {x: -0.26975152, y: 0, z: 0}
-      rotation: {x: -0.61789525, y: -0.019371934, z: -0.010653267, w: 0.7859495}
+      rotation: {x: -0.6258318, y: -0.02089343, z: -0.009469748, w: 0.7796214}
       scale: {x: 1, y: 1, z: 1}
     - name: thumb_01_l
       parentName: hand_l
-      position: {x: -0.04762039, y: 0.023749694, z: -0.025378227}
-      rotation: {x: 0.6067752, y: -0.31934717, z: 0.16361947, w: 0.70927423}
+      position: {x: -0.047723584, y: 0.024263125, z: -0.024689354}
+      rotation: {x: 0.61423784, y: -0.3195169, z: 0.15903346, w: 0.70379716}
       scale: {x: 1, y: 1, z: 1}
     - name: thumb_02_l
       parentName: thumb_01_l
@@ -620,8 +633,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_01_l
       parentName: hand_l
-      position: {x: -0.10140663, y: 0.02263153, z: 0.046431463}
-      rotation: {x: -0.13504821, y: 0.09653557, z: -0.089079455, w: 0.9820936}
+      position: {x: -0.10120316, y: 0.021699332, z: 0.04731206}
+      rotation: {x: -0.12529613, y: 0.099537306, z: -0.0878857, w: 0.9831941}
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_02_l
       parentName: pinky_01_l
@@ -635,8 +648,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: index_01_l
       parentName: hand_l
-      position: {x: -0.120681226, y: 0.017634582, z: -0.021093998}
-      rotation: {x: 0.13733755, y: 0.009897215, z: -0.13345183, w: 0.98144335}
+      position: {x: -0.12076667, y: 0.018070659, z: -0.020217707}
+      rotation: {x: 0.14696737, y: 0.013329872, z: -0.13371283, w: 0.97997195}
       scale: {x: 1, y: 1, z: 1}
     - name: index_02_l
       parentName: index_01_l
@@ -650,8 +663,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: middle_01_l
       parentName: hand_l
-      position: {x: -0.12244293, y: 0.012936554, z: 0.0057115937}
-      rotation: {x: 0.029485721, y: 0.040343873, z: -0.13032825, w: 0.99021083}
+      position: {x: -0.12241491, y: 0.012831864, z: 0.006494709}
+      rotation: {x: 0.03921885, y: 0.0437703, z: -0.13005213, w: 0.98976445}
       scale: {x: 1, y: 1, z: 1}
     - name: middle_02_l
       parentName: middle_01_l
@@ -665,8 +678,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: ring_01_l
       parentName: hand_l
-      position: {x: -0.114978865, y: 0.017535247, z: 0.028469123}
-      rotation: {x: -0.09728412, y: 0.0705604, z: -0.11622695, w: 0.9859252}
+      position: {x: -0.11485291, y: 0.016968716, z: 0.029308477}
+      rotation: {x: -0.08755522, y: 0.073843226, z: -0.11537523, w: 0.98669714}
       scale: {x: 1, y: 1, z: 1}
     - name: ring_02_l
       parentName: ring_01_l
@@ -701,12 +714,12 @@ ModelImporter:
     - name: hand_r
       parentName: lowerarm_r
       position: {x: 0.26975247, y: 0.0000002479553, z: 0}
-      rotation: {x: -0.61789525, y: -0.01937199, z: -0.010653308, w: 0.7859495}
+      rotation: {x: -0.6258322, y: -0.020893078, z: -0.009469402, w: 0.77962136}
       scale: {x: 1, y: 1, z: 1}
     - name: thumb_01_r
       parentName: hand_r
-      position: {x: 0.047621153, y: -0.02375122, z: 0.025378035}
-      rotation: {x: 0.6067763, y: -0.31934062, z: 0.16361229, w: 0.709278}
+      position: {x: 0.047724314, y: -0.024264717, z: 0.02468912}
+      rotation: {x: 0.61423916, y: -0.31951076, z: 0.15902591, w: 0.70380086}
       scale: {x: 1, y: 1, z: 1}
     - name: thumb_02_r
       parentName: thumb_01_r
@@ -720,8 +733,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_01_r
       parentName: hand_r
-      position: {x: 0.10140594, y: -0.022633513, z: -0.046430968}
-      rotation: {x: -0.13504934, y: 0.096533045, z: -0.089073144, w: 0.9820943}
+      position: {x: 0.10120246, y: -0.021701405, z: -0.0473116}
+      rotation: {x: -0.12529686, y: 0.099534765, z: -0.08787996, w: 0.983195}
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_02_r
       parentName: pinky_01_r
@@ -735,8 +748,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: index_01_r
       parentName: hand_r
-      position: {x: 0.12067947, y: -0.017637176, z: 0.021094264}
-      rotation: {x: 0.13733721, y: 0.009891332, z: -0.13346574, w: 0.9814416}
+      position: {x: 0.12076489, y: -0.018073408, z: 0.020217933}
+      rotation: {x: 0.14696737, y: 0.013324022, z: -0.13372736, w: 0.9799703}
       scale: {x: 1, y: 1, z: 1}
     - name: index_02_r
       parentName: index_01_r
@@ -750,8 +763,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: middle_01_r
       parentName: hand_r
-      position: {x: 0.12244117, y: -0.012937164, z: -0.0057113264}
-      rotation: {x: 0.029485665, y: 0.040342774, z: -0.1303212, w: 0.99021184}
+      position: {x: 0.122413136, y: -0.012832613, z: -0.0064944383}
+      rotation: {x: 0.039219204, y: 0.04376909, z: -0.13004565, w: 0.9897656}
       scale: {x: 1, y: 1, z: 1}
     - name: middle_02_r
       parentName: middle_01_r
@@ -765,8 +778,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: ring_01_r
       parentName: hand_r
-      position: {x: 0.11497971, y: -0.017537842, z: -0.0284692}
-      rotation: {x: -0.09728373, y: 0.070561625, z: -0.116237685, w: 0.9859238}
+      position: {x: 0.11485374, y: -0.016971419, z: -0.029308606}
+      rotation: {x: -0.08755449, y: 0.07384459, z: -0.115386516, w: 0.9866959}
       scale: {x: 1, y: 1, z: 1}
     - name: ring_02_r
       parentName: ring_01_r
@@ -876,15 +889,9 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
-  userData: 
+  userData: '{"hands":[{"bone":"hand_r","euler":{"x":358.8415832519531,"y":359.75531005859377,"z":0.011292556300759316}},{"bone":"hand_l","euler":{"x":358.8416442871094,"y":359.75531005859377,"z":0.011228010058403016}}]}'
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 272945
-  packageName: Adventure Female (Free)
-  packageVersion: 1.0
-  assetPath: Assets/Adventures_woman/Mesh/Adventures_woman.FBX
-  uploadId: 633968

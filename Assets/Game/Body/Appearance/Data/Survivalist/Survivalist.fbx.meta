@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: 0e55d5c42cc96404f872b45455603f8b
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181470
+  packageName: Survivalist character
+  packageVersion: 1.2
+  assetPath: Assets/Survivalist/Basemesh/SK_Military_Survivalist.fbx
+  uploadId: 762486
 ModelImporter:
-  serializedVersion: 21300
+  serializedVersion: 24501
   internalIDToNameTable: []
   externalObjects:
   - first:
@@ -69,6 +76,7 @@ ModelImporter:
     materialName: 0
     materialSearch: 1
     materialLocation: 1
+    searchTexturesGlobally: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -76,8 +84,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 1
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -100,6 +106,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -117,6 +124,11 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    importUVs: -1
+    importVertexColors: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -127,6 +139,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -135,6 +148,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+    calculateBlendshapeNormalsDeltaFromImportedNormals: 1
   referencedClips: []
   importAnimation: 1
   humanDescription:
@@ -680,12 +694,12 @@ ModelImporter:
     - name: hand_l
       parentName: lowerarm_l
       position: {x: -0.26975143, y: 1.5729569e-11, z: -9.620734e-11}
-      rotation: {x: -0.6178951, y: -0.019371983, z: -0.010653291, w: 0.78594965}
+      rotation: {x: -0.65804195, y: -0.010434413, z: 0.0018715456, w: 0.7529072}
       scale: {x: 1, y: 1, z: 1}
     - name: index_01_l
       parentName: hand_l
-      position: {x: -0.12068114, y: 0.017634615, z: -0.021093976}
-      rotation: {x: 0.13733807, y: 0.009897142, z: -0.13344935, w: 0.9814436}
+      position: {x: -0.12010132, y: 0.023499088, z: -0.018529383}
+      rotation: {x: 0.18791579, y: 0.01637873, z: -0.14848414, w: 0.9707588}
       scale: {x: 1, y: 1, z: 1}
     - name: index_02_l
       parentName: index_01_l
@@ -699,8 +713,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: middle_01_l
       parentName: hand_l
-      position: {x: -0.122442804, y: 0.012936436, z: 0.0057116197}
-      rotation: {x: 0.029486112, y: 0.040344898, z: -0.13033082, w: 0.9902104}
+      position: {x: -0.1219596, y: 0.016108016, z: 0.0076552522}
+      rotation: {x: 0.081163056, y: 0.04833896, z: -0.14373852, w: 0.98509693}
       scale: {x: 1, y: 1, z: 1}
     - name: middle_02_l
       parentName: middle_01_l
@@ -714,8 +728,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_01_l
       parentName: hand_l
-      position: {x: -0.10140665, y: 0.022631511, z: 0.046431478}
-      rotation: {x: -0.13504829, y: 0.09653478, z: -0.089076206, w: 0.98209393}
+      position: {x: -0.10054822, y: 0.020870114, z: 0.049049657}
+      rotation: {x: -0.082589254, y: 0.1048922, z: -0.09921119, w: 0.98607033}
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_02_l
       parentName: pinky_01_l
@@ -729,8 +743,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: ring_01_l
       parentName: hand_l
-      position: {x: -0.11497884, y: 0.017535266, z: 0.028469123}
-      rotation: {x: -0.09728412, y: 0.0705601, z: -0.11622464, w: 0.9859255}
+      position: {x: -0.114309765, y: 0.018089304, z: 0.03072728}
+      rotation: {x: -0.045140617, y: 0.07977306, z: -0.12779362, w: 0.9875568}
       scale: {x: 1, y: 1, z: 1}
     - name: ring_02_l
       parentName: ring_01_l
@@ -744,8 +758,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: thumb_01_l
       parentName: hand_l
-      position: {x: -0.047620364, y: 0.023749806, z: -0.025378196}
-      rotation: {x: 0.6005162, y: -0.2997086, z: 0.18536061, w: 0.7177719}
+      position: {x: -0.0468917, y: 0.027731337, z: -0.02253767}
+      rotation: {x: 0.6324279, y: -0.31707808, z: 0.15715101, w: 0.68905795}
       scale: {x: 1, y: 1, z: 1}
     - name: thumb_02_l
       parentName: thumb_01_l
@@ -785,12 +799,12 @@ ModelImporter:
     - name: hand_r
       parentName: lowerarm_r
       position: {x: 0.26975244, y: 0.0000002563412, z: -0.000000011905384}
-      rotation: {x: -0.6178951, y: -0.019371983, z: -0.010653291, w: 0.78594965}
+      rotation: {x: -0.6580422, y: -0.010434522, z: 0.0018718215, w: 0.75290734}
       scale: {x: 1, y: 1, z: 1}
     - name: index_01_r
       parentName: hand_r
-      position: {x: 0.120679416, y: -0.017637253, z: 0.021094281}
-      rotation: {x: 0.13733742, y: 0.009892774, z: -0.13346407, w: 0.98144174}
+      position: {x: 0.12009952, y: -0.023501726, z: 0.018529357}
+      rotation: {x: 0.18791498, y: 0.016375378, z: -0.14849925, w: 0.97075695}
       scale: {x: 1, y: 1, z: 1}
     - name: index_02_r
       parentName: index_01_r
@@ -804,8 +818,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: middle_01_r
       parentName: hand_r
-      position: {x: 0.12244113, y: -0.012937241, z: -0.005711302}
-      rotation: {x: 0.02948586, y: 0.040343437, z: -0.13031933, w: 0.990212}
+      position: {x: 0.12195789, y: -0.016108831, z: -0.007655077}
+      rotation: {x: 0.08116291, y: 0.048337176, z: -0.14372735, w: 0.9850989}
       scale: {x: 1, y: 1, z: 1}
     - name: middle_02_r
       parentName: middle_01_r
@@ -819,8 +833,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_01_r
       parentName: hand_r
-      position: {x: 0.101405926, y: -0.022633547, z: -0.046430945}
-      rotation: {x: -0.13504957, y: 0.096534744, z: -0.089072235, w: 0.9820941}
+      position: {x: 0.1005474, y: -0.020872192, z: -0.04904939}
+      rotation: {x: -0.08259051, y: 0.10489228, z: -0.099207364, w: 0.9860709}
       scale: {x: 1, y: 1, z: 1}
     - name: pinky_02_r
       parentName: pinky_01_r
@@ -834,8 +848,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: ring_01_r
       parentName: hand_r
-      position: {x: 0.11497973, y: -0.01753766, z: -0.028469147}
-      rotation: {x: -0.09728395, y: 0.07056194, z: -0.11623702, w: 0.9859239}
+      position: {x: 0.114310555, y: -0.01809174, z: -0.03072762}
+      rotation: {x: -0.04514052, y: 0.07977582, z: -0.12780602, w: 0.9875552}
       scale: {x: 1, y: 1, z: 1}
     - name: ring_02_r
       parentName: ring_01_r
@@ -849,8 +863,8 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: thumb_01_r
       parentName: hand_r
-      position: {x: 0.047621243, y: -0.0237512, z: 0.025378017}
-      rotation: {x: 0.6005163, y: -0.29970104, z: 0.18535389, w: 0.7177767}
+      position: {x: 0.04689254, y: -0.027732747, z: 0.022537315}
+      rotation: {x: 0.6324285, y: -0.3170702, z: 0.15714438, w: 0.6890629}
       scale: {x: 1, y: 1, z: 1}
     - name: thumb_02_r
       parentName: thumb_01_r
@@ -960,15 +974,9 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
-  userData: 
+  userData: '{"hands":[{"bone":"hand_r","euler":{"x":354.0628967285156,"y":359.7006530761719,"z":1.8276935815811158}},{"bone":"hand_l","euler":{"x":354.0628967285156,"y":359.70068359375,"z":1.8276747465133668}}]}'
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 181470
-  packageName: Survivalist character
-  packageVersion: 1.2
-  assetPath: Assets/Survivalist/Basemesh/SK_Military_Survivalist.fbx
-  uploadId: 762486
