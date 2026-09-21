@@ -10,7 +10,7 @@ namespace Shooter.Game.Llm.GiveStackable
     {
         private static readonly Journal Log = Logs.Here();
 
-        private Exchanger exchanger;
+        private InventoryExchanger exchanger;
 
         public override string Name => "give_stackable";
 
@@ -23,7 +23,7 @@ The recipient will automatically receive a notification.
 
         protected override void OnStart()
         {
-            exchanger = Self.GetComponent<Exchanger>();
+            exchanger = Self.GetComponent<InventoryExchanger>();
             if (exchanger == null)
             {
                 Log.Error($"Entity {Self.name} does not have exchanger component required by tool {Name}");

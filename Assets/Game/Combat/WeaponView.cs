@@ -9,7 +9,7 @@ using UnityEngine.Animations.Rigging;
 
 namespace Shooter.Game.Combat
 {
-    [RequireComponent(typeof(Holder))]
+    [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Skin))]
     public class WeaponView : NetworkBehaviour
     {
@@ -25,7 +25,7 @@ namespace Shooter.Game.Combat
         private Transform rightHint;
         private Transform rightShoulder;
 
-        private Holder holder;
+        private InventoryHolder holder;
         private Skin skin;
 
         private WeaponRig rig;
@@ -37,7 +37,7 @@ namespace Shooter.Game.Combat
 
         private void Awake()
         {
-            holder = GetComponent<Holder>();
+            holder = GetComponent<InventoryHolder>();
             skin = GetComponent<Skin>();
         }
 

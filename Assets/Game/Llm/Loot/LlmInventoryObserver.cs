@@ -5,15 +5,15 @@ using UnityEngine;
 namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Llm))]
-    [RequireComponent(typeof(Exchanger))]
+    [RequireComponent(typeof(InventoryExchanger))]
     public class LlmInventoryObserver : MonoBehaviour
     {
-        private Exchanger exchanger;
+        private InventoryExchanger exchanger;
         private Llm llm;
 
         private void Awake()
         {
-            exchanger = GetComponent<Exchanger>();
+            exchanger = GetComponent<InventoryExchanger>();
             llm = GetComponent<Llm>();
         }
 

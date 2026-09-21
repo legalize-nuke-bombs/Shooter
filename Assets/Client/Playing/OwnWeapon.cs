@@ -8,7 +8,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Holder))]
+    [RequireComponent(typeof(InventoryHolder))]
     public class OwnWeapon : NetworkBehaviour
     {
         private const string FirstPersonLayer = "FirstPerson";
@@ -20,7 +20,7 @@ namespace Shooter.Client.Playing
         [SerializeField] private float restScale = 1f;
         private Camera eye;
 
-        private Holder holder;
+        private InventoryHolder holder;
         private int layer = -1;
         private GameObject shown;
 
@@ -31,7 +31,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            holder = GetComponent<Holder>();
+            holder = GetComponent<InventoryHolder>();
             eye = GetComponentInChildren<Camera>();
         }
 

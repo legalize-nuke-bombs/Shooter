@@ -9,7 +9,7 @@ namespace Shooter.Game.Loot
 {
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Character))]
-    public class Exchanger : NetworkBehaviour
+    public class InventoryExchanger : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -31,7 +31,7 @@ namespace Shooter.Game.Loot
 
         public bool Give(Character to, StackableItemSpec spec, int amount)
         {
-            if (amount <= 0 || !Reaches(to, out Exchanger taker)) return false;
+            if (amount <= 0 || !Reaches(to, out InventoryExchanger taker)) return false;
 
             if (inventory.Remove(spec, amount, InventoryOnConflict.Rollback) != amount)
             {
@@ -46,7 +46,7 @@ namespace Shooter.Game.Loot
 
         public bool Give(Character to, int slot)
         {
-            if (!Reaches(to, out Exchanger taker)) return false;
+            if (!Reaches(to, out InventoryExchanger taker)) return false;
 
             UniqueItem item = inventory.Remove(slot);
             if (item == null)
@@ -89,7 +89,7 @@ namespace Shooter.Game.Loot
             Received?.Invoke(from, Catalogs.Of<ItemCatalog>().Spec(item.SpecId), 1);
         }
 
-        private bool Reaches(Character to, out Exchanger taker)
+        private bool Reaches(Character to, out InventoryExchanger taker)
         {
             taker = null;
 

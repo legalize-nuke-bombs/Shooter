@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Holder))]
+    [RequireComponent(typeof(InventoryHolder))]
     public class OwnRecoil : NetworkBehaviour
     {
         [SerializeField] private float recovery = 14f;
         private bool held;
 
-        private Holder holder;
+        private InventoryHolder holder;
         private float lastShotAt;
 
         private int shot;
@@ -21,7 +21,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            holder = GetComponent<Holder>();
+            holder = GetComponent<InventoryHolder>();
         }
 
         private void Update()

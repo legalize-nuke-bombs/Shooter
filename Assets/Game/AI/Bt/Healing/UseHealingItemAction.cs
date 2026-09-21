@@ -29,8 +29,9 @@ namespace Shooter.Game.AI.Bt.Healing
         {
             if (Agent.Value == null) return Status.Failure;
             Inventory inventory = Agent.Value.GetComponent<Inventory>();
+            InventoryUser user = Agent.Value.GetComponent<InventoryUser>();
             Health health = Agent.Value.GetComponent<Health>();
-            if (inventory == null || health == null) return Status.Failure;
+            if (inventory == null || user == null || health == null) return Status.Failure;
 
             double missing = health.MaxHp - health.Hp;
             double safetyCoefficient = health.Hp / health.MaxHp;
@@ -66,7 +67,7 @@ namespace Shooter.Game.AI.Bt.Healing
 
             Log.Info($"Entity {Agent.Value.name} used heal {best.Id} by behavior graph, missing {missing}");
             int startHp = (int)health.Hp;
-            inventory.Use(best);
+            user.Use(best);
             BtReports reports = Agent.Value.GetComponent<BtReports>();
             if (reports != null)
             {

@@ -14,7 +14,7 @@ namespace Shooter.Client.Interface
         private const int Hidden = -1;
         private static readonly Journal Log = Logs.Here();
         private Inventory bag;
-        private Holder holder;
+        private InventoryHolder holder;
 
         private VisualElement box;
         private Label magazine;
@@ -27,7 +27,7 @@ namespace Shooter.Client.Interface
             if (!Bound) return;
 
             if (bag == null) bag = OwnPlayer.Find<Inventory>();
-            if (holder == null) holder = OwnPlayer.Find<Holder>();
+            if (holder == null) holder = OwnPlayer.Find<InventoryHolder>();
 
             Firearm firearm = holder == null ? null : holder.Held as Firearm;
             ItemCatalog items = Catalogs.Of<ItemCatalog>();

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Shooter.Game.Combat
 {
     [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(Holder))]
+    [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Interactor))]
     [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(Speaker))]
@@ -21,7 +21,7 @@ namespace Shooter.Game.Combat
         private static readonly RaycastHit[] Shots = new RaycastHit[32];
         private EarSpeaker earSpeaker;
         private Hands hands;
-        private Holder holder;
+        private InventoryHolder holder;
 
         private Character character;
         private Interactor interactor;
@@ -37,7 +37,7 @@ namespace Shooter.Game.Combat
         {
             character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();
-            holder = GetComponent<Holder>();
+            holder = GetComponent<InventoryHolder>();
             interactor = GetComponent<Interactor>();
             hands = GetComponent<Hands>();
             speaker = GetComponent<Speaker>();
