@@ -13,10 +13,14 @@ namespace Shooter.Game.Body
 
         [SerializeField] private SurfaceSounds sounds;
 
+        private readonly NetworkVariable<float> phase = new(0f, NetworkVariableReadPermission.Owner);
+
         private CharacterController body;
         private Movement movement;
         private Speaker speaker;
         private float stride;
+
+        public float Phase => phase.Value;
 
         private void Awake()
         {
@@ -44,10 +48,13 @@ namespace Shooter.Game.Body
             if (!isActiveAndEnabled) return;
 
             stride += movement.GroundTravel;
-            if (stride < strideLength) return;
+            if (stride >= strideLength)
+            {
+                stride -= strideLength;
+                speaker.Play(sounds == null ? null : sounds.On(Surface.Under(body)));
+            }
 
-            stride -= strideLength;
-            speaker.Play(sounds == null ? null : sounds.On(Surface.Under(body)));
+            phase.Value = stride / strideLength;
         }
     }
 }

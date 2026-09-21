@@ -26,6 +26,7 @@ namespace Shooter.Client.Playing
 
         private GameObject shownModel;
         private CustomPassVolume volume;
+        private Transform hold;
         private bool active;
 
         private void Awake()
@@ -40,6 +41,8 @@ namespace Shooter.Client.Playing
 
             if (shown.activeSelf != eye.enabled) shown.SetActive(eye.enabled);
         }
+
+        public Transform Hold => shown == null ? null : hold;
 
         public override void OnNetworkSpawn()
         {
@@ -83,8 +86,10 @@ namespace Shooter.Client.Playing
 
             inventory.Changed -= Refresh;
             if (shown != null) Destroy(shown);
+            if (hold != null) Destroy(hold.gameObject);
             shown = null;
             shownModel = null;
+            hold = null;
         }
 
         private void Overlay()
@@ -136,7 +141,13 @@ namespace Shooter.Client.Playing
                 return null;
             }
 
-            GameObject worn = Instantiate(model, eye.transform);
+            if (hold == null)
+            {
+                hold = new GameObject("FirstPersonHold").transform;
+                hold.SetParent(eye.transform, false);
+            }
+
+            GameObject worn = Instantiate(model, hold);
             worn.transform.localPosition = restPosition;
             worn.transform.localRotation = Quaternion.Euler(restRotation);
             worn.transform.localScale = Vector3.one * restScale;

@@ -466,6 +466,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4767933737110017048}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2447839182445465221}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
 --- !u!1 &924064630755534763 stripped
 GameObject:
@@ -721,6 +724,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.PlayerInventoryObserver
   ShowTopMostFoldoutHeaderGroup: 1
   sound: {fileID: 11400000, guid: 44e6e460e1cb44d98f376b7e174c5e4d, type: 2}
+--- !u!114 &2447839182445465221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04374468770149c42823ade14117c0d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnWeaponMotion
+  ShowTopMostFoldoutHeaderGroup: 1
+  stepDrop: 0.012
+  stepSway: 0.008
+  stepFollow: 0.05
+  lookLag: 0.015
+  maxLag: 2.5
+  strafeTilt: 1.5
+  maxTilt: 4
+  settle: 0.12
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
