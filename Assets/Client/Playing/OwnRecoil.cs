@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace Shooter.Client.Playing
 {
-    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Holder))]
     public class OwnRecoil : NetworkBehaviour
     {
         [SerializeField] private float recovery = 14f;
         private bool held;
 
-        private Inventory inventory;
+        private Holder holder;
         private float lastShotAt;
 
         private int shot;
@@ -21,7 +21,7 @@ namespace Shooter.Client.Playing
 
         private void Awake()
         {
-            inventory = GetComponent<Inventory>();
+            holder = GetComponent<Holder>();
         }
 
         private void Update()
@@ -61,7 +61,7 @@ namespace Shooter.Client.Playing
 
         private void Kick(bool sustained)
         {
-            var firearm = inventory.Equipped() as Firearm;
+            var firearm = holder.Held as Firearm;
             if (firearm == null || firearm.Magazine <= 0) return;
 
             FirearmSpec spec = Catalogs.Of<ItemCatalog>().Firearm(firearm.SpecId);

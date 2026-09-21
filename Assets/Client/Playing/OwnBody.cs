@@ -20,7 +20,7 @@ namespace Shooter.Client.Playing
         private readonly List<GameObject> reflections = new();
 
         private Skin skin;
-        private Inventory inventory;
+        private Holder holder;
         private WeaponView view;
         private GameObject flesh;
         private int reflectionLayer = -1;
@@ -30,7 +30,7 @@ namespace Shooter.Client.Playing
         private void Awake()
         {
             skin = GetComponent<Skin>();
-            inventory = GetComponent<Inventory>();
+            holder = GetComponent<Holder>();
             view = GetComponent<WeaponView>();
             reflectionLayer = LayerMask.NameToLayer(ReflectionOnlyLayer);
             enabled = false;
@@ -68,7 +68,7 @@ namespace Shooter.Client.Playing
             dirty = true;
             enabled = true;
 
-            if (inventory != null) inventory.Changed += Invalidate;
+            if (holder != null) holder.Changed += Invalidate;
 
             Log.Info($"Own player {name} hides its body and mirrors it on the {ReflectionOnlyLayer} layer");
         }
@@ -79,7 +79,7 @@ namespace Shooter.Client.Playing
             owning = false;
             enabled = false;
 
-            if (inventory != null) inventory.Changed -= Invalidate;
+            if (holder != null) holder.Changed -= Invalidate;
 
             Clear();
             Shadow(ShadowCastingMode.On);

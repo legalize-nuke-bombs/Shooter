@@ -21,31 +21,23 @@ namespace Shooter.Game.Loot
         {
             [SerializeField] private ItemSpec spec;
             [SerializeField] private int amount;
-            [SerializeField] private bool equip;
 
             public ItemSpec Spec => spec;
 
             public int Amount => amount;
-
-            public bool Equip => equip;
         }
 
         [SerializeField] private Entry[] contents;
-        [SerializeField] private float giveRadius = 10f;
-
-        private readonly NetworkVariable<int> equippedSlot = new(NoSlot);
 
         private readonly NetworkVariable<ItemSlots> slots = new(new ItemSlots());
 
-        private readonly NetworkList<int> stackAmounts = new(
-            null, NetworkVariableReadPermission.Owner);
+        private readonly NetworkList<int> stackAmounts = new(null, NetworkVariableReadPermission.Owner);
 
         public string ComponentKey => "Inventory";
         private struct SaveData
         {
             public Dictionary<string, int> Stacks { get; set; }
             public List<SlotData> Slots { get; set; }
-            public int EquippedSlot { get; set; }
         }
         private struct SlotData
         {
@@ -54,55 +46,43 @@ namespace Shooter.Game.Loot
         }
         public object SaveObject()
         {
-            ItemCatalog catalog = Catalog;
-
             var stacks = new Dictionary<string, int>();
             for (int index = 0; index < stackAmounts.Count; index++)
             {
                 if (stackAmounts[index] == 0) continue;
 
-                ItemSpec spec = catalog == null ? null : catalog.At(index);
+                stacks[Catalog.At(index).Key] = stackAmounts[index];
+            }
 
-                if (spec == null)
+            var saved = new List<SlotData>();
+            foreach (UniqueItem item in slots.Value.All)
+            {
+                if (item == null)
                 {
-                    Log.Warn($"Entity {name} does not save {stackAmounts[index]} things: the world catalog has no index {index}");
+                    saved.Add(default);
                     continue;
                 }
 
-                stacks[spec.Key] = stackAmounts[index];
-            }
-
-            var kept = new List<SlotData>();
-            int equipped = NoSlot;
-
-            for (int index = 0; index < slots.Value.Count; index++)
-            {
-                UniqueItem item = slots.Value.At(index);
-                if (item == null) continue;
-
-                if (index == equippedSlot.Value) equipped = kept.Count;
-
                 object state = item.SaveObject();
 
-                kept.Add(new SlotData
+                saved.Add(new SlotData
                 {
                     SpecId = item.SpecId,
                     State = state == null ? default : SaveToken.From(state)
                 });
             }
 
-            return new SaveData { Stacks = stacks, Slots = kept, EquippedSlot = equipped };
+            return new SaveData { Stacks = stacks, Slots = saved };
         }
         public void LoadObject(SaveToken content)
         {
             SaveData sd = content.To<SaveData>();
-            ItemCatalog catalog = Catalog;
 
             Clear();
 
             foreach (KeyValuePair<string, int> stack in sd.Stacks)
             {
-                if (catalog.Spec(stack.Key) is not StackableItemSpec spec)
+                if (Catalog.Spec(stack.Key) is not StackableItemSpec spec)
                 {
                     Log.Warn($"Entity {name} lost {stack.Value} of {stack.Key}: the world catalog does not know it");
                     continue;
@@ -111,39 +91,27 @@ namespace Shooter.Game.Loot
                 Add(spec, stack.Value);
             }
 
-            for (int index = 0; index < sd.Slots.Count; index++)
+            for (int slot = 0; slot < sd.Slots.Count; slot++)
             {
-                SlotData slotData = sd.Slots[index];
+                SlotData saved = sd.Slots[slot];
+                if (saved.SpecId == null) continue;
 
-                if (catalog.Spec(slotData.SpecId) is not UniqueItemSpec spec)
+                if (Catalog.Spec(saved.SpecId) is not UniqueItemSpec spec)
                 {
-                    Log.Warn($"Entity {name} lost {slotData.SpecId}: the world catalog does not know it");
+                    Log.Warn($"Entity {name} lost {saved.SpecId}: the world catalog does not know it");
                     continue;
                 }
 
                 UniqueItem item = spec.Create();
-                if (!slotData.State.Empty) item.LoadObject(slotData.State);
+                if (!saved.State.Empty) item.LoadObject(saved.State);
 
-                int slot = Add(item);
-                if (index == sd.EquippedSlot) Equip(slot);
+                slots.Value.Put(slot, item);
             }
+
+            SlotsShifted();
         }
 
         public IReadOnlyList<UniqueItem> UniqueItems => slots.Value.All;
-
-        public float GiveRadius => giveRadius;
-
-        public int EquippedSlot => equippedSlot.Value;
-
-        public ItemSpec EquippedSpec
-        {
-            get
-            {
-                UniqueItem item = Equipped();
-
-                return item == null || Catalog == null ? null : Catalog.Spec(item.SpecId);
-            }
-        }
 
         private static ItemCatalog Catalog => Catalogs.Of<ItemCatalog>();
 
@@ -163,45 +131,35 @@ namespace Shooter.Game.Loot
 
         private void OnValidate()
         {
-            if (contents == null) return;
-
             foreach (Entry entry in contents)
-                if (entry.Spec == null)
-                    Log.Error($"Entity {name} has a starting inventory slot without an item spec");
+            {
+                if (entry.Spec != null) continue;
+
+                Log.Error($"Entity {name} has a starting inventory slot without an item spec");
+            }
         }
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
         public string Digest(DigestionDetail detail)
         {
+            if (detail != DigestionDetail.Full) return null;
+
             var digest = new StringBuilder();
-            ItemSpec held = EquippedSpec;
-
-            if (held != null) digest.Append("Holding: ").Append(held.Id).Append(" (slot " + EquippedSlot + ")");
-
-            if (detail != DigestionDetail.Full) return digest.Length == 0 ? null : digest.ToString();
-
-            ItemCatalog catalog = Catalog;
 
             for (int index = 0; index < stackAmounts.Count; index++)
             {
                 if (stackAmounts[index] == 0) continue;
 
-                ItemSpec spec = catalog == null ? null : catalog.At(index);
-
-                Line(digest).Append(spec == null ? "unknown" : spec.Id)
-                    .Append(" x ")
-                    .Append(stackAmounts[index]);
+                Line(digest).Append(Catalog.At(index).Id).Append(" x ").Append(stackAmounts[index]);
             }
 
-            for (int index = 0; index < slots.Value.Count; index++)
+            for (int slot = 0; slot < slots.Value.Count; slot++)
             {
-                UniqueItem item = slots.Value.At(index);
+                UniqueItem item = slots.Value.At(slot);
                 if (item == null) continue;
 
-                ItemSpec spec = catalog == null ? null : catalog.Spec(item.SpecId);
-
-                Line(digest).Append((spec == null ? item.SpecId : spec.Id) + " (slot " + index + ")");
+                Line(digest).Append(Catalog.Spec(item.SpecId).Id).Append(" (slot " + slot + ")");
             }
 
             return digest.Length == 0 ? null : digest.ToString();
@@ -209,22 +167,19 @@ namespace Shooter.Game.Loot
 
         public event Action Changed;
 
-        // Raised by Receive only: picking up, crafting and looting add silently
-        public event Action<Character, ItemSpec, int> Received;
-
         public override void OnNetworkSpawn()
         {
             stackAmounts.OnListChanged += StackAmountsShifted;
             slots.OnValueChanged += SlotsArrived;
-            equippedSlot.OnValueChanged += Reequipped;
 
             if (!IsServer) return;
 
             enabled = true;
 
-            ItemCatalog catalog = Catalog;
-            int kinds = catalog == null ? 0 : catalog.Count;
-            for (int index = 0; index < kinds; index++) stackAmounts.Add(0);
+            for (int index = 0; index < Catalog.Count; index++)
+            {
+                stackAmounts.Add(0);
+            }
 
             foreach (Entry entry in contents)
             {
@@ -240,25 +195,23 @@ namespace Shooter.Game.Loot
         {
             stackAmounts.OnListChanged -= StackAmountsShifted;
             slots.OnValueChanged -= SlotsArrived;
-            equippedSlot.OnValueChanged -= Reequipped;
 
             enabled = false;
         }
 
         public int Count(StackableItemSpec spec)
         {
-            int index = IndexOf(spec);
+            int index = Catalog.Index(spec);
 
             return index < 0 || index >= stackAmounts.Count ? 0 : stackAmounts[index];
         }
 
         public void Add(StackableItemSpec spec, int amount)
         {
-            if (!IsServer || amount <= 0 || spec == null) return;
+            if (amount <= 0) return;
 
-            int index = IndexOf(spec);
-
-            if (index < 0 || index >= stackAmounts.Count)
+            int index = Catalog.Index(spec);
+            if (index < 0)
             {
                 Log.Error($"Entity {name} can not take {spec.Key}: the world catalog does not know it");
                 return;
@@ -270,10 +223,10 @@ namespace Shooter.Game.Loot
 
         public int Remove(StackableItemSpec spec, int amount, InventoryOnConflict onConflict)
         {
-            if (!IsServer || amount <= 0 || spec == null) return 0;
+            if (amount <= 0) return 0;
 
-            int index = IndexOf(spec);
-            if (index < 0 || index >= stackAmounts.Count) return 0;
+            int index = Catalog.Index(spec);
+            if (index < 0) return 0;
 
             int available = stackAmounts[index];
             if (onConflict == InventoryOnConflict.Rollback && available < amount) return 0;
@@ -286,31 +239,28 @@ namespace Shooter.Game.Loot
             return taken;
         }
 
-        public int Add(UniqueItem item)
+        public void Add(UniqueItem item)
         {
-            if (!IsServer || item == null) return NoSlot;
-
             int slot = slots.Value.Put(item);
 
             SlotsShifted();
 
             Log.Info($"Entity {name} took {item.SpecId} into slot {slot}");
-
-            return slot;
         }
 
         public UniqueItem Remove(int slot)
         {
-            if (!IsServer) return null;
-
             UniqueItem item = slots.Value.Take(slot);
             if (item == null) return null;
-
-            if (equippedSlot.Value == slot) Equip(NoSlot);
 
             SlotsShifted();
 
             return item;
+        }
+
+        public UniqueItem At(int slot)
+        {
+            return slots.Value.At(slot);
         }
 
         public bool Contains(UniqueItem item)
@@ -318,97 +268,24 @@ namespace Shooter.Game.Loot
             return slots.Value.Contains(item);
         }
 
-        public bool Give(Character to, StackableItemSpec spec, int amount)
-        {
-            if (!IsServer || amount <= 0 || spec == null) return false;
-            if (!Reaches(to, out Inventory taker)) return false;
-
-            if (IndexOf(spec) < 0)
-            {
-                Log.Info($"Entity {name} can not give {spec.Key}: the world catalog does not know it");
-                return false;
-            }
-
-            if (Remove(spec, amount, InventoryOnConflict.Rollback) != amount)
-            {
-                Log.Info($"Entity {name} can not give {spec.Key} x {amount} to {to.name}: not enough in the bag");
-                return false;
-            }
-
-            taker.Receive(GetComponent<Character>(), spec, amount);
-            Log.Info($"Entity {name} gave {spec.Key} x {amount} to {to.name}");
-            return true;
-        }
-
-        public bool Give(Character to, int slot)
-        {
-            if (!IsServer || !Reaches(to, out Inventory taker)) return false;
-
-            UniqueItem item = Remove(slot);
-            if (item == null)
-            {
-                Log.Info($"Entity {name} can not give slot {slot} to {to.name}: the slot is empty");
-                return false;
-            }
-
-            taker.Receive(GetComponent<Character>(), item);
-            Log.Info($"Entity {name} gave {item.SpecId} from slot {slot} to {to.name}");
-            return true;
-        }
-
-        public void Receive(Character from, StackableItemSpec spec, int amount)
-        {
-            if (!IsServer || amount <= 0 || spec == null) return;
-
-            Add(spec, amount);
-            Received?.Invoke(from, spec, amount);
-        }
-
-        public void Receive(Character from, UniqueItem item)
-        {
-            if (!IsServer || item == null) return;
-
-            Add(item);
-            Received?.Invoke(from, Catalog == null ? null : Catalog.Spec(item.SpecId), 1);
-        }
-
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void EquipRpc(int slot)
-        {
-            Equip(slot);
-        }
-
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void UseRpc(FixedString32Bytes stackableId)
         {
-            if (Catalog.Of(stackableId) is not StackableItemSpec spec || !Use(spec))
-                Log.Info($"Entity {name} failed to use {stackableId} rpc");
-        }
+            if (Catalog.Of(stackableId) is StackableItemSpec spec && Use(spec)) return;
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void GiveStackableRpc(long targetId, FixedString32Bytes stackableId, int amount)
-        {
-            if (Catalog.Of(stackableId) is not StackableItemSpec spec ||
-                !Give(Character.Of(targetId, Inactive.Exclude), spec, amount))
-                Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {targetId} rpc");
-        }
-
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void GiveUniqueRpc(long targetId, int slot)
-        {
-            if (!Give(Character.Of(targetId, Inactive.Exclude), slot))
-                Log.Info($"Entity {name} failed to give slot {slot} to {targetId} rpc");
+            Log.Info($"Entity {name} failed to use {stackableId} rpc");
         }
 
         public bool Use(StackableItemSpec spec)
         {
-            if (spec == null || !spec.Usable) return false;
+            if (!spec.Usable) return false;
 
             if (Remove(spec, 1, InventoryOnConflict.Rollback) == 0) return false;
 
             foreach (ItemEffect effect in spec.Effects)
-                if (effect != null)
-                    effect.Apply(gameObject);
+            {
+                effect.Apply(gameObject);
+            }
 
             Speaker speaker = GetComponent<Speaker>();
             if (speaker != null) speaker.Play(spec.UseSound);
@@ -417,97 +294,35 @@ namespace Shooter.Game.Loot
             return true;
         }
 
-        public UniqueItem Equipped()
-        {
-            return At(equippedSlot.Value);
-        }
-
         public void DrainInto(Inventory target)
         {
-            if (!IsServer) return;
-
-            ItemCatalog catalog = Catalog;
-
             for (int index = 0; index < stackAmounts.Count; index++)
-                if (stackAmounts[index] > 0 && catalog.At(index) is StackableItemSpec stackable)
-                    target.Add(stackable, stackAmounts[index]);
+            {
+                if (stackAmounts[index] == 0) continue;
+
+                target.Add((StackableItemSpec)Catalog.At(index), stackAmounts[index]);
+            }
 
             foreach (UniqueItem item in slots.Value.All)
-                if (item != null)
-                    target.Add(item);
+            {
+                if (item == null) continue;
+
+                target.Add(item);
+            }
 
             Clear();
-        }
-
-        private bool Equip(int slot)
-        {
-            if (!IsServer) return false;
-
-            if (slot == NoSlot)
-            {
-                equippedSlot.Value = NoSlot;
-
-                return true;
-            }
-
-            UniqueItem item = At(slot);
-            if (item == null) return false;
-
-            var spec = (Catalog == null ? null : Catalog.Spec(item.SpecId)) as UniqueItemSpec;
-
-            if (spec == null || !spec.Equipable)
-            {
-                Log.Info($"Entity {name} can not put {item.SpecId} in hands");
-                return false;
-            }
-
-            equippedSlot.Value = slot;
-
-            Log.Info($"Entity {name} holds {item.SpecId} from slot {slot}");
-
-            return true;
-        }
-
-        private UniqueItem At(int slot)
-        {
-            return slots.Value.At(slot);
-        }
-
-        private bool Reaches(Character to, out Inventory taker)
-        {
-            taker = null;
-            Character own = GetComponent<Character>();
-
-            if (to == null || own == null || to == own || !to.gameObject.activeInHierarchy)
-            {
-                Log.Info($"Entity {name} has nobody to give things to");
-                return false;
-            }
-
-            if (Vector3.Distance(to.transform.position, transform.position) > giveRadius)
-            {
-                Log.Info($"Entity {name} can not give things to {to.name}: farther than {giveRadius} m");
-                return false;
-            }
-
-            taker = to.GetComponentInChildren<Inventory>();
-            if (taker != null) return true;
-
-            Log.Info($"Entity {name} can not give things to {to.name}: it has no bag");
-            return false;
         }
 
         private void Clear()
         {
             for (int index = 0; index < stackAmounts.Count; index++)
-                if (stackAmounts[index] != 0)
-                    stackAmounts[index] = 0;
+            {
+                if (stackAmounts[index] != 0) stackAmounts[index] = 0;
+            }
 
             slots.Value.Clear();
 
             SlotsShifted();
-
-            Equip(NoSlot);
         }
 
         private void Fill(Entry entry)
@@ -520,21 +335,12 @@ namespace Shooter.Game.Loot
                 return;
             }
 
-            if (entry.Spec is not UniqueItemSpec unique) return;
+            var unique = (UniqueItemSpec)entry.Spec;
 
             for (int made = 0; made < amount; made++)
             {
-                int slot = Add(unique.Create());
-
-                if (slot != NoSlot && entry.Equip && equippedSlot.Value == NoSlot) Equip(slot);
+                Add(unique.Create());
             }
-        }
-
-        private static int IndexOf(ItemSpec spec)
-        {
-            ItemCatalog catalog = Catalog;
-
-            return catalog == null || spec == null ? -1 : catalog.Index(spec);
         }
 
         private static StringBuilder Line(StringBuilder digest)
@@ -553,11 +359,6 @@ namespace Shooter.Game.Loot
         }
 
         private void SlotsShifted()
-        {
-            Changed?.Invoke();
-        }
-
-        private void Reequipped(int previous, int current)
         {
             Changed?.Invoke();
         }

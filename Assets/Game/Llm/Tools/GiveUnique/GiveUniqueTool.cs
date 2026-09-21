@@ -10,28 +10,28 @@ namespace Shooter.Game.Llm.GiveUnique
     {
         private static readonly Journal Log = Logs.Here();
 
-        private Inventory inventory;
+        private Exchanger exchanger;
 
         public override string Name => "give_unique";
 
         public override string Description =>
             @$"
-Give one of your unique items, by its slot number, to a character within {inventory.GiveRadius} meters.
+Give one of your unique items, by its slot number, to a character within {exchanger.Radius} meters.
 The recipient will automatically receive a notification.
 ";
 
         protected override void OnStart()
         {
-            inventory = Self.GetComponent<Inventory>();
-            if (inventory == null)
+            exchanger = Self.GetComponent<Exchanger>();
+            if (exchanger == null)
             {
-                Log.Error($"Entity {Self.name} does not have inventory component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have exchanger component required by tool {Name}");
             }
         }
 
         protected override string Execute(GiveUniqueArguments arguments, LlmCallContext context)
         {
-            return inventory.Give(Character.Of(arguments.TargetId, Inactive.Exclude), arguments.Slot)
+            return exchanger.Give(Character.Of(arguments.TargetId, Inactive.Exclude), arguments.Slot)
                 ? $"Gave the item from slot {arguments.Slot} to {arguments.TargetId}"
                 : "Could not give: the receiver is not around or the slot is empty";
         }

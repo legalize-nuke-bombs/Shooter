@@ -5,26 +5,26 @@ using UnityEngine;
 namespace Shooter.Game.Llm
 {
     [RequireComponent(typeof(Llm))]
-    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Exchanger))]
     public class LlmInventoryObserver : MonoBehaviour
     {
-        private Inventory inventory;
+        private Exchanger exchanger;
         private Llm llm;
 
         private void Awake()
         {
-            inventory = GetComponent<Inventory>();
+            exchanger = GetComponent<Exchanger>();
             llm = GetComponent<Llm>();
         }
 
         private void OnEnable()
         {
-            inventory.Received += Received;
+            exchanger.Received += Received;
         }
 
         private void OnDisable()
         {
-            inventory.Received -= Received;
+            exchanger.Received -= Received;
         }
 
         private void Received(Character from, ItemSpec item, int amount)

@@ -65,6 +65,8 @@ namespace Shooter.Client.Interface
         private readonly NameMapper names = new();
         private readonly RaycastHit[] sights = new RaycastHit[16];
         private Inventory bag;
+        private Holder holder;
+        private Exchanger exchanger;
         private Crafter crafter;
         private Character own;
         private Character taker;
@@ -159,12 +161,15 @@ namespace Shooter.Client.Interface
         private void Open()
         {
             bag = OwnPlayer.Find<Inventory>();
+            holder = OwnPlayer.Find<Holder>();
+            exchanger = OwnPlayer.Find<Exchanger>();
             crafter = OwnPlayer.Find<Crafter>();
             own = OwnPlayer.Find<Character>();
             taker = Taker(null);
             nextLook = Time.unscaledTime + LookInterval;
 
             if (bag != null) bag.Changed += Touch;
+            if (holder != null) holder.Changed += Touch;
 
             window.style.display = DisplayStyle.Flex;
             stale = true;
@@ -177,7 +182,10 @@ namespace Shooter.Client.Interface
             EndPrompt();
 
             if (bag != null) bag.Changed -= Touch;
+            if (holder != null) holder.Changed -= Touch;
             bag = null;
+            holder = null;
+            exchanger = null;
             crafter = null;
             own = null;
             taker = null;
@@ -229,8 +237,8 @@ namespace Shooter.Client.Interface
                 stale = true;
             }
 
-            bool near = own != null && bag != null &&
-                        Vector3.Distance(own.transform.position, taker.transform.position) <= bag.GiveRadius;
+            bool near = own != null && exchanger != null &&
+                        Vector3.Distance(own.transform.position, taker.transform.position) <= exchanger.Radius;
             giveButton.SetEnabled(near && ready);
         }
 
@@ -248,8 +256,8 @@ namespace Shooter.Client.Interface
             if (bag == null) return;
 
             ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
-            UniqueItem equipped = bag.Equipped();
-            int equippedSlot = bag.EquippedSlot;
+            UniqueItem equipped = holder.Held;
+            int equippedSlot = holder.Slot;
             bool[,] taken = new bool[Rows, Columns];
 
             if (equipped != null && !Offered(equippedSlot))
@@ -580,11 +588,11 @@ namespace Shooter.Client.Interface
                 if (stack != null)
                 {
                     offer.Expected = bag.Count(stack) - offer.Count;
-                    bag.GiveStackableRpc(takerId, stack.Id, offer.Count);
+                    exchanger.GiveStackableRpc(takerId, stack.Id, offer.Count);
                 }
                 else
                 {
-                    bag.GiveUniqueRpc(takerId, offer.Slot);
+                    exchanger.GiveUniqueRpc(takerId, offer.Slot);
                 }
 
                 offer.SentAt = Time.unscaledTime;
@@ -639,12 +647,12 @@ namespace Shooter.Client.Interface
         private float Offside(Character candidate, Transform eyes, float slack)
         {
             if (candidate == null || candidate == own || !candidate.gameObject.activeInHierarchy) return float.PositiveInfinity;
-            if (candidate.GetComponentInChildren<Inventory>() == null) return float.PositiveInfinity;
+            if (candidate.GetComponentInChildren<Exchanger>() == null) return float.PositiveInfinity;
 
             Health health = candidate.GetComponent<Health>();
             if (health != null && !health.Alive) return float.PositiveInfinity;
 
-            if (Vector3.Distance(own.transform.position, candidate.transform.position) > bag.GiveRadius * slack)
+            if (Vector3.Distance(own.transform.position, candidate.transform.position) > exchanger.Radius * slack)
                 return float.PositiveInfinity;
 
             Vector3 toward = candidate.transform.position - eyes.position;
@@ -1001,8 +1009,8 @@ namespace Shooter.Client.Interface
 
             if (!draggedEquipable) return;
 
-            if (held.worldBound.Contains(at) && !draggedFromHands) bag.EquipRpc(dragged);
-            else if (grid.worldBound.Contains(at) && draggedFromHands) bag.EquipRpc(Inventory.NoSlot);
+            if (held.worldBound.Contains(at) && !draggedFromHands) holder.HoldRpc(dragged);
+            else if (grid.worldBound.Contains(at) && draggedFromHands) holder.HoldRpc(Inventory.NoSlot);
         }
 
         private bool Lay(int cell, StackableItemSpec spec, int amount)
