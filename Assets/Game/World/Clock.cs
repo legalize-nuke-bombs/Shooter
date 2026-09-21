@@ -12,12 +12,12 @@ namespace Shooter.Game.World
     {
         public const string StampFormat = "yyyy.MM.dd HH:mm:ss";
         public const long DayLengthSeconds = 86400;
-        private const float DayRealSeconds = 1200f;
+        private const float DayRealSeconds = 2400f;
         private const float GameSecondsPerRealSecond = DayLengthSeconds / DayRealSeconds;
 
         [SerializeField] private float latitude = 55.75f;
 
-        [SerializeField] private float declination = 12.33f;
+        [SerializeField] private float declination = -12.33f;
 
         [SerializeField] private float solarNoonHours = 12.75f;
 

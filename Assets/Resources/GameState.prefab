@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Time.WorldClock
   ShowTopMostFoldoutHeaderGroup: 1
   latitude: 55.75
-  declination: 12.33
+  declination: -12.33
   solarNoonHours: 12.75
   beginningYear: 2026
   beginningMonth: 9
