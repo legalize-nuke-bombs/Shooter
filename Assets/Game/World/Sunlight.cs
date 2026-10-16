@@ -1,5 +1,4 @@
 using Shooter.Game.Core;
-using Shooter.Logging;
 using UnityEngine;
 
 namespace Shooter.Game.World
@@ -7,8 +6,6 @@ namespace Shooter.Game.World
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         internal const float ShadowHandover = -6f;
 
         [SerializeField] private float brightest = 120000f;
@@ -18,17 +15,13 @@ namespace Shooter.Game.World
         private void Awake()
         {
             sun = GetComponent<Light>();
-            if (GameState.Get<Clock>() == null)
-            {
-                Log.Info($"Entity {name} did not find clock, disabling...");
-                enabled = false;
-            }
         }
 
         private void Update()
         {
             Clock clock = GameState.Get<Clock>();
-            // The world goes before its scene does: for a frame on the way out there is no clock
+            // No clock yet on a client: the map wakes up there before the state arrives.
+            // No clock any more for a frame on the way out: the world goes before its scene does
             if (clock == null) return;
 
             float hourAngle = (float)clock.HourAngle;
