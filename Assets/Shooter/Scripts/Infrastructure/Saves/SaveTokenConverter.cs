@@ -1,0 +1,25 @@
+using System;
+using Newtonsoft.Json;
+
+namespace Shooter.Infrastructure
+{
+    public class SaveTokenConverter : JsonConverter<SaveToken>
+    {
+        public override void WriteJson(JsonWriter writer, SaveToken value, JsonSerializer serializer)
+        {
+            if (value.Empty)
+            {
+                writer.WriteNull();
+                return;
+            }
+
+            value.Write(writer);
+        }
+
+        public override SaveToken ReadJson(JsonReader reader, Type objectType, SaveToken existingValue,
+            bool hasExistingValue, JsonSerializer serializer)
+        {
+            return SaveToken.Read(reader);
+        }
+    }
+}

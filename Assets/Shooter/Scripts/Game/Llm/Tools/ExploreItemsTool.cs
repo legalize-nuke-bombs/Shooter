@@ -1,0 +1,44 @@
+﻿using System;
+using System.Text;
+using Shooter.Infrastructure;
+
+namespace Shooter.Game
+{
+    [Serializable]
+    public class ExploreItemsTool : LlmTool<ExploreItemsArguments>
+    {
+        public override string Name => "explore_items";
+
+        public override string Description =>
+            @"
+Use this tool to examine the item by its ID.
+This tool displays a detailed description of the item, including its effects (satiation, healing, etc.).
+You can process any number of IDs at once.
+";
+
+        protected override void OnStart()
+        {
+        }
+
+        protected override string Execute(ExploreItemsArguments arguments, LlmCallContext context)
+        {
+            if (arguments.ItemIds == null || arguments.ItemIds.Length == 0) return "You didn't pass a single ID.";
+
+            var sb = new StringBuilder();
+
+            foreach (string id in arguments.ItemIds)
+            {
+                ItemSpec item = Catalogs.Of<ItemCatalog>().Of(id);
+                if (item == null)
+                {
+                    sb.AppendLine($"{id} does not exist");
+                    continue;
+                }
+
+                sb.AppendLine($"{id} : {item.PromptDescription}");
+            }
+
+            return sb.ToString();
+        }
+    }
+}

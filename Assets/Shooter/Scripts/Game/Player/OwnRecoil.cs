@@ -1,0 +1,79 @@
+using Shooter.Infrastructure;
+using Unity.Netcode;
+using UnityEngine;
+
+namespace Shooter.Game
+{
+    [RequireComponent(typeof(InventoryHolder))]
+    public class OwnRecoil : NetworkBehaviour
+    {
+        [SerializeField] private float recovery = 14f;
+        private bool held;
+
+        private InventoryHolder holder;
+        private float lastShotAt;
+
+        private int shot;
+
+        public Vector2 Punch { get; private set; }
+
+        private void Awake()
+        {
+            holder = GetComponent<InventoryHolder>();
+        }
+
+        private void Update()
+        {
+            Punch *= Mathf.Exp(-recovery * Time.deltaTime);
+
+            if (held) Kick(true);
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            enabled = IsOwner;
+        }
+
+        public override void OnGainedOwnership()
+        {
+            if (IsOwner) enabled = true;
+        }
+
+        public override void OnLostOwnership()
+        {
+            enabled = false;
+            held = false;
+            Punch = Vector2.zero;
+        }
+
+        public void Press()
+        {
+            held = true;
+            Kick(false);
+        }
+
+        public void Release()
+        {
+            held = false;
+        }
+
+        private void Kick(bool sustained)
+        {
+            var firearm = holder.Held as Firearm;
+            if (firearm == null || firearm.Magazine <= 0) return;
+
+            FirearmSpec spec = Catalogs.Of<ItemCatalog>().Firearm(firearm.SpecId);
+            if (spec == null) return;
+            if (sustained && spec.FireMode != FireMode.Auto) return;
+
+            if (Time.time - lastShotAt < spec.FireInterval) return;
+            if (Time.time - lastShotAt >= spec.SprayRecovery) shot = 0;
+
+            Vector2 previous = shot == 0 ? Vector2.zero : spec.Spray.At(shot - 1);
+            Punch += (spec.Spray.At(shot) - previous) * spec.RecoilPunch;
+
+            shot++;
+            lastShotAt = Time.time;
+        }
+    }
+}

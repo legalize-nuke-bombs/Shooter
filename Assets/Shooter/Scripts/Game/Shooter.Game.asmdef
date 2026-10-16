@@ -1,0 +1,25 @@
+{
+  "name": "Shooter.Game",
+  "rootNamespace": "Shooter",
+  "references": [
+    "MackySoft.SerializeReferenceExtensions",
+    "Unity.Netcode.Runtime",
+    "Unity.Networking.Transport",
+    "Unity.Behavior",
+    "Unity.Animation.Rigging",
+    "Unity.Collections",
+    "Unity.InputSystem",
+    "Unity.Nuget.Newtonsoft-Json",
+    "Unity.RenderPipelines.Core.Runtime",
+    "Unity.RenderPipelines.HighDefinition.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

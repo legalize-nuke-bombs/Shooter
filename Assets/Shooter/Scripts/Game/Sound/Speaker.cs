@@ -1,0 +1,85 @@
+using System.Collections.Generic;
+using Shooter.Infrastructure;
+using Unity.Collections;
+using Unity.Netcode;
+using UnityEngine;
+
+namespace Shooter.Game
+{
+    public class Speaker : NetworkBehaviour
+    {
+        private const int Voices = 8;
+        private static readonly Journal Log = Logs.Here();
+
+        private readonly List<AudioSource> sources = new();
+
+        private int next;
+
+        private static SoundCatalog Sounds => Catalogs.Of<SoundCatalog>();
+
+        public void Play(SoundSpec sound, float gain = 1f)
+        {
+            if (!IsServer) return;
+
+            if (sound == null)
+            {
+                Log.Warn($"Entity {name} was asked to play a sound without a spec set");
+                return;
+            }
+
+            PlayRpc(sound.Id, sound.Pick(), gain);
+        }
+
+        [Rpc(SendTo.Everyone)]
+        private void PlayRpc(FixedString32Bytes id, byte variant, float gain)
+        {
+            SoundCatalog catalog = Sounds;
+            if (catalog == null)
+            {
+                Log.Warn($"Entity {name} cannot play {id}: the world has no sound catalog");
+                return;
+            }
+
+            SoundSpec sound = catalog.Of(id);
+            if (sound == null) return;
+
+            AudioClip clip = sound.Clip(variant);
+            if (clip == null) return;
+
+            AudioSource source = Free();
+            source.clip = clip;
+            source.outputAudioMixerGroup = sound.Output;
+            source.volume = sound.Volume * gain;
+            source.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
+            source.rolloffMode = sound.Rolloff;
+            source.minDistance = sound.MinDistance;
+            source.maxDistance = sound.MaxDistance;
+
+            source.Play();
+        }
+
+        private AudioSource Free()
+        {
+            foreach (AudioSource source in sources)
+                if (!source.isPlaying)
+                    return source;
+
+            if (sources.Count < Voices) return Add();
+
+            AudioSource taken = sources[next];
+            next = (next + 1) % sources.Count;
+
+            return taken;
+        }
+
+        private AudioSource Add()
+        {
+            AudioSource source = gameObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            source.spatialBlend = 1f;
+            sources.Add(source);
+
+            return source;
+        }
+    }
+}
