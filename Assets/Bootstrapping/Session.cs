@@ -25,13 +25,17 @@ namespace Shooter.Bootstrapping
         private const string AnyAddress = "0.0.0.0";
         private const int MenuFrameRate = 60;
         private const int UnlimitedFrameRate = -1;
+        private const string BrokenSave = "Не удалось загрузить сохранение";
+        private const string BrokenSaveDetails = "Файл повреждён или несовместим с этой версией";
         private static readonly Journal Log = Logs.Here();
         private bool ending;
-        private bool loadFailed;
         private bool worldLoaded;
         private bool freezing;
         private FrozenWorld frozen;
         private LoadingOverlay loading;
+        private MenuScreen menu;
+        private string warning;
+        private string warningDetails;
 
         private GameObject overlays;
 
@@ -48,21 +52,22 @@ namespace Shooter.Bootstrapping
 
             yield return SceneManager.LoadSceneAsync(MenuScene, LoadSceneMode.Single);
 
-            MenuScreen screen = FindAnyObjectByType<MenuScreen>();
-            if (screen == null)
+            menu = FindAnyObjectByType<MenuScreen>();
+            if (menu == null)
             {
                 Log.Error($"Scene {MenuScene} carries no menu screen, there is nothing to press");
                 yield break;
             }
 
-            screen.Hosting += Host;
-            screen.Joining += Join;
-            screen.Quitting += Quit;
+            menu.Hosting += Host;
+            menu.Joining += Join;
+            menu.Quitting += Quit;
 
-            if (loadFailed)
+            if (warning != null)
             {
-                loadFailed = false;
-                screen.Warn("Не удалось загрузить сохранение", "Файл повреждён или несовместим с этой версией");
+                menu.Warn(warning, warningDetails);
+                warning = null;
+                warningDetails = null;
             }
 
             ending = false;
@@ -85,34 +90,31 @@ namespace Shooter.Bootstrapping
             Application.Quit();
         }
 
+        // What can fail before the network starts is checked while the menu is still up, so the player stays in it
         private IEnumerator Begin(bool hosting, string save)
         {
+            NetworkManager network = Network();
+            if (network == null) yield break;
+
+            string certificate = Address(network, hosting);
+            if (certificate == null)
+            {
+                Drop();
+                yield break;
+            }
+
             Application.targetFrameRate = UnlimitedFrameRate;
             yield return SceneManager.LoadSceneAsync(BootScene, LoadSceneMode.Single);
 
             Overlays();
 
-            NetworkManager network = Network();
-            if (network == null)
-            {
-                yield return ToMenu();
-                yield break;
-            }
-
             ClientConfig client = Config.Read().Client;
-
-            string certificate = Address(network, hosting);
-            if (certificate == null)
-            {
-                yield return ToMenu();
-                yield break;
-            }
-
             network.NetworkConfig.ConnectionData = Handshake.Encode(client.Name, Config.Account, certificate);
             network.OnServerStopped += Stopped;
             network.OnClientStopped += Stopped;
 
-            loading.Show(hosting ? LoadingStage.Server : LoadingStage.Connection);
+            if (hosting) loading.Show(LoadingStage.Server);
+            else loading.Show(LoadingStage.Connection, Cancel);
 
             if (!(hosting ? network.StartHost() : network.StartClient()))
             {
@@ -127,6 +129,7 @@ namespace Shooter.Bootstrapping
             {
                 network.SceneManager.OnSceneEvent += Synchronizing;
                 network.OnClientConnectedCallback += Entered;
+                network.OnClientDisconnectCallback += Refused;
                 yield break;
             }
 
@@ -185,7 +188,7 @@ namespace Shooter.Bootstrapping
             if (frozen == null)
             {
                 Log.Error($"World was not frozen on load, {save} stays unloaded, shutting the host down");
-                loadFailed = true;
+                WarnInMenu(BrokenSave, BrokenSaveDetails);
                 network.Shutdown();
                 return;
             }
@@ -197,7 +200,7 @@ namespace Shooter.Bootstrapping
             if (SaveManager.Load(world, save)) return;
 
             Log.Warn($"The world failed to load {save}, shutting the host down");
-            loadFailed = true;
+            WarnInMenu(BrokenSave, BrokenSaveDetails);
             network.Shutdown();
         }
 
@@ -216,7 +219,43 @@ namespace Shooter.Bootstrapping
 
         private void Entered(ulong ignored)
         {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= Refused;
             loading.Hide();
+        }
+
+        private void Cancel()
+        {
+            NetworkManager network = NetworkManager.Singleton;
+            network.OnClientDisconnectCallback -= Refused;
+            network.Shutdown();
+        }
+
+        // The client dropped before it got into the world. Read here and not on the stop:
+        // the shutdown that follows overwrites the transport's verdict
+        private void Refused(ulong ignored)
+        {
+            NetworkManager network = NetworkManager.Singleton;
+            NetworkTransport.DisconnectEvents verdict = network.NetworkConfig.NetworkTransport.DisconnectEvent;
+            Log.Warn($"The client did not get into the world: {verdict}, {network.DisconnectReason}");
+
+            switch (verdict)
+            {
+                case NetworkTransport.DisconnectEvents.ClosedByRemote:
+                    WarnInMenu("Сервер отклонил подключение", network.DisconnectReason);
+                    break;
+                case NetworkTransport.DisconnectEvents.AuthenticationFailure:
+                    WarnInMenu("Код подключения не подходит", "По этому адресу другой сервер. Попросите у хоста код ещё раз");
+                    break;
+                default:
+                    WarnInMenu("Сервер не отвечает", "Проверьте код подключения и что сервер запущен");
+                    break;
+            }
+        }
+
+        private void WarnInMenu(string title, string details)
+        {
+            warning = title;
+            warningDetails = details;
         }
 
         private void Stopped(bool ignored)
@@ -272,7 +311,8 @@ namespace Shooter.Bootstrapping
             ClientConfig client = Config.Read().Client;
             if (!Invite.TryDecode(client.Invite, out string address, out ushort port, out string certificate))
             {
-                Log.Error("Invite code is missing or malformed, staying in the menu");
+                Log.Warn("Invite code is missing or malformed, staying in the menu");
+                menu.Warn("Неверный код подключения", "Попросите у хоста код ещё раз и вставьте его целиком");
                 return null;
             }
 

@@ -87,6 +87,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="loading" class="loading" picking-mode="Ignore">
             <ui:Label name="loading-text" class="line loading__status" picking-mode="Ignore"/>
+            <ui:Button name="loading-cancel" text="Отмена" class="loading__cancel"/>
             <ui:Label name="loading-tip" class="line loading__tip" picking-mode="Ignore"/>
         </ui:VisualElement>
     </ui:VisualElement>
