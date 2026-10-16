@@ -1,0 +1,54 @@
+using Shooter.Infrastructure;
+using Unity.Netcode;
+using UnityEngine;
+
+namespace Shooter.Game
+{
+    public static class OwnPlayer
+    {
+        private static Account account;
+        private static string publicKey;
+
+        public static T Find<T>() where T : Component
+        {
+            NetworkManager network = NetworkManager.Singleton;
+            if (network == null || !network.IsListening) return null;
+
+            Player player = network.IsServer ? ByKey() : ByOwnership();
+            if (player == null) return null;
+
+            return player.GetComponent<T>();
+        }
+
+        private static Player ByKey()
+        {
+            string key = OwnKey();
+            return key == null ? null : Player.OfKey(key, Inactive.Exclude);
+        }
+
+        private static Player ByOwnership()
+        {
+            foreach (Player player in Registers.Of<Player>(Inactive.Exclude))
+            {
+                NetworkObject net = player.GetComponent<NetworkObject>();
+                if (net != null && net.IsOwner) return player;
+            }
+
+            return null;
+        }
+
+        private static string OwnKey()
+        {
+            Account current = Config.Account;
+            if (current == null) return null;
+
+            if (!ReferenceEquals(current, account))
+            {
+                account = current;
+                publicKey = current.Public;
+            }
+
+            return publicKey;
+        }
+    }
+}

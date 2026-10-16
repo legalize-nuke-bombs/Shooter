@@ -1,0 +1,107 @@
+using System;
+using Shooter.Infrastructure;
+using Unity.Netcode;
+using UnityEngine;
+
+namespace Shooter.Game
+{
+    [RequireComponent(typeof(Character))]
+    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Speaker))]
+    public abstract class Talker : NetworkBehaviour, IUsable
+    {
+        private readonly NetworkVariable<bool> thinking = new();
+
+        [SerializeField] private SoundSpec muttering;
+
+        private Character character;
+        private ConversationManager conversations;
+        private Health health;
+        private Sleeper sleeper;
+        private Speaker speaker;
+
+        public bool Thinking => thinking.Value;
+
+        public long CharacterId => character.Id;
+
+        public bool Alive => health.Alive;
+
+        public bool Sleeping => sleeper != null && sleeper.Sleeping;
+
+        public UsageType Usage => UsageType.Talk;
+
+        public event Action<bool> ThinkingChanged;
+
+        protected virtual void Awake()
+        {
+            character = GetComponent<Character>();
+            health = GetComponent<Health>();
+            sleeper = GetComponent<Sleeper>();
+            speaker = GetComponent<Speaker>();
+            enabled = false;
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            thinking.OnValueChanged += RelayThinking;
+            if (!IsServer) return;
+
+            enabled = true;
+            conversations = GameState.Get<ConversationManager>();
+            conversations.Said += Mutter;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            thinking.OnValueChanged -= RelayThinking;
+            if (IsServer) conversations.Said -= Mutter;
+            conversations = null;
+            enabled = false;
+        }
+
+        public void Use(NetworkObject user, out string promptResult)
+        {
+            if (!IsServer)
+            {
+                promptResult = "You are not a server";
+                return;
+            }
+
+            if (!user.TryGetComponent(out PlayerMouth mouth))
+            {
+                promptResult = "Failed to talk: you are not a player";
+                return;
+            }
+
+            if (mouth.Interlocutor == NetworkObjectId)
+            {
+                mouth.Close();
+                promptResult = "Dialogue was closed";
+            }
+            else
+            {
+                mouth.Open(this);
+                promptResult = "Dialogue was opened";
+            }
+        }
+
+        protected abstract bool Busy();
+
+        private void Update()
+        {
+            thinking.Value = Busy();
+        }
+
+        private void Mutter(Conversation conversation, Message message)
+        {
+            if (!message.Spoken || message.AuthorId != CharacterId || muttering == null) return;
+
+            speaker.Play(muttering);
+        }
+
+        private void RelayThinking(bool previous, bool current)
+        {
+            ThinkingChanged?.Invoke(current);
+        }
+    }
+}

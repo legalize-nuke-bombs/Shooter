@@ -1,0 +1,112 @@
+using System;
+using Newtonsoft.Json.Linq;
+using Shooter.Infrastructure;
+using Unity.Netcode;
+using UnityEngine;
+
+namespace Shooter.Game
+{
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
+    public class Clock : NetworkBehaviour, ISaveableComponent
+    {
+        public const string StampFormat = "yyyy.MM.dd HH:mm:ss";
+        public const long DayLengthSeconds = 86400;
+        private const float DayRealSeconds = 2400f;
+        private const float GameSecondsPerRealSecond = DayLengthSeconds / DayRealSeconds;
+
+        [SerializeField] private float latitude = 55.75f;
+
+        [SerializeField] private float declination = -12.33f;
+
+        [SerializeField] private float solarNoonHours = 12.75f;
+
+        [SerializeField] private int beginningYear = 2026;
+        [SerializeField] private int beginningMonth = 9;
+        [SerializeField] private int beginningDay = 1;
+        [SerializeField] private int beginningHour = 22;
+        [SerializeField] private int beginningMinutes;
+        [SerializeField] private int beginningSeconds;
+
+        private readonly NetworkVariable<double> timestamp = new();
+        private readonly NetworkVariable<float> scale = new(1f);
+
+        public string ComponentKey => "Clock";
+        struct SaveData
+        {
+            public double Timestamp { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData()
+            {
+                Timestamp = timestamp.Value
+            };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            SaveData sd = content.To<SaveData>();
+            timestamp.Value = sd.Timestamp;
+        }
+
+        private DateTime Beginning => new(beginningYear, beginningMonth, beginningDay, beginningHour,
+            beginningMinutes, beginningSeconds);
+
+        public double Timestamp => timestamp.Value;
+
+        public DateTime Now => Beginning.AddSeconds(Timestamp);
+
+        public double DayFraction => Now.TimeOfDay.TotalSeconds / DayLengthSeconds;
+
+        public float Latitude => latitude;
+
+        public float Declination => declination;
+
+        public double HourAngle => (DayFraction - solarNoonHours / 24.0) * 360.0;
+
+        public float Scale
+        {
+            get => scale.Value;
+            set
+            {
+                if (IsServer) scale.Value = value;
+            }
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer) return;
+
+            NetworkManager.NetworkTickSystem.Tick += Step;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (!IsServer) return;
+
+            NetworkManager.NetworkTickSystem.Tick -= Step;
+        }
+
+        [ContextMenu("Fast forward x10")]
+        private void FastForward()
+        {
+            Scale = 10f;
+        }
+
+        [ContextMenu("Fast forward x60")]
+        private void FastForwardHard()
+        {
+            Scale = 60f;
+        }
+
+        [ContextMenu("Normal speed")]
+        private void NormalSpeed()
+        {
+            Scale = 1f;
+        }
+
+        private void Step()
+        {
+            timestamp.Value += NetworkManager.LocalTime.FixedDeltaTime * scale.Value * GameSecondsPerRealSecond;
+        }
+    }
+}
