@@ -18,6 +18,9 @@ namespace Shooter.Game.Llm
             var head = new StringBuilder();
             var body = new StringBuilder();
 
+            GameObjectRuntimeId id = entity.GetComponent<GameObjectRuntimeId>();
+            if (id != null) head.Append("[ID ").Append(id.Value).Append(']');
+
             foreach (IDigestible part in entity.Parts)
             {
                 string said = part.Digest(detail);

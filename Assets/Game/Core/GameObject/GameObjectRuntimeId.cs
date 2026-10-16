@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 namespace Shooter.Game.Core
 {
-    public class GameObjectRuntimeId : RegisteredNetworkBehaviour, ISaveableComponent, IDigestible
+    public class GameObjectRuntimeId : RegisteredNetworkBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -16,8 +16,6 @@ namespace Shooter.Game.Core
         public long Value => value.Value;
 
         public string ComponentKey => "GameObjectRuntimeId";
-
-        public DigestionPriority Priority => DigestionPriority.Handle;
 
         private struct SaveData
         {
@@ -35,11 +33,6 @@ namespace Shooter.Game.Core
         public void LoadObject(SaveToken content)
         {
             value.Value = content.To<SaveData>().Id;
-        }
-
-        public string Digest(DigestionDetail detail)
-        {
-            return "[ID " + Value + "]";
         }
 
         public override void OnNetworkSpawn()
