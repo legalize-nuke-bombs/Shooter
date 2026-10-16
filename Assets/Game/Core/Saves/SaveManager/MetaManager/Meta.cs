@@ -14,6 +14,5 @@ namespace Shooter.Game.Core.Saves
 
         public string Version { get; set; }
         public DateTime Stamp { get; set; }
-        public DateTime Clock { get; set; }
     }
 }

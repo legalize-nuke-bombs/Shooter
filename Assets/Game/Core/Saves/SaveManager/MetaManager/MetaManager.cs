@@ -3,7 +3,6 @@ using System.IO;
 using Shooter.Logging;
 using UnityEngine;
 using Newtonsoft.Json;
-using Shooter.Game.World;
 
 namespace Shooter.Game.Core.Saves
 {
@@ -17,8 +16,7 @@ namespace Shooter.Game.Core.Saves
             return new Meta()
             {
                 Version = Application.version,
-                Stamp = DateTime.Now,
-                Clock = GameState.Get<Clock>().Now
+                Stamp = DateTime.Now
             };
         }
 
