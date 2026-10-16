@@ -4,7 +4,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    -unity-font-definition: url("../../Overlays/Data/RobotoMono-Regular.ttf");
+    -unity-font-definition: url("../Overlays/RobotoMono-Regular.ttf");
 }
 
 .menu__panel {

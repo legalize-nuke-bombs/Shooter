@@ -85,10 +85,5 @@
             <ui:Label name="clock" class="line corner__line"/>
             <ui:Label name="debug" class="line corner__line debug" picking-mode="Ignore"/>
         </ui:VisualElement>
-        <ui:VisualElement name="loading" class="loading" picking-mode="Ignore">
-            <ui:Label name="loading-text" class="line loading__status" picking-mode="Ignore"/>
-            <ui:Button name="loading-cancel" text="Отмена" class="loading__cancel"/>
-            <ui:Label name="loading-tip" class="line loading__tip" picking-mode="Ignore"/>
-        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

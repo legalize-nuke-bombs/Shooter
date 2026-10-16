@@ -10,12 +10,34 @@ namespace Shooter.Infrastructure
     public static class Logs
     {
         private const int SameNameLimit = 10;
+        private const string NameArgument = "-name";
 
         private static readonly object Gate = new();
 
         private static StreamWriter file;
 
         public static Level Least { get; set; } = Level.Info;
+
+        // Before anything else wakes up: the file is named after this instance, the level comes from the config
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        private static void Begin()
+        {
+            string instance = Instance();
+            ToFile("shooter-" + instance);
+            Least = Config.Read().Logging.Level;
+            Here().Info($"Logging the {instance} from {Least} and up");
+        }
+
+        private static string Instance()
+        {
+            string[] arguments = Environment.GetCommandLineArgs();
+            for (int i = 0; i < arguments.Length - 1; i++)
+            {
+                if (arguments[i] == NameArgument) return arguments[i + 1].ToLowerInvariant();
+            }
+
+            return Application.isEditor ? "editor" : "game";
+        }
 
         public static Journal Here([CallerFilePath] string path = null)
         {

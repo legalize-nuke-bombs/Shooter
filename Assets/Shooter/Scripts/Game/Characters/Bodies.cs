@@ -1,50 +1,44 @@
 using System.Collections.Generic;
-using Shooter.Game;
+using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Shooter.Infrastructure
+namespace Shooter.Game
 {
-    [RequireComponent(typeof(NetworkManager))]
-    public class Greeter : MonoBehaviour
+    // Gives every player in the world a body: the one their key left here before, or a fresh one at a spawn point.
+    // Works on the server, once the world says its save is in
+    public class Bodies : MonoBehaviour
     {
-        private const int NameLimit = 24;
-        private const string Nameless = "Player";
         private static readonly Journal Log = Logs.Here();
 
-        private readonly Dictionary<ulong, string> names = new();
-        private readonly Dictionary<ulong, string> keys = new();
         private readonly Dictionary<ulong, NetworkObject> bodies = new();
-        private readonly List<ulong> pending = new();
 
         private NetworkManager network;
+        private Greeter greeter;
         private bool ready;
 
         private void Awake()
         {
-            network = GetComponent<NetworkManager>();
-            network.NetworkConfig.ConnectionApproval = true;
-            network.ConnectionApprovalCallback += Approve;
+            network = NetworkManager.Singleton;
+            greeter = network.GetComponent<Greeter>();
             network.OnClientConnectedCallback += Welcome;
             network.OnClientDisconnectCallback += Forget;
         }
 
         private void OnDestroy()
         {
-            if (network == null) return;
-
-            network.ConnectionApprovalCallback -= Approve;
             network.OnClientConnectedCallback -= Welcome;
             network.OnClientDisconnectCallback -= Forget;
         }
 
+        // Players who came while the world was loading are already connected: they get their bodies here
         public void Ready()
         {
-            if (!network.IsServer) return;
-
             ready = true;
-            foreach (ulong client in pending) Embody(client);
-            pending.Clear();
+            foreach (ulong client in network.ConnectedClientsIds)
+            {
+                Embody(client);
+            }
 
             foreach (Player player in Registers.Of<Player>(Inactive.Include))
             {
@@ -53,39 +47,17 @@ namespace Shooter.Infrastructure
             }
         }
 
-        private void Approve(NetworkManager.ConnectionApprovalRequest request,
-            NetworkManager.ConnectionApprovalResponse response)
-        {
-            if (!Handshake.TryDecode(request.Payload, Config.Account.Certificate, out string given, out string publicKey))
-            {
-                response.Approved = false;
-                response.Reason = "Не удалось подтвердить аккаунт игрока";
-                Log.Warn($"Client {request.ClientNetworkId} rejected, could not prove key ownership");
-                return;
-            }
-
-            given = given.Trim();
-            names[request.ClientNetworkId] = given.Length == 0 ? Nameless : given.Substring(0, Mathf.Min(given.Length, NameLimit));
-            keys[request.ClientNetworkId] = publicKey;
-
-            response.Approved = true;
-            response.CreatePlayerObject = false;
-
-            Log.Info($"Client {request.ClientNetworkId} proved key ownership, approved as {names[request.ClientNetworkId]}");
-        }
-
         private void Welcome(ulong client)
         {
-            if (!network.IsServer) return;
+            if (!network.IsServer || !ready) return;
 
-            if (ready) Embody(client);
-            else pending.Add(client);
+            Embody(client);
         }
 
         private void Embody(ulong client)
         {
-            string name = names.TryGetValue(client, out string known) ? known : Nameless;
-            string key = keys.TryGetValue(client, out string carried) ? carried : null;
+            string name = greeter.NameOf(client);
+            string key = greeter.KeyOf(client);
 
             Player returning = key == null ? null : Player.OfKey(key, Inactive.Include);
             NetworkObject body;
@@ -121,9 +93,6 @@ namespace Shooter.Infrastructure
 
         private void Forget(ulong client)
         {
-            names.Remove(client);
-            keys.Remove(client);
-            pending.Remove(client);
             if (!bodies.Remove(client, out NetworkObject body) || body == null) return;
 
             body.gameObject.SetActive(false);

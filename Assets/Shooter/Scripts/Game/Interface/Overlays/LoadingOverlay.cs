@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Shooter.Infrastructure;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 namespace Shooter.Game
 {
+    // Stands in Boot and lives through every scene. The menu and the world show the stages they start and take the
+    // screen down; the loads Netcode runs between them the screen follows itself, as nobody else is up to see them
     public class LoadingOverlay : Overlay
     {
         private const string ScreenElement = "loading";
@@ -30,10 +33,27 @@ namespace Shooter.Game
         private Button cancel;
         private Action cancelled;
         private string caption;
+        private NetworkManager network;
         private VisualElement screen;
         private bool shown;
         private Label text;
         private Label tip;
+
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void Start()
+        {
+            network = NetworkManager.Singleton;
+            network.OnClientStarted += Watch;
+        }
+
+        private void OnDestroy()
+        {
+            network.OnClientStarted -= Watch;
+        }
 
         // A stage the player may give up shows a cancel button, and the press goes back to whoever started the stage
         public void Show(LoadingStage stage, Action cancelled = null)
@@ -97,6 +117,27 @@ namespace Shooter.Game
         {
             Log.Info($"The player gives up {caption}");
             cancelled();
+        }
+
+        // Every start brings a scene manager of its own
+        private void Watch()
+        {
+            network.SceneManager.OnSceneEvent += Follow;
+        }
+
+        private void Follow(SceneEvent sceneEvent)
+        {
+            if (sceneEvent.ClientId != network.LocalClientId) return;
+
+            switch (sceneEvent.SceneEventType)
+            {
+                case SceneEventType.Load:
+                    Show(LoadingStage.Scene);
+                    break;
+                case SceneEventType.LoadComplete when !network.IsServer:
+                    Show(LoadingStage.Synchronization);
+                    break;
+            }
         }
 
         private string Tip()

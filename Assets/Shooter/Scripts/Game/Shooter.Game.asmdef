@@ -3,6 +3,7 @@
   "rootNamespace": "Shooter",
   "references": [
     "MackySoft.SerializeReferenceExtensions",
+    "Shooter.Infrastructure",
     "Unity.Netcode.Runtime",
     "Unity.Networking.Transport",
     "Unity.Behavior",
