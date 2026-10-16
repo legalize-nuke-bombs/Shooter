@@ -1,5 +1,3 @@
-using Shooter.Game.Core;
-using Shooter.Logging;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
@@ -8,19 +6,10 @@ namespace Shooter.Game.World
 {
     public class Skylight : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
-
         private VolumeProfile profile;
 
         private void Awake()
         {
-            if (GameState.Get<Clock>() == null)
-            {
-                Log.Info($"Entity {name} did not find clock, disabling...");
-                enabled = false;
-                return;
-            }
-
             profile = ScriptableObject.CreateInstance<VolumeProfile>();
             var sky = profile.Add<PhysicallyBasedSky>();
             sky.updateMode.Override(EnvironmentUpdateMode.Realtime);

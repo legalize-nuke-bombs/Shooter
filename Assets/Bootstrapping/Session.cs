@@ -282,8 +282,9 @@ namespace Shooter.Bootstrapping
             return certificate;
         }
 
-        // Spawned before the map loads: everything on the map wakes up into a world that already has its state,
-        // and no scene has to carry it. Netcode takes a spawned object along through the scene change
+        // Spawned before the map loads, so no scene has to carry it: Netcode takes a spawned object along through the
+        // scene change. On the host the map wakes up into a world that already has its state. A client loads the map
+        // first and gets the state after it, together with the other network objects
         private bool State()
         {
             GameObject prefab = Resources.Load<GameObject>(StatePrefab);
