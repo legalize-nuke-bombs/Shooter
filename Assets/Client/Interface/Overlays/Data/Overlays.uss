@@ -582,6 +582,18 @@
     -unity-font-definition: url("RobotoMono-Regular.ttf");
 }
 
+.loading__cancel {
+    margin-top: var(--space-6);
+    padding: 10px 18px;
+    border-width: 1px;
+    border-color: var(--color-line-strong);
+    -unity-text-align: middle-center;
+}
+
+.loading__cancel:hover {
+    border-color: var(--color-text);
+}
+
 .loading__tip {
     position: absolute;
     right: var(--space-6);

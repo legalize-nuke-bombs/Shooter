@@ -62,6 +62,7 @@ namespace Shooter.Game.Body
             if (!Handshake.TryDecode(request.Payload, Config.Account.Certificate, out string given, out string publicKey))
             {
                 response.Approved = false;
+                response.Reason = "Не удалось подтвердить аккаунт игрока";
                 Log.Warn($"Client {request.ClientNetworkId} rejected, could not prove key ownership");
                 return;
             }
