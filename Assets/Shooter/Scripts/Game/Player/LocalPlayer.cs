@@ -184,6 +184,8 @@ namespace Shooter.Game
                 playerMouth.Closed -= CloseTalk;
             }
 
+            // Dispose destroys the asset with its maps still on, and the wrapper's finalizer asserts on that
+            controls.Disable();
             controls.Dispose();
             controls = null;
             InventoryOpen = false;
