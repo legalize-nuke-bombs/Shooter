@@ -12,8 +12,11 @@ namespace Shooter.Game
         private const string PanelElement = "panel";
         private const string VersionElement = "version";
         private const string PageClass = "screen";
+        private const int FrameRate = 60;
         private static readonly Journal Log = Logs.Here();
 
+        [SerializeField] private Launcher launcher;
+        [SerializeField] private Launch launch;
         [SerializeField] private VisualTreeAsset mainPage;
         [SerializeField] private VisualTreeAsset newGamePage;
         [SerializeField] private VisualTreeAsset savesPage;
@@ -27,6 +30,7 @@ namespace Shooter.Game
         private ClientPage client;
         private ClientSettingsPage clientSettings;
         private Dialog dialog;
+        private LoadingOverlay loading;
         private MainPage main;
         private NewGamePage newGame;
         private VisualElement panel;
@@ -35,13 +39,25 @@ namespace Shooter.Game
         private string warnDetails;
         private string warnTitle;
 
-        public event Action<string> Hosting;
+        private void Awake()
+        {
+            Application.targetFrameRate = FrameRate;
+        }
 
-        public event Action Joining;
+        // A world that ended halfway through its load leaves the loading screen up, the menu takes it down
+        private void Start()
+        {
+            loading = FindAnyObjectByType<LoadingOverlay>();
+            loading.Hide();
+            launcher.Refused += Refused;
+        }
 
-        public event Action Quitting;
+        private void OnDestroy()
+        {
+            launcher.Refused -= Refused;
+        }
 
-        public void Warn(string title, string details)
+        private void Warn(string title, string details)
         {
             warnTitle = title;
             warnDetails = details;
@@ -117,10 +133,18 @@ namespace Shooter.Game
 
             pages.Push(main);
 
+            if (launch.Ending != null)
+            {
+                warnTitle = launch.Ending.Title;
+                warnDetails = launch.Ending.Details;
+                launch.Ending = null;
+            }
+
             ShowWarning();
 
             if (Config.Read().Account == null) GenerateKey();
 
+            Log.Info("Menu is up");
             return true;
         }
 
@@ -215,24 +239,45 @@ namespace Shooter.Game
         private void HostFresh()
         {
             Log.Info("The player starts a fresh game");
-            Hosting?.Invoke(null);
+            Host(null);
         }
 
         private void Host(string save)
         {
-            Log.Info($"The player continues the game saved at {save}");
-            Hosting?.Invoke(save);
+            if (save != null) Log.Info($"The player continues the game saved at {save}");
+            loading.Show(LoadingStage.Server);
+            if (!launcher.Host(save)) loading.Hide();
         }
 
         private void Connect()
         {
             Log.Info("The player joins a game of someone else");
-            Joining?.Invoke();
+            Refusal refusal = launcher.Join();
+            if (refusal != null)
+            {
+                Warn(refusal.Title, refusal.Details);
+                return;
+            }
+
+            loading.Show(LoadingStage.Connection, Cancel);
+        }
+
+        private void Cancel()
+        {
+            launcher.Cancel();
+            loading.Hide();
+        }
+
+        private void Refused(Refusal refusal)
+        {
+            loading.Hide();
+            Warn(refusal.Title, refusal.Details);
         }
 
         private void Quit()
         {
-            Quitting?.Invoke();
+            Log.Info("Leaving the game by the player's own hand");
+            Application.Quit();
         }
     }
 }
