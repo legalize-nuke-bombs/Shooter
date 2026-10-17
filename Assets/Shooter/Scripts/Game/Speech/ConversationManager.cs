@@ -85,7 +85,7 @@ namespace Shooter.Game
                 Content = content,
                 Spoken = spoken,
                 Urgent = urgent,
-                Time = GameState.Get<Clock>().Now
+                Time = MapState.Get<Clock>().Now
             };
 
             conversation.Add(message);

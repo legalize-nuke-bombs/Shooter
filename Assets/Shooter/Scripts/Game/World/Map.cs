@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Game
 {
-    // The world's own start and end. On the server it brings in the save the menu chose and hands out the bodies;
-    // on every side it takes the loading screen down once in, and goes back to the menu when the network stops
-    public class World : MonoBehaviour
+    // The map's own start and end. On the server it brings in the save the menu chose and hands out the bodies;
+    // on every side it takes the loading screen down once in, and goes back to the menu when the network stops.
+    // Never saveable itself: the load freezes every saveable object, and this one runs the load
+    public class Map : MonoBehaviour
     {
         private const int UnlimitedFrameRate = -1;
         private const string BrokenSave = "Не удалось загрузить сохранение";
@@ -67,7 +68,7 @@ namespace Shooter.Game
         private IEnumerator Begin()
         {
             yield return null;
-            Log.Info($"World {gameObject.scene.name} is up");
+            Log.Info($"Map {gameObject.scene.name} is up");
 
             if (frozen != null && !Restore()) yield break;
 

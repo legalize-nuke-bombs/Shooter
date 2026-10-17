@@ -32,7 +32,7 @@ namespace Shooter.Game
 
         private void Step()
         {
-            Clock clock = GameState.Get<Clock>();
+            Clock clock = MapState.Get<Clock>();
 
             bool everyone = AllAsleep();
             if (everyone != asleep.Value)
@@ -57,7 +57,7 @@ namespace Shooter.Game
 
         public bool IsBedtime()
         {
-            double hours = GameState.Get<Clock>().Now.TimeOfDay.TotalHours;
+            double hours = MapState.Get<Clock>().Now.TimeOfDay.TotalHours;
 
             return hours >= BedtimeHours || hours < WakeHours;
         }
