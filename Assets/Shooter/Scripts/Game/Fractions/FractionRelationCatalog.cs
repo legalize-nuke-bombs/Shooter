@@ -17,6 +17,7 @@ namespace Shooter.Game
         protected override void OnEnable()
         {
             base.OnEnable();
+            byFractions.Clear();
 
             for (int i = 0; i < Count; i++)
             {
