@@ -51,6 +51,7 @@ namespace Shooter.Game
             }
             OnPickup?.Invoke(this);
             networkObject.Despawn(!networkObject.InScenePlaced);
+            gameObject.SetActive(false);
             promptResult = $"You picked up {item.Id}";
         }
 
