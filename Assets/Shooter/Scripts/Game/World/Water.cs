@@ -26,7 +26,7 @@ namespace Shooter.Game
             return deepest;
         }
 
-        private float DepthAt(Vector3 point)
+        public float DepthAt(Vector3 point)
         {
             Vector3 offset = point - transform.position;
             Vector3 extent = transform.lossyScale / 2f;
