@@ -7,12 +7,12 @@ namespace Shooter.Game
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (IsServer) MapState.Get<ConversationManager>().Said += Refuse;
+            if (IsServer) Map.Get<ConversationManager>().Said += Refuse;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (IsServer && MapState.Get<ConversationManager>() != null) MapState.Get<ConversationManager>().Said -= Refuse;
+            if (IsServer && Map.Get<ConversationManager>() != null) Map.Get<ConversationManager>().Said -= Refuse;
             base.OnNetworkDespawn();
         }
 
@@ -28,7 +28,7 @@ namespace Shooter.Game
             Character author = Character.Of(message.AuthorId, Inactive.Include);
             if (author == null || !author.TryGetComponent(out Player _)) return;
 
-            MapState.Get<ConversationManager>().Say(CharacterId, message.AuthorId, "Not now.", false, true);
+            Map.Get<ConversationManager>().Say(CharacterId, message.AuthorId, "Not now.", false, true);
         }
     }
 }

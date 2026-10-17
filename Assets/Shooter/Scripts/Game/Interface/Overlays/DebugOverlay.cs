@@ -187,7 +187,7 @@ namespace Shooter.Game
                 Line($"Позиция {at.x:F1} {at.y:F1} {at.z:F1}", Facing(player.eulerAngles.y));
             }
 
-            HostVersion host = MapState.Get<HostVersion>();
+            HostVersion host = Map.Get<HostVersion>();
             Line(host == null
                     ? $"Клиент {Application.version}"
                     : $"Сервер {host.Version}   Клиент {Application.version}");

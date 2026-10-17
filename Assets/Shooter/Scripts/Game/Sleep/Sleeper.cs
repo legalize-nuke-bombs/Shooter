@@ -86,7 +86,7 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void WakeRpc()
         {
-            bool worldAsleep = MapState.Get<SleepCycle>() != null && MapState.Get<SleepCycle>().WorldAsleep;
+            bool worldAsleep = Map.Get<SleepCycle>() != null && Map.Get<SleepCycle>().WorldAsleep;
 
             if (!SleepRule.CanWake(worldAsleep))
             {

@@ -35,7 +35,7 @@ namespace Shooter.Game
 
             bool alive = health == null || health.Alive;
             bool handsFree = hands == null || hands.Free;
-            bool bedtime = MapState.Get<SleepCycle>() != null && MapState.Get<Clock>() != null && MapState.Get<SleepCycle>().IsBedtime();
+            bool bedtime = Map.Get<SleepCycle>() != null && Map.Get<Clock>() != null && Map.Get<SleepCycle>().IsBedtime();
 
             if (!SleepRule.CanSleep(alive, handsFree, bedtime))
             {

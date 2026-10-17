@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     // Gives every player in the world a body: the one their key left here before, or a fresh one at a spawn point.
     // Works on the server, once the world says its save is in
-    public class Bodies : MonoBehaviour
+    public class PlayerSpawner : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 

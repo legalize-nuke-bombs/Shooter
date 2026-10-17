@@ -50,7 +50,7 @@ namespace Shooter.Game
         {
             if (alive) return;
 
-            if (takenAt == null || MapState.Get<Clock>().Timestamp - takenAt.Value >= respawnHours * SecondsPerHour)
+            if (takenAt == null || Map.Get<Clock>().Timestamp - takenAt.Value >= respawnHours * SecondsPerHour)
             {
                 Respawn();
             }
@@ -68,7 +68,7 @@ namespace Shooter.Game
                 if (body == null)
                 {
                     Log.Error($"Entity {name} failed to spawn its body, retrying in {respawnHours} h of world time");
-                    takenAt = MapState.Get<Clock>().Timestamp;
+                    takenAt = Map.Get<Clock>().Timestamp;
                     return;
                 }
                 alive = true;
@@ -81,7 +81,7 @@ namespace Shooter.Game
         {
             Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, grows back in {respawnHours} h of world time");
             alive = false;
-            takenAt = MapState.Get<Clock>().Timestamp;
+            takenAt = Map.Get<Clock>().Timestamp;
             pickupable.OnPickup -= MarkDead;
         }
 

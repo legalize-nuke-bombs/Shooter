@@ -3,7 +3,7 @@
 namespace Shooter.Infrastructure
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class GameObjectRuntimeIds : MonoBehaviour, ISaveableComponent
+    public class GameObjectRuntimeIds : RegisteredBehaviour, ISaveableComponent
     {
         private long next;
 

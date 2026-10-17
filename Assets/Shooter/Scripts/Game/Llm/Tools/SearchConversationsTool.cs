@@ -46,7 +46,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
                 return $"The specified ID ({arguments.TargetId}) belongs to you";
             }
 
-            ConversationManager conversations = MapState.Get<ConversationManager>();
+            ConversationManager conversations = Map.Get<ConversationManager>();
             List<Conversation> searched;
             if (arguments.TargetId < 0)
             {

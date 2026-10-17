@@ -20,7 +20,7 @@ namespace Shooter.Game
 
         private void Update()
         {
-            Spend(idleCost * Time.deltaTime * MapState.Get<Clock>().Scale);
+            Spend(idleCost * Time.deltaTime * Map.Get<Clock>().Scale);
         }
 
         public DigestionPriority Priority => DigestionPriority.Medium;
