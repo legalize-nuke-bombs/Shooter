@@ -15,6 +15,7 @@ namespace Shooter.Infrastructure
         protected override void OnEnable()
         {
             base.OnEnable();
+            ids.Clear();
             for (int i = 0; i < Count; i++)
             {
                 SaveablePrefabSpec spec = At(i);
