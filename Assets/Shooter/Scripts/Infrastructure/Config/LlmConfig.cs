@@ -18,7 +18,7 @@ namespace Shooter.Infrastructure
             {
                 Key = "",
                 Provider = "Polza",
-                Model = "google/gemini-3.6-flash"
+                Model = "google/gemini-3.8-flash"
             };
         }
     }
