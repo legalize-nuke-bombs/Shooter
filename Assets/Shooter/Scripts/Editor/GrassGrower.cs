@@ -11,12 +11,12 @@ namespace Shooter.Editor
 {
     public class GrassGrower : EditorWindow
     {
-        private const string LandscapeRoot = "Landscape";
         private const string LayerFolder = "Assets/Shooter/Data/Environment/Terrain/Layers/";
         private const string PlantFolder = "Assets/Shooter/Data/Environment/Props/Nature/";
         private const int CellsPerPatch = 32;
         private const float Spread = 0.1f;
         private const float Jitter = 0.33f;
+        private const float NoiseOrigin = 4096f;
         private const float NoiseStride = 37.3f;
         private const float NoiseLow = 0.3f;
         private const float NoiseHigh = 0.7f;
@@ -85,8 +85,8 @@ namespace Shooter.Editor
                                        "standing on the terrain", EditorStyles.wordWrappedMiniLabel);
 
             EditorGUILayout.Space();
-            List<Terrain> targets = Targets();
-            EditorGUILayout.LabelField(HasSelectedTerrain() ? $"{targets.Count} selected terrains" : $"{targets.Count} terrains of the landscape");
+            List<Terrain> targets = Landscape.Targets();
+            EditorGUILayout.LabelField(Landscape.Selected() ? $"{targets.Count} selected terrains" : $"{targets.Count} terrains of the landscape");
 
             if (GUILayout.Button("Grow grass")) Grow();
             if (GUILayout.Button("Defaults"))
@@ -154,34 +154,6 @@ namespace Shooter.Editor
             };
         }
 
-        private static bool HasSelectedTerrain()
-        {
-            foreach (GameObject selected in Selection.gameObjects)
-            {
-                if (selected.GetComponent<Terrain>() != null) return true;
-            }
-
-            return false;
-        }
-
-        private static List<Terrain> Targets()
-        {
-            var chosen = new List<Terrain>();
-            foreach (GameObject selected in Selection.gameObjects)
-            {
-                Terrain terrain = selected.GetComponent<Terrain>();
-                if (terrain != null && !chosen.Contains(terrain))
-                {
-                    chosen.Add(terrain);
-                }
-            }
-
-            if (chosen.Count > 0) return chosen;
-
-            GameObject root = GameObject.Find(LandscapeRoot);
-            return root != null ? new List<Terrain>(root.GetComponentsInChildren<Terrain>()) : new List<Terrain>(Terrain.activeTerrains);
-        }
-
         private void Grow()
         {
             if (EditorApplication.isPlaying)
@@ -190,7 +162,7 @@ namespace Shooter.Editor
                 return;
             }
 
-            List<Terrain> targets = Targets();
+            List<Terrain> targets = Landscape.Targets();
             if (targets.Count == 0)
             {
                 Log.Error("Scene has no terrain to grow grass on");
@@ -255,7 +227,7 @@ namespace Shooter.Editor
                     if (blade.plant == null) continue;
 
                     float stride = (kinds.Count + 1) * NoiseStride;
-                    kinds.Add(new Kind { Set = set, Blade = blade, Share = blade.share / total, Offset = new Vector2(stride, -stride) });
+                    kinds.Add(new Kind { Set = set, Blade = blade, Share = blade.share / total, Offset = new Vector2(NoiseOrigin + stride, NoiseOrigin - stride) });
                 }
             }
 
