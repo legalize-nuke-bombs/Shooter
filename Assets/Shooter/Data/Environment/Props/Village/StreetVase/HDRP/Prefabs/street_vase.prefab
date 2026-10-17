@@ -73,5 +73,42 @@ PrefabInstance:
     - {fileID: -6741679889929804439, guid: 82617008f5322084096723ff6147234b, type: 3}
     - {fileID: 6870042705970011375, guid: 82617008f5322084096723ff6147234b, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 82617008f5322084096723ff6147234b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7890030917452661432}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 82617008f5322084096723ff6147234b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6795684103834496986}
   m_SourcePrefab: {fileID: 100100000, guid: 82617008f5322084096723ff6147234b, type: 3}
+--- !u!1 &5910797334850143800 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 82617008f5322084096723ff6147234b, type: 3}
+  m_PrefabInstance: {fileID: 6829206401565113193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7890030917452661432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910797334850143800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DigestibleTransform
+--- !u!114 &-6795684103834496986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910797334850143800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
+  content: Street vase
+  size: 0
