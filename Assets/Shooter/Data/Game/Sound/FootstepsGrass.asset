@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: FootstepsGrass
+  m_EditorClassIdentifier:
+  id: footstepsgrass
+  clips:
+  - {fileID: 8300000, guid: 9c22f2e220e04410921b7e38723ef694, type: 3}
+  - {fileID: 8300000, guid: 82cb5a70df7649b0882632fcc9ec4b95, type: 3}
+  - {fileID: 8300000, guid: f5afcb98bc3b4dfa82285e7d1d7ac0e4, type: 3}
+  - {fileID: 8300000, guid: b9a45fe4209f4f5ca040107b26a0e241, type: 3}
+  - {fileID: 8300000, guid: a76da7854ab84c028637b0761587f194, type: 3}
+  - {fileID: 8300000, guid: 8be4d13dd76b43d19cb1a04a7b3e444a, type: 3}
+  - {fileID: 8300000, guid: b619b0b83b2a4b7d802814ada28f090e, type: 3}
+  - {fileID: 8300000, guid: f111ea2587ba4d1e882c757322a7833c, type: 3}
+  - {fileID: 8300000, guid: cdd662ac00464c7c85930ee8f8c8435c, type: 3}
+  - {fileID: 8300000, guid: be851f139ae34b73bd86d9654c97d12b, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
+  volume: 0.36
+  rolloff: 1
+  minDistance: 1
+  maxDistance: 20
+  pitchVariation: 0.05

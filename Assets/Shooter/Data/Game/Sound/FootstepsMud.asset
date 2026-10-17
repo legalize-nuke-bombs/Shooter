@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: FootstepsMud
+  m_EditorClassIdentifier:
+  id: footstepsmud
+  clips:
+  - {fileID: 8300000, guid: 528afff58495450e89090fd9540307da, type: 3}
+  - {fileID: 8300000, guid: 76b33e52d700433a8590bbf5ef406adb, type: 3}
+  - {fileID: 8300000, guid: 3b1d70352e074374bfa759573b03a67f, type: 3}
+  - {fileID: 8300000, guid: 16de0e95346a46418df03f906e3a493f, type: 3}
+  - {fileID: 8300000, guid: 376a6a31416c4c49bb79fc7597a4a809, type: 3}
+  - {fileID: 8300000, guid: 60038eb4676f4cb695d03553ae72bb59, type: 3}
+  - {fileID: 8300000, guid: e6f81439be13436797ace37772a9ead0, type: 3}
+  - {fileID: 8300000, guid: 8776941bc23c4aaea7d3669a2c4114b8, type: 3}
+  - {fileID: 8300000, guid: 13fb6b5a557a46ffb8e0d29e93e31886, type: 3}
+  - {fileID: 8300000, guid: c73911bb76cd45cf8f7e38e87f76f052, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
+  volume: 0.36
+  rolloff: 1
+  minDistance: 1
+  maxDistance: 20
+  pitchVariation: 0.05

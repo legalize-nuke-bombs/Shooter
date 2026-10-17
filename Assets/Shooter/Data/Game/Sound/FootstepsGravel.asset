@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: FootstepsGravel
+  m_EditorClassIdentifier:
+  id: footstepsgravel
+  clips:
+  - {fileID: 8300000, guid: 4c22239711784124a0a2fc2080f5fab6, type: 3}
+  - {fileID: 8300000, guid: 3fefdbfa0db2403184fa5f1cd7800d93, type: 3}
+  - {fileID: 8300000, guid: df1fb122ed584c0ea6390dbf32c635ca, type: 3}
+  - {fileID: 8300000, guid: 4124c21909fe4d7f8288aa965d34a110, type: 3}
+  - {fileID: 8300000, guid: 2507eebd4b3a4a4fa605712546c120e2, type: 3}
+  - {fileID: 8300000, guid: 11b8070641194209acf3c41482e53a83, type: 3}
+  - {fileID: 8300000, guid: 7d231627f4684e958645a82f99b3a622, type: 3}
+  - {fileID: 8300000, guid: 53d8356417314f61a470a195ce35f14b, type: 3}
+  - {fileID: 8300000, guid: ee707b30532e41a28c5061eb0a985080, type: 3}
+  - {fileID: 8300000, guid: 966fa91dbea8481883f53f161a90e5d9, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
+  volume: 0.36
+  rolloff: 1
+  minDistance: 1
+  maxDistance: 20
+  pitchVariation: 0.05
