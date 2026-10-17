@@ -17,7 +17,7 @@ namespace Shooter.Game
         {
             if (!Bound) return;
 
-            Clock world = MapState.Get<Clock>();
+            Clock world = Map.Get<Clock>();
 
             if (world == null)
             {

@@ -156,7 +156,7 @@ namespace Shooter.Game
             Health health = hit.collider.GetComponentInParent<Health>();
             if (health == null)
             {
-                MapState.Get<BulletHoles>().Add(hit.point, hit.normal);
+                Map.Get<BulletHoles>().Add(hit.point, hit.normal);
                 Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
                 return;
             }

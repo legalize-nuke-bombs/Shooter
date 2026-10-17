@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Unity.Netcode;
 
 namespace Shooter.Infrastructure
@@ -39,7 +40,7 @@ namespace Shooter.Infrastructure
             if (!IsServer || value.Value != Default) return;
 
             // Not in Awake: a network variable written before the spawn does not know its behaviour yet
-            GameObjectRuntimeIds ids = MapState.Get<GameObjectRuntimeIds>();
+            GameObjectRuntimeIds ids = Registers.Of<GameObjectRuntimeIds>(Inactive.Include).FirstOrDefault();
             value.Value = ids == null ? UnityEngine.Random.Range(0, int.MaxValue) : ids.Next();
         }
 

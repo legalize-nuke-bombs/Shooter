@@ -55,7 +55,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
             var delivered = new List<long>();
             var failed = new List<string>();
 
-            ConversationManager conversations = MapState.Get<ConversationManager>();
+            ConversationManager conversations = Map.Get<ConversationManager>();
 
             foreach (long targetId in arguments.TargetIds.Distinct())
             {

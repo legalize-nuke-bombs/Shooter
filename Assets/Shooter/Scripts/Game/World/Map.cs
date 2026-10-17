@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,9 +10,9 @@ using UnityEngine.SceneManagement;
 namespace Shooter.Game
 {
     // The map's own start and end. On the server it brings in the save the menu chose and hands out the bodies;
-    // on every side it takes the loading screen down once in, and goes back to the menu when the network stops.
-    // Never saveable itself: the load freezes every saveable object, and this one runs the load
-    public class Map : MonoBehaviour
+    // on every side it takes the loading screen down once in, and goes back to the menu when the network stops
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
+    public class Map : RegisteredBehaviour
     {
         private const int UnlimitedFrameRate = -1;
         private const string BrokenSave = "Не удалось загрузить сохранение";
@@ -17,16 +20,31 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Launch launch;
-        [SerializeField] private Bodies bodies;
+        [SerializeField] private PlayerSpawner spawner;
+        [SerializeField] private GameObject state;
         [SerializeField] private string menu = "Menu";
+
+        private readonly Dictionary<Type, Component> parts = new();
 
         private NetworkManager network;
         private LoadingOverlay loading;
         private FrozenWorld frozen;
         private bool leaving;
 
-        private void Awake()
+        public static T Get<T>() where T : Component
         {
+            foreach (Map map in Registers.Of<Map>(Inactive.Include))
+            {
+                return map.Part<T>();
+            }
+            return null;
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            if (Registers.Of<Map>(Inactive.Include).Count() > 1) Log.Error("A second map has appeared");
+
             Application.targetFrameRate = UnlimitedFrameRate;
             network = NetworkManager.Singleton;
             loading = FindAnyObjectByType<LoadingOverlay>();
@@ -45,12 +63,13 @@ namespace Shooter.Game
             if (!network.IsListening) Stopped(false);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             network.OnClientStopped -= Stopped;
             network.OnServerStopped -= Stopped;
             network.OnClientConnectedCallback -= Entered;
             if (network.SceneManager != null) network.SceneManager.OnLoadComplete -= Loaded;
+            base.OnDestroy();
         }
 
         private void Loaded(ulong client, string scene, LoadSceneMode mode)
@@ -72,7 +91,7 @@ namespace Shooter.Game
 
             if (frozen != null && !Restore()) yield break;
 
-            bodies.Ready();
+            spawner.Ready();
             loading.Hide();
         }
 
@@ -103,6 +122,17 @@ namespace Shooter.Game
             leaving = true;
             Log.Info("The session is over, heading back to the menu");
             SceneManager.LoadScene(menu);
+        }
+
+        private T Part<T>() where T : Component
+        {
+            if (parts.TryGetValue(typeof(T), out Component known)) return (T)known;
+
+            T part = state.GetComponent<T>();
+            if (part == null) Log.Error($"The map state carries no {typeof(T).Name}");
+
+            parts[typeof(T)] = part;
+            return part;
         }
     }
 }

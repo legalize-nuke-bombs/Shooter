@@ -47,7 +47,7 @@ namespace Shooter.Game
             if (!IsServer) return;
 
             enabled = true;
-            conversations = MapState.Get<ConversationManager>();
+            conversations = Map.Get<ConversationManager>();
             conversations.Said += Mutter;
         }
 

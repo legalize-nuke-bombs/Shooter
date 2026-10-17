@@ -242,7 +242,7 @@ namespace Shooter.Game
 
         public static string Stamp()
         {
-            return MapState.Get<Clock>().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
+            return Map.Get<Clock>().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
         }
     }
 }

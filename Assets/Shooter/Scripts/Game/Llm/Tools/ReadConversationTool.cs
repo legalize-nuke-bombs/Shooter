@@ -49,7 +49,7 @@ Specify `from` (the message number from which you want to retrieve the conversat
                 return $"The specified ID ({targetId}) belongs to you";
             }
 
-            Conversation conversation = MapState.Get<ConversationManager>().GetIfPresent(ownCharacter.Id, targetId);
+            Conversation conversation = Map.Get<ConversationManager>().GetIfPresent(ownCharacter.Id, targetId);
             if (conversation == null)
             {
                 return $"You don't have conversation with ID {targetId}";
