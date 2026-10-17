@@ -6761,7 +6761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75d8e024da069948b03d5977535c043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World.Water
-  wallDepth: 1
+  wallDepth: 1.3
   wallHeight: 100
 --- !u!1001 &1287376945
 PrefabInstance:
