@@ -87,7 +87,7 @@ namespace Shooter.Game
         private void Update()
         {
             if (!IsServer) return;
-            timer += Time.deltaTime * GameState.Get<Clock>().Scale;
+            timer += Time.deltaTime * MapState.Get<Clock>().Scale;
             if (timer >= timerInterval)
             {
                 Tick(timer);

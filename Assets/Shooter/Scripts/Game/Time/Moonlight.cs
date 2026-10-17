@@ -19,7 +19,7 @@ namespace Shooter.Game
 
         private void Update()
         {
-            Clock clock = GameState.Get<Clock>();
+            Clock clock = MapState.Get<Clock>();
             // No clock in the menu, and none yet on a client: the map wakes up there before the state arrives.
             // No clock any more for a frame on the way out: the world goes before its scene does
             if (clock == null) return;

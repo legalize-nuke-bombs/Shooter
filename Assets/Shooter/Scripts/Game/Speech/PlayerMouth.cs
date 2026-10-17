@@ -80,7 +80,7 @@ namespace Shooter.Game
 
             OpenedRpc(talker.NetworkObjectId);
 
-            conversations = GameState.Get<ConversationManager>();
+            conversations = MapState.Get<ConversationManager>();
         }
 
         public void Close()

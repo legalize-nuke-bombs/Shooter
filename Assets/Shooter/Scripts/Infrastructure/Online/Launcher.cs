@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Infrastructure
 {
-    // Starts this machine from the menu. A host spawns the game state and loads the world at once; a client stays
-    // in the menu until the server takes it to the world, and hears here if it never gets there
+    // Starts this machine from the menu. A host loads the world at once; a client stays in the menu until the server
+    // takes it to the world, and hears here if it never gets there
     public class Launcher : MonoBehaviour
     {
         private const string AnyAddress = "0.0.0.0";
@@ -15,7 +15,6 @@ namespace Shooter.Infrastructure
         private const string BadInviteDetails = "Попросите у хоста код ещё раз и вставьте его целиком";
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private GameObject state;
         [SerializeField] private Launch launch;
         [SerializeField] private string world = "Map";
 
@@ -51,14 +50,6 @@ namespace Shooter.Infrastructure
             }
 
             Log.Info($"World listens on port {server.Port}, channel encrypted");
-
-            // Spawned before the map loads, so no scene has to carry it: Netcode takes a spawned object along through the
-            // scene change. On the host the map wakes up into a world that already has its state. A client loads the map
-            // first and gets the state after it, together with the other network objects
-            GameObject instance = Instantiate(state);
-            instance.name = state.name;
-            instance.GetComponent<NetworkObject>().Spawn();
-            Log.Info("Game state is up");
 
             launch.Save = save;
             SceneEventProgressStatus status = network.SceneManager.LoadScene(world, LoadSceneMode.Single);

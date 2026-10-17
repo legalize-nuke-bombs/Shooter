@@ -26,7 +26,7 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            conversations = GameState.Get<ConversationManager>();
+            conversations = MapState.Get<ConversationManager>();
             conversations.Said += Heard;
         }
 

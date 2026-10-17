@@ -40,7 +40,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            conversations = GameState.Get<ConversationManager>();
+            conversations = MapState.Get<ConversationManager>();
             conversations.Said += Relay;
         }
 
