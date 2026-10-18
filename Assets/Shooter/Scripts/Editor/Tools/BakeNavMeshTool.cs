@@ -94,7 +94,7 @@ namespace Shooter.Editor
             agent.FindPropertyRelative("agentSlope").floatValue = controller.slopeLimit - SlopeForgiveness;
             serialized.ApplyModifiedPropertiesWithoutUndo();
 
-            Log.Debug($"Navmesh agent follows {body.name}: radius {controller.radius}, height {controller.height}, climb {controller.stepOffset}, slope {controller.slopeLimit - SlopeForgiveness}");
+            Log.Info($"Navmesh agent follows {body.name}: radius {controller.radius}, height {controller.height}, climb {controller.stepOffset}, slope {controller.slopeLimit - SlopeForgiveness}");
             return true;
         }
 
@@ -156,7 +156,7 @@ namespace Shooter.Editor
                 }
             }
 
-            Log.Debug($"Built {built} tree proxies carrying {shapes} colliders for the bake");
+            Log.Info($"Built {built} tree proxies carrying {shapes} colliders for the bake");
             return root;
         }
 

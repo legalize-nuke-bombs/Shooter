@@ -65,7 +65,7 @@ namespace Shooter.Editor
                 if (added > 0)
                 {
                     PrefabUtility.SaveAsPrefabAsset(prefab, path);
-                    Log.Debug($"Prefab {path} got {added} mesh colliders");
+                    Log.Info($"Prefab {path} got {added} mesh colliders");
                 }
 
                 return added;

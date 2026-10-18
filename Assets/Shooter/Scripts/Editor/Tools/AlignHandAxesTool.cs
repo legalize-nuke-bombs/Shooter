@@ -124,13 +124,13 @@ namespace Shooter.Editor
 
                     EditorUtility.SetDirty(mesh.sharedMesh);
                     AssetDatabase.SaveAssetIfDirty(mesh.sharedMesh);
-                    Log.Debug($"Mesh {AssetDatabase.GetAssetPath(mesh.sharedMesh)} of skin {skin.name} rebound to the turned hands");
+                    Log.Info($"Mesh {AssetDatabase.GetAssetPath(mesh.sharedMesh)} of skin {skin.name} rebound to the turned hands");
                 }
 
                 if (ownBones)
                 {
                     PrefabUtility.SaveAsPrefabAsset(contents, path);
-                    Log.Debug($"Skin {skin.name} turned the hands of its own bones copy in {path}");
+                    Log.Info($"Skin {skin.name} turned the hands of its own bones copy in {path}");
                 }
             }
             finally
