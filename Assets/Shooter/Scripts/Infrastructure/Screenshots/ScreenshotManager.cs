@@ -43,7 +43,7 @@ namespace Shooter.Infrastructure
 
             var previewTexture = new Texture2D(targetWidth, targetHeight, TextureFormat.RGB24, false);
 
-            var rt = RenderTexture.GetTemporary(targetWidth, targetHeight, 0);
+            var rt = RenderTexture.GetTemporary(targetWidth, targetHeight, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
             Graphics.Blit(fullScreenshot, rt);
 
             RenderTexture oldActive = RenderTexture.active;
