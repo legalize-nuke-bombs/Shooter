@@ -9,7 +9,6 @@ namespace Shooter.Infrastructure
         public const string Performance = "dlss-performance";
         public const string Default = Quality;
 
-        // From the cheapest picture to the best one; DLAA is the top DLSS level, full internal resolution
-        public static readonly string[] Keys = { Off, Performance, Balanced, Quality, Dlaa };
+        public static readonly string[] CheapestToBest = { Off, Performance, Balanced, Quality, Dlaa };
     }
 }
