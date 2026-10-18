@@ -1,5 +1,4 @@
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace Shooter.Infrastructure
 {
@@ -10,6 +9,12 @@ namespace Shooter.Infrastructure
         internal Journal(string name)
         {
             this.name = name;
+        }
+
+        [HideInCallstack]
+        public void Debug(string message)
+        {
+            Say(Level.Debug, LogType.Log, message);
         }
 
         [HideInCallstack]
@@ -35,7 +40,7 @@ namespace Shooter.Infrastructure
         {
             if (level < Logs.Least) return;
 
-            Debug.unityLogger.Log(type, name + ": " + message);
+            UnityEngine.Debug.unityLogger.Log(type, name + ": " + message);
         }
     }
 }
