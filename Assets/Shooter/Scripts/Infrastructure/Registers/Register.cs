@@ -10,9 +10,7 @@ namespace Shooter.Infrastructure
 
         public IEnumerable<Component> All(Inactive gate)
         {
-            return gate == Inactive.Include
-                ? members
-                : members.Where(member => member.gameObject.activeInHierarchy);
+            return gate == Inactive.Include ? members : members.Where(member => member.gameObject.activeInHierarchy);
         }
 
         public void Add(Component member)

@@ -21,14 +21,20 @@ namespace Shooter.Infrastructure
 
         public static void Untrack<T>(T member) where T : Component, IRegistered
         {
-            if (Known.TryGetValue(member.GetType(), out Register register)) register.Remove(member);
+            if (Known.TryGetValue(member.GetType(), out Register register))
+            {
+                register.Remove(member);
+            }
         }
 
         public static IEnumerable<T> Of<T>(Inactive gate) where T : Component, IRegistered
         {
             if (!Known.TryGetValue(typeof(T), out Register register)) yield break;
 
-            foreach (Component member in register.All(gate)) yield return (T)member;
+            foreach (Component member in register.All(gate))
+            {
+                yield return (T)member;
+            }
         }
     }
 }
