@@ -535,10 +535,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.DefaultHunger
   ShowTopMostFoldoutHeaderGroup: 1
-  sprintCost: 0.5
-  walkCost: 0.25
-  jumpCost: 2
-  idleCost: 0.1
+  sprintCost: 0.2
+  walkCost: 0.1
+  jumpCost: 0.8
+  idleCost: 0.04
   maxAmount: 100
 --- !u!114 &-5287795101460196425
 MonoBehaviour:
