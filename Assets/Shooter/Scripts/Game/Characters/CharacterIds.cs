@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class CharacterIds : RegisteredBehaviour, ISaveableComponent
+    public class CharacterIds : ShooterBehaviour, ISaveableComponent
     {
         private long next;
 

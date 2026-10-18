@@ -5,7 +5,7 @@ using UnityEngine.Rendering.HighDefinition;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(WaterSurface))]
-    public class Water : RegisteredBehaviour
+    public class Water : ShooterBehaviour
     {
         // Nobody swims: an invisible wall stands where the water gets this deep and rises this high above the surface.
         // The wall itself is built in the editor, Tools / Build Water Walls

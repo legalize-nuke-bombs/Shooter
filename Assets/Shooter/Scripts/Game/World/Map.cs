@@ -12,7 +12,7 @@ namespace Shooter.Game
     // The map's own start and end. On the server it brings in the save the menu chose and hands out the bodies;
     // on every side it takes the loading screen down once in, and goes back to the menu when the network stops
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class Map : RegisteredBehaviour
+    public class Map : ShooterBehaviour
     {
         private const int UnlimitedFrameRate = -1;
         private const string BrokenSave = "Не удалось загрузить сохранение";
@@ -40,9 +40,8 @@ namespace Shooter.Game
             return null;
         }
 
-        protected override void Awake()
+        protected override void Awakened()
         {
-            base.Awake();
             if (Registers.Of<Map>(Inactive.Include).Count() > 1) Log.Error("A second map has appeared");
 
             Application.targetFrameRate = UnlimitedFrameRate;
@@ -63,13 +62,12 @@ namespace Shooter.Game
             if (!network.IsListening) Stopped(false);
         }
 
-        protected override void OnDestroy()
+        protected override void Destroying()
         {
             network.OnClientStopped -= Stopped;
             network.OnServerStopped -= Stopped;
             network.OnClientConnectedCallback -= Entered;
             if (network.SceneManager != null) network.SceneManager.OnLoadComplete -= Loaded;
-            base.OnDestroy();
         }
 
         private void Loaded(ulong client, string scene, LoadSceneMode mode)
