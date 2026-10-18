@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Shooter.Editor
 {
-    public class HandAxisAligner : AssetPostprocessor
+    public class HandAxisPostprocessor : AssetPostprocessor
     {
         private static readonly Journal Log = Logs.Here();
 

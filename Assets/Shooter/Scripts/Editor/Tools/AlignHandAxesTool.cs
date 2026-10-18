@@ -80,7 +80,7 @@ namespace Shooter.Editor
             Quaternion left = Quaternion.Inverse(hands.Left) * standard.Left;
             if (Angle(right) < Tolerance && Angle(left) < Tolerance) return;
 
-            HandAxisAligner.HandTurns turns = HandAxisAligner.HandTurns.Read(importer.userData) ?? new HandAxisAligner.HandTurns();
+            HandAxisPostprocessor.HandTurns turns = HandAxisPostprocessor.HandTurns.Read(importer.userData) ?? new HandAxisPostprocessor.HandTurns();
             turns.Add(hands.RightBone, right);
             turns.Add(hands.LeftBone, left);
             importer.userData = JsonUtility.ToJson(turns);
@@ -110,8 +110,8 @@ namespace Shooter.Editor
                 bool ownBones = PrefabUtility.GetCorrespondingObjectFromOriginalSource(rightHand) == null;
                 if (ownBones)
                 {
-                    HandAxisAligner.Turn(rightHand, right);
-                    HandAxisAligner.Turn(leftHand, left);
+                    HandAxisPostprocessor.Turn(rightHand, right);
+                    HandAxisPostprocessor.Turn(leftHand, left);
                 }
 
                 foreach (SkinnedMeshRenderer mesh in contents.GetComponentsInChildren<SkinnedMeshRenderer>(true))
@@ -119,7 +119,7 @@ namespace Shooter.Editor
                     if (mesh.sharedMesh == null || AssetDatabase.GetAssetPath(mesh.sharedMesh) == model) continue;
                     if (!rebound.Add(mesh.sharedMesh)) continue;
 
-                    bool turned = HandAxisAligner.Rebind(mesh.sharedMesh, mesh.bones, rightHand, right) | HandAxisAligner.Rebind(mesh.sharedMesh, mesh.bones, leftHand, left);
+                    bool turned = HandAxisPostprocessor.Rebind(mesh.sharedMesh, mesh.bones, rightHand, right) | HandAxisPostprocessor.Rebind(mesh.sharedMesh, mesh.bones, leftHand, left);
                     if (!turned) continue;
 
                     EditorUtility.SetDirty(mesh.sharedMesh);
