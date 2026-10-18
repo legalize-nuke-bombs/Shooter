@@ -18,7 +18,7 @@ namespace Shooter.Game
             var head = new StringBuilder();
             var body = new StringBuilder();
 
-            GameObjectRuntimeId id = entity.GetComponent<GameObjectRuntimeId>();
+            CharacterId id = entity.GetComponent<CharacterId>();
             if (id != null) head.Append("[ID ").Append(id.Value).Append(']');
 
             foreach (IDigestible part in entity.Parts)

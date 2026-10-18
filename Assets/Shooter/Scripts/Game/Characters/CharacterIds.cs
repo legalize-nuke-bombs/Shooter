@@ -1,17 +1,20 @@
-﻿using UnityEngine;
+using Shooter.Infrastructure;
+using UnityEngine;
 
-namespace Shooter.Infrastructure
+namespace Shooter.Game
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class GameObjectRuntimeIds : RegisteredBehaviour, ISaveableComponent
+    public class CharacterIds : RegisteredBehaviour, ISaveableComponent
     {
         private long next;
 
-        public string ComponentKey => "GameObjectRuntimeIds";
+        public string ComponentKey => "CharacterIds";
+
         private struct SaveData
         {
             public long Next { get; set; }
         }
+
         public object SaveObject()
         {
             return new SaveData
@@ -19,10 +22,10 @@ namespace Shooter.Infrastructure
                 Next = next
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
-            next = sd.Next;
+            next = content.To<SaveData>().Next;
         }
 
         public long Next()

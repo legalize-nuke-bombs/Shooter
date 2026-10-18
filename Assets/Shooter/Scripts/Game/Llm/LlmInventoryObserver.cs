@@ -30,7 +30,7 @@ namespace Shooter.Game
         {
             if (item == null) return;
 
-            long giver = from == null ? GameObjectRuntimeId.Default : from.Id;
+            long giver = from == null ? CharacterId.None : from.Id;
 
             llm.Notice(item is StackableItemSpec
                 ? $"[{Llm.Stamp()}] Character {giver} gave you {item.Id} x {amount}"

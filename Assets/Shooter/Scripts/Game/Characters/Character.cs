@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(GameObjectRuntimeId))]
+    [RequireComponent(typeof(CharacterId))]
     public class Character : RegisteredBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
-        private GameObjectRuntimeId id;
+        private CharacterId id;
 
         [SerializeField] private Fraction fraction;
         public Fraction Fraction => fraction;
@@ -17,7 +17,7 @@ namespace Shooter.Game
         protected override void Awake()
         {
             base.Awake();
-            id = GetComponent<GameObjectRuntimeId>();
+            id = GetComponent<CharacterId>();
             if (fraction == null)
             {
                 Log.Error($"Entity {name} does not have a group");

@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(GameObjectRuntimeId))]
+    [RequireComponent(typeof(CharacterId))]
     public class Player : RegisteredBehaviour, ISaveableComponent
     {
-        private GameObjectRuntimeId id;
+        private CharacterId id;
 
         public string PublicKey { get; set; }
 
@@ -30,7 +30,7 @@ namespace Shooter.Game
         protected override void Awake()
         {
             base.Awake();
-            id = GetComponent<GameObjectRuntimeId>();
+            id = GetComponent<CharacterId>();
         }
 
         public long Id => id.Value;
