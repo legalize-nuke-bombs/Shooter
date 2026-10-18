@@ -13,7 +13,7 @@ namespace Shooter.Editor
     {
         private const string LayerFolder = "Assets/Shooter/Data/Environment/Terrain/Layers/";
         private const string PlantFolder = "Assets/Shooter/Data/Environment/Props/Nature/";
-        private const int CellsPerPatch = 32;
+        private const int CellsPerPatch = 16;
         private const float Spread = 0.1f;
         private const float Jitter = 0.33f;
         private const float NoiseOrigin = 4096f;
