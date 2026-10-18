@@ -24,7 +24,7 @@ namespace Shooter.Game
             speaker = GetComponent<Speaker>();
             foreach (Craft craft in availableCrafts)
             {
-                craftsById.Add(craft.Key, craft);
+                craftsById.Add(craft.Id, craft);
             }
         }
 
@@ -47,7 +47,7 @@ namespace Shooter.Game
         {
             if (craft == null || !availableCrafts.Contains(craft))
             {
-                Log.Info($"Entity {name} does not know the craft {(craft == null ? "null" : craft.Key)}");
+                Log.Info($"Entity {name} does not know the craft {(craft == null ? "null" : craft.Id)}");
                 return false;
             }
 
@@ -58,7 +58,7 @@ namespace Shooter.Game
                 int available = inventory.Count(kvp.Key);
                 if (available < kvp.Value)
                 {
-                    Log.Info($"Entity {name} lacks {kvp.Key.Key} for {craft.Key}: {available} of {kvp.Value}");
+                    Log.Info($"Entity {name} lacks {kvp.Key.Id} for {craft.Id}: {available} of {kvp.Value}");
                     return false;
                 }
             }
@@ -81,7 +81,7 @@ namespace Shooter.Game
                 Log.Error("Unexpected craft item output");
             }
 
-            Log.Info($"Entity {name} crafted {craft.Key}");
+            Log.Info($"Entity {name} crafted {craft.Id}");
             if (craft.Sound != null) speaker.Play(craft.Sound);
             return true;
         }

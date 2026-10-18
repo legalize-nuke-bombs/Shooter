@@ -53,7 +53,7 @@ namespace Shooter.Game
 
         public override UniqueItem Create()
         {
-            return new Firearm(Key);
+            return new Firearm(Id);
         }
     }
 }

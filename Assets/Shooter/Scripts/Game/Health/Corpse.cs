@@ -37,12 +37,12 @@ namespace Shooter.Game
 
         public void Dress(SkinSpec spec)
         {
-            skin.Value = spec.Id;
+            skin.Value = spec.NetworkId;
         }
 
         public void Rename(NameSpec spec)
         {
-            title.Value = spec.Id;
+            title.Value = spec.NetworkId;
         }
 
         public override void OnNetworkSpawn()

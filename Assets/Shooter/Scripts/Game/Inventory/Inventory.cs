@@ -34,7 +34,7 @@ namespace Shooter.Game
             {
                 if (stackAmounts[index] == 0) continue;
 
-                stacks[catalog.At(index).Key] = stackAmounts[index];
+                stacks[catalog.At(index).Id] = stackAmounts[index];
             }
 
             var saved = new List<SlotData>();
@@ -157,12 +157,12 @@ namespace Shooter.Game
             int index = Catalogs.Of<ItemCatalog>().Index(spec);
             if (index < 0)
             {
-                Log.Error($"Entity {name} can not take {spec.Key}: the world catalog does not know it");
+                Log.Error($"Entity {name} can not take {spec.Id}: the world catalog does not know it");
                 return;
             }
 
             stackAmounts[index] += amount;
-            Log.Info($"Entity {name} took {amount} of {spec.Key}");
+            Log.Info($"Entity {name} took {amount} of {spec.Id}");
         }
 
         public int Remove(StackableItemSpec spec, int amount, InventoryOnConflict onConflict)

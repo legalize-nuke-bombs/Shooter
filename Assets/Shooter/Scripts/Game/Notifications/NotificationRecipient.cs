@@ -15,7 +15,7 @@ namespace Shooter.Game
         {
             if (spec == null) return;
 
-            Log.Info($"Entity {name} received notification {spec.Key}");
+            Log.Info($"Entity {name} received notification {spec.Id}");
             Received?.Invoke(spec);
         }
     }

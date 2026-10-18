@@ -68,7 +68,7 @@ namespace Shooter.Game
             toxins = Catalogs.Of<ToxinCatalog>();
             for (int i = 0; i < toxins.Count; i++)
             {
-                indexes.Add(toxins.At(i).Id, i);
+                indexes.Add(toxins.At(i).NetworkId, i);
             }
 
             Log.Info($"Entity {name} indexed {indexes.Count} toxins");
@@ -118,12 +118,12 @@ namespace Shooter.Game
 
         public double Level(ToxinSpec toxin)
         {
-            return levels[indexes[toxin.Id]];
+            return levels[indexes[toxin.NetworkId]];
         }
 
         public void Intoxicate(ToxinSpec toxin, double amount)
         {
-            int index = indexes[toxin.Id];
+            int index = indexes[toxin.NetworkId];
             amount = Math.Max(0, amount);
             levels[index] = Math.Min(100, levels[index] + amount);
             Log.Info($"Entity {name} got {toxin.name} {amount}, now {levels[index]}");

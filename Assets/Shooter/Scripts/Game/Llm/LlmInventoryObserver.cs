@@ -33,8 +33,8 @@ namespace Shooter.Game
             long giver = from == null ? GameObjectRuntimeId.Default : from.Id;
 
             llm.Notice(item is StackableItemSpec
-                ? $"[{Llm.Stamp()}] Character {giver} gave you {item.Key} x {amount}"
-                : $"[{Llm.Stamp()}] Character {giver} gave you {item.Key}", true);
+                ? $"[{Llm.Stamp()}] Character {giver} gave you {item.Id} x {amount}"
+                : $"[{Llm.Stamp()}] Character {giver} gave you {item.Id}", true);
         }
     }
 }

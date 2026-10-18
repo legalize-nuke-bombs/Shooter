@@ -25,7 +25,7 @@ namespace Shooter.Infrastructure
                     continue;
                 }
                 uint hash = spec.Prefab.GetComponent<NetworkObject>().PrefabIdHash;
-                if (!ids.TryAdd(hash, spec.Id))
+                if (!ids.TryAdd(hash, spec.NetworkId))
                 {
                     Log.Error($"Catalog {name} maps hash {hash} twice");
                 }

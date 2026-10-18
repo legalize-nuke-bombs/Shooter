@@ -33,19 +33,19 @@ namespace Shooter.Infrastructure
             {
                 if (spec == null) continue;
 
-                if (!spec.Fits())
+                if (!spec.IdFitsNetwork())
                 {
                     Log.Error($"Catalog {name} skips {spec.name}: its id does not fit the network format");
                     continue;
                 }
 
-                if (indices.TryGetValue(spec.Id, out int taken))
+                if (indices.TryGetValue(spec.NetworkId, out int taken))
                 {
-                    Log.Error($"Catalog {name} holds both {ordered[taken].name} and {spec.name} under id {spec.Key}");
+                    Log.Error($"Catalog {name} holds both {ordered[taken].name} and {spec.name} under id {spec.Id}");
                     continue;
                 }
 
-                indices.Add(spec.Id, ordered.Count);
+                indices.Add(spec.NetworkId, ordered.Count);
                 ordered.Add(spec);
             }
 
@@ -59,7 +59,7 @@ namespace Shooter.Infrastructure
 
         public int Index(TSpec spec)
         {
-            return spec != null && indices.TryGetValue(spec.Id, out int index) ? index : -1;
+            return spec != null && indices.TryGetValue(spec.NetworkId, out int index) ? index : -1;
         }
 
         public TSpec Of(FixedString32Bytes id)
