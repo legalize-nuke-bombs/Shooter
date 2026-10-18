@@ -2,20 +2,20 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public abstract class RegisteredBehaviour : MonoBehaviour, IRegistered
+    public abstract class RegisteredBehaviour : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         protected virtual void Awake()
         {
-            Log.Info($"Entity {name} is tracking");
-            Registers.Track(this);
+            Registers.Add(this);
+            Log.Info($"Entity {name} registered");
         }
 
         protected virtual void OnDestroy()
         {
-            Log.Info($"Entity {name} is untracking");
-            Registers.Untrack(this);
+            Registers.Remove(this);
+            Log.Info($"Entity {name} unregistered");
         }
     }
 }
