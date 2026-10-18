@@ -6,6 +6,8 @@ namespace Shooter.Game
     [Serializable]
     public class SprayPattern
     {
+        public const string PointsField = nameof(points);
+
         [SerializeField] private Vector2[] points = new Vector2[0];
 
         public int Length => points.Length;
