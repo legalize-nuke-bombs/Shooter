@@ -35,7 +35,6 @@ namespace Shooter.Editor
             }
 
             EditorUtility.ClearProgressBar();
-            AssetDatabase.SaveAssets();
 
             Log.Info($"Looked at {paths.Count} prefabs, added {addedColliders} mesh colliders to {changedPrefabs} of them");
         }

@@ -91,7 +91,6 @@ namespace Shooter.Editor
                 }
             }
 
-            AssetDatabase.SaveAssets();
             Log.Info($"Icon studio rendered {rendered} icons out of {prefabs.Length} selected prefabs");
         }
 
