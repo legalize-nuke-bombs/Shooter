@@ -5,19 +5,19 @@ namespace Shooter.Infrastructure
 {
     public sealed class Register
     {
-        private readonly List<RegisteredBehaviour> members = new();
+        private readonly List<ShooterBehaviour> members = new();
 
-        public IEnumerable<RegisteredBehaviour> All(Inactive gate)
+        public IEnumerable<ShooterBehaviour> All(Inactive gate)
         {
             return gate == Inactive.Include ? members : members.Where(member => member.gameObject.activeInHierarchy);
         }
 
-        public void Add(RegisteredBehaviour member)
+        public void Add(ShooterBehaviour member)
         {
             members.Add(member);
         }
 
-        public void Remove(RegisteredBehaviour member)
+        public void Remove(ShooterBehaviour member)
         {
             members.Remove(member);
         }

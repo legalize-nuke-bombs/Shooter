@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class MainSpawnPoint : RegisteredBehaviour
+    public class MainSpawnPoint : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 

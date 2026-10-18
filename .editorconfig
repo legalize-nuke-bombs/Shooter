@@ -22,6 +22,10 @@ resharper_csharp_for_built_in_types = use_explicit_type
 resharper_csharp_for_simple_types = use_explicit_type
 resharper_csharp_for_other_types = use_var_when_evident
 
+# Hiding an inherited member, such as a Unity message the base class owns, breaks the build: the base lifecycle can not be skipped by accident
+dotnet_diagnostic.CS0108.severity = error
+dotnet_diagnostic.CS0114.severity = error
+
 # Unity naming: private fields are camelCase without underscore prefix
 dotnet_naming_style.pascal_style.capitalization = pascal_case
 dotnet_naming_style.camel_style.capitalization = camel_case

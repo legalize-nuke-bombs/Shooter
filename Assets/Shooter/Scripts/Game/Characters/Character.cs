@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(CharacterId))]
-    public class Character : RegisteredBehaviour, IDigestible
+    public class Character : ShooterBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -14,9 +14,8 @@ namespace Shooter.Game
         [SerializeField] private Fraction fraction;
         public Fraction Fraction => fraction;
 
-        protected override void Awake()
+        protected override void Awakened()
         {
-            base.Awake();
             id = GetComponent<CharacterId>();
             if (fraction == null)
             {

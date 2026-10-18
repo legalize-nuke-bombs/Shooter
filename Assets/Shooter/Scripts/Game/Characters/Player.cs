@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(CharacterId))]
-    public class Player : RegisteredBehaviour, ISaveableComponent
+    public class Player : ShooterBehaviour, ISaveableComponent
     {
         private CharacterId id;
 
@@ -27,9 +27,8 @@ namespace Shooter.Game
             PublicKey = content.To<SaveData>().PublicKey;
         }
 
-        protected override void Awake()
+        protected override void Awakened()
         {
-            base.Awake();
             id = GetComponent<CharacterId>();
         }
 

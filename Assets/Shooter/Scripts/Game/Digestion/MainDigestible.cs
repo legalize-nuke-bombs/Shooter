@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(DigestibleTransform))]
-    public class MainDigestible : RegisteredBehaviour, IDigestible
+    public class MainDigestible : ShooterBehaviour, IDigestible
     {
         [SerializeField] [TextArea(5, 20)] private string content;
         [SerializeField] private DigestibleSize size;
@@ -14,9 +14,8 @@ namespace Shooter.Game
 
         public IDigestible[] Parts { get; private set; }
 
-        protected override void Awake()
+        protected override void Awakened()
         {
-            base.Awake();
             Parts = GetComponents<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
         }
 
