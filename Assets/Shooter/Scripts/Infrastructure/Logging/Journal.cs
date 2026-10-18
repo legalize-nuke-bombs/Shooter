@@ -14,33 +14,33 @@ namespace Shooter.Infrastructure
         [HideInCallstack]
         public void Debug(string message)
         {
-            Say(Level.Debug, LogType.Log, message);
+            Say(Level.Debug, message);
         }
 
         [HideInCallstack]
         public void Info(string message)
         {
-            Say(Level.Info, LogType.Log, message);
+            Say(Level.Info, message);
         }
 
         [HideInCallstack]
         public void Warn(string message)
         {
-            Say(Level.Warn, LogType.Warning, message);
+            Say(Level.Warn, message);
         }
 
         [HideInCallstack]
         public void Error(string message)
         {
-            Say(Level.Error, LogType.Error, message);
+            Say(Level.Error, message);
         }
 
         [HideInCallstack]
-        private void Say(Level level, LogType type, string message)
+        private void Say(Level level, string message)
         {
             if (level < Logs.Least) return;
 
-            UnityEngine.Debug.unityLogger.Log(type, name + ": " + message);
+            Logs.Write(level, name + ": " + message);
         }
     }
 }

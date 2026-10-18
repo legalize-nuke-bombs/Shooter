@@ -16,6 +16,8 @@ namespace Shooter.Infrastructure
 
         private static StreamWriter file;
 
+        [ThreadStatic] private static Level? writingLevel;
+
         public static Level Least { get; set; } = Level.Info;
 
         // Before anything else wakes up: the file is named after this instance, the level comes from the config
@@ -42,6 +44,27 @@ namespace Shooter.Infrastructure
         public static Journal Here([CallerFilePath] string path = null)
         {
             return new Journal(string.IsNullOrEmpty(path) ? "?" : Path.GetFileNameWithoutExtension(path));
+        }
+
+        [HideInCallstack]
+        internal static void Write(Level level, string line)
+        {
+            LogType type = level switch
+            {
+                Level.Warn => LogType.Warning,
+                Level.Error => LogType.Error,
+                _ => LogType.Log
+            };
+
+            writingLevel = level;
+            try
+            {
+                Debug.unityLogger.Log(type, line);
+            }
+            finally
+            {
+                writingLevel = null;
+            }
         }
 
         public static void ToFile(string name)
@@ -118,11 +141,13 @@ namespace Shooter.Infrastructure
 
         private static string Stamped(LogType type, string message)
         {
-            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + LevelOf(type) + " [" + ThreadName() + "] " + message;
+            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + Label(type) + " [" + ThreadName() + "] " + message;
         }
 
-        private static string LevelOf(LogType type)
+        private static string Label(LogType type)
         {
+            if (writingLevel == Level.Debug) return "DEBUG";
+
             return type switch
             {
                 LogType.Warning => "WARN",
