@@ -14,7 +14,7 @@ namespace Shooter.Game
 
         public IDigestible[] Parts { get; private set; }
 
-        protected override void Awakened()
+        protected override void ShooterAwake()
         {
             Parts = GetComponents<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
         }

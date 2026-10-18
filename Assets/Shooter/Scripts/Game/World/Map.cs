@@ -40,7 +40,7 @@ namespace Shooter.Game
             return null;
         }
 
-        protected override void Awakened()
+        protected override void ShooterAwake()
         {
             if (Registers.Of<Map>(Inactive.Include).Count() > 1) Log.Error("A second map has appeared");
 
@@ -62,7 +62,7 @@ namespace Shooter.Game
             if (!network.IsListening) Stopped(false);
         }
 
-        protected override void Destroying()
+        protected override void ShooterOnDestroy()
         {
             network.OnClientStopped -= Stopped;
             network.OnServerStopped -= Stopped;

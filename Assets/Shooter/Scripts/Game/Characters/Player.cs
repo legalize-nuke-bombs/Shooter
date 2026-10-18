@@ -27,7 +27,7 @@ namespace Shooter.Game
             PublicKey = content.To<SaveData>().PublicKey;
         }
 
-        protected override void Awakened()
+        protected override void ShooterAwake()
         {
             id = GetComponent<CharacterId>();
         }
