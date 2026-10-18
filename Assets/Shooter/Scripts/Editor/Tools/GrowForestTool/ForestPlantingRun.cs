@@ -76,7 +76,7 @@ namespace Shooter.Editor
                 int right = Column(area.xMax);
                 int bottom = Row(area.yMin);
                 int top = Row(area.yMax);
-                var cells = new int[(right - left + 1) * (top - bottom + 1)];
+                int[] cells = new int[(right - left + 1) * (top - bottom + 1)];
                 int next = 0;
                 for (int row = bottom; row <= top; row++)
                 {
@@ -172,7 +172,7 @@ namespace Shooter.Editor
 
         public string Plant(List<Terrain> targets)
         {
-            var started = DateTime.Now;
+            DateTime started = DateTime.Now;
             Physics.SyncTransforms();
 
             tiles = targets.ConvertAll(TileOf);
@@ -221,7 +221,7 @@ namespace Shooter.Editor
             TerrainData data = terrain.terrainData;
             TreePrototype[] prototypes = data.treePrototypes;
             var palette = new List<TreePrototype>(prototypes);
-            var tile = new Tile
+            Tile tile = new()
             {
                 Terrain = terrain,
                 Data = data,
@@ -260,7 +260,7 @@ namespace Shooter.Editor
         private float[,] DensityMap(TerrainData data)
         {
             TerrainLayer[] palette = data.terrainLayers;
-            var layerDensity = new float[palette.Length];
+            float[] layerDensity = new float[palette.Length];
             for (int layer = 0; layer < palette.Length; layer++)
             {
                 layerDensity[layer] = 1f;
@@ -276,7 +276,7 @@ namespace Shooter.Editor
             int side = data.alphamapResolution;
             int step = Mathf.Max(1, side / DensitySide);
             int reduced = side / step;
-            var density = new float[reduced, reduced];
+            float[,] density = new float[reduced, reduced];
             for (int y = 0; y < reduced; y++)
             {
                 float[,,] row = data.GetAlphamaps(0, y * step, side, 1);
@@ -310,7 +310,7 @@ namespace Shooter.Editor
                 foreach (TreeInstance instance in data.treeInstances)
                 {
                     GameObject prefab = prototypes[instance.prototypeIndex].prefab;
-                    var position = new Vector2(area.x + instance.position.x * area.width, area.y + instance.position.z * area.height);
+                    Vector2 position = new(area.x + instance.position.x * area.width, area.y + instance.position.z * area.height);
                     if (IsForestSpecies(prefab))
                     {
                         if (!regrown)
@@ -349,7 +349,7 @@ namespace Shooter.Editor
                 Matrix4x4 local = root * filter.transform.localToWorldMatrix;
                 for (int corner = 0; corner < 8; corner++)
                 {
-                    var sign = new Vector3((corner & 1) == 0 ? -1f : 1f, (corner & 2) == 0 ? -1f : 1f, (corner & 4) == 0 ? -1f : 1f);
+                    Vector3 sign = new((corner & 1) == 0 ? -1f : 1f, (corner & 2) == 0 ? -1f : 1f, (corner & 4) == 0 ? -1f : 1f);
                     Vector3 point = local.MultiplyPoint3x4(bounds.center + Vector3.Scale(bounds.extents, sign));
                     widest = Mathf.Max(widest, new Vector2(point.x, point.z).magnitude);
                 }
@@ -390,7 +390,7 @@ namespace Shooter.Editor
                 }
 
                 float height = tile.Data.GetInterpolatedHeight(uv.x, uv.y);
-                var foot = new Vector3(position.x, tile.BaseHeight + height, position.y);
+                Vector3 foot = new(position.x, tile.BaseHeight + height, position.y);
                 if (NearWater(foot))
                 {
                     rejectedNearWater++;
@@ -441,7 +441,7 @@ namespace Shooter.Editor
             for (int i = 0; i < ShoreProbes; i++)
             {
                 float angle = 2f * Mathf.PI * i / ShoreProbes;
-                var probe = new Vector3(foot.x + settings.distanceFromWater * Mathf.Cos(angle), 0f, foot.z + settings.distanceFromWater * Mathf.Sin(angle));
+                Vector3 probe = new(foot.x + settings.distanceFromWater * Mathf.Cos(angle), 0f, foot.z + settings.distanceFromWater * Mathf.Sin(angle));
                 int index = TerrainIndexAt(probe);
                 if (index < 0) continue;
 
@@ -475,7 +475,7 @@ namespace Shooter.Editor
 
         private bool Blocked(Vector3 foot)
         {
-            var origin = new Vector3(foot.x, ceiling, foot.z);
+            Vector3 origin = new(foot.x, ceiling, foot.z);
             int count = Physics.SphereCastNonAlloc(origin, settings.clearanceAroundObjects, Vector3.down, hits, ceiling - foot.y, settings.obstacles, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < count; i++)
             {
@@ -490,7 +490,7 @@ namespace Shooter.Editor
             int picked = PickSpecies(position);
             Vector2 scaleRange = species[picked].scaleRange;
             float scale = Mathf.Lerp(scaleRange.x, scaleRange.y, (float)random.NextDouble());
-            var gray = (byte)(255f * (1f - MostShade * (float)random.NextDouble()));
+            byte gray = (byte)(255f * (1f - MostShade * (float)random.NextDouble()));
             tile.Trees.Add(new TreeInstance
             {
                 position = new Vector3(uv.x, height / tile.Data.size.y, uv.y),
@@ -537,8 +537,8 @@ namespace Shooter.Editor
 
         private static Rect BoundingArea(IEnumerable<Rect> areas)
         {
-            var min = new Vector2(float.MaxValue, float.MaxValue);
-            var max = new Vector2(float.MinValue, float.MinValue);
+            Vector2 min = new(float.MaxValue, float.MaxValue);
+            Vector2 max = new(float.MinValue, float.MinValue);
             foreach (Rect area in areas)
             {
                 min = Vector2.Min(min, area.min);

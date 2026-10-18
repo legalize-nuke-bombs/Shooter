@@ -136,7 +136,7 @@ namespace Shooter.Editor
             Water[] waters = Object.FindObjectsByType<Water>(FindObjectsInactive.Exclude);
             Physics.SyncTransforms();
 
-            var started = DateTime.Now;
+            DateTime started = DateTime.Now;
             long grassy = 0;
             long bare = 0;
             try
@@ -188,11 +188,11 @@ namespace Shooter.Editor
 
         private static DetailPrototype[] Prototypes(List<DetailLayer> layers)
         {
-            var prototypes = new DetailPrototype[layers.Count];
+            DetailPrototype[] prototypes = new DetailPrototype[layers.Count];
             for (int i = 0; i < layers.Count; i++)
             {
                 GrassPlant plant = layers[i].Plant;
-                var prototype = new DetailPrototype
+                DetailPrototype prototype = new()
                 {
                     prototype = plant.prefab,
                     usePrototypeMesh = true,
@@ -226,7 +226,7 @@ namespace Shooter.Editor
             data.detailPrototypes = prototypes;
             data.SetDetailResolution(cellsAlongTerrain, CellsPerPatch);
             int mostPerCell = data.maxDetailScatterPerRes;
-            var random = new System.Random(terrain.name.GetHashCode());
+            System.Random random = new(terrain.name.GetHashCode());
 
             TerrainLayer[] palette = data.terrainLayers;
             foreach (DetailLayer layer in layers)
@@ -247,7 +247,7 @@ namespace Shooter.Editor
             int side = data.detailResolution;
             int alphaSide = data.alphamapResolution;
             float[,,] alphamaps = data.GetAlphamaps(0, 0, alphaSide, alphaSide);
-            var maps = new int[layers.Count][,];
+            int[][,] maps = new int[layers.Count][,];
             for (int k = 0; k < layers.Count; k++)
             {
                 maps[k] = new int[side, side];
@@ -265,7 +265,7 @@ namespace Shooter.Editor
                     float v = (y + 0.5f) / side;
                     if (data.GetSteepness(u, v) > steepestSlope) continue;
 
-                    var point = new Vector3(corner.x + u * size.x, corner.y + data.GetInterpolatedHeight(u, v), corner.z + v * size.z);
+                    Vector3 point = new(corner.x + u * size.x, corner.y + data.GetInterpolatedHeight(u, v), corner.z + v * size.z);
                     if (Submerged(point, waters)) continue;
 
                     int ax = Mathf.Min((int)(u * alphaSide), alphaSide - 1);
@@ -327,7 +327,7 @@ namespace Shooter.Editor
             Vector3 size = terrain.terrainData.size;
             float top = corner.y + size.y + RayHeadroom;
             float reach = size.y + 2f * RayHeadroom;
-            var query = new QueryParameters(obstacles, false, QueryTriggerInteraction.Ignore, false);
+            QueryParameters query = new(obstacles, false, QueryTriggerInteraction.Ignore, false);
             var commands = new NativeArray<RaycastCommand>(grassyCells.Count, Allocator.TempJob);
             var hits = new NativeArray<RaycastHit>(grassyCells.Count, Allocator.TempJob);
             try
@@ -336,7 +336,7 @@ namespace Shooter.Editor
                 {
                     int x = grassyCells[i] % side;
                     int y = grassyCells[i] / side;
-                    var origin = new Vector3(corner.x + (x + 0.5f) / side * size.x, top, corner.z + (y + 0.5f) / side * size.z);
+                    Vector3 origin = new(corner.x + (x + 0.5f) / side * size.x, top, corner.z + (y + 0.5f) / side * size.z);
                     commands[i] = new RaycastCommand(origin, Vector3.down, query, reach);
                 }
 

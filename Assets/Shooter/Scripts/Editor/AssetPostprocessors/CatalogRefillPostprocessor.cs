@@ -49,7 +49,7 @@ namespace Shooter.Editor
                 .OrderBy(spec => spec.name, StringComparer.Ordinal)
                 .ToList();
 
-            var serializedCatalog = new SerializedObject(catalog);
+            SerializedObject serializedCatalog = new(catalog);
             SerializedProperty specsProperty = serializedCatalog.FindProperty(Catalog<Spec>.SpecsField);
 
             List<string> namesBefore = SpecNames(specsProperty);

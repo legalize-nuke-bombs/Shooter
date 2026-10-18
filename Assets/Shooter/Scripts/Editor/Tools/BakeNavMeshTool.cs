@@ -86,7 +86,7 @@ namespace Shooter.Editor
                 return false;
             }
 
-            var serialized = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath(AgentSettingsPath)[0]);
+            SerializedObject serialized = new(AssetDatabase.LoadAllAssetsAtPath(AgentSettingsPath)[0]);
             SerializedProperty agent = serialized.FindProperty("m_Settings").GetArrayElementAtIndex(0);
             agent.FindPropertyRelative("agentRadius").floatValue = controller.radius;
             agent.FindPropertyRelative("agentHeight").floatValue = controller.height;
@@ -113,7 +113,7 @@ namespace Shooter.Editor
 
         private static GameObject BuildTreeProxies()
         {
-            var root = new GameObject("TreeBakeProxies");
+            GameObject root = new("TreeBakeProxies");
             int built = 0;
             int shapes = 0;
 
@@ -121,7 +121,7 @@ namespace Shooter.Editor
             {
                 TerrainData data = terrain.terrainData;
                 TreePrototype[] prototypes = data.treePrototypes;
-                var colliders = new Collider[prototypes.Length][];
+                Collider[][] colliders = new Collider[prototypes.Length][];
                 for (int i = 0; i < prototypes.Length; i++)
                 {
                     colliders[i] = prototypes[i].prefab == null ? new Collider[0] : prototypes[i].prefab.GetComponentsInChildren<Collider>(true);
