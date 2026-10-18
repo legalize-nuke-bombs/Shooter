@@ -252,10 +252,7 @@ GameObject:
   - component: {fileID: 699996685639266931}
   - component: {fileID: 5038630363986091630}
   - component: {fileID: 427411115658280303}
-  - component: {fileID: -962150206808761716}
-  - component: {fileID: 6571235420989052650}
   - component: {fileID: 5582404725710639054}
-  - component: {fileID: 3183200403606684273}
   - component: {fileID: 4010349567147579858}
   m_Layer: 0
   m_Name: StreetLamp1_ShortDouble (Concrete)
@@ -374,45 +371,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.MainLlmMeta
   content: An old street lamp, two bulbs
   size: 1
---- !u!114 &-962150206808761716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263881239168321199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 879873498
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  m_InScenePlaced: 0
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
---- !u!114 &6571235420989052650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263881239168321199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09f9eb2a89611456e858577d0a9d30e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Sounding.Speaker
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &5582404725710639054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,20 +383,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0994b96bab5f474394fb7847ac2cf72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Scattered
---- !u!114 &3183200403606684273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263881239168321199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a0761b85cfc472bae4021d23cdec103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
-  ShowTopMostFoldoutHeaderGroup: 1
-  id: 
 --- !u!114 &4010349567147579858
 MonoBehaviour:
   m_ObjectHideFlags: 0
