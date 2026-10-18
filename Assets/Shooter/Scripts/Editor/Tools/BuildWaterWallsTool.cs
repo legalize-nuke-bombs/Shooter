@@ -57,7 +57,7 @@ namespace Shooter.Editor
             float level = surface.position.y;
             float line = level - water.WallDepth;
             Vector3 extent = surface.lossyScale / 2f;
-            var origin = new Vector2(surface.position.x - extent.x, surface.position.z - extent.z);
+            Vector2 origin = new(surface.position.x - extent.x, surface.position.z - extent.z);
 
             float[,] ground = GroundHeightsWithOuterRing(origin, extent, line);
             Transform walls = UnscaledWallsUnder(surface);
@@ -117,7 +117,7 @@ namespace Shooter.Editor
             int nodesX = Mathf.FloorToInt(extent.x * 2f / GridStep) + 1;
             int nodesZ = Mathf.FloorToInt(extent.z * 2f / GridStep) + 1;
 
-            var ground = new float[nodesX + 2, nodesZ + 2];
+            float[,] ground = new float[nodesX + 2, nodesZ + 2];
             for (int x = 0; x < nodesX + 2; x++)
             {
                 for (int z = 0; z < nodesZ + 2; z++)
@@ -193,7 +193,7 @@ namespace Shooter.Editor
             {
                 for (int z = 0; z < cellsZ; z++)
                 {
-                    var cell = new Cell
+                    Cell cell = new()
                     {
                         Origin = framedOrigin + new Vector2(x, z) * GridStep,
                         NearLeft = ground[x, z],

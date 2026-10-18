@@ -238,8 +238,8 @@ namespace Shooter.Editor
 
             private static void Neutral(Animator animator)
             {
-                using var handler = new HumanPoseHandler(animator.avatar, animator.transform);
-                var pose = new HumanPose();
+                using HumanPoseHandler handler = new(animator.avatar, animator.transform);
+                HumanPose pose = new();
                 handler.GetHumanPose(ref pose);
                 pose.bodyRotation = Quaternion.identity;
                 pose.muscles = new float[HumanTrait.MuscleCount];

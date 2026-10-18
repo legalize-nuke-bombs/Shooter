@@ -20,7 +20,7 @@ namespace Shooter.Editor
             {
                 if (!string.IsNullOrEmpty(saveable.Id)) continue;
 
-                var serialized = new SerializedObject(saveable);
+                SerializedObject serialized = new(saveable);
                 serialized.FindProperty(SaveableObject.IdField).stringValue = Guid.NewGuid().ToString();
                 serialized.ApplyModifiedProperties();
 

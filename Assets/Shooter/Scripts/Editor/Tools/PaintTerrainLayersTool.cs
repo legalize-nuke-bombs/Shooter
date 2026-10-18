@@ -168,8 +168,8 @@ namespace Shooter.Editor
                 return;
             }
 
-            var started = DateTime.Now;
-            var heights = new HeightsAcrossTerrains(Terrain.activeTerrains);
+            DateTime started = DateTime.Now;
+            HeightsAcrossTerrains heights = new(Terrain.activeTerrains);
             var shares = new Dictionary<TerrainLayer, double>();
             double texels = 0d;
             int painted = 0;
@@ -202,7 +202,7 @@ namespace Shooter.Editor
                 return;
             }
 
-            var summary = new StringBuilder($"Painted {painted} terrains in {(DateTime.Now - started).TotalSeconds:F1} s:");
+            StringBuilder summary = new($"Painted {painted} terrains in {(DateTime.Now - started).TotalSeconds:F1} s:");
             foreach (KeyValuePair<TerrainLayer, double> share in shares)
             {
                 summary.Append($" {share.Key.name} {share.Value / texels:P0}");
@@ -237,8 +237,8 @@ namespace Shooter.Editor
                 ruled = GaussianBlurred(ruled, softness, blurMargin);
             }
 
-            var maps = new float[resolution, resolution, layers];
-            var totals = new double[layers];
+            float[,,] maps = new float[resolution, resolution, layers];
+            double[] totals = new double[layers];
             double covered = 0d;
 
             for (int row = 0; row < resolution; row++)
@@ -293,8 +293,8 @@ namespace Shooter.Editor
             }
 
             int span = resolution + blurMargin * 2;
-            var ruled = new float[span, span, layers];
-            var weights = new float[layers];
+            float[,,] ruled = new float[span, span, layers];
+            float[] weights = new float[layers];
 
             for (int row = 0; row < span; row++)
             {
@@ -338,7 +338,7 @@ namespace Shooter.Editor
 
         private static float[,,] GaussianBlurred(float[,,] ruled, float softness, int blurMargin)
         {
-            var kernel = new float[blurMargin * 2 + 1];
+            float[] kernel = new float[blurMargin * 2 + 1];
             float sigma = softness / 2f;
             float sum = 0f;
             for (int i = 0; i < kernel.Length; i++)
@@ -355,8 +355,8 @@ namespace Shooter.Editor
 
             int span = ruled.GetLength(0);
             int layers = ruled.GetLength(2);
-            var across = new float[span, span, layers];
-            var along = new float[span, span, layers];
+            float[,,] across = new float[span, span, layers];
+            float[,,] along = new float[span, span, layers];
 
             for (int row = 0; row < span; row++)
             {
@@ -429,7 +429,7 @@ namespace Shooter.Editor
                 return palette.Count - 1;
             }
 
-            var channels = new int[rules.Count + 1];
+            int[] channels = new int[rules.Count + 1];
             channels[0] = Index(background);
             for (int i = 0; i < rules.Count; i++)
             {

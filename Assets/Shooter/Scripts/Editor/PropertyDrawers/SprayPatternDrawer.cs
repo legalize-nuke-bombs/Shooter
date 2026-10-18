@@ -27,17 +27,17 @@ namespace Shooter.Editor
         {
             SerializedProperty points = property.FindPropertyRelative(SprayPattern.PointsField);
 
-            var header = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+            Rect header = new(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(header, label.text, $"{points.arraySize} bullets | LMB add/drag, Alt+LMB delete, RMB pan, wheel zoom");
 
             float side = Mathf.Min(CanvasSide, position.width - 4f);
-            var canvas = new Rect(position.x + (position.width - side) * 0.5f, header.yMax + 2f, side, side);
+            Rect canvas = new(position.x + (position.width - side) * 0.5f, header.yMax + 2f, side, side);
             float range = EditorPrefs.GetFloat(RangeKey, 5f);
-            var pan = new Vector2(EditorPrefs.GetFloat(PanXKey, 0f), EditorPrefs.GetFloat(PanYKey, 0f));
+            Vector2 pan = new(EditorPrefs.GetFloat(PanXKey, 0f), EditorPrefs.GetFloat(PanYKey, 0f));
 
             HandleMouse(canvas, points, range, pan);
 
-            var list = new Rect(position.x, canvas.yMax + 4f, position.width, EditorGUI.GetPropertyHeight(points, true));
+            Rect list = new(position.x, canvas.yMax + 4f, position.width, EditorGUI.GetPropertyHeight(points, true));
             EditorGUI.PropertyField(list, points, new GUIContent("Points"), true);
 
             if (Event.current.type != EventType.Repaint) return;
@@ -45,7 +45,7 @@ namespace Shooter.Editor
             EditorGUI.DrawRect(canvas, new Color(0.12f, 0.12f, 0.12f));
 
             GUI.BeginClip(canvas);
-            var local = new Rect(0f, 0f, canvas.width, canvas.height);
+            Rect local = new(0f, 0f, canvas.width, canvas.height);
             DrawGrid(local, range, pan);
             DrawPattern(local, points, range, pan);
             GUI.EndClip();
@@ -165,8 +165,8 @@ namespace Shooter.Editor
         private static void DrawGrid(Rect canvas, float range, Vector2 pan)
         {
             float step = range <= 6f ? 1f : range <= 14f ? 2f : 5f;
-            var faint = new Color(1f, 1f, 1f, 0.05f);
-            var axis = new Color(1f, 1f, 1f, 0.18f);
+            Color faint = new(1f, 1f, 1f, 0.05f);
+            Color axis = new(1f, 1f, 1f, 0.18f);
             float half = canvas.width * 0.5f;
 
             for (int i = Mathf.CeilToInt((pan.x - range) / step); i * step <= pan.x + range; i++)
@@ -190,7 +190,7 @@ namespace Shooter.Editor
             int count = points.arraySize;
             if (count == 0) return;
 
-            var line = new Vector3[count + 1];
+            Vector3[] line = new Vector3[count + 1];
             line[0] = Pixel(canvas, Vector2.zero, range, pan);
 
             for (int i = 0; i < count; i++)
@@ -204,7 +204,7 @@ namespace Shooter.Editor
             for (int i = 0; i < count; i++)
             {
                 Vector2 degrees = points.GetArrayElementAtIndex(i).vector2Value;
-                var pixel = (Vector2)line[i + 1];
+                Vector2 pixel = line[i + 1];
 
                 Handles.color = i == dragged ? Color.white : i == 0 ? new Color(0.4f, 0.8f, 1f) : new Color(1f, 0.55f, 0.1f);
                 Handles.DrawSolidDisc(pixel, Vector3.forward, 4.5f);

@@ -104,7 +104,7 @@ namespace Shooter.Editor
             }
 
             Light[] sceneLights = Array.FindAll(Object.FindObjectsByType<Light>(FindObjectsInactive.Exclude), light => light.enabled);
-            var studio = new GameObject("Icon Studio") { hideFlags = HideFlags.HideAndDontSave };
+            GameObject studio = new("Icon Studio") { hideFlags = HideFlags.HideAndDontSave };
             VolumeProfile profile = StudioVolume(studio, layer, setup.exposure);
             try
             {
@@ -162,7 +162,7 @@ namespace Shooter.Editor
 
         private static GameObject StudioPart(GameObject studio, int layer, string name)
         {
-            var part = new GameObject(name) { layer = layer };
+            GameObject part = new(name) { layer = layer };
             part.transform.SetParent(studio.transform);
             return part;
         }
@@ -203,15 +203,12 @@ namespace Shooter.Editor
 
         private static float OrthographicSize(Bounds bounds, IconSetup setup)
         {
-            var sight = Quaternion.Euler(setup.sightAngles);
+            Quaternion sight = Quaternion.Euler(setup.sightAngles);
             Vector3 extents = bounds.extents;
             float widest = 0f;
             for (int corner = 0; corner < 8; corner++)
             {
-                var offset = new Vector3(
-                    (corner & 1) == 0 ? -extents.x : extents.x,
-                    (corner & 2) == 0 ? -extents.y : extents.y,
-                    (corner & 4) == 0 ? -extents.z : extents.z);
+                Vector3 offset = new((corner & 1) == 0 ? -extents.x : extents.x, (corner & 2) == 0 ? -extents.y : extents.y, (corner & 4) == 0 ? -extents.z : extents.z);
                 Vector3 seen = Quaternion.Inverse(sight) * offset;
                 widest = Mathf.Max(widest, Mathf.Abs(seen.x), Mathf.Abs(seen.y));
             }
@@ -278,7 +275,7 @@ namespace Shooter.Editor
 
         private static Texture2D RenderOn(Camera camera, HDAdditionalCameraData data, Color background, int size)
         {
-            var target = new RenderTexture(size, size, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            RenderTexture target = new(size, size, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
             RenderTexture previous = RenderTexture.active;
 
             data.backgroundColorHDR = background;
@@ -286,7 +283,7 @@ namespace Shooter.Editor
             camera.Render();
 
             RenderTexture.active = target;
-            var shot = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            Texture2D shot = new(size, size, TextureFormat.RGBA32, false);
             shot.ReadPixels(new Rect(0f, 0f, size, size), 0, 0);
             shot.Apply();
 
@@ -301,7 +298,7 @@ namespace Shooter.Editor
         {
             Color[] dark = onBlack.GetPixels();
             Color[] light = onWhite.GetPixels();
-            var pixels = new Color[dark.Length];
+            Color[] pixels = new Color[dark.Length];
 
             float span = Mathf.Max(light[0].r - dark[0].r, light[0].g - dark[0].g, light[0].b - dark[0].b);
             if (span <= 0.01f)
@@ -318,7 +315,7 @@ namespace Shooter.Editor
                 pixels[index] = alpha <= 0.004f ? Color.clear : new Color(over.r / alpha, over.g / alpha, over.b / alpha, alpha);
             }
 
-            var shot = new Texture2D(onBlack.width, onBlack.height, TextureFormat.RGBA32, false);
+            Texture2D shot = new(onBlack.width, onBlack.height, TextureFormat.RGBA32, false);
             shot.SetPixels(pixels);
             shot.Apply();
             return shot;
@@ -352,7 +349,7 @@ namespace Shooter.Editor
 
             int width = right - left + 1;
             int height = top - bottom + 1;
-            var cropped = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            Texture2D cropped = new(width, height, TextureFormat.RGBA32, false);
             cropped.SetPixels(shot.GetPixels(left, bottom, width, height));
             cropped.Apply();
             return cropped;
@@ -366,7 +363,7 @@ namespace Shooter.Editor
             File.WriteAllBytes(path, shot.EncodeToPNG());
             AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
 
-            var importer = (TextureImporter)AssetImporter.GetAtPath(path);
+            TextureImporter importer = (TextureImporter)AssetImporter.GetAtPath(path);
             importer.textureType = TextureImporterType.Sprite;
             importer.spriteImportMode = SpriteImportMode.Single;
             importer.alphaIsTransparency = true;
