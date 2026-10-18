@@ -24,7 +24,7 @@ namespace Shooter.Editor
                 serialized.FindProperty(SaveableObject.IdField).stringValue = Guid.NewGuid().ToString();
                 serialized.ApplyModifiedProperties();
 
-                Log.Debug($"Saveable {saveable.name} got id {saveable.Id}");
+                Log.Info($"Saveable {saveable.name} got id {saveable.Id}");
                 baked++;
             }
 
