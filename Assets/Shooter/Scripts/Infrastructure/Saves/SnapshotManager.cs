@@ -28,7 +28,18 @@ namespace Shooter.Infrastructure
                     continue;
                 }
 
-                if (!snapshot.GameObjects.TryAdd(saveable.Id, saveable.SaveObject()))
+                object saved;
+                try
+                {
+                    saved = saveable.SaveObject();
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Failed to save {saveable.name} {saveable.Id} : {e.Message}");
+                    continue;
+                }
+
+                if (!snapshot.GameObjects.TryAdd(saveable.Id, saved))
                 {
                     Log.Warn($"Snapshot found that {saveable.name} shares id {saveable.Id} with an entity already saved");
                 }
