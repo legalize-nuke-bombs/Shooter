@@ -18,7 +18,7 @@ namespace Shooter.Editor
 
             foreach (string guid in AssetDatabase.FindAssets("t:" + nameof(Catalog)))
             {
-                var catalog = AssetDatabase.LoadAssetAtPath<Catalog>(AssetDatabase.GUIDToAssetPath(guid));
+                Catalog catalog = AssetDatabase.LoadAssetAtPath<Catalog>(AssetDatabase.GUIDToAssetPath(guid));
                 Type specType = SpecTypeOf(catalog.GetType());
                 if (specType != null)
                 {
