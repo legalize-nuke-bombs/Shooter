@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public static class Catalogs
     {
-        private const string Folder = "Catalogs";
+        private const string ResourcesFolder = "Catalogs";
         private static readonly Journal Log = Logs.Here();
 
         private static Dictionary<Type, Catalog> known;
@@ -25,13 +25,15 @@ namespace Shooter.Infrastructure
         {
             var found = new Dictionary<Type, Catalog>();
 
-            foreach (Catalog catalog in Resources.LoadAll<Catalog>(Folder))
+            foreach (Catalog catalog in Resources.LoadAll<Catalog>(ResourcesFolder))
             {
                 if (!found.TryAdd(catalog.GetType(), catalog))
+                {
                     Log.Error($"Catalogs hold two of {catalog.GetType().Name}, {catalog.name} is ignored");
+                }
             }
 
-            Log.Info($"Catalogs serve {found.Count} kinds");
+            Log.Info($"Catalogs loaded {found.Count} catalogs");
             return found;
         }
     }
