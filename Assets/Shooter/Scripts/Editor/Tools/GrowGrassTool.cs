@@ -88,18 +88,26 @@ namespace Shooter.Editor
                                        "on the obstacle layers", EditorStyles.wordWrappedMiniLabel);
 
             EditorGUILayout.Space();
-            List<Terrain> targets = Landscape.Targets();
-            EditorGUILayout.LabelField(Landscape.Selected() ? $"{targets.Count} selected terrains" : $"{targets.Count} terrains of the landscape");
+            var targets = new List<Terrain>(Selection.GetFiltered<Terrain>(SelectionMode.Unfiltered));
+            EditorGUILayout.LabelField(targets.Count == 0 ? "Select the terrains to grow grass on" : $"{targets.Count} selected terrains");
 
-            if (GUILayout.Button("Grow grass"))
+            using (new EditorGUI.DisabledScope(targets.Count == 0))
             {
-                Grow(targets);
+                if (GUILayout.Button("Grow grass"))
+                {
+                    Grow(targets);
+                }
             }
 
             if (!string.IsNullOrEmpty(result))
             {
                 EditorGUILayout.LabelField(result, EditorStyles.wordWrappedLabel);
             }
+        }
+
+        private void OnSelectionChange()
+        {
+            Repaint();
         }
 
         private void Field(string name, string label, bool children = false)
@@ -112,12 +120,6 @@ namespace Shooter.Editor
             if (EditorApplication.isPlaying)
             {
                 Log.Warn("Grass grows in edit mode only, stop the play mode first");
-                return;
-            }
-
-            if (targets.Count == 0)
-            {
-                Log.Warn("Scene has no terrain to grow grass on");
                 return;
             }
 
