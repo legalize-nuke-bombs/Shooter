@@ -65,7 +65,6 @@ GameObject:
   m_Component:
   - component: {fileID: 354867925509048298}
   - component: {fileID: 4807207596415725723}
-  - component: {fileID: 1890376712863660990}
   - component: {fileID: -4329957411340277084}
   - component: {fileID: 2660321299947627721}
   m_Layer: 0
@@ -135,18 +134,6 @@ LODGroup:
     - renderer: {fileID: 8576870544317805893}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
---- !u!114 &1890376712863660990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1127992084609228112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0994b96bab5f474394fb7847ac2cf72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Scattered
 --- !u!114 &-4329957411340277084
 MonoBehaviour:
   m_ObjectHideFlags: 0
