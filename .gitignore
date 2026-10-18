@@ -48,8 +48,6 @@ shooter-logs/
 /Saves
 /Screenshots
 
-# MapMagic: demos and manual stay local
-Assets/ThirdParty/MapMagic/Demo/
-Assets/ThirdParty/MapMagic/Demo.meta
-Assets/ThirdParty/MapMagic/Manual.pdf
-Assets/ThirdParty/MapMagic/Manual.pdf.meta
+# Rifle VSS: the pack waits on disk, not in git
+Assets/ThirdParty/Gece Studio/
+Assets/ThirdParty/Gece Studio.meta
