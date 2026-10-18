@@ -11,6 +11,7 @@ namespace Shooter.Infrastructure
 
     public abstract class Catalog<TSpec> : Catalog where TSpec : Spec
     {
+        public const string SpecsField = nameof(specs);
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private TSpec[] specs;
