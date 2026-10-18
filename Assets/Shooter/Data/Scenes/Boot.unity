@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394caf36a0ae5b2408aabc8df3fafa8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.Boot
-  menu: Menu
+  menuScene: Menu
 --- !u!4 &812766071
 Transform:
   m_ObjectHideFlags: 0
