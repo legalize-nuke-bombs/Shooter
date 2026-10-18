@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace Shooter.Editor
 {
-    public class CatalogFiller : AssetPostprocessor
+    public class CatalogRefillPostprocessor : AssetPostprocessor
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -19,17 +19,17 @@ namespace Shooter.Editor
             foreach (string guid in AssetDatabase.FindAssets("t:" + nameof(Catalog)))
             {
                 var catalog = AssetDatabase.LoadAssetAtPath<Catalog>(AssetDatabase.GUIDToAssetPath(guid));
-                Type specType = SpecType(catalog.GetType());
+                Type specType = SpecTypeOf(catalog.GetType());
                 if (specType != null)
                 {
-                    Fill(catalog, specType);
+                    Refill(catalog, specType);
                 }
             }
         }
 
-        private static Type SpecType(Type catalog)
+        private static Type SpecTypeOf(Type catalogType)
         {
-            for (Type type = catalog; type != null; type = type.BaseType)
+            for (Type type = catalogType; type != null; type = type.BaseType)
             {
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Catalog<>))
                 {
@@ -40,41 +40,41 @@ namespace Shooter.Editor
             return null;
         }
 
-        private static void Fill(Catalog catalog, Type specType)
+        private static void Refill(Catalog catalog, Type specType)
         {
-            var found = AssetDatabase.FindAssets("t:" + specType.Name)
+            var specsInProject = AssetDatabase.FindAssets("t:" + specType.Name)
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<ScriptableObject>)
                 .Where(specType.IsInstanceOfType)
                 .OrderBy(spec => spec.name, StringComparer.Ordinal)
                 .ToList();
 
-            var serialized = new SerializedObject(catalog);
-            SerializedProperty specs = serialized.FindProperty(Catalog<Spec>.SpecsField);
+            var serializedCatalog = new SerializedObject(catalog);
+            SerializedProperty specsProperty = serializedCatalog.FindProperty(Catalog<Spec>.SpecsField);
 
-            List<string> before = Listed(specs);
-            var after = found.Select(spec => spec.name).ToList();
+            List<string> namesBefore = SpecNames(specsProperty);
+            var namesAfter = specsInProject.Select(spec => spec.name).ToList();
 
-            if (before.SequenceEqual(after)) return;
+            if (namesBefore.SequenceEqual(namesAfter)) return;
 
-            specs.arraySize = found.Count;
-            for (int i = 0; i < found.Count; i++)
+            specsProperty.arraySize = specsInProject.Count;
+            for (int i = 0; i < specsInProject.Count; i++)
             {
-                specs.GetArrayElementAtIndex(i).objectReferenceValue = found[i];
+                specsProperty.GetArrayElementAtIndex(i).objectReferenceValue = specsInProject[i];
             }
 
-            serialized.ApplyModifiedPropertiesWithoutUndo();
+            serializedCatalog.ApplyModifiedPropertiesWithoutUndo();
             AssetDatabase.SaveAssetIfDirty(catalog);
 
-            Log.Info($"Catalog {catalog.name} refilled with every {specType.Name} in the project: was [{string.Join(", ", before)}], now [{string.Join(", ", after)}]");
+            Log.Info($"Catalog {catalog.name} refilled with every {specType.Name} in the project: was [{string.Join(", ", namesBefore)}], now [{string.Join(", ", namesAfter)}]");
         }
 
-        private static List<string> Listed(SerializedProperty specs)
+        private static List<string> SpecNames(SerializedProperty specsProperty)
         {
             var names = new List<string>();
-            for (int i = 0; i < specs.arraySize; i++)
+            for (int i = 0; i < specsProperty.arraySize; i++)
             {
-                Object spec = specs.GetArrayElementAtIndex(i).objectReferenceValue;
+                Object spec = specsProperty.GetArrayElementAtIndex(i).objectReferenceValue;
                 names.Add(spec == null ? "—" : spec.name);
             }
 
