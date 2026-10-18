@@ -14,7 +14,7 @@ namespace Shooter.Game
         [SerializeField] private Fraction fraction;
         public Fraction Fraction => fraction;
 
-        protected override void Awakened()
+        protected override void ShooterAwake()
         {
             id = GetComponent<CharacterId>();
             if (fraction == null)

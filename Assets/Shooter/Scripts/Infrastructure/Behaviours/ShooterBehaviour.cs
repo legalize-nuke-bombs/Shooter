@@ -7,20 +7,20 @@ namespace Shooter.Infrastructure
         protected void Awake()
         {
             Registers.Add(this);
-            Awakened();
+            ShooterAwake();
         }
 
         protected void OnDestroy()
         {
-            Destroying();
+            ShooterOnDestroy();
             Registers.Remove(this);
         }
 
-        protected virtual void Awakened()
+        protected virtual void ShooterAwake()
         {
         }
 
-        protected virtual void Destroying()
+        protected virtual void ShooterOnDestroy()
         {
         }
     }
