@@ -45,18 +45,26 @@ namespace Shooter.Editor
                 EditorStyles.wordWrappedMiniLabel);
 
             EditorGUILayout.Space();
-            List<Terrain> targets = Landscape.Targets();
-            EditorGUILayout.LabelField(Landscape.Selected() ? $"{targets.Count} selected terrains" : $"{targets.Count} terrains of the landscape");
+            var targets = new List<Terrain>(Selection.GetFiltered<Terrain>(SelectionMode.Unfiltered));
+            EditorGUILayout.LabelField(targets.Count == 0 ? "Select the terrains to grow forest on" : $"{targets.Count} selected terrains");
 
-            if (GUILayout.Button("Grow forest"))
+            using (new EditorGUI.DisabledScope(targets.Count == 0))
             {
-                Grow(targets);
+                if (GUILayout.Button("Grow forest"))
+                {
+                    Grow(targets);
+                }
             }
 
             if (!string.IsNullOrEmpty(result))
             {
                 EditorGUILayout.LabelField(result, EditorStyles.wordWrappedLabel);
             }
+        }
+
+        private void OnSelectionChange()
+        {
+            Repaint();
         }
 
         private void Field(string name, string label, bool children = false)
@@ -72,19 +80,13 @@ namespace Shooter.Editor
                 return;
             }
 
-            if (targets.Count == 0)
-            {
-                Log.Warn("Scene has no terrain to grow forest on");
-                return;
-            }
-
             if (!settings.species.Exists(entry => entry.tree != null && entry.share > 0f))
             {
                 Log.Warn("No species has both a tree and a share, nothing to grow");
                 return;
             }
 
-            result = new ForestPlantingRun(settings, Landscape.All()).Plant(targets);
+            result = new ForestPlantingRun(settings, new List<Terrain>(Terrain.activeTerrains)).Plant(targets);
             Log.Info(result);
         }
     }
