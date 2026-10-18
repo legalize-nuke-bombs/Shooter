@@ -25,7 +25,7 @@ namespace Shooter.Editor
             public float keyLux = 20000f;
             public Vector3 fillAngles = new(10f, 150f, 0f);
             public float fillLux = 6000f;
-            public float exposure = 13.2f;
+            public float exposure = 11.4f;
         }
 
         [SerializeField] private IconSetup setup = new();
@@ -248,6 +248,10 @@ namespace Shooter.Editor
             Tonemapping tonemapping = profile.Add<Tonemapping>();
             tonemapping.mode.overrideState = true;
             tonemapping.mode.value = TonemappingMode.ACES;
+
+            Bloom bloom = profile.Add<Bloom>();
+            bloom.intensity.overrideState = true;
+            bloom.intensity.value = 0f;
 
             Volume volume = StudioPart(studio, layer, "Volume").AddComponent<Volume>();
             volume.isGlobal = true;
