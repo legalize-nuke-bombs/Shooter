@@ -1,9 +1,35 @@
-# Shooter
+# About
 
-3D open-world cooperative survival game with LLM integration.
+3D open-world cooperative survival game with LLM integration. The project is under active development.
 
 ![](Docs/v_0_6_22/s1.jpg)
 ![](Docs/v_0_6_22/s2.jpg)
 ![](Docs/v_0_6_22/s3.jpg)
 ![](Docs/v_0_6_22/s4.jpg)
 ![](Docs/v_0_6_22/s5.jpg)
+
+# Features
+## Core
+* Multiplayer game with self-hosted servers
+* Save system
+## Gameplay
+* Day-night cycle system
+* Health, hunger, endurance, intoxication, inventory
+* Shooting
+* Crafting system
+* Mutants
+## Graphics
+* HDRP
+* DLSS support
+* Texture streaming
+## Multiplayer
+* Decentralized account model based on asymmetric encryption
+## LLM NPSs capabilities
+* Speech (including interactions between NPCs)
+* Vision
+* Persistent memory
+* Movement
+* Transfer and receipt of items, including trade
+* Using items and interacting with the world
+* An individual attitude toward each other character
+* Dynamic character development
