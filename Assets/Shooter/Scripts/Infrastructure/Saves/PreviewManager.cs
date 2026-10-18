@@ -10,7 +10,7 @@ namespace Shooter.Infrastructure
         public static IEnumerator WriteCoroutine(string path)
         {
             Log.Info($"Writing preview to {path}...");
-            yield return ScreenshotManager.WriteCoroutine(path, Setting);
+            yield return Screenshotter.Take(path, Setting);
         }
     }
 }
