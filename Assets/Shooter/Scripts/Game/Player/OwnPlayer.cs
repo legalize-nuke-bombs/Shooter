@@ -45,7 +45,7 @@ namespace Shooter.Game
             if (!ReferenceEquals(current, account))
             {
                 account = current;
-                publicKey = current.Public;
+                publicKey = current.PublicKey;
             }
 
             return publicKey;

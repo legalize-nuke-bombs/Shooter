@@ -53,8 +53,8 @@ namespace Shooter.Game
                 return;
             }
 
-            current = account.Key;
-            identity.text = account.Public;
+            current = account.PrivateKey;
+            identity.text = account.PublicKey;
             phrase.SetValueWithoutNotify(current);
             status.text = "";
         }
@@ -64,7 +64,7 @@ namespace Shooter.Game
             Account account;
             try
             {
-                account = Account.FromKey(entered);
+                account = Account.FromPrivateKey(entered);
             }
             catch (Exception)
             {
