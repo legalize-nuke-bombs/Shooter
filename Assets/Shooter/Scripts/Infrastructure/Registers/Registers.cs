@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
@@ -8,7 +7,7 @@ namespace Shooter.Infrastructure
     {
         private static readonly Dictionary<Type, Register> Known = new();
 
-        public static void Track<T>(T member) where T : Component, IRegistered
+        public static void Add(RegisteredBehaviour member)
         {
             if (!Known.TryGetValue(member.GetType(), out Register register))
             {
@@ -19,7 +18,7 @@ namespace Shooter.Infrastructure
             register.Add(member);
         }
 
-        public static void Untrack<T>(T member) where T : Component, IRegistered
+        public static void Remove(RegisteredBehaviour member)
         {
             if (Known.TryGetValue(member.GetType(), out Register register))
             {
@@ -27,11 +26,11 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public static IEnumerable<T> Of<T>(Inactive gate) where T : Component, IRegistered
+        public static IEnumerable<T> Of<T>(Inactive gate) where T : RegisteredBehaviour
         {
             if (!Known.TryGetValue(typeof(T), out Register register)) yield break;
 
-            foreach (Component member in register.All(gate))
+            foreach (RegisteredBehaviour member in register.All(gate))
             {
                 yield return (T)member;
             }
