@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Shooter.Infrastructure
 {
@@ -8,71 +9,63 @@ namespace Shooter.Infrastructure
     {
         private static readonly Journal Log = Logs.Here();
 
-        public static GameObject Spawn(GameObject prefab)
+        public static GameObject Spawn(GameObject prefab, Action<GameObject> beforeNetworkSpawn)
         {
-            return Spawn(prefab, Vector3.zero, Quaternion.identity, null);
-        }
-
-        public static GameObject Spawn(GameObject prefab, Action<GameObject> prepare)
-        {
-            return Spawn(prefab, Vector3.zero, Quaternion.identity, null, prepare);
+            return Spawn(prefab, Vector3.zero, Quaternion.identity, null, beforeNetworkSpawn);
         }
 
         public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
         {
-            return Spawn(prefab, position, rotation, null);
+            return Spawn(prefab, position, rotation, null, null);
         }
 
         public static GameObject Spawn(GameObject prefab, Transform parent)
         {
-            return Spawn(prefab, Vector3.zero, Quaternion.identity, parent);
+            return Spawn(prefab, Vector3.zero, Quaternion.identity, parent, null);
         }
 
-        public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
-        {
-            return Spawn(prefab, position, rotation, parent, null);
-        }
-
-        // prepare runs between Instantiate and the network spawn: the one moment to set what OnNetworkSpawn will read
-        private static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent,
-            Action<GameObject> prepare)
+        private static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent, Action<GameObject> beforeNetworkSpawn)
         {
             Log.Info($"Spawning {prefab.name} at {position} with parent {(parent != null ? parent.name : "None")}...");
 
-            // Netcode parents only under a spawned network object sitting on this very transform;
-            // GetComponent (unlike GetComponentInParent) also finds it on a frozen, inactive parent
             NetworkObject parentNetworkObject = null;
             if (parent != null)
             {
-                parentNetworkObject = parent.GetComponent<NetworkObject>();
-                if (parentNetworkObject == null || !parentNetworkObject.IsSpawned)
+                parentNetworkObject = SpawnedNetworkObjectOn(parent);
+                if (parentNetworkObject == null)
                 {
                     Log.Error($"Parent {parent.name} does not have a spawned network object, {prefab.name} is not spawned");
                     return null;
                 }
             }
 
-            GameObject body = UnityEngine.Object.Instantiate(prefab, position, rotation);
+            GameObject instance = Object.Instantiate(prefab, position, rotation);
 
-            NetworkObject networkObject = body.GetComponent<NetworkObject>();
+            NetworkObject networkObject = instance.GetComponent<NetworkObject>();
             if (networkObject == null)
             {
                 Log.Error($"Spawned {prefab.name} does not have a network object, destroying...");
-                UnityEngine.Object.Destroy(body);
+                Object.Destroy(instance);
                 return null;
             }
 
-            prepare?.Invoke(body);
+            beforeNetworkSpawn?.Invoke(instance);
             networkObject.Spawn(true);
 
             if (parentNetworkObject != null && !networkObject.TrySetParent(parentNetworkObject, false))
             {
-                Log.Error($"Failed to parent {body.name} to {parent.name} via Netcode, despawning...");
+                Log.Error($"Failed to parent {instance.name} to {parent.name} via Netcode, despawning...");
                 networkObject.Despawn(true);
                 return null;
             }
 
-            return body;
+            return instance;
+        }
+
+        private static NetworkObject SpawnedNetworkObjectOn(Transform parent)
+        {
+            NetworkObject networkObject = parent.GetComponent<NetworkObject>();
+            return networkObject != null && networkObject.IsSpawned ? networkObject : null;
         }
     }
 }
