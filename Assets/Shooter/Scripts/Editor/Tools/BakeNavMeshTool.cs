@@ -79,7 +79,7 @@ namespace Shooter.Editor
 
         private static bool SyncAgentTo(GameObject body)
         {
-            var controller = body.GetComponent<CharacterController>();
+            CharacterController controller = body.GetComponent<CharacterController>();
             if (controller == null)
             {
                 Log.Warn($"Agent body {body.name} carries no CharacterController, the navmesh agent cannot follow it");
