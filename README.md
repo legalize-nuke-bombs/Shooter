@@ -12,19 +12,20 @@
 ## Core
 * Multiplayer game with self-hosted servers
 * Save system
+* LLM NPCs
 ## Gameplay
 * Day-night cycle system
 * Health, hunger, endurance, intoxication, inventory
 * Shooting
 * Crafting system
-* Mutants
+* NPCs & mutants
 ## Graphics
 * HDRP
 * DLSS support
 * Texture streaming
 ## Multiplayer
 * Decentralized account model based on asymmetric encryption
-## LLM NPSs capabilities
+## LLM NPСs capabilities
 * Speech (including interactions between NPCs)
 * Vision
 * Persistent memory
@@ -33,3 +34,9 @@
 * Using items and interacting with the world
 * An individual attitude toward each other character
 * Dynamic character development
+
+# Tech Stack
+* Unity
+* NGO
+* Bouncy Castle
+* Newtonsoft
