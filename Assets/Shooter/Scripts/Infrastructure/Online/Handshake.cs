@@ -20,7 +20,7 @@ namespace Shooter.Infrastructure
             var payload = new Payload
             {
                 Name = name,
-                PublicKey = account.Public,
+                PublicKey = account.PublicKey,
                 Signature = account.Sign(Context, Challenge(certificate))
             };
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload));
