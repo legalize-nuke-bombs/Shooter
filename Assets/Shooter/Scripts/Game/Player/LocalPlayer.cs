@@ -466,7 +466,7 @@ namespace Shooter.Game
         private void Screenshot(InputAction.CallbackContext context)
         {
             if (ear != null) ear.PlayLocal(screenshotSound);
-            StartCoroutine(ScreenshotManager.ShootCoroutine());
+            StartCoroutine(Screenshotter.TakeToScreenshotsFolder());
         }
 
         public void LeaveWorld()
