@@ -16,7 +16,7 @@ namespace Shooter.Game
             Require<Button>(BackButton).clicked += () => Backing?.Invoke();
             antialiasing = Require<DropdownField>(AntialiasingField);
             Offer(antialiasing, Antialiasings.Keys, Titles.Antialiasing);
-            Offer(Require<DropdownField>(UpscalerField), Upscalers.Keys, Titles.Upscaler);
+            Offer(Require<DropdownField>(UpscalerField), Upscalers.CheapestToBest, Titles.Upscaler);
         }
 
         private readonly DropdownField antialiasing;

@@ -37,9 +37,7 @@ namespace Shooter.Infrastructure
 
         public static string Root()
         {
-            return Application.isEditor
-                ? Path.GetFullPath(Path.Combine(Application.dataPath, ".."))
-                : Application.persistentDataPath;
+            return Application.isEditor ? Path.GetFullPath(Path.Combine(Application.dataPath, "..")) : Application.persistentDataPath;
         }
 
         private static GameConfig Load()
@@ -48,7 +46,7 @@ namespace Shooter.Infrastructure
 
             if (!File.Exists(path))
             {
-                var fresh = new GameConfig();
+                GameConfig fresh = new();
                 Write(path, fresh);
                 Log.Info($"Config {path} was absent, wrote defaults");
                 return fresh;
@@ -56,15 +54,14 @@ namespace Shooter.Infrastructure
 
             try
             {
-                GameConfig config = JsonConvert.DeserializeObject<GameConfig>(File.ReadAllText(path), Settings)
-                                    ?? new GameConfig();
+                GameConfig config = JsonConvert.DeserializeObject<GameConfig>(File.ReadAllText(path), Settings) ?? new GameConfig();
                 Log.Info($"Config {path} read");
                 Write(path, config);
                 return config;
             }
             catch (Exception e)
             {
-                Log.Error($"Config {path} is unreadable, falling back to defaults: {e.Message}");
+                Log.Warn($"Config {path} is unreadable, falling back to defaults: {e.Message}");
                 return new GameConfig();
             }
         }
@@ -77,7 +74,7 @@ namespace Shooter.Infrastructure
             }
             catch (Exception e)
             {
-                Log.Error($"Config {path} can not be written: {e.Message}");
+                Log.Warn($"Config {path} can not be written: {e.Message}");
             }
         }
 
