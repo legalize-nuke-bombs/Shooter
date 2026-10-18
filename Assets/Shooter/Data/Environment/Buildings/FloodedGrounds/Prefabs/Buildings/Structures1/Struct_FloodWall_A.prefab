@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 438086}
   - component: {fileID: 3333900}
   - component: {fileID: 2311742}
-  - component: {fileID: 7509894055353935464}
   m_Layer: 0
   m_Name: Struct_FloodWall_A_LOD2
   m_TagString: Untagged
@@ -91,28 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7509894055353935464
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137994}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300006, guid: b6f5f20f39618f3458845ad3b76ea872, type: 3}
 --- !u!1 &167176
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +277,6 @@ GameObject:
   - component: {fileID: 473748}
   - component: {fileID: 3327210}
   - component: {fileID: 2304870}
-  - component: {fileID: 8144468170206316402}
   m_Layer: 0
   m_Name: Struct_FloodWall_A_LOD1
   m_TagString: Untagged
@@ -380,25 +356,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8144468170206316402
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195318}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300010, guid: b6f5f20f39618f3458845ad3b76ea872, type: 3}
