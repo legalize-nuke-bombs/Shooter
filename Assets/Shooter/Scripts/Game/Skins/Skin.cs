@@ -24,7 +24,7 @@ namespace Shooter.Game
             }
 
             Flesh = Instantiate(spec.Model, transform);
-            Flesh.name = spec.Id.ToString();
+            Flesh.name = spec.Id;
             Flesh.transform.localPosition = new Vector3(0f, -1f, 0f);
             Flesh.transform.localRotation = Quaternion.identity;
 

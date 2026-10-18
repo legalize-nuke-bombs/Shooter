@@ -34,12 +34,12 @@ namespace Shooter.Game
 
             if (inventory.Remove(spec, amount, InventoryOnConflict.Rollback) != amount)
             {
-                Log.Info($"Entity {name} can not give {spec.Key} x {amount} to {to.name}: not enough in the bag");
+                Log.Info($"Entity {name} can not give {spec.Id} x {amount} to {to.name}: not enough in the bag");
                 return false;
             }
 
             taker.Receive(character, spec, amount);
-            Log.Info($"Entity {name} gave {spec.Key} x {amount} to {to.name}");
+            Log.Info($"Entity {name} gave {spec.Id} x {amount} to {to.name}");
             return true;
         }
 

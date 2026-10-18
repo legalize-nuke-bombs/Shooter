@@ -294,7 +294,7 @@ namespace Shooter.Game
                 {
                     Pack(taken, spec, Rows, Columns, out int row, out int column);
 
-                    VisualElement thing = Thing(spec, spec.Key, row, column, amount.ToString(), Inventory.NoSlot,
+                    VisualElement thing = Thing(spec, spec.Id, row, column, amount.ToString(), Inventory.NoSlot,
                         false, false, spec);
                     AddMenu(thing, spec, amount, Inventory.NoSlot);
                     grid.Add(thing);
@@ -305,7 +305,7 @@ namespace Shooter.Game
                     if (splits[i].Spec != spec) continue;
 
                     Pack(taken, spec, Rows, Columns, out int row, out int column);
-                    grid.Add(Thing(spec, spec.Key, row, column, splits[i].Count.ToString(), Inventory.NoSlot, false,
+                    grid.Add(Thing(spec, spec.Id, row, column, splits[i].Count.ToString(), Inventory.NoSlot, false,
                         false, spec, i));
                 }
             }
@@ -538,7 +538,7 @@ namespace Shooter.Game
 
             if (!Fits(spec)) return false;
 
-            offers.Add(new Offer { Spec = spec, Key = spec.Key, Count = amount, Slot = Inventory.NoSlot });
+            offers.Add(new Offer { Spec = spec, Key = spec.Id, Count = amount, Slot = Inventory.NoSlot });
             return true;
         }
 
@@ -586,7 +586,7 @@ namespace Shooter.Game
                 if (stack != null)
                 {
                     offer.Expected = bag.Count(stack) - offer.Count;
-                    exchanger.GiveStackableRpc(takerId, stack.Id, offer.Count);
+                    exchanger.GiveStackableRpc(takerId, stack.NetworkId, offer.Count);
                 }
                 else
                 {
@@ -681,7 +681,7 @@ namespace Shooter.Game
 
         private static VisualElement Standing(ItemSpec spec, int row, int column)
         {
-            VisualElement thing = Slot(spec, spec.Key, false, true);
+            VisualElement thing = Slot(spec, spec.Id, false, true);
             thing.style.position = Position.Absolute;
             thing.style.left = column * Cell;
             thing.style.top = row * Cell;
@@ -947,7 +947,7 @@ namespace Shooter.Game
                 // The bench pays when the bag confirms the result arrived
                 pendingCraft = match;
                 outputBefore = Counted(match.Output);
-                crafter.CraftRpc(match.Id);
+                crafter.CraftRpc(match.NetworkId);
                 return;
             }
 
@@ -1049,7 +1049,7 @@ namespace Shooter.Game
             menu.style.left = local.x;
             menu.style.top = local.y;
 
-            if (stack != null && stack.Usable) Item(menu, "Использовать", () => user.UseRpc(stack.Id));
+            if (stack != null && stack.Usable) Item(menu, "Использовать", () => user.UseRpc(stack.NetworkId));
             if (stack != null && amount > 1) Item(menu, "Разделить", () => AskSplit(stack));
 
             if (menu.childCount == 0) return;
@@ -1149,7 +1149,7 @@ namespace Shooter.Game
             splits.Add(new Unit { Spec = spec, Count = count });
             EndPrompt();
             stale = true;
-            Log.Info($"Split {count} of {free} {spec.Key} off in the bag");
+            Log.Info($"Split {count} of {free} {spec.Id} off in the bag");
         }
 
         private static string Digits(string typed)

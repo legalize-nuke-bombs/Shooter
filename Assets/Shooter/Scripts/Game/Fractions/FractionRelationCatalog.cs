@@ -22,7 +22,7 @@ namespace Shooter.Game
             for (int i = 0; i < Count; i++)
             {
                 FractionRelation fractionRelation = At(i);
-                string key = KeyOf(fractionRelation.Fraction1.Id.ToString(), fractionRelation.Fraction2.Id.ToString());
+                string key = KeyOf(fractionRelation.Fraction1.Id, fractionRelation.Fraction2.Id);
                 if (!byFractions.TryAdd(key, fractionRelation.DefaultAmount))
                 {
                     Log.Error($"Fraction relation {key} already has been set");
@@ -32,7 +32,7 @@ namespace Shooter.Game
 
         public int Amount(Fraction fraction1, Fraction fraction2)
         {
-            string key = KeyOf(fraction1.Id.ToString(), fraction2.Id.ToString());
+            string key = KeyOf(fraction1.Id, fraction2.Id);
             if (byFractions.TryGetValue(key, out int result))
             {
                 return result;

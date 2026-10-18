@@ -33,7 +33,7 @@ namespace Shooter.Game
 
             speaker.Play(spec.UseSound);
 
-            Log.Info($"Entity {name} used one {spec.Key}");
+            Log.Info($"Entity {name} used one {spec.Id}");
             return true;
         }
 

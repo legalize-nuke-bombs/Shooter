@@ -10,20 +10,21 @@ namespace Shooter.Infrastructure
 
         [SerializeField] private string id;
 
-        public string Key => string.IsNullOrEmpty(id) ? name : id;
+        public string Id => string.IsNullOrEmpty(id) ? name : id;
 
-        public FixedString32Bytes Id => new(Key);
+        public FixedString32Bytes NetworkId => new(Id);
 
         private void OnValidate()
         {
-            if (!Fits())
-                Log.Error(
-                    $"{name} has an id of {Encoding.UTF8.GetByteCount(Key)} bytes, longer than the {FixedString32Bytes.UTF8MaxLengthInBytes} the network format holds");
+            if (!IdFitsNetwork())
+            {
+                Log.Error($"{name} has an id of {Encoding.UTF8.GetByteCount(Id)} bytes, longer than the {FixedString32Bytes.UTF8MaxLengthInBytes} the network format holds");
+            }
         }
 
-        public bool Fits()
+        public bool IdFitsNetwork()
         {
-            return Encoding.UTF8.GetByteCount(Key) <= FixedString32Bytes.UTF8MaxLengthInBytes;
+            return Encoding.UTF8.GetByteCount(Id) <= FixedString32Bytes.UTF8MaxLengthInBytes;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Shooter.Game
 
         public Vector2Int Cells => new(Mathf.Max(cells.x, 1), Mathf.Max(cells.y, 1));
 
-        public string Title => string.IsNullOrEmpty(title) ? Key : title;
+        public string Title => string.IsNullOrEmpty(title) ? Id : title;
 
         public virtual string PromptDescription => promptDescription;
     }

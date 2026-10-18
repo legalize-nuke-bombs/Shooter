@@ -28,7 +28,7 @@ namespace Shooter.Game
                 return;
             }
 
-            PlayRpc(sound.Id, sound.Pick());
+            PlayRpc(sound.NetworkId, sound.Pick());
         }
 
         public void PlayLocal(EarSoundSpec sound)

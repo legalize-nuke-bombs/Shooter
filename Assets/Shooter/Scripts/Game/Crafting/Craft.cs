@@ -34,18 +34,18 @@ namespace Shooter.Game
         public string PromptDescription()
         {
             var sb = new StringBuilder();
-            sb.Append(Key).Append(": ");
+            sb.Append(Id).Append(": ");
 
             bool first = true;
             foreach (KeyValuePair<StackableItemSpec, int> amount in AmountMap())
             {
                 if (!first) sb.Append(", ");
-                sb.Append(amount.Key.Key).Append(" x ").Append(amount.Value);
+                sb.Append(amount.Key.Id).Append(" x ").Append(amount.Value);
                 first = false;
             }
             if (first) sb.Append("nothing");
 
-            sb.Append(" -> ").Append(output == null ? "nothing" : output.Key);
+            sb.Append(" -> ").Append(output == null ? "nothing" : output.Id);
             return sb.ToString();
         }
     }

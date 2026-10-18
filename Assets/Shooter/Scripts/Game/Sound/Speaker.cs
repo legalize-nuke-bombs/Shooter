@@ -27,7 +27,7 @@ namespace Shooter.Game
                 return;
             }
 
-            PlayRpc(sound.Id, sound.Pick(), gain);
+            PlayRpc(sound.NetworkId, sound.Pick(), gain);
         }
 
         [Rpc(SendTo.Everyone)]

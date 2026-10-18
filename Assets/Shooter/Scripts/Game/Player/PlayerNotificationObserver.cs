@@ -33,7 +33,7 @@ namespace Shooter.Game
             // An offline body is owned by the host
             if (!gameObject.activeInHierarchy) return;
 
-            ShownRpc(spec.Id);
+            ShownRpc(spec.NetworkId);
         }
 
         [Rpc(SendTo.Owner)]
