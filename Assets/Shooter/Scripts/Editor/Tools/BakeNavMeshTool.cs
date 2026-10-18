@@ -9,37 +9,58 @@ using UnityEngine.AI;
 
 namespace Shooter.Editor
 {
-    public static class NavMeshTreeBaker
+    public class BakeNavMeshTool : EditorWindow
     {
-        private const string CharacterPrefabPath = "Assets/Shooter/Data/Game/Characters/Character.prefab";
         private const string AgentSettingsPath = "ProjectSettings/NavMeshAreas.asset";
         private const float SlopeForgiveness = 5f;
         private static readonly Journal Log = Logs.Here();
 
-        [MenuItem("Tools/Bake NavMesh With Trees")]
-        public static void Bake()
+        [SerializeField] private GameObject agentBody;
+
+        [MenuItem("Tools/Bake NavMesh")]
+        private static void Open()
+        {
+            GetWindow<BakeNavMeshTool>("Bake NavMesh");
+        }
+
+        private void OnGUI()
+        {
+            agentBody = (GameObject)EditorGUILayout.ObjectField("Agent body", agentBody, typeof(GameObject), false);
+            EditorGUILayout.LabelField("With a body set, the navmesh agent takes the radius, height, step and slope of its CharacterController. " +
+                                       "Trees of the terrains are baked through temporary copies of their colliders, the data lies next to the scene",
+                EditorStyles.wordWrappedMiniLabel);
+
+            if (GUILayout.Button("Bake"))
+            {
+                Bake();
+            }
+        }
+
+        private void Bake()
         {
             if (EditorApplication.isPlaying)
             {
-                Log.Error("Navmesh is baked in edit mode only, stop the play mode first");
+                Log.Warn("Navmesh is baked in edit mode only, stop the play mode first");
                 return;
             }
 
             NavMeshSurface[] surfaces = Object.FindObjectsByType<NavMeshSurface>(FindObjectsInactive.Include);
             if (surfaces.Length == 0)
             {
-                Log.Error("No NavMeshSurface in the scene, nothing to bake");
+                Log.Warn("No NavMeshSurface in the scene, nothing to bake");
                 return;
             }
 
-            if (!SyncAgentToBody()) return;
+            if (agentBody != null && !SyncAgentTo(agentBody)) return;
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             GameObject proxies = BuildTreeProxies();
-
             try
             {
-                foreach (NavMeshSurface surface in surfaces) surface.BuildNavMesh();
+                foreach (NavMeshSurface surface in surfaces)
+                {
+                    surface.BuildNavMesh();
+                }
             }
             finally
             {
@@ -48,28 +69,20 @@ namespace Shooter.Editor
 
             foreach (NavMeshSurface surface in surfaces)
             {
-                Persist(surface);
+                SaveNextToScene(surface);
                 EditorUtility.SetDirty(surface);
             }
 
             AssetDatabase.SaveAssets();
-
             Log.Info($"Baked {surfaces.Length} navmesh surfaces with tree proxies in {stopwatch.ElapsedMilliseconds} ms");
         }
 
-        private static bool SyncAgentToBody()
+        private static bool SyncAgentTo(GameObject body)
         {
-            var character = AssetDatabase.LoadAssetAtPath<GameObject>(CharacterPrefabPath);
-            if (character == null)
-            {
-                Log.Error($"Character prefab not found at {CharacterPrefabPath}, navmesh agent cannot follow the body");
-                return false;
-            }
-
-            var controller = character.GetComponent<CharacterController>();
+            var controller = body.GetComponent<CharacterController>();
             if (controller == null)
             {
-                Log.Error($"Prefab {character.name} carries no CharacterController, navmesh agent cannot follow the body");
+                Log.Warn($"Agent body {body.name} carries no CharacterController, the navmesh agent cannot follow it");
                 return false;
             }
 
@@ -81,20 +94,16 @@ namespace Shooter.Editor
             agent.FindPropertyRelative("agentSlope").floatValue = controller.slopeLimit - SlopeForgiveness;
             serialized.ApplyModifiedPropertiesWithoutUndo();
 
-            Log.Info($"Navmesh agent follows {character.name}: radius {controller.radius}, height {controller.height}, climb {controller.stepOffset}, slope {controller.slopeLimit - SlopeForgiveness}");
+            Log.Debug($"Navmesh agent follows {body.name}: radius {controller.radius}, height {controller.height}, climb {controller.stepOffset}, slope {controller.slopeLimit - SlopeForgiveness}");
             return true;
         }
 
-        private static void Persist(NavMeshSurface surface)
+        private static void SaveNextToScene(NavMeshSurface surface)
         {
             NavMeshData data = surface.navMeshData;
             if (data == null || EditorUtility.IsPersistent(data)) return;
 
-            // A scene lies inside its own folder together with its data, so the navmesh goes next to the scene file,
-            // not into a subfolder named after the scene, which is where the stock Bake button would put it
-            string folder = Path.GetDirectoryName(surface.gameObject.scene.path);
-
-            string path = $"{folder}/NavMesh-{surface.name}.asset";
+            string path = $"{Path.GetDirectoryName(surface.gameObject.scene.path)}/NavMesh-{surface.name}.asset";
             data.name = $"NavMesh-{surface.name}";
             AssetDatabase.CreateAsset(data, path);
             EditorSceneManager.MarkSceneDirty(surface.gameObject.scene);
@@ -111,13 +120,12 @@ namespace Shooter.Editor
             foreach (Terrain terrain in Terrain.activeTerrains)
             {
                 TerrainData data = terrain.terrainData;
-
                 TreePrototype[] prototypes = data.treePrototypes;
                 var colliders = new Collider[prototypes.Length][];
                 for (int i = 0; i < prototypes.Length; i++)
-                    colliders[i] = prototypes[i].prefab == null
-                        ? new Collider[0]
-                        : prototypes[i].prefab.GetComponentsInChildren<Collider>(true);
+                {
+                    colliders[i] = prototypes[i].prefab == null ? new Collider[0] : prototypes[i].prefab.GetComponentsInChildren<Collider>(true);
+                }
 
                 foreach (TreeInstance tree in data.treeInstances)
                 {
@@ -148,7 +156,7 @@ namespace Shooter.Editor
                 }
             }
 
-            Log.Info($"Built {built} tree proxies carrying {shapes} colliders for the bake");
+            Log.Debug($"Built {built} tree proxies carrying {shapes} colliders for the bake");
             return root;
         }
 
