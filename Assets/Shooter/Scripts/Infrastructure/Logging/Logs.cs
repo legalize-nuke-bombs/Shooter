@@ -15,15 +15,16 @@ namespace Shooter.Infrastructure
         private static readonly object Gate = new();
 
         private static StreamWriter file;
+        private static int mainThread;
 
         [ThreadStatic] private static Level? writingLevel;
 
-        public static Level Least { get; set; } = Level.Info;
+        public static Level Least { get; private set; } = Level.Info;
 
-        // Before anything else wakes up: the file is named after this instance, the level comes from the config
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Begin()
         {
+            mainThread = Thread.CurrentThread.ManagedThreadId;
             string instance = Instance();
             ToFile("shooter-" + instance);
             Least = Config.Read().Logging.Level;
@@ -67,7 +68,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public static void ToFile(string name)
+        private static void ToFile(string name)
         {
             lock (Gate)
             {
@@ -84,14 +85,15 @@ namespace Shooter.Infrastructure
 
         private static string Folder()
         {
-            return Application.isEditor
-                ? Path.Combine(Path.GetFullPath(Path.Combine(Application.dataPath, "..")), "Logs")
-                : Application.persistentDataPath;
+            return Application.isEditor ? Path.Combine(Config.Root(), "Logs") : Config.Root();
         }
 
         private static StreamWriter Opened(string folder, string name)
         {
-            if (!string.IsNullOrEmpty(folder)) Directory.CreateDirectory(folder);
+            if (!string.IsNullOrEmpty(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
 
             for (int taken = 0; taken < SameNameLimit; taken++)
             {
@@ -99,15 +101,15 @@ namespace Shooter.Infrastructure
 
                 try
                 {
-                    var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read);
-                    var writer = new StreamWriter(stream) { AutoFlush = true };
+                    FileStream stream = new(path, FileMode.Create, FileAccess.Write, FileShare.Read);
+                    StreamWriter writer = new(stream) { AutoFlush = true };
                     writer.WriteLine(Stamped(LogType.Log, "Logs: writing to " + path));
 
                     return writer;
                 }
                 catch (IOException)
                 {
-
+                    continue;
                 }
                 catch (Exception e)
                 {
@@ -117,8 +119,7 @@ namespace Shooter.Infrastructure
                 }
             }
 
-            Debug.unityLogger.Log(LogType.Warning, "Logs: all " + SameNameLimit + " names of " + name +
-                                                   " are busy in " + folder + ", this run stays in the console");
+            Debug.unityLogger.Log(LogType.Warning, $"Logs: all {SameNameLimit} names of {name} are busy in {folder}, this run stays in the console");
 
             return null;
         }
@@ -130,7 +131,10 @@ namespace Shooter.Infrastructure
             if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
             {
                 string trace = stackTrace?.TrimEnd();
-                if (!string.IsNullOrEmpty(trace)) line += Environment.NewLine + trace;
+                if (!string.IsNullOrEmpty(trace))
+                {
+                    line += Environment.NewLine + trace;
+                }
             }
 
             lock (Gate)
@@ -158,7 +162,10 @@ namespace Shooter.Infrastructure
 
         private static string ThreadName()
         {
-            return Thread.CurrentThread.Name ?? "main";
+            Thread current = Thread.CurrentThread;
+            if (current.ManagedThreadId == mainThread) return "main";
+
+            return current.Name ?? "thread " + current.ManagedThreadId;
         }
     }
 }
