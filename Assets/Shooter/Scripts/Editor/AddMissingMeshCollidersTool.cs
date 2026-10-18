@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Editor
 {
-    public static class AddMissingMeshCollidersMenuItem
+    public static class AddMissingMeshCollidersTool
     {
         private const string MenuItemPath = "Tools/Add Missing Mesh Colliders";
         private static readonly Journal Log = Logs.Here();
