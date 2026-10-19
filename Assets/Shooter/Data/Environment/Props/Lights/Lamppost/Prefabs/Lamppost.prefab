@@ -190,6 +190,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6027381086507087671}
   - component: {fileID: 8024543163208874211}
+  - component: {fileID: -2627034815974230821}
+  - component: {fileID: -7052019281833807556}
   m_Layer: 0
   m_Name: Lamppost
   m_TagString: Untagged
@@ -252,6 +254,32 @@ LODGroup:
     - renderer: {fileID: 8064523408845351909}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &-2627034815974230821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671498223490815209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DigestibleTransform
+--- !u!114 &-7052019281833807556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671498223490815209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
+  content: Lamppost
+  size: 1
 --- !u!1 &1072209304768659155
 GameObject:
   m_ObjectHideFlags: 0
