@@ -37,7 +37,7 @@ namespace Shooter.Game
         {
             if (!IsServer || value.Value != None) return;
 
-            CharacterIds ids = Registers.Of<CharacterIds>(Inactive.Include).FirstOrDefault();
+            CharacterIds ids = Registers.Of<CharacterIds>(RegisterInactivePolicy.Include).FirstOrDefault();
             value.Value = ids == null ? Random.Range(0, int.MaxValue) : ids.Next();
         }
     }

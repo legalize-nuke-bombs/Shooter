@@ -100,7 +100,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
                     string name = character.GetComponent<Nameable>()?.PromptName() ?? "Unknown";
                     partnerNames[character.Id] = name;
                 }
-            }, Inactive.Include);
+            }, RegisterInactivePolicy.Include);
 
             var sb = new StringBuilder();
             foreach (IGrouping<Conversation, (Conversation conversation, int index)> group in shown.GroupBy(hit => hit.conversation))

@@ -33,7 +33,7 @@ namespace Shooter.Game
 
         public static T Get<T>() where T : Component
         {
-            foreach (Map map in Registers.Of<Map>(Inactive.Include))
+            foreach (Map map in Registers.Of<Map>(RegisterInactivePolicy.Include))
             {
                 return map.Part<T>();
             }
@@ -42,7 +42,7 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            if (Registers.Of<Map>(Inactive.Include).Count() > 1) Log.Error("A second map has appeared");
+            if (Registers.Of<Map>(RegisterInactivePolicy.Include).Count() > 1) Log.Error("A second map has appeared");
 
             Application.targetFrameRate = UnlimitedFrameRate;
             network = NetworkManager.Singleton;

@@ -35,7 +35,7 @@ namespace Shooter.Game
         {
             var visible = new List<MainDigestible>();
 
-            foreach (MainDigestible entity in Registers.Of<MainDigestible>(Inactive.Exclude))
+            foreach (MainDigestible entity in Registers.Of<MainDigestible>(RegisterInactivePolicy.Exclude))
             {
                 if (entity.gameObject == around) continue;
 

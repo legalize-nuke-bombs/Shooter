@@ -65,7 +65,7 @@ namespace Shooter.Game
         private bool AllAsleep()
         {
             bool anyone = false;
-            foreach (Player player in Registers.Of<Player>(Inactive.Exclude))
+            foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Exclude))
             {
                 Sleeper sleeper = player.GetComponent<Sleeper>();
                 if (sleeper == null || !sleeper.Sleeping) return false;
@@ -78,7 +78,7 @@ namespace Shooter.Game
 
         private void WakeAll()
         {
-            foreach (Player player in Registers.Of<Player>(Inactive.Exclude))
+            foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Exclude))
                 player.GetComponent<Sleeper>()?.WakeUp();
         }
     }

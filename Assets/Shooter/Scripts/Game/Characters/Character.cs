@@ -25,7 +25,7 @@ namespace Shooter.Game
 
         public long Id => id.Value;
 
-        public static Character Of(long id, Inactive gate)
+        public static Character Of(long id, RegisterInactivePolicy gate)
         {
             foreach (Character character in Registers.Of<Character>(gate))
             {
@@ -38,7 +38,7 @@ namespace Shooter.Game
             return null;
         }
 
-        public static void ForEach(Action<Character> action, Inactive gate)
+        public static void ForEach(Action<Character> action, RegisterInactivePolicy gate)
         {
             foreach (Character character in Registers.Of<Character>(gate))
             {

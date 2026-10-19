@@ -29,7 +29,7 @@ namespace Shooter.Game
         {
             if (string.IsNullOrEmpty(arguments.Text)) return "Nothing to say";
 
-            Character wanderer = Character.Of(arguments.WandererId, Inactive.Exclude);
+            Character wanderer = Character.Of(arguments.WandererId, RegisterInactivePolicy.Exclude);
             if (wanderer == null || !wanderer.TryGetComponent(out Player _))
             {
                 return $"Failed to find wanderer {arguments.WandererId}";

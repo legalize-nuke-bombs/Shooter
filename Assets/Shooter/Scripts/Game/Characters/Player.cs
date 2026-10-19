@@ -34,7 +34,7 @@ namespace Shooter.Game
 
         public long Id => id.Value;
 
-        public static Player Of(long id, Inactive gate)
+        public static Player Of(long id, RegisterInactivePolicy gate)
         {
             foreach (Player player in Registers.Of<Player>(gate))
             {
@@ -46,7 +46,7 @@ namespace Shooter.Game
             return null;
         }
 
-        public static Player OfKey(string publicKey, Inactive gate)
+        public static Player OfKey(string publicKey, RegisterInactivePolicy gate)
         {
             foreach (Player player in Registers.Of<Player>(gate))
             {

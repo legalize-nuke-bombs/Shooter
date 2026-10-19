@@ -23,12 +23,12 @@ namespace Shooter.Game
         private static Player ByKey()
         {
             string key = OwnKey();
-            return key == null ? null : Player.OfKey(key, Inactive.Exclude);
+            return key == null ? null : Player.OfKey(key, RegisterInactivePolicy.Exclude);
         }
 
         private static Player ByOwnership()
         {
-            foreach (Player player in Registers.Of<Player>(Inactive.Exclude))
+            foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Exclude))
             {
                 NetworkObject net = player.GetComponent<NetworkObject>();
                 if (net != null && net.IsOwner) return player;

@@ -1,6 +1,6 @@
 namespace Shooter.Infrastructure
 {
-    public enum Inactive
+    public enum RegisterInactivePolicy
     {
         Exclude,
         Include

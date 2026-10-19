@@ -37,7 +37,7 @@ The recipient will automatically receive a notification.
                 return
                     $"{arguments.Item} does not come in counted amounts, hand it over by its slot number with give_unique";
 
-            return exchanger.Give(Character.Of(arguments.TargetId, Inactive.Exclude), stackable, arguments.Amount)
+            return exchanger.Give(Character.Of(arguments.TargetId, RegisterInactivePolicy.Exclude), stackable, arguments.Amount)
                 ? $"Gave {arguments.Amount} x {arguments.Item} to {arguments.TargetId}"
                 : "Could not give: the receiver is not around or you lack the items";
         }

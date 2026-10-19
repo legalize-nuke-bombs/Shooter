@@ -39,7 +39,7 @@ namespace Shooter.Game
         {
             get
             {
-                if (target == null) target = Character.Of(TargetId, Inactive.Exclude);
+                if (target == null) target = Character.Of(TargetId, RegisterInactivePolicy.Exclude);
 
                 return target != null && target.gameObject.activeInHierarchy ? target : null;
             }

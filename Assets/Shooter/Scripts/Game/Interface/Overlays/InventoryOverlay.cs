@@ -636,7 +636,7 @@ namespace Shooter.Game
 
                 best = candidate;
                 bestScore = score;
-            }, Inactive.Exclude);
+            }, RegisterInactivePolicy.Exclude);
 
             return best;
         }

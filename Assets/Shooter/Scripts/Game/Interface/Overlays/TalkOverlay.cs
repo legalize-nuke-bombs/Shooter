@@ -132,7 +132,7 @@ namespace Shooter.Game
         {
             if (conversations == null) return;
 
-            Character partner = Character.Of(partnerId, Inactive.Exclude);
+            Character partner = Character.Of(partnerId, RegisterInactivePolicy.Exclude);
             radio = true;
             Show(conversations.ContactOf(partnerId), partner == null ? null : partner.GetComponent<Talker>(),
                 $"{Named(partner)} ({Radio})");

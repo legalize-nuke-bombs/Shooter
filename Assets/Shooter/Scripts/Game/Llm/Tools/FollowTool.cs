@@ -41,7 +41,7 @@ The result comes at once, the following itself goes on: you will be notified whe
 
         protected override string Execute(FollowArguments arguments, LlmCallContext context)
         {
-            Character target = Character.Of(arguments.TargetId, Inactive.Exclude);
+            Character target = Character.Of(arguments.TargetId, RegisterInactivePolicy.Exclude);
             if (target == null) return $"Character with ID {arguments.TargetId} does not exist";
             if (target.gameObject == Self) return "You cannot follow yourself";
             if (arguments.Distance < 0) return "distance cannot be negative";

@@ -7,9 +7,9 @@ namespace Shooter.Infrastructure
     {
         private readonly List<ShooterBehaviour> members = new();
 
-        public IEnumerable<ShooterBehaviour> All(Inactive gate)
+        public IEnumerable<ShooterBehaviour> All(RegisterInactivePolicy gate)
         {
-            return gate == Inactive.Include ? members : members.Where(member => member.gameObject.activeInHierarchy);
+            return gate == RegisterInactivePolicy.Include ? members : members.Where(member => member.gameObject.activeInHierarchy);
         }
 
         public void Add(ShooterBehaviour member)

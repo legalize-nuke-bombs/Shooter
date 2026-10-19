@@ -6,7 +6,7 @@ namespace Shooter.Game
     {
         public string Of(long characterId)
         {
-            Character character = Character.Of(characterId, Inactive.Include);
+            Character character = Character.Of(characterId, RegisterInactivePolicy.Include);
             Nameable nameable = character == null ? null : character.GetComponentInChildren<Nameable>();
 
             return nameable == null ? string.Empty : Of(nameable);
