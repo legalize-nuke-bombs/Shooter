@@ -6,26 +6,26 @@ namespace Shooter.Game
 {
     public class ClientPage : MainMenuPage
     {
-        private const string ConnectButton = "connect";
-        private const string BackButton = "back";
+        private const string ConnectButtonName = "connect";
+        private const string BackButtonName = "back";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         public ClientPage(VisualElement root) : base(root)
         {
-            Require<Button>(ConnectButton).clicked += () => Connecting?.Invoke();
-            Require<Button>(BackButton).clicked += () => Backing?.Invoke();
+            RequireElement<Button>(ConnectButtonName).clicked += () => ConnectClicked?.Invoke();
+            RequireElement<Button>(BackButtonName).clicked += () => BackClicked?.Invoke();
         }
 
-        public event Action Connecting;
+        public event Action ConnectClicked;
 
-        public event Action Backing;
+        public event Action BackClicked;
 
-        protected override void Closed()
+        protected override void HandlePageHidden()
         {
             Config.SaveGameConfig();
 
-            ClientConfig client = Config.GetGameConfig().Client;
-            Log.Info($"Joining under the name {client.Name}");
+            ClientConfig clientConfig = Config.GetGameConfig().Client;
+            Log.Info($"Joining under the name {clientConfig.Name}");
         }
     }
 }

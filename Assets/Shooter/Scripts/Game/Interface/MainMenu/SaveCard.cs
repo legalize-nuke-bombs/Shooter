@@ -15,80 +15,80 @@ namespace Shooter.Game
         private const string ForeignClass = "save__version--foreign";
         private const string ActionsClass = "save__actions";
         private const string ActionClass = "save__action";
-        private const string LoadText = "Загрузить";
-        private const string DeleteText = "Удалить";
+        private const string LoadButtonText = "Загрузить";
+        private const string DeleteButtonText = "Удалить";
 
-        private readonly VisualElement preview;
-        private readonly Label stamp;
-        private readonly Label version;
-        private SaveEntry entry;
-        private Action<SaveEntry> onDelete;
-        private Action<SaveEntry> onLoad;
-        private Texture2D texture;
+        private readonly VisualElement previewElement;
+        private readonly Label stampLabel;
+        private readonly Label versionLabel;
+        private SaveEntry shownSaveEntry;
+        private Action<SaveEntry> deleteCallback;
+        private Action<SaveEntry> loadCallback;
+        private Texture2D previewTexture;
 
         public SaveCard()
         {
             AddToClassList(CardClass);
 
-            preview = new VisualElement();
-            preview.AddToClassList(PreviewClass);
-            Add(preview);
+            previewElement = new VisualElement();
+            previewElement.AddToClassList(PreviewClass);
+            Add(previewElement);
 
-            var info = new VisualElement();
-            info.AddToClassList(InfoClass);
-            Add(info);
+            VisualElement infoElement = new();
+            infoElement.AddToClassList(InfoClass);
+            Add(infoElement);
 
-            stamp = new Label();
-            stamp.AddToClassList(StampClass);
-            info.Add(stamp);
+            stampLabel = new Label();
+            stampLabel.AddToClassList(StampClass);
+            infoElement.Add(stampLabel);
 
-            version = new Label();
-            version.AddToClassList(VersionClass);
-            info.Add(version);
+            versionLabel = new Label();
+            versionLabel.AddToClassList(VersionClass);
+            infoElement.Add(versionLabel);
 
-            var actions = new VisualElement();
-            actions.AddToClassList(ActionsClass);
-            Add(actions);
+            VisualElement actionsElement = new();
+            actionsElement.AddToClassList(ActionsClass);
+            Add(actionsElement);
 
-            var delete = new Button(() => onDelete?.Invoke(entry)) { text = DeleteText };
-            delete.AddToClassList(ActionClass);
-            actions.Add(delete);
+            Button deleteButton = new(() => deleteCallback?.Invoke(shownSaveEntry)) { text = DeleteButtonText };
+            deleteButton.AddToClassList(ActionClass);
+            actionsElement.Add(deleteButton);
 
-            var load = new Button(() => onLoad?.Invoke(entry)) { text = LoadText };
-            load.AddToClassList(ActionClass);
-            actions.Add(load);
+            Button loadButton = new(() => loadCallback?.Invoke(shownSaveEntry)) { text = LoadButtonText };
+            loadButton.AddToClassList(ActionClass);
+            actionsElement.Add(loadButton);
         }
 
-        public void Show(SaveEntry shown, Action<SaveEntry> load, Action<SaveEntry> remove)
+        public void ShowSaveEntry(SaveEntry saveEntry, Action<SaveEntry> loadCallback, Action<SaveEntry> deleteCallback)
         {
-            Release();
+            ClearSaveEntry();
 
-            entry = shown;
-            onLoad = load;
-            onDelete = remove;
+            shownSaveEntry = saveEntry;
+            this.loadCallback = loadCallback;
+            this.deleteCallback = deleteCallback;
 
-            stamp.text = RussianDate.Moment(shown.Meta.Stamp);
-            version.text = shown.Meta.Version;
-            version.EnableInClassList(ForeignClass, shown.IsFromAnotherVersion);
+            stampLabel.text = RussianDate.FormatDateAndTime(saveEntry.Meta.Stamp);
+            versionLabel.text = saveEntry.Meta.Version;
+            versionLabel.EnableInClassList(ForeignClass, saveEntry.IsFromAnotherVersion);
 
-            byte[] bytes = shown.ReadPreview();
-            if (bytes == null) return;
+            byte[] previewBytes = saveEntry.ReadPreview();
+            if (previewBytes == null) return;
 
-            texture = new Texture2D(2, 2, TextureFormat.RGB24, false);
-            if (texture.LoadImage(bytes)) preview.style.backgroundImage = new StyleBackground(texture);
+            previewTexture = new Texture2D(2, 2, TextureFormat.RGB24, false);
+            if (previewTexture.LoadImage(previewBytes)) previewElement.style.backgroundImage = new StyleBackground(previewTexture);
         }
 
-        public void Release()
+        public void ClearSaveEntry()
         {
-            entry = null;
-            onLoad = null;
-            onDelete = null;
-            preview.style.backgroundImage = new StyleBackground(StyleKeyword.Null);
+            shownSaveEntry = null;
+            loadCallback = null;
+            deleteCallback = null;
+            previewElement.style.backgroundImage = new StyleBackground(StyleKeyword.Null);
 
-            if (texture == null) return;
+            if (previewTexture == null) return;
 
-            UnityEngine.Object.Destroy(texture);
-            texture = null;
+            UnityEngine.Object.Destroy(previewTexture);
+            previewTexture = null;
         }
     }
 }

@@ -5,17 +5,17 @@ namespace Shooter.Game
 {
     public class NewGamePage : ServerPage
     {
-        private const string StartButton = "start";
-        private const string BackButton = "back";
+        private const string StartButtonName = "start";
+        private const string BackButtonName = "back";
 
         public NewGamePage(VisualElement root) : base(root)
         {
-            Require<Button>(StartButton).clicked += () => Starting?.Invoke();
-            Require<Button>(BackButton).clicked += () => Backing?.Invoke();
+            RequireElement<Button>(StartButtonName).clicked += () => StartClicked?.Invoke();
+            RequireElement<Button>(BackButtonName).clicked += () => BackClicked?.Invoke();
         }
 
-        public event Action Starting;
+        public event Action StartClicked;
 
-        public event Action Backing;
+        public event Action BackClicked;
     }
 }

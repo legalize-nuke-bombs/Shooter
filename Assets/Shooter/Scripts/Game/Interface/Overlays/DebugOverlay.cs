@@ -13,16 +13,16 @@ namespace Shooter.Game
 {
     public class DebugOverlay : Overlay
     {
-        private const string DebugElement = "debug";
+        private const string PanelLabelName = "debug";
         private const int FrameSamples = 120;
-        private const int Column = 34;
-        private const float RefreshSeconds = 0.25f;
-        private const float ReportSeconds = 60f;
+        private const int LeftColumnWidth = 34;
+        private const float PanelRefreshSeconds = 0.25f;
+        private const float LogReportSeconds = 60f;
         private const float Megabyte = 1024f * 1024f;
         private const string Unavailable = "—";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static readonly (ProfilerCategory Category, string Name)[] Counters =
+        private static readonly (ProfilerCategory Category, string Name)[] ProfilerCounters =
         {
             (ProfilerCategory.Memory, "System Used Memory"),
             (ProfilerCategory.Memory, "Total Reserved Memory"),
@@ -33,17 +33,22 @@ namespace Shooter.Game
             (ProfilerCategory.Render, "Vertices Count")
         };
 
-        private readonly StringBuilder builder = new();
-        private readonly float[] frames = new float[FrameSamples];
+        private static readonly string[] CompassDirections =
+        {
+            "north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"
+        };
 
-        private readonly Dictionary<string, ProfilerRecorder> recorders = new();
-        private int filled;
-        private int frame;
+        private readonly StringBuilder panelTextBuilder = new();
+        private readonly float[] frameDurations = new float[FrameSamples];
+
+        private readonly Dictionary<string, ProfilerRecorder> recordersByCounterName = new();
+        private int sampledFrameCount;
+        private int nextFrameIndex;
         private HostVersion hostVersion;
 
-        private Label panel;
-        private float refresh;
-        private float report = ReportSeconds;
+        private Label panelLabel;
+        private float secondsToPanelRefresh;
+        private float secondsToLogReport = LogReportSeconds;
         private bool visible;
 
         private void Start()
@@ -53,213 +58,216 @@ namespace Shooter.Game
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            Sample();
+            SampleFrameDuration();
 
-            if (Keyboard.current != null && Keyboard.current.f3Key.wasPressedThisFrame) Toggle();
+            if (Keyboard.current != null && Keyboard.current.f3Key.wasPressedThisFrame) TogglePanel();
 
-            report -= Time.unscaledDeltaTime;
-            if (report <= 0)
+            secondsToLogReport -= Time.unscaledDeltaTime;
+            if (secondsToLogReport <= 0)
             {
-                report = ReportSeconds;
-                Log.Info(
-                    $"FPS {Frequency()}, VRAM {Video()}, RAM {Bytes("System Used Memory")}, batches {Count("Batches Count")}, triangles {Count("Triangles Count")}");
+                secondsToLogReport = LogReportSeconds;
+                Log.Info($"FPS {FormatFrameRate()}, VRAM {FormatVideoMemory()}, RAM {FormatCounterMegabytes("System Used Memory")}, batches {FormatCounterCount("Batches Count")}, triangles {FormatCounterCount("Triangles Count")}");
             }
 
             if (!visible) return;
 
-            refresh -= Time.unscaledDeltaTime;
-            if (refresh > 0) return;
+            secondsToPanelRefresh -= Time.unscaledDeltaTime;
+            if (secondsToPanelRefresh > 0) return;
 
-            refresh = RefreshSeconds;
-            panel.text = Report();
+            secondsToPanelRefresh = PanelRefreshSeconds;
+            panelLabel.text = BuildPanelText();
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            panel = root.Q<Label>(DebugElement);
+            panelLabel = root.Q<Label>(PanelLabelName);
 
-            if (panel == null)
+            if (panelLabel == null)
             {
-                Log.Error($"Overlay document has no {DebugElement} label, the debug panel stays hidden");
+                Log.Error($"Overlay document has no {PanelLabelName} label, the debug panel stays hidden");
                 return false;
             }
 
             visible = false;
-            frame = filled = 0;
-            refresh = 0;
-            panel.style.display = DisplayStyle.None;
-            Listen();
+            nextFrameIndex = sampledFrameCount = 0;
+            secondsToPanelRefresh = 0;
+            panelLabel.style.display = DisplayStyle.None;
+            StartProfilerRecorders();
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            foreach (ProfilerRecorder recorder in recorders.Values) recorder.Dispose();
-
-            recorders.Clear();
-            panel = null;
-        }
-
-        private void Listen()
-        {
-            foreach ((ProfilerCategory category, string name) in Counters)
+            foreach (ProfilerRecorder recorder in recordersByCounterName.Values)
             {
-                var recorder = ProfilerRecorder.StartNew(category, name);
-
-                if (recorder.Valid) recorders[name] = recorder;
-                else recorder.Dispose();
+                recorder.Dispose();
             }
 
-            Log.Info($"Debug panel watches {recorders.Count} of {Counters.Length} profiler counters");
+            recordersByCounterName.Clear();
+            panelLabel = null;
         }
 
-        private void Toggle()
+        private void StartProfilerRecorders()
+        {
+            foreach ((ProfilerCategory category, string counterName) in ProfilerCounters)
+            {
+                ProfilerRecorder recorder = ProfilerRecorder.StartNew(category, counterName);
+
+                if (recorder.Valid)
+                {
+                    recordersByCounterName[counterName] = recorder;
+                }
+                else
+                {
+                    recorder.Dispose();
+                }
+            }
+
+            Log.Info($"Debug panel watches {recordersByCounterName.Count} of {ProfilerCounters.Length} profiler counters");
+        }
+
+        private void TogglePanel()
         {
             visible = !visible;
-            panel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
-            refresh = 0;
+            panelLabel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            secondsToPanelRefresh = 0;
         }
 
-        private void Sample()
+        private void SampleFrameDuration()
         {
-            frames[frame] = Time.unscaledDeltaTime;
-            frame = (frame + 1) % FrameSamples;
-            if (filled < FrameSamples) filled++;
+            frameDurations[nextFrameIndex] = Time.unscaledDeltaTime;
+            nextFrameIndex = (nextFrameIndex + 1) % FrameSamples;
+            if (sampledFrameCount < FrameSamples) sampledFrameCount++;
         }
 
-        private string Report()
+        private string BuildPanelText()
         {
-            builder.Clear();
+            panelTextBuilder.Clear();
 
-            Frames();
-            Line($"Партии {Count("Batches Count")}", $"Треугольники {Count("Triangles Count")}");
-            Line($"Вершины {Count("Vertices Count")}");
+            AppendFrameLine();
+            AppendPanelLine($"Партии {FormatCounterCount("Batches Count")}", $"Треугольники {FormatCounterCount("Triangles Count")}");
+            AppendPanelLine($"Вершины {FormatCounterCount("Vertices Count")}");
 
-            Gap();
-            Line($"VRAM {Video()}", SystemInfo.graphicsDeviceName);
-            Line($"RAM {Bytes("System Used Memory")} / {SystemInfo.systemMemorySize} МБ",
-                $"{SystemInfo.processorType.Trim()} ({SystemInfo.processorCount})");
-            Line($"GC {Managed()}", $"Зарезервировано {Bytes("Total Reserved Memory")}");
+            AppendBlankLine();
+            AppendPanelLine($"VRAM {FormatVideoMemory()}", SystemInfo.graphicsDeviceName);
+            AppendPanelLine($"RAM {FormatCounterMegabytes("System Used Memory")} / {SystemInfo.systemMemorySize} МБ", $"{SystemInfo.processorType.Trim()} ({SystemInfo.processorCount})");
+            AppendPanelLine($"GC {FormatManagedMemory()}", $"Зарезервировано {FormatCounterMegabytes("Total Reserved Memory")}");
 
-            Gap();
-            Line($"Экран {Screen.width}×{Screen.height}",
-                $"{Screen.currentResolution.refreshRateRatio.value:F0} Гц   " +
-                (Screen.fullScreen ? "Полный экран" : "Окно"));
-            World();
+            AppendBlankLine();
+            AppendPanelLine($"Экран {Screen.width}×{Screen.height}", $"{Screen.currentResolution.refreshRateRatio.value:F0} Гц   " + (Screen.fullScreen ? "Полный экран" : "Окно"));
+            AppendWorldLines();
 
-            return builder.ToString().TrimEnd();
+            return panelTextBuilder.ToString().TrimEnd();
         }
 
-        private void Frames()
+        private void AppendFrameLine()
         {
-            if (filled == 0) return;
+            if (sampledFrameCount == 0) return;
 
-            float total = 0, worst = 0;
-            for (int i = 0; i < filled; i++)
+            float totalDuration = 0, worstDuration = 0;
+            for (int i = 0; i < sampledFrameCount; i++)
             {
-                total += frames[i];
-                if (frames[i] > worst) worst = frames[i];
+                totalDuration += frameDurations[i];
+                if (frameDurations[i] > worstDuration) worstDuration = frameDurations[i];
             }
 
-            float average = total / filled;
-            Line($"FPS {1f / average:F0}", $"Кадр {average * 1000f:F1} мс   Худший {worst * 1000f:F1} мс");
+            float averageDuration = totalDuration / sampledFrameCount;
+            AppendPanelLine($"FPS {1f / averageDuration:F0}", $"Кадр {averageDuration * 1000f:F1} мс   Худший {worstDuration * 1000f:F1} мс");
         }
 
-        private void World()
+        private void AppendWorldLines()
         {
             NetworkManager network = NetworkManager.Singleton;
 
-            Gap();
+            AppendBlankLine();
 
             if (network == null || !network.IsListening)
             {
-                Line("Сеть не запущена");
+                AppendPanelLine("Сеть не запущена");
                 return;
             }
 
             string role = network.IsHost ? "Хост" : network.IsServer ? "Сервер" : "Клиент";
-            string peers = network.IsServer ? $"Клиентов {network.ConnectedClientsIds.Count}" : "";
-            string delay = network.IsClient && !network.IsHost
+            string clientCount = network.IsServer ? $"Клиентов {network.ConnectedClientsIds.Count}" : "";
+            string roundTripTime = network.IsClient && !network.IsHost
                 ? $"Задержка {network.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkManager.ServerClientId)} мс"
                 : "";
-            Line(role, peers + delay);
+            AppendPanelLine(role, clientCount + roundTripTime);
 
-            Transform player = OwnPlayer.FindComponent<Transform>();
-            if (player != null)
+            Transform ownPlayerTransform = OwnPlayer.FindComponent<Transform>();
+            if (ownPlayerTransform != null)
             {
-                Vector3 at = player.position;
-                Line($"Позиция {at.x:F1} {at.y:F1} {at.z:F1}", Facing(player.eulerAngles.y));
+                Vector3 position = ownPlayerTransform.position;
+                AppendPanelLine($"Позиция {position.x:F1} {position.y:F1} {position.z:F1}", FormatFacing(ownPlayerTransform.eulerAngles.y));
             }
 
-            Line(hostVersion == null
-                    ? $"Клиент {Application.version}"
-                    : $"Сервер {hostVersion.Version}   Клиент {Application.version}");
+            AppendPanelLine(hostVersion == null
+                ? $"Клиент {Application.version}"
+                : $"Сервер {hostVersion.Version}   Клиент {Application.version}");
         }
 
-        private string Managed()
+        private string FormatManagedMemory()
         {
-            return Sampled("GC Used Memory", out long value)
-                ? $"{value / Megabyte:F0} МБ"
+            return TryGetCounterValue("GC Used Memory", out long bytes)
+                ? $"{bytes / Megabyte:F0} МБ"
                 : $"{GC.GetTotalMemory(false) / Megabyte:F0} МБ";
         }
 
-        private string Frequency()
+        private string FormatFrameRate()
         {
-            if (filled == 0) return Unavailable;
+            if (sampledFrameCount == 0) return Unavailable;
 
-            float total = 0;
-            for (int i = 0; i < filled; i++) total += frames[i];
+            float totalDuration = 0;
+            for (int i = 0; i < sampledFrameCount; i++)
+            {
+                totalDuration += frameDurations[i];
+            }
 
-            return $"{filled / total:F0}/с";
+            return $"{sampledFrameCount / totalDuration:F0}/с";
         }
 
-        private string Video()
+        private string FormatVideoMemory()
         {
-            return $"{Bytes("Gfx Used Memory")} / {SystemInfo.graphicsMemorySize} МБ";
+            return $"{FormatCounterMegabytes("Gfx Used Memory")} / {SystemInfo.graphicsMemorySize} МБ";
         }
 
-        private static readonly string[] Sides =
+        private static string FormatFacing(float yaw)
         {
-            "north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"
-        };
-
-        private static string Facing(float yaw)
-        {
-            return $"{Sides[Mathf.RoundToInt(yaw / 45f) & 7]} ({yaw:F0}°)";
+            return $"{CompassDirections[Mathf.RoundToInt(yaw / 45f) & 7]} ({yaw:F0}°)";
         }
 
-        private string Bytes(string name)
+        private string FormatCounterMegabytes(string counterName)
         {
-            return Sampled(name, out long value) ? $"{value / Megabyte:F0} МБ" : Unavailable;
+            return TryGetCounterValue(counterName, out long bytes) ? $"{bytes / Megabyte:F0} МБ" : Unavailable;
         }
 
-        private string Count(string name)
+        private string FormatCounterCount(string counterName)
         {
-            return Sampled(name, out long value) ? value.ToString("N0") : Unavailable;
+            return TryGetCounterValue(counterName, out long count) ? count.ToString("N0") : Unavailable;
         }
 
-        private bool Sampled(string name, out long value)
+        private bool TryGetCounterValue(string counterName, out long value)
         {
             value = 0;
 
-            if (!recorders.TryGetValue(name, out ProfilerRecorder recorder) || !recorder.Valid) return false;
+            if (!recordersByCounterName.TryGetValue(counterName, out ProfilerRecorder recorder) || !recorder.Valid) return false;
 
             value = recorder.LastValue;
 
             return true;
         }
 
-        private void Line(string left, string right = null)
+        private void AppendPanelLine(string left, string right = null)
         {
-            builder.Append(string.IsNullOrEmpty(right) ? left : left.PadRight(Column) + right).Append('\n');
+            panelTextBuilder.Append(string.IsNullOrEmpty(right) ? left : left.PadRight(LeftColumnWidth) + right).Append('\n');
         }
 
-        private void Gap()
+        private void AppendBlankLine()
         {
-            builder.Append('\n');
+            panelTextBuilder.Append('\n');
         }
     }
 }

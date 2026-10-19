@@ -8,315 +8,332 @@ namespace Shooter.Game
 {
     public class TalkOverlay : Overlay
     {
-        private const string WindowElement = "talk";
-        private const string NameElement = "talk-name";
-        private const string LogElement = "talk-log";
-        private const string WaitingElement = "talk-waiting";
-        private const string InputElement = "talk-input";
-        private const string GiveElement = "talk-give";
+        private const string WindowElementName = "talk";
+        private const string PartnerNameLabelName = "talk-name";
+        private const string LinesScrollViewName = "talk-log";
+        private const string WaitingLabelName = "talk-waiting";
+        private const string InputFieldName = "talk-input";
+        private const string GiveButtonName = "talk-give";
         private const string Stranger = "Незнакомец";
-        private const string Radio = "рация";
+        private const string RadioTitleSuffix = "рация";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private float charInterval = 0.01f;
 
-        private readonly NameMapper mapper = new();
-        private Button give;
-        private TextField input;
-        private ScrollView log;
-        private Label speaker;
-        private Label waiting;
-        private VisualElement window;
+        private readonly NameMapper nameMapper = new();
+        private Button giveButton;
+        private TextField inputField;
+        private ScrollView linesScrollView;
+        private Label partnerNameLabel;
+        private Label waitingLabel;
+        private VisualElement windowElement;
 
         private PlayerMouth playerMouth;
-        private PlayerConversations conversations;
+        private PlayerConversations playerConversations;
         private PlayerRadio playerRadio;
-        private Talker talker;
+        private Talker partnerTalker;
 
-        private Contact contact;
-        private int drawn;
+        private Contact shownContact;
+        private int drawnLineCount;
 
-        private bool radio;
-        private long? radioShown;
+        private bool talkingOverRadio;
+        private long? shownRadioPartnerId;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            Follow();
-            PollRadio();
+            SubscribeToOwnPlayerIfChanged();
+            OpenOrCloseRadioTalk();
         }
 
-        private void PollRadio()
+        private void OpenOrCloseRadioTalk()
         {
-            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
-            long? wanted = player == null ? null : player.RadioPartnerId;
-            if (wanted == radioShown) return;
+            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
+            long? radioPartnerId = localPlayer == null ? null : localPlayer.RadioPartnerId;
+            if (radioPartnerId == shownRadioPartnerId) return;
 
-            radioShown = wanted;
-            if (wanted != null) OpenRadio(wanted.Value);
-            else if (radio) Close();
+            shownRadioPartnerId = radioPartnerId;
+            if (radioPartnerId != null)
+            {
+                OpenRadioTalk(radioPartnerId.Value);
+            }
+            else if (talkingOverRadio)
+            {
+                CloseTalk();
+            }
         }
 
-        private void Follow()
+        private void SubscribeToOwnPlayerIfChanged()
         {
-            PlayerMouth own = OwnPlayer.FindComponent<PlayerMouth>();
-            if (own == playerMouth) return;
+            PlayerMouth ownPlayerMouth = OwnPlayer.FindComponent<PlayerMouth>();
+            if (ownPlayerMouth == playerMouth) return;
 
-            Forget();
-            playerMouth = own;
+            CloseTalkAndUnsubscribeFromOwnPlayer();
+            playerMouth = ownPlayerMouth;
 
             if (playerMouth == null) return;
 
-            playerMouth.TalkOpened += Open;
-            playerMouth.TalkClosed += Close;
+            playerMouth.TalkOpened += OpenTalk;
+            playerMouth.TalkClosed += CloseTalk;
 
             playerRadio = playerMouth.GetComponent<PlayerRadio>();
-            conversations = playerMouth.GetComponent<PlayerConversations>();
-            if (conversations == null)
+            playerConversations = playerMouth.GetComponent<PlayerConversations>();
+            if (playerConversations == null)
             {
                 Log.Error($"Player {playerMouth.name} has no conversations, talks stay empty");
                 return;
             }
 
-            conversations.LinesArrived += Arrived;
-            conversations.ContactsCleared += Cleared;
+            playerConversations.LinesArrived += HandleLinesArrived;
+            playerConversations.ContactsCleared += HandleContactsCleared;
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            window = root.Q<VisualElement>(WindowElement);
-            speaker = root.Q<Label>(NameElement);
-            log = root.Q<ScrollView>(LogElement);
-            waiting = root.Q<Label>(WaitingElement);
-            input = root.Q<TextField>(InputElement);
-            give = root.Q<Button>(GiveElement);
+            windowElement = root.Q<VisualElement>(WindowElementName);
+            partnerNameLabel = root.Q<Label>(PartnerNameLabelName);
+            linesScrollView = root.Q<ScrollView>(LinesScrollViewName);
+            waitingLabel = root.Q<Label>(WaitingLabelName);
+            inputField = root.Q<TextField>(InputFieldName);
+            giveButton = root.Q<Button>(GiveButtonName);
 
-            if (window == null || speaker == null || log == null || waiting == null || input == null || give == null)
+            if (windowElement == null || partnerNameLabel == null || linesScrollView == null || waitingLabel == null || inputField == null || giveButton == null)
             {
-                Log.Error($"Overlay document has no {WindowElement} window, talks stay invisible");
+                Log.Error($"Overlay document has no {WindowElementName} window, talks stay invisible");
                 return false;
             }
 
-            input.maxLength = PlayerMouth.MaxSpeechLength;
-            input.RegisterCallback<KeyDownEvent>(Typed);
-            give.clicked += Give;
-            window.style.display = DisplayStyle.None;
+            inputField.maxLength = PlayerMouth.MaxSpeechLength;
+            inputField.RegisterCallback<KeyDownEvent>(HandleInputKeyDown);
+            giveButton.clicked += OpenInventoryFromTalk;
+            windowElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            Forget();
+            CloseTalkAndUnsubscribeFromOwnPlayer();
 
-            if (give != null) give.clicked -= Give;
-            give = null;
-            window = null;
+            if (giveButton != null) giveButton.clicked -= OpenInventoryFromTalk;
+            giveButton = null;
+            windowElement = null;
         }
 
-        private void Open(ulong talkerId)
+        private void OpenTalk(ulong talkerNetworkObjectId)
         {
-            Talker found = TalkerOf(talkerId);
-            if (found == null || conversations == null)
+            Talker foundTalker = FindTalkerByNetworkObjectId(talkerNetworkObjectId);
+            if (foundTalker == null || playerConversations == null)
             {
-                Log.Warn($"Talk with network object {talkerId} opened, but the talker or the mirror is missing");
+                Log.Warn($"Talk with network object {talkerNetworkObjectId} opened, but the talker or the mirror is missing");
                 return;
             }
 
-            radio = false;
-            Show(conversations.GetOrCreateContact(found.CharacterId), found, Named(found));
+            talkingOverRadio = false;
+            ShowTalk(playerConversations.GetOrCreateContact(foundTalker.CharacterId), foundTalker, GetPartnerName(foundTalker));
         }
 
-        private void OpenRadio(long partnerId)
+        private void OpenRadioTalk(long partnerId)
         {
-            if (conversations == null) return;
+            if (playerConversations == null) return;
 
             Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Exclude);
-            radio = true;
-            Show(conversations.GetOrCreateContact(partnerId), partner == null ? null : partner.GetComponent<Talker>(),
-                $"{Named(partner)} ({Radio})");
+            talkingOverRadio = true;
+            ShowTalk(playerConversations.GetOrCreateContact(partnerId), partner == null ? null : partner.GetComponent<Talker>(), $"{GetPartnerName(partner)} ({RadioTitleSuffix})");
         }
 
-        private void Show(Contact pair, Talker with, string title)
+        private void ShowTalk(Contact contact, Talker talker, string title)
         {
-            Unfollow();
+            StopWatchingPartnerThinking();
 
-            contact = pair;
-            speaker.text = title;
-            give.style.display = radio ? DisplayStyle.None : DisplayStyle.Flex;
-            input.value = string.Empty;
-            window.style.display = DisplayStyle.Flex;
+            shownContact = contact;
+            partnerNameLabel.text = title;
+            giveButton.style.display = talkingOverRadio ? DisplayStyle.None : DisplayStyle.Flex;
+            inputField.value = string.Empty;
+            windowElement.style.display = DisplayStyle.Flex;
 
-            Fill();
-            Follow(with);
+            RedrawAllLines();
+            WatchPartnerThinking(talker);
 
-            input.Focus();
-            Log.Info($"Talk window opened with {speaker.text}");
+            inputField.Focus();
+            Log.Info($"Talk window opened with {partnerNameLabel.text}");
         }
 
-        private void Close()
+        private void CloseTalk()
         {
-            if (contact == null) return;
+            if (shownContact == null) return;
 
-            Unfollow();
+            StopWatchingPartnerThinking();
             StopAllCoroutines();
-            contact = null;
-            radio = false;
-            drawn = 0;
-            log.Clear();
-            window.style.display = DisplayStyle.None;
-            Wait(false);
-            input.value = string.Empty;
+            shownContact = null;
+            talkingOverRadio = false;
+            drawnLineCount = 0;
+            linesScrollView.Clear();
+            windowElement.style.display = DisplayStyle.None;
+            ShowPartnerThinking(false);
+            inputField.value = string.Empty;
 
             Log.Info("Talk window closed");
         }
 
-        private void Fill()
+        private void RedrawAllLines()
         {
             StopAllCoroutines();
-            log.Clear();
-            drawn = 0;
-            Draw(false);
+            linesScrollView.Clear();
+            drawnLineCount = 0;
+            DrawNewLines(false);
         }
 
-        private void Arrived(long partnerId)
+        private void HandleLinesArrived(long partnerId)
         {
-            if (contact == null || partnerId != contact.PartnerId) return;
+            if (shownContact == null || partnerId != shownContact.PartnerId) return;
 
-            Draw(true);
+            DrawNewLines(true);
         }
 
-        private void Cleared()
+        private void HandleContactsCleared()
         {
-            Close();
+            CloseTalk();
         }
 
         // Stops at the first gap, so a later line never shows above one that is still on its way
-        private void Draw(bool typing)
+        private void DrawNewLines(bool typeOut)
         {
-            while (drawn < contact.LineCount && contact.TryGetLine(drawn, out ConversationLine line))
+            while (drawnLineCount < shownContact.LineCount && shownContact.TryGetLine(drawnLineCount, out ConversationLine line))
             {
-                Put(line, typing);
-                drawn++;
+                AddLine(line, typeOut);
+                drawnLineCount++;
             }
 
-            contact.SeenLineCount = contact.LineCount;
+            shownContact.SeenLineCount = shownContact.LineCount;
         }
 
-        private void Put(ConversationLine line, bool typing)
+        private void AddLine(ConversationLine line, bool typeOut)
         {
-            bool mine = line.AuthorId == conversations.CharacterId;
+            bool isOwnLine = line.AuthorId == playerConversations.CharacterId;
 
-            var label = new Label();
-            label.AddToClassList("talk__line");
-            if (mine) label.AddToClassList("talk__line--mine");
-            if (!line.Spoken) label.AddToClassList("talk__line--radio");
+            Label lineLabel = new();
+            lineLabel.AddToClassList("talk__line");
+            if (isOwnLine) lineLabel.AddToClassList("talk__line--mine");
+            if (!line.Spoken) lineLabel.AddToClassList("talk__line--radio");
 
-            log.Add(label);
+            linesScrollView.Add(lineLabel);
 
-            if (mine || !typing) label.text = line.Content;
-            else StartCoroutine(Type(label, line.Content));
-
-            log.schedule.Execute(() =>
+            if (isOwnLine || !typeOut)
             {
-                if (label.parent != null) log.ScrollTo(label);
+                lineLabel.text = line.Content;
+            }
+            else
+            {
+                StartCoroutine(TypeOutLine(lineLabel, line.Content));
+            }
+
+            linesScrollView.schedule.Execute(() =>
+            {
+                if (lineLabel.parent != null) linesScrollView.ScrollTo(lineLabel);
             });
         }
 
-        private IEnumerator Type(Label line, string content)
+        private IEnumerator TypeOutLine(Label lineLabel, string content)
         {
             for (int i = 1; i <= content.Length; i++)
             {
-                line.text = content.Substring(0, i);
-                log.ScrollTo(line);
+                lineLabel.text = content.Substring(0, i);
+                linesScrollView.ScrollTo(lineLabel);
                 yield return new WaitForSeconds(charInterval);
             }
         }
 
-        private void Follow(Talker with)
+        private void WatchPartnerThinking(Talker talker)
         {
-            if (with == null)
+            if (talker == null)
             {
-                Wait(false);
+                ShowPartnerThinking(false);
                 return;
             }
 
-            talker = with;
-            talker.ThinkingChanged += Wait;
-            Wait(talker.IsThinking);
+            partnerTalker = talker;
+            partnerTalker.ThinkingChanged += ShowPartnerThinking;
+            ShowPartnerThinking(partnerTalker.IsThinking);
         }
 
-        private void Unfollow()
+        private void StopWatchingPartnerThinking()
         {
-            if (talker == null) return;
+            if (partnerTalker == null) return;
 
-            talker.ThinkingChanged -= Wait;
-            talker = null;
+            partnerTalker.ThinkingChanged -= ShowPartnerThinking;
+            partnerTalker = null;
         }
 
-        private void Wait(bool thinking)
+        private void ShowPartnerThinking(bool thinking)
         {
-            waiting.style.display = thinking ? DisplayStyle.Flex : DisplayStyle.None;
-            input.SetEnabled(!thinking);
-            if (!thinking && window.style.display == DisplayStyle.Flex) input.Focus();
+            waitingLabel.style.display = thinking ? DisplayStyle.Flex : DisplayStyle.None;
+            inputField.SetEnabled(!thinking);
+            if (!thinking && windowElement.style.display == DisplayStyle.Flex) inputField.Focus();
         }
 
-        private void Typed(KeyDownEvent typed)
+        private void HandleInputKeyDown(KeyDownEvent keyDown)
         {
-            if (typed.keyCode != KeyCode.Return && typed.keyCode != KeyCode.KeypadEnter) return;
+            if (keyDown.keyCode != KeyCode.Return && keyDown.keyCode != KeyCode.KeypadEnter) return;
 
-            string speech = input.value.Trim();
-            input.value = string.Empty;
-            typed.StopPropagation();
+            string speech = inputField.value.Trim();
+            inputField.value = string.Empty;
+            keyDown.StopPropagation();
 
-            if (speech.Length == 0 || contact == null) return;
+            if (speech.Length == 0 || shownContact == null) return;
 
-            if (radio && playerRadio != null) playerRadio.SayRpc(contact.PartnerId, speech);
-            else playerMouth.SayRpc(speech);
+            if (talkingOverRadio && playerRadio != null)
+            {
+                playerRadio.SayRpc(shownContact.PartnerId, speech);
+            }
+            else
+            {
+                playerMouth.SayRpc(speech);
+            }
         }
 
-        private void Give()
+        private void OpenInventoryFromTalk()
         {
-            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
-            if (player != null) player.OpenInventoryFromTalk();
+            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
+            if (localPlayer != null) localPlayer.OpenInventoryFromTalk();
         }
 
-        private static Talker TalkerOf(ulong talkerId)
+        private static Talker FindTalkerByNetworkObjectId(ulong networkObjectId)
         {
             NetworkManager network = NetworkManager.Singleton;
             if (network == null || network.SpawnManager == null) return null;
 
-            return network.SpawnManager.SpawnedObjects.TryGetValue(talkerId, out NetworkObject found)
-                ? found.GetComponentInChildren<Talker>()
+            return network.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject networkObject)
+                ? networkObject.GetComponentInChildren<Talker>()
                 : null;
         }
 
-        private string Named(Component character)
+        private string GetPartnerName(Component partner)
         {
-            Nameable nameable = character == null ? null : character.GetComponentInChildren<Nameable>();
+            Nameable nameable = partner == null ? null : partner.GetComponentInChildren<Nameable>();
             if (nameable == null) return Stranger;
 
-            string named = mapper.Of(nameable);
+            string shownName = nameMapper.GetShownName(nameable);
 
-            return string.IsNullOrEmpty(named) ? Stranger : named;
+            return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }
 
-        private void Forget()
+        private void CloseTalkAndUnsubscribeFromOwnPlayer()
         {
-            Close();
+            CloseTalk();
 
-            if (conversations != null)
+            if (playerConversations != null)
             {
-                conversations.LinesArrived -= Arrived;
-                conversations.ContactsCleared -= Cleared;
-                conversations = null;
+                playerConversations.LinesArrived -= HandleLinesArrived;
+                playerConversations.ContactsCleared -= HandleContactsCleared;
+                playerConversations = null;
             }
 
             if (playerMouth == null) return;
 
-            playerMouth.TalkOpened -= Open;
-            playerMouth.TalkClosed -= Close;
+            playerMouth.TalkOpened -= OpenTalk;
+            playerMouth.TalkClosed -= CloseTalk;
             playerMouth = null;
             playerRadio = null;
         }

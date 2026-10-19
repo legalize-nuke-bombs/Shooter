@@ -6,98 +6,106 @@ namespace Shooter.Game
 {
     public class InviteOverlay : Overlay
     {
-        private const string WindowElement = "invite";
-        private const string AddressElement = "invite-address";
-        private const string PortElement = "invite-port";
-        private const string CopyElement = "invite-copy";
-        private const string BackElement = "invite-back";
-        private const string StatusElement = "invite-status";
-        private const string Copied = "Ссылка скопирована";
-        private const string NoAddress = "Впишите адрес";
+        private const string WindowElementName = "invite";
+        private const string AddressFieldName = "invite-address";
+        private const string PortFieldName = "invite-port";
+        private const string CopyButtonName = "invite-copy";
+        private const string BackButtonName = "invite-back";
+        private const string StatusLabelName = "invite-status";
+        private const string CopiedStatus = "Ссылка скопирована";
+        private const string NoAddressStatus = "Впишите адрес";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private TextField address;
-        private Button back;
-        private Button copy;
+        private TextField addressField;
+        private Button backButton;
+        private Button copyButton;
         private bool open;
-        private TextField port;
-        private Label status;
-        private VisualElement window;
+        private TextField portField;
+        private Label statusLabel;
+        private VisualElement windowElement;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
-            bool wanted = player != null && player.IsInviteOpen;
+            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
+            bool shouldBeOpen = localPlayer != null && localPlayer.IsInviteOpen;
 
-            if (wanted == open) return;
+            if (shouldBeOpen == open) return;
 
-            open = wanted;
+            open = shouldBeOpen;
 
-            if (open) Show();
-            else Hide();
+            if (open)
+            {
+                ShowWindow();
+            }
+            else
+            {
+                HideWindow();
+            }
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            window = root.Q<VisualElement>(WindowElement);
-            address = root.Q<TextField>(AddressElement);
-            port = root.Q<TextField>(PortElement);
-            copy = root.Q<Button>(CopyElement);
-            back = root.Q<Button>(BackElement);
-            status = root.Q<Label>(StatusElement);
+            windowElement = root.Q<VisualElement>(WindowElementName);
+            addressField = root.Q<TextField>(AddressFieldName);
+            portField = root.Q<TextField>(PortFieldName);
+            copyButton = root.Q<Button>(CopyButtonName);
+            backButton = root.Q<Button>(BackButtonName);
+            statusLabel = root.Q<Label>(StatusLabelName);
 
-            if (window == null || address == null || port == null || copy == null || back == null || status == null)
+            if (windowElement == null || addressField == null || portField == null || copyButton == null || backButton == null || statusLabel == null)
             {
-                Log.Error($"Overlay document has no {WindowElement} window, invites stay hidden");
+                Log.Error($"Overlay document has no {WindowElementName} window, invites stay hidden");
                 return false;
             }
 
-            copy.clicked += Copy;
-            back.clicked += Back;
-            window.style.display = DisplayStyle.None;
+            copyButton.clicked += CopyInviteLink;
+            backButton.clicked += CloseInvite;
+            windowElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
             open = false;
-            window = null;
+            windowElement = null;
         }
 
-        private void Show()
+        private void ShowWindow()
         {
-            port.value = Config.GetGameConfig().Server.Port.ToString();
-            status.text = "";
-            window.style.display = DisplayStyle.Flex;
+            portField.value = Config.GetGameConfig().Server.Port.ToString();
+            statusLabel.text = "";
+            windowElement.style.display = DisplayStyle.Flex;
         }
 
-        private void Hide()
+        private void HideWindow()
         {
-            if (window != null) window.style.display = DisplayStyle.None;
+            if (windowElement != null) windowElement.style.display = DisplayStyle.None;
         }
 
-        private void Copy()
+        private void CopyInviteLink()
         {
-            string host = address.value.Trim();
-            if (string.IsNullOrEmpty(host))
+            string hostAddress = addressField.value.Trim();
+            if (string.IsNullOrEmpty(hostAddress))
             {
-                status.text = NoAddress;
+                statusLabel.text = NoAddressStatus;
                 return;
             }
 
-            if (!ushort.TryParse(port.value, out ushort chosen))
-                chosen = Config.GetGameConfig().Server.Port;
+            if (!ushort.TryParse(portField.value, out ushort port))
+            {
+                port = Config.GetGameConfig().Server.Port;
+            }
 
-            string code = NetworkInvite.EncodeInviteCode(host, chosen, Config.Account.Certificate);
-            GUIUtility.systemCopyBuffer = code;
-            status.text = Copied;
-            Log.Info($"Invite link copied for {host}:{chosen}");
+            string inviteCode = NetworkInvite.EncodeInviteCode(hostAddress, port, Config.Account.Certificate);
+            GUIUtility.systemCopyBuffer = inviteCode;
+            statusLabel.text = CopiedStatus;
+            Log.Info($"Invite link copied for {hostAddress}:{port}");
         }
 
-        private void Back()
+        private void CloseInvite()
         {
             OwnPlayer.FindComponent<LocalPlayer>()?.CloseInvite();
         }

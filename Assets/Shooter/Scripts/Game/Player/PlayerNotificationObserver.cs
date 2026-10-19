@@ -20,12 +20,12 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) notificationRecipient.Received += HandleNotificationReceived;
+            if (IsServer) notificationRecipient.NotificationReceived += HandleNotificationReceived;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (IsServer) notificationRecipient.Received -= HandleNotificationReceived;
+            if (IsServer) notificationRecipient.NotificationReceived -= HandleNotificationReceived;
         }
 
         private void HandleNotificationReceived(NotificationAsset notification)

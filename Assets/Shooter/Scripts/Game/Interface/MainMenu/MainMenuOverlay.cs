@@ -10,8 +10,8 @@ namespace Shooter.Game
 {
     public class MainMenuOverlay : Overlay
     {
-        private const string PanelElement = "panel";
-        private const string VersionElement = "version";
+        private const string PanelElementName = "panel";
+        private const string VersionLabelName = "version";
         private const string PageClass = "screen";
         private const int MenuFrameRate = 60;
         private const int UnlimitedFrameRate = -1;
@@ -25,20 +25,20 @@ namespace Shooter.Game
         [SerializeField] private VisualTreeAsset clientSettingsPage;
         [SerializeField] private VisualTreeAsset accountPage;
 
-        private readonly PageStack pages = new();
-        private AccountPage account;
-        private ClientPage client;
-        private ClientSettingsPage clientSettings;
-        private Dialog dialog;
+        private readonly MainMenuPageStack pageStack = new();
+        private AccountPage accountPageController;
+        private ClientPage clientPageController;
+        private ClientSettingsPage clientSettingsPageController;
+        private MainMenuDialog dialog;
         private LoadingScreenOverlay loadingScreenOverlay;
-        private MainPage main;
-        private NewGamePage newGame;
-        private VisualElement panel;
-        private SavesPage saves;
-        private ServerSettingsPage serverSettings;
+        private MainPage mainPageController;
+        private NewGamePage newGamePageController;
+        private VisualElement panelElement;
+        private SavesPage savesPageController;
+        private ServerSettingsPage serverSettingsPageController;
         private NetworkStarter networkStarter;
-        private string warnDetails;
-        private string warnTitle;
+        private string pendingWarningDetails;
+        private string pendingWarningTitle;
 
         private void Awake()
         {
@@ -50,7 +50,7 @@ namespace Shooter.Game
         private void Start()
         {
             loadingScreenOverlay = FindAnyObjectByType<LoadingScreenOverlay>();
-            loadingScreenOverlay.Hide();
+            loadingScreenOverlay.HideScreen();
             networkStarter.JoinFailed += HandleJoinFailed;
         }
 
@@ -60,33 +60,39 @@ namespace Shooter.Game
             Application.targetFrameRate = UnlimitedFrameRate;
         }
 
-        private void Warn(string title, string details)
+        private void ShowWarning(string title, string details)
         {
-            warnTitle = title;
-            warnDetails = details;
-            ShowWarning();
+            pendingWarningTitle = title;
+            pendingWarningDetails = details;
+            ShowPendingWarning();
         }
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
             Keyboard keyboard = Keyboard.current;
             if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame) return;
 
-            if (dialog.Open) dialog.Cancel();
-            else pages.Pop();
+            if (dialog.IsOpen)
+            {
+                dialog.CloseUnlessBusy();
+            }
+            else
+            {
+                pageStack.PopPageUnlessLast();
+            }
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            PortConverters.Register();
+            PortConverters.RegisterGlobalConverters();
             root.dataSource = Config.GetGameConfig();
 
-            panel = root.Q<VisualElement>(PanelElement);
-            Label version = root.Q<Label>(VersionElement);
+            panelElement = root.Q<VisualElement>(PanelElementName);
+            Label versionLabel = root.Q<Label>(VersionLabelName);
 
-            if (panel == null || version == null)
+            if (panelElement == null || versionLabel == null)
             {
                 Log.Error("Menu document is incomplete, the menu stays dead");
                 return false;
@@ -100,14 +106,14 @@ namespace Shooter.Game
 
             try
             {
-                dialog = new Dialog(root);
-                main = new MainPage(Mount(mainPage));
-                newGame = new NewGamePage(Mount(newGamePage));
-                saves = new SavesPage(Mount(savesPage), dialog);
-                client = new ClientPage(Mount(clientPage));
-                serverSettings = new ServerSettingsPage(Mount(serverSettingsPage));
-                clientSettings = new ClientSettingsPage(Mount(clientSettingsPage));
-                account = new AccountPage(Mount(accountPage));
+                dialog = new MainMenuDialog(root);
+                mainPageController = new MainPage(MountPage(mainPage));
+                newGamePageController = new NewGamePage(MountPage(newGamePage));
+                savesPageController = new SavesPage(MountPage(savesPage), dialog);
+                clientPageController = new ClientPage(MountPage(clientPage));
+                serverSettingsPageController = new ServerSettingsPage(MountPage(serverSettingsPage));
+                clientSettingsPageController = new ClientSettingsPage(MountPage(clientSettingsPage));
+                accountPageController = new AccountPage(MountPage(accountPage));
             }
             catch (InvalidOperationException e)
             {
@@ -115,54 +121,54 @@ namespace Shooter.Game
                 return false;
             }
 
-            version.text = Application.version;
+            versionLabel.text = Application.version;
 
-            main.NewGameOpening += OpenNewGame;
-            main.SavesOpening += OpenSaves;
-            main.ServerSettingsOpening += OpenServerSettings;
-            main.ClientSettingsOpening += OpenClientSettings;
-            main.JoinOpening += OpenClient;
-            main.AccountOpening += OpenAccount;
-            main.Quitting += Quit;
-            newGame.Starting += HostFresh;
-            newGame.Backing += Back;
-            saves.Loading += Host;
-            saves.Backing += Back;
-            client.Connecting += Connect;
-            client.Backing += Back;
-            serverSettings.Backing += Back;
-            clientSettings.Backing += Back;
-            account.Backing += Back;
+            mainPageController.NewGameClicked += OpenNewGamePage;
+            mainPageController.LoadGameClicked += OpenSavesPage;
+            mainPageController.ServerSettingsClicked += OpenServerSettingsPage;
+            mainPageController.ClientSettingsClicked += OpenClientSettingsPage;
+            mainPageController.JoinClicked += OpenClientPage;
+            mainPageController.AccountClicked += OpenAccountPage;
+            mainPageController.QuitClicked += QuitGame;
+            newGamePageController.StartClicked += HostFreshWorld;
+            newGamePageController.BackClicked += ReturnToPreviousPage;
+            savesPageController.SaveToLoadChosen += HostWorld;
+            savesPageController.BackClicked += ReturnToPreviousPage;
+            clientPageController.ConnectClicked += JoinWorldByInvite;
+            clientPageController.BackClicked += ReturnToPreviousPage;
+            serverSettingsPageController.BackClicked += ReturnToPreviousPage;
+            clientSettingsPageController.BackClicked += ReturnToPreviousPage;
+            accountPageController.BackClicked += ReturnToPreviousPage;
 
-            pages.Push(main);
+            pageStack.PushPage(mainPageController);
 
             if (networkStarter.StartFailureToShow != null)
             {
-                warnTitle = networkStarter.StartFailureToShow.Title;
-                warnDetails = networkStarter.StartFailureToShow.Details;
+                pendingWarningTitle = networkStarter.StartFailureToShow.Title;
+                pendingWarningDetails = networkStarter.StartFailureToShow.Details;
                 networkStarter.StartFailureToShow = null;
             }
 
-            ShowWarning();
+            ShowPendingWarning();
 
-            if (Config.GetGameConfig().Account == null) GenerateKey();
+            if (Config.GetGameConfig().Account == null) CreateAccountWithGeneratedKeys();
 
             Log.Info("Menu is up");
             return true;
         }
 
-        private void ShowWarning()
+        private void ShowPendingWarning()
         {
-            if (dialog == null || warnTitle == null) return;
+            if (dialog == null || pendingWarningTitle == null) return;
 
-            dialog.Notice(warnTitle, warnDetails, "Понятно");
-            warnTitle = null;
-            warnDetails = null;
+            dialog.ShowNotice(pendingWarningTitle, pendingWarningDetails, "Понятно");
+            pendingWarningTitle = null;
+            pendingWarningDetails = null;
         }
 
-        private async void GenerateKey()
+        private async void CreateAccountWithGeneratedKeys()
         {
-            dialog.Busy("Создание аккаунта...", "Пожалуйста, подождите. Может занять несколько секунд");
+            dialog.ShowBusy("Создание аккаунта...", "Пожалуйста, подождите. Может занять несколько секунд");
             try
             {
                 Account account = await Task.Run(() => Account.CreateWithGeneratedKeys());
@@ -175,94 +181,94 @@ namespace Shooter.Game
                 Log.Error($"Account key generation failed: {e.Message}");
             }
 
-            dialog?.Release();
+            dialog?.CloseBusy();
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            pages.Clear();
-            panel?.Clear();
+            pageStack.ClearPages();
+            panelElement?.Clear();
 
             dialog = null;
-            main = null;
-            newGame = null;
-            saves = null;
-            client = null;
-            serverSettings = null;
-            clientSettings = null;
-            account = null;
-            panel = null;
+            mainPageController = null;
+            newGamePageController = null;
+            savesPageController = null;
+            clientPageController = null;
+            serverSettingsPageController = null;
+            clientSettingsPageController = null;
+            accountPageController = null;
+            panelElement = null;
         }
 
-        private VisualElement Mount(VisualTreeAsset template)
+        private VisualElement MountPage(VisualTreeAsset template)
         {
-            TemplateContainer page = template.Instantiate();
-            page.name = template.name;
-            page.AddToClassList(PageClass);
-            panel.Add(page);
+            TemplateContainer pageElement = template.Instantiate();
+            pageElement.name = template.name;
+            pageElement.AddToClassList(PageClass);
+            panelElement.Add(pageElement);
 
-            return page;
+            return pageElement;
         }
 
-        private void OpenNewGame()
+        private void OpenNewGamePage()
         {
-            pages.Push(newGame);
+            pageStack.PushPage(newGamePageController);
         }
 
-        private void OpenSaves()
+        private void OpenSavesPage()
         {
-            pages.Push(saves);
+            pageStack.PushPage(savesPageController);
         }
 
-        private void OpenClient()
+        private void OpenClientPage()
         {
-            pages.Push(client);
+            pageStack.PushPage(clientPageController);
         }
 
-        private void OpenServerSettings()
+        private void OpenServerSettingsPage()
         {
-            pages.Push(serverSettings);
+            pageStack.PushPage(serverSettingsPageController);
         }
 
-        private void OpenClientSettings()
+        private void OpenClientSettingsPage()
         {
-            pages.Push(clientSettings);
+            pageStack.PushPage(clientSettingsPageController);
         }
 
-        private void OpenAccount()
+        private void OpenAccountPage()
         {
-            pages.Push(account);
+            pageStack.PushPage(accountPageController);
         }
 
-        private void Back()
+        private void ReturnToPreviousPage()
         {
-            pages.Pop();
+            pageStack.PopPageUnlessLast();
         }
 
-        private void HostFresh()
+        private void HostFreshWorld()
         {
             Log.Info("The player starts a fresh game");
-            Host(null);
+            HostWorld(null);
         }
 
-        private void Host(string save)
+        private void HostWorld(string saveLocation)
         {
-            if (save != null) Log.Info($"The player continues the game saved at {save}");
+            if (saveLocation != null) Log.Info($"The player continues the game saved at {saveLocation}");
             loadingScreenOverlay.ShowStage(LoadingScreenStage.Server);
-            NetworkStartFailure failure = networkStarter.HostWorld(save);
+            NetworkStartFailure failure = networkStarter.HostWorld(saveLocation);
             if (failure == null) return;
 
-            loadingScreenOverlay.Hide();
-            Warn(failure.Title, failure.Details);
+            loadingScreenOverlay.HideScreen();
+            ShowWarning(failure.Title, failure.Details);
         }
 
-        private void Connect()
+        private void JoinWorldByInvite()
         {
             Log.Info("The player joins a game of someone else");
             NetworkStartFailure failure = networkStarter.JoinWorldByInvite();
             if (failure != null)
             {
-                Warn(failure.Title, failure.Details);
+                ShowWarning(failure.Title, failure.Details);
                 return;
             }
 
@@ -272,16 +278,16 @@ namespace Shooter.Game
         private void CancelConnecting()
         {
             networkStarter.CancelJoin();
-            loadingScreenOverlay.Hide();
+            loadingScreenOverlay.HideScreen();
         }
 
         private void HandleJoinFailed(NetworkStartFailure failure)
         {
-            loadingScreenOverlay.Hide();
-            Warn(failure.Title, failure.Details);
+            loadingScreenOverlay.HideScreen();
+            ShowWarning(failure.Title, failure.Details);
         }
 
-        private void Quit()
+        private void QuitGame()
         {
             Log.Info("Leaving the game by the player's own hand");
             Application.Quit();

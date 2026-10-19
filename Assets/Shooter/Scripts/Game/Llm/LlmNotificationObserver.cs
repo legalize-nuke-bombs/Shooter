@@ -17,12 +17,12 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            notificationRecipient.Received += HandleNotificationReceived;
+            notificationRecipient.NotificationReceived += HandleNotificationReceived;
         }
 
         private void OnDisable()
         {
-            notificationRecipient.Received -= HandleNotificationReceived;
+            notificationRecipient.NotificationReceived -= HandleNotificationReceived;
         }
 
         private void HandleNotificationReceived(NotificationAsset notification)
@@ -33,7 +33,7 @@ namespace Shooter.Game
             EarSoundAsset sound = notification.Sound;
             string soundDescription = sound == null ? "none" : sound.PromptDescription;
 
-            llm.AppendEvent($"[{Llm.FormatCurrentWorldTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {notification.Told}", notification.Urgent);
+            llm.AppendEvent($"[{Llm.FormatCurrentWorldTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {notification.PromptText}", notification.IsUrgent);
         }
     }
 }

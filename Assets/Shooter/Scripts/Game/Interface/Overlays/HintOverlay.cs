@@ -8,16 +8,16 @@ namespace Shooter.Game
     [RequireComponent(typeof(LookHitFinder))]
     public class HintOverlay : Overlay
     {
-        private const string HintElement = "hint";
+        private const string HintLabelName = "hint";
         private const string KeyboardScheme = "Keyboard&Mouse";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private HintCatalog hints;
 
         private LookHitFinder lookHitFinder;
-        private Label hint;
-        private string key = string.Empty;
-        private string shown = string.Empty;
+        private Label hintLabel;
+        private string interactKey = string.Empty;
+        private string shownHint = string.Empty;
 
         private void Awake()
         {
@@ -26,23 +26,23 @@ namespace Shooter.Game
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            string text = Text();
-            if (text == shown) return;
+            string hint = GetHintForLookHit();
+            if (hint == shownHint) return;
 
-            shown = text;
-            hint.text = text;
+            shownHint = hint;
+            hintLabel.text = hint;
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            hint = root.Q<Label>(HintElement);
-            shown = string.Empty;
+            hintLabel = root.Q<Label>(HintLabelName);
+            shownHint = string.Empty;
 
-            if (hint == null)
+            if (hintLabel == null)
             {
-                Log.Error($"Overlay document has no {HintElement} label, interaction hints stay hidden");
+                Log.Error($"Overlay document has no {HintLabelName} label, interaction hints stay hidden");
                 return false;
             }
 
@@ -52,19 +52,19 @@ namespace Shooter.Game
                 return false;
             }
 
-            key = Key();
-            hint.text = string.Empty;
-            Log.Info($"Interaction hints are bound to key {key}");
+            interactKey = GetInteractKeyName();
+            hintLabel.text = string.Empty;
+            Log.Info($"Interaction hints are bound to key {interactKey}");
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            hint = null;
+            hintLabel = null;
         }
 
-        private string Text()
+        private string GetHintForLookHit()
         {
             Interactor interactor = OwnPlayer.FindComponent<Interactor>();
             if (interactor == null) return string.Empty;
@@ -75,16 +75,16 @@ namespace Shooter.Game
             IUsable usable = hit.collider.GetComponentInParent<IUsable>();
             if (usable == null) return string.Empty;
 
-            return "[" + key + "] " + hints.Text(usable.Usage);
+            return "[" + interactKey + "] " + hints.GetHintText(usable.Usage);
         }
 
-        private static string Key()
+        private static string GetInteractKeyName()
         {
-            var controls = new Controls();
-            string display = controls.Player.Interact.GetBindingDisplayString(InputBinding.MaskByGroup(KeyboardScheme));
+            Controls controls = new();
+            string interactKeyName = controls.Player.Interact.GetBindingDisplayString(InputBinding.MaskByGroup(KeyboardScheme));
             controls.Dispose();
 
-            return display;
+            return interactKeyName;
         }
     }
 }

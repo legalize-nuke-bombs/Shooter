@@ -9,14 +9,14 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        public event Action<NotificationAsset> Received;
+        public event Action<NotificationAsset> NotificationReceived;
 
-        public void Receive(NotificationAsset asset)
+        public void ReceiveNotification(NotificationAsset notification)
         {
-            if (asset == null) return;
+            if (notification == null) return;
 
-            Log.Info($"Entity {name} received notification {asset.Id}");
-            Received?.Invoke(asset);
+            Log.Info($"Entity {name} received notification {notification.Id}");
+            NotificationReceived?.Invoke(notification);
         }
     }
 }

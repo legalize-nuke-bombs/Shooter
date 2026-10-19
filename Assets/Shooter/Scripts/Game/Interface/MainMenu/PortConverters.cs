@@ -10,21 +10,20 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
         private static bool registered;
 
-        public static void Register()
+        public static void RegisterGlobalConverters()
         {
             if (registered) return;
 
             registered = true;
             ConverterGroups.RegisterGlobalConverter((ref ushort port) => port.ToString(CultureInfo.InvariantCulture));
-            ConverterGroups.RegisterGlobalConverter((ref string typed) => Parse(typed));
+            ConverterGroups.RegisterGlobalConverter((ref string typedPort) => ParsePortOrFallback(typedPort));
         }
 
-        private static ushort Parse(string typed)
+        private static ushort ParsePortOrFallback(string typedPort)
         {
-            if (ushort.TryParse(typed, NumberStyles.Integer, CultureInfo.InvariantCulture, out ushort port) && port != 0)
-                return port;
+            if (ushort.TryParse(typedPort, NumberStyles.Integer, CultureInfo.InvariantCulture, out ushort port) && port != 0) return port;
 
-            Log.Warn($"Port {typed} is not a number between 1 and 65535, using {FallbackPort}");
+            Log.Warn($"Port {typedPort} is not a number between 1 and 65535, using {FallbackPort}");
 
             return FallbackPort;
         }

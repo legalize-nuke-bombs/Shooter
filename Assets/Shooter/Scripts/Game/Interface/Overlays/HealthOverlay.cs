@@ -6,68 +6,68 @@ namespace Shooter.Game
 {
     public class HealthOverlay : Overlay
     {
-        private const string BarElement = "health";
-        private const string FillElement = "health-fill";
+        private const string BarElementName = "health";
+        private const string FillElementName = "health-fill";
         private const int Hidden = -1;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private VisualElement bar;
-        private VisualElement fill;
+        private VisualElement barElement;
+        private VisualElement fillElement;
         private Health health;
-        private int shown = Hidden;
+        private int shownHp = Hidden;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            Health own = Own();
+            Health ownHealth = FindOwnHealth();
 
-            if (own == null)
+            if (ownHealth == null)
             {
-                Hide();
+                HideBar();
                 return;
             }
 
-            int hp = (int)Math.Ceiling(own.Hp);
-            if (hp == shown) return;
+            int hp = (int)Math.Ceiling(ownHealth.Hp);
+            if (hp == shownHp) return;
 
-            shown = hp;
-            bar.style.display = DisplayStyle.Flex;
-            fill.style.width = new Length(100f * hp / (int)own.MaxHp, LengthUnit.Percent);
+            shownHp = hp;
+            barElement.style.display = DisplayStyle.Flex;
+            fillElement.style.width = new Length(100f * hp / (int)ownHealth.MaxHp, LengthUnit.Percent);
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            bar = root.Q<VisualElement>(BarElement);
-            fill = root.Q<VisualElement>(FillElement);
-            shown = Hidden;
+            barElement = root.Q<VisualElement>(BarElementName);
+            fillElement = root.Q<VisualElement>(FillElementName);
+            shownHp = Hidden;
 
-            if (bar == null || fill == null)
+            if (barElement == null || fillElement == null)
             {
-                Log.Error($"Overlay document has no {BarElement} or {FillElement} element, health stays hidden");
+                Log.Error($"Overlay document has no {BarElementName} or {FillElementName} element, health stays hidden");
                 return false;
             }
 
-            bar.style.display = DisplayStyle.None;
+            barElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            bar = null;
-            fill = null;
+            barElement = null;
+            fillElement = null;
         }
 
-        private void Hide()
+        private void HideBar()
         {
-            if (shown == Hidden) return;
+            if (shownHp == Hidden) return;
 
-            shown = Hidden;
-            bar.style.display = DisplayStyle.None;
+            shownHp = Hidden;
+            barElement.style.display = DisplayStyle.None;
         }
 
-        private Health Own()
+        private Health FindOwnHealth()
         {
             if (health == null) health = OwnPlayer.FindComponent<Health>();
 

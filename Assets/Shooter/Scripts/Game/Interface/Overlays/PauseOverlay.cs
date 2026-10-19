@@ -5,98 +5,104 @@ namespace Shooter.Game
 {
     public class PauseOverlay : Overlay
     {
-        private const string WindowElement = "pause";
-        private const string ResumeElement = "pause-resume";
-        private const string SaveElement = "pause-save";
-        private const string InviteElement = "pause-invite";
-        private const string LeaveElement = "pause-leave";
-        private const string LeaveHost = "Сохранить и выйти";
-        private const string LeaveClient = "Покинуть мир";
+        private const string WindowElementName = "pause";
+        private const string ResumeButtonName = "pause-resume";
+        private const string SaveButtonName = "pause-save";
+        private const string InviteButtonName = "pause-invite";
+        private const string LeaveButtonName = "pause-leave";
+        private const string LeaveTextForHost = "Сохранить и выйти";
+        private const string LeaveTextForClient = "Покинуть мир";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private Button invite;
-        private Button leave;
+        private Button inviteButton;
+        private Button leaveButton;
         private bool open;
-        private Button resume;
-        private Button save;
-        private VisualElement window;
+        private Button resumeButton;
+        private Button saveButton;
+        private VisualElement windowElement;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
-            bool wanted = player != null && player.IsPauseMenuOpen && !player.IsInviteOpen;
+            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
+            bool shouldBeOpen = localPlayer != null && localPlayer.IsPauseMenuOpen && !localPlayer.IsInviteOpen;
 
-            if (wanted == open) return;
+            if (shouldBeOpen == open) return;
 
-            open = wanted;
+            open = shouldBeOpen;
 
-            if (open) Show(player);
-            else Hide();
+            if (open)
+            {
+                ShowWindow(localPlayer);
+            }
+            else
+            {
+                HideWindow();
+            }
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            window = root.Q<VisualElement>(WindowElement);
-            resume = root.Q<Button>(ResumeElement);
-            save = root.Q<Button>(SaveElement);
-            invite = root.Q<Button>(InviteElement);
-            leave = root.Q<Button>(LeaveElement);
+            windowElement = root.Q<VisualElement>(WindowElementName);
+            resumeButton = root.Q<Button>(ResumeButtonName);
+            saveButton = root.Q<Button>(SaveButtonName);
+            inviteButton = root.Q<Button>(InviteButtonName);
+            leaveButton = root.Q<Button>(LeaveButtonName);
 
-            if (window == null || resume == null || save == null || invite == null || leave == null)
+            if (windowElement == null || resumeButton == null || saveButton == null || inviteButton == null || leaveButton == null)
             {
-                Log.Error($"Overlay document has no {WindowElement} window, the pause menu stays hidden");
+                Log.Error($"Overlay document has no {WindowElementName} window, the pause menu stays hidden");
                 return false;
             }
 
-            resume.clicked += Resume;
-            save.clicked += Save;
-            invite.clicked += Invite;
-            leave.clicked += Leave;
-            window.style.display = DisplayStyle.None;
+            resumeButton.clicked += ClosePauseMenu;
+            saveButton.clicked += SaveWorld;
+            inviteButton.clicked += OpenInvite;
+            leaveButton.clicked += LeaveWorld;
+            windowElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
             open = false;
-            window = null;
+            windowElement = null;
         }
 
-        private void Show(LocalPlayer player)
+        private void ShowWindow(LocalPlayer localPlayer)
         {
-            bool host = player.IsServer;
+            bool isHost = localPlayer.IsServer;
 
-            save.style.display = host ? DisplayStyle.Flex : DisplayStyle.None;
-            invite.style.display = host ? DisplayStyle.Flex : DisplayStyle.None;
-            leave.text = host ? LeaveHost : LeaveClient;
+            saveButton.style.display = isHost ? DisplayStyle.Flex : DisplayStyle.None;
+            inviteButton.style.display = isHost ? DisplayStyle.Flex : DisplayStyle.None;
+            leaveButton.text = isHost ? LeaveTextForHost : LeaveTextForClient;
 
-            window.style.display = DisplayStyle.Flex;
+            windowElement.style.display = DisplayStyle.Flex;
         }
 
-        private void Hide()
+        private void HideWindow()
         {
-            if (window != null) window.style.display = DisplayStyle.None;
+            if (windowElement != null) windowElement.style.display = DisplayStyle.None;
         }
 
-        private void Resume()
+        private void ClosePauseMenu()
         {
             OwnPlayer.FindComponent<LocalPlayer>()?.ClosePauseMenu();
         }
 
-        private void Save()
+        private void SaveWorld()
         {
             OwnPlayer.FindComponent<LocalPlayer>()?.SaveWorld();
         }
 
-        private void Invite()
+        private void OpenInvite()
         {
             OwnPlayer.FindComponent<LocalPlayer>()?.OpenInvite();
         }
 
-        private void Leave()
+        private void LeaveWorld()
         {
             OwnPlayer.FindComponent<LocalPlayer>()?.LeaveWorld();
         }

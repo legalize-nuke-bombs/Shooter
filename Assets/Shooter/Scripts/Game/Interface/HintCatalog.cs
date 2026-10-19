@@ -12,15 +12,16 @@ namespace Shooter.Game
 
         [SerializeField] private Hint[] hints;
 
-        private readonly HashSet<UsageType> unhinted = new();
+        private readonly HashSet<UsageType> usagesWithoutHint = new();
 
-        public string Text(UsageType usage)
+        public string GetHintText(UsageType usage)
         {
             foreach (Hint hint in hints)
-                if (hint.Usage == usage)
-                    return hint.Text;
+            {
+                if (hint.Usage == usage) return hint.Text;
+            }
 
-            if (unhinted.Add(usage)) Log.Warn($"Hint catalog {name} has no hint for {usage}");
+            if (usagesWithoutHint.Add(usage)) Log.Error($"Hint catalog {name} has no hint for {usage}");
 
             return usage.ToString();
         }

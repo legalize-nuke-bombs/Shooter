@@ -4,22 +4,22 @@ namespace Shooter.Game
 {
     public sealed class NameMapper
     {
-        public string Of(long characterId)
+        public string GetShownNameById(long characterId)
         {
             Character character = Character.FindById(characterId, RegisterInactivePolicy.Include);
             Nameable nameable = character == null ? null : character.GetComponentInChildren<Nameable>();
 
-            return nameable == null ? string.Empty : Of(nameable);
+            return nameable == null ? string.Empty : GetShownName(nameable);
         }
 
-        public string Of(Nameable nameable)
+        public string GetShownName(Nameable nameable)
         {
             switch (nameable)
             {
-                case AbsoluteNameable absolute:
-                    return absolute.Name;
-                case TypedNameable typed:
-                    return typed.Asset == null ? string.Empty : typed.Asset.GetShownName();
+                case AbsoluteNameable absoluteNameable:
+                    return absoluteNameable.Name;
+                case TypedNameable typedNameable:
+                    return typedNameable.Asset == null ? string.Empty : typedNameable.Asset.GetShownName();
                 default:
                     return string.Empty;
             }
