@@ -3649,7 +3649,7 @@ GameObject:
   - component: {fileID: 390339359}
   - component: {fileID: 390339358}
   m_Layer: 0
-  m_Name: State
+  m_Name: MapState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
