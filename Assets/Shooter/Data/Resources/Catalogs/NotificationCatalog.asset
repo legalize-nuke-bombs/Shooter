@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: NotificationCatalog
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Notifying.NotificationCatalog
   assets:
+  - {fileID: 11400000, guid: 517bf935bac8ad946b2c060af0dfcf85, type: 2}
+  - {fileID: 11400000, guid: 7e52937159889f047aa4b23fd6aa3f78, type: 2}
   - {fileID: 11400000, guid: a915e3e4f58857e4a9f88dcfffe60789, type: 2}

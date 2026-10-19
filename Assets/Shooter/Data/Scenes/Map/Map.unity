@@ -456,6 +456,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete)
       objectReference: {fileID: 0}
+    - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2368,6 +2372,10 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2802167914
       objectReference: {fileID: 0}
+    - target: {fileID: 2161080503177255288, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3622243103439998288, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_Name
       value: tv
@@ -3098,6 +3106,10 @@ PrefabInstance:
     - target: {fileID: 7431905612350002, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431905612350007, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 619626251006798639, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: id
@@ -6293,6 +6305,10 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2802167914
       objectReference: {fileID: 0}
+    - target: {fileID: 2161080503177255288, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3622243103439998288, guid: 42a7acd56b9b4c44f91e4d393ed2adc8, type: 3}
       propertyPath: m_Name
       value: tv (1)
@@ -8218,6 +8234,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3942320514626810118, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5643494334418050171, guid: 53511846966b6ce4c8acb830be33adff, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8458,6 +8482,10 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8812,6 +8840,97 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1766490383188478063, guid: a93f80d252523a14d9206681c7713ce8, type: 3}
   m_PrefabInstance: {fileID: 876447642}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &876823751 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+  m_PrefabInstance: {fileID: 1853797110}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &876823764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876823751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 658a7dc00bbc4d9997cc3be80a247a2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainTriggerable
+--- !u!114 &876823765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876823751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56c77a45109941f3bb840457957181eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.NotificationPublisher
+  notificationAsset: {fileID: 11400000, guid: 517bf935bac8ad946b2c060af0dfcf85, type: 2}
+  oncePerCharacter: 1
+--- !u!114 &876823766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876823751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4343521fa56040a791814871aff3cd29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AreaTrigger
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!135 &876823767
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876823751}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &876823768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876823751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 658a7dc00bbc4d9997cc3be80a247a2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainTriggerable
+--- !u!114 &876823769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876823751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a0761b85cfc472bae4021d23cdec103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.SaveableObject
+  ShowTopMostFoldoutHeaderGroup: 1
+  id: f49513e5-2bd1-4c4f-96e2-3bf6521a9464
 --- !u!1 &878767862
 GameObject:
   m_ObjectHideFlags: 0
@@ -9240,6 +9359,10 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14086,6 +14209,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5738104920184771058, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738104920184771058, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
       propertyPath: m_ShapeRadius
       value: 0.025
       objectReference: {fileID: 0}
@@ -16272,6 +16399,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7431905612350007, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 619626251006798639, guid: 8b4d2e6f1a3c47d9b5e0c8a2f6d1b3e7, type: 3}
       propertyPath: id
       value: b721adab-65eb-4217-93d7-0884d4206abb
@@ -16737,7 +16868,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4748876460949477868, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2035882889}
+    - targetCorrespondingSourceObject: {fileID: 4748876460949477868, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2035882888}
+    - targetCorrespondingSourceObject: {fileID: 4748876460949477868, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2035882886}
+    - targetCorrespondingSourceObject: {fileID: 4748876460949477868, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2035882887}
+    - targetCorrespondingSourceObject: {fileID: 4748876460949477868, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2035882891}
+    - targetCorrespondingSourceObject: {fileID: 4748876460949477868, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2035882890}
+    - targetCorrespondingSourceObject: {fileID: 4748876460949477868, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2035882892}
   m_SourcePrefab: {fileID: 100100000, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
 --- !u!1001 &1746106887
 PrefabInstance:
@@ -17741,7 +17893,25 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 876823768}
+    - targetCorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 876823767}
+    - targetCorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 876823766}
+    - targetCorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 876823765}
+    - targetCorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 876823764}
+    - targetCorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 876823769}
   m_SourcePrefab: {fileID: 100100000, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
 --- !u!1001 &1887392686
 PrefabInstance:
@@ -18818,6 +18988,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 743788786719850023, guid: c643da1d79cba4b4dad439ab47e03ef2, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 867288258065005220, guid: c643da1d79cba4b4dad439ab47e03ef2, type: 3}
       propertyPath: m_Name
       value: PendantLamp
@@ -19727,6 +19901,123 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 8ba92e2dd7f884a0f88b98fa2d235fe7, type: 2}
+--- !u!1 &2035882881 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4748876460949477868, guid: 273c493140056b4448126b6aa94f83ec, type: 3}
+  m_PrefabInstance: {fileID: 1715242429}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2035882886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035882881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3002008732
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  m_InScenePlaced: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &2035882887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035882881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4343521fa56040a791814871aff3cd29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AreaTrigger
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!135 &2035882888
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035882881}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 30
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2035882889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035882881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 658a7dc00bbc4d9997cc3be80a247a2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainTriggerable
+--- !u!114 &2035882890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035882881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 658a7dc00bbc4d9997cc3be80a247a2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainTriggerable
+--- !u!114 &2035882891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035882881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56c77a45109941f3bb840457957181eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.NotificationPublisher
+  notificationAsset: {fileID: 11400000, guid: 7e52937159889f047aa4b23fd6aa3f78, type: 2}
+  oncePerCharacter: 1
+--- !u!114 &2035882892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035882881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a0761b85cfc472bae4021d23cdec103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.SaveableObject
+  ShowTopMostFoldoutHeaderGroup: 1
+  id: b5194e42-c33e-4c15-9629-63aa7c98a135
 --- !u!1001 &2037927363
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21036,6 +21327,10 @@ PrefabInstance:
     - target: {fileID: 5259545090700716513, guid: 391b8ecc41e774f36af51ce0fd60b8cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5957707968789750128, guid: 391b8ecc41e774f36af51ce0fd60b8cd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
