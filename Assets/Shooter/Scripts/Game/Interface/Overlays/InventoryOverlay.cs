@@ -99,8 +99,8 @@ namespace Shooter.Game
         {
             if (!Bound) return;
 
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            bool wanted = player != null && player.InventoryOpen;
+            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
+            bool wanted = player != null && player.IsInventoryOpen;
 
             if (wanted != open)
             {
@@ -112,7 +112,7 @@ namespace Shooter.Game
 
             if (!open) return;
 
-            if (prompt != null && (player == null || !player.Prompting)) HidePrompt();
+            if (prompt != null && (player == null || !player.IsPromptOpen)) HidePrompt();
 
             Watch();
             if (stale) Fill();
@@ -156,12 +156,12 @@ namespace Shooter.Game
 
         private void Open()
         {
-            bag = OwnPlayer.Find<Inventory>();
-            holder = OwnPlayer.Find<InventoryHolder>();
-            exchanger = OwnPlayer.Find<InventoryExchanger>();
-            user = OwnPlayer.Find<InventoryUser>();
-            crafter = OwnPlayer.Find<Crafter>();
-            own = OwnPlayer.Find<Character>();
+            bag = OwnPlayer.FindComponent<Inventory>();
+            holder = OwnPlayer.FindComponent<InventoryHolder>();
+            exchanger = OwnPlayer.FindComponent<InventoryExchanger>();
+            user = OwnPlayer.FindComponent<InventoryUser>();
+            crafter = OwnPlayer.FindComponent<Crafter>();
+            own = OwnPlayer.FindComponent<Character>();
             taker = Taker(null);
             nextLook = Time.unscaledTime + LookInterval;
 
@@ -1081,7 +1081,7 @@ namespace Shooter.Game
         // While the number is typed the player's keys belong to the field: Escape closes only this box
         private void AskSplit(StackableItemAsset asset)
         {
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
+            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
             if (player == null) return;
 
             HidePrompt();
@@ -1168,7 +1168,7 @@ namespace Shooter.Game
         {
             if (prompt == null) return;
 
-            OwnPlayer.Find<LocalPlayer>()?.ClosePrompt();
+            OwnPlayer.FindComponent<LocalPlayer>()?.ClosePrompt();
             HidePrompt();
         }
 

@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Intoxication))]
     public class IntoxicationView : NetworkBehaviour
     {
-        private readonly Dictionary<ToxinAsset, List<PerceptionEffect>> trips = new();
+        private readonly Dictionary<ToxinAsset, List<PerceptionEffect>> perceptionEffectsByToxin = new();
 
         private Intoxication intoxication;
 
@@ -21,57 +21,67 @@ namespace Shooter.Game
         {
             if (!IsSpawned || !IsOwner) return;
 
-            ToxinCatalog toxins = Catalogs.GetCatalog<ToxinCatalog>();
+            ToxinCatalog toxinCatalog = Catalogs.GetCatalog<ToxinCatalog>();
 
-            for (int index = 0; index < toxins.Count; index++)
+            for (int index = 0; index < toxinCatalog.Count; index++)
             {
-                ToxinAsset toxin = toxins.GetAssetAt(index);
+                ToxinAsset toxin = toxinCatalog.GetAssetAt(index);
                 float strength = (float)(intoxication.GetLevel(toxin) / 100d);
 
                 if (strength <= 0f)
                 {
-                    if (trips.ContainsKey(toxin)) End(toxin);
+                    if (perceptionEffectsByToxin.ContainsKey(toxin)) EndPerceptionEffects(toxin);
                     continue;
                 }
 
-                if (!trips.TryGetValue(toxin, out List<PerceptionEffect> trip))
+                if (!perceptionEffectsByToxin.TryGetValue(toxin, out List<PerceptionEffect> perceptionEffects))
                 {
-                    trip = Begin(toxin);
-                    trips.Add(toxin, trip);
+                    perceptionEffects = CreatePerceptionEffects(toxin);
+                    perceptionEffectsByToxin.Add(toxin, perceptionEffects);
                 }
 
-                foreach (PerceptionEffect effect in trip) effect.UpdateStrength(strength);
+                foreach (PerceptionEffect perceptionEffect in perceptionEffects)
+                {
+                    perceptionEffect.UpdateStrength(strength);
+                }
             }
         }
 
         public override void OnNetworkDespawn()
         {
-            foreach (List<PerceptionEffect> trip in trips.Values)
-            foreach (PerceptionEffect effect in trip)
-                effect.EndEffect();
-
-            trips.Clear();
-        }
-
-        private List<PerceptionEffect> Begin(ToxinAsset toxin)
-        {
-            var trip = new List<PerceptionEffect>();
-
-            foreach (PerceptionEffectAsset asset in toxin.PerceptionEffects)
+            foreach (List<PerceptionEffect> perceptionEffects in perceptionEffectsByToxin.Values)
             {
-                if (asset == null) continue;
-
-                trip.Add(asset.CreateEffect());
+                foreach (PerceptionEffect perceptionEffect in perceptionEffects)
+                {
+                    perceptionEffect.EndEffect();
+                }
             }
 
-            return trip;
+            perceptionEffectsByToxin.Clear();
         }
 
-        private void End(ToxinAsset toxin)
+        private List<PerceptionEffect> CreatePerceptionEffects(ToxinAsset toxin)
         {
-            foreach (PerceptionEffect effect in trips[toxin]) effect.EndEffect();
+            var perceptionEffects = new List<PerceptionEffect>();
 
-            trips.Remove(toxin);
+            foreach (PerceptionEffectAsset perceptionEffectAsset in toxin.PerceptionEffects)
+            {
+                if (perceptionEffectAsset == null) continue;
+
+                perceptionEffects.Add(perceptionEffectAsset.CreateEffect());
+            }
+
+            return perceptionEffects;
+        }
+
+        private void EndPerceptionEffects(ToxinAsset toxin)
+        {
+            foreach (PerceptionEffect perceptionEffect in perceptionEffectsByToxin[toxin])
+            {
+                perceptionEffect.EndEffect();
+            }
+
+            perceptionEffectsByToxin.Remove(toxin);
         }
     }
 }

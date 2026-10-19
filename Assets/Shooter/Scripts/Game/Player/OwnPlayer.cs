@@ -6,49 +6,49 @@ namespace Shooter.Game
 {
     public static class OwnPlayer
     {
-        private static Account account;
-        private static string publicKey;
+        private static Account cachedAccount;
+        private static string cachedPublicKey;
 
-        public static T Find<T>() where T : Component
+        public static T FindComponent<T>() where T : Component
         {
             NetworkManager network = NetworkManager.Singleton;
             if (network == null || !network.IsListening) return null;
 
-            Player player = network.IsServer ? ByKey() : ByOwnership();
+            Player player = network.IsServer ? FindByOwnPublicKey() : FindByOwnership();
             if (player == null) return null;
 
             return player.GetComponent<T>();
         }
 
-        private static Player ByKey()
+        private static Player FindByOwnPublicKey()
         {
-            string key = OwnKey();
-            return key == null ? null : Player.FindByPublicKey(key, RegisterInactivePolicy.Exclude);
+            string ownPublicKey = GetOwnPublicKey();
+            return ownPublicKey == null ? null : Player.FindByPublicKey(ownPublicKey, RegisterInactivePolicy.Exclude);
         }
 
-        private static Player ByOwnership()
+        private static Player FindByOwnership()
         {
             foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
             {
-                NetworkObject net = player.GetComponent<NetworkObject>();
-                if (net != null && net.IsOwner) return player;
+                NetworkObject networkObject = player.GetComponent<NetworkObject>();
+                if (networkObject != null && networkObject.IsOwner) return player;
             }
 
             return null;
         }
 
-        private static string OwnKey()
+        private static string GetOwnPublicKey()
         {
-            Account current = Config.Account;
-            if (current == null) return null;
+            Account currentAccount = Config.Account;
+            if (currentAccount == null) return null;
 
-            if (!ReferenceEquals(current, account))
+            if (!ReferenceEquals(currentAccount, cachedAccount))
             {
-                account = current;
-                publicKey = current.PublicKey;
+                cachedAccount = currentAccount;
+                cachedPublicKey = currentAccount.PublicKey;
             }
 
-            return publicKey;
+            return cachedPublicKey;
         }
     }
 }

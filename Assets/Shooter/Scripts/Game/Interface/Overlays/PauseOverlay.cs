@@ -25,8 +25,8 @@ namespace Shooter.Game
         {
             if (!Bound) return;
 
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            bool wanted = player != null && player.Paused && !player.Inviting;
+            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
+            bool wanted = player != null && player.IsPauseMenuOpen && !player.IsInviteOpen;
 
             if (wanted == open) return;
 
@@ -83,22 +83,22 @@ namespace Shooter.Game
 
         private void Resume()
         {
-            OwnPlayer.Find<LocalPlayer>()?.Resume();
+            OwnPlayer.FindComponent<LocalPlayer>()?.ClosePauseMenu();
         }
 
         private void Save()
         {
-            OwnPlayer.Find<LocalPlayer>()?.SaveWorld();
+            OwnPlayer.FindComponent<LocalPlayer>()?.SaveWorld();
         }
 
         private void Invite()
         {
-            OwnPlayer.Find<LocalPlayer>()?.OpenInvite();
+            OwnPlayer.FindComponent<LocalPlayer>()?.OpenInvite();
         }
 
         private void Leave()
         {
-            OwnPlayer.Find<LocalPlayer>()?.LeaveWorld();
+            OwnPlayer.FindComponent<LocalPlayer>()?.LeaveWorld();
         }
     }
 }

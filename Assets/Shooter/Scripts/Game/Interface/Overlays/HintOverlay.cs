@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(Aimer))]
+    [RequireComponent(typeof(LookHitFinder))]
     public class HintOverlay : Overlay
     {
         private const string HintElement = "hint";
@@ -14,14 +14,14 @@ namespace Shooter.Game
 
         [SerializeField] private HintCatalog hints;
 
-        private Aimer aimer;
+        private LookHitFinder lookHitFinder;
         private Label hint;
         private string key = string.Empty;
         private string shown = string.Empty;
 
         private void Awake()
         {
-            aimer = GetComponent<Aimer>();
+            lookHitFinder = GetComponent<LookHitFinder>();
         }
 
         private void Update()
@@ -66,10 +66,10 @@ namespace Shooter.Game
 
         private string Text()
         {
-            Interactor interactor = OwnPlayer.Find<Interactor>();
+            Interactor interactor = OwnPlayer.FindComponent<Interactor>();
             if (interactor == null) return string.Empty;
 
-            if (!aimer.TryHit(out RaycastHit hit) || hit.distance > interactor.ReachDistance) return string.Empty;
+            if (!lookHitFinder.TryFindLookHit(out RaycastHit hit) || hit.distance > interactor.ReachDistance) return string.Empty;
             if (hit.collider == null) return string.Empty;
 
             IUsable usable = hit.collider.GetComponentInParent<IUsable>();

@@ -8,25 +8,24 @@ namespace Shooter.Game
     public class OwnRecoil : NetworkBehaviour
     {
         [SerializeField] private float recovery = 14f;
-        private bool held;
 
-        private InventoryHolder holder;
-        private float lastShotAt;
+        private InventoryHolder inventoryHolder;
+        private bool triggerHeld;
+        private float lastShotTime;
+        private int sprayShotIndex;
 
-        private int shot;
-
-        public Vector2 Punch { get; private set; }
+        public Vector2 PunchAngles { get; private set; }
 
         private void Awake()
         {
-            holder = GetComponent<InventoryHolder>();
+            inventoryHolder = GetComponent<InventoryHolder>();
         }
 
         private void Update()
         {
-            Punch *= Mathf.Exp(-recovery * Time.deltaTime);
+            PunchAngles *= Mathf.Exp(-recovery * Time.deltaTime);
 
-            if (held) Kick(true);
+            if (triggerHeld) AddPunchIfShotFires(true);
         }
 
         public override void OnNetworkSpawn()
@@ -42,38 +41,38 @@ namespace Shooter.Game
         public override void OnLostOwnership()
         {
             enabled = false;
-            held = false;
-            Punch = Vector2.zero;
+            triggerHeld = false;
+            PunchAngles = Vector2.zero;
         }
 
-        public void Press()
+        public void PressTrigger()
         {
-            held = true;
-            Kick(false);
+            triggerHeld = true;
+            AddPunchIfShotFires(false);
         }
 
-        public void Release()
+        public void ReleaseTrigger()
         {
-            held = false;
+            triggerHeld = false;
         }
 
-        private void Kick(bool sustained)
+        private void AddPunchIfShotFires(bool sustained)
         {
-            var firearm = holder.HeldItem as Firearm;
+            Firearm firearm = inventoryHolder.HeldItem as Firearm;
             if (firearm == null || firearm.RoundsInMagazine <= 0) return;
 
-            FirearmAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetFirearmAssetById(firearm.AssetId);
-            if (asset == null) return;
-            if (sustained && asset.FireMode != FireMode.Auto) return;
+            FirearmAsset firearmAsset = Catalogs.GetCatalog<ItemCatalog>().GetFirearmAssetById(firearm.AssetId);
+            if (firearmAsset == null) return;
+            if (sustained && firearmAsset.FireMode != FireMode.Auto) return;
 
-            if (Time.time - lastShotAt < asset.FireInterval) return;
-            if (Time.time - lastShotAt >= asset.SprayRecovery) shot = 0;
+            if (Time.time - lastShotTime < firearmAsset.FireInterval) return;
+            if (Time.time - lastShotTime >= firearmAsset.SprayRecovery) sprayShotIndex = 0;
 
-            Vector2 previous = shot == 0 ? Vector2.zero : asset.Spray.GetOffsetForShot(shot - 1);
-            Punch += (asset.Spray.GetOffsetForShot(shot) - previous) * asset.RecoilPunch;
+            Vector2 previousOffset = sprayShotIndex == 0 ? Vector2.zero : firearmAsset.Spray.GetOffsetForShot(sprayShotIndex - 1);
+            PunchAngles += (firearmAsset.Spray.GetOffsetForShot(sprayShotIndex) - previousOffset) * firearmAsset.RecoilPunch;
 
-            shot++;
-            lastShotAt = Time.time;
+            sprayShotIndex++;
+            lastShotTime = Time.time;
         }
     }
 }

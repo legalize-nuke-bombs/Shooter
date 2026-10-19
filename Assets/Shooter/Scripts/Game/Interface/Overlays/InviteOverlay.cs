@@ -28,8 +28,8 @@ namespace Shooter.Game
         {
             if (!Bound) return;
 
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            bool wanted = player != null && player.Inviting;
+            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
+            bool wanted = player != null && player.IsInviteOpen;
 
             if (wanted == open) return;
 
@@ -99,7 +99,7 @@ namespace Shooter.Game
 
         private void Back()
         {
-            OwnPlayer.Find<LocalPlayer>()?.CloseInvite();
+            OwnPlayer.FindComponent<LocalPlayer>()?.CloseInvite();
         }
     }
 }

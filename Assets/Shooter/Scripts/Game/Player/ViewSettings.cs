@@ -17,36 +17,36 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Camera view;
-        private HDAdditionalCameraData data;
-        private ClientConfig client;
+        private HDAdditionalCameraData additionalCameraData;
+        private ClientConfig clientConfig;
 
         private void Awake()
         {
             view = GetComponent<Camera>();
-            data = GetComponent<HDAdditionalCameraData>();
+            additionalCameraData = GetComponent<HDAdditionalCameraData>();
         }
 
         private void OnEnable()
         {
-            client = Config.GetGameConfig().Client;
-            client.propertyChanged += Changed;
-            Apply();
+            clientConfig = Config.GetGameConfig().Client;
+            clientConfig.propertyChanged += HandleClientConfigChanged;
+            ApplyAntialiasingAndUpscaler();
         }
 
         private void OnDisable()
         {
-            client.propertyChanged -= Changed;
+            clientConfig.propertyChanged -= HandleClientConfigChanged;
         }
 
-        private void Changed(object sender, BindablePropertyChangedEventArgs args)
+        private void HandleClientConfigChanged(object sender, BindablePropertyChangedEventArgs args)
         {
-            Apply();
+            ApplyAntialiasingAndUpscaler();
         }
 
-        private void Apply()
+        private void ApplyAntialiasingAndUpscaler()
         {
-            ApplyAntialiasing(client.Antialiasing);
-            ApplyUpscaler(client.Upscaler);
+            ApplyAntialiasing(clientConfig.Antialiasing);
+            ApplyUpscaler(clientConfig.Upscaler);
         }
 
         private void ApplyAntialiasing(string mode)
@@ -63,33 +63,33 @@ namespace Shooter.Game
                     return;
             }
 
-            data.antialiasing = antialiasing;
+            additionalCameraData.antialiasing = antialiasing;
             Log.Info($"Entity {name} antialiasing is {mode}");
         }
 
         private void ApplyUpscaler(string mode)
         {
-            uint quality;
+            uint dlssQuality;
             switch (mode)
             {
-                case Upscalers.Off: quality = 0; break;
-                case Upscalers.Dlaa: quality = Dlaa; break;
-                case Upscalers.Quality: quality = DlssQuality; break;
-                case Upscalers.Balanced: quality = DlssBalanced; break;
-                case Upscalers.Performance: quality = DlssPerformance; break;
+                case Upscalers.Off: dlssQuality = 0; break;
+                case Upscalers.Dlaa: dlssQuality = Dlaa; break;
+                case Upscalers.Quality: dlssQuality = DlssQuality; break;
+                case Upscalers.Balanced: dlssQuality = DlssBalanced; break;
+                case Upscalers.Performance: dlssQuality = DlssPerformance; break;
                 default:
                     Log.Warn($"Entity {name} does not know upscaler {mode}, the view keeps its own");
                     return;
             }
 
             // HDRP hands the view to DLSS only when both flags allow it; off returns it to its own antialiasing
-            bool dlss = mode != Upscalers.Off;
-            view.allowDynamicResolution = dlss;
-            data.allowDynamicResolution = dlss;
-            data.allowDeepLearningSuperSampling = dlss;
-            data.deepLearningSuperSamplingUseCustomQualitySettings = dlss;
-            data.deepLearningSuperSamplingUseOptimalSettings = true;
-            data.deepLearningSuperSamplingQuality = quality;
+            bool useDlss = mode != Upscalers.Off;
+            view.allowDynamicResolution = useDlss;
+            additionalCameraData.allowDynamicResolution = useDlss;
+            additionalCameraData.allowDeepLearningSuperSampling = useDlss;
+            additionalCameraData.deepLearningSuperSamplingUseCustomQualitySettings = useDlss;
+            additionalCameraData.deepLearningSuperSamplingUseOptimalSettings = true;
+            additionalCameraData.deepLearningSuperSamplingQuality = dlssQuality;
 
             Log.Info($"Entity {name} upscaler is {mode}");
         }

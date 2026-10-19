@@ -13,45 +13,45 @@ namespace Shooter.Game
 
         [SerializeField] private EarSoundAsset sound;
 
-        private readonly NameMapper mapper = new();
-        private InventoryExchanger exchanger;
+        private readonly NameMapper nameMapper = new();
+        private InventoryExchanger inventoryExchanger;
 
-        public event Action<Toast> Toasted;
+        public event Action<Toast> ToastRaised;
 
         private void Awake()
         {
-            exchanger = GetComponent<InventoryExchanger>();
+            inventoryExchanger = GetComponent<InventoryExchanger>();
         }
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) exchanger.ReceivedFromCharacter += Relay;
+            if (IsServer) inventoryExchanger.ReceivedFromCharacter += HandleReceivedFromCharacter;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (IsServer) exchanger.ReceivedFromCharacter -= Relay;
+            if (IsServer) inventoryExchanger.ReceivedFromCharacter -= HandleReceivedFromCharacter;
         }
 
-        private void Relay(Character from, ItemAsset item, int amount)
+        private void HandleReceivedFromCharacter(Character giver, ItemAsset item, int amount)
         {
-            // An offline body is owned by the host
+            // An offline body is switched off and owned by the host, who must not get its toasts
             if (item == null || !gameObject.activeInHierarchy) return;
 
-            ReceivedRpc(from == null ? CharacterId.None : from.Id, item.NetworkId, amount);
+            RaiseReceivedItemToastRpc(giver == null ? CharacterId.None : giver.Id, item.NetworkId, amount);
         }
 
         [Rpc(SendTo.Owner)]
-        private void ReceivedRpc(long giverId, FixedString32Bytes itemId, int amount)
+        private void RaiseReceivedItemToastRpc(long giverId, FixedString32Bytes itemId, int amount)
         {
-            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
-            ItemAsset item = catalog == null ? null : catalog.GetAssetById(itemId);
+            ItemCatalog itemCatalog = Catalogs.GetCatalog<ItemCatalog>();
+            ItemAsset item = itemCatalog == null ? null : itemCatalog.GetAssetById(itemId);
             if (item == null) return;
 
-            string named = mapper.Of(giverId);
+            string giverName = nameMapper.Of(giverId);
             string title = item is StackableItemAsset ? $"{item.Title} × {amount}" : item.Title;
 
-            Toasted?.Invoke(new Toast(item.Icon, sound, title, "от " + (string.IsNullOrEmpty(named) ? Stranger : named)));
+            ToastRaised?.Invoke(new Toast(item.Icon, sound, title, "от " + (string.IsNullOrEmpty(giverName) ? Stranger : giverName)));
         }
     }
 }

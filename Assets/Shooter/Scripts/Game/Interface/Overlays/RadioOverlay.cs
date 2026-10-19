@@ -25,8 +25,8 @@ namespace Shooter.Game
         {
             if (!Bound) return;
 
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            bool wanted = player != null && player.RadioOpen;
+            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
+            bool wanted = player != null && player.IsRadioOpen;
 
             if (wanted != open)
             {

@@ -69,7 +69,7 @@ namespace Shooter.Game
 
         private Health Own()
         {
-            if (health == null) health = OwnPlayer.Find<Health>();
+            if (health == null) health = OwnPlayer.FindComponent<Health>();
 
             return health;
         }

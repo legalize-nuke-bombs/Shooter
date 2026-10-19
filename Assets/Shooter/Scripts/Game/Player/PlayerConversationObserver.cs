@@ -12,35 +12,35 @@ namespace Shooter.Game
         [SerializeField] private IconAsset icon;
         [SerializeField] private EarSoundAsset sound;
 
-        private readonly NameMapper mapper = new();
-        private PlayerConversations conversations;
-        private LocalPlayer player;
+        private readonly NameMapper nameMapper = new();
+        private PlayerConversations playerConversations;
+        private LocalPlayer localPlayer;
 
-        public event Action<Toast> Toasted;
+        public event Action<Toast> ToastRaised;
 
         private void Awake()
         {
-            conversations = GetComponent<PlayerConversations>();
-            player = GetComponent<LocalPlayer>();
+            playerConversations = GetComponent<PlayerConversations>();
+            localPlayer = GetComponent<LocalPlayer>();
         }
 
         private void OnEnable()
         {
-            conversations.LiveLineArrived += Heard;
+            playerConversations.LiveLineArrived += HandleLiveLineArrived;
         }
 
         private void OnDisable()
         {
-            conversations.LiveLineArrived -= Heard;
+            playerConversations.LiveLineArrived -= HandleLiveLineArrived;
         }
 
-        private void Heard(long partnerId, ConversationLine line)
+        private void HandleLiveLineArrived(long partnerId, ConversationLine line)
         {
-            if (line.Spoken || line.AuthorId == conversations.CharacterId) return;
-            if (player.TalkPartner == partnerId) return;
+            if (line.Spoken || line.AuthorId == playerConversations.CharacterId) return;
+            if (localPlayer.TalkPartnerId == partnerId) return;
 
-            string named = mapper.Of(partnerId);
-            Toasted?.Invoke(new Toast(icon, sound, line.Content, "от " + (string.IsNullOrEmpty(named) ? Stranger : named)));
+            string partnerName = nameMapper.Of(partnerId);
+            ToastRaised?.Invoke(new Toast(icon, sound, line.Content, "от " + (string.IsNullOrEmpty(partnerName) ? Stranger : partnerName)));
         }
     }
 }

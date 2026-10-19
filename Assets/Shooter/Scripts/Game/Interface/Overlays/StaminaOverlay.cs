@@ -69,7 +69,7 @@ namespace Shooter.Game
 
         private Stamina Own()
         {
-            if (stamina == null) stamina = OwnPlayer.Find<Stamina>();
+            if (stamina == null) stamina = OwnPlayer.FindComponent<Stamina>();
 
             return stamina;
         }
