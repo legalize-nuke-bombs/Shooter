@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Shooter.Infrastructure
 {
-    public class SaveTokenConverter : JsonConverter<SaveToken>
+    public class SaveTokenJsonConverter : JsonConverter<SaveToken>
     {
         public override void WriteJson(JsonWriter writer, SaveToken value, JsonSerializer serializer)
         {

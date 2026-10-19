@@ -14,7 +14,7 @@ namespace Shooter.Infrastructure
 
         public static FrozenWorld Freeze()
         {
-            var world = new FrozenWorld();
+            FrozenWorld world = new();
             foreach (SaveableObject saveable in Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include))
             {
                 world.Adopt(saveable);

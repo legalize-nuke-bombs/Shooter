@@ -17,7 +17,7 @@ namespace Shooter.Infrastructure
             if (entry == null) return null;
 
             using Stream stream = entry.Open();
-            using var buffer = new MemoryStream();
+            using MemoryStream buffer = new();
             stream.CopyTo(buffer);
 
             return buffer.ToArray();

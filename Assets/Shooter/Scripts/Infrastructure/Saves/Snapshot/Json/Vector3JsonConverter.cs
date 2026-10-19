@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public class Vector3Converter : JsonConverter<Vector3>
+    public class Vector3JsonConverter : JsonConverter<Vector3>
     {
         public override void WriteJson(JsonWriter writer, Vector3 value, JsonSerializer serializer)
         {

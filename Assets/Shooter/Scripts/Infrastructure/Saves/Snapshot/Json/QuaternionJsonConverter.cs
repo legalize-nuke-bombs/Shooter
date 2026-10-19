@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public class QuaternionConverter : JsonConverter<Quaternion>
+    public class QuaternionJsonConverter : JsonConverter<Quaternion>
     {
         public override void WriteJson(JsonWriter writer, Quaternion value, JsonSerializer serializer)
         {

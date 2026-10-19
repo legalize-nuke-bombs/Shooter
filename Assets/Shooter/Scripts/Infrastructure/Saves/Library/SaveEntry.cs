@@ -35,7 +35,7 @@ namespace Shooter.Infrastructure
 
             try
             {
-                using var reader = new StreamReader(new MemoryStream(bytes), Encoding.UTF8, true);
+                using StreamReader reader = new(new MemoryStream(bytes), Encoding.UTF8, true);
                 Meta meta = JsonConvert.DeserializeObject<Meta>(reader.ReadToEnd(), Meta.Json);
 
                 return new SaveEntry(location, meta);

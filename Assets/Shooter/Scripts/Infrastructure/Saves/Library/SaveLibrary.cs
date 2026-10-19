@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Shooter.Infrastructure
 {
@@ -25,11 +24,6 @@ namespace Shooter.Infrastructure
             entries.Sort((left, right) => right.Meta.Stamp.CompareTo(left.Meta.Stamp));
 
             return entries;
-        }
-
-        public static SaveEntry Latest()
-        {
-            return All().FirstOrDefault();
         }
 
         public static void Delete(SaveEntry entry)

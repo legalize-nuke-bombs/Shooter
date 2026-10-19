@@ -29,7 +29,7 @@ namespace Shooter.Infrastructure
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to write meta into {path}: {e.Message}");
+                Log.Warn($"Failed to write meta into {path}: {e.Message}");
             }
         }
     }

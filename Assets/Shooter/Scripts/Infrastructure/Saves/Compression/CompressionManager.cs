@@ -22,7 +22,7 @@ namespace Shooter.Infrastructure
             }
             catch (Exception e)
             {
-                Log.Info($"{Name} failed to store {path} as {target}: {e.Message}");
+                Log.Warn($"{Name} failed to store {path} as {target}: {e.Message}");
                 return path;
             }
 
@@ -54,7 +54,7 @@ namespace Shooter.Infrastructure
             }
             catch (Exception e)
             {
-                Log.Error($"{Name} failed to delete {location}: {e.Message}");
+                Log.Warn($"{Name} failed to delete {location}: {e.Message}");
             }
         }
 
@@ -67,7 +67,7 @@ namespace Shooter.Infrastructure
             }
             catch (Exception e)
             {
-                Log.Info($"{Name} failed to delete {path}: {e.Message}");
+                Log.Warn($"{Name} failed to delete {path}: {e.Message}");
             }
         }
 
