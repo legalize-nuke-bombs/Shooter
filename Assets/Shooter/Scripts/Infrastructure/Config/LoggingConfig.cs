@@ -2,6 +2,6 @@ namespace Shooter.Infrastructure
 {
     public class LoggingConfig
     {
-        public Level Level { get; set; } = Level.Info;
+        public LogLevel Level { get; set; } = LogLevel.Info;
     }
 }

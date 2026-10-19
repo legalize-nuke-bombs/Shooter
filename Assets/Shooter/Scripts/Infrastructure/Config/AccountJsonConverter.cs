@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Shooter.Infrastructure
 {
-    public class AccountConverter : JsonConverter<Account>
+    public class AccountJsonConverter : JsonConverter<Account>
     {
         private static readonly Journal Log = Logs.Here();
 

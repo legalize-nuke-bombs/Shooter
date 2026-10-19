@@ -7,7 +7,7 @@ namespace Shooter.Infrastructure
     {
         public const string FileName = "config.json";
 
-        [JsonConverter(typeof(AccountConverter))]
+        [JsonConverter(typeof(AccountJsonConverter))]
         public Account Account { get; set; }
 
         [CreateProperty]
