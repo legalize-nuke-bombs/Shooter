@@ -18,7 +18,7 @@ namespace Shooter.Editor
         [SerializeField] private GameObject agentBody;
 
         [MenuItem("Tools/Bake NavMesh")]
-        private static void Open()
+        private static void OpenWindow()
         {
             GetWindow<BakeNavMeshTool>("Bake NavMesh");
         }
@@ -27,16 +27,15 @@ namespace Shooter.Editor
         {
             agentBody = (GameObject)EditorGUILayout.ObjectField("Agent body", agentBody, typeof(GameObject), false);
             EditorGUILayout.LabelField("With a body set, the navmesh agent takes the radius, height, step and slope of its CharacterController. " +
-                                       "Trees of the terrains are baked through temporary copies of their colliders, the data lies next to the scene",
-                EditorStyles.wordWrappedMiniLabel);
+                                       "Trees of the terrains are baked through temporary copies of their colliders, the data lies next to the scene", EditorStyles.wordWrappedMiniLabel);
 
             if (GUILayout.Button("Bake"))
             {
-                Bake();
+                BakeEveryNavMeshSurface();
             }
         }
 
-        private void Bake()
+        private void BakeEveryNavMeshSurface()
         {
             if (EditorApplication.isPlaying)
             {
@@ -51,10 +50,10 @@ namespace Shooter.Editor
                 return;
             }
 
-            if (agentBody != null && !SyncAgentTo(agentBody)) return;
+            if (agentBody != null && !TrySyncAgentToBody(agentBody)) return;
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            GameObject proxies = BuildTreeProxies();
+            GameObject treeProxiesRoot = BuildTreeProxies();
             try
             {
                 foreach (NavMeshSurface surface in surfaces)
@@ -64,12 +63,12 @@ namespace Shooter.Editor
             }
             finally
             {
-                Object.DestroyImmediate(proxies);
+                Object.DestroyImmediate(treeProxiesRoot);
             }
 
             foreach (NavMeshSurface surface in surfaces)
             {
-                SaveNextToScene(surface);
+                SaveNavMeshDataNextToScene(surface);
                 EditorUtility.SetDirty(surface);
             }
 
@@ -77,35 +76,35 @@ namespace Shooter.Editor
             Log.Info($"Baked {surfaces.Length} navmesh surfaces with tree proxies in {stopwatch.ElapsedMilliseconds} ms");
         }
 
-        private static bool SyncAgentTo(GameObject body)
+        private static bool TrySyncAgentToBody(GameObject body)
         {
-            CharacterController controller = body.GetComponent<CharacterController>();
-            if (controller == null)
+            CharacterController characterController = body.GetComponent<CharacterController>();
+            if (characterController == null)
             {
                 Log.Warn($"Agent body {body.name} carries no CharacterController, the navmesh agent cannot follow it");
                 return false;
             }
 
-            SerializedObject serialized = new(AssetDatabase.LoadAllAssetsAtPath(AgentSettingsPath)[0]);
-            SerializedProperty agent = serialized.FindProperty("m_Settings").GetArrayElementAtIndex(0);
-            agent.FindPropertyRelative("agentRadius").floatValue = controller.radius;
-            agent.FindPropertyRelative("agentHeight").floatValue = controller.height;
-            agent.FindPropertyRelative("agentClimb").floatValue = controller.stepOffset;
-            agent.FindPropertyRelative("agentSlope").floatValue = controller.slopeLimit - SlopeForgiveness;
-            serialized.ApplyModifiedPropertiesWithoutUndo();
+            SerializedObject serializedNavMeshAreas = new(AssetDatabase.LoadAllAssetsAtPath(AgentSettingsPath)[0]);
+            SerializedProperty agentSettings = serializedNavMeshAreas.FindProperty("m_Settings").GetArrayElementAtIndex(0);
+            agentSettings.FindPropertyRelative("agentRadius").floatValue = characterController.radius;
+            agentSettings.FindPropertyRelative("agentHeight").floatValue = characterController.height;
+            agentSettings.FindPropertyRelative("agentClimb").floatValue = characterController.stepOffset;
+            agentSettings.FindPropertyRelative("agentSlope").floatValue = characterController.slopeLimit - SlopeForgiveness;
+            serializedNavMeshAreas.ApplyModifiedPropertiesWithoutUndo();
 
-            Log.Info($"Navmesh agent follows {body.name}: radius {controller.radius}, height {controller.height}, climb {controller.stepOffset}, slope {controller.slopeLimit - SlopeForgiveness}");
+            Log.Info($"Navmesh agent follows {body.name}: radius {characterController.radius}, height {characterController.height}, climb {characterController.stepOffset}, slope {characterController.slopeLimit - SlopeForgiveness}");
             return true;
         }
 
-        private static void SaveNextToScene(NavMeshSurface surface)
+        private static void SaveNavMeshDataNextToScene(NavMeshSurface surface)
         {
-            NavMeshData data = surface.navMeshData;
-            if (data == null || EditorUtility.IsPersistent(data)) return;
+            NavMeshData navMeshData = surface.navMeshData;
+            if (navMeshData == null || EditorUtility.IsPersistent(navMeshData)) return;
 
             string path = $"{Path.GetDirectoryName(surface.gameObject.scene.path)}/NavMesh-{surface.name}.asset";
-            data.name = $"NavMesh-{surface.name}";
-            AssetDatabase.CreateAsset(data, path);
+            navMeshData.name = $"NavMesh-{surface.name}";
+            AssetDatabase.CreateAsset(navMeshData, path);
             EditorSceneManager.MarkSceneDirty(surface.gameObject.scene);
 
             Log.Info($"Navmesh data of {surface.name} saved to {path}");
@@ -113,56 +112,54 @@ namespace Shooter.Editor
 
         private static GameObject BuildTreeProxies()
         {
-            GameObject root = new("TreeBakeProxies");
-            int built = 0;
-            int shapes = 0;
+            GameObject treeProxiesRoot = new("TreeBakeProxies");
+            int builtProxies = 0;
+            int copiedColliders = 0;
 
             foreach (Terrain terrain in Terrain.activeTerrains)
             {
-                TerrainData data = terrain.terrainData;
-                TreePrototype[] prototypes = data.treePrototypes;
-                Collider[][] colliders = new Collider[prototypes.Length][];
+                TerrainData terrainData = terrain.terrainData;
+                TreePrototype[] prototypes = terrainData.treePrototypes;
+                Collider[][] collidersOfPrototype = new Collider[prototypes.Length][];
                 for (int i = 0; i < prototypes.Length; i++)
                 {
-                    colliders[i] = prototypes[i].prefab == null ? new Collider[0] : prototypes[i].prefab.GetComponentsInChildren<Collider>(true);
+                    collidersOfPrototype[i] = prototypes[i].prefab == null ? new Collider[0] : prototypes[i].prefab.GetComponentsInChildren<Collider>(true);
                 }
 
-                foreach (TreeInstance tree in data.treeInstances)
+                foreach (TreeInstance tree in terrainData.treeInstances)
                 {
-                    if (colliders[tree.prototypeIndex].Length == 0) continue;
+                    if (collidersOfPrototype[tree.prototypeIndex].Length == 0) continue;
 
                     Transform proxy = new GameObject("TreeProxy").transform;
-                    proxy.SetParent(root.transform, false);
-                    proxy.SetPositionAndRotation(
-                        terrain.transform.position + Vector3.Scale(tree.position, data.size),
-                        Quaternion.Euler(0f, tree.rotation * Mathf.Rad2Deg, 0f));
+                    proxy.SetParent(treeProxiesRoot.transform, false);
+                    proxy.SetPositionAndRotation(terrain.transform.position + Vector3.Scale(tree.position, terrainData.size), Quaternion.Euler(0f, tree.rotation * Mathf.Rad2Deg, 0f));
                     proxy.localScale = new Vector3(tree.widthScale, tree.heightScale, tree.widthScale);
 
-                    Transform prefab = prototypes[tree.prototypeIndex].prefab.transform;
-                    foreach (Collider collider in colliders[tree.prototypeIndex])
+                    Transform prefabRoot = prototypes[tree.prototypeIndex].prefab.transform;
+                    foreach (Collider collider in collidersOfPrototype[tree.prototypeIndex])
                     {
                         if (!collider.enabled) continue;
 
                         Transform part = new GameObject(collider.name).transform;
                         part.SetParent(proxy, false);
-                        part.localPosition = prefab.InverseTransformPoint(collider.transform.position);
-                        part.localRotation = Quaternion.Inverse(prefab.rotation) * collider.transform.rotation;
-                        part.localScale = Relative(collider.transform.lossyScale, prefab.lossyScale);
+                        part.localPosition = prefabRoot.InverseTransformPoint(collider.transform.position);
+                        part.localRotation = Quaternion.Inverse(prefabRoot.rotation) * collider.transform.rotation;
+                        part.localScale = GetScaleRelativeTo(collider.transform.lossyScale, prefabRoot.lossyScale);
                         EditorUtility.CopySerialized(collider, part.gameObject.AddComponent(collider.GetType()));
-                        shapes++;
+                        copiedColliders++;
                     }
 
-                    built++;
+                    builtProxies++;
                 }
             }
 
-            Log.Info($"Built {built} tree proxies carrying {shapes} colliders for the bake");
-            return root;
+            Log.Info($"Built {builtProxies} tree proxies carrying {copiedColliders} colliders for the bake");
+            return treeProxiesRoot;
         }
 
-        private static Vector3 Relative(Vector3 scale, Vector3 root)
+        private static Vector3 GetScaleRelativeTo(Vector3 scale, Vector3 rootScale)
         {
-            return new Vector3(scale.x / root.x, scale.y / root.y, scale.z / root.z);
+            return new Vector3(scale.x / rootScale.x, scale.y / rootScale.y, scale.z / rootScale.z);
         }
     }
 }

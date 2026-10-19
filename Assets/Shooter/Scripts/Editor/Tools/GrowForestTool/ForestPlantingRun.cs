@@ -12,10 +12,10 @@ namespace Shooter.Editor
     {
         public const float TreelineFade = 60f;
         private const int Seed = 1;
-        private const int Tries = 6;
+        private const int TriesPerCell = 6;
         private const int DensitySide = 512;
         private const int ShoreProbes = 8;
-        private const int MostHits = 64;
+        private const int MostObstacleHits = 64;
         private const int CellsPerProgressStep = 8192;
         private const float NoiseOrigin = 4096f;
         private const float NoiseStride = 37.3f;
@@ -28,15 +28,15 @@ namespace Shooter.Editor
         private sealed class Tile
         {
             public Terrain Terrain;
-            public TerrainData Data;
+            public TerrainData TerrainData;
             public Rect Area;
             public float BaseHeight;
-            public float[,] Density;
-            public TreePrototype[] Palette;
-            public int[] PrototypeOfSpecies;
+            public float[,] DensityMap;
+            public TreePrototype[] TreePrototypes;
+            public int[] PrototypeIndexOfSpecies;
             public List<TreeInstance> Trees;
 
-            public Vector2 UvOf(Vector2 position)
+            public Vector2 GetUvAt(Vector2 position)
             {
                 return new Vector2((position.x - Area.x) / Area.width, (position.y - Area.y) / Area.height);
             }
@@ -50,74 +50,74 @@ namespace Shooter.Editor
 
         private sealed class SpacingGrid
         {
-            private readonly Vector2 origin;
-            private readonly float cell;
-            private readonly int columns;
-            private readonly int rows;
-            private readonly int[] heads;
-            private readonly List<int> links = new();
+            private readonly Vector2 gridOrigin;
+            private readonly float cellSize;
+            private readonly int columnCount;
+            private readonly int rowCount;
+            private readonly int[] firstSpotInCell;
+            private readonly List<int> nextSpotInSameCell = new();
             private readonly List<Spot> spots = new();
-            private float widest;
+            private float widestReach;
 
             public SpacingGrid(Rect area, float spacing)
             {
-                cell = spacing / Mathf.Sqrt(2f);
-                origin = area.min;
-                columns = Mathf.CeilToInt(area.width / cell);
-                rows = Mathf.CeilToInt(area.height / cell);
-                heads = new int[columns * rows];
-                Array.Fill(heads, -1);
-                widest = spacing;
+                cellSize = spacing / Mathf.Sqrt(2f);
+                gridOrigin = area.min;
+                columnCount = Mathf.CeilToInt(area.width / cellSize);
+                rowCount = Mathf.CeilToInt(area.height / cellSize);
+                firstSpotInCell = new int[columnCount * rowCount];
+                Array.Fill(firstSpotInCell, -1);
+                widestReach = spacing;
             }
 
-            public int[] Cells(Rect area)
+            public int[] GetCellIndicesCovering(Rect area)
             {
-                int left = Column(area.xMin);
-                int right = Column(area.xMax);
-                int bottom = Row(area.yMin);
-                int top = Row(area.yMax);
-                int[] cells = new int[(right - left + 1) * (top - bottom + 1)];
-                int next = 0;
+                int left = GetColumnAt(area.xMin);
+                int right = GetColumnAt(area.xMax);
+                int bottom = GetRowAt(area.yMin);
+                int top = GetRowAt(area.yMax);
+                int[] cellIndices = new int[(right - left + 1) * (top - bottom + 1)];
+                int nextIndex = 0;
                 for (int row = bottom; row <= top; row++)
                 {
                     for (int column = left; column <= right; column++)
                     {
-                        cells[next++] = row * columns + column;
+                        cellIndices[nextIndex++] = row * columnCount + column;
                     }
                 }
 
-                return cells;
+                return cellIndices;
             }
 
-            public Vector2 Center(int index)
+            public Vector2 GetCellCenter(int cellIndex)
             {
-                return origin + cell * new Vector2(index % columns + 0.5f, index / columns + 0.5f);
+                return gridOrigin + cellSize * new Vector2(cellIndex % columnCount + 0.5f, cellIndex / columnCount + 0.5f);
             }
 
-            public Vector2 Within(int index, Random random)
+            public Vector2 GetRandomPointInCell(int cellIndex, Random random)
             {
-                return origin + cell * new Vector2(index % columns + (float)random.NextDouble(), index / columns + (float)random.NextDouble());
+                return gridOrigin + cellSize * new Vector2(cellIndex % columnCount + (float)random.NextDouble(), cellIndex / columnCount + (float)random.NextDouble());
             }
 
-            public void Add(Vector2 position, float reach)
+            public void AddSpot(Vector2 position, float reach)
             {
-                int index = Row(position.y) * columns + Column(position.x);
-                links.Add(heads[index]);
-                heads[index] = spots.Count;
+                int cellIndex = GetRowAt(position.y) * columnCount + GetColumnAt(position.x);
+                nextSpotInSameCell.Add(firstSpotInCell[cellIndex]);
+                firstSpotInCell[cellIndex] = spots.Count;
                 spots.Add(new Spot { Position = position, Reach = reach });
-                widest = Mathf.Max(widest, reach);
+                widestReach = Mathf.Max(widestReach, reach);
             }
 
-            public bool Free(Vector2 position)
+            public bool IsFreeAt(Vector2 position)
             {
-                int span = Mathf.CeilToInt(widest / cell);
-                int column = Column(position.x);
-                int row = Row(position.y);
-                for (int y = Mathf.Max(row - span, 0); y <= Mathf.Min(row + span, rows - 1); y++)
+                int cellSpan = Mathf.CeilToInt(widestReach / cellSize);
+                int column = GetColumnAt(position.x);
+                int row = GetRowAt(position.y);
+                for (int y = Mathf.Max(row - cellSpan, 0); y <= Mathf.Min(row + cellSpan, rowCount - 1); y++)
                 {
-                    for (int x = Mathf.Max(column - span, 0); x <= Mathf.Min(column + span, columns - 1); x++)
+                    for (int x = Mathf.Max(column - cellSpan, 0); x <= Mathf.Min(column + cellSpan, columnCount - 1); x++)
                     {
-                        for (int i = heads[y * columns + x]; i >= 0; i = links[i])
+                        for (int i = firstSpotInCell[y * columnCount + x]; i >= 0; i = nextSpotInSameCell[i])
                         {
                             Spot spot = spots[i];
                             if ((spot.Position - position).sqrMagnitude < spot.Reach * spot.Reach) return false;
@@ -128,75 +128,75 @@ namespace Shooter.Editor
                 return true;
             }
 
-            private int Column(float x)
+            private int GetColumnAt(float x)
             {
-                return Mathf.Clamp(Mathf.FloorToInt((x - origin.x) / cell), 0, columns - 1);
+                return Mathf.Clamp(Mathf.FloorToInt((x - gridOrigin.x) / cellSize), 0, columnCount - 1);
             }
 
-            private int Row(float z)
+            private int GetRowAt(float z)
             {
-                return Mathf.Clamp(Mathf.FloorToInt((z - origin.y) / cell), 0, rows - 1);
+                return Mathf.Clamp(Mathf.FloorToInt((z - gridOrigin.y) / cellSize), 0, rowCount - 1);
             }
         }
 
         private readonly ForestPlantingSettings settings;
         private readonly List<ForestPlantingSettings.Species> species;
-        private readonly float[] weights;
-        private readonly List<Terrain> landscape;
-        private readonly Rect[] landscapeAreas;
+        private readonly float[] speciesWeights;
+        private readonly List<Terrain> allTerrains;
+        private readonly Rect[] allTerrainAreas;
         private readonly Water[] waters;
-        private readonly float ceiling;
+        private readonly float ceilingHeight;
         private readonly Random random = new(Seed);
-        private readonly RaycastHit[] hits = new RaycastHit[MostHits];
-        private List<Tile> tiles;
-        private SpacingGrid grid;
-        private int planted;
+        private readonly RaycastHit[] obstacleHits = new RaycastHit[MostObstacleHits];
+        private List<Tile> targetTiles;
+        private SpacingGrid spacingGrid;
+        private int plantedTrees;
         private int rejectedAsSteep;
         private int rejectedNearWater;
         private int rejectedAtObjects;
 
-        public ForestPlantingRun(ForestPlantingSettings settings, List<Terrain> landscape)
+        public ForestPlantingRun(ForestPlantingSettings settings, List<Terrain> allTerrains)
         {
             this.settings = settings;
-            this.landscape = landscape;
+            this.allTerrains = allTerrains;
             species = settings.species.FindAll(entry => entry.tree != null);
-            weights = new float[species.Count];
-            landscapeAreas = landscape.ConvertAll(AreaOf).ToArray();
+            speciesWeights = new float[species.Count];
+            allTerrainAreas = allTerrains.ConvertAll(GetAreaOf).ToArray();
             waters = Object.FindObjectsByType<Water>(FindObjectsInactive.Exclude);
-            ceiling = float.MinValue;
-            foreach (Terrain terrain in landscape)
+            ceilingHeight = float.MinValue;
+            foreach (Terrain terrain in allTerrains)
             {
-                ceiling = Mathf.Max(ceiling, terrain.transform.position.y + terrain.terrainData.size.y + RayHeadroom);
+                ceilingHeight = Mathf.Max(ceilingHeight, terrain.transform.position.y + terrain.terrainData.size.y + RayHeadroom);
             }
         }
 
-        public string Plant(List<Terrain> targets)
+        public string PlantForestOn(List<Terrain> targetTerrains)
         {
-            DateTime started = DateTime.Now;
+            DateTime startTime = DateTime.Now;
             Physics.SyncTransforms();
 
-            tiles = targets.ConvertAll(TileOf);
-            int kept = 0;
-            foreach (Tile tile in tiles)
+            targetTiles = targetTerrains.ConvertAll(CreateTile);
+            int keptInstances = 0;
+            foreach (Tile tile in targetTiles)
             {
-                kept += tile.Trees.Count;
+                keptInstances += tile.Trees.Count;
             }
 
-            grid = new SpacingGrid(BoundingArea(landscapeAreas), settings.spacing);
-            RegisterStandingTrees(targets);
-            int[] order = grid.Cells(BoundingArea(targets.ConvertAll(AreaOf)));
-            Shuffle(order);
+            spacingGrid = new SpacingGrid(GetBoundingArea(allTerrainAreas), settings.spacing);
+            RegisterStandingTrees(targetTerrains);
+            int[] cellOrder = spacingGrid.GetCellIndicesCovering(GetBoundingArea(targetTerrains.ConvertAll(GetAreaOf)));
+            ShuffleInPlace(cellOrder);
 
             try
             {
-                for (int i = 0; i < order.Length; i++)
+                for (int i = 0; i < cellOrder.Length; i++)
                 {
-                    if (i % CellsPerProgressStep == 0 && EditorUtility.DisplayCancelableProgressBar("Grow Forest", $"{planted} trees", (float)i / order.Length))
+                    if (i % CellsPerProgressStep == 0 && EditorUtility.DisplayCancelableProgressBar("Grow Forest", $"{plantedTrees} trees", (float)i / cellOrder.Length))
                     {
                         return "Growing cancelled, nothing changed";
                     }
 
-                    Sow(order[i]);
+                    SowCell(cellOrder[i]);
                 }
             }
             finally
@@ -204,49 +204,49 @@ namespace Shooter.Editor
                 EditorUtility.ClearProgressBar();
             }
 
-            foreach (Tile tile in tiles)
+            foreach (Tile tile in targetTiles)
             {
-                tile.Data.treePrototypes = tile.Palette;
-                tile.Data.SetTreeInstances(tile.Trees.ToArray(), false);
+                tile.TerrainData.treePrototypes = tile.TreePrototypes;
+                tile.TerrainData.SetTreeInstances(tile.Trees.ToArray(), false);
                 tile.Terrain.Flush();
-                EditorUtility.SetDirty(tile.Data);
+                EditorUtility.SetDirty(tile.TerrainData);
             }
 
-            return $"Grew {planted} trees on {tiles.Count} terrains in {(DateTime.Now - started).TotalSeconds:F1} s, kept {kept} rocks and bushes. " +
+            return $"Grew {plantedTrees} trees on {targetTiles.Count} terrains in {(DateTime.Now - startTime).TotalSeconds:F1} s, kept {keptInstances} rocks and bushes. " +
                    $"Spots turned down: {rejectedAsSteep} too steep, {rejectedNearWater} by water, {rejectedAtObjects} at objects";
         }
 
-        private Tile TileOf(Terrain terrain)
+        private Tile CreateTile(Terrain terrain)
         {
-            TerrainData data = terrain.terrainData;
-            TreePrototype[] prototypes = data.treePrototypes;
-            var palette = new List<TreePrototype>(prototypes);
+            TerrainData terrainData = terrain.terrainData;
+            TreePrototype[] prototypes = terrainData.treePrototypes;
+            var prototypesWithSpecies = new List<TreePrototype>(prototypes);
             Tile tile = new()
             {
                 Terrain = terrain,
-                Data = data,
-                Area = AreaOf(terrain),
+                TerrainData = terrainData,
+                Area = GetAreaOf(terrain),
                 BaseHeight = terrain.transform.position.y,
-                Density = DensityMap(data),
-                PrototypeOfSpecies = new int[species.Count],
+                DensityMap = CreateDensityMap(terrainData),
+                PrototypeIndexOfSpecies = new int[species.Count],
                 Trees = new List<TreeInstance>()
             };
 
             for (int i = 0; i < species.Count; i++)
             {
-                GameObject tree = species[i].tree;
-                int index = palette.FindIndex(prototype => prototype.prefab == tree);
-                if (index < 0)
+                GameObject treePrefab = species[i].tree;
+                int prototypeIndex = prototypesWithSpecies.FindIndex(prototype => prototype.prefab == treePrefab);
+                if (prototypeIndex < 0)
                 {
-                    palette.Add(new TreePrototype { prefab = tree });
-                    index = palette.Count - 1;
+                    prototypesWithSpecies.Add(new TreePrototype { prefab = treePrefab });
+                    prototypeIndex = prototypesWithSpecies.Count - 1;
                 }
 
-                tile.PrototypeOfSpecies[i] = index;
+                tile.PrototypeIndexOfSpecies[i] = prototypeIndex;
             }
 
-            tile.Palette = palette.ToArray();
-            foreach (TreeInstance instance in data.treeInstances)
+            tile.TreePrototypes = prototypesWithSpecies.ToArray();
+            foreach (TreeInstance instance in terrainData.treeInstances)
             {
                 if (!IsForestSpecies(prototypes[instance.prototypeIndex].prefab))
                 {
@@ -257,77 +257,77 @@ namespace Shooter.Editor
             return tile;
         }
 
-        private float[,] DensityMap(TerrainData data)
+        private float[,] CreateDensityMap(TerrainData terrainData)
         {
-            TerrainLayer[] palette = data.terrainLayers;
-            float[] layerDensity = new float[palette.Length];
-            for (int layer = 0; layer < palette.Length; layer++)
+            TerrainLayer[] terrainLayers = terrainData.terrainLayers;
+            float[] densityOfLayer = new float[terrainLayers.Length];
+            for (int layer = 0; layer < terrainLayers.Length; layer++)
             {
-                layerDensity[layer] = 1f;
+                densityOfLayer[layer] = 1f;
                 foreach (ForestPlantingSettings.LayerDensity entry in settings.layerDensities)
                 {
-                    if (entry.layer == palette[layer])
+                    if (entry.layer == terrainLayers[layer])
                     {
-                        layerDensity[layer] = entry.density;
+                        densityOfLayer[layer] = entry.density;
                     }
                 }
             }
 
-            int side = data.alphamapResolution;
-            int step = Mathf.Max(1, side / DensitySide);
-            int reduced = side / step;
-            float[,] density = new float[reduced, reduced];
-            for (int y = 0; y < reduced; y++)
+            int alphamapResolution = terrainData.alphamapResolution;
+            int step = Mathf.Max(1, alphamapResolution / DensitySide);
+            int reducedSide = alphamapResolution / step;
+            float[,] densityMap = new float[reducedSide, reducedSide];
+            for (int y = 0; y < reducedSide; y++)
             {
-                float[,,] row = data.GetAlphamaps(0, y * step, side, 1);
-                for (int x = 0; x < reduced; x++)
+                float[,,] alphamapRow = terrainData.GetAlphamaps(0, y * step, alphamapResolution, 1);
+                for (int x = 0; x < reducedSide; x++)
                 {
-                    float total = 0f;
-                    float weighted = 0f;
-                    for (int layer = 0; layer < palette.Length; layer++)
+                    float totalAlpha = 0f;
+                    float weightedDensity = 0f;
+                    for (int layer = 0; layer < terrainLayers.Length; layer++)
                     {
-                        float alpha = row[0, x * step, layer];
-                        total += alpha;
-                        weighted += alpha * layerDensity[layer];
+                        float alpha = alphamapRow[0, x * step, layer];
+                        totalAlpha += alpha;
+                        weightedDensity += alpha * densityOfLayer[layer];
                     }
 
-                    density[y, x] = total > 0f ? weighted / total : 1f;
+                    densityMap[y, x] = totalAlpha > 0f ? weightedDensity / totalAlpha : 1f;
                 }
             }
 
-            return density;
+            return densityMap;
         }
 
-        private void RegisterStandingTrees(List<Terrain> targets)
+        private void RegisterStandingTrees(List<Terrain> targetTerrains)
         {
-            var footprints = new Dictionary<GameObject, float>();
-            foreach (Terrain terrain in landscape)
+            var footprintOfPrefab = new Dictionary<GameObject, float>();
+            foreach (Terrain terrain in allTerrains)
             {
-                TerrainData data = terrain.terrainData;
-                TreePrototype[] prototypes = data.treePrototypes;
-                Rect area = AreaOf(terrain);
-                bool regrown = targets.Contains(terrain);
-                foreach (TreeInstance instance in data.treeInstances)
+                TerrainData terrainData = terrain.terrainData;
+                TreePrototype[] prototypes = terrainData.treePrototypes;
+                Rect terrainArea = GetAreaOf(terrain);
+                bool isRegrown = targetTerrains.Contains(terrain);
+                foreach (TreeInstance instance in terrainData.treeInstances)
                 {
                     GameObject prefab = prototypes[instance.prototypeIndex].prefab;
-                    Vector2 position = new(area.x + instance.position.x * area.width, area.y + instance.position.z * area.height);
+                    Vector2 position = new(terrainArea.x + instance.position.x * terrainArea.width, terrainArea.y + instance.position.z * terrainArea.height);
                     if (IsForestSpecies(prefab))
                     {
-                        if (!regrown)
+                        if (!isRegrown)
                         {
-                            grid.Add(position, settings.spacing);
+                            spacingGrid.AddSpot(position, settings.spacing);
                         }
 
                         continue;
                     }
 
-                    if (!footprints.TryGetValue(prefab, out float footprint))
+                    if (!footprintOfPrefab.TryGetValue(prefab, out float footprint))
                     {
-                        footprint = Footprint(prefab);
-                        footprints.Add(prefab, footprint);
+                        footprint = MeasureFootprint(prefab);
+                        footprintOfPrefab.Add(prefab, footprint);
                     }
 
-                    grid.Add(position, footprint * instance.widthScale + settings.clearanceAroundObjects);
+                    spacingGrid.AddSpot(position, footprint * instance.widthScale + settings.clearanceAroundObjects);
                 }
             }
         }
@@ -337,80 +337,80 @@ namespace Shooter.Editor
             return species.Exists(entry => entry.tree == prefab);
         }
 
-        private static float Footprint(GameObject prefab)
+        private static float MeasureFootprint(GameObject prefab)
         {
-            Matrix4x4 root = prefab.transform.worldToLocalMatrix;
-            float widest = 0f;
-            foreach (MeshFilter filter in prefab.GetComponentsInChildren<MeshFilter>(true))
+            Matrix4x4 worldToPrefab = prefab.transform.worldToLocalMatrix;
+            float widestRadius = 0f;
+            foreach (MeshFilter meshFilter in prefab.GetComponentsInChildren<MeshFilter>(true))
             {
-                if (filter.sharedMesh == null) continue;
+                if (meshFilter.sharedMesh == null) continue;
 
-                Bounds bounds = filter.sharedMesh.bounds;
-                Matrix4x4 local = root * filter.transform.localToWorldMatrix;
+                Bounds bounds = meshFilter.sharedMesh.bounds;
+                Matrix4x4 meshToPrefab = worldToPrefab * meshFilter.transform.localToWorldMatrix;
                 for (int corner = 0; corner < 8; corner++)
                 {
-                    Vector3 sign = new((corner & 1) == 0 ? -1f : 1f, (corner & 2) == 0 ? -1f : 1f, (corner & 4) == 0 ? -1f : 1f);
-                    Vector3 point = local.MultiplyPoint3x4(bounds.center + Vector3.Scale(bounds.extents, sign));
-                    widest = Mathf.Max(widest, new Vector2(point.x, point.z).magnitude);
+                    Vector3 cornerSign = new((corner & 1) == 0 ? -1f : 1f, (corner & 2) == 0 ? -1f : 1f, (corner & 4) == 0 ? -1f : 1f);
+                    Vector3 cornerInPrefab = meshToPrefab.MultiplyPoint3x4(bounds.center + Vector3.Scale(bounds.extents, cornerSign));
+                    widestRadius = Mathf.Max(widestRadius, new Vector2(cornerInPrefab.x, cornerInPrefab.z).magnitude);
                 }
             }
 
-            return widest;
+            return widestRadius;
         }
 
-        private void Shuffle(int[] order)
+        private void ShuffleInPlace(int[] cellOrder)
         {
-            for (int i = order.Length - 1; i > 0; i--)
+            for (int i = cellOrder.Length - 1; i > 0; i--)
             {
                 int j = random.Next(i + 1);
-                (order[i], order[j]) = (order[j], order[i]);
+                (cellOrder[i], cellOrder[j]) = (cellOrder[j], cellOrder[i]);
             }
         }
 
-        private void Sow(int cell)
+        private void SowCell(int cellIndex)
         {
-            Vector2 center = grid.Center(cell);
-            Tile centerTile = TileAt(center);
+            Vector2 cellCenter = spacingGrid.GetCellCenter(cellIndex);
+            Tile centerTile = FindTargetTileAt(cellCenter);
             if (centerTile == null) return;
-            if (random.NextDouble() >= Chance(centerTile, center)) return;
+            if (random.NextDouble() >= GetPlantingChance(centerTile, cellCenter)) return;
 
-            for (int attempt = 0; attempt < Tries; attempt++)
+            for (int attempt = 0; attempt < TriesPerCell; attempt++)
             {
-                Vector2 position = grid.Within(cell, random);
-                Tile tile = TileAt(position);
+                Vector2 position = spacingGrid.GetRandomPointInCell(cellIndex, random);
+                Tile tile = FindTargetTileAt(position);
                 if (tile == null) continue;
-                if (!grid.Free(position)) continue;
+                if (!spacingGrid.IsFreeAt(position)) continue;
 
-                Vector2 uv = tile.UvOf(position);
-                float slope = tile.Data.GetSteepness(uv.x, uv.y);
+                Vector2 uv = tile.GetUvAt(position);
+                float slope = tile.TerrainData.GetSteepness(uv.x, uv.y);
                 if (slope > settings.steepestSlope)
                 {
                     rejectedAsSteep++;
                     continue;
                 }
 
-                float height = tile.Data.GetInterpolatedHeight(uv.x, uv.y);
+                float height = tile.TerrainData.GetInterpolatedHeight(uv.x, uv.y);
                 Vector3 foot = new(position.x, tile.BaseHeight + height, position.y);
-                if (NearWater(foot))
+                if (IsNearWater(foot))
                 {
                     rejectedNearWater++;
                     continue;
                 }
 
-                if (Blocked(foot))
+                if (IsBlockedByObstacle(foot))
                 {
                     rejectedAtObjects++;
                     continue;
                 }
 
-                Plant(tile, position, uv, height - TrunkRadius * Mathf.Tan(slope * Mathf.Deg2Rad));
+                PlantTree(tile, position, uv, height - TrunkRadius * Mathf.Tan(slope * Mathf.Deg2Rad));
                 return;
             }
         }
 
-        private Tile TileAt(Vector2 position)
+        private Tile FindTargetTileAt(Vector2 position)
         {
-            foreach (Tile tile in tiles)
+            foreach (Tile tile in targetTiles)
             {
                 if (tile.Area.Contains(position)) return tile;
             }
@@ -418,52 +418,52 @@ namespace Shooter.Editor
             return null;
         }
 
-        private float Chance(Tile tile, Vector2 position)
+        private float GetPlantingChance(Tile tile, Vector2 position)
         {
-            Vector2 uv = tile.UvOf(position);
-            int side = tile.Density.GetLength(0);
-            float ground = tile.Density[Mathf.Min((int)(uv.y * side), side - 1), Mathf.Min((int)(uv.x * side), side - 1)];
-            float height = tile.Data.GetInterpolatedHeight(uv.x, uv.y);
-            float altitude = Mathf.Clamp01((settings.treelineHeight - tile.BaseHeight - height) / TreelineFade);
-            return ground * altitude * Mathf.Lerp(1f, 2f * Noise(position, 0), settings.patchiness);
+            Vector2 uv = tile.GetUvAt(position);
+            int side = tile.DensityMap.GetLength(0);
+            float groundDensity = tile.DensityMap[Mathf.Min((int)(uv.y * side), side - 1), Mathf.Min((int)(uv.x * side), side - 1)];
+            float height = tile.TerrainData.GetInterpolatedHeight(uv.x, uv.y);
+            float belowTreeline = Mathf.Clamp01((settings.treelineHeight - tile.BaseHeight - height) / TreelineFade);
+            return groundDensity * belowTreeline * Mathf.Lerp(1f, 2f * SampleGroveNoise(position, 0), settings.patchiness);
         }
 
-        private float Noise(Vector2 position, int layer)
+        private float SampleGroveNoise(Vector2 position, int noiseLayer)
         {
-            float stride = layer * NoiseStride;
-            return Mathf.InverseLerp(NoiseLow, NoiseHigh, Mathf.PerlinNoise(NoiseOrigin + stride + position.x / settings.groveSize, NoiseOrigin - stride + position.y / settings.groveSize));
+            float noiseShift = noiseLayer * NoiseStride;
+            return Mathf.InverseLerp(NoiseLow, NoiseHigh, Mathf.PerlinNoise(NoiseOrigin + noiseShift + position.x / settings.groveSize, NoiseOrigin - noiseShift + position.y / settings.groveSize));
         }
 
-        private bool NearWater(Vector3 foot)
+        private bool IsNearWater(Vector3 foot)
         {
-            if (Submerged(foot)) return true;
+            if (IsUnderWater(foot)) return true;
 
             for (int i = 0; i < ShoreProbes; i++)
             {
                 float angle = 2f * Mathf.PI * i / ShoreProbes;
                 Vector3 probe = new(foot.x + settings.distanceFromWater * Mathf.Cos(angle), 0f, foot.z + settings.distanceFromWater * Mathf.Sin(angle));
-                int index = TerrainIndexAt(probe);
-                if (index < 0) continue;
+                int terrainIndex = FindTerrainIndexAt(probe);
+                if (terrainIndex < 0) continue;
 
-                Terrain terrain = landscape[index];
+                Terrain terrain = allTerrains[terrainIndex];
                 probe.y = terrain.transform.position.y + terrain.SampleHeight(probe);
-                if (Submerged(probe)) return true;
+                if (IsUnderWater(probe)) return true;
             }
 
             return false;
         }
 
-        private int TerrainIndexAt(Vector3 point)
+        private int FindTerrainIndexAt(Vector3 point)
         {
-            for (int i = 0; i < landscapeAreas.Length; i++)
+            for (int i = 0; i < allTerrainAreas.Length; i++)
             {
-                if (landscapeAreas[i].Contains(new Vector2(point.x, point.z))) return i;
+                if (allTerrainAreas[i].Contains(new Vector2(point.x, point.z))) return i;
             }
 
             return -1;
         }
 
-        private bool Submerged(Vector3 point)
+        private bool IsUnderWater(Vector3 point)
         {
             foreach (Water water in waters)
             {
@@ -473,69 +473,69 @@ namespace Shooter.Editor
             return false;
         }
 
-        private bool Blocked(Vector3 foot)
+        private bool IsBlockedByObstacle(Vector3 foot)
         {
-            Vector3 origin = new(foot.x, ceiling, foot.z);
-            int count = Physics.SphereCastNonAlloc(origin, settings.clearanceAroundObjects, Vector3.down, hits, ceiling - foot.y, settings.obstacles, QueryTriggerInteraction.Ignore);
-            for (int i = 0; i < count; i++)
+            Vector3 castStart = new(foot.x, ceilingHeight, foot.z);
+            int hitCount = Physics.SphereCastNonAlloc(castStart, settings.clearanceAroundObjects, Vector3.down, obstacleHits, ceilingHeight - foot.y, settings.obstacles, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider is not TerrainCollider) return true;
+                if (obstacleHits[i].collider is not TerrainCollider) return true;
             }
 
             return false;
         }
 
-        private void Plant(Tile tile, Vector2 position, Vector2 uv, float height)
+        private void PlantTree(Tile tile, Vector2 position, Vector2 uv, float height)
         {
-            int picked = PickSpecies(position);
-            Vector2 scaleRange = species[picked].scaleRange;
+            int speciesIndex = PickSpeciesIndex(position);
+            Vector2 scaleRange = species[speciesIndex].scaleRange;
             float scale = Mathf.Lerp(scaleRange.x, scaleRange.y, (float)random.NextDouble());
             byte gray = (byte)(255f * (1f - MostShade * (float)random.NextDouble()));
             tile.Trees.Add(new TreeInstance
             {
-                position = new Vector3(uv.x, height / tile.Data.size.y, uv.y),
+                position = new Vector3(uv.x, height / tile.TerrainData.size.y, uv.y),
                 widthScale = scale,
                 heightScale = scale,
                 rotation = (float)(random.NextDouble() * Math.PI * 2.0),
                 color = new Color32(gray, gray, gray, 255),
                 lightmapColor = new Color32(255, 255, 255, 255),
-                prototypeIndex = tile.PrototypeOfSpecies[picked]
+                prototypeIndex = tile.PrototypeIndexOfSpecies[speciesIndex]
             });
-            grid.Add(position, settings.spacing);
-            planted++;
+            spacingGrid.AddSpot(position, settings.spacing);
+            plantedTrees++;
         }
 
-        private int PickSpecies(Vector2 position)
+        private int PickSpeciesIndex(Vector2 position)
         {
-            float total = 0f;
+            float totalWeight = 0f;
             for (int i = 0; i < species.Count; i++)
             {
-                weights[i] = species[i].share * Mathf.Lerp(1f, 2f * Noise(position, i + 1), settings.patchiness);
-                total += weights[i];
+                speciesWeights[i] = species[i].share * Mathf.Lerp(1f, 2f * SampleGroveNoise(position, i + 1), settings.patchiness);
+                totalWeight += speciesWeights[i];
             }
 
-            double roll = random.NextDouble() * total;
-            int picked = 0;
+            double roll = random.NextDouble() * totalWeight;
+            int pickedIndex = 0;
             for (int i = 0; i < species.Count; i++)
             {
-                if (weights[i] <= 0f) continue;
+                if (speciesWeights[i] <= 0f) continue;
 
-                picked = i;
-                roll -= weights[i];
+                pickedIndex = i;
+                roll -= speciesWeights[i];
                 if (roll < 0) break;
             }
 
-            return picked;
+            return pickedIndex;
         }
 
-        private static Rect AreaOf(Terrain terrain)
+        private static Rect GetAreaOf(Terrain terrain)
         {
-            Vector3 corner = terrain.transform.position;
-            Vector3 size = terrain.terrainData.size;
-            return new Rect(corner.x, corner.z, size.x, size.z);
+            Vector3 terrainCorner = terrain.transform.position;
+            Vector3 terrainSize = terrain.terrainData.size;
+            return new Rect(terrainCorner.x, terrainCorner.z, terrainSize.x, terrainSize.z);
         }
 
-        private static Rect BoundingArea(IEnumerable<Rect> areas)
+        private static Rect GetBoundingArea(IEnumerable<Rect> areas)
         {
             Vector2 min = new(float.MaxValue, float.MaxValue);
             Vector2 max = new(float.MinValue, float.MinValue);

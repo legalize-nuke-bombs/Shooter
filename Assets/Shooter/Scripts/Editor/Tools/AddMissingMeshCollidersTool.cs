@@ -12,10 +12,10 @@ namespace Shooter.Editor
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [MenuItem(MenuItemPath)]
-        private static void AddToSelectedPrefabs()
+        private static void AddMissingCollidersToSelectedPrefabs()
         {
-            var paths = SelectedPrefabPaths().ToList();
-            if (paths.Count == 0)
+            var prefabPaths = FindPrefabPathsInSelection().ToList();
+            if (prefabPaths.Count == 0)
             {
                 Log.Warn("No prefabs among the selected assets, pick a folder or a prefab in the project window");
                 return;
@@ -23,11 +23,11 @@ namespace Shooter.Editor
 
             int changedPrefabs = 0;
             int addedColliders = 0;
-            for (int i = 0; i < paths.Count; i++)
+            for (int i = 0; i < prefabPaths.Count; i++)
             {
-                if (EditorUtility.DisplayCancelableProgressBar("Add Missing Mesh Colliders", paths[i], (float)i / paths.Count)) break;
+                if (EditorUtility.DisplayCancelableProgressBar("Add Missing Mesh Colliders", prefabPaths[i], (float)i / prefabPaths.Count)) break;
 
-                int addedToPrefab = AddToPrefab(paths[i]);
+                int addedToPrefab = AddMissingCollidersToPrefab(prefabPaths[i]);
                 if (addedToPrefab == 0) continue;
 
                 changedPrefabs++;
@@ -36,7 +36,7 @@ namespace Shooter.Editor
 
             EditorUtility.ClearProgressBar();
 
-            Log.Info($"Looked at {paths.Count} prefabs, added {addedColliders} mesh colliders to {changedPrefabs} of them");
+            Log.Info($"Looked at {prefabPaths.Count} prefabs, added {addedColliders} mesh colliders to {changedPrefabs} of them");
         }
 
         [MenuItem(MenuItemPath, true)]
@@ -45,44 +45,44 @@ namespace Shooter.Editor
             return Selection.assetGUIDs.Length > 0;
         }
 
-        private static int AddToPrefab(string path)
+        private static int AddMissingCollidersToPrefab(string prefabPath)
         {
-            GameObject prefab = PrefabUtility.LoadPrefabContents(path);
+            GameObject prefabContents = PrefabUtility.LoadPrefabContents(prefabPath);
             try
             {
-                HashSet<Renderer> fartherLods = RenderersOnlyInFartherLods(prefab);
-                int added = 0;
-                foreach (MeshFilter filter in prefab.GetComponentsInChildren<MeshFilter>(true))
+                HashSet<Renderer> fartherLodRenderers = FindRenderersOnlyInFartherLods(prefabContents);
+                int addedColliders = 0;
+                foreach (MeshFilter meshFilter in prefabContents.GetComponentsInChildren<MeshFilter>(true))
                 {
-                    if (filter.sharedMesh == null) continue;
-                    if (filter.GetComponent<Collider>() != null) continue;
-                    if (fartherLods.Contains(filter.GetComponent<Renderer>())) continue;
+                    if (meshFilter.sharedMesh == null) continue;
+                    if (meshFilter.GetComponent<Collider>() != null) continue;
+                    if (fartherLodRenderers.Contains(meshFilter.GetComponent<Renderer>())) continue;
 
-                    filter.gameObject.AddComponent<MeshCollider>().sharedMesh = filter.sharedMesh;
-                    added++;
+                    meshFilter.gameObject.AddComponent<MeshCollider>().sharedMesh = meshFilter.sharedMesh;
+                    addedColliders++;
                 }
 
-                if (added > 0)
+                if (addedColliders > 0)
                 {
-                    PrefabUtility.SaveAsPrefabAsset(prefab, path);
-                    Log.Info($"Prefab {path} got {added} mesh colliders");
+                    PrefabUtility.SaveAsPrefabAsset(prefabContents, prefabPath);
+                    Log.Info($"Prefab {prefabPath} got {addedColliders} mesh colliders");
                 }
 
-                return added;
+                return addedColliders;
             }
             finally
             {
-                PrefabUtility.UnloadPrefabContents(prefab);
+                PrefabUtility.UnloadPrefabContents(prefabContents);
             }
         }
 
-        private static HashSet<Renderer> RenderersOnlyInFartherLods(GameObject prefab)
+        private static HashSet<Renderer> FindRenderersOnlyInFartherLods(GameObject prefabContents)
         {
-            var nearestLod = new HashSet<Renderer>();
-            var fartherLods = new HashSet<Renderer>();
-            foreach (LODGroup group in prefab.GetComponentsInChildren<LODGroup>(true))
+            var nearestLodRenderers = new HashSet<Renderer>();
+            var fartherLodRenderers = new HashSet<Renderer>();
+            foreach (LODGroup lodGroup in prefabContents.GetComponentsInChildren<LODGroup>(true))
             {
-                LOD[] lods = group.GetLODs();
+                LOD[] lods = lodGroup.GetLODs();
                 for (int level = 0; level < lods.Length; level++)
                 {
                     foreach (Renderer renderer in lods[level].renderers)
@@ -91,24 +91,24 @@ namespace Shooter.Editor
 
                         if (level == 0)
                         {
-                            nearestLod.Add(renderer);
+                            nearestLodRenderers.Add(renderer);
                         }
                         else
                         {
-                            fartherLods.Add(renderer);
+                            fartherLodRenderers.Add(renderer);
                         }
                     }
                 }
             }
 
-            fartherLods.ExceptWith(nearestLod);
-            return fartherLods;
+            fartherLodRenderers.ExceptWith(nearestLodRenderers);
+            return fartherLodRenderers;
         }
 
-        private static IEnumerable<string> SelectedPrefabPaths()
+        private static IEnumerable<string> FindPrefabPathsInSelection()
         {
-            string[] selected = Selection.assetGUIDs.Select(AssetDatabase.GUIDToAssetPath).ToArray();
-            return AssetDatabase.FindAssets("t:Prefab", selected).Select(AssetDatabase.GUIDToAssetPath).Distinct();
+            string[] selectedPaths = Selection.assetGUIDs.Select(AssetDatabase.GUIDToAssetPath).ToArray();
+            return AssetDatabase.FindAssets("t:Prefab", selectedPaths).Select(AssetDatabase.GUIDToAssetPath).Distinct();
         }
     }
 }

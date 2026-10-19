@@ -12,16 +12,16 @@ namespace Shooter.Editor
 {
     public static class BuildWaterWallsTool
     {
-        private const string WallsName = "Walls";
-        private const string WallsLayer = "Ignore Raycast";
+        private const string WallsObjectName = "Walls";
+        private const string WallsLayerName = "Ignore Raycast";
         private const float GridStep = 1f;
         private const float DryHeightWhereNoGround = 1000f;
-        private const float SunkBelowLine = 1f;
+        private const float SunkBelowDeepLine = 1f;
         private const float ShortestPiece = 0.01f;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [MenuItem("Tools/Build Water Walls")]
-        private static void BuildForEveryWater()
+        private static void BuildWallsForEveryWater()
         {
             if (EditorApplication.isPlaying)
             {
@@ -38,11 +38,11 @@ namespace Shooter.Editor
 
             foreach (Water water in waters)
             {
-                BuildFor(water);
+                BuildWallsForWater(water);
             }
         }
 
-        private static void BuildFor(Water water)
+        private static void BuildWallsForWater(Water water)
         {
             string scenePath = water.gameObject.scene.path;
             if (string.IsNullOrEmpty(scenePath))
@@ -53,36 +53,36 @@ namespace Shooter.Editor
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            Transform surface = water.transform;
-            float level = surface.position.y;
-            float line = level - water.WallDepth;
-            Vector3 extent = surface.lossyScale / 2f;
-            Vector2 origin = new(surface.position.x - extent.x, surface.position.z - extent.z);
+            Transform waterTransform = water.transform;
+            float waterLevel = waterTransform.position.y;
+            float deepLineHeight = waterLevel - water.WallDepth;
+            Vector3 extent = waterTransform.lossyScale / 2f;
+            Vector2 gridOrigin = new(waterTransform.position.x - extent.x, waterTransform.position.z - extent.z);
 
-            float[,] ground = GroundHeightsWithOuterRing(origin, extent, line);
-            Transform walls = UnscaledWallsUnder(surface);
+            float[,] groundHeights = SampleGroundHeightsWithOuterRing(gridOrigin, extent, deepLineHeight);
+            Transform wallsTransform = FindOrCreateUnscaledWallsUnder(waterTransform);
 
             var vertices = new List<Vector3>();
             var triangles = new List<int>();
-            float length = AddRibbonByMarchingSquares(ground, origin, line, line - SunkBelowLine, level + water.WallHeight, walls, vertices, triangles);
+            float wallLength = AddRibbonByMarchingSquares(groundHeights, gridOrigin, deepLineHeight, deepLineHeight - SunkBelowDeepLine, waterLevel + water.WallHeight, wallsTransform, vertices, triangles);
 
-            string path = $"{Path.GetDirectoryName(scenePath)}/WaterWalls-{water.name}.asset";
+            string meshPath = $"{Path.GetDirectoryName(scenePath)}/WaterWalls-{water.name}.asset";
 
             if (triangles.Count == 0)
             {
-                Object.DestroyImmediate(walls.gameObject);
-                AssetDatabase.DeleteAsset(path);
+                Object.DestroyImmediate(wallsTransform.gameObject);
+                AssetDatabase.DeleteAsset(meshPath);
                 EditorSceneManager.MarkSceneDirty(water.gameObject.scene);
 
                 Log.Info($"Water {water.name} is nowhere deeper than {water.WallDepth} m, it needs no walls");
                 return;
             }
 
-            Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
+            Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
             if (mesh == null)
             {
                 mesh = new Mesh();
-                AssetDatabase.CreateAsset(mesh, path);
+                AssetDatabase.CreateAsset(mesh, meshPath);
             }
 
             mesh.Clear();
@@ -94,58 +94,58 @@ namespace Shooter.Editor
             EditorUtility.SetDirty(mesh);
             AssetDatabase.SaveAssetIfDirty(mesh);
 
-            MeshCollider collider = walls.GetComponent<MeshCollider>();
+            MeshCollider collider = wallsTransform.GetComponent<MeshCollider>();
             if (collider == null)
             {
-                collider = walls.gameObject.AddComponent<MeshCollider>();
+                collider = wallsTransform.gameObject.AddComponent<MeshCollider>();
             }
 
-            Recook(collider, mesh);
+            RecookCollider(collider, mesh);
             EditorSceneManager.MarkSceneDirty(water.gameObject.scene);
 
-            Log.Info($"Water {water.name}: {length:F0} m of wall in {triangles.Count / 6} quads where it gets {water.WallDepth} m deep, saved to {path} in {stopwatch.ElapsedMilliseconds} ms");
+            Log.Info($"Water {water.name}: {wallLength:F0} m of wall in {triangles.Count / 6} quads where it gets {water.WallDepth} m deep, saved to {meshPath} in {stopwatch.ElapsedMilliseconds} ms");
         }
 
-        private static void Recook(MeshCollider collider, Mesh mesh)
+        private static void RecookCollider(MeshCollider collider, Mesh mesh)
         {
             collider.sharedMesh = null;
             collider.sharedMesh = mesh;
         }
 
-        private static float[,] GroundHeightsWithOuterRing(Vector2 origin, Vector3 extent, float line)
+        private static float[,] SampleGroundHeightsWithOuterRing(Vector2 gridOrigin, Vector3 extent, float deepLineHeight)
         {
             int nodesX = Mathf.FloorToInt(extent.x * 2f / GridStep) + 1;
             int nodesZ = Mathf.FloorToInt(extent.z * 2f / GridStep) + 1;
 
-            float[,] ground = new float[nodesX + 2, nodesZ + 2];
+            float[,] groundHeights = new float[nodesX + 2, nodesZ + 2];
             for (int x = 0; x < nodesX + 2; x++)
             {
                 for (int z = 0; z < nodesZ + 2; z++)
                 {
-                    ground[x, z] = float.NegativeInfinity;
+                    groundHeights[x, z] = float.NegativeInfinity;
                 }
             }
 
             foreach (Terrain terrain in Terrain.activeTerrains)
             {
-                TerrainData data = terrain.terrainData;
-                Vector3 corner = terrain.GetPosition();
+                TerrainData terrainData = terrain.terrainData;
+                Vector3 terrainCorner = terrain.GetPosition();
 
-                int fromX = Mathf.Max(0, Mathf.CeilToInt((corner.x - origin.x) / GridStep));
-                int fromZ = Mathf.Max(0, Mathf.CeilToInt((corner.z - origin.y) / GridStep));
-                int toX = Mathf.Min(nodesX - 1, Mathf.FloorToInt((corner.x + data.size.x - origin.x) / GridStep));
-                int toZ = Mathf.Min(nodesZ - 1, Mathf.FloorToInt((corner.z + data.size.z - origin.y) / GridStep));
+                int fromX = Mathf.Max(0, Mathf.CeilToInt((terrainCorner.x - gridOrigin.x) / GridStep));
+                int fromZ = Mathf.Max(0, Mathf.CeilToInt((terrainCorner.z - gridOrigin.y) / GridStep));
+                int toX = Mathf.Min(nodesX - 1, Mathf.FloorToInt((terrainCorner.x + terrainData.size.x - gridOrigin.x) / GridStep));
+                int toZ = Mathf.Min(nodesZ - 1, Mathf.FloorToInt((terrainCorner.z + terrainData.size.z - gridOrigin.y) / GridStep));
                 if (fromX > toX || fromZ > toZ) continue;
 
-                float fromU = (origin.x + fromX * GridStep - corner.x) / data.size.x;
-                float fromV = (origin.y + fromZ * GridStep - corner.z) / data.size.z;
-                float[,] heights = data.GetInterpolatedHeights(fromU, fromV, toX - fromX + 1, toZ - fromZ + 1, GridStep / data.size.x, GridStep / data.size.z);
+                float fromU = (gridOrigin.x + fromX * GridStep - terrainCorner.x) / terrainData.size.x;
+                float fromV = (gridOrigin.y + fromZ * GridStep - terrainCorner.z) / terrainData.size.z;
+                float[,] heights = terrainData.GetInterpolatedHeights(fromU, fromV, toX - fromX + 1, toZ - fromZ + 1, GridStep / terrainData.size.x, GridStep / terrainData.size.z);
 
                 for (int x = fromX; x <= toX; x++)
                 {
                     for (int z = fromZ; z <= toZ; z++)
                     {
-                        ground[x + 1, z + 1] = Mathf.Max(ground[x + 1, z + 1], corner.y + heights[z - fromZ, x - fromX]);
+                        groundHeights[x + 1, z + 1] = Mathf.Max(groundHeights[x + 1, z + 1], terrainCorner.y + heights[z - fromZ, x - fromX]);
                     }
                 }
             }
@@ -154,40 +154,40 @@ namespace Shooter.Editor
             {
                 for (int z = 0; z < nodesZ + 2; z++)
                 {
-                    if (float.IsNegativeInfinity(ground[x, z]))
+                    if (float.IsNegativeInfinity(groundHeights[x, z]))
                     {
-                        ground[x, z] = line + DryHeightWhereNoGround;
+                        groundHeights[x, z] = deepLineHeight + DryHeightWhereNoGround;
                     }
                 }
             }
 
-            return ground;
+            return groundHeights;
         }
 
-        private static Transform UnscaledWallsUnder(Transform surface)
+        private static Transform FindOrCreateUnscaledWallsUnder(Transform waterTransform)
         {
-            Transform walls = surface.Find(WallsName);
-            if (walls == null)
+            Transform wallsTransform = waterTransform.Find(WallsObjectName);
+            if (wallsTransform == null)
             {
-                walls = new GameObject(WallsName).transform;
-                walls.SetParent(surface, false);
+                wallsTransform = new GameObject(WallsObjectName).transform;
+                wallsTransform.SetParent(waterTransform, false);
             }
 
-            Vector3 scale = surface.lossyScale;
-            walls.localPosition = Vector3.zero;
-            walls.localRotation = Quaternion.identity;
-            walls.localScale = new Vector3(1f / scale.x, 1f / scale.y, 1f / scale.z);
-            walls.gameObject.layer = LayerMask.NameToLayer(WallsLayer);
+            Vector3 waterScale = waterTransform.lossyScale;
+            wallsTransform.localPosition = Vector3.zero;
+            wallsTransform.localRotation = Quaternion.identity;
+            wallsTransform.localScale = new Vector3(1f / waterScale.x, 1f / waterScale.y, 1f / waterScale.z);
+            wallsTransform.gameObject.layer = LayerMask.NameToLayer(WallsLayerName);
 
-            return walls;
+            return wallsTransform;
         }
 
-        private static float AddRibbonByMarchingSquares(float[,] ground, Vector2 origin, float line, float bottom, float top, Transform walls, List<Vector3> vertices, List<int> triangles)
+        private static float AddRibbonByMarchingSquares(float[,] groundHeights, Vector2 gridOrigin, float deepLineHeight, float wallBottom, float wallTop, Transform wallsTransform, List<Vector3> vertices, List<int> triangles)
         {
-            float length = 0f;
-            int cellsX = ground.GetLength(0) - 1;
-            int cellsZ = ground.GetLength(1) - 1;
-            Vector2 framedOrigin = origin - new Vector2(GridStep, GridStep);
+            float ribbonLength = 0f;
+            int cellsX = groundHeights.GetLength(0) - 1;
+            int cellsZ = groundHeights.GetLength(1) - 1;
+            Vector2 framedOrigin = gridOrigin - new Vector2(GridStep, GridStep);
 
             for (int x = 0; x < cellsX; x++)
             {
@@ -196,103 +196,103 @@ namespace Shooter.Editor
                     Cell cell = new()
                     {
                         Origin = framedOrigin + new Vector2(x, z) * GridStep,
-                        NearLeft = ground[x, z],
-                        NearRight = ground[x + 1, z],
-                        FarRight = ground[x + 1, z + 1],
-                        FarLeft = ground[x, z + 1],
-                        Line = line
+                        NearLeftHeight = groundHeights[x, z],
+                        NearRightHeight = groundHeights[x + 1, z],
+                        FarRightHeight = groundHeights[x + 1, z + 1],
+                        FarLeftHeight = groundHeights[x, z + 1],
+                        DeepLineHeight = deepLineHeight
                     };
 
-                    int deep = cell.DeepCorners();
-                    if (deep == 0 || deep == 15) continue;
+                    int deepCornerMask = cell.GetDeepCornerMask();
+                    if (deepCornerMask == 0 || deepCornerMask == 15) continue;
 
-                    bool saddle = deep == 5 || deep == 10;
-                    if (!saddle)
+                    bool isSaddle = deepCornerMask == 5 || deepCornerMask == 10;
+                    if (!isSaddle)
                     {
-                        int from = -1;
-                        int to = -1;
+                        int fromEdge = -1;
+                        int toEdge = -1;
                         for (int edge = 0; edge < 4; edge++)
                         {
-                            if (!cell.Crosses(edge)) continue;
+                            if (!cell.IsEdgeCrossedByDeepLine(edge)) continue;
 
-                            if (from < 0)
+                            if (fromEdge < 0)
                             {
-                                from = edge;
+                                fromEdge = edge;
                             }
                             else
                             {
-                                to = edge;
+                                toEdge = edge;
                             }
                         }
 
-                        int witness = 0;
-                        while (!cell.Deep(witness))
+                        int witnessCorner = 0;
+                        while (!cell.IsDeep(witnessCorner))
                         {
-                            witness++;
+                            witnessCorner++;
                         }
 
-                        length += AddQuadFacingShore(cell, from, to, witness, bottom, top, walls, vertices, triangles);
+                        ribbonLength += AddQuadFacingShore(cell, fromEdge, toEdge, witnessCorner, wallBottom, wallTop, wallsTransform, vertices, triangles);
                         continue;
                     }
 
-                    bool middleDeep = (cell.NearLeft + cell.NearRight + cell.FarRight + cell.FarLeft) / 4f < line;
-                    bool nearLeftCut = deep == 5 ? !middleDeep : middleDeep;
+                    bool isMiddleDeep = (cell.NearLeftHeight + cell.NearRightHeight + cell.FarRightHeight + cell.FarLeftHeight) / 4f < deepLineHeight;
+                    bool isNearLeftCornerCutOff = deepCornerMask == 5 ? !isMiddleDeep : isMiddleDeep;
 
-                    if (nearLeftCut)
+                    if (isNearLeftCornerCutOff)
                     {
-                        length += AddQuadFacingShore(cell, Cell.Near, Cell.Left, Cell.NearLeftCorner, bottom, top, walls, vertices, triangles);
-                        length += AddQuadFacingShore(cell, Cell.Right, Cell.Far, Cell.FarRightCorner, bottom, top, walls, vertices, triangles);
+                        ribbonLength += AddQuadFacingShore(cell, Cell.NearEdge, Cell.LeftEdge, Cell.NearLeftCorner, wallBottom, wallTop, wallsTransform, vertices, triangles);
+                        ribbonLength += AddQuadFacingShore(cell, Cell.RightEdge, Cell.FarEdge, Cell.FarRightCorner, wallBottom, wallTop, wallsTransform, vertices, triangles);
                     }
                     else
                     {
-                        length += AddQuadFacingShore(cell, Cell.Near, Cell.Right, Cell.NearRightCorner, bottom, top, walls, vertices, triangles);
-                        length += AddQuadFacingShore(cell, Cell.Far, Cell.Left, Cell.FarLeftCorner, bottom, top, walls, vertices, triangles);
+                        ribbonLength += AddQuadFacingShore(cell, Cell.NearEdge, Cell.RightEdge, Cell.NearRightCorner, wallBottom, wallTop, wallsTransform, vertices, triangles);
+                        ribbonLength += AddQuadFacingShore(cell, Cell.FarEdge, Cell.LeftEdge, Cell.FarLeftCorner, wallBottom, wallTop, wallsTransform, vertices, triangles);
                     }
                 }
             }
 
-            return length;
+            return ribbonLength;
         }
 
-        private static float AddQuadFacingShore(Cell cell, int fromEdge, int toEdge, int witness, float bottom, float top, Transform walls, List<Vector3> vertices, List<int> triangles)
+        private static float AddQuadFacingShore(Cell cell, int fromEdge, int toEdge, int witnessCorner, float wallBottom, float wallTop, Transform wallsTransform, List<Vector3> vertices, List<int> triangles)
         {
-            Vector2 from = cell.LineCrossing(fromEdge);
-            Vector2 to = cell.LineCrossing(toEdge);
+            Vector2 fromCrossing = cell.GetDeepLineCrossing(fromEdge);
+            Vector2 toCrossing = cell.GetDeepLineCrossing(toEdge);
 
-            Vector2 along = to - from;
+            Vector2 along = toCrossing - fromCrossing;
             float length = along.magnitude;
             if (length < ShortestPiece) return 0f;
 
-            Vector2 aside = cell.Position(witness) - from;
-            bool witnessOnLeft = along.x * aside.y - along.y * aside.x > 0f;
-            bool deepOnLeft = witnessOnLeft == cell.Deep(witness);
-            if (!deepOnLeft)
+            Vector2 aside = cell.GetCornerPosition(witnessCorner) - fromCrossing;
+            bool isWitnessOnLeft = along.x * aside.y - along.y * aside.x > 0f;
+            bool isDeepOnLeft = isWitnessOnLeft == cell.IsDeep(witnessCorner);
+            if (!isDeepOnLeft)
             {
-                (from, to) = (to, from);
+                (fromCrossing, toCrossing) = (toCrossing, fromCrossing);
             }
 
-            int first = vertices.Count;
-            vertices.Add(walls.InverseTransformPoint(new Vector3(from.x, bottom, from.y)));
-            vertices.Add(walls.InverseTransformPoint(new Vector3(from.x, top, from.y)));
-            vertices.Add(walls.InverseTransformPoint(new Vector3(to.x, bottom, to.y)));
-            vertices.Add(walls.InverseTransformPoint(new Vector3(to.x, top, to.y)));
+            int firstVertex = vertices.Count;
+            vertices.Add(wallsTransform.InverseTransformPoint(new Vector3(fromCrossing.x, wallBottom, fromCrossing.y)));
+            vertices.Add(wallsTransform.InverseTransformPoint(new Vector3(fromCrossing.x, wallTop, fromCrossing.y)));
+            vertices.Add(wallsTransform.InverseTransformPoint(new Vector3(toCrossing.x, wallBottom, toCrossing.y)));
+            vertices.Add(wallsTransform.InverseTransformPoint(new Vector3(toCrossing.x, wallTop, toCrossing.y)));
 
-            triangles.Add(first);
-            triangles.Add(first + 1);
-            triangles.Add(first + 2);
-            triangles.Add(first + 1);
-            triangles.Add(first + 3);
-            triangles.Add(first + 2);
+            triangles.Add(firstVertex);
+            triangles.Add(firstVertex + 1);
+            triangles.Add(firstVertex + 2);
+            triangles.Add(firstVertex + 1);
+            triangles.Add(firstVertex + 3);
+            triangles.Add(firstVertex + 2);
 
             return length;
         }
 
         private struct Cell
         {
-            public const int Near = 0;
-            public const int Right = 1;
-            public const int Far = 2;
-            public const int Left = 3;
+            public const int NearEdge = 0;
+            public const int RightEdge = 1;
+            public const int FarEdge = 2;
+            public const int LeftEdge = 3;
 
             public const int NearLeftCorner = 0;
             public const int NearRightCorner = 1;
@@ -300,18 +300,18 @@ namespace Shooter.Editor
             public const int FarLeftCorner = 3;
 
             public Vector2 Origin;
-            public float NearLeft;
-            public float NearRight;
-            public float FarRight;
-            public float FarLeft;
-            public float Line;
+            public float NearLeftHeight;
+            public float NearRightHeight;
+            public float FarRightHeight;
+            public float FarLeftHeight;
+            public float DeepLineHeight;
 
-            public int DeepCorners()
+            public int GetDeepCornerMask()
             {
                 int mask = 0;
                 for (int corner = 0; corner < 4; corner++)
                 {
-                    if (Deep(corner))
+                    if (IsDeep(corner))
                     {
                         mask |= 1 << corner;
                     }
@@ -320,12 +320,12 @@ namespace Shooter.Editor
                 return mask;
             }
 
-            public bool Deep(int corner)
+            public bool IsDeep(int corner)
             {
-                return Ground(corner) < Line;
+                return GetGroundHeight(corner) < DeepLineHeight;
             }
 
-            public Vector2 Position(int corner)
+            public Vector2 GetCornerPosition(int corner)
             {
                 return corner switch
                 {
@@ -336,38 +336,38 @@ namespace Shooter.Editor
                 };
             }
 
-            public bool Crosses(int edge)
+            public bool IsEdgeCrossedByDeepLine(int edge)
             {
-                (int from, int to) = EndsRightOrAway(edge);
-                return Deep(from) != Deep(to);
+                (int fromCorner, int toCorner) = GetEdgeCornersRightOrAway(edge);
+                return IsDeep(fromCorner) != IsDeep(toCorner);
             }
 
-            public Vector2 LineCrossing(int edge)
+            public Vector2 GetDeepLineCrossing(int edge)
             {
-                (int from, int to) = EndsRightOrAway(edge);
-                float along = (Line - Ground(from)) / (Ground(to) - Ground(from));
+                (int fromCorner, int toCorner) = GetEdgeCornersRightOrAway(edge);
+                float along = (DeepLineHeight - GetGroundHeight(fromCorner)) / (GetGroundHeight(toCorner) - GetGroundHeight(fromCorner));
 
-                return Vector2.LerpUnclamped(Position(from), Position(to), along);
+                return Vector2.LerpUnclamped(GetCornerPosition(fromCorner), GetCornerPosition(toCorner), along);
             }
 
-            private float Ground(int corner)
+            private float GetGroundHeight(int corner)
             {
                 return corner switch
                 {
-                    NearLeftCorner => NearLeft,
-                    NearRightCorner => NearRight,
-                    FarRightCorner => FarRight,
-                    _ => FarLeft
+                    NearLeftCorner => NearLeftHeight,
+                    NearRightCorner => NearRightHeight,
+                    FarRightCorner => FarRightHeight,
+                    _ => FarLeftHeight
                 };
             }
 
-            private static (int from, int to) EndsRightOrAway(int edge)
+            private static (int fromCorner, int toCorner) GetEdgeCornersRightOrAway(int edge)
             {
                 return edge switch
                 {
-                    Near => (NearLeftCorner, NearRightCorner),
-                    Right => (NearRightCorner, FarRightCorner),
-                    Far => (FarLeftCorner, FarRightCorner),
+                    NearEdge => (NearLeftCorner, NearRightCorner),
+                    RightEdge => (NearRightCorner, FarRightCorner),
+                    FarEdge => (FarLeftCorner, FarRightCorner),
                     _ => (NearLeftCorner, FarLeftCorner)
                 };
             }

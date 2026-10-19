@@ -9,8 +9,8 @@ namespace Shooter.Editor
     {
         static PlayFromFirstBuildScene()
         {
-            EditorBuildSettingsScene first = Array.Find(EditorBuildSettings.scenes, scene => scene.enabled);
-            EditorSceneManager.playModeStartScene = first == null ? null : AssetDatabase.LoadAssetAtPath<SceneAsset>(first.path);
+            EditorBuildSettingsScene firstEnabledScene = Array.Find(EditorBuildSettings.scenes, scene => scene.enabled);
+            EditorSceneManager.playModeStartScene = firstEnabledScene == null ? null : AssetDatabase.LoadAssetAtPath<SceneAsset>(firstEnabledScene.path);
         }
     }
 }

@@ -12,13 +12,13 @@ namespace Shooter.Editor
 {
     public class AlignHandAxesTool : EditorWindow
     {
-        private const float Tolerance = 0.5f;
+        private const float ToleranceDegrees = 0.5f;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private GameObject standard;
 
         [MenuItem("Tools/Align Hand Axes")]
-        private static void Open()
+        private static void OpenWindow()
         {
             GetWindow<AlignHandAxesTool>("Align Hand Axes");
         }
@@ -32,134 +32,135 @@ namespace Shooter.Editor
             {
                 if (GUILayout.Button("Align hand axes"))
                 {
-                    Align();
+                    AlignEverySkinModelToStandard();
                 }
             }
         }
 
-        private void Align()
+        private void AlignEverySkinModelToStandard()
         {
             string standardPath = AssetDatabase.GetAssetPath(standard);
-            Scene stage = EditorSceneManager.NewPreviewScene();
+            Scene previewScene = EditorSceneManager.NewPreviewScene();
             try
             {
-                NeutralHands standardHands = NeutralHands.Of(standardPath, stage);
+                NeutralHands standardHands = NeutralHands.MeasureOnModel(standardPath, previewScene);
                 if (standardHands == null)
                 {
                     Log.Warn($"Model {standard.name} has no humanoid avatar to be the standard of hand axes");
                     return;
                 }
 
-                var rebound = new HashSet<Mesh>();
-                foreach (IGrouping<string, SkinAsset> worn in Skins().GroupBy(ModelPathOf))
+                var reboundMeshes = new HashSet<Mesh>();
+                foreach (IGrouping<string, SkinAsset> skinsOfModel in FindSkinsWithModels().GroupBy(GetModelPathOfSkin))
                 {
-                    if (worn.Key != null && worn.Key != standardPath)
+                    if (skinsOfModel.Key != null && skinsOfModel.Key != standardPath)
                     {
-                        AlignModel(worn.Key, worn, standardHands, stage, rebound);
+                        AlignModelToStandard(skinsOfModel.Key, skinsOfModel, standardHands, previewScene, reboundMeshes);
                     }
                 }
             }
             finally
             {
-                EditorSceneManager.ClosePreviewScene(stage);
+                EditorSceneManager.ClosePreviewScene(previewScene);
             }
         }
 
-        private static void AlignModel(string model, IEnumerable<SkinAsset> skins, NeutralHands standard, Scene stage, HashSet<Mesh> rebound)
+        private static void AlignModelToStandard(string modelPath, IEnumerable<SkinAsset> skins, NeutralHands standardHands, Scene previewScene, HashSet<Mesh> reboundMeshes)
         {
-            if (AssetImporter.GetAtPath(model) is not ModelImporter importer) return;
+            if (AssetImporter.GetAtPath(modelPath) is not ModelImporter importer) return;
 
-            NeutralHands hands = NeutralHands.Of(model, stage);
-            if (hands == null)
+            NeutralHands modelHands = NeutralHands.MeasureOnModel(modelPath, previewScene);
+            if (modelHands == null)
             {
-                Log.Warn($"Skin model {model} has no humanoid avatar, its hands stay as they are");
+                Log.Warn($"Skin model {modelPath} has no humanoid avatar, its hands stay as they are");
                 return;
             }
 
-            Quaternion right = Quaternion.Inverse(hands.Right) * standard.Right;
-            Quaternion left = Quaternion.Inverse(hands.Left) * standard.Left;
-            if (Angle(right) < Tolerance && Angle(left) < Tolerance) return;
+            Quaternion rightTurn = Quaternion.Inverse(modelHands.RightRotation) * standardHands.RightRotation;
+            Quaternion leftTurn = Quaternion.Inverse(modelHands.LeftRotation) * standardHands.LeftRotation;
+            if (GetTurnAngle(rightTurn) < ToleranceDegrees && GetTurnAngle(leftTurn) < ToleranceDegrees) return;
 
-            HandAxisPostprocessor.HandTurns turns = HandAxisPostprocessor.HandTurns.Read(importer.userData) ?? new HandAxisPostprocessor.HandTurns();
-            turns.Add(hands.RightBone, right);
-            turns.Add(hands.LeftBone, left);
-            importer.userData = JsonUtility.ToJson(turns);
-            importer.humanDescription = TurnedHumanDescription(importer.humanDescription, hands, right, left);
+            HandAxisPostprocessor.HandTurns handTurns = HandAxisPostprocessor.HandTurns.ReadFromUserData(importer.userData) ?? new HandAxisPostprocessor.HandTurns();
+            handTurns.AddTurn(modelHands.RightBoneName, rightTurn);
+            handTurns.AddTurn(modelHands.LeftBoneName, leftTurn);
+            importer.userData = JsonUtility.ToJson(handTurns);
+            importer.humanDescription = TurnHandsInHumanDescription(importer.humanDescription, modelHands, rightTurn, leftTurn);
             importer.SaveAndReimport();
 
             foreach (SkinAsset skin in skins)
             {
-                TurnUnpackedSkin(skin, model, right, left, rebound);
+                TurnUnpackedSkin(skin, modelPath, rightTurn, leftTurn, reboundMeshes);
             }
 
-            Log.Info($"Skin model {Path.GetFileNameWithoutExtension(model)} turned its hands to the standard axes: right by {Angle(right):F0}°, left by {Angle(left):F0}°");
+            Log.Info($"Skin model {Path.GetFileNameWithoutExtension(modelPath)} turned its hands to the standard axes: right by {GetTurnAngle(rightTurn):F0}°, left by {GetTurnAngle(leftTurn):F0}°");
         }
 
-        private static void TurnUnpackedSkin(SkinAsset skin, string model, Quaternion right, Quaternion left, HashSet<Mesh> rebound)
+        private static void TurnUnpackedSkin(SkinAsset skin, string modelPath, Quaternion rightTurn, Quaternion leftTurn, HashSet<Mesh> reboundMeshes)
         {
-            string path = AssetDatabase.GetAssetPath(skin.Model);
-            if (path == model) return;
+            string skinPrefabPath = AssetDatabase.GetAssetPath(skin.Model);
+            if (skinPrefabPath == modelPath) return;
 
-            GameObject contents = PrefabUtility.LoadPrefabContents(path);
+            GameObject prefabContents = PrefabUtility.LoadPrefabContents(skinPrefabPath);
             try
             {
-                Animator animator = contents.GetComponent<Animator>();
+                Animator animator = prefabContents.GetComponent<Animator>();
                 Transform rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
                 Transform leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
 
-                bool ownBones = PrefabUtility.GetCorrespondingObjectFromOriginalSource(rightHand) == null;
-                if (ownBones)
+                bool hasOwnBones = PrefabUtility.GetCorrespondingObjectFromOriginalSource(rightHand) == null;
+                if (hasOwnBones)
                 {
-                    HandAxisPostprocessor.Turn(rightHand, right);
-                    HandAxisPostprocessor.Turn(leftHand, left);
+                    HandAxisPostprocessor.TurnHandKeepingChildrenInPlace(rightHand, rightTurn);
+                    HandAxisPostprocessor.TurnHandKeepingChildrenInPlace(leftHand, leftTurn);
                 }
 
-                foreach (SkinnedMeshRenderer mesh in contents.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+                foreach (SkinnedMeshRenderer skinnedRenderer in prefabContents.GetComponentsInChildren<SkinnedMeshRenderer>(true))
                 {
-                    if (mesh.sharedMesh == null || AssetDatabase.GetAssetPath(mesh.sharedMesh) == model) continue;
-                    if (!rebound.Add(mesh.sharedMesh)) continue;
+                    if (skinnedRenderer.sharedMesh == null || AssetDatabase.GetAssetPath(skinnedRenderer.sharedMesh) == modelPath) continue;
+                    if (!reboundMeshes.Add(skinnedRenderer.sharedMesh)) continue;
 
-                    bool turned = HandAxisPostprocessor.Rebind(mesh.sharedMesh, mesh.bones, rightHand, right) | HandAxisPostprocessor.Rebind(mesh.sharedMesh, mesh.bones, leftHand, left);
-                    if (!turned) continue;
+                    bool isReboundToRightHand = HandAxisPostprocessor.TryRebindMeshToTurnedHand(skinnedRenderer.sharedMesh, skinnedRenderer.bones, rightHand, rightTurn);
+                    bool isReboundToLeftHand = HandAxisPostprocessor.TryRebindMeshToTurnedHand(skinnedRenderer.sharedMesh, skinnedRenderer.bones, leftHand, leftTurn);
+                    if (!isReboundToRightHand && !isReboundToLeftHand) continue;
 
-                    EditorUtility.SetDirty(mesh.sharedMesh);
-                    AssetDatabase.SaveAssetIfDirty(mesh.sharedMesh);
-                    Log.Info($"Mesh {AssetDatabase.GetAssetPath(mesh.sharedMesh)} of skin {skin.name} rebound to the turned hands");
+                    EditorUtility.SetDirty(skinnedRenderer.sharedMesh);
+                    AssetDatabase.SaveAssetIfDirty(skinnedRenderer.sharedMesh);
+                    Log.Info($"Mesh {AssetDatabase.GetAssetPath(skinnedRenderer.sharedMesh)} of skin {skin.name} rebound to the turned hands");
                 }
 
-                if (ownBones)
+                if (hasOwnBones)
                 {
-                    PrefabUtility.SaveAsPrefabAsset(contents, path);
-                    Log.Info($"Skin {skin.name} turned the hands of its own bones copy in {path}");
+                    PrefabUtility.SaveAsPrefabAsset(prefabContents, skinPrefabPath);
+                    Log.Info($"Skin {skin.name} turned the hands of its own bones copy in {skinPrefabPath}");
                 }
             }
             finally
             {
-                PrefabUtility.UnloadPrefabContents(contents);
+                PrefabUtility.UnloadPrefabContents(prefabContents);
             }
         }
 
-        private static HumanDescription TurnedHumanDescription(HumanDescription description, NeutralHands hands, Quaternion right, Quaternion left)
+        private static HumanDescription TurnHandsInHumanDescription(HumanDescription description, NeutralHands hands, Quaternion rightTurn, Quaternion leftTurn)
         {
             SkeletonBone[] skeleton = description.skeleton;
             for (int i = 0; i < skeleton.Length; i++)
             {
                 SkeletonBone bone = skeleton[i];
-                if (bone.name == hands.RightBone)
+                if (bone.name == hands.RightBoneName)
                 {
-                    bone.rotation *= right;
+                    bone.rotation *= rightTurn;
                 }
-                else if (bone.name == hands.LeftBone)
+                else if (bone.name == hands.LeftBoneName)
                 {
-                    bone.rotation *= left;
+                    bone.rotation *= leftTurn;
                 }
-                else if (hands.RightChildren.Contains(bone.name))
+                else if (hands.RightChildNames.Contains(bone.name))
                 {
-                    UndoTurn(ref bone, right);
+                    UndoParentTurn(ref bone, rightTurn);
                 }
-                else if (hands.LeftChildren.Contains(bone.name))
+                else if (hands.LeftChildNames.Contains(bone.name))
                 {
-                    UndoTurn(ref bone, left);
+                    UndoParentTurn(ref bone, leftTurn);
                 }
 
                 skeleton[i] = bone;
@@ -169,84 +170,84 @@ namespace Shooter.Editor
             return description;
         }
 
-        private static void UndoTurn(ref SkeletonBone bone, Quaternion turn)
+        private static void UndoParentTurn(ref SkeletonBone bone, Quaternion parentTurn)
         {
-            Quaternion back = Quaternion.Inverse(turn);
-            bone.position = back * bone.position;
-            bone.rotation = back * bone.rotation;
+            Quaternion inverseTurn = Quaternion.Inverse(parentTurn);
+            bone.position = inverseTurn * bone.position;
+            bone.rotation = inverseTurn * bone.rotation;
         }
 
-        private static IEnumerable<SkinAsset> Skins()
+        private static IEnumerable<SkinAsset> FindSkinsWithModels()
         {
             return AssetDatabase.FindAssets("t:" + nameof(SkinAsset))
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<SkinAsset>)
-                .Where(asset => asset != null && asset.Model != null);
+                .Where(skin => skin != null && skin.Model != null);
         }
 
-        private static string ModelPathOf(SkinAsset skin)
+        private static string GetModelPathOfSkin(SkinAsset skin)
         {
             Animator animator = skin.Model.GetComponent<Animator>();
             return animator == null || animator.avatar == null ? null : AssetDatabase.GetAssetPath(animator.avatar);
         }
 
-        private static float Angle(Quaternion turn)
+        private static float GetTurnAngle(Quaternion turn)
         {
             return Quaternion.Angle(Quaternion.identity, turn);
         }
 
         private class NeutralHands
         {
-            public Quaternion Right { get; private set; }
-            public Quaternion Left { get; private set; }
-            public string RightBone { get; private set; }
-            public string LeftBone { get; private set; }
-            public HashSet<string> RightChildren { get; private set; }
-            public HashSet<string> LeftChildren { get; private set; }
+            public Quaternion RightRotation { get; private set; }
+            public Quaternion LeftRotation { get; private set; }
+            public string RightBoneName { get; private set; }
+            public string LeftBoneName { get; private set; }
+            public HashSet<string> RightChildNames { get; private set; }
+            public HashSet<string> LeftChildNames { get; private set; }
 
-            public static NeutralHands Of(string model, Scene stage)
+            public static NeutralHands MeasureOnModel(string modelPath, Scene previewScene)
             {
-                GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(model);
-                if (asset == null) return null;
+                GameObject modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
+                if (modelAsset == null) return null;
 
-                GameObject body = Object.Instantiate(asset);
-                SceneManager.MoveGameObjectToScene(body, stage);
+                GameObject modelInstance = Object.Instantiate(modelAsset);
+                SceneManager.MoveGameObjectToScene(modelInstance, previewScene);
                 try
                 {
-                    body.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                    Animator animator = body.GetComponent<Animator>();
+                    modelInstance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                    Animator animator = modelInstance.GetComponent<Animator>();
                     if (animator == null || animator.avatar == null || !animator.avatar.isHuman) return null;
 
-                    Neutral(animator);
-                    Transform right = animator.GetBoneTransform(HumanBodyBones.RightHand);
-                    Transform left = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                    PutInNeutralPose(animator);
+                    Transform rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
+                    Transform leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
                     return new NeutralHands
                     {
-                        Right = right.rotation,
-                        Left = left.rotation,
-                        RightBone = right.name,
-                        LeftBone = left.name,
-                        RightChildren = ChildNames(right),
-                        LeftChildren = ChildNames(left)
+                        RightRotation = rightHand.rotation,
+                        LeftRotation = leftHand.rotation,
+                        RightBoneName = rightHand.name,
+                        LeftBoneName = leftHand.name,
+                        RightChildNames = GetChildNames(rightHand),
+                        LeftChildNames = GetChildNames(leftHand)
                     };
                 }
                 finally
                 {
-                    Object.DestroyImmediate(body);
+                    Object.DestroyImmediate(modelInstance);
                 }
             }
 
-            private static void Neutral(Animator animator)
+            private static void PutInNeutralPose(Animator animator)
             {
-                using HumanPoseHandler handler = new(animator.avatar, animator.transform);
+                using HumanPoseHandler poseHandler = new(animator.avatar, animator.transform);
                 HumanPose pose = new();
-                handler.GetHumanPose(ref pose);
+                poseHandler.GetHumanPose(ref pose);
                 pose.bodyRotation = Quaternion.identity;
                 pose.muscles = new float[HumanTrait.MuscleCount];
-                handler.SetHumanPose(ref pose);
+                poseHandler.SetHumanPose(ref pose);
             }
 
-            private static HashSet<string> ChildNames(Transform hand)
+            private static HashSet<string> GetChildNames(Transform hand)
             {
                 var names = new HashSet<string>();
                 foreach (Transform child in hand)

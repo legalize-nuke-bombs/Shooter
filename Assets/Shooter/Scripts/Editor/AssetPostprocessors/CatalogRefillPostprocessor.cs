@@ -12,22 +12,22 @@ namespace Shooter.Editor
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom)
+        private static void OnPostprocessAllAssets(string[] importedPaths, string[] deletedPaths, string[] movedPaths, string[] movedFromPaths)
         {
-            if (!imported.Concat(deleted).Concat(moved).Any(path => path.EndsWith(".asset"))) return;
+            if (!importedPaths.Concat(deletedPaths).Concat(movedPaths).Any(path => path.EndsWith(".asset"))) return;
 
             foreach (string guid in AssetDatabase.FindAssets("t:" + nameof(Catalog)))
             {
                 Catalog catalog = AssetDatabase.LoadAssetAtPath<Catalog>(AssetDatabase.GUIDToAssetPath(guid));
-                Type assetType = AssetTypeOf(catalog.GetType());
+                Type assetType = FindAssetTypeOfCatalog(catalog.GetType());
                 if (assetType != null)
                 {
-                    Refill(catalog, assetType);
+                    RefillWithEveryAssetInProject(catalog, assetType);
                 }
             }
         }
 
-        private static Type AssetTypeOf(Type catalogType)
+        private static Type FindAssetTypeOfCatalog(Type catalogType)
         {
             for (Type type = catalogType; type != null; type = type.BaseType)
             {
@@ -40,7 +40,7 @@ namespace Shooter.Editor
             return null;
         }
 
-        private static void Refill(Catalog catalog, Type assetType)
+        private static void RefillWithEveryAssetInProject(Catalog catalog, Type assetType)
         {
             var assetsInProject = AssetDatabase.FindAssets("t:" + assetType.Name)
                 .Select(AssetDatabase.GUIDToAssetPath)
@@ -52,7 +52,7 @@ namespace Shooter.Editor
             SerializedObject serializedCatalog = new(catalog);
             SerializedProperty assetsProperty = serializedCatalog.FindProperty(Catalog<Asset>.AssetsField);
 
-            List<string> namesBefore = AssetNames(assetsProperty);
+            List<string> namesBefore = GetAssetNames(assetsProperty);
             var namesAfter = assetsInProject.Select(asset => asset.name).ToList();
 
             if (namesBefore.SequenceEqual(namesAfter)) return;
@@ -69,7 +69,7 @@ namespace Shooter.Editor
             Log.Info($"Catalog {catalog.name} refilled with every {assetType.Name} in the project: was [{string.Join(", ", namesBefore)}], now [{string.Join(", ", namesAfter)}]");
         }
 
-        private static List<string> AssetNames(SerializedProperty assetsProperty)
+        private static List<string> GetAssetNames(SerializedProperty assetsProperty)
         {
             var names = new List<string>();
             for (int i = 0; i < assetsProperty.arraySize; i++)

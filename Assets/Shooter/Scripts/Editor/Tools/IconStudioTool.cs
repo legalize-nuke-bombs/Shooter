@@ -11,7 +11,7 @@ namespace Shooter.Editor
 {
     public class IconStudioTool : EditorWindow
     {
-        private const float Distance = 10f;
+        private const float CameraDistance = 10f;
         private const int LastLayer = 31;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
@@ -29,17 +29,17 @@ namespace Shooter.Editor
         }
 
         [SerializeField] private IconSetup setup = new();
-        private Vector2 scroll;
+        private Vector2 scrollPosition;
 
         [MenuItem("Tools/Icon Studio")]
-        private static void Open()
+        private static void OpenWindow()
         {
             GetWindow<IconStudioTool>("Icon Studio");
         }
 
         private void OnGUI()
         {
-            scroll = EditorGUILayout.BeginScrollView(scroll);
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
             EditorGUILayout.LabelField("Sight", EditorStyles.boldLabel);
             setup.sightAngles = EditorGUILayout.Vector3Field("Camera angles", setup.sightAngles);
@@ -60,15 +60,15 @@ namespace Shooter.Editor
                 setup = new IconSetup();
             }
 
-            GameObject[] prefabs = Selection.GetFiltered<GameObject>(SelectionMode.Assets);
+            GameObject[] selectedPrefabs = Selection.GetFiltered<GameObject>(SelectionMode.Assets);
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField(prefabs.Length == 0 ? "Select prefabs in the project" : $"Selected: {prefabs.Length}");
+            EditorGUILayout.LabelField(selectedPrefabs.Length == 0 ? "Select prefabs in the project" : $"Selected: {selectedPrefabs.Length}");
 
-            using (new EditorGUI.DisabledScope(prefabs.Length == 0))
+            using (new EditorGUI.DisabledScope(selectedPrefabs.Length == 0))
             {
                 if (GUILayout.Button("Render", GUILayout.Height(30f)))
                 {
-                    Render(prefabs);
+                    RenderIcons(selectedPrefabs);
                 }
             }
 
@@ -80,24 +80,24 @@ namespace Shooter.Editor
             Repaint();
         }
 
-        private void Render(GameObject[] prefabs)
+        private void RenderIcons(GameObject[] prefabs)
         {
-            int rendered = 0;
+            int renderedIcons = 0;
             foreach (GameObject prefab in prefabs)
             {
-                if (Shoot(prefab, setup) != null)
+                if (ShootIcon(prefab, setup) != null)
                 {
-                    rendered++;
+                    renderedIcons++;
                 }
             }
 
-            Log.Info($"Icon studio rendered {rendered} icons out of {prefabs.Length} selected prefabs");
+            Log.Info($"Icon studio rendered {renderedIcons} icons out of {prefabs.Length} selected prefabs");
         }
 
-        private static string Shoot(GameObject prefab, IconSetup setup)
+        private static string ShootIcon(GameObject prefab, IconSetup setup)
         {
-            int layer = FreeLayer();
-            if (layer < 0)
+            int studioLayer = FindUnnamedLayer();
+            if (studioLayer < 0)
             {
                 Log.Warn("Every layer has a name, the icon studio needs one unnamed layer to shoot in");
                 return null;
@@ -105,7 +105,7 @@ namespace Shooter.Editor
 
             Light[] sceneLights = Array.FindAll(Object.FindObjectsByType<Light>(FindObjectsInactive.Exclude), light => light.enabled);
             GameObject studio = new("Icon Studio") { hideFlags = HideFlags.HideAndDontSave };
-            VolumeProfile profile = StudioVolume(studio, layer, setup.exposure);
+            VolumeProfile volumeProfile = AddStudioVolume(studio, studioLayer, setup.exposure);
             try
             {
                 foreach (Light light in sceneLights)
@@ -114,21 +114,21 @@ namespace Shooter.Editor
                 }
 
                 GameObject model = Object.Instantiate(prefab, studio.transform);
-                MoveToLayer(model, layer);
-                if (!RendererBounds(model, out Bounds bounds))
+                MoveToLayer(model, studioLayer);
+                if (!TryGetRendererBounds(model, out Bounds bounds))
                 {
                     Log.Warn($"Prefab {prefab.name} has no renderers, nothing to shoot");
                     return null;
                 }
 
-                StudioLight(studio, layer, setup.keyAngles, setup.keyLux);
-                StudioLight(studio, layer, setup.fillAngles, setup.fillLux);
-                Camera camera = StudioCamera(studio, layer, bounds, setup);
+                AddStudioLight(studio, studioLayer, setup.keyAngles, setup.keyLux);
+                AddStudioLight(studio, studioLayer, setup.fillAngles, setup.fillLux);
+                Camera camera = AddStudioCamera(studio, studioLayer, bounds, setup);
 
-                Texture2D shot = TransparentShot(camera, camera.GetComponent<HDAdditionalCameraData>(), setup.size);
-                string path = Save(prefab, shot);
+                Texture2D shot = RenderTransparentShot(camera, camera.GetComponent<HDAdditionalCameraData>(), setup.size);
+                string iconPath = SaveIconNextToPrefab(prefab, shot);
                 Object.DestroyImmediate(shot);
-                return path;
+                return iconPath;
             }
             finally
             {
@@ -138,11 +138,11 @@ namespace Shooter.Editor
                 }
 
                 Object.DestroyImmediate(studio);
-                Object.DestroyImmediate(profile);
+                Object.DestroyImmediate(volumeProfile);
             }
         }
 
-        private static int FreeLayer()
+        private static int FindUnnamedLayer()
         {
             for (int layer = LastLayer; layer >= 0; layer--)
             {
@@ -160,14 +160,14 @@ namespace Shooter.Editor
             }
         }
 
-        private static GameObject StudioPart(GameObject studio, int layer, string name)
+        private static GameObject AddStudioPart(GameObject studio, int layer, string partName)
         {
-            GameObject part = new(name) { layer = layer };
+            GameObject part = new(partName) { layer = layer };
             part.transform.SetParent(studio.transform);
             return part;
         }
 
-        private static bool RendererBounds(GameObject model, out Bounds bounds)
+        private static bool TryGetRendererBounds(GameObject model, out Bounds bounds)
         {
             Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
             bounds = default;
@@ -182,146 +182,146 @@ namespace Shooter.Editor
             return true;
         }
 
-        private static Camera StudioCamera(GameObject studio, int layer, Bounds bounds, IconSetup setup)
+        private static Camera AddStudioCamera(GameObject studio, int layer, Bounds bounds, IconSetup setup)
         {
-            GameObject holder = StudioPart(studio, layer, "Camera");
-            Camera camera = holder.AddComponent<Camera>();
+            GameObject cameraObject = AddStudioPart(studio, layer, "Camera");
+            Camera camera = cameraObject.AddComponent<Camera>();
             camera.orthographic = true;
-            camera.orthographicSize = OrthographicSize(bounds, setup);
+            camera.orthographicSize = GetOrthographicSizeToFit(bounds, setup);
             camera.nearClipPlane = 0.01f;
-            camera.farClipPlane = Distance * 4f;
+            camera.farClipPlane = CameraDistance * 4f;
             camera.cullingMask = 1 << layer;
             camera.transform.rotation = Quaternion.Euler(setup.sightAngles);
-            camera.transform.position = bounds.center - camera.transform.forward * Distance;
+            camera.transform.position = bounds.center - camera.transform.forward * CameraDistance;
 
-            HDAdditionalCameraData data = holder.AddComponent<HDAdditionalCameraData>();
-            data.clearColorMode = HDAdditionalCameraData.ClearColorMode.Color;
-            data.volumeLayerMask = 1 << layer;
-            data.probeLayerMask = 0;
+            HDAdditionalCameraData hdCameraData = cameraObject.AddComponent<HDAdditionalCameraData>();
+            hdCameraData.clearColorMode = HDAdditionalCameraData.ClearColorMode.Color;
+            hdCameraData.volumeLayerMask = 1 << layer;
+            hdCameraData.probeLayerMask = 0;
             return camera;
         }
 
-        private static float OrthographicSize(Bounds bounds, IconSetup setup)
+        private static float GetOrthographicSizeToFit(Bounds bounds, IconSetup setup)
         {
             Quaternion sight = Quaternion.Euler(setup.sightAngles);
             Vector3 extents = bounds.extents;
-            float widest = 0f;
+            float widestExtent = 0f;
             for (int corner = 0; corner < 8; corner++)
             {
-                Vector3 offset = new((corner & 1) == 0 ? -extents.x : extents.x, (corner & 2) == 0 ? -extents.y : extents.y, (corner & 4) == 0 ? -extents.z : extents.z);
-                Vector3 seen = Quaternion.Inverse(sight) * offset;
-                widest = Mathf.Max(widest, Mathf.Abs(seen.x), Mathf.Abs(seen.y));
+                Vector3 cornerOffset = new((corner & 1) == 0 ? -extents.x : extents.x, (corner & 2) == 0 ? -extents.y : extents.y, (corner & 4) == 0 ? -extents.z : extents.z);
+                Vector3 cornerInSight = Quaternion.Inverse(sight) * cornerOffset;
+                widestExtent = Mathf.Max(widestExtent, Mathf.Abs(cornerInSight.x), Mathf.Abs(cornerInSight.y));
             }
 
-            return widest * setup.padding;
+            return widestExtent * setup.padding;
         }
 
-        private static void StudioLight(GameObject studio, int layer, Vector3 angles, float lux)
+        private static void AddStudioLight(GameObject studio, int layer, Vector3 angles, float lux)
         {
-            GameObject holder = StudioPart(studio, layer, "Light");
-            holder.transform.rotation = Quaternion.Euler(angles);
+            GameObject lightObject = AddStudioPart(studio, layer, "Light");
+            lightObject.transform.rotation = Quaternion.Euler(angles);
 
-            Light light = holder.AddComponent<Light>();
+            Light light = lightObject.AddComponent<Light>();
             light.type = LightType.Directional;
             light.cullingMask = 1 << layer;
-            HDAdditionalLightData data = holder.AddComponent<HDAdditionalLightData>();
-            data.EnableShadows(false);
+            HDAdditionalLightData hdLightData = lightObject.AddComponent<HDAdditionalLightData>();
+            hdLightData.EnableShadows(false);
             light.lightUnit = LightUnit.Lux;
             light.intensity = lux;
         }
 
-        private static VolumeProfile StudioVolume(GameObject studio, int layer, float exposure)
+        private static VolumeProfile AddStudioVolume(GameObject studio, int layer, float exposure)
         {
-            VolumeProfile profile = ScriptableObject.CreateInstance<VolumeProfile>();
-            profile.hideFlags = HideFlags.HideAndDontSave;
+            VolumeProfile volumeProfile = ScriptableObject.CreateInstance<VolumeProfile>();
+            volumeProfile.hideFlags = HideFlags.HideAndDontSave;
 
-            Exposure fixedExposure = profile.Add<Exposure>();
+            Exposure fixedExposure = volumeProfile.Add<Exposure>();
             fixedExposure.mode.overrideState = true;
             fixedExposure.mode.value = ExposureMode.Fixed;
             fixedExposure.fixedExposure.overrideState = true;
             fixedExposure.fixedExposure.value = exposure;
 
-            Tonemapping tonemapping = profile.Add<Tonemapping>();
+            Tonemapping tonemapping = volumeProfile.Add<Tonemapping>();
             tonemapping.mode.overrideState = true;
             tonemapping.mode.value = TonemappingMode.ACES;
 
-            Bloom bloom = profile.Add<Bloom>();
+            Bloom bloom = volumeProfile.Add<Bloom>();
             bloom.intensity.overrideState = true;
             bloom.intensity.value = 0f;
 
-            Volume volume = StudioPart(studio, layer, "Volume").AddComponent<Volume>();
+            Volume volume = AddStudioPart(studio, layer, "Volume").AddComponent<Volume>();
             volume.isGlobal = true;
             volume.priority = 1000f;
-            volume.profile = profile;
-            return profile;
+            volume.profile = volumeProfile;
+            return volumeProfile;
         }
 
-        private static Texture2D TransparentShot(Camera camera, HDAdditionalCameraData data, int size)
+        private static Texture2D RenderTransparentShot(Camera camera, HDAdditionalCameraData hdCameraData, int size)
         {
-            Texture2D onBlack = RenderOn(camera, data, Color.black, size);
-            Texture2D onWhite = RenderOn(camera, data, Color.white, size);
+            Texture2D shotOnBlack = RenderOnBackground(camera, hdCameraData, Color.black, size);
+            Texture2D shotOnWhite = RenderOnBackground(camera, hdCameraData, Color.white, size);
 
-            Texture2D full = AlphaFromBackgrounds(onBlack, onWhite);
-            Texture2D shot = Crop(full);
-            if (shot != full)
+            Texture2D uncroppedShot = ExtractAlphaFromBackgrounds(shotOnBlack, shotOnWhite);
+            Texture2D shot = CropToVisiblePixels(uncroppedShot);
+            if (shot != uncroppedShot)
             {
-                Object.DestroyImmediate(full);
+                Object.DestroyImmediate(uncroppedShot);
             }
 
-            Object.DestroyImmediate(onBlack);
-            Object.DestroyImmediate(onWhite);
+            Object.DestroyImmediate(shotOnBlack);
+            Object.DestroyImmediate(shotOnWhite);
             return shot;
         }
 
-        private static Texture2D RenderOn(Camera camera, HDAdditionalCameraData data, Color background, int size)
+        private static Texture2D RenderOnBackground(Camera camera, HDAdditionalCameraData hdCameraData, Color background, int size)
         {
-            RenderTexture target = new(size, size, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
-            RenderTexture previous = RenderTexture.active;
+            RenderTexture renderTarget = new(size, size, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            RenderTexture previousActive = RenderTexture.active;
 
-            data.backgroundColorHDR = background;
-            camera.targetTexture = target;
+            hdCameraData.backgroundColorHDR = background;
+            camera.targetTexture = renderTarget;
             camera.Render();
 
-            RenderTexture.active = target;
+            RenderTexture.active = renderTarget;
             Texture2D shot = new(size, size, TextureFormat.RGBA32, false);
             shot.ReadPixels(new Rect(0f, 0f, size, size), 0, 0);
             shot.Apply();
 
-            RenderTexture.active = previous;
+            RenderTexture.active = previousActive;
             camera.targetTexture = null;
-            target.Release();
-            Object.DestroyImmediate(target);
+            renderTarget.Release();
+            Object.DestroyImmediate(renderTarget);
             return shot;
         }
 
-        private static Texture2D AlphaFromBackgrounds(Texture2D onBlack, Texture2D onWhite)
+        private static Texture2D ExtractAlphaFromBackgrounds(Texture2D shotOnBlack, Texture2D shotOnWhite)
         {
-            Color[] dark = onBlack.GetPixels();
-            Color[] light = onWhite.GetPixels();
-            Color[] pixels = new Color[dark.Length];
+            Color[] pixelsOnBlack = shotOnBlack.GetPixels();
+            Color[] pixelsOnWhite = shotOnWhite.GetPixels();
+            Color[] pixels = new Color[pixelsOnBlack.Length];
 
-            float span = Mathf.Max(light[0].r - dark[0].r, light[0].g - dark[0].g, light[0].b - dark[0].b);
-            if (span <= 0.01f)
+            float backgroundSpan = Mathf.Max(pixelsOnWhite[0].r - pixelsOnBlack[0].r, pixelsOnWhite[0].g - pixelsOnBlack[0].g, pixelsOnWhite[0].b - pixelsOnBlack[0].b);
+            if (backgroundSpan <= 0.01f)
             {
                 Log.Error("Both backgrounds came out the same, the icon stays opaque");
-                span = 1f;
+                backgroundSpan = 1f;
             }
 
-            for (int index = 0; index < dark.Length; index++)
+            for (int index = 0; index < pixelsOnBlack.Length; index++)
             {
-                Color over = dark[index];
-                float lifted = (light[index].r - over.r + light[index].g - over.g + light[index].b - over.b) / 3f;
-                float alpha = Mathf.Clamp01(1f - lifted / span);
-                pixels[index] = alpha <= 0.004f ? Color.clear : new Color(over.r / alpha, over.g / alpha, over.b / alpha, alpha);
+                Color onBlack = pixelsOnBlack[index];
+                float liftOnWhite = (pixelsOnWhite[index].r - onBlack.r + pixelsOnWhite[index].g - onBlack.g + pixelsOnWhite[index].b - onBlack.b) / 3f;
+                float alpha = Mathf.Clamp01(1f - liftOnWhite / backgroundSpan);
+                pixels[index] = alpha <= 0.004f ? Color.clear : new Color(onBlack.r / alpha, onBlack.g / alpha, onBlack.b / alpha, alpha);
             }
 
-            Texture2D shot = new(onBlack.width, onBlack.height, TextureFormat.RGBA32, false);
+            Texture2D shot = new(shotOnBlack.width, shotOnBlack.height, TextureFormat.RGBA32, false);
             shot.SetPixels(pixels);
             shot.Apply();
             return shot;
         }
 
-        private static Texture2D Crop(Texture2D shot)
+        private static Texture2D CropToVisiblePixels(Texture2D shot)
         {
             Color[] pixels = shot.GetPixels();
             int left = shot.width;
@@ -355,21 +355,21 @@ namespace Shooter.Editor
             return cropped;
         }
 
-        private static string Save(GameObject prefab, Texture2D shot)
+        private static string SaveIconNextToPrefab(GameObject prefab, Texture2D shot)
         {
             string folder = Path.GetDirectoryName(AssetDatabase.GetAssetPath(prefab));
-            string path = Path.Combine(folder, prefab.name + "Icon.png").Replace('\\', '/');
+            string iconPath = Path.Combine(folder, prefab.name + "Icon.png").Replace('\\', '/');
 
-            File.WriteAllBytes(path, shot.EncodeToPNG());
-            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+            File.WriteAllBytes(iconPath, shot.EncodeToPNG());
+            AssetDatabase.ImportAsset(iconPath, ImportAssetOptions.ForceUpdate);
 
-            TextureImporter importer = (TextureImporter)AssetImporter.GetAtPath(path);
+            TextureImporter importer = (TextureImporter)AssetImporter.GetAtPath(iconPath);
             importer.textureType = TextureImporterType.Sprite;
             importer.spriteImportMode = SpriteImportMode.Single;
             importer.alphaIsTransparency = true;
             importer.mipmapEnabled = false;
             importer.SaveAndReimport();
-            return path;
+            return iconPath;
         }
     }
 }

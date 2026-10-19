@@ -13,200 +13,200 @@ namespace Shooter.Editor
         private const float CanvasSide = 280f;
         private const float GrabRadius = 12f;
 
-        private int dragged = -1;
+        private int draggedPointIndex = -1;
         private bool panning;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            SerializedProperty points = property.FindPropertyRelative(SprayPattern.PointsField);
+            SerializedProperty pointsProperty = property.FindPropertyRelative(SprayPattern.PointsField);
 
-            return EditorGUIUtility.singleLineHeight + 4f + CanvasSide + 4f + EditorGUI.GetPropertyHeight(points, true);
+            return EditorGUIUtility.singleLineHeight + 4f + CanvasSide + 4f + EditorGUI.GetPropertyHeight(pointsProperty, true);
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty points = property.FindPropertyRelative(SprayPattern.PointsField);
+            SerializedProperty pointsProperty = property.FindPropertyRelative(SprayPattern.PointsField);
 
             Rect header = new(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(header, label.text, $"{points.arraySize} bullets | LMB add/drag, Alt+LMB delete, RMB pan, wheel zoom");
+            EditorGUI.LabelField(header, label.text, $"{pointsProperty.arraySize} bullets | LMB add/drag, Alt+LMB delete, RMB pan, wheel zoom");
 
             float side = Mathf.Min(CanvasSide, position.width - 4f);
             Rect canvas = new(position.x + (position.width - side) * 0.5f, header.yMax + 2f, side, side);
             float range = EditorPrefs.GetFloat(RangeKey, 5f);
             Vector2 pan = new(EditorPrefs.GetFloat(PanXKey, 0f), EditorPrefs.GetFloat(PanYKey, 0f));
 
-            HandleMouse(canvas, points, range, pan);
+            HandleMouse(canvas, pointsProperty, range, pan);
 
-            Rect list = new(position.x, canvas.yMax + 4f, position.width, EditorGUI.GetPropertyHeight(points, true));
-            EditorGUI.PropertyField(list, points, new GUIContent("Points"), true);
+            Rect pointsListRect = new(position.x, canvas.yMax + 4f, position.width, EditorGUI.GetPropertyHeight(pointsProperty, true));
+            EditorGUI.PropertyField(pointsListRect, pointsProperty, new GUIContent("Points"), true);
 
             if (Event.current.type != EventType.Repaint) return;
 
             EditorGUI.DrawRect(canvas, new Color(0.12f, 0.12f, 0.12f));
 
             GUI.BeginClip(canvas);
-            Rect local = new(0f, 0f, canvas.width, canvas.height);
-            DrawGrid(local, range, pan);
-            DrawPattern(local, points, range, pan);
+            Rect clippedCanvas = new(0f, 0f, canvas.width, canvas.height);
+            DrawGrid(clippedCanvas, range, pan);
+            DrawPattern(clippedCanvas, pointsProperty, range, pan);
             GUI.EndClip();
         }
 
-        private void HandleMouse(Rect canvas, SerializedProperty points, float range, Vector2 pan)
+        private void HandleMouse(Rect canvas, SerializedProperty pointsProperty, float range, Vector2 pan)
         {
-            Event current = Event.current;
+            Event currentEvent = Event.current;
 
-            if (current.type == EventType.MouseUp)
+            if (currentEvent.type == EventType.MouseUp)
             {
-                if (current.button == 0 && dragged >= 0)
+                if (currentEvent.button == 0 && draggedPointIndex >= 0)
                 {
-                    dragged = -1;
-                    current.Use();
+                    draggedPointIndex = -1;
+                    currentEvent.Use();
                 }
-                else if (current.button == 1 && panning)
+                else if (currentEvent.button == 1 && panning)
                 {
                     panning = false;
-                    current.Use();
+                    currentEvent.Use();
                 }
 
                 return;
             }
 
-            bool inside = canvas.Contains(current.mousePosition);
+            bool isMouseOnCanvas = canvas.Contains(currentEvent.mousePosition);
 
-            switch (current.type)
+            switch (currentEvent.type)
             {
-                case EventType.ScrollWheel when inside:
-                    Vector2 anchor = Degrees(canvas, current.mousePosition, range, pan);
-                    float zoomed = Mathf.Clamp(range * Mathf.Pow(1.1f, Mathf.Sign(current.delta.y)), 1f, 45f);
-                    Vector2 kept = anchor - (Degrees(canvas, current.mousePosition, zoomed, pan) - pan);
+                case EventType.ScrollWheel when isMouseOnCanvas:
+                    Vector2 degreesUnderMouse = ConvertPixelToDegrees(canvas, currentEvent.mousePosition, range, pan);
+                    float zoomedRange = Mathf.Clamp(range * Mathf.Pow(1.1f, Mathf.Sign(currentEvent.delta.y)), 1f, 45f);
+                    Vector2 panKeepingMouse = degreesUnderMouse - (ConvertPixelToDegrees(canvas, currentEvent.mousePosition, zoomedRange, pan) - pan);
 
-                    EditorPrefs.SetFloat(RangeKey, zoomed);
-                    EditorPrefs.SetFloat(PanXKey, kept.x);
-                    EditorPrefs.SetFloat(PanYKey, kept.y);
-                    current.Use();
+                    EditorPrefs.SetFloat(RangeKey, zoomedRange);
+                    EditorPrefs.SetFloat(PanXKey, panKeepingMouse.x);
+                    EditorPrefs.SetFloat(PanYKey, panKeepingMouse.y);
+                    currentEvent.Use();
                     break;
 
-                case EventType.MouseDown when current.button == 0 && current.alt && inside:
-                    int victim = PointUnderMouse(canvas, points, current.mousePosition, range, pan);
+                case EventType.MouseDown when currentEvent.button == 0 && currentEvent.alt && isMouseOnCanvas:
+                    int pointIndexToDelete = FindPointIndexUnderMouse(canvas, pointsProperty, currentEvent.mousePosition, range, pan);
 
-                    if (victim >= 0)
+                    if (pointIndexToDelete >= 0)
                     {
-                        points.DeleteArrayElementAtIndex(victim);
-                        current.Use();
+                        pointsProperty.DeleteArrayElementAtIndex(pointIndexToDelete);
+                        currentEvent.Use();
                     }
 
                     break;
 
-                case EventType.MouseDown when current.button == 0 && inside:
-                    dragged = PointUnderMouse(canvas, points, current.mousePosition, range, pan);
+                case EventType.MouseDown when currentEvent.button == 0 && isMouseOnCanvas:
+                    draggedPointIndex = FindPointIndexUnderMouse(canvas, pointsProperty, currentEvent.mousePosition, range, pan);
 
-                    if (dragged < 0)
+                    if (draggedPointIndex < 0)
                     {
-                        points.arraySize++;
-                        dragged = points.arraySize - 1;
-                        points.GetArrayElementAtIndex(dragged).vector2Value = Degrees(canvas, current.mousePosition, range, pan);
+                        pointsProperty.arraySize++;
+                        draggedPointIndex = pointsProperty.arraySize - 1;
+                        pointsProperty.GetArrayElementAtIndex(draggedPointIndex).vector2Value = ConvertPixelToDegrees(canvas, currentEvent.mousePosition, range, pan);
                     }
 
-                    current.Use();
+                    currentEvent.Use();
                     break;
 
-                case EventType.MouseDrag when current.button == 0 && dragged >= 0:
-                    points.GetArrayElementAtIndex(dragged).vector2Value = Degrees(canvas, current.mousePosition, range, pan);
-                    current.Use();
+                case EventType.MouseDrag when currentEvent.button == 0 && draggedPointIndex >= 0:
+                    pointsProperty.GetArrayElementAtIndex(draggedPointIndex).vector2Value = ConvertPixelToDegrees(canvas, currentEvent.mousePosition, range, pan);
+                    currentEvent.Use();
                     break;
 
-                case EventType.MouseDown when current.button == 1 && inside:
+                case EventType.MouseDown when currentEvent.button == 1 && isMouseOnCanvas:
                     panning = true;
-                    current.Use();
+                    currentEvent.Use();
                     break;
 
-                case EventType.MouseDrag when current.button == 1 && panning:
-                    float half = canvas.width * 0.5f;
-                    EditorPrefs.SetFloat(PanXKey, pan.x - current.delta.x * range / half);
-                    EditorPrefs.SetFloat(PanYKey, pan.y + current.delta.y * range / half);
-                    current.Use();
+                case EventType.MouseDrag when currentEvent.button == 1 && panning:
+                    float halfWidth = canvas.width * 0.5f;
+                    EditorPrefs.SetFloat(PanXKey, pan.x - currentEvent.delta.x * range / halfWidth);
+                    EditorPrefs.SetFloat(PanYKey, pan.y + currentEvent.delta.y * range / halfWidth);
+                    currentEvent.Use();
                     break;
             }
         }
 
-        private static int PointUnderMouse(Rect canvas, SerializedProperty points, Vector2 mouse, float range, Vector2 pan)
+        private static int FindPointIndexUnderMouse(Rect canvas, SerializedProperty pointsProperty, Vector2 mousePosition, float range, Vector2 pan)
         {
-            int closest = -1;
-            float nearest = GrabRadius;
+            int closestIndex = -1;
+            float closestDistance = GrabRadius;
 
-            for (int i = 0; i < points.arraySize; i++)
+            for (int i = 0; i < pointsProperty.arraySize; i++)
             {
-                Vector2 pixel = Pixel(canvas, points.GetArrayElementAtIndex(i).vector2Value, range, pan);
-                float distance = Vector2.Distance(pixel, mouse);
+                Vector2 pixel = ConvertDegreesToPixel(canvas, pointsProperty.GetArrayElementAtIndex(i).vector2Value, range, pan);
+                float distance = Vector2.Distance(pixel, mousePosition);
 
-                if (distance >= nearest) continue;
+                if (distance >= closestDistance) continue;
 
-                closest = i;
-                nearest = distance;
+                closestIndex = i;
+                closestDistance = distance;
             }
 
-            return closest;
+            return closestIndex;
         }
 
-        private static Vector2 Pixel(Rect canvas, Vector2 degrees, float range, Vector2 pan)
+        private static Vector2 ConvertDegreesToPixel(Rect canvas, Vector2 degrees, float range, Vector2 pan)
         {
-            float half = canvas.width * 0.5f;
+            float halfWidth = canvas.width * 0.5f;
 
-            return new Vector2(canvas.center.x + (degrees.x - pan.x) / range * half, canvas.center.y - (degrees.y - pan.y) / range * half);
+            return new Vector2(canvas.center.x + (degrees.x - pan.x) / range * halfWidth, canvas.center.y - (degrees.y - pan.y) / range * halfWidth);
         }
 
-        private static Vector2 Degrees(Rect canvas, Vector2 pixel, float range, Vector2 pan)
+        private static Vector2 ConvertPixelToDegrees(Rect canvas, Vector2 pixel, float range, Vector2 pan)
         {
-            float half = canvas.width * 0.5f;
+            float halfWidth = canvas.width * 0.5f;
 
-            return new Vector2(pan.x + (pixel.x - canvas.center.x) / half * range, pan.y + (canvas.center.y - pixel.y) / half * range);
+            return new Vector2(pan.x + (pixel.x - canvas.center.x) / halfWidth * range, pan.y + (canvas.center.y - pixel.y) / halfWidth * range);
         }
 
         private static void DrawGrid(Rect canvas, float range, Vector2 pan)
         {
-            float step = range <= 6f ? 1f : range <= 14f ? 2f : 5f;
-            Color faint = new(1f, 1f, 1f, 0.05f);
-            Color axis = new(1f, 1f, 1f, 0.18f);
-            float half = canvas.width * 0.5f;
+            float gridStep = range <= 6f ? 1f : range <= 14f ? 2f : 5f;
+            Color gridLineColor = new(1f, 1f, 1f, 0.05f);
+            Color axisLineColor = new(1f, 1f, 1f, 0.18f);
+            float halfWidth = canvas.width * 0.5f;
 
-            for (int i = Mathf.CeilToInt((pan.x - range) / step); i * step <= pan.x + range; i++)
+            for (int i = Mathf.CeilToInt((pan.x - range) / gridStep); i * gridStep <= pan.x + range; i++)
             {
-                float x = canvas.center.x + (i * step - pan.x) / range * half;
-                EditorGUI.DrawRect(new Rect(x, canvas.y, 1f, canvas.height), i == 0 ? axis : faint);
+                float x = canvas.center.x + (i * gridStep - pan.x) / range * halfWidth;
+                EditorGUI.DrawRect(new Rect(x, canvas.y, 1f, canvas.height), i == 0 ? axisLineColor : gridLineColor);
             }
 
-            for (int i = Mathf.CeilToInt((pan.y - range) / step); i * step <= pan.y + range; i++)
+            for (int i = Mathf.CeilToInt((pan.y - range) / gridStep); i * gridStep <= pan.y + range; i++)
             {
-                float y = canvas.center.y - (i * step - pan.y) / range * half;
-                EditorGUI.DrawRect(new Rect(canvas.x, y, canvas.width, 1f), i == 0 ? axis : faint);
+                float y = canvas.center.y - (i * gridStep - pan.y) / range * halfWidth;
+                EditorGUI.DrawRect(new Rect(canvas.x, y, canvas.width, 1f), i == 0 ? axisLineColor : gridLineColor);
             }
 
-            float spread = Mathf.Tan(step * Mathf.Deg2Rad) * 10f * 100f;
-            GUI.Label(new Rect(canvas.x + 4f, canvas.yMax - 18f, canvas.width - 8f, 16f), $"cell {step:0.#}° ≈ {spread:0} cm at 10 m", EditorStyles.miniLabel);
+            float cellSpreadAtTenMeters = Mathf.Tan(gridStep * Mathf.Deg2Rad) * 10f * 100f;
+            GUI.Label(new Rect(canvas.x + 4f, canvas.yMax - 18f, canvas.width - 8f, 16f), $"cell {gridStep:0.#}° ≈ {cellSpreadAtTenMeters:0} cm at 10 m", EditorStyles.miniLabel);
         }
 
-        private void DrawPattern(Rect canvas, SerializedProperty points, float range, Vector2 pan)
+        private void DrawPattern(Rect canvas, SerializedProperty pointsProperty, float range, Vector2 pan)
         {
-            int count = points.arraySize;
-            if (count == 0) return;
+            int pointCount = pointsProperty.arraySize;
+            if (pointCount == 0) return;
 
-            Vector3[] line = new Vector3[count + 1];
-            line[0] = Pixel(canvas, Vector2.zero, range, pan);
+            Vector3[] linePixels = new Vector3[pointCount + 1];
+            linePixels[0] = ConvertDegreesToPixel(canvas, Vector2.zero, range, pan);
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < pointCount; i++)
             {
-                line[i + 1] = Pixel(canvas, points.GetArrayElementAtIndex(i).vector2Value, range, pan);
+                linePixels[i + 1] = ConvertDegreesToPixel(canvas, pointsProperty.GetArrayElementAtIndex(i).vector2Value, range, pan);
             }
 
             Handles.color = new Color(1f, 0.55f, 0.1f, 0.8f);
-            Handles.DrawAAPolyLine(2.5f, line);
+            Handles.DrawAAPolyLine(2.5f, linePixels);
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < pointCount; i++)
             {
-                Vector2 degrees = points.GetArrayElementAtIndex(i).vector2Value;
-                Vector2 pixel = line[i + 1];
+                Vector2 degrees = pointsProperty.GetArrayElementAtIndex(i).vector2Value;
+                Vector2 pixel = linePixels[i + 1];
 
-                Handles.color = i == dragged ? Color.white : i == 0 ? new Color(0.4f, 0.8f, 1f) : new Color(1f, 0.55f, 0.1f);
+                Handles.color = i == draggedPointIndex ? Color.white : i == 0 ? new Color(0.4f, 0.8f, 1f) : new Color(1f, 0.55f, 0.1f);
                 Handles.DrawSolidDisc(pixel, Vector3.forward, 4.5f);
 
                 GUI.Label(new Rect(pixel.x + 6f, pixel.y - 7f, 84f, 14f), $"{degrees.x:0.#}, {degrees.y:0.#}", EditorStyles.miniLabel);
