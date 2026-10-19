@@ -648,7 +648,7 @@ namespace Shooter.Game
             if (candidate.GetComponentInChildren<InventoryExchanger>() == null) return float.PositiveInfinity;
 
             Health health = candidate.GetComponent<Health>();
-            if (health != null && !health.Alive) return float.PositiveInfinity;
+            if (health != null && !health.IsAlive) return float.PositiveInfinity;
 
             if (Vector3.Distance(own.transform.position, candidate.transform.position) > exchanger.Radius * slack)
                 return float.PositiveInfinity;

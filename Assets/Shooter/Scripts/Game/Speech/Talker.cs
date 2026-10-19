@@ -25,9 +25,9 @@ namespace Shooter.Game
 
         public long CharacterId => character.Id;
 
-        public bool Alive => health.Alive;
+        public bool Alive => health.IsAlive;
 
-        public bool Sleeping => sleeper != null && sleeper.Sleeping;
+        public bool Sleeping => sleeper != null && sleeper.IsSleeping;
 
         public UsageType Usage => UsageType.Talk;
 

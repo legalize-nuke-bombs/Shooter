@@ -13,10 +13,9 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private GameObject corpsePrefab;
-
         [SerializeField] private EarSoundAsset deathSound;
-        private EarSpeaker earSpeaker;
 
+        private EarSpeaker earSpeaker;
         private Health health;
         private Movement movement;
         private Player player;
@@ -31,7 +30,7 @@ namespace Shooter.Game
             player = GetComponent<Player>();
         }
 
-        public void Died()
+        public void HandleDeath()
         {
             if (!IsServer) return;
 
@@ -49,47 +48,41 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void RiseRpc()
         {
-            if (health == null || health.Alive) return;
+            if (health == null || health.IsAlive) return;
 
-            Vector3 at = respawnPosition.GetPosition();
-            movement.Teleport(at);
-            health.Resurrect();
-            Log.Info($"Entity {name} rose at {at}");
+            Vector3 position = respawnPosition.GetPosition();
+            movement.Teleport(position);
+            health.ResurrectWithFullHp();
+            Log.Info($"Entity {name} rose at {position}");
         }
 
         private void LeaveCorpse()
         {
-            GameObject prefab = CorpsePrefab();
-            if (prefab == null)
+            if (corpsePrefab == null)
             {
-                Log.Warn($"Entity {name} died, but neither it nor the world has a corpse prefab");
+                Log.Error($"Entity {name} died without a corpse prefab");
                 return;
             }
 
-            GameObject body = NetworkSpawner.InstantiateAndSpawn(prefab, transform.position, transform.rotation);
-            if (body == null)
+            GameObject corpseObject = NetworkSpawner.InstantiateAndSpawn(corpsePrefab, transform.position, transform.rotation);
+            if (corpseObject == null)
             {
                 Log.Error($"Entity {name} failed to spawn corpse");
                 return;
             }
 
-            Corpse corpse = body.GetComponent<Corpse>();
+            Corpse corpse = corpseObject.GetComponent<Corpse>();
             if (corpse != null)
             {
                 Skin skin = GetComponent<Skin>();
-                if (skin != null && skin.Asset != null) corpse.Dress(skin.Asset);
+                if (skin != null && skin.Asset != null) corpse.AssignSkinAsset(skin.Asset);
 
-                TypedNameable named = GetComponent<TypedNameable>();
-                if (named != null && named.Asset != null) corpse.Rename(named.Asset);
+                TypedNameable typedNameable = GetComponent<TypedNameable>();
+                if (typedNameable != null && typedNameable.Asset != null) corpse.AssignNameAsset(typedNameable.Asset);
             }
 
-            body.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
+            corpseObject.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
             Log.Info($"Entity {name} left a corpse at {transform.position}");
-        }
-
-        private GameObject CorpsePrefab()
-        {
-            return corpsePrefab;
         }
     }
 }

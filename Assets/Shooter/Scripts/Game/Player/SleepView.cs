@@ -29,7 +29,7 @@ namespace Shooter.Game
         {
             if (!IsSpawned || !IsOwner || view == null) return;
 
-            bool asleep = sleeper.Sleeping;
+            bool asleep = sleeper.IsSleeping;
 
             if (asleep != watching)
             {
@@ -61,7 +61,7 @@ namespace Shooter.Game
 
             if (bedside == null)
             {
-                Log.Warn($"Bed at {sleeper.Bedside} has no camera of its own, the night stays dark");
+                Log.Warn($"Bed at {sleeper.BedPosition} has no camera of its own, the night stays dark");
                 return;
             }
 
@@ -79,7 +79,7 @@ namespace Shooter.Game
 
         private Camera Nearest()
         {
-            Vector3 slept = sleeper.Bedside;
+            Vector3 slept = sleeper.BedPosition;
             Bed closest = null;
             float best = BedReach * BedReach;
 
@@ -92,7 +92,7 @@ namespace Shooter.Game
                 closest = bed;
             }
 
-            return closest == null ? null : closest.Bedside;
+            return closest == null ? null : closest.BedsideCamera;
         }
     }
 }

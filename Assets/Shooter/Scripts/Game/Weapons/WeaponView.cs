@@ -80,9 +80,9 @@ namespace Shooter.Game
 
         private void Armed(bool armed)
         {
-            if (skin.Flesh == null) return;
+            if (skin.ModelInstance == null) return;
 
-            Animator animator = skin.Flesh.GetComponent<Animator>();
+            Animator animator = skin.ModelInstance.GetComponent<Animator>();
             if (animator == null) return;
 
             int layer = animator.GetLayerIndex("Armed");
@@ -223,13 +223,13 @@ namespace Shooter.Game
 
         private Animator Puppet()
         {
-            if (skin.Flesh == null)
+            if (skin.ModelInstance == null)
             {
                 Log.Warn($"Entity {name} has no flesh yet, weapon stays invisible");
                 return null;
             }
 
-            Animator animator = skin.Flesh.GetComponent<Animator>();
+            Animator animator = skin.ModelInstance.GetComponent<Animator>();
             if (animator == null) Log.Warn($"Entity {name} flesh has no animator, weapon stays invisible");
 
             return animator;

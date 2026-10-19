@@ -22,14 +22,14 @@ namespace Shooter.Game
         public float Pitch
         {
             get => pitch.Value;
-            protected set => pitch.Value = Mathf.Clamp(Finite(value), -PitchLimit, PitchLimit);
+            protected set => pitch.Value = Mathf.Clamp(ZeroIfNotFinite(value), -PitchLimit, PitchLimit);
         }
 
         public float GroundTravel { get; private set; }
 
         public float Yaw => transform.eulerAngles.y;
 
-        public Vector3 Look => Quaternion.Euler(pitch.Value, Yaw, 0f) * Vector3.forward;
+        public Vector3 LookDirection => Quaternion.Euler(pitch.Value, Yaw, 0f) * Vector3.forward;
 
         protected virtual void Awake()
         {
@@ -43,14 +43,14 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick += Step;
+            NetworkManager.NetworkTickSystem.Tick += HandleNetworkTick;
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick -= Step;
+            NetworkManager.NetworkTickSystem.Tick -= HandleNetworkTick;
         }
 
         public void Teleport(Vector3 position)
@@ -60,9 +60,9 @@ namespace Shooter.Game
 
         public void Teleport(Vector3 position, float yaw)
         {
-            Quaternion rotation = Quaternion.Euler(0f, Finite(yaw), 0f);
+            Quaternion rotation = Quaternion.Euler(0f, ZeroIfNotFinite(yaw), 0f);
 
-            TeleportRaw(position, rotation);
+            TeleportLocally(position, rotation);
 
             if (!IsServer) return;
 
@@ -70,9 +70,9 @@ namespace Shooter.Game
             TurnRpc(Yaw);
         }
 
-        protected abstract float Tick(float dt);
+        protected abstract float MoveForTick(float dt);
 
-        protected abstract void TeleportRaw(Vector3 position, Quaternion rotation);
+        protected abstract void TeleportLocally(Vector3 position, Quaternion rotation);
 
         protected float AffordSpeed(bool walking, bool sprinting, float dt)
         {
@@ -93,7 +93,7 @@ namespace Shooter.Game
             return 0f;
         }
 
-        protected static float Finite(float value)
+        protected static float ZeroIfNotFinite(float value)
         {
             return float.IsFinite(value) ? value : 0f;
         }
@@ -104,11 +104,11 @@ namespace Shooter.Game
             Turned?.Invoke(yaw);
         }
 
-        private void Step()
+        private void HandleNetworkTick()
         {
             if (!isActiveAndEnabled) return;
 
-            GroundTravel = Tick(NetworkManager.LocalTime.FixedDeltaTime);
+            GroundTravel = MoveForTick(NetworkManager.LocalTime.FixedDeltaTime);
         }
     }
 }

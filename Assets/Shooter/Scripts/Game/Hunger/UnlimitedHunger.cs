@@ -1,21 +1,20 @@
-﻿namespace Shooter.Game
+namespace Shooter.Game
 {
     public class UnlimitedHunger : Hunger
     {
         public override float Amount => 100f;
         public override float MaxAmount => 100f;
 
-
-        public override bool CanSpend(float a)
+        public override bool CanSpendAmount(float cost)
         {
             return true;
         }
 
-        public override void Spend(float a)
+        public override void SpendAmount(float cost)
         {
         }
 
-        public override void Restore(float a)
+        public override void RestoreAmount(float restoredAmount)
         {
         }
     }

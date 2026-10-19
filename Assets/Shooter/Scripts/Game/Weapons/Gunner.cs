@@ -81,9 +81,9 @@ namespace Shooter.Game
         {
             if (!Ready(out Firearm firearm, out FirearmAsset asset, ActionType.Shoot)) return false;
 
-            if (hands != null && !hands.TryTake(HandsAction.Shooting, asset.FireInterval, false, null)) return false;
+            if (hands != null && !hands.TryStartAction(HandsAction.Shooting, asset.FireInterval, false, null)) return false;
 
-            restrainable.RegisterAction(ActionType.Shoot, MainRestrainable.InstantAction);
+            restrainable.RegisterAction(ActionType.Shoot, MainRestrainable.InstantActionDuration);
 
             if (!firearm.Spend())
             {
@@ -110,10 +110,10 @@ namespace Shooter.Game
             int absent = asset.MagazineSize - firearm.Magazine;
             if (absent <= 0 || inventory.Count(asset.Ammo) == 0) return false;
 
-            if (hands != null && !hands.TryTake(HandsAction.Reloading, asset.ReloadTime, true,
+            if (hands != null && !hands.TryStartAction(HandsAction.Reloading, asset.ReloadTime, true,
                     () => Reloaded(firearm, asset, absent))) return false;
 
-            restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantAction);
+            restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantActionDuration);
             speaker?.PlayForEveryone(asset.ReloadSound);
             Log.Info($"Entity {name} started reload of {firearm.AssetId}, {asset.ReloadTime}s");
             return true;
@@ -124,7 +124,7 @@ namespace Shooter.Game
             firearm = null;
             asset = null;
 
-            if (!IsServer || !restrainable.CanPerform(action, MainRestrainable.InstantAction)) return false;
+            if (!IsServer || !restrainable.CanPerform(action, MainRestrainable.InstantActionDuration)) return false;
 
             firearm = holder.Held as Firearm;
             if (firearm == null) return false;
@@ -166,9 +166,9 @@ namespace Shooter.Game
 
             BodyPart part = Weakest(found, health);
             if (part == BodyPart.Head) earSpeaker.PlayForOwner(asset.HeadshotSound);
-            int damage = Mathf.RoundToInt(asset.Damage * part.Multiplier());
+            int damage = Mathf.RoundToInt(asset.Damage * part.GetDamageMultiplier());
 
-            health.Damage(damage, character, asset.DamageType);
+            health.TakeDamage(damage, character, asset.DamageType);
             Log.Info($"Shot of entity {name} hit {health.name} in {part} for {damage} damage");
         }
 
@@ -184,10 +184,10 @@ namespace Shooter.Game
 
                 Hitbox hitbox = collider.GetComponent<Hitbox>();
                 BodyPart part = hitbox == null ? BodyPart.Torso : hitbox.Part;
-                if (part.Multiplier() <= highest) continue;
+                if (part.GetDamageMultiplier() <= highest) continue;
 
                 weakest = part;
-                highest = part.Multiplier();
+                highest = part.GetDamageMultiplier();
             }
 
             return weakest;

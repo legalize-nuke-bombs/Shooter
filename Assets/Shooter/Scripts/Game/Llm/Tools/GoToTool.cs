@@ -45,11 +45,11 @@ The result comes at once, the walk itself takes time: you will be notified when 
             var target = new Vector3(arguments.X, arguments.Y, arguments.Z);
             string point = Whereabouts.FormatCoordinates(target);
 
-            if (!AgentMovement.NearestGround(target, GroundReach, out Vector3 ground))
+            if (!AgentMovement.TryFindNearestGround(target, GroundReach, out Vector3 ground))
             {
                 return $"There is no walkable ground at {point}";
             }
-            if (!movement.TryPlan(ground, out Vector3 end))
+            if (!movement.TryPlanPathEnd(ground, out Vector3 end))
             {
                 return $"There is no way from here to {point}";
             }

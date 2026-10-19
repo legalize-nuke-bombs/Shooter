@@ -14,7 +14,7 @@ namespace Shooter.Game
 
             if (intoxication == null) return;
 
-            intoxication.Intoxicate(toxin, force);
+            intoxication.AddToxin(toxin, force);
         }
     }
 }

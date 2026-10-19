@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Animator))]
-    public class Poser : MonoBehaviour
+    public class LocomotionAnimator : MonoBehaviour
     {
         private static readonly int SpeedXParameter = Animator.StringToHash("SpeedX");
         private static readonly int SpeedZParameter = Animator.StringToHash("SpeedZ");

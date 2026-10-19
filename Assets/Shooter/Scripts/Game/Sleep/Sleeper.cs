@@ -12,36 +12,38 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private SoundAsset bedding;
-
         [SerializeField] private SoundAsset rising;
-        private readonly NetworkVariable<Vector3> bedside = new();
 
+        private readonly NetworkVariable<Vector3> bedPosition = new();
         private readonly NetworkVariable<bool> sleeping = new();
 
+        private SleepCycle sleepCycle;
+        private RespawnPosition respawnPosition;
+        private Speaker speaker;
+
         public string ComponentKey => "Sleeper";
+
         private struct SaveData
         {
             public Vector3 Bedside { get; set; }
             public bool Sleeping { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
-                Bedside = bedside.Value,
-                Sleeping = sleeping.Value,
+                Bedside = bedPosition.Value,
+                Sleeping = sleeping.Value
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            bedside.Value = sd.Bedside;
-            sleeping.Value = sd.Sleeping;
+            SaveData saveData = content.ToObject<SaveData>();
+            bedPosition.Value = saveData.Bedside;
+            sleeping.Value = saveData.Sleeping;
         }
-
-        private SleepCycle sleepCycle;
-        private RespawnPosition respawnPosition;
-        private Speaker speaker;
 
         private void Awake()
         {
@@ -50,25 +52,25 @@ namespace Shooter.Game
             speaker = GetComponent<Speaker>();
         }
 
-        public bool Sleeping => sleeping.Value;
+        public bool IsSleeping => sleeping.Value;
 
-        public Vector3 Bedside => bedside.Value;
+        public Vector3 BedPosition => bedPosition.Value;
 
         public string Digest(DigestionDetail detail)
         {
-            return Sleeping ? "Asleep" : null;
+            return IsSleeping ? "Asleep" : null;
         }
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
-        public void Died()
+        public void HandleDeath()
         {
-            Rouse(false);
+            StopSleeping(false);
         }
 
         public bool CanPerform(ActionType type, float dt)
         {
-            return !Sleeping;
+            return !IsSleeping;
         }
 
         public void RegisterAction(ActionType type, float dt)
@@ -77,19 +79,19 @@ namespace Shooter.Game
 
         public void FallAsleep(Bed bed)
         {
-            if (!IsServer || Sleeping) return;
+            if (!IsServer || IsSleeping) return;
 
-            bedside.Value = bed == null ? transform.position : bed.transform.position;
+            bedPosition.Value = bed == null ? transform.position : bed.transform.position;
             sleeping.Value = true;
             respawnPosition.SetPosition(transform.position);
             speaker.PlayForEveryone(bedding);
-            Log.Info($"Entity {name} fell asleep at {transform.position} in a bed at {bedside.Value}");
+            Log.Info($"Entity {name} fell asleep at {transform.position} in a bed at {bedPosition.Value}");
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void WakeRpc()
         {
-            bool worldAsleep = sleepCycle.WorldAsleep;
+            bool worldAsleep = sleepCycle.IsWorldAsleep;
 
             if (!SleepRule.CanWake(worldAsleep))
             {
@@ -102,15 +104,15 @@ namespace Shooter.Game
 
         public void WakeUp()
         {
-            Rouse(true);
+            StopSleeping(true);
         }
 
-        private void Rouse(bool heard)
+        private void StopSleeping(bool playRisingSound)
         {
-            if (!IsServer || !Sleeping) return;
+            if (!IsServer || !IsSleeping) return;
 
             sleeping.Value = false;
-            if (heard) speaker.PlayForEveryone(rising);
+            if (playRisingSound) speaker.PlayForEveryone(rising);
             Log.Info($"Entity {name} woke up at {transform.position}");
         }
     }

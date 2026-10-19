@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Collections;
 using Unity.Netcode;
@@ -13,75 +12,80 @@ namespace Shooter.Game
     public class Intoxication : NetworkBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
+
         [SerializeField] private float timerInterval = 0.25f;
-
         [SerializeField] private float lowThreshold = 1f;
-
         [SerializeField] private float digestThreshold = 10f;
-        private readonly Dictionary<FixedString32Bytes, int> indexes = new();
+
+        private readonly Dictionary<FixedString32Bytes, int> levelIndexByToxinId = new();
         private readonly NetworkList<double> levels = new();
 
+        private float secondsSinceDecay;
+        private Clock clock;
+        private ToxinCatalog toxinCatalog;
+
         public string ComponentKey => "Intoxication";
+
         private struct SaveData
         {
             public Dictionary<string, double> Levels { get; set; }
         }
+
         public object SaveObject()
         {
-            var sd = new SaveData()
+            SaveData saveData = new()
             {
                 Levels = new Dictionary<string, double>()
             };
-            foreach (FixedString32Bytes toxinId in indexes.Keys)
+            foreach (FixedString32Bytes toxinId in levelIndexByToxinId.Keys)
             {
-                double toxinLevel = levels[indexes[toxinId]];
+                double toxinLevel = levels[levelIndexByToxinId[toxinId]];
                 if (toxinLevel >= lowThreshold)
                 {
-                    sd.Levels.Add(toxinId.ToString(), toxinLevel);
+                    saveData.Levels.Add(toxinId.ToString(), toxinLevel);
                 }
             }
-            return sd;
+
+            return saveData;
         }
-        public void LoadObject(SaveToken token)
+
+        public void LoadObject(SaveToken content)
         {
-            SaveData sd = token.ToObject<SaveData>();
+            SaveData saveData = content.ToObject<SaveData>();
             for (int i = 0; i < levels.Count; i++)
             {
                 levels[i] = 0;
             }
-            foreach (var kvp in sd.Levels)
+
+            foreach (KeyValuePair<string, double> savedLevel in saveData.Levels)
             {
-                if (!indexes.TryGetValue(kvp.Key, out int toxinIndex))
+                if (!levelIndexByToxinId.TryGetValue(savedLevel.Key, out int toxinIndex))
                 {
-                    Log.Warn($"Entity {name} failed to load toxin {kvp.Key}");
+                    Log.Warn($"Entity {name} failed to load toxin {savedLevel.Key}");
                     continue;
                 }
-                levels[toxinIndex] = kvp.Value;
+
+                levels[toxinIndex] = savedLevel.Value;
             }
         }
-
-        private float timer;
-
-        private Clock clock;
-        private ToxinCatalog toxins;
 
         private void Awake()
         {
             clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
-            toxins = Catalogs.GetCatalog<ToxinCatalog>();
-            for (int i = 0; i < toxins.Count; i++)
+            toxinCatalog = Catalogs.GetCatalog<ToxinCatalog>();
+            for (int i = 0; i < toxinCatalog.Count; i++)
             {
-                indexes.Add(toxins.GetAssetAt(i).NetworkId, i);
+                levelIndexByToxinId.Add(toxinCatalog.GetAssetAt(i).NetworkId, i);
             }
 
-            Log.Info($"Entity {name} indexed {indexes.Count} toxins");
+            Log.Info($"Entity {name} indexed {levelIndexByToxinId.Count} toxins");
         }
 
         public override void OnNetworkSpawn()
         {
             if (!IsServer || levels.Count > 0) return;
 
-            for (int i = 0; i < indexes.Count; i++)
+            for (int i = 0; i < levelIndexByToxinId.Count; i++)
             {
                 levels.Add(0);
             }
@@ -90,11 +94,11 @@ namespace Shooter.Game
         private void Update()
         {
             if (!IsServer) return;
-            timer += Time.deltaTime * clock.Scale;
-            if (timer >= timerInterval)
+            secondsSinceDecay += Time.deltaTime * clock.Scale;
+            if (secondsSinceDecay >= timerInterval)
             {
-                Tick(timer);
-                timer = 0;
+                DecayLevels(secondsSinceDecay);
+                secondsSinceDecay = 0;
             }
         }
 
@@ -102,42 +106,40 @@ namespace Shooter.Game
         {
             if (detail == DigestionDetail.Brief) return null;
 
-            var sb = new StringBuilder();
+            StringBuilder effects = new();
 
-            foreach (FixedString32Bytes toxinId in indexes.Keys)
+            foreach (FixedString32Bytes toxinId in levelIndexByToxinId.Keys)
             {
-                int toxinIndex = indexes[toxinId];
+                int toxinIndex = levelIndexByToxinId[toxinId];
                 if (levels[toxinIndex] < digestThreshold) continue;
-                ToxinAsset toxin = toxins.GetAssetById(toxinId);
-                sb.Append(toxin.Id + $" {levels[toxinIndex]:F0} / 100. ");
+                ToxinAsset toxin = toxinCatalog.GetAssetById(toxinId);
+                effects.Append(toxin.Id + $" {levels[toxinIndex]:F0} / 100. ");
             }
 
-            return sb.Length == 0
-                ? "Sober"
-                : "Intoxication effects: " + sb;
+            return effects.Length == 0 ? "Sober" : "Intoxication effects: " + effects;
         }
 
         public DigestionPriority Priority => DigestionPriority.Medium;
 
-        public double Level(ToxinAsset toxin)
+        public double GetLevel(ToxinAsset toxin)
         {
-            return levels[indexes[toxin.NetworkId]];
+            return levels[levelIndexByToxinId[toxin.NetworkId]];
         }
 
-        public void Intoxicate(ToxinAsset toxin, double amount)
+        public void AddToxin(ToxinAsset toxin, double amount)
         {
-            int index = indexes[toxin.NetworkId];
+            int toxinIndex = levelIndexByToxinId[toxin.NetworkId];
             amount = Math.Max(0, amount);
-            levels[index] = Math.Min(100, levels[index] + amount);
-            Log.Info($"Entity {name} got {toxin.name} {amount}, now {levels[index]}");
+            levels[toxinIndex] = Math.Min(100, levels[toxinIndex] + amount);
+            Log.Info($"Entity {name} got {toxin.name} {amount}, now {levels[toxinIndex]}");
         }
 
-        private void Tick(float dt)
+        private void DecayLevels(float dt)
         {
-            foreach (FixedString32Bytes toxinId in indexes.Keys)
+            foreach (FixedString32Bytes toxinId in levelIndexByToxinId.Keys)
             {
-                int toxinIndex = indexes[toxinId];
-                ToxinAsset toxin = toxins.GetAssetById(toxinId);
+                int toxinIndex = levelIndexByToxinId[toxinId];
+                ToxinAsset toxin = toxinCatalog.GetAssetById(toxinId);
                 if (levels[toxinIndex] < lowThreshold) continue;
                 double decayFactor = Math.Pow(0.5, dt / toxin.HalfLife);
                 levels[toxinIndex] *= decayFactor;

@@ -7,13 +7,13 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static readonly Vector3 ModelOffset = new(0f, -1f, 0f);
+        public static readonly Vector3 ModelOffset = new(0f, -1f, 0f);
 
         [SerializeField] private SkinAsset asset;
 
         public SkinAsset Asset => asset;
 
-        public GameObject Flesh { get; private set; }
+        public GameObject ModelInstance { get; private set; }
 
         private void Awake()
         {
@@ -23,34 +23,37 @@ namespace Shooter.Game
                 return;
             }
 
-            Flesh = Instantiate(asset.Model, transform);
-            Flesh.name = asset.Id;
-            Flesh.transform.localPosition = new Vector3(0f, -1f, 0f);
-            Flesh.transform.localRotation = Quaternion.identity;
+            ModelInstance = Instantiate(asset.Model, transform);
+            ModelInstance.name = asset.Id;
+            ModelInstance.transform.localPosition = ModelOffset;
+            ModelInstance.transform.localRotation = Quaternion.identity;
 
-            Animator animator = Flesh.GetComponent<Animator>();
+            Animator animator = ModelInstance.GetComponent<Animator>();
             if (animator == null)
             {
                 Log.Warn($"Skin {asset.Id} of entity {name} has no animator, entity stays still");
                 return;
             }
 
-            animator.runtimeAnimatorController = asset.Pose;
+            animator.runtimeAnimatorController = asset.AnimatorController;
             animator.applyRootMotion = false;
 
-            Flesh.AddComponent<Poser>();
-            Flesh.AddComponent<Hitboxes>();
+            ModelInstance.AddComponent<LocomotionAnimator>();
+            ModelInstance.AddComponent<Hitboxes>();
 
-            Log.Info($"Entity {name} dressed as {asset.Id}, {Height(Flesh)} m tall");
+            Log.Info($"Entity {name} dressed as {asset.Id}, {MeasureHeight(ModelInstance)} m tall");
         }
 
-        private static float Height(GameObject flesh)
+        private static float MeasureHeight(GameObject model)
         {
-            Renderer[] renderers = flesh.GetComponentsInChildren<Renderer>();
+            Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
             if (renderers.Length == 0) return 0f;
 
             Bounds bounds = renderers[0].bounds;
-            foreach (Renderer renderer in renderers) bounds.Encapsulate(renderer.bounds);
+            foreach (Renderer renderer in renderers)
+            {
+                bounds.Encapsulate(renderer.bounds);
+            }
 
             return bounds.size.y;
         }

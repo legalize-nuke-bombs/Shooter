@@ -8,36 +8,31 @@ namespace Shooter.Game
     public class Landing : MonoBehaviour
     {
         [SerializeField] private float minHeight = 0.6f;
-
         [SerializeField] private float safeHeight = 3f;
-
         [SerializeField] private float damagePerMetre = 12f;
-
         [SerializeField] private SurfaceSounds sounds;
-
         [SerializeField] private float gain = 1.7f;
-
         [SerializeField] private DamageAsset fallDamage;
-        private CharacterController body;
-        private Health health;
 
+        private CharacterController characterController;
+        private Health health;
         private Speaker speaker;
 
         private void Awake()
         {
-            body = GetComponent<CharacterController>();
+            characterController = GetComponent<CharacterController>();
             speaker = GetComponent<Speaker>();
             health = GetComponent<Health>();
         }
 
-        public void Land(float height)
+        public void HandleLanding(float fallHeight)
         {
-            if (height < minHeight) return;
+            if (fallHeight < minHeight) return;
 
-            speaker.PlayForEveryone(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(body)), gain);
+            speaker.PlayForEveryone(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(characterController)), gain);
 
-            int damage = Mathf.RoundToInt((height - safeHeight) * damagePerMetre);
-            if (damage > 0) health.Damage(damage, null, fallDamage);
+            int damage = Mathf.RoundToInt((fallHeight - safeHeight) * damagePerMetre);
+            if (damage > 0) health.TakeDamage(damage, null, fallDamage);
         }
     }
 }

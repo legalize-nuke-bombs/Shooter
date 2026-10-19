@@ -7,11 +7,11 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        public static readonly float InstantAction = 0.00000001f;
+        public static readonly float InstantActionDuration = 0.00000001f;
 
         private IRestraint[] restraints;
 
-        public void Awake()
+        private void Awake()
         {
             restraints = GetComponents<IRestraint>();
             Log.Info($"Entity {name} has {restraints.Length} restraints");
@@ -20,18 +20,23 @@ namespace Shooter.Game
         public bool CanPerform(ActionType type, float dt)
         {
             foreach (IRestraint restraint in restraints)
+            {
                 if (!restraint.CanPerform(type, dt))
                 {
-                    Log.Info($"Entity {name} cant perform {type}, reason: {restraint.GetType().Name}");
+                    Log.Debug($"Entity {name} can not perform {type}, reason: {restraint.GetType().Name}");
                     return false;
                 }
+            }
 
             return true;
         }
 
         public void RegisterAction(ActionType type, float dt)
         {
-            foreach (IRestraint restraint in restraints) restraint.RegisterAction(type, dt);
+            foreach (IRestraint restraint in restraints)
+            {
+                restraint.RegisterAction(type, dt);
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Shooter.Game
 
         private SleepCycle sleepCycle;
 
-        public Camera Bedside => bedside != null ? bedside : bedside = GetComponentInChildren<Camera>(true);
+        public Camera BedsideCamera => bedside != null ? bedside : bedside = GetComponentInChildren<Camera>(true);
 
         private void Awake()
         {
@@ -41,8 +41,8 @@ namespace Shooter.Game
             Health health = user.GetComponent<Health>();
             Hands hands = user.GetComponent<Hands>();
 
-            bool alive = health == null || health.Alive;
-            bool handsFree = hands == null || hands.Free;
+            bool alive = health == null || health.IsAlive;
+            bool handsFree = hands == null || hands.AreFree;
             bool bedtime = sleepCycle.IsBedtime();
 
             if (!SleepRule.CanSleep(alive, handsFree, bedtime))

@@ -71,7 +71,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                     failed.Add($"{targetId}: it's you");
                     continue;
                 }
-                if (!target.TryGetComponent(out Health health) || !health.Alive)
+                if (!target.TryGetComponent(out Health health) || !health.IsAlive)
                 {
                     failed.Add($"{targetId}: character is dead");
                     continue;

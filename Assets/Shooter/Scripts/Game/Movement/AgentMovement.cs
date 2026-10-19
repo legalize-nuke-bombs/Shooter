@@ -1,4 +1,3 @@
-using System;
 using Shooter.Infrastructure;
 using Unity.AI.Navigation.LowLevel;
 using UnityEngine;
@@ -12,142 +11,142 @@ namespace Shooter.Game
         private const float SampleReach = 2f;
         private const float LevelSlack = 1.5f;
         private const float BelowReach = 30f;
-        private const int AskingLag = 1;
+        private const int WalkRequestLagFrames = 1;
 
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private float shortfallLimit = 50f;
 
-        private NavMeshAgent agent;
-        private NavMeshPath scratch;
-        private Vector3 written;
+        private NavMeshAgent navMeshAgent;
+        private NavMeshPath plannedPath;
+        private Vector3 lastWrittenPosition;
         private bool stranded;
-        private int askedFrame = int.MinValue;
+        private int lastWalkRequestFrame = int.MinValue;
 
         public float ShortfallLimit => shortfallLimit;
 
         public AgentMovementStatus Status { get; private set; } = AgentMovementStatus.Idle;
-        public bool Sprinting { get; private set; }
+        public bool IsSprinting { get; private set; }
         public Vector3 Target { get; private set; }
         public Vector3 Destination { get; private set; }
 
-        public Vector3 Feet => agent.nextPosition - Vector3.up * agent.baseOffset;
+        public Vector3 FeetPosition => navMeshAgent.nextPosition - Vector3.up * navMeshAgent.baseOffset;
 
         protected override void Awake()
         {
             base.Awake();
 
-            agent = GetComponent<NavMeshAgent>();
-            agent.updatePosition = false;
-            agent.updateRotation = false;
-            scratch = new NavMeshPath();
+            navMeshAgent = GetComponent<NavMeshAgent>();
+            navMeshAgent.updatePosition = false;
+            navMeshAgent.updateRotation = false;
+            plannedPath = new NavMeshPath();
         }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
 
-            agent.enabled = IsServer;
+            navMeshAgent.enabled = IsServer;
         }
 
-        public void Walk(Vector3 target, bool sprint)
+        public void WalkTo(Vector3 target, bool sprint)
         {
-            askedFrame = Time.frameCount;
-            Sprinting = sprint;
+            lastWalkRequestFrame = Time.frameCount;
+            IsSprinting = sprint;
 
             if (target == Target && Status != AgentMovementStatus.Idle)
             {
-                if (Status == AgentMovementStatus.Walking && !agent.hasPath && !agent.pathPending)
+                if (Status == AgentMovementStatus.Walking && !navMeshAgent.hasPath && !navMeshAgent.pathPending)
                 {
                     Log.Info($"Entity {name} asks again for the path to {Destination}");
-                    agent.SetDestination(Destination);
+                    navMeshAgent.SetDestination(Destination);
                 }
                 return;
             }
 
             Target = target;
 
-            if (!NearestGround(target, SampleReach, out Vector3 ground))
+            if (!TryFindNearestGround(target, SampleReach, out Vector3 ground))
             {
                 Log.Info($"Entity {name} found no navmesh near {target}");
                 Status = AgentMovementStatus.Unreachable;
-                agent.ResetPath();
+                navMeshAgent.ResetPath();
                 return;
             }
 
             Destination = ground;
             Status = AgentMovementStatus.Walking;
-            agent.SetDestination(Destination);
+            navMeshAgent.SetDestination(Destination);
             Log.Info($"Entity {name} starts a walk to {Destination}");
         }
 
-        public bool TryPlan(Vector3 target, out Vector3 end)
+        public bool TryPlanPathEnd(Vector3 target, out Vector3 pathEnd)
         {
-            end = target;
+            pathEnd = target;
 
-            if (!NearestGround(target, SampleReach, out Vector3 ground)) return false;
-            if (!agent.CalculatePath(ground, scratch) || scratch.status == NavMeshPathStatus.PathInvalid) return false;
+            if (!TryFindNearestGround(target, SampleReach, out Vector3 ground)) return false;
+            if (!navMeshAgent.CalculatePath(ground, plannedPath) || plannedPath.status == NavMeshPathStatus.PathInvalid) return false;
 
-            Vector3[] corners = scratch.corners;
+            Vector3[] corners = plannedPath.corners;
             if (corners.Length == 0) return false;
 
-            end = corners[corners.Length - 1];
+            pathEnd = corners[corners.Length - 1];
             return true;
         }
 
-        public static bool NearestGround(Vector3 position, float reach, out Vector3 ground)
+        public static bool TryFindNearestGround(Vector3 position, float reach, out Vector3 ground)
         {
-            NavWorld world = NavWorld.GetDefaultWorld();
-            NavLocation found = world.MapLocation(position, new Vector3(reach, LevelSlack, reach), 0, NavMesh.AllAreas);
-            if (!world.IsValid(found))
+            NavWorld navWorld = NavWorld.GetDefaultWorld();
+            NavLocation location = navWorld.MapLocation(position, new Vector3(reach, LevelSlack, reach), 0, NavMesh.AllAreas);
+            if (!navWorld.IsValid(location))
             {
-                found = world.MapLocation(position + Vector3.down * (BelowReach / 2f), new Vector3(reach, BelowReach / 2f, reach), 0, NavMesh.AllAreas);
+                location = navWorld.MapLocation(position + Vector3.down * (BelowReach / 2f), new Vector3(reach, BelowReach / 2f, reach), 0, NavMesh.AllAreas);
             }
 
-            bool valid = world.IsValid(found);
-            ground = valid ? found.position : position;
-            return valid;
+            bool found = navWorld.IsValid(location);
+            ground = found ? location.position : position;
+            return found;
         }
 
-        protected override float Tick(float dt)
+        protected override float MoveForTick(float dt)
         {
             Vector3 position = transform.position;
-            if ((position != written || stranded) && !Place(position)) return 0f;
+            if ((position != lastWrittenPosition || stranded) && !TryWarpAgent(position)) return 0f;
 
-            if (Status != AgentMovementStatus.Idle && Time.frameCount - askedFrame > AskingLag) Stand();
-            if (Status == AgentMovementStatus.Walking && !agent.pathPending) Judge();
+            if (Status != AgentMovementStatus.Idle && Time.frameCount - lastWalkRequestFrame > WalkRequestLagFrames) StopWalking();
+            if (Status == AgentMovementStatus.Walking && !navMeshAgent.pathPending) UpdateWalkStatusFromPath();
 
-            bool walking = Status == AgentMovementStatus.Walking && !agent.pathPending;
-            agent.speed = AffordSpeed(walking, Sprinting, dt);
+            bool walking = Status == AgentMovementStatus.Walking && !navMeshAgent.pathPending;
+            navMeshAgent.speed = AffordSpeed(walking, IsSprinting, dt);
 
-            Vector3 velocity = agent.velocity;
+            Vector3 velocity = navMeshAgent.velocity;
             if (velocity.x != 0f || velocity.z != 0f)
             {
                 transform.rotation = Quaternion.LookRotation(new Vector3(velocity.x, 0f, velocity.z));
             }
 
-            Vector3 next = agent.nextPosition;
-            transform.position = next;
-            written = next;
-            return Vector2.Distance(new Vector2(position.x, position.z), new Vector2(next.x, next.z));
+            Vector3 nextPosition = navMeshAgent.nextPosition;
+            transform.position = nextPosition;
+            lastWrittenPosition = nextPosition;
+            return Vector2.Distance(new Vector2(position.x, position.z), new Vector2(nextPosition.x, nextPosition.z));
         }
 
-        protected override void TeleportRaw(Vector3 position, Quaternion rotation)
+        protected override void TeleportLocally(Vector3 position, Quaternion rotation)
         {
             transform.SetPositionAndRotation(position, rotation);
-            Place(position);
+            TryWarpAgent(position);
 
             if (Status != AgentMovementStatus.Walking) return;
 
             Log.Info($"Entity {name} displaced, the walk to {Destination} is over");
             Status = AgentMovementStatus.Displaced;
-            agent.ResetPath();
+            navMeshAgent.ResetPath();
         }
 
-        private bool Place(Vector3 position)
+        private bool TryWarpAgent(Vector3 position)
         {
-            written = position;
-            if (!agent.Warp(position))
+            lastWrittenPosition = position;
+            if (!navMeshAgent.Warp(position))
             {
                 if (!stranded) Log.Error($"Entity {name} stands off the navmesh at {position}, it stays put until it is back on it");
                 stranded = true;
@@ -159,43 +158,43 @@ namespace Shooter.Game
             return true;
         }
 
-        private void Stand()
+        private void StopWalking()
         {
             if (Status == AgentMovementStatus.Walking) Log.Info($"Entity {name} stops the walk to {Destination}: nobody asks for it");
 
             Status = AgentMovementStatus.Idle;
-            agent.ResetPath();
+            navMeshAgent.ResetPath();
         }
 
-        private void Judge()
+        private void UpdateWalkStatusFromPath()
         {
-            if (agent.pathStatus == NavMeshPathStatus.PathInvalid)
+            if (navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
             {
                 Log.Info($"Entity {name} found no path to {Destination}");
                 Status = AgentMovementStatus.Unreachable;
-                agent.ResetPath();
+                navMeshAgent.ResetPath();
                 return;
             }
 
-            if (!agent.hasPath) return;
+            if (!navMeshAgent.hasPath) return;
 
-            if (agent.pathStatus == NavMeshPathStatus.PathPartial)
+            if (navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial)
             {
-                float shortfall = Vector3.Distance(agent.pathEndPosition, Destination);
+                float shortfall = Vector3.Distance(navMeshAgent.pathEndPosition, Destination);
                 if (shortfall > shortfallLimit)
                 {
                     Log.Info($"Entity {name} found no way to {Destination}: the nearest walkable ground is {shortfall:F0} m short of it");
                     Status = AgentMovementStatus.Unreachable;
-                    agent.ResetPath();
+                    navMeshAgent.ResetPath();
                     return;
                 }
             }
 
-            if (agent.remainingDistance > agent.stoppingDistance) return;
+            if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance) return;
 
-            Log.Info($"Entity {name} finished the walk {Vector3.Distance(Feet, Destination):F1} m from {Destination}");
+            Log.Info($"Entity {name} finished the walk {Vector3.Distance(FeetPosition, Destination):F1} m from {Destination}");
             Status = AgentMovementStatus.Arrived;
-            agent.ResetPath();
+            navMeshAgent.ResetPath();
         }
     }
 }

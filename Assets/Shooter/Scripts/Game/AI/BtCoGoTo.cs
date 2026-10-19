@@ -51,7 +51,7 @@ namespace Shooter.Game
                 case AgentMovementStatus.Displaced:
                     return "Your walk to " + Name + " was cut short: you have been moved somewhere else";
                 default:
-                    string shortfall = Whereabouts.DescribeShortfall(Destination - movement.Feet);
+                    string shortfall = Whereabouts.DescribeShortfall(Destination - movement.FeetPosition);
                     return shortfall.Length == 0
                         ? "You have arrived at " + Name
                         : "You have arrived as close to " + Name + " as the ground allows, " + shortfall;

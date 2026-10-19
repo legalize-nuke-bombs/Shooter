@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,29 +13,29 @@ namespace Shooter.Game
         private const float ActionFade = 0.05f;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
         private static readonly int[] ActionStates = BuildActionStates();
-        private static readonly int ActionSpeed = Animator.StringToHash("ActionSpeed");
+        private static readonly int ActionSpeedParameter = Animator.StringToHash("ActionSpeed");
 
         private readonly NetworkVariable<Work> work = new();
 
-        private Action complete;
+        private Action completionCallback;
         private bool interruptible;
-        private float remaining;
+        private float remainingSeconds;
         private Skin skin;
 
-        public HandsAction Action => work.Value.Action;
+        public HandsAction CurrentAction => work.Value.Action;
 
-        public bool Free => Action == HandsAction.None;
+        public bool AreFree => CurrentAction == HandsAction.None;
 
         public string Digest(DigestionDetail detail)
         {
-            return Free ? null : "Busy: " + Action;
+            return AreFree ? null : "Busy: " + CurrentAction;
         }
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
-        public void Died()
+        public void HandleDeath()
         {
-            Interrupt();
+            InterruptAction();
         }
 
         private void Awake()
@@ -45,7 +46,7 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            work.OnValueChanged += Show;
+            work.OnValueChanged += PlayActionAnimation;
 
             if (!IsServer) return;
 
@@ -54,85 +55,85 @@ namespace Shooter.Game
 
         public override void OnNetworkDespawn()
         {
-            work.OnValueChanged -= Show;
+            work.OnValueChanged -= PlayActionAnimation;
 
             if (!IsServer) return;
 
             enabled = false;
         }
 
-        public bool TryTake(HandsAction wanted, float duration, bool interruptible, Action complete)
+        public bool TryStartAction(HandsAction action, float duration, bool interruptible, Action completionCallback)
         {
-            if (!Free) return false;
+            if (!AreFree) return false;
 
-            Take(wanted, duration, interruptible, complete);
+            StartAction(action, duration, interruptible, completionCallback);
             return true;
         }
 
-        public bool TryPreempt(HandsAction wanted, float duration, bool interruptible, Action complete)
+        public bool TryPreemptWithAction(HandsAction action, float duration, bool interruptible, Action completionCallback)
         {
-            if (!Free && !this.interruptible) return false;
-            if (!Free) Log.Info($"Hands action {Action} of entity {name} preempted by {wanted}");
+            if (!AreFree && !this.interruptible) return false;
+            if (!AreFree) Log.Info($"Hands action {CurrentAction} of entity {name} preempted by {action}");
 
-            Take(wanted, duration, interruptible, complete);
+            StartAction(action, duration, interruptible, completionCallback);
             return true;
         }
 
-        public void Interrupt()
+        public void InterruptAction()
         {
-            if (Free) return;
+            if (AreFree) return;
 
-            Log.Info($"Hands action {Action} of entity {name} interrupted");
-            Drop();
-            complete = null;
-            remaining = 0f;
+            Log.Info($"Hands action {CurrentAction} of entity {name} interrupted");
+            FreeHands();
+            completionCallback = null;
+            remainingSeconds = 0f;
         }
 
         private void Update()
         {
-            if (Free) return;
+            if (AreFree) return;
 
-            remaining -= Time.deltaTime;
-            if (remaining > 0f) return;
+            remainingSeconds -= Time.deltaTime;
+            if (remainingSeconds > 0f) return;
 
-            Action finished = complete;
-            Drop();
-            complete = null;
-            finished?.Invoke();
+            Action finishedActionCallback = completionCallback;
+            FreeHands();
+            completionCallback = null;
+            finishedActionCallback?.Invoke();
         }
 
-        private void Take(HandsAction wanted, float duration, bool interruptible, Action complete)
+        private void StartAction(HandsAction action, float duration, bool interruptible, Action completionCallback)
         {
-            work.Value = new Work { Action = wanted, Round = work.Value.Round + 1, Duration = duration };
-            remaining = duration;
+            work.Value = new Work { Action = action, SequenceNumber = work.Value.SequenceNumber + 1, Duration = duration };
+            remainingSeconds = duration;
             this.interruptible = interruptible;
-            this.complete = complete;
+            this.completionCallback = completionCallback;
         }
 
-        private void Drop()
+        private void FreeHands()
         {
-            work.Value = new Work { Action = HandsAction.None, Round = work.Value.Round + 1 };
+            work.Value = new Work { Action = HandsAction.None, SequenceNumber = work.Value.SequenceNumber + 1 };
         }
 
-        private void Show(Work before, Work now)
+        private void PlayActionAnimation(Work previousWork, Work currentWork)
         {
-            if (now.Action == HandsAction.None) return;
-            if (skin.Flesh == null) return;
+            if (currentWork.Action == HandsAction.None) return;
+            if (skin.ModelInstance == null) return;
 
-            Animator animator = skin.Flesh.GetComponent<Animator>();
+            Animator animator = skin.ModelInstance.GetComponent<Animator>();
             if (animator == null) return;
 
             int layer = animator.GetLayerIndex(ActionLayer);
             if (layer < 0) return;
 
-            int state = ActionStates[(int)now.Action];
+            int state = ActionStates[(int)currentWork.Action];
             if (!animator.HasState(layer, state)) return;
 
             animator.CrossFadeInFixedTime(state, ActionFade, layer);
-            StartCoroutine(Pace(animator, layer, now.Duration));
+            StartCoroutine(FitActionSpeedToDuration(animator, layer, currentWork.Duration));
         }
 
-        private static System.Collections.IEnumerator Pace(Animator animator, int layer, float duration)
+        private static IEnumerator FitActionSpeedToDuration(Animator animator, int layer, float duration)
         {
             yield return null;
 
@@ -142,26 +143,30 @@ namespace Shooter.Game
             if (clips.Length == 0) clips = animator.GetCurrentAnimatorClipInfo(layer);
             if (clips.Length == 0 || clips[0].clip == null) yield break;
 
-            animator.SetFloat(ActionSpeed, clips[0].clip.length / duration);
+            animator.SetFloat(ActionSpeedParameter, clips[0].clip.length / duration);
         }
 
         private static int[] BuildActionStates()
         {
-            string[] names = Enum.GetNames(typeof(HandsAction));
-            var states = new int[names.Length];
-            for (int i = 0; i < names.Length; i++) states[i] = Animator.StringToHash(names[i]);
+            string[] actionNames = Enum.GetNames(typeof(HandsAction));
+            int[] states = new int[actionNames.Length];
+            for (int i = 0; i < actionNames.Length; i++)
+            {
+                states[i] = Animator.StringToHash(actionNames[i]);
+            }
+
             return states;
         }
 
         public struct Work : INetworkSerializeByMemcpy, IEquatable<Work>
         {
             public HandsAction Action;
-            public int Round;
+            public int SequenceNumber;
             public float Duration;
 
             public bool Equals(Work other)
             {
-                return Action == other.Action && Round == other.Round && Duration.Equals(other.Duration);
+                return Action == other.Action && SequenceNumber == other.SequenceNumber && Duration.Equals(other.Duration);
             }
         }
     }

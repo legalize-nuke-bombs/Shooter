@@ -4,9 +4,9 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Skin))]
-    public class Hider : MonoBehaviour
+    public class SkinHiderWhileDead : MonoBehaviour
     {
-        private GameObject flesh;
+        private GameObject modelInstance;
         private Health health;
         private bool hidden;
 
@@ -17,18 +17,18 @@ namespace Shooter.Game
 
         private void Start()
         {
-            flesh = GetComponent<Skin>().Flesh;
+            modelInstance = GetComponent<Skin>().ModelInstance;
         }
 
         private void Update()
         {
-            if (flesh == null) return;
+            if (modelInstance == null) return;
 
-            bool dead = !health.Alive;
+            bool dead = !health.IsAlive;
             if (dead == hidden) return;
 
             hidden = dead;
-            flesh.SetActive(!dead);
+            modelInstance.SetActive(!dead);
         }
     }
 }

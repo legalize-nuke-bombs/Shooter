@@ -9,40 +9,40 @@ namespace Shooter.Game
     public class SleepCycle : ShooterNetworkBehaviour
     {
         private const float SkipTimeScale = 300f;
-        private const double BedtimeHours = 22;
-        private const double WakeHours = 8;
+        private const double BedtimeStartHour = 22;
+        private const double BedtimeEndHour = 8;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly NetworkVariable<bool> asleep = new();
+        private readonly NetworkVariable<bool> worldAsleep = new();
 
         private Clock clock;
         private bool wasBedtime;
 
-        public bool WorldAsleep => asleep.Value;
+        public bool IsWorldAsleep => worldAsleep.Value;
 
         public override void OnNetworkSpawn()
         {
             if (!IsServer) return;
 
             clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
-            NetworkManager.NetworkTickSystem.Tick += Step;
+            NetworkManager.NetworkTickSystem.Tick += HandleNetworkTick;
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick -= Step;
+            NetworkManager.NetworkTickSystem.Tick -= HandleNetworkTick;
         }
 
-        private void Step()
+        private void HandleNetworkTick()
         {
-            bool allAsleep = AreAllPlayersAsleep();
-            if (allAsleep != asleep.Value)
+            bool allPlayersAsleep = AreAllPlayersAsleep();
+            if (allPlayersAsleep != worldAsleep.Value)
             {
-                asleep.Value = allAsleep;
-                clock.Scale = allAsleep ? SkipTimeScale : 1f;
-                Log.Info($"World asleep is now {allAsleep}");
+                worldAsleep.Value = allPlayersAsleep;
+                clock.Scale = allPlayersAsleep ? SkipTimeScale : 1f;
+                Log.Info($"World asleep is now {allPlayersAsleep}");
             }
 
             if (IsBedtime())
@@ -55,31 +55,31 @@ namespace Shooter.Game
 
             wasBedtime = false;
             Log.Info("Bedtime is over, waking sleepers");
-            WakeAll();
+            WakeAllPlayers();
         }
 
         public bool IsBedtime()
         {
-            double hours = clock.Now.TimeOfDay.TotalHours;
+            double hourOfDay = clock.Now.TimeOfDay.TotalHours;
 
-            return hours >= BedtimeHours || hours < WakeHours;
+            return hourOfDay >= BedtimeStartHour || hourOfDay < BedtimeEndHour;
         }
 
         private bool AreAllPlayersAsleep()
         {
-            bool anyone = false;
+            bool anyPlayer = false;
             foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
             {
                 Sleeper sleeper = player.GetComponent<Sleeper>();
-                if (sleeper == null || !sleeper.Sleeping) return false;
+                if (sleeper == null || !sleeper.IsSleeping) return false;
 
-                anyone = true;
+                anyPlayer = true;
             }
 
-            return anyone;
+            return anyPlayer;
         }
 
-        private void WakeAll()
+        private void WakeAllPlayers()
         {
             foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
             {

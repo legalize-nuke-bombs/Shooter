@@ -13,7 +13,7 @@ namespace Shooter.Game
 
             if (hunger == null) return;
 
-            hunger.Restore(amount);
+            hunger.RestoreAmount(amount);
         }
 
         public override int FoodMarker => (int)amount;
