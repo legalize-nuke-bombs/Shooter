@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 418150528903143480}
   - component: {fileID: 418150528903127183}
+  - component: {fileID: 5808317414674848661}
+  - component: {fileID: -3848224392153348664}
+  - component: {fileID: 1013917804556428333}
   m_Layer: 0
   m_Name: NVBoids Blue
   m_TagString: Untagged
@@ -24,12 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 418150528903127182}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &418150528903127183
 MonoBehaviour:
@@ -41,8 +45,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fa35b9623162614881082335023629b, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   behavioralCh: {x: 0.5, y: 1.5}
   debug: 0
   flockNum: 1
@@ -51,11 +55,10 @@ MonoBehaviour:
   migrationFrequency: 0.2
   posChangeFrequency: 0.8
   smoothChFrequency: 0.5
-  birdPref: {fileID: 3509250616930223806, guid: a1c4ffcdd36642f5d59120c79fdae621,
-    type: 3}
+  birdPref: {fileID: 3509250616930223806, guid: a1c4ffcdd36642f5d59120c79fdae621, type: 3}
   birdsNum: 15
   birdSpeed: 0.35
-  fragmentedBirds: 2.5
+  fragmentedBirds: 2
   fragmentedBirdsYLimit: 0.5
   soaring: 3
   verticalWawe: 2
@@ -69,3 +72,47 @@ MonoBehaviour:
   dangerLayer:
     serializedVersion: 2
     m_Bits: 0
+  HelpURL: nvjob.github.io/unity/nvjob-boids
+  ReportAProblem: nvjob.github.io/support
+  Patrons: nvjob.github.io/patrons
+--- !u!114 &5808317414674848661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DigestibleTransform
+--- !u!114 &-3848224392153348664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
+  content: Blue butterflies are flying here
+  size: 0
+--- !u!114 &1013917804556428333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eafaa9b583d4574b25ab7686b7f7665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.TextGizmo
+  label: 
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  offset: {x: 0, y: 1.2, z: 0}
