@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class SavesPage : MenuPage
+    public class SavesPage : MainMenuPage
     {
         private const string SavesElement = "saves";
         private const string EmptyElement = "empty";

@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class ClientPage : MenuPage
+    public class ClientPage : MainMenuPage
     {
         private const string ConnectButton = "connect";
         private const string BackButton = "back";

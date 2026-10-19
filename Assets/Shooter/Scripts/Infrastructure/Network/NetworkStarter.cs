@@ -89,7 +89,7 @@ namespace Shooter.Infrastructure
             return null;
         }
 
-        public void Cancel()
+        public void CancelJoin()
         {
             StopWatchingJoin();
             network.Shutdown();

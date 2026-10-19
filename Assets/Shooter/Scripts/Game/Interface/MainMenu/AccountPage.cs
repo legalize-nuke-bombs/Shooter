@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class AccountPage : MenuPage
+    public class AccountPage : MainMenuPage
     {
         private const string BackButton = "back";
         private const string SecretFoldout = "secret";

@@ -61,7 +61,7 @@ namespace Shooter.Game
         private bool LoadSaveOrShutDown()
         {
             Log.Info($"Loading the world from {networkStarter.Save}");
-            loadingScreenOverlay.Show(LoadingScreenStage.Save);
+            loadingScreenOverlay.ShowStage(LoadingScreenStage.Save);
             if (SaveManager.Load(frozenWorld, networkStarter.Save)) return true;
 
             Log.Warn($"The world failed to load {networkStarter.Save}, shutting the host down");

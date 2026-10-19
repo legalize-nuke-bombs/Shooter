@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class MainPage : MenuPage
+    public class MainPage : MainMenuPage
     {
         private const string NewButton = "new";
         private const string LoadButton = "load";

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <Style src="Menu.uss"/>
+    <Style src="MainMenu.uss"/>
     <ui:VisualElement name="menu" class="menu" picking-mode="Ignore">
         <ui:VisualElement name="panel" class="menu__panel"/>
         <ui:Label name="version" class="menu__version" picking-mode="Ignore"/>

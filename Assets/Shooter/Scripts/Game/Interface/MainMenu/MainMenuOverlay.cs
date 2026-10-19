@@ -248,7 +248,7 @@ namespace Shooter.Game
         private void Host(string save)
         {
             if (save != null) Log.Info($"The player continues the game saved at {save}");
-            loadingScreenOverlay.Show(LoadingScreenStage.Server);
+            loadingScreenOverlay.ShowStage(LoadingScreenStage.Server);
             NetworkStartFailure failure = networkStarter.Host(save);
             if (failure == null) return;
 
@@ -266,12 +266,12 @@ namespace Shooter.Game
                 return;
             }
 
-            loadingScreenOverlay.Show(LoadingScreenStage.Connection, Cancel);
+            loadingScreenOverlay.ShowStage(LoadingScreenStage.Connection, CancelConnecting);
         }
 
-        private void Cancel()
+        private void CancelConnecting()
         {
-            networkStarter.Cancel();
+            networkStarter.CancelJoin();
             loadingScreenOverlay.Hide();
         }
 

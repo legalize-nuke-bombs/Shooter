@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394caf36a0ae5b2408aabc8df3fafa8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.Boot
-  scene: Menu
+  scene: MainMenu
 --- !u!4 &812766071
 Transform:
   m_ObjectHideFlags: 0
@@ -483,7 +483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1e9d3a7f4b42d8ae06b21f9c8d4e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.LoadingOverlay
-  tips: {fileID: 11400000, guid: 8746964b92e54e11abba4a25eef9432a, type: 2}
+  tipCatalog: {fileID: 11400000, guid: 8746964b92e54e11abba4a25eef9432a, type: 2}
 --- !u!1931382934 &1917017603
 PanelRenderer:
   m_ObjectHideFlags: 0

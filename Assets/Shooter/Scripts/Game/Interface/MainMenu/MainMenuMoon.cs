@@ -4,7 +4,7 @@ namespace Shooter.Game
 {
     [ExecuteAlways]
     [RequireComponent(typeof(Light))]
-    public class MenuMoon : MonoBehaviour
+    public class MainMenuMoon : MonoBehaviour
     {
         private const float Opposite = 180f;
 
