@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public abstract class Spec : ScriptableObject
+    public abstract class Asset : ScriptableObject
     {
         private static readonly Journal Log = Logs.Here();
 

@@ -10,7 +10,7 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject destination;
-        [SerializeField] private EarSoundSpec sound;
+        [SerializeField] private EarSoundAsset sound;
         [SerializeField] private bool oncePerCharacter = false;
 
         private HashSet<long> characters = new HashSet<long>();

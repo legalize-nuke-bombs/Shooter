@@ -12,7 +12,7 @@ namespace Shooter.Game
         private const int Hidden = -1;
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private IconSpec glyph;
+        [SerializeField] private IconAsset glyph;
         private Label amount;
 
         private VisualElement box;

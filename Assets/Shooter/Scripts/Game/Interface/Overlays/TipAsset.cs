@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Tip", fileName = "Tip")]
-    public class TipSpec : Spec
+    public class TipAsset : Asset
     {
         [SerializeField] [TextArea] private string text;
 

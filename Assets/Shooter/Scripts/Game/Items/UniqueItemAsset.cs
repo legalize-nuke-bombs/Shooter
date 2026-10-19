@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public abstract class UniqueItemSpec : ItemSpec
+    public abstract class UniqueItemAsset : ItemAsset
     {
         [SerializeField] private bool equipable;
 

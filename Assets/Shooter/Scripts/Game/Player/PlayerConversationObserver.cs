@@ -9,8 +9,8 @@ namespace Shooter.Game
     {
         private const string Stranger = "Незнакомец";
 
-        [SerializeField] private IconSpec icon;
-        [SerializeField] private EarSoundSpec sound;
+        [SerializeField] private IconAsset icon;
+        [SerializeField] private EarSoundAsset sound;
 
         private readonly NameMapper mapper = new();
         private PlayerConversations conversations;

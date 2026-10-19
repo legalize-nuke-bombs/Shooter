@@ -28,7 +28,7 @@ You can process any number of IDs at once.
 
             foreach (string id in arguments.ItemIds)
             {
-                ItemSpec item = Catalogs.Of<ItemCatalog>().Of(id);
+                ItemAsset item = Catalogs.Of<ItemCatalog>().Of(id);
                 if (item == null)
                 {
                     sb.AppendLine($"{id} does not exist");

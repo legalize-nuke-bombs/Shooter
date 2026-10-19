@@ -49,7 +49,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6375247507182394803, guid: 83a749eb9faa9a2468ec4d2c084d72ee, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: 8922b3072dcc413b8c1a0a82820ec831, type: 2}
     - target: {fileID: 6668695283522811458, guid: 83a749eb9faa9a2468ec4d2c084d72ee, type: 3}

@@ -28,16 +28,16 @@ namespace Shooter.Game
 
             Firearm firearm = holder == null ? null : holder.Held as Firearm;
             ItemCatalog items = Catalogs.Of<ItemCatalog>();
-            FirearmSpec spec = items == null || firearm == null ? null : items.Firearm(firearm.SpecId);
+            FirearmAsset asset = items == null || firearm == null ? null : items.Firearm(firearm.AssetId);
 
-            if (firearm == null || spec == null)
+            if (firearm == null || asset == null)
             {
                 Hide();
                 return;
             }
 
             int held = firearm.Magazine;
-            int left = spec.Ammo == null ? 0 : bag.Count(spec.Ammo);
+            int left = asset.Ammo == null ? 0 : bag.Count(asset.Ammo);
 
             if (held == shownMagazine && left == shownReserve) return;
 

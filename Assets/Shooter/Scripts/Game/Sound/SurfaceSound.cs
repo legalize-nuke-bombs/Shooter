@@ -7,9 +7,9 @@ namespace Shooter.Game
     public struct SurfaceSound
     {
         [SerializeField] private PhysicsMaterial surface;
-        [SerializeField] private SoundSpec sound;
+        [SerializeField] private SoundAsset sound;
 
         public PhysicsMaterial Surface => surface;
-        public SoundSpec Sound => sound;
+        public SoundAsset Sound => sound;
     }
 }

@@ -25,7 +25,7 @@ PrefabInstance:
       value: Tailor
       objectReference: {fileID: 0}
     - target: {fileID: 4388649271729940499, guid: 4cade8901984c0e4eb9cbe9d13e6927c, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: d14c70d9ecc1b839606505611fc1cbab, type: 2}
     - target: {fileID: 6602705200386094091, guid: 4cade8901984c0e4eb9cbe9d13e6927c, type: 3}
@@ -69,7 +69,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7502611307958826400, guid: 4cade8901984c0e4eb9cbe9d13e6927c, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: a9fb3faae4c3eae4ba89fbc4b48302a8, type: 2}
     m_RemovedComponents: []

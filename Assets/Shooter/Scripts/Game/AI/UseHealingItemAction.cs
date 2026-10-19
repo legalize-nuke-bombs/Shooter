@@ -33,14 +33,14 @@ namespace Shooter.Game
             double missing = health.MaxHp - health.Hp;
             double safetyCoefficient = health.Hp / health.MaxHp;
 
-            StackableItemSpec best = null;
+            StackableItemAsset best = null;
             double lowestScore = missing * UnderHealPenalty.Value;
             int candidates = 0;
 
-            foreach (ItemSpec item in Catalogs.Of<ItemCatalog>().FindAll(item =>
-                         item is StackableItemSpec stackableItem && stackableItem.HealMarker > 0))
+            foreach (ItemAsset item in Catalogs.Of<ItemCatalog>().FindAll(item =>
+                         item is StackableItemAsset stackableItem && stackableItem.HealMarker > 0))
             {
-                StackableItemSpec stackableItem = (StackableItemSpec)item;
+                StackableItemAsset stackableItem = (StackableItemAsset)item;
                 if (inventory.Count(stackableItem) <= 0) continue;
 
                 candidates++;

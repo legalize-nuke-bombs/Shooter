@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc1ffd80cbd432bac08648ac566e25d, type: 3}
   m_Name: NotificationCatalog
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Notifying.NotificationCatalog
-  specs:
+  assets:
   - {fileID: 11400000, guid: a915e3e4f58857e4a9f88dcfffe60789, type: 2}

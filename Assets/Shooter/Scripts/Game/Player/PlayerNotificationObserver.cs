@@ -28,22 +28,22 @@ namespace Shooter.Game
             if (IsServer) recipient.Received -= Relay;
         }
 
-        private void Relay(NotificationSpec spec)
+        private void Relay(NotificationAsset asset)
         {
             // An offline body is owned by the host
             if (!gameObject.activeInHierarchy) return;
 
-            ShownRpc(spec.NetworkId);
+            ShownRpc(asset.NetworkId);
         }
 
         [Rpc(SendTo.Owner)]
-        private void ShownRpc(FixedString32Bytes specId)
+        private void ShownRpc(FixedString32Bytes assetId)
         {
             NotificationCatalog catalog = Catalogs.Of<NotificationCatalog>();
-            NotificationSpec spec = catalog == null ? null : catalog.Of(specId);
-            if (spec == null) return;
+            NotificationAsset asset = catalog == null ? null : catalog.Of(assetId);
+            if (asset == null) return;
 
-            Toasted?.Invoke(new Toast(spec.Icon, spec.Sound, spec.Title, spec.Subtitle));
+            Toasted?.Invoke(new Toast(asset.Icon, asset.Sound, asset.Title, asset.Subtitle));
         }
     }
 }

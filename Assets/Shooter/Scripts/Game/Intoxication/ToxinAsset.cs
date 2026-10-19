@@ -4,13 +4,13 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Toxin", fileName = "Toxin")]
-    public class ToxinSpec : Spec
+    public class ToxinAsset : Asset
     {
         [SerializeField] private float halfLife;
-        [SerializeField] private PerceptionEffectSpec[] perceptionEffects;
+        [SerializeField] private PerceptionEffectAsset[] perceptionEffects;
 
         public float HalfLife => halfLife;
 
-        public PerceptionEffectSpec[] PerceptionEffects => perceptionEffects;
+        public PerceptionEffectAsset[] PerceptionEffects => perceptionEffects;
     }
 }

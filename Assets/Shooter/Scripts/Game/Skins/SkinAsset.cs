@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Skin", fileName = "Skin")]
-    public class SkinSpec : Spec
+    public class SkinAsset : Asset
     {
         [SerializeField] private GameObject model;
         [SerializeField] private RuntimeAnimatorController pose;

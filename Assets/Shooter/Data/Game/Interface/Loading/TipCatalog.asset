@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fbcdce0b2484cd4b79bd6ca00196fbf, type: 3}
   m_Name: TipCatalog
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.TipCatalog
-  specs:
+  assets:
   - {fileID: 11400000, guid: f97db07b8f2d93a4ab29d97c353f1945, type: 2}
   - {fileID: 11400000, guid: d6ee05d0356d492c89642d8db282d061, type: 2}
   - {fileID: 11400000, guid: d9959b4e9e952a0449d4fa814663f29a, type: 2}

@@ -4,18 +4,18 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Notification", fileName = "Notification")]
-    public class NotificationSpec : Spec
+    public class NotificationAsset : Asset
     {
-        [SerializeField] private IconSpec icon;
-        [SerializeField] private EarSoundSpec sound;
+        [SerializeField] private IconAsset icon;
+        [SerializeField] private EarSoundAsset sound;
         [SerializeField] private bool urgent;
         [SerializeField] [TextArea] private string title;
         [SerializeField] [TextArea] private string subtitle;
         [SerializeField] [TextArea] private string told;
 
-        public IconSpec Icon => icon;
+        public IconAsset Icon => icon;
 
-        public EarSoundSpec Sound => sound;
+        public EarSoundAsset Sound => sound;
 
         public bool Urgent => urgent;
 

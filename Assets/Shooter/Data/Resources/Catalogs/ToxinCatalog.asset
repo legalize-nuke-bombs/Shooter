@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00437a75c7d44b0a69342e143d4481e, type: 3}
   m_Name: ToxinCatalog
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Intoxication.ToxinCatalog
-  specs:
+  assets:
   - {fileID: 11400000, guid: 86789063eddba984b825ae7b43fbd470, type: 2}
   - {fileID: 11400000, guid: 9a26a80093b54084bb9a7544295b0396, type: 2}

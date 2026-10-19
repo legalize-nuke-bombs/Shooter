@@ -3,33 +3,33 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Firearm", fileName = "Firearm")]
-    public class FirearmSpec : UniqueItemSpec
+    public class FirearmAsset : UniqueItemAsset
     {
         [SerializeField] private int magazineSize = 30;
-        [SerializeField] private StackableItemSpec ammo;
+        [SerializeField] private StackableItemAsset ammo;
         [SerializeField] private float distance = 100f;
         [SerializeField] private int damage = 25;
-        [SerializeField] private DamageSpec damageType;
+        [SerializeField] private DamageAsset damageType;
         [SerializeField] private float fireInterval = 0.1f;
         [SerializeField] private FireMode fireMode = FireMode.Semi;
         [SerializeField] private SprayPattern spray = new();
         [SerializeField] private float sprayRecovery = 0.4f;
         [SerializeField] private float recoilPunch = 0.5f;
         [SerializeField] private float reloadTime = 2.5f;
-        [SerializeField] private SoundSpec shotSound;
-        [SerializeField] private SoundSpec misfireSound;
-        [SerializeField] private SoundSpec reloadSound;
-        [SerializeField] private EarSoundSpec headshotSound;
+        [SerializeField] private SoundAsset shotSound;
+        [SerializeField] private SoundAsset misfireSound;
+        [SerializeField] private SoundAsset reloadSound;
+        [SerializeField] private EarSoundAsset headshotSound;
 
         public int MagazineSize => Mathf.Max(magazineSize, 1);
 
-        public StackableItemSpec Ammo => ammo;
+        public StackableItemAsset Ammo => ammo;
 
         public float Distance => distance;
 
         public int Damage => damage;
 
-        public DamageSpec DamageType => damageType;
+        public DamageAsset DamageType => damageType;
 
         public float FireInterval => fireInterval;
 
@@ -43,13 +43,13 @@ namespace Shooter.Game
 
         public float ReloadTime => reloadTime;
 
-        public SoundSpec ShotSound => shotSound;
+        public SoundAsset ShotSound => shotSound;
 
-        public SoundSpec MisfireSound => misfireSound;
+        public SoundAsset MisfireSound => misfireSound;
 
-        public SoundSpec ReloadSound => reloadSound;
+        public SoundAsset ReloadSound => reloadSound;
 
-        public EarSoundSpec HeadshotSound => headshotSound;
+        public EarSoundAsset HeadshotSound => headshotSound;
 
         public override UniqueItem Create()
         {

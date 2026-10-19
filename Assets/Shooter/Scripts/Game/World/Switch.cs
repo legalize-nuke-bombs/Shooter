@@ -18,7 +18,7 @@ namespace Shooter.Game
 
         [SerializeField] private Renderer[] glowing;
 
-        [SerializeField] private SoundSpec click;
+        [SerializeField] private SoundAsset click;
 
         private readonly NetworkVariable<bool> shining = new(true);
 

@@ -49,7 +49,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3612036103610271200, guid: 816623e3f0c1e6e47bc8ebecc4653d6d, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: 628df19216c7b7242af13e2a334fd3cc, type: 2}
     - target: {fileID: 5245390520612440025, guid: 816623e3f0c1e6e47bc8ebecc4653d6d, type: 3}
@@ -69,7 +69,7 @@ PrefabInstance:
       value: ScavengerGray
       objectReference: {fileID: 0}
     - target: {fileID: 7411161145456203859, guid: 816623e3f0c1e6e47bc8ebecc4653d6d, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: a990b509d25446c99fcd12a64c2c2230, type: 2}
     m_RemovedComponents: []

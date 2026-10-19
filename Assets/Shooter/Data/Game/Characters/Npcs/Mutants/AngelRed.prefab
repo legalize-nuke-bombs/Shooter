@@ -21,7 +21,7 @@ PrefabInstance:
       value: 2503819244
       objectReference: {fileID: 0}
     - target: {fileID: 4153960522010541618, guid: abf8b7a53af288b429c833d26ee378c7, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: 731f030516a543c1b81f46a784b549c2, type: 2}
     - target: {fileID: 4420089269768492483, guid: abf8b7a53af288b429c833d26ee378c7, type: 3}

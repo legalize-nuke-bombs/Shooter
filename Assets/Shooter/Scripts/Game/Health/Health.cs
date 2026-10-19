@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private EarSoundSpec hurtSound;
+        [SerializeField] private EarSoundAsset hurtSound;
 
         private EarSpeaker earSpeaker;
 
@@ -40,9 +40,9 @@ namespace Shooter.Game
         {
         }
 
-        public event Action<double, Character, DamageSpec> Damaged;
+        public event Action<double, Character, DamageAsset> Damaged;
 
-        public DamageResult Damage(double amount, Character attacker, DamageSpec type)
+        public DamageResult Damage(double amount, Character attacker, DamageAsset type)
         {
             if (!IsServer || !Alive || amount <= 0)
                 return new DamageResult

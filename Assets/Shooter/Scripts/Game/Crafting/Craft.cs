@@ -6,20 +6,20 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Craft", fileName = "Craft")]
-    public class Craft : Spec
+    public class Craft : Asset
     {
-        [SerializeField] private StackableItemSpec[] input = new StackableItemSpec[9];
-        [SerializeField] private ItemSpec output;
-        [SerializeField] private SoundSpec sound;
+        [SerializeField] private StackableItemAsset[] input = new StackableItemAsset[9];
+        [SerializeField] private ItemAsset output;
+        [SerializeField] private SoundAsset sound;
 
-        public StackableItemSpec[] Input => input;
-        public ItemSpec Output => output;
-        public SoundSpec Sound => sound;
+        public StackableItemAsset[] Input => input;
+        public ItemAsset Output => output;
+        public SoundAsset Sound => sound;
 
-        public Dictionary<StackableItemSpec, int> AmountMap()
+        public Dictionary<StackableItemAsset, int> AmountMap()
         {
-            var result = new Dictionary<StackableItemSpec, int>();
-            foreach (StackableItemSpec item in input)
+            var result = new Dictionary<StackableItemAsset, int>();
+            foreach (StackableItemAsset item in input)
             {
                 if (item == null)
                 {
@@ -37,7 +37,7 @@ namespace Shooter.Game
             sb.Append(Id).Append(": ");
 
             bool first = true;
-            foreach (KeyValuePair<StackableItemSpec, int> amount in AmountMap())
+            foreach (KeyValuePair<StackableItemAsset, int> amount in AmountMap())
             {
                 if (!first) sb.Append(", ");
                 sb.Append(amount.Key.Id).Append(" x ").Append(amount.Value);

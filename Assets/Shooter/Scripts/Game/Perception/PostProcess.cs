@@ -6,23 +6,23 @@ namespace Shooter.Game
     public sealed class PostProcess : PerceptionEffect
     {
         private readonly GameObject holder;
-        private readonly PostProcessSpec spec;
+        private readonly PostProcessAsset asset;
         private readonly Volume volume;
 
-        public PostProcess(PostProcessSpec spec)
+        public PostProcess(PostProcessAsset asset)
         {
-            this.spec = spec;
+            this.asset = asset;
 
-            holder = new GameObject($"Perception {spec.name}");
+            holder = new GameObject($"Perception {asset.name}");
             volume = holder.AddComponent<Volume>();
             volume.priority = 100;
             volume.weight = 0f;
-            volume.sharedProfile = spec.Profile;
+            volume.sharedProfile = asset.Profile;
         }
 
         public override void Tick(float strength)
         {
-            volume.weight = Mathf.MoveTowards(volume.weight, strength, Time.deltaTime * spec.SettleSpeed);
+            volume.weight = Mathf.MoveTowards(volume.weight, strength, Time.deltaTime * asset.SettleSpeed);
         }
 
         public override void End()

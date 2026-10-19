@@ -62,7 +62,7 @@ namespace Shooter.Game
         {
             public int RelationDelta { get; set; }
             public int DamagePoints { get; set; }
-            public DamageSpec DamageType { get; set; }
+            public DamageAsset DamageType { get; set; }
             public long AttackerId { get; set; }
         }
         public event Action<OnDamagedCallbackData> OnDamagedCallback;
@@ -110,7 +110,7 @@ namespace Shooter.Game
 
         public DigestionPriority Priority => DigestionPriority.High;
 
-        private void OnDamaged(double amount, Character attacker, DamageSpec type)
+        private void OnDamaged(double amount, Character attacker, DamageAsset type)
         {
             if (attacker == null) return;
 

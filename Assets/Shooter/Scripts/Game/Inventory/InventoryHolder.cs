@@ -32,13 +32,13 @@ namespace Shooter.Game
 
         public UniqueItem Held => inventory.At(heldSlot.Value);
 
-        public UniqueItemSpec HeldSpec
+        public UniqueItemAsset HeldAsset
         {
             get
             {
                 UniqueItem item = Held;
 
-                return item == null ? null : (UniqueItemSpec)Catalogs.Of<ItemCatalog>().Spec(item.SpecId);
+                return item == null ? null : (UniqueItemAsset)Catalogs.Of<ItemCatalog>().Asset(item.AssetId);
             }
         }
 
@@ -46,7 +46,7 @@ namespace Shooter.Game
 
         public string Digest(DigestionDetail detail)
         {
-            UniqueItemSpec held = HeldSpec;
+            UniqueItemAsset held = HeldAsset;
 
             return held == null ? null : $"Holding: {held.Id} (slot {heldSlot.Value})";
         }
@@ -99,15 +99,15 @@ namespace Shooter.Game
                 return;
             }
 
-            var spec = (UniqueItemSpec)Catalogs.Of<ItemCatalog>().Spec(item.SpecId);
-            if (!spec.Equipable)
+            var asset = (UniqueItemAsset)Catalogs.Of<ItemCatalog>().Asset(item.AssetId);
+            if (!asset.Equipable)
             {
-                Log.Info($"Entity {name} can not put {item.SpecId} in hands");
+                Log.Info($"Entity {name} can not put {item.AssetId} in hands");
                 return;
             }
 
             heldSlot.Value = slot;
-            Log.Info($"Entity {name} holds {item.SpecId} from slot {slot}");
+            Log.Info($"Entity {name} holds {item.AssetId} from slot {slot}");
         }
 
         private void Release()

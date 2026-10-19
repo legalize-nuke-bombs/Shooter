@@ -49,8 +49,8 @@ namespace Shooter.Game
             var firearm = holder.Held as Firearm;
             if (firearm == null) return;
 
-            FirearmSpec spec = Catalogs.Of<ItemCatalog>().Firearm(firearm.SpecId);
-            if (spec == null || spec.FireMode != FireMode.Auto) return;
+            FirearmAsset asset = Catalogs.Of<ItemCatalog>().Firearm(firearm.AssetId);
+            if (asset == null || asset.FireMode != FireMode.Auto) return;
 
             TryShoot();
         }
@@ -76,23 +76,23 @@ namespace Shooter.Game
 
         public bool TryShoot()
         {
-            if (!Ready(out Firearm firearm, out FirearmSpec spec, ActionType.Shoot)) return false;
+            if (!Ready(out Firearm firearm, out FirearmAsset asset, ActionType.Shoot)) return false;
 
-            if (hands != null && !hands.TryTake(HandsAction.Shooting, spec.FireInterval, false, null)) return false;
+            if (hands != null && !hands.TryTake(HandsAction.Shooting, asset.FireInterval, false, null)) return false;
 
             restrainable.RegisterAction(ActionType.Shoot, MainRestrainable.InstantAction);
 
             if (!firearm.Spend())
             {
                 triggerHeld = false;
-                speaker?.Play(spec.MisfireSound);
+                speaker?.Play(asset.MisfireSound);
                 return false;
             }
 
-            if (Time.time - lastShotAt >= spec.SprayRecovery) sprayShot = 0;
+            if (Time.time - lastShotAt >= asset.SprayRecovery) sprayShot = 0;
 
-            speaker?.Play(spec.ShotSound);
-            Hit(spec);
+            speaker?.Play(asset.ShotSound);
+            Hit(asset);
 
             sprayShot++;
             lastShotAt = Time.time;
@@ -101,52 +101,52 @@ namespace Shooter.Game
 
         public bool TryReload()
         {
-            if (!Ready(out Firearm firearm, out FirearmSpec spec, ActionType.Reload)) return false;
-            if (spec.Ammo == null) return false;
+            if (!Ready(out Firearm firearm, out FirearmAsset asset, ActionType.Reload)) return false;
+            if (asset.Ammo == null) return false;
 
-            int absent = spec.MagazineSize - firearm.Magazine;
-            if (absent <= 0 || inventory.Count(spec.Ammo) == 0) return false;
+            int absent = asset.MagazineSize - firearm.Magazine;
+            if (absent <= 0 || inventory.Count(asset.Ammo) == 0) return false;
 
-            if (hands != null && !hands.TryTake(HandsAction.Reloading, spec.ReloadTime, true,
-                    () => Reloaded(firearm, spec, absent))) return false;
+            if (hands != null && !hands.TryTake(HandsAction.Reloading, asset.ReloadTime, true,
+                    () => Reloaded(firearm, asset, absent))) return false;
 
             restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantAction);
-            speaker?.Play(spec.ReloadSound);
-            Log.Info($"Entity {name} started reload of {firearm.SpecId}, {spec.ReloadTime}s");
+            speaker?.Play(asset.ReloadSound);
+            Log.Info($"Entity {name} started reload of {firearm.AssetId}, {asset.ReloadTime}s");
             return true;
         }
 
-        private bool Ready(out Firearm firearm, out FirearmSpec spec, ActionType action)
+        private bool Ready(out Firearm firearm, out FirearmAsset asset, ActionType action)
         {
             firearm = null;
-            spec = null;
+            asset = null;
 
             if (!IsServer || !restrainable.CanPerform(action, MainRestrainable.InstantAction)) return false;
 
             firearm = holder.Held as Firearm;
             if (firearm == null) return false;
 
-            spec = Catalogs.Of<ItemCatalog>().Firearm(firearm.SpecId);
-            return spec != null;
+            asset = Catalogs.Of<ItemCatalog>().Firearm(firearm.AssetId);
+            return asset != null;
         }
 
-        private void Reloaded(Firearm firearm, FirearmSpec spec, int absent)
+        private void Reloaded(Firearm firearm, FirearmAsset asset, int absent)
         {
             if (!inventory.Contains(firearm)) return;
 
-            int taken = inventory.Remove(spec.Ammo, absent, InventoryOnConflict.Partly);
-            firearm.Reload(taken, spec.MagazineSize);
+            int taken = inventory.Remove(asset.Ammo, absent, InventoryOnConflict.Partly);
+            firearm.Reload(taken, asset.MagazineSize);
             Log.Info(
-                $"Entity {name} reloaded {firearm.SpecId} with {taken} rounds, {inventory.Count(spec.Ammo)} left in bag");
+                $"Entity {name} reloaded {firearm.AssetId} with {taken} rounds, {inventory.Count(asset.Ammo)} left in bag");
         }
 
-        private void Hit(FirearmSpec spec)
+        private void Hit(FirearmAsset asset)
         {
-            Vector2 offset = spec.Spray.At(sprayShot);
+            Vector2 offset = asset.Spray.At(sprayShot);
             Vector3 direction = Quaternion.LookRotation(interactor.Sight) * Quaternion.Euler(-offset.y, offset.x, 0f) *
                                 Vector3.forward;
 
-            int found = Interactor.Look(interactor.Eyes, direction, spec.Distance, transform, Shots);
+            int found = Interactor.Look(interactor.Eyes, direction, asset.Distance, transform, Shots);
             if (!Interactor.TryNearest(Shots, found, out RaycastHit hit))
             {
                 Log.Info($"Shot of entity {name} missed");
@@ -162,10 +162,10 @@ namespace Shooter.Game
             }
 
             BodyPart part = Weakest(found, health);
-            if (part == BodyPart.Head) earSpeaker.Play(spec.HeadshotSound);
-            int damage = Mathf.RoundToInt(spec.Damage * part.Multiplier());
+            if (part == BodyPart.Head) earSpeaker.Play(asset.HeadshotSound);
+            int damage = Mathf.RoundToInt(asset.Damage * part.Multiplier());
 
-            health.Damage(damage, character, spec.DamageType);
+            health.Damage(damage, character, asset.DamageType);
             Log.Info($"Shot of entity {name} hit {health.name} in {part} for {damage} damage");
         }
 

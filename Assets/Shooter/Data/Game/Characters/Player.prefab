@@ -282,31 +282,31 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[0].spec
+      propertyPath: contents.Array.data[0].asset
       value: 
       objectReference: {fileID: 11400000, guid: 0836adec8b5cb4888b092591dca0497a, type: 2}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[1].spec
+      propertyPath: contents.Array.data[1].asset
       value: 
       objectReference: {fileID: 11400000, guid: 43b6fdd04eb5f4abbaf3990645e5655f, type: 2}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[2].spec
+      propertyPath: contents.Array.data[2].asset
       value: 
       objectReference: {fileID: 11400000, guid: da689ff943a374b4b82b6765cd1884ab, type: 2}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[3].spec
+      propertyPath: contents.Array.data[3].asset
       value: 
       objectReference: {fileID: 11400000, guid: e7113cba4ddd28f43b32d0c3a94429a4, type: 2}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[4].spec
+      propertyPath: contents.Array.data[4].asset
       value: 
       objectReference: {fileID: 11400000, guid: f3505551f5748d84090304a0ce58cc29, type: 2}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[5].spec
+      propertyPath: contents.Array.data[5].asset
       value: 
       objectReference: {fileID: 11400000, guid: a02c9384fcf50074bb76aa0c768d3ace, type: 2}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[6].spec
+      propertyPath: contents.Array.data[6].asset
       value: 
       objectReference: {fileID: 11400000, guid: 6342412c3cb2e464092512397c238ca0, type: 2}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
@@ -378,7 +378,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6600000000000000105, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: f2c81b5d9e3a4706b8d4c1e7a593f028, type: 2}
     - target: {fileID: 6600000000000000109, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}

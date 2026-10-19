@@ -62,15 +62,15 @@ namespace Shooter.Game
             var firearm = holder.Held as Firearm;
             if (firearm == null || firearm.Magazine <= 0) return;
 
-            FirearmSpec spec = Catalogs.Of<ItemCatalog>().Firearm(firearm.SpecId);
-            if (spec == null) return;
-            if (sustained && spec.FireMode != FireMode.Auto) return;
+            FirearmAsset asset = Catalogs.Of<ItemCatalog>().Firearm(firearm.AssetId);
+            if (asset == null) return;
+            if (sustained && asset.FireMode != FireMode.Auto) return;
 
-            if (Time.time - lastShotAt < spec.FireInterval) return;
-            if (Time.time - lastShotAt >= spec.SprayRecovery) shot = 0;
+            if (Time.time - lastShotAt < asset.FireInterval) return;
+            if (Time.time - lastShotAt >= asset.SprayRecovery) shot = 0;
 
-            Vector2 previous = shot == 0 ? Vector2.zero : spec.Spray.At(shot - 1);
-            Punch += (spec.Spray.At(shot) - previous) * spec.RecoilPunch;
+            Vector2 previous = shot == 0 ? Vector2.zero : asset.Spray.At(shot - 1);
+            Punch += (asset.Spray.At(shot) - previous) * asset.RecoilPunch;
 
             shot++;
             lastShotAt = Time.time;

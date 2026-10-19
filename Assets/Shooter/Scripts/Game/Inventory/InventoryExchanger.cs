@@ -20,7 +20,7 @@ namespace Shooter.Game
         public float Radius => radius;
 
         // Raised by Receive only: picking up, crafting and looting add silently
-        public event Action<Character, ItemSpec, int> Received;
+        public event Action<Character, ItemAsset, int> Received;
 
         private void Awake()
         {
@@ -28,18 +28,18 @@ namespace Shooter.Game
             inventory = GetComponent<Inventory>();
         }
 
-        public bool Give(Character to, StackableItemSpec spec, int amount)
+        public bool Give(Character to, StackableItemAsset asset, int amount)
         {
             if (amount <= 0 || !Reaches(to, out InventoryExchanger taker)) return false;
 
-            if (inventory.Remove(spec, amount, InventoryOnConflict.Rollback) != amount)
+            if (inventory.Remove(asset, amount, InventoryOnConflict.Rollback) != amount)
             {
-                Log.Info($"Entity {name} can not give {spec.Id} x {amount} to {to.name}: not enough in the bag");
+                Log.Info($"Entity {name} can not give {asset.Id} x {amount} to {to.name}: not enough in the bag");
                 return false;
             }
 
-            taker.Receive(character, spec, amount);
-            Log.Info($"Entity {name} gave {spec.Id} x {amount} to {to.name}");
+            taker.Receive(character, asset, amount);
+            Log.Info($"Entity {name} gave {asset.Id} x {amount} to {to.name}");
             return true;
         }
 
@@ -55,15 +55,15 @@ namespace Shooter.Game
             }
 
             taker.Receive(character, item);
-            Log.Info($"Entity {name} gave {item.SpecId} from slot {slot} to {to.name}");
+            Log.Info($"Entity {name} gave {item.AssetId} from slot {slot} to {to.name}");
             return true;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void GiveStackableRpc(long targetId, FixedString32Bytes stackableId, int amount)
         {
-            var spec = Catalogs.Of<ItemCatalog>().Of(stackableId) as StackableItemSpec;
-            if (spec != null && Give(Character.Of(targetId, RegisterInactivePolicy.Exclude), spec, amount)) return;
+            var asset = Catalogs.Of<ItemCatalog>().Of(stackableId) as StackableItemAsset;
+            if (asset != null && Give(Character.Of(targetId, RegisterInactivePolicy.Exclude), asset, amount)) return;
 
             Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {targetId} rpc");
         }
@@ -76,16 +76,16 @@ namespace Shooter.Game
             Log.Info($"Entity {name} failed to give slot {slot} to {targetId} rpc");
         }
 
-        private void Receive(Character from, StackableItemSpec spec, int amount)
+        private void Receive(Character from, StackableItemAsset asset, int amount)
         {
-            inventory.Add(spec, amount);
-            Received?.Invoke(from, spec, amount);
+            inventory.Add(asset, amount);
+            Received?.Invoke(from, asset, amount);
         }
 
         private void Receive(Character from, UniqueItem item)
         {
             inventory.Add(item);
-            Received?.Invoke(from, Catalogs.Of<ItemCatalog>().Spec(item.SpecId), 1);
+            Received?.Invoke(from, Catalogs.Of<ItemCatalog>().Asset(item.AssetId), 1);
         }
 
         private bool Reaches(Character to, out InventoryExchanger taker)

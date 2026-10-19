@@ -15,8 +15,8 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Camera view;
-        [SerializeField] private EarSoundSpec saveSound;
-        [SerializeField] private EarSoundSpec screenshotSound;
+        [SerializeField] private EarSoundAsset saveSound;
+        [SerializeField] private EarSoundAsset screenshotSound;
         private Controls controls;
         private EarSpeaker ear;
         private Gunner gunner;

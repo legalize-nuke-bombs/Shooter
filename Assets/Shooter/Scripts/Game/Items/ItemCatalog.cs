@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Item Catalog", fileName = "ItemCatalog")]
-    public class ItemCatalog : Catalog<ItemSpec>
+    public class ItemCatalog : Catalog<ItemAsset>
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -13,29 +13,29 @@ namespace Shooter.Game
         {
             if (item == null) return -1;
 
-            int kind = Index(Spec(item.SpecId));
-            if (kind < 0) Log.Error($"Catalog {name} has no place for a thing of kind {item.SpecId}");
+            int kind = Index(Asset(item.AssetId));
+            if (kind < 0) Log.Error($"Catalog {name} has no place for a thing of kind {item.AssetId}");
 
             return kind;
         }
 
         public UniqueItem Create(int kind)
         {
-            if (At(kind) is UniqueItemSpec spec) return spec.Create();
+            if (At(kind) is UniqueItemAsset asset) return asset.Create();
 
             Log.Error($"Catalog {name} has no unique item under index {kind}");
 
             return null;
         }
 
-        public ItemSpec Spec(string id)
+        public ItemAsset Asset(string id)
         {
             return Of(new FixedString32Bytes(id));
         }
 
-        public FirearmSpec Firearm(string id)
+        public FirearmAsset Firearm(string id)
         {
-            return Of(new FixedString32Bytes(id)) as FirearmSpec;
+            return Of(new FixedString32Bytes(id)) as FirearmAsset;
         }
     }
 }

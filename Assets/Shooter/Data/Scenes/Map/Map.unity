@@ -19392,7 +19392,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a648e974aa20654a9205349b057a348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.World
-  launch: {fileID: 11400000, guid: a12d078fd062bb94c985d885d4e6a2d5, type: 2}
   spawner: {fileID: 2033352354}
   state: {fileID: 390339355}
   menu: Menu

@@ -108,7 +108,7 @@ namespace Shooter.Game
             return line;
         }
 
-        private static void Ring(EarSoundSpec sound)
+        private static void Ring(EarSoundAsset sound)
         {
             if (sound == null) return;
 

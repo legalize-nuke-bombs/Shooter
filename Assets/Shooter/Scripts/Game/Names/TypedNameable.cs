@@ -5,23 +5,23 @@ namespace Shooter.Game
 {
     public sealed class TypedNameable : Nameable
     {
-        [SerializeField] private NameSpec spec;
+        [SerializeField] private NameAsset asset;
 
-        public NameSpec Spec => spec;
+        public NameAsset Asset => asset;
 
-        public void Assign(NameSpec assigned)
+        public void Assign(NameAsset assigned)
         {
-            spec = assigned;
+            asset = assigned;
         }
 
         public override string Digest(DigestionDetail detail)
         {
-            return spec == null ? null : spec.Prompt();
+            return asset == null ? null : asset.Prompt();
         }
 
         public override string PromptName()
         {
-            return spec == null ? null : spec.Prompt();
+            return asset == null ? null : asset.Prompt();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private EarSoundSpec sound;
+        [SerializeField] private EarSoundAsset sound;
 
         public void OnTrigger(Character character)
         {

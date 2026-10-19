@@ -19,7 +19,7 @@ namespace Shooter.Game
         private static AudioMixer mixer;
         private static ClientConfig client;
 
-        // Sounds find their group in their own spec; the mixer only has to follow the volume settings, from the start
+        // Sounds find their group in their own asset; the mixer only has to follow the volume settings, from the start
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Tune()
         {

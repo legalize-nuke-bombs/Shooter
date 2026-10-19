@@ -22,7 +22,7 @@ namespace Shooter.Game
         }
         private struct SlotData
         {
-            public string SpecId { get; set; }
+            public string AssetId { get; set; }
             public SaveToken State { get; set; }
         }
         public object SaveObject()
@@ -50,7 +50,7 @@ namespace Shooter.Game
 
                 saved.Add(new SlotData
                 {
-                    SpecId = item.SpecId,
+                    AssetId = item.AssetId,
                     State = state == null ? default : SaveToken.From(state)
                 });
             }
@@ -66,27 +66,27 @@ namespace Shooter.Game
 
             foreach (KeyValuePair<string, int> stack in sd.Stacks)
             {
-                if (catalog.Spec(stack.Key) is not StackableItemSpec spec)
+                if (catalog.Asset(stack.Key) is not StackableItemAsset asset)
                 {
                     Log.Warn($"Entity {name} lost {stack.Value} of {stack.Key}: the world catalog does not know it");
                     continue;
                 }
 
-                Add(spec, stack.Value);
+                Add(asset, stack.Value);
             }
 
             for (int slot = 0; slot < sd.Slots.Count; slot++)
             {
                 SlotData saved = sd.Slots[slot];
-                if (saved.SpecId == null) continue;
+                if (saved.AssetId == null) continue;
 
-                if (catalog.Spec(saved.SpecId) is not UniqueItemSpec spec)
+                if (catalog.Asset(saved.AssetId) is not UniqueItemAsset asset)
                 {
-                    Log.Warn($"Entity {name} lost {saved.SpecId}: the world catalog does not know it");
+                    Log.Warn($"Entity {name} lost {saved.AssetId}: the world catalog does not know it");
                     continue;
                 }
 
-                UniqueItem item = spec.Create();
+                UniqueItem item = asset.Create();
                 if (!saved.State.Empty) item.LoadObject(saved.State);
 
                 slots.Put(slot, item);
@@ -116,7 +116,7 @@ namespace Shooter.Game
                 UniqueItem item = slots.At(slot);
                 if (item == null) continue;
 
-                lines.Add($"{catalog.Spec(item.SpecId).Id} (slot {slot})");
+                lines.Add($"{catalog.Asset(item.AssetId).Id} (slot {slot})");
             }
 
             return lines.Count == 0 ? null : string.Join("\n", lines);
@@ -143,33 +143,33 @@ namespace Shooter.Game
             slots.Changed -= SlotsChanged;
         }
 
-        public int Count(StackableItemSpec spec)
+        public int Count(StackableItemAsset asset)
         {
-            int index = Catalogs.Of<ItemCatalog>().Index(spec);
+            int index = Catalogs.Of<ItemCatalog>().Index(asset);
 
             return index < 0 || index >= stackAmounts.Count ? 0 : stackAmounts[index];
         }
 
-        public void Add(StackableItemSpec spec, int amount)
+        public void Add(StackableItemAsset asset, int amount)
         {
             if (amount <= 0) return;
 
-            int index = Catalogs.Of<ItemCatalog>().Index(spec);
+            int index = Catalogs.Of<ItemCatalog>().Index(asset);
             if (index < 0)
             {
-                Log.Error($"Entity {name} can not take {spec.Id}: the world catalog does not know it");
+                Log.Error($"Entity {name} can not take {asset.Id}: the world catalog does not know it");
                 return;
             }
 
             stackAmounts[index] += amount;
-            Log.Info($"Entity {name} took {amount} of {spec.Id}");
+            Log.Info($"Entity {name} took {amount} of {asset.Id}");
         }
 
-        public int Remove(StackableItemSpec spec, int amount, InventoryOnConflict onConflict)
+        public int Remove(StackableItemAsset asset, int amount, InventoryOnConflict onConflict)
         {
             if (amount <= 0) return 0;
 
-            int index = Catalogs.Of<ItemCatalog>().Index(spec);
+            int index = Catalogs.Of<ItemCatalog>().Index(asset);
             if (index < 0) return 0;
 
             int available = stackAmounts[index];
@@ -187,7 +187,7 @@ namespace Shooter.Game
         {
             int slot = slots.Put(item);
 
-            Log.Info($"Entity {name} took {item.SpecId} into slot {slot}");
+            Log.Info($"Entity {name} took {item.AssetId} into slot {slot}");
 
             return slot;
         }
@@ -215,7 +215,7 @@ namespace Shooter.Game
             {
                 if (stackAmounts[index] == 0) continue;
 
-                target.Add((StackableItemSpec)catalog.At(index), stackAmounts[index]);
+                target.Add((StackableItemAsset)catalog.At(index), stackAmounts[index]);
             }
 
             foreach (UniqueItem item in slots.All)

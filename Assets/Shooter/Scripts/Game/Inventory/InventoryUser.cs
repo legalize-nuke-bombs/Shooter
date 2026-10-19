@@ -20,27 +20,27 @@ namespace Shooter.Game
             speaker = GetComponent<Speaker>();
         }
 
-        public bool Use(StackableItemSpec spec)
+        public bool Use(StackableItemAsset asset)
         {
-            if (!spec.Usable) return false;
+            if (!asset.Usable) return false;
 
-            if (inventory.Remove(spec, 1, InventoryOnConflict.Rollback) == 0) return false;
+            if (inventory.Remove(asset, 1, InventoryOnConflict.Rollback) == 0) return false;
 
-            foreach (ItemEffect effect in spec.Effects)
+            foreach (ItemEffect effect in asset.Effects)
             {
                 effect.Apply(gameObject);
             }
 
-            speaker.Play(spec.UseSound);
+            speaker.Play(asset.UseSound);
 
-            Log.Info($"Entity {name} used one {spec.Id}");
+            Log.Info($"Entity {name} used one {asset.Id}");
             return true;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void UseRpc(FixedString32Bytes stackableId)
         {
-            if (Catalogs.Of<ItemCatalog>().Of(stackableId) is StackableItemSpec spec && Use(spec)) return;
+            if (Catalogs.Of<ItemCatalog>().Of(stackableId) is StackableItemAsset asset && Use(asset)) return;
 
             Log.Info($"Entity {name} failed to use {stackableId} rpc");
         }

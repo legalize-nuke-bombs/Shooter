@@ -3,7 +3,7 @@
 namespace Shooter.Infrastructure
 {
     [CreateAssetMenu(menuName = "Shooter-saves/Saveable Prefab", fileName = "SaveablePrefab")]
-    public class SaveablePrefabSpec : Spec
+    public class SaveablePrefabAsset : Asset
     {
         [SerializeField] private UnityEngine.GameObject prefab;
 

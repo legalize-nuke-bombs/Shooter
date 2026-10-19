@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e1c9094a05549d9a3a1730a32af00b5, type: 3}
   m_Name: FractionCatalog
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Groups.FractionCatalog
-  specs:
+  assets:
   - {fileID: 11400000, guid: 7a2c8878960749d44a025c7f467dd1d4, type: 2}
   - {fileID: 11400000, guid: 5dbcde0bfe115b74b8b3dedcc123493d, type: 2}
   - {fileID: 11400000, guid: f13ac3862bb50eb48bd3618281e45ff7, type: 2}

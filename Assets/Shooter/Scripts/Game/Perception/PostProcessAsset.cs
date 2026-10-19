@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Perception/Post Process", fileName = "PostProcess")]
-    public class PostProcessSpec : PerceptionEffectSpec
+    public class PostProcessAsset : PerceptionEffectAsset
     {
         [SerializeField] private VolumeProfile profile;
         [SerializeField] private float settleSpeed = 0.3f;

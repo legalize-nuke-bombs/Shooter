@@ -49,7 +49,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3014438985372408575, guid: 0784f79c8275dd040a1b15af285ef60e, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: cfe12c834452ba04898229093b36e283, type: 2}
     - target: {fileID: 5998417678525257926, guid: 0784f79c8275dd040a1b15af285ef60e, type: 3}
@@ -69,7 +69,7 @@ PrefabInstance:
       value: Alien
       objectReference: {fileID: 0}
     - target: {fileID: 9019667924498876236, guid: 0784f79c8275dd040a1b15af285ef60e, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: 13025e751fc929309b75080573d51de1, type: 2}
     m_RemovedComponents: []

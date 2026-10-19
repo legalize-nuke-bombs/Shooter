@@ -9,7 +9,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 790000886050361899, guid: eb707382ab5a2884cb15df00e6ae44b5, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: 609835fc84a94528b12a904fc80c436f, type: 2}
     - target: {fileID: 1010001818332740058, guid: eb707382ab5a2884cb15df00e6ae44b5, type: 3}
@@ -29,7 +29,7 @@ PrefabInstance:
       value: 26791016
       objectReference: {fileID: 0}
     - target: {fileID: 6777805184162402200, guid: eb707382ab5a2884cb15df00e6ae44b5, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: 97b21eab3a5661043bc3301e3294c7f3, type: 2}
     - target: {fileID: 7904025951889575475, guid: eb707382ab5a2884cb15df00e6ae44b5, type: 3}

@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter-Llm/KnowledgeSpec", fileName = "KnowledgeSpec")]
-    public class KnowledgeSpec : Spec
+    [CreateAssetMenu(menuName = "Shooter-Llm/KnowledgeAsset", fileName = "KnowledgeAsset")]
+    public class KnowledgeAsset : Asset
     {
         [SerializeField] [TextArea(5, 20)] private string content;
 

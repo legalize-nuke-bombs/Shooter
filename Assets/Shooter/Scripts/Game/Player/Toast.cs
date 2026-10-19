@@ -2,7 +2,7 @@ namespace Shooter.Game
 {
     public readonly struct Toast
     {
-        public Toast(IconSpec icon, EarSoundSpec sound, string title, string subtitle)
+        public Toast(IconAsset icon, EarSoundAsset sound, string title, string subtitle)
         {
             Icon = icon;
             Sound = sound;
@@ -10,9 +10,9 @@ namespace Shooter.Game
             Subtitle = subtitle;
         }
 
-        public IconSpec Icon { get; }
+        public IconAsset Icon { get; }
 
-        public EarSoundSpec Sound { get; }
+        public EarSoundAsset Sound { get; }
 
         public string Title { get; }
 

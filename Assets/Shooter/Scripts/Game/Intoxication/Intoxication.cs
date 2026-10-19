@@ -105,7 +105,7 @@ namespace Shooter.Game
             {
                 int toxinIndex = indexes[toxinId];
                 if (levels[toxinIndex] < digestThreshold) continue;
-                ToxinSpec toxin = toxins.Of(toxinId);
+                ToxinAsset toxin = toxins.Of(toxinId);
                 sb.Append(toxin.Id + $" {levels[toxinIndex]:F0} / 100. ");
             }
 
@@ -116,12 +116,12 @@ namespace Shooter.Game
 
         public DigestionPriority Priority => DigestionPriority.Medium;
 
-        public double Level(ToxinSpec toxin)
+        public double Level(ToxinAsset toxin)
         {
             return levels[indexes[toxin.NetworkId]];
         }
 
-        public void Intoxicate(ToxinSpec toxin, double amount)
+        public void Intoxicate(ToxinAsset toxin, double amount)
         {
             int index = indexes[toxin.NetworkId];
             amount = Math.Max(0, amount);
@@ -134,7 +134,7 @@ namespace Shooter.Game
             foreach (FixedString32Bytes toxinId in indexes.Keys)
             {
                 int toxinIndex = indexes[toxinId];
-                ToxinSpec toxin = toxins.Of(toxinId);
+                ToxinAsset toxin = toxins.Of(toxinId);
                 if (levels[toxinIndex] < lowThreshold) continue;
                 double decayFactor = Math.Pow(0.5, dt / toxin.HalfLife);
                 levels[toxinIndex] *= decayFactor;

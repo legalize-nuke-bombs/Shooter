@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Fraction Relation", fileName = "FractionRelation")]
-    public class FractionRelation : Spec
+    public class FractionRelation : Asset
     {
         private static readonly Journal Log = Logs.Here();
 

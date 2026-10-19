@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Damage", fileName = "Damage")]
-    public class DamageSpec : Spec
+    public class DamageAsset : Asset
     {
     }
 }
