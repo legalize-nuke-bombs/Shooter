@@ -8,8 +8,9 @@ using Random = UnityEngine.Random;
 
 namespace Shooter.Game
 {
-    // Stands in Boot and lives through every scene. The menu and the world show the stages they start and take the
-    // screen down; the loads Netcode runs between them the screen follows itself, as nobody else is up to see them
+    // Stands in Boot and lives through every scene. The menu and the host's world show the stages they start, and the
+    // world takes the screen down once its save is in; the loads Netcode runs the screen follows itself, as nobody else
+    // is up to see them, down to a client getting in
     public class LoadingScreenOverlay : Overlay
     {
         private const string ScreenElement = "loading";
@@ -48,11 +49,13 @@ namespace Shooter.Game
         {
             network = NetworkManager.Singleton;
             network.OnClientStarted += Watch;
+            network.OnClientConnectedCallback += Entered;
         }
 
         private void OnDestroy()
         {
             network.OnClientStarted -= Watch;
+            network.OnClientConnectedCallback -= Entered;
         }
 
         // A stage the player may give up shows a cancel button, and the press goes back to whoever started the stage
@@ -138,6 +141,14 @@ namespace Shooter.Game
                     Show(LoadingScreenStage.Synchronization);
                     break;
             }
+        }
+
+        // A client connects only once its world is synchronized, so this is the moment it is in
+        private void Entered(ulong client)
+        {
+            if (network.IsServer || client != network.LocalClientId) return;
+
+            Hide();
         }
 
         private string Tip()

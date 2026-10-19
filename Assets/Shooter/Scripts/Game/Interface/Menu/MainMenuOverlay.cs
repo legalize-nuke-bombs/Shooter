@@ -14,6 +14,7 @@ namespace Shooter.Game
         private const string VersionElement = "version";
         private const string PageClass = "screen";
         private const int FrameRate = 60;
+        private const int UnlimitedFrameRate = -1;
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private VisualTreeAsset mainPage;
@@ -56,6 +57,7 @@ namespace Shooter.Game
         private void OnDestroy()
         {
             starter.JoinFailed -= JoinFailed;
+            Application.targetFrameRate = UnlimitedFrameRate;
         }
 
         private void Warn(string title, string details)

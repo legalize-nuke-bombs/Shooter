@@ -6,10 +6,12 @@ using UnityEngine;
 namespace Shooter.Game
 {
     // Gives every player in the world a body: the one their key left here before, or a fresh one at a spawn point.
-    // Works on the server, once the world says its save is in
-    public class PlayerSpawner : MonoBehaviour
+    // Works on the server, once the save is in
+    public class PlayerSpawner : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
+
+        [SerializeField] private SaveLoaderOnStartup loader;
 
         private readonly Dictionary<ulong, NetworkObject> bodies = new();
 
@@ -17,22 +19,24 @@ namespace Shooter.Game
         private NetworkConnectionApprover approver;
         private bool ready;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             network = NetworkManager.Singleton;
             approver = network.GetComponent<NetworkConnectionApprover>();
             network.OnClientConnectedCallback += Welcome;
             network.OnClientDisconnectCallback += Forget;
+            loader.Loaded += Ready;
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             network.OnClientConnectedCallback -= Welcome;
             network.OnClientDisconnectCallback -= Forget;
+            loader.Loaded -= Ready;
         }
 
         // Players who came while the world was loading are already connected: they get their bodies here
-        public void Ready()
+        private void Ready()
         {
             ready = true;
             foreach (ulong client in network.ConnectedClientsIds)
