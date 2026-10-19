@@ -12,7 +12,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
         private Character ownCharacter;
 
         public override string Name => "send_message";
@@ -39,7 +39,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
 
         protected override void OnStart()
         {
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {
@@ -76,7 +76,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                     failed.Add($"{targetId}: character is dead");
                     continue;
                 }
-                conversations.Say(ownCharacter.Id, targetId, arguments.Content, false, arguments.Urgent);
+                conversationManager.Say(ownCharacter.Id, targetId, arguments.Content, false, arguments.Urgent);
 
                 delivered.Add(targetId);
                 Log.Info($"Entity {Self.name} said to {targetId}: {arguments.Content}");

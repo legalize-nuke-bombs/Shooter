@@ -49,13 +49,13 @@ namespace Shooter.Game
         {
             network = NetworkManager.Singleton;
             network.OnClientStarted += Watch;
-            network.OnClientConnectedCallback += Entered;
+            network.OnClientConnectedCallback += HandleClientConnected;
         }
 
         private void OnDestroy()
         {
             network.OnClientStarted -= Watch;
-            network.OnClientConnectedCallback -= Entered;
+            network.OnClientConnectedCallback -= HandleClientConnected;
         }
 
         // A stage the player may give up shows a cancel button, and the press goes back to whoever started the stage
@@ -144,9 +144,9 @@ namespace Shooter.Game
         }
 
         // A client connects only once its world is synchronized, so this is the moment it is in
-        private void Entered(ulong client)
+        private void HandleClientConnected(ulong clientId)
         {
-            if (network.IsServer || client != network.LocalClientId) return;
+            if (network.IsServer || clientId != network.LocalClientId) return;
 
             Hide();
         }

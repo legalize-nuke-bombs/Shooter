@@ -11,37 +11,37 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private SaveLoaderOnStartup loader;
+        [SerializeField] private SaveLoaderOnStartup saveLoaderOnStartup;
 
         private readonly Dictionary<ulong, NetworkObject> bodies = new();
 
         private NetworkManager network;
-        private NetworkConnectionApprover approver;
+        private NetworkConnectionApprover networkConnectionApprover;
         private bool ready;
 
         protected override void ShooterAwake()
         {
             network = NetworkManager.Singleton;
-            approver = network.GetComponent<NetworkConnectionApprover>();
+            networkConnectionApprover = network.GetComponent<NetworkConnectionApprover>();
             network.OnClientConnectedCallback += Welcome;
             network.OnClientDisconnectCallback += Forget;
-            loader.Loaded += Ready;
+            saveLoaderOnStartup.Loaded += HandleSaveLoaded;
         }
 
         protected override void ShooterOnDestroy()
         {
             network.OnClientConnectedCallback -= Welcome;
             network.OnClientDisconnectCallback -= Forget;
-            loader.Loaded -= Ready;
+            saveLoaderOnStartup.Loaded -= HandleSaveLoaded;
         }
 
         // Players who came while the world was loading are already connected: they get their bodies here
-        private void Ready()
+        private void HandleSaveLoaded()
         {
             ready = true;
-            foreach (ulong client in network.ConnectedClientsIds)
+            foreach (ulong clientId in network.ConnectedClientsIds)
             {
-                Embody(client);
+                Embody(clientId);
             }
 
             foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Include))
@@ -51,19 +51,19 @@ namespace Shooter.Game
             }
         }
 
-        private void Welcome(ulong client)
+        private void Welcome(ulong clientId)
         {
             if (!network.IsServer || !ready) return;
 
-            Embody(client);
+            Embody(clientId);
         }
 
-        private void Embody(ulong client)
+        private void Embody(ulong clientId)
         {
-            string name = approver.NameOf(client);
-            string key = approver.PublicKeyOf(client);
+            string playerName = networkConnectionApprover.NameOf(clientId);
+            string publicKey = networkConnectionApprover.PublicKeyOf(clientId);
 
-            Player returning = Player.OfKey(key, RegisterInactivePolicy.Include);
+            Player returning = Player.OfKey(publicKey, RegisterInactivePolicy.Include);
             NetworkObject body;
             if (returning != null)
             {
@@ -72,35 +72,35 @@ namespace Shooter.Game
             }
             else
             {
-                MainSpawnPoint point = MainSpawnPoint.Pick();
-                Transform at = point == null ? transform : point.transform;
-                GameObject fresh = NetworkSpawner.Spawn(network.NetworkConfig.PlayerPrefab, at.position, at.rotation);
-                if (fresh == null)
+                MainSpawnPoint mainSpawnPoint = MainSpawnPoint.Pick();
+                Transform spawnTransform = mainSpawnPoint == null ? transform : mainSpawnPoint.transform;
+                GameObject freshBody = NetworkSpawner.Spawn(network.NetworkConfig.PlayerPrefab, spawnTransform.position, spawnTransform.rotation);
+                if (freshBody == null)
                 {
-                    Log.Error($"Client {client} could not be given a body");
+                    Log.Error($"Client {clientId} could not be given a body");
                     return;
                 }
 
-                body = fresh.GetComponent<NetworkObject>();
-                Player player = fresh.GetComponent<Player>();
-                if (player != null) player.PublicKey = key;
+                body = freshBody.GetComponent<NetworkObject>();
+                Player player = freshBody.GetComponent<Player>();
+                if (player != null) player.PublicKey = publicKey;
             }
 
-            body.ChangeOwnership(client);
+            body.ChangeOwnership(clientId);
             body.DontDestroyWithOwner = true;
-            bodies[client] = body;
-            body.GetComponent<AbsoluteNameable>()?.Rename(name);
-            body.name = name;
+            bodies[clientId] = body;
+            body.GetComponent<AbsoluteNameable>()?.Rename(playerName);
+            body.name = playerName;
 
-            Log.Info($"Client {client} entered the world as {name}, players online {network.ConnectedClients.Count}");
+            Log.Info($"Client {clientId} entered the world as {playerName}, players online {network.ConnectedClients.Count}");
         }
 
-        private void Forget(ulong client)
+        private void Forget(ulong clientId)
         {
-            if (!bodies.Remove(client, out NetworkObject body) || body == null) return;
+            if (!bodies.Remove(clientId, out NetworkObject body) || body == null) return;
 
             body.gameObject.SetActive(false);
-            Log.Info($"Client {client} left the world, body switched off");
+            Log.Info($"Client {clientId} left the world, body switched off");
         }
     }
 }

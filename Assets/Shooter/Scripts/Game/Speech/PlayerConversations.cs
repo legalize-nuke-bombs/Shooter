@@ -17,7 +17,7 @@ namespace Shooter.Game
         private readonly Dictionary<long, Contact> contacts = new();
 
         private Character character;
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
         private Coroutine snapshot;
         private bool synced;
 
@@ -41,16 +41,16 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
-            conversations.Said += Relay;
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager.Said += Relay;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (conversations != null)
+            if (conversationManager != null)
             {
-                conversations.Said -= Relay;
-                conversations = null;
+                conversationManager.Said -= Relay;
+                conversationManager = null;
             }
 
             if (snapshot != null)
@@ -123,7 +123,7 @@ namespace Shooter.Game
         private IEnumerator Snapshot()
         {
             int sent = 0;
-            foreach (Conversation pair in conversations.Of(CharacterId))
+            foreach (Conversation pair in conversationManager.Of(CharacterId))
             {
                 long partner = pair.Partner(CharacterId);
                 IReadOnlyList<Message> messages = pair.Messages;

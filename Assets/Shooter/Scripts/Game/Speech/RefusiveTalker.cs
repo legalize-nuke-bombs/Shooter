@@ -5,20 +5,20 @@ namespace Shooter.Game
 {
     public sealed class RefusiveTalker : Talker
     {
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
             if (!IsServer) return;
 
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
-            conversations.Said += Refuse;
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager.Said += Refuse;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (IsServer) conversations.Said -= Refuse;
+            if (IsServer) conversationManager.Said -= Refuse;
             base.OnNetworkDespawn();
         }
 
@@ -34,7 +34,7 @@ namespace Shooter.Game
             Character author = Character.Of(message.AuthorId, RegisterInactivePolicy.Include);
             if (author == null || !author.TryGetComponent(out Player _)) return;
 
-            conversations.Say(CharacterId, message.AuthorId, "Not now.", false, true);
+            conversationManager.Say(CharacterId, message.AuthorId, "Not now.", false, true);
         }
     }
 }

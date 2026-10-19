@@ -8,9 +8,9 @@ namespace Shooter.Infrastructure
     {
         private readonly List<MonoBehaviour> members = new();
 
-        public IEnumerable<MonoBehaviour> All(RegisterInactivePolicy gate)
+        public IEnumerable<MonoBehaviour> All(RegisterInactivePolicy inactivePolicy)
         {
-            return gate == RegisterInactivePolicy.Include ? members : members.Where(member => member.gameObject.activeInHierarchy);
+            return inactivePolicy == RegisterInactivePolicy.Include ? members : members.Where(member => member.gameObject.activeInHierarchy);
         }
 
         public void Add(MonoBehaviour member)

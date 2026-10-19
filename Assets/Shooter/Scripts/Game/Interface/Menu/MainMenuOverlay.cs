@@ -13,7 +13,7 @@ namespace Shooter.Game
         private const string PanelElement = "panel";
         private const string VersionElement = "version";
         private const string PageClass = "screen";
-        private const int FrameRate = 60;
+        private const int MenuFrameRate = 60;
         private const int UnlimitedFrameRate = -1;
         private static readonly Journal Log = Logs.Here();
 
@@ -42,7 +42,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            Application.targetFrameRate = FrameRate;
+            Application.targetFrameRate = MenuFrameRate;
             starter = NetworkManager.Singleton.GetComponent<NetworkStarter>();
         }
 

@@ -18,7 +18,7 @@ namespace Shooter.Game
         private readonly NetworkVariable<ulong> interlocutor = new();
 
         private Character character;
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
         private Health health;
         private Sleeper sleeper;
         private Talker talker;
@@ -36,7 +36,7 @@ namespace Shooter.Game
         private void Awake()
         {
             character = GetComponent<Character>();
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             health = GetComponent<Health>();
             sleeper = GetComponent<Sleeper>();
             enabled = false;
@@ -108,7 +108,7 @@ namespace Shooter.Game
                 return;
             }
 
-            conversations.Say(CharacterId, talker.CharacterId, speech, true, true);
+            conversationManager.Say(CharacterId, talker.CharacterId, speech, true, true);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

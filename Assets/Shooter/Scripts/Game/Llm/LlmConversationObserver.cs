@@ -13,14 +13,14 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private Character character;
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
         private Health health;
         private Llm llm;
 
         private void Awake()
         {
             character = GetComponent<Character>();
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             health = GetComponent<Health>();
             llm = GetComponent<Llm>();
             enabled = NetworkManager.Singleton.IsServer;
@@ -28,15 +28,15 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            conversations.Said += Heard;
+            conversationManager.Said += Hear;
         }
 
         private void OnDisable()
         {
-            conversations.Said -= Heard;
+            conversationManager.Said -= Hear;
         }
 
-        private void Heard(Conversation conversation, Message message)
+        private void Hear(Conversation conversation, Message message)
         {
             if (message.AuthorId == character.Id || conversation.Partner(message.AuthorId) != character.Id) return;
             if (!health.Alive) return;

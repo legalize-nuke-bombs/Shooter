@@ -39,7 +39,7 @@ namespace Shooter.Game
         private readonly Dictionary<string, ProfilerRecorder> recorders = new();
         private int filled;
         private int frame;
-        private HostVersion host;
+        private HostVersion hostVersion;
 
         private Label panel;
         private float refresh;
@@ -48,7 +48,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            host = Registers.Of<HostVersion>(RegisterInactivePolicy.Include).Single();
+            hostVersion = Registers.Of<HostVersion>(RegisterInactivePolicy.Include).Single();
         }
 
         private void Update()
@@ -194,9 +194,9 @@ namespace Shooter.Game
                 Line($"Позиция {at.x:F1} {at.y:F1} {at.z:F1}", Facing(player.eulerAngles.y));
             }
 
-            Line(host == null
+            Line(hostVersion == null
                     ? $"Клиент {Application.version}"
-                    : $"Сервер {host.Version}   Клиент {Application.version}");
+                    : $"Сервер {hostVersion.Version}   Клиент {Application.version}");
         }
 
         private string Managed()

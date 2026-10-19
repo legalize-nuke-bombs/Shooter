@@ -11,40 +11,41 @@ namespace Shooter.Game
         private const long Hidden = long.MinValue;
         private static readonly Journal Log = Logs.Here();
 
-        private Label clock;
-        private long shown = Hidden;
-        private Clock world;
+        private Clock clock;
+        private Label clockLabel;
+        private long shownMinute = Hidden;
 
         private void Start()
         {
-            world = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
         }
 
         private void Update()
         {
             if (!Bound) return;
 
-            if (world == null)
+            // No clock any more for a frame on the way out: the world goes before its scene does
+            if (clock == null)
             {
                 Hide();
                 return;
             }
 
-            DateTime now = world.Now;
+            DateTime now = clock.Now;
             long minute = now.Ticks / TimeSpan.TicksPerMinute;
 
-            if (minute == shown) return;
+            if (minute == shownMinute) return;
 
-            shown = minute;
-            clock.text = RussianDate.Moment(now);
+            shownMinute = minute;
+            clockLabel.text = RussianDate.Moment(now);
         }
 
         protected override bool Bind(VisualElement root)
         {
-            clock = root.Q<Label>(ClockElement);
-            shown = Hidden;
+            clockLabel = root.Q<Label>(ClockElement);
+            shownMinute = Hidden;
 
-            if (clock == null)
+            if (clockLabel == null)
             {
                 Log.Error($"Overlay document has no {ClockElement} label, the clock stays hidden");
                 return false;
@@ -55,15 +56,15 @@ namespace Shooter.Game
 
         protected override void Unbind()
         {
-            clock = null;
+            clockLabel = null;
         }
 
         private void Hide()
         {
-            if (shown == Hidden) return;
+            if (shownMinute == Hidden) return;
 
-            shown = Hidden;
-            clock.text = string.Empty;
+            shownMinute = Hidden;
+            clockLabel.text = string.Empty;
         }
     }
 }
