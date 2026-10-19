@@ -65,7 +65,7 @@ PrefabInstance:
       value: AngelGrey
       objectReference: {fileID: 0}
     - target: {fileID: 8579487752863522997, guid: 67e439bbd8635e44cadad78d86aa9b18, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: 17cf8cd4e97747eeae836bb768c7335e, type: 2}
     m_RemovedComponents: []

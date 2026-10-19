@@ -128,7 +128,7 @@ namespace Shooter.Game
 
         private GameObject Wanted()
         {
-            return holder.HeldSpec is FirearmSpec firearm ? firearm.Model : null;
+            return holder.HeldAsset is FirearmAsset firearm ? firearm.Model : null;
         }
 
         private GameObject Wear(GameObject model)

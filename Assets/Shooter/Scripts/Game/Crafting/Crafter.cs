@@ -51,7 +51,7 @@ namespace Shooter.Game
                 return false;
             }
 
-            Dictionary<StackableItemSpec, int> amountMap = craft.AmountMap();
+            Dictionary<StackableItemAsset, int> amountMap = craft.AmountMap();
 
             foreach (var kvp in amountMap)
             {
@@ -68,11 +68,11 @@ namespace Shooter.Game
                 inventory.Remove(kvp.Key, kvp.Value, InventoryOnConflict.Partly);
             }
 
-            if (craft.Output is StackableItemSpec stackableOutput)
+            if (craft.Output is StackableItemAsset stackableOutput)
             {
                 inventory.Add(stackableOutput, 1);
             }
-            else if (craft.Output is UniqueItemSpec uniqueOutput)
+            else if (craft.Output is UniqueItemAsset uniqueOutput)
             {
                 inventory.Add(uniqueOutput.Create());
             }

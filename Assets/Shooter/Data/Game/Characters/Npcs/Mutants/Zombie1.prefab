@@ -9,7 +9,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1409396421700863558, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: 73ebcce2cc552da4dac557329c3f0632, type: 2}
     - target: {fileID: 1820400599769648782, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
@@ -61,7 +61,7 @@ PrefabInstance:
       value: Zombie1
       objectReference: {fileID: 0}
     - target: {fileID: 5149324034548456437, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      propertyPath: spec
+      propertyPath: asset
       value: 
       objectReference: {fileID: 11400000, guid: f2cb18773d5bcffd89c26e32124cd661, type: 2}
     - target: {fileID: 7594467300387980415, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}

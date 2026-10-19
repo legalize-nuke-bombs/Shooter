@@ -30,10 +30,10 @@ The recipient will automatically receive a notification.
 
         protected override string Execute(GiveStackableArguments arguments, LlmCallContext context)
         {
-            ItemSpec item = Catalogs.Of<ItemCatalog>().Of(arguments.Item);
+            ItemAsset item = Catalogs.Of<ItemCatalog>().Of(arguments.Item);
             if (item == null) return $"There is no item named {arguments.Item}";
 
-            if (item is not StackableItemSpec stackable)
+            if (item is not StackableItemAsset stackable)
                 return
                     $"{arguments.Item} does not come in counted amounts, hand it over by its slot number with give_unique";
 

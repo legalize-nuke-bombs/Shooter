@@ -14,7 +14,7 @@ namespace Shooter.Game
 
         [SerializeField] private GameObject corpsePrefab;
 
-        [SerializeField] private EarSoundSpec deathSound;
+        [SerializeField] private EarSoundAsset deathSound;
         private EarSpeaker earSpeaker;
 
         private Health health;
@@ -77,10 +77,10 @@ namespace Shooter.Game
             if (corpse != null)
             {
                 Skin skin = GetComponent<Skin>();
-                if (skin != null && skin.Spec != null) corpse.Dress(skin.Spec);
+                if (skin != null && skin.Asset != null) corpse.Dress(skin.Asset);
 
                 TypedNameable named = GetComponent<TypedNameable>();
-                if (named != null && named.Spec != null) corpse.Rename(named.Spec);
+                if (named != null && named.Asset != null) corpse.Rename(named.Asset);
             }
 
             body.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());

@@ -10,9 +10,9 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private SoundSpec bedding;
+        [SerializeField] private SoundAsset bedding;
 
-        [SerializeField] private SoundSpec rising;
+        [SerializeField] private SoundAsset rising;
         private readonly NetworkVariable<Vector3> bedside = new();
 
         private readonly NetworkVariable<bool> sleeping = new();

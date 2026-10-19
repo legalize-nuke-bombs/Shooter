@@ -9,14 +9,14 @@ namespace Shooter.Infrastructure
     {
     }
 
-    public abstract class Catalog<TSpec> : Catalog where TSpec : Spec
+    public abstract class Catalog<TAsset> : Catalog where TAsset : Asset
     {
-        public const string SpecsField = nameof(specs);
+        public const string AssetsField = nameof(assets);
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private TSpec[] specs;
+        [SerializeField] private TAsset[] assets;
         private readonly Dictionary<FixedString32Bytes, int> indices = new();
-        private readonly List<TSpec> ordered = new();
+        private readonly List<TAsset> ordered = new();
         private readonly HashSet<FixedString32Bytes> reportedUnknown = new();
 
         public int Count => ordered.Count;
@@ -27,42 +27,42 @@ namespace Shooter.Infrastructure
             ordered.Clear();
             reportedUnknown.Clear();
 
-            if (specs == null) return;
+            if (assets == null) return;
 
-            foreach (TSpec spec in specs)
+            foreach (TAsset asset in assets)
             {
-                if (spec == null) continue;
+                if (asset == null) continue;
 
-                if (!spec.IdFitsNetwork())
+                if (!asset.IdFitsNetwork())
                 {
-                    Log.Error($"Catalog {name} skips {spec.name}: its id does not fit the network format");
+                    Log.Error($"Catalog {name} skips {asset.name}: its id does not fit the network format");
                     continue;
                 }
 
-                if (indices.TryGetValue(spec.NetworkId, out int taken))
+                if (indices.TryGetValue(asset.NetworkId, out int taken))
                 {
-                    Log.Error($"Catalog {name} holds both {ordered[taken].name} and {spec.name} under id {spec.Id}");
+                    Log.Error($"Catalog {name} holds both {ordered[taken].name} and {asset.name} under id {asset.Id}");
                     continue;
                 }
 
-                indices.Add(spec.NetworkId, ordered.Count);
-                ordered.Add(spec);
+                indices.Add(asset.NetworkId, ordered.Count);
+                ordered.Add(asset);
             }
 
             Log.Info($"Catalog {name} knows {ordered.Count} things");
         }
 
-        public TSpec At(int index)
+        public TAsset At(int index)
         {
             return index >= 0 && index < ordered.Count ? ordered[index] : null;
         }
 
-        public int Index(TSpec spec)
+        public int Index(TAsset asset)
         {
-            return spec != null && indices.TryGetValue(spec.NetworkId, out int index) ? index : -1;
+            return asset != null && indices.TryGetValue(asset.NetworkId, out int index) ? index : -1;
         }
 
-        public TSpec Of(FixedString32Bytes id)
+        public TAsset Of(FixedString32Bytes id)
         {
             if (indices.TryGetValue(id, out int index)) return ordered[index];
 
@@ -74,7 +74,7 @@ namespace Shooter.Infrastructure
             return null;
         }
 
-        public List<TSpec> FindAll(Predicate<TSpec> predicate)
+        public List<TAsset> FindAll(Predicate<TAsset> predicate)
         {
             return ordered.FindAll(predicate);
         }

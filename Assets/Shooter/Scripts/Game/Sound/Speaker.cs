@@ -17,13 +17,13 @@ namespace Shooter.Game
 
         private static SoundCatalog Sounds => Catalogs.Of<SoundCatalog>();
 
-        public void Play(SoundSpec sound, float gain = 1f)
+        public void Play(SoundAsset sound, float gain = 1f)
         {
             if (!IsServer) return;
 
             if (sound == null)
             {
-                Log.Warn($"Entity {name} was asked to play a sound without a spec set");
+                Log.Warn($"Entity {name} was asked to play a sound without an asset set");
                 return;
             }
 
@@ -40,7 +40,7 @@ namespace Shooter.Game
                 return;
             }
 
-            SoundSpec sound = catalog.Of(id);
+            SoundAsset sound = catalog.Of(id);
             if (sound == null) return;
 
             AudioClip clip = sound.Clip(variant);

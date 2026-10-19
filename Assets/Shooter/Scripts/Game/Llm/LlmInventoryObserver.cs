@@ -26,13 +26,13 @@ namespace Shooter.Game
             exchanger.Received -= Received;
         }
 
-        private void Received(Character from, ItemSpec item, int amount)
+        private void Received(Character from, ItemAsset item, int amount)
         {
             if (item == null) return;
 
             long giver = from == null ? CharacterId.None : from.Id;
 
-            llm.Notice(item is StackableItemSpec
+            llm.Notice(item is StackableItemAsset
                 ? $"[{Llm.Stamp()}] Character {giver} gave you {item.Id} x {amount}"
                 : $"[{Llm.Stamp()}] Character {giver} gave you {item.Id}", true);
         }

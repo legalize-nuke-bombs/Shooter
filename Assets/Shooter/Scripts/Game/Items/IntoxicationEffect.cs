@@ -5,7 +5,7 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Effects/Intoxication", fileName = "Intoxication")]
     public class IntoxicationEffect : ItemEffect
     {
-        [SerializeField] private ToxinSpec toxin;
+        [SerializeField] private ToxinAsset toxin;
         [SerializeField] private float force = 33f;
 
         public override void Apply(GameObject user)

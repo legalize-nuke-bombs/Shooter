@@ -17,21 +17,21 @@ namespace Shooter.Game
 
         private static EarSoundCatalog Sounds => Catalogs.Of<EarSoundCatalog>();
 
-        public void Play(EarSoundSpec sound)
+        public void Play(EarSoundAsset sound)
         {
             if (!IsServer) return;
             if (GetComponent<Player>() == null) return;
 
             if (sound == null)
             {
-                Log.Warn($"Entity {name} was asked to play an ear sound without a spec set");
+                Log.Warn($"Entity {name} was asked to play an ear sound without an asset set");
                 return;
             }
 
             PlayRpc(sound.NetworkId, sound.Pick());
         }
 
-        public void PlayLocal(EarSoundSpec sound)
+        public void PlayLocal(EarSoundAsset sound)
         {
             if (sound == null) return;
 
@@ -48,13 +48,13 @@ namespace Shooter.Game
                 return;
             }
 
-            EarSoundSpec sound = catalog.Of(id);
+            EarSoundAsset sound = catalog.Of(id);
             if (sound == null) return;
 
             Ring(sound, variant);
         }
 
-        private void Ring(EarSoundSpec sound, byte variant)
+        private void Ring(EarSoundAsset sound, byte variant)
         {
             AudioClip clip = sound.Clip(variant);
             if (clip == null) return;

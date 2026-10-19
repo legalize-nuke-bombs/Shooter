@@ -25,17 +25,17 @@ namespace Shooter.Game
             recipient.Received -= Received;
         }
 
-        private void Received(NotificationSpec spec)
+        private void Received(NotificationAsset asset)
         {
-            IconSpec icon = spec.Icon;
+            IconAsset icon = asset.Icon;
             string iconDescription = icon == null ? "none" : icon.PromptDescription;
 
-            EarSoundSpec sound = spec.Sound;
+            EarSoundAsset sound = asset.Sound;
             string soundDescription = sound == null ? "none" : sound.PromptDescription;
 
             llm.Notice(
-                $"[{Llm.Stamp()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {spec.Told}",
-                spec.Urgent
+                $"[{Llm.Stamp()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {asset.Told}",
+                asset.Urgent
             );
         }
     }

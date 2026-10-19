@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private NotificationSpec notificationSpec;
+        [SerializeField] private NotificationAsset notificationAsset;
         [SerializeField] private bool oncePerCharacter = true;
 
         private HashSet<long> characters = new HashSet<long>();
@@ -34,9 +34,9 @@ namespace Shooter.Game
 
         public void OnTrigger(Character character)
         {
-            if (notificationSpec == null)
+            if (notificationAsset == null)
             {
-                Log.Warn($"Entity {name} does not have a notification spec");
+                Log.Warn($"Entity {name} does not have a notification asset");
                 return;
             }
 
@@ -49,7 +49,7 @@ namespace Shooter.Game
             }
 
             Log.Info($"Entity {name} is sending notification to {notificationRecipient.name}...");
-            notificationRecipient.Receive(notificationSpec);
+            notificationRecipient.Receive(notificationAsset);
         }
     }
 }

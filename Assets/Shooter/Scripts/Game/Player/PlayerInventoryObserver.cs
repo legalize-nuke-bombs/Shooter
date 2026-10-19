@@ -11,7 +11,7 @@ namespace Shooter.Game
     {
         private const string Stranger = "Незнакомец";
 
-        [SerializeField] private EarSoundSpec sound;
+        [SerializeField] private EarSoundAsset sound;
 
         private readonly NameMapper mapper = new();
         private InventoryExchanger exchanger;
@@ -33,7 +33,7 @@ namespace Shooter.Game
             if (IsServer) exchanger.Received -= Relay;
         }
 
-        private void Relay(Character from, ItemSpec item, int amount)
+        private void Relay(Character from, ItemAsset item, int amount)
         {
             // An offline body is owned by the host
             if (item == null || !gameObject.activeInHierarchy) return;
@@ -45,11 +45,11 @@ namespace Shooter.Game
         private void ReceivedRpc(long giverId, FixedString32Bytes itemId, int amount)
         {
             ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
-            ItemSpec item = catalog == null ? null : catalog.Of(itemId);
+            ItemAsset item = catalog == null ? null : catalog.Of(itemId);
             if (item == null) return;
 
             string named = mapper.Of(giverId);
-            string title = item is StackableItemSpec ? $"{item.Title} × {amount}" : item.Title;
+            string title = item is StackableItemAsset ? $"{item.Title} × {amount}" : item.Title;
 
             Toasted?.Invoke(new Toast(item.Icon, sound, title, "от " + (string.IsNullOrEmpty(named) ? Stranger : named)));
         }

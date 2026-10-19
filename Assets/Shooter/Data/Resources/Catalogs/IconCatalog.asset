@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f55ed36604fd41ab961429130ee8a431, type: 3}
   m_Name: IconCatalog
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Icons.IconCatalog
-  specs:
+  assets:
   - {fileID: 11400000, guid: dc2ef63794314c829b091e3628876c5c, type: 2}
   - {fileID: 11400000, guid: ff0cb665195a414ca33b54ef32f17835, type: 2}
   - {fileID: 11400000, guid: a4915dc5353b4554a10695f592418dd7, type: 2}

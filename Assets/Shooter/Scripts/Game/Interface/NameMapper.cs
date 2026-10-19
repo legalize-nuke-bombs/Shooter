@@ -19,7 +19,7 @@ namespace Shooter.Game
                 case AbsoluteNameable absolute:
                     return absolute.Name;
                 case TypedNameable typed:
-                    return typed.Spec == null ? string.Empty : typed.Spec.Text();
+                    return typed.Asset == null ? string.Empty : typed.Asset.Text();
                 default:
                     return string.Empty;
             }

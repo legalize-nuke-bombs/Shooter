@@ -4,8 +4,8 @@ using UnityEngine.Audio;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Ear Sound", fileName = "EarSound")]
-    public class EarSoundSpec : Spec
+    [CreateAssetMenu(menuName = "Shooter/Sound", fileName = "Sound")]
+    public class SoundAsset : Asset
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -15,14 +15,23 @@ namespace Shooter.Game
 
         [SerializeField] [Range(0f, 1f)] private float volume = 1f;
 
-        [SerializeField] [Range(0f, 0.5f)] private float pitchVariation;
+        [SerializeField] private AudioRolloffMode rolloff = AudioRolloffMode.Logarithmic;
 
-        [SerializeField] private string promptDescription;
-        public string PromptDescription => promptDescription;
+        [SerializeField] private float minDistance = 1f;
+
+        [SerializeField] private float maxDistance = 100f;
+
+        [SerializeField] [Range(0f, 0.5f)] private float pitchVariation = 0.05f;
 
         public AudioMixerGroup Output => output;
 
         public float Volume => volume;
+
+        public AudioRolloffMode Rolloff => rolloff;
+
+        public float MinDistance => minDistance;
+
+        public float MaxDistance => maxDistance;
 
         public float PitchVariation => pitchVariation;
 
@@ -30,7 +39,7 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            if (output == null) Log.Error($"Ear sound {name} has no mixer group set, it will not follow the volume settings");
+            if (output == null) Log.Error($"Sound {name} has no mixer group set, it will not follow the volume settings");
         }
 
         public byte Pick()

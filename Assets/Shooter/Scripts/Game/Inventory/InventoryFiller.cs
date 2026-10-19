@@ -14,11 +14,11 @@ namespace Shooter.Game
         [Serializable]
         private struct Entry
         {
-            [SerializeField] private ItemSpec spec;
+            [SerializeField] private ItemAsset asset;
             [SerializeField] private int amount;
             [SerializeField] private bool held;
 
-            public ItemSpec Spec => spec;
+            public ItemAsset Asset => asset;
 
             public int Amount => amount;
 
@@ -42,7 +42,7 @@ namespace Shooter.Game
 
             foreach (Entry entry in contents)
             {
-                if (entry.Spec == null) continue;
+                if (entry.Asset == null) continue;
 
                 Fill(entry);
             }
@@ -54,13 +54,13 @@ namespace Shooter.Game
         {
             int amount = Math.Max(entry.Amount, 1);
 
-            if (entry.Spec is StackableItemSpec stackable)
+            if (entry.Asset is StackableItemAsset stackable)
             {
                 inventory.Add(stackable, amount);
                 return;
             }
 
-            var unique = (UniqueItemSpec)entry.Spec;
+            var unique = (UniqueItemAsset)entry.Asset;
 
             for (int made = 0; made < amount; made++)
             {

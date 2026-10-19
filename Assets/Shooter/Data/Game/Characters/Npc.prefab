@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.TypedNameable
   ShowTopMostFoldoutHeaderGroup: 1
-  spec: {fileID: 0}
+  asset: {fileID: 0}
 --- !u!114 &5662692412787698359
 MonoBehaviour:
   m_ObjectHideFlags: 0

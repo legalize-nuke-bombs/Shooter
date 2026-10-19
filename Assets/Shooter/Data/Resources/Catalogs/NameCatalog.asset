@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76062cc05c6da4c499f4d00449c1d631, type: 3}
   m_Name: NameCatalog
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.NameCatalog
-  specs:
+  assets:
   - {fileID: 11400000, guid: cfe12c834452ba04898229093b36e283, type: 2}
   - {fileID: 11400000, guid: 97b21eab3a5661043bc3301e3294c7f3, type: 2}
   - {fileID: 11400000, guid: 72530d69524d0074ebf7e9429064ea2f, type: 2}

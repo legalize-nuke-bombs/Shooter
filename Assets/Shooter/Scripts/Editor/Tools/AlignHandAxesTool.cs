@@ -51,7 +51,7 @@ namespace Shooter.Editor
                 }
 
                 var rebound = new HashSet<Mesh>();
-                foreach (IGrouping<string, SkinSpec> worn in Skins().GroupBy(ModelPathOf))
+                foreach (IGrouping<string, SkinAsset> worn in Skins().GroupBy(ModelPathOf))
                 {
                     if (worn.Key != null && worn.Key != standardPath)
                     {
@@ -65,7 +65,7 @@ namespace Shooter.Editor
             }
         }
 
-        private static void AlignModel(string model, IEnumerable<SkinSpec> skins, NeutralHands standard, Scene stage, HashSet<Mesh> rebound)
+        private static void AlignModel(string model, IEnumerable<SkinAsset> skins, NeutralHands standard, Scene stage, HashSet<Mesh> rebound)
         {
             if (AssetImporter.GetAtPath(model) is not ModelImporter importer) return;
 
@@ -87,7 +87,7 @@ namespace Shooter.Editor
             importer.humanDescription = TurnedHumanDescription(importer.humanDescription, hands, right, left);
             importer.SaveAndReimport();
 
-            foreach (SkinSpec skin in skins)
+            foreach (SkinAsset skin in skins)
             {
                 TurnUnpackedSkin(skin, model, right, left, rebound);
             }
@@ -95,7 +95,7 @@ namespace Shooter.Editor
             Log.Info($"Skin model {Path.GetFileNameWithoutExtension(model)} turned its hands to the standard axes: right by {Angle(right):F0}°, left by {Angle(left):F0}°");
         }
 
-        private static void TurnUnpackedSkin(SkinSpec skin, string model, Quaternion right, Quaternion left, HashSet<Mesh> rebound)
+        private static void TurnUnpackedSkin(SkinAsset skin, string model, Quaternion right, Quaternion left, HashSet<Mesh> rebound)
         {
             string path = AssetDatabase.GetAssetPath(skin.Model);
             if (path == model) return;
@@ -176,15 +176,15 @@ namespace Shooter.Editor
             bone.rotation = back * bone.rotation;
         }
 
-        private static IEnumerable<SkinSpec> Skins()
+        private static IEnumerable<SkinAsset> Skins()
         {
-            return AssetDatabase.FindAssets("t:" + nameof(SkinSpec))
+            return AssetDatabase.FindAssets("t:" + nameof(SkinAsset))
                 .Select(AssetDatabase.GUIDToAssetPath)
-                .Select(AssetDatabase.LoadAssetAtPath<SkinSpec>)
-                .Where(spec => spec != null && spec.Model != null);
+                .Select(AssetDatabase.LoadAssetAtPath<SkinAsset>)
+                .Where(asset => asset != null && asset.Model != null);
         }
 
-        private static string ModelPathOf(SkinSpec skin)
+        private static string ModelPathOf(SkinAsset skin)
         {
             Animator animator = skin.Model.GetComponent<Animator>();
             return animator == null || animator.avatar == null ? null : AssetDatabase.GetAssetPath(animator.avatar);

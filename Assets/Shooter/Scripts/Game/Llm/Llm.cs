@@ -25,9 +25,9 @@ namespace Shooter.Game
 
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private SystemPromptSpec[] systemPrompts;
+        [SerializeField] private SystemPromptAsset[] systemPrompts;
         [SerializeField] [TextArea(5, 20)] private string character;
-        [SerializeField] private KnowledgeSpec[] knowledges;
+        [SerializeField] private KnowledgeAsset[] knowledges;
         [SerializeField] private float failureCooldown = 2.5f;
         [SerializeField] private int maxToolRounds = 10;
 
@@ -80,7 +80,7 @@ namespace Shooter.Game
         {
             var systemPrompt = new StringBuilder();
             systemPrompt.Append("SYSTEM PROMPT BEGIN\n");
-            foreach (SystemPromptSpec sp in systemPrompts)
+            foreach (SystemPromptAsset sp in systemPrompts)
             {
                 if (sp == null)
                 {
@@ -98,7 +98,7 @@ namespace Shooter.Game
         private string Knowledge()
         {
             var known = new StringBuilder();
-            foreach (KnowledgeSpec knowledge in knowledges)
+            foreach (KnowledgeAsset knowledge in knowledges)
             {
                 if (knowledge == null)
                 {

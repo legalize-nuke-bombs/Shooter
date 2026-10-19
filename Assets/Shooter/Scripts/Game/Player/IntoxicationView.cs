@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Intoxication))]
     public class IntoxicationView : NetworkBehaviour
     {
-        private readonly Dictionary<ToxinSpec, List<PerceptionEffect>> trips = new();
+        private readonly Dictionary<ToxinAsset, List<PerceptionEffect>> trips = new();
 
         private Intoxication intoxication;
 
@@ -25,7 +25,7 @@ namespace Shooter.Game
 
             for (int index = 0; index < toxins.Count; index++)
             {
-                ToxinSpec toxin = toxins.At(index);
+                ToxinAsset toxin = toxins.At(index);
                 float strength = (float)(intoxication.Level(toxin) / 100d);
 
                 if (strength <= 0f)
@@ -53,21 +53,21 @@ namespace Shooter.Game
             trips.Clear();
         }
 
-        private List<PerceptionEffect> Begin(ToxinSpec toxin)
+        private List<PerceptionEffect> Begin(ToxinAsset toxin)
         {
             var trip = new List<PerceptionEffect>();
 
-            foreach (PerceptionEffectSpec spec in toxin.PerceptionEffects)
+            foreach (PerceptionEffectAsset asset in toxin.PerceptionEffects)
             {
-                if (spec == null) continue;
+                if (asset == null) continue;
 
-                trip.Add(spec.Create());
+                trip.Add(asset.Create());
             }
 
             return trip;
         }
 
-        private void End(ToxinSpec toxin)
+        private void End(ToxinAsset toxin)
         {
             foreach (PerceptionEffect effect in trips[toxin]) effect.End();
 

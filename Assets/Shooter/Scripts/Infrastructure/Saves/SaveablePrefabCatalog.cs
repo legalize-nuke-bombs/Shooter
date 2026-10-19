@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [CreateAssetMenu(menuName = "Shooter-saves/Saveable Prefab Catalog", fileName = "SaveablePrefabCatalog")]
-    public class SaveablePrefabCatalog : Catalog<SaveablePrefabSpec>
+    public class SaveablePrefabCatalog : Catalog<SaveablePrefabAsset>
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -18,14 +18,14 @@ namespace Shooter.Infrastructure
             ids.Clear();
             for (int i = 0; i < Count; i++)
             {
-                SaveablePrefabSpec spec = At(i);
-                if (spec.Prefab == null)
+                SaveablePrefabAsset asset = At(i);
+                if (asset.Prefab == null)
                 {
-                    Log.Warn($"Catalog {name} contains null spec at index {i}");
+                    Log.Warn($"Catalog {name} contains null asset at index {i}");
                     continue;
                 }
-                uint hash = spec.Prefab.GetComponent<NetworkObject>().PrefabIdHash;
-                if (!ids.TryAdd(hash, spec.NetworkId))
+                uint hash = asset.Prefab.GetComponent<NetworkObject>().PrefabIdHash;
+                if (!ids.TryAdd(hash, asset.NetworkId))
                 {
                     Log.Error($"Catalog {name} maps hash {hash} twice");
                 }

@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d2a6c4f1b9e43708c5e2a7d9f461b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Skin
-  spec: {fileID: 0}
+  asset: {fileID: 0}
 --- !u!114 &6600000000000000109
 MonoBehaviour:
   m_ObjectHideFlags: 0

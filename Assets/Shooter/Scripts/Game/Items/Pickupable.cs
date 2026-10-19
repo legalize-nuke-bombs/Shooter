@@ -11,8 +11,8 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private NetworkObject networkObject;
-        [SerializeField] private StackableItemSpec item;
-        [SerializeField] private SoundSpec sound;
+        [SerializeField] private StackableItemAsset item;
+        [SerializeField] private SoundAsset sound;
 
         public Action<Pickupable> OnPickup;
 

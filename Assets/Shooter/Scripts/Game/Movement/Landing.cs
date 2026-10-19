@@ -17,7 +17,7 @@ namespace Shooter.Game
 
         [SerializeField] private float gain = 1.7f;
 
-        [SerializeField] private DamageSpec fallDamage;
+        [SerializeField] private DamageAsset fallDamage;
         private CharacterController body;
         private Health health;
 

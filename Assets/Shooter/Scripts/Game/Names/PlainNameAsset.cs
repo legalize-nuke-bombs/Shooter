@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Plain Name", fileName = "PlainName")]
-    public sealed class PlainNameSpec : NameSpec
+    public sealed class PlainNameAsset : NameAsset
     {
         [SerializeField] private string text;
         [SerializeField] private string prompt;

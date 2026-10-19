@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private int magazine;
 
-        public Firearm(string specId) : base(specId)
+        public Firearm(string assetId) : base(assetId)
         {
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [CreateAssetMenu(menuName = "Shooter/Glitch Name", fileName = "GlitchName")]
-    public sealed class GlitchNameSpec : NameSpec
+    public sealed class GlitchNameAsset : NameAsset
     {
         [SerializeField] private string alphabet = "017XREVID#$@%?!&";
 

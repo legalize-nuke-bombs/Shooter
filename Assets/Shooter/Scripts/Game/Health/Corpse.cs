@@ -35,14 +35,14 @@ namespace Shooter.Game
             title.Value = sd.Title;
         }
 
-        public void Dress(SkinSpec spec)
+        public void Dress(SkinAsset asset)
         {
-            skin.Value = spec.NetworkId;
+            skin.Value = asset.NetworkId;
         }
 
-        public void Rename(NameSpec spec)
+        public void Rename(NameAsset asset)
         {
-            title.Value = spec.NetworkId;
+            title.Value = asset.NetworkId;
         }
 
         public override void OnNetworkSpawn()
@@ -65,8 +65,8 @@ namespace Shooter.Game
             if (dressed || current.IsEmpty) return;
 
             SkinCatalog catalog = Catalogs.Of<SkinCatalog>();
-            SkinSpec spec = catalog == null ? null : catalog.Of(current);
-            if (spec == null || spec.Model == null)
+            SkinAsset asset = catalog == null ? null : catalog.Of(current);
+            if (asset == null || asset.Model == null)
             {
                 Log.Error($"Corpse {name} cannot find skin {current}, stays invisible");
                 return;
@@ -74,7 +74,7 @@ namespace Shooter.Game
 
             dressed = true;
 
-            GameObject body = Instantiate(spec.Model, transform);
+            GameObject body = Instantiate(asset.Model, transform);
             body.transform.localPosition = new Vector3(0f, -1f, 0f);
             body.transform.localRotation = Quaternion.identity;
             body.AddComponent<Ragdoll>();
@@ -88,14 +88,14 @@ namespace Shooter.Game
             if (named == null || current.IsEmpty) return;
 
             NameCatalog catalog = Catalogs.Of<NameCatalog>();
-            NameSpec spec = catalog == null ? null : catalog.Of(current);
-            if (spec == null)
+            NameAsset asset = catalog == null ? null : catalog.Of(current);
+            if (asset == null)
             {
                 Log.Warn($"Corpse {name} cannot find name {current}, keeps its own");
                 return;
             }
 
-            named.Assign(spec);
+            named.Assign(asset);
         }
     }
 }

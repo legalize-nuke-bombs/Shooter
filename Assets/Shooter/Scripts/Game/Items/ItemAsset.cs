@@ -3,17 +3,17 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public abstract class ItemSpec : Spec
+    public abstract class ItemAsset : Asset
     {
         [SerializeField] private string title;
         [SerializeField] private GameObject model;
-        [SerializeField] private IconSpec icon;
+        [SerializeField] private IconAsset icon;
         [SerializeField] private Vector2Int cells = Vector2Int.one;
         [SerializeField] private string promptDescription;
 
         public GameObject Model => model;
 
-        public IconSpec Icon => icon;
+        public IconAsset Icon => icon;
 
         public Vector2Int Cells => new(Mathf.Max(cells.x, 1), Mathf.Max(cells.y, 1));
 

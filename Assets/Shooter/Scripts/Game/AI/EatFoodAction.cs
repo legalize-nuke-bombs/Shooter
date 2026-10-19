@@ -27,11 +27,11 @@ namespace Shooter.Game
             Hunger hunger = Agent.Value.GetComponent<Hunger>();
             if (user == null || hunger == null) return Status.Failure;
 
-            foreach (ItemSpec item in Catalogs.Of<ItemCatalog>().FindAll(item =>
-                         item is StackableItemSpec stackableItem && stackableItem.FoodMarker > 0))
+            foreach (ItemAsset item in Catalogs.Of<ItemCatalog>().FindAll(item =>
+                         item is StackableItemAsset stackableItem && stackableItem.FoodMarker > 0))
             {
                 int startSaturation = (int)hunger.Amount;
-                if (user.Use((StackableItemSpec)item))
+                if (user.Use((StackableItemAsset)item))
                 {
                     Log.Info($"Entity {Agent.Value.name} ate {item.Id} by behavior graph");
                     BtReports reports = Agent.Value.GetComponent<BtReports>();

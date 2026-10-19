@@ -6,12 +6,12 @@ namespace Shooter.Game
 {
     public abstract class UniqueItem : INetworkSerializable, ISaveable
     {
-        protected UniqueItem(string specId)
+        protected UniqueItem(string assetId)
         {
-            SpecId = specId;
+            AssetId = assetId;
         }
 
-        public string SpecId { get; private set; }
+        public string AssetId { get; private set; }
 
         public event Action Changed;
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d8f1a2c9e47b5a0d7c4e8b2f65193, type: 3}
   m_Name: Skins
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.SkinCatalog
-  specs:
+  assets:
   - {fileID: 11400000, guid: 7a4f2e8c5d1b49a3b0e6c9d2f8a51637, type: 2}
   - {fileID: 11400000, guid: c0a6795b4be341b79c8dd8c1f7eceb94, type: 2}
   - {fileID: 11400000, guid: 4b3ca71c15e94816a5ecff55fcc9dbff, type: 2}

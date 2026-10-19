@@ -12,7 +12,7 @@ namespace Shooter.Game
     {
         private readonly NetworkVariable<bool> thinking = new();
 
-        [SerializeField] private SoundSpec muttering;
+        [SerializeField] private SoundAsset muttering;
 
         private Character character;
         private ConversationManager conversations;
