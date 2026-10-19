@@ -8,83 +8,81 @@ namespace Shooter.Game
 {
     public class SavesPage : MainMenuPage
     {
-        private const string SavesElement = "saves";
-        private const string EmptyElement = "empty";
-        private const string BackButton = "back";
+        private const string SaveListViewName = "saves";
+        private const string EmptyLabelName = "empty";
+        private const string BackButtonName = "back";
         private const string DeleteQuestion = "Удалить сохранение?";
-        private const string DeleteLabel = "Удалить";
-        private const string ForeignQuestion = "Другая версия";
-        private const string ForeignLabel = "Загрузить";
+        private const string DeleteConfirmLabel = "Удалить";
+        private const string ForeignVersionQuestion = "Другая версия";
+        private const string ForeignVersionConfirmLabel = "Загрузить";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly Dialog dialog;
-        private readonly Label empty;
-        private readonly ListView saves;
-        private List<SaveEntry> entries = new();
+        private readonly MainMenuDialog dialog;
+        private readonly Label emptyLabel;
+        private readonly ListView saveListView;
+        private List<SaveEntry> saveEntries = new();
 
-        public SavesPage(VisualElement root, Dialog dialog) : base(root)
+        public SavesPage(VisualElement root, MainMenuDialog dialog) : base(root)
         {
             this.dialog = dialog;
-            saves = Require<ListView>(SavesElement);
-            empty = Require<Label>(EmptyElement);
+            saveListView = RequireElement<ListView>(SaveListViewName);
+            emptyLabel = RequireElement<Label>(EmptyLabelName);
 
-            saves.makeItem = () => new SaveCard();
-            saves.bindItem = (element, index) => ((SaveCard)element).Show(entries[index], AskToLoad, AskToDelete);
-            saves.unbindItem = (element, index) => ((SaveCard)element).Release();
-            saves.destroyItem = element => ((SaveCard)element).Release();
+            saveListView.makeItem = () => new SaveCard();
+            saveListView.bindItem = (element, index) => ((SaveCard)element).ShowSaveEntry(saveEntries[index], AskToLoad, AskToDelete);
+            saveListView.unbindItem = (element, index) => ((SaveCard)element).ClearSaveEntry();
+            saveListView.destroyItem = element => ((SaveCard)element).ClearSaveEntry();
 
-            Require<Button>(BackButton).clicked += () => Backing?.Invoke();
+            RequireElement<Button>(BackButtonName).clicked += () => BackClicked?.Invoke();
         }
 
-        public event Action<string> Loading;
+        public event Action<string> SaveToLoadChosen;
 
-        public event Action Backing;
+        public event Action BackClicked;
 
-        protected override void Opened()
+        protected override void HandlePageShown()
         {
-            Refresh();
+            RefreshSaveList();
         }
 
-        private void Refresh()
+        private void RefreshSaveList()
         {
-            entries = SaveLibrary.ReadAllEntries();
-            saves.itemsSource = entries;
-            saves.RefreshItems();
+            saveEntries = SaveLibrary.ReadAllEntries();
+            saveListView.itemsSource = saveEntries;
+            saveListView.RefreshItems();
 
-            bool any = entries.Count > 0;
-            saves.style.display = any ? DisplayStyle.Flex : DisplayStyle.None;
-            empty.style.display = any ? DisplayStyle.None : DisplayStyle.Flex;
+            bool hasSaves = saveEntries.Count > 0;
+            saveListView.style.display = hasSaves ? DisplayStyle.Flex : DisplayStyle.None;
+            emptyLabel.style.display = hasSaves ? DisplayStyle.None : DisplayStyle.Flex;
 
-            Log.Info($"Saves page lists {entries.Count} saves");
+            Log.Info($"Saves page lists {saveEntries.Count} saves");
         }
 
-        private void AskToLoad(SaveEntry entry)
+        private void AskToLoad(SaveEntry saveEntry)
         {
-            if (!entry.IsFromAnotherVersion)
+            if (!saveEntry.IsFromAnotherVersion)
             {
-                Load(entry);
+                ChooseSaveToLoad(saveEntry);
                 return;
             }
 
-            dialog.Warn(ForeignQuestion,
-                $"Сохранение {entry.Meta.Version}, игра {Application.version}. Совместимость не гарантируется.",
-                ForeignLabel, () => Load(entry));
+            dialog.ShowDangerousQuestion(ForeignVersionQuestion, $"Сохранение {saveEntry.Meta.Version}, игра {Application.version}. Совместимость не гарантируется.", ForeignVersionConfirmLabel, () => ChooseSaveToLoad(saveEntry));
         }
 
-        private void Load(SaveEntry entry)
+        private void ChooseSaveToLoad(SaveEntry saveEntry)
         {
-            Loading?.Invoke(entry.Location);
+            SaveToLoadChosen?.Invoke(saveEntry.Location);
         }
 
-        private void AskToDelete(SaveEntry entry)
+        private void AskToDelete(SaveEntry saveEntry)
         {
-            dialog.Warn(DeleteQuestion, RussianDate.Moment(entry.Meta.Stamp), DeleteLabel, () => Delete(entry));
+            dialog.ShowDangerousQuestion(DeleteQuestion, RussianDate.FormatDateAndTime(saveEntry.Meta.Stamp), DeleteConfirmLabel, () => DeleteSave(saveEntry));
         }
 
-        private void Delete(SaveEntry entry)
+        private void DeleteSave(SaveEntry saveEntry)
         {
-            SaveLibrary.DeleteSave(entry);
-            Refresh();
+            SaveLibrary.DeleteSave(saveEntry);
+            RefreshSaveList();
         }
     }
 }

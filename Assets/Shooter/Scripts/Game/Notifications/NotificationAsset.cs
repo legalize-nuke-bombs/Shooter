@@ -17,12 +17,12 @@ namespace Shooter.Game
 
         public EarSoundAsset Sound => sound;
 
-        public bool Urgent => urgent;
+        public bool IsUrgent => urgent;
 
         public string Title => title;
 
         public string Subtitle => subtitle;
 
-        public string Told => told;
+        public string PromptText => told;
     }
 }

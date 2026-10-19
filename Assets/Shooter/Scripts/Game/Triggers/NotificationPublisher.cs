@@ -49,7 +49,7 @@ namespace Shooter.Game
             if (oncePerCharacter && !notifiedCharacterIds.Add(character.Id)) return;
 
             Log.Info($"Entity {name} is sending notification to {notificationRecipient.name}...");
-            notificationRecipient.Receive(notificationAsset);
+            notificationRecipient.ReceiveNotification(notificationAsset);
         }
     }
 }

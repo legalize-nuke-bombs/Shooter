@@ -8,9 +8,8 @@ using Random = UnityEngine.Random;
 
 namespace Shooter.Game
 {
-    // Stands in Boot and lives through every scene. The menu and the host's world show the stages they start, and the
-    // world takes the screen down once its save is in; the loads Netcode runs the screen follows itself, as nobody else
-    // is up to see them, down to a client getting in
+    // Lives in Boot through every scene. The menu and the host's world show the stages they start and the world takes the
+    // screen down once its save is in; the loads Netcode runs the screen follows itself, as nobody else is up to see them
     public class LoadingScreenOverlay : Overlay
     {
         private const string ScreenElementName = "loading";
@@ -58,7 +57,6 @@ namespace Shooter.Game
             network.OnClientConnectedCallback -= HandleClientConnected;
         }
 
-        // A stage the player may give up shows a cancel button, and the press goes back to whoever started the stage
         public void ShowStage(LoadingScreenStage stage, Action cancelCallback = null)
         {
             stageTitle = StageTitles[stage];
@@ -68,7 +66,7 @@ namespace Shooter.Game
             UpdateElementsIfBound();
         }
 
-        public void Hide()
+        public void HideScreen()
         {
             shown = false;
             cancelCallback = null;
@@ -76,7 +74,7 @@ namespace Shooter.Game
             UpdateElementsIfBound();
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
             screenElement = root.Q<VisualElement>(ScreenElementName);
             stageLabel = root.Q<Label>(StageLabelName);
@@ -96,7 +94,7 @@ namespace Shooter.Game
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
             screenElement = null;
             stageLabel = null;
@@ -106,7 +104,7 @@ namespace Shooter.Game
 
         private void UpdateElementsIfBound()
         {
-            if (Bound) UpdateElements();
+            if (IsBound) UpdateElements();
         }
 
         private void UpdateElements()
@@ -148,7 +146,7 @@ namespace Shooter.Game
         {
             if (network.IsServer || clientId != network.LocalClientId) return;
 
-            Hide();
+            HideScreen();
         }
 
         private string GetRandomTip()

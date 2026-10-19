@@ -7,120 +7,126 @@ namespace Shooter.Game
 {
     public class RadioOverlay : Overlay
     {
-        private const string WindowElement = "radio";
-        private const string ListElement = "radio-list";
-        private const string EmptyElement = "radio-empty";
+        private const string WindowElementName = "radio";
+        private const string ContactScrollViewName = "radio-list";
+        private const string EmptyLabelName = "radio-empty";
         private const string Stranger = "Незнакомец";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly NameMapper mapper = new();
-        private PlayerConversations conversations;
-        private Label empty;
-        private ScrollView list;
+        private readonly NameMapper nameMapper = new();
+        private PlayerConversations playerConversations;
+        private Label emptyLabel;
+        private ScrollView contactScrollView;
         private bool open;
         private bool stale;
-        private VisualElement window;
+        private VisualElement windowElement;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
-            bool wanted = player != null && player.IsRadioOpen;
+            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
+            bool shouldBeOpen = localPlayer != null && localPlayer.IsRadioOpen;
 
-            if (wanted != open)
+            if (shouldBeOpen != open)
             {
-                open = wanted;
+                open = shouldBeOpen;
 
-                if (open) Open(player);
-                else Close();
+                if (open)
+                {
+                    OpenWindow(localPlayer);
+                }
+                else
+                {
+                    CloseWindow();
+                }
             }
 
-            if (open && stale) Fill(player);
+            if (open && stale) FillContactList(localPlayer);
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            window = root.Q<VisualElement>(WindowElement);
-            list = root.Q<ScrollView>(ListElement);
-            empty = root.Q<Label>(EmptyElement);
+            windowElement = root.Q<VisualElement>(WindowElementName);
+            contactScrollView = root.Q<ScrollView>(ContactScrollViewName);
+            emptyLabel = root.Q<Label>(EmptyLabelName);
 
-            if (window == null || list == null || empty == null)
+            if (windowElement == null || contactScrollView == null || emptyLabel == null)
             {
-                Log.Error($"Overlay document has no {WindowElement} window, the radio stays hidden");
+                Log.Error($"Overlay document has no {WindowElementName} window, the radio stays hidden");
                 return false;
             }
 
-            window.style.display = DisplayStyle.None;
+            windowElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            if (open) Close();
+            if (open) CloseWindow();
 
             open = false;
-            window = null;
+            windowElement = null;
         }
 
-        private void Open(LocalPlayer player)
+        private void OpenWindow(LocalPlayer localPlayer)
         {
-            conversations = player.GetComponent<PlayerConversations>();
-            if (conversations != null) conversations.LinesArrived += Touch;
+            playerConversations = localPlayer.GetComponent<PlayerConversations>();
+            if (playerConversations != null) playerConversations.LinesArrived += HandleLinesArrived;
 
-            window.style.display = DisplayStyle.Flex;
+            windowElement.style.display = DisplayStyle.Flex;
             stale = true;
             Log.Info("The radio is open");
         }
 
-        private void Close()
+        private void CloseWindow()
         {
-            if (conversations != null) conversations.LinesArrived -= Touch;
-            conversations = null;
+            if (playerConversations != null) playerConversations.LinesArrived -= HandleLinesArrived;
+            playerConversations = null;
 
-            if (window != null) window.style.display = DisplayStyle.None;
-            list?.Clear();
+            if (windowElement != null) windowElement.style.display = DisplayStyle.None;
+            contactScrollView?.Clear();
             Log.Info("The radio is closed");
         }
 
-        private void Touch(long partnerId)
+        private void HandleLinesArrived(long partnerId)
         {
             stale = true;
         }
 
-        private void Fill(LocalPlayer player)
+        private void FillContactList(LocalPlayer localPlayer)
         {
             stale = false;
-            list.Clear();
+            contactScrollView.Clear();
 
-            List<Contact> contacts = conversations == null
+            List<Contact> contacts = playerConversations == null
                 ? new List<Contact>()
-                : conversations.Contacts.Values.OrderByDescending(contact => contact.LastLineTime).ToList();
+                : playerConversations.Contacts.Values.OrderByDescending(contact => contact.LastLineTime).ToList();
 
-            empty.style.display = contacts.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            emptyLabel.style.display = contacts.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
 
             foreach (Contact contact in contacts)
             {
                 long partnerId = contact.PartnerId;
 
-                var item = new Button(() => player.OpenRadioTalk(partnerId)) { text = Named(partnerId) };
-                item.AddToClassList("radio__item");
-                if (contact.UnreadLineCount > 0) item.AddToClassList("radio__item--unread");
+                Button contactButton = new(() => localPlayer.OpenRadioTalk(partnerId)) { text = GetPartnerName(partnerId) };
+                contactButton.AddToClassList("radio__item");
+                if (contact.UnreadLineCount > 0) contactButton.AddToClassList("radio__item--unread");
 
-                list.Add(item);
+                contactScrollView.Add(contactButton);
             }
         }
 
-        private string Named(long partnerId)
+        private string GetPartnerName(long partnerId)
         {
             Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Exclude);
             Nameable nameable = partner == null ? null : partner.GetComponentInChildren<Nameable>();
             if (nameable == null) return Stranger;
 
-            string named = mapper.Of(nameable);
+            string shownName = nameMapper.GetShownName(nameable);
 
-            return string.IsNullOrEmpty(named) ? Stranger : named;
+            return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }
     }
 }

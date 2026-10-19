@@ -5,84 +5,84 @@ namespace Shooter.Game
 {
     public class AmmoOverlay : Overlay
     {
-        private const string BoxElement = "ammo";
-        private const string MagazineElement = "ammo-magazine";
-        private const string ReserveElement = "ammo-reserve";
+        private const string CounterElementName = "ammo";
+        private const string MagazineLabelName = "ammo-magazine";
+        private const string ReserveLabelName = "ammo-reserve";
         private const int Hidden = -1;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
-        private Inventory bag;
-        private InventoryHolder holder;
 
-        private VisualElement box;
-        private Label magazine;
-        private Label reserve;
-        private int shownMagazine = Hidden;
-        private int shownReserve = Hidden;
+        private Inventory inventory;
+        private InventoryHolder inventoryHolder;
+
+        private VisualElement counterElement;
+        private Label magazineLabel;
+        private Label reserveLabel;
+        private int shownMagazineRounds = Hidden;
+        private int shownReserveRounds = Hidden;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            if (bag == null) bag = OwnPlayer.FindComponent<Inventory>();
-            if (holder == null) holder = OwnPlayer.FindComponent<InventoryHolder>();
+            if (inventory == null) inventory = OwnPlayer.FindComponent<Inventory>();
+            if (inventoryHolder == null) inventoryHolder = OwnPlayer.FindComponent<InventoryHolder>();
 
-            Firearm firearm = holder == null ? null : holder.HeldItem as Firearm;
-            ItemCatalog items = Catalogs.GetCatalog<ItemCatalog>();
-            FirearmAsset asset = items == null || firearm == null ? null : items.GetFirearmAssetById(firearm.AssetId);
+            Firearm firearm = inventoryHolder == null ? null : inventoryHolder.HeldItem as Firearm;
+            ItemCatalog itemCatalog = Catalogs.GetCatalog<ItemCatalog>();
+            FirearmAsset firearmAsset = itemCatalog == null || firearm == null ? null : itemCatalog.GetFirearmAssetById(firearm.AssetId);
 
-            if (firearm == null || asset == null)
+            if (firearm == null || firearmAsset == null)
             {
-                Hide();
+                HideCounter();
                 return;
             }
 
-            int held = firearm.RoundsInMagazine;
-            int left = asset.Ammo == null ? 0 : bag.CountStackable(asset.Ammo);
+            int magazineRounds = firearm.RoundsInMagazine;
+            int reserveRounds = firearmAsset.Ammo == null ? 0 : inventory.CountStackable(firearmAsset.Ammo);
 
-            if (held == shownMagazine && left == shownReserve) return;
+            if (magazineRounds == shownMagazineRounds && reserveRounds == shownReserveRounds) return;
 
-            shownMagazine = held;
-            shownReserve = left;
+            shownMagazineRounds = magazineRounds;
+            shownReserveRounds = reserveRounds;
 
-            box.style.display = DisplayStyle.Flex;
-            magazine.text = held.ToString();
-            reserve.text = left.ToString();
+            counterElement.style.display = DisplayStyle.Flex;
+            magazineLabel.text = magazineRounds.ToString();
+            reserveLabel.text = reserveRounds.ToString();
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            box = root.Q<VisualElement>(BoxElement);
-            magazine = root.Q<Label>(MagazineElement);
-            reserve = root.Q<Label>(ReserveElement);
-            shownMagazine = Hidden;
-            shownReserve = Hidden;
+            counterElement = root.Q<VisualElement>(CounterElementName);
+            magazineLabel = root.Q<Label>(MagazineLabelName);
+            reserveLabel = root.Q<Label>(ReserveLabelName);
+            shownMagazineRounds = Hidden;
+            shownReserveRounds = Hidden;
 
-            if (box == null || magazine == null || reserve == null)
+            if (counterElement == null || magazineLabel == null || reserveLabel == null)
             {
-                Log.Error($"Overlay document has no {BoxElement} box, the ammo counter stays hidden");
+                Log.Error($"Overlay document has no {CounterElementName} box, the ammo counter stays hidden");
                 return false;
             }
 
-            box.style.display = DisplayStyle.None;
+            counterElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            box = null;
-            magazine = null;
-            reserve = null;
+            counterElement = null;
+            magazineLabel = null;
+            reserveLabel = null;
         }
 
-        private void Hide()
+        private void HideCounter()
         {
-            if (shownMagazine == Hidden && shownReserve == Hidden) return;
+            if (shownMagazineRounds == Hidden && shownReserveRounds == Hidden) return;
 
-            shownMagazine = Hidden;
-            shownReserve = Hidden;
-            box.style.display = DisplayStyle.None;
+            shownMagazineRounds = Hidden;
+            shownReserveRounds = Hidden;
+            counterElement.style.display = DisplayStyle.None;
         }
-
     }
 }

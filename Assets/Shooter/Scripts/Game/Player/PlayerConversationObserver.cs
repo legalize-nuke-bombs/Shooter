@@ -39,7 +39,7 @@ namespace Shooter.Game
             if (line.Spoken || line.AuthorId == playerConversations.CharacterId) return;
             if (localPlayer.TalkPartnerId == partnerId) return;
 
-            string partnerName = nameMapper.Of(partnerId);
+            string partnerName = nameMapper.GetShownNameById(partnerId);
             ToastRaised?.Invoke(new Toast(icon, sound, line.Content, "от " + (string.IsNullOrEmpty(partnerName) ? Stranger : partnerName)));
         }
     }

@@ -5,13 +5,13 @@ namespace Shooter.Game
 {
     public class ServerSettingsPage : ServerPage
     {
-        private const string BackButton = "back";
+        private const string BackButtonName = "back";
 
         public ServerSettingsPage(VisualElement root) : base(root)
         {
-            Require<Button>(BackButton).clicked += () => Backing?.Invoke();
+            RequireElement<Button>(BackButtonName).clicked += () => BackClicked?.Invoke();
         }
 
-        public event Action Backing;
+        public event Action BackClicked;
     }
 }

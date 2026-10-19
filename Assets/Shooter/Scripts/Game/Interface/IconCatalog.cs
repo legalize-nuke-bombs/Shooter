@@ -7,11 +7,11 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Icon Catalog", fileName = "IconCatalog")]
     public class IconCatalog : Catalog<IconAsset>
     {
-        public Sprite Sprite(FixedString32Bytes id)
+        public Sprite GetSpriteById(FixedString32Bytes id)
         {
-            IconAsset asset = GetAssetById(id);
+            IconAsset iconAsset = GetAssetById(id);
 
-            return asset == null ? null : asset.Sprite;
+            return iconAsset == null ? null : iconAsset.Sprite;
         }
     }
 }

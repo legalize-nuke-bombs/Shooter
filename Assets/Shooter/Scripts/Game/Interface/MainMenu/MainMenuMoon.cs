@@ -6,7 +6,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class MainMenuMoon : MonoBehaviour
     {
-        private const float Opposite = 180f;
+        private const float HalfTurnDegrees = 180f;
 
         [SerializeField] private Camera view;
         [SerializeField] [Range(-10f, 89f)] private float elevation = 20f;
@@ -14,19 +14,19 @@ namespace Shooter.Game
 
         private void Update()
         {
-            Aim();
+            RotateOppositeToView();
         }
 
         private void OnValidate()
         {
-            Aim();
+            RotateOppositeToView();
         }
 
-        private void Aim()
+        private void RotateOppositeToView()
         {
             if (view == null) return;
 
-            float yaw = view.transform.eulerAngles.y + Opposite + sideways;
+            float yaw = view.transform.eulerAngles.y + HalfTurnDegrees + sideways;
             transform.rotation = Quaternion.Euler(elevation, yaw, 0f);
         }
     }

@@ -7,14 +7,14 @@ namespace Shooter.Game
     [RequireComponent(typeof(LookHitFinder))]
     public class TargetNameOverlay : Overlay
     {
-        private const string TargetElement = "target-name";
+        private const string NameLabelName = "target-name";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly NameMapper mapper = new();
+        private readonly NameMapper nameMapper = new();
 
         private LookHitFinder lookHitFinder;
-        private string shown = string.Empty;
-        private Label target;
+        private string shownName = string.Empty;
+        private Label nameLabel;
 
         private void Awake()
         {
@@ -23,39 +23,39 @@ namespace Shooter.Game
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            Nameable nameable = Aimed();
-            string text = nameable == null ? string.Empty : mapper.Of(nameable);
+            Nameable nameable = FindNameableAtLookHit();
+            string targetName = nameable == null ? string.Empty : nameMapper.GetShownName(nameable);
 
-            if (text == shown) return;
+            if (targetName == shownName) return;
 
-            shown = text;
-            target.text = text;
+            shownName = targetName;
+            nameLabel.text = targetName;
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            target = root.Q<Label>(TargetElement);
-            shown = string.Empty;
+            nameLabel = root.Q<Label>(NameLabelName);
+            shownName = string.Empty;
 
-            if (target == null)
+            if (nameLabel == null)
             {
-                Log.Error($"Overlay document has no {TargetElement} label, target names stay hidden");
+                Log.Error($"Overlay document has no {NameLabelName} label, target names stay hidden");
                 return false;
             }
 
-            target.text = string.Empty;
+            nameLabel.text = string.Empty;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            target = null;
+            nameLabel = null;
         }
 
-        private Nameable Aimed()
+        private Nameable FindNameableAtLookHit()
         {
             if (!lookHitFinder.TryFindLookHit(out RaycastHit hit)) return null;
             if (hit.collider == null) return null;

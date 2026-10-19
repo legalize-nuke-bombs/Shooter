@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class ClockOverlay : Overlay
     {
-        private const string ClockElement = "clock";
+        private const string ClockLabelName = "clock";
         private const long Hidden = long.MinValue;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
@@ -22,12 +22,12 @@ namespace Shooter.Game
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
             // No clock any more for a frame on the way out: the world goes before its scene does
             if (clock == null)
             {
-                Hide();
+                HideClock();
                 return;
             }
 
@@ -37,29 +37,29 @@ namespace Shooter.Game
             if (minute == shownMinute) return;
 
             shownMinute = minute;
-            clockLabel.text = RussianDate.Moment(now);
+            clockLabel.text = RussianDate.FormatDateAndTime(now);
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            clockLabel = root.Q<Label>(ClockElement);
+            clockLabel = root.Q<Label>(ClockLabelName);
             shownMinute = Hidden;
 
             if (clockLabel == null)
             {
-                Log.Error($"Overlay document has no {ClockElement} label, the clock stays hidden");
+                Log.Error($"Overlay document has no {ClockLabelName} label, the clock stays hidden");
                 return false;
             }
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
             clockLabel = null;
         }
 
-        private void Hide()
+        private void HideClock()
         {
             if (shownMinute == Hidden) return;
 

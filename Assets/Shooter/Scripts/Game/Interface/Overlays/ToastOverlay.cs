@@ -6,126 +6,136 @@ namespace Shooter.Game
 {
     public class ToastOverlay : Overlay
     {
-        private const string FeedElement = "toasts";
-        private const long Life = 5000;
-        private const int Limit = 4;
+        private const string FeedElementName = "toasts";
+        private const long ToastLifetimeMilliseconds = 5000;
+        private const int MaxShownToasts = 4;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private VisualElement feed;
-        private Player player;
-        private IToastSource[] sources;
+        private VisualElement feedElement;
+        private Player subscribedPlayer;
+        private IToastSource[] toastSources;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            Follow();
+            SubscribeToOwnPlayerToastSourcesIfChanged();
         }
 
-        private void Follow()
+        private void SubscribeToOwnPlayerToastSourcesIfChanged()
         {
-            Player own = OwnPlayer.FindComponent<Player>();
-            if (own == player) return;
+            Player ownPlayer = OwnPlayer.FindComponent<Player>();
+            if (ownPlayer == subscribedPlayer) return;
 
-            Forget();
-            player = own;
+            UnsubscribeFromToastSources();
+            subscribedPlayer = ownPlayer;
 
-            if (player == null) return;
+            if (subscribedPlayer == null) return;
 
-            sources = player.GetComponents<IToastSource>();
-            foreach (IToastSource source in sources) source.ToastRaised += Show;
-
-            Log.Info($"Toasts follow {sources.Length} sources on {player.name}");
-        }
-
-        protected override bool Bind(VisualElement root)
-        {
-            feed = root.Q<VisualElement>(FeedElement);
-
-            if (feed == null)
+            toastSources = subscribedPlayer.GetComponents<IToastSource>();
+            foreach (IToastSource toastSource in toastSources)
             {
-                Log.Error($"Overlay document has no {FeedElement} element, toasts stay hidden");
+                toastSource.ToastRaised += ShowToast;
+            }
+
+            Log.Info($"Toasts follow {toastSources.Length} sources on {subscribedPlayer.name}");
+        }
+
+        protected override bool TryBindElements(VisualElement root)
+        {
+            feedElement = root.Q<VisualElement>(FeedElementName);
+
+            if (feedElement == null)
+            {
+                Log.Error($"Overlay document has no {FeedElementName} element, toasts stay hidden");
                 return false;
             }
 
-            feed.Clear();
+            feedElement.Clear();
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            Forget();
-            feed = null;
+            UnsubscribeFromToastSources();
+            feedElement = null;
         }
 
-        private void Show(Toast toast)
+        private void ShowToast(Toast toast)
         {
-            if (!Bound || string.IsNullOrEmpty(toast.Title)) return;
+            if (!IsBound || string.IsNullOrEmpty(toast.Title)) return;
 
-            VisualElement element = Line(toast);
-            feed.Add(element);
+            VisualElement toastElement = CreateToastElement(toast);
+            feedElement.Add(toastElement);
 
-            while (feed.childCount > Limit) feed.RemoveAt(0);
-
-            feed.schedule.Execute(element.RemoveFromHierarchy).StartingIn(Life);
-
-            Ring(toast.Sound);
-        }
-
-        private static VisualElement Line(Toast toast)
-        {
-            var line = new VisualElement();
-            line.AddToClassList("toast");
-
-            Sprite image = toast.Icon == null ? null : toast.Icon.Sprite;
-
-            if (image != null)
+            while (feedElement.childCount > MaxShownToasts)
             {
-                var box = new VisualElement();
-                box.AddToClassList("toast__icon");
-                box.style.backgroundImage = Background.FromSprite(image);
-                line.Add(box);
+                feedElement.RemoveAt(0);
             }
 
-            var body = new VisualElement();
-            body.AddToClassList("toast__body");
+            feedElement.schedule.Execute(toastElement.RemoveFromHierarchy).StartingIn(ToastLifetimeMilliseconds);
 
-            var caption = new Label(toast.Title);
-            caption.AddToClassList("line");
-            caption.AddToClassList("toast__title");
-            body.Add(caption);
+            PlayToastSound(toast.Sound);
+        }
+
+        private static VisualElement CreateToastElement(Toast toast)
+        {
+            VisualElement toastElement = new();
+            toastElement.AddToClassList("toast");
+
+            Sprite iconSprite = toast.Icon == null ? null : toast.Icon.Sprite;
+
+            if (iconSprite != null)
+            {
+                VisualElement iconElement = new();
+                iconElement.AddToClassList("toast__icon");
+                iconElement.style.backgroundImage = Background.FromSprite(iconSprite);
+                toastElement.Add(iconElement);
+            }
+
+            VisualElement bodyElement = new();
+            bodyElement.AddToClassList("toast__body");
+
+            Label titleLabel = new(toast.Title);
+            titleLabel.AddToClassList("line");
+            titleLabel.AddToClassList("toast__title");
+            bodyElement.Add(titleLabel);
 
             if (!string.IsNullOrEmpty(toast.Subtitle))
             {
-                var from = new Label(toast.Subtitle);
-                from.AddToClassList("toast__from");
-                body.Add(from);
+                Label subtitleLabel = new(toast.Subtitle);
+                subtitleLabel.AddToClassList("toast__from");
+                bodyElement.Add(subtitleLabel);
             }
 
-            line.Add(body);
+            toastElement.Add(bodyElement);
 
-            return line;
+            return toastElement;
         }
 
-        private static void Ring(EarSoundAsset sound)
+        private static void PlayToastSound(EarSoundAsset sound)
         {
             if (sound == null) return;
 
-            EarSpeaker ear = OwnPlayer.FindComponent<EarSpeaker>();
-            if (ear == null) return;
+            EarSpeaker earSpeaker = OwnPlayer.FindComponent<EarSpeaker>();
+            if (earSpeaker == null) return;
 
-            ear.PlayLocally(sound);
+            earSpeaker.PlayLocally(sound);
         }
 
-        private void Forget()
+        private void UnsubscribeFromToastSources()
         {
-            if (sources != null)
-                foreach (IToastSource source in sources)
-                    source.ToastRaised -= Show;
+            if (toastSources != null)
+            {
+                foreach (IToastSource toastSource in toastSources)
+                {
+                    toastSource.ToastRaised -= ShowToast;
+                }
+            }
 
-            sources = null;
-            player = null;
+            toastSources = null;
+            subscribedPlayer = null;
         }
     }
 }

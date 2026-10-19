@@ -6,76 +6,78 @@ namespace Shooter.Game
 {
     public class HungerOverlay : Overlay
     {
-        private const string BoxElement = "hunger";
-        private const string GlyphElement = "hunger-glyph";
-        private const string AmountElement = "hunger-amount";
+        private const string CounterElementName = "hunger";
+        private const string GlyphElementName = "hunger-glyph";
+        private const string AmountLabelName = "hunger-amount";
         private const int Hidden = -1;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private IconAsset glyph;
-        private Label amount;
+        private Label amountLabel;
 
-        private VisualElement box;
+        private VisualElement counterElement;
         private Hunger hunger;
-        private int shown = Hidden;
+        private int shownAmount = Hidden;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            Hunger own = Own();
+            Hunger ownHunger = FindOwnHunger();
 
-            if (own == null)
+            if (ownHunger == null)
             {
-                Hide();
+                HideCounter();
                 return;
             }
 
-            int left = Mathf.RoundToInt(own.Amount);
-            if (left == shown) return;
+            int amount = Mathf.RoundToInt(ownHunger.Amount);
+            if (amount == shownAmount) return;
 
-            shown = left;
-            box.style.display = DisplayStyle.Flex;
-            amount.text = left.ToString();
+            shownAmount = amount;
+            counterElement.style.display = DisplayStyle.Flex;
+            amountLabel.text = amount.ToString();
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            box = root.Q<VisualElement>(BoxElement);
-            amount = root.Q<Label>(AmountElement);
-            shown = Hidden;
+            counterElement = root.Q<VisualElement>(CounterElementName);
+            amountLabel = root.Q<Label>(AmountLabelName);
+            shownAmount = Hidden;
 
-            if (box == null || amount == null)
+            if (counterElement == null || amountLabel == null)
             {
-                Log.Error($"Overlay document has no {BoxElement} box, the hunger counter stays hidden");
+                Log.Error($"Overlay document has no {CounterElementName} box, the hunger counter stays hidden");
                 return false;
             }
 
-            VisualElement image = root.Q<VisualElement>(GlyphElement);
+            VisualElement glyphElement = root.Q<VisualElement>(GlyphElementName);
 
-            if (image != null && glyph != null && glyph.Sprite != null)
-                image.style.backgroundImage = Background.FromSprite(glyph.Sprite);
+            if (glyphElement != null && glyph != null && glyph.Sprite != null)
+            {
+                glyphElement.style.backgroundImage = Background.FromSprite(glyph.Sprite);
+            }
 
-            box.style.display = DisplayStyle.None;
+            counterElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            box = null;
-            amount = null;
+            counterElement = null;
+            amountLabel = null;
         }
 
-        private void Hide()
+        private void HideCounter()
         {
-            if (shown == Hidden) return;
+            if (shownAmount == Hidden) return;
 
-            shown = Hidden;
-            box.style.display = DisplayStyle.None;
+            shownAmount = Hidden;
+            counterElement.style.display = DisplayStyle.None;
         }
 
-        private Hunger Own()
+        private Hunger FindOwnHunger()
         {
             if (hunger == null) hunger = OwnPlayer.FindComponent<Hunger>();
 

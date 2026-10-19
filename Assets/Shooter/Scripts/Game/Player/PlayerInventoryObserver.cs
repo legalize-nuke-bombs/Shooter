@@ -48,7 +48,7 @@ namespace Shooter.Game
             ItemAsset item = itemCatalog == null ? null : itemCatalog.GetAssetById(itemId);
             if (item == null) return;
 
-            string giverName = nameMapper.Of(giverId);
+            string giverName = nameMapper.GetShownNameById(giverId);
             string title = item is StackableItemAsset ? $"{item.Title} × {amount}" : item.Title;
 
             ToastRaised?.Invoke(new Toast(item.Icon, sound, title, "от " + (string.IsNullOrEmpty(giverName) ? Stranger : giverName)));

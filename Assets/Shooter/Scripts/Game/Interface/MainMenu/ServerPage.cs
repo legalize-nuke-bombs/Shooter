@@ -8,26 +8,25 @@ namespace Shooter.Game
 {
     public abstract class ServerPage : MainMenuPage
     {
-        private const string CompressionField = "compression";
-        private const string ProviderField = "provider";
+        private const string CompressionDropdownName = "compression";
+        private const string ProviderDropdownName = "provider";
         private const string NoProvider = "";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         protected ServerPage(VisualElement root) : base(root)
         {
-            Offer(Require<DropdownField>(CompressionField), MainCompressionManager.Keys, Titles.Compression);
+            SetDropdownChoices(RequireElement<DropdownField>(CompressionDropdownName), MainCompressionManager.Keys, SettingsDropdownTitles.GetCompressionTitle);
 
-            IEnumerable<string> providers = new[] { NoProvider }.Concat(OpenAiHosts.ProviderNames);
-            Offer(Require<DropdownField>(ProviderField), providers, Titles.Provider);
+            IEnumerable<string> providerNames = new[] { NoProvider }.Concat(OpenAiHosts.ProviderNames);
+            SetDropdownChoices(RequireElement<DropdownField>(ProviderDropdownName), providerNames, SettingsDropdownTitles.GetProviderTitle);
         }
 
-        protected override void Closed()
+        protected override void HandlePageHidden()
         {
             Config.SaveGameConfig();
 
-            ServerConfig server = Config.GetGameConfig().Server;
-            Log.Info(
-                $"Server settings: port {server.Port}, saves as '{server.SaveCompressionAlgorithm}', model {server.Llm.Provider}/{server.Llm.Model}");
+            ServerConfig serverConfig = Config.GetGameConfig().Server;
+            Log.Info($"Server settings: port {serverConfig.Port}, saves as '{serverConfig.SaveCompressionAlgorithm}', model {serverConfig.Llm.Provider}/{serverConfig.Llm.Model}");
         }
     }
 }

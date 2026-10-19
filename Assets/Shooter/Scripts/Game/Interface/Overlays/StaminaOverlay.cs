@@ -6,68 +6,68 @@ namespace Shooter.Game
 {
     public class StaminaOverlay : Overlay
     {
-        private const string BarElement = "stamina";
-        private const string FillElement = "stamina-fill";
+        private const string BarElementName = "stamina";
+        private const string FillElementName = "stamina-fill";
         private const int Hidden = -1;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private VisualElement bar;
+        private VisualElement barElement;
         private Stamina stamina;
-        private VisualElement fill;
-        private int shown = Hidden;
+        private VisualElement fillElement;
+        private int shownPercent = Hidden;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            Stamina own = Own();
+            Stamina ownStamina = FindOwnStamina();
 
-            if (own == null)
+            if (ownStamina == null)
             {
-                Hide();
+                HideBar();
                 return;
             }
 
-            int percent = Mathf.RoundToInt(100f * own.Amount / own.MaxAmount);
-            if (percent == shown) return;
+            int percent = Mathf.RoundToInt(100f * ownStamina.Amount / ownStamina.MaxAmount);
+            if (percent == shownPercent) return;
 
-            shown = percent;
-            bar.style.display = DisplayStyle.Flex;
-            fill.style.width = new Length(percent, LengthUnit.Percent);
+            shownPercent = percent;
+            barElement.style.display = DisplayStyle.Flex;
+            fillElement.style.width = new Length(percent, LengthUnit.Percent);
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            bar = root.Q<VisualElement>(BarElement);
-            fill = root.Q<VisualElement>(FillElement);
-            shown = Hidden;
+            barElement = root.Q<VisualElement>(BarElementName);
+            fillElement = root.Q<VisualElement>(FillElementName);
+            shownPercent = Hidden;
 
-            if (bar == null || fill == null)
+            if (barElement == null || fillElement == null)
             {
-                Log.Error($"Overlay document has no {BarElement} or {FillElement} element, stamina stays hidden");
+                Log.Error($"Overlay document has no {BarElementName} or {FillElementName} element, stamina stays hidden");
                 return false;
             }
 
-            bar.style.display = DisplayStyle.None;
+            barElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            bar = null;
-            fill = null;
+            barElement = null;
+            fillElement = null;
         }
 
-        private void Hide()
+        private void HideBar()
         {
-            if (shown == Hidden) return;
+            if (shownPercent == Hidden) return;
 
-            shown = Hidden;
-            bar.style.display = DisplayStyle.None;
+            shownPercent = Hidden;
+            barElement.style.display = DisplayStyle.None;
         }
 
-        private Stamina Own()
+        private Stamina FindOwnStamina()
         {
             if (stamina == null) stamina = OwnPlayer.FindComponent<Stamina>();
 

@@ -6,60 +6,60 @@ namespace Shooter.Game
 {
     public class SleepOverlay : Overlay
     {
-        private const string SleepElement = "sleep";
+        private const string ScreenElementName = "sleep";
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
-        private VisualElement screen;
-        private float shown;
 
-        private SleepView view;
+        private VisualElement screenElement;
+        private float shownEyesClosedAmount;
+        private SleepView sleepView;
 
         private void Update()
         {
-            if (!Bound) return;
+            if (!IsBound) return;
 
-            float blink = Blink();
-            if (Mathf.Approximately(blink, shown)) return;
+            float eyesClosedAmount = GetOwnEyesClosedAmount();
+            if (Mathf.Approximately(eyesClosedAmount, shownEyesClosedAmount)) return;
 
-            shown = blink;
+            shownEyesClosedAmount = eyesClosedAmount;
 
-            if (blink <= 0f)
+            if (eyesClosedAmount <= 0f)
             {
-                screen.style.display = DisplayStyle.None;
+                screenElement.style.display = DisplayStyle.None;
                 return;
             }
 
-            screen.style.display = DisplayStyle.Flex;
-            screen.style.backgroundColor = new Color(0f, 0f, 0f, blink);
+            screenElement.style.display = DisplayStyle.Flex;
+            screenElement.style.backgroundColor = new Color(0f, 0f, 0f, eyesClosedAmount);
         }
 
-        protected override bool Bind(VisualElement root)
+        protected override bool TryBindElements(VisualElement root)
         {
-            screen = root.Q<VisualElement>(SleepElement);
-            shown = 0f;
+            screenElement = root.Q<VisualElement>(ScreenElementName);
+            shownEyesClosedAmount = 0f;
 
-            if (screen == null)
+            if (screenElement == null)
             {
-                Log.Error($"Overlay document has no {SleepElement} element, sleep stays unseen");
+                Log.Error($"Overlay document has no {ScreenElementName} element, sleep stays unseen");
                 return false;
             }
 
-            screen.style.display = DisplayStyle.None;
+            screenElement.style.display = DisplayStyle.None;
 
             return true;
         }
 
-        protected override void Unbind()
+        protected override void UnbindElements()
         {
-            screen = null;
-            view = null;
-            shown = 0f;
+            screenElement = null;
+            sleepView = null;
+            shownEyesClosedAmount = 0f;
         }
 
-        private float Blink()
+        private float GetOwnEyesClosedAmount()
         {
-            if (view == null) view = OwnPlayer.FindComponent<SleepView>();
+            if (sleepView == null) sleepView = OwnPlayer.FindComponent<SleepView>();
 
-            return view == null ? 0f : view.EyesClosedAmount;
+            return sleepView == null ? 0f : sleepView.EyesClosedAmount;
         }
     }
 }

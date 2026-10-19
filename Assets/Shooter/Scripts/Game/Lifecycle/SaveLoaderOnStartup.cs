@@ -55,7 +55,7 @@ namespace Shooter.Game
             if (frozenWorld != null && !LoadSaveOrShutDown()) yield break;
 
             Loaded?.Invoke();
-            loadingScreenOverlay.Hide();
+            loadingScreenOverlay.HideScreen();
         }
 
         private bool LoadSaveOrShutDown()

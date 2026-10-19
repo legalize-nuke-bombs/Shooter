@@ -15,39 +15,39 @@ namespace Shooter.Game
 
         public VisualElement Root { get; }
 
-        internal void Show()
+        internal void ShowPage()
         {
             Root.style.display = DisplayStyle.Flex;
-            Opened();
+            HandlePageShown();
         }
 
-        internal void Hide()
+        internal void HidePage()
         {
             Root.style.display = DisplayStyle.None;
-            Closed();
+            HandlePageHidden();
         }
 
-        protected virtual void Opened()
+        protected virtual void HandlePageShown()
         {
         }
 
-        protected virtual void Closed()
+        protected virtual void HandlePageHidden()
         {
         }
 
-        protected static void Offer(DropdownField field, IEnumerable<string> keys, Func<string, string> title)
+        protected static void SetDropdownChoices(DropdownField dropdownField, IEnumerable<string> keys, Func<string, string> getTitle)
         {
-            field.choices = keys.ToList();
-            field.formatSelectedValueCallback = title;
-            field.formatListItemCallback = title;
+            dropdownField.choices = keys.ToList();
+            dropdownField.formatSelectedValueCallback = getTitle;
+            dropdownField.formatListItemCallback = getTitle;
         }
 
-        protected T Require<T>(string name) where T : VisualElement
+        protected T RequireElement<T>(string elementName) where T : VisualElement
         {
-            T element = Root.Q<T>(name);
+            T element = Root.Q<T>(elementName);
             if (element != null) return element;
 
-            throw new InvalidOperationException($"Page {Root.name} has no {typeof(T).Name} named {name}");
+            throw new InvalidOperationException($"Page {Root.name} has no {typeof(T).Name} named {elementName}");
         }
     }
 }
