@@ -1,52 +1,51 @@
 using System.Text;
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     public static class Digester
     {
-        public static string Of(GameObject entity, DigestionDetail detail)
+        public static string DigestEntity(GameObject entity, DigestionDetail detail)
         {
-            return entity == null ? null : Of(entity.GetComponent<MainDigestible>(), detail);
+            return entity == null ? null : DigestEntity(entity.GetComponent<MainDigestible>(), detail);
         }
 
-        public static string Of(MainDigestible entity, DigestionDetail detail)
+        public static string DigestEntity(MainDigestible mainDigestible, DigestionDetail detail)
         {
-            if (entity == null) return null;
+            if (mainDigestible == null) return null;
 
-            var head = new StringBuilder();
-            var body = new StringBuilder();
+            StringBuilder headline = new();
+            StringBuilder details = new();
 
-            CharacterId id = entity.GetComponent<CharacterId>();
-            if (id != null) head.Append("[ID ").Append(id.Value).Append(']');
+            CharacterId characterId = mainDigestible.GetComponent<CharacterId>();
+            if (characterId != null) headline.Append("[ID ").Append(characterId.Value).Append(']');
 
-            foreach (IDigestible part in entity.Parts)
+            foreach (IDigestible part in mainDigestible.Parts)
             {
-                string said = part.Digest(detail);
-                if (string.IsNullOrWhiteSpace(said)) continue;
+                string partDigest = part.Digest(detail);
+                if (string.IsNullOrWhiteSpace(partDigest)) continue;
 
-                bool heading = part.Priority >= DigestionPriority.Place;
+                bool isNextLineHeadline = part.Priority >= DigestionPriority.Place;
 
-                foreach (string line in said.Trim().Split('\n'))
+                foreach (string line in partDigest.Trim().Split('\n'))
                 {
                     if (string.IsNullOrWhiteSpace(line)) continue;
 
-                    if (heading)
+                    if (isNextLineHeadline)
                     {
-                        if (head.Length > 0) head.Append(' ');
-                        head.Append(line.Trim());
-                        heading = false;
+                        if (headline.Length > 0) headline.Append(' ');
+                        headline.Append(line.Trim());
+                        isNextLineHeadline = false;
                         continue;
                     }
 
-                    body.Append("\n  ").Append(line.TrimEnd());
+                    details.Append("\n  ").Append(line.TrimEnd());
                 }
             }
 
-            if (head.Length == 0) return null;
+            if (headline.Length == 0) return null;
 
-            return head.Append(body).ToString();
+            return headline.Append(details).ToString();
         }
     }
 }

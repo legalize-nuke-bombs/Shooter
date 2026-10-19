@@ -458,14 +458,14 @@ namespace Shooter.Game
         {
             if (!IsServer || SaveManager.IsSaving) return;
 
-            if (ear != null) ear.PlayLocal(saveSound);
+            if (ear != null) ear.PlayLocally(saveSound);
             Log.Info("Saving the world by the hotkey");
             StartCoroutine(SaveManager.SaveCoroutine());
         }
 
         private void Screenshot(InputAction.CallbackContext context)
         {
-            if (ear != null) ear.PlayLocal(screenshotSound);
+            if (ear != null) ear.PlayLocally(screenshotSound);
             StartCoroutine(Screenshotter.TakeToScreenshotsFolder());
         }
 

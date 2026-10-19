@@ -14,16 +14,16 @@ namespace Shooter.Game
 
         private readonly NetworkVariable<float> phase = new(0f, NetworkVariableReadPermission.Owner);
 
-        private CharacterController body;
+        private CharacterController characterController;
         private Movement movement;
         private Speaker speaker;
-        private float stride;
+        private float distanceSinceLastStep;
 
         public float Phase => phase.Value;
 
         private void Awake()
         {
-            body = GetComponent<CharacterController>();
+            characterController = GetComponent<CharacterController>();
             movement = GetComponent<Movement>();
             speaker = GetComponent<Speaker>();
         }
@@ -32,28 +32,28 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick += Step;
+            NetworkManager.NetworkTickSystem.Tick += AdvanceStride;
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick -= Step;
+            NetworkManager.NetworkTickSystem.Tick -= AdvanceStride;
         }
 
-        private void Step()
+        private void AdvanceStride()
         {
             if (!isActiveAndEnabled) return;
 
-            stride += movement.GroundTravel;
-            if (stride >= strideLength)
+            distanceSinceLastStep += movement.GroundTravel;
+            if (distanceSinceLastStep >= strideLength)
             {
-                stride -= strideLength;
-                speaker.Play(sounds == null ? null : sounds.On(Surface.Under(body)));
+                distanceSinceLastStep -= strideLength;
+                speaker.PlayForEveryone(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(characterController)));
             }
 
-            phase.Value = stride / strideLength;
+            phase.Value = distanceSinceLastStep / strideLength;
         }
     }
 }

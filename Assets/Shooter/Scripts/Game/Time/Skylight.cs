@@ -6,24 +6,24 @@ namespace Shooter.Game
 {
     public class Skylight : MonoBehaviour
     {
-        private VolumeProfile profile;
+        private VolumeProfile volumeProfile;
 
         private void Awake()
         {
-            profile = ScriptableObject.CreateInstance<VolumeProfile>();
-            var sky = profile.Add<PhysicallyBasedSky>();
-            sky.updateMode.Override(EnvironmentUpdateMode.Realtime);
-            sky.updatePeriod.Override(0f);
+            volumeProfile = ScriptableObject.CreateInstance<VolumeProfile>();
+            PhysicallyBasedSky physicallyBasedSky = volumeProfile.Add<PhysicallyBasedSky>();
+            physicallyBasedSky.updateMode.Override(EnvironmentUpdateMode.Realtime);
+            physicallyBasedSky.updatePeriod.Override(0f);
 
-            var volume = gameObject.AddComponent<Volume>();
+            Volume volume = gameObject.AddComponent<Volume>();
             volume.isGlobal = true;
             volume.priority = 1f;
-            volume.sharedProfile = profile;
+            volume.sharedProfile = volumeProfile;
         }
 
         private void OnDestroy()
         {
-            if (profile != null) Destroy(profile);
+            if (volumeProfile != null) Destroy(volumeProfile);
         }
     }
 }

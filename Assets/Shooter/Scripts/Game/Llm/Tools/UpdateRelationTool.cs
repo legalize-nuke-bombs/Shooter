@@ -32,13 +32,13 @@ Always use this tool if a character does something good or bad to you.
 
         protected override string Execute(UpdateRelationArguments arguments, LlmCallContext context)
         {
-            var target = Character.Of(arguments.TargetId, RegisterInactivePolicy.Include);
+            var target = Character.FindById(arguments.TargetId, RegisterInactivePolicy.Include);
             if (target == null)
             {
                 return $"Character ID {arguments.TargetId} does not exist.";
             }
 
-            int old = aiCharacterRelation.Amount(target);
+            int old = aiCharacterRelation.GetAmount(target);
             aiCharacterRelation.SetAmount(target, arguments.Amount);
 
             return $"Your attitude to {arguments.TargetId}: {old} -> {arguments.Amount}";

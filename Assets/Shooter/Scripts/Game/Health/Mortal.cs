@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(EarSpeaker))]
-    [RequireComponent(typeof(SpawnPoint))]
+    [RequireComponent(typeof(RespawnPosition))]
     public class Mortal : NetworkBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
@@ -20,13 +20,13 @@ namespace Shooter.Game
         private Health health;
         private Movement movement;
         private Player player;
-        private SpawnPoint spawnPoint;
+        private RespawnPosition respawnPosition;
 
         private void Awake()
         {
             health = GetComponent<Health>();
             movement = GetComponent<Movement>();
-            spawnPoint = GetComponent<SpawnPoint>();
+            respawnPosition = GetComponent<RespawnPosition>();
             earSpeaker = GetComponent<EarSpeaker>();
             player = GetComponent<Player>();
         }
@@ -35,7 +35,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            earSpeaker.Play(deathSound);
+            earSpeaker.PlayForOwner(deathSound);
             LeaveCorpse();
 
             if (player == null) NetworkObject.Despawn(!NetworkObject.InScenePlaced);
@@ -51,7 +51,7 @@ namespace Shooter.Game
         {
             if (health == null || health.Alive) return;
 
-            Vector3 at = spawnPoint.GetPosition();
+            Vector3 at = respawnPosition.GetPosition();
             movement.Teleport(at);
             health.Resurrect();
             Log.Info($"Entity {name} rose at {at}");

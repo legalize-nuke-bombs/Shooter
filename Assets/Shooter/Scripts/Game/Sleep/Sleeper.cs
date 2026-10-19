@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(SpawnPoint))]
+    [RequireComponent(typeof(RespawnPosition))]
     [RequireComponent(typeof(Speaker))]
     public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint, ISaveableComponent
     {
@@ -40,13 +40,13 @@ namespace Shooter.Game
         }
 
         private SleepCycle sleepCycle;
-        private SpawnPoint spawnPoint;
+        private RespawnPosition respawnPosition;
         private Speaker speaker;
 
         private void Awake()
         {
             sleepCycle = Registers.GetAll<SleepCycle>(RegisterInactivePolicy.Include).Single();
-            spawnPoint = GetComponent<SpawnPoint>();
+            respawnPosition = GetComponent<RespawnPosition>();
             speaker = GetComponent<Speaker>();
         }
 
@@ -81,8 +81,8 @@ namespace Shooter.Game
 
             bedside.Value = bed == null ? transform.position : bed.transform.position;
             sleeping.Value = true;
-            spawnPoint.SetPosition(transform.position);
-            speaker.Play(bedding);
+            respawnPosition.SetPosition(transform.position);
+            speaker.PlayForEveryone(bedding);
             Log.Info($"Entity {name} fell asleep at {transform.position} in a bed at {bedside.Value}");
         }
 
@@ -110,7 +110,7 @@ namespace Shooter.Game
             if (!IsServer || !Sleeping) return;
 
             sleeping.Value = false;
-            if (heard) speaker.Play(rising);
+            if (heard) speaker.PlayForEveryone(rising);
             Log.Info($"Entity {name} woke up at {transform.position}");
         }
     }

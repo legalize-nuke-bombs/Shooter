@@ -9,49 +9,54 @@ namespace Shooter.Game
         [SerializeField] private AudioClip[] tracks;
         [SerializeField] [Range(0f, 1f)] private float volume = 0.2f;
 
-        private readonly List<int> bag = new();
-        private AudioSource source;
+        private readonly List<int> shuffledTrackIndices = new();
+        private AudioSource audioSource;
 
         private void Awake()
         {
-            source = GetComponent<AudioSource>();
-            source.loop = false;
-            source.playOnAwake = false;
-            source.spatialBlend = 0f;
-            source.volume = volume;
+            audioSource = GetComponent<AudioSource>();
+            audioSource.loop = false;
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 0f;
+            audioSource.volume = volume;
         }
 
         private void Update()
         {
-            if (source.isPlaying || tracks == null || tracks.Length == 0) return;
+            if (audioSource.isPlaying || tracks == null || tracks.Length == 0) return;
 
-            source.clip = tracks[Next()];
-            source.Play();
+            audioSource.clip = tracks[TakeNextTrackIndex()];
+            audioSource.Play();
         }
 
-        private int Next()
+        private int TakeNextTrackIndex()
         {
-            if (bag.Count == 0) Refill();
+            if (shuffledTrackIndices.Count == 0) RefillShuffledTrackIndices();
 
-            int last = bag.Count - 1;
-            int index = bag[last];
-            bag.RemoveAt(last);
-            return index;
+            int last = shuffledTrackIndices.Count - 1;
+            int trackIndex = shuffledTrackIndices[last];
+            shuffledTrackIndices.RemoveAt(last);
+            return trackIndex;
         }
 
-        private void Refill()
+        private void RefillShuffledTrackIndices()
         {
-            for (int i = 0; i < tracks.Length; i++) bag.Add(i);
-
-            for (int i = bag.Count - 1; i > 0; i--)
+            for (int i = 0; i < tracks.Length; i++)
             {
-                int j = Random.Range(0, i + 1);
-                (bag[i], bag[j]) = (bag[j], bag[i]);
+                shuffledTrackIndices.Add(i);
             }
 
-            // не открывать новый круг тем же треком, что звучал последним
-            if (source.clip != null && tracks.Length > 1 && tracks[bag[^1]] == source.clip)
-                (bag[^1], bag[0]) = (bag[0], bag[^1]);
+            for (int i = shuffledTrackIndices.Count - 1; i > 0; i--)
+            {
+                int j = Random.Range(0, i + 1);
+                (shuffledTrackIndices[i], shuffledTrackIndices[j]) = (shuffledTrackIndices[j], shuffledTrackIndices[i]);
+            }
+
+            // A new round must not open with the track that has just played
+            if (audioSource.clip != null && tracks.Length > 1 && tracks[shuffledTrackIndices[^1]] == audioSource.clip)
+            {
+                (shuffledTrackIndices[^1], shuffledTrackIndices[0]) = (shuffledTrackIndices[0], shuffledTrackIndices[^1]);
+            }
         }
     }
 }

@@ -95,7 +95,7 @@ namespace Shooter.Game
                 return;
             }
 
-            named.Assign(asset);
+            named.AssignNameAsset(asset);
         }
     }
 }

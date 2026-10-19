@@ -63,7 +63,7 @@ namespace Shooter.Game
         public void GiveStackableRpc(long targetId, FixedString32Bytes stackableId, int amount)
         {
             var asset = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) as StackableItemAsset;
-            if (asset != null && Give(Character.Of(targetId, RegisterInactivePolicy.Exclude), asset, amount)) return;
+            if (asset != null && Give(Character.FindById(targetId, RegisterInactivePolicy.Exclude), asset, amount)) return;
 
             Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {targetId} rpc");
         }
@@ -71,7 +71,7 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void GiveUniqueRpc(long targetId, int slot)
         {
-            if (Give(Character.Of(targetId, RegisterInactivePolicy.Exclude), slot)) return;
+            if (Give(Character.FindById(targetId, RegisterInactivePolicy.Exclude), slot)) return;
 
             Log.Info($"Entity {name} failed to give slot {slot} to {targetId} rpc");
         }

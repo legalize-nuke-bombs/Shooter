@@ -6,16 +6,16 @@ namespace Shooter.Game
     {
         public const float ArrivalTolerance = 1f;
 
-        public static string Coordinates(Vector3 position)
+        public static string FormatCoordinates(Vector3 position)
         {
             return "(" + Mathf.RoundToInt(position.x) + ", " + Mathf.RoundToInt(position.y) + ", " + Mathf.RoundToInt(position.z) + ")";
         }
 
-        public static string Shortfall(Vector3 rest)
+        public static string DescribeShortfall(Vector3 remainingOffset)
         {
-            if (rest.magnitude < ArrivalTolerance) return "";
+            if (remainingOffset.magnitude < ArrivalTolerance) return "";
 
-            return Mathf.RoundToInt(rest.magnitude) + " m short of the point";
+            return Mathf.RoundToInt(remainingOffset.magnitude) + " m short of the point";
         }
     }
 }

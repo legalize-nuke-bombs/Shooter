@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,8 +10,8 @@ namespace Shooter.Game
     {
         public const string StampFormat = "yyyy.MM.dd HH:mm:ss";
         public const long DayLengthSeconds = 86400;
-        private const float DayRealSeconds = 2400f;
-        private const float GameSecondsPerRealSecond = DayLengthSeconds / DayRealSeconds;
+        private const float RealSecondsPerGameDay = 2400f;
+        private const float GameSecondsPerRealSecond = DayLengthSeconds / RealSecondsPerGameDay;
 
         [SerializeField] private float latitude = 55.75f;
 
@@ -31,25 +30,27 @@ namespace Shooter.Game
         private readonly NetworkVariable<float> scale = new(1f);
 
         public string ComponentKey => "Clock";
-        struct SaveData
+
+        private struct SaveData
         {
             public double Timestamp { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
                 Timestamp = timestamp.Value
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            timestamp.Value = sd.Timestamp;
+            SaveData saveData = content.ToObject<SaveData>();
+            timestamp.Value = saveData.Timestamp;
         }
 
-        private DateTime Beginning => new(beginningYear, beginningMonth, beginningDay, beginningHour,
-            beginningMinutes, beginningSeconds);
+        private DateTime Beginning => new(beginningYear, beginningMonth, beginningDay, beginningHour, beginningMinutes, beginningSeconds);
 
         public double Timestamp => timestamp.Value;
 
@@ -76,35 +77,35 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick += Step;
+            NetworkManager.NetworkTickSystem.Tick += AdvanceTime;
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) return;
 
-            NetworkManager.NetworkTickSystem.Tick -= Step;
+            NetworkManager.NetworkTickSystem.Tick -= AdvanceTime;
         }
 
         [ContextMenu("Fast forward x10")]
-        private void FastForward()
+        private void FastForwardTenTimes()
         {
             Scale = 10f;
         }
 
         [ContextMenu("Fast forward x60")]
-        private void FastForwardHard()
+        private void FastForwardSixtyTimes()
         {
             Scale = 60f;
         }
 
         [ContextMenu("Normal speed")]
-        private void NormalSpeed()
+        private void SetNormalSpeed()
         {
             Scale = 1f;
         }
 
-        private void Step()
+        private void AdvanceTime()
         {
             timestamp.Value += NetworkManager.LocalTime.FixedDeltaTime * scale.Value * GameSecondsPerRealSecond;
         }

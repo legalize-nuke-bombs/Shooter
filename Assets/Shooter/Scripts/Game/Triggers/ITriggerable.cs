@@ -1,7 +1,7 @@
-﻿namespace Shooter.Game
+namespace Shooter.Game
 {
     public interface ITriggerable
     {
-        public void OnTrigger(Character character);
+        void HandleCharacterEntered(Character character);
     }
 }

@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static readonly int Emissive = Shader.PropertyToID("_EmissiveColor");
+        private static readonly int EmissiveColorId = Shader.PropertyToID("_EmissiveColor");
 
         [SerializeField] private bool lit = true;
 
@@ -22,14 +21,16 @@ namespace Shooter.Game
 
         private readonly NetworkVariable<bool> shining = new(true);
 
-        private Color[] glows;
+        private Color[] litEmissiveColors;
         private Speaker speaker;
 
         public string ComponentKey => "Switch";
-        struct SaveData
+
+        private struct SaveData
         {
             public bool Shining { get; set; }
         }
+
         public object SaveObject()
         {
             return new SaveData
@@ -37,19 +38,22 @@ namespace Shooter.Game
                 Shining = shining.Value
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            shining.Value = sd.Shining;
+            SaveData saveData = content.ToObject<SaveData>();
+            shining.Value = saveData.Shining;
         }
 
         private void Awake()
         {
             speaker = GetComponent<Speaker>();
-            glows = new Color[glowing.Length];
+            litEmissiveColors = new Color[glowing.Length];
 
             for (int i = 0; i < glowing.Length; i++)
-                glows[i] = glowing[i] == null ? Color.black : glowing[i].material.GetColor(Emissive);
+            {
+                litEmissiveColors[i] = glowing[i] == null ? Color.black : glowing[i].material.GetColor(EmissiveColorId);
+            }
         }
 
         public string Digest(DigestionDetail detail)
@@ -64,7 +68,7 @@ namespace Shooter.Game
         public void Use(NetworkObject user, out string promptResult)
         {
             shining.Value = !shining.Value;
-            speaker.Play(click);
+            speaker.PlayForEveryone(click);
             Log.Info($"Entity {user.name} switched {name} {(shining.Value ? "on" : "off")}");
             promptResult = $"Switched to {shining.Value}";
         }
@@ -73,29 +77,31 @@ namespace Shooter.Game
         {
             if (IsServer) shining.Value = lit;
 
-            shining.OnValueChanged += Switched;
-            Apply(shining.Value);
+            shining.OnValueChanged += HandleShiningChanged;
+            SwitchPoweredAndGlowing(shining.Value);
         }
 
         public override void OnNetworkDespawn()
         {
-            shining.OnValueChanged -= Switched;
+            shining.OnValueChanged -= HandleShiningChanged;
         }
 
-        private void Switched(bool was, bool now)
+        private void HandleShiningChanged(bool wasShining, bool isShining)
         {
-            Apply(now);
+            SwitchPoweredAndGlowing(isShining);
         }
 
-        private void Apply(bool now)
+        private void SwitchPoweredAndGlowing(bool isShining)
         {
-            foreach (GameObject part in powered)
-                if (part != null)
-                    part.SetActive(now);
+            foreach (GameObject poweredObject in powered)
+            {
+                if (poweredObject != null) poweredObject.SetActive(isShining);
+            }
 
             for (int i = 0; i < glowing.Length; i++)
-                if (glowing[i] != null)
-                    glowing[i].material.SetColor(Emissive, now ? glows[i] : Color.black);
+            {
+                if (glowing[i] != null) glowing[i].material.SetColor(EmissiveColorId, isShining ? litEmissiveColors[i] : Color.black);
+            }
         }
     }
 }

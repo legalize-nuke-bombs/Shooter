@@ -98,7 +98,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
             {
                 if (partners.Contains(character.Id))
                 {
-                    string name = character.GetComponent<Nameable>()?.PromptName() ?? "Unknown";
+                    string name = character.GetComponent<Nameable>()?.GetPromptName() ?? "Unknown";
                     partnerNames[character.Id] = name;
                 }
             }, RegisterInactivePolicy.Include);

@@ -43,7 +43,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
         protected override string Execute(GoToArguments arguments, LlmCallContext context)
         {
             var target = new Vector3(arguments.X, arguments.Y, arguments.Z);
-            string point = Whereabouts.Coordinates(target);
+            string point = Whereabouts.FormatCoordinates(target);
 
             if (!AgentMovement.NearestGround(target, GroundReach, out Vector3 ground))
             {
@@ -60,7 +60,7 @@ The result comes at once, the walk itself takes time: you will be notified when 
                 return $"There is no way from here to {point}: the nearest walkable ground is {rest:F0} m short of it";
             }
 
-            string shortfall = Whereabouts.Shortfall(ground - end);
+            string shortfall = Whereabouts.DescribeShortfall(ground - end);
             if (shortfall.Length > 0 && Vector3.Distance(end, Self.transform.position) < Whereabouts.ArrivalTolerance)
             {
                 return $"There is no way from here toward {point}: the walkable ground ends right here, {shortfall}";

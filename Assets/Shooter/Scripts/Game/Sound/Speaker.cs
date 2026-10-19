@@ -8,16 +8,14 @@ namespace Shooter.Game
 {
     public class Speaker : NetworkBehaviour
     {
-        private const int Voices = 8;
+        private const int MaxVoices = 8;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly List<AudioSource> sources = new();
+        private readonly List<AudioSource> audioSources = new();
 
-        private int next;
+        private int nextAudioSourceIndexToReuse;
 
-        private static SoundCatalog Sounds => Catalogs.GetCatalog<SoundCatalog>();
-
-        public void Play(SoundAsset sound, float gain = 1f)
+        public void PlayForEveryone(SoundAsset sound, float gain = 1f)
         {
             if (!IsServer) return;
 
@@ -27,59 +25,60 @@ namespace Shooter.Game
                 return;
             }
 
-            PlayRpc(sound.NetworkId, sound.Pick(), gain);
+            PlayForEveryoneRpc(sound.NetworkId, sound.PickRandomVariant(), gain);
         }
 
         [Rpc(SendTo.Everyone)]
-        private void PlayRpc(FixedString32Bytes id, byte variant, float gain)
+        private void PlayForEveryoneRpc(FixedString32Bytes id, byte variant, float gain)
         {
-            SoundCatalog catalog = Sounds;
-            if (catalog == null)
+            SoundCatalog soundCatalog = Catalogs.GetCatalog<SoundCatalog>();
+            if (soundCatalog == null)
             {
                 Log.Warn($"Entity {name} cannot play {id}: the world has no sound catalog");
                 return;
             }
 
-            SoundAsset sound = catalog.GetAssetById(id);
+            SoundAsset sound = soundCatalog.GetAssetById(id);
             if (sound == null) return;
 
-            AudioClip clip = sound.Clip(variant);
+            AudioClip clip = sound.GetClip(variant);
             if (clip == null) return;
 
-            AudioSource source = Free();
-            source.clip = clip;
-            source.outputAudioMixerGroup = sound.Output;
-            source.volume = sound.Volume * gain;
-            source.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
-            source.rolloffMode = sound.Rolloff;
-            source.minDistance = sound.MinDistance;
-            source.maxDistance = sound.MaxDistance;
+            AudioSource audioSource = TakeAudioSource();
+            audioSource.clip = clip;
+            audioSource.outputAudioMixerGroup = sound.Output;
+            audioSource.volume = sound.Volume * gain;
+            audioSource.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
+            audioSource.rolloffMode = sound.Rolloff;
+            audioSource.minDistance = sound.MinDistance;
+            audioSource.maxDistance = sound.MaxDistance;
 
-            source.Play();
+            audioSource.Play();
         }
 
-        private AudioSource Free()
+        private AudioSource TakeAudioSource()
         {
-            foreach (AudioSource source in sources)
-                if (!source.isPlaying)
-                    return source;
+            foreach (AudioSource audioSource in audioSources)
+            {
+                if (!audioSource.isPlaying) return audioSource;
+            }
 
-            if (sources.Count < Voices) return Add();
+            if (audioSources.Count < MaxVoices) return AddAudioSource();
 
-            AudioSource taken = sources[next];
-            next = (next + 1) % sources.Count;
+            AudioSource reusedAudioSource = audioSources[nextAudioSourceIndexToReuse];
+            nextAudioSourceIndexToReuse = (nextAudioSourceIndexToReuse + 1) % audioSources.Count;
 
-            return taken;
+            return reusedAudioSource;
         }
 
-        private AudioSource Add()
+        private AudioSource AddAudioSource()
         {
-            AudioSource source = gameObject.AddComponent<AudioSource>();
-            source.playOnAwake = false;
-            source.spatialBlend = 1f;
-            sources.Add(source);
+            AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 1f;
+            audioSources.Add(audioSource);
 
-            return source;
+            return audioSource;
         }
     }
 }

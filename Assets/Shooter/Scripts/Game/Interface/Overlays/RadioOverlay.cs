@@ -114,7 +114,7 @@ namespace Shooter.Game
 
         private string Named(long partnerId)
         {
-            Character partner = Character.Of(partnerId, RegisterInactivePolicy.Exclude);
+            Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Exclude);
             Nameable nameable = partner == null ? null : partner.GetComponentInChildren<Nameable>();
             if (nameable == null) return Stranger;
 

@@ -82,7 +82,7 @@ namespace Shooter.Game
             }
 
             Log.Info($"Entity {name} crafted {craft.Id}");
-            if (craft.Sound != null) speaker.Play(craft.Sound);
+            if (craft.Sound != null) speaker.PlayForEveryone(craft.Sound);
             return true;
         }
     }

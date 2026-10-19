@@ -21,13 +21,13 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            characterRelation.OnDamagedCallback += OnDamaged;
+            characterRelation.RelationWorsenedByDamage += OnDamaged;
             btReports.OnReport += OnBtReport;
         }
 
         private void OnDisable()
         {
-            characterRelation.OnDamagedCallback -= OnDamaged;
+            characterRelation.RelationWorsenedByDamage -= OnDamaged;
             btReports.OnReport -= OnBtReport;
         }
 
@@ -37,7 +37,7 @@ namespace Shooter.Game
             llm.Notice(report.Prompt, report.Urgent);
         }
 
-        private void OnDamaged(AICharacterRelation.OnDamagedCallbackData data)
+        private void OnDamaged(AICharacterRelation.RelationWorsenedByDamageData data)
         {
             Log.Info("OnDamaged");
             llm.Notice($"Your character automatically worsened their attitude toward ID {data.AttackerId} by {data.RelationDelta} units because {data.AttackerId} dealt you {data.DamagePoints} x {data.DamageType.Id} damage", false);

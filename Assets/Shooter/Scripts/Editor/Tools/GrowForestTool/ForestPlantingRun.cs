@@ -467,7 +467,7 @@ namespace Shooter.Editor
         {
             foreach (Water water in waters)
             {
-                if (water.DepthAt(point) > 0f) return true;
+                if (water.GetDepthAt(point) > 0f) return true;
             }
 
             return false;

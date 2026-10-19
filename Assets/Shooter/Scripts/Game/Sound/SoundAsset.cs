@@ -35,21 +35,21 @@ namespace Shooter.Game
 
         public float PitchVariation => pitchVariation;
 
-        public bool Silent => clips == null || clips.Length == 0;
+        public bool IsSilent => clips == null || clips.Length == 0;
 
         private void OnEnable()
         {
             if (output == null) Log.Error($"Sound {name} has no mixer group set, it will not follow the volume settings");
         }
 
-        public byte Pick()
+        public byte PickRandomVariant()
         {
-            return Silent ? (byte)0 : (byte)Random.Range(0, clips.Length);
+            return IsSilent ? (byte)0 : (byte)Random.Range(0, clips.Length);
         }
 
-        public AudioClip Clip(byte variant)
+        public AudioClip GetClip(byte variant)
         {
-            return Silent ? null : clips[variant % clips.Length];
+            return IsSilent ? null : clips[variant % clips.Length];
         }
     }
 }

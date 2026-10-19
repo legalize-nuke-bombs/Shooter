@@ -58,7 +58,7 @@ namespace Shooter.Game
 
                 if (OnlyEnemies.Value)
                 {
-                    if (characterRelation.Status(targetCharacter) != RelationshipStatus.Enemy)
+                    if (characterRelation.GetStatus(targetCharacter) != RelationStatus.Enemy)
                     {
                         continue;
                     }

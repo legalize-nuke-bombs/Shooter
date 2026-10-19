@@ -6,7 +6,7 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class CharacterIds : ShooterBehaviour, ISaveableComponent
     {
-        private long next;
+        private long nextId;
 
         public string ComponentKey => "CharacterIds";
 
@@ -19,18 +19,18 @@ namespace Shooter.Game
         {
             return new SaveData
             {
-                Next = next
+                Next = nextId
             };
         }
 
         public void LoadObject(SaveToken content)
         {
-            next = content.ToObject<SaveData>().Next;
+            nextId = content.ToObject<SaveData>().Next;
         }
 
-        public long Next()
+        public long TakeNextId()
         {
-            return next++;
+            return nextId++;
         }
     }
 }

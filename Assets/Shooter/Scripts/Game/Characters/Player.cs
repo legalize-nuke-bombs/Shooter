@@ -6,7 +6,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(CharacterId))]
     public class Player : ShooterBehaviour, ISaveableComponent
     {
-        private CharacterId id;
+        private CharacterId characterId;
 
         public string PublicKey { get; set; }
 
@@ -29,14 +29,14 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            id = GetComponent<CharacterId>();
+            characterId = GetComponent<CharacterId>();
         }
 
-        public long Id => id.Value;
+        public long Id => characterId.Value;
 
-        public static Player Of(long id, RegisterInactivePolicy gate)
+        public static Player FindById(long id, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (Player player in Registers.GetAll<Player>(gate))
+            foreach (Player player in Registers.GetAll<Player>(inactivePolicy))
             {
                 if (player.Id == id)
                 {
@@ -46,9 +46,9 @@ namespace Shooter.Game
             return null;
         }
 
-        public static Player OfKey(string publicKey, RegisterInactivePolicy gate)
+        public static Player FindByPublicKey(string publicKey, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (Player player in Registers.GetAll<Player>(gate))
+            foreach (Player player in Registers.GetAll<Player>(inactivePolicy))
             {
                 if (player.PublicKey == publicKey)
                 {

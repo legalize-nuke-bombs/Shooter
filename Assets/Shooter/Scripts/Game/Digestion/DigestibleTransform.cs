@@ -8,7 +8,7 @@ namespace Shooter.Game
 
         public string Digest(DigestionDetail detail)
         {
-            return Whereabouts.Coordinates(transform.position);
+            return Whereabouts.FormatCoordinates(transform.position);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Shooter.Game
                 effect.Apply(gameObject);
             }
 
-            speaker.Play(asset.UseSound);
+            speaker.PlayForEveryone(asset.UseSound);
 
             Log.Info($"Entity {name} used one {asset.Id}");
             return true;

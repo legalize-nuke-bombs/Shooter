@@ -18,9 +18,10 @@ namespace Shooter.Game
         [SerializeField] [Range(0, 100)] private int enemyThreshold;
         [SerializeField] [Range(0, 100)] private int friendThreshold = 90;
 
-        private readonly Dictionary<long, int> amounts = new();
+        private readonly Dictionary<long, int> amountsByCharacterId = new();
 
         public string ComponentKey => "AICharacterRelation";
+
         private struct SaveData
         {
             public struct Entry
@@ -30,25 +31,27 @@ namespace Shooter.Game
             }
             public List<Entry> Entries { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
-                Entries = amounts.Select(pair => new SaveData.Entry
+                Entries = amountsByCharacterId.Select(pair => new SaveData.Entry
                 {
                     Id = pair.Key,
                     Amount = pair.Value
                 }).ToList()
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            amounts.Clear();
-            if (sd.Entries == null) return;
-            foreach (SaveData.Entry entry in sd.Entries)
+            SaveData saveData = content.ToObject<SaveData>();
+            amountsByCharacterId.Clear();
+            if (saveData.Entries == null) return;
+            foreach (SaveData.Entry entry in saveData.Entries)
             {
-                if (!amounts.TryAdd(entry.Id, entry.Amount))
+                if (!amountsByCharacterId.TryAdd(entry.Id, entry.Amount))
                 {
                     Log.Warn($"Save token contains multiple definitions of relation with {entry.Id}");
                 }
@@ -58,14 +61,15 @@ namespace Shooter.Game
         private Health health;
         private Character ownCharacter;
 
-        public struct OnDamagedCallbackData
+        public struct RelationWorsenedByDamageData
         {
             public int RelationDelta { get; set; }
             public int DamagePoints { get; set; }
             public DamageAsset DamageType { get; set; }
             public long AttackerId { get; set; }
         }
-        public event Action<OnDamagedCallbackData> OnDamagedCallback;
+
+        public event Action<RelationWorsenedByDamageData> RelationWorsenedByDamage;
 
         private void Awake()
         {
@@ -75,49 +79,49 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            health.Damaged += OnDamaged;
+            health.Damaged += HandleDamaged;
         }
 
         private void OnDisable()
         {
-            health.Damaged -= OnDamaged;
+            health.Damaged -= HandleDamaged;
         }
 
         public string Digest(DigestionDetail detail)
         {
             if (detail == DigestionDetail.Brief) return null;
 
-            var sb = new StringBuilder();
+            StringBuilder digest = new();
 
-            sb.Append("Current relations with other characters. ");
-            sb.Append($"Thresholds. Enemies: <= {enemyThreshold}. Friends: >= {friendThreshold}. ");
-            foreach (KeyValuePair<long, int> kvp in amounts)
+            digest.Append("Current relations with other characters. ");
+            digest.Append($"Thresholds. Enemies: <= {enemyThreshold}. Friends: >= {friendThreshold}. ");
+            foreach (KeyValuePair<long, int> amountByCharacterId in amountsByCharacterId)
             {
-                sb.Append(kvp.Key + " : " + kvp.Value + " (" + Status(kvp.Value) + "). ");
+                digest.Append(amountByCharacterId.Key + " : " + amountByCharacterId.Value + " (" + GetStatus(amountByCharacterId.Value) + "). ");
             }
 
-            sb.Append("The relation towards characters not listed here by fractions: ");
-            FractionCatalog fractions = Catalogs.GetCatalog<FractionCatalog>();
-            FractionRelationCatalog fractionRelations = Catalogs.GetCatalog<FractionRelationCatalog>();
-            for (int i = 0; i < fractions.Count; i++)
+            digest.Append("The relation towards characters not listed here by fractions: ");
+            FractionCatalog fractionCatalog = Catalogs.GetCatalog<FractionCatalog>();
+            FractionRelationCatalog fractionRelationCatalog = Catalogs.GetCatalog<FractionRelationCatalog>();
+            for (int i = 0; i < fractionCatalog.Count; i++)
             {
-                Fraction targetFraction = fractions.GetAssetAt(i);
-                sb.Append($"[{targetFraction.PromptName}: {fractionRelations.Amount(ownCharacter.Fraction, targetFraction)}], ");
+                Fraction targetFraction = fractionCatalog.GetAssetAt(i);
+                digest.Append($"[{targetFraction.PromptName}: {fractionRelationCatalog.GetDefaultAmount(ownCharacter.Fraction, targetFraction)}], ");
             }
 
-            return sb.ToString();
+            return digest.ToString();
         }
 
         public DigestionPriority Priority => DigestionPriority.High;
 
-        private void OnDamaged(double amount, Character attacker, DamageAsset type)
+        private void HandleDamaged(double amount, Character attacker, DamageAsset type)
         {
             if (attacker == null) return;
 
-            int delta = SetAmount(attacker, Math.Max(0, Amount(attacker) - (int)(damageToReputationCoefficient * amount)));
-            if (delta != 0 && OnDamagedCallback != null)
+            int delta = SetAmount(attacker, Math.Max(0, GetAmount(attacker) - (int)(damageToReputationCoefficient * amount)));
+            if (delta != 0 && RelationWorsenedByDamage != null)
             {
-                OnDamagedCallback.Invoke(new OnDamagedCallbackData()
+                RelationWorsenedByDamage.Invoke(new RelationWorsenedByDamageData
                 {
                     RelationDelta = delta,
                     DamagePoints = (int)Math.Abs(amount),
@@ -127,19 +131,19 @@ namespace Shooter.Game
             }
         }
 
-        public int Amount(Character targetCharacter)
+        public int GetAmount(Character targetCharacter)
         {
-            if (amounts.TryGetValue(targetCharacter.Id, out int amount))
+            if (amountsByCharacterId.TryGetValue(targetCharacter.Id, out int amount))
             {
                 return amount;
             }
-            FractionRelationCatalog fractionRelations = Catalogs.GetCatalog<FractionRelationCatalog>();
-            return fractionRelations.Amount(ownCharacter.Fraction, targetCharacter.Fraction);
+            FractionRelationCatalog fractionRelationCatalog = Catalogs.GetCatalog<FractionRelationCatalog>();
+            return fractionRelationCatalog.GetDefaultAmount(ownCharacter.Fraction, targetCharacter.Fraction);
         }
 
         public int SetAmount(Character targetCharacter, int amount)
         {
-            int currentAmount = Amount(targetCharacter);
+            int currentAmount = GetAmount(targetCharacter);
 
             Log.Info($"Entity {name} SetAmount request: character id {targetCharacter.Id} amount {currentAmount} -> {amount}");
 
@@ -147,23 +151,23 @@ namespace Shooter.Game
 
             if (amount == currentAmount) return 0;
 
-            amounts[targetCharacter.Id] = amount;
+            amountsByCharacterId[targetCharacter.Id] = amount;
 
             return amount - currentAmount;
         }
 
-        public RelationshipStatus Status(Character targetCharacter)
+        public RelationStatus GetStatus(Character targetCharacter)
         {
-            return Status(Amount(targetCharacter));
+            return GetStatus(GetAmount(targetCharacter));
         }
 
-        private RelationshipStatus Status(int amount)
+        private RelationStatus GetStatus(int amount)
         {
-            if (amount <= enemyThreshold) return RelationshipStatus.Enemy;
+            if (amount <= enemyThreshold) return RelationStatus.Enemy;
 
-            if (amount >= friendThreshold) return RelationshipStatus.Friend;
+            if (amount >= friendThreshold) return RelationStatus.Friend;
 
-            return RelationshipStatus.Neutral;
+            return RelationStatus.Neutral;
         }
     }
 }

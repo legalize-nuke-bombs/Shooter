@@ -8,22 +8,22 @@ namespace Shooter.Game
     {
         [SerializeField] private string absolute;
 
-        private readonly NetworkVariable<FixedString64Bytes> current = new();
+        private readonly NetworkVariable<FixedString64Bytes> currentName = new();
 
-        public string Name => current.Value.ToString();
+        public string Name => currentName.Value.ToString();
 
         public override void OnNetworkSpawn()
         {
             if (!IsServer || string.IsNullOrEmpty(absolute)) return;
 
-            current.Value = new FixedString64Bytes(absolute);
+            currentName.Value = new FixedString64Bytes(absolute);
         }
 
-        public void Rename(string name)
+        public void RenameTo(string newName)
         {
             if (!IsServer) return;
 
-            current.Value = new FixedString64Bytes(name);
+            currentName.Value = new FixedString64Bytes(newName);
         }
 
         public override string Digest(DigestionDetail detail)
@@ -31,7 +31,7 @@ namespace Shooter.Game
             return string.IsNullOrEmpty(Name) ? null : "Name: " + Name;
         }
 
-        public override string PromptName()
+        public override string GetPromptName()
         {
             return Name;
         }

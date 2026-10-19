@@ -34,7 +34,7 @@ namespace Shooter.Game
         {
             if (height < minHeight) return;
 
-            speaker.Play(sounds == null ? null : sounds.On(Surface.Under(body)), gain);
+            speaker.PlayForEveryone(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(body)), gain);
 
             int damage = Mathf.RoundToInt((height - safeHeight) * damagePerMetre);
             if (damage > 0) health.Damage(damage, null, fallDamage);

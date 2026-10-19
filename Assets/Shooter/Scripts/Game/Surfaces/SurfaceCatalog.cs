@@ -12,13 +12,14 @@ namespace Shooter.Game
 
         public PhysicsMaterial Water => water;
 
-        public PhysicsMaterial Of(TerrainLayer layer)
+        public PhysicsMaterial GetSurfaceOf(TerrainLayer layer)
         {
             if (layer == null || terrain == null) return null;
 
-            foreach (TerrainSurface row in terrain)
-                if (row.Layer == layer)
-                    return row.Surface;
+            foreach (TerrainSurface terrainSurface in terrain)
+            {
+                if (terrainSurface.Layer == layer) return terrainSurface.Surface;
+            }
 
             return null;
         }

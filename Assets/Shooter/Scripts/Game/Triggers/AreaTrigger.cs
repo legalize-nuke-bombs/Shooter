@@ -1,4 +1,4 @@
-﻿using Shooter.Infrastructure;
+using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ namespace Shooter.Game
 
         private MainTriggerable mainTriggerable;
 
-        private Character owner;
+        private Character ownCharacter;
 
         private static int characterLayer = -1;
         private static int CharacterLayer => characterLayer != -1 ? characterLayer : characterLayer = LayerMask.NameToLayer("Character");
@@ -20,10 +20,10 @@ namespace Shooter.Game
         private void Awake()
         {
             mainTriggerable = GetComponent<MainTriggerable>();
-            owner = GetComponentInParent<Character>();
+            ownCharacter = GetComponentInParent<Character>();
 
-            SphereCollider sphere = GetComponent<SphereCollider>();
-            if (!sphere.isTrigger) Log.Warn("Sphere must have a trigger!");
+            SphereCollider sphereCollider = GetComponent<SphereCollider>();
+            if (!sphereCollider.isTrigger) Log.Error($"Entity {name} has a sphere collider that is not a trigger");
         }
 
         private void OnTriggerEnter(Collider target)
@@ -39,9 +39,9 @@ namespace Shooter.Game
                 return;
             }
 
-            if (character == owner) return;
+            if (character == ownCharacter) return;
 
-            mainTriggerable.OnTrigger(character);
+            mainTriggerable.HandleCharacterEntered(character);
         }
     }
 }

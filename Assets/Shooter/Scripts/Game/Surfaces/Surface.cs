@@ -5,63 +5,62 @@ namespace Shooter.Game
 {
     public static class Surface
     {
-        private const float Lift = 0.5f;
-        private const float Reach = 1f;
+        private const float RayStartAboveFeet = 0.5f;
+        private const float RayReachBelowFeet = 1f;
 
         private static int groundMask;
 
-        private static int GroundMask => groundMask != 0
-            ? groundMask
-            : groundMask = LayerMask.GetMask("Default");
+        private static int GroundMask => groundMask != 0 ? groundMask : groundMask = LayerMask.GetMask("Default");
 
-        public static PhysicsMaterial Under(CharacterController body)
+        public static PhysicsMaterial FindUnder(CharacterController characterController)
         {
-            return Under(body.transform.position + body.center + Vector3.down * (body.height / 2f));
+            return FindUnder(characterController.transform.position + characterController.center + Vector3.down * (characterController.height / 2f));
         }
 
-        public static PhysicsMaterial Under(Vector3 feet)
+        public static PhysicsMaterial FindUnder(Vector3 feetPosition)
         {
-            if (Water.Depth(feet) > 0f)
+            if (Water.FindDepthAt(feetPosition) > 0f)
             {
-                SurfaceCatalog catalog = Catalogs.GetCatalog<SurfaceCatalog>();
-                return catalog == null ? null : catalog.Water;
+                SurfaceCatalog surfaceCatalog = Catalogs.GetCatalog<SurfaceCatalog>();
+                return surfaceCatalog == null ? null : surfaceCatalog.Water;
             }
 
-            return Physics.Raycast(feet + Vector3.up * Lift, Vector3.down, out RaycastHit hit, Lift + Reach,
-                GroundMask, QueryTriggerInteraction.Ignore)
-                ? Of(hit)
-                : null;
+            Vector3 rayStart = feetPosition + Vector3.up * RayStartAboveFeet;
+            if (!Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, RayStartAboveFeet + RayReachBelowFeet, GroundMask, QueryTriggerInteraction.Ignore)) return null;
+
+            return FindAt(hit);
         }
 
-        public static PhysicsMaterial Of(RaycastHit hit)
+        public static PhysicsMaterial FindAt(RaycastHit hit)
         {
             if (hit.collider is not TerrainCollider) return hit.collider.sharedMaterial;
 
             Terrain terrain = hit.collider.GetComponent<Terrain>();
             if (terrain == null) return null;
 
-            SurfaceCatalog catalog = Catalogs.GetCatalog<SurfaceCatalog>();
-            return catalog == null ? null : catalog.Of(Prevailing(terrain, hit.point));
+            SurfaceCatalog surfaceCatalog = Catalogs.GetCatalog<SurfaceCatalog>();
+            return surfaceCatalog == null ? null : surfaceCatalog.GetSurfaceOf(FindPrevailingTerrainLayer(terrain, hit.point));
         }
 
-        private static TerrainLayer Prevailing(Terrain terrain, Vector3 point)
+        private static TerrainLayer FindPrevailingTerrainLayer(Terrain terrain, Vector3 point)
         {
-            TerrainData data = terrain.terrainData;
-            TerrainLayer[] layers = data.terrainLayers;
-            if (layers.Length == 0) return null;
+            TerrainData terrainData = terrain.terrainData;
+            TerrainLayer[] terrainLayers = terrainData.terrainLayers;
+            if (terrainLayers.Length == 0) return null;
 
-            Vector3 local = point - terrain.GetPosition();
-            int x = Mathf.Clamp((int)(local.x / data.size.x * data.alphamapWidth), 0, data.alphamapWidth - 1);
-            int z = Mathf.Clamp((int)(local.z / data.size.z * data.alphamapHeight), 0, data.alphamapHeight - 1);
+            Vector3 localPoint = point - terrain.GetPosition();
+            int alphamapX = Mathf.Clamp((int)(localPoint.x / terrainData.size.x * terrainData.alphamapWidth), 0, terrainData.alphamapWidth - 1);
+            int alphamapZ = Mathf.Clamp((int)(localPoint.z / terrainData.size.z * terrainData.alphamapHeight), 0, terrainData.alphamapHeight - 1);
 
-            float[,,] weights = data.GetAlphamaps(x, z, 1, 1);
-            int prevailing = 0;
+            float[,,] layerWeights = terrainData.GetAlphamaps(alphamapX, alphamapZ, 1, 1);
+            int prevailingLayerIndex = 0;
 
-            for (int i = 1; i < layers.Length; i++)
-                if (weights[0, 0, i] > weights[0, 0, prevailing])
-                    prevailing = i;
+            for (int layerIndex = 1; layerIndex < terrainLayers.Length; layerIndex++)
+            {
+                if (layerWeights[0, 0, layerIndex] > layerWeights[0, 0, prevailingLayerIndex]) prevailingLayerIndex = layerIndex;
+            }
 
-            return layers[prevailing];
+            return terrainLayers[prevailingLayerIndex];
         }
     }
 }
