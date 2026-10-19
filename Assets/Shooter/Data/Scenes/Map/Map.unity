@@ -1461,7 +1461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4228c088fd4be31419a5aa728551153d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.SceneSwitcherOnNetworkStop
-  scene: Menu
+  scene: MainMenu
 --- !u!4 &186213611
 Transform:
   m_ObjectHideFlags: 0

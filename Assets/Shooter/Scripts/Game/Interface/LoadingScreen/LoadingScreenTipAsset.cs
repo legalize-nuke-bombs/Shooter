@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Tip", fileName = "Tip")]
-    public class TipAsset : Asset
+    [CreateAssetMenu(menuName = "Shooter/Loading Screen Tip", fileName = "LoadingScreenTip")]
+    public class LoadingScreenTipAsset : Asset
     {
         [SerializeField] [TextArea] private string text;
 

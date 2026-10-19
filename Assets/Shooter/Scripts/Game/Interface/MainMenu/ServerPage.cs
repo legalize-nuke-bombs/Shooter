@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public abstract class ServerPage : MenuPage
+    public abstract class ServerPage : MainMenuPage
     {
         private const string CompressionField = "compression";
         private const string ProviderField = "provider";

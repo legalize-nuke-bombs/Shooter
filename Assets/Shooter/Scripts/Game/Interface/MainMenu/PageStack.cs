@@ -4,11 +4,11 @@ namespace Shooter.Game
 {
     public class PageStack
     {
-        private readonly List<MenuPage> pages = new();
+        private readonly List<MainMenuPage> pages = new();
 
-        public MenuPage Top => pages.Count == 0 ? null : pages[pages.Count - 1];
+        public MainMenuPage Top => pages.Count == 0 ? null : pages[pages.Count - 1];
 
-        public void Push(MenuPage page)
+        public void Push(MainMenuPage page)
         {
             Top?.Hide();
             pages.Add(page);

@@ -5,9 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public abstract class MenuPage
+    public abstract class MainMenuPage
     {
-        protected MenuPage(VisualElement root)
+        protected MainMenuPage(VisualElement root)
         {
             Root = root;
             Root.style.display = DisplayStyle.None;

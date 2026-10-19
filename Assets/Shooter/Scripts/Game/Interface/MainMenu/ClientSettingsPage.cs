@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class ClientSettingsPage : MenuPage
+    public class ClientSettingsPage : MainMenuPage
     {
         private const string BackButton = "back";
         private const string AntialiasingField = "antialiasing";

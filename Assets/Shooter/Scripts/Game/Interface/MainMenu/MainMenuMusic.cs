@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(AudioSource))]
-    public class MenuMusic : MonoBehaviour
+    public class MainMenuMusic : MonoBehaviour
     {
         [SerializeField] private AudioClip[] tracks;
         [SerializeField] private float fadeInSeconds = 4f;
