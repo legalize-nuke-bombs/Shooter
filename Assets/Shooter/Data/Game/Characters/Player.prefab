@@ -690,7 +690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.PlayerConversationObserver
   icon: {fileID: 11400000, guid: cd084102a8f49e545900fdd76f4576e5, type: 2}
-  sound: {fileID: 11400000, guid: 7c280fb930ed408eb88b8d22842678f3, type: 2}
+  sound: {fileID: 11400000, guid: 3b30bbf9a39943c5ad75c9b4004fe9a6, type: 2}
 --- !u!114 &4767933737110017048
 MonoBehaviour:
   m_ObjectHideFlags: 0
