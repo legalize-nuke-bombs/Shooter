@@ -70,7 +70,7 @@ namespace Shooter.Game
             {
                 MainSpawnPoint point = MainSpawnPoint.Pick();
                 Transform at = point == null ? transform : point.transform;
-                GameObject fresh = Spawner.Spawn(network.NetworkConfig.PlayerPrefab, at.position, at.rotation);
+                GameObject fresh = NetworkSpawner.Spawn(network.NetworkConfig.PlayerPrefab, at.position, at.rotation);
                 if (fresh == null)
                 {
                     Log.Error($"Client {client} could not be given a body");

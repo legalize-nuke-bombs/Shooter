@@ -63,7 +63,7 @@ namespace Shooter.Game
                 Log.Info($"Entity {name} is spawning its body");
                 if (body == null)
                 {
-                    body = Spawner.Spawn(bodyPrefab.gameObject, transform);
+                    body = NetworkSpawner.Spawn(bodyPrefab.gameObject, transform);
                 }
                 if (body == null)
                 {

@@ -18,11 +18,11 @@ namespace Shooter.Infrastructure
 
         private NetworkManager network;
 
-        public event Action<Refusal> Refused;
+        public event Action<NetworkStartFailure> JoinFailed;
 
         public string Save { get; private set; }
 
-        public Refusal Ending { get; set; }
+        public NetworkStartFailure Failure { get; set; }
 
         protected override void ShooterAwake()
         {
@@ -34,7 +34,7 @@ namespace Shooter.Infrastructure
             StopWatchingJoin();
         }
 
-        public Refusal Host(string save)
+        public NetworkStartFailure Host(string save)
         {
             Account account = Config.Account;
             ServerConfig server = Config.Read().Server;
@@ -48,7 +48,7 @@ namespace Shooter.Infrastructure
             if (!network.StartHost())
             {
                 Log.Warn($"The host refused to start on port {server.Port}");
-                return new Refusal("Не удалось запустить сервер", $"Возможно, порт {server.Port} занят. Смените его в настройках сервера");
+                return new NetworkStartFailure("Не удалось запустить сервер", $"Возможно, порт {server.Port} занят. Смените его в настройках сервера");
             }
 
             Log.Info($"World listens on port {server.Port}, channel encrypted");
@@ -59,16 +59,16 @@ namespace Shooter.Infrastructure
 
             Log.Error($"The world refused to load: {status}, shutting the host down");
             network.Shutdown();
-            return new Refusal("Не удалось запустить игру", "Карта не загрузилась");
+            return new NetworkStartFailure("Не удалось запустить игру", "Карта не загрузилась");
         }
 
-        public Refusal Join()
+        public NetworkStartFailure Join()
         {
             ClientConfig client = Config.Read().Client;
             if (!NetworkInvite.TryDecode(client.Invite, out string address, out ushort port, out string certificate))
             {
                 Log.Warn("Invite code is missing or malformed, staying in the menu");
-                return new Refusal(BadInvite, BadInviteDetails);
+                return new NetworkStartFailure(BadInvite, BadInviteDetails);
             }
 
             UnityTransport transport = network.GetComponent<UnityTransport>();
@@ -80,7 +80,7 @@ namespace Shooter.Infrastructure
             if (!network.StartClient())
             {
                 Log.Warn($"The client refused to start for {address}:{port}");
-                return new Refusal(BadInvite, BadInviteDetails);
+                return new NetworkStartFailure(BadInvite, BadInviteDetails);
             }
 
             network.OnClientConnectedCallback += Entered;
@@ -112,13 +112,13 @@ namespace Shooter.Infrastructure
             switch (verdict)
             {
                 case NetworkTransport.DisconnectEvents.ClosedByRemote:
-                    Refused?.Invoke(new Refusal("Сервер отклонил подключение", network.DisconnectReason));
+                    JoinFailed?.Invoke(new NetworkStartFailure("Сервер отклонил подключение", network.DisconnectReason));
                     break;
                 case NetworkTransport.DisconnectEvents.AuthenticationFailure:
-                    Refused?.Invoke(new Refusal("Код подключения не подходит", "По этому адресу другой сервер. Попросите у хоста код ещё раз"));
+                    JoinFailed?.Invoke(new NetworkStartFailure("Код подключения не подходит", "По этому адресу другой сервер. Попросите у хоста код ещё раз"));
                     break;
                 default:
-                    Refused?.Invoke(new Refusal("Сервер не отвечает", "Проверьте код подключения и что сервер запущен"));
+                    JoinFailed?.Invoke(new NetworkStartFailure("Сервер не отвечает", "Проверьте код подключения и что сервер запущен"));
                     break;
             }
         }

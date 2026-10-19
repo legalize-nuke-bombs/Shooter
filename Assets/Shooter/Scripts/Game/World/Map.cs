@@ -101,7 +101,7 @@ namespace Shooter.Game
             if (SaveManager.Load(frozen, starter.Save)) return true;
 
             Log.Warn($"The world failed to load {starter.Save}, shutting the host down");
-            starter.Ending = new Refusal(BrokenSave, BrokenSaveDetails);
+            starter.Failure = new NetworkStartFailure(BrokenSave, BrokenSaveDetails);
             network.Shutdown();
             return false;
         }

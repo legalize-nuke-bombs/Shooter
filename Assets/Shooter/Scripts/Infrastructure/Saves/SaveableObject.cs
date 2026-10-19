@@ -197,7 +197,7 @@ namespace Shooter.Infrastructure
             }
 
             // The saved id goes in before the network spawn, so the object never gets a fresh one of its own
-            GameObject body = Spawner.Spawn(prefab, fresh =>
+            GameObject body = NetworkSpawner.Spawn(prefab, fresh =>
             {
                 if (fresh.TryGetComponent(out SaveableObject saved)) saved.id = id;
             });

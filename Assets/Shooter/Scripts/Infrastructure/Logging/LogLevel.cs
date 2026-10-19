@@ -1,6 +1,6 @@
 namespace Shooter.Infrastructure
 {
-    public enum Level
+    public enum LogLevel
     {
         Debug,
         Info,

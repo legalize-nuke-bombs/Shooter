@@ -17,9 +17,9 @@ namespace Shooter.Infrastructure
         private static StreamWriter file;
         private static int mainThread;
 
-        [ThreadStatic] private static Level? writingLevel;
+        [ThreadStatic] private static LogLevel? writingLevel;
 
-        public static Level Least { get; private set; } = Level.Info;
+        public static LogLevel Least { get; private set; } = LogLevel.Info;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Begin()
@@ -48,12 +48,12 @@ namespace Shooter.Infrastructure
         }
 
         [HideInCallstack]
-        internal static void Write(Level level, string line)
+        internal static void Write(LogLevel level, string line)
         {
             LogType type = level switch
             {
-                Level.Warn => LogType.Warning,
-                Level.Error => LogType.Error,
+                LogLevel.Warn => LogType.Warning,
+                LogLevel.Error => LogType.Error,
                 _ => LogType.Log
             };
 
@@ -150,7 +150,7 @@ namespace Shooter.Infrastructure
 
         private static string Label(LogType type)
         {
-            if (writingLevel == Level.Debug) return "DEBUG";
+            if (writingLevel == LogLevel.Debug) return "DEBUG";
 
             return type switch
             {

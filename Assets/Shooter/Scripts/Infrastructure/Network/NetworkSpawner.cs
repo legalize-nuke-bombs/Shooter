@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace Shooter.Infrastructure
 {
-    public static class Spawner
+    public static class NetworkSpawner
     {
         private static readonly Journal Log = Logs.Here();
 

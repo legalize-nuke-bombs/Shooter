@@ -50,12 +50,12 @@ namespace Shooter.Game
         {
             loading = FindAnyObjectByType<LoadingScreenOverlay>();
             loading.Hide();
-            starter.Refused += Refused;
+            starter.JoinFailed += JoinFailed;
         }
 
         private void OnDestroy()
         {
-            starter.Refused -= Refused;
+            starter.JoinFailed -= JoinFailed;
         }
 
         private void Warn(string title, string details)
@@ -134,11 +134,11 @@ namespace Shooter.Game
 
             pages.Push(main);
 
-            if (starter.Ending != null)
+            if (starter.Failure != null)
             {
-                warnTitle = starter.Ending.Title;
-                warnDetails = starter.Ending.Details;
-                starter.Ending = null;
+                warnTitle = starter.Failure.Title;
+                warnDetails = starter.Failure.Details;
+                starter.Failure = null;
             }
 
             ShowWarning();
@@ -247,20 +247,20 @@ namespace Shooter.Game
         {
             if (save != null) Log.Info($"The player continues the game saved at {save}");
             loading.Show(LoadingScreenStage.Server);
-            Refusal refusal = starter.Host(save);
-            if (refusal == null) return;
+            NetworkStartFailure failure = starter.Host(save);
+            if (failure == null) return;
 
             loading.Hide();
-            Warn(refusal.Title, refusal.Details);
+            Warn(failure.Title, failure.Details);
         }
 
         private void Connect()
         {
             Log.Info("The player joins a game of someone else");
-            Refusal refusal = starter.Join();
-            if (refusal != null)
+            NetworkStartFailure failure = starter.Join();
+            if (failure != null)
             {
-                Warn(refusal.Title, refusal.Details);
+                Warn(failure.Title, failure.Details);
                 return;
             }
 
@@ -273,10 +273,10 @@ namespace Shooter.Game
             loading.Hide();
         }
 
-        private void Refused(Refusal refusal)
+        private void JoinFailed(NetworkStartFailure failure)
         {
             loading.Hide();
-            Warn(refusal.Title, refusal.Details);
+            Warn(failure.Title, failure.Details);
         }
 
         private void Quit()

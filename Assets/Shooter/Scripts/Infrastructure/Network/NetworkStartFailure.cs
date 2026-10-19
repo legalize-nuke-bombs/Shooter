@@ -1,8 +1,8 @@
 namespace Shooter.Infrastructure
 {
-    public sealed class Refusal
+    public sealed class NetworkStartFailure
     {
-        public Refusal(string title, string details)
+        public NetworkStartFailure(string title, string details)
         {
             Title = title;
             Details = details;

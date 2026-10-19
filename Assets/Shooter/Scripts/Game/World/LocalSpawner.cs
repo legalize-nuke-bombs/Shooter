@@ -51,7 +51,7 @@ namespace Shooter.Game
             fired = true;
 
             Log.Info($"Entity {name} is going to spawn {prefab.name}...");
-            Spawner.Spawn(prefab, destination.transform.position, destination.transform.rotation);
+            NetworkSpawner.Spawn(prefab, destination.transform.position, destination.transform.rotation);
         }
     }
 }
