@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.NotificationAsset
   id: green-hamlet-pov
   icon: {fileID: 11400000, guid: 9981b094dcf62ae42bd3a45f6d3e4228, type: 2}
-  sound: {fileID: 11400000, guid: 40522e9547c5daf4db1b36f4c84e6472, type: 2}
+  sound: {fileID: 11400000, guid: 24d961bc48e84441a1434668c0a9f675, type: 2}
   urgent: 0
   title: "\u041D\u043E\u0432\u043E\u0435 \u043C\u0435\u0441\u0442\u043E \u043E\u0442\u043A\u0440\u044B\u0442\u043E"
   subtitle: "\u0417\u0435\u043B\u0435\u043D\u0430\u044F \u0434\u0435\u0440\u0435\u0432\u043D\u044F"
