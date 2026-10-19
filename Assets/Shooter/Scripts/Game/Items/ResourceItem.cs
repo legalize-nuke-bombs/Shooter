@@ -17,7 +17,6 @@ namespace Shooter.Game
         [SerializeField] private Pickupable bodyPrefab;
 
         private bool alive = false;
-        // World time (clock seconds) when the body was taken; null = never taken, so the body grows at once
         private double? takenAt;
         [SerializeField] private float respawnHours = 48f;
 
@@ -38,9 +37,9 @@ namespace Shooter.Game
         public void LoadObject(SaveToken content)
         {
             // The world is frozen while it loads, so a body saved alive is grown by the first Update after the thaw
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData saveData = content.ToObject<SaveData>();
             alive = false;
-            takenAt = sd.Alive ? null : sd.TakenAt;
+            takenAt = saveData.Alive ? null : saveData.TakenAt;
         }
 
         private void Awake()
@@ -55,11 +54,11 @@ namespace Shooter.Game
 
             if (takenAt == null || clock.Timestamp - takenAt.Value >= respawnHours * SecondsPerHour)
             {
-                Respawn();
+                SpawnBody();
             }
         }
 
-        private void Respawn()
+        private void SpawnBody()
         {
             if (!alive)
             {
@@ -76,16 +75,16 @@ namespace Shooter.Game
                 }
                 alive = true;
                 takenAt = null;
-                body.GetComponent<Pickupable>().OnPickup += MarkDead;
+                body.GetComponent<Pickupable>().PickedUp += HandleBodyPickedUp;
             }
         }
 
-        private void MarkDead(Pickupable pickupable)
+        private void HandleBodyPickedUp(Pickupable pickupable)
         {
             Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, grows back in {respawnHours} h of world time");
             alive = false;
             takenAt = clock.Timestamp;
-            pickupable.OnPickup -= MarkDead;
+            pickupable.PickedUp -= HandleBodyPickedUp;
         }
 
         private void OnDrawGizmos()

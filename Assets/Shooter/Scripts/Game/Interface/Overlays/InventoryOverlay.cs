@@ -80,7 +80,7 @@ namespace Shooter.Game
         private bool draggedOutput;
         private bool draggedUnique;
         private bool draggedEquipable;
-        private Craft pendingCraft;
+        private CraftAsset pendingCraft;
         private int outputBefore;
         private VisualElement curtain;
         private VisualElement prompt;
@@ -254,13 +254,13 @@ namespace Shooter.Game
             if (bag == null) return;
 
             ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
-            UniqueItem equipped = holder.Held;
-            int equippedSlot = holder.Slot;
+            UniqueItem equipped = holder.HeldItem;
+            int equippedSlot = holder.HeldSlot;
             bool[,] taken = new bool[Rows, Columns];
 
             if (equipped != null && !Offered(equippedSlot))
             {
-                ItemAsset asset = catalog == null ? null : catalog.Asset(equipped.AssetId);
+                ItemAsset asset = catalog == null ? null : catalog.GetAssetById(equipped.AssetId);
 
                 VisualElement thing = Thing(asset, equipped.AssetId, 0, 0, null, equippedSlot, true, true);
                 AddMenu(thing, null, 0, equippedSlot);
@@ -274,11 +274,11 @@ namespace Shooter.Game
                 UniqueItem item = items[slot];
                 if (item == null || slot == equippedSlot || Offered(slot)) continue;
 
-                ItemAsset asset = catalog == null ? null : catalog.Asset(item.AssetId);
+                ItemAsset asset = catalog == null ? null : catalog.GetAssetById(item.AssetId);
                 Pack(taken, asset, Rows, Columns, out int row, out int column);
 
                 VisualElement thing = Thing(asset, item.AssetId, row, column, null, slot,
-                    asset is UniqueItemAsset unique && unique.Equipable, false);
+                    asset is UniqueItemAsset unique && unique.IsEquipable, false);
                 AddMenu(thing, null, 0, slot);
                 grid.Add(thing);
             }
@@ -289,7 +289,7 @@ namespace Shooter.Game
             {
                 if (catalog.GetAssetAt(index) is not StackableItemAsset asset) continue;
 
-                int amount = bag.Count(asset) - Reserved(asset);
+                int amount = bag.CountStackable(asset) - Reserved(asset);
                 if (amount > 0)
                 {
                     Pack(taken, asset, Rows, Columns, out int row, out int column);
@@ -378,7 +378,7 @@ namespace Shooter.Game
 
                 bool done = stack == null
                     ? offer.Slot >= items.Count || items[offer.Slot] == null || items[offer.Slot].AssetId != offer.Key
-                    : offer.SentAt > 0f && bag.Count(stack) <= offer.Expected;
+                    : offer.SentAt > 0f && bag.CountStackable(stack) <= offer.Expected;
 
                 if (done) offers.RemoveAt(i);
             }
@@ -386,7 +386,7 @@ namespace Shooter.Game
             for (int i = splits.Count - 1; i >= 0; i--)
             {
                 Unit split = splits[i];
-                int over = Reserved(split.Asset) - bag.Count(split.Asset);
+                int over = Reserved(split.Asset) - bag.CountStackable(split.Asset);
                 if (over <= 0) continue;
 
                 split.Count -= Math.Min(over, split.Count);
@@ -400,7 +400,7 @@ namespace Shooter.Game
                 StackableItemAsset stack = offer.Stack;
                 if (stack == null || offer.SentAt > 0f) continue;
 
-                int over = Reserved(stack) - bag.Count(stack);
+                int over = Reserved(stack) - bag.CountStackable(stack);
                 if (over <= 0) continue;
 
                 offer.Count -= Math.Min(over, offer.Count);
@@ -413,7 +413,7 @@ namespace Shooter.Game
                 StackableItemAsset asset = bench[i].Asset;
                 if (asset == null) continue;
 
-                int over = Reserved(asset) - bag.Count(asset);
+                int over = Reserved(asset) - bag.CountStackable(asset);
                 if (over > 0) Take(i, Math.Min(over, bench[i].Count));
             }
         }
@@ -427,7 +427,7 @@ namespace Shooter.Game
         private int Counted(ItemAsset asset)
         {
             if (bag == null) return 0;
-            if (asset is StackableItemAsset stackable) return bag.Count(stackable);
+            if (asset is StackableItemAsset stackable) return bag.CountStackable(stackable);
 
             int uniques = 0;
             foreach (UniqueItem item in bag.UniqueItems)
@@ -466,7 +466,7 @@ namespace Shooter.Game
                 craftGrid.Add(thing);
             }
 
-            Craft match = Match();
+            CraftAsset match = Match();
             craftOutput.EnableInClassList("craft__output--ready", match != null);
             if (match == null) return;
 
@@ -492,7 +492,7 @@ namespace Shooter.Game
                 Offer offer = offers[i];
                 Pack(taken, offer.Asset, GiveRows, GiveColumns, out int row, out int column);
 
-                Vector2Int cells = offer.Asset == null ? Vector2Int.one : offer.Asset.Cells;
+                Vector2Int cells = offer.Asset == null ? Vector2Int.one : offer.Asset.SizeInCells;
                 var size = new Vector2(cells.x * Cell, cells.y * Cell);
                 VisualElement thing = Slot(offer.Asset, offer.Key, false, offer.SentAt <= 0f);
                 thing.style.position = Position.Absolute;
@@ -551,7 +551,7 @@ namespace Shooter.Game
             if (item == null) return false;
 
             ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
-            ItemAsset asset = catalog == null ? null : catalog.Asset(item.AssetId);
+            ItemAsset asset = catalog == null ? null : catalog.GetAssetById(item.AssetId);
             if (!Fits(asset)) return false;
 
             offers.Add(new Offer { Asset = asset, Key = item.AssetId, Count = 1, Slot = slot });
@@ -585,7 +585,7 @@ namespace Shooter.Game
                 StackableItemAsset stack = offer.Stack;
                 if (stack != null)
                 {
-                    offer.Expected = bag.Count(stack) - offer.Count;
+                    offer.Expected = bag.CountStackable(stack) - offer.Count;
                     exchanger.GiveStackableRpc(takerId, stack.NetworkId, offer.Count);
                 }
                 else
@@ -669,7 +669,7 @@ namespace Shooter.Game
 
         private bool Visible(Transform eyes, Character candidate, Vector3 direction, float distance)
         {
-            int found = Interactor.Look(eyes.position, direction, distance, eyes.root, sights);
+            int found = Interactor.CollectLookHits(eyes.position, direction, distance, eyes.root, sights);
             Transform body = candidate.transform.root;
 
             for (int i = 0; i < found; i++)
@@ -699,7 +699,7 @@ namespace Shooter.Game
         }
 
         // The bounding box of the filled cells against the recipe's, so a one-cell recipe matches in any cell
-        private Craft Match()
+        private CraftAsset Match()
         {
             if (crafter == null || bag == null) return null;
 
@@ -708,7 +708,7 @@ namespace Shooter.Game
 
             if (!Shape(standing, out StackableItemAsset[] placed, out int width, out int height)) return null;
 
-            foreach (Craft craft in crafter.AvailableCrafts)
+            foreach (CraftAsset craft in crafter.AvailableCrafts)
             {
                 if (craft == null || craft.Output == null || craft.Input == null || craft.Input.Length != bench.Length) continue;
                 if (!Shape(craft.Input, out StackableItemAsset[] recipe, out int recipeWidth, out int recipeHeight)) continue;
@@ -788,7 +788,7 @@ namespace Shooter.Game
 
         private static bool Pack(bool[,] taken, ItemAsset asset, int rows, int columns, out int row, out int column)
         {
-            Vector2Int size = asset == null ? Vector2Int.one : asset.Cells;
+            Vector2Int size = asset == null ? Vector2Int.one : asset.SizeInCells;
 
             for (row = 0; row + size.y <= rows; row++)
             for (column = 0; column + size.x <= columns; column++)
@@ -826,7 +826,7 @@ namespace Shooter.Game
         private VisualElement Thing(ItemAsset asset, string fallback, int row, int column, string amount, int slot,
             bool equipable, bool holding, StackableItemAsset stack = null, int split = -1)
         {
-            Vector2Int cells = asset == null ? Vector2Int.one : asset.Cells;
+            Vector2Int cells = asset == null ? Vector2Int.one : asset.SizeInCells;
             var size = new Vector2(cells.x * Cell, cells.y * Cell);
             VisualElement thing = Slot(asset, fallback, holding, equipable);
 
@@ -941,7 +941,7 @@ namespace Shooter.Game
 
             if (draggedOutput)
             {
-                Craft match = Match();
+                CraftAsset match = Match();
                 if (match == null || !overBag) return;
 
                 // The bench pays when the bag confirms the result arrived
@@ -986,7 +986,7 @@ namespace Shooter.Game
             if (draggedStack != null)
             {
                 bool splitOff = draggedSplit >= 0 && draggedSplit < splits.Count;
-                int amount = splitOff ? splits[draggedSplit].Count : bag.Count(draggedStack) - Reserved(draggedStack);
+                int amount = splitOff ? splits[draggedSplit].Count : bag.CountStackable(draggedStack) - Reserved(draggedStack);
                 if (amount <= 0) return;
 
                 bool moved = overGive ? Propose(draggedStack, amount) : cell >= 0 && Lay(cell, draggedStack, amount);
@@ -1007,8 +1007,8 @@ namespace Shooter.Game
 
             if (!draggedEquipable) return;
 
-            if (held.worldBound.Contains(at) && !draggedFromHands) holder.HoldRpc(dragged);
-            else if (grid.worldBound.Contains(at) && draggedFromHands) holder.HoldRpc(Inventory.NoSlot);
+            if (held.worldBound.Contains(at) && !draggedFromHands) holder.HoldSlotRpc(dragged);
+            else if (grid.worldBound.Contains(at) && draggedFromHands) holder.HoldSlotRpc(Inventory.NoSlot);
         }
 
         private bool Lay(int cell, StackableItemAsset asset, int amount)
@@ -1049,7 +1049,7 @@ namespace Shooter.Game
             menu.style.left = local.x;
             menu.style.top = local.y;
 
-            if (stack != null && stack.Usable) Item(menu, "Использовать", () => user.UseRpc(stack.NetworkId));
+            if (stack != null && stack.IsUsable) Item(menu, "Использовать", () => user.UseItemRpc(stack.NetworkId));
             if (stack != null && amount > 1) Item(menu, "Разделить", () => AskSplit(stack));
 
             if (menu.childCount == 0) return;
@@ -1111,7 +1111,7 @@ namespace Shooter.Game
             head.Add(title);
             box.Add(head);
 
-            int free = bag.Count(asset) - Reserved(asset);
+            int free = bag.CountStackable(asset) - Reserved(asset);
             var field = new TextField { maxLength = SplitDigits, value = Math.Max(1, free / 2).ToString() };
             field.AddToClassList("split__field");
             field.RegisterValueChangedCallback(changed =>
@@ -1143,7 +1143,7 @@ namespace Shooter.Game
 
         private void Split(StackableItemAsset asset, string typed)
         {
-            int free = bag == null ? 0 : bag.Count(asset) - Reserved(asset);
+            int free = bag == null ? 0 : bag.CountStackable(asset) - Reserved(asset);
             if (!int.TryParse(typed, out int count) || count <= 0 || count >= free) return;
 
             splits.Add(new Unit { Asset = asset, Count = count });
@@ -1182,7 +1182,7 @@ namespace Shooter.Game
 
         private static VisualElement Slot(ItemAsset asset, string fallback, bool holding, bool equipable)
         {
-            Vector2Int size = asset == null ? Vector2Int.one : asset.Cells;
+            Vector2Int size = asset == null ? Vector2Int.one : asset.SizeInCells;
 
             var slot = new VisualElement { tooltip = asset == null ? fallback : asset.Title };
             slot.AddToClassList("slot");

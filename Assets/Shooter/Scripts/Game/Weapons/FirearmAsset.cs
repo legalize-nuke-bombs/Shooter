@@ -51,7 +51,7 @@ namespace Shooter.Game
 
         public EarSoundAsset HeadshotSound => headshotSound;
 
-        public override UniqueItem Create()
+        public override UniqueItem CreateItem()
         {
             return new Firearm(Id);
         }

@@ -14,7 +14,7 @@ namespace Shooter.Game
         [SerializeField] private StackableItemAsset item;
         [SerializeField] private SoundAsset sound;
 
-        public Action<Pickupable> OnPickup;
+        public Action<Pickupable> PickedUp;
 
         private void Awake()
         {
@@ -25,7 +25,7 @@ namespace Shooter.Game
             }
             if (sound == null)
             {
-                Log.Warn($"Entity {name} is missing its sound");
+                Log.Error($"Entity {name} is missing its sound");
             }
         }
 
@@ -43,13 +43,13 @@ namespace Shooter.Game
             }
             if (user.TryGetComponent(out Inventory inventory))
             {
-                inventory.Add(item, 1);
+                inventory.AddStackable(item, 1);
             }
             else
             {
                 Log.Warn($"Failed to find inventory of user {user.name}");
             }
-            OnPickup?.Invoke(this);
+            PickedUp?.Invoke(this);
             networkObject.Despawn(!networkObject.InScenePlaced);
             gameObject.SetActive(false);
             promptResult = $"You picked up {item.Id}";

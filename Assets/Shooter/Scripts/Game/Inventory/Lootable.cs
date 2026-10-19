@@ -7,18 +7,18 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        public void Fill(Inventory from)
+        public void TakeAllItemsFrom(Inventory sourceInventory)
         {
-            if (!IsServer || from == null) return;
+            if (!IsServer || sourceInventory == null) return;
 
-            Inventory own = GetComponent<Inventory>();
-            if (own == null)
+            Inventory ownInventory = GetComponent<Inventory>();
+            if (ownInventory == null)
             {
-                Log.Warn($"Lootable {name} has no inventory to take the belongings");
+                Log.Error($"Lootable {name} has no inventory to take the belongings");
                 return;
             }
 
-            from.DrainInto(own);
+            sourceInventory.DrainInto(ownInventory);
             Log.Info($"Lootable {name} took the belongings");
         }
     }

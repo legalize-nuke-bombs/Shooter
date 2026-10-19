@@ -37,63 +37,63 @@ namespace Shooter.Game
                 stacks[catalog.GetAssetAt(index).Id] = stackAmounts[index];
             }
 
-            var saved = new List<SlotData>();
-            foreach (UniqueItem item in slots.All)
+            var savedSlots = new List<SlotData>();
+            foreach (UniqueItem item in slots.ItemsBySlot)
             {
                 if (item == null)
                 {
-                    saved.Add(default);
+                    savedSlots.Add(default);
                     continue;
                 }
 
                 object state = item.SaveObject();
 
-                saved.Add(new SlotData
+                savedSlots.Add(new SlotData
                 {
                     AssetId = item.AssetId,
                     State = state == null ? default : SaveToken.FromObject(state)
                 });
             }
 
-            return new SaveData { Stacks = stacks, Slots = saved };
+            return new SaveData { Stacks = stacks, Slots = savedSlots };
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData saveData = content.ToObject<SaveData>();
             ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
 
-            Clear();
+            RemoveAllItems();
 
-            foreach (KeyValuePair<string, int> stack in sd.Stacks)
+            foreach (KeyValuePair<string, int> stack in saveData.Stacks)
             {
-                if (catalog.Asset(stack.Key) is not StackableItemAsset asset)
+                if (catalog.GetAssetById(stack.Key) is not StackableItemAsset asset)
                 {
                     Log.Warn($"Entity {name} lost {stack.Value} of {stack.Key}: the world catalog does not know it");
                     continue;
                 }
 
-                Add(asset, stack.Value);
+                AddStackable(asset, stack.Value);
             }
 
-            for (int slot = 0; slot < sd.Slots.Count; slot++)
+            for (int slot = 0; slot < saveData.Slots.Count; slot++)
             {
-                SlotData saved = sd.Slots[slot];
-                if (saved.AssetId == null) continue;
+                SlotData savedSlot = saveData.Slots[slot];
+                if (savedSlot.AssetId == null) continue;
 
-                if (catalog.Asset(saved.AssetId) is not UniqueItemAsset asset)
+                if (catalog.GetAssetById(savedSlot.AssetId) is not UniqueItemAsset asset)
                 {
-                    Log.Warn($"Entity {name} lost {saved.AssetId}: the world catalog does not know it");
+                    Log.Warn($"Entity {name} lost {savedSlot.AssetId}: the world catalog does not know it");
                     continue;
                 }
 
-                UniqueItem item = asset.Create();
-                if (!saved.State.IsEmpty) item.LoadObject(saved.State);
+                UniqueItem item = asset.CreateItem();
+                if (!savedSlot.State.IsEmpty) item.LoadObject(savedSlot.State);
 
-                slots.Put(slot, item);
+                slots.PutInSlot(slot, item);
             }
         }
 
-        public IReadOnlyList<UniqueItem> UniqueItems => slots.All;
+        public IReadOnlyList<UniqueItem> UniqueItems => slots.ItemsBySlot;
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
@@ -111,12 +111,12 @@ namespace Shooter.Game
                 lines.Add($"{catalog.GetAssetAt(index).Id} x {stackAmounts[index]}");
             }
 
-            for (int slot = 0; slot < slots.All.Count; slot++)
+            for (int slot = 0; slot < slots.ItemsBySlot.Count; slot++)
             {
-                UniqueItem item = slots.At(slot);
+                UniqueItem item = slots.GetItemAt(slot);
                 if (item == null) continue;
 
-                lines.Add($"{catalog.Asset(item.AssetId).Id} (slot {slot})");
+                lines.Add($"{catalog.GetAssetById(item.AssetId).Id} (slot {slot})");
             }
 
             return lines.Count == 0 ? null : string.Join("\n", lines);
@@ -126,8 +126,8 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            stackAmounts.OnListChanged += StackAmountsChanged;
-            slots.Changed += SlotsChanged;
+            stackAmounts.OnListChanged += HandleStackAmountsChanged;
+            slots.Changed += HandleSlotsChanged;
 
             if (!IsServer) return;
 
@@ -139,18 +139,18 @@ namespace Shooter.Game
 
         public override void OnNetworkDespawn()
         {
-            stackAmounts.OnListChanged -= StackAmountsChanged;
-            slots.Changed -= SlotsChanged;
+            stackAmounts.OnListChanged -= HandleStackAmountsChanged;
+            slots.Changed -= HandleSlotsChanged;
         }
 
-        public int Count(StackableItemAsset asset)
+        public int CountStackable(StackableItemAsset asset)
         {
             int index = Catalogs.GetCatalog<ItemCatalog>().IndexOf(asset);
 
             return index < 0 || index >= stackAmounts.Count ? 0 : stackAmounts[index];
         }
 
-        public void Add(StackableItemAsset asset, int amount)
+        public void AddStackable(StackableItemAsset asset, int amount)
         {
             if (amount <= 0) return;
 
@@ -165,7 +165,7 @@ namespace Shooter.Game
             Log.Info($"Entity {name} took {amount} of {asset.Id}");
         }
 
-        public int Remove(StackableItemAsset asset, int amount, InventoryOnConflict onConflict)
+        public int RemoveStackable(StackableItemAsset asset, int amount, InventoryShortagePolicy shortagePolicy)
         {
             if (amount <= 0) return 0;
 
@@ -173,7 +173,7 @@ namespace Shooter.Game
             if (index < 0) return 0;
 
             int available = stackAmounts[index];
-            if (onConflict == InventoryOnConflict.Rollback && available < amount) return 0;
+            if (shortagePolicy == InventoryShortagePolicy.Rollback && available < amount) return 0;
 
             int taken = Math.Min(available, amount);
             if (taken == 0) return 0;
@@ -183,28 +183,28 @@ namespace Shooter.Game
             return taken;
         }
 
-        public int Add(UniqueItem item)
+        public int AddUnique(UniqueItem item)
         {
-            int slot = slots.Put(item);
+            int slot = slots.PutInFreeSlot(item);
 
             Log.Info($"Entity {name} took {item.AssetId} into slot {slot}");
 
             return slot;
         }
 
-        public UniqueItem Remove(int slot)
+        public UniqueItem RemoveUniqueAt(int slot)
         {
-            return slots.Take(slot);
+            return slots.TakeFromSlot(slot);
         }
 
-        public UniqueItem At(int slot)
+        public UniqueItem GetUniqueAt(int slot)
         {
-            return slots.At(slot);
+            return slots.GetItemAt(slot);
         }
 
-        public bool Contains(UniqueItem item)
+        public bool ContainsUnique(UniqueItem item)
         {
-            return slots.Contains(item);
+            return slots.ContainsItem(item);
         }
 
         public void DrainInto(Inventory target)
@@ -215,35 +215,35 @@ namespace Shooter.Game
             {
                 if (stackAmounts[index] == 0) continue;
 
-                target.Add((StackableItemAsset)catalog.GetAssetAt(index), stackAmounts[index]);
+                target.AddStackable((StackableItemAsset)catalog.GetAssetAt(index), stackAmounts[index]);
             }
 
-            foreach (UniqueItem item in slots.All)
+            foreach (UniqueItem item in slots.ItemsBySlot)
             {
                 if (item == null) continue;
 
-                target.Add(item);
+                target.AddUnique(item);
             }
 
-            Clear();
+            RemoveAllItems();
         }
 
-        private void Clear()
+        private void RemoveAllItems()
         {
             for (int index = 0; index < stackAmounts.Count; index++)
             {
                 stackAmounts[index] = 0;
             }
 
-            slots.Clear();
+            slots.RemoveAllItems();
         }
 
-        private void StackAmountsChanged(NetworkListEvent<int> change)
+        private void HandleStackAmountsChanged(NetworkListEvent<int> change)
         {
             Changed?.Invoke();
         }
 
-        private void SlotsChanged()
+        private void HandleSlotsChanged()
         {
             Changed?.Invoke();
         }

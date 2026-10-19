@@ -25,12 +25,12 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) exchanger.Received += Relay;
+            if (IsServer) exchanger.ReceivedFromCharacter += Relay;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (IsServer) exchanger.Received -= Relay;
+            if (IsServer) exchanger.ReceivedFromCharacter -= Relay;
         }
 
         private void Relay(Character from, ItemAsset item, int amount)

@@ -9,31 +9,31 @@ namespace Shooter.Game
     {
         private readonly List<UniqueItem> items = new();
 
-        public IReadOnlyList<UniqueItem> All => items;
+        public IReadOnlyList<UniqueItem> ItemsBySlot => items;
 
         public event Action Changed;
 
-        public UniqueItem At(int slot)
+        public UniqueItem GetItemAt(int slot)
         {
             return slot >= 0 && slot < items.Count ? items[slot] : null;
         }
 
-        public bool Contains(UniqueItem item)
+        public bool ContainsItem(UniqueItem item)
         {
             return items.Contains(item);
         }
 
-        public int Put(UniqueItem item)
+        public int PutInFreeSlot(UniqueItem item)
         {
             int slot = items.IndexOf(null);
             if (slot < 0) slot = items.Count;
 
-            Put(slot, item);
+            PutInSlot(slot, item);
 
             return slot;
         }
 
-        public void Put(int slot, UniqueItem item)
+        public void PutInSlot(int slot, UniqueItem item)
         {
             while (items.Count <= slot)
             {
@@ -41,36 +41,36 @@ namespace Shooter.Game
             }
 
             items[slot] = item;
-            item.Changed += OnChanged;
+            item.Changed += MarkDirtyAndRaiseChanged;
 
-            OnChanged();
+            MarkDirtyAndRaiseChanged();
         }
 
-        public UniqueItem Take(int slot)
+        public UniqueItem TakeFromSlot(int slot)
         {
-            UniqueItem item = At(slot);
+            UniqueItem item = GetItemAt(slot);
             if (item == null) return null;
 
             items[slot] = null;
-            item.Changed -= OnChanged;
+            item.Changed -= MarkDirtyAndRaiseChanged;
 
-            OnChanged();
+            MarkDirtyAndRaiseChanged();
 
             return item;
         }
 
-        public void Clear()
+        public void RemoveAllItems()
         {
             foreach (UniqueItem item in items)
             {
                 if (item == null) continue;
 
-                item.Changed -= OnChanged;
+                item.Changed -= MarkDirtyAndRaiseChanged;
             }
 
             items.Clear();
 
-            OnChanged();
+            MarkDirtyAndRaiseChanged();
         }
 
         public override void WriteField(FastBufferWriter writer)
@@ -81,7 +81,7 @@ namespace Shooter.Game
 
             foreach (UniqueItem item in items)
             {
-                writer.WriteValueSafe(catalog.Kind(item));
+                writer.WriteValueSafe(catalog.GetAssetIndexOf(item));
                 if (item != null) writer.WriteNetworkSerializable(item);
             }
         }
@@ -90,14 +90,14 @@ namespace Shooter.Game
         {
             ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
 
-            reader.ReadValueSafe(out int count);
+            reader.ReadValueSafe(out int slotCount);
             items.Clear();
 
-            for (int slot = 0; slot < count; slot++)
+            for (int slot = 0; slot < slotCount; slot++)
             {
-                reader.ReadValueSafe(out int kind);
+                reader.ReadValueSafe(out int assetIndex);
 
-                UniqueItem item = kind < 0 ? null : catalog.Create(kind);
+                UniqueItem item = assetIndex < 0 ? null : catalog.CreateUniqueItemAt(assetIndex);
                 if (item != null) reader.ReadNetworkSerializableInPlace(ref item);
 
                 items.Add(item);
@@ -116,7 +116,7 @@ namespace Shooter.Game
             ReadField(reader);
         }
 
-        private void OnChanged()
+        private void MarkDirtyAndRaiseChanged()
         {
             SetDirty(true);
             Changed?.Invoke();

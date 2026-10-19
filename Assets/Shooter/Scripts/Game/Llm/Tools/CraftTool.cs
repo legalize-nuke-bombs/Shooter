@@ -43,7 +43,7 @@ Pass a dictionary of ratios as an argument, mapping the exact recipe name to the
                     sb.AppendLine($"Bad craft amount ({craftAmount}) for craft {craftId}, craft amount must be positive.");
                     continue;
                 }
-                Craft craft = crafter.Known(craftId);
+                CraftAsset craft = crafter.FindKnownCraft(craftId);
                 if (craft == null)
                 {
                     sb.AppendLine($"You don't know the craft {craftId}, see list_crafts.");

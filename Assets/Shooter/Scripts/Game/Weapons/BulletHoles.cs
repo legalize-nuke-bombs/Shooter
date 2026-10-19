@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -27,31 +25,35 @@ namespace Shooter.Game
         }
         public object SaveObject()
         {
-            var sd = new SaveData()
+            SaveData saveData = new()
             {
                 Holes = new List<BulletHole>(holes.Count)
             };
             for (int i = 0; i < holes.Count; i++)
-                sd.Holes.Add(holes[i]);
-            return sd;
+            {
+                saveData.Holes.Add(holes[i]);
+            }
+            return saveData;
         }
         public void LoadObject(SaveToken token)
         {
-            SaveData sd = token.ToObject<SaveData>();
+            SaveData saveData = token.ToObject<SaveData>();
             holes.Clear();
-            foreach (BulletHole hole in sd.Holes)
+            foreach (BulletHole hole in saveData.Holes)
+            {
                 holes.Add(hole);
+            }
         }
 
         private readonly List<DecalProjector> projectors = new();
 
-        private int next;
+        private int nextHoleToOverwrite;
 
-        public void Add(Vector3 position, Vector3 normal)
+        public void AddHole(Vector3 position, Vector3 normal)
         {
             if (!IsServer) return;
 
-            var hole = new BulletHole { Position = position, Normal = normal };
+            BulletHole hole = new() { Position = position, Normal = normal };
 
             if (holes.Count < capacity)
             {
@@ -59,61 +61,68 @@ namespace Shooter.Game
                 return;
             }
 
-            holes[next] = hole;
-            next = (next + 1) % capacity;
+            holes[nextHoleToOverwrite] = hole;
+            nextHoleToOverwrite = (nextHoleToOverwrite + 1) % capacity;
         }
 
         public override void OnNetworkSpawn()
         {
-            if (material == null) Log.Warn("Bullet holes have no material, nothing will be drawn");
+            if (material == null) Log.Error("Bullet holes have no material, nothing will be drawn");
 
-            holes.OnListChanged += Changed;
-            Refresh();
+            holes.OnListChanged += HandleHolesChanged;
+            RedrawAllHoles();
 
             Log.Info($"Bullet holes are up: {holes.Count} in the world, capacity {capacity}");
         }
 
         public override void OnNetworkDespawn()
         {
-            holes.OnListChanged -= Changed;
+            holes.OnListChanged -= HandleHolesChanged;
 
             foreach (DecalProjector projector in projectors)
+            {
                 projector.gameObject.SetActive(false);
+            }
         }
 
-        private void Changed(NetworkListEvent<BulletHole> change)
+        private void HandleHolesChanged(NetworkListEvent<BulletHole> change)
         {
             switch (change.Type)
             {
                 case NetworkListEvent<BulletHole>.EventType.Add:
                 case NetworkListEvent<BulletHole>.EventType.Insert:
                 case NetworkListEvent<BulletHole>.EventType.Value:
-                    Place(change.Index);
+                    PlaceHole(change.Index);
                     break;
                 default:
-                    Refresh();
+                    RedrawAllHoles();
                     break;
             }
         }
 
-        private void Refresh()
+        private void RedrawAllHoles()
         {
-            for (int i = 0; i < holes.Count; i++) Place(i);
+            for (int i = 0; i < holes.Count; i++)
+            {
+                PlaceHole(i);
+            }
 
             for (int i = holes.Count; i < projectors.Count; i++)
+            {
                 projectors[i].gameObject.SetActive(false);
+            }
         }
 
-        private void Place(int index)
+        private void PlaceHole(int index)
         {
             if (material == null) return;
 
             BulletHole hole = holes[index];
-            DecalProjector projector = Projector(index);
-            int seed = Seed(hole.Position);
+            DecalProjector projector = GetOrCreateProjector(index);
+            int seed = HashPosition(hole.Position);
 
-            Vector3 axis = Mathf.Abs(hole.Normal.y) > 0.99f ? Vector3.forward : Vector3.up;
-            Quaternion rotation = Quaternion.LookRotation(-hole.Normal, axis) * Quaternion.Euler(0f, 0f, seed % 360);
+            Vector3 upAxis = Mathf.Abs(hole.Normal.y) > 0.99f ? Vector3.forward : Vector3.up;
+            Quaternion rotation = Quaternion.LookRotation(-hole.Normal, upAxis) * Quaternion.Euler(0f, 0f, seed % 360);
             projector.transform.SetPositionAndRotation(hole.Position, rotation);
 
             float scale = 0.8f + ((seed >> 2) & 15) / 30f;
@@ -124,15 +133,15 @@ namespace Shooter.Game
             projector.gameObject.SetActive(true);
         }
 
-        private DecalProjector Projector(int index)
+        private DecalProjector GetOrCreateProjector(int index)
         {
             while (projectors.Count <= index)
             {
-                var mount = new GameObject($"BulletHole{projectors.Count}");
-                mount.transform.SetParent(transform, false);
-                mount.SetActive(false);
+                GameObject projectorObject = new($"BulletHole{projectors.Count}");
+                projectorObject.transform.SetParent(transform, false);
+                projectorObject.SetActive(false);
 
-                DecalProjector projector = mount.AddComponent<DecalProjector>();
+                DecalProjector projector = projectorObject.AddComponent<DecalProjector>();
                 projector.material = material;
                 projector.pivot = Vector3.zero;
 
@@ -142,7 +151,7 @@ namespace Shooter.Game
             return projectors[index];
         }
 
-        private static int Seed(Vector3 position)
+        private static int HashPosition(Vector3 position)
         {
             unchecked
             {

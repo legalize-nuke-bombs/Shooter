@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -26,9 +25,9 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            Position = sd.Position;
-            Normal = sd.Normal;
+            SaveData saveData = content.ToObject<SaveData>();
+            Position = saveData.Position;
+            Normal = saveData.Normal;
         }
 
         public bool Equals(BulletHole other)

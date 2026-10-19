@@ -22,17 +22,17 @@ namespace Shooter.Game
 
             public int Amount => amount;
 
-            public bool Held => held;
+            public bool IsHeld => held;
         }
 
         [SerializeField] private Entry[] contents;
 
-        private InventoryHolder holder;
+        private InventoryHolder inventoryHolder;
         private Inventory inventory;
 
         private void Awake()
         {
-            holder = GetComponent<InventoryHolder>();
+            inventoryHolder = GetComponent<InventoryHolder>();
             inventory = GetComponent<Inventory>();
         }
 
@@ -44,28 +44,28 @@ namespace Shooter.Game
             {
                 if (entry.Asset == null) continue;
 
-                Fill(entry);
+                AddEntryToInventory(entry);
             }
 
             Log.Info($"Entity {name} starts with {contents.Length} kinds of things in the bag");
         }
 
-        private void Fill(Entry entry)
+        private void AddEntryToInventory(Entry entry)
         {
             int amount = Math.Max(entry.Amount, 1);
 
-            if (entry.Asset is StackableItemAsset stackable)
+            if (entry.Asset is StackableItemAsset stackableAsset)
             {
-                inventory.Add(stackable, amount);
+                inventory.AddStackable(stackableAsset, amount);
                 return;
             }
 
-            var unique = (UniqueItemAsset)entry.Asset;
+            UniqueItemAsset uniqueAsset = (UniqueItemAsset)entry.Asset;
 
             for (int made = 0; made < amount; made++)
             {
-                int slot = inventory.Add(unique.Create());
-                if (entry.Held && made == 0) holder.Hold(slot);
+                int slot = inventory.AddUnique(uniqueAsset.CreateItem());
+                if (entry.IsHeld && made == 0) inventoryHolder.HoldSlot(slot);
             }
         }
     }

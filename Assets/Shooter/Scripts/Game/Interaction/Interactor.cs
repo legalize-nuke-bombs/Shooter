@@ -10,7 +10,7 @@ namespace Shooter.Game
         public const float EyeHeight = 0.75f;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static readonly RaycastHit[] Sights = new RaycastHit[16];
+        private static readonly RaycastHit[] LookHits = new RaycastHit[16];
 
         private static int lookMask;
 
@@ -18,15 +18,13 @@ namespace Shooter.Game
 
         private Movement movement;
 
-        private static int LookMask => lookMask != 0
-            ? lookMask
-            : lookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character");
+        private static int LookMask => lookMask != 0 ? lookMask : lookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character");
 
-        public Vector3 Eyes => transform.position + Vector3.up * EyeHeight;
+        public Vector3 EyePosition => transform.position + Vector3.up * EyeHeight;
 
-        public Vector3 Sight => movement.LookDirection;
+        public Vector3 LookDirection => movement.LookDirection;
 
-        public float Reach => reach;
+        public float ReachDistance => reach;
 
         private void Awake()
         {
@@ -36,14 +34,15 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void UseRpc()
         {
-            if (!TryReach(reach, out IUsable usable))
+            if (!TryFindLookedAt(reach, out IUsable usable))
             {
-                int seen = Look(reach, Sights);
-                for (int i = 0; i < seen; i++)
-                    Log.Info(
-                        $"Player {OwnerClientId} sees {Sights[i].collider.name} on layer {LayerMask.LayerToName(Sights[i].collider.gameObject.layer)} in {Sights[i].distance}m, usable {(Sights[i].collider.GetComponentInParent<IUsable>() == null ? "no" : "yes")}");
+                int seenCount = CollectLookHits(reach, LookHits);
+                for (int i = 0; i < seenCount; i++)
+                {
+                    Log.Info($"Player {OwnerClientId} sees {LookHits[i].collider.name} on layer {LayerMask.LayerToName(LookHits[i].collider.gameObject.layer)} in {LookHits[i].distance}m, usable {(LookHits[i].collider.GetComponentInParent<IUsable>() == null ? "no" : "yes")}");
+                }
 
-                Log.Info($"Player {OwnerClientId} used nothing within {reach}m, saw {seen} colliders");
+                Log.Info($"Player {OwnerClientId} used nothing within {reach}m, saw {seenCount} colliders");
                 return;
             }
 
@@ -51,58 +50,56 @@ namespace Shooter.Game
             usable.Use(NetworkObject, out _);
         }
 
-        public bool TryLook(float distance, out RaycastHit hit)
+        public bool TryFindNearestLookHit(float distance, out RaycastHit hit)
         {
-            return TryLook(Eyes, movement.LookDirection, distance, transform, out hit);
+            return TryFindNearestLookHit(EyePosition, movement.LookDirection, distance, transform, out hit);
         }
 
-        public int Look(float distance, RaycastHit[] into)
+        public int CollectLookHits(float distance, RaycastHit[] hits)
         {
-            return Look(Eyes, movement.LookDirection, distance, transform, into);
+            return CollectLookHits(EyePosition, movement.LookDirection, distance, transform, hits);
         }
 
-        public static bool TryLook(Vector3 origin, Vector3 direction, float distance, Transform looker,
-            out RaycastHit hit)
+        public static bool TryFindNearestLookHit(Vector3 origin, Vector3 direction, float distance, Transform looker, out RaycastHit hit)
         {
-            int found = Look(origin, direction, distance, looker, Sights);
-            return TryNearest(Sights, found, out hit);
+            int hitCount = CollectLookHits(origin, direction, distance, looker, LookHits);
+            return TryFindNearestHit(LookHits, hitCount, out hit);
         }
 
-        public static int Look(Vector3 origin, Vector3 direction, float distance, Transform looker, RaycastHit[] into)
+        public static int CollectLookHits(Vector3 origin, Vector3 direction, float distance, Transform looker, RaycastHit[] hits)
         {
-            int found = Physics.RaycastNonAlloc(origin, direction, into, distance, LookMask,
-                QueryTriggerInteraction.Ignore);
-            int kept = 0;
+            int hitCount = Physics.RaycastNonAlloc(origin, direction, hits, distance, LookMask, QueryTriggerInteraction.Ignore);
+            int keptCount = 0;
 
-            for (int i = 0; i < found; i++)
+            for (int i = 0; i < hitCount; i++)
             {
-                if (into[i].transform.IsChildOf(looker)) continue;
-                into[kept++] = into[i];
+                if (hits[i].transform.IsChildOf(looker)) continue;
+                hits[keptCount++] = hits[i];
             }
 
-            return kept;
+            return keptCount;
         }
 
-        public static bool TryNearest(RaycastHit[] hits, int found, out RaycastHit hit)
+        public static bool TryFindNearestHit(RaycastHit[] hits, int hitCount, out RaycastHit hit)
         {
             hit = default;
-            float closest = float.PositiveInfinity;
+            float closestDistance = float.PositiveInfinity;
 
-            for (int i = 0; i < found; i++)
+            for (int i = 0; i < hitCount; i++)
             {
-                if (hits[i].distance >= closest) continue;
+                if (hits[i].distance >= closestDistance) continue;
 
                 hit = hits[i];
-                closest = hits[i].distance;
+                closestDistance = hits[i].distance;
             }
 
-            return closest < float.PositiveInfinity;
+            return closestDistance < float.PositiveInfinity;
         }
 
-        public bool TryReach<T>(float distance, out T found) where T : class
+        public bool TryFindLookedAt<T>(float distance, out T found) where T : class
         {
             found = null;
-            if (!TryLook(distance, out RaycastHit hit)) return false;
+            if (!TryFindNearestLookHit(distance, out RaycastHit hit)) return false;
             if (hit.collider == null) return false;
 
             found = hit.collider.GetComponentInParent<T>();

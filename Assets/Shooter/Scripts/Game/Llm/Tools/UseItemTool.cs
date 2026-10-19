@@ -29,7 +29,7 @@ The item is addressed by its exact name from your bag.
 
         protected override string Execute(UseItemArguments arguments, LlmCallContext context)
         {
-            if (Catalogs.GetCatalog<ItemCatalog>().GetAssetById(arguments.Item) is StackableItemAsset item && user.Use(item))
+            if (Catalogs.GetCatalog<ItemCatalog>().GetAssetById(arguments.Item) is StackableItemAsset item && user.TryUseItem(item))
             {
                 return $"{arguments.Item} was used";
             }

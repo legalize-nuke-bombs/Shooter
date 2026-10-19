@@ -16,69 +16,68 @@ namespace Shooter.Game
         [SerializeField] private Vector3 rightElbow = new(0.55f, 0.25f, -0.25f);
         [SerializeField] private Vector3 leftElbow = new(-0.35f, 0f, 0.15f);
 
-        private Transform anchor;
-        private Transform leftHint;
+        private Transform weaponAnchor;
+        private Transform leftElbowHint;
         private Transform leftShoulder;
-        private Transform rightHint;
+        private Transform rightElbowHint;
         private Transform rightShoulder;
 
-        private InventoryHolder holder;
+        private InventoryHolder inventoryHolder;
         private Skin skin;
 
-        private WeaponRig rig;
-        private Rig hold;
-        private GameObject shown;
-        private GameObject shownModel;
+        private WeaponRig weaponRig;
+        private Rig weaponHoldRig;
+        private GameObject shownWeapon;
+        private GameObject shownWeaponModel;
 
-        public GameObject Shown => shown;
+        public GameObject ShownWeapon => shownWeapon;
 
         private void Awake()
         {
-            holder = GetComponent<InventoryHolder>();
+            inventoryHolder = GetComponent<InventoryHolder>();
             skin = GetComponent<Skin>();
         }
 
         private void Update()
         {
-            if (shown == null || anchor == null) return;
+            if (shownWeapon == null || weaponAnchor == null) return;
             if (rightShoulder == null || leftShoulder == null) return;
 
-            rightHint.localPosition = rightElbow;
-            leftHint.localPosition = leftElbow;
+            rightElbowHint.localPosition = rightElbow;
+            leftElbowHint.localPosition = leftElbow;
 
             Vector3 chest = (rightShoulder.position + leftShoulder.position) / 2f;
-            anchor.SetPositionAndRotation(chest + transform.rotation * gripAnchor, transform.rotation);
+            weaponAnchor.SetPositionAndRotation(chest + transform.rotation * gripAnchor, transform.rotation);
         }
 
         public override void OnNetworkSpawn()
         {
-            holder.Changed += Refresh;
-            Refresh();
+            inventoryHolder.Changed += UpdateShownWeapon;
+            UpdateShownWeapon();
         }
 
         public override void OnNetworkDespawn()
         {
-            holder.Changed -= Refresh;
+            inventoryHolder.Changed -= UpdateShownWeapon;
         }
 
-        private void Refresh()
+        private void UpdateShownWeapon()
         {
-            GameObject wanted = Wanted();
-            Log.Info(
-                $"Entity {name} refresh: wanted {(wanted == null ? "nothing" : wanted.name)}, shown {(shownModel == null ? "nothing" : shownModel.name)}");
-            if (wanted == shownModel) return;
+            GameObject heldWeaponModel = GetHeldWeaponModel();
+            Log.Debug($"Entity {name} refresh: wanted {(heldWeaponModel == null ? "nothing" : heldWeaponModel.name)}, shown {(shownWeaponModel == null ? "nothing" : shownWeaponModel.name)}");
+            if (heldWeaponModel == shownWeaponModel) return;
 
-            Unbuild();
-            if (shown != null) Destroy(shown);
-            shownModel = wanted;
-            shown = wanted == null ? null : Wear(wanted);
+            DestroyWeaponHoldRig();
+            if (shownWeapon != null) Destroy(shownWeapon);
+            shownWeaponModel = heldWeaponModel;
+            shownWeapon = heldWeaponModel == null ? null : InstantiateWeaponInHands(heldWeaponModel);
 
-            if (rig != null) Build();
-            Rebuild();
-            Armed(shown != null);
+            if (weaponRig != null) BuildWeaponHoldRig();
+            RebuildRigBuilder();
+            SetArmedLayerWeight(shownWeapon != null);
         }
 
-        private void Armed(bool armed)
+        private void SetArmedLayerWeight(bool isArmed)
         {
             if (skin.ModelInstance == null) return;
 
@@ -86,102 +85,101 @@ namespace Shooter.Game
             if (animator == null) return;
 
             int layer = animator.GetLayerIndex("Armed");
-            Log.Info($"Entity {name} armed {armed}, layer index {layer}");
-            if (layer >= 0) animator.SetLayerWeight(layer, armed ? 1f : 0f);
+            Log.Info($"Entity {name} armed {isArmed}, layer index {layer}");
+            if (layer >= 0) animator.SetLayerWeight(layer, isArmed ? 1f : 0f);
         }
 
-        private GameObject Wanted()
+        private GameObject GetHeldWeaponModel()
         {
-            return holder.HeldAsset is FirearmAsset firearm ? firearm.Model : null;
+            return inventoryHolder.HeldAsset is FirearmAsset firearm ? firearm.Model : null;
         }
 
-        private GameObject Wear(GameObject model)
+        private GameObject InstantiateWeaponInHands(GameObject weaponModel)
         {
-            Animator animator = Puppet();
+            Animator animator = GetSkinAnimator();
             if (animator == null) return null;
 
-            GameObject worn = Instantiate(model);
-            rig = worn.GetComponent<WeaponRig>();
+            GameObject wornWeapon = Instantiate(weaponModel);
+            weaponRig = wornWeapon.GetComponent<WeaponRig>();
 
-            if (rig == null || rig.Grip == null || rig.Foregrip == null)
+            if (weaponRig == null || weaponRig.Grip == null || weaponRig.Foregrip == null)
             {
-                rig = null;
-                Glue(worn, animator);
+                weaponRig = null;
+                GlueToHandBone(wornWeapon, animator);
             }
             else
             {
-                Raise(animator);
-                Seat(worn);
+                FindShouldersAndCreateWeaponAnchor(animator);
+                SeatOnWeaponAnchor(wornWeapon);
             }
 
-            Log.Info($"Entity {name} now holds {model.name}");
-            return worn;
+            Log.Info($"Entity {name} now holds {weaponModel.name}");
+            return wornWeapon;
         }
 
-        private void Glue(GameObject worn, Animator animator)
+        private void GlueToHandBone(GameObject wornWeapon, Animator animator)
         {
-            Log.Warn($"Entity {name} weapon {worn.name} has no grip pair, stays glued to the hand bone");
+            Log.Warn($"Entity {name} weapon {wornWeapon.name} has no grip pair, stays glued to the hand bone");
 
             Transform hand = animator.GetBoneTransform(HumanBodyBones.RightHand);
-            worn.transform.SetParent(hand == null ? transform : hand, false);
-            worn.transform.localPosition = Vector3.zero;
-            worn.transform.localRotation = Quaternion.identity;
+            wornWeapon.transform.SetParent(hand == null ? transform : hand, false);
+            wornWeapon.transform.localPosition = Vector3.zero;
+            wornWeapon.transform.localRotation = Quaternion.identity;
         }
 
-        private void Raise(Animator animator)
+        private void FindShouldersAndCreateWeaponAnchor(Animator animator)
         {
             rightShoulder = animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
             leftShoulder = animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
             if (rightShoulder == null || leftShoulder == null)
+            {
                 Log.Warn($"Entity {name} has no shoulder bones, weapon anchor stays at the root");
+            }
 
-            if (anchor != null) return;
+            if (weaponAnchor != null) return;
 
-            anchor = new GameObject("WeaponAnchor").transform;
-            anchor.SetParent(transform, false);
+            weaponAnchor = new GameObject("WeaponAnchor").transform;
+            weaponAnchor.SetParent(transform, false);
 
-            rightHint = new GameObject("RightElbowHint").transform;
-            rightHint.SetParent(transform, false);
+            rightElbowHint = new GameObject("RightElbowHint").transform;
+            rightElbowHint.SetParent(transform, false);
 
-            leftHint = new GameObject("LeftElbowHint").transform;
-            leftHint.SetParent(transform, false);
+            leftElbowHint = new GameObject("LeftElbowHint").transform;
+            leftElbowHint.SetParent(transform, false);
         }
 
-        private void Seat(GameObject worn)
+        private void SeatOnWeaponAnchor(GameObject wornWeapon)
         {
-            Transform root = worn.transform;
-            root.SetParent(anchor, false);
-            root.localPosition = rig.SeatPosition;
-            root.localRotation = rig.SeatRotation;
+            Transform weaponTransform = wornWeapon.transform;
+            weaponTransform.SetParent(weaponAnchor, false);
+            weaponTransform.localPosition = weaponRig.SeatPosition;
+            weaponTransform.localRotation = weaponRig.SeatRotation;
         }
 
-        private void Build()
+        private void BuildWeaponHoldRig()
         {
-            Animator animator = Puppet();
+            Animator animator = GetSkinAnimator();
             if (animator == null) return;
 
-            if (!animator.TryGetComponent(out RigBuilder builder)) builder = animator.gameObject.AddComponent<RigBuilder>();
+            if (!animator.TryGetComponent(out RigBuilder rigBuilder)) rigBuilder = animator.gameObject.AddComponent<RigBuilder>();
 
-            var holder = new GameObject("WeaponHold");
-            holder.transform.SetParent(animator.transform, false);
-            hold = holder.AddComponent<Rig>();
+            GameObject weaponHoldObject = new("WeaponHold");
+            weaponHoldObject.transform.SetParent(animator.transform, false);
+            weaponHoldRig = weaponHoldObject.AddComponent<Rig>();
 
-            Arm(holder.transform, "RightArmGrip", animator, HumanBodyBones.RightUpperArm, HumanBodyBones.RightLowerArm,
-                HumanBodyBones.RightHand, rig.Grip, rightHint);
-            Arm(holder.transform, "LeftArmGrip", animator, HumanBodyBones.LeftUpperArm, HumanBodyBones.LeftLowerArm,
-                HumanBodyBones.LeftHand, rig.Foregrip, leftHint);
+            AddArmIkConstraint(weaponHoldObject.transform, "RightArmGrip", animator, HumanBodyBones.RightUpperArm, HumanBodyBones.RightLowerArm, HumanBodyBones.RightHand, weaponRig.Grip, rightElbowHint);
+            AddArmIkConstraint(weaponHoldObject.transform, "LeftArmGrip", animator, HumanBodyBones.LeftUpperArm, HumanBodyBones.LeftLowerArm, HumanBodyBones.LeftHand, weaponRig.Foregrip, leftElbowHint);
 
-            builder.layers.Add(new RigLayer(hold));
+            rigBuilder.layers.Add(new RigLayer(weaponHoldRig));
         }
 
-        private static void Arm(Transform holder, string name, Animator animator, HumanBodyBones root,
-            HumanBodyBones mid, HumanBodyBones tip, Transform target, Transform hint)
+        private static void AddArmIkConstraint(Transform parent, string constraintName, Animator animator, HumanBodyBones root, HumanBodyBones mid, HumanBodyBones tip, Transform target, Transform hint)
         {
-            var constrained = new GameObject(name);
-            constrained.transform.SetParent(holder, false);
+            GameObject constraintObject = new(constraintName);
+            constraintObject.transform.SetParent(parent, false);
 
-            var ik = constrained.AddComponent<TwoBoneIKConstraint>();
-            TwoBoneIKConstraintData data = ik.data;
+            TwoBoneIKConstraint ikConstraint = constraintObject.AddComponent<TwoBoneIKConstraint>();
+            TwoBoneIKConstraintData data = ikConstraint.data;
             data.root = animator.GetBoneTransform(root);
             data.mid = animator.GetBoneTransform(mid);
             data.tip = animator.GetBoneTransform(tip);
@@ -192,45 +190,47 @@ namespace Shooter.Game
             data.hintWeight = 1f;
             data.maintainTargetPositionOffset = false;
             data.maintainTargetRotationOffset = false;
-            ik.data = data;
+            ikConstraint.data = data;
         }
 
-        private void Unbuild()
+        private void DestroyWeaponHoldRig()
         {
-            if (hold == null) return;
+            if (weaponHoldRig == null) return;
 
-            Animator animator = Puppet();
-            if (animator != null && animator.TryGetComponent(out RigBuilder builder))
-                builder.layers.RemoveAll(layer => layer.rig == hold);
+            Animator animator = GetSkinAnimator();
+            if (animator != null && animator.TryGetComponent(out RigBuilder rigBuilder))
+            {
+                rigBuilder.layers.RemoveAll(layer => layer.rig == weaponHoldRig);
+            }
 
             // Destroy waits for the end of the frame, and until then a new WeaponHold would bind to this one by name
-            hold.transform.SetParent(null, false);
-            Destroy(hold.gameObject);
-            hold = null;
-            rig = null;
+            weaponHoldRig.transform.SetParent(null, false);
+            Destroy(weaponHoldRig.gameObject);
+            weaponHoldRig = null;
+            weaponRig = null;
         }
 
-        private void Rebuild()
+        private void RebuildRigBuilder()
         {
-            Animator animator = Puppet();
-            if (animator == null || !animator.TryGetComponent(out RigBuilder builder)) return;
+            Animator animator = GetSkinAnimator();
+            if (animator == null || !animator.TryGetComponent(out RigBuilder rigBuilder)) return;
 
             // Animation Rigging never unbinds its handles: left alone, they outlive a removed WeaponHold and warn on every rebind
             animator.UnbindAllStreamHandles();
             animator.UnbindAllSceneHandles();
-            builder.Build();
+            rigBuilder.Build();
         }
 
-        private Animator Puppet()
+        private Animator GetSkinAnimator()
         {
             if (skin.ModelInstance == null)
             {
-                Log.Warn($"Entity {name} has no flesh yet, weapon stays invisible");
+                Log.Warn($"Entity {name} has no model yet, weapon stays invisible");
                 return null;
             }
 
             Animator animator = skin.ModelInstance.GetComponent<Animator>();
-            if (animator == null) Log.Warn($"Entity {name} flesh has no animator, weapon stays invisible");
+            if (animator == null) Log.Warn($"Entity {name} model has no animator, weapon stays invisible");
 
             return animator;
         }

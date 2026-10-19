@@ -8,7 +8,7 @@ namespace Shooter.Game
         [SerializeField] private ToxinAsset toxin;
         [SerializeField] private float force = 33f;
 
-        public override void Apply(GameObject user)
+        public override void ApplyToUser(GameObject user)
         {
             Intoxication intoxication = user.GetComponent<Intoxication>();
 

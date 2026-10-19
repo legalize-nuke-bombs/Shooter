@@ -59,18 +59,18 @@ namespace Shooter.Game
 
         private void Kick(bool sustained)
         {
-            var firearm = holder.Held as Firearm;
-            if (firearm == null || firearm.Magazine <= 0) return;
+            var firearm = holder.HeldItem as Firearm;
+            if (firearm == null || firearm.RoundsInMagazine <= 0) return;
 
-            FirearmAsset asset = Catalogs.GetCatalog<ItemCatalog>().Firearm(firearm.AssetId);
+            FirearmAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetFirearmAssetById(firearm.AssetId);
             if (asset == null) return;
             if (sustained && asset.FireMode != FireMode.Auto) return;
 
             if (Time.time - lastShotAt < asset.FireInterval) return;
             if (Time.time - lastShotAt >= asset.SprayRecovery) shot = 0;
 
-            Vector2 previous = shot == 0 ? Vector2.zero : asset.Spray.At(shot - 1);
-            Punch += (asset.Spray.At(shot) - previous) * asset.RecoilPunch;
+            Vector2 previous = shot == 0 ? Vector2.zero : asset.Spray.GetOffsetForShot(shot - 1);
+            Punch += (asset.Spray.GetOffsetForShot(shot) - previous) * asset.RecoilPunch;
 
             shot++;
             lastShotAt = Time.time;

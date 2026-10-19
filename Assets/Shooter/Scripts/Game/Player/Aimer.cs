@@ -31,7 +31,7 @@ namespace Shooter.Game
             if (view == null) return;
 
             Transform eyes = view.transform;
-            hits = Interactor.TryLook(eyes.position, eyes.forward, reach, eyes.root, out hit);
+            hits = Interactor.TryFindNearestLookHit(eyes.position, eyes.forward, reach, eyes.root, out hit);
         }
     }
 }
