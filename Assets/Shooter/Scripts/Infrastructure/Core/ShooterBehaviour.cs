@@ -6,14 +6,14 @@ namespace Shooter.Infrastructure
     {
         protected void Awake()
         {
-            Registers.Add(this);
+            Registers.RegisterBehaviour(this);
             ShooterAwake();
         }
 
         protected void OnDestroy()
         {
             ShooterOnDestroy();
-            Registers.Remove(this);
+            Registers.UnregisterBehaviour(this);
         }
 
         protected virtual void ShooterAwake()

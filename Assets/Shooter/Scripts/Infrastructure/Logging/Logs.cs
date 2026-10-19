@@ -12,26 +12,26 @@ namespace Shooter.Infrastructure
         private const int SameNameLimit = 10;
         private const string NameArgument = "-name";
 
-        private static readonly object Gate = new();
+        private static readonly object FileLock = new();
 
-        private static StreamWriter file;
-        private static int mainThread;
+        private static StreamWriter fileWriter;
+        private static int mainThreadId;
 
         [ThreadStatic] private static LogLevel? writingLevel;
 
-        public static LogLevel Least { get; private set; } = LogLevel.Info;
+        public static LogLevel MinimumLevel { get; private set; } = LogLevel.Info;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void Begin()
+        private static void StartLogging()
         {
-            mainThread = Thread.CurrentThread.ManagedThreadId;
-            string instance = Instance();
-            ToFile("shooter-" + instance);
-            Least = Config.Read().Logging.Level;
-            Here().Info($"Logging the {instance} from {Least} and up");
+            mainThreadId = Thread.CurrentThread.ManagedThreadId;
+            string instanceName = GetInstanceName();
+            StartWritingToFile("shooter-" + instanceName);
+            MinimumLevel = Config.GetGameConfig().Logging.Level;
+            CreateJournalForThisFile().Info($"Logging the {instanceName} from {MinimumLevel} and up");
         }
 
-        private static string Instance()
+        private static string GetInstanceName()
         {
             string[] arguments = Environment.GetCommandLineArgs();
             for (int i = 0; i < arguments.Length - 1; i++)
@@ -42,13 +42,13 @@ namespace Shooter.Infrastructure
             return Application.isEditor ? "editor" : "game";
         }
 
-        public static Journal Here([CallerFilePath] string path = null)
+        public static Journal CreateJournalForThisFile([CallerFilePath] string path = null)
         {
             return new Journal(string.IsNullOrEmpty(path) ? "?" : Path.GetFileNameWithoutExtension(path));
         }
 
         [HideInCallstack]
-        internal static void Write(LogLevel level, string line)
+        internal static void WriteToUnityLogger(LogLevel level, string line)
         {
             LogType type = level switch
             {
@@ -68,42 +68,42 @@ namespace Shooter.Infrastructure
             }
         }
 
-        private static void ToFile(string name)
+        private static void StartWritingToFile(string fileName)
         {
-            lock (Gate)
+            lock (FileLock)
             {
-                file?.Dispose();
-                file = Opened(Folder(), name);
+                fileWriter?.Dispose();
+                fileWriter = OpenFirstFreeLogFile(GetLogFolder(), fileName);
             }
 
             Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
             Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
             Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.ScriptOnly);
-            Application.logMessageReceivedThreaded -= OnEngineLog;
-            Application.logMessageReceivedThreaded += OnEngineLog;
+            Application.logMessageReceivedThreaded -= WriteLogMessageToFile;
+            Application.logMessageReceivedThreaded += WriteLogMessageToFile;
         }
 
-        private static string Folder()
+        private static string GetLogFolder()
         {
-            return Application.isEditor ? Path.Combine(Config.Root(), "Logs") : Config.Root();
+            return Application.isEditor ? Path.Combine(Config.GetRootFolder(), "Logs") : Config.GetRootFolder();
         }
 
-        private static StreamWriter Opened(string folder, string name)
+        private static StreamWriter OpenFirstFreeLogFile(string folder, string fileName)
         {
             if (!string.IsNullOrEmpty(folder))
             {
                 Directory.CreateDirectory(folder);
             }
 
-            for (int taken = 0; taken < SameNameLimit; taken++)
+            for (int suffix = 0; suffix < SameNameLimit; suffix++)
             {
-                string path = Path.Combine(folder, taken == 0 ? name + ".log" : name + "-" + taken + ".log");
+                string path = Path.Combine(folder, suffix == 0 ? fileName + ".log" : fileName + "-" + suffix + ".log");
 
                 try
                 {
                     FileStream stream = new(path, FileMode.Create, FileAccess.Write, FileShare.Read);
                     StreamWriter writer = new(stream) { AutoFlush = true };
-                    writer.WriteLine(Stamped(LogType.Log, "Logs: writing to " + path));
+                    writer.WriteLine(FormatLogLine(LogType.Log, "Logs: writing to " + path));
 
                     return writer;
                 }
@@ -119,14 +119,14 @@ namespace Shooter.Infrastructure
                 }
             }
 
-            Debug.unityLogger.Log(LogType.Warning, $"Logs: all {SameNameLimit} names of {name} are busy in {folder}, this run stays in the console");
+            Debug.unityLogger.Log(LogType.Warning, $"Logs: all {SameNameLimit} names of {fileName} are busy in {folder}, this run stays in the console");
 
             return null;
         }
 
-        private static void OnEngineLog(string message, string stackTrace, LogType type)
+        private static void WriteLogMessageToFile(string message, string stackTrace, LogType type)
         {
-            string line = Stamped(type, message);
+            string line = FormatLogLine(type, message);
 
             if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
             {
@@ -137,18 +137,18 @@ namespace Shooter.Infrastructure
                 }
             }
 
-            lock (Gate)
+            lock (FileLock)
             {
-                file?.WriteLine(line);
+                fileWriter?.WriteLine(line);
             }
         }
 
-        private static string Stamped(LogType type, string message)
+        private static string FormatLogLine(LogType type, string message)
         {
-            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + Label(type) + " [" + ThreadName() + "] " + message;
+            return DateTime.Now.ToString("HH:mm:ss.fff") + " " + GetLevelLabel(type) + " [" + GetThreadName() + "] " + message;
         }
 
-        private static string Label(LogType type)
+        private static string GetLevelLabel(LogType type)
         {
             if (writingLevel == LogLevel.Debug) return "DEBUG";
 
@@ -160,12 +160,12 @@ namespace Shooter.Infrastructure
             };
         }
 
-        private static string ThreadName()
+        private static string GetThreadName()
         {
-            Thread current = Thread.CurrentThread;
-            if (current.ManagedThreadId == mainThread) return "main";
+            Thread currentThread = Thread.CurrentThread;
+            if (currentThread.ManagedThreadId == mainThreadId) return "main";
 
-            return current.Name ?? "thread " + current.ManagedThreadId;
+            return currentThread.Name ?? "thread " + currentThread.ManagedThreadId;
         }
     }
 }

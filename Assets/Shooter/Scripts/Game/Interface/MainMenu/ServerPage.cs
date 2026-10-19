@@ -11,7 +11,7 @@ namespace Shooter.Game
         private const string CompressionField = "compression";
         private const string ProviderField = "provider";
         private const string NoProvider = "";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         protected ServerPage(VisualElement root) : base(root)
         {
@@ -23,9 +23,9 @@ namespace Shooter.Game
 
         protected override void Closed()
         {
-            Config.Save();
+            Config.SaveGameConfig();
 
-            ServerConfig server = Config.Read().Server;
+            ServerConfig server = Config.GetGameConfig().Server;
             Log.Info(
                 $"Server settings: port {server.Port}, saves as '{server.SaveCompressionAlgorithm}', model {server.Llm.Provider}/{server.Llm.Model}");
         }

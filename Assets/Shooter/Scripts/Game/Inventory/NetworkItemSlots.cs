@@ -75,7 +75,7 @@ namespace Shooter.Game
 
         public override void WriteField(FastBufferWriter writer)
         {
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
 
             writer.WriteValueSafe(items.Count);
 
@@ -88,7 +88,7 @@ namespace Shooter.Game
 
         public override void ReadField(FastBufferReader reader)
         {
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
 
             reader.ReadValueSafe(out int count);
             items.Clear();

@@ -9,9 +9,9 @@ namespace Shooter.Infrastructure
 {
     public static class SnapshotManager
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        public static Snapshot Build()
+        public static Snapshot BuildSnapshot()
         {
             Log.Info("Building snapshot...");
             Snapshot snapshot = new()
@@ -51,7 +51,7 @@ namespace Shooter.Infrastructure
             return snapshot;
         }
 
-        public static bool Write(string path, Snapshot snapshot)
+        public static bool TryWriteSnapshot(string path, Snapshot snapshot)
         {
             try
             {
@@ -67,14 +67,14 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public static bool Load(FrozenWorld world, byte[] bytes)
+        public static bool TryLoadSnapshot(FrozenWorld frozenWorld, byte[] snapshotBytes)
         {
             Log.Info("Loading from snapshot...");
 
             Snapshot snapshot;
             try
             {
-                using StreamReader reader = new(new MemoryStream(bytes), Encoding.UTF8, true);
+                using StreamReader reader = new(new MemoryStream(snapshotBytes), Encoding.UTF8, true);
                 snapshot = JsonConvert.DeserializeObject<Snapshot>(reader.ReadToEnd(), SaveJson.Settings);
             }
             catch (Exception e)
@@ -92,9 +92,9 @@ namespace Shooter.Infrastructure
             foreach (KeyValuePair<string, object> record in snapshot.GameObjects)
             {
                 string targetId = record.Key;
-                SaveToken targetValue = SaveToken.From(record.Value);
+                SaveToken targetValue = SaveToken.FromObject(record.Value);
 
-                if (world.TryGet(targetId, out SaveableObject target))
+                if (frozenWorld.TryGetSaveableObject(targetId, out SaveableObject target))
                 {
                     Log.Info($"Loading {target.name} {targetId}...");
                     try
@@ -113,7 +113,7 @@ namespace Shooter.Infrastructure
                     Log.Info($"Spawning non-scene object {targetId}...");
                     try
                     {
-                        if (SaveableObject.Spawn(world, targetId, targetValue))
+                        if (SaveableObject.TrySpawnFromSave(frozenWorld, targetId, targetValue))
                         {
                             nonSceneOk++;
                         }

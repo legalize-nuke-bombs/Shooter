@@ -31,7 +31,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             notes.Clear();
             foreach (var kvp in sd.Notes) notes.Add(kvp.Key, kvp.Value);
         }

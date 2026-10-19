@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public struct Meta
     {
-        public static readonly JsonSerializerSettings Json = new()
+        public static readonly JsonSerializerSettings JsonSettings = new()
         {
             Formatting = Formatting.Indented,
             ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() }

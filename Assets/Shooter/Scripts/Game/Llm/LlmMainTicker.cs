@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Llm))]
     public class LlmMainTicker : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
         private string entityName;
 
         private Llm llm;

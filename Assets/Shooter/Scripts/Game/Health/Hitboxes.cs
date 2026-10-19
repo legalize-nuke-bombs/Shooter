@@ -10,7 +10,7 @@ namespace Shooter.Game
 
         private const float LeastScale = 0.6f;
         private const float MostScale = 1.4f;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private void Start()
         {

@@ -7,7 +7,7 @@ namespace Shooter.Game
     [Serializable]
     public class CraftTool : LlmTool<CraftArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Crafter crafter;
 

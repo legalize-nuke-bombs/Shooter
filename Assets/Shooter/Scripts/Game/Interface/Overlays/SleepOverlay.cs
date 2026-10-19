@@ -7,7 +7,7 @@ namespace Shooter.Game
     public class SleepOverlay : Overlay
     {
         private const string SleepElement = "sleep";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
         private VisualElement screen;
         private float shown;
 

@@ -7,12 +7,12 @@ namespace Shooter.Infrastructure
     [RequireComponent(typeof(NetworkManager))]
     public class NetworkConnectionApprover : ShooterBehaviour
     {
-        private const int NameLimit = 24;
-        private const string Nameless = "Player";
-        private static readonly Journal Log = Logs.Here();
+        private const int PlayerNameLengthLimit = 24;
+        private const string DefaultPlayerName = "Player";
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly Dictionary<ulong, string> names = new();
-        private readonly Dictionary<ulong, string> publicKeys = new();
+        private readonly Dictionary<ulong, string> playerNamesByClientId = new();
+        private readonly Dictionary<ulong, string> publicKeysByClientId = new();
 
         private NetworkManager network;
 
@@ -20,88 +20,88 @@ namespace Shooter.Infrastructure
         {
             network = GetComponent<NetworkManager>();
             network.NetworkConfig.ConnectionApproval = true;
-            network.ConnectionApprovalCallback += Approve;
-            network.OnClientDisconnectCallback += Forget;
-            network.OnServerStopped += ForgetAll;
+            network.ConnectionApprovalCallback += ApproveOrRejectConnection;
+            network.OnClientDisconnectCallback += ForgetDisconnectedClient;
+            network.OnServerStopped += ForgetAllClients;
         }
 
         protected override void ShooterOnDestroy()
         {
-            network.ConnectionApprovalCallback -= Approve;
-            network.OnClientDisconnectCallback -= Forget;
-            network.OnServerStopped -= ForgetAll;
+            network.ConnectionApprovalCallback -= ApproveOrRejectConnection;
+            network.OnClientDisconnectCallback -= ForgetDisconnectedClient;
+            network.OnServerStopped -= ForgetAllClients;
         }
 
-        public string NameOf(ulong client)
+        public string GetPlayerName(ulong clientId)
         {
-            return names[client];
+            return playerNamesByClientId[clientId];
         }
 
-        public string PublicKeyOf(ulong client)
+        public string GetPublicKey(ulong clientId)
         {
-            return publicKeys[client];
+            return publicKeysByClientId[clientId];
         }
 
-        private void Approve(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
+        private void ApproveOrRejectConnection(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
-            ulong client = request.ClientNetworkId;
-            if (!NetworkHandshake.TryDecode(request.Payload, Config.Account.Certificate, out string name, out string publicKey))
+            ulong clientId = request.ClientNetworkId;
+            if (!NetworkHandshake.TryDecodeConnectionData(request.Payload, Config.Account.Certificate, out string playerName, out string publicKey))
             {
                 response.Approved = false;
                 response.Reason = "Не удалось подтвердить аккаунт игрока";
-                Log.Warn($"Client {client} rejected, could not prove key ownership");
+                Log.Warn($"Client {clientId} rejected, could not prove key ownership");
                 return;
             }
 
-            if (TryFindClientOf(publicKey, out ulong earlier))
+            if (TryFindClientWithPublicKey(publicKey, out ulong earlierClientId))
             {
-                if (earlier == NetworkManager.ServerClientId)
+                if (earlierClientId == NetworkManager.ServerClientId)
                 {
                     response.Approved = false;
                     response.Reason = "На этом аккаунте уже играет хост";
-                    Log.Warn($"Client {client} rejected, it carries the host's own key");
+                    Log.Warn($"Client {clientId} rejected, it carries the host's own key");
                     return;
                 }
 
-                Log.Info($"Client {client} carries the key of client {earlier}, the earlier connection is dropped");
-                network.DisconnectClient(earlier);
+                Log.Info($"Client {clientId} carries the key of client {earlierClientId}, the earlier connection is dropped");
+                network.DisconnectClient(earlierClientId);
             }
 
-            name = name.Trim();
-            names[client] = name.Length == 0 ? Nameless : name.Substring(0, Mathf.Min(name.Length, NameLimit));
-            publicKeys[client] = publicKey;
+            playerName = playerName.Trim();
+            playerNamesByClientId[clientId] = playerName.Length == 0 ? DefaultPlayerName : playerName.Substring(0, Mathf.Min(playerName.Length, PlayerNameLengthLimit));
+            publicKeysByClientId[clientId] = publicKey;
 
             response.Approved = true;
             response.CreatePlayerObject = false;
 
-            Log.Info($"Client {client} proved key ownership, approved as {names[client]}");
+            Log.Info($"Client {clientId} proved key ownership, approved as {playerNamesByClientId[clientId]}");
         }
 
-        private bool TryFindClientOf(string publicKey, out ulong client)
+        private bool TryFindClientWithPublicKey(string publicKey, out ulong clientId)
         {
-            foreach (KeyValuePair<ulong, string> entry in publicKeys)
+            foreach (KeyValuePair<ulong, string> entry in publicKeysByClientId)
             {
                 if (entry.Value == publicKey)
                 {
-                    client = entry.Key;
+                    clientId = entry.Key;
                     return true;
                 }
             }
 
-            client = default;
+            clientId = default;
             return false;
         }
 
-        private void Forget(ulong client)
+        private void ForgetDisconnectedClient(ulong clientId)
         {
-            names.Remove(client);
-            publicKeys.Remove(client);
+            playerNamesByClientId.Remove(clientId);
+            publicKeysByClientId.Remove(clientId);
         }
 
-        private void ForgetAll(bool ignored)
+        private void ForgetAllClients(bool wasHost)
         {
-            names.Clear();
-            publicKeys.Clear();
+            playerNamesByClientId.Clear();
+            publicKeysByClientId.Clear();
         }
     }
 }

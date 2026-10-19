@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Skin))]
     public class WeaponView : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private Vector3 gripAnchor = new(0.12f, -0.28f, 0.3f);
         [SerializeField] private Vector3 rightElbow = new(0.55f, 0.25f, -0.25f);

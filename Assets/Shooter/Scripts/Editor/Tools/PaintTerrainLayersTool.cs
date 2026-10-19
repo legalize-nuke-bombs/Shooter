@@ -10,7 +10,7 @@ namespace Shooter.Editor
     public class PaintTerrainLayersTool : EditorWindow
     {
         private const string UndoName = "Paint terrain layers";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private enum Measure
         {

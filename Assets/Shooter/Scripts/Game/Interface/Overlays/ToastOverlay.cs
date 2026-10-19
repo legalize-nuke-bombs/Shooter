@@ -9,7 +9,7 @@ namespace Shooter.Game
         private const string FeedElement = "toasts";
         private const long Life = 5000;
         private const int Limit = 4;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private VisualElement feed;
         private Player player;

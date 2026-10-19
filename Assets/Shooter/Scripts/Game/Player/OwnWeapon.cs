@@ -11,7 +11,7 @@ namespace Shooter.Game
     {
         private const string FirstPersonLayer = "FirstPerson";
 
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private Vector3 restPosition = new(0.325f, -0.193f, 0.654f);
         [SerializeField] private Vector3 restRotation = Vector3.zero;

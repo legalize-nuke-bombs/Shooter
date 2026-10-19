@@ -28,7 +28,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             Role = sd.Role;
             Content = sd.Content;
             ToolCalls = sd.ToolCalls;

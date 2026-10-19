@@ -8,7 +8,7 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Hint Catalog", fileName = "HintCatalog")]
     public sealed class HintCatalog : ScriptableObject
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private Hint[] hints;
 

@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     public class InventoryExchanger : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private float radius = 10f;
 
@@ -62,7 +62,7 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void GiveStackableRpc(long targetId, FixedString32Bytes stackableId, int amount)
         {
-            var asset = Catalogs.Of<ItemCatalog>().Of(stackableId) as StackableItemAsset;
+            var asset = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) as StackableItemAsset;
             if (asset != null && Give(Character.Of(targetId, RegisterInactivePolicy.Exclude), asset, amount)) return;
 
             Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {targetId} rpc");
@@ -85,7 +85,7 @@ namespace Shooter.Game
         private void Receive(Character from, UniqueItem item)
         {
             inventory.Add(item);
-            Received?.Invoke(from, Catalogs.Of<ItemCatalog>().Asset(item.AssetId), 1);
+            Received?.Invoke(from, Catalogs.GetCatalog<ItemCatalog>().Asset(item.AssetId), 1);
         }
 
         private bool Reaches(Character to, out InventoryExchanger taker)

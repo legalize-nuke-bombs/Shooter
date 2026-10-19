@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public abstract class Health : NetworkBehaviour, IDigestible, IRestraint
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private EarSoundAsset hurtSound;
 

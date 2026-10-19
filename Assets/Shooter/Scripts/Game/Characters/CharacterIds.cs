@@ -25,7 +25,7 @@ namespace Shooter.Game
 
         public void LoadObject(SaveToken content)
         {
-            next = content.To<SaveData>().Next;
+            next = content.ToObject<SaveData>().Next;
         }
 
         public long Next()

@@ -10,7 +10,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class SendMessageTool : LlmTool<SendMessageArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private ConversationManager conversationManager;
         private Character ownCharacter;
@@ -39,7 +39,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
 
         protected override void OnStart()
         {
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

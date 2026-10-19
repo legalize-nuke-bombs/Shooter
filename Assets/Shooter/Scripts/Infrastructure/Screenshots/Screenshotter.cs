@@ -9,52 +9,52 @@ namespace Shooter.Infrastructure
 {
     public static class Screenshotter
     {
-        private const string Folder = "Screenshots";
-        private const string Prefix = "Screenshot";
+        private const string FolderName = "Screenshots";
+        private const string FileNamePrefix = "Screenshot";
         private const string StampFormat = "yyyy_MM_dd_HH_mm_ss";
-        private static readonly Journal Log = Logs.Here();
-        private static readonly ScreenshotSetting Whole = new(0, 0, 90);
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly ScreenshotSetting FullSizeSetting = new(0, 0, 90);
 
         public static IEnumerator TakeToScreenshotsFolder()
         {
             string stamp = DateTime.Now.ToString(StampFormat, CultureInfo.InvariantCulture);
-            string path = Path.Combine(Config.Root(), Folder, Prefix + "_" + stamp + ".jpg");
+            string path = Path.Combine(Config.GetRootFolder(), FolderName, FileNamePrefix + "_" + stamp + ".jpg");
 
-            yield return Take(path, Whole);
+            yield return TakeScreenshot(path, FullSizeSetting);
         }
 
-        public static IEnumerator Take(string path, ScreenshotSetting setting)
+        public static IEnumerator TakeScreenshot(string path, ScreenshotSetting setting)
         {
             yield return new WaitForEndOfFrame();
 
-            Texture2D captured = ScreenCapture.CaptureScreenshotAsTexture(1);
-            if (captured == null)
+            Texture2D capturedTexture = ScreenCapture.CaptureScreenshotAsTexture(1);
+            if (capturedTexture == null)
             {
                 Log.Warn("Failed to capture screenshot texture");
                 yield break;
             }
 
-            int width = setting.Width <= 0 ? captured.width : setting.Width;
-            int height = setting.Height <= 0 ? captured.height : setting.Height;
+            int width = setting.Width <= 0 ? capturedTexture.width : setting.Width;
+            int height = setting.Height <= 0 ? capturedTexture.height : setting.Height;
 
-            Texture2D resized = new(width, height, TextureFormat.RGB24, false);
-            RenderTexture scaled = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
-            Graphics.Blit(captured, scaled);
+            Texture2D resizedTexture = new(width, height, TextureFormat.RGB24, false);
+            RenderTexture scaledRenderTexture = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+            Graphics.Blit(capturedTexture, scaledRenderTexture);
 
-            RenderTexture previousActive = RenderTexture.active;
-            RenderTexture.active = scaled;
-            resized.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-            resized.Apply();
-            RenderTexture.active = previousActive;
+            RenderTexture previousActiveRenderTexture = RenderTexture.active;
+            RenderTexture.active = scaledRenderTexture;
+            resizedTexture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+            resizedTexture.Apply();
+            RenderTexture.active = previousActiveRenderTexture;
 
-            RenderTexture.ReleaseTemporary(scaled);
-            Object.Destroy(captured);
+            RenderTexture.ReleaseTemporary(scaledRenderTexture);
+            Object.Destroy(capturedTexture);
 
-            byte[] bytes = resized.EncodeToJPG(setting.Quality);
-            Object.Destroy(resized);
+            byte[] jpgBytes = resizedTexture.EncodeToJPG(setting.Quality);
+            Object.Destroy(resizedTexture);
 
             Directory.CreateDirectory(Path.GetDirectoryName(path));
-            File.WriteAllBytes(path, bytes);
+            File.WriteAllBytes(path, jpgBytes);
             Log.Info($"Wrote screenshot {width} x {height} to {path}");
         }
     }

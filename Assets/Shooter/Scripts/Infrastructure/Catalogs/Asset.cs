@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public abstract class Asset : ScriptableObject
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private string id;
 
@@ -16,13 +16,13 @@ namespace Shooter.Infrastructure
 
         private void OnValidate()
         {
-            if (!IdFitsNetwork())
+            if (!DoesIdFitNetwork())
             {
                 Log.Error($"{name} has an id of {Encoding.UTF8.GetByteCount(Id)} bytes, longer than the {FixedString32Bytes.UTF8MaxLengthInBytes} the network format holds");
             }
         }
 
-        public bool IdFitsNetwork()
+        public bool DoesIdFitNetwork()
         {
             return Encoding.UTF8.GetByteCount(Id) <= FixedString32Bytes.UTF8MaxLengthInBytes;
         }

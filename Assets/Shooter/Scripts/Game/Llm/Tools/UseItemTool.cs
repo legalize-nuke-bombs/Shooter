@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class UseItemTool : LlmTool<UseItemArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private InventoryUser user;
 
@@ -29,7 +29,7 @@ The item is addressed by its exact name from your bag.
 
         protected override string Execute(UseItemArguments arguments, LlmCallContext context)
         {
-            if (Catalogs.Of<ItemCatalog>().Of(arguments.Item) is StackableItemAsset item && user.Use(item))
+            if (Catalogs.GetCatalog<ItemCatalog>().GetAssetById(arguments.Item) is StackableItemAsset item && user.Use(item))
             {
                 return $"{arguments.Item} was used";
             }

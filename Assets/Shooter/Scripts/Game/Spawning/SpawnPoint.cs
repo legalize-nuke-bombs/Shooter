@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class SpawnPoint : MonoBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Vector3? position;
 
@@ -23,7 +23,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             position = sd.Position;
         }
 

@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(InventoryHolder))]
     public class InventoryFiller : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [Serializable]
         private struct Entry

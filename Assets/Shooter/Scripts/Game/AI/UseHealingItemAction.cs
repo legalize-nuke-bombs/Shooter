@@ -16,7 +16,7 @@ namespace Shooter.Game
         id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a04")]
     public partial class UseHealingItemAction : Action
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<float> UnderHealPenalty = new(1f);
@@ -37,7 +37,7 @@ namespace Shooter.Game
             double lowestScore = missing * UnderHealPenalty.Value;
             int candidates = 0;
 
-            foreach (ItemAsset item in Catalogs.Of<ItemCatalog>().FindAll(item =>
+            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(item =>
                          item is StackableItemAsset stackableItem && stackableItem.HealMarker > 0))
             {
                 StackableItemAsset stackableItem = (StackableItemAsset)item;

@@ -5,19 +5,19 @@ namespace Shooter.Infrastructure
 {
     public static class SaveLibrary
     {
-        public const string Folder = "Saves";
+        public const string FolderName = "Saves";
 
-        public static string Location => Path.Combine(Config.Root(), Folder);
+        public static string FolderPath => Path.Combine(Config.GetRootFolder(), FolderName);
 
-        public static List<SaveEntry> All()
+        public static List<SaveEntry> ReadAllEntries()
         {
             var entries = new List<SaveEntry>();
-            string root = Location;
-            if (!Directory.Exists(root)) return entries;
+            string folderPath = FolderPath;
+            if (!Directory.Exists(folderPath)) return entries;
 
-            foreach (string location in Directory.EnumerateFileSystemEntries(root))
+            foreach (string location in Directory.EnumerateFileSystemEntries(folderPath))
             {
-                SaveEntry entry = SaveEntry.Read(location);
+                SaveEntry entry = SaveEntry.ReadFromLocation(location);
                 if (entry != null) entries.Add(entry);
             }
 
@@ -26,9 +26,9 @@ namespace Shooter.Infrastructure
             return entries;
         }
 
-        public static void Delete(SaveEntry entry)
+        public static void DeleteSave(SaveEntry entry)
         {
-            MainCompressionManager.Delete(entry.Location);
+            MainCompressionManager.DeleteArchive(entry.Location);
         }
     }
 }

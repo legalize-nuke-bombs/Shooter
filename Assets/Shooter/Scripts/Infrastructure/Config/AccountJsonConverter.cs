@@ -5,7 +5,7 @@ namespace Shooter.Infrastructure
 {
     public class AccountJsonConverter : JsonConverter<Account>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         public override void WriteJson(JsonWriter writer, Account value, JsonSerializer serializer)
         {
@@ -14,12 +14,12 @@ namespace Shooter.Infrastructure
 
         public override Account ReadJson(JsonReader reader, Type objectType, Account existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            string secret = reader.Value as string;
-            if (string.IsNullOrEmpty(secret)) return null;
+            string privateKey = reader.Value as string;
+            if (string.IsNullOrEmpty(privateKey)) return null;
 
             try
             {
-                return Account.FromPrivateKey(secret);
+                return Account.FromPrivateKey(privateKey);
             }
             catch (Exception exception)
             {

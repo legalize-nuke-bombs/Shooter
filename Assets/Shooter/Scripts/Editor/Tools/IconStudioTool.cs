@@ -13,7 +13,7 @@ namespace Shooter.Editor
     {
         private const float Distance = 10f;
         private const int LastLayer = 31;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [Serializable]
         private class IconSetup

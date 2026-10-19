@@ -28,7 +28,7 @@ namespace Shooter.Game
 
         private static Player ByOwnership()
         {
-            foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Exclude))
+            foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
             {
                 NetworkObject net = player.GetComponent<NetworkObject>();
                 if (net != null && net.IsOwner) return player;

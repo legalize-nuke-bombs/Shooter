@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         public Sprite Sprite(FixedString32Bytes id)
         {
-            IconAsset asset = Of(id);
+            IconAsset asset = GetAssetById(id);
 
             return asset == null ? null : asset.Sprite;
         }

@@ -23,7 +23,7 @@ namespace Shooter.Game
         {
             if (Water.Depth(feet) > 0f)
             {
-                SurfaceCatalog catalog = Catalogs.Of<SurfaceCatalog>();
+                SurfaceCatalog catalog = Catalogs.GetCatalog<SurfaceCatalog>();
                 return catalog == null ? null : catalog.Water;
             }
 
@@ -40,7 +40,7 @@ namespace Shooter.Game
             Terrain terrain = hit.collider.GetComponent<Terrain>();
             if (terrain == null) return null;
 
-            SurfaceCatalog catalog = Catalogs.Of<SurfaceCatalog>();
+            SurfaceCatalog catalog = Catalogs.GetCatalog<SurfaceCatalog>();
             return catalog == null ? null : catalog.Of(Prevailing(terrain, hit.point));
         }
 

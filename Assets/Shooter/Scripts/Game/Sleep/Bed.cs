@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class Bed : MonoBehaviour, IUsable, IDigestible
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private Camera bedside;
 
@@ -17,7 +17,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            sleepCycle = Registers.Of<SleepCycle>(RegisterInactivePolicy.Include).Single();
+            sleepCycle = Registers.GetAll<SleepCycle>(RegisterInactivePolicy.Include).Single();
         }
 
         public string Digest(DigestionDetail detail)

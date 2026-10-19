@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class GiveUniqueTool : LlmTool<GiveUniqueArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private InventoryExchanger exchanger;
 

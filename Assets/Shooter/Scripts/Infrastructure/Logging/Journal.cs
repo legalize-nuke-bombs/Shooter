@@ -4,43 +4,43 @@ namespace Shooter.Infrastructure
 {
     public sealed class Journal
     {
-        private readonly string name;
+        private readonly string sourceFileName;
 
-        internal Journal(string name)
+        internal Journal(string sourceFileName)
         {
-            this.name = name;
+            this.sourceFileName = sourceFileName;
         }
 
         [HideInCallstack]
         public void Debug(string message)
         {
-            Say(LogLevel.Debug, message);
+            WriteAtLevel(LogLevel.Debug, message);
         }
 
         [HideInCallstack]
         public void Info(string message)
         {
-            Say(LogLevel.Info, message);
+            WriteAtLevel(LogLevel.Info, message);
         }
 
         [HideInCallstack]
         public void Warn(string message)
         {
-            Say(LogLevel.Warn, message);
+            WriteAtLevel(LogLevel.Warn, message);
         }
 
         [HideInCallstack]
         public void Error(string message)
         {
-            Say(LogLevel.Error, message);
+            WriteAtLevel(LogLevel.Error, message);
         }
 
         [HideInCallstack]
-        private void Say(LogLevel level, string message)
+        private void WriteAtLevel(LogLevel level, string message)
         {
-            if (level < Logs.Least) return;
+            if (level < Logs.MinimumLevel) return;
 
-            Logs.Write(level, name + ": " + message);
+            Logs.WriteToUnityLogger(level, sourceFileName + ": " + message);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(MainRestrainable))]
     public class Gunner : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static readonly RaycastHit[] Shots = new RaycastHit[32];
         private BulletHoles bulletHoles;
@@ -34,7 +34,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            bulletHoles = Registers.Of<BulletHoles>(RegisterInactivePolicy.Include).Single();
+            bulletHoles = Registers.GetAll<BulletHoles>(RegisterInactivePolicy.Include).Single();
             character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();
             holder = GetComponent<InventoryHolder>();
@@ -52,7 +52,7 @@ namespace Shooter.Game
             var firearm = holder.Held as Firearm;
             if (firearm == null) return;
 
-            FirearmAsset asset = Catalogs.Of<ItemCatalog>().Firearm(firearm.AssetId);
+            FirearmAsset asset = Catalogs.GetCatalog<ItemCatalog>().Firearm(firearm.AssetId);
             if (asset == null || asset.FireMode != FireMode.Auto) return;
 
             TryShoot();
@@ -129,7 +129,7 @@ namespace Shooter.Game
             firearm = holder.Held as Firearm;
             if (firearm == null) return false;
 
-            asset = Catalogs.Of<ItemCatalog>().Firearm(firearm.AssetId);
+            asset = Catalogs.GetCatalog<ItemCatalog>().Firearm(firearm.AssetId);
             return asset != null;
         }
 

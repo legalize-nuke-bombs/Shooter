@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class GiveStackableTool : LlmTool<GiveStackableArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private InventoryExchanger exchanger;
 
@@ -30,7 +30,7 @@ The recipient will automatically receive a notification.
 
         protected override string Execute(GiveStackableArguments arguments, LlmCallContext context)
         {
-            ItemAsset item = Catalogs.Of<ItemCatalog>().Of(arguments.Item);
+            ItemAsset item = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(arguments.Item);
             if (item == null) return $"There is no item named {arguments.Item}";
 
             if (item is not StackableItemAsset stackable)

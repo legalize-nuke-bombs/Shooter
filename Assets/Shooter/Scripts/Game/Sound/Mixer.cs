@@ -14,7 +14,7 @@ namespace Shooter.Game
         private const string SoundsVolume = "SoundsVolume";
         private const float Silence = -80f;
         private const float DecibelsPerDecade = 20f;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static AudioMixer mixer;
         private static ClientConfig client;
@@ -32,7 +32,7 @@ namespace Shooter.Game
                 return;
             }
 
-            client = Config.Read().Client;
+            client = Config.GetGameConfig().Client;
             client.propertyChanged += Changed;
             Apply();
         }

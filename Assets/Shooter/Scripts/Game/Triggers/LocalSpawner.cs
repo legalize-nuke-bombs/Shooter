@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class LocalSpawner : MonoBehaviour, ITriggerable, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private GameObject prefab;
         [SerializeField] private GameObject destination;
@@ -27,7 +27,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             fired = sd.Fired;
         }
 
@@ -51,7 +51,7 @@ namespace Shooter.Game
             fired = true;
 
             Log.Info($"Entity {name} is going to spawn {prefab.name}...");
-            NetworkSpawner.Spawn(prefab, destination.transform.position, destination.transform.rotation);
+            NetworkSpawner.InstantiateAndSpawn(prefab, destination.transform.position, destination.transform.rotation);
         }
     }
 }

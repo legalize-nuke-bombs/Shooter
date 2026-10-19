@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class Lootable : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         public void Fill(Inventory from)
         {

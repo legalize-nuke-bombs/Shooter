@@ -4,19 +4,19 @@ namespace Shooter.Infrastructure
 {
     public class NoCompressionManager : CompressionManager
     {
-        protected override void CompressRaw(string path)
+        protected override void CompressFolderRaw(string folderPath)
         {
         }
 
-        protected override byte[] ReadRaw(string location, string file)
+        protected override byte[] ReadFileRaw(string archivePath, string fileName)
         {
-            string path = Path.Combine(location, file);
-            return File.Exists(path) ? File.ReadAllBytes(path) : null;
+            string filePath = Path.Combine(archivePath, fileName);
+            return File.Exists(filePath) ? File.ReadAllBytes(filePath) : null;
         }
 
-        protected override void DeleteRaw(string location)
+        protected override void DeleteArchiveRaw(string archivePath)
         {
-            Directory.Delete(location, true);
+            Directory.Delete(archivePath, true);
         }
 
         public override string Key => "";

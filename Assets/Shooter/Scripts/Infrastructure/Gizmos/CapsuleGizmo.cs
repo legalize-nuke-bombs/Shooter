@@ -14,17 +14,17 @@ namespace Shooter.Infrastructure
 
         private void OnDrawGizmos()
         {
-            Vector3 feet = transform.position + offset;
-            Vector3 bottom = feet + Vector3.up * Radius;
-            Vector3 top = feet + Vector3.up * (Height - Radius);
+            Vector3 feetPosition = transform.position + offset;
+            Vector3 bottomSphereCenter = feetPosition + Vector3.up * Radius;
+            Vector3 topSphereCenter = feetPosition + Vector3.up * (Height - Radius);
 
             Gizmos.color = Tint;
-            Gizmos.DrawWireSphere(bottom, Radius);
-            Gizmos.DrawWireSphere(top, Radius);
-            Gizmos.DrawLine(bottom + Vector3.right * Radius, top + Vector3.right * Radius);
-            Gizmos.DrawLine(bottom + Vector3.left * Radius, top + Vector3.left * Radius);
-            Gizmos.DrawLine(bottom + Vector3.forward * Radius, top + Vector3.forward * Radius);
-            Gizmos.DrawLine(bottom + Vector3.back * Radius, top + Vector3.back * Radius);
+            Gizmos.DrawWireSphere(bottomSphereCenter, Radius);
+            Gizmos.DrawWireSphere(topSphereCenter, Radius);
+            Gizmos.DrawLine(bottomSphereCenter + Vector3.right * Radius, topSphereCenter + Vector3.right * Radius);
+            Gizmos.DrawLine(bottomSphereCenter + Vector3.left * Radius, topSphereCenter + Vector3.left * Radius);
+            Gizmos.DrawLine(bottomSphereCenter + Vector3.forward * Radius, topSphereCenter + Vector3.forward * Radius);
+            Gizmos.DrawLine(bottomSphereCenter + Vector3.back * Radius, topSphereCenter + Vector3.back * Radius);
         }
     }
 }

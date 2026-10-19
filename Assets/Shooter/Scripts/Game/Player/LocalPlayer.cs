@@ -12,7 +12,7 @@ namespace Shooter.Game
     {
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private Camera view;
         [SerializeField] private EarSoundAsset saveSound;
@@ -456,7 +456,7 @@ namespace Shooter.Game
 
         private void QuickSave(InputAction.CallbackContext context)
         {
-            if (!IsServer || SaveManager.Saving) return;
+            if (!IsServer || SaveManager.IsSaving) return;
 
             if (ear != null) ear.PlayLocal(saveSound);
             Log.Info("Saving the world by the hotkey");
@@ -485,7 +485,7 @@ namespace Shooter.Game
         private IEnumerator SaveThenLeave()
         {
             yield return SaveManager.SaveCoroutine();
-            while (SaveManager.Saving) yield return null;
+            while (SaveManager.IsSaving) yield return null;
 
             NetworkManager.Shutdown();
         }

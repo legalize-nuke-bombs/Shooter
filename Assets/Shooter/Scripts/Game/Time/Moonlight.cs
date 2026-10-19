@@ -21,7 +21,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).FirstOrDefault();
+            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).FirstOrDefault();
         }
 
         private void Update()

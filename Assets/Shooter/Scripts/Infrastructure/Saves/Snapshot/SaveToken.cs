@@ -5,33 +5,33 @@ namespace Shooter.Infrastructure
 {
     public readonly struct SaveToken
     {
-        private readonly JToken token;
+        private readonly JToken jsonToken;
 
-        private SaveToken(JToken token)
+        private SaveToken(JToken jsonToken)
         {
-            this.token = token;
+            this.jsonToken = jsonToken;
         }
 
-        public bool Empty => token == null || token.Type == JTokenType.Null;
+        public bool IsEmpty => jsonToken == null || jsonToken.Type == JTokenType.Null;
 
-        public static SaveToken From(object value)
+        public static SaveToken FromObject(object value)
         {
             return new SaveToken(JToken.FromObject(value, SaveJson.Serializer));
         }
 
-        public T To<T>()
+        public T ToObject<T>()
         {
-            return token.ToObject<T>(SaveJson.Serializer);
+            return jsonToken.ToObject<T>(SaveJson.Serializer);
         }
 
-        internal static SaveToken Read(JsonReader reader)
+        internal static SaveToken ReadFromJson(JsonReader reader)
         {
             return new SaveToken(JToken.Load(reader));
         }
 
-        internal void Write(JsonWriter writer)
+        internal void WriteToJson(JsonWriter writer)
         {
-            token.WriteTo(writer);
+            jsonToken.WriteTo(writer);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Shooter.Game
         private const string BarElement = "stamina";
         private const string FillElement = "stamina-fill";
         private const int Hidden = -1;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private VisualElement bar;
         private Endurance endurance;

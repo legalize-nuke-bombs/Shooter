@@ -14,7 +14,7 @@ namespace Shooter.Game
         private const float BelowReach = 30f;
         private const int AskingLag = 1;
 
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private float shortfallLimit = 50f;
 

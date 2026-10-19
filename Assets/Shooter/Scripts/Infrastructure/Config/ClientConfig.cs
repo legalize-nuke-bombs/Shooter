@@ -23,59 +23,59 @@ namespace Shooter.Infrastructure
         public string Name
         {
             get => name;
-            set => Change(ref name, value);
+            set => SetProperty(ref name, value);
         }
 
         [CreateProperty]
         public string Invite
         {
             get => invite;
-            set => Change(ref invite, value);
+            set => SetProperty(ref invite, value);
         }
 
         [CreateProperty]
         public float Master
         {
             get => master;
-            set => Change(ref master, value);
+            set => SetProperty(ref master, value);
         }
 
         [CreateProperty]
         public float Music
         {
             get => music;
-            set => Change(ref music, value);
+            set => SetProperty(ref music, value);
         }
 
         [CreateProperty]
         public float Ambience
         {
             get => ambience;
-            set => Change(ref ambience, value);
+            set => SetProperty(ref ambience, value);
         }
 
         [CreateProperty]
         public float Sounds
         {
             get => sounds;
-            set => Change(ref sounds, value);
+            set => SetProperty(ref sounds, value);
         }
 
         [CreateProperty]
         public string Antialiasing
         {
             get => antialiasing;
-            set => Change(ref antialiasing, value);
+            set => SetProperty(ref antialiasing, value);
         }
 
         [CreateProperty]
         public string Upscaler
         {
             get => upscaler;
-            set => Change(ref upscaler, value);
+            set => SetProperty(ref upscaler, value);
         }
 
-        private void Change<T>(ref T field, T value, [CallerMemberName] string property = "")
+        private void SetProperty<T>(ref T field, T value, [CallerMemberName] string property = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
 

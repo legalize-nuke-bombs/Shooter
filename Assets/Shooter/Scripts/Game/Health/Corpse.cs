@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class Corpse : NetworkBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly NetworkVariable<FixedString32Bytes> skin = new();
         private readonly NetworkVariable<FixedString32Bytes> title = new();
@@ -30,7 +30,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             skin.Value = sd.Skin;
             title.Value = sd.Title;
         }
@@ -64,8 +64,8 @@ namespace Shooter.Game
         {
             if (dressed || current.IsEmpty) return;
 
-            SkinCatalog catalog = Catalogs.Of<SkinCatalog>();
-            SkinAsset asset = catalog == null ? null : catalog.Of(current);
+            SkinCatalog catalog = Catalogs.GetCatalog<SkinCatalog>();
+            SkinAsset asset = catalog == null ? null : catalog.GetAssetById(current);
             if (asset == null || asset.Model == null)
             {
                 Log.Error($"Corpse {name} cannot find skin {current}, stays invisible");
@@ -87,8 +87,8 @@ namespace Shooter.Game
             TypedNameable named = GetComponent<TypedNameable>();
             if (named == null || current.IsEmpty) return;
 
-            NameCatalog catalog = Catalogs.Of<NameCatalog>();
-            NameAsset asset = catalog == null ? null : catalog.Of(current);
+            NameCatalog catalog = Catalogs.GetCatalog<NameCatalog>();
+            NameAsset asset = catalog == null ? null : catalog.GetAssetById(current);
             if (asset == null)
             {
                 Log.Warn($"Corpse {name} cannot find name {current}, keeps its own");

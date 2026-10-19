@@ -9,7 +9,7 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class ConversationManager : ShooterBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly Dictionary<(long, long), Conversation> conversations = new();
 
@@ -31,7 +31,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
 
             conversations.Clear();
             conversationsById.Clear();
@@ -49,7 +49,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
         }
 
         public Conversation GetOrCreate(long first, long second)

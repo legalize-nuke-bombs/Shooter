@@ -9,7 +9,7 @@ namespace Shooter.Editor
 {
     public class HandAxisPostprocessor : AssetPostprocessor
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         public override uint GetVersion()
         {

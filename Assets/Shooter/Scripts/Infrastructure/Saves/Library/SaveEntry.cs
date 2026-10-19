@@ -8,9 +8,9 @@ namespace Shooter.Infrastructure
 {
     public sealed class SaveEntry
     {
-        private const string MetaFile = "Meta.json";
-        private const string PreviewFile = "Preview.jpg";
-        private static readonly Journal Log = Logs.Here();
+        private const string MetaFileName = "Meta.json";
+        private const string PreviewFileName = "Preview.jpg";
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private SaveEntry(string location, Meta meta)
         {
@@ -22,34 +22,34 @@ namespace Shooter.Infrastructure
 
         public Meta Meta { get; }
 
-        public bool Foreign => Meta.Version != Application.version;
+        public bool IsFromAnotherVersion => Meta.Version != Application.version;
 
-        public static SaveEntry Read(string location)
+        public static SaveEntry ReadFromLocation(string location)
         {
-            byte[] bytes = MainCompressionManager.Read(location, MetaFile);
-            if (bytes == null)
+            byte[] metaBytes = MainCompressionManager.ReadFile(location, MetaFileName);
+            if (metaBytes == null)
             {
-                Log.Warn($"Save {location} has no {MetaFile}, skipped");
+                Log.Warn($"Save {location} has no {MetaFileName}, skipped");
                 return null;
             }
 
             try
             {
-                using StreamReader reader = new(new MemoryStream(bytes), Encoding.UTF8, true);
-                Meta meta = JsonConvert.DeserializeObject<Meta>(reader.ReadToEnd(), Meta.Json);
+                using StreamReader reader = new(new MemoryStream(metaBytes), Encoding.UTF8, true);
+                Meta meta = JsonConvert.DeserializeObject<Meta>(reader.ReadToEnd(), Meta.JsonSettings);
 
                 return new SaveEntry(location, meta);
             }
             catch (Exception e)
             {
-                Log.Warn($"Save {location} has unreadable {MetaFile}, skipped: {e.Message}");
+                Log.Warn($"Save {location} has unreadable {MetaFileName}, skipped: {e.Message}");
                 return null;
             }
         }
 
         public byte[] ReadPreview()
         {
-            return MainCompressionManager.Read(Location, PreviewFile);
+            return MainCompressionManager.ReadFile(Location, PreviewFileName);
         }
     }
 }

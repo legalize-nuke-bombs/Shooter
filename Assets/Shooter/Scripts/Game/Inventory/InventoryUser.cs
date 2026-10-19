@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     public class InventoryUser : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Inventory inventory;
         private Speaker speaker;
@@ -40,7 +40,7 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void UseRpc(FixedString32Bytes stackableId)
         {
-            if (Catalogs.Of<ItemCatalog>().Of(stackableId) is StackableItemAsset asset && Use(asset)) return;
+            if (Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) is StackableItemAsset asset && Use(asset)) return;
 
             Log.Info($"Entity {name} failed to use {stackableId} rpc");
         }

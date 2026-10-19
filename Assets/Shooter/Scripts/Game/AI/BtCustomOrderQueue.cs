@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(BtReports))]
     public class BtCustomOrderQueue : MonoBehaviour, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private BtCustomOrder order = null;
         private BtReports reports;
@@ -59,12 +59,12 @@ namespace Shooter.Game
             return new SaveData
             {
                 Kind = order.Kind,
-                State = state == null ? default : SaveToken.From(state)
+                State = state == null ? default : SaveToken.FromObject(state)
             };
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             order = null;
 
             if (sd.Kind == null) return;
@@ -76,7 +76,7 @@ namespace Shooter.Game
                 return;
             }
 
-            if (!sd.State.Empty) loaded.LoadObject(sd.State);
+            if (!sd.State.IsEmpty) loaded.LoadObject(sd.State);
             order = loaded;
         }
 

@@ -7,34 +7,34 @@ namespace Shooter.Infrastructure
     public static class Catalogs
     {
         private const string ResourcesFolder = "Catalogs";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static Dictionary<Type, Catalog> known;
+        private static Dictionary<Type, Catalog> catalogsByType;
 
-        public static TCatalog Of<TCatalog>() where TCatalog : Catalog
+        public static TCatalog GetCatalog<TCatalog>() where TCatalog : Catalog
         {
-            known ??= Load();
+            catalogsByType ??= LoadAllCatalogs();
 
-            if (known.TryGetValue(typeof(TCatalog), out Catalog catalog)) return (TCatalog)catalog;
+            if (catalogsByType.TryGetValue(typeof(TCatalog), out Catalog catalog)) return (TCatalog)catalog;
 
             Log.Error($"Catalogs serve no {typeof(TCatalog).Name}");
             return null;
         }
 
-        private static Dictionary<Type, Catalog> Load()
+        private static Dictionary<Type, Catalog> LoadAllCatalogs()
         {
-            var found = new Dictionary<Type, Catalog>();
+            var loadedCatalogsByType = new Dictionary<Type, Catalog>();
 
             foreach (Catalog catalog in Resources.LoadAll<Catalog>(ResourcesFolder))
             {
-                if (!found.TryAdd(catalog.GetType(), catalog))
+                if (!loadedCatalogsByType.TryAdd(catalog.GetType(), catalog))
                 {
                     Log.Error($"Catalogs hold two of {catalog.GetType().Name}, {catalog.name} is ignored");
                 }
             }
 
-            Log.Info($"Catalogs loaded {found.Count} catalogs");
-            return found;
+            Log.Info($"Catalogs loaded {loadedCatalogsByType.Count} catalogs");
+            return loadedCatalogsByType;
         }
     }
 }

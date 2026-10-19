@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class Teleport : MonoBehaviour, ITriggerable, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private GameObject destination;
         [SerializeField] private EarSoundAsset sound;
@@ -29,7 +29,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             characters = new HashSet<long>(sd.Characters);
         }
 

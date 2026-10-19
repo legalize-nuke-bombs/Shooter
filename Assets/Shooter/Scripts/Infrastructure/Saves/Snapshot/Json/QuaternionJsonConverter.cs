@@ -21,12 +21,10 @@ namespace Shooter.Infrastructure
             writer.WriteEndObject();
         }
 
-        public override Quaternion ReadJson(JsonReader reader, Type objectType, Quaternion existingValue,
-            bool hasExistingValue, JsonSerializer serializer)
+        public override Quaternion ReadJson(JsonReader reader, Type objectType, Quaternion existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            JObject properties = JObject.Load(reader);
-            return new Quaternion((float)properties["X"], (float)properties["Y"], (float)properties["Z"],
-                (float)properties["W"]);
+            JObject jsonObject = JObject.Load(reader);
+            return new Quaternion((float)jsonObject["X"], (float)jsonObject["Y"], (float)jsonObject["Z"], (float)jsonObject["W"]);
         }
     }
 }

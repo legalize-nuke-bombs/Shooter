@@ -69,7 +69,7 @@ namespace Shooter.Game
 
             stamp.text = RussianDate.Moment(shown.Meta.Stamp);
             version.text = shown.Meta.Version;
-            version.EnableInClassList(ForeignClass, shown.Foreign);
+            version.EnableInClassList(ForeignClass, shown.IsFromAnotherVersion);
 
             byte[] bytes = shown.ReadPreview();
             if (bytes == null) return;

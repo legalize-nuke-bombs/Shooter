@@ -10,7 +10,7 @@ namespace Shooter.Game
     {
         private const string BrokenSaveTitle = "Не удалось загрузить сохранение";
         private const string BrokenSaveDetails = "Файл повреждён или несовместим с этой версией";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private NetworkManager network;
         private NetworkStarter networkStarter;
@@ -26,7 +26,7 @@ namespace Shooter.Game
 
             networkStarter = network.GetComponent<NetworkStarter>();
             loadingScreenOverlay = FindAnyObjectByType<LoadingScreenOverlay>();
-            SaveManager.Open();
+            SaveManager.ForgetUnfinishedSave();
             network.SceneManager.OnLoadComplete += HandleSceneLoaded;
         }
 
@@ -43,7 +43,7 @@ namespace Shooter.Game
 
             // Netcode calls this before the scene's first Update: freezing here keeps that one Update from running on
             // a world the save has not loaded yet
-            if (networkStarter.Save != null) frozenWorld = SaveManager.Freeze();
+            if (networkStarter.SaveLocationToLoad != null) frozenWorld = SaveManager.FreezeWorld();
             StartCoroutine(LoadWorldNextFrame());
         }
 
@@ -60,12 +60,12 @@ namespace Shooter.Game
 
         private bool LoadSaveOrShutDown()
         {
-            Log.Info($"Loading the world from {networkStarter.Save}");
+            Log.Info($"Loading the world from {networkStarter.SaveLocationToLoad}");
             loadingScreenOverlay.ShowStage(LoadingScreenStage.Save);
-            if (SaveManager.Load(frozenWorld, networkStarter.Save)) return true;
+            if (SaveManager.LoadSaveAndThawWorld(frozenWorld, networkStarter.SaveLocationToLoad)) return true;
 
-            Log.Warn($"The world failed to load {networkStarter.Save}, shutting the host down");
-            networkStarter.Failure = new NetworkStartFailure(BrokenSaveTitle, BrokenSaveDetails);
+            Log.Warn($"The world failed to load {networkStarter.SaveLocationToLoad}, shutting the host down");
+            networkStarter.StartFailureToShow = new NetworkStartFailure(BrokenSaveTitle, BrokenSaveDetails);
             network.Shutdown();
             return false;
         }

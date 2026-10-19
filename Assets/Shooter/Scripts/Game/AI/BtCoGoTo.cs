@@ -27,7 +27,7 @@ namespace Shooter.Game
         }
         public override void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             Name = sd.Name;
             Destination = sd.Destination;
             Sprint = sd.Sprint;

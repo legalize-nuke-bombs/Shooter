@@ -22,7 +22,7 @@ namespace Shooter.Game
         }
         public override void LoadObject(SaveToken content)
         {
-            magazine = content.To<SaveData>().Magazine;
+            magazine = content.ToObject<SaveData>().Magazine;
         }
 
         public int Magazine => magazine;

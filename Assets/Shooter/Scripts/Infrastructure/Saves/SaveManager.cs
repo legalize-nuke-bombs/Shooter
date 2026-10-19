@@ -5,77 +5,77 @@ namespace Shooter.Infrastructure
 {
     public static class SaveManager
     {
-        private const string Prefix = "ShooterSave";
-        private const string StampFormat = "yyyy_MM_dd_HH_mm_ss_fff";
-        private static readonly Journal Log = Logs.Here();
+        private const string SaveNamePrefix = "ShooterSave";
+        private const string SaveNameStampFormat = "yyyy_MM_dd_HH_mm_ss_fff";
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        public static bool Saving { get; private set; }
+        public static bool IsSaving { get; private set; }
 
-        // The gate outlives the world: a save cut short by its runner's death never reaches the finally below
-        public static void Open()
+        // IsSaving outlives the world: a save cut short by its runner's death never reaches the finally that clears it
+        public static void ForgetUnfinishedSave()
         {
-            if (!Saving) return;
+            if (!IsSaving) return;
 
-            Saving = false;
-            Log.Warn("The previous world left a save unfinished, the gate is open again");
+            IsSaving = false;
+            Log.Warn("The previous world left a save unfinished, saving is allowed again");
         }
 
         public static IEnumerator SaveCoroutine()
         {
-            if (Saving)
+            if (IsSaving)
             {
                 Log.Info("A save is already running, this request is dropped");
                 yield break;
             }
 
-            Saving = true;
+            IsSaving = true;
             try
             {
                 Log.Info("Making save...");
-                Snapshot snapshot = SnapshotManager.Build();
-                Meta meta = MetaManager.Build();
+                Snapshot snapshot = SnapshotManager.BuildSnapshot();
+                Meta meta = MetaManager.BuildMeta();
 
-                string path = Path.Combine(SaveLibrary.Location, Prefix + "_" + meta.Stamp.ToString(StampFormat));
+                string saveLocation = Path.Combine(SaveLibrary.FolderPath, SaveNamePrefix + "_" + meta.Stamp.ToString(SaveNameStampFormat));
 
-                if (!SnapshotManager.Write(Path.Combine(path, "Snapshot.json"), snapshot))
+                if (!SnapshotManager.TryWriteSnapshot(Path.Combine(saveLocation, "Snapshot.json"), snapshot))
                 {
-                    Log.Warn($"The save has no snapshot and is abandoned, removing {path}...");
-                    MainCompressionManager.Delete(path);
+                    Log.Warn($"The save has no snapshot and is abandoned, removing {saveLocation}...");
+                    MainCompressionManager.DeleteArchive(saveLocation);
                     yield break;
                 }
 
-                MetaManager.Write(Path.Combine(path, "Meta.json"), meta);
-                yield return PreviewManager.WriteCoroutine(Path.Combine(path, "Preview.jpg"));
-                path = MainCompressionManager.Compress(path);
-                Log.Info($"Saved to {path}");
+                MetaManager.WriteMeta(Path.Combine(saveLocation, "Meta.json"), meta);
+                yield return PreviewManager.WritePreviewCoroutine(Path.Combine(saveLocation, "Preview.jpg"));
+                saveLocation = MainCompressionManager.CompressFolder(saveLocation);
+                Log.Info($"Saved to {saveLocation}");
             }
             finally
             {
-                Saving = false;
+                IsSaving = false;
             }
         }
 
-        public static FrozenWorld Freeze()
+        public static FrozenWorld FreezeWorld()
         {
             Log.Info("Freezing the world...");
-            return FrozenWorld.Freeze();
+            return FrozenWorld.FreezeAllSaveableObjects();
         }
 
-        public static bool Load(FrozenWorld world, string path)
+        public static bool LoadSaveAndThawWorld(FrozenWorld frozenWorld, string saveLocation)
         {
-            Log.Info($"Loading from {path}...");
+            Log.Info($"Loading from {saveLocation}...");
 
-            byte[] snapshot = MainCompressionManager.Read(path, "Snapshot.json");
-            if (snapshot == null)
+            byte[] snapshotBytes = MainCompressionManager.ReadFile(saveLocation, "Snapshot.json");
+            if (snapshotBytes == null)
             {
-                Log.Warn($"No snapshot in {path}, the world stays frozen");
+                Log.Warn($"No snapshot in {saveLocation}, the world stays frozen");
                 return false;
             }
 
-            if (!SnapshotManager.Load(world, snapshot)) return false;
+            if (!SnapshotManager.TryLoadSnapshot(frozenWorld, snapshotBytes)) return false;
 
-            world.Thaw();
-            Log.Info($"Loaded {path}");
+            frozenWorld.ThawAllSaveableObjects();
+            Log.Info($"Loaded {saveLocation}");
             return true;
         }
     }

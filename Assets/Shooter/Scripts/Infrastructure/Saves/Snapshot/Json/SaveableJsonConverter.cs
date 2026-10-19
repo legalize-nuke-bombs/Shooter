@@ -15,13 +15,12 @@ namespace Shooter.Infrastructure
             serializer.Serialize(writer, ((ISaveable)value).SaveObject());
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
 
             ISaveable saveable = (ISaveable)Activator.CreateInstance(objectType);
-            saveable.LoadObject(SaveToken.Read(reader));
+            saveable.LoadObject(SaveToken.ReadFromJson(reader));
             return saveable;
         }
     }

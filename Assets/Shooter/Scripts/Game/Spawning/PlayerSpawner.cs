@@ -9,7 +9,7 @@ namespace Shooter.Game
     // Works on the server, once the save is in
     public class PlayerSpawner : ShooterBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private SaveLoaderOnStartup saveLoaderOnStartup;
 
@@ -44,7 +44,7 @@ namespace Shooter.Game
                 Embody(clientId);
             }
 
-            foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Include))
+            foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Include))
             {
                 NetworkObject body = player.GetComponent<NetworkObject>();
                 if (!bodies.ContainsValue(body)) body.gameObject.SetActive(false);
@@ -60,8 +60,8 @@ namespace Shooter.Game
 
         private void Embody(ulong clientId)
         {
-            string playerName = networkConnectionApprover.NameOf(clientId);
-            string publicKey = networkConnectionApprover.PublicKeyOf(clientId);
+            string playerName = networkConnectionApprover.GetPlayerName(clientId);
+            string publicKey = networkConnectionApprover.GetPublicKey(clientId);
 
             Player returning = Player.OfKey(publicKey, RegisterInactivePolicy.Include);
             NetworkObject body;
@@ -74,7 +74,7 @@ namespace Shooter.Game
             {
                 MainSpawnPoint mainSpawnPoint = MainSpawnPoint.Pick();
                 Transform spawnTransform = mainSpawnPoint == null ? transform : mainSpawnPoint.transform;
-                GameObject freshBody = NetworkSpawner.Spawn(network.NetworkConfig.PlayerPrefab, spawnTransform.position, spawnTransform.rotation);
+                GameObject freshBody = NetworkSpawner.InstantiateAndSpawn(network.NetworkConfig.PlayerPrefab, spawnTransform.position, spawnTransform.rotation);
                 if (freshBody == null)
                 {
                     Log.Error($"Client {clientId} could not be given a body");

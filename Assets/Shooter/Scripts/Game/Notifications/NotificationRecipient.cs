@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     public class NotificationRecipient : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         public event Action<NotificationAsset> Received;
 

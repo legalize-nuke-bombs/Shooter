@@ -13,7 +13,7 @@ namespace Shooter.Game
 {
     public static class LlmProvider
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static readonly JsonSerializerSettings Settings = new()
         {

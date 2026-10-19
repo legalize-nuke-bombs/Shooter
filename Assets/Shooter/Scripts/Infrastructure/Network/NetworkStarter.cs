@@ -10,9 +10,9 @@ namespace Shooter.Infrastructure
     public class NetworkStarter : ShooterBehaviour
     {
         private const string AnyAddress = "0.0.0.0";
-        private const string BadInvite = "Неверный код подключения";
+        private const string BadInviteTitle = "Неверный код подключения";
         private const string BadInviteDetails = "Попросите у хоста код ещё раз и вставьте его целиком";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private string world = "Map";
 
@@ -20,9 +20,9 @@ namespace Shooter.Infrastructure
 
         public event Action<NetworkStartFailure> JoinFailed;
 
-        public string Save { get; private set; }
+        public string SaveLocationToLoad { get; private set; }
 
-        public NetworkStartFailure Failure { get; set; }
+        public NetworkStartFailure StartFailureToShow { get; set; }
 
         protected override void ShooterAwake()
         {
@@ -34,26 +34,26 @@ namespace Shooter.Infrastructure
             StopWatchingJoin();
         }
 
-        public NetworkStartFailure Host(string save)
+        public NetworkStartFailure HostWorld(string saveLocation)
         {
             Account account = Config.Account;
-            ServerConfig server = Config.Read().Server;
+            ServerConfig serverConfig = Config.GetGameConfig().Server;
 
             UnityTransport transport = network.GetComponent<UnityTransport>();
             transport.UseEncryption = true;
-            transport.SetConnectionData(AnyAddress, server.Port, AnyAddress);
+            transport.SetConnectionData(AnyAddress, serverConfig.Port, AnyAddress);
             transport.SetServerSecrets(account.Certificate, account.PrivateKeyPem);
-            network.NetworkConfig.ConnectionData = NetworkHandshake.Encode(Config.Read().Client.Name, account, account.Certificate);
+            network.NetworkConfig.ConnectionData = NetworkHandshake.EncodeConnectionData(Config.GetGameConfig().Client.Name, account, account.Certificate);
 
             if (!network.StartHost())
             {
-                Log.Warn($"The host refused to start on port {server.Port}");
-                return new NetworkStartFailure("Не удалось запустить сервер", $"Возможно, порт {server.Port} занят. Смените его в настройках сервера");
+                Log.Warn($"The host refused to start on port {serverConfig.Port}");
+                return new NetworkStartFailure("Не удалось запустить сервер", $"Возможно, порт {serverConfig.Port} занят. Смените его в настройках сервера");
             }
 
-            Log.Info($"World listens on port {server.Port}, channel encrypted");
+            Log.Info($"World listens on port {serverConfig.Port}, channel encrypted");
 
-            Save = save;
+            SaveLocationToLoad = saveLocation;
             SceneEventProgressStatus status = network.SceneManager.LoadScene(world, LoadSceneMode.Single);
             if (status == SceneEventProgressStatus.Started) return null;
 
@@ -62,30 +62,30 @@ namespace Shooter.Infrastructure
             return new NetworkStartFailure("Не удалось запустить игру", "Карта не загрузилась");
         }
 
-        public NetworkStartFailure Join()
+        public NetworkStartFailure JoinWorldByInvite()
         {
-            ClientConfig client = Config.Read().Client;
-            if (!NetworkInvite.TryDecode(client.Invite, out string address, out ushort port, out string certificate))
+            ClientConfig clientConfig = Config.GetGameConfig().Client;
+            if (!NetworkInvite.TryDecodeInviteCode(clientConfig.Invite, out string address, out ushort port, out string certificate))
             {
                 Log.Warn("Invite code is missing or malformed, staying in the menu");
-                return new NetworkStartFailure(BadInvite, BadInviteDetails);
+                return new NetworkStartFailure(BadInviteTitle, BadInviteDetails);
             }
 
             UnityTransport transport = network.GetComponent<UnityTransport>();
             transport.UseEncryption = true;
             transport.SetConnectionData(address, port);
             transport.SetClientSecrets(Account.CommonName, certificate);
-            network.NetworkConfig.ConnectionData = NetworkHandshake.Encode(client.Name, Config.Account, certificate);
+            network.NetworkConfig.ConnectionData = NetworkHandshake.EncodeConnectionData(clientConfig.Name, Config.Account, certificate);
 
             if (!network.StartClient())
             {
                 Log.Warn($"The client refused to start for {address}:{port}");
-                return new NetworkStartFailure(BadInvite, BadInviteDetails);
+                return new NetworkStartFailure(BadInviteTitle, BadInviteDetails);
             }
 
             network.OnClientConnectedCallback += HandleClientConnected;
             network.OnClientDisconnectCallback += HandleClientDisconnected;
-            Log.Info($"Heading for {address}:{port} as {client.Name}, channel encrypted");
+            Log.Info($"Heading for {address}:{port} as {clientConfig.Name}, channel encrypted");
             return null;
         }
 
@@ -102,14 +102,14 @@ namespace Shooter.Infrastructure
             StopWatchingJoin();
         }
 
-        // Read here and not on the stop: the shutdown that follows overwrites the transport's verdict
+        // The transport's DisconnectEvent is read here and not on the stop: the shutdown that follows overwrites it
         private void HandleClientDisconnected(ulong clientId)
         {
             StopWatchingJoin();
-            NetworkTransport.DisconnectEvents verdict = network.NetworkConfig.NetworkTransport.DisconnectEvent;
-            Log.Warn($"The client did not get into the world: {verdict}, {network.DisconnectReason}");
+            NetworkTransport.DisconnectEvents disconnectEvent = network.NetworkConfig.NetworkTransport.DisconnectEvent;
+            Log.Warn($"The client did not get into the world: {disconnectEvent}, {network.DisconnectReason}");
 
-            switch (verdict)
+            switch (disconnectEvent)
             {
                 case NetworkTransport.DisconnectEvents.ClosedByRemote:
                     JoinFailed?.Invoke(new NetworkStartFailure("Сервер отклонил подключение", network.DisconnectReason));
