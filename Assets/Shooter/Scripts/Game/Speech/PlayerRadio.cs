@@ -20,9 +20,9 @@ namespace Shooter.Game
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void SayRpc(long partnerId, string text)
+        public void SayRpc(long partnerId, string speech)
         {
-            if (string.IsNullOrEmpty(text) || text.Length > PlayerMouth.SpeechLimit)
+            if (string.IsNullOrEmpty(speech) || speech.Length > PlayerMouth.MaxSpeechLength)
             {
                 Log.Info($"Player {OwnerClientId} radioed an empty or overlong line, ignored");
                 return;
@@ -34,7 +34,7 @@ namespace Shooter.Game
                 return;
             }
 
-            conversationManager.Say(character.Id, partnerId, text, false, true);
+            conversationManager.Say(character.Id, partnerId, speech, false, true);
         }
     }
 }

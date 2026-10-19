@@ -5,43 +5,43 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(BtReports))]
-    public class BtCustomOrderQueue : MonoBehaviour, IDigestible, ISaveableComponent
+    [RequireComponent(typeof(BehaviorReporter))]
+    public class CustomOrderSlot : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private BtCustomOrder order = null;
-        private BtReports reports;
+        private CustomOrder order;
+        private BehaviorReporter behaviorReporter;
 
         private void Awake()
         {
             enabled = NetworkManager.Singleton.IsServer;
-            reports = GetComponent<BtReports>();
+            behaviorReporter = GetComponent<BehaviorReporter>();
         }
 
         private void Update()
         {
-            Settle();
+            FinishOrderIfDone();
         }
 
-        private void Settle()
+        private void FinishOrderIfDone()
         {
-            if (order == null || !order.Done(gameObject)) return;
+            if (order == null || !order.IsDone(gameObject)) return;
 
-            Finish();
+            FinishOrder();
         }
 
-        public void Finish()
+        public void FinishOrder()
         {
             if (order == null)
             {
                 throw new InvalidOperationException($"Entity {name} has no custom order to finish");
             }
 
-            string outcome = order.PromptOutcome(gameObject);
+            string outcome = order.GetPromptOutcome(gameObject);
             Log.Info($"Entity {name} finished {order.Kind} custom order: {outcome}");
             order = null;
-            reports.Report(new BtReport { Prompt = outcome, Urgent = true });
+            behaviorReporter.Report(new BehaviorReport { Prompt = outcome, IsUrgent = true });
         }
 
         public string ComponentKey => "BtCustomOrderQueue";
@@ -64,41 +64,41 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData saveData = content.ToObject<SaveData>();
             order = null;
 
-            if (sd.Kind == null) return;
+            if (saveData.Kind == null) return;
 
-            BtCustomOrder loaded = BtCustomOrder.Create(sd.Kind);
+            CustomOrder loaded = CustomOrder.CreateOfKind(saveData.Kind);
             if (loaded == null)
             {
-                Log.Warn($"Entity {name} lost its order: kind {sd.Kind} is unknown");
+                Log.Warn($"Entity {name} lost its order: kind {saveData.Kind} is unknown");
                 return;
             }
 
-            if (!sd.State.IsEmpty) loaded.LoadObject(sd.State);
+            if (!saveData.State.IsEmpty) loaded.LoadObject(saveData.State);
             order = loaded;
         }
 
-        public BtCustomOrder Current => order;
+        public CustomOrder CurrentOrder => order;
 
-        public void ForcePut(BtCustomOrder newOrder)
+        public void ForcePutOrder(CustomOrder newOrder)
         {
             if (newOrder == null)
             {
                 throw new ArgumentNullException(nameof(newOrder));
             }
-            Settle();
+            FinishOrderIfDone();
             order = newOrder;
         }
 
-        public bool TryPut(BtCustomOrder newOrder)
+        public bool TryPutOrder(CustomOrder newOrder)
         {
             if (newOrder == null)
             {
                 throw new ArgumentNullException(nameof(newOrder));
             }
-            Settle();
+            FinishOrderIfDone();
             if (order == null)
             {
                 order = newOrder;
@@ -107,9 +107,9 @@ namespace Shooter.Game
             return false;
         }
 
-        public void Clear()
+        public void ClearOrder()
         {
-            Settle();
+            FinishOrderIfDone();
             order = null;
         }
 
@@ -124,7 +124,7 @@ namespace Shooter.Game
             {
                 return "No active second-level behavior tree actions";
             }
-            return "Second-level behaviour tree action: " + order.PromptDescription(gameObject);
+            return "Second-level behaviour tree action: " + order.GetPromptDescription(gameObject);
         }
 
         public DigestionPriority Priority => DigestionPriority.High;

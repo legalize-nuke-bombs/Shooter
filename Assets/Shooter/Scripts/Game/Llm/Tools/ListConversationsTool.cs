@@ -35,7 +35,7 @@ To see the content, use read_conversation.
 
         protected override string Execute(ListConversationsArguments arguments, LlmCallContext context)
         {
-            List<Conversation> conversations = conversationManager.Of(ownCharacter.Id);
+            List<Conversation> conversations = conversationManager.GetConversationsOf(ownCharacter.Id);
             if (conversations.Count == 0)
             {
                 return "Nothing yet";
@@ -44,7 +44,7 @@ To see the content, use read_conversation.
             var partners = new HashSet<long>();
             foreach (Conversation conversation in conversations)
             {
-                partners.Add(conversation.Partner(ownCharacter.Id));
+                partners.Add(conversation.GetPartnerId(ownCharacter.Id));
             }
 
             var partnerNames = new Dictionary<long, string>();
@@ -65,7 +65,7 @@ To see the content, use read_conversation.
             var sb = new StringBuilder();
             foreach (Conversation conversation in sortedConversations)
             {
-                long partner = conversation.Partner(ownCharacter.Id);
+                long partner = conversation.GetPartnerId(ownCharacter.Id);
                 string partnerName = partnerNames.TryGetValue(partner, out string known) ? known : "Unknown";
                 Message last = conversation.Messages.LastOrDefault();
                 string lastAt = last == null ? "never" : last.Time.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);

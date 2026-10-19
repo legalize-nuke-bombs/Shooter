@@ -15,7 +15,7 @@ namespace Shooter.Game
         id: "4f7a0c2e9b3d4a61b8e5d2c7f0a13b22")]
     public partial class WalkTowardTargetAction : Action
     {
-        private const float TargetDrift = 2f;
+        private const float MaxTargetDrift = 2f;
 
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<Transform> Target = new();
@@ -23,9 +23,9 @@ namespace Shooter.Game
         [SerializeReference] public BlackboardVariable<bool> Sprint = new();
 
         private AgentMovement movement;
-        private bool aimed;
-        private Vector3 anchor;
-        private Vector3 aim;
+        private bool hasAimPoint;
+        private Vector3 targetPositionAtAim;
+        private Vector3 aimPoint;
 
         protected override Status OnStart()
         {
@@ -37,30 +37,30 @@ namespace Shooter.Game
                 if (movement == null) return Status.Failure;
             }
 
-            Vector3 there = Target.Value.position;
-            Vector3 feet = movement.FeetPosition;
-            var gap = new Vector3(feet.x - there.x, 0f, feet.z - there.z);
+            Vector3 targetPosition = Target.Value.position;
+            Vector3 feetPosition = movement.FeetPosition;
+            Vector3 offsetFromTarget = new(feetPosition.x - targetPosition.x, 0f, feetPosition.z - targetPosition.z);
 
-            if (gap.magnitude <= Reach.Value)
+            if (offsetFromTarget.magnitude <= Reach.Value)
             {
-                aimed = false;
+                hasAimPoint = false;
                 return Status.Success;
             }
 
             if (movement.Status == AgentMovementStatus.Displaced)
             {
-                aimed = false;
+                hasAimPoint = false;
                 return Status.Success;
             }
 
-            if (!aimed || Vector3.Distance(there, anchor) > TargetDrift)
+            if (!hasAimPoint || Vector3.Distance(targetPosition, targetPositionAtAim) > MaxTargetDrift)
             {
-                anchor = there;
-                aim = there + gap.normalized * Reach.Value;
-                aimed = true;
+                targetPositionAtAim = targetPosition;
+                aimPoint = targetPosition + offsetFromTarget.normalized * Reach.Value;
+                hasAimPoint = true;
             }
 
-            movement.WalkTo(aim, Sprint.Value);
+            movement.WalkTo(aimPoint, Sprint.Value);
             return movement.Status == AgentMovementStatus.Unreachable ? Status.Failure : Status.Success;
         }
     }

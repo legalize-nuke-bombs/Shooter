@@ -21,13 +21,13 @@ namespace Shooter.Game
         private Sleeper sleeper;
         private Speaker speaker;
 
-        public bool Thinking => thinking.Value;
+        public bool IsThinking => thinking.Value;
 
         public long CharacterId => character.Id;
 
-        public bool Alive => health.IsAlive;
+        public bool IsAlive => health.IsAlive;
 
-        public bool Sleeping => sleeper != null && sleeper.IsSleeping;
+        public bool IsSleeping => sleeper != null && sleeper.IsSleeping;
 
         public UsageType Usage => UsageType.Talk;
 
@@ -68,29 +68,29 @@ namespace Shooter.Game
                 return;
             }
 
-            if (!user.TryGetComponent(out PlayerMouth mouth))
+            if (!user.TryGetComponent(out PlayerMouth playerMouth))
             {
                 promptResult = "Failed to talk: you are not a player";
                 return;
             }
 
-            if (mouth.Interlocutor == NetworkObjectId)
+            if (playerMouth.TalkerNetworkObjectId == NetworkObjectId)
             {
-                mouth.Close();
+                playerMouth.CloseTalk();
                 promptResult = "Dialogue was closed";
             }
             else
             {
-                mouth.Open(this);
+                playerMouth.OpenTalk(this);
                 promptResult = "Dialogue was opened";
             }
         }
 
-        protected abstract bool Busy();
+        protected abstract bool IsBusy();
 
         private void Update()
         {
-            thinking.Value = Busy();
+            thinking.Value = IsBusy();
         }
 
         private void Mutter(Conversation conversation, Message message)

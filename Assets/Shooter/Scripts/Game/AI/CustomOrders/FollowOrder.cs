@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class BtCoFollow : BtCustomOrder
+    public class FollowOrder : CustomOrder
     {
         public long TargetId { get; set; }
         public float Reach { get; set; }
@@ -29,10 +29,10 @@ namespace Shooter.Game
         }
         public override void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            TargetId = sd.TargetId;
-            Reach = sd.Reach;
-            Sprint = sd.Sprint;
+            SaveData saveData = content.ToObject<SaveData>();
+            TargetId = saveData.TargetId;
+            Reach = saveData.Reach;
+            Sprint = saveData.Sprint;
         }
 
         public Character Target
@@ -45,30 +45,30 @@ namespace Shooter.Game
             }
         }
 
-        public string Handle => "[ID " + TargetId + "]";
+        public string TargetPromptName => "[ID " + TargetId + "]";
 
-        public override bool Done(GameObject body)
+        public override bool IsDone(GameObject body)
         {
             return Target == null;
         }
 
-        public override string PromptOutcome(GameObject body)
+        public override string GetPromptOutcome(GameObject body)
         {
-            if (Target == null) return Handle + " is gone, you are no longer following it";
+            if (Target == null) return TargetPromptName + " is gone, you are no longer following it";
 
             AgentMovement movement = body.GetComponent<AgentMovement>();
             return movement.Status == AgentMovementStatus.Unreachable
-                ? "There is no way toward " + Handle + " from where you stand, you are no longer following it"
-                : "You are no longer following " + Handle;
+                ? "There is no way toward " + TargetPromptName + " from where you stand, you are no longer following it"
+                : "You are no longer following " + TargetPromptName;
         }
 
-        protected override string PromptRawDescription(GameObject body)
+        protected override string GetPromptDescriptionWithoutStatus(GameObject body)
         {
             Character followed = Target;
-            if (followed == null) return "Following " + Handle + ": it is gone";
+            if (followed == null) return "Following " + TargetPromptName + ": it is gone";
 
-            Vector3 there = followed.transform.position;
-            return (Sprint ? "Running after " : "Following ") + Handle + " at " + Whereabouts.FormatCoordinates(there) + " keeping " + Mathf.RoundToInt(Reach) + " m from it: " + Mathf.RoundToInt(Vector3.Distance(there, body.transform.position)) + " m away";
+            Vector3 targetPosition = followed.transform.position;
+            return (Sprint ? "Running after " : "Following ") + TargetPromptName + " at " + Whereabouts.FormatCoordinates(targetPosition) + " keeping " + Mathf.RoundToInt(Reach) + " m from it: " + Mathf.RoundToInt(Vector3.Distance(targetPosition, body.transform.position)) + " m away";
         }
     }
 }

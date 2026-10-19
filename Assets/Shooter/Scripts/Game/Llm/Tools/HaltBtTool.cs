@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private BtCustomOrderQueue customOrders;
+        private CustomOrderSlot customOrderSlot;
 
         public override string Name => "halt_bt";
 
@@ -17,20 +17,20 @@ namespace Shooter.Game
 
         protected override void OnStart()
         {
-            customOrders = Self.GetComponent<BtCustomOrderQueue>();
-            if (customOrders == null)
+            customOrderSlot = Self.GetComponent<CustomOrderSlot>();
+            if (customOrderSlot == null)
             {
-                Log.Error($"Entity {Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have CustomOrderSlot component required by tool {Name}");
             }
         }
 
         protected override string Execute(HaltBtArguments arguments, LlmCallContext context)
         {
-            BtCustomOrder current = customOrders.Current;
+            CustomOrder current = customOrderSlot.CurrentOrder;
             if (current == null) return "There is no active second-level action to stop";
 
-            string stopped = current.PromptDescription(Self);
-            customOrders.Clear();
+            string stopped = current.GetPromptDescription(Self);
+            customOrderSlot.ClearOrder();
             return $"Stopped: {stopped}";
         }
     }

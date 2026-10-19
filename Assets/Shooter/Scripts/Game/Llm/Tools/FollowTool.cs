@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private BtCustomOrderQueue customOrders;
+        private CustomOrderSlot customOrderSlot;
         private AgentMovement movement;
 
         public override string Name => "follow";
@@ -27,10 +27,10 @@ The result comes at once, the following itself goes on: you will be notified whe
 
         protected override void OnStart()
         {
-            customOrders = Self.GetComponent<BtCustomOrderQueue>();
-            if (customOrders == null)
+            customOrderSlot = Self.GetComponent<CustomOrderSlot>();
+            if (customOrderSlot == null)
             {
-                Log.Error($"Entity {Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have CustomOrderSlot component required by tool {Name}");
             }
             movement = Self.GetComponent<AgentMovement>();
             if (movement == null)
@@ -46,34 +46,34 @@ The result comes at once, the following itself goes on: you will be notified whe
             if (target.gameObject == Self) return "You cannot follow yourself";
             if (arguments.Distance < 0) return "distance cannot be negative";
 
-            var order = new BtCoFollow { TargetId = arguments.TargetId, Reach = arguments.Distance, Sprint = arguments.Sprint };
+            var order = new FollowOrder { TargetId = arguments.TargetId, Reach = arguments.Distance, Sprint = arguments.Sprint };
             Vector3 there = target.transform.position;
 
             if (!movement.TryPlanPathEnd(there, out Vector3 end))
             {
-                return $"There is no way from here to {order.Handle}";
+                return $"There is no way from here to {order.TargetPromptName}";
             }
 
             float rest = Vector3.Distance(end, there);
             if (rest > movement.ShortfallLimit)
             {
-                return $"There is no way from here to {order.Handle}: the nearest walkable ground is {rest:F0} m short of it";
+                return $"There is no way from here to {order.TargetPromptName}: the nearest walkable ground is {rest:F0} m short of it";
             }
 
-            string started = order.PromptDescription(Self);
+            string started = order.GetPromptDescription(Self);
 
             if (arguments.Force)
             {
-                BtCustomOrder dropped = customOrders.Current;
-                customOrders.ForcePut(order);
+                CustomOrder dropped = customOrderSlot.CurrentOrder;
+                customOrderSlot.ForcePutOrder(order);
                 return dropped == null
                     ? $"Started: {started}"
-                    : $"Dropped: {dropped.PromptDescription(Self)}\nStarted: {started}";
+                    : $"Dropped: {dropped.GetPromptDescription(Self)}\nStarted: {started}";
             }
 
-            if (customOrders.TryPut(order)) return $"Started: {started}";
+            if (customOrderSlot.TryPutOrder(order)) return $"Started: {started}";
 
-            return @$"Refused, another second-level action is active: {customOrders.Current.PromptDescription(Self)}
+            return @$"Refused, another second-level action is active: {customOrderSlot.CurrentOrder.GetPromptDescription(Self)}
 Call again with force=true to replace it, or halt_bt to stop it";
         }
     }

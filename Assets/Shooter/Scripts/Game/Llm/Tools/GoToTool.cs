@@ -10,7 +10,7 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
         private const float GroundReach = 5f;
 
-        private BtCustomOrderQueue customOrders;
+        private CustomOrderSlot customOrderSlot;
         private AgentMovement movement;
 
         public override string Name => "go_to";
@@ -28,10 +28,10 @@ The result comes at once, the walk itself takes time: you will be notified when 
 
         protected override void OnStart()
         {
-            customOrders = Self.GetComponent<BtCustomOrderQueue>();
-            if (customOrders == null)
+            customOrderSlot = Self.GetComponent<CustomOrderSlot>();
+            if (customOrderSlot == null)
             {
-                Log.Error($"Entity {Self.name} does not have BtCustomOrderQueue component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have CustomOrderSlot component required by tool {Name}");
             }
             movement = Self.GetComponent<AgentMovement>();
             if (movement == null)
@@ -66,22 +66,22 @@ The result comes at once, the walk itself takes time: you will be notified when 
                 return $"There is no way from here toward {point}: the walkable ground ends right here, {shortfall}";
             }
 
-            var order = new BtCoGoTo { Name = arguments.TaskName, Destination = ground, Sprint = arguments.Sprint };
-            string started = order.PromptDescription(Self);
+            var order = new GoToOrder { TaskName = arguments.TaskName, Destination = ground, Sprint = arguments.Sprint };
+            string started = order.GetPromptDescription(Self);
             if (shortfall.Length > 0) started += $"\nThe walkable ground ends {shortfall}";
 
             if (arguments.Force)
             {
-                BtCustomOrder dropped = customOrders.Current;
-                customOrders.ForcePut(order);
+                CustomOrder dropped = customOrderSlot.CurrentOrder;
+                customOrderSlot.ForcePutOrder(order);
                 return dropped == null
                     ? $"Started: {started}"
-                    : $"Dropped: {dropped.PromptDescription(Self)}\nStarted: {started}";
+                    : $"Dropped: {dropped.GetPromptDescription(Self)}\nStarted: {started}";
             }
 
-            if (customOrders.TryPut(order)) return $"Started: {started}";
+            if (customOrderSlot.TryPutOrder(order)) return $"Started: {started}";
 
-            return @$"Refused, another second-level action is active: {customOrders.Current.PromptDescription(Self)}
+            return @$"Refused, another second-level action is active: {customOrderSlot.CurrentOrder.GetPromptDescription(Self)}
 Call again with force=true to replace it, or halt_bt to stop it";
         }
     }

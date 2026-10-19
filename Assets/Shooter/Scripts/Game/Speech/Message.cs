@@ -32,12 +32,12 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            AuthorId = sd.AuthorId;
-            Content = sd.Content;
-            Time = sd.Time;
-            Spoken = sd.Spoken;
-            Urgent = sd.Urgent;
+            SaveData saveData = content.ToObject<SaveData>();
+            AuthorId = saveData.AuthorId;
+            Content = saveData.Content;
+            Time = saveData.Time;
+            Spoken = saveData.Spoken;
+            Urgent = saveData.Urgent;
         }
     }
 }

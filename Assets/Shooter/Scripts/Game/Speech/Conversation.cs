@@ -26,20 +26,23 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            First = sd.First;
-            Second = sd.Second;
+            SaveData saveData = content.ToObject<SaveData>();
+            First = saveData.First;
+            Second = saveData.Second;
             messages.Clear();
-            foreach (Message message in sd.Messages) messages.Add(message);
+            foreach (Message message in saveData.Messages)
+            {
+                messages.Add(message);
+            }
         }
 
         public Conversation()
         {
         }
 
-        public Conversation(long first, long second)
+        public Conversation(long firstId, long secondId)
         {
-            (First, Second) = Pair(first, second);
+            (First, Second) = CreateKey(firstId, secondId);
         }
 
         public long First { get; private set; }
@@ -50,12 +53,12 @@ namespace Shooter.Game
 
         public IReadOnlyList<Message> Messages => messages;
 
-        public long Partner(long participantId)
+        public long GetPartnerId(long participantId)
         {
             return participantId == First ? Second : First;
         }
 
-        public void Add(Message message)
+        public void AddMessage(Message message)
         {
             messages.Add(message);
         }
@@ -64,28 +67,29 @@ namespace Shooter.Game
         public int IndexOf(Message message)
         {
             for (int i = messages.Count - 1; i >= 0; i--)
-                if (ReferenceEquals(messages[i], message))
-                    return i;
+            {
+                if (ReferenceEquals(messages[i], message)) return i;
+            }
 
             return -1;
         }
 
-        public static (long, long) Pair(long first, long second)
+        public static (long, long) CreateKey(long firstId, long secondId)
         {
-            return first <= second ? (first, second) : (second, first);
+            return firstId <= secondId ? (firstId, secondId) : (secondId, firstId);
         }
 
-        public List<int> Matches(Regex regex)
+        public List<int> FindMatchingMessageIndexes(Regex regex)
         {
-            var result = new List<int>();
+            var indexes = new List<int>();
             for (int i = 0; i < messages.Count; i++)
             {
                 if (regex.IsMatch(messages[i].Content))
                 {
-                    result.Add(i);
+                    indexes.Add(i);
                 }
             }
-            return result;
+            return indexes;
         }
     }
 }

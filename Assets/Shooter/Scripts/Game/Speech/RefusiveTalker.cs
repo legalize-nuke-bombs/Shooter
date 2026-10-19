@@ -22,14 +22,14 @@ namespace Shooter.Game
             base.OnNetworkDespawn();
         }
 
-        protected override bool Busy()
+        protected override bool IsBusy()
         {
             return false;
         }
 
         private void Refuse(Conversation conversation, Message message)
         {
-            if (message.AuthorId == CharacterId || conversation.Partner(message.AuthorId) != CharacterId) return;
+            if (message.AuthorId == CharacterId || conversation.GetPartnerId(message.AuthorId) != CharacterId) return;
 
             Character author = Character.FindById(message.AuthorId, RegisterInactivePolicy.Include);
             if (author == null || !author.TryGetComponent(out Player _)) return;

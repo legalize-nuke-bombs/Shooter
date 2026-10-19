@@ -13,7 +13,7 @@ namespace Shooter.Game
             llm = GetComponent<Llm>();
         }
 
-        protected override bool Busy()
+        protected override bool IsBusy()
         {
             return llm.Busy;
         }

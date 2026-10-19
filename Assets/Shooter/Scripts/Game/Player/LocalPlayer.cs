@@ -51,8 +51,8 @@ namespace Shooter.Game
             {
                 if (!talking) return null;
                 if (radioPartner != null) return radioPartner;
-                if (playerMouth == null || playerMouth.Interlocutor == 0) return null;
-                if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(playerMouth.Interlocutor, out NetworkObject found))
+                if (playerMouth == null || playerMouth.TalkerNetworkObjectId == 0) return null;
+                if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(playerMouth.TalkerNetworkObjectId, out NetworkObject found))
                     return null;
 
                 Character partner = found.GetComponent<Character>();
@@ -148,8 +148,8 @@ namespace Shooter.Game
 
             if (playerMouth != null)
             {
-                playerMouth.Opened += OpenTalk;
-                playerMouth.Closed += CloseTalk;
+                playerMouth.TalkOpened += OpenTalk;
+                playerMouth.TalkClosed += CloseTalk;
             }
 
             Grab();
@@ -180,8 +180,8 @@ namespace Shooter.Game
 
             if (playerMouth != null)
             {
-                playerMouth.Opened -= OpenTalk;
-                playerMouth.Closed -= CloseTalk;
+                playerMouth.TalkOpened -= OpenTalk;
+                playerMouth.TalkClosed -= CloseTalk;
             }
 
             // Dispose destroys the asset with its maps still on, and the wrapper's finalizer asserts on that
