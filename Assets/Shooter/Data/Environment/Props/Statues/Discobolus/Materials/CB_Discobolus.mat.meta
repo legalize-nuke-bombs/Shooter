@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d3f19b30dd5655f4cbcf185f4a61f396
+timeCreated: 1513668813
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 107544
+  packageName: Discobolus Statue
+  packageVersion: 1.0
+  assetPath: Assets/ChamferBox Assets/CB Discobolus Statue/Materials/CB_Discobolus.mat
+  uploadId: 225090
