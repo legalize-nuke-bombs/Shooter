@@ -7,31 +7,31 @@ namespace Shooter.Infrastructure
 {
     public static class NetworkSpawner
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        public static GameObject Spawn(GameObject prefab, Action<GameObject> beforeNetworkSpawn)
+        public static GameObject InstantiateAndSpawn(GameObject prefab, Action<GameObject> beforeNetworkSpawn)
         {
-            return Spawn(prefab, Vector3.zero, Quaternion.identity, null, beforeNetworkSpawn);
+            return InstantiateAndSpawn(prefab, Vector3.zero, Quaternion.identity, null, beforeNetworkSpawn);
         }
 
-        public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
+        public static GameObject InstantiateAndSpawn(GameObject prefab, Vector3 position, Quaternion rotation)
         {
-            return Spawn(prefab, position, rotation, null, null);
+            return InstantiateAndSpawn(prefab, position, rotation, null, null);
         }
 
-        public static GameObject Spawn(GameObject prefab, Transform parent)
+        public static GameObject InstantiateAndSpawn(GameObject prefab, Transform parent)
         {
-            return Spawn(prefab, Vector3.zero, Quaternion.identity, parent, null);
+            return InstantiateAndSpawn(prefab, Vector3.zero, Quaternion.identity, parent, null);
         }
 
-        private static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent, Action<GameObject> beforeNetworkSpawn)
+        private static GameObject InstantiateAndSpawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent, Action<GameObject> beforeNetworkSpawn)
         {
             Log.Info($"Spawning {prefab.name} at {position} with parent {(parent != null ? parent.name : "None")}...");
 
             NetworkObject parentNetworkObject = null;
             if (parent != null)
             {
-                parentNetworkObject = SpawnedNetworkObjectOn(parent);
+                parentNetworkObject = GetSpawnedNetworkObjectOn(parent);
                 if (parentNetworkObject == null)
                 {
                     Log.Error($"Parent {parent.name} does not have a spawned network object, {prefab.name} is not spawned");
@@ -62,7 +62,7 @@ namespace Shooter.Infrastructure
             return instance;
         }
 
-        private static NetworkObject SpawnedNetworkObjectOn(Transform parent)
+        private static NetworkObject GetSpawnedNetworkObjectOn(Transform parent)
         {
             NetworkObject networkObject = parent.GetComponent<NetworkObject>();
             return networkObject != null && networkObject.IsSpawned ? networkObject : null;

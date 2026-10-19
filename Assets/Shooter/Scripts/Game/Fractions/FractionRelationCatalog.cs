@@ -8,7 +8,7 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Fraction Relation Catalog", fileName = "FractionRelationCatalog")]
     public class FractionRelationCatalog : Catalog<FractionRelation>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly Dictionary<string, int> byFractions = new Dictionary<string, int>();
 
@@ -21,7 +21,7 @@ namespace Shooter.Game
 
             for (int i = 0; i < Count; i++)
             {
-                FractionRelation fractionRelation = At(i);
+                FractionRelation fractionRelation = GetAssetAt(i);
                 string key = KeyOf(fractionRelation.Fraction1.Id, fractionRelation.Fraction2.Id);
                 if (!byFractions.TryAdd(key, fractionRelation.DefaultAmount))
                 {

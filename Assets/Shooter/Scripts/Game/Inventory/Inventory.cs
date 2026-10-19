@@ -8,7 +8,7 @@ namespace Shooter.Game
     public class Inventory : NetworkBehaviour, IDigestible, ISaveableComponent
     {
         public const int NoSlot = -1;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly NetworkList<int> stackAmounts = new(null, NetworkVariableReadPermission.Owner);
 
@@ -27,14 +27,14 @@ namespace Shooter.Game
         }
         public object SaveObject()
         {
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
 
             var stacks = new Dictionary<string, int>();
             for (int index = 0; index < stackAmounts.Count; index++)
             {
                 if (stackAmounts[index] == 0) continue;
 
-                stacks[catalog.At(index).Id] = stackAmounts[index];
+                stacks[catalog.GetAssetAt(index).Id] = stackAmounts[index];
             }
 
             var saved = new List<SlotData>();
@@ -51,7 +51,7 @@ namespace Shooter.Game
                 saved.Add(new SlotData
                 {
                     AssetId = item.AssetId,
-                    State = state == null ? default : SaveToken.From(state)
+                    State = state == null ? default : SaveToken.FromObject(state)
                 });
             }
 
@@ -59,8 +59,8 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            SaveData sd = content.ToObject<SaveData>();
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
 
             Clear();
 
@@ -87,7 +87,7 @@ namespace Shooter.Game
                 }
 
                 UniqueItem item = asset.Create();
-                if (!saved.State.Empty) item.LoadObject(saved.State);
+                if (!saved.State.IsEmpty) item.LoadObject(saved.State);
 
                 slots.Put(slot, item);
             }
@@ -101,14 +101,14 @@ namespace Shooter.Game
         {
             if (detail != DigestionDetail.Full) return null;
 
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
             var lines = new List<string>();
 
             for (int index = 0; index < stackAmounts.Count; index++)
             {
                 if (stackAmounts[index] == 0) continue;
 
-                lines.Add($"{catalog.At(index).Id} x {stackAmounts[index]}");
+                lines.Add($"{catalog.GetAssetAt(index).Id} x {stackAmounts[index]}");
             }
 
             for (int slot = 0; slot < slots.All.Count; slot++)
@@ -131,7 +131,7 @@ namespace Shooter.Game
 
             if (!IsServer) return;
 
-            for (int index = 0; index < Catalogs.Of<ItemCatalog>().Count; index++)
+            for (int index = 0; index < Catalogs.GetCatalog<ItemCatalog>().Count; index++)
             {
                 stackAmounts.Add(0);
             }
@@ -145,7 +145,7 @@ namespace Shooter.Game
 
         public int Count(StackableItemAsset asset)
         {
-            int index = Catalogs.Of<ItemCatalog>().Index(asset);
+            int index = Catalogs.GetCatalog<ItemCatalog>().IndexOf(asset);
 
             return index < 0 || index >= stackAmounts.Count ? 0 : stackAmounts[index];
         }
@@ -154,7 +154,7 @@ namespace Shooter.Game
         {
             if (amount <= 0) return;
 
-            int index = Catalogs.Of<ItemCatalog>().Index(asset);
+            int index = Catalogs.GetCatalog<ItemCatalog>().IndexOf(asset);
             if (index < 0)
             {
                 Log.Error($"Entity {name} can not take {asset.Id}: the world catalog does not know it");
@@ -169,7 +169,7 @@ namespace Shooter.Game
         {
             if (amount <= 0) return 0;
 
-            int index = Catalogs.Of<ItemCatalog>().Index(asset);
+            int index = Catalogs.GetCatalog<ItemCatalog>().IndexOf(asset);
             if (index < 0) return 0;
 
             int available = stackAmounts[index];
@@ -209,13 +209,13 @@ namespace Shooter.Game
 
         public void DrainInto(Inventory target)
         {
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
 
             for (int index = 0; index < stackAmounts.Count; index++)
             {
                 if (stackAmounts[index] == 0) continue;
 
-                target.Add((StackableItemAsset)catalog.At(index), stackAmounts[index]);
+                target.Add((StackableItemAsset)catalog.GetAssetAt(index), stackAmounts[index]);
             }
 
             foreach (UniqueItem item in slots.All)

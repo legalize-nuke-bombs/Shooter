@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         private const float Damping = 0.5f;
         private const float AngularDamping = 1f;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private void Start()
         {

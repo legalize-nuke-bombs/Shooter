@@ -5,15 +5,15 @@ namespace Shooter.Infrastructure
 {
     public class ZipManager : CompressionManager
     {
-        protected override void CompressRaw(string path)
+        protected override void CompressFolderRaw(string folderPath)
         {
-            ZipFile.CreateFromDirectory(path, path + Extension);
+            ZipFile.CreateFromDirectory(folderPath, folderPath + Extension);
         }
 
-        protected override byte[] ReadRaw(string location, string file)
+        protected override byte[] ReadFileRaw(string archivePath, string fileName)
         {
-            using ZipArchive zip = ZipFile.OpenRead(location);
-            ZipArchiveEntry entry = zip.GetEntry(file);
+            using ZipArchive archive = ZipFile.OpenRead(archivePath);
+            ZipArchiveEntry entry = archive.GetEntry(fileName);
             if (entry == null) return null;
 
             using Stream stream = entry.Open();

@@ -62,7 +62,7 @@ namespace Shooter.Game
             var firearm = holder.Held as Firearm;
             if (firearm == null || firearm.Magazine <= 0) return;
 
-            FirearmAsset asset = Catalogs.Of<ItemCatalog>().Firearm(firearm.AssetId);
+            FirearmAsset asset = Catalogs.GetCatalog<ItemCatalog>().Firearm(firearm.AssetId);
             if (asset == null) return;
             if (sustained && asset.FireMode != FireMode.Auto) return;
 

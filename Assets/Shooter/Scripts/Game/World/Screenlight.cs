@@ -6,7 +6,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Screenlight : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static readonly int Emissive = Shader.PropertyToID("_EmissiveColorMap");
 

@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public class ClearHeadTool : LlmTool<ClearHeadArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private LlmHistory history;
         private LlmNotes notes;

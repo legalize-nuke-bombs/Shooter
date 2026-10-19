@@ -15,7 +15,7 @@ namespace Shooter.Game
         private const string PageClass = "screen";
         private const int MenuFrameRate = 60;
         private const int UnlimitedFrameRate = -1;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private VisualTreeAsset mainPage;
         [SerializeField] private VisualTreeAsset newGamePage;
@@ -81,7 +81,7 @@ namespace Shooter.Game
         protected override bool Bind(VisualElement root)
         {
             PortConverters.Register();
-            root.dataSource = Config.Read();
+            root.dataSource = Config.GetGameConfig();
 
             panel = root.Q<VisualElement>(PanelElement);
             Label version = root.Q<Label>(VersionElement);
@@ -136,16 +136,16 @@ namespace Shooter.Game
 
             pages.Push(main);
 
-            if (networkStarter.Failure != null)
+            if (networkStarter.StartFailureToShow != null)
             {
-                warnTitle = networkStarter.Failure.Title;
-                warnDetails = networkStarter.Failure.Details;
-                networkStarter.Failure = null;
+                warnTitle = networkStarter.StartFailureToShow.Title;
+                warnDetails = networkStarter.StartFailureToShow.Details;
+                networkStarter.StartFailureToShow = null;
             }
 
             ShowWarning();
 
-            if (Config.Read().Account == null) GenerateKey();
+            if (Config.GetGameConfig().Account == null) GenerateKey();
 
             Log.Info("Menu is up");
             return true;
@@ -165,9 +165,9 @@ namespace Shooter.Game
             dialog.Busy("Создание аккаунта...", "Пожалуйста, подождите. Может занять несколько секунд");
             try
             {
-                Account account = await Task.Run(() => Account.Generate());
-                Config.Read().Account = account;
-                Config.Save();
+                Account account = await Task.Run(() => Account.CreateWithGeneratedKeys());
+                Config.GetGameConfig().Account = account;
+                Config.SaveGameConfig();
                 Log.Info("Account key generated");
             }
             catch (Exception e)
@@ -249,7 +249,7 @@ namespace Shooter.Game
         {
             if (save != null) Log.Info($"The player continues the game saved at {save}");
             loadingScreenOverlay.ShowStage(LoadingScreenStage.Server);
-            NetworkStartFailure failure = networkStarter.Host(save);
+            NetworkStartFailure failure = networkStarter.HostWorld(save);
             if (failure == null) return;
 
             loadingScreenOverlay.Hide();
@@ -259,7 +259,7 @@ namespace Shooter.Game
         private void Connect()
         {
             Log.Info("The player joins a game of someone else");
-            NetworkStartFailure failure = networkStarter.Join();
+            NetworkStartFailure failure = networkStarter.JoinWorldByInvite();
             if (failure != null)
             {
                 Warn(failure.Title, failure.Details);

@@ -8,7 +8,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class SayToWandererTool : LlmTool<SayToWandererArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private ConversationManager conversationManager;
         private Character ownCharacter;
@@ -20,7 +20,7 @@ namespace Shooter.Game
 
         protected override void OnStart()
         {
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

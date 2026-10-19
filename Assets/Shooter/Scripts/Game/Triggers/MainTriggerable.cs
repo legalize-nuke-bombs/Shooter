@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class MainTriggerable : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private ITriggerable[] triggerables;
 

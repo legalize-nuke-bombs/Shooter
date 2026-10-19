@@ -10,7 +10,7 @@ namespace Shooter.Game
     [Serializable]
     public class ListConversationsTool : LlmTool<ListConversationsArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private ConversationManager conversationManager;
         private Character ownCharacter;
@@ -25,7 +25,7 @@ To see the content, use read_conversation.
 
         protected override void OnStart()
         {
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

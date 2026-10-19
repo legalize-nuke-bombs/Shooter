@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private const string ConnectButton = "connect";
         private const string BackButton = "back";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         public ClientPage(VisualElement root) : base(root)
         {
@@ -22,9 +22,9 @@ namespace Shooter.Game
 
         protected override void Closed()
         {
-            Config.Save();
+            Config.SaveGameConfig();
 
-            ClientConfig client = Config.Read().Client;
+            ClientConfig client = Config.GetGameConfig().Client;
             Log.Info($"Joining under the name {client.Name}");
         }
     }

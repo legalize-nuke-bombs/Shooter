@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Health))]
     public class LlmConversationObserver : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Character character;
         private ConversationManager conversationManager;
@@ -20,7 +20,7 @@ namespace Shooter.Game
         private void Awake()
         {
             character = GetComponent<Character>();
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             health = GetComponent<Health>();
             llm = GetComponent<Llm>();
             enabled = NetworkManager.Singleton.IsServer;

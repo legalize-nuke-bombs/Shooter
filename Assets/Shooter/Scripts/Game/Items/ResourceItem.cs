@@ -10,7 +10,7 @@ namespace Shooter.Game
     {
         private const double SecondsPerHour = 3600.0;
 
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Clock clock;
         private GameObject body;
@@ -38,14 +38,14 @@ namespace Shooter.Game
         public void LoadObject(SaveToken content)
         {
             // The world is frozen while it loads, so a body saved alive is grown by the first Update after the thaw
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             alive = false;
             takenAt = sd.Alive ? null : sd.TakenAt;
         }
 
         private void Awake()
         {
-            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
             enabled = NetworkManager.Singleton.IsServer;
         }
 
@@ -66,7 +66,7 @@ namespace Shooter.Game
                 Log.Info($"Entity {name} is spawning its body");
                 if (body == null)
                 {
-                    body = NetworkSpawner.Spawn(bodyPrefab.gameObject, transform);
+                    body = NetworkSpawner.InstantiateAndSpawn(bodyPrefab.gameObject, transform);
                 }
                 if (body == null)
                 {

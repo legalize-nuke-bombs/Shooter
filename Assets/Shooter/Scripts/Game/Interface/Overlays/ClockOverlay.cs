@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         private const string ClockElement = "clock";
         private const long Hidden = long.MinValue;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Clock clock;
         private Label clockLabel;
@@ -17,7 +17,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
         }
 
         private void Update()

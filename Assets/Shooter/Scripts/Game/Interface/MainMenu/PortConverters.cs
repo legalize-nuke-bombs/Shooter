@@ -7,7 +7,7 @@ namespace Shooter.Game
     internal static class PortConverters
     {
         private const ushort FallbackPort = 7777;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
         private static bool registered;
 
         public static void Register()

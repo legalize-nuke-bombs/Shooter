@@ -6,12 +6,12 @@ namespace Shooter.Game
 {
     public class MainSpawnPoint : ShooterBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         // A map may hold none or several: none is worth a warning, several are so many ways in
         public static MainSpawnPoint Pick()
         {
-            var placed = new List<MainSpawnPoint>(Registers.Of<MainSpawnPoint>(RegisterInactivePolicy.Exclude));
+            var placed = new List<MainSpawnPoint>(Registers.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude));
 
             if (placed.Count == 0)
             {

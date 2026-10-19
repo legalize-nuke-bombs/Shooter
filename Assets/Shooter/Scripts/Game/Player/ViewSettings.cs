@@ -14,7 +14,7 @@ namespace Shooter.Game
         private const uint DlssBalanced = 1;
         private const uint DlssQuality = 2;
         private const uint Dlaa = 4;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Camera view;
         private HDAdditionalCameraData data;
@@ -28,7 +28,7 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            client = Config.Read().Client;
+            client = Config.GetGameConfig().Client;
             client.propertyChanged += Changed;
             Apply();
         }

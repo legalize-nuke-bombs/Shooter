@@ -9,7 +9,7 @@ namespace Shooter.Game
         private const string BackButton = "back";
         private const string AntialiasingField = "antialiasing";
         private const string UpscalerField = "upscaler";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         public ClientSettingsPage(VisualElement root) : base(root)
         {
@@ -24,7 +24,7 @@ namespace Shooter.Game
 
         protected override void Opened()
         {
-            client = Config.Read().Client;
+            client = Config.GetGameConfig().Client;
             client.propertyChanged += Changed;
             Follow();
         }
@@ -45,9 +45,9 @@ namespace Shooter.Game
         protected override void Closed()
         {
             if (client != null) client.propertyChanged -= Changed;
-            Config.Save();
+            Config.SaveGameConfig();
 
-            ClientConfig saved = Config.Read().Client;
+            ClientConfig saved = Config.GetGameConfig().Client;
             Log.Info(
                 $"Client settings: master {saved.Master:0.00}, music {saved.Music:0.00}, ambience {saved.Ambience:0.00}, sounds {saved.Sounds:0.00}, antialiasing {saved.Antialiasing}, upscaler {saved.Upscaler}");
         }

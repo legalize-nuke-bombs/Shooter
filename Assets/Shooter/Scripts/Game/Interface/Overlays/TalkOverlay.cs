@@ -16,7 +16,7 @@ namespace Shooter.Game
         private const string GiveElement = "talk-give";
         private const string Stranger = "Незнакомец";
         private const string Radio = "рация";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private float charInterval = 0.01f;
 

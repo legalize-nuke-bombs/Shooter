@@ -12,7 +12,7 @@ namespace Shooter.Game
     public class SearchConversationsTool : LlmTool<SearchConversationsArguments>
     {
         private const int MatchLimit = 20;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private ConversationManager conversationManager;
         private Character ownCharacter;
@@ -29,7 +29,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
 
         protected override void OnStart()
         {
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

@@ -32,7 +32,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             AuthorId = sd.AuthorId;
             Content = sd.Content;
             Time = sd.Time;

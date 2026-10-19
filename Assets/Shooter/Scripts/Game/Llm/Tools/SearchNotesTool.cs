@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public class SearchNotesTool : LlmTool<SearchNotesArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private LlmNotes notes;
 

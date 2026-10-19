@@ -22,82 +22,82 @@ namespace Shooter.Infrastructure
         private static readonly DateTime NotBefore = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private static readonly DateTime NotAfter = new(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        private readonly AsymmetricCipherKeyPair keys;
+        private readonly AsymmetricCipherKeyPair keyPair;
 
         private string certificate;
         private string privateKeyPem;
 
-        private Account(AsymmetricCipherKeyPair keys)
+        private Account(AsymmetricCipherKeyPair keyPair)
         {
-            this.keys = keys;
+            this.keyPair = keyPair;
         }
 
-        public static Account Generate()
+        public static Account CreateWithGeneratedKeys()
         {
-            RsaKeyPairGenerator generator = new();
-            generator.Init(new KeyGenerationParameters(new SecureRandom(), KeyBits));
-            return new Account(generator.GenerateKeyPair());
+            RsaKeyPairGenerator keyPairGenerator = new();
+            keyPairGenerator.Init(new KeyGenerationParameters(new SecureRandom(), KeyBits));
+            return new Account(keyPairGenerator.GenerateKeyPair());
         }
 
-        public static Account FromPrivateKey(string secret)
+        public static Account FromPrivateKey(string privateKey)
         {
-            RsaPrivateCrtKeyParameters privateKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(secret));
-            RsaKeyParameters publicKey = new(false, privateKey.Modulus, privateKey.PublicExponent);
-            return new Account(new AsymmetricCipherKeyPair(publicKey, privateKey));
+            RsaPrivateCrtKeyParameters privateKeyParameters = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
+            RsaKeyParameters publicKeyParameters = new(false, privateKeyParameters.Modulus, privateKeyParameters.PublicExponent);
+            return new Account(new AsymmetricCipherKeyPair(publicKeyParameters, privateKeyParameters));
         }
 
-        public string PrivateKey => Convert.ToBase64String(PrivateKeyInfoFactory.CreatePrivateKeyInfo(keys.Private).GetDerEncoded());
+        public string PrivateKey => Convert.ToBase64String(PrivateKeyInfoFactory.CreatePrivateKeyInfo(keyPair.Private).GetDerEncoded());
 
-        public string PublicKey => Convert.ToBase64String(SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keys.Public).GetDerEncoded());
+        public string PublicKey => Convert.ToBase64String(SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public).GetDerEncoded());
 
         public string Certificate => certificate ??= BuildCertificate();
 
-        public string PrivateKeyPem => privateKeyPem ??= Pem(keys.Private);
+        public string PrivateKeyPem => privateKeyPem ??= EncodeAsPem(keyPair.Private);
 
-        public byte[] Sign(string context, byte[] data)
+        public byte[] SignData(string context, byte[] data)
         {
-            byte[] message = BoundToContext(context, data);
+            byte[] message = BindToContext(context, data);
             ISigner signer = SignerUtilities.GetSigner(SignatureAlgorithm);
-            signer.Init(true, keys.Private);
+            signer.Init(true, keyPair.Private);
             signer.BlockUpdate(message, 0, message.Length);
             return signer.GenerateSignature();
         }
 
-        public static bool Verify(string publicKey, string context, byte[] data, byte[] signature)
+        public static bool IsSignatureValid(string publicKey, string context, byte[] data, byte[] signature)
         {
             AsymmetricKeyParameter verifyingKey = PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKey));
-            byte[] message = BoundToContext(context, data);
+            byte[] message = BindToContext(context, data);
             ISigner verifier = SignerUtilities.GetSigner(SignatureAlgorithm);
             verifier.Init(false, verifyingKey);
             verifier.BlockUpdate(message, 0, message.Length);
             return verifier.VerifySignature(signature);
         }
 
-        private static byte[] BoundToContext(string context, byte[] data)
+        private static byte[] BindToContext(string context, byte[] data)
         {
-            byte[] tag = Encoding.UTF8.GetBytes(context);
-            byte[] message = new byte[tag.Length + 1 + data.Length];
-            Buffer.BlockCopy(tag, 0, message, 0, tag.Length);
-            message[tag.Length] = 0x00;
-            Buffer.BlockCopy(data, 0, message, tag.Length + 1, data.Length);
+            byte[] contextBytes = Encoding.UTF8.GetBytes(context);
+            byte[] message = new byte[contextBytes.Length + 1 + data.Length];
+            Buffer.BlockCopy(contextBytes, 0, message, 0, contextBytes.Length);
+            message[contextBytes.Length] = 0x00;
+            Buffer.BlockCopy(data, 0, message, contextBytes.Length + 1, data.Length);
             return message;
         }
 
         private string BuildCertificate()
         {
-            X509Name name = new("CN=" + CommonName);
-            X509V3CertificateGenerator generator = new();
-            generator.SetSerialNumber(BigInteger.One);
-            generator.SetIssuerDN(name);
-            generator.SetSubjectDN(name);
-            generator.SetNotBefore(NotBefore);
-            generator.SetNotAfter(NotAfter);
-            generator.SetPublicKey(keys.Public);
-            Asn1SignatureFactory signature = new(SignatureAlgorithm, keys.Private);
-            return Pem(generator.Generate(signature));
+            X509Name distinguishedName = new("CN=" + CommonName);
+            X509V3CertificateGenerator certificateGenerator = new();
+            certificateGenerator.SetSerialNumber(BigInteger.One);
+            certificateGenerator.SetIssuerDN(distinguishedName);
+            certificateGenerator.SetSubjectDN(distinguishedName);
+            certificateGenerator.SetNotBefore(NotBefore);
+            certificateGenerator.SetNotAfter(NotAfter);
+            certificateGenerator.SetPublicKey(keyPair.Public);
+            Asn1SignatureFactory signatureFactory = new(SignatureAlgorithm, keyPair.Private);
+            return EncodeAsPem(certificateGenerator.Generate(signatureFactory));
         }
 
-        private static string Pem(object subject)
+        private static string EncodeAsPem(object subject)
         {
             using StringWriter writer = new();
             new PemWriter(writer).WriteObject(subject);

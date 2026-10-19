@@ -24,7 +24,7 @@ namespace Shooter.Game
 
         public void LoadObject(SaveToken content)
         {
-            PublicKey = content.To<SaveData>().PublicKey;
+            PublicKey = content.ToObject<SaveData>().PublicKey;
         }
 
         protected override void ShooterAwake()
@@ -36,7 +36,7 @@ namespace Shooter.Game
 
         public static Player Of(long id, RegisterInactivePolicy gate)
         {
-            foreach (Player player in Registers.Of<Player>(gate))
+            foreach (Player player in Registers.GetAll<Player>(gate))
             {
                 if (player.Id == id)
                 {
@@ -48,7 +48,7 @@ namespace Shooter.Game
 
         public static Player OfKey(string publicKey, RegisterInactivePolicy gate)
         {
-            foreach (Player player in Registers.Of<Player>(gate))
+            foreach (Player player in Registers.GetAll<Player>(gate))
             {
                 if (player.PublicKey == publicKey)
                 {

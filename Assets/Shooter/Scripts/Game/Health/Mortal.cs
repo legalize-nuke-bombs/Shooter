@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(SpawnPoint))]
     public class Mortal : NetworkBehaviour, IMortal
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private GameObject corpsePrefab;
 
@@ -66,7 +66,7 @@ namespace Shooter.Game
                 return;
             }
 
-            GameObject body = NetworkSpawner.Spawn(prefab, transform.position, transform.rotation);
+            GameObject body = NetworkSpawner.InstantiateAndSpawn(prefab, transform.position, transform.rotation);
             if (body == null)
             {
                 Log.Error($"Entity {name} failed to spawn corpse");

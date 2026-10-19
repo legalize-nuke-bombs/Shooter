@@ -19,7 +19,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
             enabled = false;
         }
 

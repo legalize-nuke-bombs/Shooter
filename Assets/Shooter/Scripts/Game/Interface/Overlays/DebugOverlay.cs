@@ -20,7 +20,7 @@ namespace Shooter.Game
         private const float ReportSeconds = 60f;
         private const float Megabyte = 1024f * 1024f;
         private const string Unavailable = "—";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static readonly (ProfilerCategory Category, string Name)[] Counters =
         {
@@ -48,7 +48,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            hostVersion = Registers.Of<HostVersion>(RegisterInactivePolicy.Include).Single();
+            hostVersion = Registers.GetAll<HostVersion>(RegisterInactivePolicy.Include).Single();
         }
 
         private void Update()

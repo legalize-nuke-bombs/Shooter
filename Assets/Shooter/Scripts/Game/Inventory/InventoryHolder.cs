@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Inventory))]
     public class InventoryHolder : NetworkBehaviour, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly NetworkVariable<int> heldSlot = new(Inventory.NoSlot);
 
@@ -25,7 +25,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            Hold(content.To<SaveData>().Slot);
+            Hold(content.ToObject<SaveData>().Slot);
         }
 
         public int Slot => heldSlot.Value;
@@ -38,7 +38,7 @@ namespace Shooter.Game
             {
                 UniqueItem item = Held;
 
-                return item == null ? null : (UniqueItemAsset)Catalogs.Of<ItemCatalog>().Asset(item.AssetId);
+                return item == null ? null : (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().Asset(item.AssetId);
             }
         }
 
@@ -99,7 +99,7 @@ namespace Shooter.Game
                 return;
             }
 
-            var asset = (UniqueItemAsset)Catalogs.Of<ItemCatalog>().Asset(item.AssetId);
+            var asset = (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().Asset(item.AssetId);
             if (!asset.Equipable)
             {
                 Log.Info($"Entity {name} can not put {item.AssetId} in hands");

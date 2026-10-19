@@ -8,7 +8,7 @@ namespace Shooter.Game
     [Serializable]
     public class ReadNotesTool : LlmTool<ReadNotesArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private LlmNotes notes;
 

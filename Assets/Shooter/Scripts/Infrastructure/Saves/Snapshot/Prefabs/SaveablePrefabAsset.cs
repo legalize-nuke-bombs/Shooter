@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
     [CreateAssetMenu(menuName = "Shooter-saves/Saveable Prefab", fileName = "SaveablePrefab")]
     public class SaveablePrefabAsset : Asset
     {
-        [SerializeField] private UnityEngine.GameObject prefab;
+        [SerializeField] private GameObject prefab;
 
-        public UnityEngine.GameObject Prefab => prefab;
+        public GameObject Prefab => prefab;
     }
 }

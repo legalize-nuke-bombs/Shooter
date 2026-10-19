@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     public class Switch : NetworkBehaviour, IUsable, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static readonly int Emissive = Shader.PropertyToID("_EmissiveColor");
 
@@ -39,7 +39,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             shining.Value = sd.Shining;
         }
 

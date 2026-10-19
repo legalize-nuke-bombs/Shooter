@@ -11,7 +11,7 @@ namespace Shooter.Game
         private const string ListElement = "radio-list";
         private const string EmptyElement = "radio-empty";
         private const string Stranger = "Незнакомец";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly NameMapper mapper = new();
         private PlayerConversations conversations;

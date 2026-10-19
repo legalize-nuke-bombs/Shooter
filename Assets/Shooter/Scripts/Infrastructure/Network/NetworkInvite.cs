@@ -13,14 +13,14 @@ namespace Shooter.Infrastructure
             public string Certificate { get; set; }
         }
 
-        public static string Encode(string address, ushort port, string certificate)
+        public static string EncodeInviteCode(string address, ushort port, string certificate)
         {
             Payload payload = new() { Address = address, Port = port, Certificate = certificate };
             string json = JsonConvert.SerializeObject(payload);
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
         }
 
-        public static bool TryDecode(string code, out string address, out ushort port, out string certificate)
+        public static bool TryDecodeInviteCode(string inviteCode, out string address, out ushort port, out string certificate)
         {
             address = null;
             port = 0;
@@ -28,7 +28,7 @@ namespace Shooter.Infrastructure
 
             try
             {
-                string json = Encoding.UTF8.GetString(Convert.FromBase64String(code.Trim()));
+                string json = Encoding.UTF8.GetString(Convert.FromBase64String(inviteCode.Trim()));
                 Payload payload = JsonConvert.DeserializeObject<Payload>(json);
                 if (string.IsNullOrEmpty(payload.Address) || string.IsNullOrEmpty(payload.Certificate)) return false;
 

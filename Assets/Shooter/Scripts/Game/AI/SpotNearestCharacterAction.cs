@@ -44,7 +44,7 @@ namespace Shooter.Game
             float nearestCharacter = Radius.Value * Radius.Value;
             Character spottedCharacter = null;
 
-            foreach (Character targetCharacter in Registers.Of<Character>(RegisterInactivePolicy.Exclude))
+            foreach (Character targetCharacter in Registers.GetAll<Character>(RegisterInactivePolicy.Exclude))
             {
                 if (targetCharacter == self) continue;
                 if (targetCharacter.TryGetComponent(out Health health) && !health.Alive) continue;

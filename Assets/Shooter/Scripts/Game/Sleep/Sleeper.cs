@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private SoundAsset bedding;
 
@@ -34,7 +34,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             bedside.Value = sd.Bedside;
             sleeping.Value = sd.Sleeping;
         }
@@ -45,7 +45,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            sleepCycle = Registers.Of<SleepCycle>(RegisterInactivePolicy.Include).Single();
+            sleepCycle = Registers.GetAll<SleepCycle>(RegisterInactivePolicy.Include).Single();
             spawnPoint = GetComponent<SpawnPoint>();
             speaker = GetComponent<Speaker>();
         }

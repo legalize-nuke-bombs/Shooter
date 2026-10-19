@@ -19,11 +19,10 @@ namespace Shooter.Infrastructure
             writer.WriteEndObject();
         }
 
-        public override Vector3 ReadJson(JsonReader reader, Type objectType, Vector3 existingValue,
-            bool hasExistingValue, JsonSerializer serializer)
+        public override Vector3 ReadJson(JsonReader reader, Type objectType, Vector3 existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            JObject properties = JObject.Load(reader);
-            return new Vector3((float)properties["X"], (float)properties["Y"], (float)properties["Z"]);
+            JObject jsonObject = JObject.Load(reader);
+            return new Vector3((float)jsonObject["X"], (float)jsonObject["Y"], (float)jsonObject["Z"]);
         }
     }
 }

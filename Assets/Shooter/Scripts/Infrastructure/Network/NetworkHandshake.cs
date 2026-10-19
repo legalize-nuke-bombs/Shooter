@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public static class NetworkHandshake
     {
-        private const string Context = "join";
+        private const string SignatureContext = "join";
 
         private struct Payload
         {
@@ -15,30 +15,30 @@ namespace Shooter.Infrastructure
             public byte[] Signature { get; set; }
         }
 
-        public static byte[] Encode(string name, Account account, string certificate)
+        public static byte[] EncodeConnectionData(string playerName, Account account, string certificate)
         {
             Payload payload = new()
             {
-                Name = name,
+                Name = playerName,
                 PublicKey = account.PublicKey,
-                Signature = account.Sign(Context, Challenge(certificate))
+                Signature = account.SignData(SignatureContext, GetChallengeBytes(certificate))
             };
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload));
         }
 
-        public static bool TryDecode(byte[] data, string certificate, out string name, out string publicKey)
+        public static bool TryDecodeConnectionData(byte[] connectionData, string certificate, out string playerName, out string publicKey)
         {
-            name = null;
+            playerName = null;
             publicKey = null;
-            if (data == null || data.Length == 0) return false;
+            if (connectionData == null || connectionData.Length == 0) return false;
 
             try
             {
-                Payload payload = JsonConvert.DeserializeObject<Payload>(Encoding.UTF8.GetString(data));
+                Payload payload = JsonConvert.DeserializeObject<Payload>(Encoding.UTF8.GetString(connectionData));
                 if (string.IsNullOrEmpty(payload.PublicKey) || payload.Signature == null) return false;
-                if (!Account.Verify(payload.PublicKey, Context, Challenge(certificate), payload.Signature)) return false;
+                if (!Account.IsSignatureValid(payload.PublicKey, SignatureContext, GetChallengeBytes(certificate), payload.Signature)) return false;
 
-                name = payload.Name ?? "";
+                playerName = payload.Name ?? "";
                 publicKey = payload.PublicKey;
                 return true;
             }
@@ -48,7 +48,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        private static byte[] Challenge(string certificate)
+        private static byte[] GetChallengeBytes(string certificate)
         {
             return Encoding.UTF8.GetBytes(certificate);
         }

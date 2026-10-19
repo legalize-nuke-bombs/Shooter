@@ -14,7 +14,7 @@ namespace Shooter.Game
         private const string StatusElement = "invite-status";
         private const string Copied = "Ссылка скопирована";
         private const string NoAddress = "Впишите адрес";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private TextField address;
         private Button back;
@@ -69,7 +69,7 @@ namespace Shooter.Game
 
         private void Show()
         {
-            port.value = Config.Read().Server.Port.ToString();
+            port.value = Config.GetGameConfig().Server.Port.ToString();
             status.text = "";
             window.style.display = DisplayStyle.Flex;
         }
@@ -89,9 +89,9 @@ namespace Shooter.Game
             }
 
             if (!ushort.TryParse(port.value, out ushort chosen))
-                chosen = Config.Read().Server.Port;
+                chosen = Config.GetGameConfig().Server.Port;
 
-            string code = NetworkInvite.Encode(host, chosen, Config.Account.Certificate);
+            string code = NetworkInvite.EncodeInviteCode(host, chosen, Config.Account.Certificate);
             GUIUtility.systemCopyBuffer = code;
             status.text = Copied;
             Log.Info($"Invite link copied for {host}:{chosen}");

@@ -13,7 +13,7 @@ namespace Shooter.Game
     {
         public const float TalkReach = 8f;
         public const int SpeechLimit = 300;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly NetworkVariable<ulong> interlocutor = new();
 
@@ -36,7 +36,7 @@ namespace Shooter.Game
         private void Awake()
         {
             character = GetComponent<Character>();
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             health = GetComponent<Health>();
             sleeper = GetComponent<Sleeper>();
             enabled = false;

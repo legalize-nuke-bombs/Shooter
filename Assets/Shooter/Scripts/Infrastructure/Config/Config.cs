@@ -8,55 +8,55 @@ namespace Shooter.Infrastructure
 {
     public static class Config
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static readonly JsonSerializerSettings Settings = new()
+        private static readonly JsonSerializerSettings JsonSettings = new()
         {
             Formatting = Formatting.Indented,
             Converters = { new StringEnumConverter() }
         };
 
-        private static GameConfig current;
+        private static GameConfig gameConfig;
 
-        public static GameConfig Read()
+        public static GameConfig GetGameConfig()
         {
-            if (current != null) return current;
+            if (gameConfig != null) return gameConfig;
 
-            current = Load();
-            return current;
+            gameConfig = LoadGameConfig();
+            return gameConfig;
         }
 
-        public static void Save()
+        public static void SaveGameConfig()
         {
-            if (current == null) return;
+            if (gameConfig == null) return;
 
-            Write(Location(), current);
+            WriteToFile(GetConfigPath(), gameConfig);
         }
 
-        public static Account Account => Read().Account;
+        public static Account Account => GetGameConfig().Account;
 
-        public static string Root()
+        public static string GetRootFolder()
         {
             return Application.isEditor ? Path.GetFullPath(Path.Combine(Application.dataPath, "..")) : Application.persistentDataPath;
         }
 
-        private static GameConfig Load()
+        private static GameConfig LoadGameConfig()
         {
-            string path = Location();
+            string path = GetConfigPath();
 
             if (!File.Exists(path))
             {
-                GameConfig fresh = new();
-                Write(path, fresh);
+                GameConfig defaultConfig = new();
+                WriteToFile(path, defaultConfig);
                 Log.Info($"Config {path} was absent, wrote defaults");
-                return fresh;
+                return defaultConfig;
             }
 
             try
             {
-                GameConfig config = JsonConvert.DeserializeObject<GameConfig>(File.ReadAllText(path), Settings) ?? new GameConfig();
+                GameConfig config = JsonConvert.DeserializeObject<GameConfig>(File.ReadAllText(path), JsonSettings) ?? new GameConfig();
                 Log.Info($"Config {path} read");
-                Write(path, config);
+                WriteToFile(path, config);
                 return config;
             }
             catch (Exception e)
@@ -66,11 +66,11 @@ namespace Shooter.Infrastructure
             }
         }
 
-        private static void Write(string path, object config)
+        private static void WriteToFile(string path, object config)
         {
             try
             {
-                File.WriteAllText(path, JsonConvert.SerializeObject(config, Settings));
+                File.WriteAllText(path, JsonConvert.SerializeObject(config, JsonSettings));
             }
             catch (Exception e)
             {
@@ -78,9 +78,9 @@ namespace Shooter.Infrastructure
             }
         }
 
-        private static string Location()
+        private static string GetConfigPath()
         {
-            return Path.Combine(Root(), GameConfig.FileName);
+            return Path.Combine(GetRootFolder(), GameConfig.FileName);
         }
     }
 }

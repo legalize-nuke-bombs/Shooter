@@ -27,7 +27,7 @@ namespace Shooter.Game
             [LoadingScreenStage.Synchronization] = "Синхронизация мира"
         };
 
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private LoadingScreenTipCatalog tipCatalog;
 
@@ -155,7 +155,7 @@ namespace Shooter.Game
         {
             if (tipCatalog == null || tipCatalog.Count == 0) return "";
 
-            return tipCatalog.At(Random.Range(0, tipCatalog.Count)).Text;
+            return tipCatalog.GetAssetAt(Random.Range(0, tipCatalog.Count)).Text;
         }
     }
 }

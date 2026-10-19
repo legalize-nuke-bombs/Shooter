@@ -7,7 +7,7 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Ear Sound", fileName = "EarSound")]
     public class EarSoundAsset : Asset
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private AudioClip[] clips;
 

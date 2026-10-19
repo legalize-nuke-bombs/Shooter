@@ -39,8 +39,8 @@ namespace Shooter.Game
         [Rpc(SendTo.Owner)]
         private void ShownRpc(FixedString32Bytes assetId)
         {
-            NotificationCatalog catalog = Catalogs.Of<NotificationCatalog>();
-            NotificationAsset asset = catalog == null ? null : catalog.Of(assetId);
+            NotificationCatalog catalog = Catalogs.GetCatalog<NotificationCatalog>();
+            NotificationAsset asset = catalog == null ? null : catalog.GetAssetById(assetId);
             if (asset == null) return;
 
             Toasted?.Invoke(new Toast(asset.Icon, asset.Sound, asset.Title, asset.Subtitle));

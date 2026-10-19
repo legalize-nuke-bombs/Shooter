@@ -9,7 +9,7 @@ namespace Shooter.Game
         private const string MagazineElement = "ammo-magazine";
         private const string ReserveElement = "ammo-reserve";
         private const int Hidden = -1;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
         private Inventory bag;
         private InventoryHolder holder;
 
@@ -27,7 +27,7 @@ namespace Shooter.Game
             if (holder == null) holder = OwnPlayer.Find<InventoryHolder>();
 
             Firearm firearm = holder == null ? null : holder.Held as Firearm;
-            ItemCatalog items = Catalogs.Of<ItemCatalog>();
+            ItemCatalog items = Catalogs.GetCatalog<ItemCatalog>();
             FirearmAsset asset = items == null || firearm == null ? null : items.Firearm(firearm.AssetId);
 
             if (firearm == null || asset == null)

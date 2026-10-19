@@ -7,7 +7,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class FollowTool : LlmTool<FollowArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private BtCustomOrderQueue customOrders;
         private AgentMovement movement;

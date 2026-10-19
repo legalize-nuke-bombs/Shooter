@@ -9,13 +9,13 @@ namespace Shooter.Game
     public class Speaker : NetworkBehaviour
     {
         private const int Voices = 8;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly List<AudioSource> sources = new();
 
         private int next;
 
-        private static SoundCatalog Sounds => Catalogs.Of<SoundCatalog>();
+        private static SoundCatalog Sounds => Catalogs.GetCatalog<SoundCatalog>();
 
         public void Play(SoundAsset sound, float gain = 1f)
         {
@@ -40,7 +40,7 @@ namespace Shooter.Game
                 return;
             }
 
-            SoundAsset sound = catalog.Of(id);
+            SoundAsset sound = catalog.GetAssetById(id);
             if (sound == null) return;
 
             AudioClip clip = sound.Clip(variant);

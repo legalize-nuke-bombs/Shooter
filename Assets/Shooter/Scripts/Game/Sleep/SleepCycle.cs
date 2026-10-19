@@ -11,7 +11,7 @@ namespace Shooter.Game
         private const float SkipTimeScale = 300f;
         private const double BedtimeHours = 22;
         private const double WakeHours = 8;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly NetworkVariable<bool> asleep = new();
 
@@ -24,7 +24,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
             NetworkManager.NetworkTickSystem.Tick += Step;
         }
 
@@ -68,7 +68,7 @@ namespace Shooter.Game
         private bool AreAllPlayersAsleep()
         {
             bool anyone = false;
-            foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Exclude))
+            foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
             {
                 Sleeper sleeper = player.GetComponent<Sleeper>();
                 if (sleeper == null || !sleeper.Sleeping) return false;
@@ -81,7 +81,7 @@ namespace Shooter.Game
 
         private void WakeAll()
         {
-            foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Exclude))
+            foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
             {
                 player.GetComponent<Sleeper>()?.WakeUp();
             }

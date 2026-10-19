@@ -44,8 +44,8 @@ namespace Shooter.Game
         [Rpc(SendTo.Owner)]
         private void ReceivedRpc(long giverId, FixedString32Bytes itemId, int amount)
         {
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
-            ItemAsset item = catalog == null ? null : catalog.Of(itemId);
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
+            ItemAsset item = catalog == null ? null : catalog.GetAssetById(itemId);
             if (item == null) return;
 
             string named = mapper.Of(giverId);

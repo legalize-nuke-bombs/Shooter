@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public sealed class LlmHistory : MonoBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private int messageLimit = 10000;
         [SerializeField] private int maxSize = 100000;
@@ -31,7 +31,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             messages.Clear();
             Size = 0;
             Unseen = sd.Unseen;

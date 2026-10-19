@@ -23,7 +23,7 @@ namespace Shooter.Game
         private const string InitHeader =
             "YOU MUST INTRODUCE YOURSELF TO YOUR FRIENDS NOW. YOU MUST UPDATE RELATION TO YOUR FRIENDS NOW.\nTHE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
 
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private SystemPromptAsset[] systemPrompts;
         [SerializeField] [TextArea(5, 20)] private string character;
@@ -159,7 +159,7 @@ namespace Shooter.Game
 
         private async Task<bool> Think()
         {
-            if (String.IsNullOrEmpty(Config.Read().Server.Llm.Provider)) return false;
+            if (String.IsNullOrEmpty(Config.GetGameConfig().Server.Llm.Provider)) return false;
 
             if (history.Bursting)
             {
@@ -174,7 +174,7 @@ namespace Shooter.Game
             history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
             var context = new LlmCallContext { PromptedCount = history.Count };
 
-            LlmConfig config = Config.Read().Server.Llm;
+            LlmConfig config = Config.GetGameConfig().Server.Llm;
             var tools = abilities.Where(ability => ability.Available).Cast<ILlmTool>().ToList();
 
             Log.Info(
@@ -242,7 +242,7 @@ namespace Shooter.Game
 
         public static string Stamp()
         {
-            return Registers.Of<Clock>(RegisterInactivePolicy.Include).Single().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
+            return Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
         }
     }
 }

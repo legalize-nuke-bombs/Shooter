@@ -10,7 +10,7 @@ namespace Shooter.Game
     {
         private const string HintElement = "hint";
         private const string KeyboardScheme = "Keyboard&Mouse";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private HintCatalog hints;
 

@@ -12,20 +12,20 @@ namespace Shooter.Infrastructure
     public abstract class Catalog<TAsset> : Catalog where TAsset : Asset
     {
         public const string AssetsField = nameof(assets);
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private TAsset[] assets;
-        private readonly Dictionary<FixedString32Bytes, int> indices = new();
-        private readonly List<TAsset> ordered = new();
-        private readonly HashSet<FixedString32Bytes> reportedUnknown = new();
+        private readonly Dictionary<FixedString32Bytes, int> indicesById = new();
+        private readonly List<TAsset> orderedAssets = new();
+        private readonly HashSet<FixedString32Bytes> reportedUnknownIds = new();
 
-        public int Count => ordered.Count;
+        public int Count => orderedAssets.Count;
 
         protected virtual void OnEnable()
         {
-            indices.Clear();
-            ordered.Clear();
-            reportedUnknown.Clear();
+            indicesById.Clear();
+            orderedAssets.Clear();
+            reportedUnknownIds.Clear();
 
             if (assets == null) return;
 
@@ -33,40 +33,40 @@ namespace Shooter.Infrastructure
             {
                 if (asset == null) continue;
 
-                if (!asset.IdFitsNetwork())
+                if (!asset.DoesIdFitNetwork())
                 {
                     Log.Error($"Catalog {name} skips {asset.name}: its id does not fit the network format");
                     continue;
                 }
 
-                if (indices.TryGetValue(asset.NetworkId, out int taken))
+                if (indicesById.TryGetValue(asset.NetworkId, out int takenIndex))
                 {
-                    Log.Error($"Catalog {name} holds both {ordered[taken].name} and {asset.name} under id {asset.Id}");
+                    Log.Error($"Catalog {name} holds both {orderedAssets[takenIndex].name} and {asset.name} under id {asset.Id}");
                     continue;
                 }
 
-                indices.Add(asset.NetworkId, ordered.Count);
-                ordered.Add(asset);
+                indicesById.Add(asset.NetworkId, orderedAssets.Count);
+                orderedAssets.Add(asset);
             }
 
-            Log.Info($"Catalog {name} knows {ordered.Count} things");
+            Log.Info($"Catalog {name} knows {orderedAssets.Count} things");
         }
 
-        public TAsset At(int index)
+        public TAsset GetAssetAt(int index)
         {
-            return index >= 0 && index < ordered.Count ? ordered[index] : null;
+            return index >= 0 && index < orderedAssets.Count ? orderedAssets[index] : null;
         }
 
-        public int Index(TAsset asset)
+        public int IndexOf(TAsset asset)
         {
-            return asset != null && indices.TryGetValue(asset.NetworkId, out int index) ? index : -1;
+            return asset != null && indicesById.TryGetValue(asset.NetworkId, out int index) ? index : -1;
         }
 
-        public TAsset Of(FixedString32Bytes id)
+        public TAsset GetAssetById(FixedString32Bytes id)
         {
-            if (indices.TryGetValue(id, out int index)) return ordered[index];
+            if (indicesById.TryGetValue(id, out int index)) return orderedAssets[index];
 
-            if (reportedUnknown.Add(id))
+            if (reportedUnknownIds.Add(id))
             {
                 Log.Warn($"Catalog {name} has nothing under id {id}");
             }
@@ -76,7 +76,7 @@ namespace Shooter.Infrastructure
 
         public List<TAsset> FindAll(Predicate<TAsset> predicate)
         {
-            return ordered.FindAll(predicate);
+            return orderedAssets.FindAll(predicate);
         }
     }
 }

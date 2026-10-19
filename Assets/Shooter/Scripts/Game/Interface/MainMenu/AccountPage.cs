@@ -12,7 +12,7 @@ namespace Shooter.Game
         private const string PhraseField = "phrase";
         private const string StatusLabel = "status";
         private const string InvalidKey = "Недействительный ключ";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly Foldout secret;
         private readonly Label identity;
@@ -72,8 +72,8 @@ namespace Shooter.Game
                 return;
             }
 
-            Config.Read().Account = account;
-            Config.Save();
+            Config.GetGameConfig().Account = account;
+            Config.SaveGameConfig();
             Log.Info("Account restored from a recovery phrase");
             Load();
         }

@@ -12,7 +12,7 @@ namespace Shooter.Game
     public class PlayerConversations : NetworkBehaviour
     {
         private const int BatchBytes = 16 * 1024;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly Dictionary<long, Contact> contacts = new();
 
@@ -41,7 +41,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             conversationManager.Said += Relay;
         }
 

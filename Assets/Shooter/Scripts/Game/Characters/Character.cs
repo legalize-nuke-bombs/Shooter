@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(CharacterId))]
     public class Character : ShooterBehaviour, IDigestible
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private CharacterId id;
 
@@ -27,7 +27,7 @@ namespace Shooter.Game
 
         public static Character Of(long id, RegisterInactivePolicy gate)
         {
-            foreach (Character character in Registers.Of<Character>(gate))
+            foreach (Character character in Registers.GetAll<Character>(gate))
             {
                 if (character.Id == id)
                 {
@@ -40,7 +40,7 @@ namespace Shooter.Game
 
         public static void ForEach(Action<Character> action, RegisterInactivePolicy gate)
         {
-            foreach (Character character in Registers.Of<Character>(gate))
+            foreach (Character character in Registers.GetAll<Character>(gate))
             {
                 action(character);
             }

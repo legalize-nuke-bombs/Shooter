@@ -12,7 +12,7 @@ namespace Shooter.Game
             base.OnNetworkSpawn();
             if (!IsServer) return;
 
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             conversationManager.Said += Refuse;
         }
 

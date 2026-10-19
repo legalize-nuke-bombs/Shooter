@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class Skin : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static readonly Vector3 ModelOffset = new(0f, -1f, 0f);
 

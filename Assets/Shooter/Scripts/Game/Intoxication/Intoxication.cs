@@ -12,7 +12,7 @@ namespace Shooter.Game
 {
     public class Intoxication : NetworkBehaviour, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
         [SerializeField] private float timerInterval = 0.25f;
 
         [SerializeField] private float lowThreshold = 1f;
@@ -44,7 +44,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken token)
         {
-            SaveData sd = token.To<SaveData>();
+            SaveData sd = token.ToObject<SaveData>();
             for (int i = 0; i < levels.Count; i++)
             {
                 levels[i] = 0;
@@ -67,11 +67,11 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
-            toxins = Catalogs.Of<ToxinCatalog>();
+            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
+            toxins = Catalogs.GetCatalog<ToxinCatalog>();
             for (int i = 0; i < toxins.Count; i++)
             {
-                indexes.Add(toxins.At(i).NetworkId, i);
+                indexes.Add(toxins.GetAssetAt(i).NetworkId, i);
             }
 
             Log.Info($"Entity {name} indexed {indexes.Count} toxins");
@@ -108,7 +108,7 @@ namespace Shooter.Game
             {
                 int toxinIndex = indexes[toxinId];
                 if (levels[toxinIndex] < digestThreshold) continue;
-                ToxinAsset toxin = toxins.Of(toxinId);
+                ToxinAsset toxin = toxins.GetAssetById(toxinId);
                 sb.Append(toxin.Id + $" {levels[toxinIndex]:F0} / 100. ");
             }
 
@@ -137,7 +137,7 @@ namespace Shooter.Game
             foreach (FixedString32Bytes toxinId in indexes.Keys)
             {
                 int toxinIndex = indexes[toxinId];
-                ToxinAsset toxin = toxins.Of(toxinId);
+                ToxinAsset toxin = toxins.GetAssetById(toxinId);
                 if (levels[toxinIndex] < lowThreshold) continue;
                 double decayFactor = Math.Pow(0.5, dt / toxin.HalfLife);
                 levels[toxinIndex] *= decayFactor;

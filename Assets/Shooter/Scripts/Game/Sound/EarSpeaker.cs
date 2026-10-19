@@ -9,13 +9,13 @@ namespace Shooter.Game
     public class EarSpeaker : NetworkBehaviour
     {
         private const int Voices = 4;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly List<AudioSource> sources = new();
 
         private int next;
 
-        private static EarSoundCatalog Sounds => Catalogs.Of<EarSoundCatalog>();
+        private static EarSoundCatalog Sounds => Catalogs.GetCatalog<EarSoundCatalog>();
 
         public void Play(EarSoundAsset sound)
         {
@@ -48,7 +48,7 @@ namespace Shooter.Game
                 return;
             }
 
-            EarSoundAsset sound = catalog.Of(id);
+            EarSoundAsset sound = catalog.GetAssetById(id);
             if (sound == null) return;
 
             Ring(sound, variant);

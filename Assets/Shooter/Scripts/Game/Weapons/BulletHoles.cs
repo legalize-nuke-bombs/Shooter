@@ -11,7 +11,7 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class BulletHoles : ShooterNetworkBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private Material material;
         [SerializeField] private int capacity = 1024;
@@ -37,7 +37,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken token)
         {
-            SaveData sd = token.To<SaveData>();
+            SaveData sd = token.ToObject<SaveData>();
             holes.Clear();
             foreach (BulletHole hole in sd.Holes)
                 holes.Add(hole);

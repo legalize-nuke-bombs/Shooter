@@ -30,14 +30,14 @@ namespace Shooter.Game
 
         public void LoadObject(SaveToken content)
         {
-            value.Value = content.To<SaveData>().Id;
+            value.Value = content.ToObject<SaveData>().Id;
         }
 
         public override void OnNetworkSpawn()
         {
             if (!IsServer || value.Value != None) return;
 
-            CharacterIds ids = Registers.Of<CharacterIds>(RegisterInactivePolicy.Include).FirstOrDefault();
+            CharacterIds ids = Registers.GetAll<CharacterIds>(RegisterInactivePolicy.Include).FirstOrDefault();
             value.Value = ids == null ? Random.Range(0, int.MaxValue) : ids.Next();
         }
     }

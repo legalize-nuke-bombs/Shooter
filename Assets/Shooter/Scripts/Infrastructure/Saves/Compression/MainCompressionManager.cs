@@ -7,65 +7,65 @@ namespace Shooter.Infrastructure
 {
     public static class MainCompressionManager
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static Dictionary<string, CompressionManager> byKey;
-        private static Dictionary<string, CompressionManager> byExtension;
-        private static List<CompressionManager> known;
+        private static Dictionary<string, CompressionManager> managersByKey;
+        private static Dictionary<string, CompressionManager> managersByExtension;
+        private static List<CompressionManager> knownManagers;
 
         public static IEnumerable<string> Keys
         {
             get
             {
-                Discover();
-                return known.Select(manager => manager.Key);
+                DiscoverManagers();
+                return knownManagers.Select(manager => manager.Key);
             }
         }
 
-        public static string Compress(string path)
+        public static string CompressFolder(string folderPath)
         {
-            Discover();
+            DiscoverManagers();
 
-            string algorithm = Config.Read().Server.SaveCompressionAlgorithm.ToLowerInvariant();
-            if (!byKey.TryGetValue(algorithm, out CompressionManager manager))
+            string algorithm = Config.GetGameConfig().Server.SaveCompressionAlgorithm.ToLowerInvariant();
+            if (!managersByKey.TryGetValue(algorithm, out CompressionManager manager))
             {
-                Log.Warn($"No compression manager for '{algorithm}', {path} stays as is");
-                return path;
+                Log.Warn($"No compression manager for '{algorithm}', {folderPath} stays as is");
+                return folderPath;
             }
 
-            Log.Info($"{path} will be stored with {manager.Key}");
-            return manager.Compress(path);
+            Log.Info($"{folderPath} will be stored with {manager.Key}");
+            return manager.CompressFolder(folderPath);
         }
 
-        public static byte[] Read(string location, string file)
+        public static byte[] ReadFile(string archivePath, string fileName)
         {
-            CompressionManager manager = Resolve(location);
-            return manager == null ? null : manager.Read(location, file);
+            CompressionManager manager = FindManagerForArchive(archivePath);
+            return manager == null ? null : manager.ReadFile(archivePath, fileName);
         }
 
-        public static void Delete(string location)
+        public static void DeleteArchive(string archivePath)
         {
-            Resolve(location)?.Delete(location);
+            FindManagerForArchive(archivePath)?.DeleteArchive(archivePath);
         }
 
-        private static CompressionManager Resolve(string location)
+        private static CompressionManager FindManagerForArchive(string archivePath)
         {
-            Discover();
+            DiscoverManagers();
 
-            string extension = Directory.Exists(location) ? "" : Path.GetExtension(location).ToLowerInvariant();
-            if (byExtension.TryGetValue(extension, out CompressionManager manager)) return manager;
+            string extension = Directory.Exists(archivePath) ? "" : Path.GetExtension(archivePath).ToLowerInvariant();
+            if (managersByExtension.TryGetValue(extension, out CompressionManager manager)) return manager;
 
-            Log.Warn($"No compression manager for '{extension}' of {location}");
+            Log.Warn($"No compression manager for '{extension}' of {archivePath}");
             return null;
         }
 
-        private static void Discover()
+        private static void DiscoverManagers()
         {
-            if (known != null) return;
+            if (knownManagers != null) return;
 
-            byKey = new Dictionary<string, CompressionManager>();
-            byExtension = new Dictionary<string, CompressionManager>();
-            known = new List<CompressionManager>();
+            managersByKey = new Dictionary<string, CompressionManager>();
+            managersByExtension = new Dictionary<string, CompressionManager>();
+            knownManagers = new List<CompressionManager>();
 
             IEnumerable<Type> types = typeof(CompressionManager).Assembly.GetTypes()
                 .Where(type => !type.IsAbstract && typeof(CompressionManager).IsAssignableFrom(type))
@@ -76,18 +76,18 @@ namespace Shooter.Infrastructure
                 CompressionManager manager = (CompressionManager)Activator.CreateInstance(type);
                 string normalizedKey = manager.Key.ToLowerInvariant();
                 string normalizedExtension = manager.Extension.ToLowerInvariant();
-                if (byKey.ContainsKey(normalizedKey) || byExtension.ContainsKey(normalizedExtension))
+                if (managersByKey.ContainsKey(normalizedKey) || managersByExtension.ContainsKey(normalizedExtension))
                 {
-                    Log.Warn($"Compression manager {type.Name} duplicates an already known one ({normalizedKey} - {normalizedExtension})");
+                    Log.Error($"Compression manager {type.Name} duplicates an already known one ({normalizedKey} - {normalizedExtension})");
                     continue;
                 }
 
-                byKey.Add(normalizedKey, manager);
-                byExtension.Add(normalizedExtension, manager);
-                known.Add(manager);
+                managersByKey.Add(normalizedKey, manager);
+                managersByExtension.Add(normalizedExtension, manager);
+                knownManagers.Add(manager);
             }
 
-            Log.Info($"{known.Count} compression managers are known");
+            Log.Info($"{knownManagers.Count} compression managers are known");
         }
     }
 }

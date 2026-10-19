@@ -15,7 +15,7 @@ namespace Shooter.Game
         private const string DeleteLabel = "Удалить";
         private const string ForeignQuestion = "Другая версия";
         private const string ForeignLabel = "Загрузить";
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private readonly Dialog dialog;
         private readonly Label empty;
@@ -47,7 +47,7 @@ namespace Shooter.Game
 
         private void Refresh()
         {
-            entries = SaveLibrary.All();
+            entries = SaveLibrary.ReadAllEntries();
             saves.itemsSource = entries;
             saves.RefreshItems();
 
@@ -60,7 +60,7 @@ namespace Shooter.Game
 
         private void AskToLoad(SaveEntry entry)
         {
-            if (!entry.Foreign)
+            if (!entry.IsFromAnotherVersion)
             {
                 Load(entry);
                 return;
@@ -83,7 +83,7 @@ namespace Shooter.Game
 
         private void Delete(SaveEntry entry)
         {
-            SaveLibrary.Delete(entry);
+            SaveLibrary.DeleteSave(entry);
             Refresh();
         }
     }

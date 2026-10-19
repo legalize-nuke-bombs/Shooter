@@ -5,79 +5,79 @@ namespace Shooter.Infrastructure
 {
     public abstract class CompressionManager
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         public abstract string Key { get; }
         public abstract string Extension { get; }
 
-        private string Name => GetType().Name;
+        private string TypeName => GetType().Name;
 
-        public string Compress(string path)
+        public string CompressFolder(string folderPath)
         {
-            string target = path + Extension;
-            Log.Info($"{Name} is storing {path} as {target}...");
+            string archivePath = folderPath + Extension;
+            Log.Info($"{TypeName} is storing {folderPath} as {archivePath}...");
             try
             {
-                CompressRaw(path);
+                CompressFolderRaw(folderPath);
             }
             catch (Exception e)
             {
-                Log.Warn($"{Name} failed to store {path} as {target}: {e.Message}");
-                return path;
+                Log.Warn($"{TypeName} failed to store {folderPath} as {archivePath}: {e.Message}");
+                return folderPath;
             }
 
-            Log.Info($"{Name} successfully stored {path} as {target}");
+            Log.Info($"{TypeName} successfully stored {folderPath} as {archivePath}");
 
-            if (target != path) Cleanup(path);
-            return target;
+            if (archivePath != folderPath) DeleteSourceFolder(folderPath);
+            return archivePath;
         }
 
-        public byte[] Read(string location, string file)
+        public byte[] ReadFile(string archivePath, string fileName)
         {
             try
             {
-                return ReadRaw(location, file);
+                return ReadFileRaw(archivePath, fileName);
             }
             catch (Exception e)
             {
-                Log.Warn($"{Name} failed to read {file} from {location}: {e.Message}");
+                Log.Warn($"{TypeName} failed to read {fileName} from {archivePath}: {e.Message}");
                 return null;
             }
         }
 
-        public void Delete(string location)
+        public void DeleteArchive(string archivePath)
         {
             try
             {
-                DeleteRaw(location);
-                Log.Info($"{Name} deleted {location}");
+                DeleteArchiveRaw(archivePath);
+                Log.Info($"{TypeName} deleted {archivePath}");
             }
             catch (Exception e)
             {
-                Log.Warn($"{Name} failed to delete {location}: {e.Message}");
+                Log.Warn($"{TypeName} failed to delete {archivePath}: {e.Message}");
             }
         }
 
-        private void Cleanup(string path)
+        private void DeleteSourceFolder(string folderPath)
         {
             try
             {
-                Directory.Delete(path, true);
-                Log.Info($"{Name} successfully deleted {path}");
+                Directory.Delete(folderPath, true);
+                Log.Info($"{TypeName} successfully deleted {folderPath}");
             }
             catch (Exception e)
             {
-                Log.Warn($"{Name} failed to delete {path}: {e.Message}");
+                Log.Warn($"{TypeName} failed to delete {folderPath}: {e.Message}");
             }
         }
 
-        protected abstract void CompressRaw(string path);
+        protected abstract void CompressFolderRaw(string folderPath);
 
-        protected abstract byte[] ReadRaw(string location, string file);
+        protected abstract byte[] ReadFileRaw(string archivePath, string fileName);
 
-        protected virtual void DeleteRaw(string location)
+        protected virtual void DeleteArchiveRaw(string archivePath)
         {
-            File.Delete(location);
+            File.Delete(archivePath);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Shooter.Game
         id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a03")]
     public partial class EatFoodAction : Action
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
@@ -27,7 +27,7 @@ namespace Shooter.Game
             Hunger hunger = Agent.Value.GetComponent<Hunger>();
             if (user == null || hunger == null) return Status.Failure;
 
-            foreach (ItemAsset item in Catalogs.Of<ItemCatalog>().FindAll(item =>
+            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(item =>
                          item is StackableItemAsset stackableItem && stackableItem.FoodMarker > 0))
             {
                 int startSaturation = (int)hunger.Amount;

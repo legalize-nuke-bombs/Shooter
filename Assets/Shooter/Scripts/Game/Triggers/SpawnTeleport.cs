@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class SpawnTeleport : MonoBehaviour, ITriggerable
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private EarSoundAsset sound;
 

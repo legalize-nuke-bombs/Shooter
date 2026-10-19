@@ -6,7 +6,7 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Fraction Relation", fileName = "FractionRelation")]
     public class FractionRelation : Asset
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private Fraction fraction1;
         [SerializeField] private Fraction fraction2;

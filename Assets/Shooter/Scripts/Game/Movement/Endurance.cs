@@ -32,7 +32,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             amount.Value = sd.Amount;
         }
 
@@ -45,7 +45,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
             enabled = false;
         }
 

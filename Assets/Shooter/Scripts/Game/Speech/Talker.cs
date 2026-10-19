@@ -48,7 +48,7 @@ namespace Shooter.Game
             if (!IsServer) return;
 
             enabled = true;
-            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             conversationManager.Said += Mutter;
         }
 

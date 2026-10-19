@@ -31,7 +31,7 @@ namespace Shooter.Game
         private const float LookInterval = 0.2f;
         private const float Stickiness = 1.25f;
         private const int SplitDigits = 7;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         // Points along a body from feet to head around its root, which sits at the middle of the body for players and residents alike
         private static readonly float[] BodyHeights = { -0.8f, -0.4f, 0f, 0.4f, 0.8f };
@@ -253,7 +253,7 @@ namespace Shooter.Game
 
             if (bag == null) return;
 
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
             UniqueItem equipped = holder.Held;
             int equippedSlot = holder.Slot;
             bool[,] taken = new bool[Rows, Columns];
@@ -287,7 +287,7 @@ namespace Shooter.Game
 
             for (int index = 0; index < kinds; index++)
             {
-                if (catalog.At(index) is not StackableItemAsset asset) continue;
+                if (catalog.GetAssetAt(index) is not StackableItemAsset asset) continue;
 
                 int amount = bag.Count(asset) - Reserved(asset);
                 if (amount > 0)
@@ -550,7 +550,7 @@ namespace Shooter.Game
             UniqueItem item = slot >= 0 && slot < items.Count ? items[slot] : null;
             if (item == null) return false;
 
-            ItemCatalog catalog = Catalogs.Of<ItemCatalog>();
+            ItemCatalog catalog = Catalogs.GetCatalog<ItemCatalog>();
             ItemAsset asset = catalog == null ? null : catalog.Asset(item.AssetId);
             if (!Fits(asset)) return false;
 

@@ -7,7 +7,7 @@ namespace Shooter.Game
     [Serializable]
     public class DeleteNotesTool : LlmTool<DeleteNotesArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private LlmNotes notes;
 

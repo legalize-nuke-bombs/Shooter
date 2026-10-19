@@ -11,7 +11,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Nameable))]
     public class AICharacterRelation : MonoBehaviour, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
 
@@ -43,7 +43,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.To<SaveData>();
+            SaveData sd = content.ToObject<SaveData>();
             amounts.Clear();
             if (sd.Entries == null) return;
             foreach (SaveData.Entry entry in sd.Entries)
@@ -97,11 +97,11 @@ namespace Shooter.Game
             }
 
             sb.Append("The relation towards characters not listed here by fractions: ");
-            FractionCatalog fractions = Catalogs.Of<FractionCatalog>();
-            FractionRelationCatalog fractionRelations = Catalogs.Of<FractionRelationCatalog>();
+            FractionCatalog fractions = Catalogs.GetCatalog<FractionCatalog>();
+            FractionRelationCatalog fractionRelations = Catalogs.GetCatalog<FractionRelationCatalog>();
             for (int i = 0; i < fractions.Count; i++)
             {
-                Fraction targetFraction = fractions.At(i);
+                Fraction targetFraction = fractions.GetAssetAt(i);
                 sb.Append($"[{targetFraction.PromptName}: {fractionRelations.Amount(ownCharacter.Fraction, targetFraction)}], ");
             }
 
@@ -133,7 +133,7 @@ namespace Shooter.Game
             {
                 return amount;
             }
-            FractionRelationCatalog fractionRelations = Catalogs.Of<FractionRelationCatalog>();
+            FractionRelationCatalog fractionRelations = Catalogs.GetCatalog<FractionRelationCatalog>();
             return fractionRelations.Amount(ownCharacter.Fraction, targetCharacter.Fraction);
         }
 

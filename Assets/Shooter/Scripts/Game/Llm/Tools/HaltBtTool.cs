@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class HaltBtTool : LlmTool<HaltBtArguments>
     {
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private BtCustomOrderQueue customOrders;
 

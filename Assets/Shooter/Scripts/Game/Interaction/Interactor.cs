@@ -8,7 +8,7 @@ namespace Shooter.Game
     public class Interactor : NetworkBehaviour
     {
         public const float EyeHeight = 0.75f;
-        private static readonly Journal Log = Logs.Here();
+        private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static readonly RaycastHit[] Sights = new RaycastHit[16];
 

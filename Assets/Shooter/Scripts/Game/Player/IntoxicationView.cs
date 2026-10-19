@@ -21,11 +21,11 @@ namespace Shooter.Game
         {
             if (!IsSpawned || !IsOwner) return;
 
-            ToxinCatalog toxins = Catalogs.Of<ToxinCatalog>();
+            ToxinCatalog toxins = Catalogs.GetCatalog<ToxinCatalog>();
 
             for (int index = 0; index < toxins.Count; index++)
             {
-                ToxinAsset toxin = toxins.At(index);
+                ToxinAsset toxin = toxins.GetAssetAt(index);
                 float strength = (float)(intoxication.Level(toxin) / 100d);
 
                 if (strength <= 0f)
