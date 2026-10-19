@@ -1,6 +1,6 @@
-﻿namespace Shooter.Game
+namespace Shooter.Game
 {
-    public enum RelationshipStatus
+    public enum RelationStatus
     {
         Enemy = 0,
         Neutral = 1,

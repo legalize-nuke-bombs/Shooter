@@ -7,53 +7,52 @@ namespace Shooter.Game
 {
     public static class Mixer
     {
-        private const string Asset = "Mixer";
+        private const string MixerResourcePath = "Mixer";
         private const string MasterVolume = "MasterVolume";
         private const string MusicVolume = "MusicVolume";
         private const string AmbienceVolume = "AmbienceVolume";
         private const string SoundsVolume = "SoundsVolume";
-        private const float Silence = -80f;
+        private const float SilenceDecibels = -80f;
         private const float DecibelsPerDecade = 20f;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private static AudioMixer mixer;
-        private static ClientConfig client;
+        private static ClientConfig clientConfig;
 
-        // Sounds find their group in their own asset; the mixer only has to follow the volume settings, from the start
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Tune()
+        private static void LoadMixerAndFollowVolumeSettings()
         {
             if (mixer != null) return;
 
-            mixer = Resources.Load<AudioMixer>(Asset);
+            mixer = Resources.Load<AudioMixer>(MixerResourcePath);
             if (mixer == null)
             {
-                Log.Error($"No {Asset} mixer in Resources, the volume settings stay unheard");
+                Log.Error($"No {MixerResourcePath} mixer in Resources, the volume settings stay unheard");
                 return;
             }
 
-            client = Config.GetGameConfig().Client;
-            client.propertyChanged += Changed;
-            Apply();
+            clientConfig = Config.GetGameConfig().Client;
+            clientConfig.propertyChanged += HandleClientConfigChanged;
+            ApplyVolumeSettings();
         }
 
-        private static void Changed(object sender, BindablePropertyChangedEventArgs args)
+        private static void HandleClientConfigChanged(object sender, BindablePropertyChangedEventArgs args)
         {
-            Apply();
+            ApplyVolumeSettings();
         }
 
-        private static void Apply()
+        private static void ApplyVolumeSettings()
         {
-            Set(MasterVolume, client.Master);
-            Set(MusicVolume, client.Music);
-            Set(AmbienceVolume, client.Ambience);
-            Set(SoundsVolume, client.Sounds);
+            SetMixerVolume(MasterVolume, clientConfig.Master);
+            SetMixerVolume(MusicVolume, clientConfig.Music);
+            SetMixerVolume(AmbienceVolume, clientConfig.Ambience);
+            SetMixerVolume(SoundsVolume, clientConfig.Sounds);
         }
 
-        private static void Set(string parameter, float volume)
+        private static void SetMixerVolume(string parameter, float volume)
         {
-            float decibels = volume <= 0f ? Silence : Mathf.Max(Silence, DecibelsPerDecade * Mathf.Log10(volume));
-            if (!mixer.SetFloat(parameter, decibels)) Log.Warn($"Mixer {mixer.name} exposes no {parameter}, that volume stays as is");
+            float decibels = volume <= 0f ? SilenceDecibels : Mathf.Max(SilenceDecibels, DecibelsPerDecade * Mathf.Log10(volume));
+            if (!mixer.SetFloat(parameter, decibels)) Log.Error($"Mixer {mixer.name} exposes no {parameter}, that volume stays as is");
         }
     }
 }

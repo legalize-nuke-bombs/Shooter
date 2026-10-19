@@ -24,14 +24,14 @@ ALWAYS use this tool when a wanderer starts a conversation with you.
         protected override string Execute(LookAtWandererArguments arguments, LlmCallContext context)
         {
             long wandererId = arguments.WandererId;
-            Character wanderer = Character.Of(wandererId, RegisterInactivePolicy.Exclude);
+            Character wanderer = Character.FindById(wandererId, RegisterInactivePolicy.Exclude);
             if (wanderer == null)
             {
                 Log.Warn($"Unregistered wanderer {wandererId} is waiting for an answer from {Self.name}!");
                 throw new ArgumentException($"Failed to find wanderer {wandererId}");
             }
 
-            return $"Wanderer {wandererId} state:\n" + Digester.Of(wanderer.gameObject, DigestionDetail.Full);
+            return $"Wanderer {wandererId} state:\n" + Digester.DigestEntity(wanderer.gameObject, DigestionDetail.Full);
         }
     }
 }

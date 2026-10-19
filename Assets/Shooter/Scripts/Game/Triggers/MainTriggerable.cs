@@ -1,4 +1,4 @@
-﻿using Shooter.Infrastructure;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -15,9 +15,12 @@ namespace Shooter.Game
             Log.Info($"Entity {name} has {triggerables.Length} triggerables");
         }
 
-        public void OnTrigger(Character character)
+        public void HandleCharacterEntered(Character character)
         {
-            foreach (ITriggerable triggerable in triggerables) triggerable.OnTrigger(character);
+            foreach (ITriggerable triggerable in triggerables)
+            {
+                triggerable.HandleCharacterEntered(character);
+            }
         }
     }
 }

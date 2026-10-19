@@ -8,12 +8,12 @@ namespace Shooter.Game
         [SerializeField] private string text;
         [SerializeField] private string prompt;
 
-        public override string Text()
+        public override string GetShownName()
         {
             return text;
         }
 
-        public override string Prompt()
+        public override string GetPromptName()
         {
             return prompt;
         }

@@ -35,7 +35,7 @@ namespace Shooter.Game
             Log.Info($"Entity {name} has been picked up by {user.name}");
             if (user.TryGetComponent(out Speaker speaker))
             {
-                speaker.Play(sound);
+                speaker.PlayForEveryone(sound);
             }
             else
             {

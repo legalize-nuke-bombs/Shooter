@@ -16,21 +16,24 @@ namespace Shooter.Game
 
         [SerializeField] private int longest = 20;
 
-        public override string Text()
+        public override string GetShownName()
         {
             if (messages.Length > 0 && Random.value < messageChance) return messages[Random.Range(0, messages.Length)];
 
             if (string.IsNullOrEmpty(alphabet)) return string.Empty;
 
             int length = Random.Range(shortest, longest + 1);
-            var noise = new StringBuilder(length);
+            StringBuilder noise = new(length);
 
-            for (int written = 0; written < length; written++) noise.Append(alphabet[Random.Range(0, alphabet.Length)]);
+            for (int written = 0; written < length; written++)
+            {
+                noise.Append(alphabet[Random.Range(0, alphabet.Length)]);
+            }
 
             return noise.ToString();
         }
 
-        public override string Prompt()
+        public override string GetPromptName()
         {
             return "The name is unreadable";
         }

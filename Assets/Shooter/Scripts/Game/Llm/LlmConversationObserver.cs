@@ -41,7 +41,7 @@ namespace Shooter.Game
             if (message.AuthorId == character.Id || conversation.Partner(message.AuthorId) != character.Id) return;
             if (!health.Alive) return;
 
-            Character author = Character.Of(message.AuthorId, RegisterInactivePolicy.Include);
+            Character author = Character.FindById(message.AuthorId, RegisterInactivePolicy.Include);
 
             if (author != null && author.TryGetComponent(out Player _))
             {
@@ -52,7 +52,7 @@ namespace Shooter.Game
             }
 
             Nameable nameable = author == null ? null : author.GetComponent<Nameable>();
-            string authorName = nameable == null ? string.Empty : nameable.PromptName();
+            string authorName = nameable == null ? string.Empty : nameable.GetPromptName();
 
             llm.Notice($"[{Llm.Stamp()}] Mail from Character {message.AuthorId} ({authorName}): {message.Content}",
                 message.Urgent);

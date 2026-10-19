@@ -9,38 +9,37 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private CharacterId id;
+        private CharacterId characterId;
 
         [SerializeField] private Fraction fraction;
         public Fraction Fraction => fraction;
 
         protected override void ShooterAwake()
         {
-            id = GetComponent<CharacterId>();
+            characterId = GetComponent<CharacterId>();
             if (fraction == null)
             {
-                Log.Error($"Entity {name} does not have a group");
+                Log.Error($"Entity {name} does not have a fraction");
             }
         }
 
-        public long Id => id.Value;
+        public long Id => characterId.Value;
 
-        public static Character Of(long id, RegisterInactivePolicy gate)
+        public static Character FindById(long id, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (Character character in Registers.GetAll<Character>(gate))
+            foreach (Character character in Registers.GetAll<Character>(inactivePolicy))
             {
                 if (character.Id == id)
                 {
                     return character;
                 }
-
             }
             return null;
         }
 
-        public static void ForEach(Action<Character> action, RegisterInactivePolicy gate)
+        public static void ForEach(Action<Character> action, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (Character character in Registers.GetAll<Character>(gate))
+            foreach (Character character in Registers.GetAll<Character>(inactivePolicy))
             {
                 action(character);
             }

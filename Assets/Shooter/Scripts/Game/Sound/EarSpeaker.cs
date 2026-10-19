@@ -8,16 +8,14 @@ namespace Shooter.Game
 {
     public class EarSpeaker : NetworkBehaviour
     {
-        private const int Voices = 4;
+        private const int MaxVoices = 4;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly List<AudioSource> sources = new();
+        private readonly List<AudioSource> audioSources = new();
 
-        private int next;
+        private int nextAudioSourceIndexToReuse;
 
-        private static EarSoundCatalog Sounds => Catalogs.GetCatalog<EarSoundCatalog>();
-
-        public void Play(EarSoundAsset sound)
+        public void PlayForOwner(EarSoundAsset sound)
         {
             if (!IsServer) return;
             if (GetComponent<Player>() == null) return;
@@ -28,70 +26,71 @@ namespace Shooter.Game
                 return;
             }
 
-            PlayRpc(sound.NetworkId, sound.Pick());
+            PlayForOwnerRpc(sound.NetworkId, sound.PickRandomVariant());
         }
 
-        public void PlayLocal(EarSoundAsset sound)
+        public void PlayLocally(EarSoundAsset sound)
         {
             if (sound == null) return;
 
-            Ring(sound, sound.Pick());
+            PlayVariantLocally(sound, sound.PickRandomVariant());
         }
 
         [Rpc(SendTo.Owner)]
-        private void PlayRpc(FixedString32Bytes id, byte variant)
+        private void PlayForOwnerRpc(FixedString32Bytes id, byte variant)
         {
-            EarSoundCatalog catalog = Sounds;
-            if (catalog == null)
+            EarSoundCatalog earSoundCatalog = Catalogs.GetCatalog<EarSoundCatalog>();
+            if (earSoundCatalog == null)
             {
                 Log.Warn($"Entity {name} cannot play {id} in the ear: the world has no ear sound catalog");
                 return;
             }
 
-            EarSoundAsset sound = catalog.GetAssetById(id);
+            EarSoundAsset sound = earSoundCatalog.GetAssetById(id);
             if (sound == null) return;
 
-            Ring(sound, variant);
+            PlayVariantLocally(sound, variant);
         }
 
-        private void Ring(EarSoundAsset sound, byte variant)
+        private void PlayVariantLocally(EarSoundAsset sound, byte variant)
         {
-            AudioClip clip = sound.Clip(variant);
+            AudioClip clip = sound.GetClip(variant);
             if (clip == null) return;
 
-            AudioSource source = Free();
-            source.clip = clip;
-            source.outputAudioMixerGroup = sound.Output;
-            source.volume = sound.Volume;
-            source.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
+            AudioSource audioSource = TakeAudioSource();
+            audioSource.clip = clip;
+            audioSource.outputAudioMixerGroup = sound.Output;
+            audioSource.volume = sound.Volume;
+            audioSource.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
 
             Log.Info($"Entity {name} plays {sound.Id} variant {variant} in the owner's ear at t={Time.time}");
 
-            source.Play();
+            audioSource.Play();
         }
 
-        private AudioSource Free()
+        private AudioSource TakeAudioSource()
         {
-            foreach (AudioSource source in sources)
-                if (!source.isPlaying)
-                    return source;
+            foreach (AudioSource audioSource in audioSources)
+            {
+                if (!audioSource.isPlaying) return audioSource;
+            }
 
-            if (sources.Count < Voices) return Add();
+            if (audioSources.Count < MaxVoices) return AddAudioSource();
 
-            AudioSource taken = sources[next];
-            next = (next + 1) % sources.Count;
+            AudioSource reusedAudioSource = audioSources[nextAudioSourceIndexToReuse];
+            nextAudioSourceIndexToReuse = (nextAudioSourceIndexToReuse + 1) % audioSources.Count;
 
-            return taken;
+            return reusedAudioSource;
         }
 
-        private AudioSource Add()
+        private AudioSource AddAudioSource()
         {
-            AudioSource source = gameObject.AddComponent<AudioSource>();
-            source.playOnAwake = false;
-            source.spatialBlend = 0f;
-            sources.Add(source);
+            AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 0f;
+            audioSources.Add(audioSource);
 
-            return source;
+            return audioSource;
         }
     }
 }

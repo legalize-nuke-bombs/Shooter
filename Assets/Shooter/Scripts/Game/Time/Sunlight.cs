@@ -7,16 +7,16 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour
     {
-        internal const float ShadowHandover = -6f;
+        internal const float ShadowHandoverElevation = -6f;
 
         [SerializeField] private float brightest = 120000f;
 
         private Clock clock;
-        private Light sun;
+        private Light sunLight;
 
         private void Awake()
         {
-            sun = GetComponent<Light>();
+            sunLight = GetComponent<Light>();
         }
 
         private void Start()
@@ -30,14 +30,14 @@ namespace Shooter.Game
             if (clock == null) return;
 
             float hourAngle = (float)clock.HourAngle;
-            float elevation = Celestial.Elevation(hourAngle, clock.Declination, clock.Latitude);
+            float elevation = Celestial.GetElevation(hourAngle, clock.Declination, clock.Latitude);
 
-            transform.rotation = Celestial.Rotation(hourAngle, clock.Declination, clock.Latitude);
-            sun.intensity = brightest * HorizonFade(elevation);
-            sun.shadows = elevation > ShadowHandover ? LightShadows.Soft : LightShadows.None;
+            transform.rotation = Celestial.GetLightRotation(hourAngle, clock.Declination, clock.Latitude);
+            sunLight.intensity = brightest * GetHorizonFade(elevation);
+            sunLight.shadows = elevation > ShadowHandoverElevation ? LightShadows.Soft : LightShadows.None;
         }
 
-        internal static float HorizonFade(float elevation)
+        internal static float GetHorizonFade(float elevation)
         {
             return Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-12f, 8f, elevation));
         }

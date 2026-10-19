@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static readonly int Emissive = Shader.PropertyToID("_EmissiveColorMap");
+        private static readonly int EmissiveColorMapId = Shader.PropertyToID("_EmissiveColorMap");
 
         [SerializeField] private Renderer screen;
 
@@ -18,44 +18,43 @@ namespace Shooter.Game
 
         [SerializeField] private float pace = 12f;
 
-        private Light glow;
-        private float own;
-        private Material picture;
+        private Light screenLight;
+        private float noiseOffset;
+        private Material screenMaterial;
 
         private void Awake()
         {
-            glow = GetComponent<Light>();
-            picture = screen == null ? null : screen.material;
-            own = Mathf.Abs(transform.position.x * 0.7f + transform.position.z * 1.3f);
+            screenLight = GetComponent<Light>();
+            screenMaterial = screen == null ? null : screen.material;
+            noiseOffset = Mathf.Abs(transform.position.x * 0.7f + transform.position.z * 1.3f);
 
-            MeshFilter filter = screen == null ? null : screen.GetComponent<MeshFilter>();
-            string mesh = screen == null ? "none" :
-                filter == null ? "no filter" :
-                filter.sharedMesh == null ? "no mesh" : filter.sharedMesh.vertexCount.ToString();
+            MeshFilter meshFilter = screen == null ? null : screen.GetComponent<MeshFilter>();
+            string meshDescription = screen == null ? "none" :
+                meshFilter == null ? "no filter" :
+                meshFilter.sharedMesh == null ? "no mesh" : meshFilter.sharedMesh.vertexCount.ToString();
 
-            Log.Info(
-                $"Screen {name}: light {glow.type} enabled {glow.enabled} intensity {glow.intensity} range {glow.range}, renderer {(screen == null ? "none" : screen.name)}, material {(picture == null ? "none" : picture.name)}, shader {(picture == null ? "none" : picture.shader.name)}, mesh {mesh}");
+            Log.Info($"Screen {name}: light {screenLight.type} enabled {screenLight.enabled} intensity {screenLight.intensity} range {screenLight.range}, renderer {(screen == null ? "none" : screen.name)}, material {(screenMaterial == null ? "none" : screenMaterial.name)}, shader {(screenMaterial == null ? "none" : screenMaterial.shader.name)}, mesh {meshDescription}");
         }
 
         private void Update()
         {
-            float moment = Time.time * pace + own;
+            float noiseTime = Time.time * pace + noiseOffset;
 
-            glow.intensity = brightest * Mathf.Max(0f, 1f + unrest * Wave(moment));
-            if (picture == null) return;
+            screenLight.intensity = brightest * Mathf.Max(0f, 1f + unrest * GetFlickerNoise(noiseTime));
+            if (screenMaterial == null) return;
 
-            var shift = new Vector2(Snap(moment), Snap(moment + 71f));
-            picture.SetTextureOffset(Emissive, shift);
+            Vector2 emissiveOffset = new(GetSteppedNoise(noiseTime), GetSteppedNoise(noiseTime + 71f));
+            screenMaterial.SetTextureOffset(EmissiveColorMapId, emissiveOffset);
         }
 
-        private static float Wave(float moment)
+        private static float GetFlickerNoise(float noiseTime)
         {
-            return Mathf.PerlinNoise(moment, 0.5f) * 2f - 1f;
+            return Mathf.PerlinNoise(noiseTime, 0.5f) * 2f - 1f;
         }
 
-        private static float Snap(float moment)
+        private static float GetSteppedNoise(float noiseTime)
         {
-            return Mathf.PerlinNoise(Mathf.Floor(moment) * 0.37f, 0.5f);
+            return Mathf.PerlinNoise(Mathf.Floor(noiseTime) * 0.37f, 0.5f);
         }
     }
 }

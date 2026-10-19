@@ -52,7 +52,7 @@ To see the content, use read_conversation.
             {
                 if (partners.Contains(character.Id))
                 {
-                    string name = character.GetComponent<Nameable>()?.PromptName() ?? "Unknown";
+                    string name = character.GetComponent<Nameable>()?.GetPromptName() ?? "Unknown";
                     partnerNames[character.Id] = name;
                 }
             }, RegisterInactivePolicy.Include

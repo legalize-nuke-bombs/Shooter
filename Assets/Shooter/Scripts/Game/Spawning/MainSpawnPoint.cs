@@ -8,18 +8,17 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        // A map may hold none or several: none is worth a warning, several are so many ways in
-        public static MainSpawnPoint Pick()
+        public static MainSpawnPoint PickRandom()
         {
-            var placed = new List<MainSpawnPoint>(Registers.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude));
+            var mainSpawnPoints = new List<MainSpawnPoint>(Registers.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude));
 
-            if (placed.Count == 0)
+            if (mainSpawnPoints.Count == 0)
             {
                 Log.Warn("The map has no main spawn point");
                 return null;
             }
 
-            return placed[Random.Range(0, placed.Count)];
+            return mainSpawnPoints[Random.Range(0, mainSpawnPoints.Count)];
         }
     }
 }

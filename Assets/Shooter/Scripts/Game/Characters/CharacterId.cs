@@ -9,9 +9,9 @@ namespace Shooter.Game
     {
         public const long None = -1;
 
-        private readonly NetworkVariable<long> value = new(None);
+        private readonly NetworkVariable<long> id = new(None);
 
-        public long Value => value.Value;
+        public long Value => id.Value;
 
         public string ComponentKey => "CharacterId";
 
@@ -30,15 +30,15 @@ namespace Shooter.Game
 
         public void LoadObject(SaveToken content)
         {
-            value.Value = content.ToObject<SaveData>().Id;
+            id.Value = content.ToObject<SaveData>().Id;
         }
 
         public override void OnNetworkSpawn()
         {
-            if (!IsServer || value.Value != None) return;
+            if (!IsServer || id.Value != None) return;
 
-            CharacterIds ids = Registers.GetAll<CharacterIds>(RegisterInactivePolicy.Include).FirstOrDefault();
-            value.Value = ids == null ? Random.Range(0, int.MaxValue) : ids.Next();
+            CharacterIds characterIds = Registers.GetAll<CharacterIds>(RegisterInactivePolicy.Include).FirstOrDefault();
+            id.Value = characterIds == null ? Random.Range(0, int.MaxValue) : characterIds.TakeNextId();
         }
     }
 }

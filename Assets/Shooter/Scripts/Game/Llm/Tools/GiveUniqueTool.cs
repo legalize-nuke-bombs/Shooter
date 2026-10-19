@@ -29,7 +29,7 @@ The recipient will automatically receive a notification.
 
         protected override string Execute(GiveUniqueArguments arguments, LlmCallContext context)
         {
-            return exchanger.Give(Character.Of(arguments.TargetId, RegisterInactivePolicy.Exclude), arguments.Slot)
+            return exchanger.Give(Character.FindById(arguments.TargetId, RegisterInactivePolicy.Exclude), arguments.Slot)
                 ? $"Gave the item from slot {arguments.Slot} to {arguments.TargetId}"
                 : "Could not give: the receiver is not around or the slot is empty";
         }

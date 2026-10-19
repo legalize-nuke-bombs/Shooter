@@ -51,7 +51,7 @@ namespace Shooter.Game
                 case AgentMovementStatus.Displaced:
                     return "Your walk to " + Name + " was cut short: you have been moved somewhere else";
                 default:
-                    string shortfall = Whereabouts.Shortfall(Destination - movement.Feet);
+                    string shortfall = Whereabouts.DescribeShortfall(Destination - movement.Feet);
                     return shortfall.Length == 0
                         ? "You have arrived at " + Name
                         : "You have arrived as close to " + Name + " as the ground allows, " + shortfall;
@@ -60,7 +60,7 @@ namespace Shooter.Game
 
         protected override string PromptRawDescription(GameObject body)
         {
-            return (Sprint ? "Running" : "Walking") + " to " + Name + " at " + Whereabouts.Coordinates(Destination) + ": " + Mathf.RoundToInt(Vector3.Distance(Destination, body.transform.position)) + " m left";
+            return (Sprint ? "Running" : "Walking") + " to " + Name + " at " + Whereabouts.FormatCoordinates(Destination) + ": " + Mathf.RoundToInt(Vector3.Distance(Destination, body.transform.position)) + " m left";
         }
     }
 }

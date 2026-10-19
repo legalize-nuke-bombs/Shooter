@@ -1,30 +1,33 @@
-﻿using Shooter.Infrastructure;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class SpawnPoint : MonoBehaviour, ISaveableComponent
+    public class RespawnPosition : MonoBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private Vector3? position;
 
         public string ComponentKey => "SpawnPoint";
+
         private struct SaveData
         {
             public Vector3? Position { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
                 Position = position
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            position = sd.Position;
+            SaveData saveData = content.ToObject<SaveData>();
+            position = saveData.Position;
         }
 
         private void Start()
@@ -37,7 +40,7 @@ namespace Shooter.Game
 
         public void SetPosition(Vector3 newPosition)
         {
-            Log.Info($"Entity {name} got new spawn point position {newPosition}");
+            Log.Info($"Entity {name} got new respawn position {newPosition}");
             position = newPosition;
         }
 
@@ -45,7 +48,7 @@ namespace Shooter.Game
         {
             if (position == null)
             {
-                Log.Error($"Entity {name} does not have inited spawn point, returning zero vector");
+                Log.Error($"Entity {name} does not have a respawn position yet, returning zero vector");
                 return Vector3.zero;
             }
             return position.Value;

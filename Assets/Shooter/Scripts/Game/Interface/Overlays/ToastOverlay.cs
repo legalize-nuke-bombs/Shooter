@@ -115,7 +115,7 @@ namespace Shooter.Game
             EarSpeaker ear = OwnPlayer.Find<EarSpeaker>();
             if (ear == null) return;
 
-            ear.PlayLocal(sound);
+            ear.PlayLocally(sound);
         }
 
         private void Forget()

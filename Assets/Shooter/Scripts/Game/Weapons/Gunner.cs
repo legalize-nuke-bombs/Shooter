@@ -88,13 +88,13 @@ namespace Shooter.Game
             if (!firearm.Spend())
             {
                 triggerHeld = false;
-                speaker?.Play(asset.MisfireSound);
+                speaker?.PlayForEveryone(asset.MisfireSound);
                 return false;
             }
 
             if (Time.time - lastShotAt >= asset.SprayRecovery) sprayShot = 0;
 
-            speaker?.Play(asset.ShotSound);
+            speaker?.PlayForEveryone(asset.ShotSound);
             Hit(asset);
 
             sprayShot++;
@@ -114,7 +114,7 @@ namespace Shooter.Game
                     () => Reloaded(firearm, asset, absent))) return false;
 
             restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantAction);
-            speaker?.Play(asset.ReloadSound);
+            speaker?.PlayForEveryone(asset.ReloadSound);
             Log.Info($"Entity {name} started reload of {firearm.AssetId}, {asset.ReloadTime}s");
             return true;
         }
@@ -165,7 +165,7 @@ namespace Shooter.Game
             }
 
             BodyPart part = Weakest(found, health);
-            if (part == BodyPart.Head) earSpeaker.Play(asset.HeadshotSound);
+            if (part == BodyPart.Head) earSpeaker.PlayForOwner(asset.HeadshotSound);
             int damage = Mathf.RoundToInt(asset.Damage * part.Multiplier());
 
             health.Damage(damage, character, asset.DamageType);

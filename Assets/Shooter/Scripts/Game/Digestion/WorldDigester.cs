@@ -14,41 +14,41 @@ namespace Shooter.Game
         private const float BiggestViewingDistance = 5000f;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        public static string Digest(GameObject around)
+        public static string DigestVisibleAround(GameObject observer)
         {
-            Vector3 origin = around.transform.position;
+            Vector3 origin = observer.transform.position;
 
-            var digest = new StringBuilder();
+            StringBuilder digest = new();
 
-            foreach (MainDigestible entity in FindVisible(around, origin))
+            foreach (MainDigestible entity in FindVisibleEntities(observer, origin))
             {
-                string seen = Digester.Of(entity, DigestionDetail.Brief);
-                if (seen != null) digest.Append(seen).Append('\n');
+                string entityDigest = Digester.DigestEntity(entity, DigestionDetail.Brief);
+                if (entityDigest != null) digest.Append(entityDigest).Append('\n');
             }
 
             string result = digest.ToString();
-            Log.Info($"Digestion around {around.name} finished, length: {result.Length}");
+            Log.Info($"Digestion around {observer.name} finished, length: {result.Length}");
             return result;
         }
 
-        private static List<MainDigestible> FindVisible(GameObject around, Vector3 origin)
+        private static List<MainDigestible> FindVisibleEntities(GameObject observer, Vector3 origin)
         {
-            var visible = new List<MainDigestible>();
+            var visibleEntities = new List<MainDigestible>();
 
             foreach (MainDigestible entity in Registers.GetAll<MainDigestible>(RegisterInactivePolicy.Exclude))
             {
-                if (entity.gameObject == around) continue;
+                if (entity.gameObject == observer) continue;
 
-                float reach = ViewingDistance(entity.Size);
-                if ((origin - entity.transform.position).sqrMagnitude > reach * reach) continue;
+                float viewingDistance = GetViewingDistance(entity.Size);
+                if ((origin - entity.transform.position).sqrMagnitude > viewingDistance * viewingDistance) continue;
 
-                visible.Add(entity);
+                visibleEntities.Add(entity);
             }
 
-            return visible.OrderBy(entity => (origin - entity.transform.position).sqrMagnitude).ToList();
+            return visibleEntities.OrderBy(entity => (origin - entity.transform.position).sqrMagnitude).ToList();
         }
 
-        private static float ViewingDistance(DigestibleSize size)
+        private static float GetViewingDistance(DigestibleSize size)
         {
             return size switch
             {

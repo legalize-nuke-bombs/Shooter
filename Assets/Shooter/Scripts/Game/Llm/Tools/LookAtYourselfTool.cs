@@ -16,7 +16,7 @@ namespace Shooter.Game
 
         protected override string Execute(LookAtYourselfArguments arguments, LlmCallContext context)
         {
-            return "Your state:\n" + Digester.Of(Self, DigestionDetail.Full);
+            return "Your state:\n" + Digester.DigestEntity(Self, DigestionDetail.Full);
         }
     }
 }

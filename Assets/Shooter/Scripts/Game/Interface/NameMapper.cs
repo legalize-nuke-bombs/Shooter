@@ -6,7 +6,7 @@ namespace Shooter.Game
     {
         public string Of(long characterId)
         {
-            Character character = Character.Of(characterId, RegisterInactivePolicy.Include);
+            Character character = Character.FindById(characterId, RegisterInactivePolicy.Include);
             Nameable nameable = character == null ? null : character.GetComponentInChildren<Nameable>();
 
             return nameable == null ? string.Empty : Of(nameable);
@@ -19,7 +19,7 @@ namespace Shooter.Game
                 case AbsoluteNameable absolute:
                     return absolute.Name;
                 case TypedNameable typed:
-                    return typed.Asset == null ? string.Empty : typed.Asset.Text();
+                    return typed.Asset == null ? string.Empty : typed.Asset.GetShownName();
                 default:
                     return string.Empty;
             }

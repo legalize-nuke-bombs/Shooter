@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Shooter.Infrastructure;
 using UnityEngine;
@@ -12,41 +12,41 @@ namespace Shooter.Game
         [SerializeField] private NotificationAsset notificationAsset;
         [SerializeField] private bool oncePerCharacter = true;
 
-        private HashSet<long> characters = new HashSet<long>();
+        private HashSet<long> notifiedCharacterIds = new();
 
         public string ComponentKey => "NotificationPublisher";
+
         private struct SaveData
         {
             public List<long> Characters { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
-                Characters = characters.ToList()
+                Characters = notifiedCharacterIds.ToList()
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            characters = new HashSet<long>(sd.Characters);
+            SaveData saveData = content.ToObject<SaveData>();
+            notifiedCharacterIds = new HashSet<long>(saveData.Characters);
         }
 
-        public void OnTrigger(Character character)
+        public void HandleCharacterEntered(Character character)
         {
             if (notificationAsset == null)
             {
-                Log.Warn($"Entity {name} does not have a notification asset");
+                Log.Error($"Entity {name} does not have a notification asset");
                 return;
             }
 
             NotificationRecipient notificationRecipient = character.GetComponent<NotificationRecipient>();
             if (notificationRecipient == null) return;
 
-            if (oncePerCharacter && !characters.Add(character.Id))
-            {
-                return;
-            }
+            if (oncePerCharacter && !notifiedCharacterIds.Add(character.Id)) return;
 
             Log.Info($"Entity {name} is sending notification to {notificationRecipient.name}...");
             notificationRecipient.Receive(notificationAsset);

@@ -97,7 +97,7 @@ namespace Shooter.Game
         {
             if (!message.Spoken || message.AuthorId != CharacterId || muttering == null) return;
 
-            speaker.Play(muttering);
+            speaker.PlayForEveryone(muttering);
         }
 
         private void RelayThinking(bool previous, bool current)

@@ -4,7 +4,7 @@ namespace Shooter.Game
 {
     public abstract class NameAsset : Asset
     {
-        public abstract string Text();
-        public abstract string Prompt();
+        public abstract string GetShownName();
+        public abstract string GetPromptName();
     }
 }

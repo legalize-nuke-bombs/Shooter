@@ -1,4 +1,3 @@
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -9,19 +8,19 @@ namespace Shooter.Game
 
         public NameAsset Asset => asset;
 
-        public void Assign(NameAsset assigned)
+        public void AssignNameAsset(NameAsset nameAsset)
         {
-            asset = assigned;
+            asset = nameAsset;
         }
 
         public override string Digest(DigestionDetail detail)
         {
-            return asset == null ? null : asset.Prompt();
+            return asset == null ? null : asset.GetPromptName();
         }
 
-        public override string PromptName()
+        public override string GetPromptName()
         {
-            return asset == null ? null : asset.Prompt();
+            return asset == null ? null : asset.GetPromptName();
         }
     }
 }

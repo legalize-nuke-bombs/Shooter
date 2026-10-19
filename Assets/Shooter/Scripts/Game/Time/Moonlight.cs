@@ -12,11 +12,11 @@ namespace Shooter.Game
         [SerializeField] private float lagBehindSun = 144f;
 
         private Clock clock;
-        private Light moon;
+        private Light moonLight;
 
         private void Awake()
         {
-            moon = GetComponent<Light>();
+            moonLight = GetComponent<Light>();
         }
 
         private void Start()
@@ -30,17 +30,17 @@ namespace Shooter.Game
             if (clock == null) return;
 
             float hourAngle = (float)clock.HourAngle - lagBehindSun;
-            float elevation = Celestial.Elevation(hourAngle, clock.Declination, clock.Latitude);
+            float elevation = Celestial.GetElevation(hourAngle, clock.Declination, clock.Latitude);
 
-            transform.rotation = Celestial.Rotation(hourAngle, clock.Declination, clock.Latitude);
-            moon.intensity = brightest * Illumination(lagBehindSun) * Sunlight.HorizonFade(elevation);
+            transform.rotation = Celestial.GetLightRotation(hourAngle, clock.Declination, clock.Latitude);
+            moonLight.intensity = brightest * GetIlluminatedFraction(lagBehindSun) * Sunlight.GetHorizonFade(elevation);
 
-            float sunElevation = Celestial.Elevation((float)clock.HourAngle, clock.Declination, clock.Latitude);
-            bool alone = sunElevation <= Sunlight.ShadowHandover && elevation > Sunlight.ShadowHandover;
-            moon.shadows = alone ? LightShadows.Soft : LightShadows.None;
+            float sunElevation = Celestial.GetElevation((float)clock.HourAngle, clock.Declination, clock.Latitude);
+            bool isMoonCastingShadows = sunElevation <= Sunlight.ShadowHandoverElevation && elevation > Sunlight.ShadowHandoverElevation;
+            moonLight.shadows = isMoonCastingShadows ? LightShadows.Soft : LightShadows.None;
         }
 
-        private static float Illumination(float elongation)
+        private static float GetIlluminatedFraction(float elongation)
         {
             return (1f - Mathf.Cos(elongation * Mathf.Deg2Rad)) * 0.5f;
         }

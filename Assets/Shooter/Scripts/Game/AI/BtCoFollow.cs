@@ -39,7 +39,7 @@ namespace Shooter.Game
         {
             get
             {
-                if (target == null) target = Character.Of(TargetId, RegisterInactivePolicy.Exclude);
+                if (target == null) target = Character.FindById(TargetId, RegisterInactivePolicy.Exclude);
 
                 return target != null && target.gameObject.activeInHierarchy ? target : null;
             }
@@ -68,7 +68,7 @@ namespace Shooter.Game
             if (followed == null) return "Following " + Handle + ": it is gone";
 
             Vector3 there = followed.transform.position;
-            return (Sprint ? "Running after " : "Following ") + Handle + " at " + Whereabouts.Coordinates(there) + " keeping " + Mathf.RoundToInt(Reach) + " m from it: " + Mathf.RoundToInt(Vector3.Distance(there, body.transform.position)) + " m away";
+            return (Sprint ? "Running after " : "Following ") + Handle + " at " + Whereabouts.FormatCoordinates(there) + " keeping " + Mathf.RoundToInt(Reach) + " m from it: " + Mathf.RoundToInt(Vector3.Distance(there, body.transform.position)) + " m away";
         }
     }
 }

@@ -15,18 +15,19 @@ namespace Shooter.Game
         public float WallDepth => wallDepth;
         public float WallHeight => wallHeight;
 
-        // A map may hold no water or several surfaces: the depth is that of the water the point is under
-        public static float Depth(Vector3 point)
+        public static float FindDepthAt(Vector3 point)
         {
             float deepest = 0f;
 
             foreach (Water water in Registers.GetAll<Water>(RegisterInactivePolicy.Exclude))
-                deepest = Mathf.Max(deepest, water.DepthAt(point));
+            {
+                deepest = Mathf.Max(deepest, water.GetDepthAt(point));
+            }
 
             return deepest;
         }
 
-        public float DepthAt(Vector3 point)
+        public float GetDepthAt(Vector3 point)
         {
             Vector3 offset = point - transform.position;
             Vector3 extent = transform.lossyScale / 2f;

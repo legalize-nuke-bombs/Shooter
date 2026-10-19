@@ -23,7 +23,7 @@ namespace Shooter.Game
         private static Player ByKey()
         {
             string key = OwnKey();
-            return key == null ? null : Player.OfKey(key, RegisterInactivePolicy.Exclude);
+            return key == null ? null : Player.FindByPublicKey(key, RegisterInactivePolicy.Exclude);
         }
 
         private static Player ByOwnership()

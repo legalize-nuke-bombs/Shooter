@@ -25,7 +25,7 @@ namespace Shooter.Game
 
             foreach (long targetId in targetIds)
             {
-                var target = Character.Of(targetId, RegisterInactivePolicy.Include);
+                var target = Character.FindById(targetId, RegisterInactivePolicy.Include);
 
                 if (target == null)
                 {
@@ -33,7 +33,7 @@ namespace Shooter.Game
                 }
                 else
                 {
-                    sb.AppendLine(Digester.Of(target.gameObject, DigestionDetail.Brief));
+                    sb.AppendLine(Digester.DigestEntity(target.gameObject, DigestionDetail.Brief));
                 }
             }
 
