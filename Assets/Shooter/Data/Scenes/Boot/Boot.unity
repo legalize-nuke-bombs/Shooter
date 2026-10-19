@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 812766071}
   - component: {fileID: 812766070}
   m_Layer: 0
-  m_Name: Boot
+  m_Name: SceneSwitcherOnStartup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394caf36a0ae5b2408aabc8df3fafa8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.Boot
-  menuScene: Menu
+  scene: Menu
 --- !u!4 &812766071
 Transform:
   m_ObjectHideFlags: 0
@@ -465,7 +465,7 @@ GameObject:
   - component: {fileID: 1917017603}
   - component: {fileID: 1917017602}
   m_Layer: 0
-  m_Name: Loading
+  m_Name: LoadingScreenOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

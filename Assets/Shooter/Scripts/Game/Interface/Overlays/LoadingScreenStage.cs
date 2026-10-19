@@ -1,6 +1,6 @@
 namespace Shooter.Game
 {
-    public enum LoadingStage
+    public enum LoadingScreenStage
     {
         Scene,
         Server,

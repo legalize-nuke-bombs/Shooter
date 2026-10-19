@@ -27,7 +27,7 @@ namespace Shooter.Game
 
         private NetworkManager network;
         private NetworkStarter starter;
-        private LoadingOverlay loading;
+        private LoadingScreenOverlay loading;
         private FrozenWorld frozen;
         private bool leaving;
 
@@ -47,7 +47,7 @@ namespace Shooter.Game
             Application.targetFrameRate = UnlimitedFrameRate;
             network = NetworkManager.Singleton;
             starter = network.GetComponent<NetworkStarter>();
-            loading = FindAnyObjectByType<LoadingOverlay>();
+            loading = FindAnyObjectByType<LoadingScreenOverlay>();
             network.OnClientStopped += Stopped;
             network.OnServerStopped += Stopped;
             network.OnClientConnectedCallback += Entered;
@@ -97,7 +97,7 @@ namespace Shooter.Game
         private bool Restore()
         {
             Log.Info($"Loading the world from {starter.Save}");
-            loading.Show(LoadingStage.Save);
+            loading.Show(LoadingScreenStage.Save);
             if (SaveManager.Load(frozen, starter.Save)) return true;
 
             Log.Warn($"The world failed to load {starter.Save}, shutting the host down");

@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class MenuScreen : Overlay
+    public class MainMenuOverlay : Overlay
     {
         private const string PanelElement = "panel";
         private const string VersionElement = "version";
@@ -29,7 +29,7 @@ namespace Shooter.Game
         private ClientPage client;
         private ClientSettingsPage clientSettings;
         private Dialog dialog;
-        private LoadingOverlay loading;
+        private LoadingScreenOverlay loading;
         private MainPage main;
         private NewGamePage newGame;
         private VisualElement panel;
@@ -48,7 +48,7 @@ namespace Shooter.Game
         // A world that ended halfway through its load leaves the loading screen up, the menu takes it down
         private void Start()
         {
-            loading = FindAnyObjectByType<LoadingOverlay>();
+            loading = FindAnyObjectByType<LoadingScreenOverlay>();
             loading.Hide();
             starter.Refused += Refused;
         }
@@ -246,7 +246,7 @@ namespace Shooter.Game
         private void Host(string save)
         {
             if (save != null) Log.Info($"The player continues the game saved at {save}");
-            loading.Show(LoadingStage.Server);
+            loading.Show(LoadingScreenStage.Server);
             Refusal refusal = starter.Host(save);
             if (refusal == null) return;
 
@@ -264,7 +264,7 @@ namespace Shooter.Game
                 return;
             }
 
-            loading.Show(LoadingStage.Connection, Cancel);
+            loading.Show(LoadingScreenStage.Connection, Cancel);
         }
 
         private void Cancel()

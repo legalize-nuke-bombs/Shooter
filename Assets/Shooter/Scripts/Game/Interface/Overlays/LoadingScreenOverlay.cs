@@ -10,20 +10,20 @@ namespace Shooter.Game
 {
     // Stands in Boot and lives through every scene. The menu and the world show the stages they start and take the
     // screen down; the loads Netcode runs between them the screen follows itself, as nobody else is up to see them
-    public class LoadingOverlay : Overlay
+    public class LoadingScreenOverlay : Overlay
     {
         private const string ScreenElement = "loading";
         private const string TextElement = "loading-text";
         private const string TipElement = "loading-tip";
         private const string CancelElement = "loading-cancel";
 
-        private static readonly Dictionary<LoadingStage, string> Titles = new()
+        private static readonly Dictionary<LoadingScreenStage, string> Titles = new()
         {
-            [LoadingStage.Scene] = "Загрузка сцены",
-            [LoadingStage.Server] = "Запуск сервера",
-            [LoadingStage.Save] = "Загрузка сохранения",
-            [LoadingStage.Connection] = "Подключение к серверу",
-            [LoadingStage.Synchronization] = "Синхронизация мира"
+            [LoadingScreenStage.Scene] = "Загрузка сцены",
+            [LoadingScreenStage.Server] = "Запуск сервера",
+            [LoadingScreenStage.Save] = "Загрузка сохранения",
+            [LoadingScreenStage.Connection] = "Подключение к серверу",
+            [LoadingScreenStage.Synchronization] = "Синхронизация мира"
         };
 
         private static readonly Journal Log = Logs.Here();
@@ -56,7 +56,7 @@ namespace Shooter.Game
         }
 
         // A stage the player may give up shows a cancel button, and the press goes back to whoever started the stage
-        public void Show(LoadingStage stage, Action cancelled = null)
+        public void Show(LoadingScreenStage stage, Action cancelled = null)
         {
             caption = Titles[stage];
             this.cancelled = cancelled;
@@ -132,10 +132,10 @@ namespace Shooter.Game
             switch (sceneEvent.SceneEventType)
             {
                 case SceneEventType.Load:
-                    Show(LoadingStage.Scene);
+                    Show(LoadingScreenStage.Scene);
                     break;
                 case SceneEventType.LoadComplete when !network.IsServer:
-                    Show(LoadingStage.Synchronization);
+                    Show(LoadingScreenStage.Synchronization);
                     break;
             }
         }
