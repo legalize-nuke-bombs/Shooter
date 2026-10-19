@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(TextMarker))]
-    public class CapsuleMarker : MonoBehaviour
+    public class CapsuleMarker : ShooterBehaviour
     {
         private const float Height = 2f;
         private const float Radius = 0.4f;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public class TextMarker : MonoBehaviour
+    public class TextMarker : ShooterBehaviour
     {
         [SerializeField] private string label;
         [SerializeField] private Color textColor = Color.white;
