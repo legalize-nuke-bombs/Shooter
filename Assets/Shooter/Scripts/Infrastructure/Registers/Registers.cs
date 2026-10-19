@@ -7,14 +7,14 @@ namespace Shooter.Infrastructure
     public static class Registers
     {
         private static readonly Journal Log = Logs.Here();
-        private static readonly Dictionary<Type, Register> Known = new();
+        private static readonly Dictionary<Type, Register> RegistersByType = new();
 
         public static void Add<T>(T member) where T : MonoBehaviour, IShooterBehaviour
         {
-            if (!Known.TryGetValue(member.GetType(), out Register register))
+            if (!RegistersByType.TryGetValue(member.GetType(), out Register register))
             {
                 register = new Register();
-                Known[member.GetType()] = register;
+                RegistersByType[member.GetType()] = register;
             }
 
             register.Add(member);
@@ -23,7 +23,7 @@ namespace Shooter.Infrastructure
 
         public static void Remove<T>(T member) where T : MonoBehaviour, IShooterBehaviour
         {
-            if (Known.TryGetValue(member.GetType(), out Register register))
+            if (RegistersByType.TryGetValue(member.GetType(), out Register register))
             {
                 register.Remove(member);
             }
@@ -31,11 +31,11 @@ namespace Shooter.Infrastructure
             Log.Debug($"{member.GetType().Name} {member.name} unregistered");
         }
 
-        public static IEnumerable<T> Of<T>(RegisterInactivePolicy gate) where T : MonoBehaviour, IShooterBehaviour
+        public static IEnumerable<T> Of<T>(RegisterInactivePolicy inactivePolicy) where T : MonoBehaviour, IShooterBehaviour
         {
-            if (!Known.TryGetValue(typeof(T), out Register register)) yield break;
+            if (!RegistersByType.TryGetValue(typeof(T), out Register register)) yield break;
 
-            foreach (MonoBehaviour member in register.All(gate))
+            foreach (MonoBehaviour member in register.All(inactivePolicy))
             {
                 yield return (T)member;
             }

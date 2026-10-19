@@ -37,12 +37,12 @@ namespace Shooter.Game
 
         private void Step()
         {
-            bool everyone = AllAsleep();
-            if (everyone != asleep.Value)
+            bool allAsleep = AreAllPlayersAsleep();
+            if (allAsleep != asleep.Value)
             {
-                asleep.Value = everyone;
-                clock.Scale = everyone ? SkipTimeScale : 1f;
-                Log.Info($"World asleep is now {everyone}");
+                asleep.Value = allAsleep;
+                clock.Scale = allAsleep ? SkipTimeScale : 1f;
+                Log.Info($"World asleep is now {allAsleep}");
             }
 
             if (IsBedtime())
@@ -65,7 +65,7 @@ namespace Shooter.Game
             return hours >= BedtimeHours || hours < WakeHours;
         }
 
-        private bool AllAsleep()
+        private bool AreAllPlayersAsleep()
         {
             bool anyone = false;
             foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Exclude))

@@ -12,7 +12,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
         private Character ownCharacter;
 
         public override string Name => "list_conversations";
@@ -25,7 +25,7 @@ To see the content, use read_conversation.
 
         protected override void OnStart()
         {
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {
@@ -35,14 +35,14 @@ To see the content, use read_conversation.
 
         protected override string Execute(ListConversationsArguments arguments, LlmCallContext context)
         {
-            List<Conversation> ownConversations = conversations.Of(ownCharacter.Id);
-            if (ownConversations.Count == 0)
+            List<Conversation> conversations = conversationManager.Of(ownCharacter.Id);
+            if (conversations.Count == 0)
             {
                 return "Nothing yet";
             }
 
             var partners = new HashSet<long>();
-            foreach (Conversation conversation in ownConversations)
+            foreach (Conversation conversation in conversations)
             {
                 partners.Add(conversation.Partner(ownCharacter.Id));
             }
@@ -58,7 +58,7 @@ To see the content, use read_conversation.
             }, RegisterInactivePolicy.Include
                 );
 
-            var sortedConversations = ownConversations
+            var sortedConversations = conversations
                 .OrderByDescending(c => c.Messages.LastOrDefault()?.Time ?? DateTime.MinValue)
                 .ToList();
 

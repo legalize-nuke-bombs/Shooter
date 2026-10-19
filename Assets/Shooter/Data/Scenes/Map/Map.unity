@@ -18081,7 +18081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db04b8a481439c84d9f29c846bbef8b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.PlayerSpawner
-  loader: {fileID: 1968605374}
+  saveLoaderOnStartup: {fileID: 1968605374}
 --- !u!4 &1892203194
 Transform:
   m_ObjectHideFlags: 0

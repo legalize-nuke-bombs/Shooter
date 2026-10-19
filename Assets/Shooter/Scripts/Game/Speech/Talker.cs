@@ -16,7 +16,7 @@ namespace Shooter.Game
         [SerializeField] private SoundAsset muttering;
 
         private Character character;
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
         private Health health;
         private Sleeper sleeper;
         private Speaker speaker;
@@ -48,15 +48,15 @@ namespace Shooter.Game
             if (!IsServer) return;
 
             enabled = true;
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
-            conversations.Said += Mutter;
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager.Said += Mutter;
         }
 
         public override void OnNetworkDespawn()
         {
             thinking.OnValueChanged -= RelayThinking;
-            if (IsServer) conversations.Said -= Mutter;
-            conversations = null;
+            if (IsServer) conversationManager.Said -= Mutter;
+            conversationManager = null;
             enabled = false;
         }
 

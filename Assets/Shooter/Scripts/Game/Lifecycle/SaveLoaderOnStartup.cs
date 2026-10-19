@@ -8,14 +8,14 @@ namespace Shooter.Game
 {
     public class SaveLoaderOnStartup : ShooterBehaviour
     {
-        private const string BrokenSave = "Не удалось загрузить сохранение";
+        private const string BrokenSaveTitle = "Не удалось загрузить сохранение";
         private const string BrokenSaveDetails = "Файл повреждён или несовместим с этой версией";
         private static readonly Journal Log = Logs.Here();
 
         private NetworkManager network;
-        private NetworkStarter starter;
-        private LoadingScreenOverlay loading;
-        private FrozenWorld frozen;
+        private NetworkStarter networkStarter;
+        private LoadingScreenOverlay loadingScreenOverlay;
+        private FrozenWorld frozenWorld;
 
         public event Action Loaded;
 
@@ -24,48 +24,48 @@ namespace Shooter.Game
             network = NetworkManager.Singleton;
             if (!network.IsServer) return;
 
-            starter = network.GetComponent<NetworkStarter>();
-            loading = FindAnyObjectByType<LoadingScreenOverlay>();
+            networkStarter = network.GetComponent<NetworkStarter>();
+            loadingScreenOverlay = FindAnyObjectByType<LoadingScreenOverlay>();
             SaveManager.Open();
-            network.SceneManager.OnLoadComplete += SceneLoaded;
+            network.SceneManager.OnLoadComplete += HandleSceneLoaded;
         }
 
         protected override void ShooterOnDestroy()
         {
-            if (network.SceneManager != null) network.SceneManager.OnLoadComplete -= SceneLoaded;
+            if (network.SceneManager != null) network.SceneManager.OnLoadComplete -= HandleSceneLoaded;
         }
 
-        private void SceneLoaded(ulong client, string scene, LoadSceneMode mode)
+        private void HandleSceneLoaded(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
         {
-            if (client != NetworkManager.ServerClientId || scene != gameObject.scene.name) return;
+            if (clientId != NetworkManager.ServerClientId || sceneName != gameObject.scene.name) return;
 
-            network.SceneManager.OnLoadComplete -= SceneLoaded;
+            network.SceneManager.OnLoadComplete -= HandleSceneLoaded;
 
             // Netcode calls this before the scene's first Update: freezing here keeps that one Update from running on
             // a world the save has not loaded yet
-            if (starter.Save != null) frozen = SaveManager.Freeze();
-            StartCoroutine(Begin());
+            if (networkStarter.Save != null) frozenWorld = SaveManager.Freeze();
+            StartCoroutine(LoadWorldNextFrame());
         }
 
-        private IEnumerator Begin()
+        private IEnumerator LoadWorldNextFrame()
         {
             yield return null;
             Log.Info($"Scene {gameObject.scene.name} is up");
 
-            if (frozen != null && !Restore()) yield break;
+            if (frozenWorld != null && !LoadSaveOrShutDown()) yield break;
 
             Loaded?.Invoke();
-            loading.Hide();
+            loadingScreenOverlay.Hide();
         }
 
-        private bool Restore()
+        private bool LoadSaveOrShutDown()
         {
-            Log.Info($"Loading the world from {starter.Save}");
-            loading.Show(LoadingScreenStage.Save);
-            if (SaveManager.Load(frozen, starter.Save)) return true;
+            Log.Info($"Loading the world from {networkStarter.Save}");
+            loadingScreenOverlay.Show(LoadingScreenStage.Save);
+            if (SaveManager.Load(frozenWorld, networkStarter.Save)) return true;
 
-            Log.Warn($"The world failed to load {starter.Save}, shutting the host down");
-            starter.Failure = new NetworkStartFailure(BrokenSave, BrokenSaveDetails);
+            Log.Warn($"The world failed to load {networkStarter.Save}, shutting the host down");
+            networkStarter.Failure = new NetworkStartFailure(BrokenSaveTitle, BrokenSaveDetails);
             network.Shutdown();
             return false;
         }

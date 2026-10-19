@@ -12,7 +12,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
         private Character ownCharacter;
         public override string Name => "read_conversation";
 
@@ -25,7 +25,7 @@ Specify `from` (the message number from which you want to retrieve the conversat
 
         protected override void OnStart()
         {
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {
@@ -52,7 +52,7 @@ Specify `from` (the message number from which you want to retrieve the conversat
                 return $"The specified ID ({targetId}) belongs to you";
             }
 
-            Conversation conversation = conversations.GetIfPresent(ownCharacter.Id, targetId);
+            Conversation conversation = conversationManager.GetIfPresent(ownCharacter.Id, targetId);
             if (conversation == null)
             {
                 return $"You don't have conversation with ID {targetId}";

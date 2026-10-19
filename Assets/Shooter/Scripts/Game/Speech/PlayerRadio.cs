@@ -11,12 +11,12 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private Character character;
-        private ConversationManager conversations;
+        private ConversationManager conversationManager;
 
         private void Awake()
         {
             character = GetComponent<Character>();
-            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -28,13 +28,13 @@ namespace Shooter.Game
                 return;
             }
 
-            if (conversations.GetIfPresent(character.Id, partnerId) == null)
+            if (conversationManager.GetIfPresent(character.Id, partnerId) == null)
             {
                 Log.Info($"Player {OwnerClientId} radioed {partnerId} without ever talking to them, ignored");
                 return;
             }
 
-            conversations.Say(character.Id, partnerId, text, false, true);
+            conversationManager.Say(character.Id, partnerId, text, false, true);
         }
     }
 }
