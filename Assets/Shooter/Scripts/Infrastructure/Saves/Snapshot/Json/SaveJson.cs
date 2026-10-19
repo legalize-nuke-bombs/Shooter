@@ -10,7 +10,7 @@ namespace Shooter.Infrastructure
             Formatting = Formatting.Indented,
             Converters =
             {
-                new Vector3Converter(), new QuaternionConverter(), new SaveableConverter(), new SaveTokenConverter(),
+                new Vector3JsonConverter(), new QuaternionJsonConverter(), new SaveableJsonConverter(), new SaveTokenJsonConverter(),
                 new StringEnumConverter()
             }
         };

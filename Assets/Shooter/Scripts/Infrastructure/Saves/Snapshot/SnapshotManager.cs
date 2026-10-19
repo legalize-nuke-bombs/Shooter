@@ -14,7 +14,7 @@ namespace Shooter.Infrastructure
         public static Snapshot Build()
         {
             Log.Info("Building snapshot...");
-            var snapshot = new Snapshot
+            Snapshot snapshot = new()
             {
                 GameObjects = new Dictionary<string, object>()
             };
@@ -39,6 +39,8 @@ namespace Shooter.Infrastructure
                     continue;
                 }
 
+                if (saved == null) continue;
+
                 if (!snapshot.GameObjects.TryAdd(saveable.Id, saved))
                 {
                     Log.Warn($"Snapshot found that {saveable.name} shares id {saveable.Id} with an entity already saved");
@@ -49,17 +51,19 @@ namespace Shooter.Infrastructure
             return snapshot;
         }
 
-        public static void Write(string path, Snapshot snapshot)
+        public static bool Write(string path, Snapshot snapshot)
         {
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, JsonConvert.SerializeObject(snapshot, SaveJson.Settings));
                 Log.Info($"Snapshot is written into {path}: {snapshot.GameObjects.Count} entities");
+                return true;
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to write snapshot into {path}: {e.Message}");
+                Log.Warn($"Failed to write snapshot into {path}: {e.Message}");
+                return false;
             }
         }
 
@@ -70,7 +74,7 @@ namespace Shooter.Infrastructure
             Snapshot snapshot;
             try
             {
-                using var reader = new StreamReader(new MemoryStream(bytes), Encoding.UTF8, true);
+                using StreamReader reader = new(new MemoryStream(bytes), Encoding.UTF8, true);
                 snapshot = JsonConvert.DeserializeObject<Snapshot>(reader.ReadToEnd(), SaveJson.Settings);
             }
             catch (Exception e)
@@ -88,7 +92,7 @@ namespace Shooter.Infrastructure
             foreach (KeyValuePair<string, object> record in snapshot.GameObjects)
             {
                 string targetId = record.Key;
-                var targetValue = SaveToken.From(record.Value);
+                SaveToken targetValue = SaveToken.From(record.Value);
 
                 if (world.TryGet(targetId, out SaveableObject target))
                 {
@@ -109,8 +113,14 @@ namespace Shooter.Infrastructure
                     Log.Info($"Spawning non-scene object {targetId}...");
                     try
                     {
-                        SaveableObject.Spawn(world, targetId, targetValue);
-                        nonSceneOk++;
+                        if (SaveableObject.Spawn(world, targetId, targetValue))
+                        {
+                            nonSceneOk++;
+                        }
+                        else
+                        {
+                            nonSceneFailed++;
+                        }
                     }
                     catch (Exception e)
                     {

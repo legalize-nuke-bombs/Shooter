@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -9,7 +8,7 @@ namespace Shooter.Infrastructure
     public class SaveableTransform : NetworkBehaviour, ISaveableComponent
     {
         public string ComponentKey => "SaveableTransform";
-        private struct SaveDto
+        private struct SaveData
         {
             public Vector3 Position { get; set; }
             public Quaternion Rotation { get; set; }
@@ -17,7 +16,7 @@ namespace Shooter.Infrastructure
         }
         public object SaveObject()
         {
-            return new SaveDto
+            return new SaveData
             {
                 Position = transform.position,
                 Rotation = transform.rotation,
@@ -26,8 +25,8 @@ namespace Shooter.Infrastructure
         }
         public void LoadObject(SaveToken content)
         {
-            SaveDto sd = content.To<SaveDto>();
-            GetComponent<NetworkTransform>().Teleport(sd.Position, sd.Rotation, sd.Scale);
+            SaveData data = content.To<SaveData>();
+            GetComponent<NetworkTransform>().Teleport(data.Position, data.Rotation, data.Scale);
         }
     }
 }

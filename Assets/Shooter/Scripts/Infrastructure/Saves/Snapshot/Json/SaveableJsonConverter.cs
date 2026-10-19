@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Shooter.Infrastructure
 {
-    public class SaveableConverter : JsonConverter
+    public class SaveableJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -20,7 +20,7 @@ namespace Shooter.Infrastructure
         {
             if (reader.TokenType == JsonToken.Null) return null;
 
-            var saveable = (ISaveable)Activator.CreateInstance(objectType);
+            ISaveable saveable = (ISaveable)Activator.CreateInstance(objectType);
             saveable.LoadObject(SaveToken.Read(reader));
             return saveable;
         }

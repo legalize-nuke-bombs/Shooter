@@ -52,7 +52,6 @@ namespace Shooter.Infrastructure
         {
             if (!IsServer) return;
 
-            // An object of the scene with no id is a forgotten bake: it stays empty and the snapshot warns about it
             if (!string.IsNullOrEmpty(id) || NetworkObject.InScenePlaced) return;
 
             id = Guid.NewGuid().ToString();
@@ -78,7 +77,7 @@ namespace Shooter.Infrastructure
                 return null;
             }
 
-            var sd = new SaveData()
+            SaveData data = new()
             {
                 Metadata = Metadata,
                 Spawned = Spawned,
@@ -105,14 +104,14 @@ namespace Shooter.Infrastructure
                     continue;
                 }
 
-                if (!sd.Components.TryAdd(saveableKey, saveableData))
+                if (!data.Components.TryAdd(saveableKey, saveableData))
                 {
                     Log.Warn($"Entity {name} found duplicate key {saveableKey}");
                 }
             }
 
-            Log.Info($"Entity {name} saved {sd.Components.Count} components, spawned = {Spawned}");
-            return sd;
+            Log.Info($"Entity {name} saved {data.Components.Count} components, spawned = {Spawned}");
+            return data;
         }
 
         public void LoadObject(SaveToken content)
@@ -120,22 +119,22 @@ namespace Shooter.Infrastructure
             LoadObject(content.To<SaveData>());
         }
 
-        private void LoadObject(SaveData sd)
+        private void LoadObject(SaveData data)
         {
             Log.Info($"Entity {name} is loading...");
 
-            active = sd.Active;
-            Metadata = sd.Metadata;
+            active = data.Active;
+            Metadata = data.Metadata;
 
-            if (Dynamic && !sd.Spawned)
+            if (Dynamic && !data.Spawned)
             {
                 Log.Warn($"Entity {name} is not valid");
             }
-            if (!sd.Spawned)
+            if (!data.Spawned)
             {
-                if (sd.Components.Count > 0)
+                if (data.Components.Count > 0)
                 {
-                    Log.Warn($"Entity {name} is not spawned, but has {sd.Components.Count} serialized components, ignoring");
+                    Log.Warn($"Entity {name} is not spawned, but has {data.Components.Count} serialized components, ignoring");
                 }
                 Log.Info($"Entity {name} is not spawned, despawning...");
                 networkObject.Despawn(Dynamic);
@@ -149,7 +148,7 @@ namespace Shooter.Infrastructure
                 string saveableKey = saveable.ComponentKey;
                 known.Add(saveableKey);
 
-                if (!sd.Components.TryGetValue(saveableKey, out SaveToken componentData))
+                if (!data.Components.TryGetValue(saveableKey, out SaveToken componentData))
                 {
                     Log.Warn($"Entity {name} failed to find saved data for {saveableKey}");
                     continue;
@@ -165,7 +164,7 @@ namespace Shooter.Infrastructure
                 }
             }
 
-            foreach (string key in sd.Components.Keys)
+            foreach (string key in data.Components.Keys)
             {
                 if (!known.Contains(key))
                 {
@@ -173,44 +172,44 @@ namespace Shooter.Infrastructure
                 }
             }
 
-            Log.Info($"Entity {name} loaded {known.Count} / {saveables.Length} components (provided {sd.Components.Count})");
+            Log.Info($"Entity {name} loaded {known.Count} / {saveables.Length} components (provided {data.Components.Count})");
         }
 
-        public static void Spawn(FrozenWorld world, string id, SaveToken content)
+        public static bool Spawn(FrozenWorld world, string id, SaveToken content)
         {
-            SaveData saveData = content.To<SaveData>();
-            if (!saveData.Spawned)
+            SaveData data = content.To<SaveData>();
+            if (!data.Spawned)
             {
                 Log.Warn($"Entity id {id} is not valid, ignoring");
-                return;
+                return false;
             }
-            string prefabId = saveData.PrefabId;
-            if (String.IsNullOrEmpty(prefabId))
+            string prefabId = data.PrefabId;
+            if (string.IsNullOrEmpty(prefabId))
             {
-                throw new ArgumentException("Serialized prefab id is null or empty");
+                Log.Warn($"Entity id {id} has no prefab id, ignoring");
+                return false;
             }
-            SaveablePrefabCatalog catalog = Catalogs.Of<SaveablePrefabCatalog>();
-            GameObject prefab = catalog.Of(prefabId).Prefab;
-            if (prefab == null)
+            SaveablePrefabAsset asset = Catalogs.Of<SaveablePrefabCatalog>().Of(prefabId);
+            if (asset == null || asset.Prefab == null)
             {
-                throw new ArgumentException($"Failed to find prefab {prefabId}");
+                Log.Warn($"Failed to find prefab {prefabId} for entity id {id}, ignoring");
+                return false;
             }
 
-            // The saved id goes in before the network spawn, so the object never gets a fresh one of its own
-            GameObject body = NetworkSpawner.Spawn(prefab, fresh =>
+            GameObject body = NetworkSpawner.Spawn(asset.Prefab, fresh =>
             {
                 if (fresh.TryGetComponent(out SaveableObject saved)) saved.id = id;
             });
 
-            if (body.TryGetComponent(out SaveableObject saveableObject))
-            {
-                world.Adopt(saveableObject);
-                saveableObject.LoadObject(saveData);
-            }
-            else
+            if (!body.TryGetComponent(out SaveableObject saveableObject))
             {
                 Log.Warn($"Prefab {prefabId} does not have saveable object");
+                return false;
             }
+
+            world.Adopt(saveableObject);
+            saveableObject.LoadObject(data);
+            return true;
         }
     }
 }

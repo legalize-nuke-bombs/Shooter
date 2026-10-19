@@ -67,18 +67,18 @@ namespace Shooter.Infrastructure
             byExtension = new Dictionary<string, CompressionManager>();
             known = new List<CompressionManager>();
 
-            IEnumerable<Type> kinds = typeof(CompressionManager).Assembly.GetTypes()
+            IEnumerable<Type> types = typeof(CompressionManager).Assembly.GetTypes()
                 .Where(type => !type.IsAbstract && typeof(CompressionManager).IsAssignableFrom(type))
                 .OrderBy(type => type.Name, StringComparer.Ordinal);
 
-            foreach (Type kind in kinds)
+            foreach (Type type in types)
             {
-                var manager = (CompressionManager)Activator.CreateInstance(kind);
+                CompressionManager manager = (CompressionManager)Activator.CreateInstance(type);
                 string normalizedKey = manager.Key.ToLowerInvariant();
                 string normalizedExtension = manager.Extension.ToLowerInvariant();
                 if (byKey.ContainsKey(normalizedKey) || byExtension.ContainsKey(normalizedExtension))
                 {
-                    Log.Warn($"Compression manager {kind.Name} duplicates an already known one ({normalizedKey} - {normalizedExtension})");
+                    Log.Warn($"Compression manager {type.Name} duplicates an already known one ({normalizedKey} - {normalizedExtension})");
                     continue;
                 }
 
