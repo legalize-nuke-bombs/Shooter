@@ -14,13 +14,13 @@ namespace Shooter.Game
         private readonly Dictionary<ulong, NetworkObject> bodies = new();
 
         private NetworkManager network;
-        private Greeter greeter;
+        private NetworkConnectionApprover approver;
         private bool ready;
 
         private void Awake()
         {
             network = NetworkManager.Singleton;
-            greeter = network.GetComponent<Greeter>();
+            approver = network.GetComponent<NetworkConnectionApprover>();
             network.OnClientConnectedCallback += Welcome;
             network.OnClientDisconnectCallback += Forget;
         }
@@ -56,10 +56,10 @@ namespace Shooter.Game
 
         private void Embody(ulong client)
         {
-            string name = greeter.NameOf(client);
-            string key = greeter.KeyOf(client);
+            string name = approver.NameOf(client);
+            string key = approver.PublicKeyOf(client);
 
-            Player returning = key == null ? null : Player.OfKey(key, Inactive.Include);
+            Player returning = Player.OfKey(key, Inactive.Include);
             NetworkObject body;
             if (returning != null)
             {

@@ -19,7 +19,6 @@ namespace Shooter.Game
         private const string BrokenSaveDetails = "Файл повреждён или несовместим с этой версией";
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private Launch launch;
         [SerializeField] private PlayerSpawner spawner;
         [SerializeField] private GameObject state;
         [SerializeField] private string menu = "Menu";
@@ -27,6 +26,7 @@ namespace Shooter.Game
         private readonly Dictionary<Type, Component> parts = new();
 
         private NetworkManager network;
+        private NetworkStarter starter;
         private LoadingOverlay loading;
         private FrozenWorld frozen;
         private bool leaving;
@@ -46,6 +46,7 @@ namespace Shooter.Game
 
             Application.targetFrameRate = UnlimitedFrameRate;
             network = NetworkManager.Singleton;
+            starter = network.GetComponent<NetworkStarter>();
             loading = FindAnyObjectByType<LoadingOverlay>();
             network.OnClientStopped += Stopped;
             network.OnServerStopped += Stopped;
@@ -78,7 +79,7 @@ namespace Shooter.Game
 
             // Netcode calls this before the scene's first Update: freezing here keeps that one Update from running on
             // a world the save has not loaded yet
-            if (launch.Save != null) frozen = SaveManager.Freeze();
+            if (starter.Save != null) frozen = SaveManager.Freeze();
             StartCoroutine(Begin());
         }
 
@@ -95,12 +96,12 @@ namespace Shooter.Game
 
         private bool Restore()
         {
-            Log.Info($"Loading the world from {launch.Save}");
+            Log.Info($"Loading the world from {starter.Save}");
             loading.Show(LoadingStage.Save);
-            if (SaveManager.Load(frozen, launch.Save)) return true;
+            if (SaveManager.Load(frozen, starter.Save)) return true;
 
-            Log.Warn($"The world failed to load {launch.Save}, shutting the host down");
-            launch.Ending = new Refusal(BrokenSave, BrokenSaveDetails);
+            Log.Warn($"The world failed to load {starter.Save}, shutting the host down");
+            starter.Ending = new Refusal(BrokenSave, BrokenSaveDetails);
             network.Shutdown();
             return false;
         }

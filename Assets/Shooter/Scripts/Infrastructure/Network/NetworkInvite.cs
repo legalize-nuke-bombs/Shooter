@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Shooter.Infrastructure
 {
-    public static class Invite
+    public static class NetworkInvite
     {
         private struct Payload
         {
@@ -15,7 +15,7 @@ namespace Shooter.Infrastructure
 
         public static string Encode(string address, ushort port, string certificate)
         {
-            var payload = new Payload { Address = address, Port = port, Certificate = certificate };
+            Payload payload = new() { Address = address, Port = port, Certificate = certificate };
             string json = JsonConvert.SerializeObject(payload);
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
         }
@@ -29,7 +29,7 @@ namespace Shooter.Infrastructure
             try
             {
                 string json = Encoding.UTF8.GetString(Convert.FromBase64String(code.Trim()));
-                var payload = JsonConvert.DeserializeObject<Payload>(json);
+                Payload payload = JsonConvert.DeserializeObject<Payload>(json);
                 if (string.IsNullOrEmpty(payload.Address) || string.IsNullOrEmpty(payload.Certificate)) return false;
 
                 address = payload.Address;

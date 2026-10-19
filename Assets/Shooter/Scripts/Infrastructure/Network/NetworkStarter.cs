@@ -6,33 +6,35 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Infrastructure
 {
-    // Starts this machine from the menu. A host loads the world at once; a client stays in the menu until the server
-    // takes it to the world, and hears here if it never gets there
-    public class Launcher : MonoBehaviour
+    [RequireComponent(typeof(NetworkManager))]
+    public class NetworkStarter : ShooterBehaviour
     {
         private const string AnyAddress = "0.0.0.0";
         private const string BadInvite = "Неверный код подключения";
         private const string BadInviteDetails = "Попросите у хоста код ещё раз и вставьте его целиком";
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private Launch launch;
         [SerializeField] private string world = "Map";
 
         private NetworkManager network;
 
         public event Action<Refusal> Refused;
 
-        private void Awake()
+        public string Save { get; private set; }
+
+        public Refusal Ending { get; set; }
+
+        protected override void ShooterAwake()
         {
-            network = NetworkManager.Singleton;
+            network = GetComponent<NetworkManager>();
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
-            network.OnClientDisconnectCallback -= Dropped;
+            StopWatchingJoin();
         }
 
-        public bool Host(string save)
+        public Refusal Host(string save)
         {
             Account account = Config.Account;
             ServerConfig server = Config.Read().Server;
@@ -41,30 +43,29 @@ namespace Shooter.Infrastructure
             transport.UseEncryption = true;
             transport.SetConnectionData(AnyAddress, server.Port, AnyAddress);
             transport.SetServerSecrets(account.Certificate, account.PrivateKeyPem);
-            network.NetworkConfig.ConnectionData = Handshake.Encode(Config.Read().Client.Name, account, account.Certificate);
+            network.NetworkConfig.ConnectionData = NetworkHandshake.Encode(Config.Read().Client.Name, account, account.Certificate);
 
             if (!network.StartHost())
             {
-                Log.Error("The host refused to start");
-                return false;
+                Log.Warn($"The host refused to start on port {server.Port}");
+                return new Refusal("Не удалось запустить сервер", $"Возможно, порт {server.Port} занят. Смените его в настройках сервера");
             }
 
             Log.Info($"World listens on port {server.Port}, channel encrypted");
 
-            launch.Save = save;
+            Save = save;
             SceneEventProgressStatus status = network.SceneManager.LoadScene(world, LoadSceneMode.Single);
-            if (status == SceneEventProgressStatus.Started) return true;
+            if (status == SceneEventProgressStatus.Started) return null;
 
             Log.Error($"The world refused to load: {status}, shutting the host down");
             network.Shutdown();
-            return false;
+            return new Refusal("Не удалось запустить игру", "Карта не загрузилась");
         }
 
-        // A code that does not decode is turned down here and now; what happens after the client starts comes as Refused
         public Refusal Join()
         {
             ClientConfig client = Config.Read().Client;
-            if (!Invite.TryDecode(client.Invite, out string address, out ushort port, out string certificate))
+            if (!NetworkInvite.TryDecode(client.Invite, out string address, out ushort port, out string certificate))
             {
                 Log.Warn("Invite code is missing or malformed, staying in the menu");
                 return new Refusal(BadInvite, BadInviteDetails);
@@ -74,7 +75,7 @@ namespace Shooter.Infrastructure
             transport.UseEncryption = true;
             transport.SetConnectionData(address, port);
             transport.SetClientSecrets(Account.CommonName, certificate);
-            network.NetworkConfig.ConnectionData = Handshake.Encode(client.Name, Config.Account, certificate);
+            network.NetworkConfig.ConnectionData = NetworkHandshake.Encode(client.Name, Config.Account, certificate);
 
             if (!network.StartClient())
             {
@@ -82,6 +83,7 @@ namespace Shooter.Infrastructure
                 return new Refusal(BadInvite, BadInviteDetails);
             }
 
+            network.OnClientConnectedCallback += Entered;
             network.OnClientDisconnectCallback += Dropped;
             Log.Info($"Heading for {address}:{port} as {client.Name}, channel encrypted");
             return null;
@@ -89,15 +91,21 @@ namespace Shooter.Infrastructure
 
         public void Cancel()
         {
-            network.OnClientDisconnectCallback -= Dropped;
+            StopWatchingJoin();
             network.Shutdown();
         }
 
-        // The client dropped before it got into the world, the menu is still up to say why. Read here and not on the
-        // stop: the shutdown that follows overwrites the transport's verdict
+        private void Entered(ulong client)
+        {
+            if (client != network.LocalClientId) return;
+
+            StopWatchingJoin();
+        }
+
+        // Read here and not on the stop: the shutdown that follows overwrites the transport's verdict
         private void Dropped(ulong ignored)
         {
-            network.OnClientDisconnectCallback -= Dropped;
+            StopWatchingJoin();
             NetworkTransport.DisconnectEvents verdict = network.NetworkConfig.NetworkTransport.DisconnectEvent;
             Log.Warn($"The client did not get into the world: {verdict}, {network.DisconnectReason}");
 
@@ -113,6 +121,12 @@ namespace Shooter.Infrastructure
                     Refused?.Invoke(new Refusal("Сервер не отвечает", "Проверьте код подключения и что сервер запущен"));
                     break;
             }
+        }
+
+        private void StopWatchingJoin()
+        {
+            network.OnClientConnectedCallback -= Entered;
+            network.OnClientDisconnectCallback -= Dropped;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Shooter.Infrastructure;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -15,8 +16,6 @@ namespace Shooter.Game
         private const int FrameRate = 60;
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private Launcher launcher;
-        [SerializeField] private Launch launch;
         [SerializeField] private VisualTreeAsset mainPage;
         [SerializeField] private VisualTreeAsset newGamePage;
         [SerializeField] private VisualTreeAsset savesPage;
@@ -36,12 +35,14 @@ namespace Shooter.Game
         private VisualElement panel;
         private SavesPage saves;
         private ServerSettingsPage serverSettings;
+        private NetworkStarter starter;
         private string warnDetails;
         private string warnTitle;
 
         private void Awake()
         {
             Application.targetFrameRate = FrameRate;
+            starter = NetworkManager.Singleton.GetComponent<NetworkStarter>();
         }
 
         // A world that ended halfway through its load leaves the loading screen up, the menu takes it down
@@ -49,12 +50,12 @@ namespace Shooter.Game
         {
             loading = FindAnyObjectByType<LoadingOverlay>();
             loading.Hide();
-            launcher.Refused += Refused;
+            starter.Refused += Refused;
         }
 
         private void OnDestroy()
         {
-            launcher.Refused -= Refused;
+            starter.Refused -= Refused;
         }
 
         private void Warn(string title, string details)
@@ -133,11 +134,11 @@ namespace Shooter.Game
 
             pages.Push(main);
 
-            if (launch.Ending != null)
+            if (starter.Ending != null)
             {
-                warnTitle = launch.Ending.Title;
-                warnDetails = launch.Ending.Details;
-                launch.Ending = null;
+                warnTitle = starter.Ending.Title;
+                warnDetails = starter.Ending.Details;
+                starter.Ending = null;
             }
 
             ShowWarning();
@@ -246,13 +247,17 @@ namespace Shooter.Game
         {
             if (save != null) Log.Info($"The player continues the game saved at {save}");
             loading.Show(LoadingStage.Server);
-            if (!launcher.Host(save)) loading.Hide();
+            Refusal refusal = starter.Host(save);
+            if (refusal == null) return;
+
+            loading.Hide();
+            Warn(refusal.Title, refusal.Details);
         }
 
         private void Connect()
         {
             Log.Info("The player joins a game of someone else");
-            Refusal refusal = launcher.Join();
+            Refusal refusal = starter.Join();
             if (refusal != null)
             {
                 Warn(refusal.Title, refusal.Details);
@@ -264,7 +269,7 @@ namespace Shooter.Game
 
         private void Cancel()
         {
-            launcher.Cancel();
+            starter.Cancel();
             loading.Hide();
         }
 
