@@ -1,3 +1,4 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Shooter.Game
 
         [SerializeField] private float lagBehindSun = 144f;
 
+        private Clock clock;
         private Light moon;
 
         private void Awake()
@@ -17,11 +19,14 @@ namespace Shooter.Game
             moon = GetComponent<Light>();
         }
 
+        private void Start()
+        {
+            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).FirstOrDefault();
+        }
+
         private void Update()
         {
-            Clock clock = Map.Get<Clock>();
-            // No clock in the menu, and none yet on a client: the map wakes up there before the state arrives.
-            // No clock any more for a frame on the way out: the world goes before its scene does
+            // No clock in the menu, and none any more for a frame on the way out: the world goes before its scene does
             if (clock == null) return;
 
             float hourAngle = (float)clock.HourAngle - lagBehindSun;

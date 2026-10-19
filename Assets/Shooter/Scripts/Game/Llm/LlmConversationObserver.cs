@@ -1,3 +1,4 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -18,22 +19,21 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            enabled = NetworkManager.Singleton.IsServer;
             character = GetComponent<Character>();
+            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             health = GetComponent<Health>();
             llm = GetComponent<Llm>();
+            enabled = NetworkManager.Singleton.IsServer;
         }
 
         private void OnEnable()
         {
-            conversations = Map.Get<ConversationManager>();
             conversations.Said += Heard;
         }
 
         private void OnDisable()
         {
-            if (conversations != null) conversations.Said -= Heard;
-            conversations = null;
+            conversations.Said -= Heard;
         }
 
         private void Heard(Conversation conversation, Message message)

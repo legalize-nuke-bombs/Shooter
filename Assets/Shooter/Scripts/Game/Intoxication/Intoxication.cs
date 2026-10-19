@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
@@ -61,10 +62,12 @@ namespace Shooter.Game
 
         private float timer;
 
+        private Clock clock;
         private ToxinCatalog toxins;
 
         private void Awake()
         {
+            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
             toxins = Catalogs.Of<ToxinCatalog>();
             for (int i = 0; i < toxins.Count; i++)
             {
@@ -87,7 +90,7 @@ namespace Shooter.Game
         private void Update()
         {
             if (!IsServer) return;
-            timer += Time.deltaTime * Map.Get<Clock>().Scale;
+            timer += Time.deltaTime * clock.Scale;
             if (timer >= timerInterval)
             {
                 Tick(timer);

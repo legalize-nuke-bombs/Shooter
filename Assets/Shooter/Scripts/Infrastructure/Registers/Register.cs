@@ -1,23 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
     public sealed class Register
     {
-        private readonly List<ShooterBehaviour> members = new();
+        private readonly List<MonoBehaviour> members = new();
 
-        public IEnumerable<ShooterBehaviour> All(RegisterInactivePolicy gate)
+        public IEnumerable<MonoBehaviour> All(RegisterInactivePolicy gate)
         {
             return gate == RegisterInactivePolicy.Include ? members : members.Where(member => member.gameObject.activeInHierarchy);
         }
 
-        public void Add(ShooterBehaviour member)
+        public void Add(MonoBehaviour member)
         {
             members.Add(member);
         }
 
-        public void Remove(ShooterBehaviour member)
+        public void Remove(MonoBehaviour member)
         {
             members.Remove(member);
         }

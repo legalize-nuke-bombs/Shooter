@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -35,6 +36,7 @@ namespace Shooter.Game
         private void Awake()
         {
             character = GetComponent<Character>();
+            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             health = GetComponent<Health>();
             sleeper = GetComponent<Sleeper>();
             enabled = false;
@@ -79,8 +81,6 @@ namespace Shooter.Game
             Log.Info($"Player {OwnerClientId} opened a talk with {talker.name}");
 
             OpenedRpc(talker.NetworkObjectId);
-
-            conversations = Map.Get<ConversationManager>();
         }
 
         public void Close()
@@ -130,7 +130,6 @@ namespace Shooter.Game
         {
             if (!Talking) return;
 
-            conversations = null;
             talker = null;
         }
 

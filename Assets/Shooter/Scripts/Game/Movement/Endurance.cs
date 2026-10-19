@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
@@ -35,6 +36,7 @@ namespace Shooter.Game
             amount.Value = sd.Amount;
         }
 
+        private Clock clock;
         private bool exhausted;
 
         public float Amount => amount.Value;
@@ -43,12 +45,13 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
             enabled = false;
         }
 
         private void Update()
         {
-            float dt = Time.deltaTime * Map.Get<Clock>().Scale;
+            float dt = Time.deltaTime * clock.Scale;
             amount.Value = Mathf.Min(amount.Value + dt * recoverySpeed, MaxAmount);
 
             if (amount.Value >= sprintThreshold) exhausted = false;

@@ -14,6 +14,7 @@ namespace Shooter.Game
         private const int MatchLimit = 20;
         private static readonly Journal Log = Logs.Here();
 
+        private ConversationManager conversations;
         private Character ownCharacter;
 
         public override string Name => "search_conversations";
@@ -28,6 +29,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
 
         protected override void OnStart()
         {
+            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {
@@ -46,7 +48,6 @@ Only the newest matches are shown, narrow the pattern if there are more.
                 return $"The specified ID ({arguments.TargetId}) belongs to you";
             }
 
-            ConversationManager conversations = Map.Get<ConversationManager>();
             List<Conversation> searched;
             if (arguments.TargetId < 0)
             {

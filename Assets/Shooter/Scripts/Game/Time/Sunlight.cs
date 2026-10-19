@@ -1,3 +1,4 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Shooter.Game
 
         [SerializeField] private float brightest = 120000f;
 
+        private Clock clock;
         private Light sun;
 
         private void Awake()
@@ -17,10 +19,13 @@ namespace Shooter.Game
             sun = GetComponent<Light>();
         }
 
+        private void Start()
+        {
+            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+        }
+
         private void Update()
         {
-            Clock clock = Map.Get<Clock>();
-            // No clock yet on a client: the map wakes up there before the state arrives.
             // No clock any more for a frame on the way out: the world goes before its scene does
             if (clock == null) return;
 

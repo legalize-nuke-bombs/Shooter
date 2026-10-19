@@ -1,3 +1,4 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,17 +11,21 @@ namespace Shooter.Game
         [SerializeField] private float walkCost = 0.25f;
         [SerializeField] private float jumpCost = 2f;
         [SerializeField] private float idleCost = 0.1f;
+
+        private Clock clock;
+
         public abstract float Amount { get; }
         public abstract float MaxAmount { get; }
 
         private void Awake()
         {
+            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
             enabled = false;
         }
 
         private void Update()
         {
-            Spend(idleCost * Time.deltaTime * Map.Get<Clock>().Scale);
+            Spend(idleCost * Time.deltaTime * clock.Scale);
         }
 
         public DigestionPriority Priority => DigestionPriority.Medium;

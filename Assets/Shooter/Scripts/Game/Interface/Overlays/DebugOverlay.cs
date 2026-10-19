@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Shooter.Infrastructure;
 using Unity.Netcode;
@@ -38,11 +39,17 @@ namespace Shooter.Game
         private readonly Dictionary<string, ProfilerRecorder> recorders = new();
         private int filled;
         private int frame;
+        private HostVersion host;
 
         private Label panel;
         private float refresh;
         private float report = ReportSeconds;
         private bool visible;
+
+        private void Start()
+        {
+            host = Registers.Of<HostVersion>(RegisterInactivePolicy.Include).Single();
+        }
 
         private void Update()
         {
@@ -187,7 +194,6 @@ namespace Shooter.Game
                 Line($"Позиция {at.x:F1} {at.y:F1} {at.z:F1}", Facing(player.eulerAngles.y));
             }
 
-            HostVersion host = Map.Get<HostVersion>();
             Line(host == null
                     ? $"Клиент {Application.version}"
                     : $"Сервер {host.Version}   Клиент {Application.version}");

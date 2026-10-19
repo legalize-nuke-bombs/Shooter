@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public class HostVersion : NetworkBehaviour
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
+    public class HostVersion : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 

@@ -1,18 +1,24 @@
+using System.Linq;
 using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
     public sealed class RefusiveTalker : Talker
     {
+        private ConversationManager conversations;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (IsServer) Map.Get<ConversationManager>().Said += Refuse;
+            if (!IsServer) return;
+
+            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversations.Said += Refuse;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (IsServer && Map.Get<ConversationManager>() != null) Map.Get<ConversationManager>().Said -= Refuse;
+            if (IsServer) conversations.Said -= Refuse;
             base.OnNetworkDespawn();
         }
 
@@ -28,7 +34,7 @@ namespace Shooter.Game
             Character author = Character.Of(message.AuthorId, RegisterInactivePolicy.Include);
             if (author == null || !author.TryGetComponent(out Player _)) return;
 
-            Map.Get<ConversationManager>().Say(CharacterId, message.AuthorId, "Not now.", false, true);
+            conversations.Say(CharacterId, message.AuthorId, "Not now.", false, true);
         }
     }
 }

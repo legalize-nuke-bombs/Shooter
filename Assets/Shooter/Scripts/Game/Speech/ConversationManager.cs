@@ -7,13 +7,15 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class ConversationManager : MonoBehaviour, ISaveableComponent
+    public class ConversationManager : ShooterBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<(long, long), Conversation> conversations = new();
 
         private readonly Dictionary<long, List<Conversation>> conversationsById = new();
+
+        private Clock clock;
 
         public string ComponentKey => "ConversationManager";
         private struct SaveData
@@ -44,6 +46,11 @@ namespace Shooter.Game
         }
 
         public event Action<Conversation, Message> Said;
+
+        private void Start()
+        {
+            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+        }
 
         public Conversation GetOrCreate(long first, long second)
         {
@@ -85,7 +92,7 @@ namespace Shooter.Game
                 Content = content,
                 Spoken = spoken,
                 Urgent = urgent,
-                Time = Map.Get<Clock>().Now
+                Time = clock.Now
             };
 
             conversation.Add(message);
