@@ -10,31 +10,31 @@ namespace Shooter.Game
 
         private Llm llm;
         private AICharacterRelation characterRelation;
-        private BtReports btReports;
+        private BehaviorReporter behaviorReporter;
 
         private void Awake()
         {
             llm = GetComponent<Llm>();
             characterRelation = GetComponent<AICharacterRelation>();
-            btReports = GetComponent<BtReports>();
+            behaviorReporter = GetComponent<BehaviorReporter>();
         }
 
         private void OnEnable()
         {
             characterRelation.RelationWorsenedByDamage += OnDamaged;
-            btReports.OnReport += OnBtReport;
+            behaviorReporter.Reported += OnBtReport;
         }
 
         private void OnDisable()
         {
             characterRelation.RelationWorsenedByDamage -= OnDamaged;
-            btReports.OnReport -= OnBtReport;
+            behaviorReporter.Reported -= OnBtReport;
         }
 
-        private void OnBtReport(BtReport report)
+        private void OnBtReport(BehaviorReport report)
         {
             Log.Info("OnBtReport");
-            llm.Notice(report.Prompt, report.Urgent);
+            llm.Notice(report.Prompt, report.IsUrgent);
         }
 
         private void OnDamaged(AICharacterRelation.RelationWorsenedByDamageData data)

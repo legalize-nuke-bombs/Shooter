@@ -17,21 +17,21 @@ namespace Shooter.Game
     {
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
-        private BtCustomOrderQueue customOrders;
+        private CustomOrderSlot customOrderSlot;
 
         protected override Status OnStart()
         {
             if (Agent.Value == null) return Status.Failure;
 
-            if (customOrders == null)
+            if (customOrderSlot == null)
             {
-                customOrders = Agent.Value.GetComponent<BtCustomOrderQueue>();
-                if (customOrders == null) return Status.Failure;
+                customOrderSlot = Agent.Value.GetComponent<CustomOrderSlot>();
+                if (customOrderSlot == null) return Status.Failure;
             }
 
-            if (customOrders.Current is not BtCoFollow) return Status.Failure;
+            if (customOrderSlot.CurrentOrder is not FollowOrder) return Status.Failure;
 
-            customOrders.Finish();
+            customOrderSlot.FinishOrder();
             return Status.Success;
         }
     }

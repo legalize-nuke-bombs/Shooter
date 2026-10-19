@@ -23,23 +23,22 @@ namespace Shooter.Game
         protected override Status OnStart()
         {
             if (Agent.Value == null) return Status.Failure;
-            InventoryUser user = Agent.Value.GetComponent<InventoryUser>();
+            InventoryUser inventoryUser = Agent.Value.GetComponent<InventoryUser>();
             Hunger hunger = Agent.Value.GetComponent<Hunger>();
-            if (user == null || hunger == null) return Status.Failure;
+            if (inventoryUser == null || hunger == null) return Status.Failure;
 
-            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(item =>
-                         item is StackableItemAsset stackableItem && stackableItem.FoodAmount > 0))
+            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(candidate => candidate is StackableItemAsset stackableItem && stackableItem.FoodAmount > 0))
             {
-                int startSaturation = (int)hunger.Amount;
-                if (user.TryUseItem((StackableItemAsset)item))
+                int saturationBefore = (int)hunger.Amount;
+                if (inventoryUser.TryUseItem((StackableItemAsset)item))
                 {
                     Log.Info($"Entity {Agent.Value.name} ate {item.Id} by behavior graph");
-                    BtReports reports = Agent.Value.GetComponent<BtReports>();
-                    if (reports != null)
+                    BehaviorReporter behaviorReporter = Agent.Value.GetComponent<BehaviorReporter>();
+                    if (behaviorReporter != null)
                     {
-                        reports.Report(new BtReport
+                        behaviorReporter.Report(new BehaviorReport
                         {
-                            Prompt = $"Your character automatically ate {item.Id} ({startSaturation} saturation -> {(int)hunger.Amount} saturation)"
+                            Prompt = $"Your character automatically ate {item.Id} ({saturationBefore} saturation -> {(int)hunger.Amount} saturation)"
                         });
                     }
                     return Status.Success;

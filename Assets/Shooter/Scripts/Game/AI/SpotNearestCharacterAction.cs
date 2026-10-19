@@ -21,57 +21,34 @@ namespace Shooter.Game
         [SerializeReference] public BlackboardVariable<Transform> Target = new();
         [SerializeReference] public BlackboardVariable<bool> OnlyEnemies = new(true);
 
-        private Character self;
+        private Character ownCharacter;
         private AICharacterRelation characterRelation;
 
         protected override Status OnStart()
         {
-            if (Agent.Value == null)
-            {
-                return Status.Failure;
-            }
-            if (self == null)
-            {
-                self = Agent.Value.GetComponent<Character>();
-            }
-            if (characterRelation == null)
-            {
-                characterRelation = Agent.Value.GetComponent<AICharacterRelation>();
-            }
+            if (Agent.Value == null) return Status.Failure;
+            if (ownCharacter == null) ownCharacter = Agent.Value.GetComponent<Character>();
+            if (characterRelation == null) characterRelation = Agent.Value.GetComponent<AICharacterRelation>();
 
-            Vector3 here = Agent.Value.transform.position;
+            Vector3 agentPosition = Agent.Value.transform.position;
 
-            float nearestCharacter = Radius.Value * Radius.Value;
+            float nearestSqrDistance = Radius.Value * Radius.Value;
             Character spottedCharacter = null;
 
-            foreach (Character targetCharacter in Registers.GetAll<Character>(RegisterInactivePolicy.Exclude))
+            foreach (Character character in Registers.GetAll<Character>(RegisterInactivePolicy.Exclude))
             {
-                if (targetCharacter == self) continue;
-                if (targetCharacter.TryGetComponent(out Health health) && !health.IsAlive) continue;
+                if (character == ownCharacter) continue;
+                if (character.TryGetComponent(out Health health) && !health.IsAlive) continue;
 
-                float apart = (targetCharacter.transform.position - here).sqrMagnitude;
+                float sqrDistance = (character.transform.position - agentPosition).sqrMagnitude;
+                if (sqrDistance >= nearestSqrDistance) continue;
+                if (OnlyEnemies.Value && characterRelation.GetStatus(character) != RelationStatus.Enemy) continue;
 
-                if (apart >= nearestCharacter)
-                {
-                    continue;
-                }
-
-                if (OnlyEnemies.Value)
-                {
-                    if (characterRelation.GetStatus(targetCharacter) != RelationStatus.Enemy)
-                    {
-                        continue;
-                    }
-                }
-
-                nearestCharacter = apart;
-                spottedCharacter = targetCharacter;
+                nearestSqrDistance = sqrDistance;
+                spottedCharacter = character;
             }
 
-            if (spottedCharacter == null)
-            {
-                return Status.Failure;
-            }
+            if (spottedCharacter == null) return Status.Failure;
 
             Target.Value = spottedCharacter.transform;
             return Status.Success;

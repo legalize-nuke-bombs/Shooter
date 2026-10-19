@@ -51,7 +51,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
             List<Conversation> searched;
             if (arguments.TargetId < 0)
             {
-                searched = conversationManager.Of(ownCharacter.Id);
+                searched = conversationManager.GetConversationsOf(ownCharacter.Id);
             }
             else
             {
@@ -68,7 +68,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
             var totals = new Dictionary<Conversation, int>();
             foreach (Conversation conversation in searched)
             {
-                List<int> indexes = conversation.Matches(regex);
+                List<int> indexes = conversation.FindMatchingMessageIndexes(regex);
                 if (indexes.Count == 0) continue;
 
                 totals[conversation] = indexes.Count;
@@ -90,7 +90,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
             var partners = new HashSet<long>();
             foreach ((Conversation conversation, int _) in shown)
             {
-                partners.Add(conversation.Partner(ownCharacter.Id));
+                partners.Add(conversation.GetPartnerId(ownCharacter.Id));
             }
 
             var partnerNames = new Dictionary<long, string>();
@@ -106,7 +106,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
             var sb = new StringBuilder();
             foreach (IGrouping<Conversation, (Conversation conversation, int index)> group in shown.GroupBy(hit => hit.conversation))
             {
-                long partner = group.Key.Partner(ownCharacter.Id);
+                long partner = group.Key.GetPartnerId(ownCharacter.Id);
                 string partnerName = partnerNames.TryGetValue(partner, out string known) ? known : "Unknown";
                 sb.AppendLine($"Conversation with ID {partner} ({partnerName}), {totals[group.Key]} matches:");
                 foreach ((Conversation conversation, int index) in group)

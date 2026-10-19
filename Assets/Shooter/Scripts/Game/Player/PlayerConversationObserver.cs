@@ -26,15 +26,15 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            conversations.Heard += Heard;
+            conversations.LiveLineArrived += Heard;
         }
 
         private void OnDisable()
         {
-            conversations.Heard -= Heard;
+            conversations.LiveLineArrived -= Heard;
         }
 
-        private void Heard(long partnerId, Line line)
+        private void Heard(long partnerId, ConversationLine line)
         {
             if (line.Spoken || line.AuthorId == conversations.CharacterId) return;
             if (player.TalkPartner == partnerId) return;

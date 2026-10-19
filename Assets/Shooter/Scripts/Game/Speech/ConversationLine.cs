@@ -3,16 +3,16 @@ using Unity.Netcode;
 
 namespace Shooter.Game
 {
-    public struct Line : INetworkSerializable
+    public struct ConversationLine : INetworkSerializable
     {
         public long AuthorId;
         public string Content;
         public DateTime Time;
         public bool Spoken;
 
-        public static Line Of(Message message)
+        public static ConversationLine FromMessage(Message message)
         {
-            return new Line
+            return new ConversationLine
             {
                 AuthorId = message.AuthorId,
                 Content = message.Content,

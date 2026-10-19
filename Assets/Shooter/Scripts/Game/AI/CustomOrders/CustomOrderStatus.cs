@@ -1,6 +1,6 @@
 ﻿namespace Shooter.Game
 {
-    public enum BtCustomOrderStatus
+    public enum CustomOrderStatus
     {
         Pending,
         Running

@@ -67,7 +67,7 @@ namespace Shooter.Game
         private void Open(LocalPlayer player)
         {
             conversations = player.GetComponent<PlayerConversations>();
-            if (conversations != null) conversations.Arrived += Touch;
+            if (conversations != null) conversations.LinesArrived += Touch;
 
             window.style.display = DisplayStyle.Flex;
             stale = true;
@@ -76,7 +76,7 @@ namespace Shooter.Game
 
         private void Close()
         {
-            if (conversations != null) conversations.Arrived -= Touch;
+            if (conversations != null) conversations.LinesArrived -= Touch;
             conversations = null;
 
             if (window != null) window.style.display = DisplayStyle.None;
@@ -96,7 +96,7 @@ namespace Shooter.Game
 
             List<Contact> contacts = conversations == null
                 ? new List<Contact>()
-                : conversations.Contacts.Values.OrderByDescending(contact => contact.LastTime).ToList();
+                : conversations.Contacts.Values.OrderByDescending(contact => contact.LastLineTime).ToList();
 
             empty.style.display = contacts.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
 
@@ -106,7 +106,7 @@ namespace Shooter.Game
 
                 var item = new Button(() => player.OpenRadioTalk(partnerId)) { text = Named(partnerId) };
                 item.AddToClassList("radio__item");
-                if (contact.Unread > 0) item.AddToClassList("radio__item--unread");
+                if (contact.UnreadLineCount > 0) item.AddToClassList("radio__item--unread");
 
                 list.Add(item);
             }

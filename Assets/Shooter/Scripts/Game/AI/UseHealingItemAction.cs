@@ -26,51 +26,50 @@ namespace Shooter.Game
         {
             if (Agent.Value == null) return Status.Failure;
             Inventory inventory = Agent.Value.GetComponent<Inventory>();
-            InventoryUser user = Agent.Value.GetComponent<InventoryUser>();
+            InventoryUser inventoryUser = Agent.Value.GetComponent<InventoryUser>();
             Health health = Agent.Value.GetComponent<Health>();
-            if (inventory == null || user == null || health == null) return Status.Failure;
+            if (inventory == null || inventoryUser == null || health == null) return Status.Failure;
 
-            double missing = health.MaxHp - health.Hp;
+            double missingHp = health.MaxHp - health.Hp;
             double safetyCoefficient = health.Hp / health.MaxHp;
 
-            StackableItemAsset best = null;
-            double lowestScore = missing * UnderHealPenalty.Value;
-            int candidates = 0;
+            StackableItemAsset bestItem = null;
+            double lowestScore = missingHp * UnderHealPenalty.Value;
+            int candidateCount = 0;
 
-            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(item =>
-                         item is StackableItemAsset stackableItem && stackableItem.HealAmount > 0))
+            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(candidate => candidate is StackableItemAsset stackableItem && stackableItem.HealAmount > 0))
             {
                 StackableItemAsset stackableItem = (StackableItemAsset)item;
                 if (inventory.CountStackable(stackableItem) <= 0) continue;
 
-                candidates++;
+                candidateCount++;
                 double healAmount = stackableItem.HealAmount;
-                double score = healAmount <= missing
-                    ? (missing - healAmount) * UnderHealPenalty.Value
-                    : (healAmount - missing) * OverHealBasePenalty.Value * safetyCoefficient;
+                double score = healAmount <= missingHp
+                    ? (missingHp - healAmount) * UnderHealPenalty.Value
+                    : (healAmount - missingHp) * OverHealBasePenalty.Value * safetyCoefficient;
 
                 if (score < lowestScore)
                 {
                     lowestScore = score;
-                    best = stackableItem;
+                    bestItem = stackableItem;
                 }
             }
 
-            if (best == null)
+            if (bestItem == null)
             {
-                Log.Info($"Entity {Agent.Value.name} refused healing: {candidates} candidates in the bag, missing {missing}, safety {safetyCoefficient}");
+                Log.Info($"Entity {Agent.Value.name} refused healing: {candidateCount} candidates in the bag, missing {missingHp}, safety {safetyCoefficient}");
                 return Status.Failure;
             }
 
-            Log.Info($"Entity {Agent.Value.name} used heal {best.Id} by behavior graph, missing {missing}");
-            int startHp = (int)health.Hp;
-            user.TryUseItem(best);
-            BtReports reports = Agent.Value.GetComponent<BtReports>();
-            if (reports != null)
+            Log.Info($"Entity {Agent.Value.name} used heal {bestItem.Id} by behavior graph, missing {missingHp}");
+            int hpBefore = (int)health.Hp;
+            inventoryUser.TryUseItem(bestItem);
+            BehaviorReporter behaviorReporter = Agent.Value.GetComponent<BehaviorReporter>();
+            if (behaviorReporter != null)
             {
-                reports.Report(new BtReport
+                behaviorReporter.Report(new BehaviorReport
                 {
-                    Prompt = $"Your character automatically healed using {best.Id} ({startHp}hp -> {(int)health.Hp}hp)"
+                    Prompt = $"Your character automatically healed using {bestItem.Id} ({hpBefore}hp -> {(int)health.Hp}hp)"
                 });
             }
             return Status.Success;

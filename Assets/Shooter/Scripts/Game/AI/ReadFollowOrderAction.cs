@@ -20,24 +20,24 @@ namespace Shooter.Game
         [SerializeReference] public BlackboardVariable<float> Reach = new();
         [SerializeReference] public BlackboardVariable<bool> Sprint = new();
 
-        private BtCustomOrderQueue customOrders;
+        private CustomOrderSlot customOrderSlot;
 
         protected override Status OnStart()
         {
             if (Agent.Value == null) return Status.Failure;
 
-            if (customOrders == null)
+            if (customOrderSlot == null)
             {
-                customOrders = Agent.Value.GetComponent<BtCustomOrderQueue>();
-                if (customOrders == null) return Status.Failure;
+                customOrderSlot = Agent.Value.GetComponent<CustomOrderSlot>();
+                if (customOrderSlot == null) return Status.Failure;
             }
 
-            if (customOrders.Current is not BtCoFollow order) return Status.Failure;
+            if (customOrderSlot.CurrentOrder is not FollowOrder order) return Status.Failure;
 
             Character followed = order.Target;
             if (followed == null) return Status.Failure;
 
-            order.Begin();
+            order.MarkRunning();
             Target.Value = followed.transform;
             Reach.Value = order.Reach;
             Sprint.Value = order.Sprint;

@@ -11,9 +11,9 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly Dictionary<(long, long), Conversation> conversations = new();
+        private readonly Dictionary<(long, long), Conversation> conversationsByKey = new();
 
-        private readonly Dictionary<long, List<Conversation>> conversationsById = new();
+        private readonly Dictionary<long, List<Conversation>> conversationsByParticipantId = new();
 
         private Clock clock;
 
@@ -26,23 +26,23 @@ namespace Shooter.Game
         {
             return new SaveData
             {
-                Conversations = conversations.Values.ToList()
+                Conversations = conversationsByKey.Values.ToList()
             };
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
+            SaveData saveData = content.ToObject<SaveData>();
 
-            conversations.Clear();
-            conversationsById.Clear();
+            conversationsByKey.Clear();
+            conversationsByParticipantId.Clear();
 
-            foreach (Conversation conversation in sd.Conversations)
+            foreach (Conversation conversation in saveData.Conversations)
             {
-                conversations[conversation.Key] = conversation;
-                UpdateIndex(conversation);
+                conversationsByKey[conversation.Key] = conversation;
+                IndexByParticipantIds(conversation);
             }
 
-            Log.Info($"World remembers {conversations.Count} conversations");
+            Log.Info($"World remembers {conversationsByKey.Count} conversations");
         }
 
         public event Action<Conversation, Message> Said;
@@ -52,41 +52,41 @@ namespace Shooter.Game
             clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
         }
 
-        public Conversation GetOrCreate(long first, long second)
+        public Conversation GetOrCreate(long firstId, long secondId)
         {
-            (long, long) pair = Conversation.Pair(first, second);
-            if (conversations.TryGetValue(pair, out Conversation conversation)) return conversation;
+            (long, long) key = Conversation.CreateKey(firstId, secondId);
+            if (conversationsByKey.TryGetValue(key, out Conversation conversation)) return conversation;
 
-            conversation = new Conversation(first, second);
-            conversations.Add(pair, conversation);
-            UpdateIndex(conversation);
-            Log.Info($"Characters {pair.Item1} and {pair.Item2} start a conversation");
+            conversation = new Conversation(firstId, secondId);
+            conversationsByKey.Add(key, conversation);
+            IndexByParticipantIds(conversation);
+            Log.Info($"Characters {key.Item1} and {key.Item2} start a conversation");
             return conversation;
         }
 
-        public Conversation GetIfPresent(long first, long second)
+        public Conversation GetIfPresent(long firstId, long secondId)
         {
-            (long, long) pair = Conversation.Pair(first, second);
-            return conversations.GetValueOrDefault(pair, null);
+            (long, long) key = Conversation.CreateKey(firstId, secondId);
+            return conversationsByKey.GetValueOrDefault(key, null);
         }
 
-        public List<Conversation> Of(long id)
+        public List<Conversation> GetConversationsOf(long characterId)
         {
-            return conversationsById.TryGetValue(id, out List<Conversation> found) ? found.ToList() : new List<Conversation>();
+            return conversationsByParticipantId.TryGetValue(characterId, out List<Conversation> conversations) ? conversations.ToList() : new List<Conversation>();
         }
 
-        private void UpdateIndex(Conversation conversation)
+        private void IndexByParticipantIds(Conversation conversation)
         {
-            conversationsById.TryAdd(conversation.First, new List<Conversation>());
-            conversationsById.TryAdd(conversation.Second, new List<Conversation>());
-            conversationsById[conversation.First].Add(conversation);
-            conversationsById[conversation.Second].Add(conversation);
+            conversationsByParticipantId.TryAdd(conversation.First, new List<Conversation>());
+            conversationsByParticipantId.TryAdd(conversation.Second, new List<Conversation>());
+            conversationsByParticipantId[conversation.First].Add(conversation);
+            conversationsByParticipantId[conversation.Second].Add(conversation);
         }
 
         public Message Say(long authorId, long listenerId, string content, bool spoken, bool urgent)
         {
             Conversation conversation = GetOrCreate(authorId, listenerId);
-            var message = new Message
+            Message message = new()
             {
                 AuthorId = authorId,
                 Content = content,
@@ -95,7 +95,7 @@ namespace Shooter.Game
                 Time = clock.Now
             };
 
-            conversation.Add(message);
+            conversation.AddMessage(message);
             Said?.Invoke(conversation, message);
             return message;
         }

@@ -1,8 +1,8 @@
 ﻿namespace Shooter.Game
 {
-    public class BtReport
+    public class BehaviorReport
     {
         public string Prompt { get; set; }
-        public bool Urgent { get; set; }
+        public bool IsUrgent { get; set; }
     }
 }

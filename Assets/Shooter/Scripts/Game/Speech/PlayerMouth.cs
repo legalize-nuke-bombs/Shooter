@@ -12,10 +12,10 @@ namespace Shooter.Game
     public class PlayerMouth : NetworkBehaviour, IMortal
     {
         public const float TalkReach = 8f;
-        public const int SpeechLimit = 300;
+        public const int MaxSpeechLength = 300;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly NetworkVariable<ulong> interlocutor = new();
+        private readonly NetworkVariable<ulong> talkerNetworkObjectId = new();
 
         private Character character;
         private ConversationManager conversationManager;
@@ -23,15 +23,15 @@ namespace Shooter.Game
         private Sleeper sleeper;
         private Talker talker;
 
-        public bool Talking => talker != null;
+        public bool IsTalking => talker != null;
 
-        public ulong Interlocutor => interlocutor.Value;
+        public ulong TalkerNetworkObjectId => talkerNetworkObjectId.Value;
 
         public long CharacterId => character.Id;
 
-        public event Action<ulong> Opened;
+        public event Action<ulong> TalkOpened;
 
-        public event Action Closed;
+        public event Action TalkClosed;
 
         private void Awake()
         {
@@ -49,62 +49,62 @@ namespace Shooter.Game
 
         public override void OnNetworkDespawn()
         {
-            Forget();
+            ForgetTalker();
             enabled = false;
         }
 
         private void OnDisable()
         {
-            Forget();
-            if (IsServer && IsSpawned) interlocutor.Value = 0;
+            ForgetTalker();
+            if (IsServer && IsSpawned) talkerNetworkObjectId.Value = 0;
         }
 
         public void HandleDeath()
         {
-            Close();
+            CloseTalk();
         }
 
-        public void Open(Talker talker)
+        public void OpenTalk(Talker talker)
         {
             if (!IsServer || this.talker == talker) return;
 
-            if (!Fit(talker))
+            if (!CanTalkTo(talker))
             {
                 Log.Info($"Player {OwnerClientId} can not talk to {talker.name}: one of them is dead or asleep");
                 return;
             }
 
-            if (Talking) Close();
+            if (IsTalking) CloseTalk();
 
             this.talker = talker;
-            interlocutor.Value = talker.NetworkObjectId;
+            talkerNetworkObjectId.Value = talker.NetworkObjectId;
             Log.Info($"Player {OwnerClientId} opened a talk with {talker.name}");
 
-            OpenedRpc(talker.NetworkObjectId);
+            RaiseTalkOpenedRpc(talker.NetworkObjectId);
         }
 
-        public void Close()
+        public void CloseTalk()
         {
-            if (!IsServer || !Talking) return;
+            if (!IsServer || !IsTalking) return;
 
             Log.Info($"Player {OwnerClientId} closed the talk with {talker.name}");
-            Forget();
-            interlocutor.Value = 0;
-            ClosedRpc();
+            ForgetTalker();
+            talkerNetworkObjectId.Value = 0;
+            RaiseTalkClosedRpc();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void SayRpc(string speech)
         {
-            if (!Talking)
+            if (!IsTalking)
             {
                 Log.Info($"Player {OwnerClientId} said something with no talk open, ignored");
                 return;
             }
 
-            if (speech == null || speech.Length > SpeechLimit)
+            if (speech == null || speech.Length > MaxSpeechLength)
             {
-                Log.Info($"Player {OwnerClientId} said over {SpeechLimit} characters, ignored");
+                Log.Info($"Player {OwnerClientId} said over {MaxSpeechLength} characters, ignored");
                 return;
             }
 
@@ -114,47 +114,47 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void HangUpRpc()
         {
-            Close();
+            CloseTalk();
         }
 
         private void Update()
         {
-            if (!Talking) return;
-            if (talker.isActiveAndEnabled && Reachable(talker) && Fit(talker)) return;
+            if (!IsTalking) return;
+            if (talker.isActiveAndEnabled && IsWithinTalkReach(talker) && CanTalkTo(talker)) return;
 
             Log.Info($"Player {OwnerClientId} ends the talk with {talker.name}: out of reach, dead or asleep");
-            Close();
+            CloseTalk();
         }
 
-        private void Forget()
+        private void ForgetTalker()
         {
-            if (!Talking) return;
+            if (!IsTalking) return;
 
             talker = null;
         }
 
-        private bool Fit(Talker talker)
+        private bool CanTalkTo(Talker talker)
         {
-            return TalkRule.CanTalk(health.IsAlive, !sleeper.IsSleeping, talker.Alive, !talker.Sleeping);
+            return TalkRule.CanTalk(health.IsAlive, !sleeper.IsSleeping, talker.IsAlive, !talker.IsSleeping);
         }
 
-        private bool Reachable(Talker talker)
+        private bool IsWithinTalkReach(Talker talker)
         {
             return Vector3.Distance(talker.transform.position, transform.position) <= TalkReach;
         }
 
         [Rpc(SendTo.Owner)]
-        private void OpenedRpc(ulong talkerId)
+        private void RaiseTalkOpenedRpc(ulong talkerId)
         {
             Log.Info($"Talk with network object {talkerId} opened");
-            Opened?.Invoke(talkerId);
+            TalkOpened?.Invoke(talkerId);
         }
 
         [Rpc(SendTo.Owner)]
-        private void ClosedRpc()
+        private void RaiseTalkClosedRpc()
         {
             Log.Info("Talk closed");
-            Closed?.Invoke();
+            TalkClosed?.Invoke();
         }
     }
 }

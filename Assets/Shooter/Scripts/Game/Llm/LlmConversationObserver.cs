@@ -38,7 +38,7 @@ namespace Shooter.Game
 
         private void Hear(Conversation conversation, Message message)
         {
-            if (message.AuthorId == character.Id || conversation.Partner(message.AuthorId) != character.Id) return;
+            if (message.AuthorId == character.Id || conversation.GetPartnerId(message.AuthorId) != character.Id) return;
             if (!health.IsAlive) return;
 
             Character author = Character.FindById(message.AuthorId, RegisterInactivePolicy.Include);

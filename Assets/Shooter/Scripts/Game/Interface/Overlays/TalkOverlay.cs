@@ -68,8 +68,8 @@ namespace Shooter.Game
 
             if (playerMouth == null) return;
 
-            playerMouth.Opened += Open;
-            playerMouth.Closed += Close;
+            playerMouth.TalkOpened += Open;
+            playerMouth.TalkClosed += Close;
 
             playerRadio = playerMouth.GetComponent<PlayerRadio>();
             conversations = playerMouth.GetComponent<PlayerConversations>();
@@ -79,8 +79,8 @@ namespace Shooter.Game
                 return;
             }
 
-            conversations.Arrived += Arrived;
-            conversations.Cleared += Cleared;
+            conversations.LinesArrived += Arrived;
+            conversations.ContactsCleared += Cleared;
         }
 
         protected override bool Bind(VisualElement root)
@@ -98,7 +98,7 @@ namespace Shooter.Game
                 return false;
             }
 
-            input.maxLength = PlayerMouth.SpeechLimit;
+            input.maxLength = PlayerMouth.MaxSpeechLength;
             input.RegisterCallback<KeyDownEvent>(Typed);
             give.clicked += Give;
             window.style.display = DisplayStyle.None;
@@ -125,7 +125,7 @@ namespace Shooter.Game
             }
 
             radio = false;
-            Show(conversations.ContactOf(found.CharacterId), found, Named(found));
+            Show(conversations.GetOrCreateContact(found.CharacterId), found, Named(found));
         }
 
         private void OpenRadio(long partnerId)
@@ -134,7 +134,7 @@ namespace Shooter.Game
 
             Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Exclude);
             radio = true;
-            Show(conversations.ContactOf(partnerId), partner == null ? null : partner.GetComponent<Talker>(),
+            Show(conversations.GetOrCreateContact(partnerId), partner == null ? null : partner.GetComponent<Talker>(),
                 $"{Named(partner)} ({Radio})");
         }
 
@@ -195,16 +195,16 @@ namespace Shooter.Game
         // Stops at the first gap, so a later line never shows above one that is still on its way
         private void Draw(bool typing)
         {
-            while (drawn < contact.Count && contact.TryGet(drawn, out Line line))
+            while (drawn < contact.LineCount && contact.TryGetLine(drawn, out ConversationLine line))
             {
                 Put(line, typing);
                 drawn++;
             }
 
-            contact.Seen = contact.Count;
+            contact.SeenLineCount = contact.LineCount;
         }
 
-        private void Put(Line line, bool typing)
+        private void Put(ConversationLine line, bool typing)
         {
             bool mine = line.AuthorId == conversations.CharacterId;
 
@@ -244,7 +244,7 @@ namespace Shooter.Game
 
             talker = with;
             talker.ThinkingChanged += Wait;
-            Wait(talker.Thinking);
+            Wait(talker.IsThinking);
         }
 
         private void Unfollow()
@@ -308,15 +308,15 @@ namespace Shooter.Game
 
             if (conversations != null)
             {
-                conversations.Arrived -= Arrived;
-                conversations.Cleared -= Cleared;
+                conversations.LinesArrived -= Arrived;
+                conversations.ContactsCleared -= Cleared;
                 conversations = null;
             }
 
             if (playerMouth == null) return;
 
-            playerMouth.Opened -= Open;
-            playerMouth.Closed -= Close;
+            playerMouth.TalkOpened -= Open;
+            playerMouth.TalkClosed -= Close;
             playerMouth = null;
             playerRadio = null;
         }
