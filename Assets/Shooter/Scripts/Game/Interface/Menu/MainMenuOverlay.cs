@@ -30,33 +30,33 @@ namespace Shooter.Game
         private ClientPage client;
         private ClientSettingsPage clientSettings;
         private Dialog dialog;
-        private LoadingScreenOverlay loading;
+        private LoadingScreenOverlay loadingScreenOverlay;
         private MainPage main;
         private NewGamePage newGame;
         private VisualElement panel;
         private SavesPage saves;
         private ServerSettingsPage serverSettings;
-        private NetworkStarter starter;
+        private NetworkStarter networkStarter;
         private string warnDetails;
         private string warnTitle;
 
         private void Awake()
         {
             Application.targetFrameRate = MenuFrameRate;
-            starter = NetworkManager.Singleton.GetComponent<NetworkStarter>();
+            networkStarter = NetworkManager.Singleton.GetComponent<NetworkStarter>();
         }
 
         // A world that ended halfway through its load leaves the loading screen up, the menu takes it down
         private void Start()
         {
-            loading = FindAnyObjectByType<LoadingScreenOverlay>();
-            loading.Hide();
-            starter.JoinFailed += JoinFailed;
+            loadingScreenOverlay = FindAnyObjectByType<LoadingScreenOverlay>();
+            loadingScreenOverlay.Hide();
+            networkStarter.JoinFailed += HandleJoinFailed;
         }
 
         private void OnDestroy()
         {
-            starter.JoinFailed -= JoinFailed;
+            networkStarter.JoinFailed -= HandleJoinFailed;
             Application.targetFrameRate = UnlimitedFrameRate;
         }
 
@@ -136,11 +136,11 @@ namespace Shooter.Game
 
             pages.Push(main);
 
-            if (starter.Failure != null)
+            if (networkStarter.Failure != null)
             {
-                warnTitle = starter.Failure.Title;
-                warnDetails = starter.Failure.Details;
-                starter.Failure = null;
+                warnTitle = networkStarter.Failure.Title;
+                warnDetails = networkStarter.Failure.Details;
+                networkStarter.Failure = null;
             }
 
             ShowWarning();
@@ -248,36 +248,36 @@ namespace Shooter.Game
         private void Host(string save)
         {
             if (save != null) Log.Info($"The player continues the game saved at {save}");
-            loading.Show(LoadingScreenStage.Server);
-            NetworkStartFailure failure = starter.Host(save);
+            loadingScreenOverlay.Show(LoadingScreenStage.Server);
+            NetworkStartFailure failure = networkStarter.Host(save);
             if (failure == null) return;
 
-            loading.Hide();
+            loadingScreenOverlay.Hide();
             Warn(failure.Title, failure.Details);
         }
 
         private void Connect()
         {
             Log.Info("The player joins a game of someone else");
-            NetworkStartFailure failure = starter.Join();
+            NetworkStartFailure failure = networkStarter.Join();
             if (failure != null)
             {
                 Warn(failure.Title, failure.Details);
                 return;
             }
 
-            loading.Show(LoadingScreenStage.Connection, Cancel);
+            loadingScreenOverlay.Show(LoadingScreenStage.Connection, Cancel);
         }
 
         private void Cancel()
         {
-            starter.Cancel();
-            loading.Hide();
+            networkStarter.Cancel();
+            loadingScreenOverlay.Hide();
         }
 
-        private void JoinFailed(NetworkStartFailure failure)
+        private void HandleJoinFailed(NetworkStartFailure failure)
         {
-            loading.Hide();
+            loadingScreenOverlay.Hide();
             Warn(failure.Title, failure.Details);
         }
 
