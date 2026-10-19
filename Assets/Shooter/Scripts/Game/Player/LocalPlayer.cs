@@ -17,46 +17,45 @@ namespace Shooter.Game
         [SerializeField] private Camera view;
         [SerializeField] private EarSoundAsset saveSound;
         [SerializeField] private EarSoundAsset screenshotSound;
+
         private Controls controls;
-        private EarSpeaker ear;
+        private EarSpeaker earSpeaker;
         private Gunner gunner;
         private Health health;
         private Interactor interactor;
         private Mortal mortal;
         private PlayerMouth playerMouth;
-
         private RpcMovement movement;
-        private float pitch;
-        private OwnRecoil recoil;
+        private OwnRecoil ownRecoil;
         private Sleeper sleeper;
-        private bool talking;
-        private long? radioPartner;
+        private float pitch;
         private float yaw;
+        private bool talking;
+        private long? radioPartnerId;
 
-        public bool InventoryOpen { get; private set; }
+        public bool IsInventoryOpen { get; private set; }
 
-        public bool Paused { get; private set; }
+        public bool IsPauseMenuOpen { get; private set; }
 
-        public bool Inviting { get; private set; }
+        public bool IsInviteOpen { get; private set; }
 
-        public bool RadioOpen { get; private set; }
+        public bool IsRadioOpen { get; private set; }
 
-        public bool Prompting { get; private set; }
+        public bool IsPromptOpen { get; private set; }
 
-        public long? RadioPartner => radioPartner;
+        public long? RadioPartnerId => radioPartnerId;
 
-        public long? TalkPartner
+        public long? TalkPartnerId
         {
             get
             {
                 if (!talking) return null;
-                if (radioPartner != null) return radioPartner;
+                if (radioPartnerId != null) return radioPartnerId;
                 if (playerMouth == null || playerMouth.TalkerNetworkObjectId == 0) return null;
-                if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(playerMouth.TalkerNetworkObjectId, out NetworkObject found))
-                    return null;
+                if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(playerMouth.TalkerNetworkObjectId, out NetworkObject talkerNetworkObject)) return null;
 
-                Character partner = found.GetComponent<Character>();
-                return partner == null ? null : partner.Id;
+                Character talkerCharacter = talkerNetworkObject.GetComponent<Character>();
+                return talkerCharacter == null ? null : talkerCharacter.Id;
             }
         }
 
@@ -69,26 +68,26 @@ namespace Shooter.Game
             health = GetComponent<Health>();
             mortal = GetComponent<Mortal>();
             gunner = GetComponent<Gunner>();
-            recoil = GetComponent<OwnRecoil>();
-            ear = GetComponent<EarSpeaker>();
+            ownRecoil = GetComponent<OwnRecoil>();
+            earSpeaker = GetComponent<EarSpeaker>();
         }
 
         private void Update()
         {
             if (controls == null) return;
 
-            Vector2 delta = controls.Player.Look.ReadValue<Vector2>() * LookSensitivity;
+            Vector2 lookDelta = controls.Player.Look.ReadValue<Vector2>() * LookSensitivity;
 
-            yaw += delta.x;
-            pitch = Mathf.Clamp(pitch - delta.y, -MaxPitch, MaxPitch);
+            yaw += lookDelta.x;
+            pitch = Mathf.Clamp(pitch - lookDelta.y, -MaxPitch, MaxPitch);
         }
 
         private void LateUpdate()
         {
-            Vector2 punch = recoil == null ? Vector2.zero : recoil.Punch;
+            Vector2 punchAngles = ownRecoil == null ? Vector2.zero : ownRecoil.PunchAngles;
 
             view.transform.position = transform.position + Vector3.up * Interactor.EyeHeight;
-            view.transform.rotation = Quaternion.Euler(pitch - punch.y, yaw + punch.x, 0f);
+            view.transform.rotation = Quaternion.Euler(pitch - punchAngles.y, yaw + punchAngles.x, 0f);
         }
 
         public override void OnNetworkSpawn()
@@ -100,7 +99,7 @@ namespace Shooter.Game
                 return;
             }
 
-            Activate();
+            StartLocalControl();
         }
 
         public override void OnGainedOwnership()
@@ -109,121 +108,129 @@ namespace Shooter.Game
 
             view.gameObject.SetActive(true);
             enabled = true;
-            Activate();
+            StartLocalControl();
         }
 
         public override void OnLostOwnership()
         {
-            Deactivate();
+            StopLocalControl();
             view.gameObject.SetActive(false);
             enabled = false;
         }
 
         public override void OnNetworkDespawn()
         {
-            Deactivate();
+            StopLocalControl();
         }
 
-        private void Activate()
+        private void StartLocalControl()
         {
             if (controls != null) return;
 
             yaw = transform.eulerAngles.y;
-            movement.Turned += Turn;
+            movement.Turned += HandleTurned;
 
             controls = new Controls();
             controls.Player.Jump.performed += Jump;
             controls.Player.Attack.performed += PressTrigger;
             controls.Player.Attack.canceled += ReleaseTrigger;
-            controls.Player.Reload.performed += Reload;
-            controls.Player.Interact.performed += Use;
-            controls.Player.Inventory.performed += OpenBag;
-            controls.UI.Inventory.performed += CloseBag;
-            controls.Player.Radio.performed += OpenRadio;
-            controls.UI.Radio.performed += CloseRadio;
-            controls.UI.Cancel.performed += Escape;
+            controls.Player.Reload.performed += ReloadWeapon;
+            controls.Player.Interact.performed += RiseOrWakeOrInteract;
+            controls.Player.Inventory.performed += OpenInventoryByKey;
+            controls.UI.Inventory.performed += CloseInventoryByKey;
+            controls.Player.Radio.performed += OpenRadioByKey;
+            controls.UI.Radio.performed += CloseRadioByKey;
+            controls.UI.Cancel.performed += CloseTopWindowOrTogglePauseMenu;
             controls.Game.Save.performed += QuickSave;
-            controls.Game.Screenshot.performed += Screenshot;
+            controls.Game.Screenshot.performed += TakeScreenshot;
             controls.Game.Enable();
 
             if (playerMouth != null)
             {
-                playerMouth.TalkOpened += OpenTalk;
-                playerMouth.TalkClosed += CloseTalk;
+                playerMouth.TalkOpened += HandleTalkOpened;
+                playerMouth.TalkClosed += HandleTalkClosed;
             }
 
-            Grab();
+            GiveInputToPlayer();
 
-            NetworkManager.NetworkTickSystem.Tick += Send;
+            NetworkManager.NetworkTickSystem.Tick += SendSteering;
             Log.Info($"Local player active on network object {NetworkObjectId} owned by client {OwnerClientId}");
         }
 
-        private void Deactivate()
+        private void StopLocalControl()
         {
             if (controls == null) return;
 
-            NetworkManager.NetworkTickSystem.Tick -= Send;
-            movement.Turned -= Turn;
+            NetworkManager.NetworkTickSystem.Tick -= SendSteering;
+            movement.Turned -= HandleTurned;
 
             controls.Player.Jump.performed -= Jump;
             controls.Player.Attack.performed -= PressTrigger;
             controls.Player.Attack.canceled -= ReleaseTrigger;
-            controls.Player.Reload.performed -= Reload;
-            controls.Player.Interact.performed -= Use;
-            controls.Player.Inventory.performed -= OpenBag;
-            controls.UI.Inventory.performed -= CloseBag;
-            controls.Player.Radio.performed -= OpenRadio;
-            controls.UI.Radio.performed -= CloseRadio;
-            controls.UI.Cancel.performed -= Escape;
+            controls.Player.Reload.performed -= ReloadWeapon;
+            controls.Player.Interact.performed -= RiseOrWakeOrInteract;
+            controls.Player.Inventory.performed -= OpenInventoryByKey;
+            controls.UI.Inventory.performed -= CloseInventoryByKey;
+            controls.Player.Radio.performed -= OpenRadioByKey;
+            controls.UI.Radio.performed -= CloseRadioByKey;
+            controls.UI.Cancel.performed -= CloseTopWindowOrTogglePauseMenu;
             controls.Game.Save.performed -= QuickSave;
-            controls.Game.Screenshot.performed -= Screenshot;
+            controls.Game.Screenshot.performed -= TakeScreenshot;
 
             if (playerMouth != null)
             {
-                playerMouth.TalkOpened -= OpenTalk;
-                playerMouth.TalkClosed -= CloseTalk;
+                playerMouth.TalkOpened -= HandleTalkOpened;
+                playerMouth.TalkClosed -= HandleTalkClosed;
             }
 
-            // Dispose destroys the asset with its maps still on, and the wrapper's finalizer asserts on that
+            // Disable before Dispose: Dispose only destroys the asset, and the generated finalizer asserts every map was disabled
             controls.Disable();
             controls.Dispose();
             controls = null;
-            InventoryOpen = false;
-            RadioOpen = false;
-            Prompting = false;
+            IsInventoryOpen = false;
+            IsRadioOpen = false;
+            IsPromptOpen = false;
             talking = false;
-            radioPartner = null;
+            radioPartnerId = null;
 
-            Point(true);
+            SetCursorShown(true);
             Log.Info("Local player inactive");
         }
 
-        private void Turn(float turned)
+        private void HandleTurned(float turnedYaw)
         {
-            yaw = turned;
+            yaw = turnedYaw;
         }
 
-        private void Capture()
+        private void RouteInputByOpenWindows()
         {
             if (controls == null) return;
 
-            if (talking || Paused || Inviting) Listen();
-            else if (InventoryOpen || RadioOpen || Prompting) Browse();
-            else Grab();
+            if (talking || IsPauseMenuOpen || IsInviteOpen)
+            {
+                GiveInputToWindow();
+            }
+            else if (IsInventoryOpen || IsRadioOpen || IsPromptOpen)
+            {
+                ShareInputWithWindow();
+            }
+            else
+            {
+                GiveInputToPlayer();
+            }
 
-            Log.Info(
-                $"Local player input is now {(talking ? "on the talk" : Inviting ? "on the invite window" : Paused ? "on the pause menu" : RadioOpen ? "on the radio" : Prompting ? "on a prompt" : InventoryOpen ? "shared with the bag" : "back on the player")}");
+            Log.Info($"Local player input is now {(talking ? "on the talk" : IsInviteOpen ? "on the invite window" : IsPauseMenuOpen ? "on the pause menu" : IsRadioOpen ? "on the radio" : IsPromptOpen ? "on a prompt" : IsInventoryOpen ? "shared with the inventory" : "back on the player")}");
         }
 
-        private void Grab()
+        private void GiveInputToPlayer()
         {
             controls.UI.Disable();
             controls.UI.Cancel.Enable();
             controls.Player.Enable();
-            Point(false);
+            SetCursorShown(false);
         }
 
-        private void Browse()
+        private void ShareInputWithWindow()
         {
             controls.Player.Enable();
             controls.Player.Look.Disable();
@@ -231,19 +238,19 @@ namespace Shooter.Game
             controls.Player.Reload.Disable();
             controls.Player.Interact.Disable();
             controls.Player.Inventory.Disable();
-            if (RadioOpen) controls.Player.Radio.Disable();
+            if (IsRadioOpen) controls.Player.Radio.Disable();
             controls.UI.Enable();
-            Point(true);
+            SetCursorShown(true);
         }
 
-        private void Listen()
+        private void GiveInputToWindow()
         {
             controls.Player.Disable();
             controls.UI.Enable();
-            Point(true);
+            SetCursorShown(true);
         }
 
-        private static void Point(bool shown)
+        private static void SetCursorShown(bool shown)
         {
             Cursor.lockState = shown ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = shown;
@@ -257,129 +264,129 @@ namespace Shooter.Game
         private void PressTrigger(InputAction.CallbackContext context)
         {
             gunner?.PressTriggerRpc();
-            recoil?.Press();
+            ownRecoil?.PressTrigger();
         }
 
         private void ReleaseTrigger(InputAction.CallbackContext context)
         {
             gunner?.ReleaseTriggerRpc();
-            recoil?.Release();
+            ownRecoil?.ReleaseTrigger();
         }
 
-        private void Reload(InputAction.CallbackContext context)
+        private void ReloadWeapon(InputAction.CallbackContext context)
         {
             gunner?.ReloadRpc();
         }
 
-        private void OpenBag(InputAction.CallbackContext context)
+        private void OpenInventoryByKey(InputAction.CallbackContext context)
         {
-            InventoryOpen = true;
-            Capture();
+            IsInventoryOpen = true;
+            RouteInputByOpenWindows();
         }
 
-        public void OpenInventory()
+        public void OpenInventoryFromTalk()
         {
-            if (radioPartner != null) return;
+            if (radioPartnerId != null) return;
 
             if (talking) playerMouth.HangUpRpc();
 
-            InventoryOpen = true;
-            Capture();
-            Log.Info("Bag opened from the talk");
+            IsInventoryOpen = true;
+            RouteInputByOpenWindows();
+            Log.Info("Inventory opened from the talk");
         }
 
         public void CloseInventory()
         {
-            if (!InventoryOpen) return;
+            if (!IsInventoryOpen) return;
 
-            InventoryOpen = false;
-            Prompting = false;
-            Capture();
+            IsInventoryOpen = false;
+            IsPromptOpen = false;
+            RouteInputByOpenWindows();
         }
 
-        private void CloseBag(InputAction.CallbackContext context)
+        private void CloseInventoryByKey(InputAction.CallbackContext context)
         {
-            if (Prompting) return;
+            if (IsPromptOpen) return;
 
             CloseInventory();
         }
 
         public void OpenPrompt()
         {
-            if (Prompting) return;
+            if (IsPromptOpen) return;
 
-            Prompting = true;
-            Capture();
+            IsPromptOpen = true;
+            RouteInputByOpenWindows();
         }
 
         public void ClosePrompt()
         {
-            if (!Prompting) return;
+            if (!IsPromptOpen) return;
 
-            Prompting = false;
-            Capture();
+            IsPromptOpen = false;
+            RouteInputByOpenWindows();
         }
 
-        private void OpenTalk(ulong talkerId)
+        private void HandleTalkOpened(ulong talkerId)
         {
             talking = true;
-            Capture();
+            RouteInputByOpenWindows();
         }
 
-        private void CloseTalk()
+        private void HandleTalkClosed()
         {
             talking = false;
-            Capture();
+            RouteInputByOpenWindows();
         }
 
-        private void OpenRadio(InputAction.CallbackContext context)
+        private void OpenRadioByKey(InputAction.CallbackContext context)
         {
             OpenRadio();
         }
 
-        private void CloseRadio(InputAction.CallbackContext context)
+        private void CloseRadioByKey(InputAction.CallbackContext context)
         {
             CloseRadio();
         }
 
         public void OpenRadio()
         {
-            RadioOpen = true;
-            Capture();
+            IsRadioOpen = true;
+            RouteInputByOpenWindows();
             Log.Info("Radio opened");
         }
 
         public void CloseRadio()
         {
-            if (!RadioOpen) return;
+            if (!IsRadioOpen) return;
 
-            RadioOpen = false;
-            Capture();
+            IsRadioOpen = false;
+            RouteInputByOpenWindows();
             Log.Info("Radio closed");
         }
 
         public void OpenRadioTalk(long partnerId)
         {
-            RadioOpen = false;
-            radioPartner = partnerId;
+            IsRadioOpen = false;
+            radioPartnerId = partnerId;
             talking = true;
-            Capture();
+            RouteInputByOpenWindows();
             Log.Info($"Radio talk with {partnerId} opened");
         }
 
         public void CloseRadioTalk()
         {
-            if (radioPartner == null) return;
+            if (radioPartnerId == null) return;
 
-            radioPartner = null;
+            radioPartnerId = null;
             talking = false;
-            Capture();
+            RouteInputByOpenWindows();
             Log.Info("Radio talk closed");
         }
 
-        private void Escape(InputAction.CallbackContext context)
+        private void CloseTopWindowOrTogglePauseMenu(InputAction.CallbackContext context)
         {
-            if (Prompting)
+            if (IsPromptOpen)
             {
                 ClosePrompt();
                 return;
@@ -387,62 +394,75 @@ namespace Shooter.Game
 
             if (talking)
             {
-                if (radioPartner != null) CloseRadioTalk();
-                else playerMouth.HangUpRpc();
+                if (radioPartnerId != null)
+                {
+                    CloseRadioTalk();
+                }
+                else
+                {
+                    playerMouth.HangUpRpc();
+                }
+
                 return;
             }
 
-            if (RadioOpen)
+            if (IsRadioOpen)
             {
                 CloseRadio();
                 return;
             }
 
-            if (InventoryOpen)
+            if (IsInventoryOpen)
             {
-                CloseBag(context);
+                CloseInventoryByKey(context);
                 return;
             }
 
-            if (Inviting)
+            if (IsInviteOpen)
             {
                 CloseInvite();
                 return;
             }
 
-            if (Paused) Resume();
-            else OpenPause();
+            if (IsPauseMenuOpen)
+            {
+                ClosePauseMenu();
+            }
+            else
+            {
+                OpenPauseMenu();
+            }
         }
 
         public void OpenInvite()
         {
-            Inviting = true;
-            Capture();
+            IsInviteOpen = true;
+            RouteInputByOpenWindows();
             Log.Info("Invite window opened");
         }
 
         public void CloseInvite()
         {
-            if (!Inviting) return;
+            if (!IsInviteOpen) return;
 
-            Inviting = false;
-            Capture();
+            IsInviteOpen = false;
+            RouteInputByOpenWindows();
             Log.Info("Invite window closed");
         }
 
-        private void OpenPause()
+        private void OpenPauseMenu()
         {
-            Paused = true;
-            Capture();
+            IsPauseMenuOpen = true;
+            RouteInputByOpenWindows();
             Log.Info("Pause menu opened");
         }
 
-        public void Resume()
+        public void ClosePauseMenu()
         {
-            if (!Paused) return;
+            if (!IsPauseMenuOpen) return;
 
-            Paused = false;
-            Capture();
+            IsPauseMenuOpen = false;
+            RouteInputByOpenWindows();
             Log.Info("Pause menu closed");
         }
 
@@ -458,14 +478,14 @@ namespace Shooter.Game
         {
             if (!IsServer || SaveManager.IsSaving) return;
 
-            if (ear != null) ear.PlayLocally(saveSound);
+            if (earSpeaker != null) earSpeaker.PlayLocally(saveSound);
             Log.Info("Saving the world by the hotkey");
             StartCoroutine(SaveManager.SaveCoroutine());
         }
 
-        private void Screenshot(InputAction.CallbackContext context)
+        private void TakeScreenshot(InputAction.CallbackContext context)
         {
-            if (ear != null) ear.PlayLocally(screenshotSound);
+            if (earSpeaker != null) earSpeaker.PlayLocally(screenshotSound);
             StartCoroutine(Screenshotter.TakeToScreenshotsFolder());
         }
 
@@ -474,7 +494,7 @@ namespace Shooter.Game
             if (IsServer)
             {
                 Log.Info("Leaving the world from the pause menu, saving first");
-                StartCoroutine(SaveThenLeave());
+                StartCoroutine(SaveWorldThenLeave());
                 return;
             }
 
@@ -482,27 +502,39 @@ namespace Shooter.Game
             NetworkManager.Shutdown();
         }
 
-        private IEnumerator SaveThenLeave()
+        private IEnumerator SaveWorldThenLeave()
         {
             yield return SaveManager.SaveCoroutine();
-            while (SaveManager.IsSaving) yield return null;
+            while (SaveManager.IsSaving)
+            {
+                yield return null;
+            }
 
             NetworkManager.Shutdown();
         }
 
-        private void Use(InputAction.CallbackContext context)
+        private void RiseOrWakeOrInteract(InputAction.CallbackContext context)
         {
-            if (health != null && !health.IsAlive) mortal?.RiseRpc();
-            else if (sleeper != null && sleeper.IsSleeping) sleeper.WakeRpc();
-            else interactor.UseRpc();
+            if (health != null && !health.IsAlive)
+            {
+                mortal?.RiseRpc();
+            }
+            else if (sleeper != null && sleeper.IsSleeping)
+            {
+                sleeper.WakeRpc();
+            }
+            else
+            {
+                interactor.UseRpc();
+            }
         }
 
-        private void Send()
+        private void SendSteering()
         {
-            Vector2 move = controls.Player.Move.ReadValue<Vector2>();
+            Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
             bool sprinting = controls.Player.Sprint.IsPressed();
 
-            movement.SteerRpc(move, yaw, pitch, sprinting, NetworkManager.LocalTime.Tick);
+            movement.SteerRpc(moveInput, yaw, pitch, sprinting, NetworkManager.LocalTime.Tick);
         }
     }
 }

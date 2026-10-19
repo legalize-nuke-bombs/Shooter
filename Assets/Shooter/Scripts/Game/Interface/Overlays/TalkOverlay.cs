@@ -49,8 +49,8 @@ namespace Shooter.Game
 
         private void PollRadio()
         {
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            long? wanted = player == null ? null : player.RadioPartner;
+            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
+            long? wanted = player == null ? null : player.RadioPartnerId;
             if (wanted == radioShown) return;
 
             radioShown = wanted;
@@ -60,7 +60,7 @@ namespace Shooter.Game
 
         private void Follow()
         {
-            PlayerMouth own = OwnPlayer.Find<PlayerMouth>();
+            PlayerMouth own = OwnPlayer.FindComponent<PlayerMouth>();
             if (own == playerMouth) return;
 
             Forget();
@@ -278,8 +278,8 @@ namespace Shooter.Game
 
         private void Give()
         {
-            LocalPlayer player = OwnPlayer.Find<LocalPlayer>();
-            if (player != null) player.OpenInventory();
+            LocalPlayer player = OwnPlayer.FindComponent<LocalPlayer>();
+            if (player != null) player.OpenInventoryFromTalk();
         }
 
         private static Talker TalkerOf(ulong talkerId)

@@ -24,7 +24,7 @@ namespace Shooter.Game
 
         private void Follow()
         {
-            Player own = OwnPlayer.Find<Player>();
+            Player own = OwnPlayer.FindComponent<Player>();
             if (own == player) return;
 
             Forget();
@@ -33,7 +33,7 @@ namespace Shooter.Game
             if (player == null) return;
 
             sources = player.GetComponents<IToastSource>();
-            foreach (IToastSource source in sources) source.Toasted += Show;
+            foreach (IToastSource source in sources) source.ToastRaised += Show;
 
             Log.Info($"Toasts follow {sources.Length} sources on {player.name}");
         }
@@ -112,7 +112,7 @@ namespace Shooter.Game
         {
             if (sound == null) return;
 
-            EarSpeaker ear = OwnPlayer.Find<EarSpeaker>();
+            EarSpeaker ear = OwnPlayer.FindComponent<EarSpeaker>();
             if (ear == null) return;
 
             ear.PlayLocally(sound);
@@ -122,7 +122,7 @@ namespace Shooter.Game
         {
             if (sources != null)
                 foreach (IToastSource source in sources)
-                    source.Toasted -= Show;
+                    source.ToastRaised -= Show;
 
             sources = null;
             player = null;

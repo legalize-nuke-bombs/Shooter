@@ -9,41 +9,41 @@ namespace Shooter.Game
     [RequireComponent(typeof(NotificationRecipient))]
     public class PlayerNotificationObserver : NetworkBehaviour, IToastSource
     {
-        private NotificationRecipient recipient;
+        private NotificationRecipient notificationRecipient;
 
-        public event Action<Toast> Toasted;
+        public event Action<Toast> ToastRaised;
 
         private void Awake()
         {
-            recipient = GetComponent<NotificationRecipient>();
+            notificationRecipient = GetComponent<NotificationRecipient>();
         }
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) recipient.Received += Relay;
+            if (IsServer) notificationRecipient.Received += HandleNotificationReceived;
         }
 
         public override void OnNetworkDespawn()
         {
-            if (IsServer) recipient.Received -= Relay;
+            if (IsServer) notificationRecipient.Received -= HandleNotificationReceived;
         }
 
-        private void Relay(NotificationAsset asset)
+        private void HandleNotificationReceived(NotificationAsset notification)
         {
-            // An offline body is owned by the host
+            // An offline body is switched off and owned by the host, who must not get its toasts
             if (!gameObject.activeInHierarchy) return;
 
-            ShownRpc(asset.NetworkId);
+            RaiseNotificationToastRpc(notification.NetworkId);
         }
 
         [Rpc(SendTo.Owner)]
-        private void ShownRpc(FixedString32Bytes assetId)
+        private void RaiseNotificationToastRpc(FixedString32Bytes notificationId)
         {
-            NotificationCatalog catalog = Catalogs.GetCatalog<NotificationCatalog>();
-            NotificationAsset asset = catalog == null ? null : catalog.GetAssetById(assetId);
-            if (asset == null) return;
+            NotificationCatalog notificationCatalog = Catalogs.GetCatalog<NotificationCatalog>();
+            NotificationAsset notification = notificationCatalog == null ? null : notificationCatalog.GetAssetById(notificationId);
+            if (notification == null) return;
 
-            Toasted?.Invoke(new Toast(asset.Icon, asset.Sound, asset.Title, asset.Subtitle));
+            ToastRaised?.Invoke(new Toast(notification.Icon, notification.Sound, notification.Title, notification.Subtitle));
         }
     }
 }

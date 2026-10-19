@@ -57,9 +57,9 @@ namespace Shooter.Game
 
         private float Blink()
         {
-            if (view == null) view = OwnPlayer.Find<SleepView>();
+            if (view == null) view = OwnPlayer.FindComponent<SleepView>();
 
-            return view == null ? 0f : view.Blink;
+            return view == null ? 0f : view.EyesClosedAmount;
         }
     }
 }

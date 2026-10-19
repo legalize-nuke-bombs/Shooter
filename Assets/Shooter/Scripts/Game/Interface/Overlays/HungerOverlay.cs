@@ -77,7 +77,7 @@ namespace Shooter.Game
 
         private Hunger Own()
         {
-            if (hunger == null) hunger = OwnPlayer.Find<Hunger>();
+            if (hunger == null) hunger = OwnPlayer.FindComponent<Hunger>();
 
             return hunger;
         }

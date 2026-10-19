@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(OwnWeapon))]
+    [RequireComponent(typeof(OwnWeaponView))]
     [RequireComponent(typeof(Footsteps))]
     public class OwnWeaponMotion : NetworkBehaviour
     {
-        private const float TeleportJump = 1f;
+        private const float MinTeleportDistance = 1f;
 
         [Header("Steps")]
         [SerializeField] private float stepDrop = 0.012f;
@@ -24,34 +24,34 @@ namespace Shooter.Game
 
         [SerializeField] private float settle = 0.12f;
 
-        private OwnWeapon weapon;
+        private OwnWeaponView ownWeaponView;
         private Footsteps footsteps;
-        private bool primed;
+        private bool tracking;
 
         private float phase;
         private bool otherFoot;
-        private float walking;
-        private float walkingVelocity;
+        private float walkingWeight;
+        private float walkingWeightVelocity;
 
         private float lastYaw;
         private float lastPitch;
-        private Vector2 lag;
-        private Vector2 lagVelocity;
+        private Vector2 lagAngles;
+        private Vector2 lagAnglesVelocity;
 
         private Vector3 lastPosition;
-        private float sideways;
-        private float tilt;
-        private float tiltVelocity;
+        private float sidewaysSpeed;
+        private float tiltAngle;
+        private float tiltAngleVelocity;
 
         private void Awake()
         {
-            weapon = GetComponent<OwnWeapon>();
+            ownWeaponView = GetComponent<OwnWeaponView>();
             footsteps = GetComponent<Footsteps>();
         }
 
         private void OnEnable()
         {
-            primed = false;
+            tracking = false;
         }
 
         public override void OnNetworkSpawn()
@@ -71,41 +71,41 @@ namespace Shooter.Game
 
         private void LateUpdate()
         {
-            Transform hold = weapon.Hold;
+            Transform weaponHold = ownWeaponView.WeaponHold;
             float dt = Time.deltaTime;
-            if (hold == null || dt <= 0f) return;
+            if (weaponHold == null || dt <= 0f) return;
 
-            Transform eye = hold.parent;
-            if (!primed) Prime(eye);
+            Transform viewTransform = weaponHold.parent;
+            if (!tracking) StartTracking(viewTransform);
 
-            Step(dt);
-            Look(eye, dt);
-            Strafe(dt);
+            FollowFootstepPhase(dt);
+            LagBehindLook(viewTransform, dt);
+            TiltOnStrafe(dt);
 
-            float side = otherFoot ? -1f : 1f;
-            float drop = stepDrop * (0.5f + 0.5f * Mathf.Cos(2f * Mathf.PI * phase)) * walking;
-            float sway = stepSway * Mathf.Sin(Mathf.PI * phase) * side * walking;
+            float footSide = otherFoot ? -1f : 1f;
+            float drop = stepDrop * (0.5f + 0.5f * Mathf.Cos(2f * Mathf.PI * phase)) * walkingWeight;
+            float sway = stepSway * Mathf.Sin(Mathf.PI * phase) * footSide * walkingWeight;
 
-            hold.localPosition = new Vector3(sway, -drop, 0f);
-            hold.localRotation = Quaternion.Euler(lag.y, lag.x, tilt);
+            weaponHold.localPosition = new Vector3(sway, -drop, 0f);
+            weaponHold.localRotation = Quaternion.Euler(lagAngles.y, lagAngles.x, tiltAngle);
         }
 
-        private void Prime(Transform eye)
+        private void StartTracking(Transform viewTransform)
         {
-            primed = true;
+            tracking = true;
             phase = footsteps.Phase;
-            lastYaw = eye.eulerAngles.y;
-            lastPitch = eye.eulerAngles.x;
+            lastYaw = viewTransform.eulerAngles.y;
+            lastPitch = viewTransform.eulerAngles.x;
             lastPosition = transform.position;
         }
 
-        // The phase comes from the server a tick at a time and runs smoothly here, across a footfall too
-        private void Step(float dt)
+        // The server sends the phase a tick at a time; here it runs smoothly, across a footfall too
+        private void FollowFootstepPhase(float dt)
         {
-            float ahead = Mathf.Repeat(footsteps.Phase - phase + 0.5f, 1f) - 0.5f;
-            float moved = ahead * (1f - Mathf.Exp(-dt / stepFollow));
+            float phaseAhead = Mathf.Repeat(footsteps.Phase - phase + 0.5f, 1f) - 0.5f;
+            float phaseStep = phaseAhead * (1f - Mathf.Exp(-dt / stepFollow));
 
-            phase += moved;
+            phase += phaseStep;
             if (phase >= 1f)
             {
                 phase -= 1f;
@@ -116,37 +116,34 @@ namespace Shooter.Game
                 phase += 1f;
             }
 
-            float pace = Mathf.Abs(moved) / dt;
-            walking = Mathf.SmoothDamp(walking, pace > 0.05f ? 1f : 0f, ref walkingVelocity, settle);
+            float phaseSpeed = Mathf.Abs(phaseStep) / dt;
+            walkingWeight = Mathf.SmoothDamp(walkingWeight, phaseSpeed > 0.05f ? 1f : 0f, ref walkingWeightVelocity, settle);
         }
 
-        private void Look(Transform eye, float dt)
+        private void LagBehindLook(Transform viewTransform, float dt)
         {
-            float yaw = eye.eulerAngles.y;
-            float pitch = eye.eulerAngles.x;
+            float yaw = viewTransform.eulerAngles.y;
+            float pitch = viewTransform.eulerAngles.x;
             float yawSpeed = Mathf.DeltaAngle(lastYaw, yaw) / dt;
             float pitchSpeed = Mathf.DeltaAngle(lastPitch, pitch) / dt;
             lastYaw = yaw;
             lastPitch = pitch;
 
-            var behind = new Vector2(
-                Mathf.Clamp(-yawSpeed * lookLag, -maxLag, maxLag),
-                Mathf.Clamp(-pitchSpeed * lookLag, -maxLag, maxLag));
-            lag = Vector2.SmoothDamp(lag, behind, ref lagVelocity, settle);
+            Vector2 targetLagAngles = new(Mathf.Clamp(-yawSpeed * lookLag, -maxLag, maxLag), Mathf.Clamp(-pitchSpeed * lookLag, -maxLag, maxLag));
+            lagAngles = Vector2.SmoothDamp(lagAngles, targetLagAngles, ref lagAnglesVelocity, settle);
         }
 
-        private void Strafe(float dt)
+        private void TiltOnStrafe(float dt)
         {
             Vector3 position = transform.position;
             Vector3 shift = position - lastPosition;
             lastPosition = position;
 
-            // A teleport is not a step to the side
-            float speed = shift.sqrMagnitude > TeleportJump * TeleportJump ? 0f : Vector3.Dot(shift, transform.right) / dt;
+            float strafeSpeed = shift.sqrMagnitude > MinTeleportDistance * MinTeleportDistance ? 0f : Vector3.Dot(shift, transform.right) / dt;
 
-            sideways = Mathf.Lerp(sideways, speed, 1f - Mathf.Exp(-dt / settle));
-            float lean = Mathf.Clamp(-sideways * strafeTilt, -maxTilt, maxTilt);
-            tilt = Mathf.SmoothDamp(tilt, lean, ref tiltVelocity, settle);
+            sidewaysSpeed = Mathf.Lerp(sidewaysSpeed, strafeSpeed, 1f - Mathf.Exp(-dt / settle));
+            float targetTiltAngle = Mathf.Clamp(-sidewaysSpeed * strafeTilt, -maxTilt, maxTilt);
+            tiltAngle = Mathf.SmoothDamp(tiltAngle, targetTiltAngle, ref tiltAngleVelocity, settle);
         }
     }
 }

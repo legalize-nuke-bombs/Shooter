@@ -5,24 +5,24 @@ namespace Shooter.Game
 {
     public static class CameraCulling
     {
-        private const string FirstPersonLayer = "FirstPerson";
-        private const string ReflectionOnlyLayer = "ReflectionOnly";
+        private const string FirstPersonLayerName = "FirstPerson";
+        private const string ReflectionOnlyLayerName = "ReflectionOnly";
 
-        private static int hidden;
+        private static int culledLayerMask;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void Watch()
+        private static void StartCullingFirstPersonAndReflectionOnlyLayers()
         {
-            hidden = LayerMask.GetMask(FirstPersonLayer, ReflectionOnlyLayer);
-            if (hidden == 0) return;
+            culledLayerMask = LayerMask.GetMask(FirstPersonLayerName, ReflectionOnlyLayerName);
+            if (culledLayerMask == 0) return;
 
-            RenderPipelineManager.beginCameraRendering -= Strip;
-            RenderPipelineManager.beginCameraRendering += Strip;
+            RenderPipelineManager.beginCameraRendering -= CullFirstPersonAndReflectionOnlyLayers;
+            RenderPipelineManager.beginCameraRendering += CullFirstPersonAndReflectionOnlyLayers;
         }
 
-        private static void Strip(ScriptableRenderContext context, Camera camera)
+        private static void CullFirstPersonAndReflectionOnlyLayers(ScriptableRenderContext context, Camera camera)
         {
-            camera.cullingMask &= ~hidden;
+            camera.cullingMask &= ~culledLayerMask;
         }
     }
 }

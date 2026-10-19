@@ -23,8 +23,8 @@ namespace Shooter.Game
         {
             if (!Bound) return;
 
-            if (bag == null) bag = OwnPlayer.Find<Inventory>();
-            if (holder == null) holder = OwnPlayer.Find<InventoryHolder>();
+            if (bag == null) bag = OwnPlayer.FindComponent<Inventory>();
+            if (holder == null) holder = OwnPlayer.FindComponent<InventoryHolder>();
 
             Firearm firearm = holder == null ? null : holder.HeldItem as Firearm;
             ItemCatalog items = Catalogs.GetCatalog<ItemCatalog>();

@@ -187,7 +187,7 @@ namespace Shooter.Game
                 : "";
             Line(role, peers + delay);
 
-            Transform player = OwnPlayer.Find<Transform>();
+            Transform player = OwnPlayer.FindComponent<Transform>();
             if (player != null)
             {
                 Vector3 at = player.position;
