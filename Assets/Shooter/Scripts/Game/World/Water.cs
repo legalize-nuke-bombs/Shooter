@@ -20,7 +20,7 @@ namespace Shooter.Game
         {
             float deepest = 0f;
 
-            foreach (Water water in Registers.Of<Water>(Inactive.Exclude))
+            foreach (Water water in Registers.Of<Water>(RegisterInactivePolicy.Exclude))
                 deepest = Mathf.Max(deepest, water.DepthAt(point));
 
             return deepest;

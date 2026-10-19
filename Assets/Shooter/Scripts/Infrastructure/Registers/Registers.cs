@@ -30,7 +30,7 @@ namespace Shooter.Infrastructure
             Log.Debug($"{member.GetType().Name} {member.name} unregistered");
         }
 
-        public static IEnumerable<T> Of<T>(Inactive gate) where T : ShooterBehaviour
+        public static IEnumerable<T> Of<T>(RegisterInactivePolicy gate) where T : ShooterBehaviour
         {
             if (!Known.TryGetValue(typeof(T), out Register register)) yield break;
 

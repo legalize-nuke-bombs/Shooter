@@ -41,7 +41,7 @@ namespace Shooter.Game
             if (message.AuthorId == character.Id || conversation.Partner(message.AuthorId) != character.Id) return;
             if (!health.Alive) return;
 
-            Character author = Character.Of(message.AuthorId, Inactive.Include);
+            Character author = Character.Of(message.AuthorId, RegisterInactivePolicy.Include);
 
             if (author != null && author.TryGetComponent(out Player _))
             {

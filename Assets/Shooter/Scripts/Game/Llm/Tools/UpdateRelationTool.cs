@@ -32,7 +32,7 @@ Always use this tool if a character does something good or bad to you.
 
         protected override string Execute(UpdateRelationArguments arguments, LlmCallContext context)
         {
-            var target = Character.Of(arguments.TargetId, Inactive.Include);
+            var target = Character.Of(arguments.TargetId, RegisterInactivePolicy.Include);
             if (target == null)
             {
                 return $"Character ID {arguments.TargetId} does not exist.";

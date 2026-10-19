@@ -25,7 +25,7 @@ namespace Shooter.Game
 
             foreach (long targetId in targetIds)
             {
-                var target = Character.Of(targetId, Inactive.Include);
+                var target = Character.Of(targetId, RegisterInactivePolicy.Include);
 
                 if (target == null)
                 {

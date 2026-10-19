@@ -53,7 +53,7 @@ To see the content, use read_conversation.
                     string name = character.GetComponent<Nameable>()?.PromptName() ?? "Unknown";
                     partnerNames[character.Id] = name;
                 }
-            }, Inactive.Include
+            }, RegisterInactivePolicy.Include
                 );
 
             var sortedConversations = conversations

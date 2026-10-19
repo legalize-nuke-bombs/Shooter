@@ -59,7 +59,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
 
             foreach (long targetId in arguments.TargetIds.Distinct())
             {
-                var target = Character.Of(targetId, Inactive.Exclude);
+                var target = Character.Of(targetId, RegisterInactivePolicy.Exclude);
 
                 if (target == null)
                 {

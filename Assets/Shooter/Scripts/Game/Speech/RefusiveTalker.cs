@@ -25,7 +25,7 @@ namespace Shooter.Game
         {
             if (message.AuthorId == CharacterId || conversation.Partner(message.AuthorId) != CharacterId) return;
 
-            Character author = Character.Of(message.AuthorId, Inactive.Include);
+            Character author = Character.Of(message.AuthorId, RegisterInactivePolicy.Include);
             if (author == null || !author.TryGetComponent(out Player _)) return;
 
             Map.Get<ConversationManager>().Say(CharacterId, message.AuthorId, "Not now.", false, true);

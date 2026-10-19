@@ -40,7 +40,7 @@ namespace Shooter.Game
                 Embody(client);
             }
 
-            foreach (Player player in Registers.Of<Player>(Inactive.Include))
+            foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Include))
             {
                 NetworkObject body = player.GetComponent<NetworkObject>();
                 if (!bodies.ContainsValue(body)) body.gameObject.SetActive(false);
@@ -59,7 +59,7 @@ namespace Shooter.Game
             string name = approver.NameOf(client);
             string key = approver.PublicKeyOf(client);
 
-            Player returning = Player.OfKey(key, Inactive.Include);
+            Player returning = Player.OfKey(key, RegisterInactivePolicy.Include);
             NetworkObject body;
             if (returning != null)
             {
