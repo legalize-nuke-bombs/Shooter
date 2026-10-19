@@ -91,7 +91,7 @@ namespace Shooter.Game
             if (!ushort.TryParse(port.value, out ushort chosen))
                 chosen = Config.Read().Server.Port;
 
-            string code = Invite.Encode(host, chosen, Config.Account.Certificate);
+            string code = NetworkInvite.Encode(host, chosen, Config.Account.Certificate);
             GUIUtility.systemCopyBuffer = code;
             status.text = Copied;
             Log.Info($"Invite link copied for {host}:{chosen}");

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Shooter.Infrastructure
 {
-    public static class Handshake
+    public static class NetworkHandshake
     {
         private const string Context = "join";
 
@@ -17,7 +17,7 @@ namespace Shooter.Infrastructure
 
         public static byte[] Encode(string name, Account account, string certificate)
         {
-            var payload = new Payload
+            Payload payload = new()
             {
                 Name = name,
                 PublicKey = account.PublicKey,
@@ -34,7 +34,7 @@ namespace Shooter.Infrastructure
 
             try
             {
-                var payload = JsonConvert.DeserializeObject<Payload>(Encoding.UTF8.GetString(data));
+                Payload payload = JsonConvert.DeserializeObject<Payload>(Encoding.UTF8.GetString(data));
                 if (string.IsNullOrEmpty(payload.PublicKey) || payload.Signature == null) return false;
                 if (!Account.Verify(payload.PublicKey, Context, Challenge(certificate), payload.Signature)) return false;
 
