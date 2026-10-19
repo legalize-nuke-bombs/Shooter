@@ -18,70 +18,70 @@ namespace Shooter.Editor
 
         private void OnPostprocessMeshHierarchy(GameObject root)
         {
-            HandTurns turns = HandTurns.Read(assetImporter.userData);
-            if (turns == null) return;
+            HandTurns handTurns = HandTurns.ReadFromUserData(assetImporter.userData);
+            if (handTurns == null) return;
 
-            foreach (HandTurn turn in turns.hands)
+            foreach (HandTurn handTurn in handTurns.hands)
             {
-                Transform hand = Find(root, turn.bone);
+                Transform hand = FindBone(root, handTurn.bone);
                 if (hand != null)
                 {
-                    Turn(hand, Quaternion.Euler(turn.euler));
+                    TurnHandKeepingChildrenInPlace(hand, Quaternion.Euler(handTurn.euler));
                 }
             }
         }
 
         private void OnPostprocessModel(GameObject root)
         {
-            HandTurns turns = HandTurns.Read(assetImporter.userData);
-            if (turns == null) return;
+            HandTurns handTurns = HandTurns.ReadFromUserData(assetImporter.userData);
+            if (handTurns == null) return;
 
-            SkinnedMeshRenderer[] skins = root.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-            foreach (HandTurn turn in turns.hands)
+            SkinnedMeshRenderer[] skinnedRenderers = root.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+            foreach (HandTurn handTurn in handTurns.hands)
             {
-                Transform hand = Find(root, turn.bone);
+                Transform hand = FindBone(root, handTurn.bone);
                 if (hand == null)
                 {
-                    Log.Warn($"Model {assetPath} has no bone {turn.bone} to turn to the standard hand axes");
+                    Log.Warn($"Model {assetPath} has no bone {handTurn.bone} to turn to the standard hand axes");
                     continue;
                 }
 
-                var rebound = new HashSet<Mesh>();
-                foreach (SkinnedMeshRenderer skin in skins)
+                var reboundMeshes = new HashSet<Mesh>();
+                foreach (SkinnedMeshRenderer skinnedRenderer in skinnedRenderers)
                 {
-                    if (rebound.Add(skin.sharedMesh))
+                    if (reboundMeshes.Add(skinnedRenderer.sharedMesh))
                     {
-                        Rebind(skin.sharedMesh, skin.bones, hand, Quaternion.Euler(turn.euler));
+                        TryRebindMeshToTurnedHand(skinnedRenderer.sharedMesh, skinnedRenderer.bones, hand, Quaternion.Euler(handTurn.euler));
                     }
                 }
             }
         }
 
-        internal static void Turn(Transform hand, Quaternion turn)
+        internal static void TurnHandKeepingChildrenInPlace(Transform hand, Quaternion turn)
         {
-            Quaternion back = Quaternion.Inverse(turn);
+            Quaternion inverseTurn = Quaternion.Inverse(turn);
             hand.localRotation *= turn;
             foreach (Transform child in hand)
             {
-                child.localPosition = back * child.localPosition;
-                child.localRotation = back * child.localRotation;
+                child.localPosition = inverseTurn * child.localPosition;
+                child.localRotation = inverseTurn * child.localRotation;
             }
         }
 
-        internal static bool Rebind(Mesh mesh, Transform[] bones, Transform hand, Quaternion turn)
+        internal static bool TryRebindMeshToTurnedHand(Mesh mesh, Transform[] bones, Transform hand, Quaternion turn)
         {
-            int index = Array.IndexOf(bones, hand);
-            if (mesh == null || index < 0 || index >= mesh.bindposes.Length) return false;
+            int handIndex = Array.IndexOf(bones, hand);
+            if (mesh == null || handIndex < 0 || handIndex >= mesh.bindposes.Length) return false;
 
             Matrix4x4[] bindposes = mesh.bindposes;
-            bindposes[index] = Matrix4x4.Rotate(Quaternion.Inverse(turn)) * bindposes[index];
+            bindposes[handIndex] = Matrix4x4.Rotate(Quaternion.Inverse(turn)) * bindposes[handIndex];
             mesh.bindposes = bindposes;
             return true;
         }
 
-        private static Transform Find(GameObject root, string bone)
+        private static Transform FindBone(GameObject root, string boneName)
         {
-            return root.GetComponentsInChildren<Transform>(true).FirstOrDefault(found => found.name == bone);
+            return root.GetComponentsInChildren<Transform>(true).FirstOrDefault(bone => bone.name == boneName);
         }
 
         [Serializable]
@@ -89,14 +89,14 @@ namespace Shooter.Editor
         {
             public List<HandTurn> hands = new();
 
-            public static HandTurns Read(string userData)
+            public static HandTurns ReadFromUserData(string userData)
             {
                 if (string.IsNullOrEmpty(userData)) return null;
 
                 try
                 {
-                    HandTurns turns = JsonUtility.FromJson<HandTurns>(userData);
-                    return turns?.hands != null && turns.hands.Count > 0 ? turns : null;
+                    HandTurns handTurns = JsonUtility.FromJson<HandTurns>(userData);
+                    return handTurns?.hands != null && handTurns.hands.Count > 0 ? handTurns : null;
                 }
                 catch (ArgumentException)
                 {
@@ -104,16 +104,16 @@ namespace Shooter.Editor
                 }
             }
 
-            public void Add(string bone, Quaternion turn)
+            public void AddTurn(string boneName, Quaternion turn)
             {
-                HandTurn known = hands.FirstOrDefault(hand => hand.bone == bone);
-                if (known == null)
+                HandTurn knownTurn = hands.FirstOrDefault(handTurn => handTurn.bone == boneName);
+                if (knownTurn == null)
                 {
-                    hands.Add(new HandTurn { bone = bone, euler = turn.eulerAngles });
+                    hands.Add(new HandTurn { bone = boneName, euler = turn.eulerAngles });
                 }
                 else
                 {
-                    known.euler = (Quaternion.Euler(known.euler) * turn).eulerAngles;
+                    knownTurn.euler = (Quaternion.Euler(knownTurn.euler) * turn).eulerAngles;
                 }
             }
         }

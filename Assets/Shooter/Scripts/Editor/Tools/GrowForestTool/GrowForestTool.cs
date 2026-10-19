@@ -10,55 +10,54 @@ namespace Shooter.Editor
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         [SerializeField] private ForestPlantingSettings settings = new();
-        private SerializedObject serialized;
-        private string result;
+        private SerializedObject serializedWindow;
+        private string lastRunSummary;
 
         [MenuItem("Tools/Grow Forest")]
-        private static void Open()
+        private static void OpenWindow()
         {
             GetWindow<GrowForestTool>("Grow Forest");
         }
 
         private void OnEnable()
         {
-            serialized = new SerializedObject(this);
+            serializedWindow = new SerializedObject(this);
         }
 
         private void OnGUI()
         {
-            serialized.Update();
-            Field(nameof(ForestPlantingSettings.species), "Species", true);
-            Field(nameof(ForestPlantingSettings.layerDensities), "Density on ground layers", true);
-            Field(nameof(ForestPlantingSettings.spacing), "Spacing between trunks, m");
-            Field(nameof(ForestPlantingSettings.groveSize), "Grove size, m");
-            Field(nameof(ForestPlantingSettings.patchiness), "Patchiness");
-            Field(nameof(ForestPlantingSettings.steepestSlope), "Steepest slope, degrees");
-            Field(nameof(ForestPlantingSettings.treelineHeight), "Treeline height, m");
-            Field(nameof(ForestPlantingSettings.distanceFromWater), "Distance from water, m");
-            Field(nameof(ForestPlantingSettings.clearanceAroundObjects), "Clearance around objects, m");
-            Field(nameof(ForestPlantingSettings.obstacles), "Obstacle layers");
-            serialized.ApplyModifiedProperties();
+            serializedWindow.Update();
+            DrawSettingsField(nameof(ForestPlantingSettings.species), "Species", true);
+            DrawSettingsField(nameof(ForestPlantingSettings.layerDensities), "Density on ground layers", true);
+            DrawSettingsField(nameof(ForestPlantingSettings.spacing), "Spacing between trunks, m");
+            DrawSettingsField(nameof(ForestPlantingSettings.groveSize), "Grove size, m");
+            DrawSettingsField(nameof(ForestPlantingSettings.patchiness), "Patchiness");
+            DrawSettingsField(nameof(ForestPlantingSettings.steepestSlope), "Steepest slope, degrees");
+            DrawSettingsField(nameof(ForestPlantingSettings.treelineHeight), "Treeline height, m");
+            DrawSettingsField(nameof(ForestPlantingSettings.distanceFromWater), "Distance from water, m");
+            DrawSettingsField(nameof(ForestPlantingSettings.clearanceAroundObjects), "Clearance around objects, m");
+            DrawSettingsField(nameof(ForestPlantingSettings.obstacles), "Obstacle layers");
+            serializedWindow.ApplyModifiedProperties();
 
             EditorGUILayout.LabelField($"Forest is full on layers missing from the list and thins out over {ForestPlantingRun.TreelineFade} m below the treeline. " +
                                        "Share is a species' part of the forest, scale range is how big its trees grow. Growing replaces the trees of these species " +
-                                       "on the chosen terrains, rocks and bushes stay, and trees keep clear of them and of anything on the obstacle layers",
-                EditorStyles.wordWrappedMiniLabel);
+                                       "on the chosen terrains, rocks and bushes stay, and trees keep clear of them and of anything on the obstacle layers", EditorStyles.wordWrappedMiniLabel);
 
             EditorGUILayout.Space();
-            var targets = new List<Terrain>(Selection.GetFiltered<Terrain>(SelectionMode.Unfiltered));
-            EditorGUILayout.LabelField(targets.Count == 0 ? "Select the terrains to grow forest on" : $"{targets.Count} selected terrains");
+            var selectedTerrains = new List<Terrain>(Selection.GetFiltered<Terrain>(SelectionMode.Unfiltered));
+            EditorGUILayout.LabelField(selectedTerrains.Count == 0 ? "Select the terrains to grow forest on" : $"{selectedTerrains.Count} selected terrains");
 
-            using (new EditorGUI.DisabledScope(targets.Count == 0))
+            using (new EditorGUI.DisabledScope(selectedTerrains.Count == 0))
             {
                 if (GUILayout.Button("Grow forest"))
                 {
-                    Grow(targets);
+                    GrowForestOn(selectedTerrains);
                 }
             }
 
-            if (!string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(lastRunSummary))
             {
-                EditorGUILayout.LabelField(result, EditorStyles.wordWrappedLabel);
+                EditorGUILayout.LabelField(lastRunSummary, EditorStyles.wordWrappedLabel);
             }
         }
 
@@ -67,12 +66,12 @@ namespace Shooter.Editor
             Repaint();
         }
 
-        private void Field(string name, string label, bool children = false)
+        private void DrawSettingsField(string propertyName, string label, bool includeChildren = false)
         {
-            EditorGUILayout.PropertyField(serialized.FindProperty(nameof(settings)).FindPropertyRelative(name), new GUIContent(label), children);
+            EditorGUILayout.PropertyField(serializedWindow.FindProperty(nameof(settings)).FindPropertyRelative(propertyName), new GUIContent(label), includeChildren);
         }
 
-        private void Grow(List<Terrain> targets)
+        private void GrowForestOn(List<Terrain> terrains)
         {
             if (EditorApplication.isPlaying)
             {
@@ -86,8 +85,8 @@ namespace Shooter.Editor
                 return;
             }
 
-            result = new ForestPlantingRun(settings, new List<Terrain>(Terrain.activeTerrains)).Plant(targets);
-            Log.Info(result);
+            lastRunSummary = new ForestPlantingRun(settings, new List<Terrain>(Terrain.activeTerrains)).PlantForestOn(terrains);
+            Log.Info(lastRunSummary);
         }
     }
 }

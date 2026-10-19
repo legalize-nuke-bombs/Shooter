@@ -41,64 +41,64 @@ namespace Shooter.Editor
         private sealed class HeightsAcrossTerrains
         {
             private readonly List<Tile> tiles = new();
-            private Tile last;
+            private Tile lastSampledTile;
 
             public HeightsAcrossTerrains(IEnumerable<Terrain> terrains)
             {
                 foreach (Terrain terrain in terrains)
                 {
-                    TerrainData data = terrain.terrainData;
-                    int resolution = data.heightmapResolution;
+                    TerrainData terrainData = terrain.terrainData;
+                    int resolution = terrainData.heightmapResolution;
                     tiles.Add(new Tile
                     {
                         Corner = terrain.transform.position,
-                        Heights = data.GetHeights(0, 0, resolution, resolution),
+                        Heights = terrainData.GetHeights(0, 0, resolution, resolution),
                         Resolution = resolution,
-                        Size = data.size
+                        Size = terrainData.size
                     });
                 }
             }
 
-            public float At(float x, float z)
+            public float GetHeightAt(float x, float z)
             {
-                if (last == null || !Inside(last, x, z))
+                if (lastSampledTile == null || !IsInsideTile(lastSampledTile, x, z))
                 {
-                    Tile found = null;
+                    Tile foundTile = null;
                     foreach (Tile tile in tiles)
                     {
-                        if (Inside(tile, x, z))
+                        if (IsInsideTile(tile, x, z))
                         {
-                            found = tile;
+                            foundTile = tile;
                             break;
                         }
                     }
 
-                    last = found ?? last ?? tiles[0];
+                    lastSampledTile = foundTile ?? lastSampledTile ?? tiles[0];
                 }
 
-                return Sample(last, x, z);
+                return SampleHeight(lastSampledTile, x, z);
             }
 
-            private static bool Inside(Tile tile, float x, float z)
+            private static bool IsInsideTile(Tile tile, float x, float z)
             {
                 return x >= tile.Corner.x && x <= tile.Corner.x + tile.Size.x && z >= tile.Corner.z && z <= tile.Corner.z + tile.Size.z;
             }
 
-            private static float Sample(Tile tile, float x, float z)
+            private static float SampleHeight(Tile tile, float x, float z)
             {
-                int top = tile.Resolution - 1;
-                float u = Mathf.Clamp01((x - tile.Corner.x) / tile.Size.x) * top;
-                float v = Mathf.Clamp01((z - tile.Corner.z) / tile.Size.z) * top;
-                int column = Mathf.Min((int)u, top - 1);
-                int row = Mathf.Min((int)v, top - 1);
+                int lastIndex = tile.Resolution - 1;
+                float u = Mathf.Clamp01((x - tile.Corner.x) / tile.Size.x) * lastIndex;
+                float v = Mathf.Clamp01((z - tile.Corner.z) / tile.Size.z) * lastIndex;
+                int column = Mathf.Min((int)u, lastIndex - 1);
+                int row = Mathf.Min((int)v, lastIndex - 1);
                 float across = u - column;
                 float along = v - row;
 
                 float[,] heights = tile.Heights;
-                float near = heights[row, column] + (heights[row, column + 1] - heights[row, column]) * across;
-                float far = heights[row + 1, column] + (heights[row + 1, column + 1] - heights[row + 1, column]) * across;
+                float nearHeight = heights[row, column] + (heights[row, column + 1] - heights[row, column]) * across;
+                float farHeight = heights[row + 1, column] + (heights[row + 1, column + 1] - heights[row + 1, column]) * across;
 
-                return (near + (far - near) * along) * tile.Size.y + tile.Corner.y;
+                return (nearHeight + (farHeight - nearHeight) * along) * tile.Size.y + tile.Corner.y;
             }
         }
 
@@ -108,29 +108,29 @@ namespace Shooter.Editor
         [SerializeField] private float softness = 2f;
         [SerializeField] private TerrainLayer marker;
 
-        private string result;
-        private SerializedObject serialized;
+        private string lastRunSummary;
+        private SerializedObject serializedWindow;
 
         [MenuItem("Tools/Paint Terrain Layers")]
-        private static void Open()
+        private static void OpenWindow()
         {
             GetWindow<PaintTerrainLayersTool>("Paint Terrain Layers");
         }
 
         private void OnEnable()
         {
-            serialized = new SerializedObject(this);
+            serializedWindow = new SerializedObject(this);
         }
 
         private void OnGUI()
         {
-            serialized.Update();
-            EditorGUILayout.PropertyField(serialized.FindProperty(nameof(background)), new GUIContent("Background"));
-            EditorGUILayout.PropertyField(serialized.FindProperty(nameof(hollowRadius)), new GUIContent("Hollow radius, m"));
-            EditorGUILayout.PropertyField(serialized.FindProperty(nameof(rules)), new GUIContent("Rules, later over earlier"), true);
-            EditorGUILayout.PropertyField(serialized.FindProperty(nameof(softness)), new GUIContent("Edge softness, cells"));
-            EditorGUILayout.PropertyField(serialized.FindProperty(nameof(marker)), new GUIContent("Only where painted with"));
-            serialized.ApplyModifiedProperties();
+            serializedWindow.Update();
+            EditorGUILayout.PropertyField(serializedWindow.FindProperty(nameof(background)), new GUIContent("Background"));
+            EditorGUILayout.PropertyField(serializedWindow.FindProperty(nameof(hollowRadius)), new GUIContent("Hollow radius, m"));
+            EditorGUILayout.PropertyField(serializedWindow.FindProperty(nameof(rules)), new GUIContent("Rules, later over earlier"), true);
+            EditorGUILayout.PropertyField(serializedWindow.FindProperty(nameof(softness)), new GUIContent("Edge softness, cells"));
+            EditorGUILayout.PropertyField(serializedWindow.FindProperty(nameof(marker)), new GUIContent("Only where painted with"));
+            serializedWindow.ApplyModifiedProperties();
 
             EditorGUILayout.LabelField("Slope in degrees, height in world metres, hollow in metres below the ground around. Between a ledge and a sheer wall " +
                                        "the slope jumps within one map cell and the border comes out as stairs: softness blurs it over that many cells, " +
@@ -138,20 +138,20 @@ namespace Shooter.Editor
                                        "with it is repainted, the rest stays as it is", EditorStyles.wordWrappedMiniLabel);
 
             EditorGUILayout.Space();
-            var targets = new List<Terrain>(Selection.GetFiltered<Terrain>(SelectionMode.Unfiltered));
-            EditorGUILayout.LabelField(targets.Count == 0 ? "Select the terrains to paint" : $"{targets.Count} selected terrains");
+            var selectedTerrains = new List<Terrain>(Selection.GetFiltered<Terrain>(SelectionMode.Unfiltered));
+            EditorGUILayout.LabelField(selectedTerrains.Count == 0 ? "Select the terrains to paint" : $"{selectedTerrains.Count} selected terrains");
 
-            using (new EditorGUI.DisabledScope(targets.Count == 0))
+            using (new EditorGUI.DisabledScope(selectedTerrains.Count == 0))
             {
                 if (GUILayout.Button(marker == null ? "Paint everything" : $"Paint over {marker.name}"))
                 {
-                    Paint(targets);
+                    PaintTerrains(selectedTerrains);
                 }
             }
 
-            if (!string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(lastRunSummary))
             {
-                EditorGUILayout.LabelField(result, EditorStyles.wordWrappedLabel);
+                EditorGUILayout.LabelField(lastRunSummary, EditorStyles.wordWrappedLabel);
             }
         }
 
@@ -160,7 +160,7 @@ namespace Shooter.Editor
             Repaint();
         }
 
-        private void Paint(List<Terrain> targets)
+        private void PaintTerrains(List<Terrain> terrains)
         {
             if (background == null)
             {
@@ -168,145 +168,145 @@ namespace Shooter.Editor
                 return;
             }
 
-            DateTime started = DateTime.Now;
-            HeightsAcrossTerrains heights = new(Terrain.activeTerrains);
-            var shares = new Dictionary<TerrainLayer, double>();
-            double texels = 0d;
-            int painted = 0;
+            DateTime startTime = DateTime.Now;
+            HeightsAcrossTerrains heightsAcrossTerrains = new(Terrain.activeTerrains);
+            var coverageByLayer = new Dictionary<TerrainLayer, double>();
+            double coveredTexels = 0d;
+            int paintedTerrains = 0;
 
-            int group = Undo.GetCurrentGroup();
+            int undoGroup = Undo.GetCurrentGroup();
             Undo.SetCurrentGroupName(UndoName);
 
             try
             {
-                for (int i = 0; i < targets.Count; i++)
+                for (int i = 0; i < terrains.Count; i++)
                 {
-                    EditorUtility.DisplayProgressBar("Paint Terrain Layers", targets[i].name, (float)i / targets.Count);
-                    double covered = Paint(targets[i], heights, shares);
-                    if (covered <= 0d) continue;
+                    EditorUtility.DisplayProgressBar("Paint Terrain Layers", terrains[i].name, (float)i / terrains.Count);
+                    double coveredOnTerrain = PaintTerrain(terrains[i], heightsAcrossTerrains, coverageByLayer);
+                    if (coveredOnTerrain <= 0d) continue;
 
-                    texels += covered;
-                    painted++;
+                    coveredTexels += coveredOnTerrain;
+                    paintedTerrains++;
                 }
             }
             finally
             {
                 EditorUtility.ClearProgressBar();
-                Undo.CollapseUndoOperations(group);
+                Undo.CollapseUndoOperations(undoGroup);
             }
 
-            if (painted == 0)
+            if (paintedTerrains == 0)
             {
-                result = $"Nothing painted: no selected terrain is painted with {marker.name}";
-                Log.Warn(result);
+                lastRunSummary = $"Nothing painted: no selected terrain is painted with {marker.name}";
+                Log.Warn(lastRunSummary);
                 return;
             }
 
-            StringBuilder summary = new($"Painted {painted} terrains in {(DateTime.Now - started).TotalSeconds:F1} s:");
-            foreach (KeyValuePair<TerrainLayer, double> share in shares)
+            StringBuilder summary = new($"Painted {paintedTerrains} terrains in {(DateTime.Now - startTime).TotalSeconds:F1} s:");
+            foreach (KeyValuePair<TerrainLayer, double> layerCoverage in coverageByLayer)
             {
-                summary.Append($" {share.Key.name} {share.Value / texels:P0}");
+                summary.Append($" {layerCoverage.Key.name} {layerCoverage.Value / coveredTexels:P0}");
             }
 
-            result = summary.ToString();
-            Log.Info(result);
+            lastRunSummary = summary.ToString();
+            Log.Info(lastRunSummary);
         }
 
-        private double Paint(Terrain terrain, HeightsAcrossTerrains heights, Dictionary<TerrainLayer, double> shares)
+        private double PaintTerrain(Terrain terrain, HeightsAcrossTerrains heightsAcrossTerrains, Dictionary<TerrainLayer, double> coverageByLayer)
         {
-            TerrainData data = terrain.terrainData;
-            if (marker != null && !Marked(data)) return 0d;
+            TerrainData terrainData = terrain.terrainData;
+            if (marker != null && !IsPaintedWithMarker(terrainData)) return 0d;
 
-            Undo.RegisterCompleteObjectUndo(data, UndoName);
-            Undo.RegisterCompleteObjectUndo(data.alphamapTextures, UndoName);
+            Undo.RegisterCompleteObjectUndo(terrainData, UndoName);
+            Undo.RegisterCompleteObjectUndo(terrainData.alphamapTextures, UndoName);
 
-            int[] channels = ChannelsAppendingMissingLayers(data);
-            TerrainLayer[] palette = data.terrainLayers;
-            int layers = palette.Length;
-            int resolution = data.alphamapResolution;
-            int markerChannel = marker == null ? -1 : Array.IndexOf(palette, marker);
-            float[,,] before = markerChannel < 0 ? null : data.GetAlphamaps(0, 0, resolution, resolution);
-            Vector3 corner = terrain.transform.position;
-            Vector3 size = data.size;
-            float reach = Mathf.Max(size.x / resolution, 1f);
+            int[] channels = AppendMissingLayersAndGetChannels(terrainData);
+            TerrainLayer[] terrainLayers = terrainData.terrainLayers;
+            int layerCount = terrainLayers.Length;
+            int resolution = terrainData.alphamapResolution;
+            int markerChannel = marker == null ? -1 : Array.IndexOf(terrainLayers, marker);
+            float[,,] alphamapsBefore = markerChannel < 0 ? null : terrainData.GetAlphamaps(0, 0, resolution, resolution);
+            Vector3 terrainCorner = terrain.transform.position;
+            Vector3 terrainSize = terrainData.size;
+            float slopeReach = Mathf.Max(terrainSize.x / resolution, 1f);
 
             int blurMargin = Mathf.CeilToInt(Mathf.Max(softness, 0f));
-            float[,,] ruled = WeightsByRules(heights, corner, size, resolution, reach, blurMargin, channels, layers);
+            float[,,] ruledWeights = ComputeWeightsByRules(heightsAcrossTerrains, terrainCorner, terrainSize, resolution, slopeReach, blurMargin, channels, layerCount);
             if (blurMargin > 0)
             {
-                ruled = GaussianBlurred(ruled, softness, blurMargin);
+                ruledWeights = BlurWithGaussian(ruledWeights, softness, blurMargin);
             }
 
-            float[,,] maps = new float[resolution, resolution, layers];
-            double[] totals = new double[layers];
-            double covered = 0d;
+            float[,,] alphamaps = new float[resolution, resolution, layerCount];
+            double[] totalWeights = new double[layerCount];
+            double coveredTexels = 0d;
 
             for (int row = 0; row < resolution; row++)
             {
                 for (int column = 0; column < resolution; column++)
                 {
-                    float markerShare = before == null ? 1f : before[row, column, markerChannel];
+                    float markerShare = alphamapsBefore == null ? 1f : alphamapsBefore[row, column, markerChannel];
                     if (markerShare <= 0f)
                     {
-                        for (int layer = 0; layer < layers; layer++)
+                        for (int layer = 0; layer < layerCount; layer++)
                         {
-                            maps[row, column, layer] = before[row, column, layer];
+                            alphamaps[row, column, layer] = alphamapsBefore[row, column, layer];
                         }
 
                         continue;
                     }
 
-                    covered += markerShare;
+                    coveredTexels += markerShare;
 
-                    for (int layer = 0; layer < layers; layer++)
+                    for (int layer = 0; layer < layerCount; layer++)
                     {
-                        float weight = ruled[row + blurMargin, column + blurMargin, layer];
-                        float kept = before == null || layer == markerChannel ? 0f : before[row, column, layer];
-                        maps[row, column, layer] = weight * markerShare + kept;
-                        totals[layer] += weight * markerShare;
+                        float weight = ruledWeights[row + blurMargin, column + blurMargin, layer];
+                        float keptWeight = alphamapsBefore == null || layer == markerChannel ? 0f : alphamapsBefore[row, column, layer];
+                        alphamaps[row, column, layer] = weight * markerShare + keptWeight;
+                        totalWeights[layer] += weight * markerShare;
                     }
                 }
             }
 
-            data.SetAlphamaps(0, 0, maps);
-            EditorUtility.SetDirty(data);
+            terrainData.SetAlphamaps(0, 0, alphamaps);
+            EditorUtility.SetDirty(terrainData);
 
-            for (int layer = 0; layer < layers; layer++)
+            for (int layer = 0; layer < layerCount; layer++)
             {
-                if (palette[layer] == null || totals[layer] <= 0d) continue;
+                if (terrainLayers[layer] == null || totalWeights[layer] <= 0d) continue;
 
-                shares.TryGetValue(palette[layer], out double sum);
-                shares[palette[layer]] = sum + totals[layer];
+                coverageByLayer.TryGetValue(terrainLayers[layer], out double sum);
+                coverageByLayer[terrainLayers[layer]] = sum + totalWeights[layer];
             }
 
-            return covered;
+            return coveredTexels;
         }
 
-        private float[,,] WeightsByRules(HeightsAcrossTerrains heights, Vector3 corner, Vector3 size, int resolution, float reach, int blurMargin, int[] channels, int layers)
+        private float[,,] ComputeWeightsByRules(HeightsAcrossTerrains heightsAcrossTerrains, Vector3 terrainCorner, Vector3 terrainSize, int resolution, float slopeReach, int blurMargin, int[] channels, int layerCount)
         {
-            bool slopes = false;
-            bool hollows = false;
+            bool needsSlope = false;
+            bool needsHollow = false;
             foreach (Rule rule in rules)
             {
-                slopes |= rule.measure == Measure.Slope;
-                hollows |= rule.measure == Measure.Hollow;
+                needsSlope |= rule.measure == Measure.Slope;
+                needsHollow |= rule.measure == Measure.Hollow;
             }
 
             int span = resolution + blurMargin * 2;
-            float[,,] ruled = new float[span, span, layers];
-            float[] weights = new float[layers];
+            float[,,] ruledWeights = new float[span, span, layerCount];
+            float[] weights = new float[layerCount];
 
             for (int row = 0; row < span; row++)
             {
                 for (int column = 0; column < span; column++)
                 {
-                    float x = corner.x + (column - blurMargin + 0.5f) / resolution * size.x;
-                    float z = corner.z + (row - blurMargin + 0.5f) / resolution * size.z;
-                    float height = heights.At(x, z);
-                    float slope = slopes ? Slope(heights, x, z, reach) : 0f;
-                    float hollow = hollows ? Hollow(heights, x, z, height) : 0f;
+                    float x = terrainCorner.x + (column - blurMargin + 0.5f) / resolution * terrainSize.x;
+                    float z = terrainCorner.z + (row - blurMargin + 0.5f) / resolution * terrainSize.z;
+                    float height = heightsAcrossTerrains.GetHeightAt(x, z);
+                    float slope = needsSlope ? MeasureSlope(heightsAcrossTerrains, x, z, slopeReach) : 0f;
+                    float hollow = needsHollow ? MeasureHollow(heightsAcrossTerrains, x, z, height) : 0f;
 
-                    Array.Clear(weights, 0, layers);
+                    Array.Clear(weights, 0, layerCount);
                     weights[channels[0]] = 1f;
 
                     for (int i = 0; i < rules.Count; i++)
@@ -314,29 +314,29 @@ namespace Shooter.Editor
                         Rule rule = rules[i];
                         if (channels[i + 1] < 0 || rule.strength <= 0f) continue;
 
-                        float value = rule.measure == Measure.Slope ? slope : rule.measure == Measure.Height ? height : hollow;
-                        float share = rule.strength * Membership(value, rule.from, rule.to, rule.blend);
-                        if (share <= 0f) continue;
+                        float measuredValue = rule.measure == Measure.Slope ? slope : rule.measure == Measure.Height ? height : hollow;
+                        float ruleShare = rule.strength * GetMembershipInRange(measuredValue, rule.from, rule.to, rule.blend);
+                        if (ruleShare <= 0f) continue;
 
-                        for (int layer = 0; layer < layers; layer++)
+                        for (int layer = 0; layer < layerCount; layer++)
                         {
-                            weights[layer] *= 1f - share;
+                            weights[layer] *= 1f - ruleShare;
                         }
 
-                        weights[channels[i + 1]] += share;
+                        weights[channels[i + 1]] += ruleShare;
                     }
 
-                    for (int layer = 0; layer < layers; layer++)
+                    for (int layer = 0; layer < layerCount; layer++)
                     {
-                        ruled[row, column, layer] = weights[layer];
+                        ruledWeights[row, column, layer] = weights[layer];
                     }
                 }
             }
 
-            return ruled;
+            return ruledWeights;
         }
 
-        private static float[,,] GaussianBlurred(float[,,] ruled, float softness, int blurMargin)
+        private static float[,,] BlurWithGaussian(float[,,] ruledWeights, float softness, int blurMargin)
         {
             float[] kernel = new float[blurMargin * 2 + 1];
             float sigma = softness / 2f;
@@ -353,24 +353,24 @@ namespace Shooter.Editor
                 kernel[i] /= sum;
             }
 
-            int span = ruled.GetLength(0);
-            int layers = ruled.GetLength(2);
-            float[,,] across = new float[span, span, layers];
-            float[,,] along = new float[span, span, layers];
+            int span = ruledWeights.GetLength(0);
+            int layerCount = ruledWeights.GetLength(2);
+            float[,,] blurredAcross = new float[span, span, layerCount];
+            float[,,] blurredAlong = new float[span, span, layerCount];
 
             for (int row = 0; row < span; row++)
             {
                 for (int column = 0; column < span; column++)
                 {
-                    for (int layer = 0; layer < layers; layer++)
+                    for (int layer = 0; layer < layerCount; layer++)
                     {
                         float blurred = 0f;
                         for (int i = 0; i < kernel.Length; i++)
                         {
-                            blurred += ruled[row, Mathf.Clamp(column + i - blurMargin, 0, span - 1), layer] * kernel[i];
+                            blurred += ruledWeights[row, Mathf.Clamp(column + i - blurMargin, 0, span - 1), layer] * kernel[i];
                         }
 
-                        across[row, column, layer] = blurred;
+                        blurredAcross[row, column, layer] = blurred;
                     }
                 }
             }
@@ -379,94 +379,95 @@ namespace Shooter.Editor
             {
                 for (int column = 0; column < span; column++)
                 {
-                    for (int layer = 0; layer < layers; layer++)
+                    for (int layer = 0; layer < layerCount; layer++)
                     {
                         float blurred = 0f;
                         for (int i = 0; i < kernel.Length; i++)
                         {
-                            blurred += across[Mathf.Clamp(row + i - blurMargin, 0, span - 1), column, layer] * kernel[i];
+                            blurred += blurredAcross[Mathf.Clamp(row + i - blurMargin, 0, span - 1), column, layer] * kernel[i];
                         }
 
-                        along[row, column, layer] = blurred;
+                        blurredAlong[row, column, layer] = blurred;
                     }
                 }
             }
 
-            return along;
+            return blurredAlong;
         }
 
-        private bool Marked(TerrainData data)
+        private bool IsPaintedWithMarker(TerrainData terrainData)
         {
-            int channel = Array.IndexOf(data.terrainLayers, marker);
-            if (channel < 0) return false;
+            int markerChannel = Array.IndexOf(terrainData.terrainLayers, marker);
+            if (markerChannel < 0) return false;
 
-            int resolution = data.alphamapResolution;
-            float[,,] maps = data.GetAlphamaps(0, 0, resolution, resolution);
+            int resolution = terrainData.alphamapResolution;
+            float[,,] alphamaps = terrainData.GetAlphamaps(0, 0, resolution, resolution);
 
             for (int row = 0; row < resolution; row++)
             {
                 for (int column = 0; column < resolution; column++)
                 {
-                    if (maps[row, column, channel] > 0f) return true;
+                    if (alphamaps[row, column, markerChannel] > 0f) return true;
                 }
             }
 
             return false;
         }
 
-        private int[] ChannelsAppendingMissingLayers(TerrainData data)
+        private int[] AppendMissingLayersAndGetChannels(TerrainData terrainData)
         {
-            var palette = new List<TerrainLayer>(data.terrainLayers);
+            var terrainLayers = new List<TerrainLayer>(terrainData.terrainLayers);
 
-            int Index(TerrainLayer layer)
+            int GetChannelAppendingIfMissing(TerrainLayer layer)
             {
                 if (layer == null) return -1;
 
-                int found = palette.IndexOf(layer);
-                if (found >= 0) return found;
+                int foundChannel = terrainLayers.IndexOf(layer);
+                if (foundChannel >= 0) return foundChannel;
 
-                palette.Add(layer);
-                return palette.Count - 1;
+                terrainLayers.Add(layer);
+                return terrainLayers.Count - 1;
             }
 
             int[] channels = new int[rules.Count + 1];
-            channels[0] = Index(background);
+            channels[0] = GetChannelAppendingIfMissing(background);
             for (int i = 0; i < rules.Count; i++)
             {
-                channels[i + 1] = Index(rules[i].layer);
+                channels[i + 1] = GetChannelAppendingIfMissing(rules[i].layer);
             }
 
-            if (palette.Count != data.terrainLayers.Length)
+            if (terrainLayers.Count != terrainData.terrainLayers.Length)
             {
-                data.terrainLayers = palette.ToArray();
+                terrainData.terrainLayers = terrainLayers.ToArray();
             }
 
             return channels;
         }
 
-        private static float Slope(HeightsAcrossTerrains heights, float x, float z, float reach)
+        private static float MeasureSlope(HeightsAcrossTerrains heightsAcrossTerrains, float x, float z, float reach)
         {
-            float acrossX = (heights.At(x + reach, z) - heights.At(x - reach, z)) / (2f * reach);
-            float acrossZ = (heights.At(x, z + reach) - heights.At(x, z - reach)) / (2f * reach);
+            float gradientX = (heightsAcrossTerrains.GetHeightAt(x + reach, z) - heightsAcrossTerrains.GetHeightAt(x - reach, z)) / (2f * reach);
+            float gradientZ = (heightsAcrossTerrains.GetHeightAt(x, z + reach) - heightsAcrossTerrains.GetHeightAt(x, z - reach)) / (2f * reach);
 
-            return Mathf.Atan(Mathf.Sqrt(acrossX * acrossX + acrossZ * acrossZ)) * Mathf.Rad2Deg;
+            return Mathf.Atan(Mathf.Sqrt(gradientX * gradientX + gradientZ * gradientZ)) * Mathf.Rad2Deg;
         }
 
-        private float Hollow(HeightsAcrossTerrains heights, float x, float z, float height)
+        private float MeasureHollow(HeightsAcrossTerrains heightsAcrossTerrains, float x, float z, float height)
         {
-            float around = heights.At(x + hollowRadius, z) + heights.At(x - hollowRadius, z) + heights.At(x, z + hollowRadius) + heights.At(x, z - hollowRadius);
+            float heightSumAround = heightsAcrossTerrains.GetHeightAt(x + hollowRadius, z) + heightsAcrossTerrains.GetHeightAt(x - hollowRadius, z)
+                                    + heightsAcrossTerrains.GetHeightAt(x, z + hollowRadius) + heightsAcrossTerrains.GetHeightAt(x, z - hollowRadius);
 
-            return around / 4f - height;
+            return heightSumAround / 4f - height;
         }
 
-        private static float Membership(float value, float from, float to, float blend)
+        private static float GetMembershipInRange(float value, float from, float to, float blend)
         {
             if (blend <= 0f) return value >= from && value <= to ? 1f : 0f;
 
-            return Ease((value - from + blend) / blend) * Ease((to + blend - value) / blend);
+            return SmoothStep((value - from + blend) / blend) * SmoothStep((to + blend - value) / blend);
         }
 
-        private static float Ease(float t)
+        private static float SmoothStep(float t)
         {
             t = Mathf.Clamp01(t);
             return t * t * (3f - 2f * t);
