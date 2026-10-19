@@ -83,8 +83,8 @@ namespace Shooter.Infrastructure
                 return new NetworkStartFailure(BadInvite, BadInviteDetails);
             }
 
-            network.OnClientConnectedCallback += Entered;
-            network.OnClientDisconnectCallback += Dropped;
+            network.OnClientConnectedCallback += HandleClientConnected;
+            network.OnClientDisconnectCallback += HandleClientDisconnected;
             Log.Info($"Heading for {address}:{port} as {client.Name}, channel encrypted");
             return null;
         }
@@ -95,15 +95,15 @@ namespace Shooter.Infrastructure
             network.Shutdown();
         }
 
-        private void Entered(ulong client)
+        private void HandleClientConnected(ulong clientId)
         {
-            if (client != network.LocalClientId) return;
+            if (clientId != network.LocalClientId) return;
 
             StopWatchingJoin();
         }
 
         // Read here and not on the stop: the shutdown that follows overwrites the transport's verdict
-        private void Dropped(ulong ignored)
+        private void HandleClientDisconnected(ulong clientId)
         {
             StopWatchingJoin();
             NetworkTransport.DisconnectEvents verdict = network.NetworkConfig.NetworkTransport.DisconnectEvent;
@@ -125,8 +125,8 @@ namespace Shooter.Infrastructure
 
         private void StopWatchingJoin()
         {
-            network.OnClientConnectedCallback -= Entered;
-            network.OnClientDisconnectCallback -= Dropped;
+            network.OnClientConnectedCallback -= HandleClientConnected;
+            network.OnClientDisconnectCallback -= HandleClientDisconnected;
         }
     }
 }
