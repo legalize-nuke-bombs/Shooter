@@ -11,7 +11,7 @@ namespace Shooter.Editor
 {
     public class IconStudioTool : EditorWindow
     {
-        private const float CameraDistance = 10f;
+        private const float CameraGapOutsideBounds = 1f;
         private const int LastLayer = 31;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
@@ -186,13 +186,14 @@ namespace Shooter.Editor
         {
             GameObject cameraObject = AddStudioPart(studio, layer, "Camera");
             Camera camera = cameraObject.AddComponent<Camera>();
+            float cameraDistance = bounds.extents.magnitude + CameraGapOutsideBounds;
             camera.orthographic = true;
             camera.orthographicSize = GetOrthographicSizeToFit(bounds, setup);
             camera.nearClipPlane = 0.01f;
-            camera.farClipPlane = CameraDistance * 4f;
+            camera.farClipPlane = cameraDistance * 2f;
             camera.cullingMask = 1 << layer;
             camera.transform.rotation = Quaternion.Euler(setup.sightAngles);
-            camera.transform.position = bounds.center - camera.transform.forward * CameraDistance;
+            camera.transform.position = bounds.center - camera.transform.forward * cameraDistance;
 
             HDAdditionalCameraData hdCameraData = cameraObject.AddComponent<HDAdditionalCameraData>();
             hdCameraData.clearColorMode = HDAdditionalCameraData.ClearColorMode.Color;
