@@ -11,7 +11,7 @@ namespace Shooter.Game
     [Serializable]
     public class SearchConversationsTool : LlmTool<SearchConversationsArguments>
     {
-        private const int MatchLimit = 20;
+        private const int ShownMatchLimit = 20;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private ConversationManager conversationManager;
@@ -27,7 +27,7 @@ Every line starts with the message index: pass it as `from` to read_conversation
 Only the newest matches are shown, narrow the pattern if there are more.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
@@ -48,10 +48,10 @@ Only the newest matches are shown, narrow the pattern if there are more.
                 return $"The specified ID ({arguments.TargetId}) belongs to you";
             }
 
-            List<Conversation> searched;
+            List<Conversation> searchedConversations;
             if (arguments.TargetId < 0)
             {
-                searched = conversationManager.GetConversationsOf(ownCharacter.Id);
+                searchedConversations = conversationManager.GetConversationsOf(ownCharacter.Id);
             }
             else
             {
@@ -60,19 +60,19 @@ Only the newest matches are shown, narrow the pattern if there are more.
                 {
                     return $"You don't have conversation with ID {arguments.TargetId}";
                 }
-                searched = new List<Conversation> { conversation };
+                searchedConversations = new List<Conversation> { conversation };
             }
 
-            var regex = new Regex(arguments.Pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
+            Regex regex = new(arguments.Pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
             var hits = new List<(Conversation conversation, int index)>();
-            var totals = new Dictionary<Conversation, int>();
-            foreach (Conversation conversation in searched)
+            var matchCountsByConversation = new Dictionary<Conversation, int>();
+            foreach (Conversation conversation in searchedConversations)
             {
-                List<int> indexes = conversation.FindMatchingMessageIndexes(regex);
-                if (indexes.Count == 0) continue;
+                List<int> matchingIndexes = conversation.FindMatchingMessageIndexes(regex);
+                if (matchingIndexes.Count == 0) continue;
 
-                totals[conversation] = indexes.Count;
-                foreach (int index in indexes)
+                matchCountsByConversation[conversation] = matchingIndexes.Count;
+                foreach (int index in matchingIndexes)
                 {
                     hits.Add((conversation, index));
                 }
@@ -82,45 +82,45 @@ Only the newest matches are shown, narrow the pattern if there are more.
                 return "No matches";
             }
 
-            var shown = hits
+            var shownHits = hits
                 .OrderByDescending(hit => hit.conversation.Messages[hit.index].Time)
-                .Take(MatchLimit)
+                .Take(ShownMatchLimit)
                 .ToList();
 
-            var partners = new HashSet<long>();
-            foreach ((Conversation conversation, int _) in shown)
+            var partnerIds = new HashSet<long>();
+            foreach ((Conversation conversation, int _) in shownHits)
             {
-                partners.Add(conversation.GetPartnerId(ownCharacter.Id));
+                partnerIds.Add(conversation.GetPartnerId(ownCharacter.Id));
             }
 
             var partnerNames = new Dictionary<long, string>();
             Character.ForEach(character =>
             {
-                if (partners.Contains(character.Id))
+                if (partnerIds.Contains(character.Id))
                 {
-                    string name = character.GetComponent<Nameable>()?.GetPromptName() ?? "Unknown";
-                    partnerNames[character.Id] = name;
+                    string promptName = character.GetComponent<Nameable>()?.GetPromptName() ?? "Unknown";
+                    partnerNames[character.Id] = promptName;
                 }
             }, RegisterInactivePolicy.Include);
 
-            var sb = new StringBuilder();
-            foreach (IGrouping<Conversation, (Conversation conversation, int index)> group in shown.GroupBy(hit => hit.conversation))
+            StringBuilder result = new();
+            foreach (IGrouping<Conversation, (Conversation conversation, int index)> hitsOfConversation in shownHits.GroupBy(hit => hit.conversation))
             {
-                long partner = group.Key.GetPartnerId(ownCharacter.Id);
-                string partnerName = partnerNames.TryGetValue(partner, out string known) ? known : "Unknown";
-                sb.AppendLine($"Conversation with ID {partner} ({partnerName}), {totals[group.Key]} matches:");
-                foreach ((Conversation conversation, int index) in group)
+                long partnerId = hitsOfConversation.Key.GetPartnerId(ownCharacter.Id);
+                string partnerName = partnerNames.TryGetValue(partnerId, out string knownName) ? knownName : "Unknown";
+                result.AppendLine($"Conversation with ID {partnerId} ({partnerName}), {matchCountsByConversation[hitsOfConversation.Key]} matches:");
+                foreach ((Conversation conversation, int index) in hitsOfConversation)
                 {
                     Message message = conversation.Messages[index];
                     string stamp = message.Time.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
-                    sb.AppendLine($"#{index} [{stamp}]{(message.Spoken ? "" : " (radio)")} ID {message.AuthorId}: {message.Content}");
+                    result.AppendLine($"#{index} [{stamp}]{(message.Spoken ? "" : " (radio)")} ID {message.AuthorId}: {message.Content}");
                 }
             }
-            if (hits.Count > shown.Count)
+            if (hits.Count > shownHits.Count)
             {
-                sb.AppendLine($"Showing the {shown.Count} newest of {hits.Count} matches, narrow the pattern or pass target_id.");
+                result.AppendLine($"Showing the {shownHits.Count} newest of {hits.Count} matches, narrow the pattern or pass target_id.");
             }
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

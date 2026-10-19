@@ -37,7 +37,7 @@ Mark messages as urgent only when truly necessary.
 Wanderers receive your messages immediately, regardless of the value of the `urgent` field.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
@@ -54,49 +54,49 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
                 return "Nothing to send";
             }
 
-            var delivered = new List<long>();
-            var failed = new List<string>();
+            var deliveredIds = new List<long>();
+            var failures = new List<string>();
 
             foreach (long targetId in arguments.TargetIds.Distinct())
             {
-                var target = Character.FindById(targetId, RegisterInactivePolicy.Exclude);
+                Character target = Character.FindById(targetId, RegisterInactivePolicy.Exclude);
 
                 if (target == null)
                 {
-                    failed.Add($"{targetId} : character does not exist");
+                    failures.Add($"{targetId} : character does not exist");
                     continue;
                 }
                 if (targetId == ownCharacter.Id)
                 {
-                    failed.Add($"{targetId}: it's you");
+                    failures.Add($"{targetId}: it's you");
                     continue;
                 }
                 if (!target.TryGetComponent(out Health health) || !health.IsAlive)
                 {
-                    failed.Add($"{targetId}: character is dead");
+                    failures.Add($"{targetId}: character is dead");
                     continue;
                 }
                 conversationManager.Say(ownCharacter.Id, targetId, arguments.Content, false, arguments.Urgent);
 
-                delivered.Add(targetId);
+                deliveredIds.Add(targetId);
                 Log.Info($"Entity {Self.name} said to {targetId}: {arguments.Content}");
             }
 
-            var answer = new StringBuilder();
-            if (delivered.Count > 0)
+            StringBuilder result = new();
+            if (deliveredIds.Count > 0)
             {
-                answer.Append("Delivered to ").Append(string.Join(", ", delivered));
+                result.Append("Delivered to ").Append(string.Join(", ", deliveredIds));
             }
-            foreach (string failure in failed)
+            foreach (string failure in failures)
             {
-                if (answer.Length > 0)
+                if (result.Length > 0)
                 {
-                    answer.Append('\n');
+                    result.Append('\n');
                 }
-                answer.Append("Not delivered to ").Append(failure);
+                result.Append("Not delivered to ").Append(failure);
             }
 
-            return answer.ToString();
+            return result.ToString();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private LlmNotes notes;
+        private LlmNotes llmNotes;
 
         public override string Name => "update_notes";
 
@@ -19,10 +19,10 @@ Use this tool to replace existing notes, one or many in a single call: the descr
 Fails on notes that do not exist. To create new notes, use add_notes. The same size limits apply.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
-            notes = Self.GetComponent<LlmNotes>();
-            if (notes == null)
+            llmNotes = Self.GetComponent<LlmNotes>();
+            if (llmNotes == null)
             {
                 Log.Error($"Entity {Self.name} does not have llm notes component required by tool {Name}");
             }
@@ -32,21 +32,21 @@ Fails on notes that do not exist. To create new notes, use add_notes. The same s
         {
             if (arguments.Notes == null || arguments.Notes.Length == 0) return "Nothing to update";
 
-            var sb = new StringBuilder();
+            StringBuilder result = new();
             foreach (LlmNoteEntry entry in arguments.Notes)
             {
                 try
                 {
-                    notes.Replace(entry.Name, new LlmNote { Content = entry.Content, Description = entry.Description });
-                    sb.Append(entry.Name).Append(": Updated").Append('\n');
+                    llmNotes.ReplaceNote(entry.Name, new LlmNote { Content = entry.Content, Description = entry.Description });
+                    result.Append(entry.Name).Append(": Updated").Append('\n');
                 }
                 catch (Exception e)
                 {
-                    sb.Append(entry.Name).Append(": Failed - ").Append(e.Message).Append('\n');
+                    result.Append(entry.Name).Append(": Failed - ").Append(e.Message).Append('\n');
                 }
             }
 
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

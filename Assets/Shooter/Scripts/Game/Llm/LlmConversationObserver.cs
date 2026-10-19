@@ -45,7 +45,7 @@ namespace Shooter.Game
 
             if (author != null && author.TryGetComponent(out Player _))
             {
-                llm.Notice(message.Spoken
+                llm.AppendEvent(message.Spoken
                     ? $"Wanderer [ID {message.AuthorId}] says: {message.Content}"
                     : $"Wanderer [ID {message.AuthorId}] says over the radio: {message.Content}", message.Urgent);
                 return;
@@ -54,8 +54,7 @@ namespace Shooter.Game
             Nameable nameable = author == null ? null : author.GetComponent<Nameable>();
             string authorName = nameable == null ? string.Empty : nameable.GetPromptName();
 
-            llm.Notice($"[{Llm.Stamp()}] Mail from Character {message.AuthorId} ({authorName}): {message.Content}",
-                message.Urgent);
+            llm.AppendEvent($"[{Llm.FormatCurrentWorldTime()}] Mail from Character {message.AuthorId} ({authorName}): {message.Content}", message.Urgent);
             Log.Info($"Entity {name} got mail from {message.AuthorId}, urgent {message.Urgent}");
         }
     }

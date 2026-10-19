@@ -12,7 +12,7 @@ namespace Shooter.Game
         public override string Description =>
             "Look by IDs: character statuses by their IDs.";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
         }
 
@@ -21,23 +21,23 @@ namespace Shooter.Game
             long[] targetIds = arguments.TargetIds;
             if (targetIds == null || targetIds.Length == 0) return "Nothing to look at";
 
-            var sb = new StringBuilder();
+            StringBuilder result = new();
 
             foreach (long targetId in targetIds)
             {
-                var target = Character.FindById(targetId, RegisterInactivePolicy.Include);
+                Character target = Character.FindById(targetId, RegisterInactivePolicy.Include);
 
                 if (target == null)
                 {
-                    sb.AppendLine($"Character with ID {targetId} does not exist");
+                    result.AppendLine($"Character with ID {targetId} does not exist");
                 }
                 else
                 {
-                    sb.AppendLine(Digester.DigestEntity(target.gameObject, DigestionDetail.Brief));
+                    result.AppendLine(Digester.DigestEntity(target.gameObject, DigestionDetail.Brief));
                 }
             }
 
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

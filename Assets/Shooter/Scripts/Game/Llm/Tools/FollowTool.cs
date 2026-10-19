@@ -25,7 +25,7 @@ force: by default the call is refused while another second-level action is activ
 The result comes at once, the following itself goes on: you will be notified when the target is gone or when there is no way toward it. Use look_at_yourself to check the active second-level action and halt_bt to stop following.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             customOrderSlot = Self.GetComponent<CustomOrderSlot>();
             if (customOrderSlot == null)
@@ -46,32 +46,32 @@ The result comes at once, the following itself goes on: you will be notified whe
             if (target.gameObject == Self) return "You cannot follow yourself";
             if (arguments.Distance < 0) return "distance cannot be negative";
 
-            var order = new FollowOrder { TargetId = arguments.TargetId, Reach = arguments.Distance, Sprint = arguments.Sprint };
-            Vector3 there = target.transform.position;
+            FollowOrder order = new() { TargetId = arguments.TargetId, Reach = arguments.Distance, Sprint = arguments.Sprint };
+            Vector3 targetPosition = target.transform.position;
 
-            if (!movement.TryPlanPathEnd(there, out Vector3 end))
+            if (!movement.TryPlanPathEnd(targetPosition, out Vector3 pathEnd))
             {
                 return $"There is no way from here to {order.TargetPromptName}";
             }
 
-            float rest = Vector3.Distance(end, there);
-            if (rest > movement.ShortfallLimit)
+            float shortfallDistance = Vector3.Distance(pathEnd, targetPosition);
+            if (shortfallDistance > movement.ShortfallLimit)
             {
-                return $"There is no way from here to {order.TargetPromptName}: the nearest walkable ground is {rest:F0} m short of it";
+                return $"There is no way from here to {order.TargetPromptName}: the nearest walkable ground is {shortfallDistance:F0} m short of it";
             }
 
-            string started = order.GetPromptDescription(Self);
+            string startedOrderDescription = order.GetPromptDescription(Self);
 
             if (arguments.Force)
             {
-                CustomOrder dropped = customOrderSlot.CurrentOrder;
+                CustomOrder droppedOrder = customOrderSlot.CurrentOrder;
                 customOrderSlot.ForcePutOrder(order);
-                return dropped == null
-                    ? $"Started: {started}"
-                    : $"Dropped: {dropped.GetPromptDescription(Self)}\nStarted: {started}";
+                return droppedOrder == null
+                    ? $"Started: {startedOrderDescription}"
+                    : $"Dropped: {droppedOrder.GetPromptDescription(Self)}\nStarted: {startedOrderDescription}";
             }
 
-            if (customOrderSlot.TryPutOrder(order)) return $"Started: {started}";
+            if (customOrderSlot.TryPutOrder(order)) return $"Started: {startedOrderDescription}";
 
             return @$"Refused, another second-level action is active: {customOrderSlot.CurrentOrder.GetPromptDescription(Self)}
 Call again with force=true to replace it, or halt_bt to stop it";

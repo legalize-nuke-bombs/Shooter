@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private InventoryUser user;
+        private InventoryUser inventoryUser;
 
         public override string Name => "use_item";
 
@@ -18,10 +18,10 @@ Use (consume, etc) some of your stackable item.
 The item is addressed by its exact name from your bag.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
-            user = Self.GetComponent<InventoryUser>();
-            if (user == null)
+            inventoryUser = Self.GetComponent<InventoryUser>();
+            if (inventoryUser == null)
             {
                 Log.Error($"Entity {Self.name} does not have inventory user component required by tool {Name}");
             }
@@ -29,7 +29,7 @@ The item is addressed by its exact name from your bag.
 
         protected override string Execute(UseItemArguments arguments, LlmCallContext context)
         {
-            if (Catalogs.GetCatalog<ItemCatalog>().GetAssetById(arguments.Item) is StackableItemAsset item && user.TryUseItem(item))
+            if (Catalogs.GetCatalog<ItemCatalog>().GetAssetById(arguments.Item) is StackableItemAsset item && inventoryUser.TryUseItem(item))
             {
                 return $"{arguments.Item} was used";
             }

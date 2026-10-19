@@ -14,6 +14,7 @@ namespace Shooter.Game
 
         private ConversationManager conversationManager;
         private Character ownCharacter;
+
         public override string Name => "read_conversation";
 
         public override string Description =>
@@ -23,7 +24,7 @@ This tool uses pagination.
 Specify `from` (the message number from which you want to retrieve the conversation history, starts from 0) and `size` (the number of messages you want to retrieve).
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
@@ -68,15 +69,15 @@ Specify `from` (the message number from which you want to retrieve the conversat
                 return $"Invalid `from`: specified conversation has {messages.Count} messages, `from` is {from}";
             }
 
-            var sb = new StringBuilder();
+            StringBuilder result = new();
             for (int i = from; i < Math.Min(messages.Count, from + size); i++)
             {
                 Message message = messages[i];
                 string stamp = message.Time.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
-                sb.AppendLine($"[{stamp}]{(message.Spoken ? "" : " (radio)")} ID {message.AuthorId}: {message.Content}");
+                result.AppendLine($"[{stamp}]{(message.Spoken ? "" : " (radio)")} ID {message.AuthorId}: {message.Content}");
             }
 
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

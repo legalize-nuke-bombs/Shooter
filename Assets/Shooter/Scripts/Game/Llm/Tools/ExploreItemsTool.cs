@@ -16,7 +16,7 @@ This tool displays a detailed description of the item, including its effects (sa
 You can process any number of IDs at once.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
         }
 
@@ -24,21 +24,21 @@ You can process any number of IDs at once.
         {
             if (arguments.ItemIds == null || arguments.ItemIds.Length == 0) return "You didn't pass a single ID.";
 
-            var sb = new StringBuilder();
+            StringBuilder result = new();
 
-            foreach (string id in arguments.ItemIds)
+            foreach (string itemId in arguments.ItemIds)
             {
-                ItemAsset item = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(id);
+                ItemAsset item = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(itemId);
                 if (item == null)
                 {
-                    sb.AppendLine($"{id} does not exist");
+                    result.AppendLine($"{itemId} does not exist");
                     continue;
                 }
 
-                sb.AppendLine($"{id} : {item.PromptDescription}");
+                result.AppendLine($"{itemId} : {item.PromptDescription}");
             }
 
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

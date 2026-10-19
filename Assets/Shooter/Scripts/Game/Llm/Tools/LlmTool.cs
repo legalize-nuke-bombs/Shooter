@@ -12,18 +12,18 @@ namespace Shooter.Game
     {
         protected GameObject Self { get; private set; }
 
-        public virtual bool Available => true;
+        public virtual bool IsAvailable => true;
         public abstract string Name { get; }
         public abstract string Description { get; }
         public abstract JObject Parameters { get; }
 
-        public void Attach(GameObject self)
+        public void AttachTo(GameObject owner)
         {
-            Self = self;
-            OnStart();
+            Self = owner;
+            HandleAttached();
         }
 
-        protected abstract void OnStart();
+        protected abstract void HandleAttached();
 
         public abstract string Execute(string arguments, LlmCallContext context);
     }
@@ -33,20 +33,19 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static readonly JsonSerializerSettings Settings = new()
+        private static readonly JsonSerializerSettings ArgumentsJsonSettings = new()
         {
             ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() }
         };
 
-        private JObject parameters;
-        public override JObject Parameters => parameters ??= LlmSchema.Of(typeof(TArguments));
+        private JObject parametersSchema;
+        public override JObject Parameters => parametersSchema ??= LlmSchema.BuildObjectSchema(typeof(TArguments));
 
         public override string Execute(string arguments, LlmCallContext context)
         {
-            TArguments parsed = JsonConvert.DeserializeObject<TArguments>(
-                string.IsNullOrEmpty(arguments) ? "{}" : arguments, Settings);
+            TArguments parsedArguments = JsonConvert.DeserializeObject<TArguments>(string.IsNullOrEmpty(arguments) ? "{}" : arguments, ArgumentsJsonSettings);
 
-            string result = Execute(parsed, context);
+            string result = Execute(parsedArguments, context);
             Log.Info($"Entity {Self.name} used {Name} {arguments}: {result}");
 
             return result;

@@ -9,7 +9,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class UseObjectTool : LlmTool<UseObjectArguments>
     {
-        private const float SearchRadius = 1.5f;
+        private const float PointSearchRadius = 1.5f;
 
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
@@ -25,7 +25,7 @@ Use (turn on / off, pickup, etc.) usable objects on the map by their coordinates
 You must provide the exact X, Y, and Z coordinates of the objects. The objects must be within a {radius}-meter radius from your current position.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             networkObject = Self.GetComponent<NetworkObject>();
             if (networkObject == null)
@@ -34,65 +34,64 @@ You must provide the exact X, Y, and Z coordinates of the objects. The objects m
             }
         }
 
-
         protected override string Execute(UseObjectArguments arguments, LlmCallContext context)
         {
             if (arguments.Points == null || arguments.Points.Length == 0)
             {
                 return "You didn't pass a single point.";
             }
-            var sb = new StringBuilder();
+            StringBuilder result = new();
             foreach (Point3D point in arguments.Points)
             {
-                HandlePoint(point, sb);
+                UseObjectNearPoint(point, result);
             }
-            return sb.ToString();
+            return result.ToString();
         }
 
-        private void HandlePoint(Point3D point, StringBuilder sb)
+        private void UseObjectNearPoint(Point3D point, StringBuilder result)
         {
             Vector3 selfPosition = Self.transform.position;
-            var targetPosition = new Vector3(point.X, point.Y, point.Z);
+            Vector3 pointPosition = new(point.X, point.Y, point.Z);
 
-            Collider[] colliders = Physics.OverlapSphere(targetPosition, SearchRadius);
+            Collider[] collidersNearPoint = Physics.OverlapSphere(pointPosition, PointSearchRadius);
 
-            IUsable targetUsable = null;
-            float minDistanceToTargetSqr = Mathf.Infinity;
-            Vector3 finalObjectPosition = Vector3.zero;
+            IUsable nearestUsable = null;
+            float nearestSqrDistance = Mathf.Infinity;
+            Vector3 nearestUsablePosition = Vector3.zero;
 
-            foreach (Collider col in colliders)
+            foreach (Collider colliderNearPoint in collidersNearPoint)
             {
-                var usable = col.GetComponentInParent<IUsable>();
+                IUsable usable = colliderNearPoint.GetComponentInParent<IUsable>();
                 if (usable == null) continue;
 
                 Vector3 usablePosition = ((Component)usable).transform.position;
-                float distanceSqr = (usablePosition - targetPosition).sqrMagnitude;
+                float sqrDistance = (usablePosition - pointPosition).sqrMagnitude;
 
-                if (distanceSqr < minDistanceToTargetSqr)
+                if (sqrDistance < nearestSqrDistance)
                 {
-                    minDistanceToTargetSqr = distanceSqr;
-                    targetUsable = usable;
-                    finalObjectPosition = usablePosition;
+                    nearestSqrDistance = sqrDistance;
+                    nearestUsable = usable;
+                    nearestUsablePosition = usablePosition;
                 }
             }
 
-            sb.Append($"[{point.X}, {point.Y}, {point.Z}] ");
+            result.Append($"[{point.X}, {point.Y}, {point.Z}] ");
 
-            if (targetUsable == null)
+            if (nearestUsable == null)
             {
-                sb.AppendLine("Failed to find usable object here. Make sure the coordinates are precise.");
+                result.AppendLine("Failed to find usable object here. Make sure the coordinates are precise.");
                 return;
             }
 
-            float distance = Vector3.Distance(selfPosition, finalObjectPosition);
+            float distance = Vector3.Distance(selfPosition, nearestUsablePosition);
             if (distance > radius)
             {
-                sb.AppendLine($"The object is {distance:F1} meters away. You must come closer than {radius} meters to use it.");
+                result.AppendLine($"The object is {distance:F1} meters away. You must come closer than {radius} meters to use it.");
                 return;
             }
 
-            targetUsable.Use(networkObject, out string result);
-            sb.AppendLine(result);
+            nearestUsable.Use(networkObject, out string promptResult);
+            result.AppendLine(promptResult);
         }
     }
 }

@@ -21,26 +21,26 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            characterRelation.RelationWorsenedByDamage += OnDamaged;
-            behaviorReporter.Reported += OnBtReport;
+            characterRelation.RelationWorsenedByDamage += HandleRelationWorsenedByDamage;
+            behaviorReporter.Reported += HandleBehaviorReported;
         }
 
         private void OnDisable()
         {
-            characterRelation.RelationWorsenedByDamage -= OnDamaged;
-            behaviorReporter.Reported -= OnBtReport;
+            characterRelation.RelationWorsenedByDamage -= HandleRelationWorsenedByDamage;
+            behaviorReporter.Reported -= HandleBehaviorReported;
         }
 
-        private void OnBtReport(BehaviorReport report)
+        private void HandleBehaviorReported(BehaviorReport report)
         {
-            Log.Info("OnBtReport");
-            llm.Notice(report.Prompt, report.IsUrgent);
+            Log.Info($"Entity {name} got a behavior report, urgent {report.IsUrgent}");
+            llm.AppendEvent(report.Prompt, report.IsUrgent);
         }
 
-        private void OnDamaged(AICharacterRelation.RelationWorsenedByDamageData data)
+        private void HandleRelationWorsenedByDamage(AICharacterRelation.RelationWorsenedByDamageData worsening)
         {
-            Log.Info("OnDamaged");
-            llm.Notice($"Your character automatically worsened their attitude toward ID {data.AttackerId} by {data.RelationDelta} units because {data.AttackerId} dealt you {data.DamagePoints} x {data.DamageType.Id} damage", false);
+            Log.Info($"Entity {name} worsened its relation to {worsening.AttackerId} for the damage it dealt");
+            llm.AppendEvent($"Your character automatically worsened their attitude toward ID {worsening.AttackerId} by {worsening.RelationDelta} units because {worsening.AttackerId} dealt you {worsening.DamagePoints} x {worsening.DamageType.Id} damage", false);
         }
     }
 }

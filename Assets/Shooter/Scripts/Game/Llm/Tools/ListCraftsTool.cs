@@ -19,7 +19,7 @@ namespace Shooter.Game
 List the crafts you know: the id of each craft, its ingredients and its result.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             crafter = Self.GetComponent<Crafter>();
             if (crafter == null)
@@ -36,12 +36,12 @@ List the crafts you know: the id of each craft, its ingredients and its result.
                 return "You don't know any crafts";
             }
 
-            var sb = new StringBuilder();
+            StringBuilder result = new();
             foreach (CraftAsset craft in crafts)
             {
-                sb.AppendLine(craft.DescribeForPrompt());
+                result.AppendLine(craft.DescribeForPrompt());
             }
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

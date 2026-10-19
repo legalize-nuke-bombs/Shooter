@@ -5,7 +5,7 @@ namespace Shooter.Game
     [Serializable]
     public class LlmMailTicker : LlmChildTicker
     {
-        public override void OnStart()
+        public override void StartTicking()
         {
         }
 
@@ -13,9 +13,9 @@ namespace Shooter.Game
         {
         }
 
-        public override bool TickRequired(LlmStatus llmStatus)
+        public override bool IsTickRequired(LlmStatus status)
         {
-            return llmStatus.PendingMail;
+            return status.HasUnseenUrgentEvent;
         }
     }
 }

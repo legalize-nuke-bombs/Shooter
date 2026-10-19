@@ -20,7 +20,7 @@ namespace Shooter.Game
 The world is under active development; any feedback is valuable and will be read.
 You NEVER include players' personal information in these reports.";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
         }
 

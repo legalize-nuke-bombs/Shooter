@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private LlmNotes notes;
+        private LlmNotes llmNotes;
 
         public override string Name => "add_notes";
 
@@ -18,16 +18,16 @@ namespace Shooter.Game
 Use this tool to add new notes, one or many in a single call.
 The name is a short id: you will retype it exactly to address the note. The description is shown in the notes list: write what is inside and why to open it.
 Keep one subject per note. To change existing notes, use update_notes.
-Max note name size: {notes.NameLimit}
-Max note description size: {notes.DescriptionLimit}
-Max note content size: {notes.ContentLimit}
-Max notes number: {notes.AmountLimit}
+Max note name size: {llmNotes.NameLimit}
+Max note description size: {llmNotes.DescriptionLimit}
+Max note content size: {llmNotes.ContentLimit}
+Max notes number: {llmNotes.AmountLimit}
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
-            notes = Self.GetComponent<LlmNotes>();
-            if (notes == null)
+            llmNotes = Self.GetComponent<LlmNotes>();
+            if (llmNotes == null)
             {
                 Log.Error($"Entity {Self.name} does not have llm notes component required by tool {Name}");
             }
@@ -37,21 +37,21 @@ Max notes number: {notes.AmountLimit}
         {
             if (arguments.Notes == null || arguments.Notes.Length == 0) return "Nothing to add";
 
-            var sb = new StringBuilder();
+            StringBuilder result = new();
             foreach (LlmNoteEntry entry in arguments.Notes)
             {
                 try
                 {
-                    notes.Add(entry.Name, new LlmNote { Content = entry.Content, Description = entry.Description });
-                    sb.Append(entry.Name).Append(": Added").Append('\n');
+                    llmNotes.AddNote(entry.Name, new LlmNote { Content = entry.Content, Description = entry.Description });
+                    result.Append(entry.Name).Append(": Added").Append('\n');
                 }
                 catch (Exception e)
                 {
-                    sb.Append(entry.Name).Append(": Failed - ").Append(e.Message).Append('\n');
+                    result.Append(entry.Name).Append(": Failed - ").Append(e.Message).Append('\n');
                 }
             }
 
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

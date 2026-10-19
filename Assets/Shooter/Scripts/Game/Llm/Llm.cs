@@ -14,14 +14,9 @@ namespace Shooter.Game
     [RequireComponent(typeof(LlmHistory))]
     public class Llm : MonoBehaviour, IMortal
     {
-        private const string ClearHeadDemand =
-            "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date in full detail, including the very latest context - what is happening right now and where you left off. Then call clear_head.";
-
-        private const string ForcedClearing =
-            "Your head overflowed and has been cleared by force: your story so far is gone, only your notes remain. Your notes are your memory now - read the ones you need before you act or speak, start with the one about who you are.";
-
-        private const string InitHeader =
-            "YOU MUST INTRODUCE YOURSELF TO YOUR FRIENDS NOW. YOU MUST UPDATE RELATION TO YOUR FRIENDS NOW.\nTHE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
+        private const string ClearHeadDemand = "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date in full detail, including the very latest context - what is happening right now and where you left off. Then call clear_head.";
+        private const string ForcedClearingNotice = "Your head overflowed and has been cleared by force: your story so far is gone, only your notes remain. Your notes are your memory now - read the ones you need before you act or speak, start with the one about who you are.";
+        private const string LifeStoryHeader = "YOU MUST INTRODUCE YOURSELF TO YOUR FRIENDS NOW. YOU MUST UPDATE RELATION TO YOUR FRIENDS NOW.\nTHE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
 
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
@@ -33,113 +28,113 @@ namespace Shooter.Game
 
         [SerializeReference, SubclassSelector] private List<LlmTool> abilities;
 
-        private readonly SemaphoreSlim gate = new(1, 1);
-        private readonly CancellationTokenSource life = new();
+        private readonly SemaphoreSlim tickSemaphore = new(1, 1);
+        private readonly CancellationTokenSource lifetimeCancellation = new();
         private string entityName;
 
-        private LlmHistory history;
+        private LlmHistory llmHistory;
         private float retryBlockedUntil;
 
-        public bool Busy { get; private set; }
+        public bool IsThinking { get; private set; }
 
         private void Awake()
         {
-            history = GetComponent<LlmHistory>();
+            llmHistory = GetComponent<LlmHistory>();
             entityName = name;
-            foreach (LlmTool ability in abilities)
+            foreach (LlmTool tool in abilities)
             {
-                ability.Attach(gameObject);
+                tool.AttachTo(gameObject);
             }
-            Begin();
+            AppendLifeStory();
         }
 
         private void OnDestroy()
         {
-            life.Cancel();
+            lifetimeCancellation.Cancel();
         }
 
         public void HandleDeath()
         {
-            life.Cancel();
+            lifetimeCancellation.Cancel();
         }
 
-        private void Begin()
+        private void AppendLifeStory()
         {
             if (String.IsNullOrEmpty(character))
             {
-                Log.Warn($"Entity {name} does not have character!");
+                Log.Error($"Entity {name} does not have character!");
             }
 
-            string start = (character + "\n" + Knowledge()).Trim('\n');
-            if (start.Length == 0) return;
+            string lifeStory = (character + "\n" + JoinKnowledges()).Trim('\n');
+            if (lifeStory.Length == 0) return;
 
-            history.Append(new LlmMessage { Role = LlmRole.User, Content = InitHeader + start });
+            llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.User, Content = LifeStoryHeader + lifeStory });
         }
 
-        private string SystemPrompt()
+        private string BuildSystemPrompt()
         {
-            var systemPrompt = new StringBuilder();
+            StringBuilder systemPrompt = new();
             systemPrompt.Append("SYSTEM PROMPT BEGIN\n");
-            foreach (SystemPromptAsset sp in systemPrompts)
+            foreach (SystemPromptAsset systemPromptAsset in systemPrompts)
             {
-                if (sp == null)
+                if (systemPromptAsset == null)
                 {
-                    Log.Warn($"Entity {entityName} has an empty slot among its {systemPrompts.Length} prompts");
+                    Log.Error($"Entity {entityName} has an empty slot among its {systemPrompts.Length} prompts");
                     continue;
                 }
 
-                systemPrompt.Append(sp.Content).Append('\n');
+                systemPrompt.Append(systemPromptAsset.Content).Append('\n');
             }
 
             systemPrompt.Append("SYSTEM PROMPT END");
             return systemPrompt.ToString();
         }
 
-        private string Knowledge()
+        private string JoinKnowledges()
         {
-            var known = new StringBuilder();
-            foreach (KnowledgeAsset knowledge in knowledges)
+            StringBuilder knowledge = new();
+            foreach (KnowledgeAsset knowledgeAsset in knowledges)
             {
-                if (knowledge == null)
+                if (knowledgeAsset == null)
                 {
-                    Log.Warn($"Entity {entityName} has an empty slot among its {knowledges.Length} knowledges");
+                    Log.Error($"Entity {entityName} has an empty slot among its {knowledges.Length} knowledges");
                     continue;
                 }
 
-                known.Append(knowledge.Content).Append('\n');
+                knowledge.Append(knowledgeAsset.Content).Append('\n');
             }
 
-            return known.ToString();
+            return knowledge.ToString();
         }
 
-        public void Notice(string line, bool urgent)
+        public void AppendEvent(string eventText, bool isUrgent)
         {
-            history.Arrive(new LlmMessage { Role = LlmRole.User, Content = line }, urgent);
+            llmHistory.AppendEvent(new LlmMessage { Role = LlmRole.User, Content = eventText }, isUrgent);
         }
 
-        public LlmStatus Status()
+        public LlmStatus GetStatus()
         {
             return new LlmStatus
             {
-                PendingCompact = history.Overflowing,
-                PendingMail = history.Unseen
+                IsOverflowing = llmHistory.IsOverflowing,
+                HasUnseenUrgentEvent = llmHistory.HasUnseenUrgentEvent
             };
         }
 
-        public async Task<bool> Tick()
+        public async Task<bool> TryTick()
         {
-            if (life.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil) return false;
+            if (lifetimeCancellation.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil) return false;
 
-            bool entered = await gate.WaitAsync(0, life.Token);
+            bool entered = await tickSemaphore.WaitAsync(0, lifetimeCancellation.Token);
 
             if (!entered) return false;
 
-            Busy = true;
+            IsThinking = true;
             bool ticked = false;
 
             try
             {
-                ticked = await Think();
+                ticked = await ThinkInToolRounds();
             }
             catch (OperationCanceledException)
             {
@@ -151,96 +146,99 @@ namespace Shooter.Game
                 Log.Warn($"Entity {entityName} failed to respond, next attempt in {failureCooldown} s: {e}");
             }
 
-            Busy = false;
-            gate.Release();
+            IsThinking = false;
+            tickSemaphore.Release();
 
             return ticked;
         }
 
-        private async Task<bool> Think()
+        private async Task<bool> ThinkInToolRounds()
         {
             if (String.IsNullOrEmpty(Config.GetGameConfig().Server.Llm.Provider)) return false;
 
-            if (history.Bursting)
+            if (llmHistory.IsBursting)
             {
-                Log.Warn($"Entity {entityName} has not cleared its head at {history.Size} chars, the story is cut by force");
-                history.Forget(history.Count);
-                history.Append(new LlmMessage { Role = LlmRole.User, Content = ForcedClearing });
+                Log.Warn($"Entity {entityName} has not cleared its head at {llmHistory.Size} chars, the story is cut by force");
+                llmHistory.ForgetMessagesBefore(llmHistory.Count);
+                llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.User, Content = ForcedClearingNotice });
             }
 
-            bool clearing = history.Overflowing;
+            bool isClearingTick = llmHistory.IsOverflowing;
 
-            history.Seen();
-            history.Append(new LlmMessage { Role = LlmRole.User, Content = Observation() });
-            var context = new LlmCallContext { PromptedCount = history.Count };
+            llmHistory.MarkEventsSeen();
+            llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.User, Content = BuildObservation() });
+            LlmCallContext callContext = new() { PromptedCount = llmHistory.Count };
 
             LlmConfig config = Config.GetGameConfig().Server.Llm;
-            var tools = abilities.Where(ability => ability.Available).Cast<ILlmTool>().ToList();
+            var availableTools = abilities.Where(tool => tool.IsAvailable).Cast<ILlmTool>().ToList();
 
-            Log.Info(
-                $"Entity {entityName} is asking {config.Model}, history {history.Count} messages / {history.Size} chars");
+            Log.Info($"Entity {entityName} is asking {config.Model}, history {llmHistory.Count} messages / {llmHistory.Size} chars");
 
             for (int round = 0; round < maxToolRounds; round++)
             {
-                LlmTurn turn = await LlmProvider.Request(
+                LlmTurn turn = await LlmProvider.RequestTurn(
                     config,
-                    $"{entityName}-{(clearing ? "compact" : "live")}",
-                    SystemPrompt(),
-                    history.Messages,
-                    tools,
-                    life.Token
+                    $"{entityName}-{(isClearingTick ? "compact" : "live")}",
+                    BuildSystemPrompt(),
+                    llmHistory.Messages,
+                    availableTools,
+                    lifetimeCancellation.Token
                 );
-                life.Token.ThrowIfCancellationRequested();
+                lifetimeCancellation.Token.ThrowIfCancellationRequested();
 
-                if (!turn.CallsTools)
+                if (!turn.HasToolCalls)
                 {
                     // Speech goes through tools only: the closing text is an unspoken double of a line or a stage direction
                     if (!String.IsNullOrEmpty(turn.Content))
+                    {
                         Log.Info($"Entity {entityName} closed the tick with unspoken text: {turn.Content}");
+                    }
                     break;
                 }
 
-                history.Append(new LlmMessage
-                    { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
+                llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
 
-                foreach (LlmToolCall call in turn.ToolCalls)
-                    history.Append(new LlmMessage
-                        { Role = LlmRole.Tool, ToolCallId = call.Id, Content = Execute(tools, call, context) });
+                foreach (LlmToolCall toolCall in turn.ToolCalls)
+                {
+                    llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.Tool, ToolCallId = toolCall.Id, Content = ExecuteToolCall(availableTools, toolCall, callContext) });
+                }
             }
 
-            if (clearing && history.Overflowing)
+            if (isClearingTick && llmHistory.IsOverflowing)
+            {
                 throw new LlmException("The story is still overflowing after the clearing tick");
+            }
 
             return true;
         }
 
-        private string Observation()
+        private string BuildObservation()
         {
-            var seen = new StringBuilder();
-            seen.Append('[').Append(Stamp()).Append(']');
+            StringBuilder observation = new();
+            observation.Append('[').Append(FormatCurrentWorldTime()).Append(']');
 
-            if (history.Overflowing) seen.Append('\n').Append(ClearHeadDemand);
+            if (llmHistory.IsOverflowing) observation.Append('\n').Append(ClearHeadDemand);
 
-            return seen.ToString();
+            return observation.ToString();
         }
 
-        private string Execute(IReadOnlyList<ILlmTool> tools, LlmToolCall call, LlmCallContext context)
+        private string ExecuteToolCall(IReadOnlyList<ILlmTool> tools, LlmToolCall toolCall, LlmCallContext callContext)
         {
-            ILlmTool tool = tools.FirstOrDefault(known => known.Name == call.Name);
-            if (tool == null) return $"There is no tool named {call.Name}";
+            ILlmTool tool = tools.FirstOrDefault(candidate => candidate.Name == toolCall.Name);
+            if (tool == null) return $"There is no tool named {toolCall.Name}";
 
             try
             {
-                return tool.Execute(call.Arguments, context);
+                return tool.Execute(toolCall.Arguments, callContext);
             }
             catch (Exception e)
             {
-                Log.Warn($"Entity {entityName} broke the tool {call.Name} {call.Arguments}: {e.Message}");
+                Log.Warn($"Entity {entityName} broke the tool {toolCall.Name} {toolCall.Arguments}: {e.Message}");
                 return $"The action failed: {e.Message}";
             }
         }
 
-        public static string Stamp()
+        public static string FormatCurrentWorldTime()
         {
             return Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
         }
