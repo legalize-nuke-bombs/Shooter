@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private LlmNotes notes;
+        private LlmNotes llmNotes;
 
         public override string Name => "search_notes";
 
@@ -17,10 +17,10 @@ namespace Shooter.Game
 Use this tool to find which notes mention something: searches all notes with a regex pattern and returns match counts per note.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
-            notes = Self.GetComponent<LlmNotes>();
-            if (notes == null)
+            llmNotes = Self.GetComponent<LlmNotes>();
+            if (llmNotes == null)
             {
                 Log.Error($"Entity {Self.name} does not have LlmNotes component required by tool {Name}");
             }
@@ -31,7 +31,7 @@ Use this tool to find which notes mention something: searches all notes with a r
             string result;
             try
             {
-                result = notes.Matches(arguments.Pattern);
+                result = llmNotes.SearchNotes(arguments.Pattern);
             }
             catch (Exception e)
             {

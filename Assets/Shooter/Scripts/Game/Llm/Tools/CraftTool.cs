@@ -19,7 +19,7 @@ Use this tool to create items.
 Pass a dictionary of ratios as an argument, mapping the exact recipe name to the quantity.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             crafter = Self.GetComponent<Crafter>();
             if (crafter == null)
@@ -32,7 +32,7 @@ Pass a dictionary of ratios as an argument, mapping the exact recipe name to the
         {
             if (arguments.Crafts.Length == 0) return "Nothing to craft";
 
-            var sb = new StringBuilder();
+            StringBuilder result = new();
 
             foreach (CraftDto craftDto in arguments.Crafts)
             {
@@ -40,30 +40,30 @@ Pass a dictionary of ratios as an argument, mapping the exact recipe name to the
                 int craftAmount = craftDto.CraftAmount;
                 if (craftAmount <= 0)
                 {
-                    sb.AppendLine($"Bad craft amount ({craftAmount}) for craft {craftId}, craft amount must be positive.");
+                    result.AppendLine($"Bad craft amount ({craftAmount}) for craft {craftId}, craft amount must be positive.");
                     continue;
                 }
                 CraftAsset craft = crafter.FindKnownCraft(craftId);
                 if (craft == null)
                 {
-                    sb.AppendLine($"You don't know the craft {craftId}, see list_crafts.");
+                    result.AppendLine($"You don't know the craft {craftId}, see list_crafts.");
                     continue;
                 }
 
-                for (int j = 0; j < craftAmount; j++)
+                for (int i = 0; i < craftAmount; i++)
                 {
                     if (crafter.TryCraft(craft))
                     {
-                        sb.AppendLine($"Crafted {craftId}");
+                        result.AppendLine($"Crafted {craftId}");
                     }
                     else
                     {
-                        sb.AppendLine($"Failed to craft {craftId}, make sure you have all the ingredients in your bag");
+                        result.AppendLine($"Failed to craft {craftId}, make sure you have all the ingredients in your bag");
                     }
                 }
             }
 
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

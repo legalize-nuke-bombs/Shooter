@@ -28,11 +28,11 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            Role = sd.Role;
-            Content = sd.Content;
-            ToolCalls = sd.ToolCalls;
-            ToolCallId = sd.ToolCallId;
+            SaveData saveData = content.ToObject<SaveData>();
+            Role = saveData.Role;
+            Content = saveData.Content;
+            ToolCalls = saveData.ToolCalls;
+            ToolCallId = saveData.ToolCallId;
         }
     }
 }

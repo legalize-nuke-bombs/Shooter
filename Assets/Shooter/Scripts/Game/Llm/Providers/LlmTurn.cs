@@ -5,6 +5,6 @@ namespace Shooter.Game
         public string Content { get; set; }
         public LlmToolCall[] ToolCalls { get; set; }
 
-        public bool CallsTools => ToolCalls != null && ToolCalls.Length > 0;
+        public bool HasToolCalls => ToolCalls != null && ToolCalls.Length > 0;
     }
 }

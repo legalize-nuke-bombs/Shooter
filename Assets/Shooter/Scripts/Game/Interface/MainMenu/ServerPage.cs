@@ -17,7 +17,7 @@ namespace Shooter.Game
         {
             Offer(Require<DropdownField>(CompressionField), MainCompressionManager.Keys, Titles.Compression);
 
-            IEnumerable<string> providers = new[] { NoProvider }.Concat(OpenAiHosts.Providers);
+            IEnumerable<string> providers = new[] { NoProvider }.Concat(OpenAiHosts.ProviderNames);
             Offer(Require<DropdownField>(ProviderField), providers, Titles.Provider);
         }
 

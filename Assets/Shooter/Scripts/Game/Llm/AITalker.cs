@@ -15,7 +15,7 @@ namespace Shooter.Game
 
         protected override bool IsBusy()
         {
-            return llm.Busy;
+            return llm.IsThinking;
         }
     }
 }

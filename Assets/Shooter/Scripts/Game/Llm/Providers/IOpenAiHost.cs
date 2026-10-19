@@ -5,6 +5,6 @@ namespace Shooter.Game
 {
     public interface IOpenAiHost
     {
-        Task<string> Request(string key, OpenAiRequest body, CancellationToken until);
+        Task<string> RequestChatCompletion(string apiKey, OpenAiRequest body, CancellationToken cancellationToken);
     }
 }

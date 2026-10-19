@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private LlmNotes notes;
+        private LlmNotes llmNotes;
 
         public override string Name => "list_notes";
 
@@ -18,10 +18,10 @@ Use this tool to list your notes: the name, the description and the last update 
 To see the content, use read_notes.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
-            notes = Self.GetComponent<LlmNotes>();
-            if (notes == null)
+            llmNotes = Self.GetComponent<LlmNotes>();
+            if (llmNotes == null)
             {
                 Log.Error($"Entity {Self.name} does not have LlmNotes component required by tool {Name}");
             }
@@ -29,7 +29,7 @@ To see the content, use read_notes.
 
         protected override string Execute(ListNotesArguments arguments, LlmCallContext context)
         {
-            return notes.List();
+            return llmNotes.ListNotes();
         }
     }
 }

@@ -23,25 +23,25 @@ namespace Shooter.Game
 
             foreach (LlmChildTicker ticker in tickers)
             {
-                ticker.OnStart();
+                ticker.StartTicking();
             }
         }
 
         private void Update()
         {
-            Type req = TickRequired();
-            if (req != null)
+            Type tickReason = FindTickReason();
+            if (tickReason != null)
             {
-                Tick(req);
+                TryTickLlm(tickReason);
             }
         }
 
-        private Type TickRequired()
+        private Type FindTickReason()
         {
-            LlmStatus llmStatus = llm.Status();
+            LlmStatus llmStatus = llm.GetStatus();
             foreach (LlmChildTicker ticker in tickers)
             {
-                if (ticker.TickRequired(llmStatus))
+                if (ticker.IsTickRequired(llmStatus))
                 {
                     return ticker.GetType();
                 }
@@ -50,22 +50,25 @@ namespace Shooter.Game
             return null;
         }
 
-        private void RegisterTick(Type req)
+        private void RegisterTick(Type tickReason)
         {
-            Log.Info($"Entity {entityName} ticked, reason {req}");
-            foreach (LlmChildTicker ticker in tickers) ticker.RegisterTick();
+            Log.Info($"Entity {entityName} ticked, reason {tickReason}");
+            foreach (LlmChildTicker ticker in tickers)
+            {
+                ticker.RegisterTick();
+            }
         }
 
-        private async void Tick(Type req)
+        private async void TryTickLlm(Type tickReason)
         {
             try
             {
-                bool success = await llm.Tick();
-                if (success) RegisterTick(req);
+                bool ticked = await llm.TryTick();
+                if (ticked) RegisterTick(tickReason);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Log.Error($"Entity {entityName} failed to execute LLM Tick: {ex.Message}");
+                Log.Error($"Entity {entityName} failed to execute LLM Tick: {e.Message}");
             }
         }
     }

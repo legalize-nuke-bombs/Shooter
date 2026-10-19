@@ -15,7 +15,7 @@ namespace Shooter.Game
         public override string Description =>
             "Instantly stops the active second-level behavior tree action, if there is one.";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             customOrderSlot = Self.GetComponent<CustomOrderSlot>();
             if (customOrderSlot == null)
@@ -26,12 +26,12 @@ namespace Shooter.Game
 
         protected override string Execute(HaltBtArguments arguments, LlmCallContext context)
         {
-            CustomOrder current = customOrderSlot.CurrentOrder;
-            if (current == null) return "There is no active second-level action to stop";
+            CustomOrder currentOrder = customOrderSlot.CurrentOrder;
+            if (currentOrder == null) return "There is no active second-level action to stop";
 
-            string stopped = current.GetPromptDescription(Self);
+            string stoppedOrderDescription = currentOrder.GetPromptDescription(Self);
             customOrderSlot.ClearOrder();
-            return $"Stopped: {stopped}";
+            return $"Stopped: {stoppedOrderDescription}";
         }
     }
 }

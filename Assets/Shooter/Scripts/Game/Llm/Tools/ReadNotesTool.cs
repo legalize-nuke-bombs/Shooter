@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using Shooter.Infrastructure;
-using UnityEngine;
 
 namespace Shooter.Game
 {
@@ -10,7 +9,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private LlmNotes notes;
+        private LlmNotes llmNotes;
 
         public override string Name => "read_notes";
 
@@ -19,10 +18,10 @@ namespace Shooter.Game
 Use this tool to read the full content of notes by their names, one or many in a single call.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
-            notes = Self.GetComponent<LlmNotes>();
-            if (notes == null)
+            llmNotes = Self.GetComponent<LlmNotes>();
+            if (llmNotes == null)
             {
                 Log.Error($"Entity {Self.name} does not have LlmNotes component required by tool {Name}");
             }
@@ -32,23 +31,23 @@ Use this tool to read the full content of notes by their names, one or many in a
         {
             if (arguments.Names == null || arguments.Names.Length == 0) return "Nothing to read";
 
-            var sb = new StringBuilder();
-            foreach (string name in arguments.Names)
+            StringBuilder result = new();
+            foreach (string noteName in arguments.Names)
             {
-                sb.Append("== ").Append(name).Append(" ==").Append('\n');
+                result.Append("== ").Append(noteName).Append(" ==").Append('\n');
                 try
                 {
-                    sb.Append(notes.Read(name));
+                    result.Append(llmNotes.ReadNoteContent(noteName));
                 }
                 catch (Exception e)
                 {
-                    sb.Append(e.Message);
+                    result.Append(e.Message);
                 }
 
-                sb.Append('\n').Append('\n');
+                result.Append('\n').Append('\n');
             }
 
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

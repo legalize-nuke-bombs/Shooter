@@ -7,36 +7,33 @@ namespace Shooter.Game
     public class LlmNotificationObserver : MonoBehaviour
     {
         private Llm llm;
-        private NotificationRecipient recipient;
+        private NotificationRecipient notificationRecipient;
 
         private void Awake()
         {
             llm = GetComponent<Llm>();
-            recipient = GetComponent<NotificationRecipient>();
+            notificationRecipient = GetComponent<NotificationRecipient>();
         }
 
         private void OnEnable()
         {
-            recipient.Received += Received;
+            notificationRecipient.Received += HandleNotificationReceived;
         }
 
         private void OnDisable()
         {
-            recipient.Received -= Received;
+            notificationRecipient.Received -= HandleNotificationReceived;
         }
 
-        private void Received(NotificationAsset asset)
+        private void HandleNotificationReceived(NotificationAsset notification)
         {
-            IconAsset icon = asset.Icon;
+            IconAsset icon = notification.Icon;
             string iconDescription = icon == null ? "none" : icon.PromptDescription;
 
-            EarSoundAsset sound = asset.Sound;
+            EarSoundAsset sound = notification.Sound;
             string soundDescription = sound == null ? "none" : sound.PromptDescription;
 
-            llm.Notice(
-                $"[{Llm.Stamp()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {asset.Told}",
-                asset.Urgent
-            );
+            llm.AppendEvent($"[{Llm.FormatCurrentWorldTime()}] You have received new notification.\nIcon: {iconDescription}\nSound: {soundDescription}\nText: {notification.Told}", notification.Urgent);
         }
     }
 }

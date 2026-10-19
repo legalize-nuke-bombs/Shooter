@@ -1,4 +1,3 @@
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -7,34 +6,34 @@ namespace Shooter.Game
     [RequireComponent(typeof(InventoryExchanger))]
     public class LlmInventoryObserver : MonoBehaviour
     {
-        private InventoryExchanger exchanger;
+        private InventoryExchanger inventoryExchanger;
         private Llm llm;
 
         private void Awake()
         {
-            exchanger = GetComponent<InventoryExchanger>();
+            inventoryExchanger = GetComponent<InventoryExchanger>();
             llm = GetComponent<Llm>();
         }
 
         private void OnEnable()
         {
-            exchanger.ReceivedFromCharacter += Received;
+            inventoryExchanger.ReceivedFromCharacter += HandleReceivedFromCharacter;
         }
 
         private void OnDisable()
         {
-            exchanger.ReceivedFromCharacter -= Received;
+            inventoryExchanger.ReceivedFromCharacter -= HandleReceivedFromCharacter;
         }
 
-        private void Received(Character from, ItemAsset item, int amount)
+        private void HandleReceivedFromCharacter(Character giver, ItemAsset item, int amount)
         {
             if (item == null) return;
 
-            long giver = from == null ? CharacterId.None : from.Id;
+            long giverId = giver == null ? CharacterId.None : giver.Id;
 
-            llm.Notice(item is StackableItemAsset
-                ? $"[{Llm.Stamp()}] Character {giver} gave you {item.Id} x {amount}"
-                : $"[{Llm.Stamp()}] Character {giver} gave you {item.Id}", true);
+            llm.AppendEvent(item is StackableItemAsset
+                ? $"[{Llm.FormatCurrentWorldTime()}] Character {giverId} gave you {item.Id} x {amount}"
+                : $"[{Llm.FormatCurrentWorldTime()}] Character {giverId} gave you {item.Id}", true);
         }
     }
 }

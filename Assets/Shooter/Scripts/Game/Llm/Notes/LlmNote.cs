@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Shooter.Infrastructure;
+﻿using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
@@ -26,10 +25,10 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            Description = sd.Description;
-            Content = sd.Content;
-            Updated = sd.Updated;
+            SaveData saveData = content.ToObject<SaveData>();
+            Description = saveData.Description;
+            Content = saveData.Content;
+            Updated = saveData.Updated;
         }
     }
 }

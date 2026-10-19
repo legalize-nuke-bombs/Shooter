@@ -10,23 +10,23 @@ namespace Shooter.Game
         [SerializeField] private float firstTickDelay = 60f;
 
         private float lastTickTime;
-        private bool first;
+        private bool isWaitingForFirstTick;
 
-        public override void OnStart()
+        public override void StartTicking()
         {
             lastTickTime = Time.time;
-            first = true;
+            isWaitingForFirstTick = true;
         }
 
         public override void RegisterTick()
         {
             lastTickTime = Time.time;
-            first = false;
+            isWaitingForFirstTick = false;
         }
 
-        public override bool TickRequired(LlmStatus llmStatus)
+        public override bool IsTickRequired(LlmStatus status)
         {
-            if (first)
+            if (isWaitingForFirstTick)
             {
                 return Time.time - lastTickTime >= firstTickDelay;
             }

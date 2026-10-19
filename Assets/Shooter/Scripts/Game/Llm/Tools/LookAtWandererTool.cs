@@ -16,8 +16,7 @@ Look at wanderer who is talking to you: their health, stamina, belongings, etc.
 ALWAYS use this tool when a wanderer starts a conversation with you.
 ";
 
-
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
         }
 

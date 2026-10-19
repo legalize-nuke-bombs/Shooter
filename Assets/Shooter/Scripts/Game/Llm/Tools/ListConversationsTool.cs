@@ -23,7 +23,7 @@ Use this tool to list your conversations.
 To see the content, use read_conversation.
 ";
 
-        protected override void OnStart()
+        protected override void HandleAttached()
         {
             conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
@@ -41,37 +41,34 @@ To see the content, use read_conversation.
                 return "Nothing yet";
             }
 
-            var partners = new HashSet<long>();
+            var partnerIds = new HashSet<long>();
             foreach (Conversation conversation in conversations)
             {
-                partners.Add(conversation.GetPartnerId(ownCharacter.Id));
+                partnerIds.Add(conversation.GetPartnerId(ownCharacter.Id));
             }
 
             var partnerNames = new Dictionary<long, string>();
             Character.ForEach(character =>
             {
-                if (partners.Contains(character.Id))
+                if (partnerIds.Contains(character.Id))
                 {
-                    string name = character.GetComponent<Nameable>()?.GetPromptName() ?? "Unknown";
-                    partnerNames[character.Id] = name;
+                    string promptName = character.GetComponent<Nameable>()?.GetPromptName() ?? "Unknown";
+                    partnerNames[character.Id] = promptName;
                 }
-            }, RegisterInactivePolicy.Include
-                );
+            }, RegisterInactivePolicy.Include);
 
-            var sortedConversations = conversations
-                .OrderByDescending(c => c.Messages.LastOrDefault()?.Time ?? DateTime.MinValue)
-                .ToList();
+            var sortedConversations = conversations.OrderByDescending(conversation => conversation.Messages.LastOrDefault()?.Time ?? DateTime.MinValue).ToList();
 
-            var sb = new StringBuilder();
+            StringBuilder result = new();
             foreach (Conversation conversation in sortedConversations)
             {
-                long partner = conversation.GetPartnerId(ownCharacter.Id);
-                string partnerName = partnerNames.TryGetValue(partner, out string known) ? known : "Unknown";
-                Message last = conversation.Messages.LastOrDefault();
-                string lastAt = last == null ? "never" : last.Time.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
-                sb.AppendLine($"ID {partner} ({partnerName}) | {conversation.Messages.Count} messages, last message at {lastAt}");
+                long partnerId = conversation.GetPartnerId(ownCharacter.Id);
+                string partnerName = partnerNames.TryGetValue(partnerId, out string knownName) ? knownName : "Unknown";
+                Message lastMessage = conversation.Messages.LastOrDefault();
+                string lastMessageTime = lastMessage == null ? "never" : lastMessage.Time.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
+                result.AppendLine($"ID {partnerId} ({partnerName}) | {conversation.Messages.Count} messages, last message at {lastMessageTime}");
             }
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }
