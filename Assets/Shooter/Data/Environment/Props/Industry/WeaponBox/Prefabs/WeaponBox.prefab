@@ -100,6 +100,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6289166567146372754}
   - component: {fileID: 7917924385013508658}
+  - component: {fileID: 8680119404599486316}
+  - component: {fileID: -8788064343807014936}
   m_Layer: 0
   m_Name: WeaponBox
   m_TagString: Untagged
@@ -144,3 +146,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.9994335, y: 0.5172901, z: 0.4}
   m_Center: {x: 0.00000004656613, y: 0.008644991, z: 0}
+--- !u!114 &8680119404599486316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6582791519991184299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DigestibleTransform
+--- !u!114 &-8788064343807014936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6582791519991184299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
+  content: Crate
+  size: 1

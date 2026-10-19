@@ -56,6 +56,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c86ca76859f18ed4c877304f941214f5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8218506919166403169}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c86ca76859f18ed4c877304f941214f5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 55902293857817081}
     - targetCorrespondingSourceObject: {fileID: 8164078558771037576, guid: c86ca76859f18ed4c877304f941214f5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7810142555028561780}
@@ -87,3 +93,34 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2432090755550338912, guid: c86ca76859f18ed4c877304f941214f5, type: 3}
+--- !u!1 &8347866746312760610 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c86ca76859f18ed4c877304f941214f5, type: 3}
+  m_PrefabInstance: {fileID: 9158348303413911667}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8218506919166403169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347866746312760610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DigestibleTransform
+--- !u!114 &55902293857817081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347866746312760610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
+  content: Old bench
+  size: 0
