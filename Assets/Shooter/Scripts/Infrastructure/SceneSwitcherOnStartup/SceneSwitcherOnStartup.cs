@@ -3,13 +3,13 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Infrastructure
 {
-    public class Boot : MonoBehaviour
+    public class SceneSwitcherOnStartup : MonoBehaviour
     {
-        [SerializeField] private string menuScene;
+        [SerializeField] private string scene;
 
         private void Start()
         {
-            SceneManager.LoadScene(menuScene);
+            SceneManager.LoadScene(scene);
         }
     }
 }
