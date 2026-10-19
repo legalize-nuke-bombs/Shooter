@@ -1,3 +1,4 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,7 +11,14 @@ namespace Shooter.Game
 
         [SerializeField] private Camera bedside;
 
+        private SleepCycle sleepCycle;
+
         public Camera Bedside => bedside != null ? bedside : bedside = GetComponentInChildren<Camera>(true);
+
+        private void Awake()
+        {
+            sleepCycle = Registers.Of<SleepCycle>(RegisterInactivePolicy.Include).Single();
+        }
 
         public string Digest(DigestionDetail detail)
         {
@@ -35,7 +43,7 @@ namespace Shooter.Game
 
             bool alive = health == null || health.Alive;
             bool handsFree = hands == null || hands.Free;
-            bool bedtime = Map.Get<SleepCycle>() != null && Map.Get<Clock>() != null && Map.Get<SleepCycle>().IsBedtime();
+            bool bedtime = sleepCycle.IsBedtime();
 
             if (!SleepRule.CanSleep(alive, handsFree, bedtime))
             {

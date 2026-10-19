@@ -1,3 +1,4 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -38,11 +39,13 @@ namespace Shooter.Game
             sleeping.Value = sd.Sleeping;
         }
 
+        private SleepCycle sleepCycle;
         private SpawnPoint spawnPoint;
         private Speaker speaker;
 
         private void Awake()
         {
+            sleepCycle = Registers.Of<SleepCycle>(RegisterInactivePolicy.Include).Single();
             spawnPoint = GetComponent<SpawnPoint>();
             speaker = GetComponent<Speaker>();
         }
@@ -86,7 +89,7 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void WakeRpc()
         {
-            bool worldAsleep = Map.Get<SleepCycle>() != null && Map.Get<SleepCycle>().WorldAsleep;
+            bool worldAsleep = sleepCycle.WorldAsleep;
 
             if (!SleepRule.CanWake(worldAsleep))
             {

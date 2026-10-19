@@ -1,9 +1,12 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class SleepCycle : NetworkBehaviour
+    [DefaultExecutionOrder(ExecutionOrder.Service)]
+    public class SleepCycle : ShooterNetworkBehaviour
     {
         private const float SkipTimeScale = 300f;
         private const double BedtimeHours = 22;
@@ -12,6 +15,7 @@ namespace Shooter.Game
 
         private readonly NetworkVariable<bool> asleep = new();
 
+        private Clock clock;
         private bool wasBedtime;
 
         public bool WorldAsleep => asleep.Value;
@@ -20,6 +24,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
+            clock = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
             NetworkManager.NetworkTickSystem.Tick += Step;
         }
 
@@ -32,8 +37,6 @@ namespace Shooter.Game
 
         private void Step()
         {
-            Clock clock = Map.Get<Clock>();
-
             bool everyone = AllAsleep();
             if (everyone != asleep.Value)
             {
@@ -57,7 +60,7 @@ namespace Shooter.Game
 
         public bool IsBedtime()
         {
-            double hours = Map.Get<Clock>().Now.TimeOfDay.TotalHours;
+            double hours = clock.Now.TimeOfDay.TotalHours;
 
             return hours >= BedtimeHours || hours < WakeHours;
         }
@@ -79,7 +82,9 @@ namespace Shooter.Game
         private void WakeAll()
         {
             foreach (Player player in Registers.Of<Player>(RegisterInactivePolicy.Exclude))
+            {
                 player.GetComponent<Sleeper>()?.WakeUp();
+            }
         }
     }
 }

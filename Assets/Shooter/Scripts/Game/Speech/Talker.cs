@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -47,7 +48,7 @@ namespace Shooter.Game
             if (!IsServer) return;
 
             enabled = true;
-            conversations = Map.Get<ConversationManager>();
+            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             conversations.Said += Mutter;
         }
 

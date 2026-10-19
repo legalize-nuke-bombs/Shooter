@@ -1,3 +1,4 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,10 +11,12 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private Character character;
+        private ConversationManager conversations;
 
         private void Awake()
         {
             character = GetComponent<Character>();
+            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -25,7 +28,6 @@ namespace Shooter.Game
                 return;
             }
 
-            ConversationManager conversations = Map.Get<ConversationManager>();
             if (conversations.GetIfPresent(character.Id, partnerId) == null)
             {
                 Log.Info($"Player {OwnerClientId} radioed {partnerId} without ever talking to them, ignored");

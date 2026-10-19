@@ -1,3 +1,4 @@
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private static readonly RaycastHit[] Shots = new RaycastHit[32];
+        private BulletHoles bulletHoles;
         private EarSpeaker earSpeaker;
         private Hands hands;
         private InventoryHolder holder;
@@ -32,6 +34,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            bulletHoles = Registers.Of<BulletHoles>(RegisterInactivePolicy.Include).Single();
             character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();
             holder = GetComponent<InventoryHolder>();
@@ -156,7 +159,7 @@ namespace Shooter.Game
             Health health = hit.collider.GetComponentInParent<Health>();
             if (health == null)
             {
-                Map.Get<BulletHoles>().Add(hit.point, hit.normal);
+                bulletHoles.Add(hit.point, hit.normal);
                 Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
                 return;
             }

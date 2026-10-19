@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public abstract class ShooterBehaviour : MonoBehaviour
+    public abstract class ShooterBehaviour : MonoBehaviour, IShooterBehaviour
     {
         protected void Awake()
         {

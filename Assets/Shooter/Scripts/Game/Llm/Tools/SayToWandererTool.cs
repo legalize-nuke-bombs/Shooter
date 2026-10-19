@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
+        private ConversationManager conversations;
         private Character ownCharacter;
 
         public override string Name => "say_to_wanderer";
@@ -18,6 +20,7 @@ namespace Shooter.Game
 
         protected override void OnStart()
         {
+            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {
@@ -40,7 +43,7 @@ namespace Shooter.Game
                 return $"Wanderer {arguments.WandererId} is too far to hear you, use send_message to reach them over the radio";
             }
 
-            Map.Get<ConversationManager>().Say(ownCharacter.Id, arguments.WandererId, arguments.Text, true, true);
+            conversations.Say(ownCharacter.Id, arguments.WandererId, arguments.Text, true, true);
             return $"Said to {arguments.WandererId}";
         }
     }

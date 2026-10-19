@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -40,7 +41,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            conversations = Map.Get<ConversationManager>();
+            conversations = Registers.Of<ConversationManager>(RegisterInactivePolicy.Include).Single();
             conversations.Said += Relay;
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Shooter.Infrastructure;
 using UnityEngine.UIElements;
 
@@ -12,12 +13,16 @@ namespace Shooter.Game
 
         private Label clock;
         private long shown = Hidden;
+        private Clock world;
+
+        private void Start()
+        {
+            world = Registers.Of<Clock>(RegisterInactivePolicy.Include).Single();
+        }
 
         private void Update()
         {
             if (!Bound) return;
-
-            Clock world = Map.Get<Clock>();
 
             if (world == null)
             {
