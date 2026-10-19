@@ -69,7 +69,7 @@ namespace Shooter.Game
             Interactor interactor = OwnPlayer.Find<Interactor>();
             if (interactor == null) return string.Empty;
 
-            if (!aimer.TryHit(out RaycastHit hit) || hit.distance > interactor.Reach) return string.Empty;
+            if (!aimer.TryHit(out RaycastHit hit) || hit.distance > interactor.ReachDistance) return string.Empty;
             if (hit.collider == null) return string.Empty;
 
             IUsable usable = hit.collider.GetComponentInParent<IUsable>();

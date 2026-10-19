@@ -19,8 +19,7 @@ namespace Shooter.Game
 
         public float Radius => radius;
 
-        // Raised by Receive only: picking up, crafting and looting add silently
-        public event Action<Character, ItemAsset, int> Received;
+        public event Action<Character, ItemAsset, int> ReceivedFromCharacter;
 
         private void Awake()
         {
@@ -28,85 +27,85 @@ namespace Shooter.Game
             inventory = GetComponent<Inventory>();
         }
 
-        public bool Give(Character to, StackableItemAsset asset, int amount)
+        public bool TryGiveStackable(Character receiver, StackableItemAsset asset, int amount)
         {
-            if (amount <= 0 || !Reaches(to, out InventoryExchanger taker)) return false;
+            if (amount <= 0 || !CanGiveTo(receiver, out InventoryExchanger receiverExchanger)) return false;
 
-            if (inventory.Remove(asset, amount, InventoryOnConflict.Rollback) != amount)
+            if (inventory.RemoveStackable(asset, amount, InventoryShortagePolicy.Rollback) != amount)
             {
-                Log.Info($"Entity {name} can not give {asset.Id} x {amount} to {to.name}: not enough in the bag");
+                Log.Info($"Entity {name} can not give {asset.Id} x {amount} to {receiver.name}: not enough in the bag");
                 return false;
             }
 
-            taker.Receive(character, asset, amount);
-            Log.Info($"Entity {name} gave {asset.Id} x {amount} to {to.name}");
+            receiverExchanger.ReceiveStackable(character, asset, amount);
+            Log.Info($"Entity {name} gave {asset.Id} x {amount} to {receiver.name}");
             return true;
         }
 
-        public bool Give(Character to, int slot)
+        public bool TryGiveUnique(Character receiver, int slot)
         {
-            if (!Reaches(to, out InventoryExchanger taker)) return false;
+            if (!CanGiveTo(receiver, out InventoryExchanger receiverExchanger)) return false;
 
-            UniqueItem item = inventory.Remove(slot);
+            UniqueItem item = inventory.RemoveUniqueAt(slot);
             if (item == null)
             {
-                Log.Info($"Entity {name} can not give slot {slot} to {to.name}: the slot is empty");
+                Log.Info($"Entity {name} can not give slot {slot} to {receiver.name}: the slot is empty");
                 return false;
             }
 
-            taker.Receive(character, item);
-            Log.Info($"Entity {name} gave {item.AssetId} from slot {slot} to {to.name}");
+            receiverExchanger.ReceiveUnique(character, item);
+            Log.Info($"Entity {name} gave {item.AssetId} from slot {slot} to {receiver.name}");
             return true;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void GiveStackableRpc(long targetId, FixedString32Bytes stackableId, int amount)
+        public void GiveStackableRpc(long receiverId, FixedString32Bytes stackableId, int amount)
         {
-            var asset = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) as StackableItemAsset;
-            if (asset != null && Give(Character.FindById(targetId, RegisterInactivePolicy.Exclude), asset, amount)) return;
+            StackableItemAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) as StackableItemAsset;
+            if (asset != null && TryGiveStackable(Character.FindById(receiverId, RegisterInactivePolicy.Exclude), asset, amount)) return;
 
-            Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {targetId} rpc");
+            Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {receiverId} rpc");
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void GiveUniqueRpc(long targetId, int slot)
+        public void GiveUniqueRpc(long receiverId, int slot)
         {
-            if (Give(Character.FindById(targetId, RegisterInactivePolicy.Exclude), slot)) return;
+            if (TryGiveUnique(Character.FindById(receiverId, RegisterInactivePolicy.Exclude), slot)) return;
 
-            Log.Info($"Entity {name} failed to give slot {slot} to {targetId} rpc");
+            Log.Info($"Entity {name} failed to give slot {slot} to {receiverId} rpc");
         }
 
-        private void Receive(Character from, StackableItemAsset asset, int amount)
+        private void ReceiveStackable(Character giver, StackableItemAsset asset, int amount)
         {
-            inventory.Add(asset, amount);
-            Received?.Invoke(from, asset, amount);
+            inventory.AddStackable(asset, amount);
+            ReceivedFromCharacter?.Invoke(giver, asset, amount);
         }
 
-        private void Receive(Character from, UniqueItem item)
+        private void ReceiveUnique(Character giver, UniqueItem item)
         {
-            inventory.Add(item);
-            Received?.Invoke(from, Catalogs.GetCatalog<ItemCatalog>().Asset(item.AssetId), 1);
+            inventory.AddUnique(item);
+            ReceivedFromCharacter?.Invoke(giver, Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId), 1);
         }
 
-        private bool Reaches(Character to, out InventoryExchanger taker)
+        private bool CanGiveTo(Character receiver, out InventoryExchanger receiverExchanger)
         {
-            taker = null;
+            receiverExchanger = null;
 
-            if (to == null || to == character || !to.gameObject.activeInHierarchy)
+            if (receiver == null || receiver == character || !receiver.gameObject.activeInHierarchy)
             {
                 Log.Info($"Entity {name} has nobody to give things to");
                 return false;
             }
 
-            if (Vector3.Distance(to.transform.position, transform.position) > radius)
+            if (Vector3.Distance(receiver.transform.position, transform.position) > radius)
             {
-                Log.Info($"Entity {name} can not give things to {to.name}: farther than {radius} m");
+                Log.Info($"Entity {name} can not give things to {receiver.name}: farther than {radius} m");
                 return false;
             }
 
-            if (to.TryGetComponent(out taker)) return true;
+            if (receiver.TryGetComponent(out receiverExchanger)) return true;
 
-            Log.Info($"Entity {name} can not give things to {to.name}: it takes nothing");
+            Log.Info($"Entity {name} can not give things to {receiver.name}: it takes nothing");
             return false;
         }
     }

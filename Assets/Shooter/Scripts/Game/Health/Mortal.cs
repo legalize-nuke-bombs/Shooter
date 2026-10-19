@@ -81,7 +81,7 @@ namespace Shooter.Game
                 if (typedNameable != null && typedNameable.Asset != null) corpse.AssignNameAsset(typedNameable.Asset);
             }
 
-            corpseObject.GetComponent<Lootable>()?.Fill(GetComponent<Inventory>());
+            corpseObject.GetComponent<Lootable>()?.TakeAllItemsFrom(GetComponent<Inventory>());
             Log.Info($"Entity {name} left a corpse at {transform.position}");
         }
     }

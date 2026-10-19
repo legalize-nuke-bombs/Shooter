@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     public class Firearm : UniqueItem
     {
-        private int magazine;
+        private int roundsInMagazine;
 
         public Firearm(string assetId) : base(assetId)
         {
@@ -18,39 +18,39 @@ namespace Shooter.Game
         }
         public override object SaveObject()
         {
-            return new SaveData { Magazine = magazine };
+            return new SaveData { Magazine = roundsInMagazine };
         }
         public override void LoadObject(SaveToken content)
         {
-            magazine = content.ToObject<SaveData>().Magazine;
+            roundsInMagazine = content.ToObject<SaveData>().Magazine;
         }
 
-        public int Magazine => magazine;
+        public int RoundsInMagazine => roundsInMagazine;
 
-        public bool Spend()
+        public bool TrySpendRound()
         {
-            if (magazine == 0) return false;
+            if (roundsInMagazine == 0) return false;
 
-            magazine--;
-            OnChanged();
+            roundsInMagazine--;
+            RaiseChanged();
 
             return true;
         }
 
-        public int Reload(int rounds, int size)
+        public int LoadRounds(int availableRounds, int magazineSize)
         {
-            int taken = Math.Min(rounds, size - magazine);
-            if (taken <= 0) return 0;
+            int loadedRounds = Math.Min(availableRounds, magazineSize - roundsInMagazine);
+            if (loadedRounds <= 0) return 0;
 
-            magazine += taken;
-            OnChanged();
+            roundsInMagazine += loadedRounds;
+            RaiseChanged();
 
-            return taken;
+            return loadedRounds;
         }
 
         public override void NetworkSerialize<T>(BufferSerializer<T> serializer)
         {
-            serializer.SerializeValue(ref magazine);
+            serializer.SerializeValue(ref roundsInMagazine);
         }
     }
 }

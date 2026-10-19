@@ -21,7 +21,7 @@ namespace Shooter.Game
 
         public abstract void LoadObject(SaveToken content);
 
-        protected void OnChanged()
+        protected void RaiseChanged()
         {
             Changed?.Invoke();
         }

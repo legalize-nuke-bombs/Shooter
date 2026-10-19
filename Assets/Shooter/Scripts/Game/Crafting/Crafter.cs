@@ -12,8 +12,8 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        [SerializeField] private List<Craft> availableCrafts;
-        private readonly Dictionary<string, Craft> craftsById = new Dictionary<string, Craft>();
+        [SerializeField] private List<CraftAsset> availableCrafts;
+        private readonly Dictionary<string, CraftAsset> craftsById = new();
 
         private Inventory inventory;
         private Speaker speaker;
@@ -22,28 +22,29 @@ namespace Shooter.Game
         {
             inventory = GetComponent<Inventory>();
             speaker = GetComponent<Speaker>();
-            foreach (Craft craft in availableCrafts)
+            foreach (CraftAsset craft in availableCrafts)
             {
                 craftsById.Add(craft.Id, craft);
             }
         }
 
-        public List<Craft> AvailableCrafts => availableCrafts;
+        public List<CraftAsset> AvailableCrafts => availableCrafts;
 
-        public Craft Known(string id)
+        public CraftAsset FindKnownCraft(string craftId)
         {
-            if (string.IsNullOrEmpty(id)) return null;
-            return craftsById.GetValueOrDefault(id, null);
+            if (string.IsNullOrEmpty(craftId)) return null;
+            return craftsById.GetValueOrDefault(craftId, null);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void CraftRpc(FixedString32Bytes craftId)
         {
-            if (!TryCraft(Known(craftId.ToString())))
-                Log.Info($"Entity {name} failed to craft {craftId} rpc");
+            if (TryCraft(FindKnownCraft(craftId.ToString()))) return;
+
+            Log.Info($"Entity {name} failed to craft {craftId} rpc");
         }
 
-        public bool TryCraft(Craft craft)
+        public bool TryCraft(CraftAsset craft)
         {
             if (craft == null || !availableCrafts.Contains(craft))
             {
@@ -51,30 +52,30 @@ namespace Shooter.Game
                 return false;
             }
 
-            Dictionary<StackableItemAsset, int> amountMap = craft.AmountMap();
+            Dictionary<StackableItemAsset, int> inputAmounts = craft.CountInputAmounts();
 
-            foreach (var kvp in amountMap)
+            foreach (KeyValuePair<StackableItemAsset, int> inputAmount in inputAmounts)
             {
-                int available = inventory.Count(kvp.Key);
-                if (available < kvp.Value)
+                int availableAmount = inventory.CountStackable(inputAmount.Key);
+                if (availableAmount < inputAmount.Value)
                 {
-                    Log.Info($"Entity {name} lacks {kvp.Key.Id} for {craft.Id}: {available} of {kvp.Value}");
+                    Log.Info($"Entity {name} lacks {inputAmount.Key.Id} for {craft.Id}: {availableAmount} of {inputAmount.Value}");
                     return false;
                 }
             }
 
-            foreach (var kvp in amountMap)
+            foreach (KeyValuePair<StackableItemAsset, int> inputAmount in inputAmounts)
             {
-                inventory.Remove(kvp.Key, kvp.Value, InventoryOnConflict.Partly);
+                inventory.RemoveStackable(inputAmount.Key, inputAmount.Value, InventoryShortagePolicy.Partly);
             }
 
             if (craft.Output is StackableItemAsset stackableOutput)
             {
-                inventory.Add(stackableOutput, 1);
+                inventory.AddStackable(stackableOutput, 1);
             }
             else if (craft.Output is UniqueItemAsset uniqueOutput)
             {
-                inventory.Add(uniqueOutput.Create());
+                inventory.AddUnique(uniqueOutput.CreateItem());
             }
             else
             {

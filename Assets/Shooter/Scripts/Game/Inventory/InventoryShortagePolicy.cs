@@ -1,6 +1,6 @@
 namespace Shooter.Game
 {
-    public enum InventoryOnConflict
+    public enum InventoryShortagePolicy
     {
         Rollback,
         Partly

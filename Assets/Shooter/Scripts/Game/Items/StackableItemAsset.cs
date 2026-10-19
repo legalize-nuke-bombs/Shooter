@@ -15,22 +15,22 @@ namespace Shooter.Game
 
         public SoundAsset UseSound => useSound;
 
-        public bool Usable => effects.Length > 0;
-        public int HealMarker => effects.Length == 0 ? 0 : effects.Sum(effect => effect.HealMarker);
-        public int FoodMarker => effects.Length == 0 ? 0 : effects.Sum(effect => effect.FoodMarker);
+        public bool IsUsable => effects.Length > 0;
+        public int HealAmount => effects.Length == 0 ? 0 : effects.Sum(effect => effect.HealAmount);
+        public int FoodAmount => effects.Length == 0 ? 0 : effects.Sum(effect => effect.FoodAmount);
         public override string PromptDescription
         {
             get
             {
-                var sb = new StringBuilder();
+                StringBuilder description = new();
 
-                sb.Append(base.PromptDescription);
+                description.Append(base.PromptDescription);
 
-                if (Usable) sb.Append(" Usable.");
-                if (HealMarker > 0) sb.Append($" Heal {HealMarker}.");
-                if (FoodMarker > 0) sb.Append($" Food {FoodMarker}.");
+                if (IsUsable) description.Append(" Usable.");
+                if (HealAmount > 0) description.Append($" Heal {HealAmount}.");
+                if (FoodAmount > 0) description.Append($" Food {FoodAmount}.");
 
-                return sb.ToString();
+                return description.ToString();
             }
         }
     }

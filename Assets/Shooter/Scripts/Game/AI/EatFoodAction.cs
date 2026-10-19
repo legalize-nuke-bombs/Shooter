@@ -28,10 +28,10 @@ namespace Shooter.Game
             if (user == null || hunger == null) return Status.Failure;
 
             foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(item =>
-                         item is StackableItemAsset stackableItem && stackableItem.FoodMarker > 0))
+                         item is StackableItemAsset stackableItem && stackableItem.FoodAmount > 0))
             {
                 int startSaturation = (int)hunger.Amount;
-                if (user.Use((StackableItemAsset)item))
+                if (user.TryUseItem((StackableItemAsset)item))
                 {
                     Log.Info($"Entity {Agent.Value.name} ate {item.Id} by behavior graph");
                     BtReports reports = Agent.Value.GetComponent<BtReports>();

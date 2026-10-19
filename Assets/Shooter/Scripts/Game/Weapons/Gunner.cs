@@ -16,11 +16,11 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private static readonly RaycastHit[] Shots = new RaycastHit[32];
+        private static readonly RaycastHit[] ShotHits = new RaycastHit[32];
         private BulletHoles bulletHoles;
         private EarSpeaker earSpeaker;
         private Hands hands;
-        private InventoryHolder holder;
+        private InventoryHolder inventoryHolder;
 
         private Character character;
         private Interactor interactor;
@@ -29,7 +29,7 @@ namespace Shooter.Game
         private MainRestrainable restrainable;
         private Speaker speaker;
 
-        private int sprayShot;
+        private int shotIndexInSpray;
         private bool triggerHeld;
 
         private void Awake()
@@ -37,7 +37,7 @@ namespace Shooter.Game
             bulletHoles = Registers.GetAll<BulletHoles>(RegisterInactivePolicy.Include).Single();
             character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();
-            holder = GetComponent<InventoryHolder>();
+            inventoryHolder = GetComponent<InventoryHolder>();
             interactor = GetComponent<Interactor>();
             hands = GetComponent<Hands>();
             speaker = GetComponent<Speaker>();
@@ -49,10 +49,10 @@ namespace Shooter.Game
         {
             if (!IsServer || !triggerHeld) return;
 
-            var firearm = holder.Held as Firearm;
+            Firearm firearm = inventoryHolder.HeldItem as Firearm;
             if (firearm == null) return;
 
-            FirearmAsset asset = Catalogs.GetCatalog<ItemCatalog>().Firearm(firearm.AssetId);
+            FirearmAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetFirearmAssetById(firearm.AssetId);
             if (asset == null || asset.FireMode != FireMode.Auto) return;
 
             TryShoot();
@@ -79,39 +79,38 @@ namespace Shooter.Game
 
         public bool TryShoot()
         {
-            if (!Ready(out Firearm firearm, out FirearmAsset asset, ActionType.Shoot)) return false;
+            if (!TryGetHeldFirearmForAction(out Firearm firearm, out FirearmAsset asset, ActionType.Shoot)) return false;
 
             if (hands != null && !hands.TryStartAction(HandsAction.Shooting, asset.FireInterval, false, null)) return false;
 
             restrainable.RegisterAction(ActionType.Shoot, MainRestrainable.InstantActionDuration);
 
-            if (!firearm.Spend())
+            if (!firearm.TrySpendRound())
             {
                 triggerHeld = false;
                 speaker?.PlayForEveryone(asset.MisfireSound);
                 return false;
             }
 
-            if (Time.time - lastShotAt >= asset.SprayRecovery) sprayShot = 0;
+            if (Time.time - lastShotAt >= asset.SprayRecovery) shotIndexInSpray = 0;
 
             speaker?.PlayForEveryone(asset.ShotSound);
-            Hit(asset);
+            TraceShotAndApplyHit(asset);
 
-            sprayShot++;
+            shotIndexInSpray++;
             lastShotAt = Time.time;
             return true;
         }
 
         public bool TryReload()
         {
-            if (!Ready(out Firearm firearm, out FirearmAsset asset, ActionType.Reload)) return false;
+            if (!TryGetHeldFirearmForAction(out Firearm firearm, out FirearmAsset asset, ActionType.Reload)) return false;
             if (asset.Ammo == null) return false;
 
-            int absent = asset.MagazineSize - firearm.Magazine;
-            if (absent <= 0 || inventory.Count(asset.Ammo) == 0) return false;
+            int missingRounds = asset.MagazineSize - firearm.RoundsInMagazine;
+            if (missingRounds <= 0 || inventory.CountStackable(asset.Ammo) == 0) return false;
 
-            if (hands != null && !hands.TryStartAction(HandsAction.Reloading, asset.ReloadTime, true,
-                    () => Reloaded(firearm, asset, absent))) return false;
+            if (hands != null && !hands.TryStartAction(HandsAction.Reloading, asset.ReloadTime, true, () => FinishReload(firearm, asset, missingRounds))) return false;
 
             restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantActionDuration);
             speaker?.PlayForEveryone(asset.ReloadSound);
@@ -119,38 +118,36 @@ namespace Shooter.Game
             return true;
         }
 
-        private bool Ready(out Firearm firearm, out FirearmAsset asset, ActionType action)
+        private bool TryGetHeldFirearmForAction(out Firearm firearm, out FirearmAsset asset, ActionType action)
         {
             firearm = null;
             asset = null;
 
             if (!IsServer || !restrainable.CanPerform(action, MainRestrainable.InstantActionDuration)) return false;
 
-            firearm = holder.Held as Firearm;
+            firearm = inventoryHolder.HeldItem as Firearm;
             if (firearm == null) return false;
 
-            asset = Catalogs.GetCatalog<ItemCatalog>().Firearm(firearm.AssetId);
+            asset = Catalogs.GetCatalog<ItemCatalog>().GetFirearmAssetById(firearm.AssetId);
             return asset != null;
         }
 
-        private void Reloaded(Firearm firearm, FirearmAsset asset, int absent)
+        private void FinishReload(Firearm firearm, FirearmAsset asset, int missingRounds)
         {
-            if (!inventory.Contains(firearm)) return;
+            if (!inventory.ContainsUnique(firearm)) return;
 
-            int taken = inventory.Remove(asset.Ammo, absent, InventoryOnConflict.Partly);
-            firearm.Reload(taken, asset.MagazineSize);
-            Log.Info(
-                $"Entity {name} reloaded {firearm.AssetId} with {taken} rounds, {inventory.Count(asset.Ammo)} left in bag");
+            int takenRounds = inventory.RemoveStackable(asset.Ammo, missingRounds, InventoryShortagePolicy.Partly);
+            firearm.LoadRounds(takenRounds, asset.MagazineSize);
+            Log.Info($"Entity {name} reloaded {firearm.AssetId} with {takenRounds} rounds, {inventory.CountStackable(asset.Ammo)} left in bag");
         }
 
-        private void Hit(FirearmAsset asset)
+        private void TraceShotAndApplyHit(FirearmAsset asset)
         {
-            Vector2 offset = asset.Spray.At(sprayShot);
-            Vector3 direction = Quaternion.LookRotation(interactor.Sight) * Quaternion.Euler(-offset.y, offset.x, 0f) *
-                                Vector3.forward;
+            Vector2 sprayOffset = asset.Spray.GetOffsetForShot(shotIndexInSpray);
+            Vector3 shotDirection = Quaternion.LookRotation(interactor.LookDirection) * Quaternion.Euler(-sprayOffset.y, sprayOffset.x, 0f) * Vector3.forward;
 
-            int found = Interactor.Look(interactor.Eyes, direction, asset.Distance, transform, Shots);
-            if (!Interactor.TryNearest(Shots, found, out RaycastHit hit))
+            int hitCount = Interactor.CollectLookHits(interactor.EyePosition, shotDirection, asset.Distance, transform, ShotHits);
+            if (!Interactor.TryFindNearestHit(ShotHits, hitCount, out RaycastHit hit))
             {
                 Log.Info($"Shot of entity {name} missed");
                 return;
@@ -159,38 +156,38 @@ namespace Shooter.Game
             Health health = hit.collider.GetComponentInParent<Health>();
             if (health == null)
             {
-                bulletHoles.Add(hit.point, hit.normal);
+                bulletHoles.AddHole(hit.point, hit.normal);
                 Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
                 return;
             }
 
-            BodyPart part = Weakest(found, health);
-            if (part == BodyPart.Head) earSpeaker.PlayForOwner(asset.HeadshotSound);
-            int damage = Mathf.RoundToInt(asset.Damage * part.GetDamageMultiplier());
+            BodyPart hitPart = FindWeakestHitBodyPart(hitCount, health);
+            if (hitPart == BodyPart.Head) earSpeaker.PlayForOwner(asset.HeadshotSound);
+            int damage = Mathf.RoundToInt(asset.Damage * hitPart.GetDamageMultiplier());
 
             health.TakeDamage(damage, character, asset.DamageType);
-            Log.Info($"Shot of entity {name} hit {health.name} in {part} for {damage} damage");
+            Log.Info($"Shot of entity {name} hit {health.name} in {hitPart} for {damage} damage");
         }
 
-        private BodyPart Weakest(int found, Health victim)
+        private BodyPart FindWeakestHitBodyPart(int hitCount, Health victim)
         {
-            BodyPart weakest = BodyPart.Torso;
-            float highest = 0f;
+            BodyPart weakestPart = BodyPart.Torso;
+            float highestMultiplier = 0f;
 
-            for (int i = 0; i < found; i++)
+            for (int i = 0; i < hitCount; i++)
             {
-                Collider collider = Shots[i].collider;
-                if (collider.GetComponentInParent<Health>() != victim) continue;
+                Collider hitCollider = ShotHits[i].collider;
+                if (hitCollider.GetComponentInParent<Health>() != victim) continue;
 
-                Hitbox hitbox = collider.GetComponent<Hitbox>();
+                Hitbox hitbox = hitCollider.GetComponent<Hitbox>();
                 BodyPart part = hitbox == null ? BodyPart.Torso : hitbox.Part;
-                if (part.GetDamageMultiplier() <= highest) continue;
+                if (part.GetDamageMultiplier() <= highestMultiplier) continue;
 
-                weakest = part;
-                highest = part.GetDamageMultiplier();
+                weakestPart = part;
+                highestMultiplier = part.GetDamageMultiplier();
             }
 
-            return weakest;
+            return weakestPart;
         }
     }
 }

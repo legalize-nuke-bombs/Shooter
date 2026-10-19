@@ -30,16 +30,16 @@ List the crafts you know: the id of each craft, its ingredients and its result.
 
         protected override string Execute(ListCraftsArguments arguments, LlmCallContext context)
         {
-            List<Craft> crafts = crafter.AvailableCrafts;
+            List<CraftAsset> crafts = crafter.AvailableCrafts;
             if (crafts.Count == 0)
             {
                 return "You don't know any crafts";
             }
 
             var sb = new StringBuilder();
-            foreach (Craft craft in crafts)
+            foreach (CraftAsset craft in crafts)
             {
-                sb.AppendLine(craft.PromptDescription());
+                sb.AppendLine(craft.DescribeForPrompt());
             }
             return sb.ToString();
         }

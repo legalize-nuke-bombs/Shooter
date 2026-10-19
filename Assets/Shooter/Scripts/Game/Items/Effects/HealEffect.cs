@@ -7,7 +7,7 @@ namespace Shooter.Game
     {
         [SerializeField] private float amount = 33f;
 
-        public override void Apply(GameObject user)
+        public override void ApplyToUser(GameObject user)
         {
             Health health = user.GetComponent<Health>();
 
@@ -16,6 +16,6 @@ namespace Shooter.Game
             health.RestoreHp(amount);
         }
 
-        public override int HealMarker => (int)amount;
+        public override int HealAmount => (int)amount;
     }
 }

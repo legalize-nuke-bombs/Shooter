@@ -12,11 +12,11 @@ namespace Shooter.Game
 
         public int Length => points.Length;
 
-        public Vector2 At(int shot)
+        public Vector2 GetOffsetForShot(int shotIndex)
         {
             if (points.Length == 0) return Vector2.zero;
 
-            return points[Mathf.Clamp(shot, 0, points.Length - 1)];
+            return points[Mathf.Clamp(shotIndex, 0, points.Length - 1)];
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Shooter.Game
     {
         [SerializeField] private float amount = 10f;
 
-        public override void Apply(GameObject user)
+        public override void ApplyToUser(GameObject user)
         {
             Hunger hunger = user.GetComponent<Hunger>();
 
@@ -16,6 +16,6 @@ namespace Shooter.Game
             hunger.RestoreAmount(amount);
         }
 
-        public override int FoodMarker => (int)amount;
+        public override int FoodAmount => (int)amount;
     }
 }

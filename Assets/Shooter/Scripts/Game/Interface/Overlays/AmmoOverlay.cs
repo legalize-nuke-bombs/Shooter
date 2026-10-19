@@ -26,9 +26,9 @@ namespace Shooter.Game
             if (bag == null) bag = OwnPlayer.Find<Inventory>();
             if (holder == null) holder = OwnPlayer.Find<InventoryHolder>();
 
-            Firearm firearm = holder == null ? null : holder.Held as Firearm;
+            Firearm firearm = holder == null ? null : holder.HeldItem as Firearm;
             ItemCatalog items = Catalogs.GetCatalog<ItemCatalog>();
-            FirearmAsset asset = items == null || firearm == null ? null : items.Firearm(firearm.AssetId);
+            FirearmAsset asset = items == null || firearm == null ? null : items.GetFirearmAssetById(firearm.AssetId);
 
             if (firearm == null || asset == null)
             {
@@ -36,8 +36,8 @@ namespace Shooter.Game
                 return;
             }
 
-            int held = firearm.Magazine;
-            int left = asset.Ammo == null ? 0 : bag.Count(asset.Ammo);
+            int held = firearm.RoundsInMagazine;
+            int left = asset.Ammo == null ? 0 : bag.CountStackable(asset.Ammo);
 
             if (held == shownMagazine && left == shownReserve) return;
 

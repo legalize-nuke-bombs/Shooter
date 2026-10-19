@@ -25,20 +25,20 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            Hold(content.ToObject<SaveData>().Slot);
+            HoldSlot(content.ToObject<SaveData>().Slot);
         }
 
-        public int Slot => heldSlot.Value;
+        public int HeldSlot => heldSlot.Value;
 
-        public UniqueItem Held => inventory.At(heldSlot.Value);
+        public UniqueItem HeldItem => inventory.GetUniqueAt(heldSlot.Value);
 
         public UniqueItemAsset HeldAsset
         {
             get
             {
-                UniqueItem item = Held;
+                UniqueItem item = HeldItem;
 
-                return item == null ? null : (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().Asset(item.AssetId);
+                return item == null ? null : (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId);
             }
         }
 
@@ -46,9 +46,9 @@ namespace Shooter.Game
 
         public string Digest(DigestionDetail detail)
         {
-            UniqueItemAsset held = HeldAsset;
+            UniqueItemAsset heldAsset = HeldAsset;
 
-            return held == null ? null : $"Holding: {held.Id} (slot {heldSlot.Value})";
+            return heldAsset == null ? null : $"Holding: {heldAsset.Id} (slot {heldSlot.Value})";
         }
 
         public event Action Changed;
@@ -60,31 +60,31 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            heldSlot.OnValueChanged += Moved;
-            inventory.Changed += Relay;
+            heldSlot.OnValueChanged += HandleHeldSlotChanged;
+            inventory.Changed += RelayInventoryChanged;
 
             if (!IsServer) return;
 
-            inventory.Changed += Release;
+            inventory.Changed += StopHoldingIfSlotEmptied;
         }
 
         public override void OnNetworkDespawn()
         {
-            heldSlot.OnValueChanged -= Moved;
-            inventory.Changed -= Relay;
+            heldSlot.OnValueChanged -= HandleHeldSlotChanged;
+            inventory.Changed -= RelayInventoryChanged;
 
             if (!IsServer) return;
 
-            inventory.Changed -= Release;
+            inventory.Changed -= StopHoldingIfSlotEmptied;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void HoldRpc(int slot)
+        public void HoldSlotRpc(int slot)
         {
-            Hold(slot);
+            HoldSlot(slot);
         }
 
-        public void Hold(int slot)
+        public void HoldSlot(int slot)
         {
             if (slot == Inventory.NoSlot)
             {
@@ -92,15 +92,15 @@ namespace Shooter.Game
                 return;
             }
 
-            UniqueItem item = inventory.At(slot);
+            UniqueItem item = inventory.GetUniqueAt(slot);
             if (item == null)
             {
                 Log.Info($"Entity {name} can not hold slot {slot}: the slot is empty");
                 return;
             }
 
-            var asset = (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().Asset(item.AssetId);
-            if (!asset.Equipable)
+            UniqueItemAsset asset = (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId);
+            if (!asset.IsEquipable)
             {
                 Log.Info($"Entity {name} can not put {item.AssetId} in hands");
                 return;
@@ -110,20 +110,20 @@ namespace Shooter.Game
             Log.Info($"Entity {name} holds {item.AssetId} from slot {slot}");
         }
 
-        private void Release()
+        private void StopHoldingIfSlotEmptied()
         {
-            if (heldSlot.Value == Inventory.NoSlot || Held != null) return;
+            if (heldSlot.Value == Inventory.NoSlot || HeldItem != null) return;
 
             Log.Info($"Entity {name} holds nothing now: slot {heldSlot.Value} is empty");
             heldSlot.Value = Inventory.NoSlot;
         }
 
-        private void Relay()
+        private void RelayInventoryChanged()
         {
             Changed?.Invoke();
         }
 
-        private void Moved(int previous, int current)
+        private void HandleHeldSlotChanged(int previousSlot, int currentSlot)
         {
             Changed?.Invoke();
         }

@@ -171,7 +171,7 @@ namespace Shooter.Game
                 foreach (Renderer piece in body.GetComponentsInChildren<Renderer>(true))
                     yield return piece;
 
-            GameObject held = view == null ? null : view.Shown;
+            GameObject held = view == null ? null : view.ShownWeapon;
             if (held == null) yield break;
 
             foreach (Renderer piece in held.GetComponentsInChildren<Renderer>(true))

@@ -6,8 +6,8 @@ namespace Shooter.Game
     {
         [SerializeField] private bool equipable;
 
-        public bool Equipable => equipable;
+        public bool IsEquipable => equipable;
 
-        public abstract UniqueItem Create();
+        public abstract UniqueItem CreateItem();
     }
 }

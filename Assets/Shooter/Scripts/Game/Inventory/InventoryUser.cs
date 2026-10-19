@@ -20,15 +20,15 @@ namespace Shooter.Game
             speaker = GetComponent<Speaker>();
         }
 
-        public bool Use(StackableItemAsset asset)
+        public bool TryUseItem(StackableItemAsset asset)
         {
-            if (!asset.Usable) return false;
+            if (!asset.IsUsable) return false;
 
-            if (inventory.Remove(asset, 1, InventoryOnConflict.Rollback) == 0) return false;
+            if (inventory.RemoveStackable(asset, 1, InventoryShortagePolicy.Rollback) == 0) return false;
 
             foreach (ItemEffect effect in asset.Effects)
             {
-                effect.Apply(gameObject);
+                effect.ApplyToUser(gameObject);
             }
 
             speaker.PlayForEveryone(asset.UseSound);
@@ -38,9 +38,9 @@ namespace Shooter.Game
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void UseRpc(FixedString32Bytes stackableId)
+        public void UseItemRpc(FixedString32Bytes stackableId)
         {
-            if (Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) is StackableItemAsset asset && Use(asset)) return;
+            if (Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) is StackableItemAsset asset && TryUseItem(asset)) return;
 
             Log.Info($"Entity {name} failed to use {stackableId} rpc");
         }

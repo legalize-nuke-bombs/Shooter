@@ -18,12 +18,12 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            exchanger.Received += Received;
+            exchanger.ReceivedFromCharacter += Received;
         }
 
         private void OnDisable()
         {
-            exchanger.Received -= Received;
+            exchanger.ReceivedFromCharacter -= Received;
         }
 
         private void Received(Character from, ItemAsset item, int amount)

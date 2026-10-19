@@ -38,13 +38,13 @@ namespace Shooter.Game
             int candidates = 0;
 
             foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(item =>
-                         item is StackableItemAsset stackableItem && stackableItem.HealMarker > 0))
+                         item is StackableItemAsset stackableItem && stackableItem.HealAmount > 0))
             {
                 StackableItemAsset stackableItem = (StackableItemAsset)item;
-                if (inventory.Count(stackableItem) <= 0) continue;
+                if (inventory.CountStackable(stackableItem) <= 0) continue;
 
                 candidates++;
-                double healAmount = stackableItem.HealMarker;
+                double healAmount = stackableItem.HealAmount;
                 double score = healAmount <= missing
                     ? (missing - healAmount) * UnderHealPenalty.Value
                     : (healAmount - missing) * OverHealBasePenalty.Value * safetyCoefficient;
@@ -64,7 +64,7 @@ namespace Shooter.Game
 
             Log.Info($"Entity {Agent.Value.name} used heal {best.Id} by behavior graph, missing {missing}");
             int startHp = (int)health.Hp;
-            user.Use(best);
+            user.TryUseItem(best);
             BtReports reports = Agent.Value.GetComponent<BtReports>();
             if (reports != null)
             {
