@@ -47,7 +47,7 @@ namespace Shooter.Game
             foreach (Character targetCharacter in Registers.GetAll<Character>(RegisterInactivePolicy.Exclude))
             {
                 if (targetCharacter == self) continue;
-                if (targetCharacter.TryGetComponent(out Health health) && !health.Alive) continue;
+                if (targetCharacter.TryGetComponent(out Health health) && !health.IsAlive) continue;
 
                 float apart = (targetCharacter.transform.position - here).sqrMagnitude;
 

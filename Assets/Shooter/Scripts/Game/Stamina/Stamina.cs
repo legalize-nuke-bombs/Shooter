@@ -1,13 +1,12 @@
 using System;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Endurance : NetworkBehaviour, IDigestible, IRestraint, ISaveableComponent
+    public class Stamina : NetworkBehaviour, IDigestible, IRestraint, ISaveableComponent
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
@@ -18,26 +17,29 @@ namespace Shooter.Game
 
         private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
 
+        private Clock clock;
+        private bool exhausted;
+
         public string ComponentKey => "Endurance";
-        struct SaveData
+
+        private struct SaveData
         {
             public float Amount { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
                 Amount = amount.Value
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            amount.Value = sd.Amount;
+            SaveData saveData = content.ToObject<SaveData>();
+            amount.Value = saveData.Amount;
         }
-
-        private Clock clock;
-        private bool exhausted;
 
         public float Amount => amount.Value;
 
@@ -70,12 +72,12 @@ namespace Shooter.Game
         {
             if (type == ActionType.Sprint && exhausted) return false;
 
-            return !Blocker(type) || amount.Value >= Cost(type, dt);
+            return !IsLimitedByStamina(type) || amount.Value >= GetActionCost(type, dt);
         }
 
         public void RegisterAction(ActionType type, float dt)
         {
-            amount.Value = Math.Max(0, amount.Value - Cost(type, dt));
+            amount.Value = Math.Max(0, amount.Value - GetActionCost(type, dt));
 
             if (amount.Value <= 0f) exhausted = true;
         }
@@ -98,7 +100,7 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private float Cost(ActionType type, float dt)
+        private float GetActionCost(ActionType type, float dt)
         {
             switch (type)
             {
@@ -113,7 +115,7 @@ namespace Shooter.Game
             }
         }
 
-        private bool Blocker(ActionType type)
+        private bool IsLimitedByStamina(ActionType type)
         {
             switch (type)
             {

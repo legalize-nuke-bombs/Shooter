@@ -25,31 +25,29 @@ namespace Shooter.Game
 
         private void Update()
         {
-            Spend(idleCost * Time.deltaTime * clock.Scale);
+            SpendAmount(idleCost * Time.deltaTime * clock.Scale);
         }
 
         public DigestionPriority Priority => DigestionPriority.Medium;
 
         public string Digest(DigestionDetail detail)
         {
-            return detail == DigestionDetail.Full
-                ? $"Hunger: {Mathf.RoundToInt(Amount)} / {Mathf.RoundToInt(MaxAmount)}"
-                : null;
+            return detail == DigestionDetail.Full ? $"Hunger: {Mathf.RoundToInt(Amount)} / {Mathf.RoundToInt(MaxAmount)}" : null;
         }
 
         public bool CanPerform(ActionType type, float dt)
         {
-            return !Blocker(type) || CanSpend(Cost(type, dt));
+            return !IsLimitedByHunger(type) || CanSpendAmount(GetActionCost(type, dt));
         }
 
         public void RegisterAction(ActionType type, float dt)
         {
-            Spend(Cost(type, dt));
+            SpendAmount(GetActionCost(type, dt));
         }
 
-        public abstract bool CanSpend(float a);
-        public abstract void Spend(float a);
-        public abstract void Restore(float a);
+        public abstract bool CanSpendAmount(float cost);
+        public abstract void SpendAmount(float cost);
+        public abstract void RestoreAmount(float restoredAmount);
 
         public override void OnNetworkSpawn()
         {
@@ -61,7 +59,7 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private float Cost(ActionType type, float dt)
+        private float GetActionCost(ActionType type, float dt)
         {
             switch (type)
             {
@@ -76,7 +74,7 @@ namespace Shooter.Game
             }
         }
 
-        private bool Blocker(ActionType type)
+        private bool IsLimitedByHunger(ActionType type)
         {
             switch (type)
             {

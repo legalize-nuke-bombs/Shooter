@@ -11,6 +11,6 @@ namespace Shooter.Game
 
         public GameObject Model => model;
 
-        public RuntimeAnimatorController Pose => pose;
+        public RuntimeAnimatorController AnimatorController => pose;
     }
 }

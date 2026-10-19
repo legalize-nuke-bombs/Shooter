@@ -59,7 +59,7 @@ namespace Shooter.Game
             if (IsServer && IsSpawned) interlocutor.Value = 0;
         }
 
-        public void Died()
+        public void HandleDeath()
         {
             Close();
         }
@@ -135,7 +135,7 @@ namespace Shooter.Game
 
         private bool Fit(Talker talker)
         {
-            return TalkRule.CanTalk(health.Alive, !sleeper.Sleeping, talker.Alive, !talker.Sleeping);
+            return TalkRule.CanTalk(health.IsAlive, !sleeper.IsSleeping, talker.Alive, !talker.Sleeping);
         }
 
         private bool Reachable(Talker talker)

@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,28 +12,31 @@ namespace Shooter.Game
         private readonly NetworkVariable<double> hp = new();
 
         public string ComponentKey => "Health";
-        struct SaveData
+
+        private struct SaveData
         {
             public double Hp { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
                 Hp = hp.Value
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            hp.Value = sd.Hp;
+            SaveData saveData = content.ToObject<SaveData>();
+            hp.Value = saveData.Hp;
         }
 
         public override double Hp => hp.Value;
 
         public override double MaxHp => Math.Max(maxHp, 1.0d);
 
-        public override bool Alive => hp.Value > 0;
+        public override bool IsAlive => hp.Value > 0;
 
         public override void OnNetworkSpawn()
         {
@@ -43,21 +45,21 @@ namespace Shooter.Game
             hp.Value = MaxHp;
         }
 
-        protected override void DamageRaw(double amount)
+        protected override void ReduceHp(double amount)
         {
             hp.Value = Math.Max(hp.Value - amount, 0);
         }
 
-        public override void Heal(double amount)
+        public override void RestoreHp(double amount)
         {
-            if (!IsServer || !Alive || amount <= 0) return;
+            if (!IsServer || !IsAlive || amount <= 0) return;
 
             hp.Value = Math.Min(hp.Value + amount, MaxHp);
         }
 
-        public override void Resurrect()
+        public override void ResurrectWithFullHp()
         {
-            if (!IsServer || Alive) return;
+            if (!IsServer || IsAlive) return;
 
             hp.Value = MaxHp;
         }

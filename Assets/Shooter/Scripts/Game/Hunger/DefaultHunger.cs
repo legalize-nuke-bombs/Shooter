@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,21 +11,24 @@ namespace Shooter.Game
         private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
 
         public string ComponentKey => "Hunger";
-        struct SaveData
+
+        private struct SaveData
         {
             public float Amount { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
                 Amount = amount.Value
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            amount.Value = sd.Amount;
+            SaveData saveData = content.ToObject<SaveData>();
+            amount.Value = saveData.Amount;
         }
 
         public override float Amount => amount.Value;
@@ -43,19 +45,19 @@ namespace Shooter.Game
             amount.Value = MaxAmount;
         }
 
-        public override bool CanSpend(float a)
+        public override bool CanSpendAmount(float cost)
         {
-            return amount.Value >= a;
+            return amount.Value >= cost;
         }
 
-        public override void Spend(float a)
+        public override void SpendAmount(float cost)
         {
-            amount.Value = Mathf.Max(amount.Value - Mathf.Max(a, 0f), 0f);
+            amount.Value = Mathf.Max(amount.Value - Mathf.Max(cost, 0f), 0f);
         }
 
-        public override void Restore(float a)
+        public override void RestoreAmount(float restoredAmount)
         {
-            amount.Value = Mathf.Min(amount.Value + Mathf.Max(a, 0f), MaxAmount);
+            amount.Value = Mathf.Min(amount.Value + Mathf.Max(restoredAmount, 0f), MaxAmount);
         }
     }
 }

@@ -7,16 +7,16 @@ namespace Shooter.Game
     [RequireComponent(typeof(Animator))]
     public class Ragdoll : MonoBehaviour
     {
-        private const float Damping = 0.5f;
+        private const float LinearDamping = 0.5f;
         private const float AngularDamping = 1f;
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private void Start()
         {
-            int layer = LayerMask.NameToLayer(Hitboxes.Layer);
+            int layer = LayerMask.NameToLayer(Hitboxes.LayerName);
             if (layer < 0)
             {
-                Log.Error($"Layer {Hitboxes.Layer} is not defined, entity {name} gets no ragdoll");
+                Log.Error($"Layer {Hitboxes.LayerName} is not defined, entity {name} gets no ragdoll");
                 return;
             }
 
@@ -31,89 +31,91 @@ namespace Shooter.Game
                 return;
             }
 
-            float scale = Skeleton.Scale(hips, head);
-            var bodies = new Dictionary<HumanBodyBones, Rigidbody>();
-            int built = 0;
+            float humanoidScale = Skeleton.MeasureHumanoidScale(hips, head);
+            var rigidbodiesByBone = new Dictionary<HumanBodyBones, Rigidbody>();
+            int builtCount = 0;
 
             foreach (Skeleton.Segment segment in Skeleton.Segments)
             {
                 Transform bone = animator.GetBoneTransform(segment.From);
-                Transform ending = Skeleton.Ending(animator, segment);
-                if (bone == null || ending == null)
+                Transform segmentEnd = Skeleton.FindSegmentEnd(animator, segment);
+                if (bone == null || segmentEnd == null)
                 {
-                    Log.Warn(
-                        $"Entity {name} misses bones {segment.From} - {segment.To}, ragdoll part skipped");
+                    Log.Warn($"Entity {name} misses bones {segment.From} - {segment.To}, ragdoll part skipped");
                     continue;
                 }
 
-                Rigidbody body = Limb(bone, ending.position, segment, segment.Radius * scale, layer);
-                bodies[segment.From] = body;
+                Rigidbody limbRigidbody = AddLimbCapsule(bone, segmentEnd.position, segment, segment.Radius * humanoidScale, layer);
+                rigidbodiesByBone[segment.From] = limbRigidbody;
 
-                if (!segment.Root && bodies.TryGetValue(segment.Parent, out Rigidbody parent))
-                    Connect(bone, parent);
+                if (!segment.IsRoot && rigidbodiesByBone.TryGetValue(segment.Parent, out Rigidbody parentRigidbody))
+                {
+                    ConnectWithJoint(bone, parentRigidbody);
+                }
 
-                built++;
+                builtCount++;
             }
 
-            Skull(head, hips, Skeleton.HeadRadius * scale, layer, bodies);
-            Log.Info($"Entity {name} turned into a ragdoll of {built + 1} parts");
+            AddHeadSphere(head, hips, Skeleton.HeadRadius * humanoidScale, layer, rigidbodiesByBone);
+            Log.Info($"Entity {name} turned into a ragdoll of {builtCount + 1} parts");
         }
 
-        private Rigidbody Limb(Transform bone, Vector3 target, Skeleton.Segment segment, float radius, int layer)
+        private Rigidbody AddLimbCapsule(Transform bone, Vector3 target, Skeleton.Segment segment, float radius, int layer)
         {
-            Vector3 local = bone.InverseTransformPoint(target);
-            float thickness = radius / Skeleton.BoneScale(bone);
+            Vector3 localTarget = bone.InverseTransformPoint(target);
+            float thickness = radius / Skeleton.MeasureBoneScale(bone);
 
-            CapsuleCollider pill = bone.gameObject.AddComponent<CapsuleCollider>();
-            pill.direction = Longest(local);
-            pill.radius = thickness;
-            pill.height = local.magnitude + thickness * 1.5f;
-            pill.center = local * 0.5f;
+            CapsuleCollider capsule = bone.gameObject.AddComponent<CapsuleCollider>();
+            capsule.direction = GetLongestAxis(localTarget);
+            capsule.radius = thickness;
+            capsule.height = localTarget.magnitude + thickness * 1.5f;
+            capsule.center = localTarget * 0.5f;
 
-            return Fill(bone.gameObject, segment.Part, segment.Mass, layer, pill);
+            return MakeRagdollPart(bone.gameObject, segment.Part, segment.Mass, layer, capsule);
         }
 
-        private void Skull(Transform head, Transform hips, float radius, int layer,
-            Dictionary<HumanBodyBones, Rigidbody> bodies)
+        private void AddHeadSphere(Transform head, Transform hips, float radius, int layer, Dictionary<HumanBodyBones, Rigidbody> rigidbodiesByBone)
         {
             Vector3 up = (head.position - hips.position).normalized;
 
-            SphereCollider ball = head.gameObject.AddComponent<SphereCollider>();
-            ball.radius = radius / Skeleton.BoneScale(head);
-            ball.center = head.InverseTransformPoint(head.position + up * (radius * 0.5f));
+            SphereCollider sphere = head.gameObject.AddComponent<SphereCollider>();
+            sphere.radius = radius / Skeleton.MeasureBoneScale(head);
+            sphere.center = head.InverseTransformPoint(head.position + up * (radius * 0.5f));
 
-            Fill(head.gameObject, BodyPart.Head, Skeleton.HeadMass, layer, ball);
+            MakeRagdollPart(head.gameObject, BodyPart.Head, Skeleton.HeadMass, layer, sphere);
 
-            if (bodies.TryGetValue(HumanBodyBones.Hips, out Rigidbody torso))
-                Connect(head, torso);
+            if (rigidbodiesByBone.TryGetValue(HumanBodyBones.Hips, out Rigidbody torsoRigidbody))
+            {
+                ConnectWithJoint(head, torsoRigidbody);
+            }
         }
 
-        private Rigidbody Fill(GameObject bone, BodyPart part, float mass, int layer, Collider shape)
+        private Rigidbody MakeRagdollPart(GameObject boneObject, BodyPart part, float mass, int layer, Collider shape)
         {
-            bone.layer = layer;
-            shape.excludeLayers = ~LayerMask.GetMask("Default", Hitboxes.Layer);
+            boneObject.layer = layer;
+            shape.excludeLayers = ~LayerMask.GetMask("Default", Hitboxes.LayerName);
 
-            bone.AddComponent<Hitbox>().Part = part;
+            boneObject.AddComponent<Hitbox>().Part = part;
 
-            Rigidbody body = bone.AddComponent<Rigidbody>();
-            body.mass = mass;
-            body.linearDamping = Damping;
-            body.angularDamping = AngularDamping;
-            return body;
+            Rigidbody partRigidbody = boneObject.AddComponent<Rigidbody>();
+            partRigidbody.mass = mass;
+            partRigidbody.linearDamping = LinearDamping;
+            partRigidbody.angularDamping = AngularDamping;
+            return partRigidbody;
         }
 
-        private static void Connect(Transform bone, Rigidbody parent)
+        private static void ConnectWithJoint(Transform bone, Rigidbody parentRigidbody)
         {
             CharacterJoint joint = bone.gameObject.AddComponent<CharacterJoint>();
-            joint.connectedBody = parent;
+            joint.connectedBody = parentRigidbody;
             joint.enableProjection = true;
         }
 
-        private static int Longest(Vector3 local)
+        private static int GetLongestAxis(Vector3 vector)
         {
-            float x = Mathf.Abs(local.x);
-            float y = Mathf.Abs(local.y);
-            float z = Mathf.Abs(local.z);
+            float x = Mathf.Abs(vector.x);
+            float y = Mathf.Abs(vector.y);
+            float z = Mathf.Abs(vector.z);
 
             if (x >= y && x >= z) return 0;
             return y >= z ? 1 : 2;

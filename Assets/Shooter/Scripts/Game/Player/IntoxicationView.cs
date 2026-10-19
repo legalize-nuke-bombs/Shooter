@@ -26,7 +26,7 @@ namespace Shooter.Game
             for (int index = 0; index < toxins.Count; index++)
             {
                 ToxinAsset toxin = toxins.GetAssetAt(index);
-                float strength = (float)(intoxication.Level(toxin) / 100d);
+                float strength = (float)(intoxication.GetLevel(toxin) / 100d);
 
                 if (strength <= 0f)
                 {
@@ -40,7 +40,7 @@ namespace Shooter.Game
                     trips.Add(toxin, trip);
                 }
 
-                foreach (PerceptionEffect effect in trip) effect.Tick(strength);
+                foreach (PerceptionEffect effect in trip) effect.UpdateStrength(strength);
             }
         }
 
@@ -48,7 +48,7 @@ namespace Shooter.Game
         {
             foreach (List<PerceptionEffect> trip in trips.Values)
             foreach (PerceptionEffect effect in trip)
-                effect.End();
+                effect.EndEffect();
 
             trips.Clear();
         }
@@ -61,7 +61,7 @@ namespace Shooter.Game
             {
                 if (asset == null) continue;
 
-                trip.Add(asset.Create());
+                trip.Add(asset.CreateEffect());
             }
 
             return trip;
@@ -69,7 +69,7 @@ namespace Shooter.Game
 
         private void End(ToxinAsset toxin)
         {
-            foreach (PerceptionEffect effect in trips[toxin]) effect.End();
+            foreach (PerceptionEffect effect in trips[toxin]) effect.EndEffect();
 
             trips.Remove(toxin);
         }

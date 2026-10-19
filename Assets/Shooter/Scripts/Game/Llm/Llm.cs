@@ -58,7 +58,7 @@ namespace Shooter.Game
             life.Cancel();
         }
 
-        public void Died()
+        public void HandleDeath()
         {
             life.Cancel();
         }

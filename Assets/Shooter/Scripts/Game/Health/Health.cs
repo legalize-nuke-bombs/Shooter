@@ -17,7 +17,7 @@ namespace Shooter.Game
 
         public abstract double MaxHp { get; }
 
-        public abstract bool Alive { get; }
+        public abstract bool IsAlive { get; }
 
         protected virtual void Awake()
         {
@@ -26,14 +26,14 @@ namespace Shooter.Game
 
         public string Digest(DigestionDetail detail)
         {
-            return Alive ? $"Health: {Math.Round(Hp)}/{Math.Round(MaxHp)}" : "Dead";
+            return IsAlive ? $"Health: {Math.Round(Hp)}/{Math.Round(MaxHp)}" : "Dead";
         }
 
         public DigestionPriority Priority => DigestionPriority.High;
 
         public bool CanPerform(ActionType type, float dt)
         {
-            return Alive;
+            return IsAlive;
         }
 
         public void RegisterAction(ActionType type, float dt)
@@ -42,43 +42,53 @@ namespace Shooter.Game
 
         public event Action<double, Character, DamageAsset> Damaged;
 
-        public DamageResult Damage(double amount, Character attacker, DamageAsset type)
+        public DamageResult TakeDamage(double amount, Character attacker, DamageAsset damageType)
         {
-            if (!IsServer || !Alive || amount <= 0)
+            if (!IsServer || !IsAlive || amount <= 0)
+            {
                 return new DamageResult
                 {
-                    Murder = false
+                    IsLethal = false
                 };
+            }
 
-            Log.Info($"Entity {name} got damage {amount} {type}");
+            Log.Info($"Entity {name} got damage {amount} {damageType}");
 
-            DamageRaw(amount);
+            ReduceHp(amount);
 
-            if (!Alive) Die();
-            else earSpeaker.PlayForOwner(hurtSound);
-
-            var result = new DamageResult
+            if (!IsAlive)
             {
-                Murder = !Alive
+                AnnounceDeath();
+            }
+            else
+            {
+                earSpeaker.PlayForOwner(hurtSound);
+            }
+
+            DamageResult result = new()
+            {
+                IsLethal = !IsAlive
             };
 
-            if (Alive) Damaged?.Invoke(amount, attacker, type);
+            if (IsAlive) Damaged?.Invoke(amount, attacker, damageType);
 
             return result;
         }
 
-        protected abstract void DamageRaw(double amount);
+        protected abstract void ReduceHp(double amount);
 
-        public abstract void Heal(double amount);
+        public abstract void RestoreHp(double amount);
 
-        public abstract void Resurrect();
+        public abstract void ResurrectWithFullHp();
 
-        private void Die()
+        private void AnnounceDeath()
         {
             Log.Info($"Entity {name} died");
 
             foreach (IMortal mortal in GetComponents<IMortal>())
-                mortal.Died();
+            {
+                mortal.HandleDeath();
+            }
         }
     }
 }

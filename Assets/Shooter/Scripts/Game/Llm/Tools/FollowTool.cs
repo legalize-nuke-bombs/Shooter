@@ -49,7 +49,7 @@ The result comes at once, the following itself goes on: you will be notified whe
             var order = new BtCoFollow { TargetId = arguments.TargetId, Reach = arguments.Distance, Sprint = arguments.Sprint };
             Vector3 there = target.transform.position;
 
-            if (!movement.TryPlan(there, out Vector3 end))
+            if (!movement.TryPlanPathEnd(there, out Vector3 end))
             {
                 return $"There is no way from here to {order.Handle}";
             }

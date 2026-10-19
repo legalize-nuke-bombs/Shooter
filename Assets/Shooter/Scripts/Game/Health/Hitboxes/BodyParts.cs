@@ -2,7 +2,7 @@ namespace Shooter.Game
 {
     public static class BodyParts
     {
-        public static float Multiplier(this BodyPart part)
+        public static float GetDamageMultiplier(this BodyPart part)
         {
             return part switch
             {
@@ -12,7 +12,7 @@ namespace Shooter.Game
             };
         }
 
-        public static float Generosity(this BodyPart part)
+        public static float GetHitboxGenerosity(this BodyPart part)
         {
             return part switch
             {

@@ -492,8 +492,8 @@ namespace Shooter.Game
 
         private void Use(InputAction.CallbackContext context)
         {
-            if (health != null && !health.Alive) mortal?.RiseRpc();
-            else if (sleeper != null && sleeper.Sleeping) sleeper.WakeRpc();
+            if (health != null && !health.IsAlive) mortal?.RiseRpc();
+            else if (sleeper != null && sleeper.IsSleeping) sleeper.WakeRpc();
             else interactor.UseRpc();
         }
 

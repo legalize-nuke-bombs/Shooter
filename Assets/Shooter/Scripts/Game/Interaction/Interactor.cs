@@ -24,7 +24,7 @@ namespace Shooter.Game
 
         public Vector3 Eyes => transform.position + Vector3.up * EyeHeight;
 
-        public Vector3 Sight => movement.Look;
+        public Vector3 Sight => movement.LookDirection;
 
         public float Reach => reach;
 
@@ -53,12 +53,12 @@ namespace Shooter.Game
 
         public bool TryLook(float distance, out RaycastHit hit)
         {
-            return TryLook(Eyes, movement.Look, distance, transform, out hit);
+            return TryLook(Eyes, movement.LookDirection, distance, transform, out hit);
         }
 
         public int Look(float distance, RaycastHit[] into)
         {
-            return Look(Eyes, movement.Look, distance, transform, into);
+            return Look(Eyes, movement.LookDirection, distance, transform, into);
         }
 
         public static bool TryLook(Vector3 origin, Vector3 direction, float distance, Transform looker,

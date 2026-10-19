@@ -35,7 +35,7 @@ namespace Shooter.Game
 
         private void LateUpdate()
         {
-            if (dirty || flesh != skin.Flesh) Rebuild();
+            if (dirty || flesh != skin.ModelInstance) Rebuild();
         }
 
         public override void OnNetworkSpawn()
@@ -91,7 +91,7 @@ namespace Shooter.Game
         private void Rebuild()
         {
             dirty = false;
-            flesh = skin.Flesh;
+            flesh = skin.ModelInstance;
             Clear();
 
             if (flesh == null)
@@ -160,7 +160,7 @@ namespace Shooter.Game
 
         private void Shadow(ShadowCastingMode mode)
         {
-            foreach (Renderer piece in Pieces(skin.Flesh))
+            foreach (Renderer piece in Pieces(skin.ModelInstance))
                 if (piece.gameObject.layer != reflectionLayer)
                     piece.shadowCastingMode = mode;
         }

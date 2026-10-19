@@ -9,93 +9,96 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
-        private readonly NetworkVariable<FixedString32Bytes> skin = new();
-        private readonly NetworkVariable<FixedString32Bytes> title = new();
+        private readonly NetworkVariable<FixedString32Bytes> skinId = new();
+        private readonly NetworkVariable<FixedString32Bytes> nameId = new();
 
         private bool dressed;
 
         public string ComponentKey => "Corpse";
+
         private struct SaveData
         {
             public string Skin { get; set; }
             public string Title { get; set; }
         }
+
         public object SaveObject()
         {
-            return new SaveData()
+            return new SaveData
             {
-                Skin = skin.Value.ToString(),
-                Title = title.Value.ToString()
+                Skin = skinId.Value.ToString(),
+                Title = nameId.Value.ToString()
             };
         }
+
         public void LoadObject(SaveToken content)
         {
-            SaveData sd = content.ToObject<SaveData>();
-            skin.Value = sd.Skin;
-            title.Value = sd.Title;
+            SaveData saveData = content.ToObject<SaveData>();
+            skinId.Value = saveData.Skin;
+            nameId.Value = saveData.Title;
         }
 
-        public void Dress(SkinAsset asset)
+        public void AssignSkinAsset(SkinAsset skinAsset)
         {
-            skin.Value = asset.NetworkId;
+            skinId.Value = skinAsset.NetworkId;
         }
 
-        public void Rename(NameAsset asset)
+        public void AssignNameAsset(NameAsset nameAsset)
         {
-            title.Value = asset.NetworkId;
+            nameId.Value = nameAsset.NetworkId;
         }
 
         public override void OnNetworkSpawn()
         {
-            skin.OnValueChanged += Dressed;
-            title.OnValueChanged += Titled;
+            skinId.OnValueChanged += HandleSkinIdChanged;
+            nameId.OnValueChanged += HandleNameIdChanged;
 
-            if (!skin.Value.IsEmpty) Dressed(default, skin.Value);
-            if (!title.Value.IsEmpty) Titled(default, title.Value);
+            if (!skinId.Value.IsEmpty) HandleSkinIdChanged(default, skinId.Value);
+            if (!nameId.Value.IsEmpty) HandleNameIdChanged(default, nameId.Value);
         }
 
         public override void OnNetworkDespawn()
         {
-            skin.OnValueChanged -= Dressed;
-            title.OnValueChanged -= Titled;
+            skinId.OnValueChanged -= HandleSkinIdChanged;
+            nameId.OnValueChanged -= HandleNameIdChanged;
         }
 
-        private void Dressed(FixedString32Bytes previous, FixedString32Bytes current)
+        private void HandleSkinIdChanged(FixedString32Bytes previousSkinId, FixedString32Bytes currentSkinId)
         {
-            if (dressed || current.IsEmpty) return;
+            if (dressed || currentSkinId.IsEmpty) return;
 
-            SkinCatalog catalog = Catalogs.GetCatalog<SkinCatalog>();
-            SkinAsset asset = catalog == null ? null : catalog.GetAssetById(current);
-            if (asset == null || asset.Model == null)
+            SkinCatalog skinCatalog = Catalogs.GetCatalog<SkinCatalog>();
+            SkinAsset skinAsset = skinCatalog == null ? null : skinCatalog.GetAssetById(currentSkinId);
+            if (skinAsset == null || skinAsset.Model == null)
             {
-                Log.Error($"Corpse {name} cannot find skin {current}, stays invisible");
+                Log.Error($"Corpse {name} cannot find skin {currentSkinId}, stays invisible");
                 return;
             }
 
             dressed = true;
 
-            GameObject body = Instantiate(asset.Model, transform);
-            body.transform.localPosition = new Vector3(0f, -1f, 0f);
-            body.transform.localRotation = Quaternion.identity;
-            body.AddComponent<Ragdoll>();
+            GameObject modelInstance = Instantiate(skinAsset.Model, transform);
+            modelInstance.transform.localPosition = Skin.ModelOffset;
+            modelInstance.transform.localRotation = Quaternion.identity;
+            modelInstance.AddComponent<Ragdoll>();
 
-            Log.Info($"Corpse {name} dressed as {current}");
+            Log.Info($"Corpse {name} dressed as {currentSkinId}");
         }
 
-        private void Titled(FixedString32Bytes previous, FixedString32Bytes current)
+        private void HandleNameIdChanged(FixedString32Bytes previousNameId, FixedString32Bytes currentNameId)
         {
-            TypedNameable named = GetComponent<TypedNameable>();
-            if (named == null || current.IsEmpty) return;
+            TypedNameable typedNameable = GetComponent<TypedNameable>();
+            if (typedNameable == null || currentNameId.IsEmpty) return;
 
-            NameCatalog catalog = Catalogs.GetCatalog<NameCatalog>();
-            NameAsset asset = catalog == null ? null : catalog.GetAssetById(current);
-            if (asset == null)
+            NameCatalog nameCatalog = Catalogs.GetCatalog<NameCatalog>();
+            NameAsset nameAsset = nameCatalog == null ? null : nameCatalog.GetAssetById(currentNameId);
+            if (nameAsset == null)
             {
-                Log.Warn($"Corpse {name} cannot find name {current}, keeps its own");
+                Log.Warn($"Corpse {name} cannot find name {currentNameId}, keeps its own");
                 return;
             }
 
-            named.AssignNameAsset(asset);
+            typedNameable.AssignNameAsset(nameAsset);
         }
     }
 }

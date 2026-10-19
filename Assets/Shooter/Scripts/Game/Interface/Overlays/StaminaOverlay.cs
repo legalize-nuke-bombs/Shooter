@@ -12,7 +12,7 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.CreateJournalForThisFile();
 
         private VisualElement bar;
-        private Endurance endurance;
+        private Stamina stamina;
         private VisualElement fill;
         private int shown = Hidden;
 
@@ -20,7 +20,7 @@ namespace Shooter.Game
         {
             if (!Bound) return;
 
-            Endurance own = Own();
+            Stamina own = Own();
 
             if (own == null)
             {
@@ -67,11 +67,11 @@ namespace Shooter.Game
             bar.style.display = DisplayStyle.None;
         }
 
-        private Endurance Own()
+        private Stamina Own()
         {
-            if (endurance == null) endurance = OwnPlayer.Find<Endurance>();
+            if (stamina == null) stamina = OwnPlayer.Find<Stamina>();
 
-            return endurance;
+            return stamina;
         }
     }
 }

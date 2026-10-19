@@ -31,7 +31,7 @@ namespace Shooter.Game
                 if (movement == null) return Status.Failure;
             }
 
-            movement.Walk(Destination.Value, Sprint.Value);
+            movement.WalkTo(Destination.Value, Sprint.Value);
             return movement.Status == AgentMovementStatus.Unreachable ? Status.Failure : Status.Success;
         }
     }

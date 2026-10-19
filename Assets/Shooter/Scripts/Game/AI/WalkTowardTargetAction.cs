@@ -38,7 +38,7 @@ namespace Shooter.Game
             }
 
             Vector3 there = Target.Value.position;
-            Vector3 feet = movement.Feet;
+            Vector3 feet = movement.FeetPosition;
             var gap = new Vector3(feet.x - there.x, 0f, feet.z - there.z);
 
             if (gap.magnitude <= Reach.Value)
@@ -60,7 +60,7 @@ namespace Shooter.Game
                 aimed = true;
             }
 
-            movement.Walk(aim, Sprint.Value);
+            movement.WalkTo(aim, Sprint.Value);
             return movement.Status == AgentMovementStatus.Unreachable ? Status.Failure : Status.Success;
         }
     }
