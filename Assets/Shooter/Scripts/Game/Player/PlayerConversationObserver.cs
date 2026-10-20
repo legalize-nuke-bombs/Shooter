@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(PlayerConversations))]
-    [RequireComponent(typeof(LocalPlayer))]
+    [RequireComponent(typeof(PlayerController))]
     public class PlayerConversationObserver : MonoBehaviour, IToastSource
     {
         private const string Stranger = "Незнакомец";
@@ -14,14 +14,14 @@ namespace Shooter.Game
 
         private readonly NameMapper nameMapper = new();
         private PlayerConversations playerConversations;
-        private LocalPlayer localPlayer;
+        private PlayerController playerController;
 
         public event Action<Toast> ToastRaised;
 
         private void Awake()
         {
             playerConversations = GetComponent<PlayerConversations>();
-            localPlayer = GetComponent<LocalPlayer>();
+            playerController = GetComponent<PlayerController>();
         }
 
         private void OnEnable()
@@ -37,7 +37,7 @@ namespace Shooter.Game
         private void HandleLiveLineArrived(long partnerId, ConversationLine line)
         {
             if (line.Spoken || line.AuthorId == playerConversations.CharacterId) return;
-            if (localPlayer.TalkPartnerId == partnerId) return;
+            if (playerController.TalkPartnerId == partnerId) return;
 
             string partnerName = nameMapper.GetShownNameById(partnerId);
             ToastRaised?.Invoke(new Toast(icon, sound, line.Content, "от " + (string.IsNullOrEmpty(partnerName) ? Stranger : partnerName)));

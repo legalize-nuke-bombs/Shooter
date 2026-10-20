@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Interactor))]
-    public class LocalPlayer : NetworkBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
@@ -28,7 +28,7 @@ namespace Shooter.Game
         private Player player;
         private PlayerMouth playerMouth;
         private RpcMovement movement;
-        private OwnRecoil ownRecoil;
+        private LocalRecoil localRecoil;
         private Sleeper sleeper;
         private float pitch;
         private float yaw;
@@ -71,7 +71,7 @@ namespace Shooter.Game
             health = GetComponent<Health>();
             mortal = GetComponent<Mortal>();
             gunner = GetComponent<Gunner>();
-            ownRecoil = GetComponent<OwnRecoil>();
+            localRecoil = GetComponent<LocalRecoil>();
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
@@ -87,7 +87,7 @@ namespace Shooter.Game
 
         private void LateUpdate()
         {
-            Vector2 punchAngles = ownRecoil == null ? Vector2.zero : ownRecoil.PunchAngles;
+            Vector2 punchAngles = localRecoil == null ? Vector2.zero : localRecoil.PunchAngles;
 
             view.transform.position = transform.position + Vector3.up * Interactor.EyeHeight;
             view.transform.rotation = Quaternion.Euler(pitch - punchAngles.y, yaw + punchAngles.x, 0f);
@@ -262,13 +262,13 @@ namespace Shooter.Game
         private void PressTrigger(InputAction.CallbackContext context)
         {
             gunner?.PressTriggerRpc();
-            ownRecoil?.PressTrigger();
+            localRecoil?.PressTrigger();
         }
 
         private void ReleaseTrigger(InputAction.CallbackContext context)
         {
             gunner?.ReleaseTriggerRpc();
-            ownRecoil?.ReleaseTrigger();
+            localRecoil?.ReleaseTrigger();
         }
 
         private void ReloadWeapon(InputAction.CallbackContext context)

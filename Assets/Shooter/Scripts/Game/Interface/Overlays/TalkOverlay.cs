@@ -48,8 +48,8 @@ namespace Shooter.Game
 
         private void OpenOrCloseRadioTalk()
         {
-            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
-            long? radioPartnerId = localPlayer == null ? null : localPlayer.RadioPartnerId;
+            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            long? radioPartnerId = playerController == null ? null : playerController.RadioPartnerId;
             if (radioPartnerId == shownRadioPartnerId) return;
 
             shownRadioPartnerId = radioPartnerId;
@@ -294,8 +294,8 @@ namespace Shooter.Game
 
         private void OpenInventoryFromTalk()
         {
-            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
-            if (localPlayer != null) localPlayer.OpenInventoryFromTalk();
+            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            if (playerController != null) playerController.OpenInventoryFromTalk();
         }
 
         private static Talker FindTalkerByNetworkObjectId(ulong networkObjectId)

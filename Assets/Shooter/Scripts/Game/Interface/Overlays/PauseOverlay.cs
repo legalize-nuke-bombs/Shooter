@@ -25,8 +25,8 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
-            bool shouldBeOpen = localPlayer != null && localPlayer.IsPauseMenuOpen && !localPlayer.IsInviteOpen;
+            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            bool shouldBeOpen = playerController != null && playerController.IsPauseMenuOpen && !playerController.IsInviteOpen;
 
             if (shouldBeOpen == open) return;
 
@@ -34,7 +34,7 @@ namespace Shooter.Game
 
             if (open)
             {
-                ShowWindow(localPlayer);
+                ShowWindow(playerController);
             }
             else
             {
@@ -71,9 +71,9 @@ namespace Shooter.Game
             windowElement = null;
         }
 
-        private void ShowWindow(LocalPlayer localPlayer)
+        private void ShowWindow(PlayerController playerController)
         {
-            bool isHost = localPlayer.IsServer;
+            bool isHost = playerController.IsServer;
 
             saveButton.style.display = isHost ? DisplayStyle.Flex : DisplayStyle.None;
             inviteButton.style.display = isHost ? DisplayStyle.Flex : DisplayStyle.None;
@@ -89,22 +89,22 @@ namespace Shooter.Game
 
         private void ClosePauseMenu()
         {
-            OwnPlayer.FindComponent<LocalPlayer>()?.ClosePauseMenu();
+            OwnPlayer.FindComponent<PlayerController>()?.ClosePauseMenu();
         }
 
         private void SaveWorld()
         {
-            OwnPlayer.FindComponent<LocalPlayer>()?.SaveWorld();
+            OwnPlayer.FindComponent<PlayerController>()?.SaveWorld();
         }
 
         private void OpenInvite()
         {
-            OwnPlayer.FindComponent<LocalPlayer>()?.OpenInvite();
+            OwnPlayer.FindComponent<PlayerController>()?.OpenInvite();
         }
 
         private void LeaveWorld()
         {
-            OwnPlayer.FindComponent<LocalPlayer>()?.LeaveWorld();
+            OwnPlayer.FindComponent<PlayerController>()?.LeaveWorld();
         }
     }
 }

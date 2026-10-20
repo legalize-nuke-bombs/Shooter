@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
-    public class OwnRecoil : NetworkBehaviour
+    public class LocalRecoil : NetworkBehaviour
     {
         [SerializeField] private float recovery = 14f;
 

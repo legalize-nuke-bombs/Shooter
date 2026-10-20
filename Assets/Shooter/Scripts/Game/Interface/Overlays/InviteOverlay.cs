@@ -28,8 +28,8 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
-            bool shouldBeOpen = localPlayer != null && localPlayer.IsInviteOpen;
+            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            bool shouldBeOpen = playerController != null && playerController.IsInviteOpen;
 
             if (shouldBeOpen == open) return;
 
@@ -107,7 +107,7 @@ namespace Shooter.Game
 
         private void CloseInvite()
         {
-            OwnPlayer.FindComponent<LocalPlayer>()?.CloseInvite();
+            OwnPlayer.FindComponent<PlayerController>()?.CloseInvite();
         }
     }
 }

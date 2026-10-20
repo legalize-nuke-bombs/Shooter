@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
-    public class OwnWeaponView : NetworkBehaviour
+    public class LocalWeaponView : NetworkBehaviour
     {
         private const string FirstPersonLayerName = "FirstPerson";
 

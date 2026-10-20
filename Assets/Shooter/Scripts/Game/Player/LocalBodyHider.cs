@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Skin))]
     [RequireComponent(typeof(WeaponView))]
-    public class OwnBodyHider : NetworkBehaviour
+    public class LocalBodyHider : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
