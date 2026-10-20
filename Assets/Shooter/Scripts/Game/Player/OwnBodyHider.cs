@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Skin))]
     public class OwnBodyHider : NetworkBehaviour
     {
@@ -16,6 +17,7 @@ namespace Shooter.Game
 
         private readonly List<GameObject> reflectionClones = new();
 
+        private Player player;
         private Skin skin;
         private InventoryHolder inventoryHolder;
         private WeaponView weaponView;
@@ -26,6 +28,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            player = GetComponent<Player>();
             skin = GetComponent<Skin>();
             inventoryHolder = GetComponent<InventoryHolder>();
             weaponView = GetComponent<WeaponView>();
@@ -40,22 +43,26 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            if (IsOwner) StartHidingOwnBody();
-        }
-
-        public override void OnGainedOwnership()
-        {
-            if (IsOwner) StartHidingOwnBody();
-        }
-
-        public override void OnLostOwnership()
-        {
-            StopHidingOwnBody();
+            player.ControlChanged += HandleControlChanged;
+            HandleControlChanged();
         }
 
         public override void OnNetworkDespawn()
         {
+            player.ControlChanged -= HandleControlChanged;
             StopHidingOwnBody();
+        }
+
+        private void HandleControlChanged()
+        {
+            if (player.IsControlledLocally)
+            {
+                StartHidingOwnBody();
+            }
+            else
+            {
+                StopHidingOwnBody();
+            }
         }
 
         private void StartHidingOwnBody()

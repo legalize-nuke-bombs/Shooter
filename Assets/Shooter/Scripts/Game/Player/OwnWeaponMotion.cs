@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(OwnWeaponView))]
     [RequireComponent(typeof(Footsteps))]
     public class OwnWeaponMotion : NetworkBehaviour
@@ -24,6 +25,7 @@ namespace Shooter.Game
 
         [SerializeField] private float settle = 0.12f;
 
+        private Player player;
         private OwnWeaponView ownWeaponView;
         private Footsteps footsteps;
         private bool tracking;
@@ -45,6 +47,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            player = GetComponent<Player>();
             ownWeaponView = GetComponent<OwnWeaponView>();
             footsteps = GetComponent<Footsteps>();
         }
@@ -56,17 +59,18 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            enabled = IsOwner;
+            player.ControlChanged += HandleControlChanged;
+            HandleControlChanged();
         }
 
-        public override void OnGainedOwnership()
+        public override void OnNetworkDespawn()
         {
-            enabled = IsOwner;
+            player.ControlChanged -= HandleControlChanged;
         }
 
-        public override void OnLostOwnership()
+        private void HandleControlChanged()
         {
-            enabled = false;
+            enabled = player.IsControlledLocally;
         }
 
         private void LateUpdate()
