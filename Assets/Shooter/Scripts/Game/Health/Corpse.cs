@@ -87,8 +87,8 @@ namespace Shooter.Game
 
         private void HandleNameIdChanged(FixedString32Bytes previousNameId, FixedString32Bytes currentNameId)
         {
-            TypedNameable typedNameable = GetComponent<TypedNameable>();
-            if (typedNameable == null || currentNameId.IsEmpty) return;
+            AssetNameable assetNameable = GetComponent<AssetNameable>();
+            if (assetNameable == null || currentNameId.IsEmpty) return;
 
             NameCatalog nameCatalog = Catalogs.GetCatalog<NameCatalog>();
             NameAsset nameAsset = nameCatalog == null ? null : nameCatalog.GetAssetById(currentNameId);
@@ -98,7 +98,7 @@ namespace Shooter.Game
                 return;
             }
 
-            typedNameable.AssignNameAsset(nameAsset);
+            assetNameable.AssignNameAsset(nameAsset);
         }
     }
 }

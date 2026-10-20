@@ -481,7 +481,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.AbsoluteNameable
   ShowTopMostFoldoutHeaderGroup: 1
-  absolute: 
 --- !u!114 &1121741087500898459
 MonoBehaviour:
   m_ObjectHideFlags: 0
