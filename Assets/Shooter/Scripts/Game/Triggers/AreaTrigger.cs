@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(SphereCollider))]
     public class AreaTrigger : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private MainTriggerable mainTriggerable;
 

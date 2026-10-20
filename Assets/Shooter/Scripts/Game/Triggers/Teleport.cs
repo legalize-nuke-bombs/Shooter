@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class Teleport : MonoBehaviour, ITriggerable, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject destination;
         [SerializeField] private EarSoundAsset sound;

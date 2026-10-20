@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public sealed class LlmHistory : MonoBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private int messageLimit = 10000;
         [SerializeField] private int maxSize = 100000;

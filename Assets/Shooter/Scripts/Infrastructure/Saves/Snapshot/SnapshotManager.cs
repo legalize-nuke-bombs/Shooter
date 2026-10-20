@@ -9,7 +9,7 @@ namespace Shooter.Infrastructure
 {
     public static class SnapshotManager
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public static Snapshot BuildSnapshot()
         {

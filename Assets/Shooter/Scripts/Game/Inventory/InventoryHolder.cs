@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Inventory))]
     public class InventoryHolder : NetworkBehaviour, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkVariable<int> heldSlot = new(Inventory.NoSlot);
 

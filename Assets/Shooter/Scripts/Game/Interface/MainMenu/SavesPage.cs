@@ -15,7 +15,7 @@ namespace Shooter.Game
         private const string DeleteConfirmLabel = "Удалить";
         private const string ForeignVersionQuestion = "Другая версия";
         private const string ForeignVersionConfirmLabel = "Загрузить";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly MainMenuDialog dialog;
         private readonly Label emptyLabel;

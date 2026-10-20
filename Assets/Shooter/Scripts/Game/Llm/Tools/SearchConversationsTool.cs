@@ -12,7 +12,7 @@ namespace Shooter.Game
     public class SearchConversationsTool : LlmTool<SearchConversationsArguments>
     {
         private const int ShownMatchLimit = 20;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private ConversationManager conversationManager;
         private Character ownCharacter;

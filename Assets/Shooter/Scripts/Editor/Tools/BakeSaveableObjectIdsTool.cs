@@ -8,7 +8,7 @@ namespace Shooter.Editor
 {
     public static class BakeSaveableObjectIdsTool
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [MenuItem("Tools/Bake Saveable Object IDs")]
         private static void BakeMissingIds()

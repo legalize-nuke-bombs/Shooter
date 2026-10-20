@@ -12,7 +12,7 @@ namespace Shooter.Infrastructure
         private const string FolderName = "Screenshots";
         private const string FileNamePrefix = "Screenshot";
         private const string StampFormat = "yyyy_MM_dd_HH_mm_ss";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
         private static readonly ScreenshotSetting FullSizeSetting = new(0, 0, 90);
 
         public static IEnumerator TakeToScreenshotsFolder()

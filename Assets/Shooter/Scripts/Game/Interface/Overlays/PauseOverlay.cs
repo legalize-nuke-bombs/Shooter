@@ -12,7 +12,7 @@ namespace Shooter.Game
         private const string LeaveButtonName = "pause-leave";
         private const string LeaveTextForHost = "Сохранить и выйти";
         private const string LeaveTextForClient = "Покинуть мир";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Button inviteButton;
         private Button leaveButton;

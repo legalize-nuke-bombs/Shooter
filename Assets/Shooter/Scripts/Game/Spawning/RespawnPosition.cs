@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class RespawnPosition : MonoBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Vector3? position;
 

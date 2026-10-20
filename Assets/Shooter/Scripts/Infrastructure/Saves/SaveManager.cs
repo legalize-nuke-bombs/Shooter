@@ -7,7 +7,7 @@ namespace Shooter.Infrastructure
     {
         private const string SaveNamePrefix = "ShooterSave";
         private const string SaveNameStampFormat = "yyyy_MM_dd_HH_mm_ss_fff";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public static bool IsSaving { get; private set; }
 

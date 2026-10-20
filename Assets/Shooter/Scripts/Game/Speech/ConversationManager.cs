@@ -9,7 +9,7 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class ConversationManager : ShooterBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<(long, long), Conversation> conversationsByKey = new();
 

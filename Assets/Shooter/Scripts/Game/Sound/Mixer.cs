@@ -14,7 +14,7 @@ namespace Shooter.Game
         private const string SoundsVolume = "SoundsVolume";
         private const float SilenceDecibels = -80f;
         private const float DecibelsPerDecade = 20f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static AudioMixer mixer;
         private static ClientConfig clientConfig;

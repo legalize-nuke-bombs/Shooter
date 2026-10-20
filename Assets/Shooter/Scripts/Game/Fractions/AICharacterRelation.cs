@@ -11,7 +11,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Nameable))]
     public class AICharacterRelation : MonoBehaviour, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
 

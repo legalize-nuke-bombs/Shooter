@@ -12,7 +12,7 @@ namespace Shooter.Infrastructure
         private const string AnyAddress = "0.0.0.0";
         private const string BadInviteTitle = "Неверный код подключения";
         private const string BadInviteDetails = "Попросите у хоста код ещё раз и вставьте его целиком";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private string world = "Map";
 

@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public class SceneSwitcherOnNetworkStop : ShooterBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private string scene;
 

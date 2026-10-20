@@ -10,7 +10,7 @@ namespace Shooter.Infrastructure
     {
         private const string MetaFileName = "Meta.json";
         private const string PreviewFileName = "Preview.jpg";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private SaveEntry(string location, Meta meta)
         {

@@ -10,7 +10,7 @@ namespace Shooter.Game
         private const string GlyphElementName = "hunger-glyph";
         private const string AmountLabelName = "hunger-amount";
         private const int Hidden = -1;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private IconAsset glyph;
         private Label amountLabel;

@@ -8,7 +8,7 @@ namespace Shooter.Infrastructure
     [CreateAssetMenu(menuName = "Shooter-saves/Saveable Prefab Catalog", fileName = "SaveablePrefabCatalog")]
     public class SaveablePrefabCatalog : Catalog<SaveablePrefabAsset>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<uint, FixedString32Bytes> prefabIdsByHash = new();
 

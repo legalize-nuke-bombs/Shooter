@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private SoundAsset bedding;
         [SerializeField] private SoundAsset rising;

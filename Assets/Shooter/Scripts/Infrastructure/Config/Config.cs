@@ -8,7 +8,7 @@ namespace Shooter.Infrastructure
 {
     public static class Config
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static readonly JsonSerializerSettings JsonSettings = new()
         {

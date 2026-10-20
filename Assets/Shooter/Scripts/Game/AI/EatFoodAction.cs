@@ -16,7 +16,7 @@ namespace Shooter.Game
         id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a03")]
     public partial class EatFoodAction : Action
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
 

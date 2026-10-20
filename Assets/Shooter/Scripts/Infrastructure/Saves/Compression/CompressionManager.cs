@@ -5,7 +5,7 @@ namespace Shooter.Infrastructure
 {
     public abstract class CompressionManager
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public abstract string Key { get; }
         public abstract string Extension { get; }

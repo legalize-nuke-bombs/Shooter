@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Health))]
     public class LlmConversationObserver : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Character character;
         private ConversationManager conversationManager;

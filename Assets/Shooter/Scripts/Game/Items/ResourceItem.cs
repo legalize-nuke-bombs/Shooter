@@ -10,7 +10,7 @@ namespace Shooter.Game
     {
         private const double SecondsPerHour = 3600.0;
 
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Clock clock;
         private GameObject body;

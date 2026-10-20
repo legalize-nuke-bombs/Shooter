@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     public class PlayerRadio : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Character character;
         private ConversationManager conversationManager;

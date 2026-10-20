@@ -14,7 +14,7 @@ namespace Shooter.Game
         private const string StatusLabelName = "invite-status";
         private const string CopiedStatus = "Ссылка скопирована";
         private const string NoAddressStatus = "Впишите адрес";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private TextField addressField;
         private Button backButton;

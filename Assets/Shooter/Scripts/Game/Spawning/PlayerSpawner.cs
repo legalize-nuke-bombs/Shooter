@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class PlayerSpawner : ShooterBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private SaveLoaderOnStartup saveLoaderOnStartup;
 

@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class GiveStackableTool : LlmTool<GiveStackableArguments>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private InventoryExchanger inventoryExchanger;
 

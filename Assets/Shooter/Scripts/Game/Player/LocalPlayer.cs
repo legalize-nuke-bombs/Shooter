@@ -12,7 +12,7 @@ namespace Shooter.Game
     {
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Camera view;
         [SerializeField] private EarSoundAsset saveSound;

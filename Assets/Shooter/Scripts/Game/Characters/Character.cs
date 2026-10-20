@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(CharacterId))]
     public class Character : ShooterBehaviour, IDigestible
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private CharacterId characterId;
 

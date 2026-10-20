@@ -5,7 +5,7 @@ namespace Shooter.Infrastructure
 {
     public class FrozenWorld
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
         private readonly Dictionary<string, SaveableObject> saveableObjectsById = new();
 
         private FrozenWorld()

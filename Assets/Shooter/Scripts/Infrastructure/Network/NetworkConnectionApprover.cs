@@ -9,7 +9,7 @@ namespace Shooter.Infrastructure
     {
         private const int PlayerNameLengthLimit = 24;
         private const string DefaultPlayerName = "Player";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<ulong, string> playerNamesByClientId = new();
         private readonly Dictionary<ulong, string> publicKeysByClientId = new();

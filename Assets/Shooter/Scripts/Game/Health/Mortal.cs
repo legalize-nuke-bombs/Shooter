@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(RespawnPosition))]
     public class Mortal : NetworkBehaviour, IMortal
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject corpsePrefab;
         [SerializeField] private EarSoundAsset deathSound;

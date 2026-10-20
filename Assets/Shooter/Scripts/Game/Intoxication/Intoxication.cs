@@ -11,7 +11,7 @@ namespace Shooter.Game
 {
     public class Intoxication : NetworkBehaviour, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float timerInterval = 0.25f;
         [SerializeField] private float lowThreshold = 1f;

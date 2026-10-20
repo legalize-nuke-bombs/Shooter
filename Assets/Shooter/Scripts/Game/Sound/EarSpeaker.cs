@@ -9,7 +9,7 @@ namespace Shooter.Game
     public class EarSpeaker : NetworkBehaviour
     {
         private const int MaxVoices = 4;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly List<AudioSource> audioSources = new();
 

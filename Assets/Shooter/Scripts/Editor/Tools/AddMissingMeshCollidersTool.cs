@@ -9,7 +9,7 @@ namespace Shooter.Editor
     public static class AddMissingMeshCollidersTool
     {
         private const string MenuItemPath = "Tools/Add Missing Mesh Colliders";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [MenuItem(MenuItemPath)]
         private static void AddMissingCollidersToSelectedPrefabs()

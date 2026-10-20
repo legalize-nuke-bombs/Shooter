@@ -10,7 +10,7 @@ namespace Shooter.Game
     {
         private const string BrokenSaveTitle = "Не удалось загрузить сохранение";
         private const string BrokenSaveDetails = "Файл повреждён или несовместим с этой версией";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private NetworkManager network;
         private NetworkStarter networkStarter;

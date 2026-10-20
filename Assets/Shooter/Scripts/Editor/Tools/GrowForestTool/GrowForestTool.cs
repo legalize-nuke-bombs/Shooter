@@ -7,7 +7,7 @@ namespace Shooter.Editor
 {
     public class GrowForestTool : EditorWindow
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private ForestPlantingSettings settings = new();
         private SerializedObject serializedWindow;

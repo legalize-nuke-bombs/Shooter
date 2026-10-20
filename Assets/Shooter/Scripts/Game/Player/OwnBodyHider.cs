@@ -12,7 +12,7 @@ namespace Shooter.Game
         private const string ReflectionOnlyLayerName = "ReflectionOnly";
         private const string ReflectionCloneName = "Reflection";
 
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly List<GameObject> reflectionClones = new();
 

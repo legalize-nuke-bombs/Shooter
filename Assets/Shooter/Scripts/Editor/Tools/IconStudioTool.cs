@@ -13,7 +13,7 @@ namespace Shooter.Editor
     {
         private const float CameraGapOutsideBounds = 1f;
         private const int LastLayer = 31;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [Serializable]
         private class IconSetup

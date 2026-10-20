@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class SendFeedbackTool : LlmTool<SendFeedbackArguments>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public override string Name => "send_feedback";
 

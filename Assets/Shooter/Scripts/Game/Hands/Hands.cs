@@ -11,7 +11,7 @@ namespace Shooter.Game
     {
         private const string ActionLayer = "Armed";
         private const float ActionFade = 0.05f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
         private static readonly int[] ActionStates = BuildActionStates();
         private static readonly int ActionSpeedParameter = Animator.StringToHash("ActionSpeed");
 

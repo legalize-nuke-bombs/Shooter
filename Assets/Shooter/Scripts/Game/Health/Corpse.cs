@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class Corpse : NetworkBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkVariable<FixedString32Bytes> skinId = new();
         private readonly NetworkVariable<FixedString32Bytes> nameId = new();

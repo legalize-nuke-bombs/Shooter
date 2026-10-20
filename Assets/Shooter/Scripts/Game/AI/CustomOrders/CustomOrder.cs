@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public abstract class CustomOrder : ISaveable
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
         private static Dictionary<string, Type> orderTypesByKind;
 
         public CustomOrderStatus Status { get; private set; }

@@ -7,7 +7,7 @@ namespace Shooter.Infrastructure
 {
     public static class MainCompressionManager
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static Dictionary<string, CompressionManager> managersByKey;
         private static Dictionary<string, CompressionManager> managersByExtension;

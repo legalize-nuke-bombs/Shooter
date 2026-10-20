@@ -7,7 +7,7 @@ namespace Shooter.Infrastructure
 {
     public static class MetaManager
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public static Meta BuildMeta()
         {

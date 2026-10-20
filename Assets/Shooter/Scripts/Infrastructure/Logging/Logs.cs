@@ -28,7 +28,7 @@ namespace Shooter.Infrastructure
             string instanceName = GetInstanceName();
             StartWritingToFile("shooter-" + instanceName);
             MinimumLevel = Config.GetGameConfig().Logging.Level;
-            CreateJournalForThisFile().Info($"Logging the {instanceName} from {MinimumLevel} and up");
+            Here().Info($"Logging the {instanceName} from {MinimumLevel} and up");
         }
 
         private static string GetInstanceName()
@@ -42,7 +42,7 @@ namespace Shooter.Infrastructure
             return Application.isEditor ? "editor" : "game";
         }
 
-        public static Journal CreateJournalForThisFile([CallerFilePath] string path = null)
+        public static Journal Here([CallerFilePath] string path = null)
         {
             return new Journal(string.IsNullOrEmpty(path) ? "?" : Path.GetFileNameWithoutExtension(path));
         }

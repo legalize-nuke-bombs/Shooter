@@ -32,7 +32,7 @@ namespace Shooter.Game
         private const float TakerSearchIntervalSeconds = 0.2f;
         private const float ChosenTakerSlack = 1.25f;
         private const int SplitAmountMaxDigits = 7;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         // Points along a body from feet to head around its root, which sits at the middle of the body for players and residents alike
         private static readonly float[] BodyHeights = { -0.8f, -0.4f, 0f, 0.4f, 0.8f };
