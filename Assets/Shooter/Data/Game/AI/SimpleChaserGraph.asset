@@ -317,7 +317,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Spot Nearest Character
     Story: '[Agent] spots the nearest character within [Radius] into [Target]'
-    RuntimeTypeString: Shooter.Game.AI.Bt.Eyes.SpotNearestCharacterAction, Shooter.Game,
+    RuntimeTypeString: Shooter.Game.SpotNearestCharacterAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 959164217303120765
@@ -342,7 +342,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Walk Toward Target
     Story: '[Agent] walks toward [Target] keeping [Reach], running if [Sprint]'
-    RuntimeTypeString: Shooter.Game.AI.Bt.Legs.WalkTowardTargetAction, Shooter.Game,
+    RuntimeTypeString: Shooter.Game.WalkTowardTargetAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 7010483506657393231
@@ -519,7 +519,7 @@ MonoBehaviour:
         - rid: 2635107353297158351
         - rid: 2635107353297158352
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.Eyes.SpotNearestCharacterAction,
+          m_SerializableType: Shooter.Game.SpotNearestCharacterAction,
             Shooter.Game, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 959164217303120765
@@ -646,7 +646,7 @@ MonoBehaviour:
         - rid: 2635107353297158380
         - rid: 2635107353297158381
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.Legs.WalkTowardTargetAction, Shooter.Game,
+          m_SerializableType: Shooter.Game.WalkTowardTargetAction, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 7010483506657393231
