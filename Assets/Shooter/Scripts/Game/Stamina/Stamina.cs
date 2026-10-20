@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Stamina : ShooterNetworkBehaviour, IDigestible, IRestraint, ISaveableComponent
+    [RequireComponent(typeof(Hands))]
+    public class Stamina : ShooterNetworkBehaviour, IDigestible, ISaveableComponent
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
@@ -18,6 +19,7 @@ namespace Shooter.Game
         private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
 
         private Clock clock;
+        private Hands hands;
         private bool exhausted;
 
         public string ComponentKey => "Endurance";
@@ -48,7 +50,20 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             clock = Registers.Get<Clock>();
+            hands = GetComponent<Hands>();
             enabled = false;
+        }
+
+        private void OnEnable()
+        {
+            hands.Checking += CanAfford;
+            hands.Performed += SpendOn;
+        }
+
+        private void OnDisable()
+        {
+            hands.Checking -= CanAfford;
+            hands.Performed -= SpendOn;
         }
 
         private void Update()
@@ -66,20 +81,6 @@ namespace Shooter.Game
             if (detail != DigestionDetail.Full) return null;
 
             return $"Stamina: {Mathf.RoundToInt(Amount)}/{Mathf.RoundToInt(MaxAmount)}";
-        }
-
-        public bool CanPerform(ActionType type, float dt)
-        {
-            if (type == ActionType.Sprint && exhausted) return false;
-
-            return !IsLimitedByStamina(type) || amount.Value >= GetActionCost(type, dt);
-        }
-
-        public void RegisterAction(ActionType type, float dt)
-        {
-            amount.Value = Math.Max(0, amount.Value - GetActionCost(type, dt));
-
-            if (amount.Value <= 0f) exhausted = true;
         }
 
         public override void OnNetworkSpawn()
@@ -100,14 +101,28 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private float GetActionCost(ActionType type, float dt)
+        private bool CanAfford(ActionType type, float duration)
+        {
+            if (type == ActionType.Sprint && exhausted) return false;
+
+            return !IsLimitedByStamina(type) || amount.Value >= GetActionCost(type, duration);
+        }
+
+        private void SpendOn(ActionType type, float duration)
+        {
+            amount.Value = Math.Max(0, amount.Value - GetActionCost(type, duration));
+
+            if (amount.Value <= 0f) exhausted = true;
+        }
+
+        private float GetActionCost(ActionType type, float duration)
         {
             switch (type)
             {
                 case ActionType.Sprint:
-                    return sprintCost * dt;
+                    return sprintCost * duration;
                 case ActionType.Walk:
-                    return walkCost * dt;
+                    return walkCost * duration;
                 case ActionType.Jump:
                     return jumpCost;
                 default:

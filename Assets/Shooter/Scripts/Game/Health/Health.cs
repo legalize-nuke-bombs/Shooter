@@ -3,7 +3,7 @@ using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
-    public abstract class Health : ShooterNetworkBehaviour, IDigestible, IRestraint
+    public abstract class Health : ShooterNetworkBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -27,15 +27,6 @@ namespace Shooter.Game
         }
 
         public DigestionPriority Priority => DigestionPriority.High;
-
-        public bool CanPerform(ActionType type, float dt)
-        {
-            return IsAlive;
-        }
-
-        public void RegisterAction(ActionType type, float dt)
-        {
-        }
 
         public DamageResult TakeDamage(double amount, Character attacker, DamageAsset damageType)
         {

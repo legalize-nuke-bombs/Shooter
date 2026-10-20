@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(MainRestrainable))]
+    [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(NetworkTransform))]
     public abstract class Movement : ShooterNetworkBehaviour
     {
@@ -18,7 +18,7 @@ namespace Shooter.Game
         private readonly NetworkVariable<float> pitch = new();
         private NetworkTransform networkTransform;
 
-        protected MainRestrainable Restrainable { get; private set; }
+        protected Hands Hands { get; private set; }
 
         public float Pitch
         {
@@ -34,7 +34,7 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            Restrainable = GetComponent<MainRestrainable>();
+            Hands = GetComponent<Hands>();
             networkTransform = GetComponent<NetworkTransform>();
         }
 
@@ -79,19 +79,9 @@ namespace Shooter.Game
         {
             if (!walking) return 0f;
 
-            if (sprinting && Restrainable.CanPerform(ActionType.Sprint, dt))
-            {
-                Restrainable.RegisterAction(ActionType.Sprint, dt);
-                return sprintSpeed;
-            }
+            if (sprinting && Hands.TryPerform(ActionType.Sprint, dt)) return sprintSpeed;
 
-            if (Restrainable.CanPerform(ActionType.Walk, dt))
-            {
-                Restrainable.RegisterAction(ActionType.Walk, dt);
-                return walkSpeed;
-            }
-
-            return 0f;
+            return Hands.TryPerform(ActionType.Walk, dt) ? walkSpeed : 0f;
         }
 
         protected static float ZeroIfNotFinite(float value)

@@ -37,21 +37,20 @@ namespace Shooter.Game
                 return;
             }
 
-            Health health = user.GetComponent<Health>();
-            Hands hands = user.GetComponent<Hands>();
-
-            bool alive = health == null || health.IsAlive;
-            bool handsFree = hands == null || hands.AreFree;
-            bool bedtime = sleepCycle.IsBedtime();
-
-            if (!SleepRule.CanSleep(alive, handsFree, bedtime))
+            if (!sleepCycle.IsBedtime())
             {
-                Log.Info($"Entity {user.name} can not sleep in {name}: alive {alive}, hands free {handsFree}, bedtime {bedtime}");
-                promptResult = $"Failed to sleep: alive {alive} (must be true) hands free {handsFree} (must be true) bedtime {bedtime} (must be true)";
+                Log.Info($"Entity {user.name} can not sleep in {name}: it is not bedtime");
+                promptResult = "Failed to sleep: it is not bedtime";
                 return;
             }
 
-            sleeper.FallAsleep(this);
+            if (!sleeper.TryFallAsleep(this, out string refusal))
+            {
+                Log.Info($"Entity {user.name} can not sleep in {name}: {refusal}");
+                promptResult = $"Failed to sleep: {refusal}";
+                return;
+            }
+
             promptResult = "You fell asleep";
         }
     }

@@ -10,7 +10,6 @@ namespace Shooter.Game
     [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(EarSpeaker))]
-    [RequireComponent(typeof(MainRestrainable))]
     public class Gunner : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -25,7 +24,6 @@ namespace Shooter.Game
         private Character character;
         private Interactor interactor;
         private Inventory inventory;
-        private MainRestrainable restrainable;
         private Speaker speaker;
 
         private bool triggerHeld;
@@ -40,7 +38,6 @@ namespace Shooter.Game
             hands = GetComponent<Hands>();
             speaker = GetComponent<Speaker>();
             earSpeaker = GetComponent<EarSpeaker>();
-            restrainable = GetComponent<MainRestrainable>();
         }
 
         private void Update()
@@ -71,12 +68,10 @@ namespace Shooter.Game
 
         private bool TryShoot(bool sustained)
         {
-            if (!TryGetHeldFirearmForAction(out Firearm firearm, out FirearmAsset asset, ActionType.Shoot)) return false;
+            if (!TryGetHeldFirearm(out Firearm firearm, out FirearmAsset asset)) return false;
             if (!cadence.CanFire(asset, sustained, Time.time)) return false;
 
-            if (hands != null && !hands.TryStartAction(HandsAction.Shooting, asset.FireInterval, false, null)) return false;
-
-            restrainable.RegisterAction(ActionType.Shoot, MainRestrainable.InstantActionDuration);
+            if (!hands.TryStartAction(ActionType.Shoot, asset.FireInterval, false, null)) return false;
 
             if (!firearm.TrySpendRound())
             {
@@ -93,26 +88,25 @@ namespace Shooter.Game
 
         public bool TryReload()
         {
-            if (!TryGetHeldFirearmForAction(out Firearm firearm, out FirearmAsset asset, ActionType.Reload)) return false;
+            if (!TryGetHeldFirearm(out Firearm firearm, out FirearmAsset asset)) return false;
             if (asset.Ammo == null) return false;
 
             int missingRounds = asset.MagazineSize - firearm.RoundsInMagazine;
             if (missingRounds <= 0 || inventory.CountStackable(asset.Ammo) == 0) return false;
 
-            if (hands != null && !hands.TryStartAction(HandsAction.Reloading, asset.ReloadTime, true, () => FinishReload(firearm, asset, missingRounds))) return false;
+            if (!hands.TryStartAction(ActionType.Reload, asset.ReloadTime, true, () => FinishReload(firearm, asset, missingRounds))) return false;
 
-            restrainable.RegisterAction(ActionType.Reload, MainRestrainable.InstantActionDuration);
             speaker?.PlayForEveryone(asset.ReloadSound);
             Log.Info($"Entity {name} started reload of {firearm.AssetId}, {asset.ReloadTime}s");
             return true;
         }
 
-        private bool TryGetHeldFirearmForAction(out Firearm firearm, out FirearmAsset asset, ActionType action)
+        private bool TryGetHeldFirearm(out Firearm firearm, out FirearmAsset asset)
         {
             firearm = null;
             asset = null;
 
-            if (!IsServer || !restrainable.CanPerform(action, MainRestrainable.InstantActionDuration)) return false;
+            if (!IsServer) return false;
 
             firearm = inventoryHolder.HeldItem as Firearm;
             if (firearm == null) return false;

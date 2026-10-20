@@ -1,10 +1,10 @@
 using Shooter.Infrastructure;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    public abstract class Hunger : ShooterNetworkBehaviour, IDigestible, IRestraint
+    [RequireComponent(typeof(Hands))]
+    public abstract class Hunger : ShooterNetworkBehaviour, IDigestible
     {
         [SerializeField] private float sprintCost = 0.5f;
         [SerializeField] private float walkCost = 0.25f;
@@ -12,6 +12,7 @@ namespace Shooter.Game
         [SerializeField] private float idleCost = 0.1f;
 
         private Clock clock;
+        private Hands hands;
 
         public abstract float Amount { get; }
         public abstract float MaxAmount { get; }
@@ -19,7 +20,20 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             clock = Registers.Get<Clock>();
+            hands = GetComponent<Hands>();
             enabled = false;
+        }
+
+        private void OnEnable()
+        {
+            hands.Checking += CanAfford;
+            hands.Performed += SpendOn;
+        }
+
+        private void OnDisable()
+        {
+            hands.Checking -= CanAfford;
+            hands.Performed -= SpendOn;
         }
 
         private void Update()
@@ -32,16 +46,6 @@ namespace Shooter.Game
         public string Digest(DigestionDetail detail)
         {
             return detail == DigestionDetail.Full ? $"Hunger: {Mathf.RoundToInt(Amount)} / {Mathf.RoundToInt(MaxAmount)}" : null;
-        }
-
-        public bool CanPerform(ActionType type, float dt)
-        {
-            return !IsLimitedByHunger(type) || CanSpendAmount(GetActionCost(type, dt));
-        }
-
-        public void RegisterAction(ActionType type, float dt)
-        {
-            SpendAmount(GetActionCost(type, dt));
         }
 
         public abstract bool CanSpendAmount(float cost);
@@ -58,14 +62,24 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private float GetActionCost(ActionType type, float dt)
+        private bool CanAfford(ActionType type, float duration)
+        {
+            return !IsLimitedByHunger(type) || CanSpendAmount(GetActionCost(type, duration));
+        }
+
+        private void SpendOn(ActionType type, float duration)
+        {
+            SpendAmount(GetActionCost(type, duration));
+        }
+
+        private float GetActionCost(ActionType type, float duration)
         {
             switch (type)
             {
                 case ActionType.Sprint:
-                    return sprintCost * dt;
+                    return sprintCost * duration;
                 case ActionType.Walk:
-                    return walkCost * dt;
+                    return walkCost * duration;
                 case ActionType.Jump:
                     return jumpCost;
                 default:
