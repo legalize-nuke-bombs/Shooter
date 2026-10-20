@@ -20,20 +20,20 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            Health ownHealth = FindOwnHealth();
+            Health localHealth = FindLocalHealth();
 
-            if (ownHealth == null)
+            if (localHealth == null)
             {
                 HideBar();
                 return;
             }
 
-            int hp = (int)Math.Ceiling(ownHealth.Hp);
+            int hp = (int)Math.Ceiling(localHealth.Hp);
             if (hp == shownHp) return;
 
             shownHp = hp;
             barElement.style.display = DisplayStyle.Flex;
-            fillElement.style.width = new Length(100f * hp / (int)ownHealth.MaxHp, LengthUnit.Percent);
+            fillElement.style.width = new Length(100f * hp / (int)localHealth.MaxHp, LengthUnit.Percent);
         }
 
         protected override bool TryBindElements(VisualElement root)
@@ -67,9 +67,9 @@ namespace Shooter.Game
             barElement.style.display = DisplayStyle.None;
         }
 
-        private Health FindOwnHealth()
+        private Health FindLocalHealth()
         {
-            if (health == null) health = OwnPlayer.FindComponent<Health>();
+            if (health == null) health = LocalPlayerFinder.FindComponent<Health>();
 
             return health;
         }

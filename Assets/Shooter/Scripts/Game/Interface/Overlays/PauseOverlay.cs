@@ -25,7 +25,7 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            PlayerController playerController = LocalPlayerFinder.FindComponent<PlayerController>();
             bool shouldBeOpen = playerController != null && playerController.IsPauseMenuOpen && !playerController.IsInviteOpen;
 
             if (shouldBeOpen == open) return;
@@ -89,22 +89,22 @@ namespace Shooter.Game
 
         private void ClosePauseMenu()
         {
-            OwnPlayer.FindComponent<PlayerController>()?.ClosePauseMenu();
+            LocalPlayerFinder.FindComponent<PlayerController>()?.ClosePauseMenu();
         }
 
         private void SaveWorld()
         {
-            OwnPlayer.FindComponent<PlayerController>()?.SaveWorld();
+            LocalPlayerFinder.FindComponent<PlayerController>()?.SaveWorld();
         }
 
         private void OpenInvite()
         {
-            OwnPlayer.FindComponent<PlayerController>()?.OpenInvite();
+            LocalPlayerFinder.FindComponent<PlayerController>()?.OpenInvite();
         }
 
         private void LeaveWorld()
         {
-            OwnPlayer.FindComponent<PlayerController>()?.LeaveWorld();
+            LocalPlayerFinder.FindComponent<PlayerController>()?.LeaveWorld();
         }
     }
 }

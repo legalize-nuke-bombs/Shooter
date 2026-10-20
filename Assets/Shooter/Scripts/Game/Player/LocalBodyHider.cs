@@ -42,22 +42,22 @@ namespace Shooter.Game
         public override void OnNetworkDespawn()
         {
             player.ControlChanged -= HandleControlChanged;
-            StopHidingOwnBody();
+            StopHidingBody();
         }
 
         private void HandleControlChanged()
         {
             if (player.IsControlledLocally)
             {
-                StartHidingOwnBody();
+                StartHidingBody();
             }
             else
             {
-                StopHidingOwnBody();
+                StopHidingBody();
             }
         }
 
-        private void StartHidingOwnBody()
+        private void StartHidingBody()
         {
             if (hiding) return;
             hiding = true;
@@ -66,10 +66,10 @@ namespace Shooter.Game
 
             weaponView.ShownWeaponChanged += MarkHidingNeeded;
 
-            Log.Info($"Own player {name} hides its body from its own camera");
+            Log.Info($"Local player {name} hides its body from its own camera");
         }
 
-        private void StopHidingOwnBody()
+        private void StopHidingBody()
         {
             if (!hiding) return;
             hiding = false;
@@ -93,7 +93,7 @@ namespace Shooter.Game
 
             if (hiddenModelInstance == null)
             {
-                Log.Warn($"Own player {name} has no model to hide");
+                Log.Warn($"Local player {name} has no model to hide");
                 return;
             }
 

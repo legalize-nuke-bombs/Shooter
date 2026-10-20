@@ -17,7 +17,7 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            float eyesClosedAmount = GetOwnEyesClosedAmount();
+            float eyesClosedAmount = GetLocalEyesClosedAmount();
             if (Mathf.Approximately(eyesClosedAmount, shownEyesClosedAmount)) return;
 
             shownEyesClosedAmount = eyesClosedAmount;
@@ -55,9 +55,9 @@ namespace Shooter.Game
             shownEyesClosedAmount = 0f;
         }
 
-        private float GetOwnEyesClosedAmount()
+        private float GetLocalEyesClosedAmount()
         {
-            if (sleepView == null) sleepView = OwnPlayer.FindComponent<SleepView>();
+            if (sleepView == null) sleepView = LocalPlayerFinder.FindComponent<SleepView>();
 
             return sleepView == null ? 0f : sleepView.EyesClosedAmount;
         }

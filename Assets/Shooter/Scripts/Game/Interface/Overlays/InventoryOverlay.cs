@@ -65,7 +65,7 @@ namespace Shooter.Game
         private InventoryExchanger inventoryExchanger;
         private InventoryUser inventoryUser;
         private Crafter crafter;
-        private Character ownCharacter;
+        private Character localCharacter;
         private Character chosenTaker;
         private float nextTakerSearchTime;
         private VisualElement craftGridElement;
@@ -100,7 +100,7 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            PlayerController playerController = LocalPlayerFinder.FindComponent<PlayerController>();
             bool shouldBeOpen = playerController != null && playerController.IsInventoryOpen;
 
             if (shouldBeOpen != open)
@@ -162,12 +162,12 @@ namespace Shooter.Game
 
         private void OpenWindow()
         {
-            inventory = OwnPlayer.FindComponent<Inventory>();
-            inventoryHolder = OwnPlayer.FindComponent<InventoryHolder>();
-            inventoryExchanger = OwnPlayer.FindComponent<InventoryExchanger>();
-            inventoryUser = OwnPlayer.FindComponent<InventoryUser>();
-            crafter = OwnPlayer.FindComponent<Crafter>();
-            ownCharacter = OwnPlayer.FindComponent<Character>();
+            inventory = LocalPlayerFinder.FindComponent<Inventory>();
+            inventoryHolder = LocalPlayerFinder.FindComponent<InventoryHolder>();
+            inventoryExchanger = LocalPlayerFinder.FindComponent<InventoryExchanger>();
+            inventoryUser = LocalPlayerFinder.FindComponent<InventoryUser>();
+            crafter = LocalPlayerFinder.FindComponent<Crafter>();
+            localCharacter = LocalPlayerFinder.FindComponent<Character>();
             chosenTaker = FindTakerNearestToViewCenter(null);
             nextTakerSearchTime = Time.unscaledTime + TakerSearchIntervalSeconds;
 
@@ -191,7 +191,7 @@ namespace Shooter.Game
             inventoryExchanger = null;
             inventoryUser = null;
             crafter = null;
-            ownCharacter = null;
+            localCharacter = null;
             chosenTaker = null;
             pendingCraft = null;
             Array.Clear(craftGridStacks, 0, craftGridStacks.Length);
@@ -241,7 +241,7 @@ namespace Shooter.Game
                 stale = true;
             }
 
-            bool isTakerNear = ownCharacter != null && inventoryExchanger != null && Vector3.Distance(ownCharacter.transform.position, chosenTaker.transform.position) <= inventoryExchanger.Radius;
+            bool isTakerNear = localCharacter != null && inventoryExchanger != null && Vector3.Distance(localCharacter.transform.position, chosenTaker.transform.position) <= inventoryExchanger.Radius;
             giveButton.SetEnabled(isTakerNear && hasUnsentOffer);
         }
 
@@ -641,7 +641,7 @@ namespace Shooter.Game
         private Character FindTakerNearestToViewCenter(Character currentTaker)
         {
             Camera mainCamera = Camera.main;
-            if (mainCamera == null || ownCharacter == null || inventory == null) return null;
+            if (mainCamera == null || localCharacter == null || inventory == null) return null;
 
             Transform eyes = mainCamera.transform;
             if (currentTaker != null && ScoreTakerCandidate(currentTaker, eyes, ChosenTakerSlack) <= 1f) return currentTaker;
@@ -664,13 +664,13 @@ namespace Shooter.Game
         // A share of the cone, above 1 is out of reach; at arm's length a body covers more than the cone
         private float ScoreTakerCandidate(Character candidate, Transform eyes, float slack)
         {
-            if (candidate == null || candidate == ownCharacter || !candidate.gameObject.activeInHierarchy) return float.PositiveInfinity;
+            if (candidate == null || candidate == localCharacter || !candidate.gameObject.activeInHierarchy) return float.PositiveInfinity;
             if (candidate.GetComponentInChildren<InventoryExchanger>() == null) return float.PositiveInfinity;
 
             Health health = candidate.GetComponent<Health>();
             if (health != null && !health.IsAlive) return float.PositiveInfinity;
 
-            if (Vector3.Distance(ownCharacter.transform.position, candidate.transform.position) > inventoryExchanger.Radius * slack) return float.PositiveInfinity;
+            if (Vector3.Distance(localCharacter.transform.position, candidate.transform.position) > inventoryExchanger.Radius * slack) return float.PositiveInfinity;
 
             Vector3 towardCandidate = candidate.transform.position - eyes.position;
             float distance = towardCandidate.magnitude;
@@ -1146,7 +1146,7 @@ namespace Shooter.Game
         // While the number is typed the player's keys belong to the field: Escape closes only this box
         private void OpenSplitPrompt(StackableItemAsset asset)
         {
-            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            PlayerController playerController = LocalPlayerFinder.FindComponent<PlayerController>();
             if (playerController == null) return;
 
             HideSplitPrompt();
@@ -1234,7 +1234,7 @@ namespace Shooter.Game
         {
             if (splitPromptElement == null) return;
 
-            OwnPlayer.FindComponent<PlayerController>()?.ClosePrompt();
+            LocalPlayerFinder.FindComponent<PlayerController>()?.ClosePrompt();
             HideSplitPrompt();
         }
 

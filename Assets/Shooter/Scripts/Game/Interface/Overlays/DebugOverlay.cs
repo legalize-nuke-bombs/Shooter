@@ -197,11 +197,11 @@ namespace Shooter.Game
                 : "";
             AppendPanelLine(role, clientCount + roundTripTime);
 
-            Transform ownPlayerTransform = OwnPlayer.FindComponent<Transform>();
-            if (ownPlayerTransform != null)
+            Transform localPlayerTransform = LocalPlayerFinder.FindComponent<Transform>();
+            if (localPlayerTransform != null)
             {
-                Vector3 position = ownPlayerTransform.position;
-                AppendPanelLine($"Позиция {position.x:F1} {position.y:F1} {position.z:F1}", FormatFacing(ownPlayerTransform.eulerAngles.y));
+                Vector3 position = localPlayerTransform.position;
+                AppendPanelLine($"Позиция {position.x:F1} {position.y:F1} {position.z:F1}", FormatFacing(localPlayerTransform.eulerAngles.y));
             }
 
             AppendPanelLine(hostVersion == null
