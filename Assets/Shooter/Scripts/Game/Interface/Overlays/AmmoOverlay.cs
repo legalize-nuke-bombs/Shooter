@@ -24,8 +24,8 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            if (inventory == null) inventory = OwnPlayer.FindComponent<Inventory>();
-            if (inventoryHolder == null) inventoryHolder = OwnPlayer.FindComponent<InventoryHolder>();
+            if (inventory == null) inventory = LocalPlayerFinder.FindComponent<Inventory>();
+            if (inventoryHolder == null) inventoryHolder = LocalPlayerFinder.FindComponent<InventoryHolder>();
 
             Firearm firearm = inventoryHolder == null ? null : inventoryHolder.HeldItem as Firearm;
             ItemCatalog itemCatalog = Catalogs.GetCatalog<ItemCatalog>();

@@ -42,13 +42,13 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            SubscribeToOwnPlayerIfChanged();
+            SubscribeToLocalPlayerIfChanged();
             OpenOrCloseRadioTalk();
         }
 
         private void OpenOrCloseRadioTalk()
         {
-            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            PlayerController playerController = LocalPlayerFinder.FindComponent<PlayerController>();
             long? radioPartnerId = playerController == null ? null : playerController.RadioPartnerId;
             if (radioPartnerId == shownRadioPartnerId) return;
 
@@ -63,13 +63,13 @@ namespace Shooter.Game
             }
         }
 
-        private void SubscribeToOwnPlayerIfChanged()
+        private void SubscribeToLocalPlayerIfChanged()
         {
-            PlayerMouth ownPlayerMouth = OwnPlayer.FindComponent<PlayerMouth>();
-            if (ownPlayerMouth == playerMouth) return;
+            PlayerMouth localPlayerMouth = LocalPlayerFinder.FindComponent<PlayerMouth>();
+            if (localPlayerMouth == playerMouth) return;
 
-            CloseTalkAndUnsubscribeFromOwnPlayer();
-            playerMouth = ownPlayerMouth;
+            CloseTalkAndUnsubscribeFromLocalPlayer();
+            playerMouth = localPlayerMouth;
 
             if (playerMouth == null) return;
 
@@ -113,7 +113,7 @@ namespace Shooter.Game
 
         protected override void UnbindElements()
         {
-            CloseTalkAndUnsubscribeFromOwnPlayer();
+            CloseTalkAndUnsubscribeFromLocalPlayer();
 
             if (giveButton != null) giveButton.clicked -= OpenInventoryFromTalk;
             giveButton = null;
@@ -294,7 +294,7 @@ namespace Shooter.Game
 
         private void OpenInventoryFromTalk()
         {
-            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            PlayerController playerController = LocalPlayerFinder.FindComponent<PlayerController>();
             if (playerController != null) playerController.OpenInventoryFromTalk();
         }
 
@@ -318,7 +318,7 @@ namespace Shooter.Game
             return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }
 
-        private void CloseTalkAndUnsubscribeFromOwnPlayer()
+        private void CloseTalkAndUnsubscribeFromLocalPlayer()
         {
             CloseTalk();
 

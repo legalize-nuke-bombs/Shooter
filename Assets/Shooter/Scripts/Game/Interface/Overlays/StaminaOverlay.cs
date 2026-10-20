@@ -20,15 +20,15 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            Stamina ownStamina = FindOwnStamina();
+            Stamina localStamina = FindLocalStamina();
 
-            if (ownStamina == null)
+            if (localStamina == null)
             {
                 HideBar();
                 return;
             }
 
-            int percent = Mathf.RoundToInt(100f * ownStamina.Amount / ownStamina.MaxAmount);
+            int percent = Mathf.RoundToInt(100f * localStamina.Amount / localStamina.MaxAmount);
             if (percent == shownPercent) return;
 
             shownPercent = percent;
@@ -67,9 +67,9 @@ namespace Shooter.Game
             barElement.style.display = DisplayStyle.None;
         }
 
-        private Stamina FindOwnStamina()
+        private Stamina FindLocalStamina()
         {
-            if (stamina == null) stamina = OwnPlayer.FindComponent<Stamina>();
+            if (stamina == null) stamina = LocalPlayerFinder.FindComponent<Stamina>();
 
             return stamina;
         }

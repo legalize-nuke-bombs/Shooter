@@ -66,7 +66,7 @@ namespace Shooter.Game
 
         private string GetHintForLookHit()
         {
-            Interactor interactor = OwnPlayer.FindComponent<Interactor>();
+            Interactor interactor = LocalPlayerFinder.FindComponent<Interactor>();
             if (interactor == null) return string.Empty;
 
             if (!lookHitFinder.TryFindLookHit(out RaycastHit hit) || hit.distance > interactor.ReachDistance) return string.Empty;

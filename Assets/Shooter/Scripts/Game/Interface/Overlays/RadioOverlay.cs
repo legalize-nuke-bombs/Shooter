@@ -24,7 +24,7 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            PlayerController playerController = LocalPlayerFinder.FindComponent<PlayerController>();
             bool shouldBeOpen = playerController != null && playerController.IsRadioOpen;
 
             if (shouldBeOpen != open)

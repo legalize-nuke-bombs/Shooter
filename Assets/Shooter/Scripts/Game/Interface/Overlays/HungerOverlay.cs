@@ -23,15 +23,15 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            Hunger ownHunger = FindOwnHunger();
+            Hunger localHunger = FindLocalHunger();
 
-            if (ownHunger == null)
+            if (localHunger == null)
             {
                 HideCounter();
                 return;
             }
 
-            int amount = Mathf.RoundToInt(ownHunger.Amount);
+            int amount = Mathf.RoundToInt(localHunger.Amount);
             if (amount == shownAmount) return;
 
             shownAmount = amount;
@@ -77,9 +77,9 @@ namespace Shooter.Game
             counterElement.style.display = DisplayStyle.None;
         }
 
-        private Hunger FindOwnHunger()
+        private Hunger FindLocalHunger()
         {
-            if (hunger == null) hunger = OwnPlayer.FindComponent<Hunger>();
+            if (hunger == null) hunger = LocalPlayerFinder.FindComponent<Hunger>();
 
             return hunger;
         }

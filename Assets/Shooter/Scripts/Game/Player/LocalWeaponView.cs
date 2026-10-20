@@ -100,7 +100,7 @@ namespace Shooter.Game
             firstPersonLayer = LayerMask.NameToLayer(FirstPersonLayerName);
             if (firstPersonLayer < 0)
             {
-                Log.Error($"Own player {name} found no {FirstPersonLayerName} layer, weapon stays in the world pass");
+                Log.Error($"Local player {name} found no {FirstPersonLayerName} layer, weapon stays in the world pass");
                 return;
             }
 
@@ -115,7 +115,7 @@ namespace Shooter.Game
             FirstPersonPass firstPersonPass = customPassVolume.AddPassOfType(typeof(FirstPersonPass)) as FirstPersonPass;
             firstPersonPass.layer = 1 << firstPersonLayer;
 
-            Log.Info($"Own player {name} draws first person weapon over the world, layer {firstPersonLayer}");
+            Log.Info($"Local player {name} draws first person weapon over the world, layer {firstPersonLayer}");
         }
 
         private void UpdateShownWeapon()
@@ -137,7 +137,7 @@ namespace Shooter.Game
         {
             if (view == null)
             {
-                Log.Error($"Own player {name} has no camera, first person weapon stays invisible");
+                Log.Error($"Local player {name} has no camera, first person weapon stays invisible");
                 return null;
             }
 
@@ -165,7 +165,7 @@ namespace Shooter.Game
                 }
             }
 
-            Log.Info($"Own player {name} sees {model.name} in first person at {weapon.transform.localPosition} scaled {weapon.transform.localScale} (rest {restScale})");
+            Log.Info($"Local player {name} sees {model.name} in first person at {weapon.transform.localPosition} scaled {weapon.transform.localScale} (rest {restScale})");
             return weapon;
         }
     }

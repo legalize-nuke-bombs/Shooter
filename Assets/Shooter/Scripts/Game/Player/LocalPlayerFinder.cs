@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public static class OwnPlayer
+    public static class LocalPlayerFinder
     {
         public static T FindComponent<T>() where T : Component
         {

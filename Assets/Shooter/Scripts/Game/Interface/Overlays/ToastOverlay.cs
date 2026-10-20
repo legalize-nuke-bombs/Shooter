@@ -19,16 +19,16 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            SubscribeToOwnPlayerToastSourcesIfChanged();
+            SubscribeToLocalPlayerToastSourcesIfChanged();
         }
 
-        private void SubscribeToOwnPlayerToastSourcesIfChanged()
+        private void SubscribeToLocalPlayerToastSourcesIfChanged()
         {
-            Player ownPlayer = OwnPlayer.FindComponent<Player>();
-            if (ownPlayer == subscribedPlayer) return;
+            Player localPlayer = LocalPlayerFinder.FindComponent<Player>();
+            if (localPlayer == subscribedPlayer) return;
 
             UnsubscribeFromToastSources();
-            subscribedPlayer = ownPlayer;
+            subscribedPlayer = localPlayer;
 
             if (subscribedPlayer == null) return;
 
@@ -118,7 +118,7 @@ namespace Shooter.Game
         {
             if (sound == null) return;
 
-            EarSpeaker earSpeaker = OwnPlayer.FindComponent<EarSpeaker>();
+            EarSpeaker earSpeaker = LocalPlayerFinder.FindComponent<EarSpeaker>();
             if (earSpeaker == null) return;
 
             earSpeaker.PlayLocally(sound);
