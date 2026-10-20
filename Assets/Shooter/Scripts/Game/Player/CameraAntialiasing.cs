@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(HDAdditionalCameraData))]
-    public class ViewSettings : ShooterBehaviour
+    public class CameraAntialiasing : ShooterBehaviour
     {
         // DLSS quality codes as the NVIDIA module numbers them; the camera keeps them as a plain number
         private const uint DlssPerformance = 0;
