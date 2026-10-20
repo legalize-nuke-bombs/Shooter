@@ -19,7 +19,8 @@ namespace Shooter.Game
 
         private Action completionCallback;
         private bool interruptible;
-        private float remainingSeconds;
+        private float actionStartedAt;
+        private float actionDuration;
         private Skin skin;
 
         public HandsAction CurrentAction => work.Value.Action;
@@ -64,6 +65,7 @@ namespace Shooter.Game
 
         public bool TryStartAction(HandsAction action, float duration, bool interruptible, Action completionCallback)
         {
+            FinishActionIfDue();
             if (!AreFree) return false;
 
             StartAction(action, duration, interruptible, completionCallback);
@@ -72,6 +74,7 @@ namespace Shooter.Game
 
         public bool TryPreemptWithAction(HandsAction action, float duration, bool interruptible, Action completionCallback)
         {
+            FinishActionIfDue();
             if (!AreFree && !this.interruptible) return false;
             if (!AreFree) Log.Info($"Hands action {CurrentAction} of entity {name} preempted by {action}");
 
@@ -86,15 +89,18 @@ namespace Shooter.Game
             Log.Info($"Hands action {CurrentAction} of entity {name} interrupted");
             FreeHands();
             completionCallback = null;
-            remainingSeconds = 0f;
         }
 
         private void Update()
         {
-            if (AreFree) return;
+            FinishActionIfDue();
+        }
 
-            remainingSeconds -= Time.deltaTime;
-            if (remainingSeconds > 0f) return;
+        // Checked on every request too, not only in Update: an action that ran out this frame frees the hands whatever
+        // ran first in the frame, so a shot follows the same interval as the shooter's ShotCadence
+        private void FinishActionIfDue()
+        {
+            if (AreFree || Time.time - actionStartedAt < actionDuration) return;
 
             Action finishedActionCallback = completionCallback;
             FreeHands();
@@ -105,7 +111,8 @@ namespace Shooter.Game
         private void StartAction(HandsAction action, float duration, bool interruptible, Action completionCallback)
         {
             work.Value = new Work { Action = action, SequenceNumber = work.Value.SequenceNumber + 1, Duration = duration };
-            remainingSeconds = duration;
+            actionStartedAt = Time.time;
+            actionDuration = duration;
             this.interruptible = interruptible;
             this.completionCallback = completionCallback;
         }

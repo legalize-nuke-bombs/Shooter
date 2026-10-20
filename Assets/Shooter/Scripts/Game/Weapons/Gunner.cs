@@ -17,6 +17,7 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private static readonly RaycastHit[] ShotHits = new RaycastHit[32];
+        private readonly ShotCadence cadence = new();
         private BulletHoles bulletHoles;
         private EarSpeaker earSpeaker;
         private Hands hands;
@@ -25,11 +26,9 @@ namespace Shooter.Game
         private Character character;
         private Interactor interactor;
         private Inventory inventory;
-        private float lastShotAt;
         private MainRestrainable restrainable;
         private Speaker speaker;
 
-        private int shotIndexInSpray;
         private bool triggerHeld;
 
         private void Awake()
@@ -49,20 +48,14 @@ namespace Shooter.Game
         {
             if (!IsServer || !triggerHeld) return;
 
-            Firearm firearm = inventoryHolder.HeldItem as Firearm;
-            if (firearm == null) return;
-
-            FirearmAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetFirearmAssetById(firearm.AssetId);
-            if (asset == null || asset.FireMode != FireMode.Auto) return;
-
-            TryShoot();
+            TryShoot(true);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void PressTriggerRpc()
         {
             triggerHeld = true;
-            TryShoot();
+            TryShoot(false);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -77,9 +70,10 @@ namespace Shooter.Game
             TryReload();
         }
 
-        public bool TryShoot()
+        private bool TryShoot(bool sustained)
         {
             if (!TryGetHeldFirearmForAction(out Firearm firearm, out FirearmAsset asset, ActionType.Shoot)) return false;
+            if (!cadence.CanFire(asset, sustained, Time.time)) return false;
 
             if (hands != null && !hands.TryStartAction(HandsAction.Shooting, asset.FireInterval, false, null)) return false;
 
@@ -92,13 +86,9 @@ namespace Shooter.Game
                 return false;
             }
 
-            if (Time.time - lastShotAt >= asset.SprayRecovery) shotIndexInSpray = 0;
-
+            int shotIndex = cadence.Fire(asset, Time.time);
             speaker?.PlayForEveryone(asset.ShotSound);
-            TraceShotAndApplyHit(asset);
-
-            shotIndexInSpray++;
-            lastShotAt = Time.time;
+            TraceShotAndApplyHit(asset, shotIndex);
             return true;
         }
 
@@ -141,9 +131,9 @@ namespace Shooter.Game
             Log.Info($"Entity {name} reloaded {firearm.AssetId} with {takenRounds} rounds, {inventory.CountStackable(asset.Ammo)} left in bag");
         }
 
-        private void TraceShotAndApplyHit(FirearmAsset asset)
+        private void TraceShotAndApplyHit(FirearmAsset asset, int shotIndex)
         {
-            Vector2 sprayOffset = asset.Spray.GetOffsetForShot(shotIndexInSpray);
+            Vector2 sprayOffset = asset.Spray.GetOffsetForShot(shotIndex);
             Vector3 shotDirection = Quaternion.LookRotation(interactor.LookDirection) * Quaternion.Euler(-sprayOffset.y, sprayOffset.x, 0f) * Vector3.forward;
 
             int hitCount = Interactor.CollectLookHits(interactor.EyePosition, shotDirection, asset.Distance, transform, ShotHits);
