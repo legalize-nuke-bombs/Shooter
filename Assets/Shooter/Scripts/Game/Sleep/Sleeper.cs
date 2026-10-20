@@ -7,7 +7,8 @@ namespace Shooter.Game
     [RequireComponent(typeof(RespawnPosition))]
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(Health))]
-    public class Sleeper : ShooterNetworkBehaviour, IDigestible, IRestraint, ISaveableComponent
+    [RequireComponent(typeof(Hands))]
+    public class Sleeper : ShooterNetworkBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -18,6 +19,7 @@ namespace Shooter.Game
         private readonly NetworkVariable<bool> sleeping = new();
 
         private Health health;
+        private Hands hands;
         private SleepCycle sleepCycle;
         private RespawnPosition respawnPosition;
         private Speaker speaker;
@@ -49,6 +51,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
+            hands = GetComponent<Hands>();
             sleepCycle = Registers.Get<SleepCycle>();
             respawnPosition = GetComponent<RespawnPosition>();
             speaker = GetComponent<Speaker>();
@@ -57,11 +60,13 @@ namespace Shooter.Game
         private void OnEnable()
         {
             health.Died += StopSleepingOnDeath;
+            hands.Checking += AllowsOnlyWhileAwake;
         }
 
         private void OnDisable()
         {
             health.Died -= StopSleepingOnDeath;
+            hands.Checking -= AllowsOnlyWhileAwake;
         }
 
         public bool IsSleeping => sleeping.Value;
@@ -80,24 +85,21 @@ namespace Shooter.Game
             StopSleeping(false);
         }
 
-        public bool CanPerform(ActionType type, float dt)
+        private bool AllowsOnlyWhileAwake(ActionType type, float duration)
         {
             return !IsSleeping;
         }
 
-        public void RegisterAction(ActionType type, float dt)
+        public bool TryFallAsleep(Bed bed, out string refusal)
         {
-        }
+            if (!hands.TryPerform(ActionType.Sleep, 0f, out refusal)) return false;
 
-        public void FallAsleep(Bed bed)
-        {
-            if (!IsServer || IsSleeping) return;
-
-            bedPosition.Value = bed == null ? transform.position : bed.transform.position;
+            bedPosition.Value = bed.transform.position;
             sleeping.Value = true;
             respawnPosition.SetPosition(transform.position);
             speaker.PlayForEveryone(bedding);
             Log.Info($"Entity {name} fell asleep at {transform.position} in a bed at {bedPosition.Value}");
+            return true;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

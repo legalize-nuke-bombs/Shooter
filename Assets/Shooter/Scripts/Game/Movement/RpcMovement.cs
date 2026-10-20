@@ -64,9 +64,8 @@ namespace Shooter.Game
                     landing.HandleLanding(fallStartHeight - transform.position.y);
                 }
 
-                if (jumpRequested && Restrainable.CanPerform(ActionType.Jump, MainRestrainable.InstantActionDuration))
+                if (jumpRequested && Hands.TryPerform(ActionType.Jump, 0f))
                 {
-                    Restrainable.RegisterAction(ActionType.Jump, MainRestrainable.InstantActionDuration);
                     verticalSpeed = jumpSpeed;
                 }
                 else

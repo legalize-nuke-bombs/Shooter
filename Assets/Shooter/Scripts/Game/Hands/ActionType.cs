@@ -2,11 +2,15 @@
 {
     public enum ActionType
     {
+        None,
+
         Sprint,
         Walk,
         Jump,
 
         Shoot,
-        Reload
+        Reload,
+
+        Sleep
     }
 }
