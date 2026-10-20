@@ -40,7 +40,7 @@ namespace Shooter.Game
         private void HandleRelationWorsenedByDamage(AICharacterRelation.RelationWorsenedByDamageData worsening)
         {
             Log.Info($"Entity {name} worsened its relation to {worsening.AttackerId} for the damage it dealt");
-            llm.AppendEvent($"Your character automatically worsened their attitude toward ID {worsening.AttackerId} by {worsening.RelationDelta} units because {worsening.AttackerId} dealt you {worsening.DamagePoints} x {worsening.DamageType.Id} damage", false);
+            llm.AppendEvent($"Your character automatically worsened their attitude toward ID {worsening.AttackerId} by {Mathf.Abs(worsening.RelationDelta)} units because {worsening.AttackerId} dealt you {worsening.DamagePoints} x {worsening.DamageType.Id} damage", false);
         }
     }
 }

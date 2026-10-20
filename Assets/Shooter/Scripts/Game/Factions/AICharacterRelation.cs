@@ -118,7 +118,7 @@ namespace Shooter.Game
         {
             if (attacker == null) return;
 
-            int delta = SetAmount(attacker, Math.Max(0, GetAmount(attacker) - (int)(damageToReputationCoefficient * amount)));
+            int delta = SetAmount(attacker, GetAmount(attacker) - (int)(damageToReputationCoefficient * amount));
             if (delta != 0 && RelationWorsenedByDamage != null)
             {
                 RelationWorsenedByDamage.Invoke(new RelationWorsenedByDamageData
@@ -144,16 +144,15 @@ namespace Shooter.Game
         public int SetAmount(Character targetCharacter, int amount)
         {
             int currentAmount = GetAmount(targetCharacter);
+            int clampedAmount = Math.Clamp(amount, 0, 100);
 
             Log.Info($"Entity {name} SetAmount request: character id {targetCharacter.Id} amount {currentAmount} -> {amount}");
 
-            if (amount < 0 || amount > 100) return 0;
+            if (clampedAmount == currentAmount) return 0;
 
-            if (amount == currentAmount) return 0;
+            amountsByCharacterId[targetCharacter.Id] = clampedAmount;
 
-            amountsByCharacterId[targetCharacter.Id] = amount;
-
-            return amount - currentAmount;
+            return clampedAmount - currentAmount;
         }
 
         public RelationStatus GetStatus(Character targetCharacter)
