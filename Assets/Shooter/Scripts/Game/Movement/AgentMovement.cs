@@ -32,9 +32,9 @@ namespace Shooter.Game
 
         public Vector3 FeetPosition => navMeshAgent.nextPosition - Vector3.up * navMeshAgent.baseOffset;
 
-        protected override void Awake()
+        protected override void ShooterAwake()
         {
-            base.Awake();
+            base.ShooterAwake();
 
             navMeshAgent = GetComponent<NavMeshAgent>();
             navMeshAgent.updatePosition = false;

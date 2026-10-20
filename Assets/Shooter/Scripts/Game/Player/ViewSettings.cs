@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(HDAdditionalCameraData))]
-    public class ViewSettings : MonoBehaviour
+    public class ViewSettings : ShooterBehaviour
     {
         // DLSS quality codes as the NVIDIA module numbers them; the camera keeps them as a plain number
         private const uint DlssPerformance = 0;
@@ -20,7 +20,7 @@ namespace Shooter.Game
         private HDAdditionalCameraData additionalCameraData;
         private ClientConfig clientConfig;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             view = GetComponent<Camera>();
             additionalCameraData = GetComponent<HDAdditionalCameraData>();

@@ -1,10 +1,11 @@
-using UnityEngine;
+using Shooter.Infrastructure;
 using UnityEngine.UIElements;
+using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(PanelRenderer))]
-    public abstract class Overlay : MonoBehaviour
+    public abstract class Overlay : ShooterBehaviour
     {
         private PanelRenderer panelRenderer;
 

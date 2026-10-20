@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public abstract class Health : NetworkBehaviour, IDigestible, IRestraint
+    public abstract class Health : ShooterNetworkBehaviour, IDigestible, IRestraint
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -19,7 +19,7 @@ namespace Shooter.Game
 
         public abstract bool IsAlive { get; }
 
-        protected virtual void Awake()
+        protected override void ShooterAwake()
         {
             earSpeaker = GetComponent<EarSpeaker>();
         }

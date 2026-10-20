@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Speaker))]
-    public class Switch : NetworkBehaviour, IUsable, IDigestible, ISaveableComponent
+    public class Switch : ShooterNetworkBehaviour, IUsable, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -45,7 +45,7 @@ namespace Shooter.Game
             shining.Value = saveData.Shining;
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             speaker = GetComponent<Speaker>();
             litEmissiveColors = new Color[glowing.Length];

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class SaveableObject : NetworkBehaviour, ISaveable
+    public class SaveableObject : ShooterNetworkBehaviour, ISaveable
     {
         public const string IdField = nameof(id);
         private static readonly Journal Log = Logs.Here();
@@ -48,7 +48,7 @@ namespace Shooter.Infrastructure
             return prefabId.ToString();
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             networkObject = GetComponent<NetworkObject>();
         }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class MainRestrainable : MonoBehaviour
+    public class MainRestrainable : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -11,7 +11,7 @@ namespace Shooter.Game
 
         private IRestraint[] restraints;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             restraints = GetComponents<IRestraint>();
             Log.Info($"Entity {name} has {restraints.Length} restraints");

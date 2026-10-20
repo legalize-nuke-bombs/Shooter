@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public abstract class Hunger : NetworkBehaviour, IDigestible, IRestraint
+    public abstract class Hunger : ShooterNetworkBehaviour, IDigestible, IRestraint
     {
         [SerializeField] private float sprintCost = 0.5f;
         [SerializeField] private float walkCost = 0.25f;
@@ -16,7 +16,7 @@ namespace Shooter.Game
         public abstract float Amount { get; }
         public abstract float MaxAmount { get; }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             clock = Registers.Get<Clock>();
             enabled = false;

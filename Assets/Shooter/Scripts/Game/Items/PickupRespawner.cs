@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class PickupRespawner : MonoBehaviour, ISaveableComponent
+    public class PickupRespawner : ShooterBehaviour, ISaveableComponent
     {
         private const double SecondsPerHour = 3600.0;
 
@@ -41,7 +41,7 @@ namespace Shooter.Game
             rolledUntil = saveData.Alive ? null : saveData.RolledUntil;
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             clock = Registers.Get<Clock>();
             enabled = NetworkManager.Singleton.IsServer;

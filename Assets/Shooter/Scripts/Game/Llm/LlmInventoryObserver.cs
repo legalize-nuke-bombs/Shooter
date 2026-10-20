@@ -1,15 +1,16 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(InventoryExchanger))]
-    public class LlmInventoryObserver : MonoBehaviour
+    public class LlmInventoryObserver : ShooterBehaviour
     {
         private InventoryExchanger inventoryExchanger;
         private Llm llm;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             inventoryExchanger = GetComponent<InventoryExchanger>();
             llm = GetComponent<Llm>();

@@ -6,14 +6,14 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(BehaviorReporter))]
-    public class CustomOrderSlot : MonoBehaviour, IDigestible, ISaveableComponent
+    public class CustomOrderSlot : ShooterBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         private CustomOrder order;
         private BehaviorReporter behaviorReporter;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             enabled = NetworkManager.Singleton.IsServer;
             behaviorReporter = GetComponent<BehaviorReporter>();

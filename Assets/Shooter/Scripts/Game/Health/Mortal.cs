@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(EarSpeaker))]
     [RequireComponent(typeof(RespawnPosition))]
-    public class Mortal : NetworkBehaviour, IMortal
+    public class Mortal : ShooterNetworkBehaviour, IMortal
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -21,7 +21,7 @@ namespace Shooter.Game
         private Player player;
         private RespawnPosition respawnPosition;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
             movement = GetComponent<Movement>();

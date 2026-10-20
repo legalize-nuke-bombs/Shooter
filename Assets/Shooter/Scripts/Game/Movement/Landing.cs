@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -5,7 +6,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(CharacterController))]
-    public class Landing : MonoBehaviour
+    public class Landing : ShooterBehaviour
     {
         [SerializeField] private float minHeight = 0.6f;
         [SerializeField] private float safeHeight = 3f;
@@ -18,7 +19,7 @@ namespace Shooter.Game
         private Health health;
         private Speaker speaker;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             characterController = GetComponent<CharacterController>();
             speaker = GetComponent<Speaker>();

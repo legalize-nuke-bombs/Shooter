@@ -1,14 +1,15 @@
-using UnityEngine;
-using UnityEngine.Rendering;
+using Shooter.Infrastructure;
 using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.Rendering;
+using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Skylight : MonoBehaviour
+    public class Skylight : ShooterBehaviour
     {
         private VolumeProfile volumeProfile;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             volumeProfile = ScriptableObject.CreateInstance<VolumeProfile>();
             PhysicallyBasedSky physicallyBasedSky = volumeProfile.Add<PhysicallyBasedSky>();
@@ -21,7 +22,7 @@ namespace Shooter.Game
             volume.sharedProfile = volumeProfile;
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             if (volumeProfile != null) Destroy(volumeProfile);
         }

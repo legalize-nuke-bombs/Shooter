@@ -1,8 +1,9 @@
+using Shooter.Infrastructure;
 using Unity.Netcode;
 
 namespace Shooter.Game
 {
-    public abstract class Nameable : NetworkBehaviour, IDigestible
+    public abstract class Nameable : ShooterNetworkBehaviour, IDigestible
     {
         public DigestionPriority Priority => DigestionPriority.High;
 

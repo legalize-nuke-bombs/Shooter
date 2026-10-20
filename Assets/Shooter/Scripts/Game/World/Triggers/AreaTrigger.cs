@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(MainTriggerable))]
     [RequireComponent(typeof(SphereCollider))]
-    public class AreaTrigger : NetworkBehaviour
+    public class AreaTrigger : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -17,7 +17,7 @@ namespace Shooter.Game
         private static int characterLayer = -1;
         private static int CharacterLayer => characterLayer != -1 ? characterLayer : characterLayer = LayerMask.NameToLayer("Character");
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             mainTriggerable = GetComponent<MainTriggerable>();
             ownCharacter = GetComponentInParent<Character>();

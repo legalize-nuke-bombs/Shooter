@@ -1,10 +1,11 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [ExecuteAlways]
     [RequireComponent(typeof(Light))]
-    public class MainMenuMoon : MonoBehaviour
+    public class MainMenuMoon : ShooterBehaviour
     {
         private const float HalfTurnDegrees = 180f;
 

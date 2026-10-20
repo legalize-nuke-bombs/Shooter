@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Movement))]
-    public class Interactor : NetworkBehaviour
+    public class Interactor : ShooterNetworkBehaviour
     {
         public const float EyeHeight = 0.75f;
         private static readonly Journal Log = Logs.Here();
@@ -26,7 +26,7 @@ namespace Shooter.Game
 
         public float ReachDistance => reach;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             movement = GetComponent<Movement>();
         }

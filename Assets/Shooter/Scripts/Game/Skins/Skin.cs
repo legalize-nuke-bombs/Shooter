@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Skin : MonoBehaviour
+    public class Skin : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -15,7 +15,7 @@ namespace Shooter.Game
 
         public GameObject ModelInstance { get; private set; }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             if (asset == null || asset.Model == null)
             {

@@ -1,9 +1,10 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(AudioSource))]
-    public class MainMenuMusic : MonoBehaviour
+    public class MainMenuMusic : ShooterBehaviour
     {
         [SerializeField] private AudioClip[] tracks;
         [SerializeField] private float fadeInSeconds = 4f;
@@ -11,7 +12,7 @@ namespace Shooter.Game
         private float elapsedFadeInSeconds;
         private AudioSource audioSource;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             audioSource = GetComponent<AudioSource>();
             audioSource.loop = true;

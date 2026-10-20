@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class CharacterId : NetworkBehaviour, ISaveableComponent
+    public class CharacterId : ShooterNetworkBehaviour, ISaveableComponent
     {
         public const long None = -1;
 

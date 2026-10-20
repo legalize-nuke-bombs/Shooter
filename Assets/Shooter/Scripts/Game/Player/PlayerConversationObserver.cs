@@ -1,11 +1,12 @@
 using System;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(PlayerConversations))]
     [RequireComponent(typeof(PlayerController))]
-    public class PlayerConversationObserver : MonoBehaviour, IToastSource
+    public class PlayerConversationObserver : ShooterBehaviour, IToastSource
     {
         private const string Stranger = "Незнакомец";
 
@@ -18,7 +19,7 @@ namespace Shooter.Game
 
         public event Action<Toast> ToastRaised;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             playerConversations = GetComponent<PlayerConversations>();
             playerController = GetComponent<PlayerController>();

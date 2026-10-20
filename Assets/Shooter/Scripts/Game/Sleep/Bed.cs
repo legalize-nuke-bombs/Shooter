@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Bed : MonoBehaviour, IUsable, IDigestible
+    public class Bed : ShooterBehaviour, IUsable, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -14,7 +14,7 @@ namespace Shooter.Game
 
         public Camera BedsideCamera => bedside != null ? bedside : bedside = GetComponentInChildren<Camera>(true);
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             sleepCycle = Registers.Get<SleepCycle>();
         }
