@@ -193,6 +193,10 @@
     margin-bottom: 14px;
 }
 
+.inventory__scroll {
+    max-height: 288px;
+}
+
 .ghost {
     position: absolute;
     opacity: 0.8;
