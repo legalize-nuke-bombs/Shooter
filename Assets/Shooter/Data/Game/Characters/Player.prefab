@@ -244,7 +244,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e61cba43094b8f489398c165fe509e4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.ViewSettings
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.CameraAntialiasing
 --- !u!1001 &6032461996145085491
 PrefabInstance:
   m_ObjectHideFlags: 0
