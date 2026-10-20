@@ -22,13 +22,13 @@ namespace Shooter.Game
         [SerializeReference] public BlackboardVariable<bool> OnlyEnemies = new(true);
 
         private Character ownCharacter;
-        private AICharacterRelation characterRelation;
+        private Relations relations;
 
         protected override Status OnStart()
         {
             if (Agent.Value == null) return Status.Failure;
             if (ownCharacter == null) ownCharacter = Agent.Value.GetComponent<Character>();
-            if (characterRelation == null) characterRelation = Agent.Value.GetComponent<AICharacterRelation>();
+            if (relations == null) relations = Agent.Value.GetComponent<Relations>();
 
             Vector3 agentPosition = Agent.Value.transform.position;
 
@@ -42,7 +42,7 @@ namespace Shooter.Game
 
                 float sqrDistance = (character.transform.position - agentPosition).sqrMagnitude;
                 if (sqrDistance >= nearestSqrDistance) continue;
-                if (OnlyEnemies.Value && characterRelation.GetStatus(character) != RelationStatus.Enemy) continue;
+                if (OnlyEnemies.Value && relations.GetStatus(character) != RelationStatus.Enemy) continue;
 
                 nearestSqrDistance = sqrDistance;
                 spottedCharacter = character;
