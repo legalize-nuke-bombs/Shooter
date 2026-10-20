@@ -1,16 +1,12 @@
 using Shooter.Infrastructure;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(MainTriggerable))]
     [RequireComponent(typeof(SphereCollider))]
-    public class AreaTrigger : ShooterNetworkBehaviour
+    public class AreaTrigger : Trigger
     {
         private static readonly Journal Log = Logs.Here();
-
-        private MainTriggerable mainTriggerable;
 
         private Character ownCharacter;
 
@@ -19,7 +15,6 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            mainTriggerable = GetComponent<MainTriggerable>();
             ownCharacter = GetComponentInParent<Character>();
 
             SphereCollider sphereCollider = GetComponent<SphereCollider>();
@@ -41,7 +36,7 @@ namespace Shooter.Game
 
             if (character == ownCharacter) return;
 
-            mainTriggerable.HandleCharacterEntered(character);
+            Fire(character);
         }
     }
 }

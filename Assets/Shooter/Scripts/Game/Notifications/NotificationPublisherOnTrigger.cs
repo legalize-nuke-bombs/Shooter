@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class NotificationPublisher : ShooterBehaviour, ITriggerable, ISaveableComponent
+    [RequireComponent(typeof(Trigger))]
+    public class NotificationPublisherOnTrigger : ShooterBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -13,6 +14,7 @@ namespace Shooter.Game
         [SerializeField] private bool oncePerCharacter = true;
 
         private HashSet<long> notifiedCharacterIds = new();
+        private Trigger trigger;
 
         public string ComponentKey => "NotificationPublisher";
 
@@ -35,7 +37,22 @@ namespace Shooter.Game
             notifiedCharacterIds = new HashSet<long>(saveData.Characters);
         }
 
-        public void HandleCharacterEntered(Character character)
+        protected override void ShooterAwake()
+        {
+            trigger = GetComponent<Trigger>();
+        }
+
+        private void OnEnable()
+        {
+            trigger.Fired += Notify;
+        }
+
+        private void OnDisable()
+        {
+            trigger.Fired -= Notify;
+        }
+
+        private void Notify(Character character)
         {
             if (notificationAsset == null)
             {

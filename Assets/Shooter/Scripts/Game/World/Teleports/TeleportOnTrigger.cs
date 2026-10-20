@@ -5,15 +5,16 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Teleport : ShooterBehaviour, ITriggerable, ISaveableComponent
+    [RequireComponent(typeof(Trigger))]
+    public class TeleportOnTrigger : Teleporter, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject destination;
-        [SerializeField] private EarSoundAsset sound;
         [SerializeField] private bool oncePerCharacter = false;
 
         private HashSet<long> teleportedCharacterIds = new();
+        private Trigger trigger;
 
         public string ComponentKey => "Teleport";
 
@@ -36,7 +37,22 @@ namespace Shooter.Game
             teleportedCharacterIds = new HashSet<long>(saveData.Characters);
         }
 
-        public void HandleCharacterEntered(Character character)
+        protected override void ShooterAwake()
+        {
+            trigger = GetComponent<Trigger>();
+        }
+
+        private void OnEnable()
+        {
+            trigger.Fired += TeleportCharacter;
+        }
+
+        private void OnDisable()
+        {
+            trigger.Fired -= TeleportCharacter;
+        }
+
+        private void TeleportCharacter(Character character)
         {
             if (destination == null)
             {
@@ -51,8 +67,7 @@ namespace Shooter.Game
 
             Vector3 destinationPosition = destination.transform.position;
             Log.Info($"Entity {name} teleporting {movement.name} to {destinationPosition}");
-            movement.Teleport(destinationPosition);
-            movement.GetComponent<EarSpeaker>()?.PlayForOwner(sound);
+            Teleport(character, movement, destinationPosition);
         }
     }
 }
