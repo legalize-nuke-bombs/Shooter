@@ -9,11 +9,8 @@ namespace Shooter.Game
     [RequireComponent(typeof(InventoryExchanger))]
     public class PlayerInventoryObserver : ShooterNetworkBehaviour, IToastSource
     {
-        private const string Stranger = "Незнакомец";
-
         [SerializeField] private EarSoundAsset sound;
 
-        private readonly NameMapper nameMapper = new();
         private InventoryExchanger inventoryExchanger;
 
         public event Action<Toast> ToastRaised;
@@ -48,10 +45,9 @@ namespace Shooter.Game
             ItemAsset item = itemCatalog == null ? null : itemCatalog.GetAssetById(itemId);
             if (item == null) return;
 
-            string giverName = nameMapper.GetShownNameById(giverId);
             string title = item is StackableItemAsset ? $"{item.Title} × {amount}" : item.Title;
 
-            ToastRaised?.Invoke(new Toast(item.Icon, sound, title, "от " + (string.IsNullOrEmpty(giverName) ? Stranger : giverName)));
+            ToastRaised?.Invoke(new Toast(item.Icon, sound, title, "от " + NameMapper.GetShownNameById(giverId)));
         }
     }
 }

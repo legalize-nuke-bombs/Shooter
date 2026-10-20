@@ -8,12 +8,9 @@ namespace Shooter.Game
     [RequireComponent(typeof(PlayerController))]
     public class PlayerConversationObserver : ShooterBehaviour, IToastSource
     {
-        private const string Stranger = "Незнакомец";
-
         [SerializeField] private IconAsset icon;
         [SerializeField] private EarSoundAsset sound;
 
-        private readonly NameMapper nameMapper = new();
         private PlayerConversations playerConversations;
         private PlayerController playerController;
 
@@ -40,8 +37,7 @@ namespace Shooter.Game
             if (line.Spoken || line.AuthorId == playerConversations.CharacterId) return;
             if (playerController.TalkPartnerId == partnerId) return;
 
-            string partnerName = nameMapper.GetShownNameById(partnerId);
-            ToastRaised?.Invoke(new Toast(icon, sound, line.Content, "от " + (string.IsNullOrEmpty(partnerName) ? Stranger : partnerName)));
+            ToastRaised?.Invoke(new Toast(icon, sound, line.Content, "от " + NameMapper.GetShownNameById(partnerId)));
         }
     }
 }

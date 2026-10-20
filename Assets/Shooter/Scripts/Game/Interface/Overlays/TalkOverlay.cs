@@ -14,7 +14,6 @@ namespace Shooter.Game
         private const string WaitingLabelName = "talk-waiting";
         private const string InputFieldName = "talk-input";
         private const string GiveButtonName = "talk-give";
-        private const string Stranger = "Незнакомец";
         private const string RadioTitleSuffix = "рация";
         private static readonly Journal Log = Logs.Here();
 
@@ -130,16 +129,16 @@ namespace Shooter.Game
             }
 
             talkingOverRadio = false;
-            ShowTalk(playerConversations.GetOrCreateContact(foundTalker.CharacterId), foundTalker, GetPartnerName(foundTalker));
+            ShowTalk(playerConversations.GetOrCreateContact(foundTalker.CharacterId), foundTalker, NameMapper.GetShownName(foundTalker));
         }
 
         private void OpenRadioTalk(long partnerId)
         {
             if (playerConversations == null) return;
 
-            Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Exclude);
+            Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Include);
             talkingOverRadio = true;
-            ShowTalk(playerConversations.GetOrCreateContact(partnerId), partner == null ? null : partner.GetComponent<Talker>(), $"{GetPartnerName(partner)} ({RadioTitleSuffix})");
+            ShowTalk(playerConversations.GetOrCreateContact(partnerId), partner == null ? null : partner.GetComponent<Talker>(), $"{NameMapper.GetShownName(partner)} ({RadioTitleSuffix})");
         }
 
         private void ShowTalk(Contact contact, Talker talker, string title)
@@ -306,16 +305,6 @@ namespace Shooter.Game
             return network.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject networkObject)
                 ? networkObject.GetComponentInChildren<Talker>()
                 : null;
-        }
-
-        private string GetPartnerName(Component partner)
-        {
-            Nameable nameable = partner == null ? null : partner.GetComponentInChildren<Nameable>();
-            if (nameable == null) return Stranger;
-
-            string shownName = nameable.GetShownName();
-
-            return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }
 
         private void CloseTalkAndUnsubscribeFromLocalPlayer()
