@@ -13,7 +13,6 @@ namespace Shooter.Game
         private const string Stranger = "Незнакомец";
         private static readonly Journal Log = Logs.Here();
 
-        private readonly NameMapper nameMapper = new();
         private PlayerConversations playerConversations;
         private Label emptyLabel;
         private ScrollView contactScrollView;
@@ -124,7 +123,7 @@ namespace Shooter.Game
             Nameable nameable = partner == null ? null : partner.GetComponentInChildren<Nameable>();
             if (nameable == null) return Stranger;
 
-            string shownName = nameMapper.GetShownName(nameable);
+            string shownName = nameable.GetShownName();
 
             return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }

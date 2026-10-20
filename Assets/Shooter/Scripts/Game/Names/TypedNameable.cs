@@ -18,6 +18,11 @@ namespace Shooter.Game
             return asset == null ? null : asset.GetPromptName();
         }
 
+        public override string GetShownName()
+        {
+            return asset == null ? null : asset.GetShownName();
+        }
+
         public override string GetPromptName()
         {
             return asset == null ? null : asset.GetPromptName();

@@ -31,6 +31,11 @@ namespace Shooter.Game
             return string.IsNullOrEmpty(Name) ? null : "Name: " + Name;
         }
 
+        public override string GetShownName()
+        {
+            return Name;
+        }
+
         public override string GetPromptName()
         {
             return Name;
