@@ -9,11 +9,11 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Nameable))]
-    public class AICharacterRelation : MonoBehaviour, IDigestible, ISaveableComponent
+    public class Relations : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] [Range(0, 10)] private float damageToReputationCoefficient = 1;
+        [SerializeField] [Range(0, 10)] private float damageToRelationCoefficient = 1;
 
         [SerializeField] [Range(0, 100)] private int enemyThreshold;
         [SerializeField] [Range(0, 100)] private int friendThreshold = 90;
@@ -118,7 +118,7 @@ namespace Shooter.Game
         {
             if (attacker == null) return;
 
-            int delta = SetAmount(attacker, GetAmount(attacker) - (int)(damageToReputationCoefficient * amount));
+            int delta = SetAmount(attacker, GetAmount(attacker) - (int)(damageToRelationCoefficient * amount));
             if (delta != 0 && RelationWorsenedByDamage != null)
             {
                 RelationWorsenedByDamage.Invoke(new RelationWorsenedByDamageData

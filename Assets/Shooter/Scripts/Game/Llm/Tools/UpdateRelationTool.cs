@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        private AICharacterRelation aiCharacterRelation;
+        private Relations relations;
 
         public override string Name => "update_relation";
 
@@ -22,10 +22,10 @@ Always use this tool if a character does something good or bad to you.
 
         protected override void HandleAttached()
         {
-            aiCharacterRelation = Self.GetComponent<AICharacterRelation>();
-            if (aiCharacterRelation == null)
+            relations = Self.GetComponent<Relations>();
+            if (relations == null)
             {
-                Log.Error($"Entity {Self.name} does not have ai character relation component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have a relations component required by tool {Name}");
             }
         }
 
@@ -37,9 +37,9 @@ Always use this tool if a character does something good or bad to you.
                 return $"Character ID {arguments.TargetId} does not exist.";
             }
 
-            int oldAmount = aiCharacterRelation.GetAmount(target);
-            aiCharacterRelation.SetAmount(target, arguments.Amount);
-            int newAmount = aiCharacterRelation.GetAmount(target);
+            int oldAmount = relations.GetAmount(target);
+            relations.SetAmount(target, arguments.Amount);
+            int newAmount = relations.GetAmount(target);
 
             return $"Your attitude to {arguments.TargetId}: {oldAmount} -> {newAmount}";
         }

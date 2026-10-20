@@ -104,8 +104,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce955cba01bd400c8f1604703358d3f0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.AI.AICharacterRelation
-  damageToReputationCoefficient: 1
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Relations
+  damageToRelationCoefficient: 1
   enemyThreshold: 0
   friendThreshold: 90
 --- !u!195 &1027279326229136173

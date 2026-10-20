@@ -9,25 +9,25 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private Llm llm;
-        private AICharacterRelation characterRelation;
+        private Relations relations;
         private BehaviorReporter behaviorReporter;
 
         private void Awake()
         {
             llm = GetComponent<Llm>();
-            characterRelation = GetComponent<AICharacterRelation>();
+            relations = GetComponent<Relations>();
             behaviorReporter = GetComponent<BehaviorReporter>();
         }
 
         private void OnEnable()
         {
-            characterRelation.RelationWorsenedByDamage += HandleRelationWorsenedByDamage;
+            relations.RelationWorsenedByDamage += HandleRelationWorsenedByDamage;
             behaviorReporter.Reported += HandleBehaviorReported;
         }
 
         private void OnDisable()
         {
-            characterRelation.RelationWorsenedByDamage -= HandleRelationWorsenedByDamage;
+            relations.RelationWorsenedByDamage -= HandleRelationWorsenedByDamage;
             behaviorReporter.Reported -= HandleBehaviorReported;
         }
 
@@ -37,7 +37,7 @@ namespace Shooter.Game
             llm.AppendEvent(report.Prompt, report.IsUrgent);
         }
 
-        private void HandleRelationWorsenedByDamage(AICharacterRelation.RelationWorsenedByDamageData worsening)
+        private void HandleRelationWorsenedByDamage(Relations.RelationWorsenedByDamageData worsening)
         {
             Log.Info($"Entity {name} worsened its relation to {worsening.AttackerId} for the damage it dealt");
             llm.AppendEvent($"Your character automatically worsened their attitude toward ID {worsening.AttackerId} by {Mathf.Abs(worsening.RelationDelta)} units because {worsening.AttackerId} dealt you {worsening.DamagePoints} x {worsening.DamageType.Id} damage", false);
