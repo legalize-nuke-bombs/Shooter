@@ -29,9 +29,10 @@ namespace Shooter.Game
             {
                 Holes = new List<BulletHole>(holes.Count)
             };
-            for (int i = 0; i < holes.Count; i++)
+            // Oldest first, so that after loading the next hole to overwrite is the first one
+            for (int age = 0; age < holes.Count; age++)
             {
-                saveData.Holes.Add(holes[i]);
+                saveData.Holes.Add(holes[(nextHoleToOverwrite + age) % holes.Count]);
             }
             return saveData;
         }
@@ -39,6 +40,7 @@ namespace Shooter.Game
         {
             SaveData saveData = token.ToObject<SaveData>();
             holes.Clear();
+            nextHoleToOverwrite = 0;
             foreach (BulletHole hole in saveData.Holes)
             {
                 holes.Add(hole);
