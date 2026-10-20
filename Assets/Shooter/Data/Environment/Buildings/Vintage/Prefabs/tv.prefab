@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: -8034441723559104857}
   - component: {fileID: -3928069200239862048}
   - component: {fileID: 1433919343119068576}
+  - component: {fileID: 8888093352159658044}
   m_Layer: 0
   m_Name: tv
   m_TagString: Untagged
@@ -141,7 +142,6 @@ MonoBehaviour:
   powered:
   - {fileID: 2161080503177255294}
   glowing: []
-  click: {fileID: 11400000, guid: 02b49b67faa74acfb909b628cdf70854, type: 2}
 --- !u!64 &7487244357921330418
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -217,6 +217,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
+--- !u!114 &8888093352159658044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622243103439998288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ad7075a5b987a45a24ba72ed2e250a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnSwitch
+  sound: {fileID: 11400000, guid: 02b49b67faa74acfb909b628cdf70854, type: 2}
 --- !u!1001 &2154924059641547055
 PrefabInstance:
   m_ObjectHideFlags: 0

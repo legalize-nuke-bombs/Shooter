@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Shooter.Infrastructure;
 using Unity.Collections;
 using Unity.Netcode;
@@ -7,7 +8,6 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(Speaker))]
     public class Crafter : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -16,12 +16,12 @@ namespace Shooter.Game
         private readonly Dictionary<string, CraftAsset> craftsById = new();
 
         private Inventory inventory;
-        private Speaker speaker;
+
+        public event Action<CraftAsset> Crafted;
 
         protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
-            speaker = GetComponent<Speaker>();
             foreach (CraftAsset craft in availableCrafts)
             {
                 craftsById.Add(craft.Id, craft);
@@ -83,7 +83,7 @@ namespace Shooter.Game
             }
 
             Log.Info($"Entity {name} crafted {craft.Id}");
-            if (craft.Sound != null) speaker.PlayForEveryone(craft.Sound);
+            Crafted?.Invoke(craft);
             return true;
         }
     }

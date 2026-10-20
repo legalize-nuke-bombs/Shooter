@@ -45,6 +45,15 @@ GameObject:
   - component: {fileID: 4910129566296814550}
   - component: {fileID: 3054902201238321546}
   - component: {fileID: 8536992718150782463}
+  - component: {fileID: 1084630616395230464}
+  - component: {fileID: 4362361215487385494}
+  - component: {fileID: 4861083539180197114}
+  - component: {fileID: 2698118972585534078}
+  - component: {fileID: 8789646931781329105}
+  - component: {fileID: 3824410857830792615}
+  - component: {fileID: 123287598632125093}
+  - component: {fileID: 6654285846877208593}
+  - component: {fileID: 8649854724007077956}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -248,11 +257,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2999e86a88a4251a09e99e6f15ad622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minHeight: 0.6
   safeHeight: 3
   damagePerMetre: 12
-  sounds: {fileID: 11400000, guid: b61324db85195d94687c05ceb97044b0, type: 2}
-  gain: 1.7
   fallDamage: {fileID: 11400000, guid: b45614fc18f34f7a98bbf9624a8cd6c3, type: 2}
 --- !u!114 &6600000000000000105
 MonoBehaviour:
@@ -621,3 +627,114 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5fab683844cce409409a1dd4c2b703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.HandsAnimator
+--- !u!114 &1084630616395230464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f365a2c3a3c74f841b29636bb5e4fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DealDamageOnShot
+--- !u!114 &4362361215487385494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96742dd43d477c24aa5a642d22a9a9df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.LeaveBulletHoleOnShot
+--- !u!114 &4861083539180197114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a76483e7635a8f747ad4fa23750d98c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnShot
+--- !u!114 &2698118972585534078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fa2978789465024090c09d86100a865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnMisfire
+--- !u!114 &8789646931781329105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bacf364f21d0614db4ad111bb5c7521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnReload
+--- !u!114 &3824410857830792615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c83a1c58cc6d3d843a227a05215fb07d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnHeadshot
+--- !u!114 &123287598632125093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc429a1ccd5386c43a7b6d62053f7011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnLanding
+  minHeight: 0.6
+  sounds: {fileID: 11400000, guid: b61324db85195d94687c05ceb97044b0, type: 2}
+  gain: 1.7
+--- !u!114 &6654285846877208593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d2bd58fa8e30f4daf84401fd32aabc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnItemUse
+--- !u!114 &8649854724007077956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73573c2ce44adaa42a10571d1d54f895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnCraft

@@ -1,3 +1,4 @@
+using System;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -5,15 +6,11 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(RespawnPosition))]
-    [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Hands))]
     public class Sleeper : ShooterNetworkBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
-
-        [SerializeField] private SoundAsset bedding;
-        [SerializeField] private SoundAsset rising;
 
         private readonly NetworkVariable<Vector3> bedPosition = new();
         private readonly NetworkVariable<bool> sleeping = new();
@@ -22,7 +19,6 @@ namespace Shooter.Game
         private Hands hands;
         private SleepCycle sleepCycle;
         private RespawnPosition respawnPosition;
-        private Speaker speaker;
 
         public string ComponentKey => "Sleeper";
 
@@ -48,13 +44,16 @@ namespace Shooter.Game
             sleeping.Value = saveData.Sleeping;
         }
 
+        public event Action FellAsleep;
+
+        public event Action WokeUp;
+
         protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
             hands = GetComponent<Hands>();
             sleepCycle = Registers.Get<SleepCycle>();
             respawnPosition = GetComponent<RespawnPosition>();
-            speaker = GetComponent<Speaker>();
         }
 
         private void OnEnable()
@@ -97,8 +96,8 @@ namespace Shooter.Game
             bedPosition.Value = bed.transform.position;
             sleeping.Value = true;
             respawnPosition.SetPosition(transform.position);
-            speaker.PlayForEveryone(bedding);
             Log.Info($"Entity {name} fell asleep at {transform.position} in a bed at {bedPosition.Value}");
+            FellAsleep?.Invoke();
             return true;
         }
 
@@ -121,13 +120,13 @@ namespace Shooter.Game
             StopSleeping(true);
         }
 
-        private void StopSleeping(bool playRisingSound)
+        private void StopSleeping(bool wokeUp)
         {
             if (!IsServer || !IsSleeping) return;
 
             sleeping.Value = false;
-            if (playRisingSound) speaker.PlayForEveryone(rising);
             Log.Info($"Entity {name} woke up at {transform.position}");
+            if (wokeUp) WokeUp?.Invoke();
         }
     }
 }

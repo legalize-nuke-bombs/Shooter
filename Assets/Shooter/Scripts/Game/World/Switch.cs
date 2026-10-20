@@ -1,10 +1,10 @@
+using System;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(Speaker))]
     public class Switch : ShooterNetworkBehaviour, IUsable, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
@@ -17,12 +17,9 @@ namespace Shooter.Game
 
         [SerializeField] private Renderer[] glowing;
 
-        [SerializeField] private SoundAsset click;
-
         private readonly NetworkVariable<bool> shining = new(true);
 
         private Color[] litEmissiveColors;
-        private Speaker speaker;
 
         public string ComponentKey => "Switch";
 
@@ -47,7 +44,6 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            speaker = GetComponent<Speaker>();
             litEmissiveColors = new Color[glowing.Length];
 
             for (int i = 0; i < glowing.Length; i++)
@@ -65,11 +61,13 @@ namespace Shooter.Game
 
         public UsageType Usage => shining.Value ? UsageType.TurnOff : UsageType.TurnOn;
 
+        public event Action<bool> Switched;
+
         public void Use(NetworkObject user, out string promptResult)
         {
             shining.Value = !shining.Value;
-            speaker.PlayForEveryone(click);
             Log.Info($"Entity {user.name} switched {name} {(shining.Value ? "on" : "off")}");
+            Switched?.Invoke(shining.Value);
             promptResult = $"Switched to {shining.Value}";
         }
 

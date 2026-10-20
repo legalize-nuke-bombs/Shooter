@@ -1,0 +1,34 @@
+using Shooter.Infrastructure;
+using UnityEngine;
+
+namespace Shooter.Game
+{
+    [RequireComponent(typeof(Gunner))]
+    [RequireComponent(typeof(Speaker))]
+    public class SoundOnShot : ShooterBehaviour
+    {
+        private Gunner gunner;
+        private Speaker speaker;
+
+        protected override void ShooterAwake()
+        {
+            gunner = GetComponent<Gunner>();
+            speaker = GetComponent<Speaker>();
+        }
+
+        private void OnEnable()
+        {
+            gunner.Shot += Play;
+        }
+
+        private void OnDisable()
+        {
+            gunner.Shot -= Play;
+        }
+
+        private void Play(FirearmAsset asset, ShotHit hit)
+        {
+            speaker.PlayForEveryone(asset.ShotSound);
+        }
+    }
+}

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -2756196156096060293}
   - component: {fileID: -548172686522659228}
   - component: {fileID: -9067010271887292737}
+  - component: {fileID: 3807415303491690272}
   m_Layer: 12
   m_Name: RedMushroom
   m_TagString: Untagged
@@ -135,7 +136,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Pickupable
   item: {fileID: 11400000, guid: e7113cba4ddd28f43b32d0c3a94429a4, type: 2}
-  sound: {fileID: 11400000, guid: 709616bf9706402ea32906bcb77f2564, type: 2}
 --- !u!114 &-2756196156096060293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,6 +184,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 6ce6f7e454178594fa964426a078b449, type: 3}
+--- !u!114 &3807415303491690272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01e820535ed751408851b383571abe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnPickup
+  sound: {fileID: 11400000, guid: 709616bf9706402ea32906bcb77f2564, type: 2}
 --- !u!1 &4176697182617146958
 GameObject:
   m_ObjectHideFlags: 0

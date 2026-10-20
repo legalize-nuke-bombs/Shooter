@@ -1,10 +1,10 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(CharacterController))]
-    [RequireComponent(typeof(Landing))]
     public class RpcMovement : Movement
     {
         private const float GroundedVerticalSpeed = -1f;
@@ -17,7 +17,6 @@ namespace Shooter.Game
         private CharacterController characterController;
         private float verticalSpeed;
         private bool jumpRequested;
-        private Landing landing;
         private bool sprinting;
         private int lastSteerTick;
         private Vector2 steeringInput;
@@ -27,8 +26,9 @@ namespace Shooter.Game
             base.ShooterAwake();
 
             characterController = GetComponent<CharacterController>();
-            landing = GetComponent<Landing>();
         }
+
+        public event Action<float> Landed;
 
         [Rpc(SendTo.Server, Delivery = RpcDelivery.Unreliable, InvokePermission = RpcInvokePermission.Owner)]
         public void SteerRpc(Vector2 moveInput, float yaw, float pitch, bool sprint, int tick)
@@ -61,7 +61,7 @@ namespace Shooter.Game
                 if (airborne)
                 {
                     airborne = false;
-                    landing.HandleLanding(fallStartHeight - transform.position.y);
+                    Landed?.Invoke(fallStartHeight - transform.position.y);
                 }
 
                 if (jumpRequested && Hands.TryPerform(ActionType.Jump, 0f))

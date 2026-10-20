@@ -84,7 +84,7 @@ namespace Shooter.Game
             body.GetComponent<Pickupable>().PickedUp += HandleBodyPickedUp;
         }
 
-        private void HandleBodyPickedUp(Pickupable pickupable)
+        private void HandleBodyPickedUp(Pickupable pickupable, NetworkObject user)
         {
             Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, grows back in about {averageHoursToGrow} h of world time");
             alive = false;
