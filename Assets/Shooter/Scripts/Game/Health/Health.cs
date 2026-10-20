@@ -1,7 +1,5 @@
 using System;
 using Shooter.Infrastructure;
-using Unity.Netcode;
-using UnityEngine;
 
 namespace Shooter.Game
 {
@@ -9,20 +7,19 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private EarSoundAsset hurtSound;
-
-        private EarSpeaker earSpeaker;
-
         public abstract double Hp { get; }
 
         public abstract double MaxHp { get; }
 
         public abstract bool IsAlive { get; }
 
-        protected override void ShooterAwake()
-        {
-            earSpeaker = GetComponent<EarSpeaker>();
-        }
+        public event Action<double, Character, DamageAsset> Damaged;
+
+        public event Action Died;
+
+        public event Action DeathFinished;
+
+        public event Action<bool> AliveChanged;
 
         public string Digest(DigestionDetail detail)
         {
@@ -40,8 +37,6 @@ namespace Shooter.Game
         {
         }
 
-        public event Action<double, Character, DamageAsset> Damaged;
-
         public DamageResult TakeDamage(double amount, Character attacker, DamageAsset damageType)
         {
             if (!IsServer || !IsAlive || amount <= 0)
@@ -56,23 +51,19 @@ namespace Shooter.Game
 
             ReduceHp(amount);
 
-            if (!IsAlive)
+            if (IsAlive)
             {
-                AnnounceDeath();
+                Damaged?.Invoke(amount, attacker, damageType);
             }
             else
             {
-                earSpeaker.PlayForOwner(hurtSound);
+                AnnounceDeath();
             }
 
-            DamageResult result = new()
+            return new DamageResult
             {
                 IsLethal = !IsAlive
             };
-
-            if (IsAlive) Damaged?.Invoke(amount, attacker, damageType);
-
-            return result;
         }
 
         protected abstract void ReduceHp(double amount);
@@ -81,14 +72,16 @@ namespace Shooter.Game
 
         public abstract void ResurrectWithFullHp();
 
+        protected void AnnounceAliveChanged(bool alive)
+        {
+            AliveChanged?.Invoke(alive);
+        }
+
         private void AnnounceDeath()
         {
             Log.Info($"Entity {name} died");
-
-            foreach (IMortal mortal in GetComponents<IMortal>())
-            {
-                mortal.HandleDeath();
-            }
+            Died?.Invoke();
+            DeathFinished?.Invoke();
         }
     }
 }

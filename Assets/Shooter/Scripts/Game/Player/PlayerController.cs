@@ -9,6 +9,9 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Interactor))]
+    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Sleeper))]
+    [RequireComponent(typeof(Respawner))]
     public class PlayerController : ShooterNetworkBehaviour
     {
         private const float LookSensitivity = 0.1f;
@@ -24,11 +27,11 @@ namespace Shooter.Game
         private Gunner gunner;
         private Health health;
         private Interactor interactor;
-        private Mortal mortal;
         private Player player;
         private PlayerMouth playerMouth;
         private RpcMovement movement;
         private LocalRecoil localRecoil;
+        private Respawner respawner;
         private Sleeper sleeper;
         private float pitch;
         private float yaw;
@@ -71,7 +74,7 @@ namespace Shooter.Game
             playerMouth = GetComponent<PlayerMouth>();
             sleeper = GetComponent<Sleeper>();
             health = GetComponent<Health>();
-            mortal = GetComponent<Mortal>();
+            respawner = GetComponent<Respawner>();
             gunner = GetComponent<Gunner>();
             localRecoil = GetComponent<LocalRecoil>();
             earSpeaker = GetComponent<EarSpeaker>();
@@ -135,7 +138,7 @@ namespace Shooter.Game
             controls.Player.Attack.performed += PressTrigger;
             controls.Player.Attack.canceled += ReleaseTrigger;
             controls.Player.Reload.performed += ReloadWeapon;
-            controls.Player.Interact.performed += RiseOrWakeOrInteract;
+            controls.Player.Interact.performed += RespawnOrWakeOrInteract;
             controls.Player.Inventory.performed += OpenInventoryByKey;
             controls.UI.Inventory.performed += CloseInventoryByKey;
             controls.Player.Radio.performed += OpenRadioByKey;
@@ -168,7 +171,7 @@ namespace Shooter.Game
             controls.Player.Attack.performed -= PressTrigger;
             controls.Player.Attack.canceled -= ReleaseTrigger;
             controls.Player.Reload.performed -= ReloadWeapon;
-            controls.Player.Interact.performed -= RiseOrWakeOrInteract;
+            controls.Player.Interact.performed -= RespawnOrWakeOrInteract;
             controls.Player.Inventory.performed -= OpenInventoryByKey;
             controls.UI.Inventory.performed -= CloseInventoryByKey;
             controls.Player.Radio.performed -= OpenRadioByKey;
@@ -514,13 +517,13 @@ namespace Shooter.Game
             NetworkManager.Shutdown();
         }
 
-        private void RiseOrWakeOrInteract(InputAction.CallbackContext context)
+        private void RespawnOrWakeOrInteract(InputAction.CallbackContext context)
         {
-            if (health != null && !health.IsAlive)
+            if (!health.IsAlive)
             {
-                mortal?.RiseRpc();
+                respawner.RespawnRpc();
             }
-            else if (sleeper != null && sleeper.IsSleeping)
+            else if (sleeper.IsSleeping)
             {
                 sleeper.WakeRpc();
             }

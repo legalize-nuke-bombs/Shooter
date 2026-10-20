@@ -12,7 +12,8 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(LlmHistory))]
-    public class Llm : ShooterBehaviour, IMortal
+    [RequireComponent(typeof(Health))]
+    public class Llm : ShooterBehaviour
     {
         private const string ClearHeadDemand = "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date in full detail, including the very latest context - what is happening right now and where you left off. Then call clear_head.";
         private const string ForcedClearingNotice = "Your head overflowed and has been cleared by force: your story so far is gone, only your notes remain. Your notes are your memory now - read the ones you need before you act or speak, start with the one about who you are.";
@@ -32,6 +33,7 @@ namespace Shooter.Game
         private readonly CancellationTokenSource lifetimeCancellation = new();
         private string entityName;
 
+        private Health health;
         private LlmHistory llmHistory;
         private float retryBlockedUntil;
 
@@ -39,6 +41,7 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
+            health = GetComponent<Health>();
             llmHistory = GetComponent<LlmHistory>();
             entityName = name;
             foreach (LlmTool tool in abilities)
@@ -48,12 +51,22 @@ namespace Shooter.Game
             AppendLifeStory();
         }
 
-        protected override void ShooterOnDestroy()
+        private void OnEnable()
         {
-            lifetimeCancellation.Cancel();
+            health.Died += EndLifetime;
         }
 
-        public void HandleDeath()
+        private void OnDisable()
+        {
+            health.Died -= EndLifetime;
+        }
+
+        protected override void ShooterOnDestroy()
+        {
+            EndLifetime();
+        }
+
+        private void EndLifetime()
         {
             lifetimeCancellation.Cancel();
         }

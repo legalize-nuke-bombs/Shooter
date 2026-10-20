@@ -461,6 +461,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8377444221923510691}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 815815991595190691}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
 --- !u!1 &924064630755534763 stripped
 GameObject:
@@ -492,6 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b2d8f4a7c34910b6e8d0a2c4f75318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Hider
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &6681037510084625313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,6 +743,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.InventoryHolderFiller
   ShowTopMostFoldoutHeaderGroup: 1
   heldAsset: {fileID: 11400000, guid: 0836adec8b5cb4888b092591dca0497a, type: 2}
+--- !u!114 &815815991595190691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f4a841c24d15d45a9d7c3fd9fa4252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Respawner
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
