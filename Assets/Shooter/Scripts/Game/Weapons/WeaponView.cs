@@ -1,3 +1,4 @@
+using System;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -31,6 +32,8 @@ namespace Shooter.Game
         private GameObject shownWeaponModel;
 
         public GameObject ShownWeapon => shownWeapon;
+
+        public event Action ShownWeaponChanged;
 
         private void Awake()
         {
@@ -75,6 +78,7 @@ namespace Shooter.Game
             if (weaponRig != null) BuildWeaponHoldRig();
             RebuildRigBuilder();
             SetArmedLayerWeight(shownWeapon != null);
+            ShownWeaponChanged?.Invoke();
         }
 
         private void SetArmedLayerWeight(bool isArmed)

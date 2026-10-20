@@ -8,37 +8,29 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Skin))]
+    [RequireComponent(typeof(WeaponView))]
     public class OwnBodyHider : NetworkBehaviour
     {
-        private const string ReflectionOnlyLayerName = "ReflectionOnly";
-        private const string ReflectionCloneName = "Reflection";
-
         private static readonly Journal Log = Logs.Here();
-
-        private readonly List<GameObject> reflectionClones = new();
 
         private Player player;
         private Skin skin;
-        private InventoryHolder inventoryHolder;
         private WeaponView weaponView;
         private GameObject hiddenModelInstance;
-        private int reflectionOnlyLayer = -1;
         private bool hiding;
-        private bool needsRebuild;
+        private bool needsHiding;
 
         private void Awake()
         {
             player = GetComponent<Player>();
             skin = GetComponent<Skin>();
-            inventoryHolder = GetComponent<InventoryHolder>();
             weaponView = GetComponent<WeaponView>();
-            reflectionOnlyLayer = LayerMask.NameToLayer(ReflectionOnlyLayerName);
             enabled = false;
         }
 
         private void LateUpdate()
         {
-            if (needsRebuild || hiddenModelInstance != skin.ModelInstance) HideModelAndRebuildReflection();
+            if (needsHiding || hiddenModelInstance != skin.ModelInstance) HideModelAndHeldWeapon();
         }
 
         public override void OnNetworkSpawn()
@@ -69,12 +61,12 @@ namespace Shooter.Game
         {
             if (hiding) return;
             hiding = true;
-            needsRebuild = true;
+            needsHiding = true;
             enabled = true;
 
-            if (inventoryHolder != null) inventoryHolder.Changed += MarkRebuildNeeded;
+            weaponView.ShownWeaponChanged += MarkHidingNeeded;
 
-            Log.Info($"Own player {name} hides its body and mirrors it on the {ReflectionOnlyLayerName} layer");
+            Log.Info($"Own player {name} hides its body from its own camera");
         }
 
         private void StopHidingOwnBody()
@@ -83,23 +75,21 @@ namespace Shooter.Game
             hiding = false;
             enabled = false;
 
-            if (inventoryHolder != null) inventoryHolder.Changed -= MarkRebuildNeeded;
+            weaponView.ShownWeaponChanged -= MarkHidingNeeded;
 
-            DestroyReflectionClones();
             SetShadowCastingMode(ShadowCastingMode.On);
             hiddenModelInstance = null;
         }
 
-        private void MarkRebuildNeeded()
+        private void MarkHidingNeeded()
         {
-            needsRebuild = true;
+            needsHiding = true;
         }
 
-        private void HideModelAndRebuildReflection()
+        private void HideModelAndHeldWeapon()
         {
-            needsRebuild = false;
+            needsHiding = false;
             hiddenModelInstance = skin.ModelInstance;
-            DestroyReflectionClones();
 
             if (hiddenModelInstance == null)
             {
@@ -107,70 +97,14 @@ namespace Shooter.Game
                 return;
             }
 
-            foreach (Renderer piece in GetModelAndHeldWeaponRenderers(hiddenModelInstance))
-            {
-                if (piece.gameObject.layer == reflectionOnlyLayer) continue;
-
-                piece.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-
-                GameObject reflectionClone = CreateReflectionClone(piece);
-                if (reflectionClone != null) reflectionClones.Add(reflectionClone);
-            }
-
-            Log.Info($"Own player {name} rebuilt its reflection from {reflectionClones.Count} pieces");
-        }
-
-        private GameObject CreateReflectionClone(Renderer piece)
-        {
-            if (reflectionOnlyLayer < 0) return null;
-
-            GameObject reflectionClone = new(ReflectionCloneName);
-            reflectionClone.layer = reflectionOnlyLayer;
-            reflectionClone.transform.SetParent(piece.transform, false);
-
-            if (piece is SkinnedMeshRenderer skinnedPiece)
-            {
-                SkinnedMeshRenderer cloneRenderer = reflectionClone.AddComponent<SkinnedMeshRenderer>();
-                cloneRenderer.sharedMesh = skinnedPiece.sharedMesh;
-                cloneRenderer.sharedMaterials = skinnedPiece.sharedMaterials;
-                cloneRenderer.bones = skinnedPiece.bones;
-                cloneRenderer.rootBone = skinnedPiece.rootBone;
-                cloneRenderer.localBounds = skinnedPiece.localBounds;
-                cloneRenderer.quality = skinnedPiece.quality;
-                cloneRenderer.updateWhenOffscreen = skinnedPiece.updateWhenOffscreen;
-                cloneRenderer.shadowCastingMode = ShadowCastingMode.Off;
-                return reflectionClone;
-            }
-
-            MeshFilter meshFilter = piece.GetComponent<MeshFilter>();
-            if (piece is MeshRenderer meshPiece && meshFilter != null)
-            {
-                reflectionClone.AddComponent<MeshFilter>().sharedMesh = meshFilter.sharedMesh;
-                MeshRenderer cloneRenderer = reflectionClone.AddComponent<MeshRenderer>();
-                cloneRenderer.sharedMaterials = meshPiece.sharedMaterials;
-                cloneRenderer.shadowCastingMode = ShadowCastingMode.Off;
-                return reflectionClone;
-            }
-
-            Destroy(reflectionClone);
-            return null;
-        }
-
-        private void DestroyReflectionClones()
-        {
-            foreach (GameObject reflectionClone in reflectionClones)
-            {
-                if (reflectionClone != null) Destroy(reflectionClone);
-            }
-
-            reflectionClones.Clear();
+            SetShadowCastingMode(ShadowCastingMode.ShadowsOnly);
         }
 
         private void SetShadowCastingMode(ShadowCastingMode mode)
         {
             foreach (Renderer piece in GetModelAndHeldWeaponRenderers(skin.ModelInstance))
             {
-                if (piece.gameObject.layer != reflectionOnlyLayer) piece.shadowCastingMode = mode;
+                piece.shadowCastingMode = mode;
             }
         }
 
@@ -184,7 +118,7 @@ namespace Shooter.Game
                 }
             }
 
-            GameObject heldWeapon = weaponView == null ? null : weaponView.ShownWeapon;
+            GameObject heldWeapon = weaponView.ShownWeapon;
             if (heldWeapon == null) yield break;
 
             foreach (Renderer piece in heldWeapon.GetComponentsInChildren<Renderer>(true))
