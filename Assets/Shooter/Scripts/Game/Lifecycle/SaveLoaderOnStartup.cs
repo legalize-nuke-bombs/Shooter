@@ -25,7 +25,7 @@ namespace Shooter.Game
             if (!network.IsServer) return;
 
             networkStarter = network.GetComponent<NetworkStarter>();
-            loadingScreenOverlay = FindAnyObjectByType<LoadingScreenOverlay>();
+            loadingScreenOverlay = Registers.Get<LoadingScreenOverlay>();
             SaveManager.ForgetUnfinishedSave();
             network.SceneManager.OnLoadComplete += HandleSceneLoaded;
         }

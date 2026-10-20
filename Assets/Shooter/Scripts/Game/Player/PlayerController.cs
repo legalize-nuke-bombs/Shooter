@@ -35,6 +35,8 @@ namespace Shooter.Game
         private bool talking;
         private long? radioPartnerId;
 
+        public bool IsControlledLocally => player.IsControlledLocally;
+
         public bool IsInventoryOpen { get; private set; }
 
         public bool IsPauseMenuOpen { get; private set; }
