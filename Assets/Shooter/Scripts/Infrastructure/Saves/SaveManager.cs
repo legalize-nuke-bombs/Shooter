@@ -5,6 +5,9 @@ namespace Shooter.Infrastructure
 {
     public static class SaveManager
     {
+        public const string SnapshotFileName = "Snapshot.json";
+        public const string MetaFileName = "Meta.json";
+        public const string PreviewFileName = "Preview.jpg";
         private const string SaveNamePrefix = "ShooterSave";
         private const string SaveNameStampFormat = "yyyy_MM_dd_HH_mm_ss_fff";
         private static readonly Journal Log = Logs.Here();
@@ -37,15 +40,15 @@ namespace Shooter.Infrastructure
 
                 string saveLocation = Path.Combine(SaveLibrary.FolderPath, SaveNamePrefix + "_" + meta.Stamp.ToString(SaveNameStampFormat));
 
-                if (!SnapshotManager.TryWriteSnapshot(Path.Combine(saveLocation, "Snapshot.json"), snapshot))
+                if (!SnapshotManager.TryWriteSnapshot(Path.Combine(saveLocation, SnapshotFileName), snapshot))
                 {
                     Log.Warn($"The save has no snapshot and is abandoned, removing {saveLocation}...");
                     MainCompressionManager.DeleteArchive(saveLocation);
                     yield break;
                 }
 
-                MetaManager.WriteMeta(Path.Combine(saveLocation, "Meta.json"), meta);
-                yield return PreviewManager.WritePreviewCoroutine(Path.Combine(saveLocation, "Preview.jpg"));
+                MetaManager.WriteMeta(Path.Combine(saveLocation, MetaFileName), meta);
+                yield return PreviewManager.WritePreviewCoroutine(Path.Combine(saveLocation, PreviewFileName));
                 saveLocation = MainCompressionManager.CompressFolder(saveLocation);
                 Log.Info($"Saved to {saveLocation}");
             }
@@ -65,7 +68,7 @@ namespace Shooter.Infrastructure
         {
             Log.Info($"Loading from {saveLocation}...");
 
-            byte[] snapshotBytes = MainCompressionManager.ReadFile(saveLocation, "Snapshot.json");
+            byte[] snapshotBytes = MainCompressionManager.ReadFile(saveLocation, SnapshotFileName);
             if (snapshotBytes == null)
             {
                 Log.Warn($"No snapshot in {saveLocation}, the world stays frozen");

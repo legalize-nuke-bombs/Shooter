@@ -8,8 +8,6 @@ namespace Shooter.Infrastructure
 {
     public sealed class SaveEntry
     {
-        private const string MetaFileName = "Meta.json";
-        private const string PreviewFileName = "Preview.jpg";
         private static readonly Journal Log = Logs.Here();
 
         private SaveEntry(string location, Meta meta)
@@ -26,10 +24,10 @@ namespace Shooter.Infrastructure
 
         public static SaveEntry ReadFromLocation(string location)
         {
-            byte[] metaBytes = MainCompressionManager.ReadFile(location, MetaFileName);
+            byte[] metaBytes = MainCompressionManager.ReadFile(location, SaveManager.MetaFileName);
             if (metaBytes == null)
             {
-                Log.Warn($"Save {location} has no {MetaFileName}, skipped");
+                Log.Warn($"Save {location} has no {SaveManager.MetaFileName}, skipped");
                 return null;
             }
 
@@ -42,14 +40,14 @@ namespace Shooter.Infrastructure
             }
             catch (Exception e)
             {
-                Log.Warn($"Save {location} has unreadable {MetaFileName}, skipped: {e.Message}");
+                Log.Warn($"Save {location} has unreadable {SaveManager.MetaFileName}, skipped: {e.Message}");
                 return null;
             }
         }
 
         public byte[] ReadPreview()
         {
-            return MainCompressionManager.ReadFile(Location, PreviewFileName);
+            return MainCompressionManager.ReadFile(Location, SaveManager.PreviewFileName);
         }
     }
 }
