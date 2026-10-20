@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Player))]
-    [RequireComponent(typeof(OwnWeaponView))]
+    [RequireComponent(typeof(LocalWeaponView))]
     [RequireComponent(typeof(Footsteps))]
-    public class OwnWeaponMotion : NetworkBehaviour
+    public class LocalWeaponMotion : NetworkBehaviour
     {
         private const float MinTeleportDistance = 1f;
 
@@ -26,7 +26,7 @@ namespace Shooter.Game
         [SerializeField] private float settle = 0.12f;
 
         private Player player;
-        private OwnWeaponView ownWeaponView;
+        private LocalWeaponView localWeaponView;
         private Footsteps footsteps;
         private bool tracking;
 
@@ -48,7 +48,7 @@ namespace Shooter.Game
         private void Awake()
         {
             player = GetComponent<Player>();
-            ownWeaponView = GetComponent<OwnWeaponView>();
+            localWeaponView = GetComponent<LocalWeaponView>();
             footsteps = GetComponent<Footsteps>();
         }
 
@@ -75,7 +75,7 @@ namespace Shooter.Game
 
         private void LateUpdate()
         {
-            Transform weaponHold = ownWeaponView.WeaponHold;
+            Transform weaponHold = localWeaponView.WeaponHold;
             float dt = Time.deltaTime;
             if (weaponHold == null || dt <= 0f) return;
 

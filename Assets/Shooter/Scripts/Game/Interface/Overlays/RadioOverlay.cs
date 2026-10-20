@@ -24,8 +24,8 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
-            bool shouldBeOpen = localPlayer != null && localPlayer.IsRadioOpen;
+            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            bool shouldBeOpen = playerController != null && playerController.IsRadioOpen;
 
             if (shouldBeOpen != open)
             {
@@ -33,7 +33,7 @@ namespace Shooter.Game
 
                 if (open)
                 {
-                    OpenWindow(localPlayer);
+                    OpenWindow(playerController);
                 }
                 else
                 {
@@ -41,7 +41,7 @@ namespace Shooter.Game
                 }
             }
 
-            if (open && stale) FillContactList(localPlayer);
+            if (open && stale) FillContactList(playerController);
         }
 
         protected override bool TryBindElements(VisualElement root)
@@ -69,9 +69,9 @@ namespace Shooter.Game
             windowElement = null;
         }
 
-        private void OpenWindow(LocalPlayer localPlayer)
+        private void OpenWindow(PlayerController playerController)
         {
-            playerConversations = localPlayer.GetComponent<PlayerConversations>();
+            playerConversations = playerController.GetComponent<PlayerConversations>();
             if (playerConversations != null) playerConversations.LinesArrived += HandleLinesArrived;
 
             windowElement.style.display = DisplayStyle.Flex;
@@ -94,7 +94,7 @@ namespace Shooter.Game
             stale = true;
         }
 
-        private void FillContactList(LocalPlayer localPlayer)
+        private void FillContactList(PlayerController playerController)
         {
             stale = false;
             contactScrollView.Clear();
@@ -109,7 +109,7 @@ namespace Shooter.Game
             {
                 long partnerId = contact.PartnerId;
 
-                Button contactButton = new(() => localPlayer.OpenRadioTalk(partnerId)) { text = GetPartnerName(partnerId) };
+                Button contactButton = new(() => playerController.OpenRadioTalk(partnerId)) { text = GetPartnerName(partnerId) };
                 contactButton.AddToClassList("radio__item");
                 if (contact.UnreadLineCount > 0) contactButton.AddToClassList("radio__item--unread");
 

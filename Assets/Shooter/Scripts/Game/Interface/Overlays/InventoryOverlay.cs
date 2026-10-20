@@ -100,8 +100,8 @@ namespace Shooter.Game
         {
             if (!IsBound) return;
 
-            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
-            bool shouldBeOpen = localPlayer != null && localPlayer.IsInventoryOpen;
+            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            bool shouldBeOpen = playerController != null && playerController.IsInventoryOpen;
 
             if (shouldBeOpen != open)
             {
@@ -119,7 +119,7 @@ namespace Shooter.Game
 
             if (!open) return;
 
-            if (splitPromptElement != null && (localPlayer == null || !localPlayer.IsPromptOpen)) HideSplitPrompt();
+            if (splitPromptElement != null && (playerController == null || !playerController.IsPromptOpen)) HideSplitPrompt();
 
             UpdateTakerAndOffers();
             if (stale) RedrawInventory();
@@ -1146,11 +1146,11 @@ namespace Shooter.Game
         // While the number is typed the player's keys belong to the field: Escape closes only this box
         private void OpenSplitPrompt(StackableItemAsset asset)
         {
-            LocalPlayer localPlayer = OwnPlayer.FindComponent<LocalPlayer>();
-            if (localPlayer == null) return;
+            PlayerController playerController = OwnPlayer.FindComponent<PlayerController>();
+            if (playerController == null) return;
 
             HideSplitPrompt();
-            localPlayer.OpenPrompt();
+            playerController.OpenPrompt();
 
             splitPromptElement = new VisualElement();
             splitPromptElement.AddToClassList("menu-curtain");
@@ -1234,7 +1234,7 @@ namespace Shooter.Game
         {
             if (splitPromptElement == null) return;
 
-            OwnPlayer.FindComponent<LocalPlayer>()?.ClosePrompt();
+            OwnPlayer.FindComponent<PlayerController>()?.ClosePrompt();
             HideSplitPrompt();
         }
 

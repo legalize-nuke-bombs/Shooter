@@ -588,7 +588,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cd4c439381ce4ef5ba07071736e3c91, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.LocalPlayer
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.PlayerController
   ShowTopMostFoldoutHeaderGroup: 1
   view: {fileID: 7320842598891428731}
   saveSound: {fileID: 11400000, guid: 2bf3a1811a0540a1b4b9b4f4ee59b639, type: 2}
@@ -634,7 +634,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a9c3e7d21b6480fa4d2c8091e63b7f5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnRecoil
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.LocalRecoil
   ShowTopMostFoldoutHeaderGroup: 1
   recovery: 1
 --- !u!114 &2668936793784441248
@@ -715,7 +715,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04374468770149c42823ade14117c0d1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.OwnWeaponMotion
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.LocalWeaponMotion
   ShowTopMostFoldoutHeaderGroup: 1
   stepDrop: 0.012
   stepSway: 0.008
