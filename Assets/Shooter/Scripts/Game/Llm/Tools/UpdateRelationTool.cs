@@ -39,8 +39,9 @@ Always use this tool if a character does something good or bad to you.
 
             int oldAmount = aiCharacterRelation.GetAmount(target);
             aiCharacterRelation.SetAmount(target, arguments.Amount);
+            int newAmount = aiCharacterRelation.GetAmount(target);
 
-            return $"Your attitude to {arguments.TargetId}: {oldAmount} -> {arguments.Amount}";
+            return $"Your attitude to {arguments.TargetId}: {oldAmount} -> {newAmount}";
         }
     }
 }
