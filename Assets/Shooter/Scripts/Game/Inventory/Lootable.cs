@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 namespace Shooter.Game
 {
-    public class Lootable : NetworkBehaviour
+    public class Lootable : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 

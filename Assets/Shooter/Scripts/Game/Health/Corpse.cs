@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Corpse : NetworkBehaviour, ISaveableComponent
+    public class Corpse : ShooterNetworkBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

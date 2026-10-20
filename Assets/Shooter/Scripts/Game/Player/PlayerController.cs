@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Interactor))]
-    public class PlayerController : NetworkBehaviour
+    public class PlayerController : ShooterNetworkBehaviour
     {
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
@@ -61,7 +61,7 @@ namespace Shooter.Game
             }
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             movement = GetComponent<RpcMovement>();

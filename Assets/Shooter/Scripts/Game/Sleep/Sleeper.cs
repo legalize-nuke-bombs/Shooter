@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(RespawnPosition))]
     [RequireComponent(typeof(Speaker))]
-    public class Sleeper : NetworkBehaviour, IMortal, IDigestible, IRestraint, ISaveableComponent
+    public class Sleeper : ShooterNetworkBehaviour, IMortal, IDigestible, IRestraint, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -44,7 +44,7 @@ namespace Shooter.Game
             sleeping.Value = saveData.Sleeping;
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             sleepCycle = Registers.Get<SleepCycle>();
             respawnPosition = GetComponent<RespawnPosition>();

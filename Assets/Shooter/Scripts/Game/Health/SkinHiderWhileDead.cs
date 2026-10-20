@@ -1,16 +1,17 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Skin))]
-    public class SkinHiderWhileDead : MonoBehaviour
+    public class SkinHiderWhileDead : ShooterBehaviour
     {
         private GameObject modelInstance;
         private Health health;
         private bool hidden;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
         }

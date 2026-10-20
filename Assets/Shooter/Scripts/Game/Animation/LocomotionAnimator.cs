@@ -1,9 +1,10 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Animator))]
-    public class LocomotionAnimator : MonoBehaviour
+    public class LocomotionAnimator : ShooterBehaviour
     {
         private static readonly int SpeedXParameter = Animator.StringToHash("SpeedX");
         private static readonly int SpeedZParameter = Animator.StringToHash("SpeedZ");
@@ -13,7 +14,7 @@ namespace Shooter.Game
         private Animator animator;
         private Vector3 previousPosition;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             animator = GetComponent<Animator>();
             previousPosition = transform.position;

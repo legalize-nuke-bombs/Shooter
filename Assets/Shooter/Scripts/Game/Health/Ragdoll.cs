@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Animator))]
-    public class Ragdoll : MonoBehaviour
+    public class Ragdoll : ShooterBehaviour
     {
         private const float LinearDamping = 0.5f;
         private const float AngularDamping = 1f;

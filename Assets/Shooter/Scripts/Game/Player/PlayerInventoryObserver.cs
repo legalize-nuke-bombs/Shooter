@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(InventoryExchanger))]
-    public class PlayerInventoryObserver : NetworkBehaviour, IToastSource
+    public class PlayerInventoryObserver : ShooterNetworkBehaviour, IToastSource
     {
         private const string Stranger = "Незнакомец";
 
@@ -18,7 +18,7 @@ namespace Shooter.Game
 
         public event Action<Toast> ToastRaised;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             inventoryExchanger = GetComponent<InventoryExchanger>();
         }

@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
-    public class PlayerConversations : NetworkBehaviour
+    public class PlayerConversations : ShooterNetworkBehaviour
     {
         private const int MaxBatchBytes = 16 * 1024;
         private const int LineOverheadBytes = 32;
@@ -33,7 +33,7 @@ namespace Shooter.Game
 
         public event Action ContactsCleared;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
         }

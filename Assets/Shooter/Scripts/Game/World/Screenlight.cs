@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Light))]
-    public class Screenlight : MonoBehaviour
+    public class Screenlight : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -22,7 +22,7 @@ namespace Shooter.Game
         private float noiseOffset;
         private Material screenMaterial;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             screenLight = GetComponent<Light>();
             screenMaterial = screen == null ? null : screen.material;

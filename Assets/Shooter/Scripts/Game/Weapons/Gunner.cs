@@ -11,7 +11,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(EarSpeaker))]
     [RequireComponent(typeof(MainRestrainable))]
-    public class Gunner : NetworkBehaviour
+    public class Gunner : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -30,7 +30,7 @@ namespace Shooter.Game
 
         private bool triggerHeld;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             bulletHoles = Registers.Get<BulletHoles>();
             character = GetComponent<Character>();

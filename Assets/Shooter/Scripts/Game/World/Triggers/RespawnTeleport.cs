@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class RespawnTeleport : MonoBehaviour, ITriggerable
+    public class RespawnTeleport : ShooterBehaviour, ITriggerable
     {
         private static readonly Journal Log = Logs.Here();
 

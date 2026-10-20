@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Skin))]
     [RequireComponent(typeof(WeaponView))]
-    public class LocalBodyHider : NetworkBehaviour
+    public class LocalBodyHider : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -20,7 +20,7 @@ namespace Shooter.Game
         private bool hiding;
         private bool needsHiding;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             skin = GetComponent<Skin>();

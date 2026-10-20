@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Skin))]
-    public class Hands : NetworkBehaviour, IMortal, IDigestible
+    public class Hands : ShooterNetworkBehaviour, IMortal, IDigestible
     {
         private const string ActionLayer = "Armed";
         private const float ActionFade = 0.05f;
@@ -39,7 +39,7 @@ namespace Shooter.Game
             InterruptAction();
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             skin = GetComponent<Skin>();
             enabled = false;

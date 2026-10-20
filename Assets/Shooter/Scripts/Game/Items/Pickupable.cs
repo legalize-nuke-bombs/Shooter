@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class Pickupable : MonoBehaviour, IUsable, IDigestible
+    public class Pickupable : ShooterBehaviour, IUsable, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -16,7 +16,7 @@ namespace Shooter.Game
 
         public Action<Pickupable> PickedUp;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             networkObject = GetComponent<NetworkObject>();
             if (item == null)

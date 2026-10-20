@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Stamina : NetworkBehaviour, IDigestible, IRestraint, ISaveableComponent
+    public class Stamina : ShooterNetworkBehaviour, IDigestible, IRestraint, ISaveableComponent
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
@@ -45,7 +45,7 @@ namespace Shooter.Game
 
         public float MaxAmount => Mathf.Max(maxAmount, 1f);
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             clock = Registers.Get<Clock>();
             enabled = false;

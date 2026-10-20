@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
-    public class LlmConversationObserver : MonoBehaviour
+    public class LlmConversationObserver : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -16,7 +16,7 @@ namespace Shooter.Game
         private Health health;
         private Llm llm;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
             conversationManager = Registers.Get<ConversationManager>();

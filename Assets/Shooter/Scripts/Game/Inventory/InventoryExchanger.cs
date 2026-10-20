@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Character))]
-    public class InventoryExchanger : NetworkBehaviour
+    public class InventoryExchanger : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -21,7 +21,7 @@ namespace Shooter.Game
 
         public event Action<Character, ItemAsset, int> ReceivedFromCharacter;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
-    public class NotificationRecipient : MonoBehaviour
+    public class NotificationRecipient : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 

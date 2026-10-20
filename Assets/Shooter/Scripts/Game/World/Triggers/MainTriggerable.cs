@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class MainTriggerable : MonoBehaviour
+    public class MainTriggerable : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private ITriggerable[] triggerables;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             triggerables = GetComponents<ITriggerable>();
             Log.Info($"Entity {name} has {triggerables.Length} triggerables");

@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(LocalWeaponView))]
     [RequireComponent(typeof(Footsteps))]
-    public class LocalWeaponMotion : NetworkBehaviour
+    public class LocalWeaponMotion : ShooterNetworkBehaviour
     {
         private const float MinTeleportDistance = 1f;
 
@@ -45,7 +46,7 @@ namespace Shooter.Game
         private float tiltAngle;
         private float tiltAngleVelocity;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             localWeaponView = GetComponent<LocalWeaponView>();

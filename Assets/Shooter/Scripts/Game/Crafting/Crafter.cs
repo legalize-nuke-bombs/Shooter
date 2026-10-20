@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Speaker))]
-    public class Crafter : NetworkBehaviour
+    public class Crafter : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -18,7 +18,7 @@ namespace Shooter.Game
         private Inventory inventory;
         private Speaker speaker;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
             speaker = GetComponent<Speaker>();

@@ -9,7 +9,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Nameable))]
-    public class Relations : MonoBehaviour, IDigestible, ISaveableComponent
+    public class Relations : ShooterBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -71,7 +71,7 @@ namespace Shooter.Game
 
         public event Action<RelationWorsenedByDamageData> RelationWorsenedByDamage;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             ownCharacter = GetComponent<Character>();
             health = GetComponent<Health>();

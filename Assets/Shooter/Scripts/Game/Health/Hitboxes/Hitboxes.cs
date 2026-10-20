@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Animator))]
-    public class Hitboxes : MonoBehaviour
+    public class Hitboxes : ShooterBehaviour
     {
         public const string LayerName = "Hitbox";
 

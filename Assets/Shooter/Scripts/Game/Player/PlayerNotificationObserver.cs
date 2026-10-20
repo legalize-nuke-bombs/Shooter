@@ -7,13 +7,13 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(NotificationRecipient))]
-    public class PlayerNotificationObserver : NetworkBehaviour, IToastSource
+    public class PlayerNotificationObserver : ShooterNetworkBehaviour, IToastSource
     {
         private NotificationRecipient notificationRecipient;
 
         public event Action<Toast> ToastRaised;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             notificationRecipient = GetComponent<NotificationRecipient>();
         }

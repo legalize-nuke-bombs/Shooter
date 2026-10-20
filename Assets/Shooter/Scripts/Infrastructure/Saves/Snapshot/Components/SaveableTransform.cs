@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(NetworkTransform))]
-    public class SaveableTransform : NetworkBehaviour, ISaveableComponent
+    public class SaveableTransform : ShooterNetworkBehaviour, ISaveableComponent
     {
         public string ComponentKey => "SaveableTransform";
 
