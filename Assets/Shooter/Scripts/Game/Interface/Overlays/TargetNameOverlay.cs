@@ -10,8 +10,6 @@ namespace Shooter.Game
         private const string NameLabelName = "target-name";
         private static readonly Journal Log = Logs.Here();
 
-        private readonly NameMapper nameMapper = new();
-
         private LookHitFinder lookHitFinder;
         private string shownName = string.Empty;
         private Label nameLabel;
@@ -26,7 +24,7 @@ namespace Shooter.Game
             if (!IsBound) return;
 
             Nameable nameable = FindNameableAtLookHit();
-            string targetName = nameable == null ? string.Empty : nameMapper.GetShownName(nameable);
+            string targetName = nameable == null ? string.Empty : nameable.GetShownName();
 
             if (targetName == shownName) return;
 

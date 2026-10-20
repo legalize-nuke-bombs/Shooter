@@ -20,7 +20,6 @@ namespace Shooter.Game
 
         [SerializeField] private float charInterval = 0.01f;
 
-        private readonly NameMapper nameMapper = new();
         private Button giveButton;
         private TextField inputField;
         private ScrollView linesScrollView;
@@ -314,7 +313,7 @@ namespace Shooter.Game
             Nameable nameable = partner == null ? null : partner.GetComponentInChildren<Nameable>();
             if (nameable == null) return Stranger;
 
-            string shownName = nameMapper.GetShownName(nameable);
+            string shownName = nameable.GetShownName();
 
             return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }
