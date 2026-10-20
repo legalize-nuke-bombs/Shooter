@@ -29,7 +29,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
 
         protected override void HandleAttached()
         {
-            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

@@ -26,7 +26,7 @@ Specify `from` (the message number from which you want to retrieve the conversat
 
         protected override void HandleAttached()
         {
-            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

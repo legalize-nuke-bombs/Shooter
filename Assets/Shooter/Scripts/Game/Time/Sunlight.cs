@@ -1,4 +1,3 @@
-using System.Linq;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -21,7 +20,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.Get<Clock>();
         }
 
         private void Update()

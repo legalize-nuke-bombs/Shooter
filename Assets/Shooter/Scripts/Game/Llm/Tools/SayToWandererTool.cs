@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -20,7 +19,7 @@ namespace Shooter.Game
 
         protected override void HandleAttached()
         {
-            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

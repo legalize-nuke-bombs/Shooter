@@ -49,7 +49,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.Get<Clock>();
         }
 
         public Conversation GetOrCreate(long firstId, long secondId)

@@ -1,4 +1,3 @@
-using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -47,7 +46,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            sleepCycle = Registers.GetAll<SleepCycle>(RegisterInactivePolicy.Include).Single();
+            sleepCycle = Registers.Get<SleepCycle>();
             respawnPosition = GetComponent<RespawnPosition>();
             speaker = GetComponent<Speaker>();
         }

@@ -71,7 +71,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.Get<Clock>();
             toxinCatalog = Catalogs.GetCatalog<ToxinCatalog>();
             for (int i = 0; i < toxinCatalog.Count; i++)
             {

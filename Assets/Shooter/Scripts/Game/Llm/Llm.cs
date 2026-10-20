@@ -240,7 +240,7 @@ namespace Shooter.Game
 
         public static string FormatCurrentWorldTime()
         {
-            return Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
+            return Registers.Get<Clock>().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
         }
     }
 }

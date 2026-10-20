@@ -1,4 +1,3 @@
-using System.Linq;
 using Shooter.Infrastructure;
 
 namespace Shooter.Game
@@ -12,7 +11,7 @@ namespace Shooter.Game
             base.OnNetworkSpawn();
             if (!IsServer) return;
 
-            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Get<ConversationManager>();
             conversationManager.Said += Refuse;
         }
 

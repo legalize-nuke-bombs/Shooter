@@ -1,4 +1,3 @@
-using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -24,7 +23,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.Get<Clock>();
             NetworkManager.NetworkTickSystem.Tick += HandleNetworkTick;
         }
 
