@@ -135,7 +135,7 @@ namespace Shooter.Game
 
         private bool CanTalkTo(Talker talker)
         {
-            return TalkRule.CanTalk(health.IsAlive, !sleeper.IsSleeping, talker.IsAlive, !talker.IsSleeping);
+            return health.IsAlive && !sleeper.IsSleeping && talker.IsAlive && !talker.IsSleeping;
         }
 
         private bool IsWithinTalkReach(Talker talker)
