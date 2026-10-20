@@ -1,59 +1,30 @@
 using Shooter.Infrastructure;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Health))]
-    [RequireComponent(typeof(Movement))]
-    [RequireComponent(typeof(EarSpeaker))]
-    [RequireComponent(typeof(RespawnPosition))]
-    public class Mortal : ShooterNetworkBehaviour, IMortal
+    public class CorpseLeaverOnDeath : ShooterBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject corpsePrefab;
-        [SerializeField] private EarSoundAsset deathSound;
 
-        private EarSpeaker earSpeaker;
         private Health health;
-        private Movement movement;
-        private Player player;
-        private RespawnPosition respawnPosition;
 
         protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
-            movement = GetComponent<Movement>();
-            respawnPosition = GetComponent<RespawnPosition>();
-            earSpeaker = GetComponent<EarSpeaker>();
-            player = GetComponent<Player>();
         }
 
-        public void HandleDeath()
+        private void OnEnable()
         {
-            if (!IsServer) return;
-
-            earSpeaker.PlayForOwner(deathSound);
-            LeaveCorpse();
-
-            if (player == null) NetworkObject.Despawn(!NetworkObject.InScenePlaced);
+            health.Died += LeaveCorpse;
         }
 
-        public override void OnNetworkDespawn()
+        private void OnDisable()
         {
-            gameObject.SetActive(false);
-        }
-
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void RiseRpc()
-        {
-            if (health == null || health.IsAlive) return;
-
-            Vector3 position = respawnPosition.GetPosition();
-            movement.Teleport(position);
-            health.ResurrectWithFullHp();
-            Log.Info($"Entity {name} rose at {position}");
+            health.Died -= LeaveCorpse;
         }
 
         private void LeaveCorpse()

@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Sleeper))]
-    public class PlayerMouth : ShooterNetworkBehaviour, IMortal
+    public class PlayerMouth : ShooterNetworkBehaviour
     {
         public const float TalkReach = 8f;
         public const int MaxSpeechLength = 300;
@@ -52,15 +52,16 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private void OnDisable()
+        private void OnEnable()
         {
-            ForgetTalker();
-            if (IsServer && IsSpawned) talkerNetworkObjectId.Value = 0;
+            health.Died += CloseTalk;
         }
 
-        public void HandleDeath()
+        private void OnDisable()
         {
-            CloseTalk();
+            health.Died -= CloseTalk;
+            ForgetTalker();
+            if (IsServer && IsSpawned) talkerNetworkObjectId.Value = 0;
         }
 
         public void OpenTalk(Talker talker)

@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(EarSpeaker))]
     public sealed class DefaultHealth : Health, ISaveableComponent
     {
         [SerializeField] private double maxHp = 100;
@@ -41,9 +40,14 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            if (!IsServer) return;
+            if (IsServer) hp.Value = MaxHp;
 
-            hp.Value = MaxHp;
+            hp.OnValueChanged += AnnounceIfAliveChanged;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            hp.OnValueChanged -= AnnounceIfAliveChanged;
         }
 
         protected override void ReduceHp(double amount)
@@ -63,6 +67,13 @@ namespace Shooter.Game
             if (!IsServer || IsAlive) return;
 
             hp.Value = MaxHp;
+        }
+
+        private void AnnounceIfAliveChanged(double previousHp, double currentHp)
+        {
+            bool wasAlive = previousHp > 0;
+            bool alive = currentHp > 0;
+            if (wasAlive != alive) AnnounceAliveChanged(alive);
         }
     }
 }

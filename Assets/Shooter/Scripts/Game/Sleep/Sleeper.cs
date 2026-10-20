@@ -6,7 +6,8 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(RespawnPosition))]
     [RequireComponent(typeof(Speaker))]
-    public class Sleeper : ShooterNetworkBehaviour, IMortal, IDigestible, IRestraint, ISaveableComponent
+    [RequireComponent(typeof(Health))]
+    public class Sleeper : ShooterNetworkBehaviour, IDigestible, IRestraint, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -16,6 +17,7 @@ namespace Shooter.Game
         private readonly NetworkVariable<Vector3> bedPosition = new();
         private readonly NetworkVariable<bool> sleeping = new();
 
+        private Health health;
         private SleepCycle sleepCycle;
         private RespawnPosition respawnPosition;
         private Speaker speaker;
@@ -46,9 +48,20 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
+            health = GetComponent<Health>();
             sleepCycle = Registers.Get<SleepCycle>();
             respawnPosition = GetComponent<RespawnPosition>();
             speaker = GetComponent<Speaker>();
+        }
+
+        private void OnEnable()
+        {
+            health.Died += StopSleepingOnDeath;
+        }
+
+        private void OnDisable()
+        {
+            health.Died -= StopSleepingOnDeath;
         }
 
         public bool IsSleeping => sleeping.Value;
@@ -62,7 +75,7 @@ namespace Shooter.Game
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
-        public void HandleDeath()
+        private void StopSleepingOnDeath()
         {
             StopSleeping(false);
         }

@@ -7,7 +7,8 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Skin))]
-    public class Hands : ShooterNetworkBehaviour, IMortal, IDigestible
+    [RequireComponent(typeof(Health))]
+    public class Hands : ShooterNetworkBehaviour, IDigestible
     {
         private const string ActionLayer = "Armed";
         private const float ActionFade = 0.05f;
@@ -21,6 +22,7 @@ namespace Shooter.Game
         private bool actionInterruptible;
         private float actionStartedAt;
         private float actionDuration;
+        private Health health;
         private Skin skin;
 
         public HandsAction CurrentAction => work.Value.Action;
@@ -34,15 +36,21 @@ namespace Shooter.Game
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
-        public void HandleDeath()
-        {
-            InterruptAction();
-        }
-
         protected override void ShooterAwake()
         {
+            health = GetComponent<Health>();
             skin = GetComponent<Skin>();
             enabled = false;
+        }
+
+        private void OnEnable()
+        {
+            health.Died += InterruptAction;
+        }
+
+        private void OnDisable()
+        {
+            health.Died -= InterruptAction;
         }
 
         public override void OnNetworkSpawn()

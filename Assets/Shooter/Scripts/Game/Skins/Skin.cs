@@ -44,6 +44,13 @@ namespace Shooter.Game
             Log.Info($"Entity {name} dressed as {asset.Id}, {MeasureHeight(ModelInstance)} m tall");
         }
 
+        public void SetModelVisible(bool visible)
+        {
+            if (ModelInstance == null) return;
+
+            ModelInstance.SetActive(visible);
+        }
+
         private static float MeasureHeight(GameObject model)
         {
             Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
