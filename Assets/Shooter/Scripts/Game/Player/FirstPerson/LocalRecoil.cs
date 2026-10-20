@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    // On the host Gunner fires in the same frame: the camera kicks first, or the last round of the magazine would be
+    // spent before the kick sees it
+    [DefaultExecutionOrder(ExecutionOrder.LocalPrediction)]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
     public class LocalRecoil : ShooterNetworkBehaviour
