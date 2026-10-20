@@ -1,5 +1,8 @@
+using UnityEngine;
+
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(EarSpeaker))]
     public sealed class ImmortalHealth : Health
     {
         public override double Hp => 100;

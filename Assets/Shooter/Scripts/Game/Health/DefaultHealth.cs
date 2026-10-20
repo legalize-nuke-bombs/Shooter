@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(EarSpeaker))]
     public sealed class DefaultHealth : Health, ISaveableComponent
     {
         [SerializeField] private double maxHp = 100;
