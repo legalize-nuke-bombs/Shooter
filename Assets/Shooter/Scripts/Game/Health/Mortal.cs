@@ -77,8 +77,8 @@ namespace Shooter.Game
                 Skin skin = GetComponent<Skin>();
                 if (skin != null && skin.Asset != null) corpse.AssignSkinAsset(skin.Asset);
 
-                TypedNameable typedNameable = GetComponent<TypedNameable>();
-                if (typedNameable != null && typedNameable.Asset != null) corpse.AssignNameAsset(typedNameable.Asset);
+                AssetNameable assetNameable = GetComponent<AssetNameable>();
+                if (assetNameable != null && assetNameable.Asset != null) corpse.AssignNameAsset(assetNameable.Asset);
             }
 
             corpseObject.GetComponent<Lootable>()?.TakeAllItemsFrom(GetComponent<Inventory>());

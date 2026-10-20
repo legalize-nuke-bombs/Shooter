@@ -1,23 +1,13 @@
 using Unity.Collections;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace Shooter.Game
 {
-    public sealed class AbsoluteNameable : Nameable
+    public sealed class TextNameable : Nameable
     {
-        [SerializeField] private string absolute;
-
         private readonly NetworkVariable<FixedString64Bytes> currentName = new();
 
         public string Name => currentName.Value.ToString();
-
-        public override void OnNetworkSpawn()
-        {
-            if (!IsServer || string.IsNullOrEmpty(absolute)) return;
-
-            currentName.Value = new FixedString64Bytes(absolute);
-        }
 
         public void RenameTo(string newName)
         {
