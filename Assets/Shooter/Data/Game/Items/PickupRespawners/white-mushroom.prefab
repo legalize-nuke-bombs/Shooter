@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.PickupRespawner
   bodyPrefab: {fileID: 4905489273699766606, guid: f37617cacbbdd7044a7ead5889c835b8, type: 3}
-  respawnHours: 48
+  averageHoursToGrow: 48
 --- !u!114 &2827093827336195807
 MonoBehaviour:
   m_ObjectHideFlags: 0
