@@ -18,7 +18,14 @@ namespace Shooter.Editor
 
             foreach (string guid in AssetDatabase.FindAssets("t:" + nameof(Catalog)))
             {
-                Catalog catalog = AssetDatabase.LoadAssetAtPath<Catalog>(AssetDatabase.GUIDToAssetPath(guid));
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                Catalog catalog = AssetDatabase.LoadAssetAtPath<Catalog>(path);
+                if (catalog == null)
+                {
+                    Log.Warn($"Catalog {path} does not load, it is not refilled this time");
+                    continue;
+                }
+
                 Type assetType = FindAssetTypeOfCatalog(catalog.GetType());
                 if (assetType != null)
                 {

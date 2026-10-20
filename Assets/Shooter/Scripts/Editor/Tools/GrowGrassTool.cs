@@ -226,7 +226,8 @@ namespace Shooter.Editor
             terrainData.detailPrototypes = prototypes;
             terrainData.SetDetailResolution(cellsAlongTerrain, CellsPerPatch);
             int mostPlantsPerCell = terrainData.maxDetailScatterPerRes;
-            System.Random random = new(terrain.name.GetHashCode());
+            // A string's own GetHashCode may differ from run to run, the same terrain should grow the same grass
+            System.Random random = new(Hash128.Compute(terrain.name).GetHashCode());
 
             TerrainLayer[] terrainLayers = terrainData.terrainLayers;
             foreach (DetailLayer detailLayer in detailLayers)

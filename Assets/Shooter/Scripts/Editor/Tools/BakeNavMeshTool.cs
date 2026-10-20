@@ -72,7 +72,6 @@ namespace Shooter.Editor
                 EditorUtility.SetDirty(surface);
             }
 
-            AssetDatabase.SaveAssets();
             Log.Info($"Baked {surfaces.Length} navmesh surfaces with tree proxies in {stopwatch.ElapsedMilliseconds} ms");
         }
 
