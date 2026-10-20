@@ -61,9 +61,14 @@ namespace Shooter.Game
                 return Status.Failure;
             }
 
-            Log.Info($"Entity {Agent.Value.name} used heal {bestItem.Id} by behavior graph, missing {missingHp}");
             int hpBefore = (int)health.Hp;
-            inventoryUser.TryUseItem(bestItem);
+            if (!inventoryUser.TryUseItem(bestItem))
+            {
+                Log.Error($"Entity {Agent.Value.name} could not use heal {bestItem.Id} it has in the bag");
+                return Status.Failure;
+            }
+
+            Log.Info($"Entity {Agent.Value.name} used heal {bestItem.Id} by behavior graph, missing {missingHp}");
             BehaviorReporter behaviorReporter = Agent.Value.GetComponent<BehaviorReporter>();
             if (behaviorReporter != null)
             {

@@ -10,7 +10,7 @@ namespace Shooter.Game
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Spot Nearest Character",
-        description: "Looks over the characters of the world for the nearest living one, other than the agent, within the radius; its transform goes into the variable; with the priority on, the nearest player within the radius wins over any nearer character. Fails when nobody is within the radius.",
+        description: "Looks over the characters of the world for the nearest living one, other than the agent, within the radius; its transform goes into the variable; with only enemies on, it passes over the characters the agent does not count as enemies. Fails when nobody is within the radius.",
         story: "[Agent] spots the nearest character within [Radius] into [Target], only spots enemies if [OnlyEnemies]",
         category: "Action",
         id: "7d3b9e15c6a24f0d8b2e4c6a1f9d3e51")]
