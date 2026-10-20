@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class ResourceItem : MonoBehaviour, ISaveableComponent
+    public class PickupRespawner : MonoBehaviour, ISaveableComponent
     {
         private const double SecondsPerHour = 3600.0;
 
