@@ -47,7 +47,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).Single();
+            clock = Registers.Get<Clock>();
             enabled = false;
         }
 

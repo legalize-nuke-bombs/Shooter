@@ -1,4 +1,3 @@
-using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -33,7 +32,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
-            bulletHoles = Registers.GetAll<BulletHoles>(RegisterInactivePolicy.Include).Single();
+            bulletHoles = Registers.Get<BulletHoles>();
             character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();
             inventoryHolder = GetComponent<InventoryHolder>();

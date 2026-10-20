@@ -42,7 +42,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Get<ConversationManager>();
             conversationManager.Said += Relay;
         }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Shooter.Infrastructure;
 using Unity.Netcode;
@@ -53,7 +52,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            hostVersion = Registers.GetAll<HostVersion>(RegisterInactivePolicy.Include).Single();
+            hostVersion = Registers.Get<HostVersion>();
         }
 
         private void Update()

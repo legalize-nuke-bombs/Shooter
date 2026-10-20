@@ -39,7 +39,7 @@ Wanderers receive your messages immediately, regardless of the value of the `urg
 
         protected override void HandleAttached()
         {
-            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

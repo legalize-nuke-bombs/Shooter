@@ -25,7 +25,7 @@ To see the content, use read_conversation.
 
         protected override void HandleAttached()
         {
-            conversationManager = Registers.GetAll<ConversationManager>(RegisterInactivePolicy.Include).Single();
+            conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {
