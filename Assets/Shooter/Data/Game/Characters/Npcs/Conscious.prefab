@@ -119,6 +119,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7337323769322132093}
+    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2811003536086662913}
   m_SourcePrefab: {fileID: 100100000, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
 --- !u!1 &8781692597535222973 stripped
 GameObject:
@@ -156,7 +159,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Speech.AITalker
   ShowTopMostFoldoutHeaderGroup: 1
-  muttering: {fileID: 11400000, guid: 2a66697da734c424898b7d31e453929f, type: 2}
 --- !u!114 &6266837280944903342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,3 +470,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba0eb21b8f4a3041a6aef5831ef3ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmInventoryObserver
+--- !u!114 &2811003536086662913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8781692597535222973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e3b79c86f54fe458e495aabc07dd3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnSpeech
+  ShowTopMostFoldoutHeaderGroup: 1
+  sound: {fileID: 11400000, guid: 2a66697da734c424898b7d31e453929f, type: 2}

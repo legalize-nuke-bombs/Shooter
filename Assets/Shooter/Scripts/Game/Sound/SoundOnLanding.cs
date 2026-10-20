@@ -3,37 +3,41 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Speaker))]
-    [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(CharacterController))]
-    public class Landing : ShooterBehaviour
+    public class SoundOnLanding : ShooterBehaviour
     {
         [SerializeField] private float minHeight = 0.6f;
-        [SerializeField] private float safeHeight = 3f;
-        [SerializeField] private float damagePerMetre = 12f;
         [SerializeField] private SurfaceSounds sounds;
         [SerializeField] private float gain = 1.7f;
-        [SerializeField] private DamageAsset fallDamage;
 
-        private CharacterController characterController;
-        private Health health;
+        private RpcMovement movement;
         private Speaker speaker;
+        private CharacterController characterController;
 
         protected override void ShooterAwake()
         {
-            characterController = GetComponent<CharacterController>();
+            movement = GetComponent<RpcMovement>();
             speaker = GetComponent<Speaker>();
-            health = GetComponent<Health>();
+            characterController = GetComponent<CharacterController>();
         }
 
-        public void HandleLanding(float fallHeight)
+        private void OnEnable()
+        {
+            movement.Landed += Play;
+        }
+
+        private void OnDisable()
+        {
+            movement.Landed -= Play;
+        }
+
+        private void Play(float fallHeight)
         {
             if (fallHeight < minHeight) return;
 
             speaker.PlayForEveryone(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(characterController)), gain);
-
-            int damage = Mathf.RoundToInt((fallHeight - safeHeight) * damagePerMetre);
-            if (damage > 0) health.TakeDamage(damage, null, fallDamage);
         }
     }
 }

@@ -1,0 +1,42 @@
+using Shooter.Infrastructure;
+using Unity.Netcode;
+using UnityEngine;
+
+namespace Shooter.Game
+{
+    [RequireComponent(typeof(Pickupable))]
+    public class SoundOnPickup : ShooterBehaviour
+    {
+        private static readonly Journal Log = Logs.Here();
+
+        [SerializeField] private SoundAsset sound;
+
+        private Pickupable pickupable;
+
+        protected override void ShooterAwake()
+        {
+            pickupable = GetComponent<Pickupable>();
+        }
+
+        private void OnEnable()
+        {
+            pickupable.PickedUp += PlayAtUser;
+        }
+
+        private void OnDisable()
+        {
+            pickupable.PickedUp -= PlayAtUser;
+        }
+
+        private void PlayAtUser(Pickupable picked, NetworkObject user)
+        {
+            if (!user.TryGetComponent(out Speaker speaker))
+            {
+                Log.Warn($"Failed to find speaker of user {user.name}");
+                return;
+            }
+
+            speaker.PlayForEveryone(sound);
+        }
+    }
+}

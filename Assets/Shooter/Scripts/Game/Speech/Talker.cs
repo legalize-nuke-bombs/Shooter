@@ -7,18 +7,13 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
-    [RequireComponent(typeof(Speaker))]
     public abstract class Talker : ShooterNetworkBehaviour, IUsable
     {
         private readonly NetworkVariable<bool> thinking = new();
 
-        [SerializeField] private SoundAsset muttering;
-
         private Character character;
-        private ConversationManager conversationManager;
         private Health health;
         private Sleeper sleeper;
-        private Speaker speaker;
 
         public bool IsThinking => thinking.Value;
 
@@ -37,7 +32,6 @@ namespace Shooter.Game
             character = GetComponent<Character>();
             health = GetComponent<Health>();
             sleeper = GetComponent<Sleeper>();
-            speaker = GetComponent<Speaker>();
             enabled = false;
         }
 
@@ -47,15 +41,11 @@ namespace Shooter.Game
             if (!IsServer) return;
 
             enabled = true;
-            conversationManager = Registers.Get<ConversationManager>();
-            conversationManager.Said += Mutter;
         }
 
         public override void OnNetworkDespawn()
         {
             thinking.OnValueChanged -= RelayThinking;
-            if (IsServer) conversationManager.Said -= Mutter;
-            conversationManager = null;
             enabled = false;
         }
 
@@ -90,13 +80,6 @@ namespace Shooter.Game
         private void Update()
         {
             thinking.Value = IsBusy();
-        }
-
-        private void Mutter(Conversation conversation, Message message)
-        {
-            if (!message.Spoken || message.AuthorId != CharacterId || muttering == null) return;
-
-            speaker.PlayForEveryone(muttering);
         }
 
         private void RelayThinking(bool previous, bool current)

@@ -1,3 +1,4 @@
+using System;
 using Shooter.Infrastructure;
 using Unity.Collections;
 using Unity.Netcode;
@@ -6,18 +7,17 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(Speaker))]
     public class InventoryUser : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private Inventory inventory;
-        private Speaker speaker;
+
+        public event Action<StackableItemAsset> Used;
 
         protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
-            speaker = GetComponent<Speaker>();
         }
 
         public bool TryUseItem(StackableItemAsset asset)
@@ -31,9 +31,8 @@ namespace Shooter.Game
                 effect.ApplyToUser(gameObject);
             }
 
-            speaker.PlayForEveryone(asset.UseSound);
-
             Log.Info($"Entity {name} used one {asset.Id}");
+            Used?.Invoke(asset);
             return true;
         }
 

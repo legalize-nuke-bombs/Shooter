@@ -1,3 +1,4 @@
+using System;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,36 +9,31 @@ namespace Shooter.Game
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Interactor))]
     [RequireComponent(typeof(Hands))]
-    [RequireComponent(typeof(Speaker))]
-    [RequireComponent(typeof(EarSpeaker))]
     public class Gunner : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private static readonly RaycastHit[] ShotHits = new RaycastHit[32];
         private readonly ShotCadence cadence = new();
-        private BulletHoles bulletHoles;
-        private EarSpeaker earSpeaker;
         private Hands hands;
         private InventoryHolder inventoryHolder;
-
-        private Character character;
         private Interactor interactor;
         private Inventory inventory;
-        private Speaker speaker;
 
         private bool triggerHeld;
 
+        public event Action<FirearmAsset, ShotHit> Shot;
+
+        public event Action<FirearmAsset> Misfired;
+
+        public event Action<FirearmAsset> ReloadStarted;
+
         protected override void ShooterAwake()
         {
-            bulletHoles = Registers.Get<BulletHoles>();
-            character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();
             inventoryHolder = GetComponent<InventoryHolder>();
             interactor = GetComponent<Interactor>();
             hands = GetComponent<Hands>();
-            speaker = GetComponent<Speaker>();
-            earSpeaker = GetComponent<EarSpeaker>();
         }
 
         private void Update()
@@ -76,13 +72,12 @@ namespace Shooter.Game
             if (!firearm.TrySpendRound())
             {
                 triggerHeld = false;
-                speaker?.PlayForEveryone(asset.MisfireSound);
+                Misfired?.Invoke(asset);
                 return false;
             }
 
             int shotIndex = cadence.Fire(asset, Time.time);
-            speaker?.PlayForEveryone(asset.ShotSound);
-            TraceShotAndApplyHit(asset, shotIndex);
+            Shot?.Invoke(asset, TraceShot(asset, shotIndex));
             return true;
         }
 
@@ -96,8 +91,8 @@ namespace Shooter.Game
 
             if (!hands.TryStartAction(ActionType.Reload, asset.ReloadTime, true, () => FinishReload(firearm, asset, missingRounds))) return false;
 
-            speaker?.PlayForEveryone(asset.ReloadSound);
             Log.Info($"Entity {name} started reload of {firearm.AssetId}, {asset.ReloadTime}s");
+            ReloadStarted?.Invoke(asset);
             return true;
         }
 
@@ -124,7 +119,7 @@ namespace Shooter.Game
             Log.Info($"Entity {name} reloaded {firearm.AssetId} with {takenRounds} rounds, {inventory.CountStackable(asset.Ammo)} left in bag");
         }
 
-        private void TraceShotAndApplyHit(FirearmAsset asset, int shotIndex)
+        private ShotHit TraceShot(FirearmAsset asset, int shotIndex)
         {
             Vector2 sprayOffset = asset.Spray.GetOffsetForShot(shotIndex);
             Vector3 shotDirection = Quaternion.LookRotation(interactor.LookDirection) * Quaternion.Euler(-sprayOffset.y, sprayOffset.x, 0f) * Vector3.forward;
@@ -133,23 +128,19 @@ namespace Shooter.Game
             if (!Interactor.TryFindNearestHit(ShotHits, hitCount, out RaycastHit hit))
             {
                 Log.Info($"Shot of entity {name} missed");
-                return;
+                return default;
             }
 
-            Health health = hit.collider.GetComponentInParent<Health>();
-            if (health == null)
+            Health victim = hit.collider.GetComponentInParent<Health>();
+            if (victim == null)
             {
-                bulletHoles.AddHole(hit.point, hit.normal);
                 Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
-                return;
+                return new ShotHit(hit.collider, hit.point, hit.normal, null, BodyPart.Torso);
             }
 
-            BodyPart hitPart = FindWeakestHitBodyPart(hitCount, health);
-            if (hitPart == BodyPart.Head) earSpeaker.PlayForOwner(asset.HeadshotSound);
-            int damage = Mathf.RoundToInt(asset.Damage * hitPart.GetDamageMultiplier());
-
-            health.TakeDamage(damage, character, asset.DamageType);
-            Log.Info($"Shot of entity {name} hit {health.name} in {hitPart} for {damage} damage");
+            BodyPart hitPart = FindWeakestHitBodyPart(hitCount, victim);
+            Log.Info($"Shot of entity {name} hit {victim.name} in {hitPart}");
+            return new ShotHit(hit.collider, hit.point, hit.normal, victim, hitPart);
         }
 
         private BodyPart FindWeakestHitBodyPart(int hitCount, Health victim)

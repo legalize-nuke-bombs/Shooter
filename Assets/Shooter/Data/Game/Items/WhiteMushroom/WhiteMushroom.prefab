@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -7144323633725208756}
   - component: {fileID: -5026217229558190974}
   - component: {fileID: 4905489273699766606}
+  - component: {fileID: 6036198875812966631}
   m_Layer: 12
   m_Name: WhiteMushroom
   m_TagString: Untagged
@@ -183,6 +184,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Pickupable
   item: {fileID: 11400000, guid: 314690ee51c010a4c9086b5088a07004, type: 2}
+--- !u!114 &6036198875812966631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01e820535ed751408851b383571abe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnPickup
   sound: {fileID: 11400000, guid: 709616bf9706402ea32906bcb77f2564, type: 2}
 --- !u!1 &5367550811031109374
 GameObject:
