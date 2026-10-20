@@ -5,21 +5,24 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Intoxication))]
     public class IntoxicationView : NetworkBehaviour
     {
         private readonly Dictionary<ToxinAsset, List<PerceptionEffect>> perceptionEffectsByToxin = new();
 
+        private Player player;
         private Intoxication intoxication;
 
         private void Awake()
         {
+            player = GetComponent<Player>();
             intoxication = GetComponent<Intoxication>();
         }
 
         private void Update()
         {
-            if (!IsSpawned || !IsOwner) return;
+            if (!player.IsControlledLocally) return;
 
             ToxinCatalog toxinCatalog = Catalogs.GetCatalog<ToxinCatalog>();
 

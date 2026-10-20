@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Interactor))]
     public class LocalPlayer : NetworkBehaviour
@@ -24,6 +25,7 @@ namespace Shooter.Game
         private Health health;
         private Interactor interactor;
         private Mortal mortal;
+        private Player player;
         private PlayerMouth playerMouth;
         private RpcMovement movement;
         private OwnRecoil ownRecoil;
@@ -61,6 +63,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            player = GetComponent<Player>();
             movement = GetComponent<RpcMovement>();
             interactor = GetComponent<Interactor>();
             playerMouth = GetComponent<PlayerMouth>();
@@ -92,35 +95,30 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            if (!IsOwner)
-            {
-                view.gameObject.SetActive(false);
-                enabled = false;
-                return;
-            }
-
-            StartLocalControl();
-        }
-
-        public override void OnGainedOwnership()
-        {
-            if (!IsOwner) return;
-
-            view.gameObject.SetActive(true);
-            enabled = true;
-            StartLocalControl();
-        }
-
-        public override void OnLostOwnership()
-        {
-            StopLocalControl();
-            view.gameObject.SetActive(false);
-            enabled = false;
+            player.ControlChanged += HandleControlChanged;
+            HandleControlChanged();
         }
 
         public override void OnNetworkDespawn()
         {
+            player.ControlChanged -= HandleControlChanged;
             StopLocalControl();
+        }
+
+        private void HandleControlChanged()
+        {
+            if (player.IsControlledLocally)
+            {
+                view.gameObject.SetActive(true);
+                enabled = true;
+                StartLocalControl();
+            }
+            else
+            {
+                StopLocalControl();
+                view.gameObject.SetActive(false);
+                enabled = false;
+            }
         }
 
         private void StartLocalControl()

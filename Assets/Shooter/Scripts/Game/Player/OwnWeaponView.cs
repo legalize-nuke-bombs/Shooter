@@ -6,6 +6,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
     public class OwnWeaponView : NetworkBehaviour
     {
@@ -17,6 +18,7 @@ namespace Shooter.Game
         [SerializeField] private Vector3 restRotation = Vector3.zero;
         [SerializeField] private float restScale = 1f;
 
+        private Player player;
         private Camera view;
         private InventoryHolder inventoryHolder;
         private int firstPersonLayer = -1;
@@ -30,6 +32,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            player = GetComponent<Player>();
             inventoryHolder = GetComponent<InventoryHolder>();
             view = GetComponentInChildren<Camera>();
         }
@@ -43,33 +46,28 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            if (IsOwner)
-            {
-                StartShowingHeldWeapon();
-            }
-            else
-            {
-                enabled = false;
-            }
-        }
-
-        public override void OnGainedOwnership()
-        {
-            if (!IsOwner) return;
-
-            enabled = true;
-            StartShowingHeldWeapon();
-        }
-
-        public override void OnLostOwnership()
-        {
-            StopShowingHeldWeapon();
-            enabled = false;
+            player.ControlChanged += HandleControlChanged;
+            HandleControlChanged();
         }
 
         public override void OnNetworkDespawn()
         {
+            player.ControlChanged -= HandleControlChanged;
             StopShowingHeldWeapon();
+        }
+
+        private void HandleControlChanged()
+        {
+            if (player.IsControlledLocally)
+            {
+                enabled = true;
+                StartShowingHeldWeapon();
+            }
+            else
+            {
+                StopShowingHeldWeapon();
+                enabled = false;
+            }
         }
 
         private void StartShowingHeldWeapon()

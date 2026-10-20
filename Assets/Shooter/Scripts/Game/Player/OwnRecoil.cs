@@ -4,11 +4,13 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
     public class OwnRecoil : NetworkBehaviour
     {
         [SerializeField] private float recovery = 14f;
 
+        private Player player;
         private InventoryHolder inventoryHolder;
         private bool triggerHeld;
         private float lastShotTime;
@@ -18,6 +20,7 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            player = GetComponent<Player>();
             inventoryHolder = GetComponent<InventoryHolder>();
         }
 
@@ -30,17 +33,18 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            enabled = IsOwner;
+            player.ControlChanged += HandleControlChanged;
+            HandleControlChanged();
         }
 
-        public override void OnGainedOwnership()
+        public override void OnNetworkDespawn()
         {
-            if (IsOwner) enabled = true;
+            player.ControlChanged -= HandleControlChanged;
         }
 
-        public override void OnLostOwnership()
+        private void HandleControlChanged()
         {
-            enabled = false;
+            enabled = player.IsControlledLocally;
             triggerHeld = false;
             PunchAngles = Vector2.zero;
         }

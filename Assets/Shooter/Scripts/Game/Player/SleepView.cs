@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Sleeper))]
     public class SleepView : NetworkBehaviour
     {
@@ -15,6 +16,7 @@ namespace Shooter.Game
         [SerializeField] private Camera view;
 
         private Camera bedsideCamera;
+        private Player player;
         private Sleeper sleeper;
         private bool shownAsleep;
 
@@ -22,12 +24,13 @@ namespace Shooter.Game
 
         private void Awake()
         {
+            player = GetComponent<Player>();
             sleeper = GetComponent<Sleeper>();
         }
 
         private void Update()
         {
-            if (!IsSpawned || !IsOwner || view == null) return;
+            if (!player.IsControlledLocally || view == null) return;
 
             bool asleep = sleeper.IsSleeping;
 

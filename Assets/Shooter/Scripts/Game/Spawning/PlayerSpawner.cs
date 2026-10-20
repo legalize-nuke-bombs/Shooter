@@ -87,6 +87,7 @@ namespace Shooter.Game
             body.ChangeOwnership(clientId);
             body.DontDestroyWithOwner = true;
             bodiesByClientId[clientId] = body;
+            body.GetComponent<Player>().GiveControlTo(clientId);
             body.GetComponent<TextNameable>()?.RenameTo(playerName);
             body.name = playerName;
 
@@ -97,6 +98,7 @@ namespace Shooter.Game
         {
             if (!bodiesByClientId.Remove(clientId, out NetworkObject body) || body == null) return;
 
+            body.GetComponent<Player>().RevokeControl();
             body.gameObject.SetActive(false);
             Log.Info($"Client {clientId} left the world, body switched off");
         }

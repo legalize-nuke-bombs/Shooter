@@ -1,14 +1,26 @@
+using System;
 using Shooter.Infrastructure;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(CharacterId))]
-    public class Player : ShooterBehaviour, ISaveableComponent
+    public class Player : ShooterNetworkBehaviour, ISaveableComponent
     {
+        private const ulong NoClient = ulong.MaxValue;
+
+        private readonly NetworkVariable<ulong> controllingClientId = new(NoClient);
+
         private CharacterId characterId;
 
         public string PublicKey { get; set; }
+
+        // Who plays this body, apart from who owns it in Netcode: on the host an offline body and a body being handed
+        // to a client are both owned by the host without being its own
+        public bool IsControlledLocally => IsSpawned && controllingClientId.Value == NetworkManager.LocalClientId;
+
+        public event Action ControlChanged;
 
         public string ComponentKey => "Player";
 
@@ -30,6 +42,31 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             characterId = GetComponent<CharacterId>();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            controllingClientId.OnValueChanged += HandleControllingClientChanged;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            controllingClientId.OnValueChanged -= HandleControllingClientChanged;
+        }
+
+        public void GiveControlTo(ulong clientId)
+        {
+            controllingClientId.Value = clientId;
+        }
+
+        public void RevokeControl()
+        {
+            controllingClientId.Value = NoClient;
+        }
+
+        private void HandleControllingClientChanged(ulong previousClientId, ulong currentClientId)
+        {
+            ControlChanged?.Invoke();
         }
 
         public long Id => characterId.Value;
