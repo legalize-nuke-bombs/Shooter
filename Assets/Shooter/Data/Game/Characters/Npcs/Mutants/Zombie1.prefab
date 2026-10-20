@@ -13,7 +13,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 73ebcce2cc552da4dac557329c3f0632, type: 2}
     - target: {fileID: 1820400599769648782, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}
-      propertyPath: fraction
+      propertyPath: faction
       value: 
       objectReference: {fileID: 11400000, guid: 7a2c8878960749d44a025c7f467dd1d4, type: 2}
     - target: {fileID: 2319365671940130797, guid: 23d4b5c3161df0a4a85aeec39e95ce49, type: 3}

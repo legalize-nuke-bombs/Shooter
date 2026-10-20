@@ -4,49 +4,49 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Fraction Relation Catalog", fileName = "FractionRelationCatalog")]
-    public class FractionRelationCatalog : Catalog<FractionRelation>
+    [CreateAssetMenu(menuName = "Shooter/Faction Relation Catalog", fileName = "FactionRelationCatalog")]
+    public class FactionRelationCatalog : Catalog<FactionRelation>
     {
         private static readonly Journal Log = Logs.Here();
 
-        private readonly Dictionary<string, int> defaultAmountsByFractionPair = new();
+        private readonly Dictionary<string, int> defaultAmountsByFactionPair = new();
 
         [SerializeField] private int defaultAmount = 50;
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            defaultAmountsByFractionPair.Clear();
+            defaultAmountsByFactionPair.Clear();
 
             for (int i = 0; i < Count; i++)
             {
-                FractionRelation fractionRelation = GetAssetAt(i);
-                string fractionPairKey = GetFractionPairKey(fractionRelation.Fraction1.Id, fractionRelation.Fraction2.Id);
-                if (!defaultAmountsByFractionPair.TryAdd(fractionPairKey, fractionRelation.DefaultAmount))
+                FactionRelation factionRelation = GetAssetAt(i);
+                string factionPairKey = GetFactionPairKey(factionRelation.Faction1.Id, factionRelation.Faction2.Id);
+                if (!defaultAmountsByFactionPair.TryAdd(factionPairKey, factionRelation.DefaultAmount))
                 {
-                    Log.Error($"Fraction relation {fractionPairKey} already has been set");
+                    Log.Error($"Faction relation {factionPairKey} already has been set");
                 }
             }
         }
 
-        public int GetDefaultAmount(Fraction fraction1, Fraction fraction2)
+        public int GetDefaultAmount(Faction faction1, Faction faction2)
         {
-            string fractionPairKey = GetFractionPairKey(fraction1.Id, fraction2.Id);
-            if (defaultAmountsByFractionPair.TryGetValue(fractionPairKey, out int amount))
+            string factionPairKey = GetFactionPairKey(faction1.Id, faction2.Id);
+            if (defaultAmountsByFactionPair.TryGetValue(factionPairKey, out int amount))
             {
                 return amount;
             }
-            Log.Error($"Failed to find relation value for {fractionPairKey}, falling back to {defaultAmount}");
+            Log.Error($"Failed to find relation value for {factionPairKey}, falling back to {defaultAmount}");
             return defaultAmount;
         }
 
-        private static string GetFractionPairKey(string fractionId1, string fractionId2)
+        private static string GetFactionPairKey(string factionId1, string factionId2)
         {
-            if (string.CompareOrdinal(fractionId1, fractionId2) > 0)
+            if (string.CompareOrdinal(factionId1, factionId2) > 0)
             {
-                (fractionId1, fractionId2) = (fractionId2, fractionId1);
+                (factionId1, factionId2) = (factionId2, factionId1);
             }
-            return fractionId1 + "-" + fractionId2;
+            return factionId1 + "-" + factionId2;
         }
     }
 }

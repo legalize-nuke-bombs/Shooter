@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c4f0350a0545bea50bbfcc987b88f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Identity.PersistentId
-  fraction: {fileID: 11400000, guid: f13ac3862bb50eb48bd3618281e45ff7, type: 2}
+  faction: {fileID: 11400000, guid: f13ac3862bb50eb48bd3618281e45ff7, type: 2}
 --- !u!114 &6188320145048159165
 MonoBehaviour:
   m_ObjectHideFlags: 0

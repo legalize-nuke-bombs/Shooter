@@ -3,32 +3,32 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Fraction Relation", fileName = "FractionRelation")]
-    public class FractionRelation : Asset
+    [CreateAssetMenu(menuName = "Shooter/Faction Relation", fileName = "FactionRelation")]
+    public class FactionRelation : Asset
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private Fraction fraction1;
-        [SerializeField] private Fraction fraction2;
+        [SerializeField] private Faction faction1;
+        [SerializeField] private Faction faction2;
         [SerializeField] private int defaultAmount;
 
-        public Fraction Fraction1 => fraction1;
-        public Fraction Fraction2 => fraction2;
+        public Faction Faction1 => faction1;
+        public Faction Faction2 => faction2;
         public int DefaultAmount => defaultAmount;
 
         private void OnEnable()
         {
-            if (fraction1 == null)
+            if (faction1 == null)
             {
-                Log.Error($"Fraction relation {Id} does not have set fraction1");
+                Log.Error($"Faction relation {Id} does not have set faction1");
             }
-            if (fraction2 == null)
+            if (faction2 == null)
             {
-                Log.Error($"Fraction relation {Id} does not have set fraction2");
+                Log.Error($"Faction relation {Id} does not have set faction2");
             }
             if (defaultAmount < 0 || defaultAmount > 100)
             {
-                Log.Error($"Fraction relation {Id} has bad default amount ({defaultAmount})");
+                Log.Error($"Faction relation {Id} has bad default amount ({defaultAmount})");
             }
         }
     }

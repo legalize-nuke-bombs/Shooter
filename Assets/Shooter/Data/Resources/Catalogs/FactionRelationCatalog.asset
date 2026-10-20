@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b353aa803e4411184e1e64dd949ec95, type: 3}
-  m_Name: FractionRelationCatalog
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.FractionsRelations.FractionRelationCatalog
+  m_Name: FactionRelationCatalog
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.FactionRelationCatalog
   assets:
   - {fileID: 11400000, guid: 6f474c2e2214d2849bbd6ad974f27453, type: 2}
   - {fileID: 11400000, guid: a7a55f711f8094848bbb35954bcf1e7b, type: 2}
