@@ -44,7 +44,6 @@ namespace Shooter.Game
             behaviorReporter.Report(new BehaviorReport { Prompt = outcome, IsUrgent = true });
         }
 
-        public string ComponentKey => "BtCustomOrderQueue";
         private struct SaveData
         {
             public string Kind { get; set; }

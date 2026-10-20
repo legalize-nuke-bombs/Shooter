@@ -94,7 +94,7 @@ namespace Shooter.Infrastructure
             ISaveableComponent[] saveables = IsNetworkObjectSpawned ? GetComponents<ISaveableComponent>() : Array.Empty<ISaveableComponent>();
             foreach (ISaveableComponent saveable in saveables)
             {
-                string saveableKey = saveable.ComponentKey;
+                string saveableKey = saveable.GetType().Name;
                 SaveToken saveableData;
                 try
                 {
@@ -152,7 +152,7 @@ namespace Shooter.Infrastructure
             var knownKeys = new HashSet<string>();
             foreach (ISaveableComponent saveable in saveables)
             {
-                string saveableKey = saveable.ComponentKey;
+                string saveableKey = saveable.GetType().Name;
                 knownKeys.Add(saveableKey);
 
                 if (!data.Components.TryGetValue(saveableKey, out SaveToken componentData))

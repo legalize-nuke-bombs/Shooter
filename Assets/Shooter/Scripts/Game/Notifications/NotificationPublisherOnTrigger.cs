@@ -16,8 +16,6 @@ namespace Shooter.Game
         private HashSet<long> notifiedCharacterIds = new();
         private Trigger trigger;
 
-        public string ComponentKey => "NotificationPublisher";
-
         private struct SaveData
         {
             public List<long> Characters { get; set; }

@@ -17,7 +17,6 @@ namespace Shooter.Game
 
         private readonly Dictionary<string, LlmNote> notesByName = new();
 
-        public string ComponentKey => "LlmNotes";
         private struct SaveData
         {
             public Dictionary<string, LlmNote> Notes { get; set; }

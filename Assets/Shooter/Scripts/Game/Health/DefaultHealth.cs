@@ -11,8 +11,6 @@ namespace Shooter.Game
 
         private readonly NetworkVariable<double> hp = new();
 
-        public string ComponentKey => "Health";
-
         private struct SaveData
         {
             public double Hp { get; set; }

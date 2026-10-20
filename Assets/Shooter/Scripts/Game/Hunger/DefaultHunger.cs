@@ -10,8 +10,6 @@ namespace Shooter.Game
 
         private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
 
-        public string ComponentKey => "Hunger";
-
         private struct SaveData
         {
             public float Amount { get; set; }

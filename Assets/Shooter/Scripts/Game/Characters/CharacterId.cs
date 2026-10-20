@@ -13,8 +13,6 @@ namespace Shooter.Game
 
         public long Value => id.Value;
 
-        public string ComponentKey => "CharacterId";
-
         private struct SaveData
         {
             public long Id { get; set; }

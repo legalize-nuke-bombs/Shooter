@@ -20,8 +20,6 @@ namespace Shooter.Game
 
         private readonly Dictionary<long, int> amountsByCharacterId = new();
 
-        public string ComponentKey => "AICharacterRelation";
-
         private struct SaveData
         {
             public struct Entry

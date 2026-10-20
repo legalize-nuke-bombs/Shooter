@@ -8,8 +8,6 @@ namespace Shooter.Game
     {
         private long nextId;
 
-        public string ComponentKey => "CharacterIds";
-
         private struct SaveData
         {
             public long Next { get; set; }

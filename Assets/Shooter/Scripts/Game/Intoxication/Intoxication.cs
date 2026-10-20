@@ -24,8 +24,6 @@ namespace Shooter.Game
         private Clock clock;
         private ToxinCatalog toxinCatalog;
 
-        public string ComponentKey => "Intoxication";
-
         private struct SaveData
         {
             public Dictionary<string, double> Levels { get; set; }

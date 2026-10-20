@@ -17,7 +17,6 @@ namespace Shooter.Game
 
         private Clock clock;
 
-        public string ComponentKey => "ConversationManager";
         private struct SaveData
         {
             public List<Conversation> Conversations { get; set; }

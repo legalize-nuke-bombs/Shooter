@@ -9,8 +9,6 @@ namespace Shooter.Game
 
         private Vector3? position;
 
-        public string ComponentKey => "SpawnPoint";
-
         private struct SaveData
         {
             public Vector3? Position { get; set; }

@@ -14,7 +14,6 @@ namespace Shooter.Game
 
         private Inventory inventory;
 
-        public string ComponentKey => "InventoryHolder";
         private struct SaveData
         {
             public int Slot { get; set; }

@@ -18,8 +18,6 @@ namespace Shooter.Game
         private Hands hands;
         private SleepCycle sleepCycle;
 
-        public string ComponentKey => "Sleeper";
-
         private struct SaveData
         {
             public Vector3 Bedside { get; set; }
