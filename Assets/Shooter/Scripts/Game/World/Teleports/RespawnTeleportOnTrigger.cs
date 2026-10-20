@@ -3,13 +3,29 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class RespawnTeleport : ShooterBehaviour, ITriggerable
+    [RequireComponent(typeof(Trigger))]
+    public class RespawnTeleportOnTrigger : Teleporter
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private EarSoundAsset sound;
+        private Trigger trigger;
 
-        public void HandleCharacterEntered(Character character)
+        protected override void ShooterAwake()
+        {
+            trigger = GetComponent<Trigger>();
+        }
+
+        private void OnEnable()
+        {
+            trigger.Fired += TeleportCharacterToRespawn;
+        }
+
+        private void OnDisable()
+        {
+            trigger.Fired -= TeleportCharacterToRespawn;
+        }
+
+        private void TeleportCharacterToRespawn(Character character)
         {
             Movement movement = character.GetComponent<Movement>();
             if (movement == null) return;
@@ -24,8 +40,7 @@ namespace Shooter.Game
                     : mainSpawnPoint.transform.position;
 
             Log.Info($"Entity {name} teleporting {movement.name} to their respawn position {destination}");
-            movement.Teleport(destination);
-            movement.GetComponent<EarSpeaker>()?.PlayForOwner(sound);
+            Teleport(character, movement, destination);
         }
     }
 }
