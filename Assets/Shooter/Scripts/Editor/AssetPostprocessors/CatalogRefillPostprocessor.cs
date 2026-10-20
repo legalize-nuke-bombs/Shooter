@@ -10,7 +10,7 @@ namespace Shooter.Editor
 {
     public class CatalogRefillPostprocessor : AssetPostprocessor
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static void OnPostprocessAllAssets(string[] importedPaths, string[] deletedPaths, string[] movedPaths, string[] movedFromPaths)
         {

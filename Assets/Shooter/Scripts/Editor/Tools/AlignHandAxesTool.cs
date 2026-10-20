@@ -13,7 +13,7 @@ namespace Shooter.Editor
     public class AlignHandAxesTool : EditorWindow
     {
         private const float ToleranceDegrees = 0.5f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject standard;
 

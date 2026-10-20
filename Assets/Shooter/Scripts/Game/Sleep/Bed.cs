@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class Bed : MonoBehaviour, IUsable, IDigestible
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Camera bedside;
 

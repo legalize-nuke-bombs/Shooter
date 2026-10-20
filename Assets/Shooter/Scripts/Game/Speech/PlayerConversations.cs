@@ -14,7 +14,7 @@ namespace Shooter.Game
         private const int MaxBatchBytes = 16 * 1024;
         private const int LineOverheadBytes = 32;
         private const int BytesPerCharacter = 2;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<long, Contact> contacts = new();
 

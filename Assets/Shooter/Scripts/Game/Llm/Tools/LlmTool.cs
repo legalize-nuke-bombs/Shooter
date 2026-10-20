@@ -31,7 +31,7 @@ namespace Shooter.Game
     [Serializable]
     public abstract class LlmTool<TArguments> : LlmTool
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static readonly JsonSerializerSettings ArgumentsJsonSettings = new()
         {

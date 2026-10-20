@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class MainRestrainable : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public static readonly float InstantActionDuration = 0.00000001f;
 

@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public class PrefabSpawner : MonoBehaviour, ITriggerable, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject prefab;
         [SerializeField] private GameObject destination;

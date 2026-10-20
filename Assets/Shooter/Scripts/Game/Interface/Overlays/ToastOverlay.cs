@@ -9,7 +9,7 @@ namespace Shooter.Game
         private const string FeedElementName = "toasts";
         private const long ToastLifetimeMilliseconds = 5000;
         private const int MaxShownToasts = 4;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private VisualElement feedElement;
         private Player subscribedPlayer;

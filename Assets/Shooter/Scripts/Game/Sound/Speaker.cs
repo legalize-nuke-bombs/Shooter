@@ -9,7 +9,7 @@ namespace Shooter.Game
     public class Speaker : NetworkBehaviour
     {
         private const int MaxVoices = 8;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly List<AudioSource> audioSources = new();
 

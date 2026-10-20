@@ -20,7 +20,7 @@ namespace Shooter.Game
         private const float LogReportSeconds = 60f;
         private const float Megabyte = 1024f * 1024f;
         private const string Unavailable = "—";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static readonly (ProfilerCategory Category, string Name)[] ProfilerCounters =
         {

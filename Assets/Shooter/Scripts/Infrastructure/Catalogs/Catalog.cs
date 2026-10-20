@@ -12,7 +12,7 @@ namespace Shooter.Infrastructure
     public abstract class Catalog<TAsset> : Catalog where TAsset : Asset
     {
         public const string AssetsField = nameof(assets);
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private TAsset[] assets;
         private readonly Dictionary<FixedString32Bytes, int> indicesById = new();

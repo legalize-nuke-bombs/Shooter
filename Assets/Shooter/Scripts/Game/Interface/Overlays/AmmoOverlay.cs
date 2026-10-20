@@ -9,7 +9,7 @@ namespace Shooter.Game
         private const string MagazineLabelName = "ammo-magazine";
         private const string ReserveLabelName = "ammo-reserve";
         private const int Hidden = -1;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Inventory inventory;
         private InventoryHolder inventoryHolder;

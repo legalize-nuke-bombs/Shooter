@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(BehaviorReporter))]
     public class CustomOrderSlot : MonoBehaviour, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private CustomOrder order;
         private BehaviorReporter behaviorReporter;

@@ -16,7 +16,7 @@ namespace Shooter.Game
         id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a04")]
     public partial class UseHealingItemAction : Action
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<float> UnderHealPenalty = new(1f);

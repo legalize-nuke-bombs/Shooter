@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public abstract class Asset : ScriptableObject
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private string id;
 

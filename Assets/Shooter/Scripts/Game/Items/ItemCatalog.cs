@@ -7,7 +7,7 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Item Catalog", fileName = "ItemCatalog")]
     public class ItemCatalog : Catalog<ItemAsset>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public int GetAssetIndexOf(UniqueItem item)
         {

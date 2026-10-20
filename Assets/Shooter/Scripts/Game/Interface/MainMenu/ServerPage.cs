@@ -11,7 +11,7 @@ namespace Shooter.Game
         private const string CompressionDropdownName = "compression";
         private const string ProviderDropdownName = "provider";
         private const string NoProvider = "";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         protected ServerPage(VisualElement root) : base(root)
         {

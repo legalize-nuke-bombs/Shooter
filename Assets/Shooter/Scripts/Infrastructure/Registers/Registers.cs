@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public static class Registers
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
         private static readonly Dictionary<Type, Register> RegistersByType = new();
 
         public static void RegisterBehaviour<T>(T member) where T : MonoBehaviour, IShooterBehaviour

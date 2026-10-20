@@ -7,7 +7,7 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Fraction Relation Catalog", fileName = "FractionRelationCatalog")]
     public class FractionRelationCatalog : Catalog<FractionRelation>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<string, int> defaultAmountsByFractionPair = new();
 

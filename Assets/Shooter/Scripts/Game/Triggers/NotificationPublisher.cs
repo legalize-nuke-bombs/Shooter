@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     public class NotificationPublisher : MonoBehaviour, ITriggerable, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private NotificationAsset notificationAsset;
         [SerializeField] private bool oncePerCharacter = true;

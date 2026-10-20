@@ -13,7 +13,7 @@ namespace Shooter.Editor
     {
         private const string AgentSettingsPath = "ProjectSettings/NavMeshAreas.asset";
         private const float SlopeForgiveness = 5f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private GameObject agentBody;
 

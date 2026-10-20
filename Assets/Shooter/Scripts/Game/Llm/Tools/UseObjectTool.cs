@@ -11,7 +11,7 @@ namespace Shooter.Game
     {
         private const float PointSearchRadius = 1.5f;
 
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float radius = 5;
 

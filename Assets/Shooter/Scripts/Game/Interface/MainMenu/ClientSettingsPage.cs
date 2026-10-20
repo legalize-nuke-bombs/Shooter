@@ -9,7 +9,7 @@ namespace Shooter.Game
         private const string BackButtonName = "back";
         private const string AntialiasingDropdownName = "antialiasing";
         private const string UpscalerDropdownName = "upscaler";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly DropdownField antialiasingDropdown;
         private ClientConfig clientConfig;

@@ -9,7 +9,7 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class BulletHoles : ShooterNetworkBehaviour, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Material material;
         [SerializeField] private int capacity = 1024;

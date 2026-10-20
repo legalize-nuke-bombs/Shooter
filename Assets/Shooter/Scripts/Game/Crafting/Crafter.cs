@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     public class Crafter : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private List<CraftAsset> availableCrafts;
         private readonly Dictionary<string, CraftAsset> craftsById = new();

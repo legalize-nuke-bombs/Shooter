@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     public class InventoryExchanger : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float radius = 10f;
 

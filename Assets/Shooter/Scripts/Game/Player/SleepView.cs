@@ -10,7 +10,7 @@ namespace Shooter.Game
         private const float EyesClosingSeconds = 0.45f;
         private const float EyesOpeningSeconds = 0.7f;
         private const float BedReach = 2f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Camera view;
 

@@ -7,7 +7,7 @@ namespace Shooter.Infrastructure
     public static class Catalogs
     {
         private const string ResourcesFolder = "Catalogs";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static Dictionary<Type, Catalog> catalogsByType;
 

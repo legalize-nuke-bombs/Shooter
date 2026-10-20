@@ -6,7 +6,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Llm))]
     public class LlmAIObserver : MonoBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Llm llm;
         private AICharacterRelation characterRelation;

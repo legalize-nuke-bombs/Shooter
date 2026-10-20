@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     public class MainSpawnPoint : ShooterBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public static MainSpawnPoint PickRandom()
         {

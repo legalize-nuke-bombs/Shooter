@@ -20,7 +20,7 @@ namespace Shooter.Editor
         private const float NoiseHigh = 0.7f;
         private const float RayHeadroom = 10f;
         private const int RaysPerJob = 256;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [Serializable]
         private class GrassPlant

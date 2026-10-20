@@ -9,7 +9,7 @@ namespace Shooter.Game
     {
         private const string ClockLabelName = "clock";
         private const long Hidden = long.MinValue;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Clock clock;
         private Label clockLabel;

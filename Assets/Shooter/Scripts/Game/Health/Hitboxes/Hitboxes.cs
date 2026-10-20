@@ -10,7 +10,7 @@ namespace Shooter.Game
 
         private const float MinHumanoidScale = 0.6f;
         private const float MaxHumanoidScale = 1.4f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private void Start()
         {

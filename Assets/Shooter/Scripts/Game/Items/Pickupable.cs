@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(NetworkObject))]
     public class Pickupable : MonoBehaviour, IUsable, IDigestible
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private NetworkObject networkObject;
         [SerializeField] private StackableItemAsset item;

@@ -11,7 +11,7 @@ namespace Shooter.Game
         private const float SkipTimeScale = 300f;
         private const double BedtimeStartHour = 22;
         private const double BedtimeEndHour = 8;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkVariable<bool> worldAsleep = new();
 

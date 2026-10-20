@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     public class Switch : NetworkBehaviour, IUsable, IDigestible, ISaveableComponent
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static readonly int EmissiveColorId = Shader.PropertyToID("_EmissiveColor");
 

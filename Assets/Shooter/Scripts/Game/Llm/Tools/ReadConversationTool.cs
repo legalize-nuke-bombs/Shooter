@@ -10,7 +10,7 @@ namespace Shooter.Game
     [Serializable]
     public class ReadConversationTool : LlmTool<ReadConversationArguments>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private ConversationManager conversationManager;
         private Character ownCharacter;

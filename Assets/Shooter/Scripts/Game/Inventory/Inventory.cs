@@ -8,7 +8,7 @@ namespace Shooter.Game
     public class Inventory : NetworkBehaviour, IDigestible, ISaveableComponent
     {
         public const int NoSlot = -1;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkList<int> stackAmounts = new(null, NetworkVariableReadPermission.Owner);
 

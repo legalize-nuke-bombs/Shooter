@@ -12,7 +12,7 @@ namespace Shooter.Game
         private const string PrivateKeyFieldName = "phrase";
         private const string StatusLabelName = "status";
         private const string InvalidKeyStatus = "Недействительный ключ";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly Foldout privateKeyFoldout;
         private readonly Label publicKeyLabel;

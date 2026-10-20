@@ -14,7 +14,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(MainRestrainable))]
     public class Gunner : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private static readonly RaycastHit[] ShotHits = new RaycastHit[32];
         private BulletHoles bulletHoles;

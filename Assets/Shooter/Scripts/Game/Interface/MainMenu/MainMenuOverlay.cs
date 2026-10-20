@@ -15,7 +15,7 @@ namespace Shooter.Game
         private const string PageClass = "screen";
         private const int MenuFrameRate = 60;
         private const int UnlimitedFrameRate = -1;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private VisualTreeAsset mainPage;
         [SerializeField] private VisualTreeAsset newGamePage;

@@ -7,7 +7,7 @@ namespace Shooter.Infrastructure
 {
     public static class NetworkSpawner
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public static GameObject InstantiateAndSpawn(GameObject prefab, Action<GameObject> beforeNetworkSpawn)
         {

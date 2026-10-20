@@ -6,7 +6,7 @@ namespace Shooter.Game
     [Serializable]
     public class LookAtWandererTool : LlmTool<LookAtWandererArguments>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public override string Name => "look_at_wanderer";
 

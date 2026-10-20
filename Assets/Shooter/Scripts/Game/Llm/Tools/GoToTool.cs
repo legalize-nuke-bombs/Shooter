@@ -7,7 +7,7 @@ namespace Shooter.Game
     [Serializable]
     public sealed class GoToTool : LlmTool<GoToArguments>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
         private const float GroundReach = 5f;
 
         private CustomOrderSlot customOrderSlot;

@@ -12,7 +12,7 @@ namespace Shooter.Game
         private const float MediumViewingDistance = 150f;
         private const float LargeViewingDistance = 500f;
         private const float BiggestViewingDistance = 5000f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public static string DigestVisibleAround(GameObject observer)
         {

@@ -13,7 +13,7 @@ namespace Shooter.Game
     {
         public const float TalkReach = 8f;
         public const int MaxSpeechLength = 300;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkVariable<ulong> talkerNetworkObjectId = new();
 

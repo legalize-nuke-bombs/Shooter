@@ -16,7 +16,7 @@ namespace Shooter.Game
         private const string GiveButtonName = "talk-give";
         private const string Stranger = "Незнакомец";
         private const string RadioTitleSuffix = "рация";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float charInterval = 0.01f;
 

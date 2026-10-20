@@ -26,7 +26,7 @@ namespace Shooter.Game
             [LoadingScreenStage.Synchronization] = "Синхронизация мира"
         };
 
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private LoadingScreenTipCatalog tipCatalog;
 

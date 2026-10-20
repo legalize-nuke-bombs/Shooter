@@ -8,7 +8,7 @@ namespace Shooter.Game
     {
         private const string ConnectButtonName = "connect";
         private const string BackButtonName = "back";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public ClientPage(VisualElement root) : base(root)
         {

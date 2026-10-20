@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     public class InventoryUser : NetworkBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private Inventory inventory;
         private Speaker speaker;

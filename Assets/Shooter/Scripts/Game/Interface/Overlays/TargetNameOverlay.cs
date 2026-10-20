@@ -8,7 +8,7 @@ namespace Shooter.Game
     public class TargetNameOverlay : Overlay
     {
         private const string NameLabelName = "target-name";
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly NameMapper nameMapper = new();
 

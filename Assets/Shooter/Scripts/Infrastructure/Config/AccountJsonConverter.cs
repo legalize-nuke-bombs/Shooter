@@ -5,7 +5,7 @@ namespace Shooter.Infrastructure
 {
     public class AccountJsonConverter : JsonConverter<Account>
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         public override void WriteJson(JsonWriter writer, Account value, JsonSerializer serializer)
         {

@@ -18,7 +18,7 @@ namespace Shooter.Editor
         private const float DryHeightWhereNoGround = 1000f;
         private const float SunkBelowDeepLine = 1f;
         private const float ShortestPiece = 0.01f;
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [MenuItem("Tools/Build Water Walls")]
         private static void BuildWallsForEveryWater()

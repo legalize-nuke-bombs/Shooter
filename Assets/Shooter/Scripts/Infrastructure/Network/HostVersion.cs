@@ -7,7 +7,7 @@ namespace Shooter.Infrastructure
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class HostVersion : ShooterNetworkBehaviour
     {
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         private readonly NetworkVariable<FixedString32Bytes> version = new();
 

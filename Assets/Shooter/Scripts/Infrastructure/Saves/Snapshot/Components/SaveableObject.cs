@@ -10,7 +10,7 @@ namespace Shooter.Infrastructure
     public class SaveableObject : NetworkBehaviour, ISaveable
     {
         public const string IdField = nameof(id);
-        private static readonly Journal Log = Logs.CreateJournalForThisFile();
+        private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private string id;
 
