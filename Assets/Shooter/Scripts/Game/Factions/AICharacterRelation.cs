@@ -100,13 +100,13 @@ namespace Shooter.Game
                 digest.Append(amountByCharacterId.Key + " : " + amountByCharacterId.Value + " (" + GetStatus(amountByCharacterId.Value) + "). ");
             }
 
-            digest.Append("The relation towards characters not listed here by fractions: ");
-            FractionCatalog fractionCatalog = Catalogs.GetCatalog<FractionCatalog>();
-            FractionRelationCatalog fractionRelationCatalog = Catalogs.GetCatalog<FractionRelationCatalog>();
-            for (int i = 0; i < fractionCatalog.Count; i++)
+            digest.Append("The relation towards characters not listed here by factions: ");
+            FactionCatalog factionCatalog = Catalogs.GetCatalog<FactionCatalog>();
+            FactionRelationCatalog factionRelationCatalog = Catalogs.GetCatalog<FactionRelationCatalog>();
+            for (int i = 0; i < factionCatalog.Count; i++)
             {
-                Fraction targetFraction = fractionCatalog.GetAssetAt(i);
-                digest.Append($"[{targetFraction.PromptName}: {fractionRelationCatalog.GetDefaultAmount(ownCharacter.Fraction, targetFraction)}], ");
+                Faction targetFaction = factionCatalog.GetAssetAt(i);
+                digest.Append($"[{targetFaction.PromptName}: {factionRelationCatalog.GetDefaultAmount(ownCharacter.Faction, targetFaction)}], ");
             }
 
             return digest.ToString();
@@ -137,8 +137,8 @@ namespace Shooter.Game
             {
                 return amount;
             }
-            FractionRelationCatalog fractionRelationCatalog = Catalogs.GetCatalog<FractionRelationCatalog>();
-            return fractionRelationCatalog.GetDefaultAmount(ownCharacter.Fraction, targetCharacter.Fraction);
+            FactionRelationCatalog factionRelationCatalog = Catalogs.GetCatalog<FactionRelationCatalog>();
+            return factionRelationCatalog.GetDefaultAmount(ownCharacter.Faction, targetCharacter.Faction);
         }
 
         public int SetAmount(Character targetCharacter, int amount)

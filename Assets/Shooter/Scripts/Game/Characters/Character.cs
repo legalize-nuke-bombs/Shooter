@@ -11,15 +11,15 @@ namespace Shooter.Game
 
         private CharacterId characterId;
 
-        [SerializeField] private Fraction fraction;
-        public Fraction Fraction => fraction;
+        [SerializeField] private Faction faction;
+        public Faction Faction => faction;
 
         protected override void ShooterAwake()
         {
             characterId = GetComponent<CharacterId>();
-            if (fraction == null)
+            if (faction == null)
             {
-                Log.Error($"Entity {name} does not have a fraction");
+                Log.Error($"Entity {name} does not have a faction");
             }
         }
 
@@ -48,7 +48,7 @@ namespace Shooter.Game
         public DigestionPriority Priority => DigestionPriority.High;
         public string Digest(DigestionDetail detail)
         {
-            return $"Character. Fraction: {fraction.PromptName}";
+            return $"Character. Faction: {faction.PromptName}";
         }
     }
 }
