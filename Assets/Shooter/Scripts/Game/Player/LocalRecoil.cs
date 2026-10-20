@@ -10,11 +10,10 @@ namespace Shooter.Game
     {
         [SerializeField] private float recovery = 14f;
 
+        private readonly ShotCadence cadence = new();
         private Player player;
         private InventoryHolder inventoryHolder;
         private bool triggerHeld;
-        private float lastShotTime;
-        private int sprayShotIndex;
 
         public Vector2 PunchAngles { get; private set; }
 
@@ -67,16 +66,11 @@ namespace Shooter.Game
 
             FirearmAsset firearmAsset = Catalogs.GetCatalog<ItemCatalog>().GetFirearmAssetById(firearm.AssetId);
             if (firearmAsset == null) return;
-            if (sustained && firearmAsset.FireMode != FireMode.Auto) return;
+            if (!cadence.CanFire(firearmAsset, sustained, Time.time)) return;
 
-            if (Time.time - lastShotTime < firearmAsset.FireInterval) return;
-            if (Time.time - lastShotTime >= firearmAsset.SprayRecovery) sprayShotIndex = 0;
-
-            Vector2 previousOffset = sprayShotIndex == 0 ? Vector2.zero : firearmAsset.Spray.GetOffsetForShot(sprayShotIndex - 1);
-            PunchAngles += (firearmAsset.Spray.GetOffsetForShot(sprayShotIndex) - previousOffset) * firearmAsset.RecoilPunch;
-
-            sprayShotIndex++;
-            lastShotTime = Time.time;
+            int shotIndex = cadence.Fire(firearmAsset, Time.time);
+            Vector2 previousOffset = shotIndex == 0 ? Vector2.zero : firearmAsset.Spray.GetOffsetForShot(shotIndex - 1);
+            PunchAngles += (firearmAsset.Spray.GetOffsetForShot(shotIndex) - previousOffset) * firearmAsset.RecoilPunch;
         }
     }
 }
