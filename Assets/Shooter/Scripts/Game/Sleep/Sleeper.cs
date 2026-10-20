@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(RespawnPosition))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Hands))]
     public class Sleeper : ShooterNetworkBehaviour, IDigestible, ISaveableComponent
@@ -18,7 +17,6 @@ namespace Shooter.Game
         private Health health;
         private Hands hands;
         private SleepCycle sleepCycle;
-        private RespawnPosition respawnPosition;
 
         public string ComponentKey => "Sleeper";
 
@@ -53,7 +51,6 @@ namespace Shooter.Game
             health = GetComponent<Health>();
             hands = GetComponent<Hands>();
             sleepCycle = Registers.Get<SleepCycle>();
-            respawnPosition = GetComponent<RespawnPosition>();
         }
 
         private void OnEnable()
@@ -95,7 +92,6 @@ namespace Shooter.Game
 
             bedPosition.Value = bed.transform.position;
             sleeping.Value = true;
-            respawnPosition.SetPosition(transform.position);
             Log.Info($"Entity {name} fell asleep at {transform.position} in a bed at {bedPosition.Value}");
             FellAsleep?.Invoke();
             return true;
