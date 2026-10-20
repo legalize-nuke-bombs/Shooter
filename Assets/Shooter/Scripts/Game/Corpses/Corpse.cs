@@ -14,8 +14,6 @@ namespace Shooter.Game
 
         private bool dressed;
 
-        public string ComponentKey => "Corpse";
-
         private struct SaveData
         {
             public string Skin { get; set; }

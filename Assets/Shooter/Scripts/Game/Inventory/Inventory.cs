@@ -14,7 +14,6 @@ namespace Shooter.Game
 
         private readonly NetworkItemSlots slots = new();
 
-        public string ComponentKey => "Inventory";
         private struct SaveData
         {
             public Dictionary<string, int> Stacks { get; set; }

@@ -22,8 +22,6 @@ namespace Shooter.Game
 
         public event Action ControlChanged;
 
-        public string ComponentKey => "Player";
-
         private struct SaveData
         {
             public string PublicKey { get; set; }

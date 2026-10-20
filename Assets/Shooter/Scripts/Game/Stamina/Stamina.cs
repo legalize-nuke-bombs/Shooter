@@ -22,8 +22,6 @@ namespace Shooter.Game
         private Hands hands;
         private bool exhausted;
 
-        public string ComponentKey => "Endurance";
-
         private struct SaveData
         {
             public float Amount { get; set; }

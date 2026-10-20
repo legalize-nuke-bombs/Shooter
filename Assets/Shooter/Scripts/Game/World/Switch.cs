@@ -21,8 +21,6 @@ namespace Shooter.Game
 
         private Color[] litEmissiveColors;
 
-        public string ComponentKey => "Switch";
-
         private struct SaveData
         {
             public bool Shining { get; set; }

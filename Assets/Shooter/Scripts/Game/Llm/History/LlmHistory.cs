@@ -15,7 +15,6 @@ namespace Shooter.Game
 
         private readonly List<LlmMessage> messages = new();
 
-        public string ComponentKey => "LlmHistory";
         private struct SaveData
         {
             public List<LlmMessage> Messages { get; set; }

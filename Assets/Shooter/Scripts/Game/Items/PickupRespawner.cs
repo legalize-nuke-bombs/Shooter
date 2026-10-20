@@ -19,7 +19,6 @@ namespace Shooter.Game
         private double? rolledUntil;
         [SerializeField] private float averageHoursToGrow = 48f;
 
-        public string ComponentKey => "ResourceItem";
         private struct SaveData
         {
             public bool Alive { get; set; }

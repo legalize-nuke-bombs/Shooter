@@ -16,8 +16,6 @@ namespace Shooter.Game
         private HashSet<long> teleportedCharacterIds = new();
         private Trigger trigger;
 
-        public string ComponentKey => "Teleport";
-
         private struct SaveData
         {
             public List<long> Characters { get; set; }

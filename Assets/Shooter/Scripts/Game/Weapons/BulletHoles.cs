@@ -18,7 +18,6 @@ namespace Shooter.Game
 
         private readonly NetworkList<BulletHole> holes = new();
 
-        public string ComponentKey => "BulletHoles";
         private struct SaveData
         {
             public List<BulletHole> Holes { get; set; }

@@ -7,8 +7,6 @@ namespace Shooter.Infrastructure
     [RequireComponent(typeof(NetworkTransform))]
     public class SaveableTransform : ShooterNetworkBehaviour, ISaveableComponent
     {
-        public string ComponentKey => "SaveableTransform";
-
         private struct SaveData
         {
             public Vector3 Position { get; set; }

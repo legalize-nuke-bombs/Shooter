@@ -29,8 +29,6 @@ namespace Shooter.Game
         private readonly NetworkVariable<double> timestamp = new();
         private readonly NetworkVariable<float> scale = new(1f);
 
-        public string ComponentKey => "Clock";
-
         private struct SaveData
         {
             public double Timestamp { get; set; }
