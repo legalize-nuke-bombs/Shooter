@@ -168,8 +168,15 @@ namespace Shooter.Editor
                 return;
             }
 
+            Terrain[] activeTerrains = Terrain.activeTerrains;
+            if (activeTerrains.Length == 0)
+            {
+                Log.Warn("No active terrain in the open scenes to take the heights from, nothing to paint");
+                return;
+            }
+
             DateTime startTime = DateTime.Now;
-            HeightsAcrossTerrains heightsAcrossTerrains = new(Terrain.activeTerrains);
+            HeightsAcrossTerrains heightsAcrossTerrains = new(activeTerrains);
             var coverageByLayer = new Dictionary<TerrainLayer, double>();
             double coveredTexels = 0d;
             int paintedTerrains = 0;
