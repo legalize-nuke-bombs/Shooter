@@ -6,7 +6,6 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
-    [RequireComponent(typeof(InventoryHolder))]
     public class InventoryFiller : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
@@ -16,23 +15,18 @@ namespace Shooter.Game
         {
             [SerializeField] private ItemAsset asset;
             [SerializeField] private int amount;
-            [SerializeField] private bool held;
 
             public ItemAsset Asset => asset;
 
             public int Amount => amount;
-
-            public bool IsHeld => held;
         }
 
         [SerializeField] private Entry[] contents;
 
-        private InventoryHolder inventoryHolder;
         private Inventory inventory;
 
         private void Awake()
         {
-            inventoryHolder = GetComponent<InventoryHolder>();
             inventory = GetComponent<Inventory>();
         }
 
@@ -64,8 +58,7 @@ namespace Shooter.Game
 
             for (int made = 0; made < amount; made++)
             {
-                int slot = inventory.AddUnique(uniqueAsset.CreateItem());
-                if (entry.IsHeld && made == 0) inventoryHolder.HoldSlot(slot);
+                inventory.AddUnique(uniqueAsset.CreateItem());
             }
         }
     }
