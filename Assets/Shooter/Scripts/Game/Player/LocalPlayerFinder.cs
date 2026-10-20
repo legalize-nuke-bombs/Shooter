@@ -1,5 +1,4 @@
 using Shooter.Infrastructure;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -8,12 +7,9 @@ namespace Shooter.Game
     {
         public static T FindComponent<T>() where T : Component
         {
-            NetworkManager network = NetworkManager.Singleton;
-            if (network == null || !network.IsListening) return null;
-
-            foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
+            foreach (PlayerController playerController in Registers.GetAll<PlayerController>(RegisterInactivePolicy.Exclude))
             {
-                if (player.IsControlledLocally) return player.GetComponent<T>();
+                if (playerController.IsControlledLocally) return playerController.GetComponent<T>();
             }
 
             return null;
