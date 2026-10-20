@@ -17,21 +17,21 @@ namespace Shooter.Game
         [SerializeField] private Pickupable bodyPrefab;
 
         private bool alive = false;
-        private double? takenAt;
-        [SerializeField] private float respawnHours = 48f;
+        private double? rolledUntil;
+        [SerializeField] private float averageHoursToGrow = 48f;
 
         public string ComponentKey => "ResourceItem";
         private struct SaveData
         {
             public bool Alive { get; set; }
-            public double? TakenAt { get; set; }
+            public double? RolledUntil { get; set; }
         }
         public object SaveObject()
         {
             return new SaveData()
             {
                 Alive = alive,
-                TakenAt = takenAt
+                RolledUntil = rolledUntil
             };
         }
         public void LoadObject(SaveToken content)
@@ -39,7 +39,7 @@ namespace Shooter.Game
             // The world is frozen while it loads, so a body saved alive is grown by the first Update after the thaw
             SaveData saveData = content.ToObject<SaveData>();
             alive = false;
-            takenAt = saveData.Alive ? null : saveData.TakenAt;
+            rolledUntil = saveData.Alive ? null : saveData.RolledUntil;
         }
 
         private void Awake()
@@ -52,38 +52,44 @@ namespace Shooter.Game
         {
             if (alive) return;
 
-            if (takenAt == null || clock.Timestamp - takenAt.Value >= respawnHours * SecondsPerHour)
+            if (rolledUntil == null)
             {
                 SpawnBody();
+                return;
             }
+
+            // One roll per hour of world time; hours skipped at once, as by sleeping, get one roll with their joint chance
+            int hours = (int)((clock.Timestamp - rolledUntil.Value) / SecondsPerHour);
+            if (hours < 1) return;
+
+            rolledUntil += hours * SecondsPerHour;
+            float chance = 1f - Mathf.Pow(1f - 1f / averageHoursToGrow, hours);
+            if (Random.value < chance) SpawnBody();
         }
 
         private void SpawnBody()
         {
-            if (!alive)
+            Log.Info($"Entity {name} is spawning its body");
+            if (body == null)
             {
-                Log.Info($"Entity {name} is spawning its body");
-                if (body == null)
-                {
-                    body = NetworkSpawner.InstantiateAndSpawn(bodyPrefab.gameObject, transform);
-                }
-                if (body == null)
-                {
-                    Log.Error($"Entity {name} failed to spawn its body, retrying in {respawnHours} h of world time");
-                    takenAt = clock.Timestamp;
-                    return;
-                }
-                alive = true;
-                takenAt = null;
-                body.GetComponent<Pickupable>().PickedUp += HandleBodyPickedUp;
+                body = NetworkSpawner.InstantiateAndSpawn(bodyPrefab.gameObject, transform);
             }
+            if (body == null)
+            {
+                Log.Error($"Entity {name} failed to spawn its body, it will try to grow it again");
+                rolledUntil = clock.Timestamp;
+                return;
+            }
+            alive = true;
+            rolledUntil = null;
+            body.GetComponent<Pickupable>().PickedUp += HandleBodyPickedUp;
         }
 
         private void HandleBodyPickedUp(Pickupable pickupable)
         {
-            Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, grows back in {respawnHours} h of world time");
+            Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, grows back in about {averageHoursToGrow} h of world time");
             alive = false;
-            takenAt = clock.Timestamp;
+            rolledUntil = clock.Timestamp;
             pickupable.PickedUp -= HandleBodyPickedUp;
         }
 
