@@ -708,7 +708,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Walk To Point
     Story: '[Agent] walks to [Destination], running if [Sprint]'
-    RuntimeTypeString: Shooter.Game.AI.Bt.Legs.WalkToPointAction, Shooter.Game, Version=0.0.0.0,
+    RuntimeTypeString: Shooter.Game.WalkToPointAction, Shooter.Game, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 2904291017835359900
@@ -758,7 +758,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Read Go To Order
     Story: '[Agent] reads the go_to order into [Destination] and [Sprint]'
-    RuntimeTypeString: Shooter.Game.AI.Bt.CustomOrders.ReadGoToOrderAction, Shooter.Game,
+    RuntimeTypeString: Shooter.Game.ReadGoToOrderAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 2904291017835359900
@@ -783,7 +783,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Read Follow Order
     Story: '[Agent] reads the follow order into [Target], [Reach] and [Sprint]'
-    RuntimeTypeString: Shooter.Game.AI.Bt.CustomOrders.ReadFollowOrderAction, Shooter.Game,
+    RuntimeTypeString: Shooter.Game.ReadFollowOrderAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 7010483506657393231
@@ -813,7 +813,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Walk Toward Target
     Story: '[Agent] walks toward [Target] keeping [Reach], running if [Sprint]'
-    RuntimeTypeString: Shooter.Game.AI.Bt.Legs.WalkTowardTargetAction, Shooter.Game,
+    RuntimeTypeString: Shooter.Game.WalkTowardTargetAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 7010483506657393231
@@ -843,7 +843,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Halt Follow Order
     Story: '[Agent] halts the follow order'
-    RuntimeTypeString: Shooter.Game.AI.Bt.CustomOrders.HaltFollowOrderAction, Shooter.Game,
+    RuntimeTypeString: Shooter.Game.HaltFollowOrderAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 7010483506657393231
@@ -1040,7 +1040,7 @@ MonoBehaviour:
         - rid: 2635107310197014674
         - rid: 2635107310197014675
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.Legs.WalkToPointAction, Shooter.Game,
+          m_SerializableType: Shooter.Game.WalkToPointAction, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 2904291017835359900
@@ -1232,7 +1232,7 @@ MonoBehaviour:
         - rid: 2635107310197015081
         - rid: 2635107310197015082
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.CustomOrders.ReadGoToOrderAction,
+          m_SerializableType: Shooter.Game.ReadGoToOrderAction,
             Shooter.Game, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 2904291017835359900
@@ -1368,7 +1368,7 @@ MonoBehaviour:
         - rid: 2635107332273209643
         - rid: 2635107332273209644
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.CustomOrders.ReadFollowOrderAction,
+          m_SerializableType: Shooter.Game.ReadFollowOrderAction,
             Shooter.Game, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 7010483506657393231
@@ -1555,7 +1555,7 @@ MonoBehaviour:
         - rid: 2635107332273209856
         - rid: 2635107332273209857
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.Legs.WalkTowardTargetAction, Shooter.Game,
+          m_SerializableType: Shooter.Game.WalkTowardTargetAction, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 7010483506657393231
@@ -1672,7 +1672,7 @@ MonoBehaviour:
         - rid: 2635107332273210014
         - rid: 2635107332273210015
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.CustomOrders.HaltFollowOrderAction,
+          m_SerializableType: Shooter.Game.HaltFollowOrderAction,
             Shooter.Game, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 7010483506657393231

@@ -350,7 +350,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Eat Food
     Story: '[Agent] eats food from inventory'
-    RuntimeTypeString: Shooter.Game.AI.Bt.Eating.EatFoodAction, Shooter.Game, Version=0.0.0.0,
+    RuntimeTypeString: Shooter.Game.EatFoodAction, Shooter.Game, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 2904291017835359900
@@ -365,7 +365,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Use Healing Item
     Story: '[Agent] uses healing item'
-    RuntimeTypeString: Shooter.Game.AI.Bt.Healing.UseHealingItemAction, Shooter.Game,
+    RuntimeTypeString: Shooter.Game.UseHealingItemAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 2904291017835359900
@@ -573,7 +573,7 @@ MonoBehaviour:
       type: {class: ConditionModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
         ConditionType:
-          m_SerializableType: Shooter.Game.AI.Bt.Healing.HealthBelowCondition, Shooter.Game,
+          m_SerializableType: Shooter.Game.HealthBelowCondition, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
           m_Value0: 2904291017835359900
@@ -709,7 +709,7 @@ MonoBehaviour:
       type: {class: ConditionModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
         ConditionType:
-          m_SerializableType: Shooter.Game.AI.Bt.Eating.HungerBelowCondition, Shooter.Game,
+          m_SerializableType: Shooter.Game.HungerBelowCondition, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
           m_Value0: 2904291017835359900
@@ -771,7 +771,7 @@ MonoBehaviour:
         - rid: 5215485742385201470
         - rid: 5215485742385201471
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.Eating.EatFoodAction, Shooter.Game,
+          m_SerializableType: Shooter.Game.EatFoodAction, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 2904291017835359900
@@ -828,7 +828,7 @@ MonoBehaviour:
         - rid: 5215485742385201495
         - rid: 5215485742385201496
         NodeType:
-          m_SerializableType: Shooter.Game.AI.Bt.Healing.UseHealingItemAction, Shooter.Game,
+          m_SerializableType: Shooter.Game.UseHealingItemAction, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 2904291017835359900
