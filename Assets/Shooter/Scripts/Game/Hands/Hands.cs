@@ -17,8 +17,8 @@ namespace Shooter.Game
 
         private readonly NetworkVariable<Work> work = new();
 
-        private Action completionCallback;
-        private bool interruptible;
+        private Action actionCompletionCallback;
+        private bool actionInterruptible;
         private float actionStartedAt;
         private float actionDuration;
         private Skin skin;
@@ -75,7 +75,7 @@ namespace Shooter.Game
         public bool TryPreemptWithAction(HandsAction action, float duration, bool interruptible, Action completionCallback)
         {
             FinishActionIfDue();
-            if (!AreFree && !this.interruptible) return false;
+            if (!AreFree && !actionInterruptible) return false;
             if (!AreFree) Log.Info($"Hands action {CurrentAction} of entity {name} preempted by {action}");
 
             StartAction(action, duration, interruptible, completionCallback);
@@ -88,7 +88,7 @@ namespace Shooter.Game
 
             Log.Info($"Hands action {CurrentAction} of entity {name} interrupted");
             FreeHands();
-            completionCallback = null;
+            actionCompletionCallback = null;
         }
 
         private void Update()
@@ -102,9 +102,9 @@ namespace Shooter.Game
         {
             if (AreFree || Time.time - actionStartedAt < actionDuration) return;
 
-            Action finishedActionCallback = completionCallback;
+            Action finishedActionCallback = actionCompletionCallback;
             FreeHands();
-            completionCallback = null;
+            actionCompletionCallback = null;
             finishedActionCallback?.Invoke();
         }
 
@@ -113,8 +113,8 @@ namespace Shooter.Game
             work.Value = new Work { Action = action, SequenceNumber = work.Value.SequenceNumber + 1, Duration = duration };
             actionStartedAt = Time.time;
             actionDuration = duration;
-            this.interruptible = interruptible;
-            this.completionCallback = completionCallback;
+            actionInterruptible = interruptible;
+            actionCompletionCallback = completionCallback;
         }
 
         private void FreeHands()
