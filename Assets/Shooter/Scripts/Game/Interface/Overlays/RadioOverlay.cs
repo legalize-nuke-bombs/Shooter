@@ -10,7 +10,6 @@ namespace Shooter.Game
         private const string WindowElementName = "radio";
         private const string ContactScrollViewName = "radio-list";
         private const string EmptyLabelName = "radio-empty";
-        private const string Stranger = "Незнакомец";
         private static readonly Journal Log = Logs.Here();
 
         private PlayerConversations playerConversations;
@@ -109,23 +108,12 @@ namespace Shooter.Game
             {
                 long partnerId = contact.PartnerId;
 
-                Button contactButton = new(() => playerController.OpenRadioTalk(partnerId)) { text = GetPartnerName(partnerId) };
+                Button contactButton = new(() => playerController.OpenRadioTalk(partnerId)) { text = NameMapper.GetShownNameById(partnerId) };
                 contactButton.AddToClassList("radio__item");
                 if (contact.UnreadLineCount > 0) contactButton.AddToClassList("radio__item--unread");
 
                 contactScrollView.Add(contactButton);
             }
-        }
-
-        private string GetPartnerName(long partnerId)
-        {
-            Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Exclude);
-            Nameable nameable = partner == null ? null : partner.GetComponentInChildren<Nameable>();
-            if (nameable == null) return Stranger;
-
-            string shownName = nameable.GetShownName();
-
-            return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }
     }
 }

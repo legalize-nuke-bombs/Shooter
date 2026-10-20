@@ -1,15 +1,24 @@
 using Shooter.Infrastructure;
+using UnityEngine;
 
 namespace Shooter.Game
 {
-    public sealed class NameMapper
+    // The name the player sees for a character, online or not; one without a name, or gone from the world, is a stranger
+    public static class NameMapper
     {
-        public string GetShownNameById(long characterId)
-        {
-            Character character = Character.FindById(characterId, RegisterInactivePolicy.Include);
-            Nameable nameable = character == null ? null : character.GetComponentInChildren<Nameable>();
+        private const string Stranger = "Незнакомец";
 
-            return nameable == null ? string.Empty : nameable.GetShownName();
+        public static string GetShownNameById(long characterId)
+        {
+            return GetShownName(Character.FindById(characterId, RegisterInactivePolicy.Include));
+        }
+
+        public static string GetShownName(Component character)
+        {
+            Nameable nameable = character == null ? null : character.GetComponentInChildren<Nameable>(true);
+            string shownName = nameable == null ? null : nameable.GetShownName();
+
+            return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }
     }
 }

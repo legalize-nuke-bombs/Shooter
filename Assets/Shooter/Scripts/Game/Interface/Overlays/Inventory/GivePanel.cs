@@ -35,7 +35,6 @@ namespace Shooter.Game
         }
 
         private readonly List<Offer> offers = new();
-        private readonly NameMapper nameMapper = new();
         private readonly RaycastHit[] lineOfSightHits = new RaycastHit[16];
         private readonly VisualElement panelElement;
         private readonly Label titleLabel;
@@ -198,8 +197,7 @@ namespace Shooter.Game
             panelElement.style.display = chosenTaker == null ? DisplayStyle.None : DisplayStyle.Flex;
             if (chosenTaker == null) return;
 
-            string takerName = nameMapper.GetShownNameById(chosenTaker.Id);
-            titleLabel.text = string.IsNullOrEmpty(takerName) ? "Передать" : $"Передать: {takerName}";
+            titleLabel.text = $"Передать: {NameMapper.GetShownName(chosenTaker)}";
             ItemGrid.DrawCells(gridElement, GridRows, GridColumns);
 
             GridPlacement placement = new(GridRows, GridColumns, false);
