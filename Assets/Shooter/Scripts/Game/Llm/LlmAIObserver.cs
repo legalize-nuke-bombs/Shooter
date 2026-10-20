@@ -1,5 +1,4 @@
 ﻿using Shooter.Infrastructure;
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
