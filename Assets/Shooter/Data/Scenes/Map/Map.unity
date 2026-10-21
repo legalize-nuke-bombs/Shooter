@@ -15533,7 +15533,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 418150528903127082, guid: b43f2b58a4fa2934b97c7024f3af9e7b, type: 3}
       propertyPath: m_Name
-      value: NVBoids Birds
+      value: Bird Flocks
       objectReference: {fileID: 0}
     - target: {fileID: 418150528903143380, guid: b43f2b58a4fa2934b97c7024f3af9e7b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15574,6 +15574,22 @@ PrefabInstance:
     - target: {fileID: 418150528903143380, guid: b43f2b58a4fa2934b97c7024f3af9e7b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685282201225241700, guid: b43f2b58a4fa2934b97c7024f3af9e7b, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685282201225241700, guid: b43f2b58a4fa2934b97c7024f3af9e7b, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 876212243
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685282201225241700, guid: b43f2b58a4fa2934b97c7024f3af9e7b, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685282201225241700, guid: b43f2b58a4fa2934b97c7024f3af9e7b, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 71738538
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -9,12 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418150528903143480}
+  - component: {fileID: 5953782877283401505}
   - component: {fileID: 418150528903127183}
-  - component: {fileID: 5808317414674848661}
-  - component: {fileID: -3848224392153348664}
-  - component: {fileID: 1013917804556428333}
+  - component: {fileID: 1831514165883503853}
+  - component: {fileID: -1642572687181529045}
+  - component: {fileID: 6776772852244049548}
   m_Layer: 0
-  m_Name: NVBoids Blue
+  m_Name: Indigo Butterfly Flocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,6 +36,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5953782877283401505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1452743524
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  m_InScenePlaced: 0
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &418150528903127183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,35 +74,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa35b9623162614881082335023629b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behavioralCh: {x: 0.5, y: 1.5}
-  debug: 0
-  flockNum: 1
-  fragmentedFlock: 2
-  fragmentedFlockYLimit: 0.25
-  migrationFrequency: 0.2
-  posChangeFrequency: 0.8
-  smoothChFrequency: 0.5
-  birdPref: {fileID: 3509250616930223806, guid: a1c4ffcdd36642f5d59120c79fdae621, type: 3}
-  birdsNum: 15
-  birdSpeed: 0.35
-  fragmentedBirds: 2
-  fragmentedBirdsYLimit: 0.5
-  soaring: 3
-  verticalWawe: 2
-  rotationClamp: 0
-  rotationClampValue: 50
-  scaleRandom: {x: 0.1, y: 0.18}
-  danger: 0
-  dangerRadius: 15
-  dangerSpeed: 1.5
-  dangerSoaring: 0.5
-  dangerLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  HelpURL: nvjob.github.io/unity/nvjob-boids
-  ReportAProblem: nvjob.github.io/support
-  Patrons: nvjob.github.io/patrons
---- !u!114 &5808317414674848661
+  ShowTopMostFoldoutHeaderGroup: 1
+  boidPrefab: {fileID: 3509250616930223806, guid: 83f9a4d87738b4d8877cff96ff33f84d, type: 3}
+  flockCount: 1
+  boidCount: 15
+  flockSpread: 2
+  flockSpreadVertical: 0.25
+  flockSmoothTime: 0.5
+  boidSpread: 2
+  boidSpreadVertical: 0.5
+  speedRange: {x: 1.05, y: 2.45}
+  turnSpeed: 1.5
+  maxPitch: 90
+  verticalWave: 2
+  scaleRange: {x: 0.1, y: 0.18}
+  retargetInterval: {x: 0.5, y: 1.5}
+  flockRetargetChance: 0.8
+  migrationChance: 0.2
+  scaredSpeedMultiplier: 2.5
+  scaredTurnMultiplier: 4
+  scaredSpreadMultiplier: 2
+  scaredClimb: 2
+  calmDownTime: 10
+--- !u!114 &1831514165883503853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DigestibleTransform
---- !u!114 &-3848224392153348664
+--- !u!114 &-1642572687181529045
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,9 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
-  content: Blue butterflies are flying here
+  content: Indigo butterflies are flying here
   size: 0
---- !u!114 &1013917804556428333
+--- !u!114 &6776772852244049548
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
