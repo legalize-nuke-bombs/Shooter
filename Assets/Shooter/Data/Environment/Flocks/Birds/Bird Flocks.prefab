@@ -91,9 +91,13 @@ MonoBehaviour:
   retargetInterval: {x: 10, y: 20}
   flockRetargetChance: 0.7
   migrationChance: 0.06
-  scaredSpeedMultiplier: 2.5
-  scaredTurnMultiplier: 4
-  scaredSpreadMultiplier: 2
+  scaredSpeedMultiplier: 1.7
+  speedRampTime: 0.5
+  scaredTurnMultiplier: 16
+  scaredMaxPitch: 40
+  escapeSpread: 15
+  escapeClimbRange: {x: 15, y: 35}
+  scaredFlapMultiplier: 2.5
   scaredClimb: 30
   calmDownTime: 10
 --- !u!114 &-3873601585301477384
