@@ -68,6 +68,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: street_vase
       objectReference: {fileID: 0}
+    - target: {fileID: -5522614116323522621, guid: 82617008f5322084096723ff6147234b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 2879c62f59909464d8a987663d213765, type: 2}
+    - target: {fileID: -343755524340731526, guid: 82617008f5322084096723ff6147234b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 709843bcf8454ef4196822b26d8f79ed, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -6741679889929804439, guid: 82617008f5322084096723ff6147234b, type: 3}
