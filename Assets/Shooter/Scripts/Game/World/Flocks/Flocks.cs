@@ -123,8 +123,21 @@ namespace Shooter.Game
         [Rpc(SendTo.Everyone)]
         public void ScareRpc(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
+            if (!PassesNearAnyBoid(shotOrigin, shotEnd, radius)) return;
+
             ScareBoids(shotOrigin, shotEnd, radius);
             ScareFlocks(shotOrigin, shotEnd, radius);
+        }
+
+        private bool PassesNearAnyBoid(Vector3 shotOrigin, Vector3 shotEnd, float radius)
+        {
+            for (int boid = 0; boid < boidCount; boid++)
+            {
+                Vector3 position = boids[boid].position;
+                if (Vector3.Distance(position, ClosestPointOnSegment(shotOrigin, shotEnd, position)) <= radius) return true;
+            }
+
+            return false;
         }
 
         private void ScareBoids(Vector3 shotOrigin, Vector3 shotEnd, float radius)
@@ -135,12 +148,13 @@ namespace Shooter.Game
             {
                 Vector3 position = boids[boid].position;
                 Vector3 away = position - ClosestPointOnSegment(shotOrigin, shotEnd, position);
-                float fear = 1f - Mathf.Max(0f, away.magnitude - radius) / panicSpread;
+                float distance = away.magnitude;
+                float fear = 1f - Mathf.Max(0f, distance - radius) / panicSpread;
                 if (fear <= 0f) continue;
 
                 if (boidFears[boid] <= 0f || fear > boidFears[boid] + NewEscapeFearMargin) boidEscapes[boid] = PickEscape(away);
                 boidFears[boid] = Mathf.Max(boidFears[boid], fear);
-                if (cawingBoids < maxCawingBoids && TryCaw(boid)) cawingBoids++;
+                if (distance <= radius && cawingBoids < maxCawingBoids && TryCaw(boid)) cawingBoids++;
             }
         }
 
