@@ -25,6 +25,8 @@ namespace Shooter.Game
 
         [SerializeField] private float flockSmoothTime = 0.5f;
 
+        [SerializeField] private float flockMaxSpeed = 4f;
+
         [SerializeField] private float boidSpread = 10f;
 
         [SerializeField] [Range(0f, 1f)] private float boidSpreadVertical = 1f;
@@ -139,10 +141,11 @@ namespace Shooter.Game
                 float fear = 1f - away.magnitude / radius;
                 if (fear <= 0f) continue;
 
-                flockFleeingUntil[flock] = Time.time + calmDownTime;
-
-                Vector3 refuge = localOrigin + PickFlatDirection(away) * radius;
+                Vector3 refuge = PickFlatDirection(away) * flockSpread;
                 flockTargets[flock] = new Vector3(refuge.x, Mathf.Max(flockTargets[flock].y, scaredClimb * fear), refuge.z);
+
+                float fleeTime = Vector3.Distance(flockPoints[flock], flockTargets[flock]) / (flockMaxSpeed * scaredSpeedMultiplier);
+                flockFleeingUntil[flock] = Time.time + Mathf.Max(calmDownTime, fleeTime);
             }
         }
 
@@ -223,7 +226,8 @@ namespace Shooter.Game
         {
             for (int flock = 0; flock < flockCount; flock++)
             {
-                flockPoints[flock] = Vector3.SmoothDamp(flockPoints[flock], flockTargets[flock], ref flockVelocities[flock], flockSmoothTime);
+                float maxSpeed = Time.time < flockFleeingUntil[flock] ? flockMaxSpeed * scaredSpeedMultiplier : flockMaxSpeed;
+                flockPoints[flock] = Vector3.SmoothDamp(flockPoints[flock], flockTargets[flock], ref flockVelocities[flock], flockSmoothTime, maxSpeed);
                 flockWorldPoints[flock] = transform.TransformPoint(flockPoints[flock]);
             }
         }
