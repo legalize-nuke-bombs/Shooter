@@ -7,6 +7,8 @@ namespace Shooter.Game
     [RequireComponent(typeof(Speaker))]
     public class SoundOnReload : ShooterBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private Gunner gunner;
         private Speaker speaker;
 
@@ -29,6 +31,7 @@ namespace Shooter.Game
         private void Play(FirearmAsset asset)
         {
             speaker.Play(asset.ReloadSound);
+            Log.Info($"Entity {name} played the reload sound of {asset.name}");
         }
     }
 }

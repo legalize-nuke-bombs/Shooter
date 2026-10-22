@@ -30,11 +30,15 @@ namespace Shooter.Game
 
         private void DealDamage(FirearmAsset asset, ShotHit hit)
         {
-            if (hit.Victim == null) return;
+            if (hit.Victim == null)
+            {
+                Log.Info($"Entity {name} dealt no damage: the shot hit no one");
+                return;
+            }
 
             int damage = Mathf.RoundToInt(asset.Damage * hit.Part.GetDamageMultiplier());
             hit.Victim.TakeDamage(damage, character, asset.DamageType);
-            Log.Info($"Shot of entity {name} dealt {damage} damage to {hit.Victim.name} in {hit.Part}");
+            Log.Info($"Entity {name} dealt {damage} damage to {hit.Victim.name} in {hit.Part}");
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Shooter.Game
         private const float FullEscapeFear = 0.5f;
         private const float NewEscapeFearMargin = 0.25f;
         private const float ScaredFlappingPanic = 0.2f;
+        private static readonly Journal Log = Logs.Here();
         private static readonly int FlapSpeedId = Shader.PropertyToID("_Flap_Speed");
 
         [SerializeField] private GameObject boidPrefab;
@@ -123,7 +124,11 @@ namespace Shooter.Game
         [Rpc(SendTo.Everyone)]
         public void ScareRpc(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
-            if (!PassesNearAnyBoid(shotOrigin, shotEnd, radius)) return;
+            if (!PassesNearAnyBoid(shotOrigin, shotEnd, radius))
+            {
+                Log.Info($"Entity {name} let a shot pass: it came within {radius} m of no bird");
+                return;
+            }
 
             ScareBoids(shotOrigin, shotEnd, radius);
             ScareFlocks(shotOrigin, shotEnd, radius);
@@ -143,6 +148,8 @@ namespace Shooter.Game
         private void ScareBoids(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
             int cawingBoids = CountCawingBoids();
+            int startedCawing = 0;
+            int scaredBoids = 0;
 
             for (int boid = 0; boid < boidCount; boid++)
             {
@@ -154,8 +161,14 @@ namespace Shooter.Game
 
                 if (boidFears[boid] <= 0f || fear > boidFears[boid] + NewEscapeFearMargin) boidEscapes[boid] = PickEscape(away);
                 boidFears[boid] = Mathf.Max(boidFears[boid], fear);
-                if (distance <= radius && cawingBoids < maxCawingBoids && TryCaw(boid)) cawingBoids++;
+                scaredBoids++;
+                if (distance > radius || cawingBoids >= maxCawingBoids || !TryCaw(boid)) continue;
+
+                cawingBoids++;
+                startedCawing++;
             }
+
+            Log.Info($"Entity {name} took fright at a shot: {scaredBoids} birds scared, {startedCawing} started cawing");
         }
 
         private int CountCawingBoids()
