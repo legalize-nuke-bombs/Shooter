@@ -94,7 +94,7 @@ namespace Shooter.Game
         private void SendTrace(FirearmAsset asset, ShotHit hit)
         {
             Vector3 end = hit.IsMiss ? hit.Origin + hit.Direction * asset.Distance : hit.Point;
-            SoundAsset impactSound = hit.IsMiss || hit.Victim != null || asset.ImpactSounds == null ? null : asset.ImpactSounds.GetSoundOn(Surface.FindAt(hit.Collider, hit.Point));
+            SoundAsset impactSound = hit.IsMiss || asset.ImpactSounds == null ? null : asset.ImpactSounds.GetSoundOn(Surface.FindAt(hit.Collider, hit.Point));
 
             ShotTracedRpc(hit.Origin, end, impactSound == null ? default : impactSound.NetworkId, impactSound == null ? (byte)0 : impactSound.PickRandomVariant());
         }

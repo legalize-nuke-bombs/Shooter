@@ -8,9 +8,13 @@ namespace Shooter.Game
     {
         [SerializeField] private PhysicsMaterial water;
 
+        [SerializeField] private PhysicsMaterial flesh;
+
         [SerializeField] private TerrainSurface[] terrain;
 
         public PhysicsMaterial Water => water;
+
+        public PhysicsMaterial Flesh => flesh;
 
         public PhysicsMaterial GetSurfaceOf(TerrainLayer layer)
         {
