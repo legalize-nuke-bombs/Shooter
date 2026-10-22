@@ -28,7 +28,7 @@ namespace Shooter.Game
 
         public event Action<FirearmAsset, ShotHit> Shot;
 
-        public event Action<SeenShot> ShotSeen;
+        public event Action<ShotTrace> ShotTraced;
 
         public event Action<FirearmAsset> Misfired;
 
@@ -87,25 +87,25 @@ namespace Shooter.Game
             int shotIndex = cadence.Fire(asset, Time.time);
             ShotHit hit = TraceShot(asset, shotIndex);
             Shot?.Invoke(asset, hit);
-            ShowShotToEveryone(asset, hit);
+            SendTrace(asset, hit);
             return true;
         }
 
-        private void ShowShotToEveryone(FirearmAsset asset, ShotHit hit)
+        private void SendTrace(FirearmAsset asset, ShotHit hit)
         {
             Vector3 end = hit.IsMiss ? hit.Origin + hit.Direction * asset.Distance : hit.Point;
             SoundAsset impactSound = hit.IsMiss || hit.Victim != null || asset.ImpactSounds == null ? null : asset.ImpactSounds.GetSoundOn(Surface.FindAt(hit.Collider, hit.Point));
 
-            ShotSeenRpc(hit.Origin, end, impactSound == null ? default : impactSound.NetworkId, impactSound == null ? (byte)0 : impactSound.PickRandomVariant());
+            ShotTracedRpc(hit.Origin, end, impactSound == null ? default : impactSound.NetworkId, impactSound == null ? (byte)0 : impactSound.PickRandomVariant());
         }
 
         [Rpc(SendTo.Everyone)]
-        private void ShotSeenRpc(Vector3 origin, Vector3 end, FixedString32Bytes impactSoundId, byte impactSoundVariant)
+        private void ShotTracedRpc(Vector3 origin, Vector3 end, FixedString32Bytes impactSoundId, byte impactSoundVariant)
         {
             SoundCatalog soundCatalog = Catalogs.GetCatalog<SoundCatalog>();
             SoundAsset impactSound = impactSoundId.IsEmpty || soundCatalog == null ? null : soundCatalog.GetAssetById(impactSoundId);
 
-            ShotSeen?.Invoke(new SeenShot(origin, end, impactSound, impactSoundVariant));
+            ShotTraced?.Invoke(new ShotTrace(origin, end, impactSound, impactSoundVariant));
         }
 
         public bool TryReload()

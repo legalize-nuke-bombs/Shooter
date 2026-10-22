@@ -38,7 +38,7 @@ namespace Shooter.Game
         {
             if (!message.Spoken || message.AuthorId != character.Id) return;
 
-            speaker.PlayForEveryone(sound);
+            speaker.Play(sound);
         }
     }
 }

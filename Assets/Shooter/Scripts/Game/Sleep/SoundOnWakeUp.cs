@@ -30,7 +30,7 @@ namespace Shooter.Game
 
         private void Play()
         {
-            speaker.PlayForEveryone(sound);
+            speaker.Play(sound);
         }
     }
 }

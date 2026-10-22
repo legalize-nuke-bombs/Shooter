@@ -37,7 +37,7 @@ namespace Shooter.Game
         {
             if (fallHeight < minHeight) return;
 
-            speaker.PlayForEveryone(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(characterController)), gain);
+            speaker.Play(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(characterController)), gain);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Shooter.Game
 
         private void Play(CraftAsset craft)
         {
-            if (craft.Sound != null) speaker.PlayForEveryone(craft.Sound);
+            if (craft.Sound != null) speaker.Play(craft.Sound);
         }
     }
 }
