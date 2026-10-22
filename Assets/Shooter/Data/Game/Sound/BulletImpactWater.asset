@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: ImpactWater
+  m_Name: BulletImpactWater
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
-  id: impactwater
+  id: bulletimpactwater
   clips:
   - {fileID: 8300000, guid: fc5edcd1a1404f1c9126492263a1b42b, type: 3}
   - {fileID: 8300000, guid: 9da0df732b16447ba794ed3833a34bd8, type: 3}

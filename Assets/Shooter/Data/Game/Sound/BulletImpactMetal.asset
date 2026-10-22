@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: ImpactMetal
+  m_Name: BulletImpactMetal
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
-  id: impactmetal
+  id: bulletimpactmetal
   clips:
   - {fileID: 8300000, guid: 8148866645de415894de4587aa48500f, type: 3}
   - {fileID: 8300000, guid: 4ca45eb34b4c48eb87a10be9e51ce8de, type: 3}

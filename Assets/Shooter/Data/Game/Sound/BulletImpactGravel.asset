@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: ImpactGravel
+  m_Name: BulletImpactGravel
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
-  id: impactgravel
+  id: bulletimpactgravel
   clips:
   - {fileID: 8300000, guid: 4c22239711784124a0a2fc2080f5fab6, type: 3}
   - {fileID: 8300000, guid: 3fefdbfa0db2403184fa5f1cd7800d93, type: 3}
