@@ -19,7 +19,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2e1437fb78dbfa546a38b5d5f89ba4cd, type: 3}
   - {fileID: 8300000, guid: fcd83d749841f5444843432231fac59b, type: 3}
   output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
-  volume: 1
+  volume: 0.7
   rolloff: 1
   minDistance: 2
   maxDistance: 60
