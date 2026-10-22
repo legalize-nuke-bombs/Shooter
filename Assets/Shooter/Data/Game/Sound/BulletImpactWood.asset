@@ -16,7 +16,7 @@ MonoBehaviour:
   clips:
   - {fileID: 8300000, guid: 4ca1134d7d1545b4c9c3013d633e2644, type: 3}
   output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
-  volume: 0.7
+  volume: 1
   rolloff: 1
   minDistance: 2
   maxDistance: 60
