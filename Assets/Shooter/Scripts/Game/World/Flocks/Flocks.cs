@@ -65,6 +65,8 @@ namespace Shooter.Game
 
         [SerializeField] private float calmDownTime = 10f;
 
+        [SerializeField] private float panicSpread = 40f;
+
         [SerializeField] private SoundAsset cawSound;
 
         [SerializeField] [Min(1)] private int maxCawingBoids = 8;
@@ -133,7 +135,7 @@ namespace Shooter.Game
             {
                 Vector3 position = boids[boid].position;
                 Vector3 away = position - ClosestPointOnSegment(shotOrigin, shotEnd, position);
-                float fear = 1f - away.magnitude / radius;
+                float fear = 1f - Mathf.Max(0f, away.magnitude - radius) / panicSpread;
                 if (fear <= 0f) continue;
 
                 if (boidFears[boid] <= 0f || fear > boidFears[boid] + NewEscapeFearMargin) boidEscapes[boid] = PickEscape(away);
