@@ -17948,7 +17948,6 @@ GameObject:
   - component: {fileID: 4891478374763294}
   - component: {fileID: 33601482559305042}
   - component: {fileID: 23052172465798532}
-  - component: {fileID: 64350711389072088}
   m_Layer: 0
   m_Name: glass_garage
   m_TagString: Untagged
@@ -18029,28 +18028,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64350711389072088
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1358967496512718}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: faa049a453ba4414da053a79930b848e, type: 3}
 --- !u!1 &1359228280781324
 GameObject:
   m_ObjectHideFlags: 0
@@ -23331,7 +23308,6 @@ GameObject:
   - component: {fileID: 4976396706375856}
   - component: {fileID: 33748013702606596}
   - component: {fileID: 23056606960943416}
-  - component: {fileID: 64386022673096368}
   m_Layer: 0
   m_Name: glass_garage (1)
   m_TagString: Untagged
@@ -23411,28 +23387,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64386022673096368
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469550343858512}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: faa049a453ba4414da053a79930b848e, type: 3}
 --- !u!1 &1469856973824012
 GameObject:
   m_ObjectHideFlags: 0
@@ -28382,7 +28336,6 @@ GameObject:
   - component: {fileID: 4263671743690860}
   - component: {fileID: 33832404472449002}
   - component: {fileID: 23080005341568194}
-  - component: {fileID: 64867898322067298}
   m_Layer: 0
   m_Name: glass_window (1)
   m_TagString: Untagged
@@ -28462,28 +28415,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64867898322067298
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582166880170616}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 157b668c22f704341b1454827ed7cd17, type: 3}
 --- !u!1 &1582302398817892
 GameObject:
   m_ObjectHideFlags: 0
@@ -29208,7 +29139,6 @@ GameObject:
   - component: {fileID: 4687805501168110}
   - component: {fileID: 33625064402999136}
   - component: {fileID: 23574964242914010}
-  - component: {fileID: 64515299657437568}
   m_Layer: 0
   m_Name: glass_door (1)
   m_TagString: Untagged
@@ -29288,28 +29218,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64515299657437568
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591412671337844}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 84dbe8bc2af70bf4888a1a8b70960675, type: 3}
 --- !u!1 &1593243116058160
 GameObject:
   m_ObjectHideFlags: 0
@@ -29773,7 +29681,6 @@ GameObject:
   - component: {fileID: 4545695419130794}
   - component: {fileID: 33996889167435242}
   - component: {fileID: 23150710517995866}
-  - component: {fileID: 64834520252952002}
   m_Layer: 0
   m_Name: glass_window (6)
   m_TagString: Untagged
@@ -29854,28 +29761,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64834520252952002
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1602153300632200}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 157b668c22f704341b1454827ed7cd17, type: 3}
 --- !u!1 &1603599961843942
 GameObject:
   m_ObjectHideFlags: 0
@@ -36123,7 +36008,6 @@ GameObject:
   - component: {fileID: 4714868753168874}
   - component: {fileID: 33583113097888858}
   - component: {fileID: 23680912737477882}
-  - component: {fileID: 64310854978813354}
   m_Layer: 0
   m_Name: glass_window (1)
   m_TagString: Untagged
@@ -36203,28 +36087,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64310854978813354
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1742762554221550}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 157b668c22f704341b1454827ed7cd17, type: 3}
 --- !u!1 &1742911907875566
 GameObject:
   m_ObjectHideFlags: 0
@@ -38686,7 +38548,6 @@ GameObject:
   - component: {fileID: 4154511579079592}
   - component: {fileID: 33022254562087316}
   - component: {fileID: 23208652150179854}
-  - component: {fileID: 64468566058289422}
   m_Layer: 0
   m_Name: glass_door
   m_TagString: Untagged
@@ -38767,28 +38628,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64468566058289422
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1802206721838920}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 84dbe8bc2af70bf4888a1a8b70960675, type: 3}
 --- !u!1 &1809099142356566
 GameObject:
   m_ObjectHideFlags: 0
@@ -44341,7 +44180,6 @@ GameObject:
   - component: {fileID: 4445411666926092}
   - component: {fileID: 33075859068969000}
   - component: {fileID: 23324476811065850}
-  - component: {fileID: 64716170452469512}
   m_Layer: 0
   m_Name: glass_window (4)
   m_TagString: Untagged
@@ -44422,28 +44260,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64716170452469512
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1945816685932524}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 157b668c22f704341b1454827ed7cd17, type: 3}
 --- !u!1 &1946233301005780
 GameObject:
   m_ObjectHideFlags: 0

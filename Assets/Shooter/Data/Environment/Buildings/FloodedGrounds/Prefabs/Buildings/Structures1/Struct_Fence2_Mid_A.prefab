@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 495594}
   - component: {fileID: 3324768}
   - component: {fileID: 2327090}
-  - component: {fileID: 6581810}
   m_Layer: 0
   m_Name: Struct_Fence2_Mid_A_LOD2
   m_TagString: Untagged
@@ -91,27 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6581810
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 140290}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 6.625373, y: 1.313875, z: 0.20825693}
-  m_Center: {x: -3.2194433, y: 0.64857435, z: 0.06567007}
 --- !u!1 &169984
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +213,6 @@ GameObject:
   - component: {fileID: 489462}
   - component: {fileID: 3342250}
   - component: {fileID: 2308928}
-  - component: {fileID: 6505332}
   m_Layer: 0
   m_Name: Struct_Fence2_Mid_A_LOD1
   m_TagString: Untagged
@@ -315,27 +292,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6505332
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 176956}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 6.625373, y: 1.3483493, z: 0.20825693}
-  m_Center: {x: -3.2194433, y: 0.66581154, z: 0.06567007}
 --- !u!1 &182002
 GameObject:
   m_ObjectHideFlags: 0
