@@ -65,6 +65,8 @@ namespace Shooter.Game
 
         [SerializeField] private float calmDownTime = 10f;
 
+        [SerializeField] private SoundAsset alarmSound;
+
         private Vector3[] flockPoints;
         private Vector3[] flockTargets;
         private Vector3[] flockVelocities;
@@ -85,6 +87,7 @@ namespace Shooter.Game
         private Material scaredMaterial;
         private float waveTime;
         private float nextRetargetTime;
+        private float alarmPlayingUntil;
 
         protected override void ShooterAwake()
         {
@@ -120,6 +123,9 @@ namespace Shooter.Game
 
         private void ScareBoids(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
+            Vector3 scaredSum = Vector3.zero;
+            int scaredCount = 0;
+
             for (int boid = 0; boid < boidCount; boid++)
             {
                 Vector3 position = boids[boid].position;
@@ -127,9 +133,26 @@ namespace Shooter.Game
                 float fear = 1f - away.magnitude / radius;
                 if (fear <= 0f) continue;
 
+                scaredSum += position;
+                scaredCount++;
+
                 if (boidFears[boid] <= 0f || fear > boidFears[boid] + NewEscapeFearMargin) boidEscapes[boid] = PickEscape(away);
                 boidFears[boid] = Mathf.Max(boidFears[boid], fear);
             }
+
+            if (scaredCount > 0) RaiseAlarm(scaredSum / scaredCount);
+        }
+
+        private void RaiseAlarm(Vector3 position)
+        {
+            if (alarmSound == null || Time.time < alarmPlayingUntil) return;
+
+            byte variant = alarmSound.PickRandomVariant();
+            AudioClip clip = alarmSound.GetClip(variant);
+            if (clip == null) return;
+
+            alarmPlayingUntil = Time.time + clip.length;
+            WorldSpeaker.PlayLocallyAt(alarmSound, variant, position);
         }
 
         private void ScareFlocks(Vector3 shotOrigin, Vector3 shotEnd, float radius)

@@ -101,6 +101,7 @@ MonoBehaviour:
   scaredFlapMultiplier: 2.5
   scaredClimb: 10
   calmDownTime: 6
+  alarmSound: {fileID: 11400000, guid: 4036f46b364c46240b745db194d7b9e7, type: 2}
 --- !u!114 &-3873601585301477384
 MonoBehaviour:
   m_ObjectHideFlags: 0
