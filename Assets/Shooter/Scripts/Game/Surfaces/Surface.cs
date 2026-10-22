@@ -33,13 +33,24 @@ namespace Shooter.Game
 
         public static PhysicsMaterial FindAt(RaycastHit hit)
         {
-            if (hit.collider is not TerrainCollider) return hit.collider.sharedMaterial;
+            return FindAt(hit.collider, hit.point);
+        }
 
-            Terrain terrain = hit.collider.GetComponent<Terrain>();
+        public static PhysicsMaterial FindAt(Collider collider, Vector3 point)
+        {
+            if (collider is not TerrainCollider) return collider.sharedMaterial;
+
+            Terrain terrain = collider.GetComponent<Terrain>();
             if (terrain == null) return null;
 
             SurfaceCatalog surfaceCatalog = Catalogs.GetCatalog<SurfaceCatalog>();
-            return surfaceCatalog == null ? null : surfaceCatalog.GetSurfaceOf(FindPrevailingTerrainLayer(terrain, hit.point));
+            return surfaceCatalog == null ? null : surfaceCatalog.GetSurfaceOf(FindPrevailingTerrainLayer(terrain, point));
+        }
+
+        public static bool IsWater(PhysicsMaterial surface)
+        {
+            SurfaceCatalog surfaceCatalog = Catalogs.GetCatalog<SurfaceCatalog>();
+            return surface != null && surfaceCatalog != null && surface == surfaceCatalog.Water;
         }
 
         private static TerrainLayer FindPrevailingTerrainLayer(Terrain terrain, Vector3 point)

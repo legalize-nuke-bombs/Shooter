@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: ImpactWater
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
+  id: impactwater
+  clips:
+  - {fileID: 8300000, guid: fc5edcd1a1404f1c9126492263a1b42b, type: 3}
+  - {fileID: 8300000, guid: 9da0df732b16447ba794ed3833a34bd8, type: 3}
+  - {fileID: 8300000, guid: 4013d4ea5a504a0189f83a462a59de35, type: 3}
+  - {fileID: 8300000, guid: b8db414bd44e4b689c042693524b3aeb, type: 3}
+  - {fileID: 8300000, guid: 717a773654f045e8a1795e7b501654c3, type: 3}
+  - {fileID: 8300000, guid: 86fd8ae648be4c76b01a99c627f948c3, type: 3}
+  - {fileID: 8300000, guid: 4b0b1aef1cae42639f6387552b364e8c, type: 3}
+  - {fileID: 8300000, guid: 2e2062e5bffa4d0ea5c3655cdefcb4ed, type: 3}
+  - {fileID: 8300000, guid: c6453486e39c451c973c4091adefd6a7, type: 3}
+  - {fileID: 8300000, guid: beb68e5c72b34bdea80539b6e7635594, type: 3}
+  - {fileID: 8300000, guid: f9d8bec52bfb4d3081c308fbdf3e5295, type: 3}
+  - {fileID: 8300000, guid: 2cef4db0393c4080acdf816360ad262e, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
+  volume: 1
+  rolloff: 1
+  minDistance: 2
+  maxDistance: 60
+  pitchVariation: 0.1

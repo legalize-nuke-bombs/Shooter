@@ -20,6 +20,7 @@ namespace Shooter.Game
         [SerializeField] private SoundAsset misfireSound;
         [SerializeField] private SoundAsset reloadSound;
         [SerializeField] private EarSoundAsset headshotSound;
+        [SerializeField] private SurfaceSounds impactSounds;
 
         public int MagazineSize => Mathf.Max(magazineSize, 1);
 
@@ -50,6 +51,8 @@ namespace Shooter.Game
         public SoundAsset ReloadSound => reloadSound;
 
         public EarSoundAsset HeadshotSound => headshotSound;
+
+        public SurfaceSounds ImpactSounds => impactSounds;
 
         public override UniqueItem CreateItem()
         {

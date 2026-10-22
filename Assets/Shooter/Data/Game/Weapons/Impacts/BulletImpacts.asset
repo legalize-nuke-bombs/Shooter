@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93eca38e2c36124ba285211afd6cfe9, type: 3}
+  m_Name: BulletImpacts
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SurfaceSounds
+  fallback: {fileID: 11400000, guid: 4c3b43ffe80727d45aae467ce9ed6f84, type: 2}
+  surfaces:
+  - surface: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
+    sound: {fileID: 11400000, guid: a866207effbebd84e8564899297fc67e, type: 2}
+  - surface: {fileID: 13400000, guid: 8702e08b70200694ba3bfbb8706495ab, type: 2}
+    sound: {fileID: 11400000, guid: bdfeb81ecd4b41341a513086bc884d5b, type: 2}
+  - surface: {fileID: 13400000, guid: 926bd9ee58c38cc4e881c94ed407261e, type: 2}
+    sound: {fileID: 11400000, guid: 7d2561aa8d16aa641b364b4af06dd8d1, type: 2}
+  - surface: {fileID: 13400000, guid: 709843bcf8454ef4196822b26d8f79ed, type: 2}
+    sound: {fileID: 11400000, guid: 4c3b43ffe80727d45aae467ce9ed6f84, type: 2}
+  - surface: {fileID: 13400000, guid: 56468965fc1d49b458d6334b7d38d76e, type: 2}
+    sound: {fileID: 11400000, guid: 5503a122e44aa3145b55c9273ea42b74, type: 2}
+  - surface: {fileID: 13400000, guid: 2879c62f59909464d8a987663d213765, type: 2}
+    sound: {fileID: 11400000, guid: 5f502f8f8ba1afb47904bd0f833ae4a3, type: 2}
+  - surface: {fileID: 13400000, guid: c81f0b108fd7a7a4ab37122d2e948aa3, type: 2}
+    sound: {fileID: 11400000, guid: 7bfa2569377e1f34391ad7dc83403d53, type: 2}
+  - surface: {fileID: 13400000, guid: e22946fe18a0b3e4cac44a7ac28b0fa4, type: 2}
+    sound: {fileID: 11400000, guid: 3ee4d8f7222f29442a4448814ae43609, type: 2}
+  - surface: {fileID: 13400000, guid: cd6d95310f8a53245b0c741aaaf00a1b, type: 2}
+    sound: {fileID: 11400000, guid: 31f1f3c1ceb9c944987b32b897def475, type: 2}
+  - surface: {fileID: 13400000, guid: 84f103fa98fd64c41958899805621396, type: 2}
+    sound: {fileID: 11400000, guid: 5e4af084448b91242b5f4474e0be5e00, type: 2}

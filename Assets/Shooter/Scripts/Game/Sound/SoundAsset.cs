@@ -51,5 +51,20 @@ namespace Shooter.Game
         {
             return IsSilent ? null : clips[variant % clips.Length];
         }
+
+        public bool TryConfigure(AudioSource audioSource, byte variant, float gain)
+        {
+            AudioClip clip = GetClip(variant);
+            if (clip == null) return false;
+
+            audioSource.clip = clip;
+            audioSource.outputAudioMixerGroup = output;
+            audioSource.volume = volume * gain;
+            audioSource.pitch = 1f + Random.Range(-pitchVariation, pitchVariation);
+            audioSource.rolloffMode = rolloff;
+            audioSource.minDistance = minDistance;
+            audioSource.maxDistance = maxDistance;
+            return true;
+        }
     }
 }

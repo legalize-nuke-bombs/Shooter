@@ -39,21 +39,10 @@ namespace Shooter.Game
             }
 
             SoundAsset sound = soundCatalog.GetAssetById(id);
-            if (sound == null) return;
-
-            AudioClip clip = sound.GetClip(variant);
-            if (clip == null) return;
+            if (sound == null || sound.GetClip(variant) == null) return;
 
             AudioSource audioSource = TakeAudioSource();
-            audioSource.clip = clip;
-            audioSource.outputAudioMixerGroup = sound.Output;
-            audioSource.volume = sound.Volume * gain;
-            audioSource.pitch = 1f + Random.Range(-sound.PitchVariation, sound.PitchVariation);
-            audioSource.rolloffMode = sound.Rolloff;
-            audioSource.minDistance = sound.MinDistance;
-            audioSource.maxDistance = sound.MaxDistance;
-
-            audioSource.Play();
+            if (sound.TryConfigure(audioSource, variant, gain)) audioSource.Play();
         }
 
         private AudioSource TakeAudioSource()
