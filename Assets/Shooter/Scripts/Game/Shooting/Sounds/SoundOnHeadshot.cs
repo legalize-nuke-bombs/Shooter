@@ -7,6 +7,8 @@ namespace Shooter.Game
     [RequireComponent(typeof(EarSpeaker))]
     public class SoundOnHeadshot : ShooterBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private Gunner gunner;
         private EarSpeaker earSpeaker;
 
@@ -28,9 +30,14 @@ namespace Shooter.Game
 
         private void PlayOnHeadshot(FirearmAsset asset, ShotHit hit)
         {
-            if (hit.Victim == null || hit.Part != BodyPart.Head) return;
+            if (hit.Victim == null || hit.Part != BodyPart.Head)
+            {
+                Log.Info($"Entity {name} played no headshot sound: {(hit.Victim == null ? "the shot hit no one" : $"it hit {hit.Victim.name} in {hit.Part}")}");
+                return;
+            }
 
             earSpeaker.PlayForOwner(asset.HeadshotSound);
+            Log.Info($"Entity {name} played the headshot sound of {asset.name} to its owner for {hit.Victim.name}");
         }
     }
 }

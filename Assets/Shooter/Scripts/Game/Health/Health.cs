@@ -38,7 +38,7 @@ namespace Shooter.Game
                 };
             }
 
-            Log.Info($"Entity {name} got damage {amount} {damageType}");
+            Log.Info($"Entity {name} got {amount} damage of {(damageType == null ? "no type" : damageType.name)}{(attacker == null ? "" : $" from {attacker.name}")}");
 
             ReduceHp(amount);
 

@@ -79,6 +79,7 @@ namespace Shooter.Game
 
             if (!firearm.TrySpendRound())
             {
+                Log.Info($"Entity {name} pulled the trigger of an empty {firearm.AssetId}");
                 triggerHeld = false;
                 Misfired?.Invoke(asset);
                 return false;
@@ -94,7 +95,7 @@ namespace Shooter.Game
         private void SendTrace(FirearmAsset asset, ShotHit hit)
         {
             Vector3 end = hit.IsMiss ? hit.Origin + hit.Direction * asset.Distance : hit.Point;
-            SoundAsset impactSound = hit.IsMiss || asset.ImpactSounds == null ? null : asset.ImpactSounds.GetSoundOn(Surface.FindAt(hit.Collider, hit.Point));
+            SoundAsset impactSound = hit.IsMiss || asset.ImpactSounds == null ? null : asset.ImpactSounds.GetSoundOn(hit.Surface);
 
             ShotTracedRpc(hit.Origin, end, impactSound == null ? default : impactSound.NetworkId, impactSound == null ? (byte)0 : impactSound.PickRandomVariant());
         }
@@ -155,20 +156,21 @@ namespace Shooter.Game
             int hitCount = Interactor.CollectHits(eyePosition, shotDirection, asset.Distance, ShotMask, transform, ShotHits);
             if (!Interactor.TryFindNearestHit(ShotHits, hitCount, out RaycastHit hit))
             {
-                Log.Info($"Shot of entity {name} missed");
+                Log.Info($"Entity {name} shot and missed");
                 return new ShotHit(eyePosition, shotDirection);
             }
 
+            PhysicsMaterial surface = Surface.FindAt(hit);
             Health victim = hit.collider.GetComponentInParent<Health>();
             if (victim == null)
             {
-                Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
-                return new ShotHit(eyePosition, shotDirection, hit.collider, hit.point, hit.normal, null, BodyPart.Torso);
+                Log.Info($"Entity {name} shot {hit.collider.name} at {hit.distance:0.0} m, surface {(surface == null ? "none" : surface.name)}");
+                return new ShotHit(eyePosition, shotDirection, hit.collider, hit.point, hit.normal, surface, null, BodyPart.Torso);
             }
 
             BodyPart hitPart = FindWeakestHitBodyPart(hitCount, victim);
-            Log.Info($"Shot of entity {name} hit {victim.name} in {hitPart}");
-            return new ShotHit(eyePosition, shotDirection, hit.collider, hit.point, hit.normal, victim, hitPart);
+            Log.Info($"Entity {name} shot {victim.name} in {hitPart} at {hit.distance:0.0} m");
+            return new ShotHit(eyePosition, shotDirection, hit.collider, hit.point, hit.normal, surface, victim, hitPart);
         }
 
         private BodyPart FindWeakestHitBodyPart(int hitCount, Health victim)

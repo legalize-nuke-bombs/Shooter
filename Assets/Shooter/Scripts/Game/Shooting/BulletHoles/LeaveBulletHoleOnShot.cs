@@ -6,6 +6,8 @@ namespace Shooter.Game
     [RequireComponent(typeof(Gunner))]
     public class LeaveBulletHoleOnShot : ShooterBehaviour
     {
+        private static readonly Journal Log = Logs.Here();
+
         private Gunner gunner;
         private BulletHoles bulletHoles;
 
@@ -27,9 +29,23 @@ namespace Shooter.Game
 
         private void LeaveBulletHole(FirearmAsset asset, ShotHit hit)
         {
-            if (hit.IsMiss || hit.Victim != null || Surface.IsWater(Surface.FindAt(hit.Collider, hit.Point))) return;
+            string missingHoleReason = FindMissingHoleReason(hit);
+            if (missingHoleReason != null)
+            {
+                Log.Info($"Entity {name} left no bullet hole: {missingHoleReason}");
+                return;
+            }
 
             bulletHoles.AddHole(hit.Point, hit.Normal);
+            Log.Info($"Entity {name} left a bullet hole on {hit.Collider.name}");
+        }
+
+        private static string FindMissingHoleReason(ShotHit hit)
+        {
+            if (hit.IsMiss) return "the shot missed";
+            if (hit.Victim != null) return $"it hit {hit.Victim.name}";
+
+            return Surface.IsWater(hit.Surface) ? "it hit water" : null;
         }
     }
 }
