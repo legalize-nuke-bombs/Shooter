@@ -65,7 +65,11 @@ namespace Shooter.Game
 
         [SerializeField] private float calmDownTime = 10f;
 
-        [SerializeField] private SoundAsset alarmSound;
+        [SerializeField] private SoundAsset cawSound;
+
+        [SerializeField] [Min(1)] private int maxCawingBoids = 8;
+
+        [SerializeField] private float maxCawDelay = 0.6f;
 
         private Vector3[] flockPoints;
         private Vector3[] flockTargets;
@@ -82,12 +86,12 @@ namespace Shooter.Game
         private float[] boidPanics;
         private Vector3[] boidEscapes;
         private bool[] boidFlappingScared;
+        private AudioSource[] boidVoices;
 
         private Material calmMaterial;
         private Material scaredMaterial;
         private float waveTime;
         private float nextRetargetTime;
-        private float alarmPlayingUntil;
 
         protected override void ShooterAwake()
         {
@@ -123,8 +127,7 @@ namespace Shooter.Game
 
         private void ScareBoids(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
-            Vector3 scaredSum = Vector3.zero;
-            int scaredCount = 0;
+            int cawingBoids = CountCawingBoids();
 
             for (int boid = 0; boid < boidCount; boid++)
             {
@@ -133,26 +136,32 @@ namespace Shooter.Game
                 float fear = 1f - away.magnitude / radius;
                 if (fear <= 0f) continue;
 
-                scaredSum += position;
-                scaredCount++;
-
                 if (boidFears[boid] <= 0f || fear > boidFears[boid] + NewEscapeFearMargin) boidEscapes[boid] = PickEscape(away);
                 boidFears[boid] = Mathf.Max(boidFears[boid], fear);
+                if (cawingBoids < maxCawingBoids && TryCaw(boid)) cawingBoids++;
             }
-
-            if (scaredCount > 0) RaiseAlarm(scaredSum / scaredCount);
         }
 
-        private void RaiseAlarm(Vector3 position)
+        private int CountCawingBoids()
         {
-            if (alarmSound == null || Time.time < alarmPlayingUntil) return;
+            if (boidVoices == null) return 0;
 
-            byte variant = alarmSound.PickRandomVariant();
-            AudioClip clip = alarmSound.GetClip(variant);
-            if (clip == null) return;
+            int cawing = 0;
+            foreach (AudioSource voice in boidVoices)
+            {
+                if (voice.isPlaying) cawing++;
+            }
 
-            alarmPlayingUntil = Time.time + clip.length;
-            WorldSpeaker.PlayLocallyAt(alarmSound, variant, position);
+            return cawing;
+        }
+
+        private bool TryCaw(int boid)
+        {
+            if (boidVoices == null || boidVoices[boid].isPlaying) return false;
+            if (!cawSound.TryConfigure(boidVoices[boid], cawSound.PickRandomVariant(), 1f)) return false;
+
+            boidVoices[boid].PlayDelayed(Random.Range(0f, maxCawDelay));
+            return true;
         }
 
         private void ScareFlocks(Vector3 shotOrigin, Vector3 shotEnd, float radius)
@@ -222,6 +231,7 @@ namespace Shooter.Game
             boidPanics = new float[boidCount];
             boidEscapes = new Vector3[boidCount];
             boidFlappingScared = new bool[boidCount];
+            boidVoices = cawSound == null ? null : new AudioSource[boidCount];
 
             for (int boid = 0; boid < boidCount; boid++)
             {
@@ -234,6 +244,12 @@ namespace Shooter.Game
                 boids[boid].localScale = Vector3.one * Random.Range(scaleRange.x, scaleRange.y);
                 boids[boid].localRotation = Quaternion.Euler(0f, Random.value * 360f, 0f);
                 boidRenderers[boid] = boids[boid].GetComponentInChildren<Renderer>();
+
+                if (boidVoices == null) continue;
+
+                boidVoices[boid] = boids[boid].gameObject.AddComponent<AudioSource>();
+                boidVoices[boid].playOnAwake = false;
+                boidVoices[boid].spatialBlend = 1f;
             }
         }
 
