@@ -72,8 +72,8 @@ namespace Shooter.Game
             if (!cadence.CanFire(firearmAsset, sustained, Time.time)) return;
 
             int shotIndex = cadence.Fire(firearmAsset, Time.time);
-            Vector2 previousOffset = shotIndex == 0 ? Vector2.zero : firearmAsset.Spray.GetOffsetForShot(shotIndex - 1);
-            PunchAngles += (firearmAsset.Spray.GetOffsetForShot(shotIndex) - previousOffset) * firearmAsset.RecoilPunch;
+            Vector2 stepToNextShot = firearmAsset.Spray.GetOffsetForShot(shotIndex + 1) - firearmAsset.Spray.GetOffsetForShot(shotIndex);
+            PunchAngles += stepToNextShot * firearmAsset.RecoilPunch;
         }
     }
 }
