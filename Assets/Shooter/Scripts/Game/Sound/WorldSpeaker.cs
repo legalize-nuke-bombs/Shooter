@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public static class PointSounds
+    public static class WorldSpeaker
     {
         private const int MaxVoices = 16;
 
@@ -12,7 +12,7 @@ namespace Shooter.Game
         private static Transform holder;
         private static int nextAudioSourceIndexToReuse;
 
-        public static void Play(SoundAsset sound, byte variant, Vector3 position, float gain = 1f)
+        public static void PlayLocallyAt(SoundAsset sound, byte variant, Vector3 position, float gain = 1f)
         {
             if (sound == null || sound.GetClip(variant) == null) return;
 
@@ -25,7 +25,7 @@ namespace Shooter.Game
         {
             if (holder == null)
             {
-                holder = new GameObject("Point Sounds").transform;
+                holder = new GameObject("World Speaker").transform;
                 AudioSources.Clear();
                 nextAudioSourceIndexToReuse = 0;
             }
@@ -45,7 +45,7 @@ namespace Shooter.Game
 
         private static AudioSource AddAudioSource()
         {
-            AudioSource audioSource = new GameObject("Point Sound").AddComponent<AudioSource>();
+            AudioSource audioSource = new GameObject("Voice").AddComponent<AudioSource>();
             audioSource.transform.SetParent(holder, false);
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 1f;

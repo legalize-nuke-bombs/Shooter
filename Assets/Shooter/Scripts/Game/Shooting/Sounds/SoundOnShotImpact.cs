@@ -25,7 +25,7 @@ namespace Shooter.Game
 
         private void Play(ShotTrace shot)
         {
-            PointSounds.Play(shot.ImpactSound, shot.ImpactSoundVariant, shot.End);
+            WorldSpeaker.PlayLocallyAt(shot.ImpactSound, shot.ImpactSoundVariant, shot.End);
         }
     }
 }
