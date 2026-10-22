@@ -112,17 +112,18 @@ namespace Shooter.Game
         }
 
         [Rpc(SendTo.Everyone)]
-        public void ScareRpc(Vector3 origin, float radius)
+        public void ScareRpc(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
-            ScareBoids(origin, radius);
-            ScareFlocks(origin, radius);
+            ScareBoids(shotOrigin, shotEnd, radius);
+            ScareFlocks(shotOrigin, shotEnd, radius);
         }
 
-        private void ScareBoids(Vector3 origin, float radius)
+        private void ScareBoids(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
             for (int boid = 0; boid < boidCount; boid++)
             {
-                Vector3 away = boids[boid].position - origin;
+                Vector3 position = boids[boid].position;
+                Vector3 away = position - ClosestPointOnSegment(shotOrigin, shotEnd, position);
                 float fear = 1f - away.magnitude / radius;
                 if (fear <= 0f) continue;
 
@@ -131,14 +132,16 @@ namespace Shooter.Game
             }
         }
 
-        private void ScareFlocks(Vector3 origin, float radius)
+        private void ScareFlocks(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
-            Vector3 localOrigin = transform.InverseTransformPoint(origin);
+            Vector3 localOrigin = transform.InverseTransformPoint(shotOrigin);
+            Vector3 localEnd = transform.InverseTransformPoint(shotEnd);
+            float flockRadius = radius + boidSpread;
 
             for (int flock = 0; flock < flockCount; flock++)
             {
-                Vector3 away = flockPoints[flock] - localOrigin;
-                float fear = 1f - away.magnitude / radius;
+                Vector3 away = flockPoints[flock] - ClosestPointOnSegment(localOrigin, localEnd, flockPoints[flock]);
+                float fear = 1f - away.magnitude / flockRadius;
                 if (fear <= 0f) continue;
 
                 Vector3 refuge = PickFlatDirection(away) * flockSpread;
@@ -154,6 +157,14 @@ namespace Shooter.Game
             Vector3 heading = Quaternion.Euler(0f, Random.Range(-escapeSpread, escapeSpread), 0f) * PickFlatDirection(away);
             float climb = Random.Range(escapeClimbRange.x, escapeClimbRange.y) * Mathf.Deg2Rad;
             return heading * Mathf.Cos(climb) + Vector3.up * Mathf.Sin(climb);
+        }
+
+        private static Vector3 ClosestPointOnSegment(Vector3 start, Vector3 end, Vector3 point)
+        {
+            Vector3 segment = end - start;
+            float lengthSquared = segment.sqrMagnitude;
+            float along = lengthSquared > 0f ? Mathf.Clamp01(Vector3.Dot(point - start, segment) / lengthSquared) : 0f;
+            return start + segment * along;
         }
 
         private static Vector3 PickFlatDirection(Vector3 away)

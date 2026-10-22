@@ -124,23 +124,24 @@ namespace Shooter.Game
             Vector2 sprayOffset = asset.Spray.GetOffsetForShot(shotIndex);
             Vector3 shotDirection = Quaternion.LookRotation(interactor.LookDirection) * Quaternion.Euler(-sprayOffset.y, sprayOffset.x, 0f) * Vector3.forward;
 
-            int hitCount = Interactor.CollectLookHits(interactor.EyePosition, shotDirection, asset.Distance, transform, ShotHits);
+            Vector3 eyePosition = interactor.EyePosition;
+            int hitCount = Interactor.CollectLookHits(eyePosition, shotDirection, asset.Distance, transform, ShotHits);
             if (!Interactor.TryFindNearestHit(ShotHits, hitCount, out RaycastHit hit))
             {
                 Log.Info($"Shot of entity {name} missed");
-                return default;
+                return new ShotHit(eyePosition, shotDirection);
             }
 
             Health victim = hit.collider.GetComponentInParent<Health>();
             if (victim == null)
             {
                 Log.Info($"Shot of entity {name} hit {hit.collider.name} without health");
-                return new ShotHit(hit.collider, hit.point, hit.normal, null, BodyPart.Torso);
+                return new ShotHit(eyePosition, shotDirection, hit.collider, hit.point, hit.normal, null, BodyPart.Torso);
             }
 
             BodyPart hitPart = FindWeakestHitBodyPart(hitCount, victim);
             Log.Info($"Shot of entity {name} hit {victim.name} in {hitPart}");
-            return new ShotHit(hit.collider, hit.point, hit.normal, victim, hitPart);
+            return new ShotHit(eyePosition, shotDirection, hit.collider, hit.point, hit.normal, victim, hitPart);
         }
 
         private BodyPart FindWeakestHitBodyPart(int hitCount, Health victim)
