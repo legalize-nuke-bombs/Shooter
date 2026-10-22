@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3328178}
   - component: {fileID: 2322924}
   - component: {fileID: 7556207600951577624}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Prop_Painting_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

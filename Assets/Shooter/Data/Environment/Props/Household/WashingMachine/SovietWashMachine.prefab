@@ -300,7 +300,6 @@ GameObject:
   - component: {fileID: 363961489119069330}
   - component: {fileID: 4450875236965458149}
   - component: {fileID: 5979232783479261658}
-  - component: {fileID: 3411249262577685893}
   m_Layer: 0
   m_Name: Hatch.001
   m_TagString: Untagged
@@ -402,27 +401,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3011791490873928107, guid: 7e741bf8744e3e248b0ec01008497c46, type: 3}
---- !u!65 &3411249262577685893
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5217368273126637513}
-  m_Material: {fileID: 13400000, guid: 8702e08b70200694ba3bfbb8706495ab, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.0553051, y: 0.098425105, z: 0.87459004}
-  m_Center: {x: -0.52765256, y: -0.009842452, z: -0.43729502}
 --- !u!1 &5889607100452724917
 GameObject:
   m_ObjectHideFlags: 0

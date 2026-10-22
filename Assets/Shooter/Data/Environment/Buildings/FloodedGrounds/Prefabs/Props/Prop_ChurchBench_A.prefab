@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 477396}
   - component: {fileID: 3385130}
   - component: {fileID: 2364536}
-  - component: {fileID: 6595830}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_ChurchBench_A_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,27 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6595830
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119706}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.8562033, y: 1.3, z: 1.1}
-  m_Center: {x: -1.3281018, y: 0.65, z: -0.35000008}
 --- !u!1 &132168
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +102,7 @@ GameObject:
   - component: {fileID: 3348206}
   - component: {fileID: 2314332}
   - component: {fileID: 6522516}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_ChurchBench_A_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 433038}
   - component: {fileID: 20543684}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Prop_ChurchBench_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

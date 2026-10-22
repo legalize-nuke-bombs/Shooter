@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 464912}
   - component: {fileID: 20579144}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Prop_Pulpit_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,8 +69,7 @@ GameObject:
   - component: {fileID: 463672}
   - component: {fileID: 3314274}
   - component: {fileID: 2396590}
-  - component: {fileID: 6573684}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Pulpit_A_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,27 +148,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6573684
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186420}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.15718, y: 2.1374326, z: 1.6449585}
-  m_Center: {x: -0.0030561686, y: 1.0679648, z: 0.1708428}
 --- !u!1 &189966
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +160,7 @@ GameObject:
   - component: {fileID: 3346806}
   - component: {fileID: 2367802}
   - component: {fileID: 6519386}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Pulpit_A_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

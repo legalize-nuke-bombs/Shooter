@@ -2457,7 +2457,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5060495242586246540}
   - component: {fileID: 9037096139816757062}
-  - component: {fileID: 9037096139816757063}
   m_Layer: 0
   m_Name: skinless-zombie_LOD0
   m_TagString: Untagged
@@ -2599,28 +2598,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0015302002, y: -0.012416631, z: 0.10459994}
     m_Extent: {x: 0.9082663, y: 0.9204953, z: 0.37676865}
   m_DirtyAABB: 0
---- !u!64 &9037096139816757063
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6998973850620090060}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &7092595213475024925
 GameObject:
   m_ObjectHideFlags: 0

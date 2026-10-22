@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3390462}
   - component: {fileID: 2335530}
   - component: {fileID: 6741733209262177071}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Prop_FlyingSaucer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 493884}
   - component: {fileID: 3315794}
   - component: {fileID: 2347382}
-  - component: {fileID: 8651435817887358991}
   m_Layer: 0
   m_Name: Grass_Tall_B
   m_TagString: Untagged
@@ -91,25 +90,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8651435817887358991
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 185326}
-  m_Material: {fileID: 13400000, guid: 84f103fa98fd64c41958899805621396, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 5502328da92d24740a90a78763d613d8, type: 3}

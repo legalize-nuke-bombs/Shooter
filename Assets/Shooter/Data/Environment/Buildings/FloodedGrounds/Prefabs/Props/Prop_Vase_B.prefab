@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 488080}
   - component: {fileID: 20553470}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Prop_Vase_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 3395130}
   - component: {fileID: 2340862}
   - component: {fileID: 6590944}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Vase_B_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,8 +181,7 @@ GameObject:
   - component: {fileID: 472486}
   - component: {fileID: 3311064}
   - component: {fileID: 2329222}
-  - component: {fileID: 6523468}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Vase_B_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,24 +260,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6523468
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149744}
-  m_Material: {fileID: 13400000, guid: 709843bcf8454ef4196822b26d8f79ed, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.33391368, y: 0.77241653, z: 0.29068637}
-  m_Center: {x: 0.006248653, y: 0.38887164, z: -0.0006618574}

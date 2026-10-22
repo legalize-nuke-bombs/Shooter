@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 497018}
   - component: {fileID: 3338392}
   - component: {fileID: 2372526}
-  - component: {fileID: 6403740}
   m_Layer: 0
   m_Name: Struct_Billboard_A_LOD1
   m_TagString: Untagged
@@ -91,28 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6403740
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 110084}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 057c7f5d969c2b0499264ed710fed4b2, type: 3}
 --- !u!1 &128594
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +101,6 @@ GameObject:
   - component: {fileID: 419626}
   - component: {fileID: 3304416}
   - component: {fileID: 2321156}
-  - component: {fileID: 6468630}
   m_Layer: 0
   m_Name: Struct_Billboard_A_LOD2
   m_TagString: Untagged
@@ -204,28 +180,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6468630
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 128594}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 057c7f5d969c2b0499264ed710fed4b2, type: 3}
 --- !u!1 &154060
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 478110}
   - component: {fileID: 20545436}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Prop_Boat_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,8 +74,7 @@ GameObject:
   - component: {fileID: 480596}
   - component: {fileID: 3390472}
   - component: {fileID: 2310144}
-  - component: {fileID: 6526986}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Boat_A_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,27 +153,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6526986
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134628}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 11.097536, y: 2.8171902, z: 2.5999212}
-  m_Center: {x: -4.9592543, y: 1.0689754, z: 0.007919908}
 --- !u!1 &152016
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,8 +164,7 @@ GameObject:
   - component: {fileID: 465904}
   - component: {fileID: 3380308}
   - component: {fileID: 2353594}
-  - component: {fileID: 4151695533057964374}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Boat_A_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,28 +243,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4151695533057964374
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 152016}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300002, guid: d2eb6812fe2e171419fa21cf0011f980, type: 3}
 --- !u!1 &187672
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +255,7 @@ GameObject:
   - component: {fileID: 3351626}
   - component: {fileID: 2376696}
   - component: {fileID: 6586176}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Boat_A_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

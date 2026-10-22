@@ -69,7 +69,6 @@ GameObject:
   - component: {fileID: 411878}
   - component: {fileID: 3367440}
   - component: {fileID: 2346454}
-  - component: {fileID: 6454402}
   m_Layer: 0
   m_Name: Struct_Pole_A_LOD1
   m_TagString: Untagged
@@ -149,28 +148,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6454402
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148484}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300004, guid: f5592db6982749f4e8ed03db7ebc685a, type: 3}
 --- !u!1 &172958
 GameObject:
   m_ObjectHideFlags: 0

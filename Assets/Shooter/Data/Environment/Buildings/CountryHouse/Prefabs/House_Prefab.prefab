@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 22867002}
   - component: {fileID: 22867005}
   - component: {fileID: 22867004}
-  - component: {fileID: 22867003}
   m_Layer: 0
   m_Name: Bake01 (12)
   m_TagString: Untagged
@@ -91,28 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &22867003
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 22867001}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1930419925736333262
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +101,6 @@ GameObject:
   - component: {fileID: 2855293188875893830}
   - component: {fileID: 4025812161050791950}
   - component: {fileID: 591818516608580226}
-  - component: {fileID: 7356762786394551595}
   m_Layer: 0
   m_Name: Bake01 (5)
   m_TagString: Untagged
@@ -204,28 +180,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7356762786394551595
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1930419925736333262}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2594713235057194395
 GameObject:
   m_ObjectHideFlags: 0
@@ -3157,7 +3111,6 @@ GameObject:
   - component: {fileID: 8773407183754423798}
   - component: {fileID: 5614231733024556908}
   - component: {fileID: 8588033736132355424}
-  - component: {fileID: 164221550195774818}
   m_Layer: 0
   m_Name: Bake01 (3)
   m_TagString: Untagged
@@ -3237,28 +3190,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &164221550195774818
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2911732153686860303}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &3550420021046987309
 GameObject:
   m_ObjectHideFlags: 0
@@ -3270,7 +3201,6 @@ GameObject:
   - component: {fileID: 7139890124890406261}
   - component: {fileID: 8768796386585680227}
   - component: {fileID: 1050430595336742781}
-  - component: {fileID: 5895767669380678189}
   m_Layer: 0
   m_Name: Bake01 (9)
   m_TagString: Untagged
@@ -3350,28 +3280,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5895767669380678189
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3550420021046987309}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &4202991582018302684
 GameObject:
   m_ObjectHideFlags: 0
@@ -3383,7 +3291,6 @@ GameObject:
   - component: {fileID: 7575947506639531357}
   - component: {fileID: 6393874626771332161}
   - component: {fileID: 4261859772296827741}
-  - component: {fileID: 8512002678986537847}
   m_Layer: 0
   m_Name: Bake01 (4)
   m_TagString: Untagged
@@ -3463,28 +3370,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8512002678986537847
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4202991582018302684}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &4244775495002073259
 GameObject:
   m_ObjectHideFlags: 0
@@ -3533,7 +3418,6 @@ GameObject:
   - component: {fileID: 4576960519163933288}
   - component: {fileID: 9148625560026637983}
   - component: {fileID: 3055384344506205001}
-  - component: {fileID: 5133485479552359742}
   m_Layer: 0
   m_Name: Bake01 (1)
   m_TagString: Untagged
@@ -3613,28 +3497,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5133485479552359742
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5094674619114264937}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &5935295677732827127
 GameObject:
   m_ObjectHideFlags: 0
@@ -3646,7 +3508,6 @@ GameObject:
   - component: {fileID: 216986634155950579}
   - component: {fileID: 1197765735242827492}
   - component: {fileID: 144056986108039877}
-  - component: {fileID: 2746053620485405878}
   m_Layer: 0
   m_Name: Bake01 (11)
   m_TagString: Untagged
@@ -3726,28 +3587,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2746053620485405878
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5935295677732827127}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &6153584969544394782
 GameObject:
   m_ObjectHideFlags: 0
@@ -3759,7 +3598,6 @@ GameObject:
   - component: {fileID: 7422068901359734481}
   - component: {fileID: 8574248101355908961}
   - component: {fileID: 3270951289289269349}
-  - component: {fileID: 1377340842122584279}
   m_Layer: 0
   m_Name: Bake01
   m_TagString: Untagged
@@ -3839,28 +3677,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1377340842122584279
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6153584969544394782}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &6494482918138202552
 GameObject:
   m_ObjectHideFlags: 0
@@ -3872,7 +3688,6 @@ GameObject:
   - component: {fileID: 6430017062174054675}
   - component: {fileID: 1776888816575478226}
   - component: {fileID: 7263980264625784667}
-  - component: {fileID: 6824711373100833336}
   m_Layer: 0
   m_Name: Bake01 (10)
   m_TagString: Untagged
@@ -3952,28 +3767,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6824711373100833336
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6494482918138202552}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &6824080370680590496
 GameObject:
   m_ObjectHideFlags: 0
@@ -3985,7 +3778,6 @@ GameObject:
   - component: {fileID: 7721209168641031190}
   - component: {fileID: 8870780396698930422}
   - component: {fileID: 3116012152570131254}
-  - component: {fileID: 4376067527838637030}
   m_Layer: 0
   m_Name: Bake01 (7)
   m_TagString: Untagged
@@ -4065,28 +3857,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4376067527838637030
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6824080370680590496}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &8390998609276529404
 GameObject:
   m_ObjectHideFlags: 0
@@ -4098,7 +3868,6 @@ GameObject:
   - component: {fileID: 8302861876278475720}
   - component: {fileID: 3467839545156652995}
   - component: {fileID: 6709622248285033970}
-  - component: {fileID: 1110764255369498445}
   m_Layer: 0
   m_Name: Bake01 (8)
   m_TagString: Untagged
@@ -4178,28 +3947,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1110764255369498445
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8390998609276529404}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &8727226714963352916
 GameObject:
   m_ObjectHideFlags: 0
@@ -4211,7 +3958,6 @@ GameObject:
   - component: {fileID: 8235615833231952493}
   - component: {fileID: 4999787428478169064}
   - component: {fileID: 4489755895859259509}
-  - component: {fileID: 5177012557112090241}
   m_Layer: 0
   m_Name: Bake01 (2)
   m_TagString: Untagged
@@ -4291,28 +4037,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5177012557112090241
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8727226714963352916}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &8793253014371146413
 GameObject:
   m_ObjectHideFlags: 0
@@ -4368,7 +4092,6 @@ GameObject:
   - component: {fileID: 6939720285102396059}
   - component: {fileID: 8780087618647160388}
   - component: {fileID: 11938695035481530}
-  - component: {fileID: 4385194865376125046}
   m_Layer: 0
   m_Name: Bake01 (6)
   m_TagString: Untagged
@@ -4448,28 +4171,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4385194865376125046
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9198771981467863292}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &655041044269612037
 PrefabInstance:
   m_ObjectHideFlags: 0

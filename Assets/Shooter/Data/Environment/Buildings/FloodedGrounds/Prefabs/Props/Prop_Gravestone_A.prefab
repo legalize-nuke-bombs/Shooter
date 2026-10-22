@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3303306}
   - component: {fileID: 2343824}
   - component: {fileID: 6585450}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Prop_Gravestone_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

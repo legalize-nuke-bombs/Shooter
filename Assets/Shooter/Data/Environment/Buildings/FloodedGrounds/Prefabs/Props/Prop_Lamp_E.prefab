@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3324118}
   - component: {fileID: 2336956}
   - component: {fileID: 6567060}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Lamp_E_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,8 +123,7 @@ GameObject:
   - component: {fileID: 470326}
   - component: {fileID: 3397534}
   - component: {fileID: 2393764}
-  - component: {fileID: 6518952}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Lamp_E_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,27 +202,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6518952
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155390}
-  m_Material: {fileID: 13400000, guid: 8702e08b70200694ba3bfbb8706495ab, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.9902686, y: 0.5410571, z: 0.3238071}
-  m_Center: {x: 0.010402873, y: 0.15747546, z: 0.16068359}
 --- !u!1 &167604
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 468664}
   - component: {fileID: 20584294}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Prop_Lamp_E
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 468658}
   - component: {fileID: 3363274}
   - component: {fileID: 2342594}
-  - component: {fileID: 6597046}
   m_Layer: 0
   m_Name: Struct_Fence3_Mid_A_LOD1
   m_TagString: Untagged
@@ -91,27 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6597046
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 111114}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 6.577719, y: 2.4171305, z: 0.3146549}
-  m_Center: {x: -3.2853897, y: 1.111855, z: 0.07337591}
 --- !u!1 &141926
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +101,6 @@ GameObject:
   - component: {fileID: 461896}
   - component: {fileID: 3344454}
   - component: {fileID: 2381162}
-  - component: {fileID: 6521846}
   m_Layer: 0
   m_Name: Struct_Fence3_Mid_A_LOD2
   m_TagString: Untagged
@@ -203,27 +180,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6521846
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 141926}
-  m_Material: {fileID: 13400000, guid: a2a2f08eb022da840aa9cc7b90e446e6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 6.577719, y: 2.4171305, z: 0.3146549}
-  m_Center: {x: -3.2853897, y: 1.111855, z: 0.07337591}
 --- !u!1 &169960
 GameObject:
   m_ObjectHideFlags: 0
