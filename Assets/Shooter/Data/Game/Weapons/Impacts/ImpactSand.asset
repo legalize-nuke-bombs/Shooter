@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: ImpactSand
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
+  id: impactsand
+  clips:
+  - {fileID: 8300000, guid: 27bb25198e964edc81f7d03c32624a8d, type: 3}
+  - {fileID: 8300000, guid: 103ae4e190ae4a019029de040f50404b, type: 3}
+  - {fileID: 8300000, guid: c31c9a3de36145aeb203add7bcbb3d8a, type: 3}
+  - {fileID: 8300000, guid: 74c9704b774a4d4ca87da5d8ce1c2947, type: 3}
+  - {fileID: 8300000, guid: d36d78bf908c4f819d265e9851f12ab4, type: 3}
+  - {fileID: 8300000, guid: 9e347d1ceb244d15a8b4d1ad1340357d, type: 3}
+  - {fileID: 8300000, guid: 542637e260f8413a9c162890b19e58c7, type: 3}
+  - {fileID: 8300000, guid: 4344506f7d874eb883f2a182220943db, type: 3}
+  - {fileID: 8300000, guid: da2f6b2f1f894970beeb6d678e51cea8, type: 3}
+  - {fileID: 8300000, guid: c588d1e1ec8e4bdd9a929053bb184a84, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
+  volume: 1
+  rolloff: 1
+  minDistance: 2
+  maxDistance: 60
+  pitchVariation: 0.1

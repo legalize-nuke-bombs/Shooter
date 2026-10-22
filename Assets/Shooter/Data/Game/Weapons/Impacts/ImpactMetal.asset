@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: ImpactMetal
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
+  id: impactmetal
+  clips:
+  - {fileID: 8300000, guid: 8148866645de415894de4587aa48500f, type: 3}
+  - {fileID: 8300000, guid: 4ca45eb34b4c48eb87a10be9e51ce8de, type: 3}
+  - {fileID: 8300000, guid: 3d3d36e7d53a4b8caa1b60e4ca873e31, type: 3}
+  - {fileID: 8300000, guid: 0731a3e31141442eb7a9bb870d724710, type: 3}
+  - {fileID: 8300000, guid: 463eeedca2bc47149da7a57a20d625a1, type: 3}
+  - {fileID: 8300000, guid: 64900b411bd340918960f60f778a7a3f, type: 3}
+  - {fileID: 8300000, guid: 2687f4b1f84041a0add6b54d9f009ad8, type: 3}
+  - {fileID: 8300000, guid: 9eace83a901f455a96a4207fdacc37a9, type: 3}
+  - {fileID: 8300000, guid: 1d07947b41b64d18a48d5a057e78ea67, type: 3}
+  - {fileID: 8300000, guid: c6e0483a29c24ae2bc9451a42551b035, type: 3}
+  - {fileID: 8300000, guid: f9c383ee913144b4932234dce083dd41, type: 3}
+  - {fileID: 8300000, guid: 4f69e5f6201e4527a89e35b3389b69e2, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
+  volume: 1
+  rolloff: 1
+  minDistance: 2
+  maxDistance: 60
+  pitchVariation: 0.1

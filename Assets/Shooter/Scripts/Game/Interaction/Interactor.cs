@@ -18,7 +18,7 @@ namespace Shooter.Game
 
         private Movement movement;
 
-        private static int LookMask => lookMask != 0 ? lookMask : lookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character");
+        public static int LookMask => lookMask != 0 ? lookMask : lookMask = Physics.DefaultRaycastLayers & ~LayerMask.GetMask("Character", "Water");
 
         public Vector3 EyePosition => transform.position + Vector3.up * EyeHeight;
 
@@ -68,7 +68,12 @@ namespace Shooter.Game
 
         public static int CollectLookHits(Vector3 origin, Vector3 direction, float distance, Transform looker, RaycastHit[] hits)
         {
-            int hitCount = Physics.RaycastNonAlloc(origin, direction, hits, distance, LookMask, QueryTriggerInteraction.Ignore);
+            return CollectHits(origin, direction, distance, LookMask, looker, hits);
+        }
+
+        public static int CollectHits(Vector3 origin, Vector3 direction, float distance, int layerMask, Transform looker, RaycastHit[] hits)
+        {
+            int hitCount = Physics.RaycastNonAlloc(origin, direction, hits, distance, layerMask, QueryTriggerInteraction.Ignore);
             int keptCount = 0;
 
             for (int i = 0; i < hitCount; i++)

@@ -1,5 +1,6 @@
 using System;
 using Shooter.Infrastructure;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -14,6 +15,9 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private static readonly RaycastHit[] ShotHits = new RaycastHit[32];
+
+        private static int shotMask;
+
         private readonly ShotCadence cadence = new();
         private Hands hands;
         private InventoryHolder inventoryHolder;
@@ -24,9 +28,13 @@ namespace Shooter.Game
 
         public event Action<FirearmAsset, ShotHit> Shot;
 
+        public event Action<SeenShot> ShotSeen;
+
         public event Action<FirearmAsset> Misfired;
 
         public event Action<FirearmAsset> ReloadStarted;
+
+        private static int ShotMask => shotMask != 0 ? shotMask : shotMask = Interactor.LookMask | LayerMask.GetMask("Water");
 
         protected override void ShooterAwake()
         {
@@ -77,8 +85,27 @@ namespace Shooter.Game
             }
 
             int shotIndex = cadence.Fire(asset, Time.time);
-            Shot?.Invoke(asset, TraceShot(asset, shotIndex));
+            ShotHit hit = TraceShot(asset, shotIndex);
+            Shot?.Invoke(asset, hit);
+            ShowShotToEveryone(asset, hit);
             return true;
+        }
+
+        private void ShowShotToEveryone(FirearmAsset asset, ShotHit hit)
+        {
+            Vector3 end = hit.IsMiss ? hit.Origin + hit.Direction * asset.Distance : hit.Point;
+            SoundAsset impactSound = hit.IsMiss || hit.Victim != null || asset.ImpactSounds == null ? null : asset.ImpactSounds.GetSoundOn(Surface.FindAt(hit.Collider, hit.Point));
+
+            ShotSeenRpc(hit.Origin, end, impactSound == null ? default : impactSound.NetworkId, impactSound == null ? (byte)0 : impactSound.PickRandomVariant());
+        }
+
+        [Rpc(SendTo.Everyone)]
+        private void ShotSeenRpc(Vector3 origin, Vector3 end, FixedString32Bytes impactSoundId, byte impactSoundVariant)
+        {
+            SoundCatalog soundCatalog = Catalogs.GetCatalog<SoundCatalog>();
+            SoundAsset impactSound = impactSoundId.IsEmpty || soundCatalog == null ? null : soundCatalog.GetAssetById(impactSoundId);
+
+            ShotSeen?.Invoke(new SeenShot(origin, end, impactSound, impactSoundVariant));
         }
 
         public bool TryReload()
@@ -125,7 +152,7 @@ namespace Shooter.Game
             Vector3 shotDirection = Quaternion.LookRotation(interactor.LookDirection) * Quaternion.Euler(-sprayOffset.y, sprayOffset.x, 0f) * Vector3.forward;
 
             Vector3 eyePosition = interactor.EyePosition;
-            int hitCount = Interactor.CollectLookHits(eyePosition, shotDirection, asset.Distance, transform, ShotHits);
+            int hitCount = Interactor.CollectHits(eyePosition, shotDirection, asset.Distance, ShotMask, transform, ShotHits);
             if (!Interactor.TryFindNearestHit(ShotHits, hitCount, out RaycastHit hit))
             {
                 Log.Info($"Shot of entity {name} missed");

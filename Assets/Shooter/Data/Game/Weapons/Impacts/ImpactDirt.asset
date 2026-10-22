@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
+  m_Name: ImpactDirt
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
+  id: impactdirt
+  clips:
+  - {fileID: 8300000, guid: 5d3aa9cb9bfb49c8b3e3bc109bd6fb3d, type: 3}
+  - {fileID: 8300000, guid: a8af8ac7c2724980bf9ef90b0ba2f258, type: 3}
+  - {fileID: 8300000, guid: 58413e2263ab4313bacb50e66ade1502, type: 3}
+  - {fileID: 8300000, guid: 582968ad74d8422ea4d62f3755f38c7e, type: 3}
+  - {fileID: 8300000, guid: a5d772fe94cf4981a46ae74ef2231b3f, type: 3}
+  - {fileID: 8300000, guid: d673a33bb98c4ca4abccb5cbc71c5a7f, type: 3}
+  - {fileID: 8300000, guid: 0e7f202094074057b08d76a00b6ee244, type: 3}
+  - {fileID: 8300000, guid: 293d9710b05941cd8a042280e4e78eed, type: 3}
+  - {fileID: 8300000, guid: f30e0bc66dbc4d1787a283c6950cb015, type: 3}
+  - {fileID: 8300000, guid: e6677275cff843488a35c5255dc046dd, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
+  volume: 1
+  rolloff: 1
+  minDistance: 2
+  maxDistance: 60
+  pitchVariation: 0.1

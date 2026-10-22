@@ -27,7 +27,7 @@ namespace Shooter.Game
 
         private void LeaveBulletHole(FirearmAsset asset, ShotHit hit)
         {
-            if (hit.IsMiss || hit.Victim != null) return;
+            if (hit.IsMiss || hit.Victim != null || Surface.IsWater(Surface.FindAt(hit.Collider, hit.Point))) return;
 
             bulletHoles.AddHole(hit.Point, hit.Normal);
         }
