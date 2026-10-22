@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: ImpactLeaves
+  m_Name: BulletImpactLeaves
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
-  id: impactleaves
+  id: bulletimpactleaves
   clips:
   - {fileID: 8300000, guid: f4b57a28faeb496d941e7987f976e30e, type: 3}
   - {fileID: 8300000, guid: 30933fca61a54454ae9bfb740c28e998, type: 3}

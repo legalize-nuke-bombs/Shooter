@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: ImpactMud
+  m_Name: BulletImpactMud
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
-  id: impactmud
+  id: bulletimpactmud
   clips:
   - {fileID: 8300000, guid: 528afff58495450e89090fd9540307da, type: 3}
   - {fileID: 8300000, guid: 76b33e52d700433a8590bbf5ef406adb, type: 3}

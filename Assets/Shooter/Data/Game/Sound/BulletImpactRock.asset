@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: ImpactRock
+  m_Name: BulletImpactRock
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
-  id: impactrock
+  id: bulletimpactrock
   clips:
   - {fileID: 8300000, guid: af61b96f513f4004b1d025c40f75c7d5, type: 3}
   - {fileID: 8300000, guid: 4ef6904e06444ec7b42ca0571620825d, type: 3}

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: ImpactGrass
+  m_Name: BulletImpactGrass
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
-  id: impactgrass
+  id: bulletimpactgrass
   clips:
   - {fileID: 8300000, guid: 9c22f2e220e04410921b7e38723ef694, type: 3}
   - {fileID: 8300000, guid: 82cb5a70df7649b0882632fcc9ec4b95, type: 3}
