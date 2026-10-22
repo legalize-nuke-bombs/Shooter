@@ -7,6 +7,7 @@ namespace Shooter.Game
     {
         private const float RayStartAboveFeet = 2f;
         private const float RayReachBelowFeet = 1f;
+        private const float TreeHitAboveGround = 0.05f;
 
         private static int groundMask;
 
@@ -36,9 +37,49 @@ namespace Shooter.Game
 
             Terrain terrain = collider.GetComponent<Terrain>();
             if (terrain == null) return null;
+            if (point.y > terrain.SampleHeight(point) + terrain.GetPosition().y + TreeHitAboveGround) return FindTreeSurface(terrain, point);
 
             SurfaceCatalog surfaceCatalog = Catalogs.GetCatalog<SurfaceCatalog>();
             return surfaceCatalog == null ? null : surfaceCatalog.GetSurfaceOf(FindPrevailingTerrainLayer(terrain, point));
+        }
+
+        private static PhysicsMaterial FindTreeSurface(Terrain terrain, Vector3 point)
+        {
+            TerrainData terrainData = terrain.terrainData;
+            int prototypeIndex = FindNearestTreePrototypeIndex(terrain, point);
+            if (prototypeIndex < 0) return null;
+
+            GameObject treePrefab = terrainData.treePrototypes[prototypeIndex].prefab;
+            if (treePrefab == null) return null;
+
+            foreach (Collider treeCollider in treePrefab.GetComponentsInChildren<Collider>(true))
+            {
+                if (treeCollider.sharedMaterial != null) return treeCollider.sharedMaterial;
+            }
+
+            return null;
+        }
+
+        private static int FindNearestTreePrototypeIndex(Terrain terrain, Vector3 point)
+        {
+            TerrainData terrainData = terrain.terrainData;
+            Vector3 terrainSize = terrainData.size;
+            Vector3 localPoint = point - terrain.GetPosition();
+            int nearestPrototypeIndex = -1;
+            float nearestDistanceSquared = float.PositiveInfinity;
+
+            for (int treeIndex = 0; treeIndex < terrainData.treeInstanceCount; treeIndex++)
+            {
+                TreeInstance tree = terrainData.GetTreeInstance(treeIndex);
+                Vector3 treePosition = Vector3.Scale(tree.position, terrainSize);
+                float distanceSquared = new Vector2(treePosition.x - localPoint.x, treePosition.z - localPoint.z).sqrMagnitude;
+                if (distanceSquared >= nearestDistanceSquared) continue;
+
+                nearestPrototypeIndex = tree.prototypeIndex;
+                nearestDistanceSquared = distanceSquared;
+            }
+
+            return nearestPrototypeIndex;
         }
 
         public static bool IsWater(PhysicsMaterial surface)
