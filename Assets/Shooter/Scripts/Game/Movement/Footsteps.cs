@@ -51,7 +51,7 @@ namespace Shooter.Game
             if (distanceSinceLastStep >= strideLength)
             {
                 distanceSinceLastStep -= strideLength;
-                speaker.PlayForEveryone(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(characterController)));
+                speaker.Play(sounds == null ? null : sounds.GetSoundOn(Surface.FindUnder(characterController)));
             }
 
             phase.Value = distanceSinceLastStep / strideLength;

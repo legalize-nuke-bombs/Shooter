@@ -36,7 +36,7 @@ namespace Shooter.Game
                 return;
             }
 
-            speaker.PlayForEveryone(sound);
+            speaker.Play(sound);
         }
     }
 }

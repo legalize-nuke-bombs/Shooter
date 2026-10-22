@@ -28,7 +28,7 @@ namespace Shooter.Game
 
         private void Play(StackableItemAsset asset)
         {
-            speaker.PlayForEveryone(asset.UseSound);
+            speaker.Play(asset.UseSound);
         }
     }
 }

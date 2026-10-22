@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public readonly struct SeenShot
+    public readonly struct ShotTrace
     {
-        public SeenShot(Vector3 origin, Vector3 end, SoundAsset impactSound, byte impactSoundVariant)
+        public ShotTrace(Vector3 origin, Vector3 end, SoundAsset impactSound, byte impactSoundVariant)
         {
             Origin = origin;
             End = end;

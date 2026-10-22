@@ -15,7 +15,7 @@ namespace Shooter.Game
 
         private int nextAudioSourceIndexToReuse;
 
-        public void PlayForEveryone(SoundAsset sound, float gain = 1f)
+        public void Play(SoundAsset sound, float gain = 1f)
         {
             if (!IsServer) return;
 
@@ -25,11 +25,11 @@ namespace Shooter.Game
                 return;
             }
 
-            PlayForEveryoneRpc(sound.NetworkId, sound.PickRandomVariant(), gain);
+            PlayRpc(sound.NetworkId, sound.PickRandomVariant(), gain);
         }
 
         [Rpc(SendTo.Everyone)]
-        private void PlayForEveryoneRpc(FixedString32Bytes id, byte variant, float gain)
+        private void PlayRpc(FixedString32Bytes id, byte variant, float gain)
         {
             SoundCatalog soundCatalog = Catalogs.GetCatalog<SoundCatalog>();
             if (soundCatalog == null)

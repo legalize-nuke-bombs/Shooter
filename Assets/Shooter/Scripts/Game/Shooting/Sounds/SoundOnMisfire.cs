@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Gunner))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnReload : ShooterBehaviour
+    public class SoundOnMisfire : ShooterBehaviour
     {
         private Gunner gunner;
         private Speaker speaker;
@@ -18,17 +18,17 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            gunner.ReloadStarted += Play;
+            gunner.Misfired += Play;
         }
 
         private void OnDisable()
         {
-            gunner.ReloadStarted -= Play;
+            gunner.Misfired -= Play;
         }
 
         private void Play(FirearmAsset asset)
         {
-            speaker.PlayForEveryone(asset.ReloadSound);
+            speaker.Play(asset.MisfireSound);
         }
     }
 }

@@ -15,15 +15,15 @@ namespace Shooter.Game
 
         private void OnEnable()
         {
-            gunner.ShotSeen += Play;
+            gunner.ShotTraced += Play;
         }
 
         private void OnDisable()
         {
-            gunner.ShotSeen -= Play;
+            gunner.ShotTraced -= Play;
         }
 
-        private void Play(SeenShot shot)
+        private void Play(ShotTrace shot)
         {
             PointSounds.Play(shot.ImpactSound, shot.ImpactSoundVariant, shot.End);
         }
