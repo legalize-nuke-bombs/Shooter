@@ -49,6 +49,7 @@ namespace Shooter.Game
             audioSource.transform.SetParent(holder, false);
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 1f;
+            audioSource.dopplerLevel = 0f;
             AudioSources.Add(audioSource);
 
             return audioSource;
