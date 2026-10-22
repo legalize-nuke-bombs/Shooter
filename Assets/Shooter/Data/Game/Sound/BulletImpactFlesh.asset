@@ -10,18 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab15c47a0fd7e4c2b8e07876837d0eb4, type: 3}
-  m_Name: BulletImpactLeaves
+  m_Name: BulletImpactFlesh
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
-  id: bulletimpactleaves
+  id: bulletimpactflesh
   clips:
-  - {fileID: 8300000, guid: f4b57a28faeb496d941e7987f976e30e, type: 3}
-  - {fileID: 8300000, guid: 30933fca61a54454ae9bfb740c28e998, type: 3}
-  - {fileID: 8300000, guid: d2c7b95b43c8440ab02c609cb2f3e21d, type: 3}
-  - {fileID: 8300000, guid: 10faf4d216f34b629f91e9815fb8634a, type: 3}
-  - {fileID: 8300000, guid: b5018daee708406d9bc6b9a4bda26bc6, type: 3}
-  - {fileID: 8300000, guid: 3253f7097efe40d799f52b7c4e697914, type: 3}
+  - {fileID: 8300000, guid: 5d074c4bd6b492546af324c51efc1479, type: 3}
+  - {fileID: 8300000, guid: b201c873a8b9e9f4cbe9016ab38d7ffe, type: 3}
+  - {fileID: 8300000, guid: d66f9170645c89f48af7a5e13209ab61, type: 3}
   output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
-  volume: 1
+  volume: 0.5
   rolloff: 1
   minDistance: 2
   maxDistance: 60

@@ -36,6 +36,8 @@ namespace Shooter.Game
                 Log.Error($"Entity {name} measures {Vector3.Distance(hips.position, head.position)} from hips to head, a humanoid scale of {humanoidScale}: its avatar likely maps Hips to a bone that is not the pelvis");
             }
 
+            SurfaceCatalog surfaceCatalog = Catalogs.GetCatalog<SurfaceCatalog>();
+            PhysicsMaterial flesh = surfaceCatalog == null ? null : surfaceCatalog.Flesh;
             int builtCount = 0;
 
             foreach (Skeleton.Segment segment in Skeleton.Segments)
@@ -48,16 +50,16 @@ namespace Shooter.Game
                     continue;
                 }
 
-                AddHitboxCapsule(segmentStart, segmentEnd.position, segment.Part, segment.Radius * humanoidScale, layer);
+                AddHitboxCapsule(segmentStart, segmentEnd.position, segment.Part, segment.Radius * humanoidScale, layer, flesh);
                 builtCount++;
             }
 
             Vector3 crown = head.position + (head.position - hips.position).normalized * (Skeleton.HeadRise * humanoidScale);
-            AddHitboxCapsule(head, crown, BodyPart.Head, Skeleton.HeadRadius * humanoidScale, layer);
+            AddHitboxCapsule(head, crown, BodyPart.Head, Skeleton.HeadRadius * humanoidScale, layer, flesh);
             Log.Info($"Entity {name} got {builtCount + 1} hitboxes, humanoid scale {humanoidScale}");
         }
 
-        private void AddHitboxCapsule(Transform bone, Vector3 target, BodyPart part, float radius, int layer)
+        private void AddHitboxCapsule(Transform bone, Vector3 target, BodyPart part, float radius, int layer, PhysicsMaterial surface)
         {
             GameObject hitboxObject = CreateHitboxObject(bone, part, layer);
             Vector3 boneToTarget = target - bone.position;
@@ -72,6 +74,7 @@ namespace Shooter.Game
             capsule.radius = thickness;
             capsule.height = length + thickness * 1.5f;
             capsule.center = new Vector3(0f, length / 2f, 0f);
+            capsule.sharedMaterial = surface;
             ExcludeFromCollisions(capsule);
         }
 

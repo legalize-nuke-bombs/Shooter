@@ -14,18 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
   id: bulletimpactwater
   clips:
-  - {fileID: 8300000, guid: fc5edcd1a1404f1c9126492263a1b42b, type: 3}
-  - {fileID: 8300000, guid: 9da0df732b16447ba794ed3833a34bd8, type: 3}
-  - {fileID: 8300000, guid: 4013d4ea5a504a0189f83a462a59de35, type: 3}
-  - {fileID: 8300000, guid: b8db414bd44e4b689c042693524b3aeb, type: 3}
-  - {fileID: 8300000, guid: 717a773654f045e8a1795e7b501654c3, type: 3}
-  - {fileID: 8300000, guid: 86fd8ae648be4c76b01a99c627f948c3, type: 3}
-  - {fileID: 8300000, guid: 4b0b1aef1cae42639f6387552b364e8c, type: 3}
-  - {fileID: 8300000, guid: 2e2062e5bffa4d0ea5c3655cdefcb4ed, type: 3}
-  - {fileID: 8300000, guid: c6453486e39c451c973c4091adefd6a7, type: 3}
-  - {fileID: 8300000, guid: beb68e5c72b34bdea80539b6e7635594, type: 3}
-  - {fileID: 8300000, guid: f9d8bec52bfb4d3081c308fbdf3e5295, type: 3}
-  - {fileID: 8300000, guid: 2cef4db0393c4080acdf816360ad262e, type: 3}
+  - {fileID: 8300000, guid: 2eb868b854c616045bfd99167b6999ff, type: 3}
+  - {fileID: 8300000, guid: 3b92d2d428f9524459734b09a156391f, type: 3}
+  - {fileID: 8300000, guid: 0d20936f87a196b4da1c3eaeea07db37, type: 3}
+  - {fileID: 8300000, guid: 678b13e8ac74c4c498d115917c22aa4d, type: 3}
   output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   rolloff: 1

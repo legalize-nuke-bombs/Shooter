@@ -14,17 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundAsset
   id: bulletimpactrock
   clips:
-  - {fileID: 8300000, guid: af61b96f513f4004b1d025c40f75c7d5, type: 3}
-  - {fileID: 8300000, guid: 4ef6904e06444ec7b42ca0571620825d, type: 3}
-  - {fileID: 8300000, guid: 5b3c7c439a8f441a9b84a8b5207dab15, type: 3}
-  - {fileID: 8300000, guid: 3872c338be424b60b293e005fd74c5d2, type: 3}
-  - {fileID: 8300000, guid: 3dcc2f48a2ac4dc3a85894fb2284bc38, type: 3}
-  - {fileID: 8300000, guid: d9884b65eed849f5a1cfaa57f99810c5, type: 3}
-  - {fileID: 8300000, guid: 7935eed6b9f24b148bb2dde19b3d91a3, type: 3}
-  - {fileID: 8300000, guid: f1eae53be8974a7185ea3d300d8278dc, type: 3}
-  - {fileID: 8300000, guid: 8854878309674cb9942b0a390f186ef6, type: 3}
+  - {fileID: 8300000, guid: 24aba32d07c6e0644917d99a70813832, type: 3}
+  - {fileID: 8300000, guid: 737a94609776ce74397e985d213f2821, type: 3}
+  - {fileID: 8300000, guid: 2e1437fb78dbfa546a38b5d5f89ba4cd, type: 3}
+  - {fileID: 8300000, guid: fcd83d749841f5444843432231fac59b, type: 3}
   output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
-  volume: 1
+  volume: 0.8
   rolloff: 1
   minDistance: 2
   maxDistance: 60
