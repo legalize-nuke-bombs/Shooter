@@ -76,30 +76,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   boidPrefab: {fileID: 7623336724680058607, guid: 2f5f5731eb36efb4ead612880acc102e, type: 3}
-  flockCount: 75
-  boidCount: 1000
-  flockSpread: 500
-  flockSpreadVertical: 0
+  flockCount: 1
+  boidCount: 500
+  flockSpread: 50
+  flockSpreadVertical: 0.05
   flockSmoothTime: 4
-  boidSpread: 20
-  boidSpreadVertical: 0.15
-  speedRange: {x: 6, y: 14}
-  turnSpeed: 0.25
+  flockMaxSpeed: 4
+  boidSpread: 160
+  boidSpreadVertical: 0.06
+  speedRange: {x: 8, y: 12}
+  turnSpeed: 0.6
   maxPitch: 10
   verticalWave: 8
-  scaleRange: {x: 1, y: 1.5}
+  scaleRange: {x: 0.55, y: 0.7}
   retargetInterval: {x: 10, y: 20}
   flockRetargetChance: 0.7
-  migrationChance: 0.06
+  migrationChance: 0
   scaredSpeedMultiplier: 1.7
-  speedRampTime: 0.5
-  scaredTurnMultiplier: 16
-  scaredMaxPitch: 40
+  speedRampTime: 0.1
+  scaredTurnMultiplier: 12
+  scaredMaxPitch: 20
   escapeSpread: 15
-  escapeClimbRange: {x: 15, y: 35}
+  escapeClimbRange: {x: 5, y: 15}
   scaredFlapMultiplier: 2.5
-  scaredClimb: 30
-  calmDownTime: 10
+  scaredClimb: 10
+  calmDownTime: 6
 --- !u!114 &-3873601585301477384
 MonoBehaviour:
   m_ObjectHideFlags: 0
