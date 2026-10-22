@@ -7,18 +7,6 @@ namespace Shooter.Game
     [RequireComponent(typeof(WaterSurface))]
     public class Water : ShooterBehaviour
     {
-        public static float FindDepthAt(Vector3 point)
-        {
-            float deepest = 0f;
-
-            foreach (Water water in Registers.GetAll<Water>(RegisterInactivePolicy.Exclude))
-            {
-                deepest = Mathf.Max(deepest, water.GetDepthAt(point));
-            }
-
-            return deepest;
-        }
-
         public float GetDepthAt(Vector3 point)
         {
             Vector3 offset = point - transform.position;
