@@ -81,6 +81,7 @@ namespace Shooter.Game
             if (asset == null)
             {
                 Log.Info($"Entity {name} failed to rpc give {stackableId} x {amount} to {receiverId} : asset not found");
+                return;
             }
 
             IncrementalId receiver = IncrementalId.FindByValue(receiverId, RegisterInactivePolicy.Exclude);
