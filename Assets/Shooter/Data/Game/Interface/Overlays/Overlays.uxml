@@ -48,7 +48,7 @@
                     <ui:Label name="loot-title" class="line loot__title" picking-mode="Ignore"/>
                     <ui:Button name="loot-take-all" text="Взять всё" class="loot__button"/>
                 </ui:VisualElement>
-                <ui:ScrollView name="loot-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="inventory__scroll">
+                <ui:ScrollView name="loot-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="loot__scroll">
                     <ui:VisualElement name="loot-grid" class="inventory__grid"/>
                 </ui:ScrollView>
             </ui:VisualElement>
