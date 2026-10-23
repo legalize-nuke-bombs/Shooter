@@ -28,6 +28,7 @@ GameObject:
   - component: {fileID: 582697031381551377}
   - component: {fileID: 8113226400939475344}
   - component: {fileID: 3347146998605163575}
+  - component: {fileID: 6681896379146858491}
   m_Layer: 0
   m_Name: Overlays
   m_TagString: Untagged
@@ -350,3 +351,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9ebde81f5492e247adf55709af1acbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.RadioOverlay
+--- !u!114 &6681896379146858491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155463033436812329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 166cd9f28348c754085ce0ef7de24f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.CrosshairOverlay
