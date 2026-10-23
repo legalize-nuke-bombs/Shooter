@@ -229,6 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Lootable
   ShowTopMostFoldoutHeaderGroup: 1
+  shownName: "\u042F\u0449\u0438\u043A"
 --- !u!114 &-2716870745604165116
 MonoBehaviour:
   m_ObjectHideFlags: 0

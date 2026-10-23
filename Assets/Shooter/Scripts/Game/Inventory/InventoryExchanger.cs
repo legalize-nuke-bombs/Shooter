@@ -21,6 +21,8 @@ namespace Shooter.Game
 
         public event Action<Character, ItemAsset, int> ReceivedFromCharacter;
 
+        public event Action<ulong> LootOpened;
+
         protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
@@ -154,6 +156,63 @@ namespace Shooter.Game
             {
                 Log.Info($"Entity {name} failed to rpc give slot {slot} to {receiverId}");
             }
+        }
+
+        // The server opens a lootable to its looter's owner, whose bag window shows what lies in it
+        public void OpenLoot(Lootable lootable)
+        {
+            if (!CanTakeFrom(lootable.GetComponent<Inventory>())) return;
+
+            Log.Info($"Entity {name} opens {lootable.name}");
+            RaiseLootOpenedRpc(lootable.NetworkObjectId);
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void TakeStackableRpc(long sourceId, FixedString32Bytes stackableId, int amount)
+        {
+            StackableItemAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) as StackableItemAsset;
+            if (asset == null)
+            {
+                Log.Info($"Entity {name} failed to rpc take {stackableId} x {amount} from {sourceId} : asset not found");
+                return;
+            }
+
+            IncrementalId source = IncrementalId.FindByValue(sourceId, RegisterInactivePolicy.Exclude);
+            Inventory sourceInventory = source == null ? null : source.GetComponent<Inventory>();
+            if (sourceInventory == null)
+            {
+                Log.Info($"Entity {name} failed to rpc take {stackableId} x {amount} from {sourceId}: nothing there holds items");
+                return;
+            }
+
+            if (!TryTakeStackable(sourceInventory, asset, amount))
+            {
+                Log.Info($"Entity {name} failed to rpc take {stackableId} x {amount} from {sourceId}");
+            }
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void TakeUniqueRpc(long sourceId, int slot)
+        {
+            IncrementalId source = IncrementalId.FindByValue(sourceId, RegisterInactivePolicy.Exclude);
+            Inventory sourceInventory = source == null ? null : source.GetComponent<Inventory>();
+            if (sourceInventory == null)
+            {
+                Log.Info($"Entity {name} failed to rpc take slot {slot} from {sourceId}: nothing there holds items");
+                return;
+            }
+
+            if (!TryTakeUnique(sourceInventory, slot))
+            {
+                Log.Info($"Entity {name} failed to rpc take slot {slot} from {sourceId}");
+            }
+        }
+
+        [Rpc(SendTo.Owner)]
+        private void RaiseLootOpenedRpc(ulong lootableId)
+        {
+            Log.Info($"Loot of network object {lootableId} opened");
+            LootOpened?.Invoke(lootableId);
         }
 
         private void ReceiveStackable(Character giver, StackableItemAsset asset, int amount)

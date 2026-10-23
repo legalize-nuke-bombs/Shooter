@@ -27,6 +27,7 @@ namespace Shooter.Game
         private Gunner gunner;
         private Health health;
         private Interactor interactor;
+        private InventoryExchanger inventoryExchanger;
         private Player player;
         private PlayerMouth playerMouth;
         private RpcMovement movement;
@@ -37,6 +38,7 @@ namespace Shooter.Game
         private float yaw;
         private bool talking;
         private long? radioPartnerId;
+        private ulong lootNetworkObjectId;
 
         public bool IsControlledLocally => player.IsControlledLocally;
 
@@ -66,11 +68,24 @@ namespace Shooter.Game
             }
         }
 
+        // What the open bag window searches, a chest or a corpse the player used
+        public Lootable Loot
+        {
+            get
+            {
+                if (lootNetworkObjectId == 0) return null;
+                if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(lootNetworkObjectId, out NetworkObject lootNetworkObject)) return null;
+
+                return lootNetworkObject.GetComponent<Lootable>();
+            }
+        }
+
         protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             movement = GetComponent<RpcMovement>();
             interactor = GetComponent<Interactor>();
+            inventoryExchanger = GetComponent<InventoryExchanger>();
             playerMouth = GetComponent<PlayerMouth>();
             sleeper = GetComponent<Sleeper>();
             health = GetComponent<Health>();
@@ -154,6 +169,8 @@ namespace Shooter.Game
                 playerMouth.TalkClosed += HandleTalkClosed;
             }
 
+            if (inventoryExchanger != null) inventoryExchanger.LootOpened += HandleLootOpened;
+
             GiveInputToPlayer();
 
             NetworkManager.NetworkTickSystem.Tick += SendSteering;
@@ -186,6 +203,8 @@ namespace Shooter.Game
                 playerMouth.TalkClosed -= HandleTalkClosed;
             }
 
+            if (inventoryExchanger != null) inventoryExchanger.LootOpened -= HandleLootOpened;
+
             // Disable before Dispose: Dispose only destroys the asset, and the generated finalizer asserts every map was disabled
             controls.Disable();
             controls.Dispose();
@@ -195,6 +214,7 @@ namespace Shooter.Game
             IsPromptOpen = false;
             talking = false;
             radioPartnerId = null;
+            lootNetworkObjectId = 0;
 
             SetCursorShown(true);
             Log.Info("Local player inactive");
@@ -305,7 +325,16 @@ namespace Shooter.Game
 
             IsInventoryOpen = false;
             IsPromptOpen = false;
+            lootNetworkObjectId = 0;
             RouteInputByOpenWindows();
+        }
+
+        private void HandleLootOpened(ulong lootId)
+        {
+            lootNetworkObjectId = lootId;
+            IsInventoryOpen = true;
+            RouteInputByOpenWindows();
+            Log.Info($"Inventory opened on the loot of network object {lootId}");
         }
 
         private void CloseInventoryByKey(InputAction.CallbackContext context)

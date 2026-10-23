@@ -6,8 +6,8 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // The bag window: the bag and the hands, with the craft grid, the give panel and the split box beside them;
-    // whatever is dragged in it, the window decides what dropping it there means
+    // The bag window: the bag and the hands, with the craft grid, the give panel or the searched loot, and the split box
+    // beside them; whatever is dragged in it, the window decides what dropping it there means
     public class InventoryOverlay : Overlay
     {
         private const string WindowElementName = "inventory-screen";
@@ -20,6 +20,10 @@ namespace Shooter.Game
         private const string GiveTitleLabelName = "give-title";
         private const string GiveGridElementName = "give-grid";
         private const string GiveButtonName = "give-button";
+        private const string LootPanelElementName = "loot";
+        private const string LootTitleLabelName = "loot-title";
+        private const string LootGridElementName = "loot-grid";
+        private const string LootTakeAllButtonName = "loot-take-all";
         private const int BagGridColumns = 10;
         private const int BagGridRows = 6;
         private const int HandsGridRows = 2;
@@ -37,6 +41,7 @@ namespace Shooter.Game
         private StackSplitPrompt splitPrompt;
         private CraftPanel craftPanel;
         private GivePanel givePanel;
+        private LootPanel lootPanel;
         private bool open;
         private bool stale;
 
@@ -53,7 +58,7 @@ namespace Shooter.Game
 
                 if (open)
                 {
-                    OpenWindow();
+                    OpenWindow(playerController.Loot);
                 }
                 else
                 {
@@ -63,7 +68,16 @@ namespace Shooter.Game
 
             if (!open) return;
 
-            if (splitPrompt.IsOpen && (playerController == null || !playerController.IsPromptOpen)) splitPrompt.Hide();
+            if (playerController.Loot != lootPanel.Loot) SearchOtherLoot(playerController.Loot);
+
+            if (lootPanel.IsOpen && !lootPanel.IsInReach)
+            {
+                Log.Info($"{lootPanel.Loot.name} is out of reach, the bag closes");
+                playerController.CloseInventory();
+                return;
+            }
+
+            if (splitPrompt.IsOpen && !playerController.IsPromptOpen) splitPrompt.Hide();
 
             givePanel.Update();
             if (stale) RedrawInventory();
@@ -81,8 +95,13 @@ namespace Shooter.Game
             Label giveTitleLabel = root.Q<Label>(GiveTitleLabelName);
             VisualElement giveGridElement = root.Q<VisualElement>(GiveGridElementName);
             Button giveButton = root.Q<Button>(GiveButtonName);
+            VisualElement lootPanelElement = root.Q<VisualElement>(LootPanelElementName);
+            Label lootTitleLabel = root.Q<Label>(LootTitleLabelName);
+            VisualElement lootGridElement = root.Q<VisualElement>(LootGridElementName);
+            Button lootTakeAllButton = root.Q<Button>(LootTakeAllButtonName);
 
-            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null)
+            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
+                lootPanelElement == null || lootTitleLabel == null || lootGridElement == null || lootTakeAllButton == null)
             {
                 Log.Error($"Overlay document has no {WindowElementName} window, the bag stays hidden");
                 return false;
@@ -94,6 +113,7 @@ namespace Shooter.Game
             splitPrompt = new StackSplitPrompt(windowElement, MarkStale);
             craftPanel = new CraftPanel(craftGridElement, craftOutputElement, dragging, MarkStale);
             givePanel = new GivePanel(givePanelElement, giveTitleLabel, giveGridElement, giveButton, dragging, MarkStale);
+            lootPanel = new LootPanel(lootPanelElement, lootTitleLabel, lootGridElement, lootTakeAllButton, dragging, MarkStale);
 
             return true;
         }
@@ -103,18 +123,19 @@ namespace Shooter.Game
             if (open) CloseWindow();
 
             givePanel?.Unbind();
+            lootPanel?.Unbind();
 
             open = false;
             windowElement = null;
         }
 
-        private void OpenWindow()
+        private void OpenWindow(Lootable loot)
         {
             inventory = LocalPlayerFinder.FindComponent<Inventory>();
             inventoryHolder = LocalPlayerFinder.FindComponent<InventoryHolder>();
             inventoryUser = LocalPlayerFinder.FindComponent<InventoryUser>();
             craftPanel.Open(inventory, LocalPlayerFinder.FindComponent<Crafter>());
-            givePanel.Open(inventory, LocalPlayerFinder.FindComponent<InventoryExchanger>(), LocalPlayerFinder.FindComponent<Character>());
+            OpenOtherSide(loot);
 
             if (inventory != null) inventory.Changed += MarkStale;
             if (inventoryHolder != null) inventoryHolder.Changed += MarkStale;
@@ -123,7 +144,29 @@ namespace Shooter.Game
             stale = true;
 
             string takerName = givePanel.DescribeTaker();
-            Log.Info(takerName == null ? "The bag is open" : $"The bag is open, {takerName} can take things from it");
+            Log.Info(loot != null ? $"The bag is open on {loot.name}" : takerName == null ? "The bag is open" : $"The bag is open, {takerName} can take things from it");
+        }
+
+        // The other side of the bag is the searched loot, or else whoever in view can take things
+        private void OpenOtherSide(Lootable loot)
+        {
+            InventoryExchanger inventoryExchanger = LocalPlayerFinder.FindComponent<InventoryExchanger>();
+            if (loot != null && inventoryExchanger != null)
+            {
+                lootPanel.Open(loot, inventoryExchanger);
+            }
+            else
+            {
+                givePanel.Open(inventory, inventoryExchanger, LocalPlayerFinder.FindComponent<Character>());
+            }
+        }
+
+        private void SearchOtherLoot(Lootable loot)
+        {
+            lootPanel.Close();
+            givePanel.Close();
+            OpenOtherSide(loot);
+            stale = true;
         }
 
         private void CloseWindow()
@@ -138,6 +181,7 @@ namespace Shooter.Game
             inventoryUser = null;
             craftPanel.Close();
             givePanel.Close();
+            lootPanel.Close();
             splitPrompt.Clear();
 
             if (windowElement != null) windowElement.style.display = DisplayStyle.None;
@@ -223,6 +267,7 @@ namespace Shooter.Game
 
             craftPanel.Draw();
             givePanel.Draw();
+            lootPanel.Draw();
         }
 
         // A result that reached the bag pays one unit from every craft cell; an offer the bag let go is done; what
@@ -238,9 +283,9 @@ namespace Shooter.Game
             }
 
             craftPanel.PayForArrivedOutput();
-            givePanel.ForgetGiven();
+            if (givePanel.IsOpen) givePanel.ForgetGiven();
             splitPrompt.ReleaseUnbacked(inventory, CountReserved);
-            givePanel.ReleaseUnbacked(CountReserved);
+            if (givePanel.IsOpen) givePanel.ReleaseUnbacked(CountReserved);
             craftPanel.ReleaseUnbacked(CountReserved);
         }
 
@@ -302,7 +347,14 @@ namespace Shooter.Game
 
             bool isOverBag = bagScrollElement.worldBound.Contains(position) || handsGridElement.worldBound.Contains(position);
             bool isOverGivePanel = givePanel.IsOver(position);
+            bool isOverLootPanel = lootPanel.IsOver(position);
             int craftCell = craftPanel.FindCellAt(position);
+
+            if (item.IsFromLoot)
+            {
+                if (isOverBag) lootPanel.Take(item);
+                return;
+            }
 
             if (item.IsCraftOutput)
             {
@@ -344,9 +396,11 @@ namespace Shooter.Game
                 int amount = isPile ? splitPrompt.Piles[item.SplitIndex].Count : CountFree(item.StackableAsset);
                 if (amount <= 0) return;
 
-                bool isMoved = isOverGivePanel
+                if (isOverLootPanel) lootPanel.PutStackable(item.StackableAsset, amount);
+
+                bool isMoved = isOverLootPanel || (isOverGivePanel
                     ? givePanel.TryOfferStackable(item.StackableAsset, amount)
-                    : craftCell >= 0 && craftPanel.TryPut(craftCell, item.StackableAsset, amount);
+                    : craftCell >= 0 && craftPanel.TryPut(craftCell, item.StackableAsset, amount));
                 if (!isMoved) return;
 
                 if (isPile) splitPrompt.RemovePileAt(item.SplitIndex);
@@ -355,6 +409,12 @@ namespace Shooter.Game
             }
 
             if (!item.IsUnique) return;
+
+            if (isOverLootPanel)
+            {
+                lootPanel.PutUnique(item.UniqueSlot);
+                return;
+            }
 
             if (isOverGivePanel)
             {

@@ -42,6 +42,13 @@
                     <ui:VisualElement name="give-grid" class="give__grid"/>
                     <ui:Button name="give-button" text="Отдать" class="give__button"/>
                 </ui:VisualElement>
+                <ui:VisualElement name="loot" class="loot">
+                    <ui:Label name="loot-title" class="line loot__title" picking-mode="Ignore"/>
+                    <ui:ScrollView name="loot-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="loot__scroll">
+                        <ui:VisualElement name="loot-grid" class="loot__grid"/>
+                    </ui:ScrollView>
+                    <ui:Button name="loot-take-all" text="Взять всё" class="loot__button"/>
+                </ui:VisualElement>
             </ui:VisualElement>
           </ui:VisualElement>
         </ui:VisualElement>
