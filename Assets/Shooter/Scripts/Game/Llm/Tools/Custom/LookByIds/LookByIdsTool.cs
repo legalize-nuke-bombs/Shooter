@@ -10,7 +10,10 @@ namespace Shooter.Game
         public override string Name => "look_by_ids";
 
         public override string Description =>
-            "Look by IDs: character statuses by their IDs.";
+            @"
+Look by IDs: entities statuses by their IDs.
+If the `detailed` field is passed as `true`, the response will contain the most comprehensive information about each entity (for example, this is useful when examining chests, corpses, etc.). If the `detailed` field is passed as `false`, the response will contain a concise summary (it is preferable to use this option whenever possible).
+";
 
         protected override void HandleAttached()
         {
@@ -29,11 +32,11 @@ namespace Shooter.Game
 
                 if (target == null)
                 {
-                    result.AppendLine($"Character with ID {targetId} does not exist");
+                    result.AppendLine($"Entity with ID {targetId} does not exist");
                 }
                 else
                 {
-                    result.AppendLine(Digester.DigestEntity(target.gameObject, DigestionDetail.Brief));
+                    result.AppendLine(Digester.DigestEntity(target.gameObject, arguments.Detailed ? DigestionDetail.Full : DigestionDetail.Brief));
                 }
             }
 
