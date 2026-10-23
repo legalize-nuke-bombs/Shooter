@@ -14,9 +14,8 @@ namespace Shooter.Game
 
         public override string Description =>
             @$"
-Give some of your stackable items to a character within {inventoryExchanger.Radius} meters.
+Give some of your stackable items to a character / put some of your stackable item to a lootable entity (chest, corpse, etc.) within {inventoryExchanger.Radius} meters.
 The item is addressed by its exact name from your bag.
-The recipient will automatically receive a notification.
 ";
 
         protected override void HandleAttached()
