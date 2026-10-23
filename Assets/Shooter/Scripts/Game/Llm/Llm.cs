@@ -13,17 +13,19 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(LlmHistory))]
     [RequireComponent(typeof(Health))]
-    public class Llm : ShooterBehaviour
+    public class Llm : ShooterBehaviour, ISaveableComponent
     {
         private const string ClearHeadDemand = "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date in full detail, including the very latest context - what is happening right now and where you left off. Then call clear_head.";
         private const string ForcedClearingNotice = "Your head overflowed and has been cleared by force: your story so far is gone, only your notes remain. Your notes are your memory now - read the ones you need before you act or speak, start with the one about who you are.";
         private const string LifeStoryHeader = "YOU MUST INTRODUCE YOURSELF TO YOUR FRIENDS NOW. YOU MUST UPDATE RELATION TO YOUR FRIENDS NOW.\nTHE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
+        private const string LifeStoryConflictHeader = "The world has migrated to a new version, and your initial life story has changed. Two versions are shown below – the previous one and the new one. You must analyze the difference and update your notes. You MUST save all your intermediate memories. This message will be erased by the first call to clear_head.\n";
 
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private SystemPromptAsset[] systemPrompts;
         [SerializeField] [TextArea(5, 20)] private string character;
         [SerializeField] private KnowledgeAsset[] knowledges;
+        private string lifeStoryConflictPrompt = null; // The order in which component states are loaded from the save is not defined, so a conflict is registered during state loading and resolved on the first tick.
         [SerializeField] private float failureCooldown = 2.5f;
         [SerializeField] private int maxToolRounds = 10;
 
@@ -71,17 +73,18 @@ namespace Shooter.Game
             lifetimeCancellation.Cancel();
         }
 
-        private void AppendLifeStory()
+        private string BuildLifeStory()
         {
             if (String.IsNullOrEmpty(character))
             {
                 Log.Error($"Entity {name} does not have character!");
             }
+            return (character + "\n" + JoinKnowledges()).Trim('\n');
+        }
 
-            string lifeStory = (character + "\n" + JoinKnowledges()).Trim('\n');
-            if (lifeStory.Length == 0) return;
-
-            llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.User, Content = LifeStoryHeader + lifeStory });
+        private void AppendLifeStory()
+        {
+            llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.User, Content = LifeStoryHeader + BuildLifeStory() });
         }
 
         private string BuildSystemPrompt()
@@ -120,6 +123,28 @@ namespace Shooter.Game
             return knowledge.ToString();
         }
 
+
+        private struct SaveData
+        {
+            public string LifeStory { get; set; }
+        }
+        public object SaveObject()
+        {
+            return new SaveData
+            {
+                LifeStory = BuildLifeStory(),
+            };
+        }
+        public void LoadObject(SaveToken content)
+        {
+            SaveData sd = content.ToObject<SaveData>();
+            if (sd.LifeStory != BuildLifeStory())
+            {
+                lifeStoryConflictPrompt = sd.LifeStory;
+            }
+        }
+
+
         public void AppendEvent(string eventText, bool isUrgent)
         {
             llmHistory.AppendEvent(new LlmMessage { Role = LlmRole.User, Content = eventText }, isUrgent);
@@ -144,6 +169,13 @@ namespace Shooter.Game
 
             IsThinking = true;
             bool ticked = false;
+
+            if (lifeStoryConflictPrompt != null)
+            {
+                Log.Info($"Entity {entityName} life story conflict resolved");
+                llmHistory.AppendMessage(new LlmMessage{Role = LlmRole.User, Content = LifeStoryConflictHeader + $"Old:\n{lifeStoryConflictPrompt}\nNew:\n{BuildLifeStory()}"});
+                lifeStoryConflictPrompt = null;
+            }
 
             try
             {
