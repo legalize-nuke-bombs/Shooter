@@ -10,8 +10,8 @@ namespace Shooter.Game
     // or Take all takes, and what a drag from the bag onto it puts there; nothing waits for consent, the server does it
     public sealed class LootPanel
     {
-        private const int GridColumns = 6;
-        private const int GridRows = 3;
+        private const int GridColumns = 10;
+        private const int GridRows = 6;
         private static readonly Journal Log = Logs.Here();
 
         private readonly VisualElement panelElement;

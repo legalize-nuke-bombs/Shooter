@@ -32,7 +32,7 @@
                     <ui:VisualElement name="inventory-grid" class="inventory__grid"/>
                 </ui:ScrollView>
             </ui:VisualElement>
-            <ui:VisualElement class="inventory__side">
+            <ui:VisualElement name="inventory-side" class="inventory__side">
                 <ui:VisualElement class="craft">
                     <ui:VisualElement name="craft-grid" class="craft__grid"/>
                     <ui:VisualElement name="craft-output" class="craft__output"/>
@@ -42,13 +42,15 @@
                     <ui:VisualElement name="give-grid" class="give__grid"/>
                     <ui:Button name="give-button" text="Отдать" class="give__button"/>
                 </ui:VisualElement>
-                <ui:VisualElement name="loot" class="loot">
+            </ui:VisualElement>
+            <ui:VisualElement name="loot" class="inventory loot">
+                <ui:VisualElement class="loot__header">
                     <ui:Label name="loot-title" class="line loot__title" picking-mode="Ignore"/>
-                    <ui:ScrollView name="loot-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="loot__scroll">
-                        <ui:VisualElement name="loot-grid" class="loot__grid"/>
-                    </ui:ScrollView>
                     <ui:Button name="loot-take-all" text="Взять всё" class="loot__button"/>
                 </ui:VisualElement>
+                <ui:ScrollView name="loot-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="inventory__scroll">
+                    <ui:VisualElement name="loot-grid" class="inventory__grid"/>
+                </ui:ScrollView>
             </ui:VisualElement>
           </ui:VisualElement>
         </ui:VisualElement>
