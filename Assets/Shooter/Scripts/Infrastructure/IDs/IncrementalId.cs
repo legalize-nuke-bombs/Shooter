@@ -14,6 +14,8 @@ namespace Shooter.Infrastructure
 
         public long Value => id.Value;
 
+        public bool IsLoadedFromSave { get; private set; }
+
         private struct SaveData
         {
             public long Id { get; set; }
@@ -30,6 +32,7 @@ namespace Shooter.Infrastructure
         public void LoadObject(SaveToken content)
         {
             id.Value = content.ToObject<SaveData>().Id;
+            IsLoadedFromSave = true;
         }
 
         public override void OnNetworkSpawn()
@@ -46,6 +49,11 @@ namespace Shooter.Infrastructure
             {
                 id.Value = incrementalIds.TakeNextId();
             }
+        }
+
+        internal void Renumber(long newId)
+        {
+            id.Value = newId;
         }
 
         public static IncrementalId FindByValue(long id, RegisterInactivePolicy inactivePolicy)
