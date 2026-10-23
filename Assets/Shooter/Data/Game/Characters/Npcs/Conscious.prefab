@@ -208,7 +208,6 @@ MonoBehaviour:
   - rid: 2635107260138258839
   - rid: 2635107260138258848
   - rid: 2635107260138258850
-  - rid: 2635107260138258849
   - rid: 2635107260138258851
   - rid: 2635107260138258846
   - rid: 2635107260138258852
@@ -266,15 +265,13 @@ MonoBehaviour:
     - rid: 2635107260138258848
       type: {class: LookAroundTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
-    - rid: 2635107260138258849
-      type: {class: LookAtWandererTool, ns: Shooter.Game, asm: Shooter.Game}
-      data: 
     - rid: 2635107260138258850
       type: {class: LookAtYourselfTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258851
       type: {class: LookByIdsTool, ns: Shooter.Game, asm: Shooter.Game}
-      data: 
+      data:
+        detailedModeMaxDistance: 5
     - rid: 2635107260138258852
       type: {class: ReadNotesTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
