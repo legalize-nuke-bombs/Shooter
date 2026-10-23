@@ -34,7 +34,18 @@ The item is addressed by its exact name from your bag.
 
             if (item is not StackableItemAsset stackableItem) return $"{arguments.Item} does not come in counted amounts, hand it over by its slot number with give_unique";
 
-            return inventoryExchanger.TryGiveStackable(Character.FindById(arguments.TargetId, RegisterInactivePolicy.Exclude), stackableItem, arguments.Amount)
+            IncrementalId target = IncrementalId.FindByValue(arguments.TargetId, RegisterInactivePolicy.Exclude);
+            if (target == null)
+            {
+                return $"Target with ID {arguments.TargetId} does not exist";
+            }
+            Inventory targetInventory = target.GetComponent<Inventory>();
+            if (targetInventory == null)
+            {
+                return $"Target ID {arguments.TargetId} does not have inventory";
+            }
+
+            return inventoryExchanger.TryGiveStackable(targetInventory, stackableItem, arguments.Amount)
                 ? $"Gave {arguments.Amount} x {arguments.Item} to {arguments.TargetId}"
                 : "Could not give: the receiver is not around or you lack the items";
         }

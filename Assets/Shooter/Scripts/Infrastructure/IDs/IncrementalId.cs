@@ -47,5 +47,17 @@ namespace Shooter.Infrastructure
                 id.Value = incrementalIds.TakeNextId();
             }
         }
+
+        public static IncrementalId FindByValue(long id, RegisterInactivePolicy inactivePolicy)
+        {
+            foreach (IncrementalId target in Registers.GetAll<IncrementalId>(inactivePolicy))
+            {
+                if (target.Value == id)
+                {
+                    return target;
+                }
+            }
+            return null;
+        }
     }
 }

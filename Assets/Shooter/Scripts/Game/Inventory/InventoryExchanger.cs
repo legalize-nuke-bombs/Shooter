@@ -27,34 +27,50 @@ namespace Shooter.Game
             inventory = GetComponent<Inventory>();
         }
 
-        public bool TryGiveStackable(Character receiver, StackableItemAsset asset, int amount)
+        public bool TryGiveStackable(Inventory receiverInventory, StackableItemAsset asset, int amount)
         {
-            if (amount <= 0 || !CanGiveTo(receiver, out InventoryExchanger receiverExchanger)) return false;
+            if (amount <= 0 || !CanGiveTo(receiverInventory)) return false;
 
             if (inventory.RemoveStackable(asset, amount, InventoryShortagePolicy.Rollback) != amount)
             {
-                Log.Info($"Entity {name} can not give {asset.Id} x {amount} to {receiver.name}: not enough in the bag");
+                Log.Info($"Entity {name} can not give {asset.Id} x {amount} to {receiverInventory.name}: not enough in the bag");
                 return false;
             }
 
-            receiverExchanger.ReceiveStackable(character, asset, amount);
-            Log.Info($"Entity {name} gave {asset.Id} x {amount} to {receiver.name}");
+            InventoryExchanger receiverExchanger = receiverInventory.GetComponent<InventoryExchanger>();
+            if (receiverExchanger)
+            {
+                receiverExchanger.ReceiveStackable(character, asset, amount);
+            }
+            else
+            {
+                receiverInventory.AddStackable(asset, amount);
+            }
+            Log.Info($"Entity {name} gave {asset.Id} x {amount} to {receiverInventory.name}");
             return true;
         }
 
-        public bool TryGiveUnique(Character receiver, int slot)
+        public bool TryGiveUnique(Inventory receiverInventory, int slot)
         {
-            if (!CanGiveTo(receiver, out InventoryExchanger receiverExchanger)) return false;
+            if (!CanGiveTo(receiverInventory)) return false;
 
             UniqueItem item = inventory.RemoveUniqueAt(slot);
             if (item == null)
             {
-                Log.Info($"Entity {name} can not give slot {slot} to {receiver.name}: the slot is empty");
+                Log.Info($"Entity {name} can not give slot {slot} to {receiverInventory.name}: the slot is empty");
                 return false;
             }
 
-            receiverExchanger.ReceiveUnique(character, item);
-            Log.Info($"Entity {name} gave {item.AssetId} from slot {slot} to {receiver.name}");
+            InventoryExchanger receiverExchanger = receiverInventory.GetComponent<InventoryExchanger>();
+            if (receiverExchanger)
+            {
+                receiverExchanger.ReceiveUnique(character, item);
+            }
+            else
+            {
+                receiverInventory.AddUnique(item);
+            }
+            Log.Info($"Entity {name} gave {item.AssetId} from slot {slot} to {receiverInventory.name}");
             return true;
         }
 
@@ -62,17 +78,50 @@ namespace Shooter.Game
         public void GiveStackableRpc(long receiverId, FixedString32Bytes stackableId, int amount)
         {
             StackableItemAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(stackableId) as StackableItemAsset;
-            if (asset != null && TryGiveStackable(Character.FindById(receiverId, RegisterInactivePolicy.Exclude), asset, amount)) return;
+            if (asset == null)
+            {
+                Log.Info($"Entity {name} failed to rpc give {stackableId} x {amount} to {receiverId} : asset not found");
+            }
 
-            Log.Info($"Entity {name} failed to give {stackableId} x {amount} to {receiverId} rpc");
+            IncrementalId receiver = IncrementalId.FindByValue(receiverId, RegisterInactivePolicy.Exclude);
+            if (receiver == null)
+            {
+                Log.Info($"Entity {name} failed to rpc give {stackableId} x {amount} to {receiverId} : target does not exist");
+                return;
+            }
+            Inventory receivedInventory = receiver.GetComponent<Inventory>();
+            if (receivedInventory == null)
+            {
+                Log.Info($"Entity {name} failed to rpc give {stackableId} x {amount} to {receiverId}: target does not contain inventory");
+                return;
+            }
+
+            if (!TryGiveStackable(receivedInventory, asset, amount))
+            {
+                Log.Info($"Entity {name} failed to rpc give {stackableId} x {amount} to {receiverId}");
+            }
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void GiveUniqueRpc(long receiverId, int slot)
         {
-            if (TryGiveUnique(Character.FindById(receiverId, RegisterInactivePolicy.Exclude), slot)) return;
+            IncrementalId receiver = IncrementalId.FindByValue(receiverId, RegisterInactivePolicy.Exclude);
+            if (receiver == null)
+            {
+                Log.Info($"Entity {name} failed to rpc give slot {slot} to {receiverId} : target does not exist");
+                return;
+            }
+            Inventory receiverInventory = receiver.GetComponent<Inventory>();
+            if (receiverInventory == null)
+            {
+                Log.Info($"Entity {name} failed to rpc give slot {slot} to {receiverId}: target does not contain inventory");
+                return;
+            }
 
-            Log.Info($"Entity {name} failed to give slot {slot} to {receiverId} rpc");
+            if (!TryGiveUnique(receiverInventory, slot))
+            {
+                Log.Info($"Entity {name} failed to rpc give slot {slot} to {receiverId}");
+            }
         }
 
         private void ReceiveStackable(Character giver, StackableItemAsset asset, int amount)
@@ -87,26 +136,21 @@ namespace Shooter.Game
             ReceivedFromCharacter?.Invoke(giver, Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId), 1);
         }
 
-        private bool CanGiveTo(Character receiver, out InventoryExchanger receiverExchanger)
+        private bool CanGiveTo(Inventory receiverInventory)
         {
-            receiverExchanger = null;
-
-            if (receiver == null || receiver == character || !receiver.gameObject.activeInHierarchy)
+            if (receiverInventory == inventory || !receiverInventory.gameObject.activeInHierarchy)
             {
                 Log.Info($"Entity {name} has nobody to give things to");
                 return false;
             }
 
-            if (Vector3.Distance(receiver.transform.position, transform.position) > radius)
+            if (Vector3.Distance(receiverInventory.transform.position, transform.position) > radius)
             {
-                Log.Info($"Entity {name} can not give things to {receiver.name}: farther than {radius} m");
+                Log.Info($"Entity {name} can not give things to {receiverInventory.name}: farther than {radius} m");
                 return false;
             }
 
-            if (receiver.TryGetComponent(out receiverExchanger)) return true;
-
-            Log.Info($"Entity {name} can not give things to {receiver.name}: it takes nothing");
-            return false;
+            return true;
         }
     }
 }
