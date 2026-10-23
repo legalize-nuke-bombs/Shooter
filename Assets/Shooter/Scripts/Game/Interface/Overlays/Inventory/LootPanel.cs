@@ -11,7 +11,7 @@ namespace Shooter.Game
     public sealed class LootPanel
     {
         private const int GridColumns = 10;
-        private const int GridRows = 6;
+        private const int GridRows = 7;
         private static readonly Journal Log = Logs.Here();
 
         private readonly VisualElement panelElement;

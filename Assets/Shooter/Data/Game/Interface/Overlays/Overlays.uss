@@ -258,16 +258,22 @@
     position: relative;
 }
 
-/* The searched loot mirrors the bag: its header stands where the hands do, its grid where the bag is */
+/* The searched loot mirrors the bag: a header a cell high and seven rows end where the hands and the bag do */
 .loot {
     margin-left: 14px;
     display: none;
 }
 
 .loot__header {
-    height: 96px;
+    height: 48px;
     margin-bottom: 14px;
+    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+}
+
+.loot__scroll {
+    max-height: 336px;
 }
 
 .loot__title {
@@ -302,10 +308,6 @@
 
 .give__button {
     margin-top: 12px;
-}
-
-.give__button,
-.loot__button {
     align-self: flex-end;
 }
 
