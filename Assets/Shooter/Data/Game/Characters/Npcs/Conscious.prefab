@@ -248,10 +248,10 @@ MonoBehaviour:
       type: {class: ExploreItemsTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258842
-      type: {class: GiveStackableTool, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: ExchangeStackableTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258843
-      type: {class: GiveUniqueTool, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: ExchangeUniqueTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258844
       type: {class: GoToTool, ns: Shooter.Game, asm: Shooter.Game}
