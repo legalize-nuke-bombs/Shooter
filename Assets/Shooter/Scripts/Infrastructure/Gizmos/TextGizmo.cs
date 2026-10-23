@@ -4,6 +4,8 @@ namespace Shooter.Infrastructure
 {
     public class TextGizmo : ShooterBehaviour
     {
+        public const string LabelField = nameof(label);
+
         [SerializeField] private string label;
         [SerializeField] private Color textColor = Color.white;
         [SerializeField] private Vector3 offset = new(0f, 1.2f, 0f);

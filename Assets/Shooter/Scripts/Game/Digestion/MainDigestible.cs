@@ -7,6 +7,9 @@ namespace Shooter.Game
     [RequireComponent(typeof(DigestibleTransform))]
     public class MainDigestible : ShooterBehaviour, IDigestible
     {
+        public const string ContentField = nameof(content);
+        public const string SizeField = nameof(size);
+
         [SerializeField] [TextArea(5, 20)] private string content;
         [SerializeField] private DigestibleSize size;
 
