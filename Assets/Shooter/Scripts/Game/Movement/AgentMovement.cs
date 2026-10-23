@@ -54,15 +54,7 @@ namespace Shooter.Game
             lastWalkRequestFrame = Time.frameCount;
             IsSprinting = sprint;
 
-            if (target == Target && Status != AgentMovementStatus.Idle)
-            {
-                if (Status == AgentMovementStatus.Walking && !navMeshAgent.hasPath && !navMeshAgent.pathPending)
-                {
-                    Log.Info($"Entity {name} asks again for the path to {Destination}");
-                    navMeshAgent.SetDestination(Destination);
-                }
-                return;
-            }
+            if (target == Target && Status != AgentMovementStatus.Idle) return;
 
             Target = target;
 
@@ -111,7 +103,25 @@ namespace Shooter.Game
         protected override float MoveForTick(float dt)
         {
             Vector3 position = transform.position;
-            if ((position != lastWrittenPosition || stranded) && !TryWarpAgent(position)) return 0f;
+            if (position != lastWrittenPosition || stranded)
+            {
+                if (!TryWarpAgent(position))
+                {
+                    if (Status == AgentMovementStatus.Walking)
+                    {
+                        Log.Info($"Entity {name} can not walk to {Destination}: it stands off the navmesh");
+                        Status = AgentMovementStatus.Unreachable;
+                    }
+                    return 0f;
+                }
+
+                // Warp drops the path: the walk goes on from where the body has been moved
+                if (Status == AgentMovementStatus.Walking)
+                {
+                    Log.Info($"Entity {name} was moved during the walk, asks for the path to {Destination} from {position}");
+                    navMeshAgent.SetDestination(Destination);
+                }
+            }
 
             if (Status != AgentMovementStatus.Idle && Time.frameCount - lastWalkRequestFrame > WalkRequestLagFrames) StopWalking();
             if (Status == AgentMovementStatus.Walking && !navMeshAgent.pathPending) UpdateWalkStatusFromPath();
@@ -176,21 +186,30 @@ namespace Shooter.Game
                 return;
             }
 
-            if (!navMeshAgent.hasPath) return;
-
-            if (navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial)
+            if (navMeshAgent.hasPath)
             {
-                float shortfall = Vector3.Distance(navMeshAgent.pathEndPosition, Destination);
-                if (shortfall > shortfallLimit)
+                if (navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial)
                 {
-                    Log.Info($"Entity {name} found no way to {Destination}: the nearest walkable ground is {shortfall:F0} m short of it");
-                    Status = AgentMovementStatus.Unreachable;
-                    navMeshAgent.ResetPath();
-                    return;
+                    float shortfall = Vector3.Distance(navMeshAgent.pathEndPosition, Destination);
+                    if (shortfall > shortfallLimit)
+                    {
+                        Log.Info($"Entity {name} found no way to {Destination}: the nearest walkable ground is {shortfall:F0} m short of it");
+                        Status = AgentMovementStatus.Unreachable;
+                        navMeshAgent.ResetPath();
+                        return;
+                    }
                 }
-            }
 
-            if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance) return;
+                if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance) return;
+            }
+            else if (Vector3.Distance(FeetPosition, Destination) > navMeshAgent.stoppingDistance)
+            {
+                // No path and none on the way: the walk ends here, so whoever asked for it hears at once instead of waiting forever
+                Log.Info($"Entity {name} has no path to {Destination}");
+                Status = AgentMovementStatus.Unreachable;
+                navMeshAgent.ResetPath();
+                return;
+            }
 
             Log.Info($"Entity {name} finished the walk {Vector3.Distance(FeetPosition, Destination):F1} m from {Destination}");
             Status = AgentMovementStatus.Arrived;
