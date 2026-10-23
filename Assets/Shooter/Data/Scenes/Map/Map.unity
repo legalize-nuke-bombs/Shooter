@@ -8937,20 +8937,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &876823769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876823751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a0761b85cfc472bae4021d23cdec103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.SaveableObject
-  ShowTopMostFoldoutHeaderGroup: 1
-  id: f49513e5-2bd1-4c4f-96e2-3bf6521a9464
 --- !u!1 &878767862
 GameObject:
   m_ObjectHideFlags: 0
@@ -17971,9 +17957,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
       insertIndex: -1
       addedObject: {fileID: 876823765}
-    - targetCorrespondingSourceObject: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 876823769}
   m_SourcePrefab: {fileID: 100100000, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
 --- !u!1001 &1887392686
 PrefabInstance:
