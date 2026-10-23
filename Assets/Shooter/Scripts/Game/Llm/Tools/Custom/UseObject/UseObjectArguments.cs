@@ -2,6 +2,6 @@
 {
     public class UseObjectArguments
     {
-        public long[] IDs { get; set; }
+        public long[] Ids { get; set; }
     }
 }
