@@ -12,7 +12,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private float radius = 10f;
+        [SerializeField] private float radius = 5f;
 
         private Character character;
         private Inventory inventory;
