@@ -118,7 +118,7 @@ namespace Shooter.Game
                 lines.Add($"{catalog.GetAssetById(item.AssetId).Id} (slot {slot})");
             }
 
-            return lines.Count == 0 ? null : string.Join("\n", lines);
+            return lines.Count == 0 ? "No items" : string.Join("\n", lines);
         }
 
         public event Action Changed;
