@@ -28,7 +28,7 @@ If the `detailed` field is passed as `true`, the response will contain the most 
 
             foreach (long targetId in targetIds)
             {
-                Character target = Character.FindById(targetId, RegisterInactivePolicy.Include);
+                IncrementalId target = IncrementalId.FindByValue(targetId, RegisterInactivePolicy.Include);
 
                 if (target == null)
                 {
