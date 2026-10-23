@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using Shooter.Infrastructure;
 using Unity.Netcode;
@@ -35,12 +34,12 @@ You must provide the IDs of the objects. The objects must be within a {radius}-m
 
         protected override string Execute(UseObjectArguments arguments, LlmCallContext context)
         {
-            if (arguments.IDs == null || arguments.IDs.Length == 0)
+            if (arguments.Ids == null || arguments.Ids.Length == 0)
             {
                 return "You didn't pass a single object.";
             }
             StringBuilder result = new();
-            foreach (long id in arguments.IDs)
+            foreach (long id in arguments.Ids)
             {
                 UseObjectById(id, result);
             }
@@ -49,34 +48,29 @@ You must provide the IDs of the objects. The objects must be within a {radius}-m
 
         private void UseObjectById(long id, StringBuilder result)
         {
-            IEnumerable<IncrementalId> all = Registers.GetAll<IncrementalId>(RegisterInactivePolicy.Exclude);
-            foreach (IncrementalId target in all)
+            IncrementalId target = IncrementalId.FindByValue(id, RegisterInactivePolicy.Exclude);
+            if (target == null)
             {
-                if (target.Value != id)
-                {
-                    continue;
-                }
-
-                float dst = Vector3.Distance(target.transform.position, Self.transform.position);
-                if (dst > radius)
-                {
-                    result.AppendLine($"The object ID {target.Value} is in {dst} m away. Approach the object to a distance of {radius} meters or closer to use it.");
-                    return;
-                }
-
-                IUsable usable = target.GetComponent<IUsable>();
-                if (usable == null)
-                {
-                    result.AppendLine($"The object ID {target.Value} is not usable");
-                    return;
-                }
-
-                usable.Use(networkObject, out string promptResult);
-                result.AppendLine($"The object ID {target.Value} used: {promptResult}");
+                result.AppendLine($"Object with ID {id} does not exist");
                 return;
             }
 
-            result.AppendLine($"Object with ID {id} does not exist");
+            float dst = Vector3.Distance(target.transform.position, Self.transform.position);
+            if (dst > radius)
+            {
+                result.AppendLine($"The object ID {target.Value} is in {dst} m away. Approach the object to a distance of {radius} meters or closer to use it.");
+                return;
+            }
+
+            IUsable usable = target.GetComponent<IUsable>();
+            if (usable == null)
+            {
+                result.AppendLine($"The object ID {target.Value} is not usable");
+                return;
+            }
+
+            usable.Use(networkObject, out string promptResult);
+            result.AppendLine($"The object ID {target.Value} used: {promptResult}");
         }
     }
 }
