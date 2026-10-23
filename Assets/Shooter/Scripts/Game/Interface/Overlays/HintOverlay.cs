@@ -66,9 +66,10 @@ namespace Shooter.Game
 
         private string GetHintForLookHit()
         {
-            Interactor interactor = LocalPlayerFinder.FindComponent<Interactor>();
-            if (interactor == null) return string.Empty;
+            PlayerController playerController = LocalPlayerFinder.FindComponent<PlayerController>();
+            if (playerController == null || !playerController.CanInteract) return string.Empty;
 
+            Interactor interactor = playerController.GetComponent<Interactor>();
             if (!lookHitFinder.TryFindLookHit(out RaycastHit hit) || hit.distance > interactor.ReachDistance) return string.Empty;
             if (hit.collider == null) return string.Empty;
 
@@ -81,10 +82,12 @@ namespace Shooter.Game
         private static string GetInteractKeyName()
         {
             Controls controls = new();
-            string interactKeyName = controls.Player.Interact.GetBindingDisplayString(InputBinding.MaskByGroup(KeyboardScheme));
+            InputAction interact = controls.Player.Interact;
+            string interactKeyPath = interact.bindings[interact.GetBindingIndex(InputBinding.MaskByGroup(KeyboardScheme))].effectivePath;
             controls.Dispose();
 
-            return interactKeyName;
+            // Named by the binding path, not by the keyboard: the keyboard names its keys after the system layout, and the Russian one shows E as У
+            return InputControlPath.ToHumanReadableString(interactKeyPath, InputControlPath.HumanReadableStringOptions.OmitDevice);
         }
     }
 }
