@@ -1,12 +1,13 @@
-using System.Linq;
-using Shooter.Infrastructure;
+﻿using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Shooter.Game
+namespace Shooter.Infrastructure
 {
-    public class CharacterId : ShooterNetworkBehaviour, ISaveableComponent
+    public class IncrementalId : ShooterNetworkBehaviour, ISaveableComponent
     {
+        private static readonly Journal Log = Logs.Here();
+
         public const long None = -1;
 
         private readonly NetworkVariable<long> id = new(None);
@@ -35,8 +36,16 @@ namespace Shooter.Game
         {
             if (!IsServer || id.Value != None) return;
 
-            CharacterIds characterIds = Registers.GetAll<CharacterIds>(RegisterInactivePolicy.Include).FirstOrDefault();
-            id.Value = characterIds == null ? Random.Range(0, int.MaxValue) : characterIds.TakeNextId();
+            IncrementalIds incrementalIds = Registers.GetAll<IncrementalIds>(RegisterInactivePolicy.Include).FirstOrDefault();
+            if (incrementalIds == null)
+            {
+                Log.Error($"Entity {name} failed to find IncrementalIds. Fall back to random id generation");
+                id.Value = Random.Range(0, int.MaxValue);
+            }
+            else
+            {
+                id.Value = incrementalIds.TakeNextId();
+            }
         }
     }
 }

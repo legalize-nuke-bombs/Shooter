@@ -35,7 +35,7 @@ namespace Shooter.Game
             // An offline body is switched off and owned by the host, who must not get its toasts
             if (item == null || !gameObject.activeInHierarchy) return;
 
-            RaiseReceivedItemToastRpc(giver == null ? CharacterId.None : giver.Id, item.NetworkId, amount);
+            RaiseReceivedItemToastRpc(giver == null ? IncrementalId.None : giver.Id, item.NetworkId, amount);
         }
 
         [Rpc(SendTo.Owner)]

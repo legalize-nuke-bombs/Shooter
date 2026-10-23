@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(CharacterId))]
+    [RequireComponent(typeof(IncrementalId))]
     public class Player : ShooterNetworkBehaviour, ISaveableComponent
     {
         private const ulong NoClient = ulong.MaxValue;
 
         private readonly NetworkVariable<ulong> controllingClientId = new(NoClient);
 
-        private CharacterId characterId;
+        private IncrementalId incrementalId;
 
         public string PublicKey { get; set; }
 
@@ -39,7 +39,7 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            characterId = GetComponent<CharacterId>();
+            incrementalId = GetComponent<IncrementalId>();
         }
 
         public override void OnNetworkSpawn()
@@ -67,7 +67,7 @@ namespace Shooter.Game
             ControlChanged?.Invoke();
         }
 
-        public long Id => characterId.Value;
+        public long Id => incrementalId.Value;
 
         public static Player FindById(long id, RegisterInactivePolicy inactivePolicy)
         {
