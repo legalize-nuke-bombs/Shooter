@@ -1,8 +1,10 @@
 using Shooter.Infrastructure;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(IncrementalId))]
     public class Lootable : ShooterNetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();

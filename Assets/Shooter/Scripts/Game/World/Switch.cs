@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [RequireComponent(typeof(IncrementalId))]
     public class Switch : ShooterNetworkBehaviour, IUsable, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();

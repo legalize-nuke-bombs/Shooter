@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(NetworkObject))]
+    [RequireComponent(typeof(IncrementalId))]
     public class Pickupable : ShooterBehaviour, IUsable, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
