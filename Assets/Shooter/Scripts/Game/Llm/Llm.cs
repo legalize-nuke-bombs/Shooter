@@ -132,7 +132,8 @@ namespace Shooter.Game
         {
             return new SaveData
             {
-                LifeStory = BuildLifeStory(),
+                // Conflicts that have not yet been resolved must persist!
+                LifeStory = (lifeStoryConflictPrompt == null) ? BuildLifeStory() : lifeStoryConflictPrompt,
             };
         }
         public void LoadObject(SaveToken content)
