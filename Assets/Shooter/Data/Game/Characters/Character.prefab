@@ -550,7 +550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.Exchanger
   ShowTopMostFoldoutHeaderGroup: 1
-  radius: 10
+  radius: 5
 --- !u!114 &3946889129072610234
 MonoBehaviour:
   m_ObjectHideFlags: 0
