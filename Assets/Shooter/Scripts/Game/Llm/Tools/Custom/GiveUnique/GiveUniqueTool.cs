@@ -28,7 +28,18 @@ Give one of your unique items, by its slot number, to a character / put one of y
 
         protected override string Execute(GiveUniqueArguments arguments, LlmCallContext context)
         {
-            return inventoryExchanger.TryGiveUnique(Character.FindById(arguments.TargetId, RegisterInactivePolicy.Exclude), arguments.Slot)
+            IncrementalId target = IncrementalId.FindByValue(arguments.TargetId, RegisterInactivePolicy.Exclude);
+            if (target == null)
+            {
+                return $"Target with ID {arguments.TargetId} does not exist";
+            }
+            Inventory targetInventory = target.GetComponent<Inventory>();
+            if (targetInventory == null)
+            {
+                return $"Target ID {arguments.TargetId} does not have inventory";
+            }
+
+            return inventoryExchanger.TryGiveUnique(targetInventory, arguments.Slot)
                 ? $"Gave the item from slot {arguments.Slot} to {arguments.TargetId}"
                 : "Could not give: the receiver is not around or the slot is empty";
         }
