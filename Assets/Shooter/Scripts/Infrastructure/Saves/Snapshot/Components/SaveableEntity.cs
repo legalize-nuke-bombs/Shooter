@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class SaveableObject : ShooterNetworkBehaviour, ISaveable
+    public class SaveableEntity : ShooterNetworkBehaviour, ISaveableObject
     {
         public const string IdField = nameof(id);
         private static readonly Journal Log = Logs.Here();
@@ -207,10 +207,10 @@ namespace Shooter.Infrastructure
 
             GameObject spawnedObject = NetworkSpawner.InstantiateAndSpawn(prefabAsset.Prefab, instance =>
             {
-                if (instance.TryGetComponent(out SaveableObject instanceSaveable)) instanceSaveable.id = id;
+                if (instance.TryGetComponent(out SaveableEntity instanceSaveable)) instanceSaveable.id = id;
             });
 
-            if (!spawnedObject.TryGetComponent(out SaveableObject saveableObject))
+            if (!spawnedObject.TryGetComponent(out SaveableEntity saveableObject))
             {
                 Log.Warn($"Prefab {prefabId} does not have saveable object");
                 return false;

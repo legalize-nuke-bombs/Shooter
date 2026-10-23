@@ -19,8 +19,8 @@ namespace Shooter.Infrastructure
                 GameObjects = new Dictionary<string, object>()
             };
 
-            SaveableObject[] saveables = UnityEngine.Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
-            foreach (SaveableObject saveable in saveables)
+            SaveableEntity[] saveables = UnityEngine.Object.FindObjectsByType<SaveableEntity>(FindObjectsInactive.Include);
+            foreach (SaveableEntity saveable in saveables)
             {
                 if (string.IsNullOrEmpty(saveable.Id))
                 {
@@ -94,7 +94,7 @@ namespace Shooter.Infrastructure
                 string targetId = record.Key;
                 SaveToken targetValue = SaveToken.FromObject(record.Value);
 
-                if (frozenWorld.TryGetSaveableObject(targetId, out SaveableObject target))
+                if (frozenWorld.TryGetSaveableObject(targetId, out SaveableEntity target))
                 {
                     Log.Info($"Loading {target.name} {targetId}...");
                     try
@@ -113,7 +113,7 @@ namespace Shooter.Infrastructure
                     Log.Info($"Spawning non-scene object {targetId}...");
                     try
                     {
-                        if (SaveableObject.TrySpawnFromSave(frozenWorld, targetId, targetValue))
+                        if (SaveableEntity.TrySpawnFromSave(frozenWorld, targetId, targetValue))
                         {
                             nonSceneOk++;
                         }

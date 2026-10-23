@@ -1,6 +1,6 @@
 namespace Shooter.Infrastructure
 {
-    public interface ISaveable
+    public interface ISaveableObject
     {
         object SaveObject();
 
