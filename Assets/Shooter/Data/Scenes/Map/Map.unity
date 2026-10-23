@@ -3644,9 +3644,9 @@ GameObject:
   - component: {fileID: 390339363}
   - component: {fileID: 390339362}
   - component: {fileID: 390339361}
-  - component: {fileID: 390339360}
   - component: {fileID: 390339359}
   - component: {fileID: 390339358}
+  - component: {fileID: 390339367}
   m_Layer: 0
   m_Name: MapState
   m_TagString: Untagged
@@ -3721,18 +3721,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8e84818f624729b8819d773dc64a22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Speech.ConversationManager
---- !u!114 &390339360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 390339355}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69bfb7ad3d144db6bc178140dadd7999, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectRuntimeIds
 --- !u!114 &390339361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3924,6 +3912,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Environment
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &390339367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390339355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991699ad5b5a477d9cab43256fa5ea77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.IncrementalIds
 --- !u!1 &392983858
 GameObject:
   m_ObjectHideFlags: 0

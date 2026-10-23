@@ -30,7 +30,7 @@ namespace Shooter.Game
         {
             if (item == null) return;
 
-            long giverId = giver == null ? CharacterId.None : giver.Id;
+            long giverId = giver == null ? IncrementalId.None : giver.Id;
 
             llm.AppendEvent(item is StackableItemAsset
                 ? $"[{Llm.FormatCurrentWorldTime()}] Character {giverId} gave you {item.Id} x {amount}"

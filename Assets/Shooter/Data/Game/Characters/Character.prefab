@@ -31,7 +31,6 @@ GameObject:
   - component: {fileID: 6370029383145960073}
   - component: {fileID: -6602629386385626499}
   - component: {fileID: 6251458730921147201}
-  - component: {fileID: 2519498067671057823}
   - component: {fileID: 5388064838481061285}
   - component: {fileID: -8391446196736826818}
   - component: {fileID: -7306219323992828894}
@@ -56,6 +55,7 @@ GameObject:
   - component: {fileID: 8649854724007077956}
   - component: {fileID: 5342888232122473171}
   - component: {fileID: 9005091976391876415}
+  - component: {fileID: 3710712943946237249}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -444,19 +444,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableTransform
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &2519498067671057823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874027793385663384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6822d4cb2224f5bbd96ebc54848aef7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectRuntimeId
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &5388064838481061285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766,3 +753,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67cf298373a8a4a45ba51fba0c89c0b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnShotImpact
+--- !u!114 &3710712943946237249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c246ea6684244e42bd5d15262b7bfa62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.IncrementalId
+  ShowTopMostFoldoutHeaderGroup: 1

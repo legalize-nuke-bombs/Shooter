@@ -1,10 +1,9 @@
-using Shooter.Infrastructure;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Shooter.Game
+namespace Shooter.Infrastructure
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class CharacterIds : ShooterBehaviour, ISaveableComponent
+    public class IncrementalIds : ShooterBehaviour, ISaveableComponent
     {
         private long nextId;
 

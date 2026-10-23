@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 3545692209479366608}
   - component: {fileID: -1508299866133183944}
   - component: {fileID: 2232584987689059584}
-  - component: {fileID: 3519299769182243449}
+  - component: {fileID: 7881839541133670331}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
---- !u!114 &3519299769182243449
+--- !u!114 &7881839541133670331
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -268,9 +268,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1475251358202894423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6822d4cb2224f5bbd96ebc54848aef7, type: 3}
+  m_Script: {fileID: 11500000, guid: c246ea6684244e42bd5d15262b7bfa62, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.GameObjectRuntimeId
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.IncrementalId
   ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &4402097373001482622
 GameObject:

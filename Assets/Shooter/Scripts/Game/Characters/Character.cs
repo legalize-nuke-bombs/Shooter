@@ -4,26 +4,26 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [RequireComponent(typeof(CharacterId))]
+    [RequireComponent(typeof(IncrementalId))]
     public class Character : ShooterBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
-        private CharacterId characterId;
+        private IncrementalId incrementalId;
 
         [SerializeField] private Faction faction;
         public Faction Faction => faction;
 
         protected override void ShooterAwake()
         {
-            characterId = GetComponent<CharacterId>();
+            incrementalId = GetComponent <IncrementalId>();
             if (faction == null)
             {
                 Log.Error($"Entity {name} does not have a faction");
             }
         }
 
-        public long Id => characterId.Value;
+        public long Id => incrementalId.Value;
 
         public static Character FindById(long id, RegisterInactivePolicy inactivePolicy)
         {

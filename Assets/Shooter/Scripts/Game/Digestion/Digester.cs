@@ -1,4 +1,5 @@
 using System.Text;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -17,8 +18,8 @@ namespace Shooter.Game
             StringBuilder headline = new();
             StringBuilder details = new();
 
-            CharacterId characterId = mainDigestible.GetComponent<CharacterId>();
-            if (characterId != null) headline.Append("[ID ").Append(characterId.Value).Append(']');
+            IncrementalId incrementalId = mainDigestible.GetComponent<IncrementalId>();
+            if (incrementalId != null) headline.Append("[ID ").Append(incrementalId.Value).Append(']');
 
             foreach (IDigestible part in mainDigestible.Parts)
             {
