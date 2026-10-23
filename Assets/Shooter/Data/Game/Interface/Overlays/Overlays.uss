@@ -240,7 +240,8 @@
     margin-left: 24px;
 }
 
-.give {
+.give,
+.loot {
     margin-top: 14px;
     padding: 14px 20px 18px 20px;
     background-color: rgba(8, 8, 10, 0.94);
@@ -249,16 +250,23 @@
     display: none;
 }
 
-.give__title {
+.give__title,
+.loot__title {
     font-size: 14px;
     margin-bottom: 10px;
 }
 
-.give__grid {
+.give__grid,
+.loot__grid {
     position: relative;
 }
 
+.loot__scroll {
+    max-height: 288px;
+}
+
 .give__button,
+.loot__button,
 .split__button,
 .talk__give {
     margin: 0;
@@ -272,16 +280,19 @@
 }
 
 .give__button:hover,
+.loot__button:hover,
 .split__button:hover,
 .talk__give:hover {
     background-color: rgba(255, 255, 255, 0.14);
 }
 
-.give__button:disabled {
+.give__button:disabled,
+.loot__button:disabled {
     opacity: 0.35;
 }
 
-.give__button {
+.give__button,
+.loot__button {
     margin-top: 12px;
     align-self: flex-end;
 }

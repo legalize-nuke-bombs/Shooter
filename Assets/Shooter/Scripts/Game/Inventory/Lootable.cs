@@ -5,9 +5,29 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(IncrementalId))]
-    public class Lootable : ShooterNetworkBehaviour
+    public class Lootable : ShooterNetworkBehaviour, IUsable
     {
+        public const string ShownNameField = nameof(shownName);
         private static readonly Journal Log = Logs.Here();
+
+        [SerializeField] private string shownName;
+
+        public string ShownName => string.IsNullOrEmpty(shownName) ? name : shownName;
+
+        public UsageType Usage => UsageType.Loot;
+
+        // A player searches it in the bag window, a resident looks into it and exchanges with its tools
+        public void Use(NetworkObject user, out string promptResult)
+        {
+            if (user.TryGetComponent(out Player _) && user.TryGetComponent(out InventoryExchanger exchanger))
+            {
+                exchanger.OpenLoot(this);
+                promptResult = $"{name} is opened";
+                return;
+            }
+
+            promptResult = "Look into it with look_by_ids in detailed mode, and exchange things with it with exchange_stackable and exchange_unique";
+        }
 
         public void TakeAllItemsFrom(Inventory sourceInventory)
         {

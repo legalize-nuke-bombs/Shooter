@@ -6,6 +6,7 @@ namespace Shooter.Game
         Talk,
         TurnOn,
         TurnOff,
-        PickUp
+        PickUp,
+        Loot
     }
 }

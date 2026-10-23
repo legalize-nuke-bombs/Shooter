@@ -63,6 +63,8 @@ namespace Shooter.Game
 
         public bool HasTaker => chosenTaker != null;
 
+        public bool IsOpen => inventory != null;
+
         public void Unbind()
         {
             giveButton.clicked -= Give;
