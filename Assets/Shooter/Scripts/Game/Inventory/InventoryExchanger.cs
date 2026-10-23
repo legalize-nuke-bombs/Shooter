@@ -29,7 +29,7 @@ namespace Shooter.Game
 
         public bool TryGiveStackable(Inventory receiverInventory, StackableItemAsset asset, int amount)
         {
-            if (amount <= 0 || !CanGiveTo(receiverInventory)) return false;
+            if (amount <= 0 || !CanReach(receiverInventory)) return false;
 
             if (inventory.RemoveStackable(asset, amount, InventoryShortagePolicy.Rollback) != amount)
             {
@@ -52,7 +52,7 @@ namespace Shooter.Game
 
         public bool TryGiveUnique(Inventory receiverInventory, int slot)
         {
-            if (!CanGiveTo(receiverInventory)) return false;
+            if (!CanReach(receiverInventory)) return false;
 
             UniqueItem item = inventory.RemoveUniqueAt(slot);
             if (item == null)
@@ -71,6 +71,37 @@ namespace Shooter.Game
                 receiverInventory.AddUnique(item);
             }
             Log.Info($"Entity {name} gave {item.AssetId} from slot {slot} to {receiverInventory.name}");
+            return true;
+        }
+
+        public bool TryTakeStackable(Inventory sourceInventory, StackableItemAsset asset, int amount)
+        {
+            if (amount <= 0 || !CanTakeFrom(sourceInventory)) return false;
+
+            if (sourceInventory.RemoveStackable(asset, amount, InventoryShortagePolicy.Rollback) != amount)
+            {
+                Log.Info($"Entity {name} can not take {asset.Id} x {amount} from {sourceInventory.name}: not enough there");
+                return false;
+            }
+
+            inventory.AddStackable(asset, amount);
+            Log.Info($"Entity {name} took {asset.Id} x {amount} from {sourceInventory.name}");
+            return true;
+        }
+
+        public bool TryTakeUnique(Inventory sourceInventory, int slot)
+        {
+            if (!CanTakeFrom(sourceInventory)) return false;
+
+            UniqueItem item = sourceInventory.RemoveUniqueAt(slot);
+            if (item == null)
+            {
+                Log.Info($"Entity {name} can not take slot {slot} from {sourceInventory.name}: the slot is empty");
+                return false;
+            }
+
+            inventory.AddUnique(item);
+            Log.Info($"Entity {name} took {item.AssetId} from slot {slot} of {sourceInventory.name}");
             return true;
         }
 
@@ -137,17 +168,29 @@ namespace Shooter.Game
             ReceivedFromCharacter?.Invoke(giver, Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId), 1);
         }
 
-        private bool CanGiveTo(Inventory receiverInventory)
+        // Things are taken only from what is there to be looted, a chest or a corpse: a living character gives them himself
+        private bool CanTakeFrom(Inventory sourceInventory)
         {
-            if (receiverInventory == inventory || !receiverInventory.gameObject.activeInHierarchy)
+            if (!sourceInventory.TryGetComponent(out Lootable _))
             {
-                Log.Info($"Entity {name} has nobody to give things to");
+                Log.Info($"Entity {name} can not take things from {sourceInventory.name}: it is not lootable");
                 return false;
             }
 
-            if (Vector3.Distance(receiverInventory.transform.position, transform.position) > radius)
+            return CanReach(sourceInventory);
+        }
+
+        private bool CanReach(Inventory otherInventory)
+        {
+            if (otherInventory == inventory || !otherInventory.gameObject.activeInHierarchy)
             {
-                Log.Info($"Entity {name} can not give things to {receiverInventory.name}: farther than {radius} m");
+                Log.Info($"Entity {name} has nobody to exchange things with");
+                return false;
+            }
+
+            if (Vector3.Distance(otherInventory.transform.position, transform.position) > radius)
+            {
+                Log.Info($"Entity {name} can not reach {otherInventory.name}: farther than {radius} m");
                 return false;
             }
 
