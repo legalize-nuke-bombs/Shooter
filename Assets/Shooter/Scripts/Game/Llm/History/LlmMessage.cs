@@ -2,7 +2,7 @@ using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
-    public class LlmMessage : ISaveable
+    public class LlmMessage : ISaveableObject
     {
         public LlmRole Role { get; set; }
         public string Content { get; set; }

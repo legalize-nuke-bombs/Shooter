@@ -7,19 +7,19 @@ namespace Shooter.Infrastructure
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(ISaveable).IsAssignableFrom(objectType);
+            return typeof(ISaveableObject).IsAssignableFrom(objectType);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            serializer.Serialize(writer, ((ISaveable)value).SaveObject());
+            serializer.Serialize(writer, ((ISaveableObject)value).SaveObject());
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
 
-            ISaveable saveable = (ISaveable)Activator.CreateInstance(objectType);
+            ISaveableObject saveable = (ISaveableObject)Activator.CreateInstance(objectType);
             saveable.LoadObject(SaveToken.ReadFromJson(reader));
             return saveable;
         }

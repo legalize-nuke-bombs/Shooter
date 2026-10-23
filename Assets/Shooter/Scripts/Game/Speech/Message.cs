@@ -3,7 +3,7 @@ using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
-    public class Message : ISaveable
+    public class Message : ISaveableObject
     {
         public long AuthorId { get; set; }
         public string Content { get; set; }

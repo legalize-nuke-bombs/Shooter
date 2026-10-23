@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
     public class FrozenWorld
     {
         private static readonly Journal Log = Logs.Here();
-        private readonly Dictionary<string, SaveableObject> saveableObjectsById = new();
+        private readonly Dictionary<string, SaveableEntity> saveableObjectsById = new();
 
         private FrozenWorld()
         {
@@ -15,7 +15,7 @@ namespace Shooter.Infrastructure
         public static FrozenWorld FreezeAllSaveableObjects()
         {
             FrozenWorld frozenWorld = new();
-            foreach (SaveableObject saveable in Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include))
+            foreach (SaveableEntity saveable in Object.FindObjectsByType<SaveableEntity>(FindObjectsInactive.Include))
             {
                 frozenWorld.FreezeSaveableObject(saveable);
             }
@@ -24,12 +24,12 @@ namespace Shooter.Infrastructure
             return frozenWorld;
         }
 
-        public bool TryGetSaveableObject(string id, out SaveableObject saveable)
+        public bool TryGetSaveableObject(string id, out SaveableEntity saveable)
         {
             return saveableObjectsById.TryGetValue(id, out saveable);
         }
 
-        public void FreezeSaveableObject(SaveableObject saveable)
+        public void FreezeSaveableObject(SaveableEntity saveable)
         {
             string id = saveable.Id;
             if (string.IsNullOrEmpty(id))
@@ -50,7 +50,7 @@ namespace Shooter.Infrastructure
         public void ThawAllSaveableObjects()
         {
             int wokenCount = 0;
-            foreach (SaveableObject saveable in saveableObjectsById.Values)
+            foreach (SaveableEntity saveable in saveableObjectsById.Values)
             {
                 if (!saveable.IsSpawned) continue;
 

@@ -4,7 +4,7 @@ using Unity.Netcode;
 
 namespace Shooter.Game
 {
-    public abstract class UniqueItem : INetworkSerializable, ISaveable
+    public abstract class UniqueItem : INetworkSerializable, ISaveableObject
     {
         protected UniqueItem(string assetId)
         {

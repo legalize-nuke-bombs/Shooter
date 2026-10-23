@@ -5,7 +5,7 @@ using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
-    public sealed class Conversation : ISaveable
+    public sealed class Conversation : ISaveableObject
     {
         private readonly List<Message> messages = new();
 

@@ -2,7 +2,7 @@
 
 namespace Shooter.Game
 {
-    public class LlmToolCall : ISaveable
+    public class LlmToolCall : ISaveableObject
     {
         public string Id { get; set; }
         public string Name { get; set; }

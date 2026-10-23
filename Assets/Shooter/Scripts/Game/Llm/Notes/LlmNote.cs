@@ -2,7 +2,7 @@
 
 namespace Shooter.Game
 {
-    public class LlmNote : ISaveable
+    public class LlmNote : ISaveableObject
     {
         public string Description { get; set; }
         public string Content { get; set; }

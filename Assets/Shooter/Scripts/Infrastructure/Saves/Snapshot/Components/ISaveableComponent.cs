@@ -1,6 +1,6 @@
 namespace Shooter.Infrastructure
 {
-    public interface ISaveableComponent : ISaveable
+    public interface ISaveableComponent : ISaveableObject
     {
     }
 }

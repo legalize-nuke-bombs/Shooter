@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public abstract class CustomOrder : ISaveable
+    public abstract class CustomOrder : ISaveableObject
     {
         private static readonly Journal Log = Logs.Here();
         private static Dictionary<string, Type> orderTypesByKind;

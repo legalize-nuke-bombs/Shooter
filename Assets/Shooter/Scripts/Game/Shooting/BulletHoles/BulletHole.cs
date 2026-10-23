@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public struct BulletHole : INetworkSerializeByMemcpy, IEquatable<BulletHole>, ISaveable
+    public struct BulletHole : INetworkSerializeByMemcpy, IEquatable<BulletHole>, ISaveableObject
     {
         public Vector3 Position;
         public Vector3 Normal;

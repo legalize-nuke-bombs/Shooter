@@ -13,15 +13,15 @@ namespace Shooter.Editor
         [MenuItem("Tools/Bake Saveable Object IDs")]
         private static void BakeMissingIds()
         {
-            SaveableObject[] saveables = UnityEngine.Object.FindObjectsByType<SaveableObject>(FindObjectsInactive.Include);
+            SaveableEntity[] saveables = UnityEngine.Object.FindObjectsByType<SaveableEntity>(FindObjectsInactive.Include);
 
             int bakedIds = 0;
-            foreach (SaveableObject saveable in saveables)
+            foreach (SaveableEntity saveable in saveables)
             {
                 if (!string.IsNullOrEmpty(saveable.Id)) continue;
 
                 SerializedObject serializedSaveable = new(saveable);
-                serializedSaveable.FindProperty(SaveableObject.IdField).stringValue = Guid.NewGuid().ToString();
+                serializedSaveable.FindProperty(SaveableEntity.IdField).stringValue = Guid.NewGuid().ToString();
                 serializedSaveable.ApplyModifiedProperties();
 
                 Log.Info($"Saveable {saveable.name} got id {saveable.Id}");
@@ -30,7 +30,7 @@ namespace Shooter.Editor
 
             var seenIds = new HashSet<string>();
             int repeatedIds = 0;
-            foreach (SaveableObject saveable in saveables)
+            foreach (SaveableEntity saveable in saveables)
             {
                 if (seenIds.Add(saveable.Id)) continue;
 
