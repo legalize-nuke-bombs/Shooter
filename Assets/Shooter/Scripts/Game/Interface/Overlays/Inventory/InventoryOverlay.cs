@@ -14,6 +14,7 @@ namespace Shooter.Game
         private const string BagScrollElementName = "inventory-scroll";
         private const string BagGridElementName = "inventory-grid";
         private const string HandsGridElementName = "inventory-held";
+        private const string SideElementName = "inventory-side";
         private const string CraftGridElementName = "craft-grid";
         private const string CraftOutputElementName = "craft-output";
         private const string GivePanelElementName = "give";
@@ -36,6 +37,7 @@ namespace Shooter.Game
         private VisualElement bagScrollElement;
         private VisualElement bagGridElement;
         private VisualElement handsGridElement;
+        private VisualElement sideElement;
         private ItemDragging dragging;
         private ItemContextMenu contextMenu;
         private StackSplitPrompt splitPrompt;
@@ -89,6 +91,7 @@ namespace Shooter.Game
             bagScrollElement = root.Q<VisualElement>(BagScrollElementName);
             bagGridElement = root.Q<VisualElement>(BagGridElementName);
             handsGridElement = root.Q<VisualElement>(HandsGridElementName);
+            sideElement = root.Q<VisualElement>(SideElementName);
             VisualElement craftGridElement = root.Q<VisualElement>(CraftGridElementName);
             VisualElement craftOutputElement = root.Q<VisualElement>(CraftOutputElementName);
             VisualElement givePanelElement = root.Q<VisualElement>(GivePanelElementName);
@@ -100,7 +103,7 @@ namespace Shooter.Game
             VisualElement lootGridElement = root.Q<VisualElement>(LootGridElementName);
             Button lootTakeAllButton = root.Q<Button>(LootTakeAllButtonName);
 
-            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
+            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
                 lootPanelElement == null || lootTitleLabel == null || lootGridElement == null || lootTakeAllButton == null)
             {
                 Log.Error($"Overlay document has no {WindowElementName} window, the bag stays hidden");
@@ -265,6 +268,8 @@ namespace Shooter.Game
                 bagGridElement.Add(itemElement);
             }
 
+            // A search shows the bag and the loot side by side, the craft grid and the give panel step aside
+            sideElement.style.display = lootPanel.IsOpen ? DisplayStyle.None : DisplayStyle.Flex;
             craftPanel.Draw();
             givePanel.Draw();
             lootPanel.Draw();
