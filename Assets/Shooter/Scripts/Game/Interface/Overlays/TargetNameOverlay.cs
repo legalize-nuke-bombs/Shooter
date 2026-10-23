@@ -55,6 +55,9 @@ namespace Shooter.Game
 
         private Nameable FindNameableAtLookHit()
         {
+            PlayerController playerController = LocalPlayerFinder.FindComponent<PlayerController>();
+            if (playerController != null && playerController.IsAnyWindowOpen) return null;
+
             if (!lookHitFinder.TryFindLookHit(out RaycastHit hit)) return null;
             if (hit.collider == null) return null;
 
