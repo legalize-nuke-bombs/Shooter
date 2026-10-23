@@ -14,8 +14,7 @@ namespace Shooter.Game
 
         public override string Description =>
             @$"
-Give one of your unique items, by its slot number, to a character within {inventoryExchanger.Radius} meters.
-The recipient will automatically receive a notification.
+Give one of your unique items, by its slot number, to a character / put one of your unique items in a lootable entity (chest, corpse, etc.) within {inventoryExchanger.Radius} meters.
 ";
 
         protected override void HandleAttached()
