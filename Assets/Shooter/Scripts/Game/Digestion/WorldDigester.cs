@@ -8,10 +8,10 @@ namespace Shooter.Game
 {
     public static class WorldDigester
     {
-        private const float SmallViewingDistance = 50f;
-        private const float MediumViewingDistance = 150f;
-        private const float LargeViewingDistance = 500f;
-        private const float BiggestViewingDistance = 5000f;
+        private const float SmallViewingDistance = 25f;
+        private const float MediumViewingDistance = 100f;
+        private const float LargeViewingDistance = 250f;
+        private const float BiggestViewingDistance = 1000f;
         private static readonly Journal Log = Logs.Here();
 
         public static string DigestVisibleAround(GameObject observer)
