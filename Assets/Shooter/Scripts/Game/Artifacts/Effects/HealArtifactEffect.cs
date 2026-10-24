@@ -2,19 +2,34 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Artifacts/Heal Artifact Effect", fileName = "HealArtifactEffect")]
     public class HealArtifactEffect : ArtifactEffect
     {
-        [SerializeField] private double speed;
+        private readonly float speed;
 
-        public override void Update(GameObject user, float dt)
+        private Health health;
+
+        public HealArtifactEffect(float speed)
         {
-            Health health = user.GetComponent<Health>();
+            this.speed = speed;
+        }
+
+        public override void Enable(GameObject self)
+        {
+            health = self.GetComponent<Health>();
+        }
+
+        public override void Disable()
+        {
+
+        }
+
+        public override void Update(float dt)
+        {
             if (health == null)
             {
                 return;
             }
-            double amount = speed * dt;
+            float amount = speed * dt;
             health.Heal(amount);
         }
     }
