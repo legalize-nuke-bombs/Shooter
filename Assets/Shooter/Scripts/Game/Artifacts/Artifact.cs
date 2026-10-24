@@ -8,8 +8,27 @@ namespace Shooter.Game
 {
     public class Artifact : UniqueItem
     {
-        public Artifact(string assetId) : base(assetId)
+        private readonly List<ArtifactEffect> effects;
+
+        public Artifact(string assetId, List<ArtifactEffect> effects) : base(assetId)
         {
+            this.effects = effects;
+        }
+
+        public void Enable(GameObject self)
+        {
+            foreach (ArtifactEffect effect in effects)
+            {
+                effect.Enable(self);
+            }
+        }
+
+        private void Disable()
+        {
+            foreach (ArtifactEffect effect in effects )
+            {
+                effect.Disable();
+            }
         }
 
         private struct SaveData
@@ -30,14 +49,12 @@ namespace Shooter.Game
 
         }
 
-        public void Update(GameObject user, float dt)
+        public void Update(float dt)
         {
-            ArtifactAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(AssetId) as ArtifactAsset;
-            List<ArtifactEffect> effects = asset.Effects;
             for (int i = 0; i < effects.Count; i++)
             {
                 ArtifactEffect effect = effects.ElementAt(i);
-                effect.Update(user, dt);
+                effect.Update(dt);
             }
         }
     }

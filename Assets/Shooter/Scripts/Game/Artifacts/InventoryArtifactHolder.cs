@@ -110,6 +110,11 @@ namespace Shooter.Game
             {
                 Changed?.Invoke();
             }
+
+            /*
+             * TODO
+             * блядь апи инвентаря уебищное из-за этого дисейбл тут не получается позвать как только первые подписки от эффектов артефактов будут будет пизда
+             */
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -147,6 +152,7 @@ namespace Shooter.Game
                 return InventoryArtifactHolderTryHoldResultCode.SlotNotAnArtifact;
             }
             slots.Add(slot);
+            (item as Artifact).Enable(gameObject);
             return InventoryArtifactHolderTryHoldResultCode.Ok;
         }
 
@@ -156,7 +162,7 @@ namespace Shooter.Game
             {
                 int slot = slots[i];
                 Artifact artifact = inventory.GetUniqueAt(slot) as Artifact;
-                artifact.Update(gameObject, Time.deltaTime);
+                artifact.Update(Time.deltaTime);
             }
         }
     }

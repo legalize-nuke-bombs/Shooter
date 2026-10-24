@@ -6,13 +6,18 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Artifacts/Artifact", fileName = "Artifact")]
     public class ArtifactAsset : UniqueItemAsset
     {
-        [SerializeField] private List<ArtifactEffect> effects;
+        [SerializeField] private List<ArtifactEffectAsset> effects;
 
-        public List<ArtifactEffect> Effects => effects;
+        public List<ArtifactEffectAsset> Effects => effects;
 
         public override UniqueItem CreateItem()
         {
-            return new Artifact(Id);
+            List<ArtifactEffect> clonedEffects = new();
+            foreach (ArtifactEffectAsset effectAsset in effects)
+            {
+                clonedEffects.Add(effectAsset.Create());
+            }
+            return new Artifact(Id, clonedEffects);
         }
     }
 }
