@@ -5,6 +5,11 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    /*
+     * TODO
+     * Это пиздец ужасно написано
+     */
+
     [RequireComponent(typeof(Inventory))]
     public class InventoryHolder : ShooterNetworkBehaviour, IDigestible, ISaveableComponent
     {
