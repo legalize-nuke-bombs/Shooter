@@ -14,6 +14,7 @@ namespace Shooter.Game
         private const string BagScrollElementName = "inventory-scroll";
         private const string BagGridElementName = "inventory-grid";
         private const string HandsGridElementName = "inventory-held";
+        private const string BeltGridElementName = "inventory-belt";
         private const string SideElementName = "inventory-side";
         private const string CraftGridElementName = "craft-grid";
         private const string CraftOutputElementName = "craft-output";
@@ -32,11 +33,13 @@ namespace Shooter.Game
 
         private Inventory inventory;
         private InventoryHolder inventoryHolder;
+        private InventoryArtifactHolder artifactHolder;
         private InventoryUser inventoryUser;
         private VisualElement windowElement;
         private VisualElement bagScrollElement;
         private VisualElement bagGridElement;
         private VisualElement handsGridElement;
+        private VisualElement beltGridElement;
         private VisualElement sideElement;
         private ItemDragging dragging;
         private ItemContextMenu contextMenu;
@@ -91,6 +94,7 @@ namespace Shooter.Game
             bagScrollElement = root.Q<VisualElement>(BagScrollElementName);
             bagGridElement = root.Q<VisualElement>(BagGridElementName);
             handsGridElement = root.Q<VisualElement>(HandsGridElementName);
+            beltGridElement = root.Q<VisualElement>(BeltGridElementName);
             sideElement = root.Q<VisualElement>(SideElementName);
             VisualElement craftGridElement = root.Q<VisualElement>(CraftGridElementName);
             VisualElement craftOutputElement = root.Q<VisualElement>(CraftOutputElementName);
@@ -103,7 +107,7 @@ namespace Shooter.Game
             VisualElement lootGridElement = root.Q<VisualElement>(LootGridElementName);
             Button lootTakeAllButton = root.Q<Button>(LootTakeAllButtonName);
 
-            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
+            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || beltGridElement == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
                 lootPanelElement == null || lootTitleLabel == null || lootGridElement == null || lootTakeAllButton == null)
             {
                 Log.Error($"Overlay document has no {WindowElementName} window, the bag stays hidden");
@@ -136,12 +140,14 @@ namespace Shooter.Game
         {
             inventory = LocalPlayerFinder.FindComponent<Inventory>();
             inventoryHolder = LocalPlayerFinder.FindComponent<InventoryHolder>();
+            artifactHolder = LocalPlayerFinder.FindComponent<InventoryArtifactHolder>();
             inventoryUser = LocalPlayerFinder.FindComponent<InventoryUser>();
             craftPanel.Open(inventory, LocalPlayerFinder.FindComponent<Crafter>());
             OpenOtherSide(loot);
 
             if (inventory != null) inventory.Changed += MarkStale;
             if (inventoryHolder != null) inventoryHolder.Changed += MarkStale;
+            if (artifactHolder != null) artifactHolder.Changed += MarkStale;
 
             windowElement.style.display = DisplayStyle.Flex;
             stale = true;
@@ -179,8 +185,10 @@ namespace Shooter.Game
 
             if (inventory != null) inventory.Changed -= MarkStale;
             if (inventoryHolder != null) inventoryHolder.Changed -= MarkStale;
+            if (artifactHolder != null) artifactHolder.Changed -= MarkStale;
             inventory = null;
             inventoryHolder = null;
+            artifactHolder = null;
             inventoryUser = null;
             craftPanel.Close();
             givePanel.Close();
@@ -190,6 +198,7 @@ namespace Shooter.Game
             if (windowElement != null) windowElement.style.display = DisplayStyle.None;
             bagGridElement?.Clear();
             handsGridElement?.Clear();
+            beltGridElement?.Clear();
             Log.Info("The bag is closed");
         }
 
@@ -205,8 +214,11 @@ namespace Shooter.Game
             ReconcileWithInventory();
             bagGridElement.Clear();
             handsGridElement.Clear();
+            beltGridElement.Clear();
 
             ItemGrid.DrawCells(handsGridElement, HandsGridRows, BagGridColumns);
+            beltGridElement.style.display = artifactHolder == null ? DisplayStyle.None : DisplayStyle.Flex;
+            if (artifactHolder != null) ItemGrid.DrawCells(beltGridElement, 1, artifactHolder.MaxSlots);
 
             if (inventory == null)
             {
@@ -221,8 +233,10 @@ namespace Shooter.Game
             if (heldItem != null && !givePanel.IsSlotOffered(heldSlot))
             {
                 ItemAsset asset = itemCatalog == null ? null : itemCatalog.GetAssetById(heldItem.AssetId);
-                handsGridElement.Add(CreateUniqueElement(asset, heldItem.AssetId, 0, 0, heldSlot, true, true));
+                handsGridElement.Add(CreateUniqueElement(asset, heldItem.AssetId, 0, 0, heldSlot, true, true, false));
             }
+
+            HashSet<int> beltSlots = DrawBelt(itemCatalog);
 
             // The bag grows by rows when its things do not fit, and its window scrolls
             GridPlacement placement = new(BagGridRows, BagGridColumns, true);
@@ -232,12 +246,12 @@ namespace Shooter.Game
             for (int slot = 0; slot < uniqueItems.Count; slot++)
             {
                 UniqueItem uniqueItem = uniqueItems[slot];
-                if (uniqueItem == null || slot == heldSlot || givePanel.IsSlotOffered(slot)) continue;
+                if (uniqueItem == null || slot == heldSlot || beltSlots.Contains(slot) || givePanel.IsSlotOffered(slot)) continue;
 
                 ItemAsset asset = itemCatalog == null ? null : itemCatalog.GetAssetById(uniqueItem.AssetId);
                 placement.TryPlace(ItemGrid.GetSizeInCells(asset), out int row, out int column);
                 bool equipable = asset is UniqueItemAsset uniqueItemAsset && uniqueItemAsset.IsEquipable;
-                itemElements.Add(CreateUniqueElement(asset, uniqueItem.AssetId, row, column, slot, equipable, false));
+                itemElements.Add(CreateUniqueElement(asset, uniqueItem.AssetId, row, column, slot, equipable, false, false));
             }
 
             int assetCount = itemCatalog == null ? 0 : itemCatalog.Count;
@@ -304,12 +318,33 @@ namespace Shooter.Game
             return inventory == null ? 0 : inventory.CountStackable(asset) - CountReserved(asset);
         }
 
-        private VisualElement CreateUniqueElement(ItemAsset asset, string fallbackTitle, int row, int column, int slot, bool equipable, bool inHands)
+        // The belt shows the artifacts it holds in the order they were put on, the bag shows the rest
+        private HashSet<int> DrawBelt(ItemCatalog itemCatalog)
+        {
+            HashSet<int> beltSlots = new();
+            if (artifactHolder == null) return beltSlots;
+
+            int column = 0;
+            foreach (int slot in artifactHolder.HeldSlots)
+            {
+                beltSlots.Add(slot);
+                UniqueItem artifact = inventory.GetUniqueAt(slot);
+                if (artifact == null || givePanel.IsSlotOffered(slot)) continue;
+
+                ItemAsset asset = itemCatalog == null ? null : itemCatalog.GetAssetById(artifact.AssetId);
+                beltGridElement.Add(CreateUniqueElement(asset, artifact.AssetId, 0, column, slot, false, false, true));
+                column += ItemGrid.GetSizeInCells(asset).x;
+            }
+
+            return beltSlots;
+        }
+
+        private VisualElement CreateUniqueElement(ItemAsset asset, string fallbackTitle, int row, int column, int slot, bool equipable, bool inHands, bool onBelt)
         {
             Vector2 size = ItemGrid.GetSize(asset);
-            VisualElement itemElement = ItemGrid.CreateSlotElement(asset, fallbackTitle, inHands, equipable);
+            VisualElement itemElement = ItemGrid.CreateSlotElement(asset, fallbackTitle, inHands || onBelt, equipable || asset is ArtifactAsset);
             ItemGrid.PlaceAt(itemElement, row, column, size);
-            dragging.MakeDraggable(itemElement, asset, size, DraggedItem.Unique(slot, equipable, inHands));
+            dragging.MakeDraggable(itemElement, asset, size, DraggedItem.Unique(slot, equipable, inHands, onBelt));
 
             return itemElement;
         }
@@ -350,7 +385,8 @@ namespace Shooter.Game
         {
             if (inventory == null) return;
 
-            bool isOverBag = bagScrollElement.worldBound.Contains(position) || handsGridElement.worldBound.Contains(position);
+            bool isOverBelt = artifactHolder != null && beltGridElement.worldBound.Contains(position);
+            bool isOverBag = bagScrollElement.worldBound.Contains(position) || handsGridElement.worldBound.Contains(position) || isOverBelt;
             bool isOverGivePanel = givePanel.IsOver(position);
             bool isOverLootPanel = lootPanel.IsOver(position);
             int craftCell = craftPanel.FindCellAt(position);
@@ -424,6 +460,18 @@ namespace Shooter.Game
             if (isOverGivePanel)
             {
                 if (givePanel.TryOfferUnique(item.UniqueSlot)) stale = true;
+                return;
+            }
+
+            if (isOverBelt && !item.IsFromBelt)
+            {
+                artifactHolder.HoldSlotRpc(item.UniqueSlot);
+                return;
+            }
+
+            if (item.IsFromBelt)
+            {
+                if (bagScrollElement.worldBound.Contains(position)) artifactHolder.ReleaseSlotRpc(item.UniqueSlot);
                 return;
             }
 

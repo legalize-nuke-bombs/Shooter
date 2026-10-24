@@ -13,7 +13,9 @@ namespace Shooter.Game
 
         private Clock clock;
         private GameObject body;
+        [SerializeField] private ItemAsset item;
         [SerializeField] private Pickupable bodyPrefab;
+        [SerializeField] private bool growsBack = true;
 
         private bool alive = false;
         private double? rolledUntil;
@@ -44,6 +46,10 @@ namespace Shooter.Game
         {
             clock = Registers.Get<Clock>();
             enabled = NetworkManager.Singleton.IsServer;
+            if (item == null)
+            {
+                Log.Error($"Entity {name} is missing its item");
+            }
         }
 
         private void Update()
@@ -56,6 +62,8 @@ namespace Shooter.Game
                 return;
             }
 
+            if (!growsBack) return;
+
             // One roll per hour of world time; hours skipped at once, as by sleeping, get one roll with their joint chance
             int hours = (int)((clock.Timestamp - rolledUntil.Value) / SecondsPerHour);
             if (hours < 1) return;
@@ -67,7 +75,7 @@ namespace Shooter.Game
 
         private void SpawnBody()
         {
-            Log.Info($"Entity {name} is spawning its body");
+            Log.Info($"Entity {name} is spawning its body of {item.Id}");
             if (body == null)
             {
                 body = NetworkSpawner.InstantiateAndSpawn(bodyPrefab.gameObject, transform);
@@ -80,12 +88,14 @@ namespace Shooter.Game
             }
             alive = true;
             rolledUntil = null;
-            body.GetComponent<Pickupable>().PickedUp += HandleBodyPickedUp;
+            Pickupable pickupable = body.GetComponent<Pickupable>();
+            pickupable.AssignItem(item);
+            pickupable.PickedUp += HandleBodyPickedUp;
         }
 
         private void HandleBodyPickedUp(Pickupable pickupable, NetworkObject user)
         {
-            Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, grows back in about {averageHoursToGrow} h of world time");
+            Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, {(growsBack ? $"grows back in about {averageHoursToGrow} h of world time" : "does not grow back")}");
             alive = false;
             rolledUntil = clock.Timestamp;
             pickupable.PickedUp -= HandleBodyPickedUp;
@@ -93,18 +103,16 @@ namespace Shooter.Game
 
         private void OnDrawGizmos()
         {
-            if (bodyPrefab == null) return;
-
             Gizmos.color = new Color(0, 1, 1, 0.5f);
 
-            MeshFilter meshFilter = bodyPrefab.GetComponentInChildren<MeshFilter>();
+            MeshFilter meshFilter = item == null || item.Model == null ? null : item.Model.GetComponentInChildren<MeshFilter>();
 
             if (meshFilter != null && meshFilter.sharedMesh != null)
             {
-                Transform prefabTransform = meshFilter.transform;
-                Vector3 position = transform.TransformPoint(prefabTransform.localPosition);
-                Quaternion rotation = transform.rotation * prefabTransform.localRotation;
-                Vector3 scale = Vector3.Scale(transform.lossyScale, prefabTransform.localScale);
+                Transform modelTransform = meshFilter.transform;
+                Vector3 position = transform.TransformPoint(modelTransform.localPosition);
+                Quaternion rotation = transform.rotation * modelTransform.localRotation;
+                Vector3 scale = Vector3.Scale(transform.lossyScale, modelTransform.localScale);
 
                 Gizmos.DrawMesh(meshFilter.sharedMesh, position, rotation, scale);
             }
