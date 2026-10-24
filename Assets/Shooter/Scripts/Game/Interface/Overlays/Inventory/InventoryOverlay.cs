@@ -14,12 +14,11 @@ namespace Shooter.Game
         private const string BagScrollElementName = "inventory-scroll";
         private const string BagGridElementName = "inventory-grid";
         private const string HandsGridElementName = "inventory-held";
-        private const string BeltGridElementName = "inventory-belt";
-        private const string BeltSectionElementName = "inventory-belt-section";
-        private const string BeltTitleLabelName = "inventory-belt-title";
+        private const string ArtifactsGridElementName = "inventory-artifacts";
+        private const string ArtifactsSectionElementName = "inventory-artifacts-section";
+        private const string ArtifactsTitleLabelName = "inventory-artifacts-title";
         private const string TooltipElementName = "item-tooltip";
         private const string TooltipTitleLabelName = "item-tooltip-title";
-        private const string TooltipKindLabelName = "item-tooltip-kind";
         private const string TooltipDescriptionLabelName = "item-tooltip-description";
         private const string TooltipStatsElementName = "item-tooltip-stats";
         private const string SideElementName = "inventory-side";
@@ -46,9 +45,9 @@ namespace Shooter.Game
         private VisualElement bagScrollElement;
         private VisualElement bagGridElement;
         private VisualElement handsGridElement;
-        private VisualElement beltGridElement;
-        private VisualElement beltSectionElement;
-        private Label beltTitleLabel;
+        private VisualElement artifactsGridElement;
+        private VisualElement artifactsSectionElement;
+        private Label artifactsTitleLabel;
         private VisualElement sideElement;
         private ItemTooltip itemTooltip;
         private ItemDragging dragging;
@@ -104,13 +103,12 @@ namespace Shooter.Game
             bagScrollElement = root.Q<VisualElement>(BagScrollElementName);
             bagGridElement = root.Q<VisualElement>(BagGridElementName);
             handsGridElement = root.Q<VisualElement>(HandsGridElementName);
-            beltGridElement = root.Q<VisualElement>(BeltGridElementName);
-            beltSectionElement = root.Q<VisualElement>(BeltSectionElementName);
-            beltTitleLabel = root.Q<Label>(BeltTitleLabelName);
+            artifactsGridElement = root.Q<VisualElement>(ArtifactsGridElementName);
+            artifactsSectionElement = root.Q<VisualElement>(ArtifactsSectionElementName);
+            artifactsTitleLabel = root.Q<Label>(ArtifactsTitleLabelName);
             sideElement = root.Q<VisualElement>(SideElementName);
             VisualElement tooltipElement = root.Q<VisualElement>(TooltipElementName);
             Label tooltipTitleLabel = root.Q<Label>(TooltipTitleLabelName);
-            Label tooltipKindLabel = root.Q<Label>(TooltipKindLabelName);
             Label tooltipDescriptionLabel = root.Q<Label>(TooltipDescriptionLabelName);
             VisualElement tooltipStatsElement = root.Q<VisualElement>(TooltipStatsElementName);
             VisualElement craftGridElement = root.Q<VisualElement>(CraftGridElementName);
@@ -124,9 +122,9 @@ namespace Shooter.Game
             VisualElement lootGridElement = root.Q<VisualElement>(LootGridElementName);
             Button lootTakeAllButton = root.Q<Button>(LootTakeAllButtonName);
 
-            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || beltGridElement == null || beltSectionElement == null || beltTitleLabel == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
+            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || artifactsGridElement == null || artifactsSectionElement == null || artifactsTitleLabel == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
                 lootPanelElement == null || lootTitleLabel == null || lootGridElement == null || lootTakeAllButton == null ||
-                tooltipElement == null || tooltipTitleLabel == null || tooltipKindLabel == null || tooltipDescriptionLabel == null || tooltipStatsElement == null)
+                tooltipElement == null || tooltipTitleLabel == null || tooltipDescriptionLabel == null || tooltipStatsElement == null)
             {
                 Log.Error($"Overlay document has no {WindowElementName} window, the bag stays hidden");
                 return false;
@@ -139,7 +137,7 @@ namespace Shooter.Game
             craftPanel = new CraftPanel(craftGridElement, craftOutputElement, dragging, MarkStale);
             givePanel = new GivePanel(givePanelElement, giveTitleLabel, giveGridElement, giveButton, dragging, MarkStale);
             lootPanel = new LootPanel(lootPanelElement, lootTitleLabel, lootGridElement, lootTakeAllButton, dragging, MarkStale);
-            itemTooltip = new ItemTooltip(tooltipElement, tooltipTitleLabel, tooltipKindLabel, tooltipDescriptionLabel, tooltipStatsElement);
+            itemTooltip = new ItemTooltip(tooltipElement, tooltipTitleLabel, tooltipDescriptionLabel, tooltipStatsElement);
             itemTooltip.Hide();
             windowElement.RegisterCallback<PointerMoveEvent>(ShowTooltipAtPointer);
             windowElement.RegisterCallback<PointerLeaveEvent>(_ => itemTooltip.Hide());
@@ -221,7 +219,7 @@ namespace Shooter.Game
             if (windowElement != null) windowElement.style.display = DisplayStyle.None;
             bagGridElement?.Clear();
             handsGridElement?.Clear();
-            beltGridElement?.Clear();
+            artifactsGridElement?.Clear();
             Log.Info("The bag is closed");
         }
 
@@ -237,11 +235,11 @@ namespace Shooter.Game
             ReconcileWithInventory();
             bagGridElement.Clear();
             handsGridElement.Clear();
-            beltGridElement.Clear();
+            artifactsGridElement.Clear();
 
             ItemGrid.DrawCells(handsGridElement, HandsGridRows, BagGridColumns);
-            beltSectionElement.style.display = artifactHolder == null ? DisplayStyle.None : DisplayStyle.Flex;
-            if (artifactHolder != null) ItemGrid.DrawCells(beltGridElement, 1, artifactHolder.MaxSlots);
+            artifactsSectionElement.style.display = artifactHolder == null ? DisplayStyle.None : DisplayStyle.Flex;
+            if (artifactHolder != null) ItemGrid.DrawCells(artifactsGridElement, 1, artifactHolder.MaxSlots);
 
             if (inventory == null)
             {
@@ -259,7 +257,7 @@ namespace Shooter.Game
                 handsGridElement.Add(CreateUniqueElement(asset, heldItem.AssetId, 0, 0, heldSlot, true, true, false));
             }
 
-            HashSet<int> beltSlots = DrawBelt(itemCatalog);
+            HashSet<int> artifactSlots = DrawArtifacts(itemCatalog);
 
             // The bag grows by rows when its things do not fit, and its window scrolls
             GridPlacement placement = new(BagGridRows, BagGridColumns, true);
@@ -269,7 +267,7 @@ namespace Shooter.Game
             for (int slot = 0; slot < uniqueItems.Count; slot++)
             {
                 UniqueItem uniqueItem = uniqueItems[slot];
-                if (uniqueItem == null || slot == heldSlot || beltSlots.Contains(slot) || givePanel.IsSlotOffered(slot)) continue;
+                if (uniqueItem == null || slot == heldSlot || artifactSlots.Contains(slot) || givePanel.IsSlotOffered(slot)) continue;
 
                 ItemAsset asset = itemCatalog == null ? null : itemCatalog.GetAssetById(uniqueItem.AssetId);
                 placement.TryPlace(ItemGrid.GetSizeInCells(asset), out int row, out int column);
@@ -341,29 +339,29 @@ namespace Shooter.Game
             return inventory == null ? 0 : inventory.CountStackable(asset) - CountReserved(asset);
         }
 
-        // The belt shows the artifacts it holds in the order they were put on, the bag shows the rest
-        private HashSet<int> DrawBelt(ItemCatalog itemCatalog)
+        // The artifacts row shows the held artifacts in the order they were put on, the bag shows the rest
+        private HashSet<int> DrawArtifacts(ItemCatalog itemCatalog)
         {
-            HashSet<int> beltSlots = new();
-            if (artifactHolder == null) return beltSlots;
+            HashSet<int> artifactSlots = new();
+            if (artifactHolder == null) return artifactSlots;
 
             int column = 0;
             foreach (int slot in artifactHolder.HeldSlots)
             {
-                beltSlots.Add(slot);
+                artifactSlots.Add(slot);
                 UniqueItem artifact = inventory.GetUniqueAt(slot);
                 if (artifact == null || givePanel.IsSlotOffered(slot)) continue;
 
                 ItemAsset asset = itemCatalog == null ? null : itemCatalog.GetAssetById(artifact.AssetId);
-                beltGridElement.Add(CreateUniqueElement(asset, artifact.AssetId, 0, column, slot, false, false, true));
+                artifactsGridElement.Add(CreateUniqueElement(asset, artifact.AssetId, 0, column, slot, false, false, true));
                 column += ItemGrid.GetSizeInCells(asset).x;
             }
 
-            beltTitleLabel.text = $"Пояс  {beltSlots.Count}/{artifactHolder.MaxSlots}";
-            return beltSlots;
+            artifactsTitleLabel.text = $"Артефакты  {artifactSlots.Count}/{artifactHolder.MaxSlots}";
+            return artifactSlots;
         }
 
-        // Whatever thing the pointer rests on, in the bag, the hands, the belt, the loot, the offer or the craft grid,
+        // Whatever thing the pointer rests on, in the bag, the hands, the artifacts, the loot, the offer or the craft grid,
         // shows its tooltip beside the pointer; a drag hides it
         private void ShowTooltipAtPointer(PointerMoveEvent pointerMove)
         {
@@ -388,12 +386,12 @@ namespace Shooter.Game
             return null;
         }
 
-        private VisualElement CreateUniqueElement(ItemAsset asset, string fallbackTitle, int row, int column, int slot, bool equipable, bool inHands, bool onBelt)
+        private VisualElement CreateUniqueElement(ItemAsset asset, string fallbackTitle, int row, int column, int slot, bool equipable, bool inHands, bool inArtifacts)
         {
             Vector2 size = ItemGrid.GetSize(asset);
-            VisualElement itemElement = ItemGrid.CreateSlotElement(asset, fallbackTitle, inHands || onBelt, equipable || asset is ArtifactAsset);
+            VisualElement itemElement = ItemGrid.CreateSlotElement(asset, fallbackTitle, inHands || inArtifacts, equipable || asset is ArtifactAsset);
             ItemGrid.PlaceAt(itemElement, row, column, size);
-            dragging.MakeDraggable(itemElement, asset, size, DraggedItem.Unique(slot, equipable, inHands, onBelt));
+            dragging.MakeDraggable(itemElement, asset, size, DraggedItem.Unique(slot, equipable, inHands, inArtifacts));
 
             return itemElement;
         }
@@ -434,8 +432,8 @@ namespace Shooter.Game
         {
             if (inventory == null) return;
 
-            bool isOverBelt = artifactHolder != null && beltGridElement.worldBound.Contains(position);
-            bool isOverBag = bagScrollElement.worldBound.Contains(position) || handsGridElement.worldBound.Contains(position) || isOverBelt;
+            bool isOverArtifacts = artifactHolder != null && artifactsGridElement.worldBound.Contains(position);
+            bool isOverBag = bagScrollElement.worldBound.Contains(position) || handsGridElement.worldBound.Contains(position) || isOverArtifacts;
             bool isOverGivePanel = givePanel.IsOver(position);
             bool isOverLootPanel = lootPanel.IsOver(position);
             int craftCell = craftPanel.FindCellAt(position);
@@ -512,13 +510,13 @@ namespace Shooter.Game
                 return;
             }
 
-            if (isOverBelt && !item.IsFromBelt)
+            if (isOverArtifacts && !item.IsFromArtifacts)
             {
                 artifactHolder.HoldSlotRpc(item.UniqueSlot);
                 return;
             }
 
-            if (item.IsFromBelt)
+            if (item.IsFromArtifacts)
             {
                 if (bagScrollElement.worldBound.Contains(position)) artifactHolder.ReleaseSlotRpc(item.UniqueSlot);
                 return;

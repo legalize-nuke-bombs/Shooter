@@ -16,6 +16,8 @@ namespace Shooter.Game
             health.Heal(amount);
         }
 
+        public override ItemStat Stat => new("Здоровье", $"+{HealAmount}", $"Heal {HealAmount}");
+
         public override int HealAmount => (int)amount;
     }
 }

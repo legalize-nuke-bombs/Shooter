@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Text;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -22,6 +24,26 @@ namespace Shooter.Game
 
         public string Description => description;
 
-        public virtual string PromptDescription => promptDescription;
+        // Its numbers, each kind of thing knows its own: the tooltip shows them, the prompt description tells them
+        public virtual IEnumerable<ItemStat> Stats
+        {
+            get { yield break; }
+        }
+
+        public virtual string PromptDescription
+        {
+            get
+            {
+                StringBuilder description = new((promptDescription ?? string.Empty).Trim());
+
+                description.Append('.');
+                foreach (ItemStat stat in Stats)
+                {
+                    description.Append(' ').Append(stat.PromptDescription).Append('.');
+                }
+
+                return description.ToString();
+            }
+        }
     }
 }

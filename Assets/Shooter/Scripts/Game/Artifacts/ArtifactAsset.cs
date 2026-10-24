@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -9,6 +10,8 @@ namespace Shooter.Game
         [SerializeField] private List<ArtifactEffectAsset> effects;
 
         public List<ArtifactEffectAsset> Effects => effects;
+
+        public override IEnumerable<ItemStat> Stats => effects.Select(effect => effect.Stat);
 
         public override UniqueItem CreateItem()
         {

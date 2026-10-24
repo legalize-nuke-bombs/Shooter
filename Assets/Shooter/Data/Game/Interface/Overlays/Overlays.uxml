@@ -29,9 +29,9 @@
             <ui:VisualElement class="inventory">
                 <ui:Label text="Руки" class="section__title" picking-mode="Ignore"/>
                 <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands"/>
-                <ui:VisualElement name="inventory-belt-section">
-                    <ui:Label name="inventory-belt-title" text="Пояс" class="section__title" picking-mode="Ignore"/>
-                    <ui:VisualElement name="inventory-belt" class="inventory__grid inventory__grid--belt"/>
+                <ui:VisualElement name="inventory-artifacts-section">
+                    <ui:Label name="inventory-artifacts-title" text="Артефакты" class="section__title" picking-mode="Ignore"/>
+                    <ui:VisualElement name="inventory-artifacts" class="inventory__grid inventory__grid--artifacts"/>
                 </ui:VisualElement>
                 <ui:Label text="Сумка" class="section__title" picking-mode="Ignore"/>
                 <ui:ScrollView name="inventory-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="inventory__scroll">
@@ -65,7 +65,6 @@
           </ui:VisualElement>
           <ui:VisualElement name="item-tooltip" class="tooltip" picking-mode="Ignore">
               <ui:Label name="item-tooltip-title" class="tooltip__title" picking-mode="Ignore"/>
-              <ui:Label name="item-tooltip-kind" class="tooltip__kind" picking-mode="Ignore"/>
               <ui:Label name="item-tooltip-description" class="tooltip__description" picking-mode="Ignore"/>
               <ui:VisualElement name="item-tooltip-stats" class="tooltip__stats" picking-mode="Ignore"/>
           </ui:VisualElement>
