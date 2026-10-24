@@ -23,7 +23,7 @@ namespace Shooter.Game
 
             foreach (LlmChildTicker ticker in tickers)
             {
-                ticker.StartTicking();
+                ticker.Start();
             }
         }
 
