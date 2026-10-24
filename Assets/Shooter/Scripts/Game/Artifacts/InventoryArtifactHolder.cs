@@ -17,6 +17,7 @@ namespace Shooter.Game
         private readonly NetworkList<int> slots = new();
 
         private Inventory inventory;
+        private Clock clock;
 
         public event Action Changed;
 
@@ -84,6 +85,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
+            clock = Registers.Get<Clock>();
         }
 
         public override void OnNetworkSpawn()
@@ -199,11 +201,12 @@ namespace Shooter.Game
 
         private void Update()
         {
+            float dt = Time.deltaTime * clock.Scale;
             for (int i = 0; i < slots.Count; i++)
             {
                 int slot = slots[i];
                 Artifact artifact = inventory.GetUniqueAt(slot) as Artifact;
-                artifact.Update(Time.deltaTime);
+                artifact.Update(dt);
             }
         }
     }

@@ -54,7 +54,7 @@ namespace Shooter.Game
         {
             Vector2Int sizeInCells = GetSizeInCells(asset);
 
-            VisualElement slotElement = new() { tooltip = asset == null ? fallbackTitle : asset.Title };
+            VisualElement slotElement = new() { tooltip = asset == null ? fallbackTitle : asset.Title, userData = asset };
             slotElement.AddToClassList("slot");
             if (inHands) slotElement.AddToClassList("slot--held");
             if (!equipable) slotElement.AddToClassList("slot--fixed");

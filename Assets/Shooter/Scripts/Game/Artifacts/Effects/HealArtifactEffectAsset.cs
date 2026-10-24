@@ -11,5 +11,7 @@ namespace Shooter.Game
         {
             return new HealArtifactEffect(speed);
         }
+
+        public override float HealPerSecond => speed;
     }
 }

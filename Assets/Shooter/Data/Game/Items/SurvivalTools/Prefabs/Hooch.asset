@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: hooch
   title: "\u0421\u0430\u043C\u043E\u0433\u043E\u043D"
+  description: "\u041c\u0443\u0442\u043d\u044b\u0439 \u0438 \u043a\u0440\u0435\u043f\u043a\u0438\u0439. \u0412\u0435\u0440\u0442\u0435\u0440 \u0433\u043e\u043d\u0438\u0442 \u0435\u0433\u043e \u0441\u0430\u043c \u0438 \u0441\u0430\u043c \u0436\u0435 \u043f\u044c\u0451\u0442."
   model: {fileID: 1216505430168376, guid: 57e3542e6c16dfd40972c0b1b0899afb, type: 3}
   icon: {fileID: 11400000, guid: d2455b761eae7ed499339750c2b320cc, type: 2}
   cells: {x: 1, y: 1}
