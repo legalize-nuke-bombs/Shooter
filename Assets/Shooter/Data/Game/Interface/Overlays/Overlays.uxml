@@ -27,41 +27,20 @@
         <ui:VisualElement name="inventory-screen" class="screen">
           <ui:VisualElement class="inventory__row">
             <ui:VisualElement class="inventory">
-                <ui:VisualElement class="section" picking-mode="Ignore">
-                    <ui:Label text="РУКИ" class="section__title" picking-mode="Ignore"/>
-                    <ui:VisualElement class="section__rule" picking-mode="Ignore"/>
-                </ui:VisualElement>
+                <ui:Label text="Руки" class="section__title" picking-mode="Ignore"/>
                 <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands"/>
                 <ui:VisualElement name="inventory-belt-section">
-                    <ui:VisualElement class="section" picking-mode="Ignore">
-                        <ui:Label name="inventory-belt-title" text="ПОЯС" class="section__title" picking-mode="Ignore"/>
-                        <ui:VisualElement class="section__rule" picking-mode="Ignore"/>
-                    </ui:VisualElement>
+                    <ui:Label name="inventory-belt-title" text="Пояс" class="section__title" picking-mode="Ignore"/>
                     <ui:VisualElement name="inventory-belt" class="inventory__grid inventory__grid--belt"/>
                 </ui:VisualElement>
-                <ui:VisualElement class="section" picking-mode="Ignore">
-                    <ui:Label text="СУМКА" class="section__title" picking-mode="Ignore"/>
-                    <ui:VisualElement class="section__rule" picking-mode="Ignore"/>
-                </ui:VisualElement>
+                <ui:Label text="Сумка" class="section__title" picking-mode="Ignore"/>
                 <ui:ScrollView name="inventory-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="inventory__scroll">
                     <ui:VisualElement name="inventory-grid" class="inventory__grid"/>
                 </ui:ScrollView>
-                <ui:VisualElement name="item-card" class="card card--empty" picking-mode="Ignore">
-                    <ui:VisualElement name="item-card-icon" class="card__icon" picking-mode="Ignore"/>
-                    <ui:VisualElement class="card__body" picking-mode="Ignore">
-                        <ui:Label name="item-card-kind" class="card__kind" picking-mode="Ignore"/>
-                        <ui:Label name="item-card-title" class="card__title" picking-mode="Ignore"/>
-                        <ui:Label name="item-card-description" class="card__description" picking-mode="Ignore"/>
-                        <ui:VisualElement name="item-card-stats" class="card__stats" picking-mode="Ignore"/>
-                    </ui:VisualElement>
-                </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="inventory-side" class="inventory__side">
                 <ui:VisualElement class="craft">
-                    <ui:VisualElement class="section" picking-mode="Ignore">
-                        <ui:Label text="ВЕРСТАК" class="section__title" picking-mode="Ignore"/>
-                        <ui:VisualElement class="section__rule" picking-mode="Ignore"/>
-                    </ui:VisualElement>
+                    <ui:Label text="Верстак" class="section__title" picking-mode="Ignore"/>
                     <ui:VisualElement class="craft__body">
                         <ui:VisualElement name="craft-grid" class="craft__grid"/>
                         <ui:Label text="→" class="craft__arrow" picking-mode="Ignore"/>
@@ -83,6 +62,12 @@
                     <ui:VisualElement name="loot-grid" class="inventory__grid"/>
                 </ui:ScrollView>
             </ui:VisualElement>
+          </ui:VisualElement>
+          <ui:VisualElement name="item-tooltip" class="tooltip" picking-mode="Ignore">
+              <ui:Label name="item-tooltip-title" class="tooltip__title" picking-mode="Ignore"/>
+              <ui:Label name="item-tooltip-kind" class="tooltip__kind" picking-mode="Ignore"/>
+              <ui:Label name="item-tooltip-description" class="tooltip__description" picking-mode="Ignore"/>
+              <ui:VisualElement name="item-tooltip-stats" class="tooltip__stats" picking-mode="Ignore"/>
           </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="talk" class="talk">
