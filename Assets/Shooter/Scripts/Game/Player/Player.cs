@@ -46,14 +46,14 @@ namespace Shooter.Game
         {
             if (IsServer) return;
 
-            controllingClientId.OnValueChanged += HandleControllingClientIdChanged;
+            controllingClientId.OnValueChanged += HandleControllingClientIdReplicated;
         }
 
         public override void OnNetworkDespawn()
         {
             if (IsServer) return;
 
-            controllingClientId.OnValueChanged -= HandleControllingClientIdChanged;
+            controllingClientId.OnValueChanged -= HandleControllingClientIdReplicated;
         }
 
         public void GiveControlTo(ulong clientId)
@@ -72,7 +72,7 @@ namespace Shooter.Game
             ControlChanged?.Invoke();
         }
 
-        private void HandleControllingClientIdChanged(ulong previousClientId, ulong currentClientId)
+        private void HandleControllingClientIdReplicated(ulong previousClientId, ulong currentClientId)
         {
             ControlChanged?.Invoke();
         }

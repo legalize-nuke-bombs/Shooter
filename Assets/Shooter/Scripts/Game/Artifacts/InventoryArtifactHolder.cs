@@ -90,7 +90,7 @@ namespace Shooter.Game
             }
             else
             {
-                slots.OnListChanged += HandleSlotsChanged;
+                slots.OnListChanged += HandleSlotsReplicated;
             }
         }
 
@@ -105,7 +105,7 @@ namespace Shooter.Game
             }
             else
             {
-                slots.OnListChanged -= HandleSlotsChanged;
+                slots.OnListChanged -= HandleSlotsReplicated;
             }
         }
 
@@ -162,7 +162,7 @@ namespace Shooter.Game
             Changed?.Invoke();
         }
 
-        private void HandleSlotsChanged(NetworkListEvent<int> change)
+        private void HandleSlotsReplicated(NetworkListEvent<int> change)
         {
             Changed?.Invoke();
         }

@@ -43,13 +43,13 @@ namespace Shooter.Game
             }
             else
             {
-                thinking.OnValueChanged += HandleThinkingChanged;
+                thinking.OnValueChanged += HandleThinkingReplicated;
             }
         }
 
         public override void OnNetworkDespawn()
         {
-            if (!IsServer) thinking.OnValueChanged -= HandleThinkingChanged;
+            if (!IsServer) thinking.OnValueChanged -= HandleThinkingReplicated;
             enabled = false;
         }
 
@@ -90,7 +90,7 @@ namespace Shooter.Game
             ThinkingChanged?.Invoke(busy);
         }
 
-        private void HandleThinkingChanged(bool previous, bool current)
+        private void HandleThinkingReplicated(bool previous, bool current)
         {
             ThinkingChanged?.Invoke(current);
         }
