@@ -195,8 +195,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 943e48c625773e644ab127f9be160ef2, type: 2}
   - {fileID: 11400000, guid: 99d8e860dba5ec443a50f55b4ca7f1a6, type: 2}
   - {fileID: 11400000, guid: 8f9c0ec3c3a44a04f9ba4a4767958553, type: 2}
-  - {fileID: 11400000, guid: 6bc2db37d3bdc914886b6c31e0e2eaf0, type: 2}
   - {fileID: 11400000, guid: 7169eafc621024f46b028be5826ca7a9, type: 2}
+  - {fileID: 11400000, guid: 6bc2db37d3bdc914886b6c31e0e2eaf0, type: 2}
+  - {fileID: 11400000, guid: 9f87351e07ec8924ba1954a0c0f1a17a, type: 2}
   - {fileID: 11400000, guid: 0886e0cc6f07c984a91ef4837c02d77e, type: 2}
   character: 
   knowledges:
@@ -233,6 +234,7 @@ MonoBehaviour:
   - rid: 2635107283221348554
   - rid: 2635107260138258855
   - rid: 8204019759183560845
+  - rid: 8204019759183560847
   references:
     version: 2
     RefIds:
@@ -321,6 +323,9 @@ MonoBehaviour:
         radius: 5
     - rid: 8204019759183560845
       type: {class: HoldItemTool, ns: Shooter.Game, asm: Shooter.Game}
+      data: 
+    - rid: 8204019759183560847
+      type: {class: HoldArtifactsTool, ns: Shooter.Game.Custom.HoldArtifacts, asm: Shooter.Game}
       data: 
 --- !u!114 &7426902805887786745
 MonoBehaviour:
