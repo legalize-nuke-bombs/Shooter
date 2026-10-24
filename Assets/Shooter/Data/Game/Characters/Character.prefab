@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 5342888232122473171}
   - component: {fileID: 9005091976391876415}
   - component: {fileID: 3710712943946237249}
+  - component: {fileID: 1139319155543779384}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -766,3 +767,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.IncrementalId
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &1139319155543779384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0011b6fd3d543e4af22733e7299522b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.InventoryArtifactHolder
+  ShowTopMostFoldoutHeaderGroup: 1
+  maxSlotsNum: 6

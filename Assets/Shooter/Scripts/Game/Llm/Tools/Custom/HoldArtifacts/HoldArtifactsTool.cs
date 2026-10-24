@@ -14,8 +14,8 @@ namespace Shooter.Game
         public override string Name => "hold_artifacts";
 
         public override string Description => @"
-Pass the ID of the slot/slots with the artifact to `holdSlots` to hold it/them.
-Pass the ID of the slot/slots with the artifact you have held to `unholdSlots` to unhold it/them.
+Pass the ID of the slot/slots with the artifact to `hold_slots` to hold it/them.
+Pass the ID of the slot/slots with the artifact you have held to `unhold_slots` to unhold it/them.
 ";
 
 
@@ -45,7 +45,7 @@ Pass the ID of the slot/slots with the artifact you have held to `unholdSlots` t
                     switch (result)
                     {
                         case InventoryArtifactHolder.TryHoldResultCode.Ok:
-                            sb.AppendLine($"Slot {slot} succesfully held");
+                            sb.AppendLine($"Slot {slot} successfully held");
                             break;
                         case InventoryArtifactHolder.TryHoldResultCode.SlotAlreadyHeld:
                             sb.AppendLine($"Failed to hold slot {slot}: the slot is already held");

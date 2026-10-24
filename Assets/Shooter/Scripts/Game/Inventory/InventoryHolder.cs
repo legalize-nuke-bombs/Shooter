@@ -25,8 +25,8 @@ namespace Shooter.Game
         public void LoadObject(SaveToken content)
         {
             int slot = content.ToObject<SaveData>().Slot;
-            InventoryHolderTryHoldSlotResultCode result = HoldSlot(slot);
-            if (result != InventoryHolderTryHoldSlotResultCode.Ok) Log.Warn($"Entity {name} can not hold saved slot {slot}: {result}");
+            TryHoldSlotResultCode result = HoldSlot(slot);
+            if (result != TryHoldSlotResultCode.Ok) Log.Warn($"Entity {name} can not hold saved slot {slot}: {result}");
         }
 
         public int HeldSlot => heldSlot.Value;
@@ -86,38 +86,38 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void HoldSlotRpc(int slot)
         {
-            InventoryHolderTryHoldSlotResultCode result = HoldSlot(slot);
+            TryHoldSlotResultCode result = HoldSlot(slot);
             Log.Info($"Entity {name} inventory holder hold slot {slot} rpc result code: {result}");
         }
 
-        public enum InventoryHolderTryHoldSlotResultCode
+        public enum TryHoldSlotResultCode
         {
             SlotIsEmpty,
             SlotIsNotEquipable,
             Ok
         }
-        public InventoryHolderTryHoldSlotResultCode HoldSlot(int slot)
+        public TryHoldSlotResultCode HoldSlot(int slot)
         {
             if (slot != Inventory.NoSlot)
             {
                 UniqueItem item = inventory.GetUniqueAt(slot);
                 if (item == null)
                 {
-                    return InventoryHolderTryHoldSlotResultCode.SlotIsEmpty;
+                    return TryHoldSlotResultCode.SlotIsEmpty;
                 }
 
                 UniqueItemAsset asset = (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId);
                 if (!asset.IsEquipable)
                 {
-                    return InventoryHolderTryHoldSlotResultCode.SlotIsNotEquipable;
+                    return TryHoldSlotResultCode.SlotIsNotEquipable;
                 }
             }
 
-            if (heldSlot.Value == slot) return InventoryHolderTryHoldSlotResultCode.Ok;
+            if (heldSlot.Value == slot) return TryHoldSlotResultCode.Ok;
 
             heldSlot.Value = slot;
             Changed?.Invoke();
-            return InventoryHolderTryHoldSlotResultCode.Ok;
+            return TryHoldSlotResultCode.Ok;
         }
 
         private void HandleUniqueRemoved(int slot, UniqueItem item)
