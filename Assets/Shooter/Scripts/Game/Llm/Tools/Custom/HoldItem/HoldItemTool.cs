@@ -4,10 +4,6 @@ using Shooter.Infrastructure;
 namespace Shooter.Game
 {
     [Serializable]
-    /*
-     * TODO
-     * Тул не протестирован и не повешен на префаб
-     */
     public class HoldItemTool : LlmTool<HoldItemArguments>
     {
         private static readonly Journal Log = Logs.Here();

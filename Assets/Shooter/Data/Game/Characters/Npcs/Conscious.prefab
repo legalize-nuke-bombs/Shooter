@@ -232,6 +232,7 @@ MonoBehaviour:
   - rid: 2635107283221348553
   - rid: 2635107283221348554
   - rid: 2635107260138258855
+  - rid: 8204019759183560845
   references:
     version: 2
     RefIds:
@@ -318,6 +319,9 @@ MonoBehaviour:
       type: {class: UseObjectTool, ns: Shooter.Game, asm: Shooter.Game}
       data:
         radius: 5
+    - rid: 8204019759183560845
+      type: {class: HoldItemTool, ns: Shooter.Game, asm: Shooter.Game}
+      data: 
 --- !u!114 &7426902805887786745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,8 +347,10 @@ MonoBehaviour:
     - rid: 2635107260138258860
       type: {class: LlmIntervalTicker, ns: Shooter.Game, asm: Shooter.Game}
       data:
-        interval: 300
-        firstTickDelay: 60
+        firstTickMinDelay: 20
+        firstTickMaxDelay: 120
+        tickMinDelay: 180
+        tickMaxDelay: 300
     - rid: 2635107260138258861
       type: {class: LlmMailTicker, ns: Shooter.Game, asm: Shooter.Game}
       data: 
