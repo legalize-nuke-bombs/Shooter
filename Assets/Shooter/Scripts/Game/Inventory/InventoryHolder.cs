@@ -67,7 +67,7 @@ namespace Shooter.Game
             }
             else
             {
-                heldSlot.OnValueChanged += HandleHeldSlotChanged;
+                heldSlot.OnValueChanged += HandleHeldSlotReplicated;
             }
         }
 
@@ -79,7 +79,7 @@ namespace Shooter.Game
             }
             else
             {
-                heldSlot.OnValueChanged -= HandleHeldSlotChanged;
+                heldSlot.OnValueChanged -= HandleHeldSlotReplicated;
             }
         }
 
@@ -133,7 +133,7 @@ namespace Shooter.Game
             Changed?.Invoke();
         }
 
-        private void HandleHeldSlotChanged(int previousSlot, int currentSlot)
+        private void HandleHeldSlotReplicated(int previousSlot, int currentSlot)
         {
             Changed?.Invoke();
         }

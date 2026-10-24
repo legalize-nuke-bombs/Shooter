@@ -80,7 +80,7 @@ namespace Shooter.Game
             }
             else
             {
-                shining.OnValueChanged += HandleShiningChanged;
+                shining.OnValueChanged += HandleShiningReplicated;
             }
 
             SwitchPoweredAndGlowing(shining.Value);
@@ -90,10 +90,10 @@ namespace Shooter.Game
         {
             if (IsServer) return;
 
-            shining.OnValueChanged -= HandleShiningChanged;
+            shining.OnValueChanged -= HandleShiningReplicated;
         }
 
-        private void HandleShiningChanged(bool wasShining, bool isShining)
+        private void HandleShiningReplicated(bool wasShining, bool isShining)
         {
             SwitchPoweredAndGlowing(isShining);
         }

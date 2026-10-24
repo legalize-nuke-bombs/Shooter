@@ -139,7 +139,7 @@ namespace Shooter.Game
             }
             else
             {
-                stackAmounts.OnListChanged += HandleStackAmountsChanged;
+                stackAmounts.OnListChanged += HandleStackAmountsReplicated;
                 slots.Replicated += HandleSlotsReplicated;
             }
         }
@@ -148,7 +148,7 @@ namespace Shooter.Game
         {
             if (IsServer) return;
 
-            stackAmounts.OnListChanged -= HandleStackAmountsChanged;
+            stackAmounts.OnListChanged -= HandleStackAmountsReplicated;
             slots.Replicated -= HandleSlotsReplicated;
         }
 
@@ -267,7 +267,7 @@ namespace Shooter.Game
             slots.RemoveAllItems();
         }
 
-        private void HandleStackAmountsChanged(NetworkListEvent<int> change)
+        private void HandleStackAmountsReplicated(NetworkListEvent<int> change)
         {
             Changed?.Invoke();
         }

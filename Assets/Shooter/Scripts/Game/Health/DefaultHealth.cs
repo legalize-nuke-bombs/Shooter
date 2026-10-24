@@ -44,7 +44,7 @@ namespace Shooter.Game
             }
             else
             {
-                hp.OnValueChanged += HandleHpChanged;
+                hp.OnValueChanged += HandleHpReplicated;
             }
         }
 
@@ -52,7 +52,7 @@ namespace Shooter.Game
         {
             if (IsServer) return;
 
-            hp.OnValueChanged -= HandleHpChanged;
+            hp.OnValueChanged -= HandleHpReplicated;
         }
 
         protected override void ReduceHp(double amount)
@@ -81,7 +81,7 @@ namespace Shooter.Game
             if (IsAlive != wasAlive) AnnounceAliveChanged(IsAlive);
         }
 
-        private void HandleHpChanged(double previousHp, double currentHp)
+        private void HandleHpReplicated(double previousHp, double currentHp)
         {
             bool wasAlive = previousHp > 0;
             bool alive = currentHp > 0;
