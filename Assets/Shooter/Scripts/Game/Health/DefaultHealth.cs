@@ -27,7 +27,7 @@ namespace Shooter.Game
         public void LoadObject(SaveToken content)
         {
             SaveData saveData = content.ToObject<SaveData>();
-            hp.Value = saveData.Hp;
+            SetHp(saveData.Hp);
         }
 
         public override double Hp => hp.Value;
@@ -38,36 +38,50 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) hp.Value = MaxHp;
-
-            hp.OnValueChanged += AnnounceIfAliveChanged;
+            if (IsServer)
+            {
+                hp.Value = MaxHp;
+            }
+            else
+            {
+                hp.OnValueChanged += AnnounceReplicatedHp;
+            }
         }
 
         public override void OnNetworkDespawn()
         {
-            hp.OnValueChanged -= AnnounceIfAliveChanged;
+            if (IsServer) return;
+
+            hp.OnValueChanged -= AnnounceReplicatedHp;
         }
 
         protected override void ReduceHp(double amount)
         {
-            hp.Value = Math.Max(hp.Value - amount, 0);
+            SetHp(Math.Max(hp.Value - amount, 0));
         }
 
         public override void Heal(double amount)
         {
             if (!IsServer || !IsAlive || amount <= 0) return;
 
-            hp.Value = Math.Min(hp.Value + amount, MaxHp);
+            SetHp(Math.Min(hp.Value + amount, MaxHp));
         }
 
         public override void ResurrectWithFullHp()
         {
             if (!IsServer || IsAlive) return;
 
-            hp.Value = MaxHp;
+            SetHp(MaxHp);
         }
 
-        private void AnnounceIfAliveChanged(double previousHp, double currentHp)
+        private void SetHp(double value)
+        {
+            bool wasAlive = IsAlive;
+            hp.Value = value;
+            if (IsAlive != wasAlive) AnnounceAliveChanged(IsAlive);
+        }
+
+        private void AnnounceReplicatedHp(double previousHp, double currentHp)
         {
             bool wasAlive = previousHp > 0;
             bool alive = currentHp > 0;

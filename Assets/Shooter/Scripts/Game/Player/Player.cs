@@ -44,25 +44,35 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            controllingClientId.OnValueChanged += HandleControllingClientChanged;
+            if (IsServer) return;
+
+            controllingClientId.OnValueChanged += AnnounceReplicatedControl;
         }
 
         public override void OnNetworkDespawn()
         {
-            controllingClientId.OnValueChanged -= HandleControllingClientChanged;
+            if (IsServer) return;
+
+            controllingClientId.OnValueChanged -= AnnounceReplicatedControl;
         }
 
         public void GiveControlTo(ulong clientId)
         {
+            if (controllingClientId.Value == clientId) return;
+
             controllingClientId.Value = clientId;
+            ControlChanged?.Invoke();
         }
 
         public void RevokeControl()
         {
+            if (controllingClientId.Value == NoClient) return;
+
             controllingClientId.Value = NoClient;
+            ControlChanged?.Invoke();
         }
 
-        private void HandleControllingClientChanged(ulong previousClientId, ulong currentClientId)
+        private void AnnounceReplicatedControl(ulong previousClientId, ulong currentClientId)
         {
             ControlChanged?.Invoke();
         }

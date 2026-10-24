@@ -44,6 +44,7 @@ namespace Shooter.Game
             {
                 holes.Add(hole);
             }
+            RedrawAllHoles();
         }
 
         private readonly List<DecalProjector> projectors = new();
@@ -59,10 +60,12 @@ namespace Shooter.Game
             if (holes.Count < capacity)
             {
                 holes.Add(hole);
+                PlaceHole(holes.Count - 1);
                 return;
             }
 
             holes[nextHoleToOverwrite] = hole;
+            PlaceHole(nextHoleToOverwrite);
             nextHoleToOverwrite = (nextHoleToOverwrite + 1) % capacity;
         }
 
@@ -70,7 +73,7 @@ namespace Shooter.Game
         {
             if (material == null) Log.Error("Bullet holes have no material, nothing will be drawn");
 
-            holes.OnListChanged += HandleHolesChanged;
+            if (!IsServer) holes.OnListChanged += PlaceReplicatedHoles;
             RedrawAllHoles();
 
             Log.Info($"Bullet holes are up: {holes.Count} in the world, capacity {capacity}");
@@ -78,7 +81,7 @@ namespace Shooter.Game
 
         public override void OnNetworkDespawn()
         {
-            holes.OnListChanged -= HandleHolesChanged;
+            if (!IsServer) holes.OnListChanged -= PlaceReplicatedHoles;
 
             foreach (DecalProjector projector in projectors)
             {
@@ -86,7 +89,7 @@ namespace Shooter.Game
             }
         }
 
-        private void HandleHolesChanged(NetworkListEvent<BulletHole> change)
+        private void PlaceReplicatedHoles(NetworkListEvent<BulletHole> change)
         {
             switch (change.Type)
             {
