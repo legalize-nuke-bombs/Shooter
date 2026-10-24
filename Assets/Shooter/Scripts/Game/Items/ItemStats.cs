@@ -4,7 +4,7 @@ namespace Shooter.Game
     public struct ItemStats
     {
         public int Heal;
-        public int HealPerMinute;
+        public int HealPerHour;
         public int Food;
         public int Intoxication;
         public int Damage;
@@ -15,7 +15,7 @@ namespace Shooter.Game
             return new ItemStats
             {
                 Heal = left.Heal + right.Heal,
-                HealPerMinute = left.HealPerMinute + right.HealPerMinute,
+                HealPerHour = left.HealPerHour + right.HealPerHour,
                 Food = left.Food + right.Food,
                 Intoxication = left.Intoxication + right.Intoxication,
                 Damage = left.Damage + right.Damage,

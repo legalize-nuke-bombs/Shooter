@@ -4,13 +4,13 @@ namespace Shooter.Game
 {
     public class HealArtifactEffect : ArtifactEffect
     {
-        private readonly float speed;
+        private readonly float healPerHour;
 
         private Health health;
 
-        public HealArtifactEffect(float speed)
+        public HealArtifactEffect(float healPerHour)
         {
-            this.speed = speed;
+            this.healPerHour = healPerHour;
         }
 
         public override void Enable(GameObject self)
@@ -29,7 +29,7 @@ namespace Shooter.Game
             {
                 return;
             }
-            float amount = speed * dt;
+            float amount = healPerHour * dt / Clock.HourLengthSeconds;
             health.Heal(amount);
         }
     }

@@ -7,8 +7,6 @@ namespace Shooter.Game
     [RequireComponent(typeof(NetworkObject))]
     public class PickupRespawner : ShooterBehaviour, ISaveableComponent
     {
-        private const double SecondsPerHour = 3600.0;
-
         private static readonly Journal Log = Logs.Here();
 
         private Clock clock;
@@ -65,10 +63,10 @@ namespace Shooter.Game
             if (!growsBack) return;
 
             // One roll per hour of world time; hours skipped at once, as by sleeping, get one roll with their joint chance
-            int hours = (int)((clock.Timestamp - rolledUntil.Value) / SecondsPerHour);
+            int hours = (int)((clock.Timestamp - rolledUntil.Value) / Clock.HourLengthSeconds);
             if (hours < 1) return;
 
-            rolledUntil += hours * SecondsPerHour;
+            rolledUntil += hours * Clock.HourLengthSeconds;
             float chance = 1f - Mathf.Pow(1f - 1f / averageHoursToGrow, hours);
             if (Random.value < chance) SpawnBody();
         }

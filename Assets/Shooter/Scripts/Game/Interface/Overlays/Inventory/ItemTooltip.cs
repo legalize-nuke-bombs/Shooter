@@ -10,7 +10,7 @@ namespace Shooter.Game
     {
         private const float PointerGap = 16f;
         private const string HealRowName = "item-tooltip-heal";
-        private const string HealPerMinuteRowName = "item-tooltip-heal-per-minute";
+        private const string HealPerHourRowName = "item-tooltip-heal-per-hour";
         private const string FoodRowName = "item-tooltip-food";
         private const string IntoxicationRowName = "item-tooltip-intoxication";
         private const string DamageRowName = "item-tooltip-damage";
@@ -43,7 +43,7 @@ namespace Shooter.Game
 
             ItemStats stats = asset.Stats;
             ShowGain(HealRowName, stats.Heal);
-            ShowGain(HealPerMinuteRowName, stats.HealPerMinute);
+            ShowGain(HealPerHourRowName, stats.HealPerHour);
             ShowGain(FoodRowName, stats.Food);
             ShowGain(IntoxicationRowName, stats.Intoxication);
             ShowNumber(DamageRowName, stats.Damage);

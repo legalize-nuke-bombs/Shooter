@@ -323,36 +323,20 @@
     display: none;
 }
 
-.give__title {
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
 .give__grid {
     position: relative;
 }
 
-/* The searched loot stands as tall as the bag beside it: a header a cell high, and its grid scrolls in the rest */
+/* The searched loot stands as tall as the bag beside it, titled like the bag's parts: its grid starts level with the
+   hands and scrolls in what the button at the bottom leaves */
 .loot {
     margin-left: 14px;
     display: none;
 }
 
-.loot__header {
-    height: 48px;
-    margin-bottom: 14px;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .loot__scroll {
     flex-grow: 1;
     flex-shrink: 1;
-}
-
-.loot__title {
-    font-size: 16px;
 }
 
 .give__button,
@@ -381,7 +365,8 @@
     opacity: 0.35;
 }
 
-.give__button {
+.give__button,
+.loot__button {
     margin-top: 12px;
     align-self: flex-end;
 }

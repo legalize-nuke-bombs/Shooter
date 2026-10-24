@@ -201,7 +201,7 @@ namespace Shooter.Game
 
         private void Update()
         {
-            float dt = Time.deltaTime * clock.Scale;
+            float dt = clock.DeltaTime;
             for (int i = 0; i < slots.Count; i++)
             {
                 int slot = slots[i];
