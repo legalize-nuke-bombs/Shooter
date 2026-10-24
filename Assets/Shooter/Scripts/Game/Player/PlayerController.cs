@@ -52,6 +52,11 @@ namespace Shooter.Game
 
         public bool IsPromptOpen { get; private set; }
 
+        public bool IsAnyWindowOpen => talking || IsPauseMenuOpen || IsInviteOpen || IsInventoryOpen || IsRadioOpen || IsPromptOpen;
+
+        // The use key uses what the player looks at, instead of respawning or waking the player
+        public bool CanInteract => !IsAnyWindowOpen && health.IsAlive && !sleeper.IsSleeping;
+
         public long? RadioPartnerId => radioPartnerId;
 
         public long? TalkPartnerId
