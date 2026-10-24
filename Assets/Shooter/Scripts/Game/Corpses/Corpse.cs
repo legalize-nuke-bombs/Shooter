@@ -54,8 +54,8 @@ namespace Shooter.Game
         {
             if (!IsServer)
             {
-                skinId.OnValueChanged += DressInReplicatedSkin;
-                nameId.OnValueChanged += TakeReplicatedName;
+                skinId.OnValueChanged += HandleSkinIdChanged;
+                nameId.OnValueChanged += HandleNameIdChanged;
             }
 
             Dress(skinId.Value);
@@ -66,16 +66,16 @@ namespace Shooter.Game
         {
             if (IsServer) return;
 
-            skinId.OnValueChanged -= DressInReplicatedSkin;
-            nameId.OnValueChanged -= TakeReplicatedName;
+            skinId.OnValueChanged -= HandleSkinIdChanged;
+            nameId.OnValueChanged -= HandleNameIdChanged;
         }
 
-        private void DressInReplicatedSkin(FixedString32Bytes previousSkinId, FixedString32Bytes currentSkinId)
+        private void HandleSkinIdChanged(FixedString32Bytes previousSkinId, FixedString32Bytes currentSkinId)
         {
             Dress(currentSkinId);
         }
 
-        private void TakeReplicatedName(FixedString32Bytes previousNameId, FixedString32Bytes currentNameId)
+        private void HandleNameIdChanged(FixedString32Bytes previousNameId, FixedString32Bytes currentNameId)
         {
             TakeName(currentNameId);
         }
