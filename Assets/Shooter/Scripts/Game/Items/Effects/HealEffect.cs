@@ -13,7 +13,7 @@ namespace Shooter.Game
 
             if (health == null) return;
 
-            health.RestoreHp(amount);
+            health.Heal(amount);
         }
 
         public override int HealAmount => (int)amount;

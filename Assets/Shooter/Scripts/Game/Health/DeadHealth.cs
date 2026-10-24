@@ -12,7 +12,7 @@ namespace Shooter.Game
         {
         }
 
-        public override void RestoreHp(double amount)
+        public override void Heal(double amount)
         {
         }
 

@@ -145,5 +145,15 @@ namespace Shooter.Game
             slots.Add(slot);
             result = $"Successfully held {item.AssetId} (slot {slot})";
         }
+
+        private void Update()
+        {
+            for (int i = 0; i < slots.Count; i++)
+            {
+                int slot = slots[i];
+                Artifact artifact = inventory.GetUniqueAt(slot) as Artifact;
+                artifact.Update(gameObject, Time.deltaTime);
+            }
+        }
     }
 }

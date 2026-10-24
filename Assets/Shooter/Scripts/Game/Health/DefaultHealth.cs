@@ -53,7 +53,7 @@ namespace Shooter.Game
             hp.Value = Math.Max(hp.Value - amount, 0);
         }
 
-        public override void RestoreHp(double amount)
+        public override void Heal(double amount)
         {
             if (!IsServer || !IsAlive || amount <= 0) return;
 
