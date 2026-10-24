@@ -6,31 +6,29 @@ namespace Shooter.Game
     [Serializable]
     public class LlmIntervalTicker : LlmChildTicker
     {
-        [SerializeField] private float interval = 300f;
-        [SerializeField] private float firstTickDelay = 60f;
+        [SerializeField] private float firstTickMinDelay = 20f;
+        [SerializeField] private float firstTickMaxDelay = 120f;
+        [SerializeField] private float tickMinDelay = 180f;
+        [SerializeField] private float tickMaxDelay = 300f;
 
         private float lastTickTime;
-        private bool isWaitingForFirstTick;
+        private float currentDelay;
 
-        public override void StartTicking()
+        public override void Start()
         {
             lastTickTime = Time.time;
-            isWaitingForFirstTick = true;
+            currentDelay = UnityEngine.Random.Range(firstTickMinDelay, firstTickMaxDelay);
         }
 
         public override void RegisterTick()
         {
             lastTickTime = Time.time;
-            isWaitingForFirstTick = false;
+            currentDelay = UnityEngine.Random.Range(tickMinDelay, tickMaxDelay);
         }
 
         public override bool IsTickRequired(LlmStatus status)
         {
-            if (isWaitingForFirstTick)
-            {
-                return Time.time - lastTickTime >= firstTickDelay;
-            }
-            return Time.time - lastTickTime >= interval;
+            return Time.time - lastTickTime >= currentDelay;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Shooter.Game
     [Serializable]
     public class LlmCompactTicker : LlmChildTicker
     {
-        public override void StartTicking()
+        public override void Start()
         {
         }
 
