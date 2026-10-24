@@ -37,15 +37,19 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            thinking.OnValueChanged += RelayThinking;
-            if (!IsServer) return;
-
-            enabled = true;
+            if (IsServer)
+            {
+                enabled = true;
+            }
+            else
+            {
+                thinking.OnValueChanged += AnnounceReplicatedThinking;
+            }
         }
 
         public override void OnNetworkDespawn()
         {
-            thinking.OnValueChanged -= RelayThinking;
+            if (!IsServer) thinking.OnValueChanged -= AnnounceReplicatedThinking;
             enabled = false;
         }
 
@@ -79,10 +83,14 @@ namespace Shooter.Game
 
         private void Update()
         {
-            thinking.Value = IsBusy();
+            bool busy = IsBusy();
+            if (busy == thinking.Value) return;
+
+            thinking.Value = busy;
+            ThinkingChanged?.Invoke(busy);
         }
 
-        private void RelayThinking(bool previous, bool current)
+        private void AnnounceReplicatedThinking(bool previous, bool current)
         {
             ThinkingChanged?.Invoke(current);
         }

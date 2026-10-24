@@ -61,20 +61,26 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            work.OnValueChanged += AnnounceActionStarted;
-
-            if (!IsServer) return;
-
-            enabled = true;
+            if (IsServer)
+            {
+                enabled = true;
+            }
+            else
+            {
+                work.OnValueChanged += AnnounceReplicatedAction;
+            }
         }
 
         public override void OnNetworkDespawn()
         {
-            work.OnValueChanged -= AnnounceActionStarted;
-
-            if (!IsServer) return;
-
-            enabled = false;
+            if (IsServer)
+            {
+                enabled = false;
+            }
+            else
+            {
+                work.OnValueChanged -= AnnounceReplicatedAction;
+            }
         }
 
         public bool TryPerform(ActionType action, float duration)
@@ -185,6 +191,7 @@ namespace Shooter.Game
             actionDuration = duration;
             actionInterruptible = interruptible;
             actionCompletionCallback = completionCallback;
+            ActionStarted?.Invoke(action, duration);
         }
 
         private void FreeHands()
@@ -192,7 +199,7 @@ namespace Shooter.Game
             work.Value = new Work { Action = ActionType.None, SequenceNumber = work.Value.SequenceNumber + 1 };
         }
 
-        private void AnnounceActionStarted(Work previousWork, Work currentWork)
+        private void AnnounceReplicatedAction(Work previousWork, Work currentWork)
         {
             if (currentWork.Action == ActionType.None) return;
 

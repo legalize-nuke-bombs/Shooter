@@ -43,14 +43,14 @@ namespace Shooter.Game
             if (!IsServer) return;
 
             conversationManager = Registers.Get<ConversationManager>();
-            conversationManager.Said += Relay;
+            conversationManager.Said += SendLiveLine;
         }
 
         public override void OnNetworkDespawn()
         {
             if (conversationManager != null)
             {
-                conversationManager.Said -= Relay;
+                conversationManager.Said -= SendLiveLine;
                 conversationManager = null;
             }
 
@@ -101,7 +101,7 @@ namespace Shooter.Game
             ContactsCleared?.Invoke();
         }
 
-        private void Relay(Conversation conversation, Message message)
+        private void SendLiveLine(Conversation conversation, Message message)
         {
             if (conversation.First != CharacterId && conversation.Second != CharacterId) return;
 

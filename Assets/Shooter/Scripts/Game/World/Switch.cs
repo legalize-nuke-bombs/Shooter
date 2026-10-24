@@ -39,6 +39,7 @@ namespace Shooter.Game
         {
             SaveData saveData = content.ToObject<SaveData>();
             shining.Value = saveData.Shining;
+            SwitchPoweredAndGlowing(shining.Value);
         }
 
         protected override void ShooterAwake()
@@ -65,6 +66,7 @@ namespace Shooter.Game
         public void Use(NetworkObject user, out string promptResult)
         {
             shining.Value = !shining.Value;
+            SwitchPoweredAndGlowing(shining.Value);
             Log.Info($"Entity {user.name} switched {name} {(shining.Value ? "on" : "off")}");
             Switched?.Invoke(shining.Value);
             promptResult = $"Switched to {shining.Value}";
@@ -72,18 +74,26 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) shining.Value = lit;
+            if (IsServer)
+            {
+                shining.Value = lit;
+            }
+            else
+            {
+                shining.OnValueChanged += ShowReplicatedShining;
+            }
 
-            shining.OnValueChanged += HandleShiningChanged;
             SwitchPoweredAndGlowing(shining.Value);
         }
 
         public override void OnNetworkDespawn()
         {
-            shining.OnValueChanged -= HandleShiningChanged;
+            if (IsServer) return;
+
+            shining.OnValueChanged -= ShowReplicatedShining;
         }
 
-        private void HandleShiningChanged(bool wasShining, bool isShining)
+        private void ShowReplicatedShining(bool wasShining, bool isShining)
         {
             SwitchPoweredAndGlowing(isShining);
         }

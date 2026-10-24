@@ -34,42 +34,61 @@ namespace Shooter.Game
             SaveData saveData = content.ToObject<SaveData>();
             skinId.Value = saveData.Skin;
             nameId.Value = saveData.Title;
+            Dress(skinId.Value);
+            TakeName(nameId.Value);
         }
 
         public void AssignSkinAsset(SkinAsset skinAsset)
         {
             skinId.Value = skinAsset.NetworkId;
+            Dress(skinId.Value);
         }
 
         public void AssignNameAsset(NameAsset nameAsset)
         {
             nameId.Value = nameAsset.NetworkId;
+            TakeName(nameId.Value);
         }
 
         public override void OnNetworkSpawn()
         {
-            skinId.OnValueChanged += HandleSkinIdChanged;
-            nameId.OnValueChanged += HandleNameIdChanged;
+            if (!IsServer)
+            {
+                skinId.OnValueChanged += DressInReplicatedSkin;
+                nameId.OnValueChanged += TakeReplicatedName;
+            }
 
-            if (!skinId.Value.IsEmpty) HandleSkinIdChanged(default, skinId.Value);
-            if (!nameId.Value.IsEmpty) HandleNameIdChanged(default, nameId.Value);
+            Dress(skinId.Value);
+            TakeName(nameId.Value);
         }
 
         public override void OnNetworkDespawn()
         {
-            skinId.OnValueChanged -= HandleSkinIdChanged;
-            nameId.OnValueChanged -= HandleNameIdChanged;
+            if (IsServer) return;
+
+            skinId.OnValueChanged -= DressInReplicatedSkin;
+            nameId.OnValueChanged -= TakeReplicatedName;
         }
 
-        private void HandleSkinIdChanged(FixedString32Bytes previousSkinId, FixedString32Bytes currentSkinId)
+        private void DressInReplicatedSkin(FixedString32Bytes previousSkinId, FixedString32Bytes currentSkinId)
         {
-            if (dressed || currentSkinId.IsEmpty) return;
+            Dress(currentSkinId);
+        }
+
+        private void TakeReplicatedName(FixedString32Bytes previousNameId, FixedString32Bytes currentNameId)
+        {
+            TakeName(currentNameId);
+        }
+
+        private void Dress(FixedString32Bytes skin)
+        {
+            if (dressed || skin.IsEmpty) return;
 
             SkinCatalog skinCatalog = Catalogs.GetCatalog<SkinCatalog>();
-            SkinAsset skinAsset = skinCatalog == null ? null : skinCatalog.GetAssetById(currentSkinId);
+            SkinAsset skinAsset = skinCatalog == null ? null : skinCatalog.GetAssetById(skin);
             if (skinAsset == null || skinAsset.Model == null)
             {
-                Log.Error($"Corpse {name} cannot find skin {currentSkinId}, stays invisible");
+                Log.Error($"Corpse {name} cannot find skin {skin}, stays invisible");
                 return;
             }
 
@@ -80,19 +99,19 @@ namespace Shooter.Game
             modelInstance.transform.localRotation = Quaternion.identity;
             modelInstance.AddComponent<Ragdoll>();
 
-            Log.Info($"Corpse {name} dressed as {currentSkinId}");
+            Log.Info($"Corpse {name} dressed as {skin}");
         }
 
-        private void HandleNameIdChanged(FixedString32Bytes previousNameId, FixedString32Bytes currentNameId)
+        private void TakeName(FixedString32Bytes title)
         {
             AssetNameable assetNameable = GetComponent<AssetNameable>();
-            if (assetNameable == null || currentNameId.IsEmpty) return;
+            if (assetNameable == null || title.IsEmpty) return;
 
             NameCatalog nameCatalog = Catalogs.GetCatalog<NameCatalog>();
-            NameAsset nameAsset = nameCatalog == null ? null : nameCatalog.GetAssetById(currentNameId);
+            NameAsset nameAsset = nameCatalog == null ? null : nameCatalog.GetAssetById(title);
             if (nameAsset == null)
             {
-                Log.Warn($"Corpse {name} cannot find name {currentNameId}, keeps its own");
+                Log.Warn($"Corpse {name} cannot find name {title}, keeps its own");
                 return;
             }
 
