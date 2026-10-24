@@ -325,7 +325,7 @@ MonoBehaviour:
       type: {class: HoldItemTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
     - rid: 8204019759183560847
-      type: {class: HoldArtifactsTool, ns: Shooter.Game.Custom.HoldArtifacts, asm: Shooter.Game}
+      type: {class: HoldArtifactsTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
 --- !u!114 &7426902805887786745
 MonoBehaviour:

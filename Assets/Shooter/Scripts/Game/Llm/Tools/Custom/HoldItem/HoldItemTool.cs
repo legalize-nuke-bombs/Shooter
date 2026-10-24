@@ -37,14 +37,14 @@ Always prefer to keep a weapon in your hand.
             {
                 return $"Bad slot number ({slotId})";
             }
-            InventoryHolder.InventoryHolderTryHoldSlotResultCode result = inventoryHolder.HoldSlot(slotId);
+            InventoryHolder.TryHoldSlotResultCode result = inventoryHolder.HoldSlot(slotId);
             switch (result)
             {
-                case InventoryHolder.InventoryHolderTryHoldSlotResultCode.SlotIsEmpty:
+                case InventoryHolder.TryHoldSlotResultCode.SlotIsEmpty:
                     return $"Slot {slotId} is empty";
-                case InventoryHolder.InventoryHolderTryHoldSlotResultCode.SlotIsNotEquipable:
+                case InventoryHolder.TryHoldSlotResultCode.SlotIsNotEquipable:
                     return $"Slot {slotId} is not equipable";
-                case InventoryHolder.InventoryHolderTryHoldSlotResultCode.Ok:
+                case InventoryHolder.TryHoldSlotResultCode.Ok:
                     return $"Slot {slotId} held successfully";
                 default:
                     Log.Error($"Entity {Self.name} got unexpected result code {result} during inventory holder try hold");
