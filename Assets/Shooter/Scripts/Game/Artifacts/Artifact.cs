@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game
 {
@@ -25,6 +28,17 @@ namespace Shooter.Game
         public override void NetworkSerialize<T>(BufferSerializer<T> serializer)
         {
 
+        }
+
+        public void Update(GameObject user, float dt)
+        {
+            ArtifactAsset asset = Catalogs.GetCatalog<ItemCatalog>().GetAssetById(AssetId) as ArtifactAsset;
+            List<ArtifactEffect> effects = asset.Effects;
+            for (int i = 0; i < effects.Count; i++)
+            {
+                ArtifactEffect effect = effects.ElementAt(i);
+                effect.Update(user, dt);
+            }
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Shooter.Game
 
         protected abstract void ReduceHp(double amount);
 
-        public abstract void RestoreHp(double amount);
+        public abstract void Heal(double amount);
 
         public abstract void ResurrectWithFullHp();
 
