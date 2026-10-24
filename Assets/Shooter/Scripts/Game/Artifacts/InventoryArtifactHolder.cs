@@ -42,8 +42,8 @@ namespace Shooter.Game
             SaveData sd = content.ToObject<SaveData>();
             foreach (int slot in sd.Slots)
             {
-                InventoryArtifactHolderTryHoldResultCode result = TryHoldSlot(slot);
-                if (result != InventoryArtifactHolderTryHoldResultCode.Ok) Log.Warn($"Entity {name} can not hold saved artifact slot {slot}: {result}");
+                TryHoldResultCode result = TryHoldSlot(slot);
+                if (result != TryHoldResultCode.Ok) Log.Warn($"Entity {name} can not hold saved artifact slot {slot}: {result}");
             }
         }
 
@@ -121,11 +121,11 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void HoldSlotRpc(int slot)
         {
-            InventoryArtifactHolderTryHoldResultCode result = TryHoldSlot(slot);
+            TryHoldResultCode result = TryHoldSlot(slot);
             Log.Info($"Entity {name} inventory artefact holder hold slot rpc result code: {result}");
         }
 
-        public enum InventoryArtifactHolderTryHoldResultCode
+        public enum TryHoldResultCode
         {
             TooManySlots,
             SlotAlreadyHeld,
@@ -133,52 +133,52 @@ namespace Shooter.Game
             SlotNotAnArtifact,
             Ok
         }
-        public InventoryArtifactHolderTryHoldResultCode TryHoldSlot(int slot)
+        public TryHoldResultCode TryHoldSlot(int slot)
         {
             if (slots.Count >= maxSlotsNum)
             {
-                return InventoryArtifactHolderTryHoldResultCode.TooManySlots;
+                return TryHoldResultCode.TooManySlots;
             }
             if (slots.Contains(slot))
             {
-                return InventoryArtifactHolderTryHoldResultCode.SlotAlreadyHeld;
+                return TryHoldResultCode.SlotAlreadyHeld;
             }
             UniqueItem item = inventory.GetUniqueAt(slot);
             if (item == null)
             {
-                return InventoryArtifactHolderTryHoldResultCode.SlotIsEmpty;
+                return TryHoldResultCode.SlotIsEmpty;
             }
             if (item is not Artifact)
             {
-                return InventoryArtifactHolderTryHoldResultCode.SlotNotAnArtifact;
+                return TryHoldResultCode.SlotNotAnArtifact;
             }
             slots.Add(slot);
             (item as Artifact).Enable(gameObject);
             Changed?.Invoke();
-            return InventoryArtifactHolderTryHoldResultCode.Ok;
+            return TryHoldResultCode.Ok;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void ReleaseSlotRpc(int slot)
         {
-            InventoryArtifactHolderTryReleaseResultCode result = TryReleaseSlot(slot);
+            TryReleaseResultCode result = TryReleaseSlot(slot);
             Log.Info($"Entity {name} inventory artefact holder release slot {slot} rpc result code: {result}");
         }
 
-        public enum InventoryArtifactHolderTryReleaseResultCode
+        public enum TryReleaseResultCode
         {
             SlotNotHeld,
             Ok
         }
-        public InventoryArtifactHolderTryReleaseResultCode TryReleaseSlot(int slot)
+        public TryReleaseResultCode TryReleaseSlot(int slot)
         {
             if (!slots.Remove(slot))
             {
-                return InventoryArtifactHolderTryReleaseResultCode.SlotNotHeld;
+                return TryReleaseResultCode.SlotNotHeld;
             }
             (inventory.GetUniqueAt(slot) as Artifact).Disable();
             Changed?.Invoke();
-            return InventoryArtifactHolderTryReleaseResultCode.Ok;
+            return TryReleaseResultCode.Ok;
         }
 
         private void HandleUniqueRemoved(int slot, UniqueItem item)
