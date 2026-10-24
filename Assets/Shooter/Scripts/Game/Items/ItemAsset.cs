@@ -34,7 +34,7 @@ namespace Shooter.Game
 
                 description.Append('.');
                 if (stats.Heal > 0) description.Append($" Heal {stats.Heal}.");
-                if (stats.HealPerMinute > 0) description.Append($" Heal {stats.HealPerMinute} per minute.");
+                if (stats.HealPerHour > 0) description.Append($" Heal {stats.HealPerHour} per hour.");
                 if (stats.Food > 0) description.Append($" Food {stats.Food}.");
                 if (stats.Intoxication > 0) description.Append($" Intoxication {stats.Intoxication}.");
                 if (stats.Damage > 0) description.Append($" Damage {stats.Damage}.");

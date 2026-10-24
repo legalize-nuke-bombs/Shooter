@@ -5,13 +5,13 @@ namespace Shooter.Game
     [CreateAssetMenu(menuName = "Shooter/Artifacts/Heal Artifact Effect", fileName = "HealArtifactEffect")]
     public class HealArtifactEffectAsset : ArtifactEffectAsset
     {
-        [SerializeField] private float speed;
+        [SerializeField] private float healPerHour;
 
         public override ArtifactEffect Create()
         {
-            return new HealArtifactEffect(speed);
+            return new HealArtifactEffect(healPerHour);
         }
 
-        public override ItemStats Stats => new() { HealPerMinute = Mathf.RoundToInt(speed * 60f) };
+        public override ItemStats Stats => new() { HealPerHour = (int)healPerHour };
     }
 }

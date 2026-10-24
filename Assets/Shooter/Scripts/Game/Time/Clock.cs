@@ -10,6 +10,7 @@ namespace Shooter.Game
     {
         public const string StampFormat = "yyyy.MM.dd HH:mm:ss";
         public const long DayLengthSeconds = 86400;
+        public const long HourLengthSeconds = 3600;
         private const float RealSecondsPerGameDay = 2400f;
         private const float GameSecondsPerRealSecond = DayLengthSeconds / RealSecondsPerGameDay;
 
@@ -70,6 +71,9 @@ namespace Shooter.Game
                 if (IsServer) scale.Value = value;
             }
         }
+
+        // The world's seconds that passed this frame, at the clock's pace and sped up with it while everyone sleeps
+        public float DeltaTime => Time.deltaTime * Scale * GameSecondsPerRealSecond;
 
         public override void OnNetworkSpawn()
         {
