@@ -115,35 +115,39 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void HoldSlotRpc(int slot)
         {
-            TryHoldSlot(slot, out string result);
-            Log.Info($"Entity {name} inventory artefact holder hold slot rpc result: {result}");
+            InventoryArtifactHolderTryHoldResultCode result = TryHoldSlot(slot);
+            Log.Info($"Entity {name} inventory artefact holder hold slot rpc result code: {result}");
         }
 
-        public void TryHoldSlot(int slot, out string result)
+        public enum InventoryArtifactHolderTryHoldResultCode
+        {
+            TooManySlots,
+            SlotAlreadyHeld,
+            SlotIsEmpty,
+            SlotNotAnArtifact,
+            Ok
+        }
+        public InventoryArtifactHolderTryHoldResultCode TryHoldSlot(int slot)
         {
             if (slots.Count >= maxSlotsNum)
             {
-                result = $"Failed to hold slot: too many slots held (current {slots.Count} max {maxSlotsNum})";
-                return;
+                return InventoryArtifactHolderTryHoldResultCode.TooManySlots;
             }
             if (slots.Contains(slot))
             {
-                result = $"Failed to hold slot: {slot} is already held";
-                return;
+                return InventoryArtifactHolderTryHoldResultCode.SlotAlreadyHeld;
             }
             UniqueItem item = inventory.GetUniqueAt(slot);
             if (item == null)
             {
-                result = $"Failed to hold slot: {slot} is empty";
-                return;
+                return InventoryArtifactHolderTryHoldResultCode.SlotIsEmpty;
             }
             if (item is not Artifact)
             {
-                result = $"Failed to hold slot: {slot} is not an artifact";
-                return;
+                return InventoryArtifactHolderTryHoldResultCode.SlotNotAnArtifact;
             }
             slots.Add(slot);
-            result = $"Successfully held {item.AssetId} (slot {slot})";
+            return InventoryArtifactHolderTryHoldResultCode.Ok;
         }
 
         private void Update()
