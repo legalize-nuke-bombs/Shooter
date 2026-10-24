@@ -20,6 +20,7 @@ namespace Shooter.Game
 
         private Player player;
         private Camera view;
+        private Inventory inventory;
         private InventoryHolder inventoryHolder;
         private int firstPersonLayer = -1;
         private GameObject shownWeapon;
@@ -33,6 +34,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
+            inventory = GetComponent<Inventory>();
             inventoryHolder = GetComponent<InventoryHolder>();
             view = GetComponentInChildren<Camera>();
         }
@@ -76,6 +78,7 @@ namespace Shooter.Game
             showing = true;
 
             AddFirstPersonPass();
+            inventory.Changed += UpdateShownWeapon;
             inventoryHolder.Changed += UpdateShownWeapon;
             UpdateShownWeapon();
         }
@@ -85,6 +88,7 @@ namespace Shooter.Game
             if (!showing) return;
             showing = false;
 
+            inventory.Changed -= UpdateShownWeapon;
             inventoryHolder.Changed -= UpdateShownWeapon;
             if (shownWeapon != null) Destroy(shownWeapon);
             if (weaponHold != null) Destroy(weaponHold.gameObject);
