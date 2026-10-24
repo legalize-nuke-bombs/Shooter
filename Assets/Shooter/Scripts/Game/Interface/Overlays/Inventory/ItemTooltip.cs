@@ -6,25 +6,23 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // The card at the foot of the bag: the picture, kind, name, description and numbers of the thing last pointed at;
-    // it keeps its size empty or full, so the bag does not jump under the pointer
-    public sealed class ItemCard
+    // The tooltip at the pointer while it rests on a thing in the bag window, as in most games: the name, the kind,
+    // the description and the numbers; it floats over the window, so the window keeps its size whatever it says
+    public sealed class ItemTooltip
     {
-        private const string EmptyClass = "card--empty";
+        private const float PointerGap = 16f;
 
-        private readonly VisualElement cardElement;
-        private readonly VisualElement iconElement;
-        private readonly Label kindLabel;
+        private readonly VisualElement tooltipElement;
         private readonly Label titleLabel;
+        private readonly Label kindLabel;
         private readonly Label descriptionLabel;
         private readonly VisualElement statsElement;
 
-        public ItemCard(VisualElement cardElement, VisualElement iconElement, Label kindLabel, Label titleLabel, Label descriptionLabel, VisualElement statsElement)
+        public ItemTooltip(VisualElement tooltipElement, Label titleLabel, Label kindLabel, Label descriptionLabel, VisualElement statsElement)
         {
-            this.cardElement = cardElement;
-            this.iconElement = iconElement;
-            this.kindLabel = kindLabel;
+            this.tooltipElement = tooltipElement;
             this.titleLabel = titleLabel;
+            this.kindLabel = kindLabel;
             this.descriptionLabel = descriptionLabel;
             this.statsElement = statsElement;
         }
@@ -33,19 +31,11 @@ namespace Shooter.Game
 
         public void Show(ItemAsset asset)
         {
-            if (asset == null)
-            {
-                Clear();
-                return;
-            }
-
             if (asset == Shown) return;
 
             Shown = asset;
-            Sprite iconSprite = ItemGrid.GetIconSprite(asset);
-            iconElement.style.backgroundImage = iconSprite == null ? new StyleBackground(StyleKeyword.None) : new StyleBackground(iconSprite);
-            kindLabel.text = DescribeKind(asset);
             titleLabel.text = asset.Title;
+            kindLabel.text = DescribeKind(asset);
             descriptionLabel.text = asset.Description;
             descriptionLabel.style.display = string.IsNullOrEmpty(asset.Description) ? DisplayStyle.None : DisplayStyle.Flex;
 
@@ -55,18 +45,27 @@ namespace Shooter.Game
                 statsElement.Add(CreateStat(name, value));
             }
 
-            cardElement.RemoveFromClassList(EmptyClass);
+            statsElement.style.display = statsElement.childCount == 0 ? DisplayStyle.None : DisplayStyle.Flex;
+            tooltipElement.style.display = DisplayStyle.Flex;
         }
 
-        public void Clear()
+        public void Hide()
         {
             Shown = null;
-            iconElement.style.backgroundImage = new StyleBackground(StyleKeyword.None);
-            kindLabel.text = string.Empty;
-            titleLabel.text = string.Empty;
-            descriptionLabel.text = string.Empty;
-            statsElement.Clear();
-            cardElement.AddToClassList(EmptyClass);
+            tooltipElement.style.display = DisplayStyle.None;
+        }
+
+        // Below and to the right of the pointer, turned to its other side where the window would cut it off
+        public void MoveTo(Vector2 pointer, Rect window)
+        {
+            float width = float.IsNaN(tooltipElement.resolvedStyle.width) ? 0f : tooltipElement.resolvedStyle.width;
+            float height = float.IsNaN(tooltipElement.resolvedStyle.height) ? 0f : tooltipElement.resolvedStyle.height;
+
+            float left = pointer.x + PointerGap + width > window.width ? pointer.x - PointerGap - width : pointer.x + PointerGap;
+            float top = pointer.y + PointerGap + height > window.height ? pointer.y - PointerGap - height : pointer.y + PointerGap;
+
+            tooltipElement.style.left = Mathf.Max(0f, left);
+            tooltipElement.style.top = Mathf.Max(0f, top);
         }
 
         private static string DescribeKind(ItemAsset asset)
@@ -74,15 +73,15 @@ namespace Shooter.Game
             switch (asset)
             {
                 case FirearmAsset:
-                    return "ОРУЖИЕ · В РУКИ";
+                    return "Оружие, берётся в руки";
                 case ArtifactAsset:
-                    return "АРТЕФАКТ · НА ПОЯС";
+                    return "Артефакт, носится на поясе";
                 case StackableItemAsset stackable when FindFirearmFor(stackable) != null:
-                    return "ПАТРОНЫ";
+                    return "Патроны";
                 case StackableItemAsset { IsUsable: true }:
-                    return "РАСХОДНИК";
+                    return "Расходник";
                 default:
-                    return "ВЕЩЬ";
+                    return "Вещь";
             }
         }
 
@@ -93,7 +92,7 @@ namespace Shooter.Game
                 case FirearmAsset firearm:
                     yield return ("Урон", firearm.Damage.ToString(CultureInfo.InvariantCulture));
                     yield return ("Магазин", firearm.MagazineSize.ToString(CultureInfo.InvariantCulture));
-                    if (firearm.Ammo != null) yield return (string.Empty, firearm.Ammo.Title);
+                    if (firearm.Ammo != null) yield return ("Заряжается", firearm.Ammo.Title);
                     break;
                 case ArtifactAsset artifact:
                     float healPerSecond = 0f;
@@ -125,17 +124,14 @@ namespace Shooter.Game
         private static VisualElement CreateStat(string name, string value)
         {
             VisualElement statElement = new();
-            statElement.AddToClassList("card__stat");
+            statElement.AddToClassList("tooltip__stat");
 
-            if (!string.IsNullOrEmpty(name))
-            {
-                Label nameLabel = new(name);
-                nameLabel.AddToClassList("card__stat-name");
-                statElement.Add(nameLabel);
-            }
+            Label nameLabel = new(name);
+            nameLabel.AddToClassList("tooltip__stat-name");
+            statElement.Add(nameLabel);
 
             Label valueLabel = new(value);
-            valueLabel.AddToClassList("card__stat-value");
+            valueLabel.AddToClassList("tooltip__stat-value");
             statElement.Add(valueLabel);
 
             return statElement;
