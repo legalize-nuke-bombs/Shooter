@@ -15,6 +15,14 @@ namespace Shooter.Game
         private const string BagGridElementName = "inventory-grid";
         private const string HandsGridElementName = "inventory-held";
         private const string BeltGridElementName = "inventory-belt";
+        private const string BeltSectionElementName = "inventory-belt-section";
+        private const string BeltTitleLabelName = "inventory-belt-title";
+        private const string CardElementName = "item-card";
+        private const string CardIconElementName = "item-card-icon";
+        private const string CardKindLabelName = "item-card-kind";
+        private const string CardTitleLabelName = "item-card-title";
+        private const string CardDescriptionLabelName = "item-card-description";
+        private const string CardStatsElementName = "item-card-stats";
         private const string SideElementName = "inventory-side";
         private const string CraftGridElementName = "craft-grid";
         private const string CraftOutputElementName = "craft-output";
@@ -40,7 +48,10 @@ namespace Shooter.Game
         private VisualElement bagGridElement;
         private VisualElement handsGridElement;
         private VisualElement beltGridElement;
+        private VisualElement beltSectionElement;
+        private Label beltTitleLabel;
         private VisualElement sideElement;
+        private ItemCard itemCard;
         private ItemDragging dragging;
         private ItemContextMenu contextMenu;
         private StackSplitPrompt splitPrompt;
@@ -95,7 +106,15 @@ namespace Shooter.Game
             bagGridElement = root.Q<VisualElement>(BagGridElementName);
             handsGridElement = root.Q<VisualElement>(HandsGridElementName);
             beltGridElement = root.Q<VisualElement>(BeltGridElementName);
+            beltSectionElement = root.Q<VisualElement>(BeltSectionElementName);
+            beltTitleLabel = root.Q<Label>(BeltTitleLabelName);
             sideElement = root.Q<VisualElement>(SideElementName);
+            VisualElement cardElement = root.Q<VisualElement>(CardElementName);
+            VisualElement cardIconElement = root.Q<VisualElement>(CardIconElementName);
+            Label cardKindLabel = root.Q<Label>(CardKindLabelName);
+            Label cardTitleLabel = root.Q<Label>(CardTitleLabelName);
+            Label cardDescriptionLabel = root.Q<Label>(CardDescriptionLabelName);
+            VisualElement cardStatsElement = root.Q<VisualElement>(CardStatsElementName);
             VisualElement craftGridElement = root.Q<VisualElement>(CraftGridElementName);
             VisualElement craftOutputElement = root.Q<VisualElement>(CraftOutputElementName);
             VisualElement givePanelElement = root.Q<VisualElement>(GivePanelElementName);
@@ -107,8 +126,9 @@ namespace Shooter.Game
             VisualElement lootGridElement = root.Q<VisualElement>(LootGridElementName);
             Button lootTakeAllButton = root.Q<Button>(LootTakeAllButtonName);
 
-            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || beltGridElement == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
-                lootPanelElement == null || lootTitleLabel == null || lootGridElement == null || lootTakeAllButton == null)
+            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || beltGridElement == null || beltSectionElement == null || beltTitleLabel == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
+                lootPanelElement == null || lootTitleLabel == null || lootGridElement == null || lootTakeAllButton == null ||
+                cardElement == null || cardIconElement == null || cardKindLabel == null || cardTitleLabel == null || cardDescriptionLabel == null || cardStatsElement == null)
             {
                 Log.Error($"Overlay document has no {WindowElementName} window, the bag stays hidden");
                 return false;
@@ -121,6 +141,9 @@ namespace Shooter.Game
             craftPanel = new CraftPanel(craftGridElement, craftOutputElement, dragging, MarkStale);
             givePanel = new GivePanel(givePanelElement, giveTitleLabel, giveGridElement, giveButton, dragging, MarkStale);
             lootPanel = new LootPanel(lootPanelElement, lootTitleLabel, lootGridElement, lootTakeAllButton, dragging, MarkStale);
+            itemCard = new ItemCard(cardElement, cardIconElement, cardKindLabel, cardTitleLabel, cardDescriptionLabel, cardStatsElement);
+            itemCard.Clear();
+            windowElement.RegisterCallback<PointerOverEvent>(ShowPointedItem);
 
             return true;
         }
@@ -150,6 +173,7 @@ namespace Shooter.Game
             if (artifactHolder != null) artifactHolder.Changed += MarkStale;
 
             windowElement.style.display = DisplayStyle.Flex;
+            itemCard.Show(inventoryHolder == null ? null : inventoryHolder.HeldAsset);
             stale = true;
 
             string takerName = givePanel.DescribeTaker();
@@ -194,6 +218,7 @@ namespace Shooter.Game
             givePanel.Close();
             lootPanel.Close();
             splitPrompt.Clear();
+            itemCard.Clear();
 
             if (windowElement != null) windowElement.style.display = DisplayStyle.None;
             bagGridElement?.Clear();
@@ -217,7 +242,7 @@ namespace Shooter.Game
             beltGridElement.Clear();
 
             ItemGrid.DrawCells(handsGridElement, HandsGridRows, BagGridColumns);
-            beltGridElement.style.display = artifactHolder == null ? DisplayStyle.None : DisplayStyle.Flex;
+            beltSectionElement.style.display = artifactHolder == null ? DisplayStyle.None : DisplayStyle.Flex;
             if (artifactHolder != null) ItemGrid.DrawCells(beltGridElement, 1, artifactHolder.MaxSlots);
 
             if (inventory == null)
@@ -336,7 +361,21 @@ namespace Shooter.Game
                 column += ItemGrid.GetSizeInCells(asset).x;
             }
 
+            beltTitleLabel.text = $"ПОЯС  {beltSlots.Count}/{artifactHolder.MaxSlots}";
             return beltSlots;
+        }
+
+        // Whatever thing the pointer is over, in the bag, the hands, the belt, the loot, the offer or the craft grid,
+        // goes to the card, and stays there until the pointer finds another
+        private void ShowPointedItem(PointerOverEvent pointerOver)
+        {
+            for (VisualElement element = pointerOver.target as VisualElement; element != null && element != windowElement; element = element.parent)
+            {
+                if (!element.ClassListContains("slot")) continue;
+
+                if (element.userData is ItemAsset asset) itemCard.Show(asset);
+                return;
+            }
         }
 
         private VisualElement CreateUniqueElement(ItemAsset asset, string fallbackTitle, int row, int column, int slot, bool equipable, bool inHands, bool onBelt)

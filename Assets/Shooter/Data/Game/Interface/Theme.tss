@@ -6,6 +6,7 @@
     --color-text-faint: rgba(236, 232, 224, 0.32);
     --color-accent: rgb(168, 51, 51);
     --color-accent-soft: rgba(168, 51, 51, 0.5);
+    --color-accent-text: rgb(206, 96, 88);
     --color-panel: rgba(6, 6, 8, 0.76);
     --color-panel-solid: rgb(10, 10, 12);
     --color-line: rgba(255, 255, 255, 0.1);

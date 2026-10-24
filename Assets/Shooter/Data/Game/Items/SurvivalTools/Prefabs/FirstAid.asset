@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: first-aid
   title: "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
+  description: "\u0411\u0438\u043d\u0442\u044b, \u0436\u0433\u0443\u0442 \u0438 \u0448\u043f\u0440\u0438\u0446-\u0442\u044e\u0431\u0438\u043a \u043e\u0431\u0435\u0437\u0431\u043e\u043b\u0438\u0432\u0430\u044e\u0449\u0435\u0433\u043e."
   model: {fileID: 1279140426991430450, guid: 360690a7c06559a4f927c76899139848, type: 3}
   icon: {fileID: 11400000, guid: 4e8c73df9a659b043ac7ca98a4600a58, type: 2}
   cells: {x: 1, y: 1}

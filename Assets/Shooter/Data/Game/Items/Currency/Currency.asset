@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: coin
   title: "\u0420\u0443\u0431\u043B\u0438"
+  description: "\u041f\u0430\u0447\u043a\u0430 \u043c\u044f\u0442\u044b\u0445 \u0442\u044b\u0441\u044f\u0447\u043d\u044b\u0445."
   model: {fileID: 0}
   icon: {fileID: 11400000, guid: 92416472735945f18922ab23d6592ec2, type: 2}
   cells: {x: 1, y: 1}

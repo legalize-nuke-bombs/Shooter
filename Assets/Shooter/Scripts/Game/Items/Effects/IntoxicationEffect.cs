@@ -16,5 +16,7 @@ namespace Shooter.Game
 
             intoxication.AddToxin(toxin, force);
         }
+
+        public override int IntoxicationAmount => (int)force;
     }
 }

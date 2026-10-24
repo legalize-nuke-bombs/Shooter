@@ -23,6 +23,7 @@ namespace Shooter.Game
         private Lootable loot;
         private Inventory lootInventory;
         private InventoryExchanger inventoryExchanger;
+        private int shownRows = GridRows;
 
         public LootPanel(VisualElement panelElement, Label titleLabel, VisualElement gridElement, Button takeAllButton, ItemDragging dragging, Action markStale)
         {
@@ -35,6 +36,7 @@ namespace Shooter.Game
 
             panelElement.style.display = DisplayStyle.None;
             takeAllButton.clicked += TakeAll;
+            gridElement.GetFirstAncestorOfType<ScrollView>().RegisterCallback<GeometryChangedEvent>(FitRowsToHeight);
         }
 
         public Lootable Loot => loot;
@@ -87,7 +89,7 @@ namespace Shooter.Game
 
             // The grid grows by rows when the things do not fit, and its panel scrolls
             ItemCatalog itemCatalog = Catalogs.GetCatalog<ItemCatalog>();
-            GridPlacement placement = new(GridRows, GridColumns, true);
+            GridPlacement placement = new(shownRows, GridColumns, true);
             List<VisualElement> itemElements = new();
 
             IReadOnlyList<UniqueItem> uniqueItems = lootInventory.UniqueItems;
@@ -136,6 +138,16 @@ namespace Shooter.Game
         public void PutUnique(int slot)
         {
             inventoryExchanger.GiveUniqueRpc(LootId, slot);
+        }
+
+        // The panel stands as tall as the bag beside it, and its grid fills it with as many rows as fit
+        private void FitRowsToHeight(GeometryChangedEvent change)
+        {
+            int rows = Mathf.Max(GridRows, Mathf.FloorToInt(change.newRect.height / ItemGrid.CellSize));
+            if (rows == shownRows) return;
+
+            shownRows = rows;
+            markStale();
         }
 
         private VisualElement CreateItemElement(ItemAsset asset, string fallbackTitle, GridPlacement placement, DraggedItem item, int amount)

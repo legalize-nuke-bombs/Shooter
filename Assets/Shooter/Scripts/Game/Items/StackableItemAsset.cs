@@ -18,6 +18,7 @@ namespace Shooter.Game
         public bool IsUsable => effects.Length > 0;
         public int HealAmount => effects.Length == 0 ? 0 : effects.Sum(effect => effect.HealAmount);
         public int FoodAmount => effects.Length == 0 ? 0 : effects.Sum(effect => effect.FoodAmount);
+        public int IntoxicationAmount => effects.Length == 0 ? 0 : effects.Sum(effect => effect.IntoxicationAmount);
         public override string PromptDescription
         {
             get

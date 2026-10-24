@@ -27,16 +27,46 @@
         <ui:VisualElement name="inventory-screen" class="screen">
           <ui:VisualElement class="inventory__row">
             <ui:VisualElement class="inventory">
+                <ui:VisualElement class="section" picking-mode="Ignore">
+                    <ui:Label text="РУКИ" class="section__title" picking-mode="Ignore"/>
+                    <ui:VisualElement class="section__rule" picking-mode="Ignore"/>
+                </ui:VisualElement>
                 <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands"/>
-                <ui:VisualElement name="inventory-belt" class="inventory__grid inventory__grid--belt"/>
+                <ui:VisualElement name="inventory-belt-section">
+                    <ui:VisualElement class="section" picking-mode="Ignore">
+                        <ui:Label name="inventory-belt-title" text="ПОЯС" class="section__title" picking-mode="Ignore"/>
+                        <ui:VisualElement class="section__rule" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="inventory-belt" class="inventory__grid inventory__grid--belt"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="section" picking-mode="Ignore">
+                    <ui:Label text="СУМКА" class="section__title" picking-mode="Ignore"/>
+                    <ui:VisualElement class="section__rule" picking-mode="Ignore"/>
+                </ui:VisualElement>
                 <ui:ScrollView name="inventory-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="inventory__scroll">
                     <ui:VisualElement name="inventory-grid" class="inventory__grid"/>
                 </ui:ScrollView>
+                <ui:VisualElement name="item-card" class="card card--empty" picking-mode="Ignore">
+                    <ui:VisualElement name="item-card-icon" class="card__icon" picking-mode="Ignore"/>
+                    <ui:VisualElement class="card__body" picking-mode="Ignore">
+                        <ui:Label name="item-card-kind" class="card__kind" picking-mode="Ignore"/>
+                        <ui:Label name="item-card-title" class="card__title" picking-mode="Ignore"/>
+                        <ui:Label name="item-card-description" class="card__description" picking-mode="Ignore"/>
+                        <ui:VisualElement name="item-card-stats" class="card__stats" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="inventory-side" class="inventory__side">
                 <ui:VisualElement class="craft">
-                    <ui:VisualElement name="craft-grid" class="craft__grid"/>
-                    <ui:VisualElement name="craft-output" class="craft__output"/>
+                    <ui:VisualElement class="section" picking-mode="Ignore">
+                        <ui:Label text="ВЕРСТАК" class="section__title" picking-mode="Ignore"/>
+                        <ui:VisualElement class="section__rule" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="craft__body">
+                        <ui:VisualElement name="craft-grid" class="craft__grid"/>
+                        <ui:Label text="→" class="craft__arrow" picking-mode="Ignore"/>
+                        <ui:VisualElement name="craft-output" class="craft__output"/>
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="give" class="give">
                     <ui:Label name="give-title" class="line give__title" picking-mode="Ignore"/>
