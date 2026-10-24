@@ -28,6 +28,7 @@
           <ui:VisualElement class="inventory__row">
             <ui:VisualElement class="inventory">
                 <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands"/>
+                <ui:VisualElement name="inventory-belt" class="inventory__grid inventory__grid--belt"/>
                 <ui:ScrollView name="inventory-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="inventory__scroll">
                     <ui:VisualElement name="inventory-grid" class="inventory__grid"/>
                 </ui:ScrollView>

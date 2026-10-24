@@ -50,7 +50,18 @@ namespace Shooter.Game
             }
         }
 
-        public IEnumerator<int> HeldSlots => slots.GetEnumerator();
+        public IEnumerable<int> HeldSlots
+        {
+            get
+            {
+                foreach (int slot in slots)
+                {
+                    yield return slot;
+                }
+            }
+        }
+
+        public int MaxSlots => maxSlotsNum;
 
         public DigestionPriority Priority => DigestionPriority.Low;
         public string Digest(DigestionDetail detail)
@@ -147,6 +158,29 @@ namespace Shooter.Game
             (item as Artifact).Enable(gameObject);
             Changed?.Invoke();
             return InventoryArtifactHolderTryHoldResultCode.Ok;
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void ReleaseSlotRpc(int slot)
+        {
+            InventoryArtifactHolderTryReleaseResultCode result = TryReleaseSlot(slot);
+            Log.Info($"Entity {name} inventory artefact holder release slot {slot} rpc result code: {result}");
+        }
+
+        public enum InventoryArtifactHolderTryReleaseResultCode
+        {
+            SlotNotHeld,
+            Ok
+        }
+        public InventoryArtifactHolderTryReleaseResultCode TryReleaseSlot(int slot)
+        {
+            if (!slots.Remove(slot))
+            {
+                return InventoryArtifactHolderTryReleaseResultCode.SlotNotHeld;
+            }
+            (inventory.GetUniqueAt(slot) as Artifact).Disable();
+            Changed?.Invoke();
+            return InventoryArtifactHolderTryReleaseResultCode.Ok;
         }
 
         private void HandleUniqueRemoved(int slot, UniqueItem item)

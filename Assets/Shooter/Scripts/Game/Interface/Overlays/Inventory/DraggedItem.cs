@@ -14,6 +14,7 @@ namespace Shooter.Game
         public int UniqueSlot { get; private set; } = Inventory.NoSlot;
         public bool IsEquipable { get; private set; }
         public bool IsFromHands { get; private set; }
+        public bool IsFromBelt { get; private set; }
         public int CraftCell { get; private set; } = -1;
         public bool IsCraftOutput { get; private set; }
         public int OfferIndex { get; private set; } = -1;
@@ -27,9 +28,9 @@ namespace Shooter.Game
             return new DraggedItem { StackableAsset = asset, SplitIndex = splitIndex };
         }
 
-        public static DraggedItem Unique(int slot, bool equipable, bool fromHands)
+        public static DraggedItem Unique(int slot, bool equipable, bool fromHands, bool fromBelt)
         {
-            return new DraggedItem { IsUnique = true, UniqueSlot = slot, IsEquipable = equipable, IsFromHands = fromHands };
+            return new DraggedItem { IsUnique = true, UniqueSlot = slot, IsEquipable = equipable, IsFromHands = fromHands, IsFromBelt = fromBelt };
         }
 
         public static DraggedItem FromCraftCell(int cell)

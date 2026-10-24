@@ -193,6 +193,10 @@
     margin-bottom: 14px;
 }
 
+.inventory__grid--belt {
+    margin-bottom: 14px;
+}
+
 .inventory__scroll {
     max-height: 288px;
 }
