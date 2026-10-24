@@ -67,7 +67,7 @@ namespace Shooter.Game
             }
             else
             {
-                work.OnValueChanged += AnnounceReplicatedAction;
+                work.OnValueChanged += HandleWorkChanged;
             }
         }
 
@@ -79,7 +79,7 @@ namespace Shooter.Game
             }
             else
             {
-                work.OnValueChanged -= AnnounceReplicatedAction;
+                work.OnValueChanged -= HandleWorkChanged;
             }
         }
 
@@ -199,7 +199,7 @@ namespace Shooter.Game
             work.Value = new Work { Action = ActionType.None, SequenceNumber = work.Value.SequenceNumber + 1 };
         }
 
-        private void AnnounceReplicatedAction(Work previousWork, Work currentWork)
+        private void HandleWorkChanged(Work previousWork, Work currentWork)
         {
             if (currentWork.Action == ActionType.None) return;
 

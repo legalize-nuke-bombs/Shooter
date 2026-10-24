@@ -63,11 +63,11 @@ namespace Shooter.Game
         {
             if (IsServer)
             {
-                inventory.UniqueRemoved += StopHoldingIfRemoved;
+                inventory.UniqueRemoved += HandleUniqueRemoved;
             }
             else
             {
-                heldSlot.OnValueChanged += AnnounceReplicatedSlot;
+                heldSlot.OnValueChanged += HandleHeldSlotChanged;
             }
         }
 
@@ -75,11 +75,11 @@ namespace Shooter.Game
         {
             if (IsServer)
             {
-                inventory.UniqueRemoved -= StopHoldingIfRemoved;
+                inventory.UniqueRemoved -= HandleUniqueRemoved;
             }
             else
             {
-                heldSlot.OnValueChanged -= AnnounceReplicatedSlot;
+                heldSlot.OnValueChanged -= HandleHeldSlotChanged;
             }
         }
 
@@ -120,7 +120,7 @@ namespace Shooter.Game
             return InventoryHolderTryHoldSlotResultCode.Ok;
         }
 
-        private void StopHoldingIfRemoved(int slot, UniqueItem item)
+        private void HandleUniqueRemoved(int slot, UniqueItem item)
         {
             if (slot != heldSlot.Value)
             {
@@ -133,7 +133,7 @@ namespace Shooter.Game
             Changed?.Invoke();
         }
 
-        private void AnnounceReplicatedSlot(int previousSlot, int currentSlot)
+        private void HandleHeldSlotChanged(int previousSlot, int currentSlot)
         {
             Changed?.Invoke();
         }

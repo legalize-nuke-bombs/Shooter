@@ -33,7 +33,7 @@ namespace Shooter.Game
         {
             if (amount <= 0 || !CanReach(receiverInventory)) return false;
 
-            if (inventory.RemoveStackable(asset, amount, InventoryShortagePolicy.Rollback) != amount)
+            if (inventory.RemoveStackable(asset, amount, Inventory.InventoryShortagePolicy.Rollback) != amount)
             {
                 Log.Info($"Entity {name} can not give {asset.Id} x {amount} to {receiverInventory.name}: not enough in the bag");
                 return false;
@@ -80,7 +80,7 @@ namespace Shooter.Game
         {
             if (amount <= 0 || !CanTakeFrom(sourceInventory)) return false;
 
-            if (sourceInventory.RemoveStackable(asset, amount, InventoryShortagePolicy.Rollback) != amount)
+            if (sourceInventory.RemoveStackable(asset, amount, Inventory.InventoryShortagePolicy.Rollback) != amount)
             {
                 Log.Info($"Entity {name} can not take {asset.Id} x {amount} from {sourceInventory.name}: not enough there");
                 return false;

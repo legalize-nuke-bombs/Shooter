@@ -24,7 +24,7 @@ namespace Shooter.Game
         {
             if (!asset.IsUsable) return false;
 
-            if (inventory.RemoveStackable(asset, 1, InventoryShortagePolicy.Rollback) == 0) return false;
+            if (inventory.RemoveStackable(asset, 1, Inventory.InventoryShortagePolicy.Rollback) == 0) return false;
 
             foreach (ItemEffect effect in asset.Effects)
             {

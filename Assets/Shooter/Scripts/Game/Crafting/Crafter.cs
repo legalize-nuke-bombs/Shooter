@@ -66,7 +66,7 @@ namespace Shooter.Game
 
             foreach (KeyValuePair<StackableItemAsset, int> inputAmount in inputAmounts)
             {
-                inventory.RemoveStackable(inputAmount.Key, inputAmount.Value, InventoryShortagePolicy.Partly);
+                inventory.RemoveStackable(inputAmount.Key, inputAmount.Value, Inventory.InventoryShortagePolicy.Partly);
             }
 
             if (craft.Output is StackableItemAsset stackableOutput)

@@ -142,7 +142,7 @@ namespace Shooter.Game
         {
             if (!inventory.ContainsUnique(firearm)) return;
 
-            int takenRounds = inventory.RemoveStackable(asset.Ammo, missingRounds, InventoryShortagePolicy.Partly);
+            int takenRounds = inventory.RemoveStackable(asset.Ammo, missingRounds, Inventory.InventoryShortagePolicy.Partly);
             firearm.LoadRounds(takenRounds, asset.MagazineSize);
             Log.Info($"Entity {name} reloaded {firearm.AssetId} with {takenRounds} rounds, {inventory.CountStackable(asset.Ammo)} left in bag");
         }
