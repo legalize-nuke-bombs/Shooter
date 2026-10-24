@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -53,7 +52,7 @@ namespace Shooter.Game
         {
             for (int i = 0; i < effects.Count; i++)
             {
-                ArtifactEffect effect = effects.ElementAt(i);
+                ArtifactEffect effect = effects[i];
                 effect.Update(dt);
             }
         }
