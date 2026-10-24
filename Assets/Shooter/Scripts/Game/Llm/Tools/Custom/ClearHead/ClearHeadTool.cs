@@ -21,7 +21,7 @@ Call this only when your notes are complete.
 
         public override bool IsAvailable => llmHistory.IsOverflowing;
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             llmHistory = Self.GetComponent<LlmHistory>();
             llmNotes = Self.GetComponent<LlmNotes>();

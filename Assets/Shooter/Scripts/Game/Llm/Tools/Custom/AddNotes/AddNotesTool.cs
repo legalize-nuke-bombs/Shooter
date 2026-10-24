@@ -24,7 +24,7 @@ Max note content size: {llmNotes.ContentLimit}
 Max notes number: {llmNotes.AmountLimit}
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             llmNotes = Self.GetComponent<LlmNotes>();
             if (llmNotes == null)

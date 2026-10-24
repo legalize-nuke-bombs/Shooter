@@ -19,7 +19,7 @@ Use this tool to delete notes, one or many in a single call.
 The notes with the provided names will be PERMANENTLY DELETED.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             llmNotes = Self.GetComponent<LlmNotes>();
             if (llmNotes == null)

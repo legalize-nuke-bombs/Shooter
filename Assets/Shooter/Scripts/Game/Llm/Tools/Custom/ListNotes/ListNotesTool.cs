@@ -18,7 +18,7 @@ Use this tool to list your notes: the name, the description and the last update 
 To see the content, use read_notes.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             llmNotes = Self.GetComponent<LlmNotes>();
             if (llmNotes == null)

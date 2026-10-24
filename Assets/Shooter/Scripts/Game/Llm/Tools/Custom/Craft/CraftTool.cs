@@ -19,7 +19,7 @@ Use this tool to create items.
 Pass a dictionary of ratios as an argument, mapping the exact recipe name to the quantity.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             crafter = Self.GetComponent<Crafter>();
             if (crafter == null)

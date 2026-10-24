@@ -37,7 +37,7 @@ Mark messages as urgent only when truly necessary.
 Wanderers receive your messages immediately, regardless of the value of the `urgent` field.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();

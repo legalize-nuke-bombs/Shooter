@@ -24,7 +24,7 @@ This tool uses pagination.
 Specify `from` (the message number from which you want to retrieve the conversation history, starts from 0) and `size` (the number of messages you want to retrieve).
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();

@@ -88,30 +88,34 @@ namespace Shooter.Game
             HoldSlot(slot);
         }
 
-        public void HoldSlot(int slot)
+        public enum InventoryHolderTryHoldSlotResultCode
+        {
+            SlotIsEmpty,
+            SlotIsNotEquipable,
+            Ok
+        }
+        public InventoryHolderTryHoldSlotResultCode HoldSlot(int slot)
         {
             if (slot == Inventory.NoSlot)
             {
                 heldSlot.Value = Inventory.NoSlot;
-                return;
+                return InventoryHolderTryHoldSlotResultCode.Ok;
             }
 
             UniqueItem item = inventory.GetUniqueAt(slot);
             if (item == null)
             {
-                Log.Info($"Entity {name} can not hold slot {slot}: the slot is empty");
-                return;
+                return InventoryHolderTryHoldSlotResultCode.SlotIsEmpty;
             }
 
             UniqueItemAsset asset = (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId);
             if (!asset.IsEquipable)
             {
-                Log.Info($"Entity {name} can not put {item.AssetId} in hands");
-                return;
+                return InventoryHolderTryHoldSlotResultCode.SlotIsNotEquipable;
             }
 
             heldSlot.Value = slot;
-            Log.Info($"Entity {name} holds {item.AssetId} from slot {slot}");
+            return InventoryHolderTryHoldSlotResultCode.Ok;
         }
 
         private void StopHoldingIfSlotEmptied()

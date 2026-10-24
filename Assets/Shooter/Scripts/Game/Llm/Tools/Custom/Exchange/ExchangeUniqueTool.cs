@@ -21,7 +21,7 @@ Hand over and take unique items, addressed by their slot numbers, with a charact
 Things are taken only from lootable entities: a character has to give them to you.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             inventoryExchanger = Self.GetComponent<InventoryExchanger>();
             inventory = Self.GetComponent<Inventory>();

@@ -17,7 +17,7 @@ namespace Shooter.Game
 Use this tool to find which notes mention something: searches all notes with a regex pattern and returns match counts per note.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             llmNotes = Self.GetComponent<LlmNotes>();
             if (llmNotes == null)

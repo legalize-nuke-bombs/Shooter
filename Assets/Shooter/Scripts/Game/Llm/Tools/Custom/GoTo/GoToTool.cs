@@ -26,7 +26,7 @@ force: by default the call is refused while another second-level action is activ
 The result comes at once, the walk itself takes time: you will be notified when you arrive or when your character failed to find path. Use look_at_yourself to check the active second-level action.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             customOrderSlot = Self.GetComponent<CustomOrderSlot>();
             if (customOrderSlot == null)

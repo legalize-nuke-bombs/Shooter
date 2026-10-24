@@ -10,7 +10,7 @@ namespace Shooter.Game
         public override string Description =>
             "This tool shows everything near you. The greater the distance, the less detail is visible.";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
         }
 
