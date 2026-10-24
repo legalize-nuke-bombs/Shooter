@@ -30,7 +30,7 @@
                 <ui:Label text="Руки" class="section__title" picking-mode="Ignore"/>
                 <ui:VisualElement name="inventory-held" class="inventory__grid inventory__grid--hands"/>
                 <ui:VisualElement name="inventory-artifacts-section">
-                    <ui:Label name="inventory-artifacts-title" text="Артефакты" class="section__title" picking-mode="Ignore"/>
+                    <ui:Label text="Артефакты" class="section__title" picking-mode="Ignore"/>
                     <ui:VisualElement name="inventory-artifacts" class="inventory__grid inventory__grid--artifacts"/>
                 </ui:VisualElement>
                 <ui:Label text="Сумка" class="section__title" picking-mode="Ignore"/>
@@ -66,7 +66,33 @@
           <ui:VisualElement name="item-tooltip" class="tooltip" picking-mode="Ignore">
               <ui:Label name="item-tooltip-title" class="tooltip__title" picking-mode="Ignore"/>
               <ui:Label name="item-tooltip-description" class="tooltip__description" picking-mode="Ignore"/>
-              <ui:VisualElement name="item-tooltip-stats" class="tooltip__stats" picking-mode="Ignore"/>
+              <ui:VisualElement name="item-tooltip-stats" class="tooltip__stats" picking-mode="Ignore">
+                  <ui:VisualElement name="item-tooltip-heal" class="tooltip__stat" picking-mode="Ignore">
+                      <ui:Label text="Здоровье" class="tooltip__stat-name" picking-mode="Ignore"/>
+                      <ui:Label class="tooltip__stat-value" picking-mode="Ignore"/>
+                  </ui:VisualElement>
+                  <ui:VisualElement name="item-tooltip-heal-per-minute" class="tooltip__stat" picking-mode="Ignore">
+                      <ui:Label text="Здоровье" class="tooltip__stat-name" picking-mode="Ignore"/>
+                      <ui:Label class="tooltip__stat-value" picking-mode="Ignore"/>
+                      <ui:Label text="в минуту" class="tooltip__stat-unit" picking-mode="Ignore"/>
+                  </ui:VisualElement>
+                  <ui:VisualElement name="item-tooltip-food" class="tooltip__stat" picking-mode="Ignore">
+                      <ui:Label text="Сытость" class="tooltip__stat-name" picking-mode="Ignore"/>
+                      <ui:Label class="tooltip__stat-value" picking-mode="Ignore"/>
+                  </ui:VisualElement>
+                  <ui:VisualElement name="item-tooltip-intoxication" class="tooltip__stat" picking-mode="Ignore">
+                      <ui:Label text="Опьянение" class="tooltip__stat-name" picking-mode="Ignore"/>
+                      <ui:Label class="tooltip__stat-value" picking-mode="Ignore"/>
+                  </ui:VisualElement>
+                  <ui:VisualElement name="item-tooltip-damage" class="tooltip__stat" picking-mode="Ignore">
+                      <ui:Label text="Урон" class="tooltip__stat-name" picking-mode="Ignore"/>
+                      <ui:Label class="tooltip__stat-value" picking-mode="Ignore"/>
+                  </ui:VisualElement>
+                  <ui:VisualElement name="item-tooltip-magazine" class="tooltip__stat" picking-mode="Ignore">
+                      <ui:Label text="Магазин" class="tooltip__stat-name" picking-mode="Ignore"/>
+                      <ui:Label class="tooltip__stat-value" picking-mode="Ignore"/>
+                  </ui:VisualElement>
+              </ui:VisualElement>
           </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="talk" class="talk">

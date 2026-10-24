@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text;
 using Shooter.Infrastructure;
 using UnityEngine;
@@ -24,23 +23,22 @@ namespace Shooter.Game
 
         public string Description => description;
 
-        // Its numbers, each kind of thing knows its own: the tooltip shows them, the prompt description tells them
-        public virtual IEnumerable<ItemStat> Stats
-        {
-            get { yield break; }
-        }
+        public virtual ItemStats Stats => new();
 
         public virtual string PromptDescription
         {
             get
             {
-                StringBuilder description = new((promptDescription ?? string.Empty).Trim());
+                StringBuilder description = new(promptDescription?.Trim());
+                ItemStats stats = Stats;
 
                 description.Append('.');
-                foreach (ItemStat stat in Stats)
-                {
-                    description.Append(' ').Append(stat.PromptDescription).Append('.');
-                }
+                if (stats.Heal > 0) description.Append($" Heal {stats.Heal}.");
+                if (stats.HealPerMinute > 0) description.Append($" Heal {stats.HealPerMinute} per minute.");
+                if (stats.Food > 0) description.Append($" Food {stats.Food}.");
+                if (stats.Intoxication > 0) description.Append($" Intoxication {stats.Intoxication}.");
+                if (stats.Damage > 0) description.Append($" Damage {stats.Damage}.");
+                if (stats.Magazine > 0) description.Append($" Magazine {stats.Magazine}.");
 
                 return description.ToString();
             }

@@ -261,10 +261,10 @@
 
 .tooltip__stat {
     flex-direction: row;
-    justify-content: space-between;
 }
 
 .tooltip__stat-name {
+    flex-grow: 1;
     margin: 0 16px 0 0;
     padding: 0;
     font-size: 13px;
@@ -273,6 +273,13 @@
 
 .tooltip__stat-value {
     margin: 0;
+    padding: 0;
+    font-size: 13px;
+    color: var(--color-text);
+}
+
+.tooltip__stat-unit {
+    margin: 0 0 0 4px;
     padding: 0;
     font-size: 13px;
     color: var(--color-text);

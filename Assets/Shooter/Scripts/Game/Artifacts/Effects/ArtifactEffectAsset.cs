@@ -5,6 +5,6 @@ namespace Shooter.Game
     public abstract class ArtifactEffectAsset : ScriptableObject
     {
         public abstract ArtifactEffect Create();
-        public abstract ItemStat Stat { get; }
+        public abstract ItemStats Stats { get; }
     }
 }

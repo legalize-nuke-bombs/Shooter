@@ -16,7 +16,6 @@ namespace Shooter.Game
         private const string HandsGridElementName = "inventory-held";
         private const string ArtifactsGridElementName = "inventory-artifacts";
         private const string ArtifactsSectionElementName = "inventory-artifacts-section";
-        private const string ArtifactsTitleLabelName = "inventory-artifacts-title";
         private const string TooltipElementName = "item-tooltip";
         private const string TooltipTitleLabelName = "item-tooltip-title";
         private const string TooltipDescriptionLabelName = "item-tooltip-description";
@@ -47,7 +46,6 @@ namespace Shooter.Game
         private VisualElement handsGridElement;
         private VisualElement artifactsGridElement;
         private VisualElement artifactsSectionElement;
-        private Label artifactsTitleLabel;
         private VisualElement sideElement;
         private ItemTooltip itemTooltip;
         private ItemDragging dragging;
@@ -105,7 +103,6 @@ namespace Shooter.Game
             handsGridElement = root.Q<VisualElement>(HandsGridElementName);
             artifactsGridElement = root.Q<VisualElement>(ArtifactsGridElementName);
             artifactsSectionElement = root.Q<VisualElement>(ArtifactsSectionElementName);
-            artifactsTitleLabel = root.Q<Label>(ArtifactsTitleLabelName);
             sideElement = root.Q<VisualElement>(SideElementName);
             VisualElement tooltipElement = root.Q<VisualElement>(TooltipElementName);
             Label tooltipTitleLabel = root.Q<Label>(TooltipTitleLabelName);
@@ -122,7 +119,7 @@ namespace Shooter.Game
             VisualElement lootGridElement = root.Q<VisualElement>(LootGridElementName);
             Button lootTakeAllButton = root.Q<Button>(LootTakeAllButtonName);
 
-            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || artifactsGridElement == null || artifactsSectionElement == null || artifactsTitleLabel == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
+            if (windowElement == null || bagScrollElement == null || bagGridElement == null || handsGridElement == null || artifactsGridElement == null || artifactsSectionElement == null || sideElement == null || craftGridElement == null || craftOutputElement == null || givePanelElement == null || giveTitleLabel == null || giveGridElement == null || giveButton == null ||
                 lootPanelElement == null || lootTitleLabel == null || lootGridElement == null || lootTakeAllButton == null ||
                 tooltipElement == null || tooltipTitleLabel == null || tooltipDescriptionLabel == null || tooltipStatsElement == null)
             {
@@ -357,7 +354,6 @@ namespace Shooter.Game
                 column += ItemGrid.GetSizeInCells(asset).x;
             }
 
-            artifactsTitleLabel.text = $"Артефакты  {artifactSlots.Count}/{artifactHolder.MaxSlots}";
             return artifactSlots;
         }
 

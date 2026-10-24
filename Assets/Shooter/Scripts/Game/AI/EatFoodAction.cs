@@ -27,7 +27,7 @@ namespace Shooter.Game
             Hunger hunger = Agent.Value.GetComponent<Hunger>();
             if (inventoryUser == null || hunger == null) return Status.Failure;
 
-            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(candidate => candidate is StackableItemAsset stackableItem && stackableItem.FoodAmount > 0))
+            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(candidate => candidate is StackableItemAsset stackableItem && stackableItem.Stats.Food > 0))
             {
                 int saturationBefore = (int)hunger.Amount;
                 if (inventoryUser.TryUseItem((StackableItemAsset)item))

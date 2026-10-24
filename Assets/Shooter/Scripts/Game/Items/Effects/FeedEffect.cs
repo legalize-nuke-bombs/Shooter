@@ -16,8 +16,6 @@ namespace Shooter.Game
             hunger.RestoreAmount(amount);
         }
 
-        public override ItemStat Stat => new("Сытость", $"+{FoodAmount}", $"Food {FoodAmount}");
-
-        public override int FoodAmount => (int)amount;
+        public override ItemStats Stats => new() { Food = (int)amount };
     }
 }

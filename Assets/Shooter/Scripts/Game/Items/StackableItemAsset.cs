@@ -15,9 +15,7 @@ namespace Shooter.Game
         public SoundAsset UseSound => useSound;
 
         public bool IsUsable => effects.Length > 0;
-        public int HealAmount => effects.Length == 0 ? 0 : effects.Sum(effect => effect.HealAmount);
-        public int FoodAmount => effects.Length == 0 ? 0 : effects.Sum(effect => effect.FoodAmount);
-        public override IEnumerable<ItemStat> Stats => effects.Select(effect => effect.Stat);
+        public override ItemStats Stats => effects.Aggregate(new ItemStats(), (sum, effect) => sum + effect.Stats);
         public override string PromptDescription => IsUsable ? base.PromptDescription + " Usable." : base.PromptDescription;
     }
 }

@@ -11,7 +11,7 @@ namespace Shooter.Game
 
         public List<ArtifactEffectAsset> Effects => effects;
 
-        public override IEnumerable<ItemStat> Stats => effects.Select(effect => effect.Stat);
+        public override ItemStats Stats => effects.Aggregate(new ItemStats(), (sum, effect) => sum + effect.Stats);
 
         public override UniqueItem CreateItem()
         {

@@ -4,10 +4,18 @@ using UnityEngine.UIElements;
 namespace Shooter.Game
 {
     // The tooltip at the pointer while it rests on a thing in the bag window, as in most games: the name, the
-    // description and the numbers; it floats over the window, so the window keeps its size whatever it says
+    // description and the numbers; it floats over the window, so the window keeps its size whatever it says. Every
+    // number has its row in the layout, which names it; a number the thing does not have hides its row
     public sealed class ItemTooltip
     {
         private const float PointerGap = 16f;
+        private const string HealRowName = "item-tooltip-heal";
+        private const string HealPerMinuteRowName = "item-tooltip-heal-per-minute";
+        private const string FoodRowName = "item-tooltip-food";
+        private const string IntoxicationRowName = "item-tooltip-intoxication";
+        private const string DamageRowName = "item-tooltip-damage";
+        private const string MagazineRowName = "item-tooltip-magazine";
+        private const string StatValueClassName = "tooltip__stat-value";
 
         private readonly VisualElement tooltipElement;
         private readonly Label titleLabel;
@@ -33,13 +41,15 @@ namespace Shooter.Game
             descriptionLabel.text = asset.Description;
             descriptionLabel.style.display = string.IsNullOrEmpty(asset.Description) ? DisplayStyle.None : DisplayStyle.Flex;
 
-            statsElement.Clear();
-            foreach (ItemStat stat in asset.Stats)
-            {
-                statsElement.Add(CreateStat(stat));
-            }
+            ItemStats stats = asset.Stats;
+            ShowGain(HealRowName, stats.Heal);
+            ShowGain(HealPerMinuteRowName, stats.HealPerMinute);
+            ShowGain(FoodRowName, stats.Food);
+            ShowGain(IntoxicationRowName, stats.Intoxication);
+            ShowNumber(DamageRowName, stats.Damage);
+            ShowNumber(MagazineRowName, stats.Magazine);
+            statsElement.style.display = stats.Equals(new ItemStats()) ? DisplayStyle.None : DisplayStyle.Flex;
 
-            statsElement.style.display = statsElement.childCount == 0 ? DisplayStyle.None : DisplayStyle.Flex;
             tooltipElement.style.display = DisplayStyle.Flex;
         }
 
@@ -62,20 +72,21 @@ namespace Shooter.Game
             tooltipElement.style.top = Mathf.Max(0f, top);
         }
 
-        private static VisualElement CreateStat(ItemStat stat)
+        private void ShowGain(string rowName, int value)
         {
-            VisualElement statElement = new();
-            statElement.AddToClassList("tooltip__stat");
+            ShowRow(rowName, value, $"+{value}");
+        }
 
-            Label nameLabel = new(stat.Title);
-            nameLabel.AddToClassList("tooltip__stat-name");
-            statElement.Add(nameLabel);
+        private void ShowNumber(string rowName, int value)
+        {
+            ShowRow(rowName, value, $"{value}");
+        }
 
-            Label valueLabel = new(stat.Value);
-            valueLabel.AddToClassList("tooltip__stat-value");
-            statElement.Add(valueLabel);
-
-            return statElement;
+        private void ShowRow(string rowName, int value, string text)
+        {
+            VisualElement rowElement = statsElement.Q<VisualElement>(rowName);
+            rowElement.style.display = value == 0 ? DisplayStyle.None : DisplayStyle.Flex;
+            rowElement.Q<Label>(className: StatValueClassName).text = text;
         }
     }
 }
