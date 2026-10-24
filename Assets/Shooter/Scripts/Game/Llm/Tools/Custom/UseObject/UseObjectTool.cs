@@ -23,7 +23,7 @@ Use (turn on / off, pickup, etc.) usable objects on the map by their IDs.
 You must provide the IDs of the objects. The objects must be within a {radius}-meter radius from your current position.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             networkObject = Self.GetComponent<NetworkObject>();
             if (networkObject == null)

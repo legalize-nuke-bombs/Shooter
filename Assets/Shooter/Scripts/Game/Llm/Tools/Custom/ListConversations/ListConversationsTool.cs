@@ -23,7 +23,7 @@ Use this tool to list your conversations.
 To see the content, use read_conversation.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();

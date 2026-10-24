@@ -10,7 +10,7 @@ namespace Shooter.Game
         public override string Description =>
             "Look at yourself: your own health, stamina, belongings and relations.";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
         }
 

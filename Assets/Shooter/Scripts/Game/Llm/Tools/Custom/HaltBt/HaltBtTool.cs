@@ -15,7 +15,7 @@ namespace Shooter.Game
         public override string Description =>
             "Instantly stops the active second-level behavior tree action, if there is one.";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             customOrderSlot = Self.GetComponent<CustomOrderSlot>();
             if (customOrderSlot == null)

@@ -18,7 +18,7 @@ namespace Shooter.Game
 Use this tool to read the full content of notes by their names, one or many in a single call.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             llmNotes = Self.GetComponent<LlmNotes>();
             if (llmNotes == null)

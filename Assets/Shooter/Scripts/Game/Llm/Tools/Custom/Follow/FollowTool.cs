@@ -25,7 +25,7 @@ force: by default the call is refused while another second-level action is activ
 The result comes at once, the following itself goes on: you will be notified when the target is gone or when there is no way toward it. Use look_at_yourself to check the active second-level action and halt_bt to stop following.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             customOrderSlot = Self.GetComponent<CustomOrderSlot>();
             if (customOrderSlot == null)

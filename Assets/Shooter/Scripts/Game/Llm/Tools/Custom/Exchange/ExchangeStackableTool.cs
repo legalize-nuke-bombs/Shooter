@@ -21,7 +21,7 @@ Hand over and take stackable items, addressed by their exact names and amounts, 
 Things are taken only from lootable entities: a character has to give them to you.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             inventoryExchanger = Self.GetComponent<InventoryExchanger>();
             inventory = Self.GetComponent<Inventory>();

@@ -20,7 +20,7 @@ If the `detailed` field is passed as `true`, the response will contain the most 
 The detailed mode is available only for objects within a distance of {detailedModeMaxDistance} meters and closer.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
         }
 

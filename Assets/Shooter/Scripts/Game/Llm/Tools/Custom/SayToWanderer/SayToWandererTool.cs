@@ -17,7 +17,7 @@ namespace Shooter.Game
         public override string Description =>
             "Answer a wanderer who is talking to you. Answer in the language the wanderer speaks.";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();

@@ -27,7 +27,7 @@ Every line starts with the message index: pass it as `from` to read_conversation
 Only the newest matches are shown, narrow the pattern if there are more.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             conversationManager = Registers.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();

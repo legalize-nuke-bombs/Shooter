@@ -19,7 +19,7 @@ namespace Shooter.Game
 List the crafts you know: the id of each craft, its ingredients and its result.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             crafter = Self.GetComponent<Crafter>();
             if (crafter == null)

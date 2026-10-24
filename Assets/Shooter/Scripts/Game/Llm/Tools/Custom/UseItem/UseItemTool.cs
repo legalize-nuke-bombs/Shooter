@@ -18,7 +18,7 @@ Use (consume, etc) some of your stackable item.
 The item is addressed by its exact name from your bag.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             inventoryUser = Self.GetComponent<InventoryUser>();
             if (inventoryUser == null)

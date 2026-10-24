@@ -16,7 +16,7 @@ This tool displays a detailed description of the item, including its effects (sa
 You can process any number of IDs at once.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
         }
 

@@ -20,10 +20,10 @@ namespace Shooter.Game
         public void AttachTo(GameObject owner)
         {
             Self = owner;
-            HandleAttached();
+            Start();
         }
 
-        protected abstract void HandleAttached();
+        protected abstract void Start();
 
         public abstract string Execute(string arguments, LlmCallContext context);
     }

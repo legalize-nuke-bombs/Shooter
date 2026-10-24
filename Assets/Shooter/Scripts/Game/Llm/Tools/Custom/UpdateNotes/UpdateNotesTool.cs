@@ -19,7 +19,7 @@ Use this tool to replace existing notes, one or many in a single call: the descr
 Fails on notes that do not exist. To create new notes, use add_notes. The same size limits apply.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             llmNotes = Self.GetComponent<LlmNotes>();
             if (llmNotes == null)

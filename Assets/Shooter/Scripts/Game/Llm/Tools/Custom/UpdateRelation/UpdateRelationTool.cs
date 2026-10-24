@@ -20,7 +20,7 @@ If you want to attack a character, change the attitude to zero.
 Always use this tool if a character does something good or bad to you.
 ";
 
-        protected override void HandleAttached()
+        protected override void Start()
         {
             relations = Self.GetComponent<Relations>();
             if (relations == null)
