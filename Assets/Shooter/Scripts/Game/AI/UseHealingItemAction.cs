@@ -37,13 +37,13 @@ namespace Shooter.Game
             double lowestScore = missingHp * UnderHealPenalty.Value;
             int candidateCount = 0;
 
-            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(candidate => candidate is StackableItemAsset stackableItem && stackableItem.HealAmount > 0))
+            foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(candidate => candidate is StackableItemAsset stackableItem && stackableItem.Stats.Heal > 0))
             {
                 StackableItemAsset stackableItem = (StackableItemAsset)item;
                 if (inventory.CountStackable(stackableItem) <= 0) continue;
 
                 candidateCount++;
-                double healAmount = stackableItem.HealAmount;
+                double healAmount = stackableItem.Stats.Heal;
                 double score = healAmount <= missingHp
                     ? (missingHp - healAmount) * UnderHealPenalty.Value
                     : (healAmount - missingHp) * OverHealBasePenalty.Value * safetyCoefficient;

@@ -17,6 +17,6 @@ namespace Shooter.Game
             intoxication.AddToxin(toxin, force);
         }
 
-        public override ItemStat Stat => new("Опьянение", $"+{(int)force}", $"Intoxication {(int)force}");
+        public override ItemStats Stats => new() { Intoxication = (int)force };
     }
 }

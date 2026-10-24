@@ -5,8 +5,6 @@ namespace Shooter.Game
     public abstract class ItemEffect : ScriptableObject
     {
         public abstract void ApplyToUser(GameObject user);
-        public abstract ItemStat Stat { get; }
-        public virtual int FoodAmount => 0;
-        public virtual int HealAmount => 0;
+        public abstract ItemStats Stats { get; }
     }
 }
