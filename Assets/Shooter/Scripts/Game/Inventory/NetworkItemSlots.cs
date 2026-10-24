@@ -11,7 +11,7 @@ namespace Shooter.Game
 
         public IReadOnlyList<UniqueItem> ItemsBySlot => items;
 
-        public event Action Changed;
+        public event Action Replicated;
 
         public UniqueItem GetItemAt(int slot)
         {
@@ -41,9 +41,9 @@ namespace Shooter.Game
             }
 
             items[slot] = item;
-            item.Changed += MarkDirtyAndRaiseChanged;
+            item.Changed += MarkDirty;
 
-            MarkDirtyAndRaiseChanged();
+            MarkDirty();
         }
 
         public UniqueItem TakeFromSlot(int slot)
@@ -52,9 +52,9 @@ namespace Shooter.Game
             if (item == null) return null;
 
             items[slot] = null;
-            item.Changed -= MarkDirtyAndRaiseChanged;
+            item.Changed -= MarkDirty;
 
-            MarkDirtyAndRaiseChanged();
+            MarkDirty();
 
             return item;
         }
@@ -65,12 +65,12 @@ namespace Shooter.Game
             {
                 if (item == null) continue;
 
-                item.Changed -= MarkDirtyAndRaiseChanged;
+                item.Changed -= MarkDirty;
             }
 
             items.Clear();
 
-            MarkDirtyAndRaiseChanged();
+            MarkDirty();
         }
 
         public override void WriteField(FastBufferWriter writer)
@@ -103,7 +103,7 @@ namespace Shooter.Game
                 items.Add(item);
             }
 
-            Changed?.Invoke();
+            Replicated?.Invoke();
         }
 
         public override void WriteDelta(FastBufferWriter writer)
@@ -116,10 +116,9 @@ namespace Shooter.Game
             ReadField(reader);
         }
 
-        private void MarkDirtyAndRaiseChanged()
+        private void MarkDirty()
         {
             SetDirty(true);
-            Changed?.Invoke();
         }
     }
 }

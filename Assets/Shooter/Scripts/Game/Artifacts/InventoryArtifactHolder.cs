@@ -43,10 +43,10 @@ namespace Shooter.Game
         public void LoadObject(SaveToken content)
         {
             SaveData sd = content.ToObject<SaveData>();
-            slots.Clear();
-            foreach (int slot in slots)
+            foreach (int slot in sd.Slots)
             {
-                sd.Slots.Add(slot);
+                InventoryArtifactHolderTryHoldResultCode result = TryHoldSlot(slot);
+                if (result != InventoryArtifactHolderTryHoldResultCode.Ok) Log.Warn($"Entity {name} can not hold saved artifact slot {slot}: {result}");
             }
         }
 
@@ -82,39 +82,31 @@ namespace Shooter.Game
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            inventory.Changed += HandleInventoryChanged;
+            enabled = IsServer;
+
+            if (IsServer)
+            {
+                inventory.UniqueRemoved += StopHoldingIfRemoved;
+            }
+            else
+            {
+                slots.OnListChanged += AnnounceReplicatedSlots;
+            }
         }
 
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            inventory.Changed -= HandleInventoryChanged;
-        }
+            enabled = false;
 
-        private void HandleInventoryChanged()
-        {
-            // Backward loop allows safe removing on iteration
-            bool modification = false;
-            for (int i = slots.Count - 1; i >= 0; i--)
+            if (IsServer)
             {
-                int slot = slots[i];
-                UniqueItem item = inventory.GetUniqueAt(slot);
-                if (item == null || item is not Artifact)
-                {
-                    slots.RemoveAt(i);
-                    modification = true;
-                }
+                inventory.UniqueRemoved -= StopHoldingIfRemoved;
             }
-
-            if (modification)
+            else
             {
-                Changed?.Invoke();
+                slots.OnListChanged -= AnnounceReplicatedSlots;
             }
-
-            /*
-             * TODO
-             * блядь апи инвентаря уебищное из-за этого дисейбл тут не получается позвать как только первые подписки от эффектов артефактов будут будет пизда
-             */
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -153,7 +145,26 @@ namespace Shooter.Game
             }
             slots.Add(slot);
             (item as Artifact).Enable(gameObject);
+            Changed?.Invoke();
             return InventoryArtifactHolderTryHoldResultCode.Ok;
+        }
+
+        private void StopHoldingIfRemoved(int slot, UniqueItem item)
+        {
+            if (!slots.Remove(slot))
+            {
+                Log.Info($"Entity {name} holds no artifact in slot {slot}: nothing to stop, {item.AssetId} left it");
+                return;
+            }
+
+            (item as Artifact).Disable();
+            Log.Info($"Entity {name} stops holding artifact {item.AssetId}: it left slot {slot}");
+            Changed?.Invoke();
+        }
+
+        private void AnnounceReplicatedSlots(NetworkListEvent<int> change)
+        {
+            Changed?.Invoke();
         }
 
         private void Update()

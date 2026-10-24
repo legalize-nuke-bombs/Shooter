@@ -5,11 +5,6 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    /*
-     * TODO
-     * Это пиздец ужасно написано
-     */
-
     [RequireComponent(typeof(Inventory))]
     public class InventoryHolder : ShooterNetworkBehaviour, IDigestible, ISaveableComponent
     {
@@ -29,7 +24,9 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            HoldSlot(content.ToObject<SaveData>().Slot);
+            int slot = content.ToObject<SaveData>().Slot;
+            InventoryHolderTryHoldSlotResultCode result = HoldSlot(slot);
+            if (result != InventoryHolderTryHoldSlotResultCode.Ok) Log.Warn($"Entity {name} can not hold saved slot {slot}: {result}");
         }
 
         public int HeldSlot => heldSlot.Value;
@@ -64,28 +61,33 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            heldSlot.OnValueChanged += HandleHeldSlotChanged;
-            inventory.Changed += RelayInventoryChanged;
-
-            if (!IsServer) return;
-
-            inventory.Changed += StopHoldingIfSlotEmptied;
+            if (IsServer)
+            {
+                inventory.UniqueRemoved += StopHoldingIfRemoved;
+            }
+            else
+            {
+                heldSlot.OnValueChanged += AnnounceReplicatedSlot;
+            }
         }
 
         public override void OnNetworkDespawn()
         {
-            heldSlot.OnValueChanged -= HandleHeldSlotChanged;
-            inventory.Changed -= RelayInventoryChanged;
-
-            if (!IsServer) return;
-
-            inventory.Changed -= StopHoldingIfSlotEmptied;
+            if (IsServer)
+            {
+                inventory.UniqueRemoved -= StopHoldingIfRemoved;
+            }
+            else
+            {
+                heldSlot.OnValueChanged -= AnnounceReplicatedSlot;
+            }
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void HoldSlotRpc(int slot)
         {
-            HoldSlot(slot);
+            InventoryHolderTryHoldSlotResultCode result = HoldSlot(slot);
+            Log.Info($"Entity {name} inventory holder hold slot {slot} rpc result code: {result}");
         }
 
         public enum InventoryHolderTryHoldSlotResultCode
@@ -96,42 +98,42 @@ namespace Shooter.Game
         }
         public InventoryHolderTryHoldSlotResultCode HoldSlot(int slot)
         {
-            if (slot == Inventory.NoSlot)
+            if (slot != Inventory.NoSlot)
             {
-                heldSlot.Value = Inventory.NoSlot;
-                return InventoryHolderTryHoldSlotResultCode.Ok;
+                UniqueItem item = inventory.GetUniqueAt(slot);
+                if (item == null)
+                {
+                    return InventoryHolderTryHoldSlotResultCode.SlotIsEmpty;
+                }
+
+                UniqueItemAsset asset = (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId);
+                if (!asset.IsEquipable)
+                {
+                    return InventoryHolderTryHoldSlotResultCode.SlotIsNotEquipable;
+                }
             }
 
-            UniqueItem item = inventory.GetUniqueAt(slot);
-            if (item == null)
-            {
-                return InventoryHolderTryHoldSlotResultCode.SlotIsEmpty;
-            }
-
-            UniqueItemAsset asset = (UniqueItemAsset)Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId);
-            if (!asset.IsEquipable)
-            {
-                return InventoryHolderTryHoldSlotResultCode.SlotIsNotEquipable;
-            }
+            if (heldSlot.Value == slot) return InventoryHolderTryHoldSlotResultCode.Ok;
 
             heldSlot.Value = slot;
+            Changed?.Invoke();
             return InventoryHolderTryHoldSlotResultCode.Ok;
         }
 
-        private void StopHoldingIfSlotEmptied()
+        private void StopHoldingIfRemoved(int slot, UniqueItem item)
         {
-            if (heldSlot.Value == Inventory.NoSlot || HeldItem != null) return;
+            if (slot != heldSlot.Value)
+            {
+                Log.Info($"Entity {name} keeps holding slot {heldSlot.Value}: {item.AssetId} left slot {slot}");
+                return;
+            }
 
-            Log.Info($"Entity {name} holds nothing now: slot {heldSlot.Value} is empty");
             heldSlot.Value = Inventory.NoSlot;
-        }
-
-        private void RelayInventoryChanged()
-        {
+            Log.Info($"Entity {name} holds nothing now: {item.AssetId} left slot {slot}");
             Changed?.Invoke();
         }
 
-        private void HandleHeldSlotChanged(int previousSlot, int currentSlot)
+        private void AnnounceReplicatedSlot(int previousSlot, int currentSlot)
         {
             Changed?.Invoke();
         }

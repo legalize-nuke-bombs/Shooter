@@ -71,7 +71,7 @@ namespace Shooter.Game
                     continue;
                 }
 
-                AddStackable(asset, stack.Value);
+                stackAmounts[catalog.IndexOf(asset)] = stack.Value;
             }
 
             for (int slot = 0; slot < saveData.Slots.Count; slot++)
@@ -90,6 +90,8 @@ namespace Shooter.Game
 
                 slots.PutInSlot(slot, item);
             }
+
+            Changed?.Invoke();
         }
 
         public IReadOnlyList<UniqueItem> UniqueItems => slots.ItemsBySlot;
@@ -115,7 +117,7 @@ namespace Shooter.Game
                 UniqueItem item = slots.GetItemAt(slot);
                 if (item == null) continue;
 
-                lines.Add($"{catalog.GetAssetById(item.AssetId).Id} (slot {slot})");
+                lines.Add($"{item.AssetId} (slot {slot})");
             }
 
             return lines.Count == 0 ? "No items" : string.Join("\n", lines);
@@ -123,23 +125,31 @@ namespace Shooter.Game
 
         public event Action Changed;
 
+        // Raised on the server only: a client gets the slots from the network all at once and does not see what left
+        public event Action<int, UniqueItem> UniqueRemoved;
+
         public override void OnNetworkSpawn()
         {
-            stackAmounts.OnListChanged += HandleStackAmountsChanged;
-            slots.Changed += HandleSlotsChanged;
-
-            if (!IsServer) return;
-
-            for (int index = 0; index < Catalogs.GetCatalog<ItemCatalog>().Count; index++)
+            if (IsServer)
             {
-                stackAmounts.Add(0);
+                for (int index = 0; index < Catalogs.GetCatalog<ItemCatalog>().Count; index++)
+                {
+                    stackAmounts.Add(0);
+                }
+            }
+            else
+            {
+                stackAmounts.OnListChanged += AnnounceReplicatedStacks;
+                slots.Replicated += AnnounceReplicatedSlots;
             }
         }
 
         public override void OnNetworkDespawn()
         {
-            stackAmounts.OnListChanged -= HandleStackAmountsChanged;
-            slots.Changed -= HandleSlotsChanged;
+            if (IsServer) return;
+
+            stackAmounts.OnListChanged -= AnnounceReplicatedStacks;
+            slots.Replicated -= AnnounceReplicatedSlots;
         }
 
         public int CountStackable(StackableItemAsset asset)
@@ -162,6 +172,7 @@ namespace Shooter.Game
 
             stackAmounts[index] += amount;
             Log.Info($"Entity {name} took {amount} of {asset.Id}");
+            Changed?.Invoke();
         }
 
         public int RemoveStackable(StackableItemAsset asset, int amount, InventoryShortagePolicy shortagePolicy)
@@ -178,6 +189,7 @@ namespace Shooter.Game
             if (taken == 0) return 0;
 
             stackAmounts[index] = available - taken;
+            Changed?.Invoke();
 
             return taken;
         }
@@ -185,15 +197,21 @@ namespace Shooter.Game
         public int AddUnique(UniqueItem item)
         {
             int slot = slots.PutInFreeSlot(item);
-
             Log.Info($"Entity {name} took {item.AssetId} into slot {slot}");
+            Changed?.Invoke();
 
             return slot;
         }
 
         public UniqueItem RemoveUniqueAt(int slot)
         {
-            return slots.TakeFromSlot(slot);
+            UniqueItem item = slots.TakeFromSlot(slot);
+            if (item == null) return null;
+
+            UniqueRemoved?.Invoke(slot, item);
+            Changed?.Invoke();
+
+            return item;
         }
 
         public UniqueItem GetUniqueAt(int slot)
@@ -225,24 +243,31 @@ namespace Shooter.Game
             }
 
             RemoveAllItems();
+            Changed?.Invoke();
         }
 
         private void RemoveAllItems()
         {
             for (int index = 0; index < stackAmounts.Count; index++)
             {
-                stackAmounts[index] = 0;
+                if (stackAmounts[index] != 0) stackAmounts[index] = 0;
+            }
+
+            for (int slot = 0; slot < slots.ItemsBySlot.Count; slot++)
+            {
+                UniqueItem item = slots.TakeFromSlot(slot);
+                if (item != null) UniqueRemoved?.Invoke(slot, item);
             }
 
             slots.RemoveAllItems();
         }
 
-        private void HandleStackAmountsChanged(NetworkListEvent<int> change)
+        private void AnnounceReplicatedStacks(NetworkListEvent<int> change)
         {
             Changed?.Invoke();
         }
 
-        private void HandleSlotsChanged()
+        private void AnnounceReplicatedSlots()
         {
             Changed?.Invoke();
         }

@@ -39,7 +39,7 @@ Always prefer to keep a weapon in your hand.
             int slotId = arguments.Slot;
             if (slotId < -1)
             {
-                return $"Bad slot number ({slotId}";
+                return $"Bad slot number ({slotId})";
             }
             InventoryHolder.InventoryHolderTryHoldSlotResultCode result = inventoryHolder.HoldSlot(slotId);
             switch (result)

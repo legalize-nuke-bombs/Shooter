@@ -23,7 +23,7 @@ namespace Shooter.Game
             }
         }
 
-        private void Disable()
+        public void Disable()
         {
             foreach (ArtifactEffect effect in effects )
             {

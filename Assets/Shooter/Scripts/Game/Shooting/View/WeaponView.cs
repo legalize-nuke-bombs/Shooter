@@ -23,6 +23,7 @@ namespace Shooter.Game
         private Transform rightElbowHint;
         private Transform rightShoulder;
 
+        private Inventory inventory;
         private InventoryHolder inventoryHolder;
         private Skin skin;
 
@@ -37,6 +38,7 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
+            inventory = GetComponent<Inventory>();
             inventoryHolder = GetComponent<InventoryHolder>();
             skin = GetComponent<Skin>();
         }
@@ -55,12 +57,14 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
+            inventory.Changed += UpdateShownWeapon;
             inventoryHolder.Changed += UpdateShownWeapon;
             UpdateShownWeapon();
         }
 
         public override void OnNetworkDespawn()
         {
+            inventory.Changed -= UpdateShownWeapon;
             inventoryHolder.Changed -= UpdateShownWeapon;
         }
 
