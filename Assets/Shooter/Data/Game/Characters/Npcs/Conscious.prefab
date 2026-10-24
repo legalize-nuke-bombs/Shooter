@@ -188,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Llm
   systemPrompts:
   - {fileID: 11400000, guid: c73c83677512f0644ad6fcaec67a4593, type: 2}
+  - {fileID: 11400000, guid: 6016a725f5d9ef54082d6973b3264efd, type: 2}
   - {fileID: 11400000, guid: deaa5f34e6307c943b1b29ed0e8081bc, type: 2}
   - {fileID: 11400000, guid: f9381fea87786d149963881bb2484b5f, type: 2}
   - {fileID: 11400000, guid: 15dce29c4e723814eb7a5c2a5306561a, type: 2}

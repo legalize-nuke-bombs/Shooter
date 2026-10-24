@@ -14,6 +14,7 @@ namespace Shooter.Game
 Use this tool to examine the item by its ID.
 This tool displays a detailed description of the item, including its effects (satiation, healing, etc.).
 You can process any number of IDs at once.
+Always use this tool when you’re not sure about the item.
 ";
 
         protected override void Start()
