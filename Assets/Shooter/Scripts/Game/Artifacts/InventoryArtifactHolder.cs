@@ -7,10 +7,6 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    /*
-     * TODO
-     * Не проверял компиляцию и работу скорее всего есть проблемы
-     */
     [RequireComponent(typeof(Inventory))]
     public class InventoryArtifactHolder : ShooterNetworkBehaviour, ISaveableComponent, IDigestible
     {
