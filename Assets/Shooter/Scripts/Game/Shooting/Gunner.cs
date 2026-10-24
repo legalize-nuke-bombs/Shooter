@@ -114,7 +114,7 @@ namespace Shooter.Game
             if (!TryGetHeldFirearm(out Firearm firearm, out FirearmAsset asset)) return false;
             if (asset.Ammo == null) return false;
 
-            int missingRounds = asset.MagazineSize - firearm.RoundsInMagazine;
+            int missingRounds = asset.MagazineSize - firearm.Magazine;
             if (missingRounds <= 0 || inventory.CountStackable(asset.Ammo) == 0) return false;
 
             if (!hands.TryStartAction(ActionType.Reload, asset.ReloadTime, true, () => FinishReload(firearm, asset, missingRounds))) return false;

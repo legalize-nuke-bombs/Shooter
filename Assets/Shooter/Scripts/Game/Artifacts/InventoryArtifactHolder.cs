@@ -99,7 +99,7 @@ namespace Shooter.Game
             {
                 int slot = slots[i];
                 UniqueItem item = inventory.GetUniqueAt(slot);
-                if (item == null || false) // TODO artifact validation
+                if (item == null || item is not Artifact)
                 {
                     slots.RemoveAt(i);
                     modification = true;
@@ -137,7 +137,7 @@ namespace Shooter.Game
                 result = $"Failed to hold slot: {slot} is empty";
                 return;
             }
-            if (false) // TODO artifact validation
+            if (item is not Artifact)
             {
                 result = $"Failed to hold slot: {slot} is not an artifact";
                 return;

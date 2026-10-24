@@ -37,7 +37,7 @@ namespace Shooter.Game
                 return;
             }
 
-            int magazineRounds = firearm.RoundsInMagazine;
+            int magazineRounds = firearm.Magazine;
             int reserveRounds = firearmAsset.Ammo == null ? 0 : inventory.CountStackable(firearmAsset.Ammo);
 
             if (magazineRounds == shownMagazineRounds && reserveRounds == shownReserveRounds) return;
