@@ -65,7 +65,7 @@ namespace Shooter.Game
         private void AddPunchIfShotFires(bool sustained)
         {
             Firearm firearm = inventoryHolder.HeldItem as Firearm;
-            if (firearm == null || firearm.RoundsInMagazine <= 0) return;
+            if (firearm == null || firearm.Magazine <= 0) return;
 
             FirearmAsset firearmAsset = Catalogs.GetCatalog<ItemCatalog>().GetFirearmAssetById(firearm.AssetId);
             if (firearmAsset == null) return;
