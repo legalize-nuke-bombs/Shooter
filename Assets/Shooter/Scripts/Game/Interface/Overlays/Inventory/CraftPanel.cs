@@ -4,8 +4,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // The 3×3 grid the player lays stacks on and the output cell the matching recipe shows up in; the stacks only stay
-    // reserved in the bag until the server crafts
     public sealed class CraftPanel
     {
         private const int Side = 3;
@@ -60,7 +58,6 @@ namespace Shooter.Game
             return count;
         }
 
-        // A result that reached the bag pays one unit from every cell
         public void PayForArrivedOutput()
         {
             if (pendingCraft == null || CountInInventory(pendingCraft.Output) <= outputCountBeforeCraft) return;
@@ -173,7 +170,6 @@ namespace Shooter.Game
             }
         }
 
-        // The grid pays when the bag confirms the result arrived
         public void Craft()
         {
             CraftAsset matchingCraft = FindMatchingCraft();

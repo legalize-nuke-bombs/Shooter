@@ -6,8 +6,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // The bag window: the bag and the hands, with the craft grid, the give panel or the searched loot, and the split box
-    // beside them; whatever is dragged in it, the window decides what dropping it there means
     public class InventoryOverlay : Overlay
     {
         private const string WindowElementName = "inventory-screen";
@@ -173,7 +171,6 @@ namespace Shooter.Game
             Log.Info(loot != null ? $"The bag is open on {loot.name}" : takerName == null ? "The bag is open" : $"The bag is open, {takerName} can take things from it");
         }
 
-        // The other side of the bag is the searched loot, or else whoever in view can take things
         private void OpenOtherSide(Lootable loot)
         {
             InventoryExchanger inventoryExchanger = LocalPlayerFinder.FindComponent<InventoryExchanger>();
@@ -256,7 +253,6 @@ namespace Shooter.Game
 
             HashSet<int> artifactSlots = DrawArtifacts(itemCatalog);
 
-            // The bag grows by rows when its things do not fit, and its window scrolls
             GridPlacement placement = new(BagGridRows, BagGridColumns, true);
             List<VisualElement> itemElements = new();
 
@@ -300,15 +296,12 @@ namespace Shooter.Game
                 bagGridElement.Add(itemElement);
             }
 
-            // A search shows the bag and the loot side by side, the craft grid and the give panel step aside
             sideElement.style.display = lootPanel.IsOpen ? DisplayStyle.None : DisplayStyle.Flex;
             craftPanel.Draw();
             givePanel.Draw();
             lootPanel.Draw();
         }
 
-        // A result that reached the bag pays one unit from every craft cell; an offer the bag let go is done; what
-        // the bag no longer backs leaves the split piles first, then the offer, then the craft grid
         private void ReconcileWithInventory()
         {
             if (inventory == null)
@@ -336,7 +329,6 @@ namespace Shooter.Game
             return inventory == null ? 0 : inventory.CountStackable(asset) - CountReserved(asset);
         }
 
-        // The artifacts row shows the held artifacts in the order they were put on, the bag shows the rest
         private HashSet<int> DrawArtifacts(ItemCatalog itemCatalog)
         {
             HashSet<int> artifactSlots = new();
@@ -357,8 +349,6 @@ namespace Shooter.Game
             return artifactSlots;
         }
 
-        // Whatever thing the pointer rests on, in the bag, the hands, the artifacts, the loot, the offer or the craft grid,
-        // shows its tooltip beside the pointer; a drag hides it
         private void ShowTooltipAtPointer(PointerMoveEvent pointerMove)
         {
             ItemAsset asset = dragging.IsDragging ? null : FindPointedAsset(pointerMove.target as VisualElement);

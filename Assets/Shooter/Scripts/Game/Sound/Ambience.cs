@@ -53,7 +53,6 @@ namespace Shooter.Game
                 (shuffledTrackIndices[i], shuffledTrackIndices[j]) = (shuffledTrackIndices[j], shuffledTrackIndices[i]);
             }
 
-            // A new round must not open with the track that has just played
             if (audioSource.clip != null && tracks.Length > 1 && tracks[shuffledTrackIndices[^1]] == audioSource.clip)
             {
                 (shuffledTrackIndices[^1], shuffledTrackIndices[0]) = (shuffledTrackIndices[0], shuffledTrackIndices[^1]);

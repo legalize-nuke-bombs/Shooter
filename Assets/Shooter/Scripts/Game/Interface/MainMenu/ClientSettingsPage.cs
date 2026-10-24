@@ -36,7 +36,6 @@ namespace Shooter.Game
             EnableAntialiasingDropdownIfUpscalerOff();
         }
 
-        // DLSS replaces the camera antialiasing, so that row is greyed out while it is on
         private void EnableAntialiasingDropdownIfUpscalerOff()
         {
             antialiasingDropdown.SetEnabled(clientConfig.Upscaler == Upscalers.Off);

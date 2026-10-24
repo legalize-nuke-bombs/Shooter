@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    // The name the player sees for a character, online or not; one without a name, or gone from the world, is a stranger
     public static class NameMapper
     {
         private const string Stranger = "Незнакомец";

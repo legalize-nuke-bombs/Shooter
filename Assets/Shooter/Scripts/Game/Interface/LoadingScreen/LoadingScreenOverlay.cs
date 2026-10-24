@@ -8,8 +8,6 @@ using Random = UnityEngine.Random;
 
 namespace Shooter.Game
 {
-    // Lives in Boot through every scene. The menu and the host's world show the stages they start and the world takes the
-    // screen down once its save is in; the loads Netcode runs the screen follows itself, as nobody else is up to see them
     public class LoadingScreenOverlay : Overlay
     {
         private const string ScreenElementName = "loading";

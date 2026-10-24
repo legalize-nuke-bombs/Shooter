@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    // The other side of an exchange: a character or a lootable entity within the exchanger's reach
     public static class ExchangeTarget
     {
         public static bool TryFind(long targetId, bool taking, InventoryExchanger exchanger, out Inventory target, out string refusal)

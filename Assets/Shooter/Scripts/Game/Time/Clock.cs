@@ -72,7 +72,6 @@ namespace Shooter.Game
             }
         }
 
-        // The world's seconds that passed this frame, at the clock's pace and sped up with it while everyone sleeps
         public float DeltaTime => Time.deltaTime * Scale * GameSecondsPerRealSecond;
 
         public override void OnNetworkSpawn()

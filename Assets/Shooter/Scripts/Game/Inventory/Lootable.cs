@@ -16,7 +16,6 @@ namespace Shooter.Game
 
         public UsageType Usage => UsageType.Loot;
 
-        // A player searches it in the bag window, a resident looks into it and exchanges with its tools
         public void Use(NetworkObject user, out string promptResult)
         {
             if (user.TryGetComponent(out Player _) && user.TryGetComponent(out InventoryExchanger exchanger))

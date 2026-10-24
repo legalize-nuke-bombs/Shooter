@@ -158,7 +158,6 @@ namespace Shooter.Game
             }
         }
 
-        // The server opens a lootable to its looter's owner, whose bag window shows what lies in it
         public void OpenLoot(Lootable lootable)
         {
             if (!CanTakeFrom(lootable.GetComponent<Inventory>())) return;
@@ -227,7 +226,6 @@ namespace Shooter.Game
             ReceivedFromCharacter?.Invoke(giver, Catalogs.GetCatalog<ItemCatalog>().GetAssetById(item.AssetId), 1);
         }
 
-        // Things are taken only from what is there to be looted, a chest or a corpse: a living character gives them himself
         private bool CanTakeFrom(Inventory sourceInventory)
         {
             if (!sourceInventory.TryGetComponent(out Lootable _))

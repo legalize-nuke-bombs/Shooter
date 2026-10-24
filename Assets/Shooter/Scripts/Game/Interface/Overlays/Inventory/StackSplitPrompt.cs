@@ -7,8 +7,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // The box that asks how many to split off a stack, and the piles split off so far; a pile only lives in the window
-    // and is part of its stack in the bag
     public sealed class StackSplitPrompt
     {
         private const int AmountMaxDigits = 7;

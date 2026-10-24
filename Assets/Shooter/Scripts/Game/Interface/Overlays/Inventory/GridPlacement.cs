@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    // Which cells of a grid are taken; a growing grid adds rows below when the next item fits nowhere above
     public sealed class GridPlacement
     {
         private readonly List<bool[]> takenRows = new();

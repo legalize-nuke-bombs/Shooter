@@ -1,7 +1,5 @@
 namespace Shooter.Game
 {
-    // What was picked up in the bag window: a stack or its split pile, a unique item, a craft cell, the craft output, an
-    // offer, or a stack or a unique item of the searched loot
     public sealed class DraggedItem
     {
         private DraggedItem()

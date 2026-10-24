@@ -6,8 +6,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // The panel of things offered to whoever stands in the middle of the view and can take them; the bag only lets
-    // an offer go once the server confirms, until then it stays greyed out where it was
     public sealed class GivePanel
     {
         private const int GridColumns = 4;

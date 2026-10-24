@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // A ghost of the item follows the pointer from press to release; what the drop means is the window's to decide
     public sealed class ItemDragging
     {
         private readonly VisualElement windowElement;
