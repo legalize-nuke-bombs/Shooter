@@ -8,8 +8,6 @@ using Object = UnityEngine.Object;
 
 namespace Shooter.Editor
 {
-    // Shore markers tell a resident where the water is, the way people see a shore: the near water line in detail, the far
-    // one in a few points. Small markers stand close together and are seen from close by, large ones far apart and from afar
     public class BuildLakeShoresTool : EditorWindow
     {
         private const int MaxLakeCells = 2_000_000;
@@ -176,7 +174,7 @@ namespace Shooter.Editor
             return !float.IsNegativeInfinity(ground) && water.GetDepthAt(new Vector3(point.x, ground, point.z)) > 0f;
         }
 
-        // The lake cells next to dry ground, row by row so the markers come out the same on every build
+        // Row by row, so the markers come out the same on every build
         private List<Vector3> FindWaterLine(HashSet<Vector2Int> lakeCells, float waterLevel)
         {
             var edge = new List<Vector2Int>();
@@ -195,7 +193,6 @@ namespace Shooter.Editor
             return edge.ConvertAll(cell => ToPoint(cell, waterLevel));
         }
 
-        // The points of the water line that stand at least the spacing from each other and from the ones already standing
         private static List<Vector3> Thin(List<Vector3> waterLine, float spacing, List<Vector3> standing)
         {
             var kept = new List<Vector3>(standing);

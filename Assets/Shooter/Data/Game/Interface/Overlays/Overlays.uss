@@ -173,7 +173,6 @@
     display: none;
 }
 
-/* The bag, the craft grid, the offer and the loot stand side by side and end on one line at the bottom */
 .inventory__row {
     flex-direction: row;
     align-items: stretch;
@@ -227,7 +226,6 @@
     color: rgba(255, 255, 255, 0.45);
 }
 
-/* The tooltip floats by the pointer over the whole window, so nothing under it moves */
 .tooltip {
     position: absolute;
     max-width: 300px;
@@ -327,8 +325,6 @@
     position: relative;
 }
 
-/* The searched loot stands as tall as the bag beside it, titled like the bag's parts: its grid starts level with the
-   hands and scrolls in what the button at the bottom leaves */
 .loot {
     margin-left: 14px;
     display: none;

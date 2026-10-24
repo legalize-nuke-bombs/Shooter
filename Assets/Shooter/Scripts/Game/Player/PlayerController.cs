@@ -73,7 +73,6 @@ namespace Shooter.Game
             }
         }
 
-        // What the open bag window searches, a chest or a corpse the player used
         public Lootable Loot
         {
             get

@@ -6,8 +6,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // The other side of the bag window while a chest or a corpse is searched: what lies in it, which a drag into the bag
-    // or Take all takes, and what a drag from the bag onto it puts there; nothing waits for consent, the server does it
     public sealed class LootPanel
     {
         private const int GridColumns = 10;
@@ -43,7 +41,6 @@ namespace Shooter.Game
 
         public bool IsOpen => loot != null;
 
-        // Out of reach the search is over, as it is when the loot is gone
         public bool IsInReach => loot != null && loot.gameObject.activeInHierarchy &&
                                  Vector3.Distance(inventoryExchanger.transform.position, loot.transform.position) <= inventoryExchanger.Radius;
 
@@ -87,7 +84,6 @@ namespace Shooter.Game
 
             titleLabel.text = loot.ShownName;
 
-            // The grid grows by rows when the things do not fit, and its panel scrolls
             ItemCatalog itemCatalog = Catalogs.GetCatalog<ItemCatalog>();
             GridPlacement placement = new(shownRows, GridColumns, true);
             List<VisualElement> itemElements = new();
@@ -140,7 +136,6 @@ namespace Shooter.Game
             inventoryExchanger.GiveUniqueRpc(LootId, slot);
         }
 
-        // The panel stands as tall as the bag beside it, and its grid fills it with as many rows as fit
         private void FitRowsToHeight(GeometryChangedEvent change)
         {
             int rows = Mathf.Max(GridRows, Mathf.FloorToInt(change.newRect.height / ItemGrid.CellSize));

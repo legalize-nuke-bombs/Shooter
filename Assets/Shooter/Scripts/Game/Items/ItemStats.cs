@@ -1,6 +1,5 @@
 namespace Shooter.Game
 {
-    // The numbers of a thing: each effect gives its own, an item sums those of its effects
     public struct ItemStats
     {
         public int Heal;

@@ -3,9 +3,6 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    // The tooltip at the pointer while it rests on a thing in the bag window, as in most games: the name, the
-    // description and the numbers; it floats over the window, so the window keeps its size whatever it says. Every
-    // number has its row in the layout, which names it; a number the thing does not have hides its row
     public sealed class ItemTooltip
     {
         private const float PointerGap = 16f;
@@ -59,7 +56,6 @@ namespace Shooter.Game
             tooltipElement.style.display = DisplayStyle.None;
         }
 
-        // Below and to the right of the pointer, turned to its other side where the window would cut it off
         public void MoveTo(Vector2 pointer, Rect window)
         {
             float width = float.IsNaN(tooltipElement.resolvedStyle.width) ? 0f : tooltipElement.resolvedStyle.width;
