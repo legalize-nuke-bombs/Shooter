@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -53,6 +54,15 @@ namespace Shooter.Game
         public EarSoundAsset HeadshotSound => headshotSound;
 
         public SurfaceSounds ImpactSounds => impactSounds;
+
+        public override IEnumerable<ItemStat> Stats
+        {
+            get
+            {
+                yield return new ItemStat("Урон", $"{damage}", $"Damage {damage}");
+                yield return new ItemStat("Магазин", $"{MagazineSize}", $"Magazine {MagazineSize}");
+            }
+        }
 
         public override UniqueItem CreateItem()
         {

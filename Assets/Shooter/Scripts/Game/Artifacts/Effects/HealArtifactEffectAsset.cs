@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -12,6 +13,13 @@ namespace Shooter.Game
             return new HealArtifactEffect(speed);
         }
 
-        public override float HealPerSecond => speed;
+        public override ItemStat Stat
+        {
+            get
+            {
+                string perMinute = (speed * 60f).ToString("0.#", CultureInfo.InvariantCulture);
+                return new ItemStat("Здоровье", $"+{perMinute} в минуту", $"Heal {perMinute} per minute while held");
+            }
+        }
     }
 }

@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.FirearmSpec
   id: akm
   title: "\u0410\u041A\u041C"
-  description: "\u0421\u0442\u0430\u0440\u044b\u0439 \u0430\u0432\u0442\u043e\u043c\u0430\u0442. \u0422\u044f\u0436\u0451\u043b\u044b\u0439 \u0438 \u0433\u0440\u043e\u043c\u043a\u0438\u0439, \u0437\u0430\u0442\u043e \u043d\u0435 \u043f\u043e\u0434\u0432\u043e\u0434\u0438\u0442."
+  description: "\u0421\u0442\u0430\u0440\u044B\u0439 \u0430\u0432\u0442\u043E\u043C\u0430\u0442
+    \u043F\u043E\u0434 \u043F\u0430\u0442\u0440\u043E\u043D 7.62x39. \u0422\u044F\u0436\u0451\u043B\u044B\u0439
+    \u0438 \u0433\u0440\u043E\u043C\u043A\u0438\u0439, \u0437\u0430\u0442\u043E \u043D\u0435
+    \u043F\u043E\u0434\u0432\u043E\u0434\u0438\u0442."
   model: {fileID: 7492422559979336910, guid: a0e48e2f4140fa44ca545664cfbf5726, type: 3}
   icon: {fileID: 11400000, guid: dc2ef63794314c829b091e3628876c5c, type: 2}
   cells: {x: 4, y: 2}

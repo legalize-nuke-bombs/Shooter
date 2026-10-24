@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: ammo762x39
   title: "\u041F\u0430\u0442\u0440\u043E\u043D\u044B 7.62x39"
-  description: "\u041f\u0440\u043e\u043c\u0430\u0441\u043b\u0435\u043d\u043d\u044b\u0435, \u0432 \u043a\u0430\u0440\u0442\u043e\u043d\u043d\u043e\u0439 \u043f\u0430\u0447\u043a\u0435."
+  description: "\u041F\u0440\u043E\u043C\u0430\u0441\u043B\u0435\u043D\u043D\u044B\u0435,
+    \u0432 \u043A\u0430\u0440\u0442\u043E\u043D\u043D\u043E\u0439 \u043F\u0430\u0447\u043A\u0435.
+    \u041F\u043E\u0434\u0445\u043E\u0434\u044F\u0442 \u043A \u0410\u041A\u041C."
   model: {fileID: 2730496887622252028, guid: 4b489fd8296f8994c9891a9029c72a4b, type: 3}
   icon: {fileID: 11400000, guid: ff0cb665195a414ca33b54ef32f17835, type: 2}
   cells: {x: 2, y: 1}
