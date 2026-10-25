@@ -12,12 +12,6 @@ namespace Shooter.Infrastructure
         }
 
         [HideInCallstack]
-        public void Debug(string message)
-        {
-            WriteAtLevel(LogLevel.Debug, message);
-        }
-
-        [HideInCallstack]
         public void Debug(ref DebugInterpolatedStringHandler message)
         {
             if (message.IsEnabled) WriteAtLevel(LogLevel.Debug, message.ToString());
