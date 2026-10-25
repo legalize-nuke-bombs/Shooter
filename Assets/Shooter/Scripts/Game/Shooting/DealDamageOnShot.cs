@@ -18,12 +18,12 @@ namespace Shooter.Game
             character = GetComponent<Character>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             gunner.Shot += DealDamage;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             gunner.Shot -= DealDamage;
         }

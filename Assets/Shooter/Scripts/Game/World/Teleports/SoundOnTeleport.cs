@@ -15,12 +15,12 @@ namespace Shooter.Game
             teleporter = GetComponent<Teleporter>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             teleporter.Teleported += PlayForTeleported;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             teleporter.Teleported -= PlayForTeleported;
         }

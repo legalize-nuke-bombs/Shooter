@@ -15,12 +15,12 @@ namespace Shooter.Game
             gunner = GetComponent<Gunner>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             gunner.ShotTraced += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             gunner.ShotTraced -= Play;
         }

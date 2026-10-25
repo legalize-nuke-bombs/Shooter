@@ -18,12 +18,12 @@ namespace Shooter.Game
             pickupable = GetComponent<Pickupable>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             pickupable.PickedUp += PlayAtUser;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             pickupable.PickedUp -= PlayAtUser;
         }

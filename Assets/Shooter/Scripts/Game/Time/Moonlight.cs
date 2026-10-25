@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -21,7 +21,8 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).FirstOrDefault();
+            ReadOnlySpan<Clock> clocks = Registers.GetAll<Clock>(RegisterInactivePolicy.Include);
+            clock = clocks.Length == 0 ? null : clocks[0];
         }
 
         private void Update()

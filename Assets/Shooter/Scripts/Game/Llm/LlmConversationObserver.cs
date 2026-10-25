@@ -25,12 +25,12 @@ namespace Shooter.Game
             enabled = NetworkManager.Singleton.IsServer;
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             conversationManager.Said += Hear;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             conversationManager.Said -= Hear;
         }

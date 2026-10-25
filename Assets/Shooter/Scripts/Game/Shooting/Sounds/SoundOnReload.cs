@@ -18,12 +18,12 @@ namespace Shooter.Game
             speaker = GetComponent<Speaker>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             gunner.ReloadStarted += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             gunner.ReloadStarted -= Play;
         }

@@ -16,12 +16,12 @@ namespace Shooter.Game
             respawnPosition = GetComponent<RespawnPosition>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             sleeper.FellAsleep += RememberSleepingPlace;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             sleeper.FellAsleep -= RememberSleepingPlace;
         }

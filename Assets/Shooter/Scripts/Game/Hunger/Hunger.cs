@@ -24,13 +24,13 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             hands.Checking += CanAfford;
             hands.Performed += SpendOn;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             hands.Checking -= CanAfford;
             hands.Performed -= SpendOn;

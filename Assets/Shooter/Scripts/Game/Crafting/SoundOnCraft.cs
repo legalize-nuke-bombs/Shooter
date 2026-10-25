@@ -16,12 +16,12 @@ namespace Shooter.Game
             speaker = GetComponent<Speaker>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             crafter.Crafted += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             crafter.Crafted -= Play;
         }

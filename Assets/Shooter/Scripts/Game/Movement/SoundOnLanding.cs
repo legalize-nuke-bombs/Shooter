@@ -23,12 +23,12 @@ namespace Shooter.Game
             characterController = GetComponent<CharacterController>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             movement.Landed += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             movement.Landed -= Play;
         }

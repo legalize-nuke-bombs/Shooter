@@ -15,12 +15,12 @@ namespace Shooter.Game
             health = GetComponent<Health>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.DeathFinished += Despawn;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.DeathFinished -= Despawn;
         }

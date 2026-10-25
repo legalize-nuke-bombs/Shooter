@@ -49,12 +49,12 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += InterruptAction;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= InterruptAction;
         }

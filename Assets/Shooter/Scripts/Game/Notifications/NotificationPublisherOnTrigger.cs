@@ -40,12 +40,12 @@ namespace Shooter.Game
             trigger = GetComponent<Trigger>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             trigger.Fired += Notify;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             trigger.Fired -= Notify;
         }

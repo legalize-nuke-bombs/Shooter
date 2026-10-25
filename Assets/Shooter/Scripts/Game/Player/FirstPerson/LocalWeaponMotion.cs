@@ -53,7 +53,7 @@ namespace Shooter.Game
             footsteps = GetComponent<Footsteps>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             tracking = false;
         }

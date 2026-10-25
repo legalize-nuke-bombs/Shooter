@@ -18,12 +18,12 @@ namespace Shooter.Game
             speaker = GetComponent<Speaker>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             sleeper.FellAsleep += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             sleeper.FellAsleep -= Play;
         }

@@ -16,12 +16,12 @@ namespace Shooter.Game
             llm = GetComponent<Llm>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             inventoryExchanger.ReceivedFromCharacter += HandleReceivedFromCharacter;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             inventoryExchanger.ReceivedFromCharacter -= HandleReceivedFromCharacter;
         }

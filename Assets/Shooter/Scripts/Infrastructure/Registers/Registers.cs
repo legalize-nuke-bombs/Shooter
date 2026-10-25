@@ -1,17 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-
-
-/*
- * TODO
- * Это какая-то ебень
- * Много лишних неявных аллокаций что особенно в юнити дорого
- * Непонятно зачем используется MonoBehaviour вообще вместо IShooterBehaviour
- * Какой-то итератор не понятно нахуй нужный тут который создает обман что обход с минимумом аллокаций происходит хотя каждый запрос строит полную копию списка в любом случае + который не дает удобно использовать адекватно возможности массива
- * Попробовал написать адекватные кастомные интервалы апдейта - с такой хуйней это адекватно сделать невозможно
- */
 
 namespace Shooter.Infrastructure
 {
@@ -19,59 +7,70 @@ namespace Shooter.Infrastructure
     {
         private static readonly Journal Log = Logs.Here();
         private static readonly Dictionary<Type, Register> RegistersByType = new();
-        private static readonly Dictionary<Type, List<Register>> RegistersOfTypeAndSubtypes = new();
+        private static readonly Dictionary<Type, Register> ActiveRegistersByType = new();
 
-        public static void RegisterBehaviour<T>(T member) where T : MonoBehaviour, IShooterBehaviour
+        public static void RegisterBehaviour(IShooterBehaviour behaviour)
         {
-            if (!RegistersByType.TryGetValue(member.GetType(), out Register register))
-            {
-                register = new Register();
-                RegistersByType[member.GetType()] = register;
-                RegistersOfTypeAndSubtypes.Clear();
-            }
-
-            register.AddMember(member);
-            Log.Debug($"{member.GetType().Name} {member.name} registered");
+            AddToRegisters(RegistersByType, behaviour);
+            Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} registered");
         }
 
-        public static void UnregisterBehaviour<T>(T member) where T : MonoBehaviour, IShooterBehaviour
+        public static void UnregisterBehaviour(IShooterBehaviour behaviour)
         {
-            if (RegistersByType.TryGetValue(member.GetType(), out Register register))
-            {
-                register.RemoveMember(member);
-            }
-
-            Log.Debug($"{member.GetType().Name} {member.name} unregistered");
+            RemoveFromRegisters(RegistersByType, behaviour);
+            Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} unregistered");
         }
 
-        public static IEnumerable<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : MonoBehaviour, IShooterBehaviour
+        public static void ActivateBehaviour(IShooterBehaviour behaviour)
         {
-            foreach (Register register in GetRegistersOfTypeAndSubtypes(typeof(T)))
+            AddToRegisters(ActiveRegistersByType, behaviour);
+            Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} activated");
+        }
+
+        public static void DeactivateBehaviour(IShooterBehaviour behaviour)
+        {
+            RemoveFromRegisters(ActiveRegistersByType, behaviour);
+            Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} deactivated");
+        }
+
+        public static ReadOnlySpan<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class, IShooterBehaviour
+        {
+            Dictionary<Type, Register> registersByType = inactivePolicy == RegisterInactivePolicy.Include ? RegistersByType : ActiveRegistersByType;
+            return registersByType.TryGetValue(typeof(T), out Register register) ? register.GetMembers<T>() : ReadOnlySpan<T>.Empty;
+        }
+
+        public static T Get<T>() where T : class, IShooterBehaviour
+        {
+            ReadOnlySpan<T> members = GetAll<T>(RegisterInactivePolicy.Include);
+            if (members.Length != 1) throw new InvalidOperationException($"{members.Length} {typeof(T).Name} registered instead of one");
+            return members[0];
+        }
+
+        private static void AddToRegisters(Dictionary<Type, Register> registersByType, IShooterBehaviour behaviour)
+        {
+            for (Type type = behaviour.GetType(); IsRegisteredType(type); type = type.BaseType)
             {
-                foreach (MonoBehaviour member in register.GetMembers(inactivePolicy))
+                if (!registersByType.TryGetValue(type, out Register register))
                 {
-                    yield return (T)member;
+                    register = new Register(type);
+                    registersByType[type] = register;
                 }
+
+                register.AddMember(behaviour);
             }
         }
 
-        public static T Get<T>() where T : MonoBehaviour, IShooterBehaviour
+        private static void RemoveFromRegisters(Dictionary<Type, Register> registersByType, IShooterBehaviour behaviour)
         {
-            return GetAll<T>(RegisterInactivePolicy.Include).Single();
-        }
-
-        private static List<Register> GetRegistersOfTypeAndSubtypes(Type type)
-        {
-            if (RegistersOfTypeAndSubtypes.TryGetValue(type, out List<Register> registers)) return registers;
-
-            registers = new List<Register>();
-            foreach (KeyValuePair<Type, Register> registerByType in RegistersByType)
+            for (Type type = behaviour.GetType(); IsRegisteredType(type); type = type.BaseType)
             {
-                if (type.IsAssignableFrom(registerByType.Key)) registers.Add(registerByType.Value);
+                if (registersByType.TryGetValue(type, out Register register)) register.RemoveMember(behaviour);
             }
+        }
 
-            RegistersOfTypeAndSubtypes[type] = registers;
-            return registers;
+        private static bool IsRegisteredType(Type type)
+        {
+            return type != typeof(ShooterBehaviour) && type != typeof(ShooterNetworkBehaviour);
         }
     }
 }

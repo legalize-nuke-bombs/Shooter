@@ -53,12 +53,12 @@ namespace Shooter.Game
             AppendLifeStory();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += EndLifetime;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= EndLifetime;
         }

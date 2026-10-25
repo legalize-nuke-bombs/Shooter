@@ -16,12 +16,12 @@ namespace Shooter.Game
             notificationRecipient = GetComponent<NotificationRecipient>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             notificationRecipient.NotificationReceived += HandleNotificationReceived;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             notificationRecipient.NotificationReceived -= HandleNotificationReceived;
         }

@@ -20,12 +20,12 @@ namespace Shooter.Game
             health = GetComponent<Health>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             movement.Landed += DealFallDamage;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             movement.Landed -= DealFallDamage;
         }

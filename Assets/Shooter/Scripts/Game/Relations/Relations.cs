@@ -75,12 +75,12 @@ namespace Shooter.Game
             health = GetComponent<Health>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Damaged += HandleDamaged;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Damaged -= HandleDamaged;
         }

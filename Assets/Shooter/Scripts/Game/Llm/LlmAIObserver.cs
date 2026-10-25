@@ -19,13 +19,13 @@ namespace Shooter.Game
             behaviorReporter = GetComponent<BehaviorReporter>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             relations.RelationWorsenedByDamage += HandleRelationWorsenedByDamage;
             behaviorReporter.Reported += HandleBehaviorReported;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             relations.RelationWorsenedByDamage -= HandleRelationWorsenedByDamage;
             behaviorReporter.Reported -= HandleBehaviorReported;

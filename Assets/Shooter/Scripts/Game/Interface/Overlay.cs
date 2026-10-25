@@ -11,13 +11,13 @@ namespace Shooter.Game
 
         protected bool IsBound { get; private set; }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             panelRenderer = GetComponent<PanelRenderer>();
             panelRenderer.RegisterUIReloadCallback(HandleUIReloaded);
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             panelRenderer.UnregisterUIReloadCallback(HandleUIReloaded);
             UnbindElementsIfBound();

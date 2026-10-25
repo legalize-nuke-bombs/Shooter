@@ -26,14 +26,14 @@ namespace Shooter.Game
             additionalCameraData = GetComponent<HDAdditionalCameraData>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             clientConfig = Config.GetGameConfig().Client;
             clientConfig.propertyChanged += HandleClientConfigChanged;
             ApplyAntialiasingAndUpscaler();
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             clientConfig.propertyChanged -= HandleClientConfigChanged;
         }

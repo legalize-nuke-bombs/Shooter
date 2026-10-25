@@ -18,12 +18,12 @@ namespace Shooter.Game
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= Play;
         }

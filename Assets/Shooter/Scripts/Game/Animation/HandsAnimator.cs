@@ -23,12 +23,12 @@ namespace Shooter.Game
             skin = GetComponent<Skin>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             hands.ActionStarted += PlayAction;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             hands.ActionStarted -= PlayAction;
         }

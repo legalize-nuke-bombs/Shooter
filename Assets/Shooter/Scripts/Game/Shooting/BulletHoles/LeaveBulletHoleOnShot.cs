@@ -17,12 +17,12 @@ namespace Shooter.Game
             bulletHoles = Registers.Get<BulletHoles>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             gunner.Shot += LeaveBulletHole;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             gunner.Shot -= LeaveBulletHole;
         }

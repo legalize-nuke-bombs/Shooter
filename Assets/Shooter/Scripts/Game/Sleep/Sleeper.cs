@@ -51,13 +51,13 @@ namespace Shooter.Game
             sleepCycle = Registers.Get<SleepCycle>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += StopSleepingOnDeath;
             hands.Checking += AllowsOnlyWhileAwake;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= StopSleepingOnDeath;
             hands.Checking -= AllowsOnlyWhileAwake;

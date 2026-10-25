@@ -19,12 +19,12 @@ namespace Shooter.Game
             gunner = GetComponent<Gunner>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             gunner.Shot += Scare;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             gunner.Shot -= Scare;
         }

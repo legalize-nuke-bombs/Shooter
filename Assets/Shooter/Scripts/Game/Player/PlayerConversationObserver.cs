@@ -22,12 +22,12 @@ namespace Shooter.Game
             playerController = GetComponent<PlayerController>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             playerConversations.LiveLineArrived += HandleLiveLineArrived;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             playerConversations.LiveLineArrived -= HandleLiveLineArrived;
         }

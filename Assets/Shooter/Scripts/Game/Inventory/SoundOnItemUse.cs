@@ -16,12 +16,12 @@ namespace Shooter.Game
             speaker = GetComponent<Speaker>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             inventoryUser.Used += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             inventoryUser.Used -= Play;
         }
