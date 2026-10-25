@@ -353,8 +353,8 @@ MonoBehaviour:
       screenSpaceShadowBufferFormat: 48
     decalSettings:
       drawDistance: 1000
-      atlasWidth: 4096
-      atlasHeight: 4096
+      atlasWidth: 1024
+      atlasHeight: 1024
       transparentTextureResolution:
         m_Values: 000100000002000000040000
         m_SchemaId:
