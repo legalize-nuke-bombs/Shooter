@@ -17,7 +17,6 @@ namespace Shooter.Game
 
         private static readonly JsonSerializerSettings JsonSettings = new()
         {
-            Formatting = Formatting.Indented,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
@@ -42,13 +41,14 @@ namespace Shooter.Game
             string folderPath = Path.Combine(Application.temporaryCachePath, "LlmRequests", SessionFolderName);
             Directory.CreateDirectory(folderPath);
 
-            string requestJson = JsonConvert.SerializeObject(body, JsonSettings);
+            // The body carries the whole history, and serializing it on the main thread froze the frame; it holds its own copies of the messages and tool schemas nobody edits, so nothing changes under the serializer
+            string requestJson = await Task.Run(() => JsonConvert.SerializeObject(body, JsonSettings), cancellationToken);
             string requestPath = Path.Combine(folderPath, $"{requestId}-request.json");
             Log.Info($"Request {requestId}. Input: {requestJson.Length}ch. Will be saved as {requestPath}");
             await File.WriteAllTextAsync(requestPath, requestJson, cancellationToken);
 
             string responsePath = Path.Combine(folderPath, $"{requestId}-response.json");
-            string responseJson = await SendToHost(OpenAiHosts.CreateHostFor(config), config.Key, body, cancellationToken);
+            string responseJson = await SendToHost(OpenAiHosts.CreateHostFor(config), config.Key, body.Model, requestJson, cancellationToken);
             await File.WriteAllTextAsync(responsePath, responseJson, cancellationToken);
             Log.Info($"Response {requestId}. Output: {responseJson.Length}ch. Will be saved as {responsePath}");
 
@@ -119,13 +119,13 @@ namespace Shooter.Game
             return new LlmTurn { Content = answeredMessage.Content, ToolCalls = toolCalls.ToArray() };
         }
 
-        private static async Task<string> SendToHost(IOpenAiHost host, string apiKey, OpenAiRequest body, CancellationToken cancellationToken)
+        private static async Task<string> SendToHost(IOpenAiHost host, string apiKey, string model, string requestJson, CancellationToken cancellationToken)
         {
-            Log.Info($"Sending request. Model: {body.Model}");
+            Log.Info($"Sending request. Model: {model}");
 
             try
             {
-                string responseJson = await host.RequestChatCompletion(apiKey, body, cancellationToken);
+                string responseJson = await host.RequestChatCompletion(apiKey, requestJson, cancellationToken);
                 Log.Info("Response received successfully");
 
                 return responseJson;
