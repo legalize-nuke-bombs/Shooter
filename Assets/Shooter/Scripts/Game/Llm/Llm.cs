@@ -25,7 +25,7 @@ namespace Shooter.Game
         [SerializeField] private SystemPromptAsset[] systemPrompts;
         [SerializeField] [TextArea(5, 20)] private string character;
         [SerializeField] private KnowledgeAsset[] knowledges;
-        private string lifeStoryConflictPrompt = null; // The order in which component states are loaded from the save is not defined, so a conflict is registered during state loading and resolved on the first tick.
+        private string lifeStoryConflictPrompt = null; // The order in which component states are loaded from the save is not defined, so a conflict is registered during state loading and resolved in PostLoad, once all of them are loaded.
         [SerializeField] private float failureCooldown = 2.5f;
         [SerializeField] private int maxToolRounds = 10;
 
@@ -132,8 +132,7 @@ namespace Shooter.Game
         {
             return new SaveData
             {
-                // Conflicts that have not yet been resolved must persist!
-                LifeStory = (lifeStoryConflictPrompt == null) ? BuildLifeStory() : lifeStoryConflictPrompt,
+                LifeStory = BuildLifeStory(),
             };
         }
         public void LoadObject(SaveToken content)
@@ -143,6 +142,14 @@ namespace Shooter.Game
             {
                 lifeStoryConflictPrompt = sd.LifeStory;
             }
+        }
+        public void PostLoad()
+        {
+            if (lifeStoryConflictPrompt == null) return;
+
+            Log.Info($"Entity {entityName} life story conflict resolved");
+            llmHistory.AppendMessage(new LlmMessage{Role = LlmRole.User, Content = LifeStoryConflictHeader + $"Old:\n{lifeStoryConflictPrompt}\nNew:\n{BuildLifeStory()}"});
+            lifeStoryConflictPrompt = null;
         }
 
 
@@ -170,13 +177,6 @@ namespace Shooter.Game
 
             IsThinking = true;
             bool ticked = false;
-
-            if (lifeStoryConflictPrompt != null)
-            {
-                Log.Info($"Entity {entityName} life story conflict resolved");
-                llmHistory.AppendMessage(new LlmMessage{Role = LlmRole.User, Content = LifeStoryConflictHeader + $"Old:\n{lifeStoryConflictPrompt}\nNew:\n{BuildLifeStory()}"});
-                lifeStoryConflictPrompt = null;
-            }
 
             try
             {

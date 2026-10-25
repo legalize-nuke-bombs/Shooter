@@ -182,8 +182,24 @@ namespace Shooter.Infrastructure
             Log.Info($"Entity {name} loaded {knownKeys.Count} / {saveables.Length} components (provided {data.Components.Count})");
         }
 
-        public static bool TrySpawnFromSave(FrozenWorld frozenWorld, string id, SaveToken content)
+        public void PostLoad()
         {
+            foreach (ISaveableComponent saveable in GetComponents<ISaveableComponent>())
+            {
+                try
+                {
+                    saveable.PostLoad();
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Entity {name} failed to post-load component {saveable.GetType().Name}: {e.Message}");
+                }
+            }
+        }
+
+        public static bool TrySpawnFromSave(FrozenWorld frozenWorld, string id, SaveToken content, out SaveableEntity spawned)
+        {
+            spawned = null;
             SaveData data = content.ToObject<SaveData>();
             if (!data.Spawned)
             {
@@ -218,6 +234,7 @@ namespace Shooter.Infrastructure
 
             frozenWorld.FreezeSaveableObject(saveableObject);
             saveableObject.LoadObject(data);
+            spawned = saveableObject;
             return true;
         }
     }

@@ -9,16 +9,6 @@ namespace Shooter.Infrastructure
 
         private long nextId;
 
-        protected override void ShooterAwake()
-        {
-            SaveManager.SnapshotLoaded += RenumberIdsMissingFromSave;
-        }
-
-        protected override void ShooterOnDestroy()
-        {
-            SaveManager.SnapshotLoaded -= RenumberIdsMissingFromSave;
-        }
-
         private struct SaveData
         {
             public long Next { get; set; }
@@ -44,7 +34,7 @@ namespace Shooter.Infrastructure
 
         // The scene spawns and takes its ids before the save is read: an entity the save has no id for holds one taken
         // while the counter was not restored yet, and someone from the save may have the same
-        private void RenumberIdsMissingFromSave()
+        public void PostLoad()
         {
             int renumbered = 0;
             foreach (IncrementalId incrementalId in Registers.GetAll<IncrementalId>(RegisterInactivePolicy.Include))

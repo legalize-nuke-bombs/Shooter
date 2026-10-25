@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.IO;
 
@@ -14,9 +13,6 @@ namespace Shooter.Infrastructure
         private static readonly Journal Log = Logs.Here();
 
         public static bool IsSaving { get; private set; }
-
-        // The world has taken the save and is still frozen
-        public static event Action SnapshotLoaded;
 
         // IsSaving outlives the world: a save cut short by its runner's death never reaches the finally that clears it
         public static void ForgetUnfinishedSave()
@@ -81,7 +77,6 @@ namespace Shooter.Infrastructure
 
             if (!SnapshotManager.TryLoadSnapshot(frozenWorld, snapshotBytes)) return false;
 
-            SnapshotLoaded?.Invoke();
             frozenWorld.ThawAllSaveableObjects();
             Log.Info($"Loaded {saveLocation}");
             return true;

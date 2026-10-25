@@ -34,7 +34,7 @@ namespace Shooter.Game
         }
         public void LoadObject(SaveToken content)
         {
-            // The world is frozen while it loads, so a body saved alive is grown by the first Update after the thaw
+            // The world is frozen while it loads, so a body saved alive is grown in Start, which a frozen respawner gets only after the thaw
             SaveData saveData = content.ToObject<SaveData>();
             alive = false;
             rolledUntil = saveData.Alive ? null : saveData.RolledUntil;
@@ -50,15 +50,14 @@ namespace Shooter.Game
             }
         }
 
+        private void Start()
+        {
+            if (rolledUntil == null) SpawnBody();
+        }
+
         private void Update()
         {
             if (alive) return;
-
-            if (rolledUntil == null)
-            {
-                SpawnBody();
-                return;
-            }
 
             if (!growsBack) return;
 

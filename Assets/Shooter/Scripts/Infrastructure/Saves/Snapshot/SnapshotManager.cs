@@ -89,6 +89,7 @@ namespace Shooter.Infrastructure
             int inSceneFailed = 0;
             int nonSceneOk = 0;
             int nonSceneFailed = 0;
+            var loadedEntities = new List<SaveableEntity>();
             foreach (KeyValuePair<string, object> record in snapshot.GameObjects)
             {
                 string targetId = record.Key;
@@ -100,6 +101,7 @@ namespace Shooter.Infrastructure
                     try
                     {
                         target.LoadObject(targetValue);
+                        loadedEntities.Add(target);
                         inSceneOk++;
                     }
                     catch (Exception e)
@@ -113,8 +115,9 @@ namespace Shooter.Infrastructure
                     Log.Info($"Spawning non-scene object {targetId}...");
                     try
                     {
-                        if (SaveableEntity.TrySpawnFromSave(frozenWorld, targetId, targetValue))
+                        if (SaveableEntity.TrySpawnFromSave(frozenWorld, targetId, targetValue, out SaveableEntity spawned))
                         {
+                            loadedEntities.Add(spawned);
                             nonSceneOk++;
                         }
                         else
@@ -130,7 +133,16 @@ namespace Shooter.Infrastructure
                 }
             }
 
-            Log.Info($"Loaded from snapshot, inSceneOk {inSceneOk} inSceneFailed {inSceneFailed} nonSceneOk {nonSceneOk} nonSceneFailed {nonSceneFailed}");
+            int postLoaded = 0;
+            foreach (SaveableEntity loadedEntity in loadedEntities)
+            {
+                if (!loadedEntity.IsSpawned) continue;
+
+                loadedEntity.PostLoad();
+                postLoaded++;
+            }
+
+            Log.Info($"Loaded from snapshot, inSceneOk {inSceneOk} inSceneFailed {inSceneFailed} nonSceneOk {nonSceneOk} nonSceneFailed {nonSceneFailed} postLoaded {postLoaded}");
             return true;
         }
     }
