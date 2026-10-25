@@ -144,7 +144,7 @@ MonoBehaviour:
   sprintCost: 0.2
   walkCost: 0.1
   jumpCost: 0.8
-  idleCost: 0.04
+  idleCostPerHour: 4
   maxAmount: 100
 --- !u!114 &7180941744360380848
 MonoBehaviour:

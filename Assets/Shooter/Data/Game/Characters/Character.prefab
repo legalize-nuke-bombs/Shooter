@@ -333,7 +333,7 @@ MonoBehaviour:
   sprintCost: 25
   walkCost: 3
   jumpCost: 25
-  recoverySpeed: 12
+  recoveryPerHour: 1200
   sprintThreshold: 10
 --- !u!114 &-8817301132106935022
 MonoBehaviour:
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Intoxication.Intoxication
   ShowTopMostFoldoutHeaderGroup: 1
-  timerInterval: 0.25
+  decayIntervalSeconds: 9
   lowThreshold: 1
   digestThreshold: 10
 --- !u!114 &6403981259524950330

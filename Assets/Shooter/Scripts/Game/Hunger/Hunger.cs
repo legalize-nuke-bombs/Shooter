@@ -4,14 +4,13 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Hands))]
-    public abstract class Hunger : ShooterNetworkBehaviour, IDigestible
+    public abstract class Hunger : ShooterNetworkBehaviour, IDigestible, ITimePassedHandler
     {
         [SerializeField] private float sprintCost = 0.5f;
         [SerializeField] private float walkCost = 0.25f;
         [SerializeField] private float jumpCost = 2f;
-        [SerializeField] private float idleCost = 0.1f;
+        [SerializeField] private float idleCostPerHour = 10f;
 
-        private Clock clock;
         private Hands hands;
 
         public abstract float Amount { get; }
@@ -19,7 +18,6 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            clock = Registers.Get<Clock>();
             hands = GetComponent<Hands>();
             enabled = false;
         }
@@ -36,9 +34,9 @@ namespace Shooter.Game
             hands.Performed -= SpendOn;
         }
 
-        private void Update()
+        public void HandleTimePassed(float seconds)
         {
-            SpendAmount(idleCost * Time.deltaTime * clock.Scale);
+            SpendAmount(idleCostPerHour * seconds / Clock.HourLengthSeconds);
         }
 
         public DigestionPriority Priority => DigestionPriority.Medium;

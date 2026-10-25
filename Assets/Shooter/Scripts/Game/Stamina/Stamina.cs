@@ -7,18 +7,17 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Hands))]
-    public class Stamina : ShooterNetworkBehaviour, IDigestible, ISaveableComponent
+    public class Stamina : ShooterNetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
         [SerializeField] private float walkCost = 3f;
         [SerializeField] private float jumpCost = 10f;
-        [SerializeField] private float recoverySpeed = 12f;
+        [SerializeField] private float recoveryPerHour = 1200f;
         [SerializeField] private float sprintThreshold = 10f;
 
         private readonly NetworkVariable<float> amount = new(0f, NetworkVariableReadPermission.Owner);
 
-        private Clock clock;
         private Hands hands;
         private bool exhausted;
 
@@ -47,7 +46,6 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            clock = Registers.Get<Clock>();
             hands = GetComponent<Hands>();
             enabled = false;
         }
@@ -64,10 +62,9 @@ namespace Shooter.Game
             hands.Performed -= SpendOn;
         }
 
-        private void Update()
+        public void HandleTimePassed(float seconds)
         {
-            float dt = Time.deltaTime * clock.Scale;
-            amount.Value = Mathf.Min(amount.Value + dt * recoverySpeed, MaxAmount);
+            amount.Value = Mathf.Min(amount.Value + recoveryPerHour * seconds / Clock.HourLengthSeconds, MaxAmount);
 
             if (amount.Value >= sprintThreshold) exhausted = false;
         }

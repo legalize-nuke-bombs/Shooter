@@ -30,6 +30,9 @@ namespace Shooter.Game
         private readonly NetworkVariable<double> timestamp = new();
         private readonly NetworkVariable<float> scale = new(1f);
 
+        private int hourPassedCursor;
+        private float hourPassedCallsOwed;
+
         private struct SaveData
         {
             public double Timestamp { get; set; }
@@ -109,6 +112,44 @@ namespace Shooter.Game
         private void AdvanceTime()
         {
             timestamp.Value += NetworkManager.LocalTime.FixedDeltaTime * scale.Value * GameSecondsPerRealSecond;
+        }
+
+        private void Update()
+        {
+            float seconds = DeltaTime;
+            TellTimePassed(seconds);
+            TellHourPassed(seconds);
+        }
+
+        private static void TellTimePassed(float seconds)
+        {
+            int i = 0;
+            ReadOnlySpan<ITimePassedHandler> handlers = Registers.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude);
+            while (i < handlers.Length)
+            {
+                ITimePassedHandler handler = handlers[i];
+                handler.HandleTimePassed(seconds);
+                handlers = Registers.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude);
+                // A handler that switched itself off gave its slot to the last one, which is told next
+                if (i < handlers.Length && handlers[i] == handler) i++;
+            }
+        }
+
+        // Every handler is told once per world hour, the calls spread evenly over the hour instead of all at once
+        private void TellHourPassed(float seconds)
+        {
+            ReadOnlySpan<IHourPassedHandler> handlers = Registers.GetAll<IHourPassedHandler>(RegisterInactivePolicy.Exclude);
+            hourPassedCallsOwed = Mathf.Min(hourPassedCallsOwed + handlers.Length * seconds / HourLengthSeconds, handlers.Length);
+            while (hourPassedCallsOwed >= 1f && handlers.Length > 0)
+            {
+                if (hourPassedCursor >= handlers.Length) hourPassedCursor = 0;
+
+                IHourPassedHandler handler = handlers[hourPassedCursor];
+                handler.HandleHourPassed();
+                hourPassedCallsOwed--;
+                handlers = Registers.GetAll<IHourPassedHandler>(RegisterInactivePolicy.Exclude);
+                if (hourPassedCursor < handlers.Length && handlers[hourPassedCursor] == handler) hourPassedCursor++;
+            }
         }
     }
 }

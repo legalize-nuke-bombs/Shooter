@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class PickupRespawner : ShooterBehaviour, ISaveableComponent
+    public class PickupRespawner : ShooterBehaviour, ISaveableComponent, IHourPassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -53,14 +53,11 @@ namespace Shooter.Game
         private void Start()
         {
             if (rolledUntil == null) SpawnBody();
+            else enabled = growsBack;
         }
 
-        private void Update()
+        public void HandleHourPassed()
         {
-            if (alive) return;
-
-            if (!growsBack) return;
-
             // One roll per hour of world time; hours skipped at once, as by sleeping, get one roll with their joint chance
             int hours = (int)((clock.Timestamp - rolledUntil.Value) / Clock.HourLengthSeconds);
             if (hours < 1) return;
@@ -85,6 +82,8 @@ namespace Shooter.Game
             }
             alive = true;
             rolledUntil = null;
+            // A grown body needs no hourly calls until it is picked up
+            enabled = false;
             Pickupable pickupable = body.GetComponent<Pickupable>();
             pickupable.AssignItem(item);
             pickupable.PickedUp += HandleBodyPickedUp;
@@ -95,6 +94,7 @@ namespace Shooter.Game
             Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, {(growsBack ? $"grows back in about {averageHoursToGrow} h of world time" : "does not grow back")}");
             alive = false;
             rolledUntil = clock.Timestamp;
+            enabled = growsBack;
             pickupable.PickedUp -= HandleBodyPickedUp;
         }
 

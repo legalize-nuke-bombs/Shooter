@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
-    public class InventoryArtifactHolder : ShooterNetworkBehaviour, ISaveableComponent, IDigestible
+    public class InventoryArtifactHolder : ShooterNetworkBehaviour, ISaveableComponent, IDigestible, ITimePassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -17,7 +17,6 @@ namespace Shooter.Game
         private readonly NetworkList<int> slots = new();
 
         private Inventory inventory;
-        private Clock clock;
 
         public event Action Changed;
 
@@ -85,7 +84,6 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
-            clock = Registers.Get<Clock>();
         }
 
         public override void OnNetworkSpawn()
@@ -199,14 +197,13 @@ namespace Shooter.Game
             Changed?.Invoke();
         }
 
-        private void Update()
+        public void HandleTimePassed(float seconds)
         {
-            float dt = clock.DeltaTime;
             for (int i = 0; i < slots.Count; i++)
             {
                 int slot = slots[i];
                 Artifact artifact = inventory.GetUniqueAt(slot) as Artifact;
-                artifact.Update(dt);
+                artifact.Update(seconds);
             }
         }
     }

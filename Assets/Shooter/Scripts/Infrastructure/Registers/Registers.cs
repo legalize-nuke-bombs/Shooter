@@ -8,6 +8,7 @@ namespace Shooter.Infrastructure
         private static readonly Journal Log = Logs.Here();
         private static readonly Dictionary<Type, Register> RegistersByType = new();
         private static readonly Dictionary<Type, Register> ActiveRegistersByType = new();
+        private static readonly Dictionary<Type, Type[]> RegisteredTypesByBehaviourType = new();
 
         public static void RegisterBehaviour(IShooterBehaviour behaviour)
         {
@@ -33,13 +34,13 @@ namespace Shooter.Infrastructure
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} deactivated");
         }
 
-        public static ReadOnlySpan<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class, IShooterBehaviour
+        public static ReadOnlySpan<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
         {
             Dictionary<Type, Register> registersByType = inactivePolicy == RegisterInactivePolicy.Include ? RegistersByType : ActiveRegistersByType;
             return registersByType.TryGetValue(typeof(T), out Register register) ? register.GetMembers<T>() : ReadOnlySpan<T>.Empty;
         }
 
-        public static T Get<T>() where T : class, IShooterBehaviour
+        public static T Get<T>() where T : class
         {
             ReadOnlySpan<T> members = GetAll<T>(RegisterInactivePolicy.Include);
             if (members.Length != 1) throw new InvalidOperationException($"{members.Length} {typeof(T).Name} registered instead of one");
@@ -48,7 +49,7 @@ namespace Shooter.Infrastructure
 
         private static void AddToRegisters(Dictionary<Type, Register> registersByType, IShooterBehaviour behaviour)
         {
-            for (Type type = behaviour.GetType(); IsRegisteredType(type); type = type.BaseType)
+            foreach (Type type in GetRegisteredTypes(behaviour.GetType()))
             {
                 if (!registersByType.TryGetValue(type, out Register register))
                 {
@@ -62,15 +63,31 @@ namespace Shooter.Infrastructure
 
         private static void RemoveFromRegisters(Dictionary<Type, Register> registersByType, IShooterBehaviour behaviour)
         {
-            for (Type type = behaviour.GetType(); IsRegisteredType(type); type = type.BaseType)
+            foreach (Type type in GetRegisteredTypes(behaviour.GetType()))
             {
                 if (registersByType.TryGetValue(type, out Register register)) register.RemoveMember(behaviour);
             }
         }
 
-        private static bool IsRegisteredType(Type type)
+        // GetInterfaces builds a new array on every call, so the types a behaviour registers under are found once per type
+        private static Type[] GetRegisteredTypes(Type behaviourType)
         {
-            return type != typeof(ShooterBehaviour) && type != typeof(ShooterNetworkBehaviour);
+            if (RegisteredTypesByBehaviourType.TryGetValue(behaviourType, out Type[] registeredTypes)) return registeredTypes;
+
+            var types = new List<Type>();
+            for (Type type = behaviourType; type != typeof(ShooterBehaviour) && type != typeof(ShooterNetworkBehaviour); type = type.BaseType)
+            {
+                types.Add(type);
+            }
+
+            foreach (Type interfaceType in behaviourType.GetInterfaces())
+            {
+                if (interfaceType != typeof(IShooterBehaviour)) types.Add(interfaceType);
+            }
+
+            registeredTypes = types.ToArray();
+            RegisteredTypesByBehaviourType[behaviourType] = registeredTypes;
+            return registeredTypes;
         }
     }
 }

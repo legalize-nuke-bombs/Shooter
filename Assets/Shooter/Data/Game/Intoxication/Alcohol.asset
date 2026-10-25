@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Alcohol
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Body.Intoxication.ToxinSpec
   id: alcohol
-  halfLife: 30
+  halfLifeHours: 0.3
   perceptionEffects:
   - {fileID: 11400000, guid: f87ee2c92110800489d4ed2365f0df4e, type: 2}

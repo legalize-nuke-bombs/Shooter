@@ -8,16 +8,16 @@ namespace Shooter.Infrastructure
 
         private readonly Type memberType;
 
-        private IShooterBehaviour[] members;
+        private object[] members;
         private int count;
 
         public Register(Type memberType)
         {
             this.memberType = memberType;
-            members = (IShooterBehaviour[])Array.CreateInstance(memberType, InitialCapacity);
+            members = (object[])Array.CreateInstance(memberType, InitialCapacity);
         }
 
-        public ReadOnlySpan<T> GetMembers<T>() where T : class, IShooterBehaviour
+        public ReadOnlySpan<T> GetMembers<T>() where T : class
         {
             return new ReadOnlySpan<T>((T[])members, 0, count);
         }
@@ -26,7 +26,7 @@ namespace Shooter.Infrastructure
         {
             if (count == members.Length)
             {
-                var grownMembers = (IShooterBehaviour[])Array.CreateInstance(memberType, members.Length * 2);
+                var grownMembers = (object[])Array.CreateInstance(memberType, members.Length * 2);
                 Array.Copy(members, grownMembers, count);
                 members = grownMembers;
             }

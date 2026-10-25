@@ -9,11 +9,11 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Intoxication : ShooterNetworkBehaviour, IDigestible, ISaveableComponent
+    public class Intoxication : ShooterNetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private float timerInterval = 0.25f;
+        [SerializeField] private float decayIntervalSeconds = 9f;
         [SerializeField] private float lowThreshold = 1f;
         [SerializeField] private float digestThreshold = 10f;
 
@@ -21,7 +21,6 @@ namespace Shooter.Game
         private readonly NetworkList<double> levels = new();
 
         private float secondsSinceDecay;
-        private Clock clock;
         private ToxinCatalog toxinCatalog;
 
         private struct SaveData
@@ -69,7 +68,6 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            clock = Registers.Get<Clock>();
             toxinCatalog = Catalogs.GetCatalog<ToxinCatalog>();
             for (int i = 0; i < toxinCatalog.Count; i++)
             {
@@ -77,10 +75,12 @@ namespace Shooter.Game
             }
 
             Log.Info($"Entity {name} indexed {levelIndexByToxinId.Count} toxins");
+            enabled = false;
         }
 
         public override void OnNetworkSpawn()
         {
+            enabled = IsServer;
             if (!IsServer || levels.Count > 0) return;
 
             for (int i = 0; i < levelIndexByToxinId.Count; i++)
@@ -89,11 +89,10 @@ namespace Shooter.Game
             }
         }
 
-        private void Update()
+        public void HandleTimePassed(float seconds)
         {
-            if (!IsServer) return;
-            secondsSinceDecay += Time.deltaTime * clock.Scale;
-            if (secondsSinceDecay >= timerInterval)
+            secondsSinceDecay += seconds;
+            if (secondsSinceDecay >= decayIntervalSeconds)
             {
                 DecayLevels(secondsSinceDecay);
                 secondsSinceDecay = 0;
@@ -132,14 +131,14 @@ namespace Shooter.Game
             Log.Info($"Entity {name} got {toxin.name} {amount}, now {levels[toxinIndex]}");
         }
 
-        private void DecayLevels(float dt)
+        private void DecayLevels(float seconds)
         {
             foreach (FixedString32Bytes toxinId in levelIndexByToxinId.Keys)
             {
                 int toxinIndex = levelIndexByToxinId[toxinId];
                 ToxinAsset toxin = toxinCatalog.GetAssetById(toxinId);
                 if (levels[toxinIndex] < lowThreshold) continue;
-                double decayFactor = Math.Pow(0.5, dt / toxin.HalfLife);
+                double decayFactor = Math.Pow(0.5, seconds / (toxin.HalfLifeHours * Clock.HourLengthSeconds));
                 levels[toxinIndex] *= decayFactor;
                 if (levels[toxinIndex] < lowThreshold) levels[toxinIndex] = 0;
             }
