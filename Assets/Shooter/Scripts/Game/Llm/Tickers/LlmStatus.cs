@@ -1,6 +1,6 @@
 ﻿namespace Shooter.Game
 {
-    public class LlmStatus
+    public struct LlmStatus
     {
         public bool IsOverflowing { get; set; }
         public bool HasUnseenUrgentEvent { get; set; }
