@@ -36,7 +36,6 @@ namespace Shooter.Game
         public override void OnNetworkSpawn()
         {
             player.ControlChanged += HandleControlChanged;
-            // The server sees its shots happen, so only a client has to guess them
             if (IsServer) gunner.Shot += HandleShot;
             HandleControlChanged();
         }

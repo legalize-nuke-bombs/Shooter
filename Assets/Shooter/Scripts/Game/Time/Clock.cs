@@ -123,19 +123,13 @@ namespace Shooter.Game
 
         private static void TellTimePassed(float seconds)
         {
-            int i = 0;
-            ReadOnlySpan<ITimePassedHandler> handlers = Registers.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude);
-            while (i < handlers.Length)
+            for (int i = Registers.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude).Length - 1; i >= 0; i--)
             {
-                ITimePassedHandler handler = handlers[i];
-                handler.HandleTimePassed(seconds);
-                handlers = Registers.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude);
-                // A handler that switched itself off gave its slot to the last one, which is told next
-                if (i < handlers.Length && handlers[i] == handler) i++;
+                ReadOnlySpan<ITimePassedHandler> handlers = Registers.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude);
+                if (i < handlers.Length) handlers[i].HandleTimePassed(seconds);
             }
         }
 
-        // Every handler is told once per world hour, the calls spread evenly over the hour instead of all at once
         private void TellHourPassed(float seconds)
         {
             ReadOnlySpan<IHourPassedHandler> handlers = Registers.GetAll<IHourPassedHandler>(RegisterInactivePolicy.Exclude);
@@ -144,11 +138,10 @@ namespace Shooter.Game
             {
                 if (hourPassedCursor >= handlers.Length) hourPassedCursor = 0;
 
-                IHourPassedHandler handler = handlers[hourPassedCursor];
-                handler.HandleHourPassed();
+                handlers[hourPassedCursor].HandleHourPassed();
+                hourPassedCursor++;
                 hourPassedCallsOwed--;
                 handlers = Registers.GetAll<IHourPassedHandler>(RegisterInactivePolicy.Exclude);
-                if (hourPassedCursor < handlers.Length && handlers[hourPassedCursor] == handler) hourPassedCursor++;
             }
         }
     }

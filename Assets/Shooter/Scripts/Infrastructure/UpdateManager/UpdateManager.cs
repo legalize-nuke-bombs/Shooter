@@ -26,19 +26,13 @@ namespace Shooter.Infrastructure
 
         private static void TellAll<T>(Action<T> tell) where T : class, IShooterBehaviour
         {
-            int i = 0;
-            ReadOnlySpan<T> handlers = Registers.GetAll<T>(RegisterInactivePolicy.Exclude);
-            while (i < handlers.Length)
+            for (int i = Registers.GetAll<T>(RegisterInactivePolicy.Exclude).Length - 1; i >= 0; i--)
             {
-                T handler = handlers[i];
-                Tell(handler, tell);
-                handlers = Registers.GetAll<T>(RegisterInactivePolicy.Exclude);
-                // A handler that switched itself off gave its slot to the last one, which is told next
-                if (i < handlers.Length && handlers[i] == handler) i++;
+                ReadOnlySpan<T> handlers = Registers.GetAll<T>(RegisterInactivePolicy.Exclude);
+                if (i < handlers.Length) Tell(handlers[i], tell);
             }
         }
 
-        // As with Update called by Unity, an exception stops only the handler that threw it
         private static void Tell<T>(T handler, Action<T> tell) where T : class, IShooterBehaviour
         {
 #if ENABLE_PROFILER
@@ -58,7 +52,6 @@ namespace Shooter.Infrastructure
 #endif
         }
 
-        // Without a marker per type the profiler would show every update as one UpdateManager.Update
         private static ProfilerMarker GetMarker(Type type)
         {
             if (MarkersByType.TryGetValue(type, out ProfilerMarker marker)) return marker;
