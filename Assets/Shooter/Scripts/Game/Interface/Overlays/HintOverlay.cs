@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(LookHitFinder))]
-    public class HintOverlay : Overlay
+    public class HintOverlay : Overlay, IShooterUpdateable
     {
         private const string HintLabelName = "hint";
         private const string KeyboardScheme = "Keyboard&Mouse";
@@ -24,7 +24,7 @@ namespace Shooter.Game
             lookHitFinder = GetComponent<LookHitFinder>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

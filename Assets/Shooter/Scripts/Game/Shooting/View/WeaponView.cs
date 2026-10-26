@@ -9,7 +9,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Skin))]
-    public class WeaponView : ShooterNetworkBehaviour
+    public class WeaponView : ShooterNetworkBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -43,7 +43,7 @@ namespace Shooter.Game
             skin = GetComponent<Skin>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (shownWeapon == null || weaponAnchor == null) return;
             if (rightShoulder == null || leftShoulder == null) return;

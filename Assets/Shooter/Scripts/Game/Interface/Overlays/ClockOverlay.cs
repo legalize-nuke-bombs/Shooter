@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class ClockOverlay : Overlay
+    public class ClockOverlay : Overlay, IShooterUpdateable
     {
         private const string ClockLabelName = "clock";
         private const long Hidden = long.MinValue;
@@ -19,7 +19,7 @@ namespace Shooter.Game
             clock = Registers.Get<Clock>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

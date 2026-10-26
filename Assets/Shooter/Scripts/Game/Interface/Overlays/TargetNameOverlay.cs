@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(LookHitFinder))]
-    public class TargetNameOverlay : Overlay
+    public class TargetNameOverlay : Overlay, IShooterUpdateable
     {
         private const string NameLabelName = "target-name";
         private static readonly Journal Log = Logs.Here();
@@ -19,7 +19,7 @@ namespace Shooter.Game
             lookHitFinder = GetComponent<LookHitFinder>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

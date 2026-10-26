@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Health))]
-    public class Hands : ShooterNetworkBehaviour, IDigestible
+    public class Hands : ShooterNetworkBehaviour, IDigestible, IShooterUpdateable
     {
         private const string DeadRefusal = "dead";
         private const string BusyHandsRefusal = "hands busy";
@@ -120,7 +120,7 @@ namespace Shooter.Game
             actionCompletionCallback = null;
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             FinishActionIfDue();
         }

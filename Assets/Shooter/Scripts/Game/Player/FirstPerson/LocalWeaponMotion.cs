@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(LocalWeaponView))]
     [RequireComponent(typeof(Footsteps))]
-    public class LocalWeaponMotion : ShooterNetworkBehaviour
+    public class LocalWeaponMotion : ShooterNetworkBehaviour, IShooterLateUpdateable
     {
         private const float MinTeleportDistance = 1f;
 
@@ -74,7 +74,7 @@ namespace Shooter.Game
             enabled = player.IsControlledLocally;
         }
 
-        private void LateUpdate()
+        public void ShooterLateUpdate()
         {
             Transform weaponHold = localWeaponView.WeaponHold;
             float dt = Time.deltaTime;

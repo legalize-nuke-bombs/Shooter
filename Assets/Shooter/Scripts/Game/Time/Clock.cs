@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class Clock : ShooterNetworkBehaviour, ISaveableComponent
+    public class Clock : ShooterNetworkBehaviour, ISaveableComponent, IShooterUpdateable
     {
         public const string StampFormat = "yyyy.MM.dd HH:mm:ss";
         public const long DayLengthSeconds = 86400;
@@ -114,7 +114,7 @@ namespace Shooter.Game
             timestamp.Value += NetworkManager.LocalTime.FixedDeltaTime * scale.Value * GameSecondsPerRealSecond;
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             float seconds = DeltaTime;
             TellTimePassed(seconds);
@@ -130,7 +130,7 @@ namespace Shooter.Game
                 ITimePassedHandler handler = handlers[i];
                 handler.HandleTimePassed(seconds);
                 handlers = Registers.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude);
-                // A handler that switched itself off gave its slot to the last one, which is told next
+                // A handler that switched itself off moved the ones after it a slot back, so the same slot is told next
                 if (i < handlers.Length && handlers[i] == handler) i++;
             }
         }

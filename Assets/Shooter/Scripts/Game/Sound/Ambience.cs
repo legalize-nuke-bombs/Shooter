@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(AudioSource))]
-    public class Ambience : ShooterBehaviour
+    public class Ambience : ShooterBehaviour, IShooterUpdateable
     {
         [SerializeField] private AudioClip[] tracks;
         [SerializeField] [Range(0f, 1f)] private float volume = 0.2f;
@@ -22,7 +22,7 @@ namespace Shooter.Game
             audioSource.volume = volume;
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (audioSource.isPlaying || tracks == null || tracks.Length == 0) return;
 

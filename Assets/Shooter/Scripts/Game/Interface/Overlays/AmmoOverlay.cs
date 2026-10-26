@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class AmmoOverlay : Overlay
+    public class AmmoOverlay : Overlay, IShooterUpdateable
     {
         private const string CounterElementName = "ammo";
         private const string MagazineLabelName = "ammo-magazine";
@@ -20,7 +20,7 @@ namespace Shooter.Game
         private int shownMagazineRounds = Hidden;
         private int shownReserveRounds = Hidden;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

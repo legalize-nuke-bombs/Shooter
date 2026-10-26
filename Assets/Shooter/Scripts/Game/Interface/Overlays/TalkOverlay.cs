@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class TalkOverlay : Overlay
+    public class TalkOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "talk";
         private const string PartnerNameLabelName = "talk-name";
@@ -37,7 +37,7 @@ namespace Shooter.Game
         private bool talkingOverRadio;
         private long? shownRadioPartnerId;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

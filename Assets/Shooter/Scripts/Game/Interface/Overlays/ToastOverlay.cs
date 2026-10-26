@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class ToastOverlay : Overlay
+    public class ToastOverlay : Overlay, IShooterUpdateable
     {
         private const string FeedElementName = "toasts";
         private const long ToastLifetimeMilliseconds = 5000;
@@ -15,7 +15,7 @@ namespace Shooter.Game
         private Player subscribedPlayer;
         private IToastSource[] toastSources;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

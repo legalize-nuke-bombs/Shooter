@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class InviteOverlay : Overlay
+    public class InviteOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "invite";
         private const string AddressFieldName = "invite-address";
@@ -24,7 +24,7 @@ namespace Shooter.Game
         private Label statusLabel;
         private VisualElement windowElement;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

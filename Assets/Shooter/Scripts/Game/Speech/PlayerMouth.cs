@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Sleeper))]
-    public class PlayerMouth : ShooterNetworkBehaviour
+    public class PlayerMouth : ShooterNetworkBehaviour, IShooterUpdateable
     {
         public const float TalkReach = 8f;
         public const int MaxSpeechLength = 300;
@@ -117,7 +117,7 @@ namespace Shooter.Game
             CloseTalk();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsTalking) return;
             if (talker.isActiveAndEnabled && IsWithinTalkReach(talker) && CanTalkTo(talker)) return;

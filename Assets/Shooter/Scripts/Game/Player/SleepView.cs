@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Sleeper))]
-    public class SleepView : ShooterNetworkBehaviour
+    public class SleepView : ShooterNetworkBehaviour, IShooterUpdateable
     {
         private const float EyesClosingSeconds = 0.45f;
         private const float EyesOpeningSeconds = 0.7f;
@@ -28,7 +28,7 @@ namespace Shooter.Game
             sleeper = GetComponent<Sleeper>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!player.IsControlledLocally || view == null) return;
 

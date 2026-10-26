@@ -9,7 +9,7 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.LocalPrediction)]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
-    public class LocalRecoil : ShooterNetworkBehaviour
+    public class LocalRecoil : ShooterNetworkBehaviour, IShooterUpdateable
     {
         [SerializeField] private float recovery = 14f;
 
@@ -26,7 +26,7 @@ namespace Shooter.Game
             inventoryHolder = GetComponent<InventoryHolder>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             PunchAngles *= Mathf.Exp(-recovery * Time.deltaTime);
 

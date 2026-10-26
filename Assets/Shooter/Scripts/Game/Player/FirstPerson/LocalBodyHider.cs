@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Skin))]
     [RequireComponent(typeof(WeaponView))]
-    public class LocalBodyHider : ShooterNetworkBehaviour
+    public class LocalBodyHider : ShooterNetworkBehaviour, IShooterLateUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -28,7 +28,7 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private void LateUpdate()
+        public void ShooterLateUpdate()
         {
             if (needsHiding || hiddenModelInstance != skin.ModelInstance) HideModelAndHeldWeapon();
         }

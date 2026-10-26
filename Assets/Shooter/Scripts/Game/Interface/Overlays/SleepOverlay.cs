@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class SleepOverlay : Overlay
+    public class SleepOverlay : Overlay, IShooterUpdateable
     {
         private const string ScreenElementName = "sleep";
         private static readonly Journal Log = Logs.Here();
@@ -13,7 +13,7 @@ namespace Shooter.Game
         private float shownEyesClosedAmount;
         private SleepView sleepView;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

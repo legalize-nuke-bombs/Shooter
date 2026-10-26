@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class DebugOverlay : Overlay
+    public class DebugOverlay : Overlay, IShooterUpdateable
     {
         private const string PanelLabelName = "debug";
         private const int FrameSamples = 120;
@@ -55,7 +55,7 @@ namespace Shooter.Game
             hostVersion = Registers.Get<HostVersion>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

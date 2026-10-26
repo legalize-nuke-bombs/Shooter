@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class CrosshairOverlay : Overlay
+    public class CrosshairOverlay : Overlay, IShooterUpdateable
     {
         private const string CrosshairElementName = "crosshair";
         private static readonly Journal Log = Logs.Here();
@@ -11,7 +11,7 @@ namespace Shooter.Game
         private VisualElement crosshairElement;
         private bool shown;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Light))]
-    public class Moonlight : ShooterBehaviour
+    public class Moonlight : ShooterBehaviour, IShooterUpdateable
     {
         [SerializeField] private float brightest = 1.2f;
 
@@ -25,7 +25,7 @@ namespace Shooter.Game
             clock = clocks.Length == 0 ? null : clocks[0];
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             // No clock in the menu, and none any more for a frame on the way out: the world goes before its scene does
             if (clock == null) return;

@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
-    public class LocalWeaponView : ShooterNetworkBehaviour
+    public class LocalWeaponView : ShooterNetworkBehaviour, IShooterLateUpdateable
     {
         private const string FirstPersonLayerName = "FirstPerson";
 
@@ -39,7 +39,7 @@ namespace Shooter.Game
             view = GetComponentInChildren<Camera>();
         }
 
-        private void LateUpdate()
+        public void ShooterLateUpdate()
         {
             if (shownWeapon == null || view == null) return;
 

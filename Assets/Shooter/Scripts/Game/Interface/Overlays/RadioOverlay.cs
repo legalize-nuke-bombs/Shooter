@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class RadioOverlay : Overlay
+    public class RadioOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "radio";
         private const string ContactScrollViewName = "radio-list";
@@ -19,7 +19,7 @@ namespace Shooter.Game
         private bool stale;
         private VisualElement windowElement;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

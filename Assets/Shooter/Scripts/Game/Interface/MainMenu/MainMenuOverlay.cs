@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class MainMenuOverlay : Overlay
+    public class MainMenuOverlay : Overlay, IShooterUpdateable
     {
         private const string PanelElementName = "panel";
         private const string VersionLabelName = "version";
@@ -67,7 +67,7 @@ namespace Shooter.Game
             ShowPendingWarning();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

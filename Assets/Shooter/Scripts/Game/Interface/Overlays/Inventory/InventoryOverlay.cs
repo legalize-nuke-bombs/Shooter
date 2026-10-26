@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class InventoryOverlay : Overlay
+    public class InventoryOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "inventory-screen";
         private const string BagScrollElementName = "inventory-scroll";
@@ -55,7 +55,7 @@ namespace Shooter.Game
         private bool open;
         private bool stale;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

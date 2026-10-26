@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Skin))]
-    public class SkinHiderWhileDead : ShooterNetworkBehaviour
+    public class SkinHiderWhileDead : ShooterNetworkBehaviour, IShooterLateUpdateable
     {
         private Health health;
         private Skin skin;
@@ -20,7 +20,7 @@ namespace Shooter.Game
 
         // Applied after the rest of the frame: on death the corpse takes the held weapon in the same frame, and the
         // weapon rig has to come down while the model is still active, or the animator warns about it on respawn
-        private void LateUpdate()
+        public void ShooterLateUpdate()
         {
             skin.SetModelVisible(modelVisible);
             enabled = false;

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Flocks : ShooterNetworkBehaviour
+    public class Flocks : ShooterNetworkBehaviour, IShooterLateUpdateable
     {
         private const float FullEscapeFear = 0.5f;
         private const float NewEscapeFearMargin = 0.25f;
@@ -113,7 +113,7 @@ namespace Shooter.Game
             Destroy(scaredMaterial);
         }
 
-        private void LateUpdate()
+        public void ShooterLateUpdate()
         {
             if (Time.time >= nextRetargetTime) Retarget();
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Light))]
-    public class Screenlight : ShooterBehaviour
+    public class Screenlight : ShooterBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -36,7 +36,7 @@ namespace Shooter.Game
             Log.Info($"Screen {name}: light {screenLight.type} enabled {screenLight.enabled} intensity {screenLight.intensity} range {screenLight.range}, renderer {(screen == null ? "none" : screen.name)}, material {(screenMaterial == null ? "none" : screenMaterial.name)}, shader {(screenMaterial == null ? "none" : screenMaterial.shader.name)}, mesh {meshDescription}");
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             float noiseTime = Time.time * pace + noiseOffset;
 

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(BehaviorReporter))]
-    public class CustomOrderSlot : ShooterBehaviour, IDigestible, ISaveableComponent
+    public class CustomOrderSlot : ShooterBehaviour, IDigestible, ISaveableComponent, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -19,7 +19,7 @@ namespace Shooter.Game
             behaviorReporter = GetComponent<BehaviorReporter>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             FinishOrderIfDone();
         }

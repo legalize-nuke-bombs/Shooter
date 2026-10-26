@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
-    public class PlayerConversations : ShooterNetworkBehaviour
+    public class PlayerConversations : ShooterNetworkBehaviour, IShooterUpdateable
     {
         private const int MaxBatchBytes = 16 * 1024;
         private const int LineOverheadBytes = 32;
@@ -73,7 +73,7 @@ namespace Shooter.Game
             ClearContacts();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             // The owner pulls its history itself: one path for a fresh body, a reclaimed one and the host,
             // whose own body never changes owner and so never raises an ownership event

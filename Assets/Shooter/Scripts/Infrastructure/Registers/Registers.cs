@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
@@ -9,6 +11,7 @@ namespace Shooter.Infrastructure
         private static readonly Dictionary<Type, Register> RegistersByType = new();
         private static readonly Dictionary<Type, Register> ActiveRegistersByType = new();
         private static readonly Dictionary<Type, Type[]> RegisteredTypesByBehaviourType = new();
+        private static readonly Dictionary<Type, int> ExecutionOrdersByBehaviourType = new();
 
         public static void RegisterBehaviour(IShooterBehaviour behaviour)
         {
@@ -49,6 +52,7 @@ namespace Shooter.Infrastructure
 
         private static void AddToRegisters(Dictionary<Type, Register> registersByType, IShooterBehaviour behaviour)
         {
+            int executionOrder = GetExecutionOrder(behaviour.GetType());
             foreach (Type type in GetRegisteredTypes(behaviour.GetType()))
             {
                 if (!registersByType.TryGetValue(type, out Register register))
@@ -57,7 +61,7 @@ namespace Shooter.Infrastructure
                     registersByType[type] = register;
                 }
 
-                register.AddMember(behaviour);
+                register.AddMember(behaviour, executionOrder);
             }
         }
 
@@ -88,6 +92,15 @@ namespace Shooter.Infrastructure
             registeredTypes = types.ToArray();
             RegisteredTypesByBehaviourType[behaviourType] = registeredTypes;
             return registeredTypes;
+        }
+
+        private static int GetExecutionOrder(Type behaviourType)
+        {
+            if (ExecutionOrdersByBehaviourType.TryGetValue(behaviourType, out int executionOrder)) return executionOrder;
+
+            executionOrder = behaviourType.GetCustomAttribute<DefaultExecutionOrder>()?.order ?? 0;
+            ExecutionOrdersByBehaviourType[behaviourType] = executionOrder;
+            return executionOrder;
         }
     }
 }

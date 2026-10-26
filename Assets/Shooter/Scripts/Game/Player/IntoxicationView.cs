@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Intoxication))]
-    public class IntoxicationView : ShooterNetworkBehaviour
+    public class IntoxicationView : ShooterNetworkBehaviour, IShooterUpdateable
     {
         private readonly Dictionary<ToxinAsset, List<PerceptionEffect>> perceptionEffectsByToxin = new();
 
@@ -20,7 +20,7 @@ namespace Shooter.Game
             intoxication = GetComponent<Intoxication>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!player.IsControlledLocally) return;
 

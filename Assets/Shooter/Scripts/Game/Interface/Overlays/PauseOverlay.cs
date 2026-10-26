@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class PauseOverlay : Overlay
+    public class PauseOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "pause";
         private const string ResumeButtonName = "pause-resume";
@@ -21,7 +21,7 @@ namespace Shooter.Game
         private Button saveButton;
         private VisualElement windowElement;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

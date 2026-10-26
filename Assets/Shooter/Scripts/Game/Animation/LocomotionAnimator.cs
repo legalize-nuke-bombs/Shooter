@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Animator))]
-    public class LocomotionAnimator : ShooterBehaviour
+    public class LocomotionAnimator : ShooterBehaviour, IShooterUpdateable
     {
         private static readonly int SpeedXParameter = Animator.StringToHash("SpeedX");
         private static readonly int SpeedZParameter = Animator.StringToHash("SpeedZ");
@@ -20,7 +20,7 @@ namespace Shooter.Game
             previousPosition = transform.position;
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             Vector3 position = transform.position;
             Vector3 travel = position - previousPosition;

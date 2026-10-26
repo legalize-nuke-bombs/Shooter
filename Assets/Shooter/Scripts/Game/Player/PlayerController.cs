@@ -12,7 +12,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(Respawner))]
-    public class PlayerController : ShooterNetworkBehaviour
+    public class PlayerController : ShooterNetworkBehaviour, IShooterUpdateable, IShooterLateUpdateable
     {
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
@@ -99,7 +99,7 @@ namespace Shooter.Game
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (controls == null) return;
 
@@ -109,7 +109,7 @@ namespace Shooter.Game
             pitch = Mathf.Clamp(pitch - lookDelta.y, -MaxPitch, MaxPitch);
         }
 
-        private void LateUpdate()
+        public void ShooterLateUpdate()
         {
             Vector2 punchAngles = localRecoil == null ? Vector2.zero : localRecoil.PunchAngles;
 

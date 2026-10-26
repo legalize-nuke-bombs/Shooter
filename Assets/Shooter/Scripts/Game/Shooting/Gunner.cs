@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Interactor))]
     [RequireComponent(typeof(Hands))]
-    public class Gunner : ShooterNetworkBehaviour
+    public class Gunner : ShooterNetworkBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -44,7 +44,7 @@ namespace Shooter.Game
             hands = GetComponent<Hands>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsServer || !triggerHeld) return;
 

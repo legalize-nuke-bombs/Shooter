@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Llm))]
-    public class LlmMainTicker : ShooterBehaviour
+    public class LlmMainTicker : ShooterBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
         private string entityName;
@@ -27,7 +27,7 @@ namespace Shooter.Game
             }
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             Type tickReason = FindTickReason();
             if (tickReason != null)

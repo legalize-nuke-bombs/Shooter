@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [ExecuteAlways]
     [RequireComponent(typeof(Light))]
-    public class MainMenuMoon : ShooterBehaviour
+    public class MainMenuMoon : ShooterBehaviour, IShooterUpdateable
     {
         private const float HalfTurnDegrees = 180f;
 
@@ -13,7 +12,7 @@ namespace Shooter.Game
         [SerializeField] [Range(-10f, 89f)] private float elevation = 20f;
         [SerializeField] [Range(-180f, 180f)] private float sideways;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             RotateOppositeToView();
         }

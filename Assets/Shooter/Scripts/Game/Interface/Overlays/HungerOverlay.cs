@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class HungerOverlay : Overlay
+    public class HungerOverlay : Overlay, IShooterUpdateable
     {
         private const string CounterElementName = "hunger";
         private const string GlyphElementName = "hunger-glyph";
@@ -19,7 +19,7 @@ namespace Shooter.Game
         private Hunger hunger;
         private int shownAmount = Hidden;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

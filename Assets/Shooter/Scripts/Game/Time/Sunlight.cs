@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Light))]
-    public class Sunlight : ShooterBehaviour
+    public class Sunlight : ShooterBehaviour, IShooterUpdateable
     {
         internal const float ShadowHandoverElevation = -6f;
 
@@ -23,7 +23,7 @@ namespace Shooter.Game
             clock = Registers.Get<Clock>();
         }
 
-        private void Update()
+        public void ShooterUpdate()
         {
             // No clock any more for a frame on the way out: the world goes before its scene does
             if (clock == null) return;

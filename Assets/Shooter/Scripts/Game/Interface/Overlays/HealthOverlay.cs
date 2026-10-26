@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class HealthOverlay : Overlay
+    public class HealthOverlay : Overlay, IShooterUpdateable
     {
         private const string BarElementName = "health";
         private const string FillElementName = "health-fill";
@@ -16,7 +16,7 @@ namespace Shooter.Game
         private Health health;
         private int shownHp = Hidden;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 

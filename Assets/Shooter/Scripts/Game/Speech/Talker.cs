@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
-    public abstract class Talker : ShooterNetworkBehaviour, IUsable
+    public abstract class Talker : ShooterNetworkBehaviour, IUsable, IShooterUpdateable
     {
         private readonly NetworkVariable<bool> thinking = new();
 
@@ -81,7 +81,7 @@ namespace Shooter.Game
 
         protected abstract bool IsBusy();
 
-        private void Update()
+        public void ShooterUpdate()
         {
             bool busy = IsBusy();
             if (busy == thinking.Value) return;

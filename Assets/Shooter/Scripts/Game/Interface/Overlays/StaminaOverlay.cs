@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public class StaminaOverlay : Overlay
+    public class StaminaOverlay : Overlay, IShooterUpdateable
     {
         private const string BarElementName = "stamina";
         private const string FillElementName = "stamina-fill";
@@ -16,7 +16,7 @@ namespace Shooter.Game
         private VisualElement fillElement;
         private int shownPercent = Hidden;
 
-        private void Update()
+        public void ShooterUpdate()
         {
             if (!IsBound) return;
 
