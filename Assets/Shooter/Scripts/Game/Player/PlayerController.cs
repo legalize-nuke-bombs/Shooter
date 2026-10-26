@@ -290,7 +290,6 @@ namespace Shooter.Game
 
         private void PressTrigger(InputAction.CallbackContext context)
         {
-            // The kick first: on the host the shot below spends the round at once, and the last round would kick nothing
             localRecoil?.PressTrigger();
             gunner?.PressTriggerRpc();
         }

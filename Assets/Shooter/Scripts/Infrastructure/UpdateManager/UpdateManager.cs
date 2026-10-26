@@ -33,7 +33,7 @@ namespace Shooter.Infrastructure
                 T handler = handlers[i];
                 Tell(handler, tell);
                 handlers = Registers.GetAll<T>(RegisterInactivePolicy.Exclude);
-                // A handler that switched itself off moved the ones after it a slot back, so the same slot is told next
+                // A handler that switched itself off gave its slot to the last one, which is told next
                 if (i < handlers.Length && handlers[i] == handler) i++;
             }
         }

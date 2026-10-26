@@ -9,14 +9,12 @@ namespace Shooter.Infrastructure
         private readonly Type memberType;
 
         private object[] members;
-        private int[] executionOrders;
         private int count;
 
         public Register(Type memberType)
         {
             this.memberType = memberType;
             members = (object[])Array.CreateInstance(memberType, InitialCapacity);
-            executionOrders = new int[InitialCapacity];
         }
 
         public ReadOnlySpan<T> GetMembers<T>() where T : class
@@ -24,28 +22,16 @@ namespace Shooter.Infrastructure
             return new ReadOnlySpan<T>((T[])members, 0, count);
         }
 
-        // Members stay sorted by execution order, equal orders by arrival, so a walk over a register calls them in the
-        // order Unity would call their own Update
-        public void AddMember(IShooterBehaviour member, int executionOrder)
+        public void AddMember(IShooterBehaviour member)
         {
             if (count == members.Length)
             {
                 var grownMembers = (object[])Array.CreateInstance(memberType, members.Length * 2);
                 Array.Copy(members, grownMembers, count);
                 members = grownMembers;
-                Array.Resize(ref executionOrders, members.Length);
             }
 
-            int index = count;
-            while (index > 0 && executionOrders[index - 1] > executionOrder)
-            {
-                index--;
-            }
-
-            Array.Copy(members, index, members, index + 1, count - index);
-            Array.Copy(executionOrders, index, executionOrders, index + 1, count - index);
-            members[index] = member;
-            executionOrders[index] = executionOrder;
+            members[count] = member;
             count++;
         }
 
@@ -56,8 +42,7 @@ namespace Shooter.Infrastructure
                 if (!ReferenceEquals(members[i], member)) continue;
 
                 count--;
-                Array.Copy(members, i + 1, members, i, count - i);
-                Array.Copy(executionOrders, i + 1, executionOrders, i, count - i);
+                members[i] = members[count];
                 members[count] = null;
                 return;
             }
