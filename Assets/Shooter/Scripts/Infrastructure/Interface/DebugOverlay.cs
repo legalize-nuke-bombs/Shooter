@@ -211,9 +211,6 @@ namespace Shooter.Infrastructure
 
             AppendBlankLine();
             AppendPanelLine($"Registry: {FormatCount(registers.TypeCount)} types, {FormatCount(registers.UsedSlots)} of {FormatCount(registers.Capacity)} slots used");
-            AppendPanelLine(
-                $"Behaviours: {FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Include).Count)}" +
-                $" ({FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Exclude).Count)} enabled)");
 
             registers.FindLargestClasses(largestClasses, largestClassCounts);
             for (int i = 0; i < LargestClassCount && largestClasses[i] != null; i++)
