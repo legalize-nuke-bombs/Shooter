@@ -3,11 +3,13 @@ using System.Collections;
 using System.Globalization;
 using System.IO;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
 
 namespace Shooter.Infrastructure
 {
-    public static class Screenshotter
+    [RequireComponent(typeof(AudioSource))]
+    public class Screenshotter : ShooterBehaviour, IShooterUpdateable
     {
         private const string FolderName = "Screenshots";
         private const string FileNamePrefix = "Screenshot";
@@ -15,15 +17,26 @@ namespace Shooter.Infrastructure
         private static readonly Journal Log = Logs.Here();
         private static readonly ScreenshotSetting FullSizeSetting = new(0, 0, 90);
 
-        public static IEnumerator TakeToScreenshotsFolder()
-        {
-            string stamp = DateTime.Now.ToString(StampFormat, CultureInfo.InvariantCulture);
-            string path = Path.Combine(Config.GetRootFolder(), FolderName, FileNamePrefix + "_" + stamp + ".jpg");
+        private AudioSource click;
 
-            yield return TakeScreenshot(path, FullSizeSetting);
+        public static Screenshotter Instance { get; private set; }
+
+        protected override void ShooterAwake()
+        {
+            Instance = this;
+            click = GetComponent<AudioSource>();
+            DontDestroyOnLoad(gameObject);
         }
 
-        public static IEnumerator TakeScreenshot(string path, ScreenshotSetting setting)
+        public void ShooterUpdate()
+        {
+            if (Keyboard.current == null || !Keyboard.current.f12Key.wasPressedThisFrame) return;
+
+            click.Play();
+            StartCoroutine(TakeToScreenshotsFolder());
+        }
+
+        public IEnumerator TakeScreenshot(string path, ScreenshotSetting setting)
         {
             yield return new WaitForEndOfFrame();
 
@@ -56,6 +69,14 @@ namespace Shooter.Infrastructure
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllBytes(path, jpgBytes);
             Log.Info($"Wrote screenshot {width} x {height} to {path}");
+        }
+
+        private IEnumerator TakeToScreenshotsFolder()
+        {
+            string stamp = DateTime.Now.ToString(StampFormat, CultureInfo.InvariantCulture);
+            string path = Path.Combine(Config.GetRootFolder(), FolderName, FileNamePrefix + "_" + stamp + ".jpg");
+
+            yield return TakeScreenshot(path, FullSizeSetting);
         }
     }
 }

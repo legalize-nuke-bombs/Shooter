@@ -20,7 +20,6 @@ namespace Shooter.Game
 
         [SerializeField] private Camera view;
         [SerializeField] private EarSoundAsset saveSound;
-        [SerializeField] private EarSoundAsset screenshotSound;
 
         private Controls controls;
         private EarSpeaker earSpeaker;
@@ -164,7 +163,6 @@ namespace Shooter.Game
             controls.UI.Radio.performed += CloseRadioByKey;
             controls.UI.Cancel.performed += CloseTopWindowOrTogglePauseMenu;
             controls.Game.Save.performed += QuickSave;
-            controls.Game.Screenshot.performed += TakeScreenshot;
             controls.Game.Enable();
 
             if (playerMouth != null)
@@ -199,7 +197,6 @@ namespace Shooter.Game
             controls.UI.Radio.performed -= CloseRadioByKey;
             controls.UI.Cancel.performed -= CloseTopWindowOrTogglePauseMenu;
             controls.Game.Save.performed -= QuickSave;
-            controls.Game.Screenshot.performed -= TakeScreenshot;
 
             if (playerMouth != null)
             {
@@ -517,12 +514,6 @@ namespace Shooter.Game
             if (earSpeaker != null) earSpeaker.PlayLocally(saveSound);
             Log.Info("Saving the world by the hotkey");
             StartCoroutine(SaveManager.SaveCoroutine());
-        }
-
-        private void TakeScreenshot(InputAction.CallbackContext context)
-        {
-            if (earSpeaker != null) earSpeaker.PlayLocally(screenshotSound);
-            StartCoroutine(Screenshotter.TakeToScreenshotsFolder());
         }
 
         public void LeaveWorld()

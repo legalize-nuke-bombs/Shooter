@@ -1114,15 +1114,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Screenshot",
-                    "type": "Button",
-                    "id": "1da537a5-afc1-4192-a4e3-164817e8cb0e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1134,17 +1125,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Save",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "04f4cfa8-c517-4a42-a39b-2be0f49d93ea",
-                    "path": "<Keyboard>/f12",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Screenshot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

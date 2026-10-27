@@ -1203,15 +1203,6 @@ namespace Shooter.Game
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Screenshot"",
-                    ""type"": ""Button"",
-                    ""id"": ""1da537a5-afc1-4192-a4e3-164817e8cb0e"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1223,17 +1214,6 @@ namespace Shooter.Game
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Save"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""04f4cfa8-c517-4a42-a39b-2be0f49d93ea"",
-                    ""path"": ""<Keyboard>/f12"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Screenshot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1334,7 +1314,6 @@ namespace Shooter.Game
             // Game
             m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
             m_Game_Save = m_Game.FindAction("Save", throwIfNotFound: true);
-            m_Game_Screenshot = m_Game.FindAction("Screenshot", throwIfNotFound: true);
         }
 
         ~@Controls()
@@ -1852,7 +1831,6 @@ namespace Shooter.Game
         private readonly InputActionMap m_Game;
         private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
         private readonly InputAction m_Game_Save;
-        private readonly InputAction m_Game_Screenshot;
         /// <summary>
         /// Provides access to input actions defined in input action map "Game".
         /// </summary>
@@ -1868,10 +1846,6 @@ namespace Shooter.Game
             /// Provides access to the underlying input action "Game/Save".
             /// </summary>
             public InputAction @Save => m_Wrapper.m_Game_Save;
-            /// <summary>
-            /// Provides access to the underlying input action "Game/Screenshot".
-            /// </summary>
-            public InputAction @Screenshot => m_Wrapper.m_Game_Screenshot;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1901,9 +1875,6 @@ namespace Shooter.Game
                 @Save.started += instance.OnSave;
                 @Save.performed += instance.OnSave;
                 @Save.canceled += instance.OnSave;
-                @Screenshot.started += instance.OnScreenshot;
-                @Screenshot.performed += instance.OnScreenshot;
-                @Screenshot.canceled += instance.OnScreenshot;
             }
 
             /// <summary>
@@ -1918,9 +1889,6 @@ namespace Shooter.Game
                 @Save.started -= instance.OnSave;
                 @Save.performed -= instance.OnSave;
                 @Save.canceled -= instance.OnSave;
-                @Screenshot.started -= instance.OnScreenshot;
-                @Screenshot.performed -= instance.OnScreenshot;
-                @Screenshot.canceled -= instance.OnScreenshot;
             }
 
             /// <summary>
@@ -2217,13 +2185,6 @@ namespace Shooter.Game
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnSave(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Screenshot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnScreenshot(InputAction.CallbackContext context);
         }
     }
 }
