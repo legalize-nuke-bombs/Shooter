@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
-using Unity.Netcode;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using static System.FormattableString;
 
 namespace Shooter.Infrastructure
 {
@@ -148,51 +149,22 @@ namespace Shooter.Infrastructure
             panelTextBuilder.Clear();
 
             AppendFrameLine();
-            AppendPanelLine($"Партии {FormatCounterCount("Batches Count")}", $"Треугольники {FormatCounterCount("Triangles Count")}");
-            AppendPanelLine($"Вершины {FormatCounterCount("Vertices Count")}");
+            AppendPanelLine($"Batches {FormatCounterCount("Batches Count")}", $"Triangles {FormatCounterCount("Triangles Count")}");
+            AppendPanelLine($"Vertices {FormatCounterCount("Vertices Count")}");
 
             AppendBlankLine();
             AppendPanelLine($"VRAM {FormatVideoMemory()}", SystemInfo.graphicsDeviceName);
-            AppendPanelLine($"RAM {FormatCounterMegabytes("System Used Memory")} / {SystemInfo.systemMemorySize} МБ", $"{SystemInfo.processorType.Trim()} ({SystemInfo.processorCount})");
-            AppendPanelLine($"GC {FormatManagedMemory()}", $"Зарезервировано {FormatCounterMegabytes("Total Reserved Memory")}");
+            AppendPanelLine($"RAM {FormatCounterMegabytes("System Used Memory")} / {SystemInfo.systemMemorySize} MB", $"{SystemInfo.processorType.Trim()} ({SystemInfo.processorCount})");
+            AppendPanelLine($"GC {FormatManagedMemory()}", $"Reserved {FormatCounterMegabytes("Total Reserved Memory")}");
 
             AppendBlankLine();
-            AppendPanelLine($"Экран {Screen.width}×{Screen.height}", $"{Screen.currentResolution.refreshRateRatio.value:F0} Гц   " + (Screen.fullScreen ? "Полный экран" : "Окно"));
+            AppendPanelLine($"Screen {Screen.width}×{Screen.height}", Invariant($"{Screen.currentResolution.refreshRateRatio.value:F0} Hz   ") + (Screen.fullScreen ? "fullscreen" : "windowed"));
             AppendCameraLine();
-            AppendRegistryLines();
-            AppendNetworkLines();
+            AppendPanelLine($"Version {Application.version}");
+
+            AppendBehaviourLines();
 
             return panelTextBuilder.ToString().TrimEnd();
-        }
-
-        private void AppendCameraLine()
-        {
-            Camera camera = Camera.main;
-            if (camera == null) return;
-
-            Transform cameraTransform = camera.transform;
-            Vector3 position = cameraTransform.position;
-            AppendPanelLine($"Камера {position.x:F1} {position.y:F1} {position.z:F1}", FormatFacing(cameraTransform.eulerAngles.y));
-        }
-
-        private void AppendRegistryLines()
-        {
-            Registers registers = Registers.Instance;
-
-            AppendBlankLine();
-            AppendPanelLine(
-                $"Компоненты {registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Include).Count:N0}",
-                $"Включены {registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Exclude).Count:N0}");
-            AppendPanelLine(
-                $"Апдейты {registers.GetAll<IShooterUpdateable>(RegisterInactivePolicy.Exclude).Count:N0}",
-                $"Поздние {registers.GetAll<IShooterLateUpdateable>(RegisterInactivePolicy.Exclude).Count:N0}");
-            AppendPanelLine($"Ключи {registers.KeyCount:N0}", $"Места {registers.Capacity:N0}");
-
-            registers.FindLargestClasses(largestClasses, largestClassCounts);
-            for (int i = 0; i < LargestClassCount && largestClasses[i] != null; i++)
-            {
-                AppendPanelLine($"  {largestClasses[i].Name}", largestClassCounts[i].ToString("N0"));
-            }
         }
 
         private void AppendFrameLine()
@@ -207,35 +179,45 @@ namespace Shooter.Infrastructure
             }
 
             float averageDuration = totalDuration / sampledFrameCount;
-            AppendPanelLine($"FPS {1f / averageDuration:F0}", $"Кадр {averageDuration * 1000f:F1} мс   Худший {worstDuration * 1000f:F1} мс");
+            AppendPanelLine(Invariant($"FPS {1f / averageDuration:F0}"), Invariant($"Frame {averageDuration * 1000f:F1} ms   Worst {worstDuration * 1000f:F1} ms"));
         }
 
-        private void AppendNetworkLines()
+        private void AppendCameraLine()
         {
-            NetworkManager network = NetworkManager.Singleton;
+            Camera camera = Camera.main;
+            if (camera == null) return;
+
+            Transform cameraTransform = camera.transform;
+            Vector3 position = cameraTransform.position;
+            AppendPanelLine(Invariant($"Camera {position.x:F1} {position.y:F1} {position.z:F1}"), FormatFacing(cameraTransform.eulerAngles.y));
+        }
+
+        private void AppendBehaviourLines()
+        {
+            Registers registers = Registers.Instance;
 
             AppendBlankLine();
+            AppendPanelLine(
+                $"Behaviours {FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Include).Count)}",
+                $"Enabled {FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Exclude).Count)}");
 
-            if (network == null || !network.IsListening)
+            registers.FindLargestClasses(largestClasses, largestClassCounts);
+            for (int i = 0; i < LargestClassCount && largestClasses[i] != null; i++)
             {
-                AppendPanelLine("Сеть не запущена", $"Версия {Application.version}");
-                return;
+                AppendPanelLine($"  {largestClasses[i].Name}", FormatCount(largestClassCounts[i]));
             }
 
-            string role = network.IsHost ? "Хост" : network.IsServer ? "Сервер" : "Клиент";
-            string clientCount = network.IsServer ? $"Клиентов {network.ConnectedClientsIds.Count}" : "";
-            string roundTripTime = network.IsClient && !network.IsHost
-                ? $"Задержка {network.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkManager.ServerClientId)} мс"
-                : "";
-            AppendPanelLine(role, clientCount + roundTripTime);
-            AppendPanelLine($"Версия {Application.version}");
+            AppendPanelLine(
+                $"ShooterUpdate {FormatCount(registers.GetAll<IShooterUpdateable>(RegisterInactivePolicy.Exclude).Count)}/frame",
+                $"ShooterLateUpdate {FormatCount(registers.GetAll<IShooterLateUpdateable>(RegisterInactivePolicy.Exclude).Count)}/frame");
+            AppendPanelLine($"Registry keys {FormatCount(registers.KeyCount)}", $"Slots allocated {FormatCount(registers.Capacity)}");
         }
 
         private string FormatManagedMemory()
         {
             return TryGetCounterValue("GC Used Memory", out long bytes)
-                ? $"{bytes / Megabyte:F0} МБ"
-                : $"{GC.GetTotalMemory(false) / Megabyte:F0} МБ";
+                ? Invariant($"{bytes / Megabyte:F0} MB")
+                : Invariant($"{GC.GetTotalMemory(false) / Megabyte:F0} MB");
         }
 
         private string FormatFrameRate()
@@ -248,27 +230,32 @@ namespace Shooter.Infrastructure
                 totalDuration += frameDurations[i];
             }
 
-            return $"{sampledFrameCount / totalDuration:F0}/с";
+            return Invariant($"{sampledFrameCount / totalDuration:F0}/s");
         }
 
         private string FormatVideoMemory()
         {
-            return $"{FormatCounterMegabytes("Gfx Used Memory")} / {SystemInfo.graphicsMemorySize} МБ";
+            return $"{FormatCounterMegabytes("Gfx Used Memory")} / {SystemInfo.graphicsMemorySize} MB";
         }
 
         private static string FormatFacing(float yaw)
         {
-            return $"{CompassDirections[Mathf.RoundToInt(yaw / 45f) & 7]} ({yaw:F0}°)";
+            return Invariant($"{CompassDirections[Mathf.RoundToInt(yaw / 45f) & 7]} ({yaw:F0}°)");
         }
 
         private string FormatCounterMegabytes(string counterName)
         {
-            return TryGetCounterValue(counterName, out long bytes) ? $"{bytes / Megabyte:F0} МБ" : Unavailable;
+            return TryGetCounterValue(counterName, out long bytes) ? Invariant($"{bytes / Megabyte:F0} MB") : Unavailable;
         }
 
         private string FormatCounterCount(string counterName)
         {
-            return TryGetCounterValue(counterName, out long count) ? count.ToString("N0") : Unavailable;
+            return TryGetCounterValue(counterName, out long count) ? FormatCount(count) : Unavailable;
+        }
+
+        private static string FormatCount(long count)
+        {
+            return count.ToString("N0", CultureInfo.InvariantCulture);
         }
 
         private bool TryGetCounterValue(string counterName, out long value)

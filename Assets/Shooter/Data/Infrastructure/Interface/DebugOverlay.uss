@@ -4,11 +4,11 @@
     top: 0;
     right: 0;
     bottom: 0;
+    align-items: flex-end;
     padding: 4px 6px;
 }
 
 .debug {
-    margin-top: 23px;
     white-space: nowrap;
     font-size: 13px;
     color: rgba(255, 255, 255, 0.9);
