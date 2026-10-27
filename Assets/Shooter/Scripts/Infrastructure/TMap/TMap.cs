@@ -11,6 +11,20 @@ namespace Shooter.Infrastructure
 
         public int KeyCount => arraysByKey.Count;
 
+        public int UsedSlots
+        {
+            get
+            {
+                int usedSlots = 0;
+                foreach (TArray array in arraysByKey.Values)
+                {
+                    usedSlots += array.Count;
+                }
+
+                return usedSlots;
+            }
+        }
+
         public int Capacity
         {
             get

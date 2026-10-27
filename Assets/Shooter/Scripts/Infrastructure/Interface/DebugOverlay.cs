@@ -14,7 +14,7 @@ namespace Shooter.Infrastructure
     {
         private const string PanelLabelName = "debug";
         private const int FrameSamples = 120;
-        private const int LargestClassCount = 5;
+        private const int LargestClassCount = 10;
         private const int LeftColumnWidth = 34;
         private const float PanelRefreshSeconds = 0.25f;
         private const float LogReportSeconds = 60f;
@@ -210,7 +210,7 @@ namespace Shooter.Infrastructure
             Registers registers = Registers.Instance;
 
             AppendBlankLine();
-            AppendPanelLine($"Registry: {FormatCount(registers.KeyCount)} keys, {FormatCount(registers.Capacity)} slots");
+            AppendPanelLine($"Registry: {FormatCount(registers.TypeCount)} types, {FormatCount(registers.UsedSlots)} of {FormatCount(registers.Capacity)} slots used");
             AppendPanelLine(
                 $"Behaviours: {FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Include).Count)}" +
                 $" ({FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Exclude).Count)} enabled)");

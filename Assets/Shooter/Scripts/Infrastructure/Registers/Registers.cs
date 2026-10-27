@@ -11,7 +11,9 @@ namespace Shooter.Infrastructure
 
         public static Registers Instance { get; private set; }
 
-        public int KeyCount => behaviours.KeyCount + activeBehaviours.KeyCount;
+        public int TypeCount => behaviours.KeyCount;
+
+        public int UsedSlots => behaviours.UsedSlots + activeBehaviours.UsedSlots;
 
         public int Capacity => behaviours.Capacity + activeBehaviours.Capacity;
 
