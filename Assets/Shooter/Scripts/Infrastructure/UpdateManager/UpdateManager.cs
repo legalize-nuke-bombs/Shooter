@@ -26,10 +26,9 @@ namespace Shooter.Infrastructure
 
         private static void TellAll<T>(Action<T> tell) where T : class, IShooterBehaviour
         {
-            for (int i = Registers.GetAll<T>(RegisterInactivePolicy.Exclude).Length - 1; i >= 0; i--)
+            foreach (T handler in Registers.GetAll<T>(RegisterInactivePolicy.Exclude))
             {
-                ReadOnlySpan<T> handlers = Registers.GetAll<T>(RegisterInactivePolicy.Exclude);
-                if (i < handlers.Length) Tell(handlers[i], tell);
+                Tell(handler, tell);
             }
         }
 

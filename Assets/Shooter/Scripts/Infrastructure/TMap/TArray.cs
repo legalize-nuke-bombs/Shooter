@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Shooter.Infrastructure
 {
@@ -6,46 +7,46 @@ namespace Shooter.Infrastructure
     {
         private const int InitialCapacity = 4;
 
-        private readonly Type elementType;
+        private readonly Dictionary<IShooterBehaviour, int> positions = new();
+        private readonly Stack<int> freePositions = new();
 
-        private object[] elements;
-        private int count;
+        private IShooterBehaviour[] elements = new IShooterBehaviour[InitialCapacity];
+        private int used;
 
-        public TArray(Type elementType)
-        {
-            this.elementType = elementType;
-            elements = (object[])Array.CreateInstance(elementType, InitialCapacity);
-        }
+        public int Count => positions.Count;
 
-        public ReadOnlySpan<T> AsSpan<T>() where T : class
-        {
-            return new ReadOnlySpan<T>((T[])elements, 0, count);
-        }
+        internal int Used => used;
+
+        internal IShooterBehaviour this[int position] => elements[position];
 
         public void Add(IShooterBehaviour behaviour)
         {
-            if (count == elements.Length)
-            {
-                var grownElements = (object[])Array.CreateInstance(elementType, elements.Length * 2);
-                Array.Copy(elements, grownElements, count);
-                elements = grownElements;
-            }
+            if (positions.ContainsKey(behaviour)) return;
 
-            elements[count] = behaviour;
-            count++;
+            int position = freePositions.Count > 0 ? freePositions.Pop() : TakeNewPosition();
+            elements[position] = behaviour;
+            positions.Add(behaviour, position);
         }
 
         public void Remove(IShooterBehaviour behaviour)
         {
-            for (int i = 0; i < count; i++)
-            {
-                if (!ReferenceEquals(elements[i], behaviour)) continue;
+            if (!positions.Remove(behaviour, out int position)) return;
 
-                count--;
-                elements[i] = elements[count];
-                elements[count] = null;
+            elements[position] = null;
+            if (positions.Count == 0)
+            {
+                used = 0;
+                freePositions.Clear();
                 return;
             }
+
+            freePositions.Push(position);
+        }
+
+        private int TakeNewPosition()
+        {
+            if (used == elements.Length) Array.Resize(ref elements, elements.Length * 2);
+            return used++;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Shooter.Infrastructure
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} deactivated");
         }
 
-        public static ReadOnlySpan<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
+        public static TArrayView<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
         {
             TMap behaviours = inactivePolicy == RegisterInactivePolicy.Include ? Behaviours : ActiveBehaviours;
             return behaviours.GetAll<T>();
@@ -40,9 +40,9 @@ namespace Shooter.Infrastructure
 
         public static T Get<T>() where T : class
         {
-            ReadOnlySpan<T> members = GetAll<T>(RegisterInactivePolicy.Include);
-            if (members.Length != 1) throw new InvalidOperationException($"{members.Length} {typeof(T).Name} registered instead of one");
-            return members[0];
+            TArrayView<T> members = GetAll<T>(RegisterInactivePolicy.Include);
+            if (members.Count != 1 || !members.TryGetFirst(out T member)) throw new InvalidOperationException($"{members.Count} {typeof(T).Name} registered instead of one");
+            return member;
         }
     }
 }

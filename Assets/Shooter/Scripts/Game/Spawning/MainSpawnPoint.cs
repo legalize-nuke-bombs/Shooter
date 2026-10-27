@@ -1,4 +1,3 @@
-using System;
 using Shooter.Infrastructure;
 using Random = UnityEngine.Random;
 
@@ -10,15 +9,22 @@ namespace Shooter.Game
 
         public static MainSpawnPoint PickRandom()
         {
-            ReadOnlySpan<MainSpawnPoint> mainSpawnPoints = Registers.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude);
+            TArrayView<MainSpawnPoint> mainSpawnPoints = Registers.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude);
 
-            if (mainSpawnPoints.Length == 0)
+            if (mainSpawnPoints.Count == 0)
             {
                 Log.Warn("The map has no main spawn point");
                 return null;
             }
 
-            return mainSpawnPoints[Random.Range(0, mainSpawnPoints.Length)];
+            int skipped = Random.Range(0, mainSpawnPoints.Count);
+            foreach (MainSpawnPoint mainSpawnPoint in mainSpawnPoints)
+            {
+                if (skipped == 0) return mainSpawnPoint;
+                skipped--;
+            }
+
+            return null;
         }
     }
 }

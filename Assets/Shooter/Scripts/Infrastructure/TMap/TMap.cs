@@ -15,7 +15,7 @@ namespace Shooter.Infrastructure
             {
                 if (!arraysByKey.TryGetValue(key, out TArray array))
                 {
-                    array = new TArray(key);
+                    array = new TArray();
                     arraysByKey[key] = array;
                 }
 
@@ -31,9 +31,10 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public ReadOnlySpan<T> GetAll<T>() where T : class
+        public TArrayView<T> GetAll<T>() where T : class
         {
-            return arraysByKey.TryGetValue(typeof(T), out TArray array) ? array.AsSpan<T>() : ReadOnlySpan<T>.Empty;
+            arraysByKey.TryGetValue(typeof(T), out TArray array);
+            return new TArrayView<T>(array);
         }
 
         // GetInterfaces builds a new array on every call, so the keys a behaviour goes under are found once per type

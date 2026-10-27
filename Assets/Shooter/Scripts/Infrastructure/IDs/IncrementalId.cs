@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using Random = UnityEngine.Random;
 
 namespace Shooter.Infrastructure
@@ -39,15 +38,14 @@ namespace Shooter.Infrastructure
         {
             if (!IsServer || id.Value != None) return;
 
-            ReadOnlySpan<IncrementalIds> incrementalIds = Registers.GetAll<IncrementalIds>(RegisterInactivePolicy.Include);
-            if (incrementalIds.Length == 0)
+            if (!Registers.GetAll<IncrementalIds>(RegisterInactivePolicy.Include).TryGetFirst(out IncrementalIds incrementalIds))
             {
                 Log.Error($"Entity {name} failed to find IncrementalIds. Fall back to random id generation");
                 id.Value = Random.Range(0, int.MaxValue);
             }
             else
             {
-                id.Value = incrementalIds[0].TakeNextId();
+                id.Value = incrementalIds.TakeNextId();
             }
         }
 
