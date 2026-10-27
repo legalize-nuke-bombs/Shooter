@@ -6,6 +6,7 @@ namespace Shooter.Infrastructure
     public sealed class TMap
     {
         private static readonly Dictionary<Type, Type[]> KeysByBehaviourType = new();
+        private static readonly List<Type> EmptyKeys = new();
 
         private readonly Dictionary<Type, TArray> arraysByKey = new();
 
@@ -39,10 +40,21 @@ namespace Shooter.Infrastructure
 
         public void CollectGarbage()
         {
-            foreach (TArray array in arraysByKey.Values)
+            foreach (KeyValuePair<Type, TArray> pair in arraysByKey)
             {
-                array.CollectGarbage();
+                if (pair.Value.Count == 0) EmptyKeys.Add(pair.Key);
+                else pair.Value.CollectGarbage();
             }
+
+            if (EmptyKeys.Count == 0) return;
+
+            foreach (Type key in EmptyKeys)
+            {
+                arraysByKey.Remove(key);
+            }
+
+            EmptyKeys.Clear();
+            arraysByKey.TrimExcess();
         }
 
         // GetInterfaces builds a new array on every call, so the keys a behaviour goes under are found once per type

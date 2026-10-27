@@ -13,7 +13,6 @@ namespace Shooter.Infrastructure
         private int used;
         private int count;
         private int freeHead = None;
-        private bool sparseAtLastCollect;
 
         public TArray()
         {
@@ -32,7 +31,6 @@ namespace Shooter.Infrastructure
             entries[position] = new Entry { Behaviour = behaviour, Hash = hash, NextFree = None };
             Place(position);
             count++;
-            if (!IsSparse()) sparseAtLastCollect = false;
         }
 
         public void Remove(IShooterBehaviour behaviour)
@@ -66,25 +64,7 @@ namespace Shooter.Infrastructure
 
         public void CollectGarbage()
         {
-            if (!IsSparse())
-            {
-                sparseAtLastCollect = false;
-                return;
-            }
-
-            if (!sparseAtLastCollect)
-            {
-                sparseAtLastCollect = true;
-                return;
-            }
-
-            ShrinkToFit();
-            sparseAtLastCollect = false;
-        }
-
-        private bool IsSparse()
-        {
-            return entries.Length > MinCapacity && count <= entries.Length / 4;
+            if (entries.Length > MinCapacity && count <= entries.Length / 4) ShrinkToFit();
         }
 
         private int FindSlot(IShooterBehaviour behaviour, int hash)
