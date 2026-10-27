@@ -43,15 +43,12 @@ namespace Shooter.Infrastructure
             if (KeysByBehaviourType.TryGetValue(behaviourType, out Type[] keys)) return keys;
 
             var types = new List<Type>();
-            for (Type type = behaviourType; type != typeof(ShooterBehaviour) && type != typeof(ShooterNetworkBehaviour); type = type.BaseType)
+            for (Type type = behaviourType; typeof(IShooterBehaviour).IsAssignableFrom(type); type = type.BaseType)
             {
                 types.Add(type);
             }
 
-            foreach (Type interfaceType in behaviourType.GetInterfaces())
-            {
-                if (interfaceType != typeof(IShooterBehaviour)) types.Add(interfaceType);
-            }
+            types.AddRange(behaviourType.GetInterfaces());
 
             keys = types.ToArray();
             KeysByBehaviourType[behaviourType] = keys;
