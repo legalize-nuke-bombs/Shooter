@@ -1,46 +1,62 @@
 using System;
+using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public static class Registers
+    [DefaultExecutionOrder(ExecutionOrder.Registers)]
+    public class Registers : ShooterBehaviour
     {
+        private const float CollectIntervalSeconds = 2f;
         private static readonly Journal Log = Logs.Here();
-        private static readonly TMap Behaviours = new();
-        private static readonly TMap ActiveBehaviours = new();
+
+        private static Registers instance;
+
+        private readonly TMap behaviours = new();
+        private readonly TMap activeBehaviours = new();
+        private float nextCollectTime;
+
+        protected override void ShooterAwake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void LateUpdate()
+        {
+            if (Time.unscaledTime < nextCollectTime) return;
+
+            nextCollectTime = Time.unscaledTime + CollectIntervalSeconds;
+            behaviours.CollectGarbage();
+            activeBehaviours.CollectGarbage();
+        }
 
         public static void RegisterBehaviour(IShooterBehaviour behaviour)
         {
-            Behaviours.Add(behaviour);
+            if (behaviour is Registers registers) instance = registers;
+            instance.behaviours.Add(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} registered");
         }
 
         public static void UnregisterBehaviour(IShooterBehaviour behaviour)
         {
-            Behaviours.Remove(behaviour);
+            instance.behaviours.Remove(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} unregistered");
         }
 
         public static void ActivateBehaviour(IShooterBehaviour behaviour)
         {
-            ActiveBehaviours.Add(behaviour);
+            instance.activeBehaviours.Add(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} activated");
         }
 
         public static void DeactivateBehaviour(IShooterBehaviour behaviour)
         {
-            ActiveBehaviours.Remove(behaviour);
+            instance.activeBehaviours.Remove(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} deactivated");
-        }
-
-        public static void CollectGarbage()
-        {
-            Behaviours.CollectGarbage();
-            ActiveBehaviours.CollectGarbage();
         }
 
         public static TArray.View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
         {
-            TMap behaviours = inactivePolicy == RegisterInactivePolicy.Include ? Behaviours : ActiveBehaviours;
+            TMap behaviours = inactivePolicy == RegisterInactivePolicy.Include ? instance.behaviours : instance.activeBehaviours;
             return behaviours.GetAll<T>();
         }
 
