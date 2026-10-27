@@ -47,6 +47,11 @@ namespace Shooter.Infrastructure
             }
         }
 
+        public int CountOf(Type key)
+        {
+            return arraysByKey.TryGetValue(key, out TArray array) ? array.Count : 0;
+        }
+
         public TArray.View<T> GetAll<T>() where T : class
         {
             arraysByKey.TryGetValue(typeof(T), out TArray array);

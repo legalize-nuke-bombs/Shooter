@@ -64,6 +64,12 @@ namespace Shooter.Infrastructure
             return registered.GetAll<T>();
         }
 
+        public int CountOf(Type type, RegisterInactivePolicy inactivePolicy)
+        {
+            TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? behaviours : activeBehaviours;
+            return registered.CountOf(type);
+        }
+
         public void FindLargestClasses(Type[] classes, int[] counts)
         {
             behaviours.FindLargestClasses(classes, counts);

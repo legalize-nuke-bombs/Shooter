@@ -149,6 +149,11 @@ namespace Shooter.Infrastructure
             panelTextBuilder.Clear();
 
             AppendFrameLine();
+
+            AppendBlankLine();
+            AppendUpdateLines();
+
+            AppendBlankLine();
             AppendPanelLine($"Batches {FormatCounterCount("Batches Count")}", $"Triangles {FormatCounterCount("Triangles Count")}");
             AppendPanelLine($"Vertices {FormatCounterCount("Vertices Count")}");
 
@@ -162,7 +167,7 @@ namespace Shooter.Infrastructure
             AppendCameraLine();
             AppendPanelLine($"Version {Application.version}");
 
-            AppendBehaviourLines();
+            AppendRegistryLines();
 
             return panelTextBuilder.ToString().TrimEnd();
         }
@@ -192,25 +197,30 @@ namespace Shooter.Infrastructure
             AppendPanelLine(Invariant($"Camera {position.x:F1} {position.y:F1} {position.z:F1}"), FormatFacing(cameraTransform.eulerAngles.y));
         }
 
-        private void AppendBehaviourLines()
+        private void AppendUpdateLines()
+        {
+            Registers registers = Registers.Instance;
+
+            AppendPanelLine($"Updates per frame: {FormatCount(registers.GetAll<IShooterUpdateable>(RegisterInactivePolicy.Exclude).Count)}");
+            AppendPanelLine($"Late updates per frame: {FormatCount(registers.GetAll<IShooterLateUpdateable>(RegisterInactivePolicy.Exclude).Count)}");
+        }
+
+        private void AppendRegistryLines()
         {
             Registers registers = Registers.Instance;
 
             AppendBlankLine();
+            AppendPanelLine($"Registry: {FormatCount(registers.KeyCount)} keys, {FormatCount(registers.Capacity)} slots");
             AppendPanelLine(
-                $"Behaviours {FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Include).Count)}",
-                $"Enabled {FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Exclude).Count)}");
+                $"Behaviours: {FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Include).Count)}" +
+                $" ({FormatCount(registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Exclude).Count)} enabled)");
 
             registers.FindLargestClasses(largestClasses, largestClassCounts);
             for (int i = 0; i < LargestClassCount && largestClasses[i] != null; i++)
             {
-                AppendPanelLine($"  {largestClasses[i].Name}", FormatCount(largestClassCounts[i]));
+                int enabled = registers.CountOf(largestClasses[i], RegisterInactivePolicy.Exclude);
+                AppendPanelLine($"  {largestClasses[i].Name}: {FormatCount(largestClassCounts[i])} ({FormatCount(enabled)} enabled)");
             }
-
-            AppendPanelLine(
-                $"ShooterUpdate {FormatCount(registers.GetAll<IShooterUpdateable>(RegisterInactivePolicy.Exclude).Count)}/frame",
-                $"ShooterLateUpdate {FormatCount(registers.GetAll<IShooterLateUpdateable>(RegisterInactivePolicy.Exclude).Count)}/frame");
-            AppendPanelLine($"Registry keys {FormatCount(registers.KeyCount)}", $"Slots allocated {FormatCount(registers.Capacity)}");
         }
 
         private string FormatManagedMemory()
