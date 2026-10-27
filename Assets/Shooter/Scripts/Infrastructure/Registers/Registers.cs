@@ -32,6 +32,12 @@ namespace Shooter.Infrastructure
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} deactivated");
         }
 
+        public static void CollectGarbage()
+        {
+            Behaviours.CollectGarbage();
+            ActiveBehaviours.CollectGarbage();
+        }
+
         public static TArray.View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
         {
             TMap behaviours = inactivePolicy == RegisterInactivePolicy.Include ? Behaviours : ActiveBehaviours;

@@ -13,7 +13,7 @@ namespace Shooter.Infrastructure
         private int used;
         private int count;
         private int freeHead = None;
-        private int walks;
+        private bool sparseAtLastCollect;
 
         public TArray()
         {
@@ -32,6 +32,7 @@ namespace Shooter.Infrastructure
             entries[position] = new Entry { Behaviour = behaviour, Hash = hash, NextFree = None };
             Place(position);
             count++;
+            if (!IsSparse()) sparseAtLastCollect = false;
         }
 
         public void Remove(IShooterBehaviour behaviour)
@@ -61,8 +62,29 @@ namespace Shooter.Infrastructure
                 used = 0;
                 freeHead = None;
             }
+        }
 
-            ShrinkIfSparse();
+        public void CollectGarbage()
+        {
+            if (!IsSparse())
+            {
+                sparseAtLastCollect = false;
+                return;
+            }
+
+            if (!sparseAtLastCollect)
+            {
+                sparseAtLastCollect = true;
+                return;
+            }
+
+            ShrinkToFit();
+            sparseAtLastCollect = false;
+        }
+
+        private bool IsSparse()
+        {
+            return entries.Length > MinCapacity && count <= entries.Length / 4;
         }
 
         private int FindSlot(IShooterBehaviour behaviour, int hash)
@@ -107,10 +129,8 @@ namespace Shooter.Infrastructure
             RebuildIndex();
         }
 
-        private void ShrinkIfSparse()
+        private void ShrinkToFit()
         {
-            if (walks > 0 || entries.Length <= MinCapacity || count > entries.Length / 4) return;
-
             int capacity = MinCapacity;
             while (capacity < 2 * count)
             {
@@ -178,7 +198,7 @@ namespace Shooter.Infrastructure
                 return false;
             }
 
-            public struct Enumerator : IDisposable
+            public ref struct Enumerator
             {
                 private readonly TArray array;
                 private int position;
@@ -189,7 +209,6 @@ namespace Shooter.Infrastructure
                     this.array = array;
                     position = 0;
                     current = null;
-                    if (array != null) array.walks++;
                 }
 
                 public T Current => current;
@@ -207,14 +226,6 @@ namespace Shooter.Infrastructure
                     }
 
                     return false;
-                }
-
-                public void Dispose()
-                {
-                    if (array == null) return;
-
-                    array.walks--;
-                    array.ShrinkIfSparse();
                 }
             }
         }

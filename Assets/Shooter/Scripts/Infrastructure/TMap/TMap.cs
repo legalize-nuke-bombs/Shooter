@@ -37,6 +37,14 @@ namespace Shooter.Infrastructure
             return new TArray.View<T>(array);
         }
 
+        public void CollectGarbage()
+        {
+            foreach (TArray array in arraysByKey.Values)
+            {
+                array.CollectGarbage();
+            }
+        }
+
         // GetInterfaces builds a new array on every call, so the keys a behaviour goes under are found once per type
         private static Type[] GetKeys(Type behaviourType)
         {
