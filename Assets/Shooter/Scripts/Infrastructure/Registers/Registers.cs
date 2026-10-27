@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    [DefaultExecutionOrder(ExecutionOrder.Registers)]
-    public class Registers : ShooterBehaviour
+    [DefaultExecutionOrder(ExecutionOrder.Infrastructure)]
+    public class Registers : MonoBehaviour
     {
         private const float CollectIntervalSeconds = 2f;
         private static readonly Journal Log = Logs.Here();
@@ -15,8 +15,9 @@ namespace Shooter.Infrastructure
         private readonly TMap activeBehaviours = new();
         private float nextCollectTime;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
 
@@ -31,7 +32,6 @@ namespace Shooter.Infrastructure
 
         public static void RegisterBehaviour(IShooterBehaviour behaviour)
         {
-            if (behaviour is Registers registers) instance = registers;
             instance.behaviours.Add(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} registered");
         }
