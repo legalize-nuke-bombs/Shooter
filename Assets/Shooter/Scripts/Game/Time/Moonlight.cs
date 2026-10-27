@@ -20,7 +20,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.GetAll<Clock>(RegisterInactivePolicy.Include).TryGetFirst(out Clock first) ? first : null;
+            clock = Registers.Instance.GetAll<Clock>(RegisterInactivePolicy.Include).TryGetFirst(out Clock first) ? first : null;
         }
 
         public void ShooterUpdate()

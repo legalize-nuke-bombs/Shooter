@@ -27,7 +27,7 @@ namespace Shooter.Game
 
         public static Character FindById(long id, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (Character character in Registers.GetAll<Character>(inactivePolicy))
+            foreach (Character character in Registers.Instance.GetAll<Character>(inactivePolicy))
             {
                 if (character.Id == id)
                 {
@@ -39,7 +39,7 @@ namespace Shooter.Game
 
         public static void ForEach(Action<Character> action, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (Character character in Registers.GetAll<Character>(inactivePolicy))
+            foreach (Character character in Registers.Instance.GetAll<Character>(inactivePolicy))
             {
                 action(character);
             }

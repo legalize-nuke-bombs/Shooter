@@ -42,7 +42,7 @@ namespace Shooter.Game
                 GiveBodyToClient(clientId);
             }
 
-            foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Include))
+            foreach (Player player in Registers.Instance.GetAll<Player>(RegisterInactivePolicy.Include))
             {
                 NetworkObject body = player.GetComponent<NetworkObject>();
                 if (!bodiesByClientId.ContainsValue(body)) body.gameObject.SetActive(false);

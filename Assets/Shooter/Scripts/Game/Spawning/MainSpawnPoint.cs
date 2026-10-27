@@ -9,7 +9,7 @@ namespace Shooter.Game
 
         public static MainSpawnPoint PickRandom()
         {
-            TArray.View<MainSpawnPoint> mainSpawnPoints = Registers.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude);
+            TArray.View<MainSpawnPoint> mainSpawnPoints = Registers.Instance.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude);
 
             if (mainSpawnPoints.Count == 0)
             {

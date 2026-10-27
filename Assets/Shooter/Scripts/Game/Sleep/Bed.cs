@@ -16,7 +16,7 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            sleepCycle = Registers.Get<SleepCycle>();
+            sleepCycle = Registers.Instance.Get<SleepCycle>();
         }
 
         public string Digest(DigestionDetail detail)

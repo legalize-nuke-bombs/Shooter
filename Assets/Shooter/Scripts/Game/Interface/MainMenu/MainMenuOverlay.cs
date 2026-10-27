@@ -49,7 +49,7 @@ namespace Shooter.Game
         // A world that ended halfway through its load leaves the loading screen up, the menu takes it down
         private void Start()
         {
-            loadingScreenOverlay = Registers.Get<LoadingScreenOverlay>();
+            loadingScreenOverlay = Registers.Instance.Get<LoadingScreenOverlay>();
             loadingScreenOverlay.HideScreen();
             networkStarter.JoinFailed += HandleJoinFailed;
         }

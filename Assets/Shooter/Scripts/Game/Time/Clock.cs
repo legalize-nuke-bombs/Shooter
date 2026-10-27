@@ -122,7 +122,7 @@ namespace Shooter.Game
 
         private static void TellTimePassed(float seconds)
         {
-            foreach (ITimePassedHandler handler in Registers.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude))
+            foreach (ITimePassedHandler handler in Registers.Instance.GetAll<ITimePassedHandler>(RegisterInactivePolicy.Exclude))
             {
                 handler.HandleTimePassed(seconds);
             }
@@ -134,7 +134,7 @@ namespace Shooter.Game
             while (secondsSinceHourPassed >= HourLengthSeconds)
             {
                 secondsSinceHourPassed -= HourLengthSeconds;
-                foreach (IHourPassedHandler handler in Registers.GetAll<IHourPassedHandler>(RegisterInactivePolicy.Exclude))
+                foreach (IHourPassedHandler handler in Registers.Instance.GetAll<IHourPassedHandler>(RegisterInactivePolicy.Exclude))
                 {
                     handler.HandleHourPassed();
                 }

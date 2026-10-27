@@ -48,7 +48,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.Get<Clock>();
+            clock = Registers.Instance.Get<Clock>();
         }
 
         public Conversation GetOrCreate(long firstId, long secondId)

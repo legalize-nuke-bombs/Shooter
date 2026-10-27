@@ -35,7 +35,7 @@ namespace Shooter.Game
         {
             var visibleEntities = new List<MainDigestible>();
 
-            foreach (MainDigestible entity in Registers.GetAll<MainDigestible>(RegisterInactivePolicy.Exclude))
+            foreach (MainDigestible entity in Registers.Instance.GetAll<MainDigestible>(RegisterInactivePolicy.Exclude))
             {
                 if (entity.gameObject == observer) continue;
 

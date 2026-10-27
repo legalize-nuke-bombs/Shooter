@@ -37,7 +37,7 @@ namespace Shooter.Infrastructure
         public void PostLoad()
         {
             int renumbered = 0;
-            foreach (IncrementalId incrementalId in Registers.GetAll<IncrementalId>(RegisterInactivePolicy.Include))
+            foreach (IncrementalId incrementalId in Registers.Instance.GetAll<IncrementalId>(RegisterInactivePolicy.Include))
             {
                 if (incrementalId.IsLoadedFromSave) continue;
 

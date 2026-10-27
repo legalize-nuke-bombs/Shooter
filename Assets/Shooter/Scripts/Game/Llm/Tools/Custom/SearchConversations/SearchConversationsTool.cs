@@ -29,7 +29,7 @@ Only the newest matches are shown, narrow the pattern if there are more.
 
         protected override void Start()
         {
-            conversationManager = Registers.Get<ConversationManager>();
+            conversationManager = Registers.Instance.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

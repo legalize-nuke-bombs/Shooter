@@ -35,7 +35,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
-            conversationManager = Registers.Get<ConversationManager>();
+            conversationManager = Registers.Instance.Get<ConversationManager>();
             health = GetComponent<Health>();
             sleeper = GetComponent<Sleeper>();
             enabled = false;

@@ -7,7 +7,7 @@ namespace Shooter.Game
     {
         public static T FindComponent<T>() where T : Component
         {
-            foreach (PlayerController playerController in Registers.GetAll<PlayerController>(RegisterInactivePolicy.Exclude))
+            foreach (PlayerController playerController in Registers.Instance.GetAll<PlayerController>(RegisterInactivePolicy.Exclude))
             {
                 if (playerController.IsControlledLocally) return playerController.GetComponent<T>();
             }

@@ -286,7 +286,7 @@ namespace Shooter.Game
 
         public static string FormatCurrentWorldTime()
         {
-            return Registers.Get<Clock>().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
+            return Registers.Instance.Get<Clock>().Now.ToString(Clock.StampFormat, CultureInfo.InvariantCulture);
         }
     }
 }

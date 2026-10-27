@@ -15,7 +15,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
-            conversationManager = Registers.Get<ConversationManager>();
+            conversationManager = Registers.Instance.Get<ConversationManager>();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

@@ -81,7 +81,7 @@ namespace Shooter.Game
 
         public static Player FindById(long id, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (Player player in Registers.GetAll<Player>(inactivePolicy))
+            foreach (Player player in Registers.Instance.GetAll<Player>(inactivePolicy))
             {
                 if (player.Id == id)
                 {
@@ -93,7 +93,7 @@ namespace Shooter.Game
 
         public static Player FindByPublicKey(string publicKey, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (Player player in Registers.GetAll<Player>(inactivePolicy))
+            foreach (Player player in Registers.Instance.GetAll<Player>(inactivePolicy))
             {
                 if (player.PublicKey == publicKey)
                 {

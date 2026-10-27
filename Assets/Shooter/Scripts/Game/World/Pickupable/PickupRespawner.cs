@@ -42,7 +42,7 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            clock = Registers.Get<Clock>();
+            clock = Registers.Instance.Get<Clock>();
             enabled = NetworkManager.Singleton.IsServer;
             if (item == null)
             {

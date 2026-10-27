@@ -48,7 +48,7 @@ namespace Shooter.Game
         {
             health = GetComponent<Health>();
             hands = GetComponent<Hands>();
-            sleepCycle = Registers.Get<SleepCycle>();
+            sleepCycle = Registers.Instance.Get<SleepCycle>();
         }
 
         protected override void ShooterOnEnable()

@@ -34,7 +34,7 @@ namespace Shooter.Game
             Vector3 shotEnd = hit.IsMiss ? hit.Origin + hit.Direction * missFlightDistance : hit.Point;
 
             int flocksCount = 0;
-            foreach (Flocks flocks in Registers.GetAll<Flocks>(RegisterInactivePolicy.Exclude))
+            foreach (Flocks flocks in Registers.Instance.GetAll<Flocks>(RegisterInactivePolicy.Exclude))
             {
                 flocks.ScareRpc(hit.Origin, shotEnd, scareRadius);
                 flocksCount++;

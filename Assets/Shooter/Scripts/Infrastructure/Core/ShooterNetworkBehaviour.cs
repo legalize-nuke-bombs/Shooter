@@ -9,26 +9,26 @@ namespace Shooter.Infrastructure
 
         protected void Awake()
         {
-            Registers.RegisterBehaviour(this);
+            Registers.Instance.RegisterBehaviour(this);
             ShooterAwake();
         }
 
         protected void OnEnable()
         {
-            Registers.ActivateBehaviour(this);
+            Registers.Instance.ActivateBehaviour(this);
             ShooterOnEnable();
         }
 
         protected void OnDisable()
         {
             ShooterOnDisable();
-            Registers.DeactivateBehaviour(this);
+            Registers.Instance.DeactivateBehaviour(this);
         }
 
         public sealed override void OnDestroy()
         {
             ShooterOnDestroy();
-            Registers.UnregisterBehaviour(this);
+            Registers.Instance.UnregisterBehaviour(this);
             base.OnDestroy();
         }
 

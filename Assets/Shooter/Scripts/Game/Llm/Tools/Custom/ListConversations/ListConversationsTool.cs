@@ -25,7 +25,7 @@ To see the content, use read_conversation.
 
         protected override void Start()
         {
-            conversationManager = Registers.Get<ConversationManager>();
+            conversationManager = Registers.Instance.Get<ConversationManager>();
             ownCharacter = Self.GetComponent<Character>();
             if (ownCharacter == null)
             {

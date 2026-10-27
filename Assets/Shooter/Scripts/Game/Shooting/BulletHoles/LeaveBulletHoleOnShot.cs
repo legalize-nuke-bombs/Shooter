@@ -14,7 +14,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             gunner = GetComponent<Gunner>();
-            bulletHoles = Registers.Get<BulletHoles>();
+            bulletHoles = Registers.Instance.Get<BulletHoles>();
         }
 
         protected override void ShooterOnEnable()

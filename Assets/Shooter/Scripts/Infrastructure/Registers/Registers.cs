@@ -9,7 +9,7 @@ namespace Shooter.Infrastructure
         private const float CollectIntervalSeconds = 2f;
         private static readonly Journal Log = Logs.Here();
 
-        private static Registers instance;
+        public static Registers Instance { get; private set; }
 
         private readonly TMap behaviours = new();
         private readonly TMap activeBehaviours = new();
@@ -17,7 +17,7 @@ namespace Shooter.Infrastructure
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
 
@@ -30,37 +30,37 @@ namespace Shooter.Infrastructure
             activeBehaviours.CollectGarbage();
         }
 
-        public static void RegisterBehaviour(IShooterBehaviour behaviour)
+        public void RegisterBehaviour(IShooterBehaviour behaviour)
         {
-            instance.behaviours.Add(behaviour);
+            behaviours.Add(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} registered");
         }
 
-        public static void UnregisterBehaviour(IShooterBehaviour behaviour)
+        public void UnregisterBehaviour(IShooterBehaviour behaviour)
         {
-            instance.behaviours.Remove(behaviour);
+            behaviours.Remove(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} unregistered");
         }
 
-        public static void ActivateBehaviour(IShooterBehaviour behaviour)
+        public void ActivateBehaviour(IShooterBehaviour behaviour)
         {
-            instance.activeBehaviours.Add(behaviour);
+            activeBehaviours.Add(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} activated");
         }
 
-        public static void DeactivateBehaviour(IShooterBehaviour behaviour)
+        public void DeactivateBehaviour(IShooterBehaviour behaviour)
         {
-            instance.activeBehaviours.Remove(behaviour);
+            activeBehaviours.Remove(behaviour);
             Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} deactivated");
         }
 
-        public static TArray.View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
+        public TArray.View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
         {
-            TMap behaviours = inactivePolicy == RegisterInactivePolicy.Include ? instance.behaviours : instance.activeBehaviours;
-            return behaviours.GetAll<T>();
+            TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? behaviours : activeBehaviours;
+            return registered.GetAll<T>();
         }
 
-        public static T Get<T>() where T : class
+        public T Get<T>() where T : class
         {
             TArray.View<T> members = GetAll<T>(RegisterInactivePolicy.Include);
             if (members.Count != 1 || !members.TryGetFirst(out T member)) throw new InvalidOperationException($"{members.Count} {typeof(T).Name} registered instead of one");

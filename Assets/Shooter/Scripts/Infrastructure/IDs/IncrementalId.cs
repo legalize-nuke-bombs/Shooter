@@ -38,7 +38,7 @@ namespace Shooter.Infrastructure
         {
             if (!IsServer || id.Value != None) return;
 
-            if (!Registers.GetAll<IncrementalIds>(RegisterInactivePolicy.Include).TryGetFirst(out IncrementalIds incrementalIds))
+            if (!Registers.Instance.GetAll<IncrementalIds>(RegisterInactivePolicy.Include).TryGetFirst(out IncrementalIds incrementalIds))
             {
                 Log.Error($"Entity {name} failed to find IncrementalIds. Fall back to random id generation");
                 id.Value = Random.Range(0, int.MaxValue);
@@ -56,7 +56,7 @@ namespace Shooter.Infrastructure
 
         public static IncrementalId FindByValue(long id, RegisterInactivePolicy inactivePolicy)
         {
-            foreach (IncrementalId target in Registers.GetAll<IncrementalId>(inactivePolicy))
+            foreach (IncrementalId target in Registers.Instance.GetAll<IncrementalId>(inactivePolicy))
             {
                 if (target.Value == id)
                 {

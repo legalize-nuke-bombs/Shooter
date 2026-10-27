@@ -16,7 +16,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            clock = Registers.Get<Clock>();
+            clock = Registers.Instance.Get<Clock>();
         }
 
         public void ShooterUpdate()

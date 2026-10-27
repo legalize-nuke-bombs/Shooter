@@ -52,7 +52,7 @@ namespace Shooter.Game
 
         private void Start()
         {
-            hostVersion = Registers.Get<HostVersion>();
+            hostVersion = Registers.Instance.Get<HostVersion>();
         }
 
         public void ShooterUpdate()

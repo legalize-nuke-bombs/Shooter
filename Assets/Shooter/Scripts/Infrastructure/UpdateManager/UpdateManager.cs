@@ -26,7 +26,7 @@ namespace Shooter.Infrastructure
 
         private static void TellAll<T>(Action<T> tell) where T : class, IShooterBehaviour
         {
-            foreach (T handler in Registers.GetAll<T>(RegisterInactivePolicy.Exclude))
+            foreach (T handler in Registers.Instance.GetAll<T>(RegisterInactivePolicy.Exclude))
             {
                 Tell(handler, tell);
             }

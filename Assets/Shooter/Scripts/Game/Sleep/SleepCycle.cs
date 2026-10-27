@@ -23,7 +23,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            clock = Registers.Get<Clock>();
+            clock = Registers.Instance.Get<Clock>();
             NetworkManager.NetworkTickSystem.Tick += HandleNetworkTick;
         }
 
@@ -67,7 +67,7 @@ namespace Shooter.Game
         private bool AreAllPlayersAsleep()
         {
             bool anyPlayer = false;
-            foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
+            foreach (Player player in Registers.Instance.GetAll<Player>(RegisterInactivePolicy.Exclude))
             {
                 Sleeper sleeper = player.GetComponent<Sleeper>();
                 if (sleeper == null || !sleeper.IsSleeping) return false;
@@ -80,7 +80,7 @@ namespace Shooter.Game
 
         private void WakeAllPlayers()
         {
-            foreach (Player player in Registers.GetAll<Player>(RegisterInactivePolicy.Exclude))
+            foreach (Player player in Registers.Instance.GetAll<Player>(RegisterInactivePolicy.Exclude))
             {
                 player.GetComponent<Sleeper>()?.WakeUp();
             }

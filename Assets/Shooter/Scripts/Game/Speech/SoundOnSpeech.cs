@@ -23,7 +23,7 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            conversationManager = Registers.Get<ConversationManager>();
+            conversationManager = Registers.Instance.Get<ConversationManager>();
             conversationManager.Said += PlayOnOwnSpokenLine;
         }
 

@@ -11,7 +11,7 @@ namespace Shooter.Game
             base.OnNetworkSpawn();
             if (!IsServer) return;
 
-            conversationManager = Registers.Get<ConversationManager>();
+            conversationManager = Registers.Instance.Get<ConversationManager>();
             conversationManager.Said += Refuse;
         }
 
