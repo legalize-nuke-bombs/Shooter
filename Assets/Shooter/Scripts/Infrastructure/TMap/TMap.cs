@@ -31,10 +31,10 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public TArrayView<T> GetAll<T>() where T : class
+        public TArray.View<T> GetAll<T>() where T : class
         {
             arraysByKey.TryGetValue(typeof(T), out TArray array);
-            return new TArrayView<T>(array);
+            return new TArray.View<T>(array);
         }
 
         // GetInterfaces builds a new array on every call, so the keys a behaviour goes under are found once per type

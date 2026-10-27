@@ -30,8 +30,7 @@ namespace Shooter.Game
         private readonly NetworkVariable<double> timestamp = new();
         private readonly NetworkVariable<float> scale = new(1f);
 
-        private TArrayView<IHourPassedHandler>.Enumerator hourPassedCursor;
-        private float hourPassedCallsOwed;
+        private float secondsSinceHourPassed;
 
         private struct SaveData
         {
@@ -131,18 +130,14 @@ namespace Shooter.Game
 
         private void TellHourPassed(float seconds)
         {
-            TArrayView<IHourPassedHandler> handlers = Registers.GetAll<IHourPassedHandler>(RegisterInactivePolicy.Exclude);
-            hourPassedCallsOwed = Mathf.Min(hourPassedCallsOwed + handlers.Count * seconds / HourLengthSeconds, handlers.Count);
-            while (hourPassedCallsOwed >= 1f && handlers.Count > 0)
+            secondsSinceHourPassed += seconds;
+            while (secondsSinceHourPassed >= HourLengthSeconds)
             {
-                if (!hourPassedCursor.MoveNext())
+                secondsSinceHourPassed -= HourLengthSeconds;
+                foreach (IHourPassedHandler handler in Registers.GetAll<IHourPassedHandler>(RegisterInactivePolicy.Exclude))
                 {
-                    hourPassedCursor = handlers.GetEnumerator();
-                    continue;
+                    handler.HandleHourPassed();
                 }
-
-                hourPassedCursor.Current.HandleHourPassed();
-                hourPassedCallsOwed--;
             }
         }
     }
