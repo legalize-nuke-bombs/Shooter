@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+
+namespace Shooter.Infrastructure
+{
+    public sealed class TMap
+    {
+        private static readonly Dictionary<Type, Type[]> KeysByBehaviourType = new();
+
+        private readonly Dictionary<Type, TArray> arraysByKey = new();
+
+        public void Add(IShooterBehaviour behaviour)
+        {
+            foreach (Type key in GetKeys(behaviour.GetType()))
+            {
+                if (!arraysByKey.TryGetValue(key, out TArray array))
+                {
+                    array = new TArray(key);
+                    arraysByKey[key] = array;
+                }
+
+                array.Add(behaviour);
+            }
+        }
+
+        public void Remove(IShooterBehaviour behaviour)
+        {
+            foreach (Type key in GetKeys(behaviour.GetType()))
+            {
+                if (arraysByKey.TryGetValue(key, out TArray array)) array.Remove(behaviour);
+            }
+        }
+
+        public ReadOnlySpan<T> GetAll<T>() where T : class
+        {
+            return arraysByKey.TryGetValue(typeof(T), out TArray array) ? array.AsSpan<T>() : ReadOnlySpan<T>.Empty;
+        }
+
+        // GetInterfaces builds a new array on every call, so the keys a behaviour goes under are found once per type
+        private static Type[] GetKeys(Type behaviourType)
+        {
+            if (KeysByBehaviourType.TryGetValue(behaviourType, out Type[] keys)) return keys;
+
+            var types = new List<Type>();
+            for (Type type = behaviourType; type != typeof(ShooterBehaviour) && type != typeof(ShooterNetworkBehaviour); type = type.BaseType)
+            {
+                types.Add(type);
+            }
+
+            foreach (Type interfaceType in behaviourType.GetInterfaces())
+            {
+                if (interfaceType != typeof(IShooterBehaviour)) types.Add(interfaceType);
+            }
+
+            keys = types.ToArray();
+            KeysByBehaviourType[behaviourType] = keys;
+            return keys;
+        }
+    }
+}
