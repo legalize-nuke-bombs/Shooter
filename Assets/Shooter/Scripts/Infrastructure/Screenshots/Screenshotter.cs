@@ -1,42 +1,15 @@
-using System;
 using System.Collections;
-using System.Globalization;
 using System.IO;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
 
 namespace Shooter.Infrastructure
 {
-    [RequireComponent(typeof(AudioSource))]
-    public class Screenshotter : ShooterBehaviour, IShooterUpdateable
+    public static class Screenshotter
     {
-        private const string FolderName = "Screenshots";
-        private const string FileNamePrefix = "Screenshot";
-        private const string StampFormat = "yyyy_MM_dd_HH_mm_ss";
         private static readonly Journal Log = Logs.Here();
-        private static readonly ScreenshotSetting FullSizeSetting = new(0, 0, 90);
 
-        private AudioSource click;
-
-        public static Screenshotter Instance { get; private set; }
-
-        protected override void ShooterAwake()
-        {
-            Instance = this;
-            click = GetComponent<AudioSource>();
-            DontDestroyOnLoad(gameObject);
-        }
-
-        public void ShooterUpdate()
-        {
-            if (Keyboard.current == null || !Keyboard.current.f12Key.wasPressedThisFrame) return;
-
-            click.Play();
-            StartCoroutine(TakeToScreenshotsFolder());
-        }
-
-        public IEnumerator TakeScreenshot(string path, ScreenshotSetting setting)
+        public static IEnumerator TakeScreenshot(string path, ScreenshotSetting setting)
         {
             yield return new WaitForEndOfFrame();
 
@@ -69,14 +42,6 @@ namespace Shooter.Infrastructure
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllBytes(path, jpgBytes);
             Log.Info($"Wrote screenshot {width} x {height} to {path}");
-        }
-
-        private IEnumerator TakeToScreenshotsFolder()
-        {
-            string stamp = DateTime.Now.ToString(StampFormat, CultureInfo.InvariantCulture);
-            string path = Path.Combine(Config.GetRootFolder(), FolderName, FileNamePrefix + "_" + stamp + ".jpg");
-
-            yield return TakeScreenshot(path, FullSizeSetting);
         }
     }
 }

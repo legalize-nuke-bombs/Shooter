@@ -169,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8353832467919372590, guid: f01d84e2e1a1931409fa872bff9b9965, type: 3}
       propertyPath: m_Name
-      value: Screenshotter
+      value: ScreenshotOnKey
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

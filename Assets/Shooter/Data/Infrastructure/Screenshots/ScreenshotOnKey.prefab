@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8556484687174119029}
   - component: {fileID: 3659652651855644947}
   m_Layer: 0
-  m_Name: Screenshotter
+  m_Name: ScreenshotOnKey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
