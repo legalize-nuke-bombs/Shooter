@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Shooter.Infrastructure;
 using Unity.Netcode;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-namespace Shooter.Game
+namespace Shooter.Infrastructure
 {
     public class DebugOverlay : Overlay, IShooterUpdateable
     {
         private const string PanelLabelName = "debug";
         private const int FrameSamples = 120;
+        private const int LargestClassCount = 5;
         private const int LeftColumnWidth = 34;
         private const float PanelRefreshSeconds = 0.25f;
         private const float LogReportSeconds = 60f;
@@ -41,18 +41,19 @@ namespace Shooter.Game
         private readonly float[] frameDurations = new float[FrameSamples];
 
         private readonly Dictionary<string, ProfilerRecorder> recordersByCounterName = new();
+        private readonly Type[] largestClasses = new Type[LargestClassCount];
+        private readonly int[] largestClassCounts = new int[LargestClassCount];
         private int sampledFrameCount;
         private int nextFrameIndex;
-        private HostVersion hostVersion;
 
         private Label panelLabel;
         private float secondsToPanelRefresh;
         private float secondsToLogReport = LogReportSeconds;
         private bool visible;
 
-        private void Start()
+        protected override void ShooterAwake()
         {
-            hostVersion = Registers.Instance.Get<HostVersion>();
+            DontDestroyOnLoad(gameObject);
         }
 
         public void ShooterUpdate()
@@ -157,9 +158,41 @@ namespace Shooter.Game
 
             AppendBlankLine();
             AppendPanelLine($"Экран {Screen.width}×{Screen.height}", $"{Screen.currentResolution.refreshRateRatio.value:F0} Гц   " + (Screen.fullScreen ? "Полный экран" : "Окно"));
-            AppendWorldLines();
+            AppendCameraLine();
+            AppendRegistryLines();
+            AppendNetworkLines();
 
             return panelTextBuilder.ToString().TrimEnd();
+        }
+
+        private void AppendCameraLine()
+        {
+            Camera camera = Camera.main;
+            if (camera == null) return;
+
+            Transform cameraTransform = camera.transform;
+            Vector3 position = cameraTransform.position;
+            AppendPanelLine($"Камера {position.x:F1} {position.y:F1} {position.z:F1}", FormatFacing(cameraTransform.eulerAngles.y));
+        }
+
+        private void AppendRegistryLines()
+        {
+            Registers registers = Registers.Instance;
+
+            AppendBlankLine();
+            AppendPanelLine(
+                $"Компоненты {registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Include).Count:N0}",
+                $"Включены {registers.GetAll<IShooterBehaviour>(RegisterInactivePolicy.Exclude).Count:N0}");
+            AppendPanelLine(
+                $"Апдейты {registers.GetAll<IShooterUpdateable>(RegisterInactivePolicy.Exclude).Count:N0}",
+                $"Поздние {registers.GetAll<IShooterLateUpdateable>(RegisterInactivePolicy.Exclude).Count:N0}");
+            AppendPanelLine($"Ключи {registers.KeyCount:N0}", $"Места {registers.Capacity:N0}");
+
+            registers.FindLargestClasses(largestClasses, largestClassCounts);
+            for (int i = 0; i < LargestClassCount && largestClasses[i] != null; i++)
+            {
+                AppendPanelLine($"  {largestClasses[i].Name}", largestClassCounts[i].ToString("N0"));
+            }
         }
 
         private void AppendFrameLine()
@@ -177,7 +210,7 @@ namespace Shooter.Game
             AppendPanelLine($"FPS {1f / averageDuration:F0}", $"Кадр {averageDuration * 1000f:F1} мс   Худший {worstDuration * 1000f:F1} мс");
         }
 
-        private void AppendWorldLines()
+        private void AppendNetworkLines()
         {
             NetworkManager network = NetworkManager.Singleton;
 
@@ -185,7 +218,7 @@ namespace Shooter.Game
 
             if (network == null || !network.IsListening)
             {
-                AppendPanelLine("Сеть не запущена");
+                AppendPanelLine("Сеть не запущена", $"Версия {Application.version}");
                 return;
             }
 
@@ -195,17 +228,7 @@ namespace Shooter.Game
                 ? $"Задержка {network.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkManager.ServerClientId)} мс"
                 : "";
             AppendPanelLine(role, clientCount + roundTripTime);
-
-            Transform localPlayerTransform = LocalPlayerFinder.FindComponent<Transform>();
-            if (localPlayerTransform != null)
-            {
-                Vector3 position = localPlayerTransform.position;
-                AppendPanelLine($"Позиция {position.x:F1} {position.y:F1} {position.z:F1}", FormatFacing(localPlayerTransform.eulerAngles.y));
-            }
-
-            AppendPanelLine(hostVersion == null
-                ? $"Клиент {Application.version}"
-                : $"Сервер {hostVersion.Version}   Клиент {Application.version}");
+            AppendPanelLine($"Версия {Application.version}");
         }
 
         private string FormatManagedMemory()

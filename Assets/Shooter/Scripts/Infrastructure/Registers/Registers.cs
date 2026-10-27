@@ -11,6 +11,10 @@ namespace Shooter.Infrastructure
 
         public static Registers Instance { get; private set; }
 
+        public int KeyCount => behaviours.KeyCount + activeBehaviours.KeyCount;
+
+        public int Capacity => behaviours.Capacity + activeBehaviours.Capacity;
+
         private readonly TMap behaviours = new();
         private readonly TMap activeBehaviours = new();
         private float nextCollectTime;
@@ -58,6 +62,11 @@ namespace Shooter.Infrastructure
         {
             TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? behaviours : activeBehaviours;
             return registered.GetAll<T>();
+        }
+
+        public void FindLargestClasses(Type[] classes, int[] counts)
+        {
+            behaviours.FindLargestClasses(classes, counts);
         }
 
         public T Get<T>() where T : class

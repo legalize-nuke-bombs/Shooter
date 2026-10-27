@@ -1,0 +1,18 @@
+.debug-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 4px 6px;
+}
+
+.debug {
+    margin-top: 23px;
+    white-space: nowrap;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    -unity-font-definition: url("/Assets/Shooter/Data/Game/Interface/Overlays/RobotoMono-Regular.ttf");
+    -unity-text-outline-width: 0.7px;
+    -unity-text-outline-color: rgba(0, 0, 0, 0.9);
+}

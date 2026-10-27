@@ -650,14 +650,6 @@
     display: none;
 }
 
-.debug {
-    margin-top: 6px;
-    white-space: nowrap;
-    color: rgba(255, 255, 255, 0.9);
-    -unity-text-outline-width: 0.7px;
-    -unity-text-outline-color: rgba(0, 0, 0, 0.9);
-}
-
 .toasts {
     position: absolute;
     right: 6px;

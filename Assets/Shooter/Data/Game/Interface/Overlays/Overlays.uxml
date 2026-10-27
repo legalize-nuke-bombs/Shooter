@@ -133,7 +133,6 @@
         </ui:VisualElement>
         <ui:VisualElement name="versions" class="corner" picking-mode="Ignore">
             <ui:Label name="clock" class="line corner__line"/>
-            <ui:Label name="debug" class="line corner__line debug" picking-mode="Ignore"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

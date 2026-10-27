@@ -4060,7 +4060,6 @@ GameObject:
   m_Component:
   - component: {fileID: 390339357}
   - component: {fileID: 390339356}
-  - component: {fileID: 390339366}
   - component: {fileID: 390339365}
   - component: {fileID: 390339364}
   - component: {fileID: 390339363}
@@ -4321,19 +4320,6 @@ MonoBehaviour:
   beginningHour: 22
   beginningMinutes: 0
   beginningSeconds: 0
---- !u!114 &390339366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 390339355}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c24581d0e3ef4346adeb38422006901, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Environment
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &390339367
 MonoBehaviour:
   m_ObjectHideFlags: 0

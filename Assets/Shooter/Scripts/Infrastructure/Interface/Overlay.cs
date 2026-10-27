@@ -1,8 +1,7 @@
-using Shooter.Infrastructure;
 using UnityEngine.UIElements;
 using UnityEngine;
 
-namespace Shooter.Game
+namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(PanelRenderer))]
     public abstract class Overlay : ShooterBehaviour

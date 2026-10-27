@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="DebugOverlay.uss"/>
+    <ui:VisualElement class="debug-overlay" picking-mode="Ignore">
+        <ui:Label name="debug" class="debug" picking-mode="Ignore"/>
+    </ui:VisualElement>
+</ui:UXML>

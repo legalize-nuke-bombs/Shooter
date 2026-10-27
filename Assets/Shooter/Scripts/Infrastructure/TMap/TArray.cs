@@ -22,6 +22,8 @@ namespace Shooter.Infrastructure
 
         public int Count => count;
 
+        public int Capacity => entries.Length;
+
         public void Add(IShooterBehaviour behaviour)
         {
             int hash = RuntimeHelpers.GetHashCode(behaviour);

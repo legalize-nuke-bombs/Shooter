@@ -9,6 +9,22 @@ namespace Shooter.Infrastructure
 
         private Dictionary<Type, TArray> arraysByKey = new();
 
+        public int KeyCount => arraysByKey.Count;
+
+        public int Capacity
+        {
+            get
+            {
+                int capacity = 0;
+                foreach (TArray array in arraysByKey.Values)
+                {
+                    capacity += array.Capacity;
+                }
+
+                return capacity;
+            }
+        }
+
         public void Add(IShooterBehaviour behaviour)
         {
             foreach (Type key in GetKeys(behaviour.GetType()))
@@ -35,6 +51,29 @@ namespace Shooter.Infrastructure
         {
             arraysByKey.TryGetValue(typeof(T), out TArray array);
             return new TArray.View<T>(array);
+        }
+
+        public void FindLargestClasses(Type[] classes, int[] counts)
+        {
+            Array.Clear(classes, 0, classes.Length);
+            Array.Clear(counts, 0, counts.Length);
+
+            foreach (KeyValuePair<Type, TArray> pair in arraysByKey)
+            {
+                if (pair.Key.IsInterface || pair.Key.IsAbstract) continue;
+
+                int count = pair.Value.Count;
+                for (int place = 0; place < counts.Length; place++)
+                {
+                    if (count <= counts[place]) continue;
+
+                    Array.Copy(counts, place, counts, place + 1, counts.Length - place - 1);
+                    Array.Copy(classes, place, classes, place + 1, classes.Length - place - 1);
+                    counts[place] = count;
+                    classes[place] = pair.Key;
+                    break;
+                }
+            }
         }
 
         public void CollectGarbage()
