@@ -9,8 +9,8 @@ namespace Shooter.Infrastructure
     {
         [SerializeField] private TransformMobility mobility;
 
-        private readonly List<ShooterTransformObserver> followers = new();
-        private ShooterTransformObserver leader;
+        private readonly List<ShooterTransformObserver> children = new();
+        private ShooterTransformObserver parent;
         private Vector3 lastPosition;
         private bool started;
 
@@ -29,20 +29,20 @@ namespace Shooter.Infrastructure
             started = true;
             lastPosition = transform.position;
             Placed?.Invoke();
-            Follow(FindLeader());
+            ChangeParent(FindParent());
         }
 
         private void OnTransformParentChanged()
         {
             if (!started || mobility == TransformMobility.Static) return;
 
-            Follow(FindLeader());
+            ChangeParent(FindParent());
             Move();
         }
 
         private void OnDestroy()
         {
-            if (leader != null) leader.followers.Remove(this);
+            if (parent != null) parent.children.Remove(this);
             Removed?.Invoke();
         }
 
@@ -55,22 +55,22 @@ namespace Shooter.Infrastructure
         {
             lastPosition = transform.position;
             Moved?.Invoke();
-            foreach (ShooterTransformObserver follower in followers)
+            foreach (ShooterTransformObserver child in children)
             {
-                follower.Move();
+                child.Move();
             }
         }
 
-        private void Follow(ShooterTransformObserver newLeader)
+        private void ChangeParent(ShooterTransformObserver newParent)
         {
-            if (leader != null) leader.followers.Remove(this);
+            if (parent != null) parent.children.Remove(this);
 
-            leader = newLeader;
-            if (leader != null) leader.followers.Add(this);
-            enabled = mobility == TransformMobility.Dynamic && leader == null;
+            parent = newParent;
+            if (parent != null) parent.children.Add(this);
+            enabled = mobility == TransformMobility.Dynamic && parent == null;
         }
 
-        private ShooterTransformObserver FindLeader()
+        private ShooterTransformObserver FindParent()
         {
             if (mobility == TransformMobility.Static) return null;
 
