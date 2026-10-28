@@ -9,7 +9,8 @@ namespace Shooter.Game
         private static readonly Dictionary<string, Func<IOpenAiHost>> HostFactoriesByProvider = new(StringComparer.OrdinalIgnoreCase)
         {
             ["Polza"] = () => new PolzaHost(),
-            ["Ollama"] = () => new OllamaHost()
+            ["Ollama"] = () => new OllamaHost(),
+            ["Claude"] = () => new ClaudeHost()
         };
 
         public static IEnumerable<string> ProviderNames => HostFactoriesByProvider.Keys;
