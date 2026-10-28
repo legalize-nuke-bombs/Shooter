@@ -12,7 +12,6 @@ namespace Shooter.Infrastructure
         private readonly List<ShooterTransformObserver> children = new();
         private ShooterTransformObserver parent;
         private Vector3 lastPosition;
-        private bool started;
 
         public event Action Placed;
         public event Action Moved;
@@ -24,23 +23,17 @@ namespace Shooter.Infrastructure
             set => mobility = value;
         }
 
-        private bool ShouldPoll => (mobility == TransformMobility.Dynamic) && (parent == null);
-
         private void Start()
         {
-            started = true;
             lastPosition = transform.position;
             Placed?.Invoke();
             ChangeParent(FindParent());
-            enabled = ShouldPoll;
+            enabled = (mobility == TransformMobility.Dynamic);
         }
 
         private void OnTransformParentChanged()
         {
-            if (!started || mobility == TransformMobility.Static) return;
-
             ChangeParent(FindParent());
-            enabled = ShouldPoll;
             Move();
         }
 
@@ -75,14 +68,7 @@ namespace Shooter.Infrastructure
 
         private ShooterTransformObserver FindParent()
         {
-            if (mobility == TransformMobility.Static) return null;
-
-            for (Transform ancestor = transform.parent; ancestor != null; ancestor = ancestor.parent)
-            {
-                if (ancestor.TryGetComponent(out ShooterTransformObserver observer) && observer.mobility == TransformMobility.Dynamic) return observer;
-            }
-
-            return null;
+            return transform.parent == null ? null : transform.parent.GetComponentInParent<ShooterTransformObserver>(true);
         }
 
         public enum TransformMobility

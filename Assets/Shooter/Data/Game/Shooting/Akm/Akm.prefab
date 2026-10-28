@@ -251,4 +251,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
-  mobility: 1
+  mobility: 0

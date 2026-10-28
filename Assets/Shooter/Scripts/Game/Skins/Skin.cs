@@ -40,7 +40,6 @@ namespace Shooter.Game
             animator.applyRootMotion = false;
 
             ShooterEntity shooterEntity = ModelInstance.AddComponent<ShooterEntity>();
-            shooterEntity.GetComponent<ShooterTransformObserver>().Mobility = ShooterTransformObserver.TransformMobility.Dynamic;
             shooterEntity.AddComponent<LocomotionAnimator>();
             shooterEntity.AddComponent<Hitboxes>();
 

@@ -99,7 +99,6 @@ namespace Shooter.Game
             modelInstance.transform.localPosition = Skin.ModelOffset;
             modelInstance.transform.localRotation = Quaternion.identity;
             ShooterEntity shooterEntity = modelInstance.AddComponent<ShooterEntity>();
-            shooterEntity.GetComponent<ShooterTransformObserver>().Mobility = ShooterTransformObserver.TransformMobility.Dynamic;
             shooterEntity.AddComponent<Ragdoll>();
 
             Log.Info($"Corpse {name} dressed as {skin}");
