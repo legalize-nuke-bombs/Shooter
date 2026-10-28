@@ -5,7 +5,7 @@ namespace Shooter.Infrastructure
     [RequireComponent(typeof(ShooterEntity))]
     public abstract class ShooterComponent : MonoBehaviour
     {
-        private protected ShooterEntity Entity { get; private set; }
+        protected ShooterEntity Entity { get; private set; }
 
         protected void Awake()
         {

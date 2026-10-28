@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
     [RequireComponent(typeof(ShooterEntity))]
     public abstract class ShooterNetworkComponent : NetworkBehaviour
     {
-        private protected ShooterEntity Entity { get; private set; }
+        protected ShooterEntity Entity { get; private set; }
 
         protected void Awake()
         {

@@ -13,7 +13,7 @@ namespace Shooter.Infrastructure
 
         private void Start()
         {
-            lastPosition = transform.position;
+            Move();
             ChangeParent(FindParent());
             enabled = (Entity.Mobility == TransformMobility.Dynamic);
         }
