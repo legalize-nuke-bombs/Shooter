@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class Intoxication : NetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
     {
         private static readonly Journal Log = Logs.Here();

@@ -1,9 +1,11 @@
 using System;
 using Shooter.Infrastructure;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public abstract class Health : NetworkBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();

@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class HungerOverlay : Overlay, IShooterUpdateable
     {
         private const string CounterElementName = "hunger";

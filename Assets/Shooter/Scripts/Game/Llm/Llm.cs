@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(LlmHistory))]
     [RequireComponent(typeof(Health))]

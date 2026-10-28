@@ -7,6 +7,7 @@ using UnityEngine.Animations.Rigging;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Skin))]
     public class WeaponView : NetworkBehaviour, IShooterUpdateable

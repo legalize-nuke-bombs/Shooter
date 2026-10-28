@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(InventoryExchanger))]
     public class PlayerInventoryObserver : NetworkBehaviour, IToastSource
     {

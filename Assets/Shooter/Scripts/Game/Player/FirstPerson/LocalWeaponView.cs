@@ -6,6 +6,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
     public class LocalWeaponView : NetworkBehaviour, IShooterLateUpdateable

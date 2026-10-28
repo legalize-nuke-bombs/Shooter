@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
     public class PlayerConversations : NetworkBehaviour, IShooterUpdateable
     {

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkManager))]
     public class NetworkStarter : MonoBehaviour
     {

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerConversations))]
     [RequireComponent(typeof(PlayerController))]
     public class PlayerConversationObserver : MonoBehaviour, IToastSource

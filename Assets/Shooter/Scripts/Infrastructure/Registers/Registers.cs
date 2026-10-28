@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Infrastructure)]
     public class Registers : MonoBehaviour
     {

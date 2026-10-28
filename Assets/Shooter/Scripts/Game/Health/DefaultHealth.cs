@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public sealed class DefaultHealth : Health, ISaveableComponent
     {
         [SerializeField] private double maxHp = 100;

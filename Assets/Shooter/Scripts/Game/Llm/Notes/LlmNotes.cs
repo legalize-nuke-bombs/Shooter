@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class LlmNotes : MonoBehaviour, ISaveableComponent
     {
         [SerializeField] private int nameLimit = 25;

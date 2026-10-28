@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(LocalWeaponView))]
     [RequireComponent(typeof(Footsteps))]

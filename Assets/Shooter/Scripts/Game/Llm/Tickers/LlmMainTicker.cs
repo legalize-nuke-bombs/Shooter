@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Llm))]
     public class LlmMainTicker : MonoBehaviour, IShooterUpdateable
     {

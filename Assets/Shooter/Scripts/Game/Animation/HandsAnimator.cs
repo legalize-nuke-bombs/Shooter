@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(Skin))]
     public class HandsAnimator : MonoBehaviour

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     public class DespawnOnDeath : NetworkBehaviour
     {

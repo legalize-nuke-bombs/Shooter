@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     public class SceneSwitcherOnNetworkStop : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();

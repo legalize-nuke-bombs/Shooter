@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Trigger))]
     public class NotificationPublisherOnTrigger : MonoBehaviour, ISaveableComponent
     {

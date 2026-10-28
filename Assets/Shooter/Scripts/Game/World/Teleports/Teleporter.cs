@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public abstract class Teleporter : MonoBehaviour
     {
         public event Action<Character> Teleported;

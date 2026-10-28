@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class Skin : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();

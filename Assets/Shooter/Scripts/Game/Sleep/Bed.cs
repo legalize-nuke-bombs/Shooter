@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class Bed : MonoBehaviour, IUsable, IDigestible
     {
         private static readonly Journal Log = Logs.Here();

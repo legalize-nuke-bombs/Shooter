@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class InventoryOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "inventory-screen";

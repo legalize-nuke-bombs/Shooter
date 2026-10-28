@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(LookHitFinder))]
     public class HintOverlay : Overlay, IShooterUpdateable
     {

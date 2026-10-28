@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(NotificationRecipient))]
     public class LlmNotificationObserver : MonoBehaviour

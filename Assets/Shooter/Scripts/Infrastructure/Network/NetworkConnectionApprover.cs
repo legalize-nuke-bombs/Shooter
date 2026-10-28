@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkManager))]
     public class NetworkConnectionApprover : MonoBehaviour
     {

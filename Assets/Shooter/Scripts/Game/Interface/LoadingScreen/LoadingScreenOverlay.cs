@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class LoadingScreenOverlay : Overlay
     {
         private const string ScreenElementName = "loading";

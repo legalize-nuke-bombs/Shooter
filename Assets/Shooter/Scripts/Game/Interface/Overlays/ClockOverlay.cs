@@ -1,9 +1,11 @@
 using System;
 using Shooter.Infrastructure;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class ClockOverlay : Overlay, IShooterUpdateable
     {
         private const string ClockLabelName = "clock";

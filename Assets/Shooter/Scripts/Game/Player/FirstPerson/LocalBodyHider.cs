@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Skin))]
     [RequireComponent(typeof(WeaponView))]

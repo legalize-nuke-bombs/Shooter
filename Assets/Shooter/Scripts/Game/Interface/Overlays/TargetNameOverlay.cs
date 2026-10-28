@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(LookHitFinder))]
     public class TargetNameOverlay : Overlay, IShooterUpdateable
     {

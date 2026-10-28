@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class BehaviorReporter : MonoBehaviour
     {
         public event Action<BehaviorReport> Reported;

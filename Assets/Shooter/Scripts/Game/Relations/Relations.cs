@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Nameable))]
     public class Relations : MonoBehaviour, IDigestible, ISaveableComponent

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(PanelRenderer))]
     public abstract class Overlay : MonoBehaviour
     {

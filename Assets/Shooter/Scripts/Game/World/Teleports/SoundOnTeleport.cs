@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Teleporter))]
     public class SoundOnTeleport : MonoBehaviour
     {

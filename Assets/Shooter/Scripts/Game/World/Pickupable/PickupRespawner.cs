@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkObject))]
     public class PickupRespawner : MonoBehaviour, ISaveableComponent, IHourPassedHandler
     {

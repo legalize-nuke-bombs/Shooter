@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
     public class Stamina : NetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
     {

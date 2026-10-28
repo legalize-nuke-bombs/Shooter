@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkObject))]
     public class SaveableEntity : NetworkBehaviour, ISaveableObject
     {

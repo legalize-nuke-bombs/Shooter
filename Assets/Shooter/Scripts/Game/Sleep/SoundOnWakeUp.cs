@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(Speaker))]
     public class SoundOnWakeUp : MonoBehaviour

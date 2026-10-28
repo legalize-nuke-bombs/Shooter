@@ -1,9 +1,11 @@
 using System;
 using Shooter.Infrastructure;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class HealthOverlay : Overlay, IShooterUpdateable
     {
         private const string BarElementName = "health";

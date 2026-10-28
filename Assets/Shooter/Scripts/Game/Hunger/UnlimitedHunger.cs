@@ -1,5 +1,8 @@
+using UnityEngine;
+
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class UnlimitedHunger : Hunger
     {
         public override float Amount => 100f;

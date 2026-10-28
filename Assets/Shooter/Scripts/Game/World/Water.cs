@@ -3,6 +3,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(WaterSurface))]
     public class Water : MonoBehaviour
     {

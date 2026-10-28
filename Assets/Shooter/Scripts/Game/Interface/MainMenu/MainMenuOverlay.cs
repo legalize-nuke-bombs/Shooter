@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class MainMenuOverlay : Overlay, IShooterUpdateable
     {
         private const string PanelElementName = "panel";

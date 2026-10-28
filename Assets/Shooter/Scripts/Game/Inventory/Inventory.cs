@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using Shooter.Infrastructure;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class Inventory : NetworkBehaviour, IDigestible, ISaveableComponent
     {
         public const int NoSlot = -1;

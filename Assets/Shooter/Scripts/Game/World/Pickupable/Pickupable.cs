@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(IncrementalId))]
     public class Pickupable : NetworkBehaviour, IUsable, IDigestible

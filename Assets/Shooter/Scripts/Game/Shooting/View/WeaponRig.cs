@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class WeaponRig : MonoBehaviour
     {
         [SerializeField] private Vector3 seatPosition;

@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class ToastOverlay : Overlay, IShooterUpdateable
     {
         private const string FeedElementName = "toasts";

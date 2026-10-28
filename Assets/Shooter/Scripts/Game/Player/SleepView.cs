@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Sleeper))]
     public class SleepView : NetworkBehaviour, IShooterUpdateable

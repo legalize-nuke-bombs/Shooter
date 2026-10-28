@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Interactor))]

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour, IShooterUpdateable
     {

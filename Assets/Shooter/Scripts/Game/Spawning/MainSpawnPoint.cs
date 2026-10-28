@@ -4,6 +4,7 @@ using Random = UnityEngine.Random;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class MainSpawnPoint : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();

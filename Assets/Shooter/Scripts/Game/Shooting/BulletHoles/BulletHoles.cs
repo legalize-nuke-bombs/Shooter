@@ -6,6 +6,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class BulletHoles : NetworkBehaviour, ISaveableComponent
     {

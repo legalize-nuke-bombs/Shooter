@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(BehaviorReporter))]
     public class CustomOrderSlot : MonoBehaviour, IDigestible, ISaveableComponent, IShooterUpdateable
     {

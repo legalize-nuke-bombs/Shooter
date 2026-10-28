@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(InventoryHolder))]
     public class InventoryHolderFiller : NetworkBehaviour

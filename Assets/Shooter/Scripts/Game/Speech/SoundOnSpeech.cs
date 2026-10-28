@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Speaker))]
     public class SoundOnSpeech : NetworkBehaviour

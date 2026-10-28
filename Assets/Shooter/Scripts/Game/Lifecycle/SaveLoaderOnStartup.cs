@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class SaveLoaderOnStartup : MonoBehaviour
     {
         private const string BrokenSaveTitle = "Не удалось загрузить сохранение";

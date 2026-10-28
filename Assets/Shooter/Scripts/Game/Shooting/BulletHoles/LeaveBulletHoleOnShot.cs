@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Gunner))]
     public class LeaveBulletHoleOnShot : MonoBehaviour
     {

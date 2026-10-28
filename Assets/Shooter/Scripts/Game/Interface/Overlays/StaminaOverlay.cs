@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class StaminaOverlay : Overlay, IShooterUpdateable
     {
         private const string BarElementName = "stamina";

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkTransform))]
     public class SaveableTransform : NetworkBehaviour, ISaveableComponent
     {

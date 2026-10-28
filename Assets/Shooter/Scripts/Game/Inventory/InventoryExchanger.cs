@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Character))]
     public class InventoryExchanger : NetworkBehaviour

@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class SleepOverlay : Overlay, IShooterUpdateable
     {
         private const string ScreenElementName = "sleep";

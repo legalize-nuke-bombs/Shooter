@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Health))]
     public class FallDamageOnLanding : MonoBehaviour

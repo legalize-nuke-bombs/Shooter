@@ -1,7 +1,9 @@
 using Shooter.Infrastructure;
+using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public sealed class RefusiveTalker : Talker
     {
         private ConversationManager conversationManager;

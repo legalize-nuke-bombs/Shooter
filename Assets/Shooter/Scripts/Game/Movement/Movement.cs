@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(NetworkTransform))]
     public abstract class Movement : NetworkBehaviour

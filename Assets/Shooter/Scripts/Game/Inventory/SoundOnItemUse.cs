@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(InventoryUser))]
     [RequireComponent(typeof(Speaker))]
     public class SoundOnItemUse : MonoBehaviour

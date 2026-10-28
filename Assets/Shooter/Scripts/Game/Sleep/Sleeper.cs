@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Hands))]
     public class Sleeper : NetworkBehaviour, IDigestible, ISaveableComponent

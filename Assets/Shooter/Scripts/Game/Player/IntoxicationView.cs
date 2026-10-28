@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Intoxication))]
     public class IntoxicationView : NetworkBehaviour, IShooterUpdateable

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class SleepCycle : NetworkBehaviour
     {

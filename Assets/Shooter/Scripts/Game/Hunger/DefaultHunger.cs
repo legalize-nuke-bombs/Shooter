@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class DefaultHunger : Hunger, ISaveableComponent
     {
         [SerializeField] private float maxAmount = 100f;

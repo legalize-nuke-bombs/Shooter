@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(RespawnPosition))]
     public class RespawnPositionOnFallAsleep : MonoBehaviour

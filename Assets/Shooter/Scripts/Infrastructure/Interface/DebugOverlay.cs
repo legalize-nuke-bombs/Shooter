@@ -10,6 +10,7 @@ using static System.FormattableString;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     public class DebugOverlay : Overlay, IShooterUpdateable
     {
         private const string PanelLabelName = "debug";

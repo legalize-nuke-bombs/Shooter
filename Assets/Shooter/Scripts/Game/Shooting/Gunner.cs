@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Interactor))]

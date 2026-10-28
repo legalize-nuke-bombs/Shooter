@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(IncrementalId))]
     public class Player : NetworkBehaviour, ISaveableComponent
     {

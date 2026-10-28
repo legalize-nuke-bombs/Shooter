@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(TextGizmo))]
     public class CapsuleGizmo : MonoBehaviour
     {

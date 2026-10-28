@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     public class Hands : NetworkBehaviour, IDigestible, IShooterUpdateable
     {

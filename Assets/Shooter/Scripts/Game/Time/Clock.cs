@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class Clock : NetworkBehaviour, ISaveableComponent, IShooterUpdateable
     {

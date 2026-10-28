@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(HDAdditionalCameraData))]
     public class CameraAntialiasing : MonoBehaviour

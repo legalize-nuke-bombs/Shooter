@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(IncrementalId))]
     public class Switch : NetworkBehaviour, IUsable, IDigestible, ISaveableComponent
     {

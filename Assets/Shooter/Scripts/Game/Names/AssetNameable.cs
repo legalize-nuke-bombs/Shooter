@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public sealed class AssetNameable : Nameable
     {
         [SerializeField] private NameAsset asset;

@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class IncrementalIds : MonoBehaviour, ISaveableComponent
     {

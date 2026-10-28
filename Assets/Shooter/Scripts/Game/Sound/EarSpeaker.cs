@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class EarSpeaker : NetworkBehaviour
     {
         private const int MaxVoices = 4;

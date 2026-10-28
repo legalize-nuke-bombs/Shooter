@@ -1,5 +1,8 @@
+using UnityEngine;
+
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public sealed class DeadHealth : Health
     {
         public override double Hp => 0;

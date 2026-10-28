@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
     public class MainMenuMusic : MonoBehaviour, IShooterUpdateable
     {

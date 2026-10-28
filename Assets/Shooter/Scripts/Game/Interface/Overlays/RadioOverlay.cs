@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Shooter.Infrastructure;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class RadioOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "radio";

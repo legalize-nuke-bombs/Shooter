@@ -1,8 +1,10 @@
 using Shooter.Infrastructure;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class AmmoOverlay : Overlay, IShooterUpdateable
     {
         private const string CounterElementName = "ammo";

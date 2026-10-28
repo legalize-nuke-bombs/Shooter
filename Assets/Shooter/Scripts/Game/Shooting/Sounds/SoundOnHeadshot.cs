@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Gunner))]
     [RequireComponent(typeof(EarSpeaker))]
     public class SoundOnHeadshot : MonoBehaviour

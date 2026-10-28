@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class InviteOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "invite";

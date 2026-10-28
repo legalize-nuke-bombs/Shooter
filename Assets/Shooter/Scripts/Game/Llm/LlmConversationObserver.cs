@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]

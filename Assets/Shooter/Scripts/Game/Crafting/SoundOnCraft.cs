@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Crafter))]
     [RequireComponent(typeof(Speaker))]
     public class SoundOnCraft : MonoBehaviour

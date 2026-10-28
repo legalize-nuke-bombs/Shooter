@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(InventoryExchanger))]
     public class LlmInventoryObserver : MonoBehaviour

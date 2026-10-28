@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(RespawnPosition))]

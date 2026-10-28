@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Trigger))]
     public class RespawnTeleportOnTrigger : Teleporter
     {

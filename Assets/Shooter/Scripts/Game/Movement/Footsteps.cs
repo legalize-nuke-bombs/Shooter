@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(CharacterController))]

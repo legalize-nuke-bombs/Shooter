@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
     public class ScreenshotOnKey : MonoBehaviour, IShooterUpdateable
     {

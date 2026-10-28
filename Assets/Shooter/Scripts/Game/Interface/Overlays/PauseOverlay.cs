@@ -1,8 +1,10 @@
 using Shooter.Infrastructure;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class PauseOverlay : Overlay, IShooterUpdateable
     {
         private const string WindowElementName = "pause";

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Inventory))]
     public class InventoryHolder : NetworkBehaviour, IDigestible, ISaveableComponent
     {

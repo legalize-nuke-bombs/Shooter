@@ -1,8 +1,10 @@
 using Unity.Collections;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public sealed class TextNameable : Nameable
     {
         private readonly NetworkVariable<FixedString64Bytes> currentName = new();

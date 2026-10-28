@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     public class TransformObserver : MonoBehaviour, IShooterLateUpdateable
     {
         private Vector3 lastPosition;

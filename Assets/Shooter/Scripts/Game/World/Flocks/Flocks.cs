@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class Flocks : NetworkBehaviour, IShooterLateUpdateable
     {
         private const float FullEscapeFear = 0.5f;

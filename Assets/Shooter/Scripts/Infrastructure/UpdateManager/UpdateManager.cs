@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DisallowMultipleComponent]
     public class UpdateManager : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();

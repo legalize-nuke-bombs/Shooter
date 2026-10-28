@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
     public abstract class Hunger : NetworkBehaviour, IDigestible, ITimePassedHandler
     {

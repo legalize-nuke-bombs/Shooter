@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(EarSpeaker))]
     public class SoundOnDeath : MonoBehaviour

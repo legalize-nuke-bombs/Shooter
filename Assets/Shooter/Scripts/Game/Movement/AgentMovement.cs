@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(NavMeshAgent))]
     public class AgentMovement : Movement
     {

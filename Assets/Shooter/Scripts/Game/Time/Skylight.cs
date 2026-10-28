@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
+    [DisallowMultipleComponent]
     public class Skylight : MonoBehaviour
     {
         private VolumeProfile volumeProfile;
