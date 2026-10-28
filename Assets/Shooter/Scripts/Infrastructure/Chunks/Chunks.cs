@@ -56,19 +56,19 @@ namespace Shooter.Infrastructure
             if (chunks.TryGetValue(chunk, out TMap members)) members.Remove(component);
         }
 
-        public InRadius<T> FindInRadius<T>(Vector3 center, float radius, ChunkInactivePolicy inactivePolicy) where T : class
+        public View<T> FindInRadius<T>(Vector3 center, float radius, ChunkInactivePolicy inactivePolicy) where T : class
         {
-            return new InRadius<T>(chunks, center, radius, inactivePolicy);
+            return new View<T>(chunks, center, radius, inactivePolicy);
         }
 
-        public readonly struct InRadius<T> where T : class
+        public readonly struct View<T> where T : class
         {
             private readonly Dictionary<Vector2Int, TMap> chunks;
             private readonly Vector3 center;
             private readonly float radius;
             private readonly ChunkInactivePolicy inactivePolicy;
 
-            public InRadius(Dictionary<Vector2Int, TMap> chunks, Vector3 center, float radius, ChunkInactivePolicy inactivePolicy)
+            public View(Dictionary<Vector2Int, TMap> chunks, Vector3 center, float radius, ChunkInactivePolicy inactivePolicy)
             {
                 this.chunks = chunks;
                 this.center = center;
