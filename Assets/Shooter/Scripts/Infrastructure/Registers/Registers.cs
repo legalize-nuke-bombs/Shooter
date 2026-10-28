@@ -73,7 +73,7 @@ namespace Shooter.Infrastructure
             return new View<MonoBehaviour>(registered.GetAll(type), inactivePolicy).Count;
         }
 
-        public int CountWalked(Type type)
+        public int CountActive(Type type)
         {
             return activeComponents.CountOf(type);
         }

@@ -202,8 +202,8 @@ namespace Shooter.Infrastructure
         {
             Registers registers = Registers.Instance;
 
-            AppendPanelLine($"Updates per frame: {FormatCount(registers.CountWalked(typeof(IShooterUpdateable)))}");
-            AppendPanelLine($"Late updates per frame: {FormatCount(registers.CountWalked(typeof(IShooterLateUpdateable)))}");
+            AppendPanelLine($"Updates per frame: {FormatCount(registers.CountActive(typeof(IShooterUpdateable)))}");
+            AppendPanelLine($"Late updates per frame: {FormatCount(registers.CountActive(typeof(IShooterLateUpdateable)))}");
         }
 
         private void AppendRegistryLines()
