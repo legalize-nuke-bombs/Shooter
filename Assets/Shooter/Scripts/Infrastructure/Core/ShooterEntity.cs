@@ -4,22 +4,14 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(ShooterTransformObserver))]
     [DefaultExecutionOrder(ExecutionOrder.Registration)]
     public sealed class ShooterEntity : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private WorldPlacement placement;
-
         private readonly List<MonoBehaviour> components = new();
-        private Vector2Int chunk;
-        private bool started;
-
-        public WorldPlacement Placement
-        {
-            get => placement;
-            set => placement = value;
-        }
+        private Vector2Int? chunk;
 
         private void Awake()
         {
@@ -27,20 +19,11 @@ namespace Shooter.Infrastructure
             {
                 if (component != null) Register(component);
             }
-        }
 
-        private void Start()
-        {
-            started = true;
-            if (placement == WorldPlacement.None) return;
-
-            chunk = Chunks.ChunkOf(transform.position);
-            foreach (MonoBehaviour component in components)
-            {
-                Chunks.Instance.AddComponent(chunk, component);
-            }
-
-            if (placement == WorldPlacement.Movable) AddComponent<TransformObserver>().Moved += HandleMoved;
+            ShooterTransformObserver observer = GetComponent<ShooterTransformObserver>();
+            observer.Placed += HandlePlaced;
+            observer.Moved += HandleMoved;
+            observer.Removed += HandleRemoved;
         }
 
         private void OnEnable()
@@ -64,7 +47,6 @@ namespace Shooter.Infrastructure
             foreach (MonoBehaviour component in components)
             {
                 Registers.Instance.UnregisterComponent(component);
-                Chunks.Instance.TryRemoveComponent(chunk, component);
             }
         }
 
@@ -73,23 +55,49 @@ namespace Shooter.Infrastructure
             T component = gameObject.AddComponent<T>();
             Register(component);
             if (isActiveAndEnabled) Registers.Instance.ActivateComponent(component);
-            if (started && placement != WorldPlacement.None) Chunks.Instance.AddComponent(chunk, component);
+            if (chunk != null) Chunks.Instance.AddComponent(chunk.Value, component);
             return component;
+        }
+
+        private void HandlePlaced()
+        {
+            Vector2Int cell = Chunks.ChunkOf(transform.position);
+            foreach (MonoBehaviour component in components)
+            {
+                Chunks.Instance.AddComponent(cell, component);
+            }
+
+            chunk = cell;
         }
 
         private void HandleMoved()
         {
+            if (chunk == null) return;
+
+            Vector2Int movedFrom = chunk.Value;
             Vector2Int movedTo = Chunks.ChunkOf(transform.position);
-            if (movedTo == chunk) return;
+            if (movedTo == movedFrom) return;
 
             foreach (MonoBehaviour component in components)
             {
-                Chunks.Instance.TryRemoveComponent(chunk, component);
+                Chunks.Instance.TryRemoveComponent(movedFrom, component);
                 Chunks.Instance.AddComponent(movedTo, component);
             }
 
-            Log.Debug($"Entity {name} moved from chunk {chunk} to chunk {movedTo}");
+            Log.Debug($"Entity {name} moved from chunk {movedFrom} to chunk {movedTo}");
             chunk = movedTo;
+        }
+
+        private void HandleRemoved()
+        {
+            if (chunk == null) return;
+
+            foreach (MonoBehaviour component in components)
+            {
+                Chunks.Instance.TryRemoveComponent(chunk.Value, component);
+            }
+
+            chunk = null;
         }
 
         private void Register(MonoBehaviour component)

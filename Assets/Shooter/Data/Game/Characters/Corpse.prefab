@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 603369317153100443}
   - component: {fileID: 2841719778918629317}
   - component: {fileID: 5808589941098694088}
+  - component: {fileID: 5446187960500743843}
   m_Layer: 0
   m_Name: Corpse
   m_TagString: Untagged
@@ -261,4 +262,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 2
+--- !u!114 &5446187960500743843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6108037598719724321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 1

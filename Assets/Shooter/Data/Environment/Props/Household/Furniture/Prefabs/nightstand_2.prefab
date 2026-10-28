@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1648052844109720948}
   - component: {fileID: 1028917136261231293}
   - component: {fileID: 832679474897998993}
+  - component: {fileID: 507227864866480003}
   m_Layer: 0
   m_Name: nightstand_2
   m_TagString: Untagged
@@ -177,4 +178,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 1
+--- !u!114 &507227864866480003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011439637972986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0

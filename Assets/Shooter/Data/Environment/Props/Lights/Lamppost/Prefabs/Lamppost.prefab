@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: -2627034815974230821}
   - component: {fileID: -7052019281833807556}
   - component: {fileID: 8819779708105820314}
+  - component: {fileID: 6368025605023270354}
   m_Layer: 0
   m_Name: Lamppost
   m_TagString: Untagged
@@ -293,7 +294,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 1
+--- !u!114 &6368025605023270354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671498223490815209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0
 --- !u!1 &1072209304768659155
 GameObject:
   m_ObjectHideFlags: 0

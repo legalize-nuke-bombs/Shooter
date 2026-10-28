@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 501915309449027661}
   - component: {fileID: 5680128839920005895}
   - component: {fileID: 8385372717601780872}
+  - component: {fileID: 8969898319171514431}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -258,7 +259,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 2
+--- !u!114 &8969898319171514431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8153453556380322540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 1
 --- !u!1001 &6032461996145085491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -316,10 +329,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 6342412c3cb2e464092512397c238ca0, type: 2}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[6].asset
-      value: 
-      objectReference: {fileID: 11400000, guid: 6342412c3cb2e464092512397c238ca0, type: 2}
-    - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: contents.Array.data[0].amount
       value: 60
       objectReference: {fileID: 0}
@@ -341,10 +350,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       propertyPath: contents.Array.data[5].amount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3946889129072610234, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
-      propertyPath: contents.Array.data[6].amount
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}

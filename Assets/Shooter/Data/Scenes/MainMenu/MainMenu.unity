@@ -359,16 +359,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -3368437015953145799, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
-      propertyPath: id
-      value: e60edc11-063d-4990-b7de-90f228e8dfef
-      objectReference: {fileID: 0}
     - target: {fileID: 1475251358202894423, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
-    - target: {fileID: 5639782983844613975, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
-      propertyPath: placement
+    - target: {fileID: 6136018337975789749, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      propertyPath: mobility
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7723478074634143434, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
@@ -537,10 +533,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
-    - target: {fileID: 8069772375480875294, guid: 49bd04efa032c7d4c8bdc9a4a3e565ce, type: 3}
-      propertyPath: placement
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -558,6 +550,7 @@ GameObject:
   - component: {fileID: 522876685}
   - component: {fileID: 522876684}
   - component: {fileID: 522876687}
+  - component: {fileID: 522876688}
   m_Layer: 0
   m_Name: MainMenuMusic
   m_TagString: Untagged
@@ -704,7 +697,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 0
+--- !u!114 &522876688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522876683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0
 --- !u!1 &767148945
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,6 +722,7 @@ GameObject:
   - component: {fileID: 767148947}
   - component: {fileID: 767148946}
   - component: {fileID: 767148949}
+  - component: {fileID: 767148950}
   m_Layer: 0
   m_Name: MainMenuOverlay
   m_TagString: Untagged
@@ -828,7 +834,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 0
+--- !u!114 &767148950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767148945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0
 --- !u!1001 &784380615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -916,6 +934,7 @@ GameObject:
   - component: {fileID: 850104245}
   - component: {fileID: 850104244}
   - component: {fileID: 850104246}
+  - component: {fileID: 850104247}
   m_Layer: 0
   m_Name: MainMenuState
   m_TagString: Untagged
@@ -962,7 +981,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 0
+--- !u!114 &850104247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850104243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0
 --- !u!1 &871913569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1059,10 +1090,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4306056515154094, guid: cd0dec594d983fb4e818009695f46b1c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3893160036896522582, guid: cd0dec594d983fb4e818009695f46b1c, type: 3}
-      propertyPath: placement
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1202,14 +1229,6 @@ PrefabInstance:
     - target: {fileID: 2533964689087174679, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete) (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3529101084312199460, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: placement
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6588986734940429705, guid: e55f449d142443c4c96764e849da910a, type: 3}
-      propertyPath: id
-      value: df92a399-db02-4177-b835-d6293b49f716
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

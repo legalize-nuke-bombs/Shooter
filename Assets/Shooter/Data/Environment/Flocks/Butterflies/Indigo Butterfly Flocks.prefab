@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -1642572687181529045}
   - component: {fileID: 6776772852244049548}
   - component: {fileID: 579828623003957014}
+  - component: {fileID: 1884164891741303843}
   m_Layer: 0
   m_Name: Indigo Butterfly Flocks
   m_TagString: Untagged
@@ -159,4 +160,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 1
+--- !u!114 &1884164891741303843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0

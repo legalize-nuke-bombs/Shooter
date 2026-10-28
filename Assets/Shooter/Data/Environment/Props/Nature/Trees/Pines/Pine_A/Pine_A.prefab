@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 7626239233395129329}
   - component: {fileID: 8797582830405473085}
   - component: {fileID: 4648833202272033981}
+  - component: {fileID: 6997905782958631538}
   m_Layer: 0
   m_Name: Pine_A
   m_TagString: Untagged
@@ -142,7 +143,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  placement: 1
+--- !u!114 &6997905782958631538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2503636403554334455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0
 --- !u!1 &3923590717123692241
 GameObject:
   m_ObjectHideFlags: 0
