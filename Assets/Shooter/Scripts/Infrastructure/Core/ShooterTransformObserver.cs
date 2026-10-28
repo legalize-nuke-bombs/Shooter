@@ -24,12 +24,15 @@ namespace Shooter.Infrastructure
             set => mobility = value;
         }
 
+        private bool ShouldPoll => (mobility == TransformMobility.Dynamic) && (parent == null);
+
         private void Start()
         {
             started = true;
             lastPosition = transform.position;
             Placed?.Invoke();
             ChangeParent(FindParent());
+            enabled = ShouldPoll;
         }
 
         private void OnTransformParentChanged()
@@ -37,6 +40,7 @@ namespace Shooter.Infrastructure
             if (!started || mobility == TransformMobility.Static) return;
 
             ChangeParent(FindParent());
+            enabled = ShouldPoll;
             Move();
         }
 
@@ -67,7 +71,6 @@ namespace Shooter.Infrastructure
 
             parent = newParent;
             if (parent != null) parent.children.Add(this);
-            enabled = mobility == TransformMobility.Dynamic && parent == null;
         }
 
         private ShooterTransformObserver FindParent()
