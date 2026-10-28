@@ -7,12 +7,15 @@ using UnityEngine.Networking;
 
 namespace Shooter.Game
 {
-    public sealed class ClaudeHost : IOpenAiHost
+    public sealed class ClaudeHost : ILlmHost
     {
         private const string Host = "api.anthropic.com";
-        private const int TimeoutSeconds = 25;
+        private const int TimeoutSeconds = 120;
+        private const string Betas = "thinking-binding-controls-2026-08-01,server-side-fallback-2026-07-01";
 
-        public async Task<string> RequestChatCompletion(string apiKey, string requestJson, CancellationToken cancellationToken)
+        public ILlmFormat Format { get; } = new AnthropicFormat();
+
+        public async Task<string> Send(string apiKey, string requestJson, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
@@ -30,6 +33,7 @@ namespace Shooter.Game
                 webRequest.SetRequestHeader("Content-Type", "application/json");
                 webRequest.SetRequestHeader("x-api-key", apiKey);
                 webRequest.SetRequestHeader("anthropic-version", "2023-06-01");
+                webRequest.SetRequestHeader("anthropic-beta", Betas);
 
                 TaskCompletionSource<bool> completion = new();
                 webRequest.SendWebRequest().completed += _ => completion.TrySetResult(true);

@@ -172,8 +172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmHistory
   messageLimit: 10000
-  maxSize: 100000
-  hardSize: 200000
+  maxSize: 180000
+  hardSize: 230000
 --- !u!114 &3131132399333746512
 MonoBehaviour:
   m_ObjectHideFlags: 0

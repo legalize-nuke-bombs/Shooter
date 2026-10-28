@@ -6,12 +6,14 @@ using UnityEngine.Networking;
 
 namespace Shooter.Game
 {
-    public sealed class OllamaHost : IOpenAiHost
+    public sealed class OllamaHost : ILlmHost
     {
         private const string Host = "localhost:11434";
         private const int TimeoutSeconds = 300;
 
-        public async Task<string> RequestChatCompletion(string apiKey, string requestJson, CancellationToken cancellationToken)
+        public ILlmFormat Format { get; } = new OpenAiFormat();
+
+        public async Task<string> Send(string apiKey, string requestJson, CancellationToken cancellationToken)
         {
             Uri uri = new($"http://{Host}/v1/chat/completions");
 

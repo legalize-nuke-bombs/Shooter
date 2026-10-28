@@ -25,6 +25,9 @@ namespace Shooter.Game
 
         [JsonProperty("tool_call_id", NullValueHandling = NullValueHandling.Ignore)]
         public string ToolCallId { get; set; }
+
+        [JsonProperty("reasoning_details", NullValueHandling = NullValueHandling.Ignore)]
+        public JArray ReasoningDetails { get; set; }
     }
 
     public class OpenAiTool
@@ -51,23 +54,5 @@ namespace Shooter.Game
     {
         public string Name { get; set; }
         public string Arguments { get; set; }
-    }
-
-    public class OpenAiResponse
-    {
-        public OpenAiChoice[] Choices { get; set; }
-        public OpenAiUsage Usage { get; set; }
-    }
-
-    public class OpenAiChoice
-    {
-        public OpenAiMessage Message { get; set; }
-    }
-
-    public class OpenAiUsage
-    {
-        [JsonProperty("prompt_tokens")] public int PromptTokens { get; set; }
-
-        [JsonProperty("completion_tokens")] public int CompletionTokens { get; set; }
     }
 }

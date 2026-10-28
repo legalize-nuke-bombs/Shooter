@@ -7,12 +7,14 @@ using UnityEngine.Networking;
 
 namespace Shooter.Game
 {
-    public sealed class PolzaHost : IOpenAiHost
+    public sealed class PolzaHost : ILlmHost
     {
         private const string Host = "api.polza.ai";
         private const int TimeoutSeconds = 25;
 
-        public async Task<string> RequestChatCompletion(string apiKey, string requestJson, CancellationToken cancellationToken)
+        public ILlmFormat Format { get; } = new OpenAiFormat();
+
+        public async Task<string> Send(string apiKey, string requestJson, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(apiKey))
             {

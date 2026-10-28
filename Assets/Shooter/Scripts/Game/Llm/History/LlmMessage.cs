@@ -8,6 +8,8 @@ namespace Shooter.Game
         public string Content { get; set; }
         public LlmToolCall[] ToolCalls { get; set; }
         public string ToolCallId { get; set; }
+        public string RawMessage { get; set; }
+        public string RawFormat { get; set; }
 
         private struct SaveData
         {
@@ -15,6 +17,8 @@ namespace Shooter.Game
             public string Content { get; set; }
             public LlmToolCall[] ToolCalls { get; set; }
             public string ToolCallId { get; set; }
+            public string RawMessage { get; set; }
+            public string RawFormat { get; set; }
         }
         public object SaveObject()
         {
@@ -23,7 +27,9 @@ namespace Shooter.Game
                 Role = Role,
                 Content = Content,
                 ToolCalls = ToolCalls,
-                ToolCallId = ToolCallId
+                ToolCallId = ToolCallId,
+                RawMessage = RawMessage,
+                RawFormat = RawFormat
             };
         }
         public void LoadObject(SaveToken content)
@@ -33,6 +39,8 @@ namespace Shooter.Game
             Content = saveData.Content;
             ToolCalls = saveData.ToolCalls;
             ToolCallId = saveData.ToolCallId;
+            RawMessage = saveData.RawMessage;
+            RawFormat = saveData.RawFormat;
         }
     }
 }

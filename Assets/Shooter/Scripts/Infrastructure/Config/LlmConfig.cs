@@ -12,5 +12,8 @@ namespace Shooter.Infrastructure
 
         [CreateProperty]
         public string Model { get; set; } = "google/gemini-3.8-flash";
+
+        [CreateProperty]
+        public string Effort { get; set; } = "";
     }
 }

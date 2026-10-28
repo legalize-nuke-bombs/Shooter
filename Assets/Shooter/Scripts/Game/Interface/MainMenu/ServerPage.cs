@@ -17,7 +17,7 @@ namespace Shooter.Game
         {
             SetDropdownChoices(RequireElement<DropdownField>(CompressionDropdownName), MainCompressionManager.Keys, SettingsDropdownTitles.GetCompressionTitle);
 
-            IEnumerable<string> providerNames = new[] { NoProvider }.Concat(OpenAiHosts.ProviderNames);
+            IEnumerable<string> providerNames = new[] { NoProvider }.Concat(LlmHosts.ProviderNames);
             SetDropdownChoices(RequireElement<DropdownField>(ProviderDropdownName), providerNames, SettingsDropdownTitles.GetProviderTitle);
         }
 

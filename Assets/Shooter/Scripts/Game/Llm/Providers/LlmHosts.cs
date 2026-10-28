@@ -4,9 +4,9 @@ using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
-    public static class OpenAiHosts
+    public static class LlmHosts
     {
-        private static readonly Dictionary<string, Func<IOpenAiHost>> HostFactoriesByProvider = new(StringComparer.OrdinalIgnoreCase)
+        private static readonly Dictionary<string, Func<ILlmHost>> HostFactoriesByProvider = new(StringComparer.OrdinalIgnoreCase)
         {
             ["Polza"] = () => new PolzaHost(),
             ["Ollama"] = () => new OllamaHost(),
@@ -15,9 +15,9 @@ namespace Shooter.Game
 
         public static IEnumerable<string> ProviderNames => HostFactoriesByProvider.Keys;
 
-        public static IOpenAiHost CreateHostFor(LlmConfig config)
+        public static ILlmHost CreateHostFor(LlmConfig config)
         {
-            if (HostFactoriesByProvider.TryGetValue(config.Provider, out Func<IOpenAiHost> createHost)) return createHost();
+            if (HostFactoriesByProvider.TryGetValue(config.Provider, out Func<ILlmHost> createHost)) return createHost();
 
             throw new InvalidOperationException($"No llm host registered for '{config.Provider}'");
         }

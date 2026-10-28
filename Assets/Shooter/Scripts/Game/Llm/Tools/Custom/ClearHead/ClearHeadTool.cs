@@ -16,7 +16,7 @@ namespace Shooter.Game
         public override string Description =>
             @"
 Clear your head. Your notes stay with you; everything else is gone for good.
-Call this only when your notes are complete.
+Call this only when you are told that your head is too full, and only once your notes are complete.
 ";
 
         public override bool IsAvailable => llmHistory.IsOverflowing;

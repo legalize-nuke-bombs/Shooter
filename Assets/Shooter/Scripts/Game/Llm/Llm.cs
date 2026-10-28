@@ -217,7 +217,6 @@ namespace Shooter.Game
             LlmCallContext callContext = new() { PromptedCount = llmHistory.Count };
 
             LlmConfig config = Config.GetGameConfig().Server.Llm;
-            var availableTools = abilities.Where(tool => tool.IsAvailable).Cast<ILlmTool>().ToList();
 
             Log.Info($"Entity {entityName} is asking {config.Model}, history {llmHistory.Count} messages / {llmHistory.Size} chars");
 
@@ -228,7 +227,7 @@ namespace Shooter.Game
                     $"{entityName}-{(isClearingTick ? "compact" : "live")}",
                     BuildSystemPrompt(),
                     llmHistory.Messages,
-                    availableTools,
+                    abilities,
                     lifetimeCancellation.Token
                 );
                 lifetimeCancellation.Token.ThrowIfCancellationRequested();
@@ -243,11 +242,11 @@ namespace Shooter.Game
                     break;
                 }
 
-                llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls });
+                llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls, RawMessage = turn.RawMessage, RawFormat = turn.RawFormat });
 
                 foreach (LlmToolCall toolCall in turn.ToolCalls)
                 {
-                    llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.Tool, ToolCallId = toolCall.Id, Content = ExecuteToolCall(availableTools, toolCall, callContext) });
+                    llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.Tool, ToolCallId = toolCall.Id, Content = ExecuteToolCall(toolCall, callContext) });
                 }
             }
 
@@ -269,10 +268,11 @@ namespace Shooter.Game
             return observation.ToString();
         }
 
-        private string ExecuteToolCall(IReadOnlyList<ILlmTool> tools, LlmToolCall toolCall, LlmCallContext callContext)
+        private string ExecuteToolCall(LlmToolCall toolCall, LlmCallContext callContext)
         {
-            ILlmTool tool = tools.FirstOrDefault(candidate => candidate.Name == toolCall.Name);
+            LlmTool tool = abilities.FirstOrDefault(candidate => candidate.Name == toolCall.Name);
             if (tool == null) return $"There is no tool named {toolCall.Name}";
+            if (!tool.IsAvailable) return $"The tool {toolCall.Name} is not available now";
 
             try
             {

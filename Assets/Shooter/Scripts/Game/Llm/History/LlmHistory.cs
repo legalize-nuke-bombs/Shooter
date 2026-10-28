@@ -11,8 +11,8 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private int messageLimit = 10000;
-        [SerializeField] private int maxSize = 100000;
-        [SerializeField] private int hardSize = 200000;
+        [SerializeField] private int maxSize = 180000;
+        [SerializeField] private int hardSize = 230000;
 
         private readonly List<LlmMessage> messages = new();
 
@@ -85,6 +85,9 @@ namespace Shooter.Game
 
             foreach (LlmMessage message in keptMessages)
             {
+                // A raw reply is bound to everything before it, and that is forgotten now
+                message.RawMessage = null;
+                message.RawFormat = null;
                 AppendMessage(message);
             }
         }
@@ -103,6 +106,8 @@ namespace Shooter.Game
 
         private static int MeasureSize(LlmMessage message)
         {
+            if (message.RawMessage != null) return message.RawMessage.Length + 20;
+
             int size = (message.Content == null ? 0 : message.Content.Length) + 20;
 
             if (message.ToolCalls != null)
