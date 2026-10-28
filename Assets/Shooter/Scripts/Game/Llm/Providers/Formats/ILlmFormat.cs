@@ -7,6 +7,6 @@ namespace Shooter.Game
     {
         object BuildRequestBody(LlmConfig config, string systemPrompt, IReadOnlyList<LlmMessage> history, IReadOnlyList<ILlmTool> tools);
 
-        LlmTurn ParseTurn(string responseJson);
+        LlmMessage ParseReply(string responseJson);
     }
 }

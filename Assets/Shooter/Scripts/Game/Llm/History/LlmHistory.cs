@@ -85,40 +85,43 @@ namespace Shooter.Game
 
             foreach (LlmMessage message in keptMessages)
             {
-                // A raw reply is bound to everything before it, and that is forgotten now
-                message.RawMessage = null;
-                message.RawFormat = null;
+                // Reasoning is bound to everything before it, and that is forgotten now
+                message.Parts.RemoveAll(part => part is LlmReasoningPart);
                 AppendMessage(message);
             }
         }
 
         private void TruncateIfTooLong(LlmMessage message)
         {
-            if (message.Content == null) return;
+            // The model's own reply goes back exactly as it came
+            if (message.Role == LlmRole.Assistant) return;
 
-            int contentLength = message.Content.Length;
-            if (contentLength <= messageLimit) return;
+            foreach (LlmPart part in message.Parts)
+            {
+                switch (part)
+                {
+                    case LlmTextPart text:
+                        text.Text = Truncate(text.Text);
+                        break;
+                    case LlmToolResultPart toolResult:
+                        toolResult.Text = Truncate(toolResult.Text);
+                        break;
+                }
+            }
+        }
 
-            Log.Warn($"Entity {name} takes a {contentLength} character message, cut to {messageLimit}");
-            string truncationMarker = $"\n[output truncated, original length {contentLength} characters]";
-            message.Content = message.Content.Substring(0, messageLimit - truncationMarker.Length) + truncationMarker;
+        private string Truncate(string text)
+        {
+            if (text.Length <= messageLimit) return text;
+
+            Log.Warn($"Entity {name} takes a {text.Length} character message, cut to {messageLimit}");
+            string truncationMarker = $"\n[output truncated, original length {text.Length} characters]";
+            return text.Substring(0, messageLimit - truncationMarker.Length) + truncationMarker;
         }
 
         private static int MeasureSize(LlmMessage message)
         {
-            if (message.RawMessage != null) return message.RawMessage.Length + 20;
-
-            int size = (message.Content == null ? 0 : message.Content.Length) + 20;
-
-            if (message.ToolCalls != null)
-            {
-                foreach (LlmToolCall toolCall in message.ToolCalls)
-                {
-                    size += (toolCall.Name?.Length ?? 0) + (toolCall.Arguments?.Length ?? 0) + 20;
-                }
-            }
-
-            return size;
+            return message.Parts.Sum(part => part.Length + 20) + 20;
         }
     }
 }

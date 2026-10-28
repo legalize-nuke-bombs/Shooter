@@ -16,7 +16,7 @@ namespace Shooter.Game
 
         private static int requestNumber;
 
-        public static async Task<LlmTurn> RequestTurn(LlmConfig config, string requestName, string systemPrompt, IReadOnlyList<LlmMessage> history, IReadOnlyList<ILlmTool> tools, CancellationToken cancellationToken)
+        public static async Task<LlmMessage> RequestReply(LlmConfig config, string requestName, string systemPrompt, IReadOnlyList<LlmMessage> history, IReadOnlyList<ILlmTool> tools, CancellationToken cancellationToken)
         {
             string requestId = $"{++requestNumber:d4}-{requestName}";
 
@@ -37,7 +37,7 @@ namespace Shooter.Game
             await File.WriteAllTextAsync(responsePath, responseJson, cancellationToken);
             Log.Info($"Response {requestId}. Output: {responseJson.Length}ch. Will be saved as {responsePath}");
 
-            return host.Format.ParseTurn(responseJson);
+            return host.Format.ParseReply(responseJson);
         }
 
         private static async Task<string> SendToHost(ILlmHost host, string apiKey, string model, string requestJson, CancellationToken cancellationToken)

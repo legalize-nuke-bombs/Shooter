@@ -85,7 +85,7 @@ namespace Shooter.Game
 
         private void AppendLifeStory()
         {
-            llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.User, Content = LifeStoryHeader + BuildLifeStory() });
+            llmHistory.AppendMessage(new LlmMessage(LlmRole.User, LifeStoryHeader + BuildLifeStory()));
         }
 
         private string BuildSystemPrompt()
@@ -149,14 +149,14 @@ namespace Shooter.Game
             if (lifeStoryConflictPrompt == null) return;
 
             Log.Info($"Entity {entityName} life story conflict resolved");
-            llmHistory.AppendMessage(new LlmMessage{Role = LlmRole.User, Content = LifeStoryConflictHeader + $"Old:\n{lifeStoryConflictPrompt}\nNew:\n{BuildLifeStory()}"});
+            llmHistory.AppendMessage(new LlmMessage(LlmRole.User, LifeStoryConflictHeader + $"Old:\n{lifeStoryConflictPrompt}\nNew:\n{BuildLifeStory()}"));
             lifeStoryConflictPrompt = null;
         }
 
 
         public void AppendEvent(string eventText, bool isUrgent)
         {
-            llmHistory.AppendEvent(new LlmMessage { Role = LlmRole.User, Content = eventText }, isUrgent);
+            llmHistory.AppendEvent(new LlmMessage(LlmRole.User, eventText), isUrgent);
         }
 
         public LlmStatus GetStatus()
@@ -207,13 +207,13 @@ namespace Shooter.Game
             {
                 Log.Warn($"Entity {entityName} has not cleared its head at {llmHistory.Size} chars, the story is cut by force");
                 llmHistory.ForgetMessagesBefore(llmHistory.Count);
-                llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.User, Content = ForcedClearingNotice });
+                llmHistory.AppendMessage(new LlmMessage(LlmRole.User, ForcedClearingNotice));
             }
 
             bool isClearingTick = llmHistory.IsOverflowing;
 
             llmHistory.MarkEventsSeen();
-            llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.User, Content = BuildObservation() });
+            llmHistory.AppendMessage(new LlmMessage(LlmRole.User, BuildObservation()));
             LlmCallContext callContext = new() { PromptedCount = llmHistory.Count };
 
             LlmConfig config = Config.GetGameConfig().Server.Llm;
@@ -222,7 +222,7 @@ namespace Shooter.Game
 
             for (int round = 0; round < maxToolRounds; round++)
             {
-                LlmTurn turn = await LlmProvider.RequestTurn(
+                LlmMessage reply = await LlmProvider.RequestReply(
                     config,
                     $"{entityName}-{(isClearingTick ? "compact" : "live")}",
                     BuildSystemPrompt(),
@@ -232,22 +232,22 @@ namespace Shooter.Game
                 );
                 lifetimeCancellation.Token.ThrowIfCancellationRequested();
 
-                if (!turn.HasToolCalls)
+                var toolCalls = reply.ToolCalls.ToList();
+                if (toolCalls.Count == 0)
                 {
                     // Speech goes through tools only: the closing text is an unspoken double of a line or a stage direction
-                    if (!String.IsNullOrEmpty(turn.Content))
+                    string closingText = reply.Text;
+                    if (!String.IsNullOrEmpty(closingText))
                     {
-                        Log.Info($"Entity {entityName} closed the tick with unspoken text: {turn.Content}");
+                        Log.Info($"Entity {entityName} closed the tick with unspoken text: {closingText}");
                     }
                     break;
                 }
 
-                llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.Assistant, Content = turn.Content, ToolCalls = turn.ToolCalls, RawMessage = turn.RawMessage, RawFormat = turn.RawFormat });
+                llmHistory.AppendMessage(reply);
 
-                foreach (LlmToolCall toolCall in turn.ToolCalls)
-                {
-                    llmHistory.AppendMessage(new LlmMessage { Role = LlmRole.Tool, ToolCallId = toolCall.Id, Content = ExecuteToolCall(toolCall, callContext) });
-                }
+                var toolResults = toolCalls.Select(toolCall => new LlmToolResultPart(toolCall.Id, ExecuteToolCall(toolCall, callContext))).ToList();
+                llmHistory.AppendMessage(new LlmMessage(LlmRole.Tool, toolResults));
             }
 
             if (isClearingTick && llmHistory.IsOverflowing)
@@ -268,7 +268,7 @@ namespace Shooter.Game
             return observation.ToString();
         }
 
-        private string ExecuteToolCall(LlmToolCall toolCall, LlmCallContext callContext)
+        private string ExecuteToolCall(LlmToolCallPart toolCall, LlmCallContext callContext)
         {
             LlmTool tool = abilities.FirstOrDefault(candidate => candidate.Name == toolCall.Name);
             if (tool == null) return $"There is no tool named {toolCall.Name}";

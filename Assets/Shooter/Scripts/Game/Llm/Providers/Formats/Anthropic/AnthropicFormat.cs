@@ -36,7 +36,7 @@ namespace Shooter.Game
             };
         }
 
-        public LlmTurn ParseTurn(string responseJson)
+        public LlmMessage ParseReply(string responseJson)
         {
             AnthropicResponse response;
             try
@@ -57,34 +57,29 @@ namespace Shooter.Game
                 Log.Info($"The provider dropped thinking blocks: {response.InputTransformations.ToString(Formatting.None)}");
             }
 
-            var texts = new List<string>();
-            var toolCalls = new List<LlmToolCall>();
-
+            var parts = new List<LlmPart>();
             foreach (JToken block in response.Content)
             {
-                switch ((string)block["type"])
+                string type = (string)block["type"];
+                switch (type)
                 {
                     case "text":
-                        texts.Add((string)block["text"]);
+                        parts.Add(new LlmTextPart((string)block["text"]));
                         break;
                     case "tool_use":
-                        toolCalls.Add(new LlmToolCall
-                        {
-                            Id = (string)block["id"],
-                            Name = (string)block["name"],
-                            Arguments = block["input"]?.ToString(Formatting.None) ?? "{}"
-                        });
+                        parts.Add(new LlmToolCallPart((string)block["id"], (string)block["name"], block["input"]?.ToString(Formatting.None) ?? "{}"));
+                        break;
+                    case "thinking":
+                    case "redacted_thinking":
+                        parts.Add(new LlmReasoningPart(FormatName, block.ToString(Formatting.None)));
+                        break;
+                    default:
+                        Log.Warn($"The provider sent an unknown content block {type}, it is dropped");
                         break;
                 }
             }
 
-            return new LlmTurn
-            {
-                Content = texts.Count == 0 ? null : string.Join("\n", texts),
-                ToolCalls = toolCalls.ToArray(),
-                RawMessage = response.Content.ToString(Formatting.None),
-                RawFormat = FormatName
-            };
+            return new LlmMessage(LlmRole.Assistant, parts);
         }
 
         private static AnthropicMessage[] ConvertToAnthropicMessages(IReadOnlyList<LlmMessage> history)
@@ -96,7 +91,7 @@ namespace Shooter.Game
             {
                 if (message.Role == LlmRole.Assistant)
                 {
-                    JArray assistantBlocks = BuildAssistantBlocks(message);
+                    var assistantBlocks = new JArray(message.Parts.Select(BuildAssistantBlock).Where(block => block != null));
                     if (assistantBlocks.Count == 0) continue;
 
                     if (messages.Count == 0) messages.Add(new AnthropicMessage { Role = "user", Content = new JArray(BuildTextBlock(ClearedStoryMarker)) });
@@ -105,42 +100,58 @@ namespace Shooter.Game
                     continue;
                 }
 
-                if (message.Role == LlmRole.User && string.IsNullOrEmpty(message.Content)) continue;
-
-                if (userBlocks == null)
+                foreach (JObject block in message.Parts.Select(BuildUserBlock).Where(block => block != null))
                 {
-                    userBlocks = new JArray();
-                    messages.Add(new AnthropicMessage { Role = "user", Content = userBlocks });
-                }
+                    if (userBlocks == null)
+                    {
+                        userBlocks = new JArray();
+                        messages.Add(new AnthropicMessage { Role = "user", Content = userBlocks });
+                    }
 
-                userBlocks.Add(message.Role == LlmRole.Tool ? BuildToolResultBlock(message) : BuildTextBlock(message.Content));
+                    userBlocks.Add(block);
+                }
             }
 
             return messages.ToArray();
         }
 
-        private static JArray BuildAssistantBlocks(LlmMessage message)
+        private static JToken BuildAssistantBlock(LlmPart part)
         {
-            if (message.RawFormat == FormatName) return (JArray)LlmJson.Parse(message.RawMessage);
-
-            var blocks = new JArray();
-            if (!string.IsNullOrEmpty(message.Content)) blocks.Add(BuildTextBlock(message.Content));
-
-            if (message.ToolCalls != null)
+            switch (part)
             {
-                foreach (LlmToolCall toolCall in message.ToolCalls)
-                {
-                    blocks.Add(new JObject
+                case LlmTextPart text:
+                    return string.IsNullOrEmpty(text.Text) ? null : BuildTextBlock(text.Text);
+                case LlmToolCallPart toolCall:
+                    return new JObject
                     {
                         ["type"] = "tool_use",
                         ["id"] = toolCall.Id,
                         ["name"] = toolCall.Name,
                         ["input"] = ParseToolInput(toolCall.Arguments)
-                    });
-                }
+                    };
+                case LlmReasoningPart reasoning:
+                    return reasoning.Format == FormatName ? LlmJson.Parse(reasoning.Json) : null;
+                default:
+                    return null;
             }
+        }
 
-            return blocks;
+        private static JObject BuildUserBlock(LlmPart part)
+        {
+            switch (part)
+            {
+                case LlmTextPart text:
+                    return string.IsNullOrEmpty(text.Text) ? null : BuildTextBlock(text.Text);
+                case LlmToolResultPart toolResult:
+                    return new JObject
+                    {
+                        ["type"] = "tool_result",
+                        ["tool_use_id"] = toolResult.ToolCallId,
+                        ["content"] = toolResult.Text
+                    };
+                default:
+                    return null;
+            }
         }
 
         private static JObject ParseToolInput(string arguments)
@@ -155,16 +166,6 @@ namespace Shooter.Game
             {
                 return new JObject();
             }
-        }
-
-        private static JObject BuildToolResultBlock(LlmMessage message)
-        {
-            return new JObject
-            {
-                ["type"] = "tool_result",
-                ["tool_use_id"] = message.ToolCallId,
-                ["content"] = message.Content ?? ""
-            };
         }
 
         private static JObject BuildTextBlock(string text)
