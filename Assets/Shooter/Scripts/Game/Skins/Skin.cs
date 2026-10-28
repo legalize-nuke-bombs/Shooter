@@ -39,6 +39,7 @@ namespace Shooter.Game
             animator.applyRootMotion = false;
 
             ShooterObject shooterObject = ModelInstance.AddComponent<ShooterObject>();
+            shooterObject.Placement = WorldPlacement.Movable;
             shooterObject.AddComponent<LocomotionAnimator>();
             shooterObject.AddComponent<Hitboxes>();
 
