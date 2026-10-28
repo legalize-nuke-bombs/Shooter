@@ -50,7 +50,7 @@ namespace Shooter.Infrastructure
             members.Add(behaviour);
         }
 
-        public void RemoveBehaviour(Vector2Int chunk, MonoBehaviour behaviour)
+        public void TryRemoveBehaviour(Vector2Int chunk, MonoBehaviour behaviour)
         {
             if (chunks.TryGetValue(chunk, out TMap members)) members.Remove(behaviour);
         }

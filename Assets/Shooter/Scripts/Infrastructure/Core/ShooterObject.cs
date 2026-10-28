@@ -13,7 +13,7 @@ namespace Shooter.Infrastructure
 
         private readonly List<MonoBehaviour> behaviours = new();
         private Vector2Int chunk;
-        private bool placed;
+        private bool started;
 
         public WorldPlacement Placement
         {
@@ -31,6 +31,7 @@ namespace Shooter.Infrastructure
 
         private void Start()
         {
+            started = true;
             if (placement == WorldPlacement.None) return;
 
             chunk = Chunks.ChunkOf(transform.position);
@@ -39,7 +40,6 @@ namespace Shooter.Infrastructure
                 Chunks.Instance.AddBehaviour(chunk, behaviour);
             }
 
-            placed = true;
             if (placement == WorldPlacement.Movable) AddComponent<TransformObserver>().Moved += HandleMoved;
         }
 
@@ -64,7 +64,7 @@ namespace Shooter.Infrastructure
             foreach (MonoBehaviour behaviour in behaviours)
             {
                 Registers.Instance.UnregisterBehaviour(behaviour);
-                if (placed) Chunks.Instance.RemoveBehaviour(chunk, behaviour);
+                Chunks.Instance.TryRemoveBehaviour(chunk, behaviour);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Shooter.Infrastructure
             T behaviour = gameObject.AddComponent<T>();
             Register(behaviour);
             if (isActiveAndEnabled) Registers.Instance.ActivateBehaviour(behaviour);
-            if (placed) Chunks.Instance.AddBehaviour(chunk, behaviour);
+            if (started && placement != WorldPlacement.None) Chunks.Instance.AddBehaviour(chunk, behaviour);
             return behaviour;
         }
 
@@ -84,7 +84,7 @@ namespace Shooter.Infrastructure
 
             foreach (MonoBehaviour behaviour in behaviours)
             {
-                Chunks.Instance.RemoveBehaviour(chunk, behaviour);
+                Chunks.Instance.TryRemoveBehaviour(chunk, behaviour);
                 Chunks.Instance.AddBehaviour(movedTo, behaviour);
             }
 
