@@ -8,10 +8,10 @@ namespace Shooter.Infrastructure
         public string Key { get; set; } = "";
 
         [CreateProperty]
-        public string Provider { get; set; } = "Polza";
+        public string Provider { get; set; } = "Claude";
 
         [CreateProperty]
-        public string Model { get; set; } = "google/gemini-3.8-flash";
+        public string Model { get; set; } = "claude-haiku-5-5";
 
         [CreateProperty]
         public string Effort { get; set; } = "";
