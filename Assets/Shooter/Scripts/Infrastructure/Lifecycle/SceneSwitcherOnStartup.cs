@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Infrastructure
 {
-    public class SceneSwitcherOnStartup : ShooterBehaviour
+    public class SceneSwitcherOnStartup : MonoBehaviour
     {
         [SerializeField] private string scene;
 

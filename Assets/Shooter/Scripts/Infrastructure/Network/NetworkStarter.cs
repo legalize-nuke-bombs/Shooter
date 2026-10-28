@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(NetworkManager))]
-    public class NetworkStarter : ShooterBehaviour
+    public class NetworkStarter : MonoBehaviour
     {
         private const string AnyAddress = "0.0.0.0";
         private const string BadInviteTitle = "Неверный код подключения";
@@ -24,12 +24,12 @@ namespace Shooter.Infrastructure
 
         public NetworkStartFailure StartFailureToShow { get; set; }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             network = GetComponent<NetworkManager>();
         }
 
-        protected override void ShooterOnDestroy()
+        private void OnDestroy()
         {
             StopWatchingJoin();
         }

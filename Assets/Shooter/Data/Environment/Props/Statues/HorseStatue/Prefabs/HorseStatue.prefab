@@ -512,6 +512,7 @@ GameObject:
   - component: {fileID: 6963931668376058869}
   - component: {fileID: -7624300907995115108}
   - component: {fileID: -7879662225892659577}
+  - component: {fileID: 6117860678211900521}
   m_Layer: 0
   m_Name: HorseStatue
   m_TagString: Untagged
@@ -597,6 +598,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
   content: Stone horse statue
   size: 1
+--- !u!114 &6117860678211900521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4748876460949477868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &5029174211258888877
 GameObject:
   m_ObjectHideFlags: 0

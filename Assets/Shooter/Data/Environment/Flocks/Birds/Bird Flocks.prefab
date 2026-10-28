@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -3873601585301477384}
   - component: {fileID: 2724745167176534850}
   - component: {fileID: 1293473591878619145}
+  - component: {fileID: 7252760882524261135}
   m_Layer: 0
   m_Name: Bird Flocks
   m_TagString: Untagged
@@ -101,6 +102,7 @@ MonoBehaviour:
   scaredFlapMultiplier: 2.5
   scaredClimb: 10
   calmDownTime: 6
+  panicSpread: 40
   cawSound: {fileID: 11400000, guid: 015e83b8f6346734e874c156f9af5cd9, type: 2}
   maxCawingBoids: 20
   maxCawDelay: 1.5
@@ -145,3 +147,15 @@ MonoBehaviour:
   label: 
   textColor: {r: 1, g: 1, b: 1, a: 1}
   offset: {x: 0, y: 1.2, z: 0}
+--- !u!114 &7252760882524261135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject

@@ -13,7 +13,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(LlmHistory))]
     [RequireComponent(typeof(Health))]
-    public class Llm : ShooterBehaviour, ISaveableComponent
+    public class Llm : MonoBehaviour, ISaveableComponent
     {
         private const string ClearHeadDemand = "Your head is too full and MUST be cleared: only your notes will survive, ALL THE REST is lost forever. Bring your notes up to date in full detail, including the very latest context - what is happening right now and where you left off. Then call clear_head.";
         private const string ForcedClearingNotice = "Your head overflowed and has been cleared by force: your story so far is gone, only your notes remain. Your notes are your memory now - read the ones you need before you act or speak, start with the one about who you are.";
@@ -41,7 +41,7 @@ namespace Shooter.Game
 
         public bool IsThinking { get; private set; }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             health = GetComponent<Health>();
             llmHistory = GetComponent<LlmHistory>();
@@ -53,17 +53,17 @@ namespace Shooter.Game
             AppendLifeStory();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             health.Died += EndLifetime;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             health.Died -= EndLifetime;
         }
 
-        protected override void ShooterOnDestroy()
+        private void OnDestroy()
         {
             EndLifetime();
         }

@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class IncrementalIds : ShooterBehaviour, ISaveableComponent
+    public class IncrementalIds : MonoBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

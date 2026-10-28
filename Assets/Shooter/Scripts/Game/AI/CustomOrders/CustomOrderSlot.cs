@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -6,14 +6,14 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(BehaviorReporter))]
-    public class CustomOrderSlot : ShooterBehaviour, IDigestible, ISaveableComponent, IShooterUpdateable
+    public class CustomOrderSlot : MonoBehaviour, IDigestible, ISaveableComponent, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
         private CustomOrder order;
         private BehaviorReporter behaviorReporter;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             enabled = NetworkManager.Singleton.IsServer;
             behaviorReporter = GetComponent<BehaviorReporter>();

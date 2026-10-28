@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
-    public class InventoryUser : ShooterNetworkBehaviour
+    public class InventoryUser : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -15,7 +15,7 @@ namespace Shooter.Game
 
         public event Action<StackableItemAsset> Used;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             inventory = GetComponent<Inventory>();
         }

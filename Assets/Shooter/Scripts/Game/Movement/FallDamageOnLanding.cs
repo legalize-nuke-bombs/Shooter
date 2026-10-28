@@ -1,11 +1,10 @@
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Health))]
-    public class FallDamageOnLanding : ShooterBehaviour
+    public class FallDamageOnLanding : MonoBehaviour
     {
         [SerializeField] private float safeHeight = 3f;
         [SerializeField] private float damagePerMetre = 12f;
@@ -14,18 +13,18 @@ namespace Shooter.Game
         private RpcMovement movement;
         private Health health;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             movement = GetComponent<RpcMovement>();
             health = GetComponent<Health>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             movement.Landed += DealFallDamage;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             movement.Landed -= DealFallDamage;
         }

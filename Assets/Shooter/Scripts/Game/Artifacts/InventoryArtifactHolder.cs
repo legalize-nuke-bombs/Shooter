@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
-    public class InventoryArtifactHolder : ShooterNetworkBehaviour, ISaveableComponent, IDigestible, ITimePassedHandler
+    public class InventoryArtifactHolder : NetworkBehaviour, ISaveableComponent, IDigestible, ITimePassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -81,7 +81,7 @@ namespace Shooter.Game
             return sb.ToString();
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             inventory = GetComponent<Inventory>();
         }

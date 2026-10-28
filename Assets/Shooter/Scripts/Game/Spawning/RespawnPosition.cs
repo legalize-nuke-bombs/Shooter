@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class RespawnPosition : ShooterBehaviour, ISaveableComponent
+    public class RespawnPosition : MonoBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

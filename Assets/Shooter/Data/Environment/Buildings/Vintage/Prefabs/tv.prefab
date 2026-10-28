@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: -3928069200239862048}
   - component: {fileID: 1433919343119068576}
   - component: {fileID: 8888093352159658044}
+  - component: {fileID: 2161262339511438996}
+  - component: {fileID: 7500089725610269123}
   m_Layer: 0
   m_Name: tv
   m_TagString: Untagged
@@ -230,6 +232,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnSwitch
   sound: {fileID: 11400000, guid: 02b49b67faa74acfb909b628cdf70854, type: 2}
+--- !u!114 &2161262339511438996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622243103439998288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c246ea6684244e42bd5d15262b7bfa62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.IncrementalId
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &7500089725610269123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622243103439998288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1001 &2154924059641547055
 PrefabInstance:
   m_ObjectHideFlags: 0

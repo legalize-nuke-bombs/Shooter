@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class Clock : ShooterNetworkBehaviour, ISaveableComponent, IShooterUpdateable
+    public class Clock : NetworkBehaviour, ISaveableComponent, IShooterUpdateable
     {
         public const string StampFormat = "yyyy.MM.dd HH:mm:ss";
         public const long DayLengthSeconds = 86400;

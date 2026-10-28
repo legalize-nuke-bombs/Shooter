@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public class TextGizmo : ShooterBehaviour
+    public class TextGizmo : MonoBehaviour
     {
         public const string LabelField = nameof(label);
 

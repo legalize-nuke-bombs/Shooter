@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class Intoxication : ShooterNetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
+    public class Intoxication : NetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -66,7 +66,7 @@ namespace Shooter.Game
             }
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             toxinCatalog = Catalogs.GetCatalog<ToxinCatalog>();
             for (int i = 0; i < toxinCatalog.Count; i++)

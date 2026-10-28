@@ -1,27 +1,26 @@
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(InventoryUser))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnItemUse : ShooterBehaviour
+    public class SoundOnItemUse : MonoBehaviour
     {
         private InventoryUser inventoryUser;
         private Speaker speaker;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             inventoryUser = GetComponent<InventoryUser>();
             speaker = GetComponent<Speaker>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             inventoryUser.Used += Play;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             inventoryUser.Used -= Play;
         }

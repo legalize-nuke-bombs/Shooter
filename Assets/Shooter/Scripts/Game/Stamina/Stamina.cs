@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Hands))]
-    public class Stamina : ShooterNetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
+    public class Stamina : NetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
@@ -44,19 +44,19 @@ namespace Shooter.Game
 
         public float MaxAmount => Mathf.Max(maxAmount, 1f);
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             hands = GetComponent<Hands>();
             enabled = false;
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             hands.Checking += CanAfford;
             hands.Performed += SpendOn;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             hands.Checking -= CanAfford;
             hands.Performed -= SpendOn;

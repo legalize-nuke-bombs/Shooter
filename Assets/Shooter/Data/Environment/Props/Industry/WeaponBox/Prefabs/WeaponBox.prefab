@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: -7753976285820549287}
   - component: {fileID: -2716870745604165116}
   - component: {fileID: 4917636212667045907}
+  - component: {fileID: 9211494407312241873}
   m_Layer: 0
   m_Name: WeaponBox
   m_TagString: Untagged
@@ -257,3 +258,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Inventory
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &9211494407312241873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6582791519991184299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject

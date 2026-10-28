@@ -1,11 +1,12 @@
 using Shooter.Infrastructure;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnSpeech : ShooterNetworkBehaviour
+    public class SoundOnSpeech : NetworkBehaviour
     {
         [SerializeField] private SoundAsset sound;
 
@@ -13,7 +14,7 @@ namespace Shooter.Game
         private Speaker speaker;
         private ConversationManager conversationManager;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             character = GetComponent<Character>();
             speaker = GetComponent<Speaker>();

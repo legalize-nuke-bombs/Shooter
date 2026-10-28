@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7161471920529591100}
   - component: {fileID: 3159533862990456872}
   - component: {fileID: 797120504818356713}
+  - component: {fileID: 992784277241871236}
   m_Layer: 0
   m_Name: house_ruined
   m_TagString: Untagged
@@ -63,6 +64,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.MainDigestible
   content: A ruined village house
   size: 2
+--- !u!114 &992784277241871236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5948371143710941384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1001 &723667004724117784
 PrefabInstance:
   m_ObjectHideFlags: 0

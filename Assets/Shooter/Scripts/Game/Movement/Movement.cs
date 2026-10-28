@@ -1,5 +1,4 @@
 using System;
-using Shooter.Infrastructure;
 using Unity.Netcode.Components;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,7 +7,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(NetworkTransform))]
-    public abstract class Movement : ShooterNetworkBehaviour
+    public abstract class Movement : NetworkBehaviour
     {
         private const float PitchLimit = 89f;
 
@@ -32,7 +31,7 @@ namespace Shooter.Game
 
         public Vector3 LookDirection => Quaternion.Euler(pitch.Value, Yaw, 0f) * Vector3.forward;
 
-        protected override void ShooterAwake()
+        protected virtual void Awake()
         {
             Hands = GetComponent<Hands>();
             networkTransform = GetComponent<NetworkTransform>();

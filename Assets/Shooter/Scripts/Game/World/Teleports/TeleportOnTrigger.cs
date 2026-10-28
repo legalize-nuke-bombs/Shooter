@@ -35,17 +35,17 @@ namespace Shooter.Game
             teleportedCharacterIds = new HashSet<long>(saveData.Characters);
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             trigger = GetComponent<Trigger>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             trigger.Fired += TeleportCharacter;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             trigger.Fired -= TeleportCharacter;
         }

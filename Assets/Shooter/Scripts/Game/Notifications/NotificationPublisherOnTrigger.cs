@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Trigger))]
-    public class NotificationPublisherOnTrigger : ShooterBehaviour, ISaveableComponent
+    public class NotificationPublisherOnTrigger : MonoBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -35,17 +35,17 @@ namespace Shooter.Game
             notifiedCharacterIds = new HashSet<long>(saveData.Characters);
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             trigger = GetComponent<Trigger>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             trigger.Fired += Notify;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             trigger.Fired -= Notify;
         }

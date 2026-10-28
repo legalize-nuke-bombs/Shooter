@@ -1,9 +1,9 @@
-﻿using Unity.Netcode;
+using Unity.Netcode;
 using Random = UnityEngine.Random;
 
 namespace Shooter.Infrastructure
 {
-    public class IncrementalId : ShooterNetworkBehaviour, ISaveableComponent
+    public class IncrementalId : NetworkBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

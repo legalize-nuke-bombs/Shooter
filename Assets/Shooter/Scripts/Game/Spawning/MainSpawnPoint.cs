@@ -1,9 +1,10 @@
 using Shooter.Infrastructure;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Shooter.Game
 {
-    public class MainSpawnPoint : ShooterBehaviour
+    public class MainSpawnPoint : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 

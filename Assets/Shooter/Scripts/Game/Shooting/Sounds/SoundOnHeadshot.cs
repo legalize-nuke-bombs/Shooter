@@ -5,25 +5,25 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Gunner))]
     [RequireComponent(typeof(EarSpeaker))]
-    public class SoundOnHeadshot : ShooterBehaviour
+    public class SoundOnHeadshot : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private Gunner gunner;
         private EarSpeaker earSpeaker;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             gunner = GetComponent<Gunner>();
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             gunner.Shot += PlayOnHeadshot;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             gunner.Shot -= PlayOnHeadshot;
         }

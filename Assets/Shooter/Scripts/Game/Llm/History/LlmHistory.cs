@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public sealed class LlmHistory : ShooterBehaviour, ISaveableComponent
+    public sealed class LlmHistory : MonoBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

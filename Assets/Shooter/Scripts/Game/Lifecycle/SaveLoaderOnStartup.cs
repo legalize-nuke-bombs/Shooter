@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using Shooter.Infrastructure;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Shooter.Game
 {
-    public class SaveLoaderOnStartup : ShooterBehaviour
+    public class SaveLoaderOnStartup : MonoBehaviour
     {
         private const string BrokenSaveTitle = "Не удалось загрузить сохранение";
         private const string BrokenSaveDetails = "Файл повреждён или несовместим с этой версией";
@@ -19,7 +20,7 @@ namespace Shooter.Game
 
         public event Action Loaded;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             network = NetworkManager.Singleton;
             if (!network.IsServer) return;
@@ -30,7 +31,7 @@ namespace Shooter.Game
             network.SceneManager.OnLoadComplete += HandleSceneLoaded;
         }
 
-        protected override void ShooterOnDestroy()
+        private void OnDestroy()
         {
             if (network.SceneManager != null) network.SceneManager.OnLoadComplete -= HandleSceneLoaded;
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(AudioSource))]
-    public class MainMenuMusic : ShooterBehaviour, IShooterUpdateable
+    public class MainMenuMusic : MonoBehaviour, IShooterUpdateable
     {
         [SerializeField] private AudioClip[] tracks;
         [SerializeField] private float fadeInSeconds = 4f;
@@ -12,7 +12,7 @@ namespace Shooter.Game
         private float elapsedFadeInSeconds;
         private AudioSource audioSource;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             audioSource = GetComponent<AudioSource>();
             audioSource.loop = true;

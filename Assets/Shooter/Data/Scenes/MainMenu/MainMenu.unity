@@ -549,6 +549,7 @@ GameObject:
   - component: {fileID: 522876686}
   - component: {fileID: 522876685}
   - component: {fileID: 522876684}
+  - component: {fileID: 522876687}
   m_Layer: 0
   m_Name: MainMenuMusic
   m_TagString: Untagged
@@ -683,6 +684,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &522876687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522876683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &767148945
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,6 +707,7 @@ GameObject:
   - component: {fileID: 767148948}
   - component: {fileID: 767148947}
   - component: {fileID: 767148946}
+  - component: {fileID: 767148949}
   m_Layer: 0
   m_Name: MainMenuOverlay
   m_TagString: Untagged
@@ -793,6 +807,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &767148949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767148945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1001 &784380615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -879,6 +905,7 @@ GameObject:
   m_Component:
   - component: {fileID: 850104245}
   - component: {fileID: 850104244}
+  - component: {fileID: 850104246}
   m_Layer: 0
   m_Name: MainMenuState
   m_TagString: Untagged
@@ -913,6 +940,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &850104246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850104243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &871913569
 GameObject:
   m_ObjectHideFlags: 0

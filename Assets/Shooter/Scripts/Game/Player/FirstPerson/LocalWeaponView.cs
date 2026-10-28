@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
-    public class LocalWeaponView : ShooterNetworkBehaviour, IShooterLateUpdateable
+    public class LocalWeaponView : NetworkBehaviour, IShooterLateUpdateable
     {
         private const string FirstPersonLayerName = "FirstPerson";
 
@@ -31,7 +31,7 @@ namespace Shooter.Game
 
         public Transform WeaponHold => shownWeapon == null ? null : weaponHold;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             player = GetComponent<Player>();
             inventory = GetComponent<Inventory>();

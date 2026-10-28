@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
-    public abstract class Talker : ShooterNetworkBehaviour, IUsable, IShooterUpdateable
+    public abstract class Talker : NetworkBehaviour, IUsable, IShooterUpdateable
     {
         private readonly NetworkVariable<bool> thinking = new();
 
@@ -27,7 +27,7 @@ namespace Shooter.Game
 
         public event Action<bool> ThinkingChanged;
 
-        protected override void ShooterAwake()
+        protected virtual void Awake()
         {
             character = GetComponent<Character>();
             health = GetComponent<Health>();

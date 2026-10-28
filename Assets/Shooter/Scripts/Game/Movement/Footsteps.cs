@@ -1,4 +1,3 @@
-using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(CharacterController))]
-    public class Footsteps : ShooterNetworkBehaviour
+    public class Footsteps : NetworkBehaviour
     {
         [SerializeField] private float strideLength = 2f;
 
@@ -22,7 +21,7 @@ namespace Shooter.Game
 
         public float Phase => phase.Value;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             characterController = GetComponent<CharacterController>();
             movement = GetComponent<Movement>();

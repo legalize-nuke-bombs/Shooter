@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using Unity.Profiling;
+using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    public class UpdateManager : ShooterBehaviour
+    public class UpdateManager : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
         private static readonly Dictionary<Type, ProfilerMarker> MarkersByType = new();
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             DontDestroyOnLoad(gameObject);
         }
@@ -24,7 +25,7 @@ namespace Shooter.Infrastructure
             TellAll<IShooterLateUpdateable>(static updateable => updateable.ShooterLateUpdate());
         }
 
-        private static void TellAll<T>(Action<T> tell) where T : class, IShooterBehaviour
+        private static void TellAll<T>(Action<T> tell) where T : class
         {
             foreach (T handler in Registers.Instance.GetAll<T>(RegisterInactivePolicy.Exclude))
             {
@@ -32,11 +33,12 @@ namespace Shooter.Infrastructure
             }
         }
 
-        private static void Tell<T>(T handler, Action<T> tell) where T : class, IShooterBehaviour
+        private static void Tell<T>(T handler, Action<T> tell) where T : class
         {
+            var behaviour = (MonoBehaviour)(object)handler;
 #if ENABLE_PROFILER
             ProfilerMarker marker = GetMarker(handler.GetType());
-            marker.Begin(handler.NativeBehaviour);
+            marker.Begin(behaviour);
 #endif
             try
             {
@@ -44,7 +46,7 @@ namespace Shooter.Infrastructure
             }
             catch (Exception e)
             {
-                Log.Error($"{handler.GetType().Name} {handler.NativeBehaviour.name} failed its update: {e}");
+                Log.Error($"{handler.GetType().Name} {behaviour.name} failed its update: {e}");
             }
 #if ENABLE_PROFILER
             marker.End();

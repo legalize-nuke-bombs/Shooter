@@ -13,7 +13,7 @@ namespace Shooter.Game
         private static int characterLayer = -1;
         private static int CharacterLayer => characterLayer != -1 ? characterLayer : characterLayer = LayerMask.NameToLayer("Character");
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             ownCharacter = GetComponentInParent<Character>();
 

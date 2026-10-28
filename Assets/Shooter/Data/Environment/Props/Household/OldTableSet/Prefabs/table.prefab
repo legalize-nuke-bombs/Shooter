@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4651666762754425408}
   - component: {fileID: -5640933798201490651}
   - component: {fileID: 3798672554599363982}
+  - component: {fileID: 8490224103104440151}
   m_Layer: 0
   m_Name: table
   m_TagString: Untagged
@@ -60,6 +61,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
   content: Old table
   size: 0
+--- !u!114 &8490224103104440151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5964748217857490938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &7840395562867857267
 GameObject:
   m_ObjectHideFlags: 0

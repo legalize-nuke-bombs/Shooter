@@ -1,10 +1,10 @@
-﻿using Shooter.Infrastructure;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Llm))]
-    public class LlmAIObserver : ShooterBehaviour
+    public class LlmAIObserver : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -12,20 +12,20 @@ namespace Shooter.Game
         private Relations relations;
         private BehaviorReporter behaviorReporter;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             llm = GetComponent<Llm>();
             relations = GetComponent<Relations>();
             behaviorReporter = GetComponent<BehaviorReporter>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             relations.RelationWorsenedByDamage += HandleRelationWorsenedByDamage;
             behaviorReporter.Reported += HandleBehaviorReported;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             relations.RelationWorsenedByDamage -= HandleRelationWorsenedByDamage;
             behaviorReporter.Reported -= HandleBehaviorReported;

@@ -1,10 +1,9 @@
-﻿using System;
-using Shooter.Infrastructure;
+using System;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class BehaviorReporter : ShooterBehaviour
+    public class BehaviorReporter : MonoBehaviour
     {
         public event Action<BehaviorReport> Reported;
 

@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: 619626251006798639}
   - component: {fileID: 990665624612003098}
   - component: {fileID: 6872196630086473304}
+  - component: {fileID: 645852179459913696}
+  - component: {fileID: 6352749203807220508}
   m_Layer: 0
   m_Name: Lamp
   m_TagString: Untagged
@@ -231,6 +233,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnSwitch
   sound: {fileID: 11400000, guid: 513700c63dd14d38885dab6d5e0cd837, type: 2}
+--- !u!114 &645852179459913696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7431905612350001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c246ea6684244e42bd5d15262b7bfa62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.IncrementalId
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &6352749203807220508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7431905612350001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &7431905612350005
 GameObject:
   m_ObjectHideFlags: 0

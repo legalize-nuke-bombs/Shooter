@@ -36,40 +36,40 @@ namespace Shooter.Infrastructure
             activeBehaviours.CollectGarbage();
         }
 
-        public void RegisterBehaviour(IShooterBehaviour behaviour)
+        public void RegisterBehaviour(MonoBehaviour behaviour)
         {
             behaviours.Add(behaviour);
-            Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} registered");
+            Log.Debug($"{behaviour.GetType().Name} {behaviour.name} registered");
         }
 
-        public void UnregisterBehaviour(IShooterBehaviour behaviour)
+        public void UnregisterBehaviour(MonoBehaviour behaviour)
         {
             behaviours.Remove(behaviour);
-            Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} unregistered");
+            Log.Debug($"{behaviour.GetType().Name} {behaviour.name} unregistered");
         }
 
-        public void ActivateBehaviour(IShooterBehaviour behaviour)
+        public void ActivateBehaviour(MonoBehaviour behaviour)
         {
             activeBehaviours.Add(behaviour);
-            Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} activated");
+            Log.Debug($"{behaviour.GetType().Name} {behaviour.name} activated");
         }
 
-        public void DeactivateBehaviour(IShooterBehaviour behaviour)
+        public void DeactivateBehaviour(MonoBehaviour behaviour)
         {
             activeBehaviours.Remove(behaviour);
-            Log.Debug($"{behaviour.GetType().Name} {behaviour.NativeBehaviour.name} deactivated");
+            Log.Debug($"{behaviour.GetType().Name} {behaviour.name} deactivated");
         }
 
         public TArray.View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
         {
             TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? behaviours : activeBehaviours;
-            return registered.GetAll<T>();
+            return registered.GetAll<T>(inactivePolicy);
         }
 
         public int CountOf(Type type, RegisterInactivePolicy inactivePolicy)
         {
             TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? behaviours : activeBehaviours;
-            return registered.CountOf(type);
+            return registered.CountOf(type, inactivePolicy);
         }
 
         public void FindLargestClasses(Type[] classes, int[] counts)

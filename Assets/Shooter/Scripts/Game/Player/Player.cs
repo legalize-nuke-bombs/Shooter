@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(IncrementalId))]
-    public class Player : ShooterNetworkBehaviour, ISaveableComponent
+    public class Player : NetworkBehaviour, ISaveableComponent
     {
         private const ulong NoClient = ulong.MaxValue;
 
@@ -37,7 +37,7 @@ namespace Shooter.Game
             PublicKey = content.ToObject<SaveData>().PublicKey;
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             incrementalId = GetComponent<IncrementalId>();
         }

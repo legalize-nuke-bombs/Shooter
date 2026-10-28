@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class ConversationManager : ShooterBehaviour, ISaveableComponent
+    public class ConversationManager : MonoBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

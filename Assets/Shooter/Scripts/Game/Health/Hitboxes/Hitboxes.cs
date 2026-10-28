@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Animator))]
-    public class Hitboxes : ShooterBehaviour
+    public class Hitboxes : MonoBehaviour
     {
         public const string LayerName = "Hitbox";
 
@@ -12,8 +12,12 @@ namespace Shooter.Game
         private const float MaxHumanoidScale = 1.4f;
         private static readonly Journal Log = Logs.Here();
 
+        private ShooterObject shooterObject;
+
         private void Start()
         {
+            shooterObject = GetComponentInParent<ShooterObject>();
+
             int layer = LayerMask.NameToLayer(LayerName);
             if (layer < 0)
             {
@@ -88,7 +92,7 @@ namespace Shooter.Game
             hitboxRigidbody.isKinematic = true;
             hitboxRigidbody.useGravity = false;
 
-            hitboxObject.AddComponent<Hitbox>().Part = part;
+            shooterObject.AddComponent<Hitbox>(hitboxObject).Part = part;
             return hitboxObject;
         }
 

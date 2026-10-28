@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Llm))]
-    public class LlmMainTicker : ShooterBehaviour, IShooterUpdateable
+    public class LlmMainTicker : MonoBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
         private string entityName;
@@ -14,7 +14,7 @@ namespace Shooter.Game
         private Llm llm;
         [SerializeReference, SubclassSelector] private LlmChildTicker[] tickers;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             enabled = NetworkManager.Singleton.IsServer;
             entityName = name;

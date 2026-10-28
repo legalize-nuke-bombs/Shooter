@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(IncrementalId))]
-    public class Lootable : ShooterNetworkBehaviour, IUsable
+    public class Lootable : NetworkBehaviour, IUsable
     {
         public const string ShownNameField = nameof(shownName);
         private static readonly Journal Log = Logs.Here();

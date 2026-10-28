@@ -5,14 +5,14 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Character))]
-    public class PlayerRadio : ShooterNetworkBehaviour
+    public class PlayerRadio : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private Character character;
         private ConversationManager conversationManager;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             character = GetComponent<Character>();
             conversationManager = Registers.Instance.Get<ConversationManager>();

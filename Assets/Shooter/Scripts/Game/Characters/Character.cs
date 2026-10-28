@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(IncrementalId))]
-    public class Character : ShooterBehaviour, IDigestible
+    public class Character : MonoBehaviour, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -14,7 +14,7 @@ namespace Shooter.Game
         [SerializeField] private Faction faction;
         public Faction Faction => faction;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             incrementalId = GetComponent <IncrementalId>();
             if (faction == null)

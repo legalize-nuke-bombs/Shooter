@@ -1,6 +1,6 @@
 namespace Shooter.Infrastructure
 {
-    public interface IShooterUpdateable : IShooterBehaviour
+    public interface IShooterUpdateable
     {
         void ShooterUpdate();
     }

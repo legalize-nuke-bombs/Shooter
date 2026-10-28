@@ -5,25 +5,25 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Gunner))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnReload : ShooterBehaviour
+    public class SoundOnReload : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private Gunner gunner;
         private Speaker speaker;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             gunner = GetComponent<Gunner>();
             speaker = GetComponent<Speaker>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             gunner.ReloadStarted += Play;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             gunner.ReloadStarted -= Play;
         }

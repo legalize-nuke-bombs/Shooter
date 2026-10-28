@@ -1,17 +1,18 @@
 using Shooter.Infrastructure;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Skin))]
-    public class SkinHiderWhileDead : ShooterNetworkBehaviour, IShooterLateUpdateable
+    public class SkinHiderWhileDead : NetworkBehaviour, IShooterLateUpdateable
     {
         private Health health;
         private Skin skin;
         private bool modelVisible;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             health = GetComponent<Health>();
             skin = GetComponent<Skin>();

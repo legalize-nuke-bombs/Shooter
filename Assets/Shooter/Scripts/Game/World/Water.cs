@@ -1,11 +1,10 @@
-using Shooter.Infrastructure;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(WaterSurface))]
-    public class Water : ShooterBehaviour
+    public class Water : MonoBehaviour
     {
         public float GetDepthAt(Vector3 point)
         {

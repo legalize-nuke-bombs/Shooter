@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Gunner))]
-    public class LocalRecoil : ShooterNetworkBehaviour, IShooterUpdateable
+    public class LocalRecoil : NetworkBehaviour, IShooterUpdateable
     {
         [SerializeField] private float recovery = 14f;
 
@@ -19,7 +19,7 @@ namespace Shooter.Game
 
         public Vector2 PunchAngles { get; private set; }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             player = GetComponent<Player>();
             inventoryHolder = GetComponent<InventoryHolder>();

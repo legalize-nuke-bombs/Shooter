@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Health))]
-    public class Hands : ShooterNetworkBehaviour, IDigestible, IShooterUpdateable
+    public class Hands : NetworkBehaviour, IDigestible, IShooterUpdateable
     {
         private const string DeadRefusal = "dead";
         private const string BusyHandsRefusal = "hands busy";
@@ -43,18 +43,18 @@ namespace Shooter.Game
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             health = GetComponent<Health>();
             enabled = false;
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             health.Died += InterruptAction;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             health.Died -= InterruptAction;
         }

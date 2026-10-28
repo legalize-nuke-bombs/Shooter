@@ -7,9 +7,9 @@ namespace Shooter.Game
     {
         private Llm llm;
 
-        protected override void ShooterAwake()
+        protected override void Awake()
         {
-            base.ShooterAwake();
+            base.Awake();
             llm = GetComponent<Llm>();
         }
 

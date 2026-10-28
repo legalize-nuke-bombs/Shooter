@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class PickupRespawner : ShooterBehaviour, ISaveableComponent, IHourPassedHandler
+    public class PickupRespawner : MonoBehaviour, ISaveableComponent, IHourPassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -40,7 +40,7 @@ namespace Shooter.Game
             rolledUntil = saveData.Alive ? null : saveData.RolledUntil;
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             clock = Registers.Instance.Get<Clock>();
             enabled = NetworkManager.Singleton.IsServer;

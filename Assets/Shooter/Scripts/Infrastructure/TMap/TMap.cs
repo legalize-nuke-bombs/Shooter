@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
@@ -39,7 +40,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void Add(IShooterBehaviour behaviour)
+        public void Add(MonoBehaviour behaviour)
         {
             foreach (Type key in GetKeys(behaviour.GetType()))
             {
@@ -53,7 +54,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void Remove(IShooterBehaviour behaviour)
+        public void Remove(MonoBehaviour behaviour)
         {
             foreach (Type key in GetKeys(behaviour.GetType()))
             {
@@ -61,15 +62,16 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public int CountOf(Type key)
+        public int CountOf(Type key, RegisterInactivePolicy inactivePolicy)
         {
-            return arraysByKey.TryGetValue(key, out TArray array) ? array.Count : 0;
+            arraysByKey.TryGetValue(key, out TArray array);
+            return new TArray.View<MonoBehaviour>(array, inactivePolicy).Count;
         }
 
-        public TArray.View<T> GetAll<T>() where T : class
+        public TArray.View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
         {
             arraysByKey.TryGetValue(typeof(T), out TArray array);
-            return new TArray.View<T>(array);
+            return new TArray.View<T>(array, inactivePolicy);
         }
 
         public void FindLargestClasses(Type[] classes, int[] counts)
@@ -121,7 +123,7 @@ namespace Shooter.Infrastructure
             if (KeysByBehaviourType.TryGetValue(behaviourType, out Type[] keys)) return keys;
 
             var types = new List<Type>();
-            for (Type type = behaviourType; typeof(IShooterBehaviour).IsAssignableFrom(type); type = type.BaseType)
+            for (Type type = behaviourType; type != typeof(MonoBehaviour); type = type.BaseType)
             {
                 types.Add(type);
             }

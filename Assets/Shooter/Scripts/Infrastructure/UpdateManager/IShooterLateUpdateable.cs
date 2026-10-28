@@ -1,6 +1,6 @@
 namespace Shooter.Infrastructure
 {
-    public interface IShooterLateUpdateable : IShooterBehaviour
+    public interface IShooterLateUpdateable
     {
         void ShooterLateUpdate();
     }

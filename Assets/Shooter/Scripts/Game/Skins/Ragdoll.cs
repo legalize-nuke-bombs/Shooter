@@ -5,14 +5,18 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Animator))]
-    public class Ragdoll : ShooterBehaviour
+    public class Ragdoll : MonoBehaviour
     {
         private const float LinearDamping = 0.5f;
         private const float AngularDamping = 1f;
         private static readonly Journal Log = Logs.Here();
 
+        private ShooterObject shooterObject;
+
         private void Start()
         {
+            shooterObject = GetComponentInParent<ShooterObject>();
+
             int layer = LayerMask.NameToLayer(Hitboxes.LayerName);
             if (layer < 0)
             {
@@ -95,7 +99,7 @@ namespace Shooter.Game
             boneObject.layer = layer;
             shape.excludeLayers = ~LayerMask.GetMask("Default", Hitboxes.LayerName);
 
-            boneObject.AddComponent<Hitbox>().Part = part;
+            shooterObject.AddComponent<Hitbox>(boneObject).Part = part;
 
             Rigidbody partRigidbody = boneObject.AddComponent<Rigidbody>();
             partRigidbody.mass = mass;

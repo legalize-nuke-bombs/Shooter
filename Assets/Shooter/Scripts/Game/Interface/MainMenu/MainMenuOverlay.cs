@@ -40,7 +40,7 @@ namespace Shooter.Game
         private string pendingWarningDetails;
         private string pendingWarningTitle;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             Application.targetFrameRate = MenuFrameRate;
             networkStarter = NetworkManager.Singleton.GetComponent<NetworkStarter>();
@@ -54,7 +54,7 @@ namespace Shooter.Game
             networkStarter.JoinFailed += HandleJoinFailed;
         }
 
-        protected override void ShooterOnDestroy()
+        private void OnDestroy()
         {
             networkStarter.JoinFailed -= HandleJoinFailed;
             Application.targetFrameRate = UnlimitedFrameRate;

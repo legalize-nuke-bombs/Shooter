@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 4387550727983708763}
   - component: {fileID: -7820441610070540138}
   - component: {fileID: 9107607427431538322}
+  - component: {fileID: 9180768178165588952}
   m_Layer: 0
   m_Name: SovietWashMachine
   m_TagString: Untagged
@@ -175,6 +176,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
+--- !u!114 &9180768178165588952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772631205478615112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &3230797592610666793
 GameObject:
   m_ObjectHideFlags: 0

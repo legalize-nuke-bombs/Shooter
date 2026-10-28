@@ -7,7 +7,7 @@ using UnityEngine.Rendering.HighDefinition;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class BulletHoles : ShooterNetworkBehaviour, ISaveableComponent
+    public class BulletHoles : NetworkBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

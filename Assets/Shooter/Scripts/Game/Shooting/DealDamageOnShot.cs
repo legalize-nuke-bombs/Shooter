@@ -5,25 +5,25 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Gunner))]
     [RequireComponent(typeof(Character))]
-    public class DealDamageOnShot : ShooterBehaviour
+    public class DealDamageOnShot : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private Gunner gunner;
         private Character character;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             gunner = GetComponent<Gunner>();
             character = GetComponent<Character>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             gunner.Shot += DealDamage;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             gunner.Shot -= DealDamage;
         }

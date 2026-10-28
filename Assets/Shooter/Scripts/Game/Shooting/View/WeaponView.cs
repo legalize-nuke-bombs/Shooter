@@ -9,7 +9,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Skin))]
-    public class WeaponView : ShooterNetworkBehaviour, IShooterUpdateable
+    public class WeaponView : NetworkBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -36,7 +36,7 @@ namespace Shooter.Game
 
         public event Action ShownWeaponChanged;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             inventory = GetComponent<Inventory>();
             inventoryHolder = GetComponent<InventoryHolder>();

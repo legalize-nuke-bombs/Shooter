@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4005648429012305702}
   - component: {fileID: 6600000000000000105}
   - component: {fileID: 6600000000000000106}
+  - component: {fileID: 1137111971607723885}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -119,8 +120,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8dbdd0aa5fde147ef9e55a6d4c9b814c, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6600000000000000106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,3 +135,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   world: Map
+--- !u!114 &1137111971607723885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5189339268117028077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject

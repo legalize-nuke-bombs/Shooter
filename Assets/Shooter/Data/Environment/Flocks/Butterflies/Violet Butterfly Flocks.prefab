@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8632314085404868022}
   - component: {fileID: -7208121065842903753}
   - component: {fileID: 1808337934870029527}
+  - component: {fileID: 4058840753440546061}
   m_Layer: 0
   m_Name: Violet Butterfly Flocks
   m_TagString: Untagged
@@ -81,6 +82,7 @@ MonoBehaviour:
   flockSpread: 2
   flockSpreadVertical: 0.25
   flockSmoothTime: 0.5
+  flockMaxSpeed: 4
   boidSpread: 2
   boidSpreadVertical: 0.5
   speedRange: {x: 1.05, y: 2.45}
@@ -100,6 +102,10 @@ MonoBehaviour:
   scaredFlapMultiplier: 2.5
   scaredClimb: 2
   calmDownTime: 10
+  panicSpread: 40
+  cawSound: {fileID: 0}
+  maxCawingBoids: 8
+  maxCawDelay: 0.6
 --- !u!114 &8632314085404868022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,3 +147,15 @@ MonoBehaviour:
   label: 
   textColor: {r: 1, g: 1, b: 1, a: 1}
   offset: {x: 0, y: 1.2, z: 0}
+--- !u!114 &4058840753440546061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject

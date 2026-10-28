@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(TextGizmo))]
-    public class CapsuleGizmo : ShooterBehaviour
+    public class CapsuleGizmo : MonoBehaviour
     {
         private const float Height = 2f;
         private const float Radius = 0.4f;

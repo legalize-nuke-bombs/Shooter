@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Shooter.Infrastructure;
 using Unity.Collections;
@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Inventory))]
-    public class Crafter : ShooterNetworkBehaviour
+    public class Crafter : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -19,7 +19,7 @@ namespace Shooter.Game
 
         public event Action<CraftAsset> Crafted;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             inventory = GetComponent<Inventory>();
             foreach (CraftAsset craft in availableCrafts)

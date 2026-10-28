@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6805342511397077342}
   - component: {fileID: 2176922096568345579}
   - component: {fileID: 4068015368134210253}
+  - component: {fileID: 5467741329896627013}
   m_Layer: 0
   m_Name: TubeLamp
   m_TagString: Untagged
@@ -117,6 +118,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Core.Saves.SaveableObject
   ShowTopMostFoldoutHeaderGroup: 1
   id: 
+--- !u!114 &5467741329896627013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2461312555955314122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &7420697962194907331
 GameObject:
   m_ObjectHideFlags: 0

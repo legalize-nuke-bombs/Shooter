@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Light))]
-    public class Sunlight : ShooterBehaviour, IShooterUpdateable
+    public class Sunlight : MonoBehaviour, IShooterUpdateable
     {
         internal const float ShadowHandoverElevation = -6f;
 
@@ -13,7 +13,7 @@ namespace Shooter.Game
         private Clock clock;
         private Light sunLight;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             sunLight = GetComponent<Light>();
         }

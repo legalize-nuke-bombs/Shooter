@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class LlmNotes : ShooterBehaviour, ISaveableComponent
+    public class LlmNotes : MonoBehaviour, ISaveableComponent
     {
         [SerializeField] private int nameLimit = 25;
         [SerializeField] private int descriptionLimit = 100;

@@ -1,9 +1,8 @@
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    public class DigestibleTransform : ShooterBehaviour, IDigestible
+    public class DigestibleTransform : MonoBehaviour, IDigestible
     {
         public DigestionPriority Priority => DigestionPriority.Place;
 

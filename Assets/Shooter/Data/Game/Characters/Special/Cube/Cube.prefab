@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: -1508299866133183944}
   - component: {fileID: 2232584987689059584}
   - component: {fileID: 7881839541133670331}
+  - component: {fileID: 5639782983844613975}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -272,6 +273,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.IncrementalId
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &5639782983844613975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475251358202894423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &4402097373001482622
 GameObject:
   m_ObjectHideFlags: 0

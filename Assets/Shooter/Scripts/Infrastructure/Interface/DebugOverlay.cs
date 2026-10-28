@@ -52,7 +52,7 @@ namespace Shooter.Infrastructure
         private float secondsToLogReport = LogReportSeconds;
         private bool visible;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             DontDestroyOnLoad(gameObject);
         }

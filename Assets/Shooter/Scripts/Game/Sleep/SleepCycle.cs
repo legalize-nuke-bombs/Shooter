@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class SleepCycle : ShooterNetworkBehaviour
+    public class SleepCycle : NetworkBehaviour
     {
         private const float SkipTimeScale = 300f;
         private const double BedtimeStartHour = 22;

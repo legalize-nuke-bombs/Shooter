@@ -21,9 +21,9 @@ namespace Shooter.Game
         private int lastSteerTick;
         private Vector2 steeringInput;
 
-        protected override void ShooterAwake()
+        protected override void Awake()
         {
-            base.ShooterAwake();
+            base.Awake();
 
             characterController = GetComponent<CharacterController>();
         }

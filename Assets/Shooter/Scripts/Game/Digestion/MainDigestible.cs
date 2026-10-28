@@ -1,11 +1,10 @@
 using System.Linq;
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(DigestibleTransform))]
-    public class MainDigestible : ShooterBehaviour, IDigestible
+    public class MainDigestible : MonoBehaviour, IDigestible
     {
         public const string ContentField = nameof(content);
         public const string SizeField = nameof(size);
@@ -17,7 +16,7 @@ namespace Shooter.Game
 
         public IDigestible[] Parts { get; private set; }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             Parts = GetComponents<IDigestible>().OrderByDescending(part => part.Priority).ToArray();
         }

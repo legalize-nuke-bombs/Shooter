@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Light))]
-    public class Moonlight : ShooterBehaviour, IShooterUpdateable
+    public class Moonlight : MonoBehaviour, IShooterUpdateable
     {
         [SerializeField] private float brightest = 1.2f;
 
@@ -13,7 +13,7 @@ namespace Shooter.Game
         private Clock clock;
         private Light moonLight;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             moonLight = GetComponent<Light>();
         }

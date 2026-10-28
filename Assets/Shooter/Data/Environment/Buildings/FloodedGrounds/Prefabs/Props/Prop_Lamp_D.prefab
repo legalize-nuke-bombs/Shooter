@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3350394421217206260}
   - component: {fileID: -2247415204721118134}
   - component: {fileID: 5222574490137900118}
+  - component: {fileID: 2403864974687210608}
   m_Layer: 0
   m_Name: Prop_Lamp_D
   m_TagString: Untagged
@@ -198,6 +199,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.DigestibleTransform
+--- !u!114 &2403864974687210608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
 --- !u!1 &8538791260996525183
 GameObject:
   m_ObjectHideFlags: 0

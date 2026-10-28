@@ -1,9 +1,9 @@
 using System;
-using Shooter.Infrastructure;
+using Unity.Netcode;
 
 namespace Shooter.Game
 {
-    public abstract class Trigger : ShooterNetworkBehaviour
+    public abstract class Trigger : NetworkBehaviour
     {
         public event Action<Character> Fired;
 

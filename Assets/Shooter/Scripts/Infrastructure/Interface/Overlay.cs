@@ -4,19 +4,19 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(PanelRenderer))]
-    public abstract class Overlay : ShooterBehaviour
+    public abstract class Overlay : MonoBehaviour
     {
         private PanelRenderer panelRenderer;
 
         protected bool IsBound { get; private set; }
 
-        protected override void ShooterOnEnable()
+        protected virtual void OnEnable()
         {
             panelRenderer = GetComponent<PanelRenderer>();
             panelRenderer.RegisterUIReloadCallback(HandleUIReloaded);
         }
 
-        protected override void ShooterOnDisable()
+        protected virtual void OnDisable()
         {
             panelRenderer.UnregisterUIReloadCallback(HandleUIReloaded);
             UnbindElementsIfBound();

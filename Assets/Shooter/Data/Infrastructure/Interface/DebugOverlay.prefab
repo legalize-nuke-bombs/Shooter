@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 401129285025457504}
   - component: {fileID: 129108830637613783}
   - component: {fileID: 3341249684517595564}
+  - component: {fileID: 7648671880380480387}
   m_Layer: 0
   m_Name: DebugOverlay
   m_TagString: Untagged
@@ -103,3 +104,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3f2b6d19e74c05b7d3e8a41f26c9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.DebugOverlay
+--- !u!114 &7648671880380480387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2870796327848878098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject

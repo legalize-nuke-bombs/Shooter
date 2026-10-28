@@ -1,27 +1,26 @@
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(NotificationRecipient))]
-    public class LlmNotificationObserver : ShooterBehaviour
+    public class LlmNotificationObserver : MonoBehaviour
     {
         private Llm llm;
         private NotificationRecipient notificationRecipient;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             llm = GetComponent<Llm>();
             notificationRecipient = GetComponent<NotificationRecipient>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             notificationRecipient.NotificationReceived += HandleNotificationReceived;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             notificationRecipient.NotificationReceived -= HandleNotificationReceived;
         }

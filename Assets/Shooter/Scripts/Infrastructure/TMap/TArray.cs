@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
@@ -24,7 +25,7 @@ namespace Shooter.Infrastructure
 
         public int Capacity => entries.Length;
 
-        public void Add(IShooterBehaviour behaviour)
+        public void Add(MonoBehaviour behaviour)
         {
             int hash = RuntimeHelpers.GetHashCode(behaviour);
             if (FindSlot(behaviour, hash) != None) return;
@@ -35,7 +36,7 @@ namespace Shooter.Infrastructure
             count++;
         }
 
-        public void Remove(IShooterBehaviour behaviour)
+        public void Remove(MonoBehaviour behaviour)
         {
             int hole = FindSlot(behaviour, RuntimeHelpers.GetHashCode(behaviour));
             if (hole == None) return;
@@ -69,7 +70,7 @@ namespace Shooter.Infrastructure
             if (entries.Length > MinCapacity && count <= entries.Length / 4) ShrinkToFit();
         }
 
-        private int FindSlot(IShooterBehaviour behaviour, int hash)
+        private int FindSlot(MonoBehaviour behaviour, int hash)
         {
             int mask = index.Length - 1;
             for (int i = hash & mask; index[i] != None; i = (i + 1) & mask)
@@ -123,7 +124,7 @@ namespace Shooter.Infrastructure
             int packedUsed = 0;
             for (int position = 0; position < used; position++)
             {
-                if (entries[position].Behaviour == null) continue;
+                if (entries[position].Behaviour is null) continue;
 
                 packed[packedUsed] = entries[position];
                 packedUsed++;
@@ -141,13 +142,13 @@ namespace Shooter.Infrastructure
             Array.Fill(index, None);
             for (int position = 0; position < used; position++)
             {
-                if (entries[position].Behaviour != null) Place(position);
+                if (entries[position].Behaviour is not null) Place(position);
             }
         }
 
         private struct Entry
         {
-            public IShooterBehaviour Behaviour;
+            public MonoBehaviour Behaviour;
             public int Hash;
             public int NextFree;
         }
@@ -155,17 +156,34 @@ namespace Shooter.Infrastructure
         public readonly struct View<T> where T : class
         {
             private readonly TArray array;
+            private readonly RegisterInactivePolicy inactivePolicy;
 
-            public View(TArray array)
+            public View(TArray array, RegisterInactivePolicy inactivePolicy)
             {
                 this.array = array;
+                this.inactivePolicy = inactivePolicy;
             }
 
-            public int Count => array == null ? 0 : array.count;
+            public int Count
+            {
+                get
+                {
+                    if (array == null) return 0;
+                    if (inactivePolicy == RegisterInactivePolicy.Include) return array.count;
+
+                    int count = 0;
+                    foreach (T element in this)
+                    {
+                        count++;
+                    }
+
+                    return count;
+                }
+            }
 
             public Enumerator GetEnumerator()
             {
-                return new Enumerator(array);
+                return new Enumerator(array, inactivePolicy);
             }
 
             public bool TryGetFirst(out T first)
@@ -183,12 +201,14 @@ namespace Shooter.Infrastructure
             public ref struct Enumerator
             {
                 private readonly TArray array;
+                private readonly RegisterInactivePolicy inactivePolicy;
                 private int position;
                 private T current;
 
-                public Enumerator(TArray array)
+                public Enumerator(TArray array, RegisterInactivePolicy inactivePolicy)
                 {
                     this.array = array;
+                    this.inactivePolicy = inactivePolicy;
                     position = 0;
                     current = null;
                 }
@@ -199,11 +219,12 @@ namespace Shooter.Infrastructure
                 {
                     while (array != null && position < array.used)
                     {
-                        IShooterBehaviour behaviour = array.entries[position].Behaviour;
+                        MonoBehaviour behaviour = array.entries[position].Behaviour;
                         position++;
-                        if (behaviour == null) continue;
+                        if (behaviour is null) continue;
+                        if (inactivePolicy == RegisterInactivePolicy.Exclude && !behaviour.isActiveAndEnabled) continue;
 
-                        current = (T)behaviour;
+                        current = (T)(object)behaviour;
                         return true;
                     }
 

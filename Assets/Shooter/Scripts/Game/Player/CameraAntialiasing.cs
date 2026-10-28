@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(HDAdditionalCameraData))]
-    public class CameraAntialiasing : ShooterBehaviour
+    public class CameraAntialiasing : MonoBehaviour
     {
         // DLSS quality codes as the NVIDIA module numbers them; the camera keeps them as a plain number
         private const uint DlssPerformance = 0;
@@ -20,20 +20,20 @@ namespace Shooter.Game
         private HDAdditionalCameraData additionalCameraData;
         private ClientConfig clientConfig;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             view = GetComponent<Camera>();
             additionalCameraData = GetComponent<HDAdditionalCameraData>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             clientConfig = Config.GetGameConfig().Client;
             clientConfig.propertyChanged += HandleClientConfigChanged;
             ApplyAntialiasingAndUpscaler();
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             clientConfig.propertyChanged -= HandleClientConfigChanged;
         }

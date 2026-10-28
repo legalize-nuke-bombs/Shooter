@@ -4,23 +4,23 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Gunner))]
-    public class SoundOnShotImpact : ShooterBehaviour
+    public class SoundOnShotImpact : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private Gunner gunner;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             gunner = GetComponent<Gunner>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             gunner.ShotTraced += Play;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             gunner.ShotTraced -= Play;
         }

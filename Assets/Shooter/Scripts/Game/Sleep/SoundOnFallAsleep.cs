@@ -1,29 +1,28 @@
-using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnFallAsleep : ShooterBehaviour
+    public class SoundOnFallAsleep : MonoBehaviour
     {
         [SerializeField] private SoundAsset sound;
 
         private Sleeper sleeper;
         private Speaker speaker;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             sleeper = GetComponent<Sleeper>();
             speaker = GetComponent<Speaker>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             sleeper.FellAsleep += Play;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             sleeper.FellAsleep -= Play;
         }

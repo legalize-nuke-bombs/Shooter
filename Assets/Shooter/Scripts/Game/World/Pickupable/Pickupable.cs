@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Shooter.Infrastructure;
 using Unity.Collections;
 using Unity.Netcode;
@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(IncrementalId))]
-    public class Pickupable : ShooterNetworkBehaviour, IUsable, IDigestible
+    public class Pickupable : NetworkBehaviour, IUsable, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
