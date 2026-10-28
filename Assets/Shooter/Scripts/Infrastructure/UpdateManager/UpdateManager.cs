@@ -36,10 +36,10 @@ namespace Shooter.Infrastructure
 
         private static void Tell<T>(T handler, Action<T> tell) where T : class
         {
-            var behaviour = (MonoBehaviour)(object)handler;
+            var component = (MonoBehaviour)(object)handler;
 #if ENABLE_PROFILER
             ProfilerMarker marker = GetMarker(handler.GetType());
-            marker.Begin(behaviour);
+            marker.Begin(component);
 #endif
             try
             {
@@ -47,7 +47,7 @@ namespace Shooter.Infrastructure
             }
             catch (Exception e)
             {
-                Log.Error($"{handler.GetType().Name} {behaviour.name} failed its update: {e}");
+                Log.Error($"{handler.GetType().Name} {component.name} failed its update: {e}");
             }
 #if ENABLE_PROFILER
             marker.End();

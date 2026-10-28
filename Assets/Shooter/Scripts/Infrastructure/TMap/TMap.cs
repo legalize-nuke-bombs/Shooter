@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public sealed class TMap
     {
-        private static readonly Dictionary<Type, Type[]> KeysByBehaviourType = new();
+        private static readonly Dictionary<Type, Type[]> KeysByComponentType = new();
 
         private Dictionary<Type, TArray> arraysByKey = new();
 
@@ -40,9 +40,9 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void Add(MonoBehaviour behaviour)
+        public void Add(MonoBehaviour component)
         {
-            foreach (Type key in GetKeys(behaviour.GetType()))
+            foreach (Type key in GetKeys(component.GetType()))
             {
                 if (!arraysByKey.TryGetValue(key, out TArray array))
                 {
@@ -50,15 +50,15 @@ namespace Shooter.Infrastructure
                     arraysByKey[key] = array;
                 }
 
-                array.Add(behaviour);
+                array.Add(component);
             }
         }
 
-        public void Remove(MonoBehaviour behaviour)
+        public void Remove(MonoBehaviour component)
         {
-            foreach (Type key in GetKeys(behaviour.GetType()))
+            foreach (Type key in GetKeys(component.GetType()))
             {
-                if (arraysByKey.TryGetValue(key, out TArray array)) array.Remove(behaviour);
+                if (arraysByKey.TryGetValue(key, out TArray array)) array.Remove(component);
             }
         }
 
@@ -122,21 +122,21 @@ namespace Shooter.Infrastructure
             arraysByKey = keptArrays;
         }
 
-        // GetInterfaces builds a new array on every call, so the keys a behaviour goes under are found once per type
-        private static Type[] GetKeys(Type behaviourType)
+        // GetInterfaces builds a new array on every call, so the keys a component goes under are found once per type
+        private static Type[] GetKeys(Type componentType)
         {
-            if (KeysByBehaviourType.TryGetValue(behaviourType, out Type[] keys)) return keys;
+            if (KeysByComponentType.TryGetValue(componentType, out Type[] keys)) return keys;
 
             var types = new List<Type>();
-            for (Type type = behaviourType; type != typeof(MonoBehaviour); type = type.BaseType)
+            for (Type type = componentType; type != typeof(MonoBehaviour); type = type.BaseType)
             {
                 types.Add(type);
             }
 
-            types.AddRange(behaviourType.GetInterfaces());
+            types.AddRange(componentType.GetInterfaces());
 
             keys = types.ToArray();
-            KeysByBehaviourType[behaviourType] = keys;
+            KeysByComponentType[componentType] = keys;
             return keys;
         }
     }

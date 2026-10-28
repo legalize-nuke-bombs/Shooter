@@ -6,30 +6,30 @@ namespace Shooter.Infrastructure
     public class FrozenWorld
     {
         private static readonly Journal Log = Logs.Here();
-        private readonly Dictionary<string, SaveableEntity> saveableObjectsById = new();
+        private readonly Dictionary<string, SaveableEntity> saveableEntitiesById = new();
 
         private FrozenWorld()
         {
         }
 
-        public static FrozenWorld FreezeAllSaveableObjects()
+        public static FrozenWorld FreezeAllSaveableEntities()
         {
             FrozenWorld frozenWorld = new();
             foreach (SaveableEntity saveable in Object.FindObjectsByType<SaveableEntity>(FindObjectsInactive.Include))
             {
-                frozenWorld.FreezeSaveableObject(saveable);
+                frozenWorld.FreezeSaveableEntity(saveable);
             }
 
-            Log.Info($"World is frozen: {frozenWorld.saveableObjectsById.Count} saveable objects went dark");
+            Log.Info($"World is frozen: {frozenWorld.saveableEntitiesById.Count} saveable entities went dark");
             return frozenWorld;
         }
 
-        public bool TryGetSaveableObject(string id, out SaveableEntity saveable)
+        public bool TryGetSaveableEntity(string id, out SaveableEntity saveable)
         {
-            return saveableObjectsById.TryGetValue(id, out saveable);
+            return saveableEntitiesById.TryGetValue(id, out saveable);
         }
 
-        public void FreezeSaveableObject(SaveableEntity saveable)
+        public void FreezeSaveableEntity(SaveableEntity saveable)
         {
             string id = saveable.Id;
             if (string.IsNullOrEmpty(id))
@@ -38,19 +38,19 @@ namespace Shooter.Infrastructure
                 return;
             }
 
-            if (!saveableObjectsById.TryAdd(id, saveable))
+            if (!saveableEntitiesById.TryAdd(id, saveable))
             {
-                Log.Warn($"Saveable {saveable.name} shares id {id} with {saveableObjectsById[id].name}, stays awake and unknown to the save");
+                Log.Warn($"Saveable {saveable.name} shares id {id} with {saveableEntitiesById[id].name}, stays awake and unknown to the save");
                 return;
             }
 
             saveable.gameObject.SetActive(false);
         }
 
-        public void ThawAllSaveableObjects()
+        public void ThawAllSaveableEntities()
         {
             int wokenCount = 0;
-            foreach (SaveableEntity saveable in saveableObjectsById.Values)
+            foreach (SaveableEntity saveable in saveableEntitiesById.Values)
             {
                 if (!saveable.IsSpawned) continue;
 
@@ -58,8 +58,8 @@ namespace Shooter.Infrastructure
                 if (saveable.IsActiveAfterThaw) wokenCount++;
             }
 
-            Log.Info($"World is thawed: {wokenCount} of {saveableObjectsById.Count} saveable objects woke up");
-            saveableObjectsById.Clear();
+            Log.Info($"World is thawed: {wokenCount} of {saveableEntitiesById.Count} saveable entities woke up");
+            saveableEntitiesById.Clear();
         }
     }
 }

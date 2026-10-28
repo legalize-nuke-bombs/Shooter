@@ -95,7 +95,7 @@ namespace Shooter.Infrastructure
                 string targetId = record.Key;
                 SaveToken targetValue = SaveToken.FromObject(record.Value);
 
-                if (frozenWorld.TryGetSaveableObject(targetId, out SaveableEntity target))
+                if (frozenWorld.TryGetSaveableEntity(targetId, out SaveableEntity target))
                 {
                     Log.Info($"Loading {target.name} {targetId}...");
                     try

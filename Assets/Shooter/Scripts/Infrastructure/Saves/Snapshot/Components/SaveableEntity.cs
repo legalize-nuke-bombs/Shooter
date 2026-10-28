@@ -227,15 +227,15 @@ namespace Shooter.Infrastructure
                 if (instance.TryGetComponent(out SaveableEntity instanceSaveable)) instanceSaveable.id = id;
             });
 
-            if (!spawnedObject.TryGetComponent(out SaveableEntity saveableObject))
+            if (!spawnedObject.TryGetComponent(out SaveableEntity saveableEntity))
             {
                 Log.Warn($"Prefab {prefabId} does not have saveable object");
                 return false;
             }
 
-            frozenWorld.FreezeSaveableObject(saveableObject);
-            saveableObject.LoadObject(data);
-            spawned = saveableObject;
+            frozenWorld.FreezeSaveableEntity(saveableEntity);
+            saveableEntity.LoadObject(data);
+            spawned = saveableEntity;
             return true;
         }
     }

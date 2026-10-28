@@ -25,20 +25,20 @@ namespace Shooter.Infrastructure
 
         public int Capacity => entries.Length;
 
-        public void Add(MonoBehaviour behaviour)
+        public void Add(MonoBehaviour component)
         {
-            int hash = RuntimeHelpers.GetHashCode(behaviour);
-            if (FindSlot(behaviour, hash) != None) return;
+            int hash = RuntimeHelpers.GetHashCode(component);
+            if (FindSlot(component, hash) != None) return;
 
             int position = TakePosition();
-            entries[position] = new Entry { Behaviour = behaviour, Hash = hash, NextFree = None };
+            entries[position] = new Entry { Component = component, Hash = hash, NextFree = None };
             Place(position);
             count++;
         }
 
-        public void Remove(MonoBehaviour behaviour)
+        public void Remove(MonoBehaviour component)
         {
-            int hole = FindSlot(behaviour, RuntimeHelpers.GetHashCode(behaviour));
+            int hole = FindSlot(component, RuntimeHelpers.GetHashCode(component));
             if (hole == None) return;
 
             int position = index[hole];
@@ -70,12 +70,12 @@ namespace Shooter.Infrastructure
             if (entries.Length > MinCapacity && count <= entries.Length / 4) ShrinkToFit();
         }
 
-        private int FindSlot(MonoBehaviour behaviour, int hash)
+        private int FindSlot(MonoBehaviour component, int hash)
         {
             int mask = index.Length - 1;
             for (int i = hash & mask; index[i] != None; i = (i + 1) & mask)
             {
-                if (ReferenceEquals(entries[index[i]].Behaviour, behaviour)) return i;
+                if (ReferenceEquals(entries[index[i]].Component, component)) return i;
             }
 
             return None;
@@ -124,7 +124,7 @@ namespace Shooter.Infrastructure
             int packedUsed = 0;
             for (int position = 0; position < used; position++)
             {
-                if (entries[position].Behaviour is null) continue;
+                if (entries[position].Component is null) continue;
 
                 packed[packedUsed] = entries[position];
                 packedUsed++;
@@ -142,13 +142,13 @@ namespace Shooter.Infrastructure
             Array.Fill(index, None);
             for (int position = 0; position < used; position++)
             {
-                if (entries[position].Behaviour is not null) Place(position);
+                if (entries[position].Component is not null) Place(position);
             }
         }
 
         private struct Entry
         {
-            public MonoBehaviour Behaviour;
+            public MonoBehaviour Component;
             public int Hash;
             public int NextFree;
         }
@@ -200,11 +200,11 @@ namespace Shooter.Infrastructure
                 {
                     while (array != null && position < array.used)
                     {
-                        MonoBehaviour behaviour = array.entries[position].Behaviour;
+                        MonoBehaviour component = array.entries[position].Component;
                         position++;
-                        if (behaviour is null) continue;
+                        if (component is null) continue;
 
-                        current = (T)(object)behaviour;
+                        current = (T)(object)component;
                         return true;
                     }
 

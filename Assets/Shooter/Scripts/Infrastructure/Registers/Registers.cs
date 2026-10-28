@@ -12,14 +12,14 @@ namespace Shooter.Infrastructure
 
         public static Registers Instance { get; private set; }
 
-        public int TypeCount => behaviours.KeyCount;
+        public int TypeCount => components.KeyCount;
 
-        public int UsedSlots => behaviours.UsedSlots + activeBehaviours.UsedSlots;
+        public int UsedSlots => components.UsedSlots + activeComponents.UsedSlots;
 
-        public int Capacity => behaviours.Capacity + activeBehaviours.Capacity;
+        public int Capacity => components.Capacity + activeComponents.Capacity;
 
-        private readonly TMap behaviours = new();
-        private readonly TMap activeBehaviours = new();
+        private readonly TMap components = new();
+        private readonly TMap activeComponents = new();
         private float nextCollectTime;
 
         private void Awake()
@@ -33,49 +33,49 @@ namespace Shooter.Infrastructure
             if (Time.unscaledTime < nextCollectTime) return;
 
             nextCollectTime = Time.unscaledTime + CollectIntervalSeconds;
-            behaviours.CollectGarbage();
-            activeBehaviours.CollectGarbage();
+            components.CollectGarbage();
+            activeComponents.CollectGarbage();
         }
 
-        public void RegisterBehaviour(MonoBehaviour behaviour)
+        public void RegisterComponent(MonoBehaviour component)
         {
-            behaviours.Add(behaviour);
-            Log.Debug($"{behaviour.GetType().Name} {behaviour.name} registered");
+            components.Add(component);
+            Log.Debug($"{component.GetType().Name} {component.name} registered");
         }
 
-        public void UnregisterBehaviour(MonoBehaviour behaviour)
+        public void UnregisterComponent(MonoBehaviour component)
         {
-            behaviours.Remove(behaviour);
-            Log.Debug($"{behaviour.GetType().Name} {behaviour.name} unregistered");
+            components.Remove(component);
+            Log.Debug($"{component.GetType().Name} {component.name} unregistered");
         }
 
-        public void ActivateBehaviour(MonoBehaviour behaviour)
+        public void ActivateComponent(MonoBehaviour component)
         {
-            activeBehaviours.Add(behaviour);
-            Log.Debug($"{behaviour.GetType().Name} {behaviour.name} activated");
+            activeComponents.Add(component);
+            Log.Debug($"{component.GetType().Name} {component.name} activated");
         }
 
-        public void DeactivateBehaviour(MonoBehaviour behaviour)
+        public void DeactivateComponent(MonoBehaviour component)
         {
-            activeBehaviours.Remove(behaviour);
-            Log.Debug($"{behaviour.GetType().Name} {behaviour.name} deactivated");
+            activeComponents.Remove(component);
+            Log.Debug($"{component.GetType().Name} {component.name} deactivated");
         }
 
         public View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
         {
-            TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? behaviours : activeBehaviours;
+            TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? components : activeComponents;
             return new View<T>(registered.GetAll<T>(), inactivePolicy);
         }
 
         public int CountOf(Type type, RegisterInactivePolicy inactivePolicy)
         {
-            TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? behaviours : activeBehaviours;
+            TMap registered = inactivePolicy == RegisterInactivePolicy.Include ? components : activeComponents;
             return new View<MonoBehaviour>(registered.GetAll(type), inactivePolicy).Count;
         }
 
         public void FindLargestClasses(Type[] classes, int[] counts)
         {
-            behaviours.FindLargestClasses(classes, counts);
+            components.FindLargestClasses(classes, counts);
         }
 
         public T Get<T>() where T : class

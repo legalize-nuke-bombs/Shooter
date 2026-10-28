@@ -40,7 +40,7 @@ namespace Shooter.Infrastructure
             return new Vector2Int(Mathf.FloorToInt(position.x / ChunkSize), Mathf.FloorToInt(position.z / ChunkSize));
         }
 
-        public void AddBehaviour(Vector2Int chunk, MonoBehaviour behaviour)
+        public void AddComponent(Vector2Int chunk, MonoBehaviour component)
         {
             if (!chunks.TryGetValue(chunk, out TMap members))
             {
@@ -48,12 +48,12 @@ namespace Shooter.Infrastructure
                 chunks[chunk] = members;
             }
 
-            members.Add(behaviour);
+            members.Add(component);
         }
 
-        public void TryRemoveBehaviour(Vector2Int chunk, MonoBehaviour behaviour)
+        public void TryRemoveComponent(Vector2Int chunk, MonoBehaviour component)
         {
-            if (chunks.TryGetValue(chunk, out TMap members)) members.Remove(behaviour);
+            if (chunks.TryGetValue(chunk, out TMap members)) members.Remove(component);
         }
 
         public InRadius<T> FindInRadius<T>(Vector3 center, float radius, ChunkInactivePolicy inactivePolicy) where T : class
@@ -112,9 +112,9 @@ namespace Shooter.Infrastructure
                     {
                         while (members.MoveNext())
                         {
-                            var behaviour = (MonoBehaviour)(object)members.Current;
-                            if (inactivePolicy == ChunkInactivePolicy.Exclude && !behaviour.isActiveAndEnabled) continue;
-                            if ((behaviour.transform.position - center).sqrMagnitude <= radiusSquared) return true;
+                            var component = (MonoBehaviour)(object)members.Current;
+                            if (inactivePolicy == ChunkInactivePolicy.Exclude && !component.isActiveAndEnabled) continue;
+                            if ((component.transform.position - center).sqrMagnitude <= radiusSquared) return true;
                         }
 
                         if (!TryEnterNextChunk()) return false;

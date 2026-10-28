@@ -61,7 +61,7 @@ namespace Shooter.Infrastructure
         public static FrozenWorld FreezeWorld()
         {
             Log.Info("Freezing the world...");
-            return FrozenWorld.FreezeAllSaveableObjects();
+            return FrozenWorld.FreezeAllSaveableEntities();
         }
 
         public static bool LoadSaveAndThawWorld(FrozenWorld frozenWorld, string saveLocation)
@@ -77,7 +77,7 @@ namespace Shooter.Infrastructure
 
             if (!SnapshotManager.TryLoadSnapshot(frozenWorld, snapshotBytes)) return false;
 
-            frozenWorld.ThawAllSaveableObjects();
+            frozenWorld.ThawAllSaveableEntities();
             Log.Info($"Loaded {saveLocation}");
             return true;
         }
