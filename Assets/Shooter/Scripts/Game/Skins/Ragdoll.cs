@@ -11,12 +11,8 @@ namespace Shooter.Game
         private const float AngularDamping = 1f;
         private static readonly Journal Log = Logs.Here();
 
-        private ShooterObject shooterObject;
-
         private void Start()
         {
-            shooterObject = GetComponentInParent<ShooterObject>();
-
             int layer = LayerMask.NameToLayer(Hitboxes.LayerName);
             if (layer < 0)
             {
@@ -99,7 +95,7 @@ namespace Shooter.Game
             boneObject.layer = layer;
             shape.excludeLayers = ~LayerMask.GetMask("Default", Hitboxes.LayerName);
 
-            shooterObject.AddComponent<Hitbox>(boneObject).Part = part;
+            boneObject.AddComponent<Hitbox>().Part = part;
 
             Rigidbody partRigidbody = boneObject.AddComponent<Rigidbody>();
             partRigidbody.mass = mass;

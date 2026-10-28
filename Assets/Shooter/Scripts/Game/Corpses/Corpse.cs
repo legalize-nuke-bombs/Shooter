@@ -97,7 +97,7 @@ namespace Shooter.Game
             GameObject modelInstance = Instantiate(skinAsset.Model, transform);
             modelInstance.transform.localPosition = Skin.ModelOffset;
             modelInstance.transform.localRotation = Quaternion.identity;
-            GetComponent<ShooterObject>().AddComponent<Ragdoll>(modelInstance);
+            modelInstance.AddComponent<ShooterObject>().AddComponent<Ragdoll>();
 
             Log.Info($"Corpse {name} dressed as {skin}");
         }

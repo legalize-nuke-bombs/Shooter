@@ -12,12 +12,8 @@ namespace Shooter.Game
         private const float MaxHumanoidScale = 1.4f;
         private static readonly Journal Log = Logs.Here();
 
-        private ShooterObject shooterObject;
-
         private void Start()
         {
-            shooterObject = GetComponentInParent<ShooterObject>();
-
             int layer = LayerMask.NameToLayer(LayerName);
             if (layer < 0)
             {
@@ -92,7 +88,7 @@ namespace Shooter.Game
             hitboxRigidbody.isKinematic = true;
             hitboxRigidbody.useGravity = false;
 
-            shooterObject.AddComponent<Hitbox>(hitboxObject).Part = part;
+            hitboxObject.AddComponent<Hitbox>().Part = part;
             return hitboxObject;
         }
 

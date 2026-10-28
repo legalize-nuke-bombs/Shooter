@@ -38,9 +38,9 @@ namespace Shooter.Game
             animator.runtimeAnimatorController = asset.AnimatorController;
             animator.applyRootMotion = false;
 
-            ShooterObject shooterObject = GetComponent<ShooterObject>();
-            shooterObject.AddComponent<LocomotionAnimator>(ModelInstance);
-            shooterObject.AddComponent<Hitboxes>(ModelInstance);
+            ShooterObject shooterObject = ModelInstance.AddComponent<ShooterObject>();
+            shooterObject.AddComponent<LocomotionAnimator>();
+            shooterObject.AddComponent<Hitboxes>();
 
             Log.Info($"Entity {name} dressed as {asset.Id}, {MeasureHeight(ModelInstance)} m tall");
         }

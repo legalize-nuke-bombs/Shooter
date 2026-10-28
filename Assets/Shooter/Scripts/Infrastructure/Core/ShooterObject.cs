@@ -11,11 +11,9 @@ namespace Shooter.Infrastructure
 
         private void Awake()
         {
-            foreach (MonoBehaviour behaviour in GetComponentsInChildren<MonoBehaviour>(true))
+            foreach (MonoBehaviour behaviour in GetComponents<MonoBehaviour>())
             {
-                if (behaviour == null || behaviour.GetComponentInParent<ShooterObject>(true) != this) continue;
-
-                Register(behaviour);
+                if (behaviour != null) Register(behaviour);
             }
         }
 
@@ -43,9 +41,9 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public T AddComponent<T>(GameObject target) where T : MonoBehaviour
+        public T AddComponent<T>() where T : MonoBehaviour
         {
-            T behaviour = target.AddComponent<T>();
+            T behaviour = gameObject.AddComponent<T>();
             Register(behaviour);
             if (isActiveAndEnabled) Registers.Instance.ActivateBehaviour(behaviour);
             return behaviour;
