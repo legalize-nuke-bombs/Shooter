@@ -10,8 +10,8 @@ namespace Shooter.Infrastructure
 
         [SerializeField] private ShooterTransformObserver.TransformMobility mobility;
 
-        private readonly List<MonoBehaviour> components = new();
-        private readonly List<MonoBehaviour> plainComponents = new();
+        private readonly List<MonoBehaviour> allComponents = new();
+        private readonly List<MonoBehaviour> nativeComponents = new();
         private Vector2Int? chunk;
 
         public ShooterTransformObserver.TransformMobility Mobility => mobility;
@@ -22,7 +22,7 @@ namespace Shooter.Infrastructure
             {
                 if (component == null || component is ShooterComponent or ShooterNetworkComponent) continue;
 
-                plainComponents.Add(component);
+                nativeComponents.Add(component);
                 NotifyComponentAttached(component);
             }
 
@@ -33,7 +33,7 @@ namespace Shooter.Infrastructure
 
         private void OnEnable()
         {
-            foreach (MonoBehaviour component in plainComponents)
+            foreach (MonoBehaviour component in nativeComponents)
             {
                 NotifyComponentEnabled(component);
             }
@@ -41,7 +41,7 @@ namespace Shooter.Infrastructure
 
         private void OnDisable()
         {
-            foreach (MonoBehaviour component in plainComponents)
+            foreach (MonoBehaviour component in nativeComponents)
             {
                 NotifyComponentDisabled(component);
             }
@@ -49,21 +49,21 @@ namespace Shooter.Infrastructure
 
         private void OnDestroy()
         {
-            foreach (MonoBehaviour component in plainComponents)
+            foreach (MonoBehaviour component in nativeComponents)
             {
                 NotifyComponentDetached(component);
             }
         }
 
-        // The entity learns about its object only through Notify calls, direct rather than events: they come on
-        // every enable, disable and move, and no delegates are kept per entity. ShooterComponent and
-        // ShooterNetworkComponent send the component ones from their closed Unity messages, plain components are
-        // reported by the entity itself together with its object, since Unity doesn't tell when one of them alone
-        // is enabled or disabled. A call may come before this entity's Awake, as Unity doesn't order Awake between
-        // the components of one object, so the calls rely only on fields set where they are declared
+        // The entity learns about its object only through Notify calls, direct rather than events: they come on every
+        // enable, disable and move, and no delegates are kept per entity. ShooterComponent and ShooterNetworkComponent
+        // send the component ones from their closed Unity messages, native components, without these bases, are
+        // reported by the entity itself together with its object, since Unity doesn't tell when one of them alone is
+        // enabled or disabled. A call may come before this entity's Awake, as Unity doesn't order Awake between the
+        // components of one object, so the calls rely only on fields set where they are declared
         public void NotifyComponentAttached(MonoBehaviour component)
         {
-            components.Add(component);
+            allComponents.Add(component);
             Registers.Instance.RegisterComponent(component);
             if (chunk != null) Chunks.Instance.AddComponent(chunk.Value, component);
         }
@@ -80,7 +80,7 @@ namespace Shooter.Infrastructure
 
         public void NotifyComponentDetached(MonoBehaviour component)
         {
-            components.Remove(component);
+            allComponents.Remove(component);
             Registers.Instance.UnregisterComponent(component);
             if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, component);
         }
@@ -90,7 +90,7 @@ namespace Shooter.Infrastructure
             Vector2Int movedTo = Chunks.ChunkOf(transform.position);
             if (chunk != null && chunk.Value == movedTo) return;
 
-            foreach (MonoBehaviour component in components)
+            foreach (MonoBehaviour component in allComponents)
             {
                 if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, component);
                 Chunks.Instance.AddComponent(movedTo, component);
