@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class SaveLoaderOnStartup : MonoBehaviour
+    public class SaveLoaderOnStartup : ShooterComponent
     {
         private const string BrokenSaveTitle = "Не удалось загрузить сохранение";
         private const string BrokenSaveDetails = "Файл повреждён или несовместим с этой версией";
@@ -21,7 +21,7 @@ namespace Shooter.Game
 
         public event Action Loaded;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             network = NetworkManager.Singleton;
             if (!network.IsServer) return;
@@ -32,7 +32,7 @@ namespace Shooter.Game
             network.SceneManager.OnLoadComplete += HandleSceneLoaded;
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             if (network.SceneManager != null) network.SceneManager.OnLoadComplete -= HandleSceneLoaded;
         }

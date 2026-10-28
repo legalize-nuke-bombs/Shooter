@@ -1,9 +1,10 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public sealed class LookHitFinder : MonoBehaviour
+    public sealed class LookHitFinder : ShooterComponent
     {
         [SerializeField] private float reach = 10f;
 

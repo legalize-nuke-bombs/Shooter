@@ -7,7 +7,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnSpeech : NetworkBehaviour
+    public class SoundOnSpeech : ShooterNetworkComponent
     {
         [SerializeField] private SoundAsset sound;
 
@@ -15,7 +15,7 @@ namespace Shooter.Game
         private Speaker speaker;
         private ConversationManager conversationManager;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
             speaker = GetComponent<Speaker>();

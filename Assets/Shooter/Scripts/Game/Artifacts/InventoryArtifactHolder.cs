@@ -9,7 +9,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Inventory))]
-    public class InventoryArtifactHolder : NetworkBehaviour, ISaveableComponent, IDigestible, ITimePassedHandler
+    public class InventoryArtifactHolder : ShooterNetworkComponent, ISaveableComponent, IDigestible, ITimePassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -82,7 +82,7 @@ namespace Shooter.Game
             return sb.ToString();
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
         }

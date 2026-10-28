@@ -5,13 +5,13 @@ using Random = UnityEngine.Random;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class MainSpawnPoint : MonoBehaviour
+    public class MainSpawnPoint : ShooterComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         public static MainSpawnPoint PickRandom()
         {
-            Registers.View<MainSpawnPoint> mainSpawnPoints = Registers.Instance.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude);
+            TArray.View<MainSpawnPoint> mainSpawnPoints = Registers.Instance.GetAll<MainSpawnPoint>(RegisterInactivePolicy.Exclude);
 
             if (mainSpawnPoints.Count == 0)
             {

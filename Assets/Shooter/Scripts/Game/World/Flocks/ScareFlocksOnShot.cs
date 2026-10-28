@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Gunner))]
-    public class ScareFlocksOnShot : MonoBehaviour
+    public class ScareFlocksOnShot : ShooterComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -15,17 +15,17 @@ namespace Shooter.Game
 
         private Gunner gunner;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             gunner = GetComponent<Gunner>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             gunner.Shot += Scare;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             gunner.Shot -= Scare;
         }

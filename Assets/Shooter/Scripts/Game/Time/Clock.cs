@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class Clock : NetworkBehaviour, ISaveableComponent, IShooterUpdateable
+    public class Clock : ShooterNetworkComponent, ISaveableComponent, IShooterUpdateable
     {
         public const string StampFormat = "yyyy.MM.dd HH:mm:ss";
         public const long DayLengthSeconds = 86400;

@@ -53,7 +53,7 @@ namespace Shooter.Infrastructure
         private float secondsToLogReport = LogReportSeconds;
         private bool visible;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             DontDestroyOnLoad(gameObject);
         }
@@ -202,8 +202,8 @@ namespace Shooter.Infrastructure
         {
             Registers registers = Registers.Instance;
 
-            AppendPanelLine($"Updates per frame: {FormatCount(registers.CountActive(typeof(IShooterUpdateable)))}");
-            AppendPanelLine($"Late updates per frame: {FormatCount(registers.CountActive(typeof(IShooterLateUpdateable)))}");
+            AppendPanelLine($"Updates per frame: {FormatCount(registers.CountOf(typeof(IShooterUpdateable), RegisterInactivePolicy.Exclude))}");
+            AppendPanelLine($"Late updates per frame: {FormatCount(registers.CountOf(typeof(IShooterLateUpdateable), RegisterInactivePolicy.Exclude))}");
         }
 
         private void AppendRegistryLines()

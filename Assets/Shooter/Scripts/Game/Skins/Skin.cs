@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class Skin : MonoBehaviour
+    public class Skin : ShooterComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -16,7 +16,7 @@ namespace Shooter.Game
 
         public GameObject ModelInstance { get; private set; }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             if (asset == null || asset.Model == null)
             {
@@ -39,9 +39,8 @@ namespace Shooter.Game
             animator.runtimeAnimatorController = asset.AnimatorController;
             animator.applyRootMotion = false;
 
-            ShooterEntity shooterEntity = ModelInstance.AddComponent<ShooterEntity>();
-            shooterEntity.AddComponent<LocomotionAnimator>();
-            shooterEntity.AddComponent<Hitboxes>();
+            ModelInstance.AddComponent<LocomotionAnimator>();
+            ModelInstance.AddComponent<Hitboxes>();
 
             Log.Info($"Entity {name} dressed as {asset.Id}, {MeasureHeight(ModelInstance)} m tall");
         }

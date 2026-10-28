@@ -65,9 +65,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c86ca76859f18ed4c877304f941214f5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7723642521174288508}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c86ca76859f18ed4c877304f941214f5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6004946279441164515}
     - targetCorrespondingSourceObject: {fileID: 8164078558771037576, guid: c86ca76859f18ed4c877304f941214f5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7810142555028561780}
@@ -142,16 +139,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
---- !u!114 &6004946279441164515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8347866746312760610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0

@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Llm))]
-    public class LlmAIObserver : MonoBehaviour
+    public class LlmAIObserver : ShooterComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -13,20 +13,20 @@ namespace Shooter.Game
         private Relations relations;
         private BehaviorReporter behaviorReporter;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             llm = GetComponent<Llm>();
             relations = GetComponent<Relations>();
             behaviorReporter = GetComponent<BehaviorReporter>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             relations.RelationWorsenedByDamage += HandleRelationWorsenedByDamage;
             behaviorReporter.Reported += HandleBehaviorReported;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             relations.RelationWorsenedByDamage -= HandleRelationWorsenedByDamage;
             behaviorReporter.Reported -= HandleBehaviorReported;

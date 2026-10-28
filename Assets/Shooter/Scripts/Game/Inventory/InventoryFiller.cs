@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Inventory))]
-    public class InventoryFiller : NetworkBehaviour
+    public class InventoryFiller : ShooterNetworkComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -26,7 +26,7 @@ namespace Shooter.Game
 
         private Inventory inventory;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
         }

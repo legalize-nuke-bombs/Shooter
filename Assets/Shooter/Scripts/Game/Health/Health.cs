@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public abstract class Health : NetworkBehaviour, IDigestible
+    public abstract class Health : ShooterNetworkComponent, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 

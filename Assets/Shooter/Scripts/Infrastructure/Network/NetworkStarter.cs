@@ -8,7 +8,7 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkManager))]
-    public class NetworkStarter : MonoBehaviour
+    public class NetworkStarter : ShooterComponent
     {
         private const string AnyAddress = "0.0.0.0";
         private const string BadInviteTitle = "Неверный код подключения";
@@ -25,12 +25,12 @@ namespace Shooter.Infrastructure
 
         public NetworkStartFailure StartFailureToShow { get; set; }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             network = GetComponent<NetworkManager>();
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             StopWatchingJoin();
         }

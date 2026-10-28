@@ -1,9 +1,10 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class WeaponRig : MonoBehaviour
+    public class WeaponRig : ShooterComponent
     {
         [SerializeField] private Vector3 seatPosition;
         [SerializeField] private Vector3 seatEuler;

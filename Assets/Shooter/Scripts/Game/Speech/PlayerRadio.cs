@@ -6,14 +6,14 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
-    public class PlayerRadio : NetworkBehaviour
+    public class PlayerRadio : ShooterNetworkComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         private Character character;
         private ConversationManager conversationManager;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
             conversationManager = Registers.Instance.Get<ConversationManager>();

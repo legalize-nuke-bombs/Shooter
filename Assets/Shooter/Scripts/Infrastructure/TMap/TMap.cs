@@ -73,11 +73,6 @@ namespace Shooter.Infrastructure
             return new TArray.View<T>(array);
         }
 
-        public TArray.View<MonoBehaviour> GetAll(Type key)
-        {
-            arraysByKey.TryGetValue(key, out TArray array);
-            return new TArray.View<MonoBehaviour>(array);
-        }
 
         public void FindLargestClasses(Type[] classes, int[] counts)
         {

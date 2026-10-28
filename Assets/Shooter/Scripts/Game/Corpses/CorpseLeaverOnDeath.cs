@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
-    public class CorpseLeaverOnDeath : MonoBehaviour
+    public class CorpseLeaverOnDeath : ShooterComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -13,17 +13,17 @@ namespace Shooter.Game
 
         private Health health;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += LeaveCorpse;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= LeaveCorpse;
         }

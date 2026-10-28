@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(LocalWeaponView))]
     [RequireComponent(typeof(Footsteps))]
-    public class LocalWeaponMotion : NetworkBehaviour, IShooterLateUpdateable
+    public class LocalWeaponMotion : ShooterNetworkComponent, IShooterLateUpdateable
     {
         private const float MinTeleportDistance = 1f;
 
@@ -47,14 +47,14 @@ namespace Shooter.Game
         private float tiltAngle;
         private float tiltAngleVelocity;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             localWeaponView = GetComponent<LocalWeaponView>();
             footsteps = GetComponent<Footsteps>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             tracking = false;
         }

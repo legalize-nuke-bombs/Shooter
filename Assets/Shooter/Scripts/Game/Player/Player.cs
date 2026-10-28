@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(IncrementalId))]
-    public class Player : NetworkBehaviour, ISaveableComponent
+    public class Player : ShooterNetworkComponent, ISaveableComponent
     {
         private const ulong NoClient = ulong.MaxValue;
 
@@ -38,7 +38,7 @@ namespace Shooter.Game
             PublicKey = content.ToObject<SaveData>().PublicKey;
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             incrementalId = GetComponent<IncrementalId>();
         }

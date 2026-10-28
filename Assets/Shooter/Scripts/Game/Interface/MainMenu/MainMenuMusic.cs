@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
-    public class MainMenuMusic : MonoBehaviour, IShooterUpdateable
+    public class MainMenuMusic : ShooterComponent, IShooterUpdateable
     {
         [SerializeField] private AudioClip[] tracks;
         [SerializeField] private float fadeInSeconds = 4f;
@@ -13,7 +13,7 @@ namespace Shooter.Game
         private float elapsedFadeInSeconds;
         private AudioSource audioSource;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             audioSource = GetComponent<AudioSource>();
             audioSource.loop = true;

@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class BulletHoles : NetworkBehaviour, ISaveableComponent
+    public class BulletHoles : ShooterNetworkComponent, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

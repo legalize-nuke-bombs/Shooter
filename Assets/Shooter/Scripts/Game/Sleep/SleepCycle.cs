@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class SleepCycle : NetworkBehaviour
+    public class SleepCycle : ShooterNetworkComponent
     {
         private const float SkipTimeScale = 300f;
         private const double BedtimeStartHour = 22;

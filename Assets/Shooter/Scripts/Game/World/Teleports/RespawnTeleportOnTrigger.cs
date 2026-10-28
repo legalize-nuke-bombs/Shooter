@@ -11,17 +11,17 @@ namespace Shooter.Game
 
         private Trigger trigger;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             trigger = GetComponent<Trigger>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             trigger.Fired += TeleportCharacterToRespawn;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             trigger.Fired -= TeleportCharacterToRespawn;
         }

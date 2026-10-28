@@ -13,7 +13,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(Respawner))]
-    public class PlayerController : NetworkBehaviour, IShooterUpdateable, IShooterLateUpdateable
+    public class PlayerController : ShooterNetworkComponent, IShooterUpdateable, IShooterLateUpdateable
     {
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
@@ -84,7 +84,7 @@ namespace Shooter.Game
             }
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             movement = GetComponent<RpcMovement>();

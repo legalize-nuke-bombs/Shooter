@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -5,23 +6,23 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Crafter))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnCraft : MonoBehaviour
+    public class SoundOnCraft : ShooterComponent
     {
         private Crafter crafter;
         private Speaker speaker;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             crafter = GetComponent<Crafter>();
             speaker = GetComponent<Speaker>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             crafter.Crafted += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             crafter.Crafted -= Play;
         }

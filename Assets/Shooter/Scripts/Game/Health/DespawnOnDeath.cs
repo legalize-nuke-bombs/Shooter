@@ -6,23 +6,23 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
-    public class DespawnOnDeath : NetworkBehaviour
+    public class DespawnOnDeath : ShooterNetworkComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         private Health health;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.DeathFinished += Despawn;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.DeathFinished -= Despawn;
         }

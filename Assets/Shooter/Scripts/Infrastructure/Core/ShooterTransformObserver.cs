@@ -1,34 +1,21 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [AddComponentMenu("")]
     [DisallowMultipleComponent]
-    public class ShooterTransformObserver : MonoBehaviour, IShooterLateUpdateable
+    public class ShooterTransformObserver : ShooterComponent, IShooterLateUpdateable
     {
-        [SerializeField] private TransformMobility mobility;
-
         private readonly List<ShooterTransformObserver> children = new();
         private ShooterTransformObserver parent;
         private Vector3 lastPosition;
 
-        public event Action Placed;
-        public event Action Moved;
-        public event Action Removed;
-
-        public TransformMobility Mobility
-        {
-            get => mobility;
-            set => mobility = value;
-        }
-
         private void Start()
         {
             lastPosition = transform.position;
-            Placed?.Invoke();
             ChangeParent(FindParent());
-            enabled = (mobility == TransformMobility.Dynamic);
+            enabled = (Entity.Mobility == TransformMobility.Dynamic);
         }
 
         private void OnTransformParentChanged()
@@ -37,10 +24,9 @@ namespace Shooter.Infrastructure
             Move();
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             if (parent != null) parent.children.Remove(this);
-            Removed?.Invoke();
         }
 
         public void ShooterLateUpdate()
@@ -51,7 +37,7 @@ namespace Shooter.Infrastructure
         private void Move()
         {
             lastPosition = transform.position;
-            Moved?.Invoke();
+            Entity.NotifyMoved();
             foreach (ShooterTransformObserver child in children)
             {
                 child.Move();

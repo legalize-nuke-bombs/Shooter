@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class Corpse : NetworkBehaviour, ISaveableComponent
+    public class Corpse : ShooterNetworkComponent, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -98,8 +98,7 @@ namespace Shooter.Game
             GameObject modelInstance = Instantiate(skinAsset.Model, transform);
             modelInstance.transform.localPosition = Skin.ModelOffset;
             modelInstance.transform.localRotation = Quaternion.identity;
-            ShooterEntity shooterEntity = modelInstance.AddComponent<ShooterEntity>();
-            shooterEntity.AddComponent<Ragdoll>();
+            modelInstance.AddComponent<Ragdoll>();
 
             Log.Info($"Corpse {name} dressed as {skin}");
         }

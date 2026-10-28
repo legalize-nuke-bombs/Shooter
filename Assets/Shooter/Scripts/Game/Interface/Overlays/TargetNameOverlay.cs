@@ -15,7 +15,7 @@ namespace Shooter.Game
         private string shownName = string.Empty;
         private Label nameLabel;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             lookHitFinder = GetComponent<LookHitFinder>();
         }

@@ -7,7 +7,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Sleeper))]
-    public class SleepView : NetworkBehaviour, IShooterUpdateable
+    public class SleepView : ShooterNetworkComponent, IShooterUpdateable
     {
         private const float EyesClosingSeconds = 0.45f;
         private const float EyesOpeningSeconds = 0.7f;
@@ -23,7 +23,7 @@ namespace Shooter.Game
 
         public float EyesClosedAmount { get; private set; }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             sleeper = GetComponent<Sleeper>();

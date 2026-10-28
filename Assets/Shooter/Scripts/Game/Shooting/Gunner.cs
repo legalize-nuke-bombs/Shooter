@@ -11,7 +11,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Interactor))]
     [RequireComponent(typeof(Hands))]
-    public class Gunner : NetworkBehaviour, IShooterUpdateable
+    public class Gunner : ShooterNetworkComponent, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -37,7 +37,7 @@ namespace Shooter.Game
 
         private static int ShotMask => shotMask != 0 ? shotMask : shotMask = Interactor.LookMask | LayerMask.GetMask("Water");
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
             inventoryHolder = GetComponent<InventoryHolder>();

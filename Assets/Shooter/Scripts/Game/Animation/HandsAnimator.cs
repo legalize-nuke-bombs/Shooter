@@ -1,4 +1,5 @@
 using System.Collections;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -6,7 +7,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
     [RequireComponent(typeof(Skin))]
-    public class HandsAnimator : MonoBehaviour
+    public class HandsAnimator : ShooterComponent
     {
         private const string ActionLayer = "Armed";
         private const float ActionFade = 0.05f;
@@ -17,18 +18,18 @@ namespace Shooter.Game
         private Hands hands;
         private Skin skin;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             hands = GetComponent<Hands>();
             skin = GetComponent<Skin>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             hands.ActionStarted += PlayAction;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             hands.ActionStarted -= PlayAction;
         }

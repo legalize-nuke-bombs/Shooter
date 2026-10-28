@@ -4,7 +4,7 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class IncrementalIds : MonoBehaviour, ISaveableComponent
+    public class IncrementalIds : ShooterComponent, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

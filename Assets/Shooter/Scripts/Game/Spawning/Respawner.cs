@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(RespawnPosition))]
-    public class Respawner : NetworkBehaviour
+    public class Respawner : ShooterNetworkComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -16,7 +16,7 @@ namespace Shooter.Game
         private Movement movement;
         private RespawnPosition respawnPosition;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
             movement = GetComponent<Movement>();

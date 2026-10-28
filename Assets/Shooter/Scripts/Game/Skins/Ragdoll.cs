@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
-    public class Ragdoll : MonoBehaviour
+    public class Ragdoll : ShooterComponent
     {
         private const float LinearDamping = 0.5f;
         private const float AngularDamping = 1f;

@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Light))]
-    public class Sunlight : MonoBehaviour, IShooterUpdateable
+    public class Sunlight : ShooterComponent, IShooterUpdateable
     {
         internal const float ShadowHandoverElevation = -6f;
 
@@ -14,7 +14,7 @@ namespace Shooter.Game
         private Clock clock;
         private Light sunLight;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             sunLight = GetComponent<Light>();
         }

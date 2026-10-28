@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
-    public class Stamina : NetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
+    public class Stamina : ShooterNetworkComponent, IDigestible, ISaveableComponent, ITimePassedHandler
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
@@ -45,19 +45,19 @@ namespace Shooter.Game
 
         public float MaxAmount => Mathf.Max(maxAmount, 1f);
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             hands = GetComponent<Hands>();
             enabled = false;
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             hands.Checking += CanAfford;
             hands.Performed += SpendOn;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             hands.Checking -= CanAfford;
             hands.Performed -= SpendOn;

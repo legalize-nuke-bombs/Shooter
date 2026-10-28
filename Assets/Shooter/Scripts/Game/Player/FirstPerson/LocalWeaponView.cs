@@ -9,7 +9,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
-    public class LocalWeaponView : NetworkBehaviour, IShooterLateUpdateable
+    public class LocalWeaponView : ShooterNetworkComponent, IShooterLateUpdateable
     {
         private const string FirstPersonLayerName = "FirstPerson";
 
@@ -32,7 +32,7 @@ namespace Shooter.Game
 
         public Transform WeaponHold => shownWeapon == null ? null : weaponHold;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             inventory = GetComponent<Inventory>();

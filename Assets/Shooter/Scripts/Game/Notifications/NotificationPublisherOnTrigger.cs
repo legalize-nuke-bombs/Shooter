@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Trigger))]
-    public class NotificationPublisherOnTrigger : MonoBehaviour, ISaveableComponent
+    public class NotificationPublisherOnTrigger : ShooterComponent, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -36,17 +36,17 @@ namespace Shooter.Game
             notifiedCharacterIds = new HashSet<long>(saveData.Characters);
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             trigger = GetComponent<Trigger>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             trigger.Fired += Notify;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             trigger.Fired -= Notify;
         }

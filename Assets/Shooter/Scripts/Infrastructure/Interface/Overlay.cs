@@ -5,19 +5,19 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PanelRenderer))]
-    public abstract class Overlay : MonoBehaviour
+    public abstract class Overlay : ShooterComponent
     {
         private PanelRenderer panelRenderer;
 
         protected bool IsBound { get; private set; }
 
-        protected virtual void OnEnable()
+        protected override void ShooterOnEnable()
         {
             panelRenderer = GetComponent<PanelRenderer>();
             panelRenderer.RegisterUIReloadCallback(HandleUIReloaded);
         }
 
-        protected virtual void OnDisable()
+        protected override void ShooterOnDisable()
         {
             panelRenderer.UnregisterUIReloadCallback(HandleUIReloaded);
             UnbindElementsIfBound();

@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
-    public class SceneSwitcherOnStartup : MonoBehaviour
+    public class SceneSwitcherOnStartup : ShooterComponent
     {
         [SerializeField] private string scene;
 

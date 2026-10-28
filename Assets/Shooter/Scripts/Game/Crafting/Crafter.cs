@@ -9,7 +9,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Inventory))]
-    public class Crafter : NetworkBehaviour
+    public class Crafter : ShooterNetworkComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -20,7 +20,7 @@ namespace Shooter.Game
 
         public event Action<CraftAsset> Crafted;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             inventory = GetComponent<Inventory>();
             foreach (CraftAsset craft in availableCrafts)

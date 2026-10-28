@@ -6,25 +6,25 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Gunner))]
     [RequireComponent(typeof(Character))]
-    public class DealDamageOnShot : MonoBehaviour
+    public class DealDamageOnShot : ShooterComponent
     {
         private static readonly Journal Log = Logs.Here();
 
         private Gunner gunner;
         private Character character;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             gunner = GetComponent<Gunner>();
             character = GetComponent<Character>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             gunner.Shot += DealDamage;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             gunner.Shot -= DealDamage;
         }

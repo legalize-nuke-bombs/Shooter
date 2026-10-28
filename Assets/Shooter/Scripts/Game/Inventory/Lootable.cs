@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(IncrementalId))]
-    public class Lootable : NetworkBehaviour, IUsable
+    public class Lootable : ShooterNetworkComponent, IUsable
     {
         public const string ShownNameField = nameof(shownName);
         private static readonly Journal Log = Logs.Here();

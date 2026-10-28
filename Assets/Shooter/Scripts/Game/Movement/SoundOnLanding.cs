@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -6,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(RpcMovement))]
     [RequireComponent(typeof(Speaker))]
     [RequireComponent(typeof(CharacterController))]
-    public class SoundOnLanding : MonoBehaviour
+    public class SoundOnLanding : ShooterComponent
     {
         [SerializeField] private float minHeight = 0.6f;
         [SerializeField] private SurfaceSounds sounds;
@@ -16,19 +17,19 @@ namespace Shooter.Game
         private Speaker speaker;
         private CharacterController characterController;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             movement = GetComponent<RpcMovement>();
             speaker = GetComponent<Speaker>();
             characterController = GetComponent<CharacterController>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             movement.Landed += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             movement.Landed -= Play;
         }

@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
-    public class IncrementalId : NetworkBehaviour, ISaveableComponent
+    public class IncrementalId : ShooterNetworkComponent, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -5,25 +6,25 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnWakeUp : MonoBehaviour
+    public class SoundOnWakeUp : ShooterComponent
     {
         [SerializeField] private SoundAsset sound;
 
         private Sleeper sleeper;
         private Speaker speaker;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             sleeper = GetComponent<Sleeper>();
             speaker = GetComponent<Speaker>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             sleeper.WokeUp += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             sleeper.WokeUp -= Play;
         }

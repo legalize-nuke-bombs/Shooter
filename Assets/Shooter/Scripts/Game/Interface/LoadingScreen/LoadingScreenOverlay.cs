@@ -38,7 +38,7 @@ namespace Shooter.Game
         private string stageTitle;
         private Label tipLabel;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             DontDestroyOnLoad(gameObject);
         }
@@ -50,7 +50,7 @@ namespace Shooter.Game
             network.OnClientConnectedCallback += HandleClientConnected;
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             network.OnClientStarted -= HandleClientStarted;
             network.OnClientConnectedCallback -= HandleClientConnected;

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
-    public class SceneSwitcherOnNetworkStop : MonoBehaviour
+    public class SceneSwitcherOnNetworkStop : ShooterComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -14,7 +14,7 @@ namespace Shooter.Infrastructure
         private NetworkManager network;
         private bool switching;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             network = NetworkManager.Singleton;
             network.OnClientStopped += HandleNetworkStopped;
@@ -27,7 +27,7 @@ namespace Shooter.Infrastructure
             if (!network.IsListening) SwitchScene();
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             network.OnClientStopped -= HandleNetworkStopped;
             network.OnServerStopped -= HandleNetworkStopped;

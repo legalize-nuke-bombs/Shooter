@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -5,25 +6,25 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(EarSpeaker))]
-    public class SoundOnDeath : MonoBehaviour
+    public class SoundOnDeath : ShooterComponent
     {
         [SerializeField] private EarSoundAsset sound;
 
         private Health health;
         private EarSpeaker earSpeaker;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += Play;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= Play;
         }

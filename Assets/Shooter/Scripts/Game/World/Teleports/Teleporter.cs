@@ -1,10 +1,11 @@
 using System;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public abstract class Teleporter : MonoBehaviour
+    public abstract class Teleporter : ShooterComponent
     {
         public event Action<Character> Teleported;
 

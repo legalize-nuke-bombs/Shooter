@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(IncrementalId))]
-    public class Character : MonoBehaviour, IDigestible
+    public class Character : ShooterComponent, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -15,7 +15,7 @@ namespace Shooter.Game
         [SerializeField] private Faction faction;
         public Faction Faction => faction;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             incrementalId = GetComponent <IncrementalId>();
             if (faction == null)

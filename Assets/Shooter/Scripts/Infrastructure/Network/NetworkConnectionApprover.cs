@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkManager))]
-    public class NetworkConnectionApprover : MonoBehaviour
+    public class NetworkConnectionApprover : ShooterComponent
     {
         private const int PlayerNameLengthLimit = 24;
         private const string DefaultPlayerName = "Player";
@@ -17,7 +17,7 @@ namespace Shooter.Infrastructure
 
         private NetworkManager network;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             network = GetComponent<NetworkManager>();
             network.NetworkConfig.ConnectionApproval = true;
@@ -26,7 +26,7 @@ namespace Shooter.Infrastructure
             network.OnServerStopped += ForgetAllClients;
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             network.ConnectionApprovalCallback -= ApproveOrRejectConnection;
             network.OnClientDisconnectCallback -= ForgetDisconnectedClient;

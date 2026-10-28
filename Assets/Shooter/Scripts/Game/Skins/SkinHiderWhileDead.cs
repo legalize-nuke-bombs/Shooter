@@ -7,13 +7,13 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Skin))]
-    public class SkinHiderWhileDead : NetworkBehaviour, IShooterLateUpdateable
+    public class SkinHiderWhileDead : ShooterNetworkComponent, IShooterLateUpdateable
     {
         private Health health;
         private Skin skin;
         private bool modelVisible;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
             skin = GetComponent<Skin>();

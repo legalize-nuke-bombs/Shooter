@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class PlayerSpawner : MonoBehaviour
+    public class PlayerSpawner : ShooterComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -18,7 +18,7 @@ namespace Shooter.Game
         private NetworkConnectionApprover networkConnectionApprover;
         private bool worldLoaded;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             network = NetworkManager.Singleton;
             networkConnectionApprover = network.GetComponent<NetworkConnectionApprover>();
@@ -27,7 +27,7 @@ namespace Shooter.Game
             saveLoaderOnStartup.Loaded += HandleSaveLoaded;
         }
 
-        private void OnDestroy()
+        protected override void ShooterOnDestroy()
         {
             network.OnClientConnectedCallback -= HandleClientConnected;
             network.OnClientDisconnectCallback -= HandleClientDisconnected;

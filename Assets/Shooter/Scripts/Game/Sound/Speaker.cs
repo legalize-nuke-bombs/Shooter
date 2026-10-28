@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class Speaker : NetworkBehaviour
+    public class Speaker : ShooterNetworkComponent
     {
         private const int MaxVoices = 8;
         private static readonly Journal Log = Logs.Here();

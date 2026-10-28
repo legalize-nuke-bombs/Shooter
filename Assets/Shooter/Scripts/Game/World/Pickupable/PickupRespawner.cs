@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkObject))]
-    public class PickupRespawner : MonoBehaviour, ISaveableComponent, IHourPassedHandler
+    public class PickupRespawner : ShooterComponent, ISaveableComponent, IHourPassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -41,7 +41,7 @@ namespace Shooter.Game
             rolledUntil = saveData.Alive ? null : saveData.RolledUntil;
         }
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             clock = Registers.Instance.Get<Clock>();
             enabled = NetworkManager.Singleton.IsServer;

@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(InventoryExchanger))]
-    public class PlayerInventoryObserver : NetworkBehaviour, IToastSource
+    public class PlayerInventoryObserver : ShooterNetworkComponent, IToastSource
     {
         [SerializeField] private EarSoundAsset sound;
 
@@ -16,7 +16,7 @@ namespace Shooter.Game
 
         public event Action<Toast> ToastRaised;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             inventoryExchanger = GetComponent<InventoryExchanger>();
         }

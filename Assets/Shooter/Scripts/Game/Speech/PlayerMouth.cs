@@ -9,7 +9,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Sleeper))]
-    public class PlayerMouth : NetworkBehaviour, IShooterUpdateable
+    public class PlayerMouth : ShooterNetworkComponent, IShooterUpdateable
     {
         public const float TalkReach = 8f;
         public const int MaxSpeechLength = 300;
@@ -33,7 +33,7 @@ namespace Shooter.Game
 
         public event Action TalkClosed;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             character = GetComponent<Character>();
             conversationManager = Registers.Instance.Get<ConversationManager>();
@@ -53,12 +53,12 @@ namespace Shooter.Game
             enabled = false;
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += CloseTalk;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= CloseTalk;
             ForgetTalker();

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class RespawnPosition : MonoBehaviour, ISaveableComponent
+    public class RespawnPosition : ShooterComponent, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

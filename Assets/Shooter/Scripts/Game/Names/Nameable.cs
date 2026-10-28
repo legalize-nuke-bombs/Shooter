@@ -1,10 +1,11 @@
+using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public abstract class Nameable : NetworkBehaviour, IDigestible
+    public abstract class Nameable : ShooterNetworkComponent, IDigestible
     {
         public DigestionPriority Priority => DigestionPriority.High;
 

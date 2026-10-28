@@ -8,14 +8,14 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Intoxication))]
-    public class IntoxicationView : NetworkBehaviour, IShooterUpdateable
+    public class IntoxicationView : ShooterNetworkComponent, IShooterUpdateable
     {
         private readonly Dictionary<ToxinAsset, List<PerceptionEffect>> perceptionEffectsByToxin = new();
 
         private Player player;
         private Intoxication intoxication;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             player = GetComponent<Player>();
             intoxication = GetComponent<Intoxication>();

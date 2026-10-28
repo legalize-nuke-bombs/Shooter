@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
-    public class Hands : NetworkBehaviour, IDigestible, IShooterUpdateable
+    public class Hands : ShooterNetworkComponent, IDigestible, IShooterUpdateable
     {
         private const string DeadRefusal = "dead";
         private const string BusyHandsRefusal = "hands busy";
@@ -44,18 +44,18 @@ namespace Shooter.Game
 
         public DigestionPriority Priority => DigestionPriority.Low;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
             enabled = false;
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += InterruptAction;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= InterruptAction;
         }

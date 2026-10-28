@@ -8,7 +8,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Hands))]
-    public class Sleeper : NetworkBehaviour, IDigestible, ISaveableComponent
+    public class Sleeper : ShooterNetworkComponent, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -45,20 +45,20 @@ namespace Shooter.Game
 
         public event Action WokeUp;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
             hands = GetComponent<Hands>();
             sleepCycle = Registers.Instance.Get<SleepCycle>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             health.Died += StopSleepingOnDeath;
             hands.Checking += AllowsOnlyWhileAwake;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             health.Died -= StopSleepingOnDeath;
             hands.Checking -= AllowsOnlyWhileAwake;

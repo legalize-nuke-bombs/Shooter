@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
-    public abstract class Hunger : NetworkBehaviour, IDigestible, ITimePassedHandler
+    public abstract class Hunger : ShooterNetworkComponent, IDigestible, ITimePassedHandler
     {
         [SerializeField] private float sprintCost = 0.5f;
         [SerializeField] private float walkCost = 0.25f;
@@ -17,19 +18,19 @@ namespace Shooter.Game
         public abstract float Amount { get; }
         public abstract float MaxAmount { get; }
 
-        protected virtual void Awake()
+        protected override void ShooterAwake()
         {
             hands = GetComponent<Hands>();
             enabled = false;
         }
 
-        protected virtual void OnEnable()
+        protected override void ShooterOnEnable()
         {
             hands.Checking += CanAfford;
             hands.Performed += SpendOn;
         }
 
-        protected virtual void OnDisable()
+        protected override void ShooterOnDisable()
         {
             hands.Checking -= CanAfford;
             hands.Performed -= SpendOn;

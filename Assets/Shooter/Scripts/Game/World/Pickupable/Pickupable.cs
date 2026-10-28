@@ -9,7 +9,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(IncrementalId))]
-    public class Pickupable : NetworkBehaviour, IUsable, IDigestible
+    public class Pickupable : ShooterNetworkComponent, IUsable, IDigestible
     {
         private static readonly Journal Log = Logs.Here();
 

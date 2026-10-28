@@ -1,4 +1,5 @@
 using System;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -6,7 +7,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerConversations))]
     [RequireComponent(typeof(PlayerController))]
-    public class PlayerConversationObserver : MonoBehaviour, IToastSource
+    public class PlayerConversationObserver : ShooterComponent, IToastSource
     {
         [SerializeField] private IconAsset icon;
         [SerializeField] private EarSoundAsset sound;
@@ -16,18 +17,18 @@ namespace Shooter.Game
 
         public event Action<Toast> ToastRaised;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             playerConversations = GetComponent<PlayerConversations>();
             playerController = GetComponent<PlayerController>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             playerConversations.LiveLineArrived += HandleLiveLineArrived;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             playerConversations.LiveLineArrived -= HandleLiveLineArrived;
         }

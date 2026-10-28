@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -5,23 +6,23 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(RespawnPosition))]
-    public class RespawnPositionOnFallAsleep : MonoBehaviour
+    public class RespawnPositionOnFallAsleep : ShooterComponent
     {
         private Sleeper sleeper;
         private RespawnPosition respawnPosition;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             sleeper = GetComponent<Sleeper>();
             respawnPosition = GetComponent<RespawnPosition>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             sleeper.FellAsleep += RememberSleepingPlace;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             sleeper.FellAsleep -= RememberSleepingPlace;
         }

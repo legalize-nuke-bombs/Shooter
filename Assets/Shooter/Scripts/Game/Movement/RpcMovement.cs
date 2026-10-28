@@ -1,4 +1,5 @@
 using System;
+using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -22,9 +23,9 @@ namespace Shooter.Game
         private int lastSteerTick;
         private Vector2 steeringInput;
 
-        protected override void Awake()
+        protected override void ShooterAwake()
         {
-            base.Awake();
+            base.ShooterAwake();
 
             characterController = GetComponent<CharacterController>();
         }

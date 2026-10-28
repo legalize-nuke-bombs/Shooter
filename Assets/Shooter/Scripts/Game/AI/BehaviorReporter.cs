@@ -1,10 +1,11 @@
 using System;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class BehaviorReporter : MonoBehaviour
+    public class BehaviorReporter : ShooterComponent
     {
         public event Action<BehaviorReport> Reported;
 

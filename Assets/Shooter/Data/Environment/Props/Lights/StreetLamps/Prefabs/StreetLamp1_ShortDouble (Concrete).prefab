@@ -254,7 +254,6 @@ GameObject:
   - component: {fileID: 427411115658280303}
   - component: {fileID: 4010349567147579858}
   - component: {fileID: 717395209450811442}
-  - component: {fileID: 571027973214848302}
   m_Layer: 0
   m_Name: StreetLamp1_ShortDouble (Concrete)
   m_TagString: Untagged
@@ -396,18 +395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
---- !u!114 &571027973214848302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263881239168321199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &1726197021241180716
 GameObject:

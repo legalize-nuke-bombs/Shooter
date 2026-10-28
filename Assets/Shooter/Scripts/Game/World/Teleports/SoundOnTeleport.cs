@@ -1,26 +1,27 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Teleporter))]
-    public class SoundOnTeleport : MonoBehaviour
+    public class SoundOnTeleport : ShooterComponent
     {
         [SerializeField] private EarSoundAsset sound;
 
         private Teleporter teleporter;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             teleporter = GetComponent<Teleporter>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             teleporter.Teleported += PlayForTeleported;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             teleporter.Teleported -= PlayForTeleported;
         }

@@ -1,3 +1,4 @@
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
@@ -5,23 +6,23 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(NotificationRecipient))]
-    public class LlmNotificationObserver : MonoBehaviour
+    public class LlmNotificationObserver : ShooterComponent
     {
         private Llm llm;
         private NotificationRecipient notificationRecipient;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             llm = GetComponent<Llm>();
             notificationRecipient = GetComponent<NotificationRecipient>();
         }
 
-        private void OnEnable()
+        protected override void ShooterOnEnable()
         {
             notificationRecipient.NotificationReceived += HandleNotificationReceived;
         }
 
-        private void OnDisable()
+        protected override void ShooterOnDisable()
         {
             notificationRecipient.NotificationReceived -= HandleNotificationReceived;
         }

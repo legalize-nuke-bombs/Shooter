@@ -20,7 +20,7 @@ namespace Shooter.Game
         private string interactKey = string.Empty;
         private string shownHint = string.Empty;
 
-        private void Awake()
+        protected override void ShooterAwake()
         {
             lookHitFinder = GetComponent<LookHitFinder>();
         }
