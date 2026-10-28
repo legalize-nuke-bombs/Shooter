@@ -156,34 +156,17 @@ namespace Shooter.Infrastructure
         public readonly struct View<T> where T : class
         {
             private readonly TArray array;
-            private readonly RegisterInactivePolicy inactivePolicy;
 
-            public View(TArray array, RegisterInactivePolicy inactivePolicy)
+            public View(TArray array)
             {
                 this.array = array;
-                this.inactivePolicy = inactivePolicy;
             }
 
-            public int Count
-            {
-                get
-                {
-                    if (array == null) return 0;
-                    if (inactivePolicy == RegisterInactivePolicy.Include) return array.count;
-
-                    int count = 0;
-                    foreach (T element in this)
-                    {
-                        count++;
-                    }
-
-                    return count;
-                }
-            }
+            public int Count => array == null ? 0 : array.count;
 
             public Enumerator GetEnumerator()
             {
-                return new Enumerator(array, inactivePolicy);
+                return new Enumerator(array);
             }
 
             public bool TryGetFirst(out T first)
@@ -201,14 +184,12 @@ namespace Shooter.Infrastructure
             public ref struct Enumerator
             {
                 private readonly TArray array;
-                private readonly RegisterInactivePolicy inactivePolicy;
                 private int position;
                 private T current;
 
-                public Enumerator(TArray array, RegisterInactivePolicy inactivePolicy)
+                public Enumerator(TArray array)
                 {
                     this.array = array;
-                    this.inactivePolicy = inactivePolicy;
                     position = 0;
                     current = null;
                 }
@@ -222,7 +203,6 @@ namespace Shooter.Infrastructure
                         MonoBehaviour behaviour = array.entries[position].Behaviour;
                         position++;
                         if (behaviour is null) continue;
-                        if (inactivePolicy == RegisterInactivePolicy.Exclude && !behaviour.isActiveAndEnabled) continue;
 
                         current = (T)(object)behaviour;
                         return true;

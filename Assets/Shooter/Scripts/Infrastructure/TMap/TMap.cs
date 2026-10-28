@@ -62,16 +62,21 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public int CountOf(Type key, RegisterInactivePolicy inactivePolicy)
+        public int CountOf(Type key)
         {
-            arraysByKey.TryGetValue(key, out TArray array);
-            return new TArray.View<MonoBehaviour>(array, inactivePolicy).Count;
+            return arraysByKey.TryGetValue(key, out TArray array) ? array.Count : 0;
         }
 
-        public TArray.View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class
+        public TArray.View<T> GetAll<T>() where T : class
         {
             arraysByKey.TryGetValue(typeof(T), out TArray array);
-            return new TArray.View<T>(array, inactivePolicy);
+            return new TArray.View<T>(array);
+        }
+
+        public TArray.View<MonoBehaviour> GetAll(Type key)
+        {
+            arraysByKey.TryGetValue(key, out TArray array);
+            return new TArray.View<MonoBehaviour>(array);
         }
 
         public void FindLargestClasses(Type[] classes, int[] counts)
