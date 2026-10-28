@@ -40,3 +40,8 @@
 * NGO
 * Bouncy Castle
 * Newtonsoft
+
+# Supported LLM providers
+* Polza
+* Claude
+* Ollama (very good pc is required)
