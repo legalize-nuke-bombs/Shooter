@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
   m_Name: Hunger
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
+  id: 
   content: 'You have a saturation level, expressed as a number from 0 to 100. When
     the saturation level reaches 0, you won''t be able to run or jump. To restore
     your saturation level, you need to eat edible items.
 
     Your character automatically
-    eats edible items from your inventory if hungry.
-
-    You have to look for food.'
+    eats edible items from your inventory if hungry.'
