@@ -11,8 +11,8 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private int messageLimit = 10000;
-        [SerializeField] private int maxSize = 180000;
-        [SerializeField] private int hardSize = 230000;
+        [SerializeField] private int maxSize = 360000;
+        [SerializeField] private int hardSize = 460000;
 
         private readonly List<LlmMessage> messages = new();
 
