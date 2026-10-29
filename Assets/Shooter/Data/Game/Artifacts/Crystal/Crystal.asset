@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 135a0bda19dc44438fdf5b50a684c1f2, type: 3}
+  m_Name: Crystal
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.ArtifactAsset
+  id: crystal
+  title: "\u041A\u0440\u0438\u0441\u0442\u0430\u043B\u043B"
+  description: "\u0414\u0440\u0443\u0437\u0430 \u043E\u0441\u0442\u0440\u044B\u0445
+    \u043A\u0440\u0438\u0441\u0442\u0430\u043B\u043B\u043E\u0432, \u0441\u0438\u043D\u0438\u0445
+    \u0443 \u043E\u0441\u043D\u043E\u0432\u0430\u043D\u0438\u044F \u0438 \u043A\u0440\u0430\u0441\u043D\u044B\u0445
+    \u043A \u0432\u0435\u0440\u0448\u0438\u043D\u0430\u043C. \u0421\u043B\u0430\u0431\u043E
+    \u0441\u0432\u0435\u0442\u0438\u0442\u0441\u044F."
+  model: {fileID: 6352619290808437225, guid: 7b614d5426ba3fd47bc805f7d4b3975b, type: 3}
+  icon: {fileID: 11400000, guid: 4c157d07d681ccb4f9200d1ed2e2f43e, type: 2}
+  cells: {x: 1, y: 1}
+  promptDescription: Crystal, a cluster of sharp crystals, blue at the base and red
+    at the tips, faintly glowing
+  equipable: 0
+  effects: []
