@@ -47,6 +47,11 @@ namespace Shooter.Game
             [FogQualities.Max] = "Максимальный"
         };
 
+        public static string GetScreenResolutionTitle(string key)
+        {
+            return (key ?? "").Replace("x", " × ");
+        }
+
         public static string GetUpscalerTitle(string key)
         {
             return GetTitleOrKey(UpscalerTitles, key);

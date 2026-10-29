@@ -15,6 +15,7 @@ namespace Shooter.Infrastructure
         private float music = 0.25f;
         private float ambience = 1f;
         private float sounds = 1f;
+        private string screenResolution = "";
         private string upscaler = Upscalers.Default;
         private string renderScale = RenderScales.Default;
         private string antialiasing = Antialiasings.Default;
@@ -62,6 +63,13 @@ namespace Shooter.Infrastructure
         {
             get => sounds;
             set => SetProperty(ref sounds, value);
+        }
+
+        [CreateProperty]
+        public string ScreenResolution
+        {
+            get => screenResolution;
+            set => SetProperty(ref screenResolution, value);
         }
 
         [CreateProperty]

@@ -10,6 +10,7 @@ namespace Shooter.Game
     public class ClientSettingsPage : MainMenuPage
     {
         private const string BackButtonName = "back";
+        private const string ScreenResolutionDropdownName = "screen-resolution";
         private const string UpscalerDropdownName = "upscaler";
         private const string RenderScaleDropdownName = "render-scale";
         private const string AntialiasingDropdownName = "antialiasing";
@@ -23,6 +24,7 @@ namespace Shooter.Game
         public ClientSettingsPage(VisualElement root) : base(root)
         {
             RequireElement<Button>(BackButtonName).clicked += () => BackClicked?.Invoke();
+            SetDropdownChoices(RequireElement<DropdownField>(ScreenResolutionDropdownName), ScreenResolutions.GetKeysOfThisScreen(), SettingsDropdownTitles.GetScreenResolutionTitle);
             SetDropdownChoices(RequireElement<DropdownField>(UpscalerDropdownName), GetUpscalersOfThisCard(), SettingsDropdownTitles.GetUpscalerTitle);
             renderScaleDropdown = RequireElement<DropdownField>(RenderScaleDropdownName);
             SetDropdownChoices(renderScaleDropdown, RenderScales.Keys, SettingsDropdownTitles.GetRenderScaleTitle);
@@ -63,7 +65,7 @@ namespace Shooter.Game
             Config.SaveGameConfig();
 
             ClientConfig savedClientConfig = Config.GetGameConfig().Client;
-            Log.Info($"Client settings: master {savedClientConfig.Master:0.00}, music {savedClientConfig.Music:0.00}, ambience {savedClientConfig.Ambience:0.00}, sounds {savedClientConfig.Sounds:0.00}, upscaler {savedClientConfig.Upscaler}, render scale {savedClientConfig.RenderScale}%, antialiasing {savedClientConfig.Antialiasing}, fog {savedClientConfig.Fog}");
+            Log.Info($"Client settings: master {savedClientConfig.Master:0.00}, music {savedClientConfig.Music:0.00}, ambience {savedClientConfig.Ambience:0.00}, sounds {savedClientConfig.Sounds:0.00}, screen {savedClientConfig.ScreenResolution}, upscaler {savedClientConfig.Upscaler}, render scale {savedClientConfig.RenderScale}%, antialiasing {savedClientConfig.Antialiasing}, fog {savedClientConfig.Fog}");
         }
     }
 }
