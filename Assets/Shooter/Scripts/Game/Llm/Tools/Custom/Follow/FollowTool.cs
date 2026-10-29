@@ -22,7 +22,8 @@ target_id: the ID of the character to follow, shown next to it in what you see.
 distance: whole meters to keep from the target; your character stops when it is that close and walks again when the target moves away.
 sprint: true to run.
 force: by default the call is refused while another second-level action is active; set force to true to drop it and start this one at once.
-The result comes at once, the following itself goes on: you will be notified when the target is gone or when there is no way toward it. Use look_at_yourself to check the active second-level action and halt_bt to stop following.
+The result comes at once, the following itself goes on: you will be notified when the target is gone or when there is no way toward it.
+If the target is reachable and still exists, your character will never stop following it automatically. You must always call halt_bt tool manually to stop following.
 ";
 
         protected override void Start()
