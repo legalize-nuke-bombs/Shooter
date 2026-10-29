@@ -35,7 +35,7 @@ namespace Shooter.Game
             float nearestSqrDistance = Radius.Value * Radius.Value;
             Character spottedCharacter = null;
 
-            foreach (Character character in Registers.Instance.GetAll<Character>(RegisterInactivePolicy.Exclude))
+            foreach (Character character in Chunks.Instance.FindInRadius<Character>(agentPosition, Radius.Value, ChunkInactivePolicy.Exclude))
             {
                 if (character == ownCharacter) continue;
                 if (character.TryGetComponent(out Health health) && !health.IsAlive) continue;
