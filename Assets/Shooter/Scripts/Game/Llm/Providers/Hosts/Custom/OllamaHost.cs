@@ -9,7 +9,7 @@ namespace Shooter.Game
     public sealed class OllamaHost : ILlmHost
     {
         private const string Host = "localhost:11434";
-        private const int TimeoutSeconds = 300;
+        private const int TimeoutSeconds = 600;
 
         public ILlmFormat Format { get; } = new OpenAiFormat();
 

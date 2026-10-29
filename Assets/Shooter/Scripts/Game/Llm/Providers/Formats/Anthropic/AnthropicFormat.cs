@@ -9,7 +9,7 @@ namespace Shooter.Game
     public sealed class AnthropicFormat : ILlmFormat
     {
         private const string FormatName = "Anthropic";
-        private const int MaxTokens = 16000;
+        private const int MaxTokens = 64000;
         // The API takes only a user message first, while after clear_head the story starts with the call itself
         private const string ClearedStoryMarker = "[Everything before this point is gone from your head]";
 

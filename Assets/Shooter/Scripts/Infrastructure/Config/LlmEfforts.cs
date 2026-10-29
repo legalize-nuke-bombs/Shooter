@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
         public const string Medium = "medium";
         public const string High = "high";
         public const string Max = "max";
-        public const string Default = Max;
+        public const string Default = High;
 
         public static readonly string[] Keys = { Low, Medium, High, Max };
     }

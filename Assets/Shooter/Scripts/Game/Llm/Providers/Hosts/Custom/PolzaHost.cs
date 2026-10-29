@@ -10,7 +10,7 @@ namespace Shooter.Game
     public sealed class PolzaHost : ILlmHost
     {
         private const string Host = "api.polza.ai";
-        private const int TimeoutSeconds = 25;
+        private const int TimeoutSeconds = 600;
 
         public ILlmFormat Format { get; } = new OpenAiFormat();
 

@@ -10,7 +10,7 @@ namespace Shooter.Game
     public sealed class ClaudeHost : ILlmHost
     {
         private const string Host = "api.anthropic.com";
-        private const int TimeoutSeconds = 120;
+        private const int TimeoutSeconds = 600;
         private const string Betas = "thinking-binding-controls-2026-08-01,server-side-fallback-2026-07-01";
 
         public ILlmFormat Format { get; } = new AnthropicFormat();
