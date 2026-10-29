@@ -128,6 +128,7 @@
 .unity-base-popup-field.unity-popup-field:hover > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input,
 .unity-base-popup-field.unity-popup-field:active > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input,
 .unity-base-popup-field.unity-popup-field:focus > .unity-base-field__input.unity-base-popup-field__input.unity-popup-field__input {
+    margin: 0;
     padding: 6px 8px;
     border-width: 1px;
     border-radius: 0;

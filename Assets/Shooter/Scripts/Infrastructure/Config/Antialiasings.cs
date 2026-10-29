@@ -4,10 +4,10 @@ namespace Shooter.Infrastructure
     {
         public const string Off = "off";
         public const string Fxaa = "fxaa";
-        public const string Taa = "taa";
         public const string Smaa = "smaa";
+        public const string Taa = "taa";
         public const string Default = Off;
 
-        public static readonly string[] Keys = { Off, Fxaa, Taa, Smaa };
+        public static readonly string[] Keys = { Off, Fxaa, Smaa, Taa };
     }
 }
