@@ -8,16 +8,12 @@ namespace Shooter.Game
     {
         private const float AspectTolerance = 0.005f;
 
-        // In the editor Display reports 640x480, so the native size is the largest one any source knows
+        // In the editor Display reports 640x480, there the game view's size stands for the screen
         public static Vector2Int GetNative()
         {
-            Resolution desktop = Screen.currentResolution;
-            return Screen.resolutions
-                .Select(mode => new Vector2Int(mode.width, mode.height))
-                .Append(new Vector2Int(desktop.width, desktop.height))
-                .Append(new Vector2Int(Display.main.systemWidth, Display.main.systemHeight))
-                .OrderByDescending(size => size.x * size.y)
-                .First();
+            return Application.isEditor
+                ? new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height)
+                : new Vector2Int(Display.main.systemWidth, Display.main.systemHeight);
         }
 
         public static List<string> GetKeysOfThisScreen()
