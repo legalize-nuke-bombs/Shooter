@@ -14,8 +14,6 @@ namespace Shooter.Game
         private const string PanelElementName = "panel";
         private const string VersionLabelName = "version";
         private const string PageClass = "screen";
-        private const int MenuFrameRate = 60;
-        private const int UnlimitedFrameRate = -1;
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private VisualTreeAsset mainPage;
@@ -45,7 +43,6 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            Application.targetFrameRate = MenuFrameRate;
             networkStarter = NetworkManager.Singleton.GetComponent<NetworkStarter>();
         }
 
@@ -60,7 +57,6 @@ namespace Shooter.Game
         protected override void ShooterOnDestroy()
         {
             networkStarter.JoinFailed -= HandleJoinFailed;
-            Application.targetFrameRate = UnlimitedFrameRate;
         }
 
         private void ShowWarning(string title, string details)
