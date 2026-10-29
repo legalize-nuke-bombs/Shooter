@@ -41,6 +41,8 @@ namespace Shooter.Game
         private string pendingWarningDetails;
         private string pendingWarningTitle;
 
+        private static bool IsWorldStarting => NetworkManager.Singleton.IsListening;
+
         protected override void ShooterAwake()
         {
             Application.targetFrameRate = MenuFrameRate;
@@ -248,12 +250,16 @@ namespace Shooter.Game
 
         private void HostFreshWorld()
         {
+            if (IsWorldStarting) return;
+
             Log.Info("The player starts a fresh game");
             HostWorld(null);
         }
 
         private void HostWorld(string saveLocation)
         {
+            if (IsWorldStarting) return;
+
             if (saveLocation != null) Log.Info($"The player continues the game saved at {saveLocation}");
             loadingScreenOverlay.ShowStage(LoadingScreenStage.Server);
             NetworkStartFailure failure = networkStarter.HostWorld(saveLocation);
@@ -265,6 +271,8 @@ namespace Shooter.Game
 
         private void JoinWorldByInvite()
         {
+            if (IsWorldStarting) return;
+
             Log.Info("The player joins a game of someone else");
             NetworkStartFailure failure = networkStarter.JoinWorldByInvite();
             if (failure != null)
