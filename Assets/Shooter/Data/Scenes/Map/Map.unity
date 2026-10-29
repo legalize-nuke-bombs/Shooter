@@ -712,6 +712,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 73449702}
+  - component: {fileID: 73449703}
   m_Layer: 0
   m_Name: Landscape
   m_TagString: Untagged
@@ -745,6 +746,19 @@ Transform:
   - {fileID: 2048266868}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &73449703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73449701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &97866893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1949,6 +1963,7 @@ GameObject:
   - component: {fileID: 193115861}
   - component: {fileID: 193115863}
   - component: {fileID: 193115862}
+  - component: {fileID: 193115864}
   m_Layer: 0
   m_Name: Tile_-1_0
   m_TagString: Untagged
@@ -2032,6 +2047,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &193115864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193115860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &196689337
 GameObject:
   m_ObjectHideFlags: 0
@@ -5132,6 +5160,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 445378030}
+  - component: {fileID: 445378031}
   m_Layer: 0
   m_Name: Rocks
   m_TagString: Untagged
@@ -5226,6 +5255,19 @@ Transform:
   - {fileID: 803487155}
   m_Father: {fileID: 73449702}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &445378031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445378029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1001 &489180398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5547,6 +5589,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 517448227}
+  - component: {fileID: 517448228}
   m_Layer: 0
   m_Name: Lake Beata
   m_TagString: Untagged
@@ -5587,6 +5630,19 @@ Transform:
   - {fileID: 1643189208}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &517448228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517448226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1001 &531809095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7631,6 +7687,7 @@ GameObject:
   - component: {fileID: 754976828}
   - component: {fileID: 754976830}
   - component: {fileID: 754976829}
+  - component: {fileID: 754976831}
   m_Layer: 0
   m_Name: Tile_-1_1
   m_TagString: Untagged
@@ -7714,6 +7771,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &754976831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754976827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &755287644
 GameObject:
   m_ObjectHideFlags: 0
@@ -8559,6 +8629,7 @@ GameObject:
   - component: {fileID: 870834238}
   - component: {fileID: 870834240}
   - component: {fileID: 870834239}
+  - component: {fileID: 870834241}
   m_Layer: 0
   m_Name: Tile_0_0
   m_TagString: Untagged
@@ -8642,6 +8713,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &870834241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870834237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1001 &876447642
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8782,6 +8866,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 896772181}
+  - component: {fileID: 896772182}
   m_Layer: 0
   m_Name: Lake Rebekka
   m_TagString: Untagged
@@ -8894,6 +8979,19 @@ Transform:
   - {fileID: 1915955101}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &896772182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896772180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &903563114
 GameObject:
   m_ObjectHideFlags: 0
@@ -14294,6 +14392,7 @@ GameObject:
   - component: {fileID: 1354511866}
   - component: {fileID: 1354511868}
   - component: {fileID: 1354511867}
+  - component: {fileID: 1354511869}
   m_Layer: 0
   m_Name: Tile_-2_-1
   m_TagString: Untagged
@@ -14377,6 +14476,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &1354511869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354511865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1363418768
 GameObject:
   m_ObjectHideFlags: 0
@@ -14934,6 +15046,7 @@ GameObject:
   - component: {fileID: 1461296877}
   - component: {fileID: 1461296879}
   - component: {fileID: 1461296878}
+  - component: {fileID: 1461296880}
   m_Layer: 0
   m_Name: Tile_-1_-1
   m_TagString: Untagged
@@ -15017,6 +15130,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &1461296880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461296876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1001 &1462984329
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17828,6 +17954,7 @@ GameObject:
   - component: {fileID: 1821241800}
   - component: {fileID: 1821241802}
   - component: {fileID: 1821241801}
+  - component: {fileID: 1821241803}
   m_Layer: 0
   m_Name: Tile_0_1
   m_TagString: Untagged
@@ -17911,6 +18038,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &1821241803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821241799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1001 &1826062606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18693,6 +18833,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1911644788}
   - component: {fileID: 1911644787}
+  - component: {fileID: 1911644789}
   m_Layer: 0
   m_Name: NavMesh Surface
   m_TagString: Untagged
@@ -18747,6 +18888,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1911644789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911644786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1915955100
 GameObject:
   m_ObjectHideFlags: 0
@@ -18847,6 +19001,7 @@ GameObject:
   - component: {fileID: 1918537665}
   - component: {fileID: 1918537667}
   - component: {fileID: 1918537666}
+  - component: {fileID: 1918537668}
   m_Layer: 0
   m_Name: Tile_-2_0
   m_TagString: Untagged
@@ -18930,6 +19085,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &1918537668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918537664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1929233834
 GameObject:
   m_ObjectHideFlags: 0
@@ -20090,6 +20258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2033352356}
   - component: {fileID: 2033352358}
+  - component: {fileID: 2033352359}
   m_Layer: 0
   m_Name: Global Volume
   m_TagString: Untagged
@@ -20129,6 +20298,19 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 8ba92e2dd7f884a0f88b98fa2d235fe7, type: 2}
+--- !u!114 &2033352359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033352353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2033360522
 GameObject:
   m_ObjectHideFlags: 0
@@ -20448,13 +20630,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8423933847119075203, guid: bafa13e7f7584804785c3f212ae0bf27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2048266870}
   m_SourcePrefab: {fileID: 100100000, guid: bafa13e7f7584804785c3f212ae0bf27, type: 3}
 --- !u!4 &2048266868 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1397881592064033955, guid: bafa13e7f7584804785c3f212ae0bf27, type: 3}
   m_PrefabInstance: {fileID: 2048266867}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2048266869 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8423933847119075203, guid: bafa13e7f7584804785c3f212ae0bf27, type: 3}
+  m_PrefabInstance: {fileID: 2048266867}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2048266870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048266869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1001 &2055643720
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21139,6 +21342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2104222434}
   - component: {fileID: 2104222433}
+  - component: {fileID: 2104222435}
   m_Layer: 0
   m_Name: WindZone
   m_TagString: Untagged
@@ -21175,6 +21379,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2104222435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104222432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2108734347
 GameObject:
   m_ObjectHideFlags: 0
@@ -21186,6 +21403,7 @@ GameObject:
   - component: {fileID: 2108734348}
   - component: {fileID: 2108734350}
   - component: {fileID: 2108734349}
+  - component: {fileID: 2108734351}
   m_Layer: 0
   m_Name: Tile_0_-1
   m_TagString: Untagged
@@ -21269,6 +21487,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &2108734351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108734347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2117107251
 GameObject:
   m_ObjectHideFlags: 0
@@ -21280,6 +21511,7 @@ GameObject:
   - component: {fileID: 2117107252}
   - component: {fileID: 2117107254}
   - component: {fileID: 2117107253}
+  - component: {fileID: 2117107255}
   m_Layer: 0
   m_Name: Tile_-2_1
   m_TagString: Untagged
@@ -21363,6 +21595,19 @@ Terrain:
   m_EnableTreesAndDetailsRayTracing: 0
   m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &2117107255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117107251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2134287635
 GameObject:
   m_ObjectHideFlags: 0
