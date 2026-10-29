@@ -48,6 +48,6 @@ shooter-logs/
 /Saves
 /Screenshots
 
-# Rifle VSS: the pack waits on disk, not in git
-Assets/ThirdParty/Gece Studio/
-Assets/ThirdParty/Gece Studio.meta
+# Packs wait on disk until what the game uses moves into Shooter/Data
+/Assets/ThirdParty/
+/Assets/ThirdParty.meta
