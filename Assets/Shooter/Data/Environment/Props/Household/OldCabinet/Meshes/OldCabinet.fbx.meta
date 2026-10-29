@@ -10,17 +10,7 @@ AssetOrigin:
 ModelImporter:
   serializedVersion: 24501
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: cabinet
-    second: {fileID: 2100000, guid: 98012d1931461924d848b05c6f03d1d2, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: glass
-    second: {fileID: 2100000, guid: cf22011104c400d4a97e6d3b2e92b558, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 0
     materialName: 0

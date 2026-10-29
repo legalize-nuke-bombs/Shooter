@@ -148,12 +148,7 @@ ModelImporter:
   - first:
       95: 9500000
     second: //RootNode
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: bitonZaborRazv01
-    second: {fileID: 2100000, guid: eacf7f0fdcbddd143a3563c76a3ccf4f, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 0
     materialName: 0
