@@ -22,13 +22,11 @@ namespace Shooter.Game
         private void Start()
         {
             clock = Registers.Instance.GetAll<Clock>(RegisterInactivePolicy.Include).TryGetFirst(out Clock first) ? first : null;
+            enabled = clock;
         }
 
         public void ShooterUpdate()
         {
-            // No clock in the menu, and none any more for a frame on the way out: the world goes before its scene does
-            if (clock == null) return;
-
             float hourAngle = (float)clock.HourAngle - lagBehindSun;
             float elevation = Celestial.GetElevation(hourAngle, clock.Declination, clock.Latitude);
 

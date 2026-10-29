@@ -7,7 +7,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Sunlight : ShooterComponent, IShooterUpdateable
     {
-        internal const float ShadowHandoverElevation = -6f;
+        public const float ShadowHandoverElevation = -6f;
 
         [SerializeField] private float brightest = 120000f;
 
@@ -22,13 +22,11 @@ namespace Shooter.Game
         private void Start()
         {
             clock = Registers.Instance.Get<Clock>();
+            enabled = clock;
         }
 
         public void ShooterUpdate()
         {
-            // No clock any more for a frame on the way out: the world goes before its scene does
-            if (clock == null) return;
-
             float hourAngle = (float)clock.HourAngle;
             float elevation = Celestial.GetElevation(hourAngle, clock.Declination, clock.Latitude);
 
@@ -37,7 +35,7 @@ namespace Shooter.Game
             sunLight.shadows = elevation > ShadowHandoverElevation ? LightShadows.Soft : LightShadows.None;
         }
 
-        internal static float GetHorizonFade(float elevation)
+        public static float GetHorizonFade(float elevation)
         {
             return Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-12f, 8f, elevation));
         }
