@@ -2,11 +2,11 @@
 
 3D open-world cooperative survival game with LLM integration. The project is under active development.
 
-![](Docs/v_0_6_22/s1.jpg)
-![](Docs/v_0_6_22/s2.jpg)
-![](Docs/v_0_6_22/s3.jpg)
-![](Docs/v_0_6_22/s4.jpg)
-![](Docs/v_0_6_22/s5.jpg)
+![](Docs/s1.jpg)
+![](Docs/s2.jpg)
+![](Docs/s3.jpg)
+![](Docs/s4.jpg)
+![](Docs/s5.jpg)
 
 # Features
 ## Core
@@ -19,9 +19,11 @@
 * Shooting
 * Crafting system
 * NPCs & mutants
+* Artifacts
 ## Graphics
 * HDRP
-* DLSS support
+* Upscalers (STP, DLSS)
+* Settings
 * Texture streaming
 ## Multiplayer
 * Decentralized account model based on asymmetric encryption
@@ -39,9 +41,8 @@
 * Unity
 * NGO
 * Bouncy Castle
-* Newtonsoft
 
 # Supported LLM providers
 * Polza
 * Claude
-* Ollama (very good pc is required)
+* Ollama (a very good pc is required)

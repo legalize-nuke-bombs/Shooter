@@ -218,6 +218,7 @@ MonoBehaviour:
       - rid: 575452007052869734
       - rid: 575452007052869736
       - rid: 575452007052869738
+      - rid: 575452007052869739
   renderingLayerNames:
   - Default
   lightLayerName0: 
