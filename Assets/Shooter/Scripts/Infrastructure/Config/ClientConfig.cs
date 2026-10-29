@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.Properties;
 using UnityEngine.UIElements;
@@ -14,8 +15,10 @@ namespace Shooter.Infrastructure
         private float music = 0.25f;
         private float ambience = 1f;
         private float sounds = 1f;
-        private string antialiasing = Antialiasings.Default;
         private string upscaler = Upscalers.Default;
+        private string renderScale = RenderScales.Default;
+        private string antialiasing = Antialiasings.Default;
+        private string fog = FogQualities.Default;
 
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
@@ -62,17 +65,31 @@ namespace Shooter.Infrastructure
         }
 
         [CreateProperty]
-        public string Antialiasing
-        {
-            get => antialiasing;
-            set => SetProperty(ref antialiasing, value);
-        }
-
-        [CreateProperty]
         public string Upscaler
         {
             get => upscaler;
-            set => SetProperty(ref upscaler, value);
+            set => SetProperty(ref upscaler, Upscalers.Keys.Contains(value) ? value : Upscalers.Default);
+        }
+
+        [CreateProperty]
+        public string RenderScale
+        {
+            get => renderScale;
+            set => SetProperty(ref renderScale, RenderScales.Keys.Contains(value) ? value : RenderScales.Default);
+        }
+
+        [CreateProperty]
+        public string Antialiasing
+        {
+            get => antialiasing;
+            set => SetProperty(ref antialiasing, Antialiasings.Keys.Contains(value) ? value : Antialiasings.Default);
+        }
+
+        [CreateProperty]
+        public string Fog
+        {
+            get => fog;
+            set => SetProperty(ref fog, FogQualities.Keys.Contains(value) ? value : FogQualities.Default);
         }
 
         private void SetProperty<T>(ref T field, T value, [CallerMemberName] string property = "")

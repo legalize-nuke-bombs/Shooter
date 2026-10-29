@@ -10,6 +10,7 @@ namespace Shooter.Game
     {
         private const string CompressionDropdownName = "compression";
         private const string ProviderDropdownName = "provider";
+        private const string EffortDropdownName = "effort";
         private const string NoProvider = "";
         private static readonly Journal Log = Logs.Here();
 
@@ -19,6 +20,7 @@ namespace Shooter.Game
 
             IEnumerable<string> providerNames = new[] { NoProvider }.Concat(LlmHosts.ProviderNames);
             SetDropdownChoices(RequireElement<DropdownField>(ProviderDropdownName), providerNames, SettingsDropdownTitles.GetProviderTitle);
+            SetDropdownChoices(RequireElement<DropdownField>(EffortDropdownName), LlmEfforts.Keys, SettingsDropdownTitles.GetEffortTitle);
         }
 
         protected override void HandlePageHidden()
@@ -26,7 +28,7 @@ namespace Shooter.Game
             Config.SaveGameConfig();
 
             ServerConfig serverConfig = Config.GetGameConfig().Server;
-            Log.Info($"Server settings: port {serverConfig.Port}, saves as '{serverConfig.SaveCompressionAlgorithm}', model {serverConfig.Llm.Provider}/{serverConfig.Llm.Model}");
+            Log.Info($"Server settings: port {serverConfig.Port}, saves as '{serverConfig.SaveCompressionAlgorithm}', model {serverConfig.Llm.Provider}/{serverConfig.Llm.Model}, effort '{serverConfig.Llm.Effort}'");
         }
     }
 }

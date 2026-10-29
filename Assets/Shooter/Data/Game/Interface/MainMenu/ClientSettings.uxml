@@ -24,14 +24,24 @@
             </Bindings>
         </ui:Slider>
         <ui:Label text="Изображение" class="screen__section"/>
+        <ui:DropdownField name="upscaler" label="Масштабирование" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.Upscaler" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="render-scale" label="Разрешение рендера" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.RenderScale" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
         <ui:DropdownField name="antialiasing" label="Сглаживание" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.Antialiasing" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="upscaler" label="DLSS" class="field">
+        <ui:DropdownField name="fog" label="Туман" class="field">
             <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Upscaler" binding-mode="TwoWay"/>
+                <ui:DataBinding property="value" data-source-path="Client.Fog" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
     </ui:VisualElement>

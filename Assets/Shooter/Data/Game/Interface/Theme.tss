@@ -53,7 +53,7 @@
 }
 
 .unity-text-field__label {
-    min-width: 160px;
+    min-width: 190px;
     padding: 0;
     color: var(--color-text-dim);
     font-size: var(--text-base);
@@ -117,7 +117,7 @@
 }
 
 .unity-popup-field__label {
-    min-width: 160px;
+    min-width: 190px;
     padding: 0;
     color: var(--color-text-dim);
     font-size: var(--text-base);
@@ -219,7 +219,7 @@
 }
 
 .unity-slider__label {
-    min-width: 160px;
+    min-width: 190px;
     padding: 0;
     color: var(--color-text-dim);
     font-size: var(--text-base);

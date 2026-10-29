@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
         public const string Fxaa = "fxaa";
         public const string Taa = "taa";
         public const string Smaa = "smaa";
-        public const string Default = Smaa;
+        public const string Default = Off;
 
         public static readonly string[] Keys = { Off, Fxaa, Taa, Smaa };
     }

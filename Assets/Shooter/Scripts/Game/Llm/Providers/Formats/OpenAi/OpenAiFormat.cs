@@ -23,7 +23,7 @@ namespace Shooter.Game
                 Model = config.Model,
                 Messages = messages.ToArray(),
                 Tools = tools == null || tools.Count == 0 ? null : tools.Select(ConvertToOpenAiTool).ToArray(),
-                ReasoningEffort = string.IsNullOrEmpty(config.Effort) ? null : config.Effort
+                ReasoningEffort = ConvertToReasoningEffort(config.Effort)
             };
         }
 
@@ -122,6 +122,12 @@ namespace Shooter.Game
                     Parameters = tool.Parameters
                 }
             };
+        }
+
+        // OpenAI's reasoning effort tops out at high, there is no max
+        private static string ConvertToReasoningEffort(string effort)
+        {
+            return effort == LlmEfforts.Max ? LlmEfforts.High : effort;
         }
     }
 }

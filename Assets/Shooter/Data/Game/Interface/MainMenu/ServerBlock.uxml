@@ -22,6 +22,11 @@
             <ui:DataBinding property="value" data-source-path="Server.Llm.Model" binding-mode="TwoWay"/>
         </Bindings>
     </ui:TextField>
+    <ui:DropdownField name="effort" label="Глубина рассуждений" class="field">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.Llm.Effort" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:DropdownField>
     <ui:TextField label="Ключ" password="true" class="field">
         <Bindings>
             <ui:DataBinding property="value" data-source-path="Server.Llm.Key" binding-mode="TwoWay"/>

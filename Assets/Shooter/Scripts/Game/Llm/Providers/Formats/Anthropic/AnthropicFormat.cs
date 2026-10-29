@@ -30,7 +30,7 @@ namespace Shooter.Game
                     Display = "summarized",
                     BlockBinding = new AnthropicBlockBinding { PrefixMismatchBehavior = "drop_block" }
                 },
-                OutputConfig = string.IsNullOrEmpty(config.Effort) ? null : new AnthropicOutputConfig { Effort = config.Effort },
+                OutputConfig = new AnthropicOutputConfig { Effort = config.Effort },
                 CacheControl = new AnthropicCacheControl { Type = "ephemeral" },
                 Fallbacks = "default"
             };

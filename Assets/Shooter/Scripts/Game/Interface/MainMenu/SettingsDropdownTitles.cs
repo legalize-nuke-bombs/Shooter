@@ -16,6 +16,21 @@ namespace Shooter.Game
             [""] = "Выкл"
         };
 
+        private static readonly Dictionary<string, string> EffortTitles = new()
+        {
+            [LlmEfforts.Low] = "Низкая",
+            [LlmEfforts.Medium] = "Средняя",
+            [LlmEfforts.High] = "Высокая",
+            [LlmEfforts.Max] = "Максимальная"
+        };
+
+        private static readonly Dictionary<string, string> UpscalerTitles = new()
+        {
+            [Upscalers.Off] = "Выкл",
+            [Upscalers.Dlss] = "DLSS",
+            [Upscalers.Stp] = "STP"
+        };
+
         private static readonly Dictionary<string, string> AntialiasingTitles = new()
         {
             [Antialiasings.Off] = "Выкл",
@@ -24,23 +39,37 @@ namespace Shooter.Game
             [Antialiasings.Smaa] = "SMAA"
         };
 
-        private static readonly Dictionary<string, string> UpscalerTitles = new()
+        private static readonly Dictionary<string, string> FogTitles = new()
         {
-            [Upscalers.Off] = "Выкл",
-            [Upscalers.Dlaa] = "Максимум",
-            [Upscalers.Quality] = "Качество",
-            [Upscalers.Balanced] = "Баланс",
-            [Upscalers.Performance] = "Производительность"
+            [FogQualities.Low] = "Низкий",
+            [FogQualities.Medium] = "Средний",
+            [FogQualities.High] = "Высокий",
+            [FogQualities.Max] = "Максимальный"
         };
+
+        public static string GetUpscalerTitle(string key)
+        {
+            return GetTitleOrKey(UpscalerTitles, key);
+        }
+
+        public static string GetRenderScaleTitle(string key)
+        {
+            return $"{key}%";
+        }
 
         public static string GetAntialiasingTitle(string key)
         {
             return GetTitleOrKey(AntialiasingTitles, key);
         }
 
-        public static string GetUpscalerTitle(string key)
+        public static string GetFogTitle(string key)
         {
-            return GetTitleOrKey(UpscalerTitles, key);
+            return GetTitleOrKey(FogTitles, key);
+        }
+
+        public static string GetEffortTitle(string key)
+        {
+            return GetTitleOrKey(EffortTitles, key);
         }
 
         public static string GetCompressionTitle(string key)
