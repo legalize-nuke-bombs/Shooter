@@ -12,6 +12,7 @@ namespace Shooter.Game
         [SerializeField] private IconAsset icon;
         [SerializeField] private Vector2Int cells = Vector2Int.one;
         [SerializeField] private string promptDescription;
+        [SerializeField] private int marketValue;
 
         public GameObject Model => model;
 
@@ -25,22 +26,21 @@ namespace Shooter.Game
 
         public virtual ItemStats Stats => new();
 
+        public virtual int MarketValue => marketValue;
+
         public virtual string PromptDescription
         {
             get
             {
-                StringBuilder description = new(promptDescription?.Trim());
+                StringBuilder sb = new(promptDescription?.Trim());
+
+
+                sb.Append($". Market value (per piece): {marketValue}. ");
+
                 ItemStats stats = Stats;
+                sb.Append(stats.PromptDescription());
 
-                description.Append('.');
-                if (stats.Heal > 0) description.Append($" Heal {stats.Heal}.");
-                if (stats.HealPerHour > 0) description.Append($" Heal {stats.HealPerHour} per hour.");
-                if (stats.Food > 0) description.Append($" Food {stats.Food}.");
-                if (stats.Intoxication > 0) description.Append($" Intoxication {stats.Intoxication}.");
-                if (stats.Damage > 0) description.Append($" Damage {stats.Damage}.");
-                if (stats.Magazine > 0) description.Append($" Magazine {stats.Magazine}.");
-
-                return description.ToString();
+                return sb.ToString();
             }
         }
     }

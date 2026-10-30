@@ -14,11 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Loot.StackableItemSpec
   id: first-aid
   title: "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
-  description: "\u0411\u0438\u043d\u0442\u044b, \u0436\u0433\u0443\u0442 \u0438 \u0448\u043f\u0440\u0438\u0446-\u0442\u044e\u0431\u0438\u043a \u043e\u0431\u0435\u0437\u0431\u043e\u043b\u0438\u0432\u0430\u044e\u0449\u0435\u0433\u043e."
+  description: "\u041D\u0430\u0431\u043E\u0440 \u0431\u0430\u0437\u043E\u0432\u044B\u0445
+    \u043C\u0435\u0434\u0438\u0446\u0438\u043D\u0441\u043A\u0438\u0445 \u0441\u0440\u0435\u0434\u0441\u0442\u0432
+    \u0438 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u043E\u0432
+    \u0434\u043B\u044F \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043D\u043E\u0439
+    \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0438 \u0440\u0430\u043D\u0435\u043D\u0438\u0439
+    \u0438 \u0442\u0440\u0430\u0432\u043C."
   model: {fileID: 1279140426991430450, guid: 360690a7c06559a4f927c76899139848, type: 3}
   icon: {fileID: 11400000, guid: 4e8c73df9a659b043ac7ca98a4600a58, type: 2}
   cells: {x: 1, y: 1}
   promptDescription: First aid kit
+  marketValue: 400
   effects:
   - {fileID: 11400000, guid: 0129bb08baf600044980477d11ee657a, type: 2}
   useSound: {fileID: 11400000, guid: e8c8b05dcd7e49bca59d4f9cdf6c6735, type: 2}

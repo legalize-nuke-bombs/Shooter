@@ -11,10 +11,9 @@ namespace Shooter.Game
 
         public override string Description =>
             @"
-Use this tool to examine the item by its ID.
-This tool displays a detailed description of the item, including its effects (satiation, healing, etc.).
-You can process any number of IDs at once.
-Always use this tool when you’re not sure about the item.
+Use this tool to examine items by their IDs.
+This tool displays a detailed description of specified items, including their effects (satiation, healing, etc.) and market value.
+Always use this tool when you’re not sure about items.
 ";
 
         protected override void Start()
