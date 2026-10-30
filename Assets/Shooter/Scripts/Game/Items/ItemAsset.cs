@@ -26,7 +26,7 @@ namespace Shooter.Game
 
         public virtual ItemStats Stats => new();
 
-        public virtual int MarketValue => marketValue;
+        public int MarketValue => marketValue;
 
         public virtual string PromptDescription
         {
