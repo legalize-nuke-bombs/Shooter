@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Shooter.Infrastructure;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,8 @@ namespace Shooter.Editor
         [SerializeField] private bool skipBareObjects = true;
 
         private readonly List<MissingEntity> found = new();
-        private Vector2 scrollPosition;
+        private EntityTree tree;
+        private SearchField searchField;
 
         [MenuItem("Tools/Add Missing Shooter Entities")]
         private static void OpenWindow()
@@ -26,38 +28,26 @@ namespace Shooter.Editor
 
         private void OnGUI()
         {
-            skipBareObjects = EditorGUILayout.Toggle("Skip objects with only a Transform", skipBareObjects);
-            EditorGUILayout.LabelField("Looks through every prefab under Assets/Shooter and the open scenes. An object is listed where it is defined: a part of one of our prefabs is fixed in that prefab, not in every place it is used", EditorStyles.wordWrappedMiniLabel);
+            skipBareObjects = EditorGUILayout.ToggleLeft("Skip objects with only a Transform", skipBareObjects);
+            EditorGUILayout.LabelField("Looks through every prefab under Assets/Shooter and the open scenes. An object is listed where it is defined: a part of one of our prefabs is fixed in that prefab, not in every place it is used. A tick or a mobility on any row goes down to everything under it", EditorStyles.wordWrappedMiniLabel);
 
             if (GUILayout.Button("Find objects without a ShooterEntity"))
             {
                 Find();
             }
 
-            if (found.Count == 0) return;
+            if (tree == null) return;
 
             EditorGUILayout.LabelField($"{found.Count} objects, {found.Count(missing => missing.Checked)} checked", EditorStyles.boldLabel);
-            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-            string location = null;
-            foreach (MissingEntity missing in found)
+            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
             {
-                if (missing.Location != location)
-                {
-                    location = missing.Location;
-                    EditorGUILayout.Space();
-                    EditorGUILayout.LabelField(location, EditorStyles.boldLabel);
-                }
-
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    missing.Checked = EditorGUILayout.Toggle(missing.Checked, GUILayout.Width(16));
-                    EditorGUILayout.LabelField(new GUIContent($"{missing.ObjectPath}   {missing.Components}", missing.Components));
-                    missing.Mobility = (ShooterTransformObserver.TransformMobility)EditorGUILayout.EnumPopup(missing.Mobility, GUILayout.Width(70));
-                    if (GUILayout.Button("Ping", GUILayout.Width(40))) Ping(missing);
-                }
+                searchField ??= new SearchField();
+                tree.searchString = searchField.OnToolbarGUI(tree.searchString);
+                if (GUILayout.Button("Expand all", EditorStyles.toolbarButton, GUILayout.Width(80))) tree.ExpandAll();
+                if (GUILayout.Button("Collapse all", EditorStyles.toolbarButton, GUILayout.Width(80))) tree.CollapseAll();
             }
 
-            EditorGUILayout.EndScrollView();
+            tree.OnGUI(GUILayoutUtility.GetRect(0f, float.MaxValue, 0f, float.MaxValue));
 
             if (GUILayout.Button("Add ShooterEntity to the checked objects"))
             {
@@ -100,6 +90,7 @@ namespace Shooter.Editor
                 }
             }
 
+            tree = new EntityTree(found);
             Log.Info($"Found {found.Count} objects without a ShooterEntity in {found.Select(missing => missing.Location).Distinct().Count()} prefabs and scenes");
         }
 
@@ -115,8 +106,9 @@ namespace Shooter.Editor
                 Location = location,
                 PrefabPath = prefabPath,
                 SceneObject = sceneObject,
+                RootIndex = root.GetSiblingIndex(),
                 SiblingPath = GetSiblingPath(root, part),
-                ObjectPath = GetObjectPath(root, part),
+                Names = GetNames(root, part),
                 Components = string.Join(", ", components.Where(component => component is not Transform).Select(component => component == null ? "Missing script" : component.GetType().Name))
             });
         }
@@ -177,19 +169,6 @@ namespace Shooter.Editor
             else serializedEntity.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private static void Ping(MissingEntity missing)
-        {
-            Object target = missing.SceneObject;
-            if (target == null)
-            {
-                GameObject prefabRoot = AssetDatabase.LoadAssetAtPath<GameObject>(missing.PrefabPath);
-                target = FindBySiblingPath(prefabRoot.transform, missing.SiblingPath).gameObject;
-            }
-
-            Selection.activeObject = target;
-            EditorGUIUtility.PingObject(target);
-        }
-
         private static int[] GetSiblingPath(Transform root, Transform part)
         {
             var siblingPath = new List<int>();
@@ -201,18 +180,18 @@ namespace Shooter.Editor
             return siblingPath.ToArray();
         }
 
-        private static string GetObjectPath(Transform root, Transform part)
+        private static string[] GetNames(Transform root, Transform part)
         {
             var names = new List<string>();
-            for (Transform current = part; current != null && current != root.parent; current = current.parent)
+            for (Transform current = part; current != root.parent; current = current.parent)
             {
                 names.Insert(0, current.name);
             }
 
-            return string.Join("/", names);
+            return names.ToArray();
         }
 
-        private static Transform FindBySiblingPath(Transform root, int[] siblingPath)
+        private static Transform FindBySiblingPath(Transform root, IEnumerable<int> siblingPath)
         {
             Transform current = root;
             foreach (int siblingIndex in siblingPath)
@@ -228,11 +207,230 @@ namespace Shooter.Editor
             public string Location;
             public string PrefabPath;
             public GameObject SceneObject;
+            public int RootIndex;
             public int[] SiblingPath;
-            public string ObjectPath;
+            public string[] Names;
             public string Components;
             public bool Checked = true;
             public ShooterTransformObserver.TransformMobility Mobility;
+        }
+
+        private sealed class Node
+        {
+            public readonly Dictionary<string, Node> ChildrenByKey = new();
+            public readonly List<Node> Children = new();
+            public string Name;
+            public string AssetPath;
+            public string PrefabPath;
+            public int[] SiblingPath;
+            public GameObject SceneObject;
+            public MissingEntity Missing;
+
+            public bool IsObject => SiblingPath != null || SceneObject != null;
+
+            public Node GetOrAddChild(string key, string name)
+            {
+                if (ChildrenByKey.TryGetValue(key, out Node child)) return child;
+
+                child = new Node { Name = name };
+                ChildrenByKey[key] = child;
+                Children.Add(child);
+                return child;
+            }
+
+            public IEnumerable<MissingEntity> MissingUnder()
+            {
+                if (Missing != null) yield return Missing;
+
+                foreach (Node child in Children)
+                {
+                    foreach (MissingEntity missing in child.MissingUnder())
+                    {
+                        yield return missing;
+                    }
+                }
+            }
+
+            public Object FindPingTarget()
+            {
+                if (SceneObject != null) return SceneObject;
+                if (PrefabPath == null) return AssetDatabase.LoadAssetAtPath<Object>(AssetPath);
+
+                GameObject prefabRoot = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+                return SiblingPath == null ? prefabRoot : FindBySiblingPath(prefabRoot.transform, SiblingPath).gameObject;
+            }
+        }
+
+        private sealed class EntityTree : TreeView<int>
+        {
+            private const int NameColumn = 0;
+            private const int ComponentsColumn = 1;
+            private const int AddColumn = 2;
+            private const int MobilityColumn = 3;
+
+            private readonly Node rootNode;
+            private readonly Dictionary<int, Node> nodesById = new();
+
+            public EntityTree(IEnumerable<MissingEntity> found) : base(new TreeViewState<int>(), CreateHeader())
+            {
+                rootNode = BuildNodes(found);
+                showAlternatingRowBackgrounds = true;
+                columnIndexForTreeFoldouts = NameColumn;
+                Reload();
+            }
+
+            protected override TreeViewItem<int> BuildRoot()
+            {
+                nodesById.Clear();
+                var rootItem = new TreeViewItem<int> { id = 0, depth = -1, displayName = "" };
+                int nextId = 1;
+                AddItems(rootItem, rootNode, 0, ref nextId);
+                SetupDepthsFromParentsAndChildren(rootItem);
+                return rootItem;
+            }
+
+            protected override void RowGUI(RowGUIArgs args)
+            {
+                Node node = nodesById[args.item.id];
+                for (int i = 0; i < args.GetNumVisibleColumns(); i++)
+                {
+                    Rect cell = args.GetCellRect(i);
+                    CenterRectUsingSingleLineHeight(ref cell);
+                    switch (args.GetColumn(i))
+                    {
+                        case NameColumn:
+                            cell.xMin += GetContentIndent(args.item);
+                            using (new EditorGUI.DisabledScope(node.IsObject && node.Missing == null))
+                            {
+                                EditorGUI.LabelField(cell, args.label);
+                            }
+
+                            break;
+                        case ComponentsColumn:
+                            if (node.Missing != null) EditorGUI.LabelField(cell, new GUIContent(node.Missing.Components, node.Missing.Components), EditorStyles.miniLabel);
+                            break;
+                        case AddColumn:
+                            DrawChecked(cell, node);
+                            break;
+                        case MobilityColumn:
+                            DrawMobility(cell, node);
+                            break;
+                    }
+                }
+            }
+
+            protected override void DoubleClickedItem(int id)
+            {
+                Object target = nodesById[id].FindPingTarget();
+                Selection.activeObject = target;
+                EditorGUIUtility.PingObject(target);
+            }
+
+            private static void DrawChecked(Rect cell, Node node)
+            {
+                List<MissingEntity> under = node.MissingUnder().ToList();
+                bool allChecked = under.All(missing => missing.Checked);
+                EditorGUI.showMixedValue = !allChecked && under.Any(missing => missing.Checked);
+                EditorGUI.BeginChangeCheck();
+                bool isChecked = EditorGUI.Toggle(cell, allChecked);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    foreach (MissingEntity missing in under)
+                    {
+                        missing.Checked = isChecked;
+                    }
+                }
+
+                EditorGUI.showMixedValue = false;
+            }
+
+            private static void DrawMobility(Rect cell, Node node)
+            {
+                List<MissingEntity> under = node.MissingUnder().ToList();
+                ShooterTransformObserver.TransformMobility first = under[0].Mobility;
+                EditorGUI.showMixedValue = under.Any(missing => missing.Mobility != first);
+                EditorGUI.BeginChangeCheck();
+                var mobility = (ShooterTransformObserver.TransformMobility)EditorGUI.EnumPopup(cell, first);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    foreach (MissingEntity missing in under)
+                    {
+                        missing.Mobility = mobility;
+                    }
+                }
+
+                EditorGUI.showMixedValue = false;
+            }
+
+            private void AddItems(TreeViewItem<int> parentItem, Node parentNode, int depth, ref int nextId)
+            {
+                foreach (Node node in parentNode.Children)
+                {
+                    var item = new TreeViewItem<int> { id = nextId++, depth = depth, displayName = node.Name };
+                    nodesById[item.id] = node;
+                    parentItem.AddChild(item);
+                    AddItems(item, node, depth + 1, ref nextId);
+                }
+            }
+
+            private static Node BuildNodes(IEnumerable<MissingEntity> found)
+            {
+                var root = new Node();
+                foreach (MissingEntity missing in found.OrderBy(missing => missing.Location).ThenBy(missing => string.Join("/", missing.SiblingPath.Prepend(missing.RootIndex).Select(index => index.ToString("D4")))))
+                {
+                    Node node = root;
+                    string[] locationParts = missing.Location.Split('/');
+                    for (int i = 2; i < locationParts.Length; i++)
+                    {
+                        string assetPath = string.Join("/", locationParts.Take(i + 1));
+                        node = node.GetOrAddChild(assetPath, locationParts[i]);
+                        node.AssetPath = assetPath;
+                        if (i == locationParts.Length - 1) node.PrefabPath = missing.PrefabPath;
+                    }
+
+                    for (int level = 0; level < missing.Names.Length; level++)
+                    {
+                        int siblingIndex = level == 0 ? missing.RootIndex : missing.SiblingPath[level - 1];
+                        node = node.GetOrAddChild($"{siblingIndex}:{missing.Names[level]}", missing.Names[level]);
+                        node.PrefabPath = missing.PrefabPath;
+                        node.SiblingPath = missing.SiblingPath.Take(level).ToArray();
+                        if (missing.SceneObject != null) node.SceneObject = GetAncestor(missing.SceneObject, missing.Names.Length - 1 - level);
+                    }
+
+                    node.Missing = missing;
+                }
+
+                while (root.Children.Count == 1 && root.Children[0].AssetPath != null && !root.Children[0].AssetPath.Contains('.'))
+                {
+                    root = root.Children[0];
+                }
+
+                return root;
+            }
+
+            private static GameObject GetAncestor(GameObject gameObject, int generations)
+            {
+                Transform current = gameObject.transform;
+                for (int i = 0; i < generations; i++)
+                {
+                    current = current.parent;
+                }
+
+                return current.gameObject;
+            }
+
+            private static MultiColumnHeader CreateHeader()
+            {
+                var columns = new[]
+                {
+                    new MultiColumnHeaderState.Column { headerContent = new GUIContent("Object"), width = 360, minWidth = 120 },
+                    new MultiColumnHeaderState.Column { headerContent = new GUIContent("Components"), width = 300, minWidth = 80 },
+                    new MultiColumnHeaderState.Column { headerContent = new GUIContent("Add"), width = 36, minWidth = 36, maxWidth = 36, autoResize = false },
+                    new MultiColumnHeaderState.Column { headerContent = new GUIContent("Mobility"), width = 80, minWidth = 80, maxWidth = 80, autoResize = false }
+                };
+
+                return new MultiColumnHeader(new MultiColumnHeaderState(columns));
+            }
         }
     }
 }
