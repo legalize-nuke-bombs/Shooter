@@ -107,9 +107,9 @@ namespace Shooter.Game
 
         protected override void TeleportLocally(Vector3 position, Quaternion rotation)
         {
-            characterController.enabled = false;
+            Entity.SetComponentEnabled(characterController, false);
             transform.SetPositionAndRotation(position, rotation);
-            characterController.enabled = true;
+            Entity.SetComponentEnabled(characterController, true);
             verticalSpeed = 0f;
             airborne = false;
         }
