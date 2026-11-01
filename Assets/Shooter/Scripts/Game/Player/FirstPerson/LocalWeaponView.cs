@@ -63,13 +63,13 @@ namespace Shooter.Game
         {
             if (player.IsControlledLocally)
             {
-                enabled = true;
+                Entity.SetComponentEnabled(this, true);
                 StartShowingHeldWeapon();
             }
             else
             {
                 StopShowingHeldWeapon();
-                enabled = false;
+                Entity.SetComponentEnabled(this, false);
             }
         }
 

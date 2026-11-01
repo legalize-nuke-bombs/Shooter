@@ -15,7 +15,7 @@ namespace Shooter.Infrastructure
         {
             Move();
             ChangeParent(FindParent());
-            enabled = (Entity.Mobility == TransformMobility.Dynamic);
+            Entity.SetComponentEnabled(this, Entity.Mobility == TransformMobility.Dynamic);
         }
 
         private void OnTransformParentChanged()

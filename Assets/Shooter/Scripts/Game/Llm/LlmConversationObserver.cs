@@ -23,7 +23,7 @@ namespace Shooter.Game
             conversationManager = Registers.Instance.Get<ConversationManager>();
             health = GetComponent<Health>();
             llm = GetComponent<Llm>();
-            enabled = NetworkManager.Singleton.IsServer;
+            Entity.SetComponentEnabled(this, NetworkManager.Singleton.IsServer);
         }
 
         protected override void ShooterOnEnable()

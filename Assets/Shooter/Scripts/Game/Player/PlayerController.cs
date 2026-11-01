@@ -134,14 +134,14 @@ namespace Shooter.Game
             if (player.IsControlledLocally)
             {
                 view.gameObject.SetActive(true);
-                enabled = true;
+                Entity.SetComponentEnabled(this, true);
                 StartLocalControl();
             }
             else
             {
                 StopLocalControl();
                 view.gameObject.SetActive(false);
-                enabled = false;
+                Entity.SetComponentEnabled(this, false);
             }
         }
 

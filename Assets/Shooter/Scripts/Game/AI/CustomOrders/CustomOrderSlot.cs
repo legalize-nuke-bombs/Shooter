@@ -16,7 +16,7 @@ namespace Shooter.Game
 
         protected override void ShooterAwake()
         {
-            enabled = NetworkManager.Singleton.IsServer;
+            Entity.SetComponentEnabled(this, NetworkManager.Singleton.IsServer);
             behaviorReporter = GetComponent<BehaviorReporter>();
         }
 

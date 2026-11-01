@@ -39,18 +39,18 @@ namespace Shooter.Game
             conversationManager = Registers.Instance.Get<ConversationManager>();
             health = GetComponent<Health>();
             sleeper = GetComponent<Sleeper>();
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer) enabled = true;
+            if (IsServer) Entity.SetComponentEnabled(this, true);
         }
 
         public override void OnNetworkDespawn()
         {
             ForgetTalker();
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         protected override void ShooterOnEnable()

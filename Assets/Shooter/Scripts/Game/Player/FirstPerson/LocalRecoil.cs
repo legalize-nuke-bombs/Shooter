@@ -49,7 +49,7 @@ namespace Shooter.Game
 
         private void HandleControlChanged()
         {
-            enabled = player.IsControlledLocally;
+            Entity.SetComponentEnabled(this, player.IsControlledLocally);
             triggerHeld = false;
             PunchAngles = Vector2.zero;
         }

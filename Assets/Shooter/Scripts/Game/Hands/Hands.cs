@@ -47,7 +47,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             health = GetComponent<Health>();
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         protected override void ShooterOnEnable()
@@ -64,7 +64,7 @@ namespace Shooter.Game
         {
             if (IsServer)
             {
-                enabled = true;
+                Entity.SetComponentEnabled(this, true);
             }
             else
             {
@@ -76,7 +76,7 @@ namespace Shooter.Game
         {
             if (IsServer)
             {
-                enabled = false;
+                Entity.SetComponentEnabled(this, false);
             }
             else
             {

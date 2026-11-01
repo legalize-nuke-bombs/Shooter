@@ -17,7 +17,7 @@ namespace Shooter.Game
         {
             health = GetComponent<Health>();
             skin = GetComponent<Skin>();
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         // Applied after the rest of the frame: on death the corpse takes the held weapon in the same frame, and the
@@ -25,7 +25,7 @@ namespace Shooter.Game
         public void ShooterLateUpdate()
         {
             skin.SetModelVisible(modelVisible);
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         public override void OnNetworkSpawn()
@@ -42,7 +42,7 @@ namespace Shooter.Game
         private void ShowModelWhileAlive(bool alive)
         {
             modelVisible = alive;
-            enabled = true;
+            Entity.SetComponentEnabled(this, true);
         }
     }
 }

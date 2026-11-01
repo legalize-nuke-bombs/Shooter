@@ -22,7 +22,7 @@ namespace Shooter.Game
             }
 
             Animator animator = GetComponent<Animator>();
-            animator.enabled = false;
+            Entity.SetComponentEnabled(animator, false);
 
             Transform hips = animator.GetBoneTransform(HumanBodyBones.Hips);
             Transform head = animator.GetBoneTransform(HumanBodyBones.Head);

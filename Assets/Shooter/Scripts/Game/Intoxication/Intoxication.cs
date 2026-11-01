@@ -76,12 +76,12 @@ namespace Shooter.Game
             }
 
             Log.Info($"Entity {name} indexed {levelIndexByToxinId.Count} toxins");
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         public override void OnNetworkSpawn()
         {
-            enabled = IsServer;
+            Entity.SetComponentEnabled(this, IsServer);
             if (!IsServer || levels.Count > 0) return;
 
             for (int i = 0; i < levelIndexByToxinId.Count; i++)

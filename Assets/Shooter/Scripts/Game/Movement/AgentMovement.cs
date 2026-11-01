@@ -47,7 +47,7 @@ namespace Shooter.Game
         {
             base.OnNetworkSpawn();
 
-            navMeshAgent.enabled = IsServer;
+            Entity.SetComponentEnabled(navMeshAgent, IsServer);
         }
 
         public void WalkTo(Vector3 target, bool sprint)

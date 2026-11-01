@@ -21,7 +21,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             hands = GetComponent<Hands>();
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         protected override void ShooterOnEnable()
@@ -54,12 +54,12 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            enabled = IsServer;
+            Entity.SetComponentEnabled(this, IsServer);
         }
 
         public override void OnNetworkDespawn()
         {
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         private bool CanAfford(ActionType type, float duration)

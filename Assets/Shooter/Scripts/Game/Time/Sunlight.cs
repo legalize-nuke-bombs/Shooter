@@ -22,7 +22,7 @@ namespace Shooter.Game
         private void Start()
         {
             clock = Registers.Instance.Get<Clock>();
-            enabled = clock;
+            Entity.SetComponentEnabled(this, clock);
         }
 
         public void ShooterUpdate()

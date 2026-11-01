@@ -44,7 +44,7 @@ namespace Shooter.Game
         protected override void ShooterAwake()
         {
             clock = Registers.Instance.Get<Clock>();
-            enabled = NetworkManager.Singleton.IsServer;
+            Entity.SetComponentEnabled(this, NetworkManager.Singleton.IsServer);
             if (item == null)
             {
                 Log.Error($"Entity {name} is missing its item");
@@ -54,7 +54,7 @@ namespace Shooter.Game
         private void Start()
         {
             if (rolledUntil == null) SpawnBody();
-            else enabled = growsBack;
+            else Entity.SetComponentEnabled(this, growsBack);
         }
 
         public void HandleHourPassed()
@@ -84,7 +84,7 @@ namespace Shooter.Game
             alive = true;
             rolledUntil = null;
             // A grown body needs no hourly calls until it is picked up
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
             Pickupable pickupable = body.GetComponent<Pickupable>();
             pickupable.AssignItem(item);
             pickupable.PickedUp += HandleBodyPickedUp;
@@ -95,7 +95,7 @@ namespace Shooter.Game
             Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, {(growsBack ? $"grows back in about {averageHoursToGrow} h of world time" : "does not grow back")}");
             alive = false;
             rolledUntil = clock.Timestamp;
-            enabled = growsBack;
+            Entity.SetComponentEnabled(this, growsBack);
             pickupable.PickedUp -= HandleBodyPickedUp;
         }
 

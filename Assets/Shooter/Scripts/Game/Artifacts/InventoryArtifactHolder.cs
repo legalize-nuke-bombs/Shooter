@@ -90,7 +90,7 @@ namespace Shooter.Game
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            enabled = IsServer;
+            Entity.SetComponentEnabled(this, IsServer);
 
             if (IsServer)
             {
@@ -105,7 +105,7 @@ namespace Shooter.Game
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
 
             if (IsServer)
             {

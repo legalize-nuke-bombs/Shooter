@@ -33,14 +33,14 @@ namespace Shooter.Game
             character = GetComponent<Character>();
             health = GetComponent<Health>();
             sleeper = GetComponent<Sleeper>();
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         public override void OnNetworkSpawn()
         {
             if (IsServer)
             {
-                enabled = true;
+                Entity.SetComponentEnabled(this, true);
             }
             else
             {
@@ -51,7 +51,7 @@ namespace Shooter.Game
         public override void OnNetworkDespawn()
         {
             if (!IsServer) thinking.OnValueChanged -= HandleThinkingReplicated;
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         public void Use(NetworkObject user, out string promptResult)

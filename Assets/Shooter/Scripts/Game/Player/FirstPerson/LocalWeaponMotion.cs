@@ -72,7 +72,7 @@ namespace Shooter.Game
 
         private void HandleControlChanged()
         {
-            enabled = player.IsControlledLocally;
+            Entity.SetComponentEnabled(this, player.IsControlledLocally);
         }
 
         public void ShooterLateUpdate()

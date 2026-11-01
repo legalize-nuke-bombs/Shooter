@@ -26,7 +26,7 @@ namespace Shooter.Game
             player = GetComponent<Player>();
             skin = GetComponent<Skin>();
             weaponView = GetComponent<WeaponView>();
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
         }
 
         public void ShooterLateUpdate()
@@ -63,7 +63,7 @@ namespace Shooter.Game
             if (hiding) return;
             hiding = true;
             needsHiding = true;
-            enabled = true;
+            Entity.SetComponentEnabled(this, true);
 
             weaponView.ShownWeaponChanged += MarkHidingNeeded;
 
@@ -74,7 +74,7 @@ namespace Shooter.Game
         {
             if (!hiding) return;
             hiding = false;
-            enabled = false;
+            Entity.SetComponentEnabled(this, false);
 
             weaponView.ShownWeaponChanged -= MarkHidingNeeded;
 
