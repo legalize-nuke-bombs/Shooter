@@ -10,10 +10,7 @@ namespace Shooter.Infrastructure
 
         [SerializeField] private ShooterTransformObserver.TransformMobility mobility;
 
-        private readonly List<MonoBehaviour> allComponents = new();
-        private readonly List<MonoBehaviour> nativeComponents = new();
-        private readonly List<Behaviour> switchableComponents = new();
-        private readonly HashSet<Behaviour> switchedOffComponents = new();
+        private readonly List<Entry> components = new();
         private Vector2Int? chunk;
 
         public ShooterTransformObserver.TransformMobility Mobility => mobility;
@@ -24,17 +21,9 @@ namespace Shooter.Infrastructure
         {
             foreach (Component attached in GetComponents<Component>())
             {
-                if (attached is not Behaviour component || component is ShooterComponent or ShooterNetworkComponent) continue;
+                if (attached is not Behaviour component || ReportsItself(component)) continue;
 
-                if (component is MonoBehaviour nativeComponent)
-                {
-                    nativeComponents.Add(nativeComponent);
-                    NotifyComponentAttached(nativeComponent);
-                }
-                else
-                {
-                    AddSwitchable(component);
-                }
+                NotifyComponentAttached(component);
             }
 
             // Not a RequireComponent: Unity creates a required component before the one requiring it, and the
@@ -44,36 +33,41 @@ namespace Shooter.Infrastructure
 
         private void OnEnable()
         {
-            foreach (MonoBehaviour component in nativeComponents)
+            foreach (Entry entry in components)
             {
-                if (component.enabled) NotifyComponentEnabled(component);
+                if (!ReportsItself(entry.Component) && entry.Component.enabled) NotifyComponentEnabled(entry.Component);
             }
         }
 
         private void OnDisable()
         {
-            foreach (MonoBehaviour component in nativeComponents)
+            foreach (Entry entry in components)
             {
-                NotifyComponentDisabled(component);
+                if (!ReportsItself(entry.Component)) NotifyComponentDisabled(entry.Component);
             }
         }
 
         private void OnDestroy()
         {
-            foreach (MonoBehaviour component in nativeComponents)
+            for (int i = components.Count - 1; i >= 0; i--)
             {
-                NotifyComponentDetached(component);
+                if (!ReportsItself(components[i].Component)) NotifyComponentDetached(components[i].Component);
             }
         }
 
-        // Our code never writes enabled of a component on an entity's object, it asks the entity: the component's own
-        // wish is kept here and enabled is that wish unless the entity is optimized
+        // Our code never writes enabled of a component on an entity's object, it asks the entity: the entity keeps what
+        // the component's code wants, and enabled is that unless the entity is optimized
         public void SetComponentEnabled(Behaviour component, bool componentEnabled)
         {
-            if (componentEnabled) switchedOffComponents.Remove(component);
-            else switchedOffComponents.Add(component);
+            Entry entry = components.Find(candidate => candidate.Component == component);
+            if (entry == null)
+            {
+                Log.Error($"Entity {name} was asked to switch {component.GetType().Name} {component.name}, which is not on its object");
+                return;
+            }
 
-            ApplyEnabled(component);
+            entry.Enabled = componentEnabled;
+            Apply(entry);
         }
 
         public void SetOptimized(bool optimized)
@@ -81,9 +75,9 @@ namespace Shooter.Infrastructure
             if (IsOptimized == optimized) return;
 
             IsOptimized = optimized;
-            for (int i = 0; i < switchableComponents.Count; i++)
+            for (int i = 0; i < components.Count; i++)
             {
-                if (switchableComponents[i] != null) ApplyEnabled(switchableComponents[i]);
+                if (components[i].Component != null) Apply(components[i]);
             }
 
             Log.Debug($"Entity {name} {(optimized ? "optimized" : "no longer optimized")}");
@@ -91,33 +85,31 @@ namespace Shooter.Infrastructure
 
         // The entity learns about its object only through Notify calls, direct rather than events: they come on every
         // enable, disable and move, and no delegates are kept per entity. ShooterComponent and ShooterNetworkComponent
-        // send the component ones from their closed Unity messages, native components, without these bases, are
-        // reported by the entity itself together with its object and whenever it switches one of them. A call may come
+        // send the component ones from their closed Unity messages, every other component, the entity included, is
+        // reported by the entity itself together with its object and whenever the entity switches it. A call may come
         // before this entity's Awake, as Unity doesn't order Awake between the components of one object, so the calls
         // rely only on fields set where they are declared
-        public void NotifyComponentAttached(MonoBehaviour component)
+        public void NotifyComponentAttached(Behaviour component)
         {
-            allComponents.Add(component);
-            AddSwitchable(component);
+            components.Add(new Entry { Component = component, Enabled = component.enabled });
+            if (IsOptimized) component.enabled = false;
             Registers.Instance.RegisterComponent(component);
             if (chunk != null) Chunks.Instance.AddComponent(chunk.Value, component);
         }
 
-        public void NotifyComponentEnabled(MonoBehaviour component)
+        public void NotifyComponentEnabled(Behaviour component)
         {
             Registers.Instance.ActivateComponent(component);
         }
 
-        public void NotifyComponentDisabled(MonoBehaviour component)
+        public void NotifyComponentDisabled(Behaviour component)
         {
             Registers.Instance.DeactivateComponent(component);
         }
 
-        public void NotifyComponentDetached(MonoBehaviour component)
+        public void NotifyComponentDetached(Behaviour component)
         {
-            allComponents.Remove(component);
-            switchableComponents.Remove(component);
-            switchedOffComponents.Remove(component);
+            components.RemoveAll(entry => entry.Component == component);
             Registers.Instance.UnregisterComponent(component);
             if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, component);
         }
@@ -127,32 +119,34 @@ namespace Shooter.Infrastructure
             Vector2Int movedTo = Chunks.ChunkOf(transform.position);
             if (chunk != null && chunk.Value == movedTo) return;
 
-            foreach (MonoBehaviour component in allComponents)
+            foreach (Entry entry in components)
             {
-                if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, component);
-                Chunks.Instance.AddComponent(movedTo, component);
+                if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, entry.Component);
+                Chunks.Instance.AddComponent(movedTo, entry.Component);
             }
 
             Log.Debug($"Entity {name} moved to chunk {movedTo}");
             chunk = movedTo;
         }
 
-        private void AddSwitchable(Behaviour component)
+        private void Apply(Entry entry)
         {
-            if (component == this) return;
+            entry.Component.enabled = entry.Enabled && !IsOptimized;
+            if (ReportsItself(entry.Component)) return;
 
-            switchableComponents.Add(component);
-            if (!component.enabled) switchedOffComponents.Add(component);
-            if (IsOptimized) component.enabled = false;
+            if (entry.Component.isActiveAndEnabled) NotifyComponentEnabled(entry.Component);
+            else NotifyComponentDisabled(entry.Component);
         }
 
-        private void ApplyEnabled(Behaviour component)
+        private static bool ReportsItself(Behaviour component)
         {
-            component.enabled = !IsOptimized && !switchedOffComponents.Contains(component);
-            if (component is not MonoBehaviour nativeComponent || !nativeComponents.Contains(nativeComponent)) return;
+            return component is ShooterComponent or ShooterNetworkComponent;
+        }
 
-            if (component.enabled && isActiveAndEnabled) NotifyComponentEnabled(nativeComponent);
-            else NotifyComponentDisabled(nativeComponent);
+        private sealed class Entry
+        {
+            public Behaviour Component;
+            public bool Enabled;
         }
     }
 }

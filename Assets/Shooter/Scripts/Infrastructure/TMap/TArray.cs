@@ -25,7 +25,7 @@ namespace Shooter.Infrastructure
 
         public int Capacity => entries.Length;
 
-        public void Add(MonoBehaviour component)
+        public void Add(Behaviour component)
         {
             int hash = RuntimeHelpers.GetHashCode(component);
             if (FindSlot(component, hash) != None) return;
@@ -36,7 +36,7 @@ namespace Shooter.Infrastructure
             count++;
         }
 
-        public void Remove(MonoBehaviour component)
+        public void Remove(Behaviour component)
         {
             int hole = FindSlot(component, RuntimeHelpers.GetHashCode(component));
             if (hole == None) return;
@@ -70,7 +70,7 @@ namespace Shooter.Infrastructure
             if (entries.Length > MinCapacity && count <= entries.Length / 4) ShrinkToFit();
         }
 
-        private int FindSlot(MonoBehaviour component, int hash)
+        private int FindSlot(Behaviour component, int hash)
         {
             int mask = index.Length - 1;
             for (int i = hash & mask; index[i] != None; i = (i + 1) & mask)
@@ -148,7 +148,7 @@ namespace Shooter.Infrastructure
 
         private struct Entry
         {
-            public MonoBehaviour Component;
+            public Behaviour Component;
             public int Hash;
             public int NextFree;
         }
@@ -200,7 +200,7 @@ namespace Shooter.Infrastructure
                 {
                     while (array != null && position < array.used)
                     {
-                        MonoBehaviour component = array.entries[position].Component;
+                        Behaviour component = array.entries[position].Component;
                         position++;
                         if (component is null) continue;
 

@@ -37,25 +37,25 @@ namespace Shooter.Infrastructure
             activeComponents.CollectGarbage();
         }
 
-        public void RegisterComponent(MonoBehaviour component)
+        public void RegisterComponent(Behaviour component)
         {
             components.Add(component);
             Log.Debug($"{component.GetType().Name} {component.name} registered");
         }
 
-        public void UnregisterComponent(MonoBehaviour component)
+        public void UnregisterComponent(Behaviour component)
         {
             components.Remove(component);
             Log.Debug($"{component.GetType().Name} {component.name} unregistered");
         }
 
-        public void ActivateComponent(MonoBehaviour component)
+        public void ActivateComponent(Behaviour component)
         {
             activeComponents.Add(component);
             Log.Debug($"{component.GetType().Name} {component.name} activated");
         }
 
-        public void DeactivateComponent(MonoBehaviour component)
+        public void DeactivateComponent(Behaviour component)
         {
             activeComponents.Remove(component);
             Log.Debug($"{component.GetType().Name} {component.name} deactivated");

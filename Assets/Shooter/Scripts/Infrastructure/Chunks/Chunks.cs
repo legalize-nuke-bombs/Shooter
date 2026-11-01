@@ -40,7 +40,7 @@ namespace Shooter.Infrastructure
             return new Vector2Int(Mathf.FloorToInt(position.x / ChunkSize), Mathf.FloorToInt(position.z / ChunkSize));
         }
 
-        public void AddComponent(Vector2Int chunk, MonoBehaviour component)
+        public void AddComponent(Vector2Int chunk, Behaviour component)
         {
             if (!chunks.TryGetValue(chunk, out TMap members))
             {
@@ -51,7 +51,7 @@ namespace Shooter.Infrastructure
             members.Add(component);
         }
 
-        public void TryRemoveComponent(Vector2Int chunk, MonoBehaviour component)
+        public void TryRemoveComponent(Vector2Int chunk, Behaviour component)
         {
             if (chunks.TryGetValue(chunk, out TMap members)) members.Remove(component);
         }
@@ -112,7 +112,7 @@ namespace Shooter.Infrastructure
                     {
                         while (members.MoveNext())
                         {
-                            var component = (MonoBehaviour)(object)members.Current;
+                            var component = (Behaviour)(object)members.Current;
                             if (inactivePolicy == ChunkInactivePolicy.Exclude && !component.isActiveAndEnabled) continue;
                             if ((component.transform.position - center).sqrMagnitude <= radiusSquared) return true;
                         }

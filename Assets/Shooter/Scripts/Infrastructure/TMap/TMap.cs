@@ -40,7 +40,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void Add(MonoBehaviour component)
+        public void Add(Behaviour component)
         {
             foreach (Type key in GetKeys(component.GetType()))
             {
@@ -54,7 +54,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void Remove(MonoBehaviour component)
+        public void Remove(Behaviour component)
         {
             foreach (Type key in GetKeys(component.GetType()))
             {
@@ -123,7 +123,7 @@ namespace Shooter.Infrastructure
             if (KeysByComponentType.TryGetValue(componentType, out Type[] keys)) return keys;
 
             var types = new List<Type>();
-            for (Type type = componentType; type != typeof(MonoBehaviour); type = type.BaseType)
+            for (Type type = componentType; type != typeof(Behaviour); type = type.BaseType)
             {
                 types.Add(type);
             }

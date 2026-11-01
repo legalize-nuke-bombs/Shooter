@@ -36,7 +36,7 @@ namespace Shooter.Infrastructure
 
         private static void Tell<T>(T handler, Action<T> tell) where T : class
         {
-            var component = (MonoBehaviour)(object)handler;
+            var component = (Behaviour)(object)handler;
 #if ENABLE_PROFILER
             ProfilerMarker marker = GetMarker(handler.GetType());
             marker.Begin(component);
