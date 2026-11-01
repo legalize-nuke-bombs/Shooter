@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Faction Catalog", fileName = "FactionCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Factions/Faction Catalog", fileName = "FactionCatalog")]
     public class FactionCatalog : Catalog<Faction>
     {
     }

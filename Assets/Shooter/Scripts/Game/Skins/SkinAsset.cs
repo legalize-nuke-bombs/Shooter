@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Skin", fileName = "Skin")]
+    [CreateAssetMenu(menuName = "Shooter/Skins/Skin", fileName = "Skin")]
     public class SkinAsset : Asset
     {
         [SerializeField] private GameObject model;

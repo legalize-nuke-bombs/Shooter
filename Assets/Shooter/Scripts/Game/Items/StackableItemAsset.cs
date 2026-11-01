@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Stackable Item", fileName = "StackableItem")]
+    [CreateAssetMenu(menuName = "Shooter/Items/Stackable Item", fileName = "StackableItem")]
     public class StackableItemAsset : ItemAsset
     {
         [SerializeField] private ItemEffect[] effects = { };

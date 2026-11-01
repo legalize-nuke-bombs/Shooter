@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Surface Catalog", fileName = "SurfaceCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Surfaces/Surface Catalog", fileName = "SurfaceCatalog")]
     public class SurfaceCatalog : Catalog
     {
         [SerializeField] private PhysicsMaterial water;

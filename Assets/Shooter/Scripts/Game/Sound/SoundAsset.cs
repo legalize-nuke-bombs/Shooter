@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Sound", fileName = "Sound")]
+    [CreateAssetMenu(menuName = "Shooter/Sound/Sound", fileName = "Sound")]
     public class SoundAsset : Asset
     {
         private static readonly Journal Log = Logs.Here();

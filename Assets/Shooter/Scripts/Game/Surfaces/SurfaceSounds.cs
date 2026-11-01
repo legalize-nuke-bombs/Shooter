@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Surface Sounds", fileName = "SurfaceSounds")]
+    [CreateAssetMenu(menuName = "Shooter/Surfaces/Surface Sounds", fileName = "SurfaceSounds")]
     public class SurfaceSounds : ScriptableObject
     {
         [SerializeField] private SoundAsset fallback;

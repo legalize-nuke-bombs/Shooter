@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Sound Catalog", fileName = "SoundCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Sound/Sound Catalog", fileName = "SoundCatalog")]
     public class SoundCatalog : Catalog<SoundAsset>
     {
     }

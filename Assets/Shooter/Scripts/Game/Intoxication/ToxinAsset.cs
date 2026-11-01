@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Toxin", fileName = "Toxin")]
+    [CreateAssetMenu(menuName = "Shooter/Intoxication/Toxin", fileName = "Toxin")]
     public class ToxinAsset : Asset
     {
         [SerializeField] private float halfLifeHours;

@@ -20,7 +20,7 @@ namespace Shooter.Editor
         private EntityTree tree;
         private SearchField searchField;
 
-        [MenuItem("Tools/Add Missing Shooter Entities")]
+        [MenuItem("Tools/Shooter/Prefabs/Add Missing Shooter Entities")]
         private static void OpenWindow()
         {
             GetWindow<AddMissingShooterEntitiesTool>("Shooter Entities");

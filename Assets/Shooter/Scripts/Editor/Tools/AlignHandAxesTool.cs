@@ -17,7 +17,7 @@ namespace Shooter.Editor
 
         [SerializeField] private GameObject standard;
 
-        [MenuItem("Tools/Align Hand Axes")]
+        [MenuItem("Tools/Shooter/Characters/Align Hand Axes")]
         private static void OpenWindow()
         {
             GetWindow<AlignHandAxesTool>("Align Hand Axes");

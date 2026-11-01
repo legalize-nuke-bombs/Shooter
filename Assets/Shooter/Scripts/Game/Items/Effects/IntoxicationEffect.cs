@@ -2,7 +2,7 @@
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Effects/Intoxication", fileName = "Intoxication")]
+    [CreateAssetMenu(menuName = "Shooter/Items/Effects/Intoxication", fileName = "Intoxication")]
     public class IntoxicationEffect : ItemEffect
     {
         [SerializeField] private ToxinAsset toxin;

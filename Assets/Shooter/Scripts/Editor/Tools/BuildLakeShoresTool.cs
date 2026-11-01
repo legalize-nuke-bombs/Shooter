@@ -22,7 +22,7 @@ namespace Shooter.Editor
         private string lastRunSummary;
         private SerializedObject serializedWindow;
 
-        [MenuItem("Tools/Build Lake Shores")]
+        [MenuItem("Tools/Shooter/World/Build Lake Shores")]
         private static void OpenWindow()
         {
             GetWindow<BuildLakeShoresTool>("Build Lake Shores");

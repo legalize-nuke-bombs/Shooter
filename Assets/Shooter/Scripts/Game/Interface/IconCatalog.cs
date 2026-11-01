@@ -4,7 +4,7 @@ using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Icon Catalog", fileName = "IconCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Interface/Icon Catalog", fileName = "IconCatalog")]
     public class IconCatalog : Catalog<IconAsset>
     {
         public Sprite GetSpriteById(FixedString32Bytes id)

@@ -2,7 +2,7 @@
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Effects/Heal", fileName = "Heal")]
+    [CreateAssetMenu(menuName = "Shooter/Items/Effects/Heal", fileName = "Heal")]
     public class HealEffect : ItemEffect
     {
         [SerializeField] private float amount = 33f;

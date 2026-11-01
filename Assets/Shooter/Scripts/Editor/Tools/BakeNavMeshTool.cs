@@ -17,7 +17,7 @@ namespace Shooter.Editor
 
         [SerializeField] private GameObject agentBody;
 
-        [MenuItem("Tools/Bake NavMesh")]
+        [MenuItem("Tools/Shooter/World/Bake NavMesh")]
         private static void OpenWindow()
         {
             GetWindow<BakeNavMeshTool>("Bake NavMesh");

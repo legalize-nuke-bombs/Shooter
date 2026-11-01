@@ -13,7 +13,7 @@ namespace Shooter.Editor
         private SerializedObject serializedWindow;
         private string lastRunSummary;
 
-        [MenuItem("Tools/Grow Forest")]
+        [MenuItem("Tools/Shooter/World/Grow Forest")]
         private static void OpenWindow()
         {
             GetWindow<GrowForestTool>("Grow Forest");

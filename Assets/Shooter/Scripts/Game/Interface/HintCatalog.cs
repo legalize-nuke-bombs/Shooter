@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Hint Catalog", fileName = "HintCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Interface/Hint Catalog", fileName = "HintCatalog")]
     public sealed class HintCatalog : ScriptableObject
     {
         private static readonly Journal Log = Logs.Here();

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Notification Catalog", fileName = "NotificationCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Notifications/Notification Catalog", fileName = "NotificationCatalog")]
     public class NotificationCatalog : Catalog<NotificationAsset>
     {
     }

@@ -111,7 +111,7 @@ namespace Shooter.Editor
         private string lastRunSummary;
         private SerializedObject serializedWindow;
 
-        [MenuItem("Tools/Paint Terrain Layers")]
+        [MenuItem("Tools/Shooter/World/Paint Terrain Layers")]
         private static void OpenWindow()
         {
             GetWindow<PaintTerrainLayersTool>("Paint Terrain Layers");

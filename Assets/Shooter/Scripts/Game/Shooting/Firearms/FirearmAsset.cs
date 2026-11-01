@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Firearm", fileName = "Firearm")]
+    [CreateAssetMenu(menuName = "Shooter/Items/Firearm", fileName = "Firearm")]
     public class FirearmAsset : UniqueItemAsset
     {
         [SerializeField] private int magazineSize = 30;

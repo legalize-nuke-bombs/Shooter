@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Effects/Feed", fileName = "Feed")]
+    [CreateAssetMenu(menuName = "Shooter/Items/Effects/Feed", fileName = "Feed")]
     public class FeedEffect : ItemEffect
     {
         [SerializeField] private float amount = 10f;

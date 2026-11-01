@@ -3,7 +3,7 @@ using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Icon", fileName = "Icon")]
+    [CreateAssetMenu(menuName = "Shooter/Interface/Icon", fileName = "Icon")]
     public class IconAsset : Asset
     {
         [SerializeField] private Sprite sprite;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    [CreateAssetMenu(menuName = "Shooter-saves/Saveable Prefab Catalog", fileName = "SaveablePrefabCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Saves/Saveable Prefab Catalog", fileName = "SaveablePrefabCatalog")]
     public class SaveablePrefabCatalog : Catalog<SaveablePrefabAsset>
     {
         private static readonly Journal Log = Logs.Here();

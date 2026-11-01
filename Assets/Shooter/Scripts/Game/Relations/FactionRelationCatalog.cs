@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Faction Relation Catalog", fileName = "FactionRelationCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Factions/Faction Relation Catalog", fileName = "FactionRelationCatalog")]
     public class FactionRelationCatalog : Catalog<FactionRelation>
     {
         private static readonly Journal Log = Logs.Here();

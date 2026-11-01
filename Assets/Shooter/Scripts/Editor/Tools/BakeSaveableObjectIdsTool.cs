@@ -10,7 +10,7 @@ namespace Shooter.Editor
     {
         private static readonly Journal Log = Logs.Here();
 
-        [MenuItem("Tools/Bake Saveable Object IDs")]
+        [MenuItem("Tools/Shooter/Saves/Bake Saveable Object IDs")]
         private static void BakeMissingIds()
         {
             SaveableEntity[] saveables = UnityEngine.Object.FindObjectsByType<SaveableEntity>(FindObjectsInactive.Include);

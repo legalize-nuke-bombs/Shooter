@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Item Catalog", fileName = "ItemCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Items/Item Catalog", fileName = "ItemCatalog")]
     public class ItemCatalog : Catalog<ItemAsset>
     {
         private static readonly Journal Log = Logs.Here();

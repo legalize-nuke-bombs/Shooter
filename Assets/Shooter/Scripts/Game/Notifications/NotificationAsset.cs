@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Notification", fileName = "Notification")]
+    [CreateAssetMenu(menuName = "Shooter/Notifications/Notification", fileName = "Notification")]
     public class NotificationAsset : Asset
     {
         [SerializeField] private IconAsset icon;

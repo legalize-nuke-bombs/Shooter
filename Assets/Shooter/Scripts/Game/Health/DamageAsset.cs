@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Damage", fileName = "Damage")]
+    [CreateAssetMenu(menuName = "Shooter/Health/Damage", fileName = "Damage")]
     public class DamageAsset : Asset
     {
     }

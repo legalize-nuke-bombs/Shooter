@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Faction Relation", fileName = "FactionRelation")]
+    [CreateAssetMenu(menuName = "Shooter/Factions/Faction Relation", fileName = "FactionRelation")]
     public class FactionRelation : Asset
     {
         private static readonly Journal Log = Logs.Here();

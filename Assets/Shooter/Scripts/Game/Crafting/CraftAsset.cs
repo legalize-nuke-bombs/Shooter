@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Craft", fileName = "Craft")]
+    [CreateAssetMenu(menuName = "Shooter/Items/Craft", fileName = "Craft")]
     public class CraftAsset : Asset
     {
         [SerializeField] private StackableItemAsset[] input = new StackableItemAsset[9];

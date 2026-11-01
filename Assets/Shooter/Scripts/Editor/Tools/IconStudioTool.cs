@@ -31,7 +31,7 @@ namespace Shooter.Editor
         [SerializeField] private IconSetup setup = new();
         private Vector2 scrollPosition;
 
-        [MenuItem("Tools/Icon Studio")]
+        [MenuItem("Tools/Shooter/Interface/Icon Studio")]
         private static void OpenWindow()
         {
             GetWindow<IconStudioTool>("Icon Studio");

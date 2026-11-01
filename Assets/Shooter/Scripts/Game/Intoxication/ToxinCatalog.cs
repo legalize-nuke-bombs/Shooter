@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Game
 {
-    [CreateAssetMenu(menuName = "Shooter/Toxin Catalog", fileName = "ToxinCatalog")]
+    [CreateAssetMenu(menuName = "Shooter/Intoxication/Toxin Catalog", fileName = "ToxinCatalog")]
     public class ToxinCatalog : Catalog<ToxinAsset>
     {
     }
