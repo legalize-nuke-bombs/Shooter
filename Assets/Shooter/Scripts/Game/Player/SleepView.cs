@@ -75,16 +75,16 @@ namespace Shooter.Game
                 return;
             }
 
-            bedsideCamera.enabled = true;
-            view.enabled = false;
+            ShooterEntity.SetEnabled(bedsideCamera, true);
+            ShooterEntity.SetEnabled(view, false);
         }
 
         private void SwitchToPlayerCamera()
         {
-            if (bedsideCamera != null) bedsideCamera.enabled = false;
+            if (bedsideCamera != null) ShooterEntity.SetEnabled(bedsideCamera, false);
 
             bedsideCamera = null;
-            view.enabled = true;
+            ShooterEntity.SetEnabled(view, true);
         }
 
         private Camera FindNearestBedsideCamera()
