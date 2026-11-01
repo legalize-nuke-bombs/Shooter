@@ -11,6 +11,7 @@ namespace Shooter.Infrastructure
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private ShooterTransformObserver.TransformMobility mobility;
+        [SerializeField] private OptimizationLevelAsset optimizationLevel;
 
         private readonly List<Entry> components = new();
         private Vector2Int? chunk;
