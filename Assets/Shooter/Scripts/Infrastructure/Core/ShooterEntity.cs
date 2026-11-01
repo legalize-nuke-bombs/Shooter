@@ -21,14 +21,23 @@ namespace Shooter.Infrastructure
 
         public static void SetEnabled(Component component, bool componentEnabled)
         {
-            component.GetComponent<ShooterEntity>().SetComponentEnabled(component, componentEnabled);
+            ShooterEntity entity = component.GetComponent<ShooterEntity>();
+            Entry entry = entity.FindOrRegister(component);
+            if (entry == null)
+            {
+                Log.Error($"Entity {entity.name} was asked to switch {component.GetType().Name} {component.name}, which can't be switched");
+                return;
+            }
+
+            entry.WantsEnabled = componentEnabled;
+            entity.UpdateUnityEnabled(entry);
         }
 
         private void Awake()
         {
             foreach (Component component in GetComponents<Component>())
             {
-                Attach(component);
+                FindOrRegister(component);
             }
 
             AddComponent<ShooterTransformObserver>();
@@ -64,7 +73,7 @@ namespace Shooter.Infrastructure
         public T AddComponent<T>() where T : Component
         {
             T component = gameObject.AddComponent<T>();
-            Attach(component);
+            FindOrRegister(component);
             return component;
         }
 
@@ -75,7 +84,7 @@ namespace Shooter.Infrastructure
             IsOptimized = optimized;
             for (int i = 0; i < components.Count; i++)
             {
-                if (components[i].Component != null) Apply(components[i]);
+                if (components[i].Component != null) UpdateUnityEnabled(components[i]);
             }
 
             Log.Debug($"Entity {name} {(optimized ? "optimized" : "no longer optimized")}");
@@ -101,57 +110,41 @@ namespace Shooter.Infrastructure
             chunk = movedTo;
         }
 
-        // A component may ask to be switched from its own Awake, before this entity's Awake has found it, as Unity
-        // doesn't order Awake between the components of one object: it is taken then, and found again later is skipped
-        private void SetComponentEnabled(Component component, bool componentEnabled)
-        {
-            Entry entry = Attach(component);
-            if (entry == null)
-            {
-                Log.Error($"Entity {name} was asked to switch {component.GetType().Name} {component.name}, which can't be switched");
-                return;
-            }
-
-            entry.Enabled = componentEnabled;
-            Apply(entry);
-        }
-
-        private Entry Attach(Component component)
+        private Entry FindOrRegister(Component component)
         {
             Entry entry = components.Find(candidate => candidate.Component == component);
             if (entry != null) return entry;
 
-            bool? componentEnabled = GetEnabled(component);
+            bool? componentEnabled = ReadUnityEnabled(component);
             if (componentEnabled == null) return null;
 
-            entry = new Entry { Component = component, Enabled = componentEnabled.Value };
+            entry = new Entry { Component = component, WantsEnabled = componentEnabled.Value };
             components.Add(entry);
-            if (IsOptimized) Switch(component, false);
+            if (IsOptimized) WriteUnityEnabled(component, false);
             if (component is not Behaviour behaviour) return entry;
 
             Registers.Instance.RegisterComponent(behaviour);
             if (chunk != null) Chunks.Instance.AddComponent(chunk.Value, behaviour);
-            if (IsActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
+            if (IsEnabledAndActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
             return entry;
         }
 
-        private void Apply(Entry entry)
+        private void UpdateUnityEnabled(Entry entry)
         {
-            Switch(entry.Component, entry.Enabled && !IsOptimized);
+            WriteUnityEnabled(entry.Component, entry.WantsEnabled && !IsOptimized);
             if (entry.Component is not Behaviour behaviour) return;
 
-            if (IsActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
+            if (IsEnabledAndActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
             else Registers.Instance.DeactivateComponent(behaviour);
         }
 
         // Not isActiveAndEnabled: it stays false in a component's Awake, before Unity calls its OnEnable
-        private static bool IsActive(Behaviour behaviour)
+        private static bool IsEnabledAndActive(Behaviour behaviour)
         {
             return behaviour.enabled && behaviour.gameObject.activeInHierarchy;
         }
 
-        // Unity has no common enabled: each family of components declares its own, and the rest can't be switched
-        private static bool? GetEnabled(Component component)
+        private static bool? ReadUnityEnabled(Component component)
         {
             return component switch
             {
@@ -163,7 +156,7 @@ namespace Shooter.Infrastructure
             };
         }
 
-        private static void Switch(Component component, bool componentEnabled)
+        private static void WriteUnityEnabled(Component component, bool componentEnabled)
         {
             switch (component)
             {
@@ -185,7 +178,7 @@ namespace Shooter.Infrastructure
         private sealed class Entry
         {
             public Component Component;
-            public bool Enabled;
+            public bool WantsEnabled;
         }
     }
 }
