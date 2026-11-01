@@ -6,6 +6,7 @@ namespace Shooter.Infrastructure
     [DisallowMultipleComponent]
     public sealed class ShooterEntity : MonoBehaviour
     {
+        public const string MobilityField = nameof(mobility);
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private ShooterTransformObserver.TransformMobility mobility;
