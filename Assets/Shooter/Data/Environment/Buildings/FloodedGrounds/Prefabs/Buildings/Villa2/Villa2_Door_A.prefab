@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3339050}
   - component: {fileID: 2335010}
   - component: {fileID: 6512326}
+  - component: {fileID: 3349819865928541566}
   m_Layer: 0
   m_Name: Villa2_Door_A
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0037348, y: 4.484176, z: 0.2143895}
   m_Center: {x: -0.47708073, y: 2.242088, z: -0.003078077}
+--- !u!114 &3349819865928541566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

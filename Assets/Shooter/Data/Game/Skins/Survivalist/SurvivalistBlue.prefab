@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536237596332338}
   - component: {fileID: 6766536237596332341}
+  - component: {fileID: 890857776016331716}
   m_Layer: 0
   m_Name: SK_Military_Backpack1_vest
   m_TagString: Untagged
@@ -153,6 +154,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.004759662, y: 0.28511536, z: 1.332009}
     m_Extent: {x: 0.15399799, y: 0.120904, z: 0.21341121}
   m_DirtyAABB: 0
+--- !u!114 &890857776016331716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536237596332339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536237646169996
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,6 +471,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536237863850490}
   - component: {fileID: 6766536237863850493}
+  - component: {fileID: 3790921139740967810}
   m_Layer: 0
   m_Name: SK_Military_Shirt3
   m_TagString: Untagged
@@ -600,6 +615,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0002965927, y: 0.072602965, z: 1.3167187}
     m_Extent: {x: 0.5479926, y: 0.26235703, z: 0.3437231}
   m_DirtyAABB: 0
+--- !u!114 &3790921139740967810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536237863850491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536237895893037
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,6 +638,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536237895893036}
   - component: {fileID: 6766536237895893039}
+  - component: {fileID: 553037110332500763}
   m_Layer: 0
   m_Name: SK_Military_Male_Arms1
   m_TagString: Untagged
@@ -753,6 +782,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0030043721, y: 0.012800917, z: 1.1372731}
     m_Extent: {x: 0.7393776, y: 0.18919481, z: 0.22067782}
   m_DirtyAABB: 0
+--- !u!114 &553037110332500763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536237895893037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536237930457609
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,6 +900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536237987528164}
   - component: {fileID: 6766536237987528167}
+  - component: {fileID: 3175055015966109378}
   m_Layer: 0
   m_Name: SK_Military_Cap1
   m_TagString: Untagged
@@ -1001,6 +1044,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0002072677, y: -0.013836369, z: 1.8295168}
     m_Extent: {x: 0.09079334, y: 0.14090718, z: 0.0658201}
   m_DirtyAABB: 0
+--- !u!114 &3175055015966109378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536237987528165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536238011392958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,6 +1224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536238112821819}
   - component: {fileID: 6766536238112821818}
+  - component: {fileID: 5879487633099942689}
   m_Layer: 0
   m_Name: SK_Military_Backpack1
   m_TagString: Untagged
@@ -1311,6 +1368,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0053469837, y: 0.13934457, z: 1.3637393}
     m_Extent: {x: 0.36190346, y: 0.2597386, z: 0.26378208}
   m_DirtyAABB: 0
+--- !u!114 &5879487633099942689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536238112821816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536238129429963
 GameObject:
   m_ObjectHideFlags: 0
@@ -1545,6 +1615,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536238320270213}
   - component: {fileID: 6766536238320270212}
+  - component: {fileID: 5770091986136911173}
   m_Layer: 0
   m_Name: SK_Military_Male_Arms1_Gloves1
   m_TagString: Untagged
@@ -1689,6 +1760,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0047460496, y: 0.016993433, z: 1.140239}
     m_Extent: {x: 0.7431755, y: 0.18683907, z: 0.21771199}
   m_DirtyAABB: 0
+--- !u!114 &5770091986136911173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536238320270210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536238353398183
 GameObject:
   m_ObjectHideFlags: 0
@@ -1699,6 +1783,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536238353398182}
   - component: {fileID: 6766536238353397849}
+  - component: {fileID: 8414830135900137142}
   m_Layer: 0
   m_Name: SK_Military_Boots3
   m_TagString: Untagged
@@ -1842,6 +1927,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.00000044703484, y: 0.018295534, z: 0.08140838}
     m_Extent: {x: 0.2573013, y: 0.17746538, z: 0.1216099}
   m_DirtyAABB: 0
+--- !u!114 &8414830135900137142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536238353398183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536238357855074
 GameObject:
   m_ObjectHideFlags: 0
@@ -1915,6 +2013,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536238432138805}
   - component: {fileID: 6766536238432138804}
+  - component: {fileID: 1049149429310833083}
   m_Layer: 0
   m_Name: SurvivalistBlue
   m_TagString: Untagged
@@ -1971,6 +2070,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1049149429310833083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536238432138802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536238452530525
 GameObject:
   m_ObjectHideFlags: 0
@@ -2365,6 +2477,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536238839599708}
   - component: {fileID: 6766536238839599711}
+  - component: {fileID: 2476895107420913312}
   m_Layer: 0
   m_Name: SK_Military_Vest1_4
   m_TagString: Untagged
@@ -2509,6 +2622,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.004407674, y: 0.037526935, z: 1.283328}
     m_Extent: {x: 0.36818472, y: 0.29108435, z: 0.38185248}
   m_DirtyAABB: 0
+--- !u!114 &2476895107420913312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536238839599709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536238852601126
 GameObject:
   m_ObjectHideFlags: 0
@@ -2551,6 +2677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536238854058144}
   - component: {fileID: 6766536238854058147}
+  - component: {fileID: 8217795189971105414}
   m_Layer: 0
   m_Name: SK_Military_Pants2
   m_TagString: Untagged
@@ -2694,6 +2821,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.002769485, y: 0.028202556, z: 0.5631768}
     m_Extent: {x: 0.2828374, y: 0.18594435, z: 0.51537687}
   m_DirtyAABB: 0
+--- !u!114 &8217795189971105414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536238854058145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536238913049033
 GameObject:
   m_ObjectHideFlags: 0
@@ -3310,6 +3450,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536239555979622}
   - component: {fileID: 6766536239555979545}
+  - component: {fileID: 5703925109814527791}
   m_Layer: 0
   m_Name: SK_Military_Head1
   m_TagString: Untagged
@@ -3400,6 +3541,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.30696458, y: -0.07000545, z: 0.0001245439}
     m_Extent: {x: 0.18225129, y: 0.157433, z: 0.110385984}
   m_DirtyAABB: 0
+--- !u!114 &5703925109814527791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536239555979623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536239590868139
 GameObject:
   m_ObjectHideFlags: 0
@@ -3442,6 +3596,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6766536239604076409}
   - component: {fileID: 6766536239604076408}
+  - component: {fileID: 2930788466044355329}
   m_Layer: 0
   m_Name: SK_Military_Vest1
   m_TagString: Untagged
@@ -3585,6 +3740,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.004407674, y: 0.0598818, z: 1.3574905}
     m_Extent: {x: 0.36818472, y: 0.26872948, z: 0.30335867}
   m_DirtyAABB: 0
+--- !u!114 &2930788466044355329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766536239604076358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6766536239641251667
 GameObject:
   m_ObjectHideFlags: 0

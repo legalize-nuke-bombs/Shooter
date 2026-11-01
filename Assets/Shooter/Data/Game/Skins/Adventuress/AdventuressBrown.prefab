@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2845570550133257734}
   - component: {fileID: 1595287268113905839}
+  - component: {fileID: 2247849012966219199}
   m_Layer: 0
   m_Name: Adventures_woman_Jacket
   m_TagString: Untagged
@@ -107,6 +108,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.42222977, y: 0.024034046, z: -0.0010167211}
     m_Extent: {x: 0.26047903, y: 0.19620061, z: 0.3682506}
   m_DirtyAABB: 0
+--- !u!114 &2247849012966219199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42708474117263724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &104695902369937845
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,6 +520,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3767983729637551048}
   - component: {fileID: 2457254172542268672}
+  - component: {fileID: 6402801817775809618}
   m_Layer: 0
   m_Name: Adventures_woman_Arms_01
   m_TagString: Untagged
@@ -633,6 +648,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.46073717, y: 0.06291385, z: 0.000017017126}
     m_Extent: {x: 0.15823303, y: 0.13353537, z: 0.9787843}
   m_DirtyAABB: 0
+--- !u!114 &6402801817775809618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666581191094227102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1775918847695647194
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,6 +672,7 @@ GameObject:
   - component: {fileID: 2547213603499445197}
   - component: {fileID: 2098828927058645741}
   - component: {fileID: 8281605990338422627}
+  - component: {fileID: 2047686258012603716}
   m_Layer: 0
   m_Name: Adventures_woman_Skirt
   m_TagString: Untagged
@@ -3881,6 +3910,19 @@ Cloth:
   - {x: 0.6666667, y: 0.16666667, z: 0.16666667}
   - {x: 0.5, y: 0.5, z: 0}
   m_VirtualParticleIndices: 
+--- !u!114 &2047686258012603716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775918847695647194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1782118010414324641
 GameObject:
   m_ObjectHideFlags: 0
@@ -3891,6 +3933,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8787163615984324414}
   - component: {fileID: 3810337846759077043}
+  - component: {fileID: 8437188780405356557}
   m_Layer: 0
   m_Name: Adventures_woman_Hair
   m_TagString: Untagged
@@ -3981,6 +4024,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.49664956, y: -0.042921737, z: 0.00123512}
     m_Extent: {x: 0.18042272, y: 0.16406941, z: 0.09923742}
   m_DirtyAABB: 0
+--- !u!114 &8437188780405356557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782118010414324641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1967126461917384628
 GameObject:
   m_ObjectHideFlags: 0
@@ -4278,6 +4334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8531003103171767551}
   - component: {fileID: 8739448729229914376}
+  - component: {fileID: 7626124034034154055}
   m_Layer: 0
   m_Name: Adventures_woman_Shoes
   m_TagString: Untagged
@@ -4368,6 +4425,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.8425068, y: 0.008531734, z: -0.20648205}
     m_Extent: {x: 0.13113767, y: 0.18267123, z: 0.25609803}
   m_DirtyAABB: 0
+--- !u!114 &7626124034034154055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3377383183741050560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3803368471025677200
 GameObject:
   m_ObjectHideFlags: 0
@@ -4629,6 +4699,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8227994608419467278}
   - component: {fileID: 2261970108221137081}
+  - component: {fileID: 1765957875705229846}
   m_Layer: 0
   m_Name: Adventures_woman_Head
   m_TagString: Untagged
@@ -4725,6 +4796,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.63921535, y: 0.027230814, z: 0.00016992539}
     m_Extent: {x: 0.2631824, y: 0.15983956, z: 0.18829888}
   m_DirtyAABB: 0
+--- !u!114 &1765957875705229846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4534103593191214422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &4887008753393195249
 GameObject:
   m_ObjectHideFlags: 0
@@ -4766,6 +4850,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7284098274329012780}
   - component: {fileID: 2948633616158315598}
+  - component: {fileID: 3649188587290088314}
   m_Layer: 0
   m_Name: Adventures_woman_Body_02
   m_TagString: Untagged
@@ -4898,6 +4983,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.07459009, y: 0.017348766, z: 0.000017136335}
     m_Extent: {x: 0.6818701, y: 0.17910054, z: 0.97878444}
   m_DirtyAABB: 0
+--- !u!114 &3649188587290088314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4961669715975419804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5149138359339431741
 GameObject:
   m_ObjectHideFlags: 0
@@ -4972,6 +5070,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3950495384738024961}
   - component: {fileID: 4409048562357320773}
+  - component: {fileID: 2807821990345152776}
   m_Layer: 0
   m_Name: Adventures_woman_Eyes
   m_TagString: Untagged
@@ -5055,6 +5154,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.071185, y: -0.09441258, z: 0.00000008940697}
     m_Extent: {x: 0.015428901, y: 0.01329533, z: 0.04933544}
   m_DirtyAABB: 0
+--- !u!114 &2807821990345152776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5343292743715631488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5362683536997812147
 GameObject:
   m_ObjectHideFlags: 0
@@ -5160,6 +5272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4186073207049427224}
   - component: {fileID: 406773327780700276}
+  - component: {fileID: 4335517772859620501}
   m_Layer: 0
   m_Name: Adventures_woman_Belt_02
   m_TagString: Untagged
@@ -5247,6 +5360,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.5301891, y: 0.043329045, z: 0.1385161}
     m_Extent: {x: 0.103215635, y: 0.08903371, z: 0.09365329}
   m_DirtyAABB: 0
+--- !u!114 &4335517772859620501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5659826585563807575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5806321930440054395
 GameObject:
   m_ObjectHideFlags: 0
@@ -5450,6 +5576,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2600274334684636610}
   - component: {fileID: 5160269410817458767}
+  - component: {fileID: 5841984261873578720}
   m_Layer: 0
   m_Name: Adventures_woman_Gloves
   m_TagString: Untagged
@@ -5570,6 +5697,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.17333037, y: 0.006326981, z: 0.023294576}
     m_Extent: {x: 0.90655655, y: 0.15682197, z: 0.13667047}
   m_DirtyAABB: 0
+--- !u!114 &5841984261873578720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560226699635179098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6637327066776569911
 GameObject:
   m_ObjectHideFlags: 0
@@ -5643,6 +5783,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7852452331045600250}
   - component: {fileID: 8281605991420984617}
+  - component: {fileID: 8380675832435716076}
   m_Layer: 0
   m_Name: pelvis
   m_TagString: Untagged
@@ -5691,6 +5832,19 @@ CapsuleCollider:
   m_Height: 0.38
   m_Direction: 2
   m_Center: {x: -0.04, y: 0.01, z: 0}
+--- !u!114 &8380675832435716076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6907463375434808615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7001170328316026470
 GameObject:
   m_ObjectHideFlags: 0
@@ -5732,6 +5886,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5996720697311446439}
   - component: {fileID: 220044341902693005}
+  - component: {fileID: 3902002930052520188}
   m_Layer: 0
   m_Name: Adventures_woman_Topic
   m_TagString: Untagged
@@ -5827,6 +5982,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.42012075, y: 0.006648965, z: 0.00039330125}
     m_Extent: {x: 0.20665786, y: 0.17988262, z: 0.3287647}
   m_DirtyAABB: 0
+--- !u!114 &3902002930052520188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7043179006655171449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7089147316334901106
 GameObject:
   m_ObjectHideFlags: 0
@@ -5837,6 +6005,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6529630821901575985}
   - component: {fileID: 8281605990203063768}
+  - component: {fileID: 5853217212052142953}
   m_Layer: 0
   m_Name: thigh_l
   m_TagString: Untagged
@@ -5883,6 +6052,19 @@ CapsuleCollider:
   m_Height: 0.52
   m_Direction: 0
   m_Center: {x: 0.11, y: 0.023, z: 0}
+--- !u!114 &5853217212052142953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7089147316334901106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7483170624050542327
 GameObject:
   m_ObjectHideFlags: 0
@@ -5893,6 +6075,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5322193222142252756}
   - component: {fileID: 8281605990519525102}
+  - component: {fileID: 7563952374761171751}
   m_Layer: 0
   m_Name: thigh_r
   m_TagString: Untagged
@@ -5939,6 +6122,19 @@ CapsuleCollider:
   m_Height: 0.55
   m_Direction: 0
   m_Center: {x: -0.11, y: -0.022, z: -0.001}
+--- !u!114 &7563952374761171751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7483170624050542327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7495052613710743786
 GameObject:
   m_ObjectHideFlags: 0
@@ -5949,6 +6145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5542897276563907635}
   - component: {fileID: 5688393263811563277}
+  - component: {fileID: 7161045116281898934}
   m_Layer: 0
   m_Name: Adventures_woman_Belt_01
   m_TagString: Untagged
@@ -6039,6 +6236,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.1720093, y: -0.028514922, z: -0.0106038}
     m_Extent: {x: 0.04462038, y: 0.11822535, z: 0.15771003}
   m_DirtyAABB: 0
+--- !u!114 &7161045116281898934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7495052613710743786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7668859212651356360
 GameObject:
   m_ObjectHideFlags: 0
@@ -6114,6 +6324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6790038208018107197}
   - component: {fileID: 4525474012654623677}
+  - component: {fileID: 482303432011098783}
   m_Layer: 0
   m_Name: Adventures_woman_Arms_02
   m_TagString: Untagged
@@ -6241,6 +6452,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.46088183, y: 0.063926026, z: 0.000016987324}
     m_Extent: {x: 0.15837778, y: 0.13454759, z: 0.9787843}
   m_DirtyAABB: 0
+--- !u!114 &482303432011098783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290773914519282553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8492036425251228847
 GameObject:
   m_ObjectHideFlags: 0
@@ -6251,6 +6475,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4260302793204469703}
   - component: {fileID: 622968825329078492}
+  - component: {fileID: 5341112515641685386}
   m_Layer: 0
   m_Name: Adventures_woman_Body_01
   m_TagString: Untagged
@@ -6391,6 +6616,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.03284949, y: 0.032675423, z: 0.000023037195}
     m_Extent: {x: 0.93524724, y: 0.20683146, z: 0.9782834}
   m_DirtyAABB: 0
+--- !u!114 &5341112515641685386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8492036425251228847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8515083787310576559
 GameObject:
   m_ObjectHideFlags: 0
@@ -6561,6 +6799,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5633014836651697728}
   - component: {fileID: 8917301382768472458}
+  - component: {fileID: 1264411335018553677}
   m_Layer: 0
   m_Name: Adventures_woman_Knee_socks
   m_TagString: Untagged
@@ -6653,6 +6892,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.5696545, y: 0.02981089, z: -0.0016225278}
     m_Extent: {x: 0.3723389, y: 0.16185275, z: 0.26253602}
   m_DirtyAABB: 0
+--- !u!114 &1264411335018553677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9014011311276026010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &9092562129108326937
 GameObject:
   m_ObjectHideFlags: 0
@@ -6663,6 +6915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8459050619244347555}
   - component: {fileID: 8281605991258290647}
+  - component: {fileID: 7570693400334783161}
   m_Layer: 0
   m_Name: AdventuressBrown
   m_TagString: Untagged
@@ -6724,6 +6977,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7570693400334783161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9092562129108326937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &9108023403000259280
 GameObject:
   m_ObjectHideFlags: 0
@@ -6766,6 +7032,7 @@ GameObject:
   m_Component:
   - component: {fileID: 679754612374035154}
   - component: {fileID: 6230029316607429611}
+  - component: {fileID: 14216025780147974}
   m_Layer: 0
   m_Name: Adventures_woman_Bag
   m_TagString: Untagged
@@ -6859,3 +7126,16 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.4124475, y: 0.02438961, z: -0.025838941}
     m_Extent: {x: 0.25331444, y: 0.1881327, z: 0.32872903}
   m_DirtyAABB: 0
+--- !u!114 &14216025780147974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9147744211703567222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

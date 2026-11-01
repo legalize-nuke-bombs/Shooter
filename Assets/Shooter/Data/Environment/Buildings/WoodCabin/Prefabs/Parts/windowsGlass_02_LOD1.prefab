@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3307750}
   - component: {fileID: 2307750}
   - component: {fileID: 4281829577090495366}
+  - component: {fileID: 4474337032489037995}
   m_Layer: 0
   m_Name: windowsGlass_02_LOD1
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 7154cb4b39ab2064e8a39cdb13fd6b83, type: 3}
+--- !u!114 &4474337032489037995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3389850}
   - component: {fileID: 2314900}
   - component: {fileID: 6580500}
+  - component: {fileID: 7119626092299625589}
   m_Layer: 0
   m_Name: IndBuilding1_Roof_Mid_A_4x
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6, y: 0.21000059, z: 6.000001}
   m_Center: {x: 3, y: -0.095000185, z: 2.9999986}
+--- !u!114 &7119626092299625589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

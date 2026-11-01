@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3352668}
   - component: {fileID: 2326118}
   - component: {fileID: 6538180}
+  - component: {fileID: 7676753380830555414}
   m_Layer: 0
   m_Name: Villa1_Deco_Beam_A
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 0.29999992, z: 0.39999995}
   m_Center: {x: -2, y: 0.049999993, z: 0.000000014901161}
+--- !u!114 &7676753380830555414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

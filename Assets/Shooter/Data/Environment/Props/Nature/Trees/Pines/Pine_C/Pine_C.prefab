@@ -154,6 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8715401015310104458}
   - component: {fileID: 4421081744314173000}
+  - component: {fileID: 1680338495936922805}
   m_Layer: 0
   m_Name: Collider_Trunk_0
   m_TagString: Untagged
@@ -199,6 +200,19 @@ CapsuleCollider:
   m_Height: 3.5543678
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1680338495936922805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6030001370170008524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6038694552676387882
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,6 +225,7 @@ GameObject:
   - component: {fileID: 2398578558648007173}
   - component: {fileID: 8498632444570589429}
   - component: {fileID: 3197103586651177963}
+  - component: {fileID: 2876187700847521614}
   m_Layer: 0
   m_Name: Pine_C_LOD1
   m_TagString: Untagged
@@ -300,6 +315,19 @@ Tree:
   m_GameObject: {fileID: 6038694552676387882}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b3da1778a10a6eb48b449d9c0bc21c2e, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &2876187700847521614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6038694552676387882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6261067771249982754
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +340,7 @@ GameObject:
   - component: {fileID: 3617610068297692278}
   - component: {fileID: 7800645950292580977}
   - component: {fileID: 3268134235514732030}
+  - component: {fileID: 5654220714528116228}
   m_Layer: 0
   m_Name: Pine_C_LOD2
   m_TagString: Untagged
@@ -401,6 +430,19 @@ Tree:
   m_GameObject: {fileID: 6261067771249982754}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b3da1778a10a6eb48b449d9c0bc21c2e, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &5654220714528116228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6261067771249982754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6284710352299001075
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,6 +453,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8567847605336893954}
   - component: {fileID: 4909372854954601458}
+  - component: {fileID: 4613423667216306874}
   m_Layer: 0
   m_Name: Collider_Branch_0
   m_TagString: Untagged
@@ -456,6 +499,19 @@ CapsuleCollider:
   m_Height: 3.7024012
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4613423667216306874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6284710352299001075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6688057123372672481
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,6 +524,7 @@ GameObject:
   - component: {fileID: 3646318832881598793}
   - component: {fileID: 9080470692263905684}
   - component: {fileID: 2256302955406469440}
+  - component: {fileID: 2751356959935996999}
   m_Layer: 0
   m_Name: Pine_C_LOD3
   m_TagString: Untagged
@@ -556,6 +613,19 @@ Tree:
   m_GameObject: {fileID: 6688057123372672481}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b3da1778a10a6eb48b449d9c0bc21c2e, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &2751356959935996999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6688057123372672481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8384353008170012623
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,6 +638,7 @@ GameObject:
   - component: {fileID: 4129199363020981262}
   - component: {fileID: 1478677804990479682}
   - component: {fileID: 6131815998195351283}
+  - component: {fileID: 7917721394636461094}
   m_Layer: 0
   m_Name: Pine_C_LOD0
   m_TagString: Untagged
@@ -657,3 +728,16 @@ Tree:
   m_GameObject: {fileID: 8384353008170012623}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b3da1778a10a6eb48b449d9c0bc21c2e, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &7917721394636461094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8384353008170012623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3307864}
   - component: {fileID: 2393410}
   - component: {fileID: 6532458}
+  - component: {fileID: 6151095898990031337}
   m_Layer: 0
   m_Name: Villa1_Deco_IntDivider_A
   m_TagString: Untagged
@@ -113,3 +114,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.5233126, y: 1.2706568, z: 2.215283}
   m_Center: {x: -3.0039954, y: 0.6361557, z: -0.8382663}
+--- !u!114 &6151095898990031337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

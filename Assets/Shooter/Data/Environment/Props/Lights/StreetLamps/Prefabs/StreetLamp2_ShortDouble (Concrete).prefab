@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 716453792507124468}
   - component: {fileID: 716453792507124475}
   - component: {fileID: 574881323568615662}
+  - component: {fileID: 6000687468491772426}
   m_Layer: 0
   m_Name: Point Light2
   m_TagString: Untagged
@@ -239,6 +240,19 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &6000687468491772426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716453792507124469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &716453793281546827
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,6 +264,7 @@ GameObject:
   - component: {fileID: 716453793281546826}
   - component: {fileID: 716453793281546825}
   - component: {fileID: 764481681737981657}
+  - component: {fileID: 2498821071045462779}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged
@@ -478,6 +493,19 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &2498821071045462779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716453793281546827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &716453793419137506
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,6 +517,7 @@ GameObject:
   - component: {fileID: 716453793419137505}
   - component: {fileID: 716453793419137504}
   - component: {fileID: 202675418551478684}
+  - component: {fileID: 3000594221720738963}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -717,6 +746,19 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &3000594221720738963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716453793419137506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &716453793516417692
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,6 +770,7 @@ GameObject:
   - component: {fileID: 716453793516417763}
   - component: {fileID: 716453793516417762}
   - component: {fileID: 4791431578994402530}
+  - component: {fileID: 7579777896306877145}
   m_Layer: 0
   m_Name: Spot Light2
   m_TagString: Untagged
@@ -956,6 +999,19 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &7579777896306877145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716453793516417692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8849775559486640924
 GameObject:
   m_ObjectHideFlags: 0
@@ -968,6 +1024,7 @@ GameObject:
   - component: {fileID: 3589624661009980217}
   - component: {fileID: 7128180023717046208}
   - component: {fileID: 716453793359579674}
+  - component: {fileID: 178887398700784660}
   m_Layer: 0
   m_Name: StreetLamp2_ShortDouble (Concrete)
   m_TagString: Untagged
@@ -1074,3 +1131,16 @@ CapsuleCollider:
   m_Height: 3.543503
   m_Direction: 1
   m_Center: {x: 0, y: 1.7717515, z: 0.0043095946}
+--- !u!114 &178887398700784660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849775559486640924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

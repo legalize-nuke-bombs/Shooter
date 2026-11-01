@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2289445520929349908}
   - component: {fileID: 5628706664976472597}
   - component: {fileID: 2572603361267543240}
+  - component: {fileID: 3359058258821112605}
   m_Layer: 0
   m_Name: Part
   m_TagString: Untagged
@@ -112,6 +113,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2755906, y: 0.10419, z: 0.10419}
   m_Center: {x: 0.0984252, y: 0.052095, z: -0.052095}
+--- !u!114 &3359058258821112605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509041494255357047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &772631205478615112
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,6 +215,7 @@ GameObject:
   - component: {fileID: 5124249872287704250}
   - component: {fileID: 6023168923370841266}
   - component: {fileID: 7933940505484871969}
+  - component: {fileID: 8824637750826613780}
   m_Layer: 0
   m_Name: WashMachine
   m_TagString: Untagged
@@ -302,6 +317,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5578052, y: 1.10381, z: 0.94488007}
   m_Center: {x: -0.73953253, y: 0.551905, z: -0.47244003}
+--- !u!114 &8824637750826613780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230797592610666793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5217368273126637513
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +342,7 @@ GameObject:
   - component: {fileID: 363961489119069330}
   - component: {fileID: 4450875236965458149}
   - component: {fileID: 5979232783479261658}
+  - component: {fileID: 599365151675640774}
   m_Layer: 0
   m_Name: Hatch.001
   m_TagString: Untagged
@@ -415,6 +444,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3011791490873928107, guid: 7e741bf8744e3e248b0ec01008497c46, type: 3}
+--- !u!114 &599365151675640774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5217368273126637513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5889607100452724917
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,6 +468,7 @@ GameObject:
   - component: {fileID: 7544171507245742645}
   - component: {fileID: 6471409394781637416}
   - component: {fileID: 59395597555709573}
+  - component: {fileID: 5520814676070002649}
   m_Layer: 0
   m_Name: Drum
   m_TagString: Untagged
@@ -505,3 +548,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5520814676070002649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5889607100452724917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

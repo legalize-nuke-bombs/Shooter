@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 4310304732095800949}
   - component: {fileID: 3655028092168642955}
   - component: {fileID: 8364043966977720213}
+  - component: {fileID: 7417647687655454508}
   m_Layer: 0
   m_Name: Heather_A
   m_TagString: Untagged
@@ -122,3 +123,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7417647687655454508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8267427934229748759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

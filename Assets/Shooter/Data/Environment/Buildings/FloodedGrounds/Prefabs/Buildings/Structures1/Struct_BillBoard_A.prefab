@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 497018}
   - component: {fileID: 3338392}
   - component: {fileID: 2372526}
+  - component: {fileID: 6879956619427971513}
   m_Layer: 0
   m_Name: Struct_Billboard_A_LOD1
   m_TagString: Untagged
@@ -90,6 +91,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6879956619427971513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &128594
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,6 +115,7 @@ GameObject:
   - component: {fileID: 419626}
   - component: {fileID: 3304416}
   - component: {fileID: 2321156}
+  - component: {fileID: 3559270545433235533}
   m_Layer: 0
   m_Name: Struct_Billboard_A_LOD2
   m_TagString: Untagged
@@ -180,6 +195,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3559270545433235533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &154060
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 475506}
   - component: {fileID: 20560130}
+  - component: {fileID: 4313579513803915884}
   m_Layer: 0
   m_Name: Struct_BillBoard_A
   m_TagString: Untagged
@@ -243,6 +272,19 @@ LODGroup:
     - renderer: {fileID: 2321156}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &4313579513803915884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &168048
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,6 +297,7 @@ GameObject:
   - component: {fileID: 3324560}
   - component: {fileID: 2357128}
   - component: {fileID: 6492960}
+  - component: {fileID: 1469516203473460353}
   m_Layer: 0
   m_Name: Struct_Billboard_A_LOD0
   m_TagString: Untagged
@@ -356,3 +399,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 057c7f5d969c2b0499264ed710fed4b2, type: 3}
+--- !u!114 &1469516203473460353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

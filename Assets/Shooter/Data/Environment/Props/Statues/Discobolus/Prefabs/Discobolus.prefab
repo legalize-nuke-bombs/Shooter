@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6777823830766016156}
   - component: {fileID: 7381408675286947947}
   - component: {fileID: 6020501239248316833}
+  - component: {fileID: 544764993187601814}
   m_Layer: 0
   m_Name: LOD2
   m_TagString: Untagged
@@ -113,6 +114,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: f7a2a5f57e7e1f94aa268e91b2e37573, type: 3}
+--- !u!114 &544764993187601814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527786726974110812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1892989594563843646
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +138,7 @@ GameObject:
   - component: {fileID: 5628406702347704467}
   - component: {fileID: 8082234830038165788}
   - component: {fileID: 1005595741156724370}
+  - component: {fileID: 260568748344601997}
   m_Layer: 0
   m_Name: LOD1
   m_TagString: Untagged
@@ -203,6 +218,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &260568748344601997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892989594563843646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &4790048847554278269
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,6 +242,7 @@ GameObject:
   - component: {fileID: 4048555671256857983}
   - component: {fileID: 4701390133624570923}
   - component: {fileID: 2561074606945603906}
+  - component: {fileID: 354909937133126436}
   m_Layer: 0
   m_Name: LOD0
   m_TagString: Untagged
@@ -293,6 +322,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &354909937133126436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4790048847554278269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8167598037265612137
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 981859635037740576}
   - component: {fileID: 8448828424960045252}
+  - component: {fileID: 802281396679973760}
   m_Layer: 0
   m_Name: Discobolus
   m_TagString: Untagged
@@ -356,3 +399,16 @@ LODGroup:
     - renderer: {fileID: 7381408675286947947}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &802281396679973760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8167598037265612137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

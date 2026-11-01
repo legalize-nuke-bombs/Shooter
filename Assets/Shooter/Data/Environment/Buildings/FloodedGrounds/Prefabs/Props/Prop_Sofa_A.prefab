@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3306198}
   - component: {fileID: 2332408}
   - component: {fileID: 6529600}
+  - component: {fileID: 6821620081444388529}
   m_Layer: 0
   m_Name: lo_Prop_Sofa_A_LOD0
   m_TagString: Untagged
@@ -112,6 +113,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.8099403, y: 1.2802668, z: 1.1681442}
   m_Center: {x: -0.012945056, y: 0.64067817, z: 0.39737546}
+--- !u!114 &6821620081444388529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &132456
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 432834}
   - component: {fileID: 20540796}
+  - component: {fileID: 3372763248364222883}
   m_Layer: 0
   m_Name: Prop_Sofa_A
   m_TagString: Untagged
@@ -170,6 +185,19 @@ LODGroup:
     - renderer: {fileID: 2393798}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &3372763248364222883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &182092
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,6 +209,7 @@ GameObject:
   - component: {fileID: 493646}
   - component: {fileID: 3346936}
   - component: {fileID: 2393798}
+  - component: {fileID: 1011214920820563487}
   m_Layer: 0
   m_Name: lo_Prop_Sofa_A_LOD1
   m_TagString: Untagged
@@ -260,3 +289,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1011214920820563487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 458288}
   - component: {fileID: 3329328}
   - component: {fileID: 2339576}
+  - component: {fileID: 7904496575248893473}
   m_Layer: 0
   m_Name: Struct_ExtStairs_A_LOD2
   m_TagString: Untagged
@@ -90,6 +91,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7904496575248893473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &133742
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +116,7 @@ GameObject:
   - component: {fileID: 3356264}
   - component: {fileID: 2398414}
   - component: {fileID: 6494148}
+  - component: {fileID: 4365028828508521739}
   m_Layer: 0
   m_Name: Struct_ExtStairs_A_LOD0
   m_TagString: Untagged
@@ -203,6 +218,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 0996fca634a0d444d8317fb999f971c0, type: 3}
+--- !u!114 &4365028828508521739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &151992
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,6 +241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 467182}
   - component: {fileID: 20511700}
+  - component: {fileID: 3994237275125982072}
   m_Layer: 0
   m_Name: Struct_ExtStairs_A
   m_TagString: Untagged
@@ -266,6 +295,19 @@ LODGroup:
     - renderer: {fileID: 2339576}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &3994237275125982072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &169788
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,6 +319,7 @@ GameObject:
   - component: {fileID: 439686}
   - component: {fileID: 3341016}
   - component: {fileID: 2355756}
+  - component: {fileID: 8192058044278140366}
   m_Layer: 0
   m_Name: Struct_ExtStairs_A_LOD1
   m_TagString: Untagged
@@ -356,3 +399,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8192058044278140366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

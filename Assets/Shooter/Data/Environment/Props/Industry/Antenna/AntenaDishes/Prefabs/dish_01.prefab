@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 5155362713145423111}
   - component: {fileID: 5124290190200962185}
   - component: {fileID: 1949874656228135381}
+  - component: {fileID: 8547934774020923794}
   m_Layer: 0
   m_Name: dish_01_mesh_LOD0
   m_TagString: Untagged
@@ -187,3 +188,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3599889826945844338, guid: 4f60a5844ce4e2448ab5f819ba23196c, type: 3}
+--- !u!114 &8547934774020923794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5929034640762040979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

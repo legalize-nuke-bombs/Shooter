@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1809400894674528665}
   - component: {fileID: 763564033677675604}
   - component: {fileID: 1530205148688533478}
+  - component: {fileID: 975174223122597963}
   m_Layer: 12
   m_Name: Point Light
   m_TagString: Untagged
@@ -239,6 +240,19 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &975174223122597963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048919483453050737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2583761828372146466
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +265,7 @@ GameObject:
   - component: {fileID: 1109230222535504693}
   - component: {fileID: 8245506135859937000}
   - component: {fileID: 8415449355191777709}
+  - component: {fileID: 500356614170331810}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -351,6 +366,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.007012563, y: 0.007064825, z: 0.0050844117}
   m_Center: {x: -0.0007584891, y: 0.0031984355, z: 0.0018621009}
+--- !u!114 &500356614170331810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2583761828372146466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6352619290808437225
 GameObject:
   m_ObjectHideFlags: 0

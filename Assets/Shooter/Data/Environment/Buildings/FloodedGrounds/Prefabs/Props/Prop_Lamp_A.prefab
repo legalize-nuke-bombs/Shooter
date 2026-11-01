@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3357468}
   - component: {fileID: 2361322}
   - component: {fileID: 6587490}
+  - component: {fileID: 8049998334264060066}
   m_Layer: 0
   m_Name: lo_Prop_Lamp_A_LOD0
   m_TagString: Untagged
@@ -112,6 +113,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.49502593, y: 0.7328258, z: 0.49502593}
   m_Center: {x: 0.0014277399, y: 0.36909375, z: 0.0003267601}
+--- !u!114 &8049998334264060066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &166050
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 459410}
   - component: {fileID: 20581440}
+  - component: {fileID: 5225671457077856716}
   m_Layer: 0
   m_Name: Prop_Lamp_A
   m_TagString: Untagged
@@ -170,6 +185,19 @@ LODGroup:
     - renderer: {fileID: 2364168}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &5225671457077856716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &185748
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,6 +209,7 @@ GameObject:
   - component: {fileID: 475566}
   - component: {fileID: 3340142}
   - component: {fileID: 2364168}
+  - component: {fileID: 8514314559462364315}
   m_Layer: 0
   m_Name: lo_Prop_Lamp_A_LOD1
   m_TagString: Untagged
@@ -260,3 +289,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8514314559462364315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3392634}
   - component: {fileID: 2392634}
   - component: {fileID: 6578626351926995074}
+  - component: {fileID: 4217592814322402565}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
   m_TagString: Untagged
@@ -113,6 +114,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 57384fc0379c4974a8e6294115620a8a, type: 3}
+--- !u!114 &4217592814322402565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &192636
 GameObject:
   m_ObjectHideFlags: 0

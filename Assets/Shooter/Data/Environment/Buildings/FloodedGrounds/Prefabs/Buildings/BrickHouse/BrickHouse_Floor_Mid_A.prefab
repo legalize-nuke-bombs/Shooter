@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3317802}
   - component: {fileID: 2330156}
   - component: {fileID: 6590194}
+  - component: {fileID: 4614921765290173252}
   m_Layer: 0
   m_Name: BrickHouse_Floor_Mid_A
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 0.3000005, z: 11.2}
   m_Center: {x: -2, y: -0.049999997, z: 0}
+--- !u!114 &4614921765290173252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

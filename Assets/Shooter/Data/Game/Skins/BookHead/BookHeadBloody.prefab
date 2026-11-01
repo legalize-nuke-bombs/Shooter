@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3730696589916050487}
   - component: {fileID: 2067856374441460575}
+  - component: {fileID: 4199016798657960748}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -217,6 +218,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.007410854, y: -0.07586674, z: 0.8853746}
     m_Extent: {x: 0.56560624, y: 0.22187153, z: 0.8964605}
   m_DirtyAABB: 0
+--- !u!114 &4199016798657960748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198954649852705381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &442158942719396143
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +307,7 @@ GameObject:
   m_Component:
   - component: {fileID: 979962230820305382}
   - component: {fileID: 7391884026503117442}
+  - component: {fileID: 587717569246838797}
   m_Layer: 0
   m_Name: BookHeadBloody
   m_TagString: Untagged
@@ -341,6 +356,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &587717569246838797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 491550796927181660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &511706845839535236
 GameObject:
   m_ObjectHideFlags: 0
@@ -2215,6 +2243,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3340603040026348644}
   - component: {fileID: 4805331118423454600}
+  - component: {fileID: 5046271243270517392}
   m_Layer: 0
   m_Name: Eye
   m_TagString: Untagged
@@ -2311,6 +2340,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000065019354, y: -0.114047706, z: 1.6881566}
     m_Extent: {x: 0.015155182, y: 0.012603641, z: 0.015914083}
   m_DirtyAABB: 0
+--- !u!114 &5046271243270517392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5133325872906095371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5331789090777719394
 GameObject:
   m_ObjectHideFlags: 0
@@ -2729,6 +2771,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1075945009735793402}
   - component: {fileID: 9053781806590129737}
+  - component: {fileID: 721920803187545074}
   m_Layer: 0
   m_Name: Teeth
   m_TagString: Untagged
@@ -2825,6 +2868,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: -0.08492637, z: 1.5720236}
     m_Extent: {x: 0.03598569, y: 0.044945452, z: 0.044757247}
   m_DirtyAABB: 0
+--- !u!114 &721920803187545074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7111132551316123441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7124673166794458312
 GameObject:
   m_ObjectHideFlags: 0

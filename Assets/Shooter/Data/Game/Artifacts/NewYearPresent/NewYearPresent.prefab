@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1549847247596532646}
   - component: {fileID: 7647505753767812605}
+  - component: {fileID: 2901047279428094204}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -87,6 +88,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.23251861, y: 0.22857891, z: 0.15001242}
   m_Center: {x: -0.000060863793, y: 0.047045536, z: 0}
+--- !u!114 &2901047279428094204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3202025024263165848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5119138524251705698
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,6 +112,7 @@ GameObject:
   - component: {fileID: 6494171036105353038}
   - component: {fileID: 4936280096385067051}
   - component: {fileID: 4402088077163303411}
+  - component: {fileID: 3192053981595038322}
   m_Layer: 0
   m_Name: Present-Ribbon-01
   m_TagString: Untagged
@@ -177,6 +192,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3192053981595038322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5119138524251705698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8889550456678518084
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,6 +216,7 @@ GameObject:
   - component: {fileID: 9102836428377019970}
   - component: {fileID: 4181857387799481611}
   - component: {fileID: 2683652705351019209}
+  - component: {fileID: 3360638920999768704}
   m_Layer: 0
   m_Name: Present-Box-01
   m_TagString: Untagged
@@ -267,3 +296,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3360638920999768704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8889550456678518084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

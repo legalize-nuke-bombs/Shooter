@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3332008}
   - component: {fileID: 2380332}
   - component: {fileID: 195671021080670019}
+  - component: {fileID: 7284513184459524736}
   m_Layer: 0
   m_Name: Prop_Painting_B
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: a7017ebc27bb4794b8cc0b547b386472, type: 3}
+--- !u!114 &7284513184459524736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

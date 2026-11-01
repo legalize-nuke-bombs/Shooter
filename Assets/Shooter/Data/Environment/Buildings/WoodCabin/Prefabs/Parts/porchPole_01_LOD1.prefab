@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3342406}
   - component: {fileID: 2342406}
   - component: {fileID: 5751261942441245921}
+  - component: {fileID: 4624472183109970189}
   m_Layer: 0
   m_Name: porchPole_01_LOD1
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 2e6f690717ce4d3428197e7bd3638649, type: 3}
+--- !u!114 &4624472183109970189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

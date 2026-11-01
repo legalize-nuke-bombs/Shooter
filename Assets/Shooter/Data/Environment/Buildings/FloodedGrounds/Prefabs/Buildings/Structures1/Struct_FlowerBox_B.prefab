@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3343712}
   - component: {fileID: 2364880}
   - component: {fileID: 6523044}
+  - component: {fileID: 5231806046595319371}
   m_Layer: 0
   m_Name: Struct_FlowerBox_B
   m_TagString: Untagged
@@ -113,3 +114,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.3, y: 0.96113855, z: 1.8181889}
   m_Center: {x: -4.5000005, y: 0.4804227, z: 0.00012469292}
+--- !u!114 &5231806046595319371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

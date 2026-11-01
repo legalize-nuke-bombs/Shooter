@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3368578}
   - component: {fileID: 2358182}
   - component: {fileID: 6501828}
+  - component: {fileID: 1276101105362112025}
   m_Layer: 0
   m_Name: Cabin2_Door_A
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6141279, y: 3.319395, z: 0.2044397}
   m_Center: {x: -0.7778183, y: 1.6596978, z: -0.010840289}
+--- !u!114 &1276101105362112025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 175468014823522266}
   - component: {fileID: 486892753209310729}
   - component: {fileID: 1764255238315059432}
+  - component: {fileID: 8535048103102948133}
   m_Layer: 0
   m_Name: cabinet_door_03
   m_TagString: Untagged
@@ -135,6 +136,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.405649, y: 0.50701797, z: 0.033188194}
   m_Center: {x: -0.19776484, y: 0, z: 0.0013495833}
+--- !u!114 &8535048103102948133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99820915545565396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1676823389205486238
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,6 +257,7 @@ GameObject:
   - component: {fileID: 8220733757958950588}
   - component: {fileID: 5093928781714073551}
   - component: {fileID: 2644293221080580584}
+  - component: {fileID: 6657835428359402856}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -350,6 +365,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -6531174569082035124, guid: 57f7da9926d23b545bfa1970b4283dd6, type: 3}
+--- !u!114 &6657835428359402856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2379287925734913572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2763518457459214972
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,6 +391,7 @@ GameObject:
   - component: {fileID: 2780301143808086626}
   - component: {fileID: 1484643772059091487}
   - component: {fileID: 1197379618525106995}
+  - component: {fileID: 7665633263231041735}
   m_Layer: 0
   m_Name: cabinet_door_02
   m_TagString: Untagged
@@ -486,6 +515,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.42051584, y: 0.9209691, z: 0.03327895}
   m_Center: {x: 0.20537826, y: 0.000000059604645, z: 0.0013501532}
+--- !u!114 &7665633263231041735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2763518457459214972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5391774437121815668
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,6 +541,7 @@ GameObject:
   - component: {fileID: 1874467889205257095}
   - component: {fileID: 5749293047440246996}
   - component: {fileID: 7161253635741517628}
+  - component: {fileID: 5672116887706577455}
   m_Layer: 0
   m_Name: cabinet_drawer_02
   m_TagString: Untagged
@@ -621,6 +664,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.38469726, y: 0.11559564, z: 0.44116047}
   m_Center: {x: 0, y: 0.000000029802322, z: -0.20178963}
+--- !u!114 &5672116887706577455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5391774437121815668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6966903691378532603
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,6 +690,7 @@ GameObject:
   - component: {fileID: 6224508733919918330}
   - component: {fileID: 1651917393532615551}
   - component: {fileID: 2150557839688824017}
+  - component: {fileID: 2088386073182054500}
   m_Layer: 0
   m_Name: cabinet_door_01
   m_TagString: Untagged
@@ -757,6 +814,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.40590346, y: 0.92096883, z: 0.033278674}
   m_Center: {x: -0.19787925, y: 0.00000008940697, z: 0.0013549849}
+--- !u!114 &2088386073182054500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6966903691378532603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7480329826761906708
 GameObject:
   m_ObjectHideFlags: 0
@@ -770,6 +840,7 @@ GameObject:
   - component: {fileID: 1967031833775941600}
   - component: {fileID: 774158481481429063}
   - component: {fileID: 5446429428012460607}
+  - component: {fileID: 1311064561934705916}
   m_Layer: 0
   m_Name: cabinet_door_04
   m_TagString: Untagged
@@ -892,6 +963,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4205157, y: 0.50702393, z: 0.033188447}
   m_Center: {x: 0.20528372, y: 0, z: 0.0013498142}
+--- !u!114 &1311064561934705916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7480329826761906708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8165923481843318601
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,6 +989,7 @@ GameObject:
   - component: {fileID: 3412450455532504800}
   - component: {fileID: 1225949322073351076}
   - component: {fileID: 1256585230471827506}
+  - component: {fileID: 3531043252816322479}
   m_Layer: 0
   m_Name: cabinet_drawer_01
   m_TagString: Untagged
@@ -1027,3 +1112,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.38479832, y: 0.1155957, z: 0.4411604}
   m_Center: {x: 0, y: 0, z: -0.2017894}
+--- !u!114 &3531043252816322479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165923481843318601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

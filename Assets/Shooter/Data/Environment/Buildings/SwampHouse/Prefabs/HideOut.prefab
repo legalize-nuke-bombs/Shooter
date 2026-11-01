@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1858055917855344541}
   - component: {fileID: 3973939944987820821}
   - component: {fileID: 886033172966472009}
+  - component: {fileID: 8413745065809779164}
   m_Layer: 0
   m_Name: Radio
   m_TagString: Untagged
@@ -119,6 +120,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8089699231438940418, guid: 9509c5b766352084a9e9847b113590b2, type: 3}
+--- !u!114 &8413745065809779164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442439935809463177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2419604539837916221
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,6 +148,7 @@ GameObject:
   - component: {fileID: 2419604539837916220}
   - component: {fileID: 2419604539837916222}
   - component: {fileID: 2419604539837916217}
+  - component: {fileID: 1410877115471601045}
   m_Layer: 0
   m_Name: Phone
   m_TagString: Untagged
@@ -292,6 +307,19 @@ ConstantForce:
   m_RelativeForce: {x: 20, y: 0, z: 0}
   m_Torque: {x: 10, y: 0, z: 0}
   m_RelativeTorque: {x: 0, y: 0, z: 0}
+--- !u!114 &1410877115471601045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2419604539837916221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2617244898030047531
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +365,7 @@ GameObject:
   - component: {fileID: 3831019648159348581}
   - component: {fileID: 3831019648159348580}
   - component: {fileID: 3831019648159348583}
+  - component: {fileID: 4380769005689777432}
   m_Layer: 0
   m_Name: Ladder
   m_TagString: Untagged
@@ -465,6 +494,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4380769005689777432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831019648159348582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3831019648250892982
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,6 +519,7 @@ GameObject:
   - component: {fileID: 3831019648250892981}
   - component: {fileID: 3831019648250892980}
   - component: {fileID: 3831019648250892983}
+  - component: {fileID: 6286985109363404718}
   m_Layer: 0
   m_Name: Stool (1)
   m_TagString: Untagged
@@ -579,6 +622,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8089699231438940418, guid: 700f9ae30218c6a4686462db5b594800, type: 3}
+--- !u!114 &6286985109363404718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831019648250892982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3831019648257925769
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,6 +648,7 @@ GameObject:
   - component: {fileID: 3831019648257925772}
   - component: {fileID: 3831019648257925775}
   - component: {fileID: 3831019648257925774}
+  - component: {fileID: 2932377672431450393}
   m_Layer: 0
   m_Name: Barrel 1
   m_TagString: Untagged
@@ -720,6 +777,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2932377672431450393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831019648257925769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3831019648296075625
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +804,7 @@ GameObject:
   - component: {fileID: 3831019648296075628}
   - component: {fileID: 3831019648296075631}
   - component: {fileID: 3831019648296075630}
+  - component: {fileID: 4534936315487487636}
   m_Layer: 0
   m_Name: door
   m_TagString: Untagged
@@ -900,6 +971,19 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &4534936315487487636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831019648296075625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3831019648355056437
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,6 +997,7 @@ GameObject:
   - component: {fileID: 3831019648355056440}
   - component: {fileID: 3831019648355056443}
   - component: {fileID: 3831019648355056442}
+  - component: {fileID: 7704990143559820954}
   m_Layer: 0
   m_Name: Barrel 1 (2)
   m_TagString: Untagged
@@ -1041,6 +1126,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7704990143559820954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831019648355056437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3831019649526858015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1054,6 +1152,7 @@ GameObject:
   - component: {fileID: 3831019649526857986}
   - component: {fileID: 3831019649526858013}
   - component: {fileID: 3831019649526858012}
+  - component: {fileID: 7707293289249353627}
   m_Layer: 0
   m_Name: Barrel 1 (1)
   m_TagString: Untagged
@@ -1182,6 +1281,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7707293289249353627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831019649526858015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &4173690902951656687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,6 +1306,7 @@ GameObject:
   - component: {fileID: 364764058471705072}
   - component: {fileID: 2516124279160560954}
   - component: {fileID: 3831019648611902850}
+  - component: {fileID: 7011107840931423095}
   m_Layer: 0
   m_Name: Table 2
   m_TagString: Untagged
@@ -1294,6 +1407,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.01031404, y: 0.0113048395, z: 0.02}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7011107840931423095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173690902951656687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762382368720405
 GameObject:
   m_ObjectHideFlags: 0
@@ -1308,6 +1434,7 @@ GameObject:
   - component: {fileID: 6593762382368720408}
   - component: {fileID: 6593762382368720406}
   - component: {fileID: 6593762382368720407}
+  - component: {fileID: 6100607758076840954}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -1453,6 +1580,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &6100607758076840954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762382368720405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762382392171188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1467,6 +1607,7 @@ GameObject:
   - component: {fileID: 6593762382392171191}
   - component: {fileID: 6593762382392171189}
   - component: {fileID: 6593762382392171190}
+  - component: {fileID: 4997617820621016709}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -1612,6 +1753,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &4997617820621016709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762382392171188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762382443721446
 GameObject:
   m_ObjectHideFlags: 0
@@ -1626,6 +1780,7 @@ GameObject:
   - component: {fileID: 6593762382443721449}
   - component: {fileID: 6593762382443721447}
   - component: {fileID: 6593762382443721448}
+  - component: {fileID: 5103402872938800919}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -1771,6 +1926,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &5103402872938800919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762382443721446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762382908221657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1785,6 +1953,7 @@ GameObject:
   - component: {fileID: 6593762382908221660}
   - component: {fileID: 6593762382908221658}
   - component: {fileID: 6593762382908221659}
+  - component: {fileID: 4725400722397788369}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -1930,6 +2099,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &4725400722397788369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762382908221657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762383036091271
 GameObject:
   m_ObjectHideFlags: 0
@@ -1944,6 +2126,7 @@ GameObject:
   - component: {fileID: 6593762383036091274}
   - component: {fileID: 6593762383036091272}
   - component: {fileID: 6593762383036091273}
+  - component: {fileID: 1793082053932285212}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -2089,6 +2272,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &1793082053932285212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762383036091271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762383729376686
 GameObject:
   m_ObjectHideFlags: 0
@@ -2103,6 +2299,7 @@ GameObject:
   - component: {fileID: 6593762383729376849}
   - component: {fileID: 6593762383729376687}
   - component: {fileID: 6593762383729376848}
+  - component: {fileID: 96094031302112410}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -2248,6 +2445,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &96094031302112410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762383729376686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762383858799412
 GameObject:
   m_ObjectHideFlags: 0
@@ -2262,6 +2472,7 @@ GameObject:
   - component: {fileID: 6593762383858799415}
   - component: {fileID: 6593762383858799413}
   - component: {fileID: 6593762383858799414}
+  - component: {fileID: 8236497166725635892}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -2407,6 +2618,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &8236497166725635892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762383858799412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762384013803210
 GameObject:
   m_ObjectHideFlags: 0
@@ -2421,6 +2645,7 @@ GameObject:
   - component: {fileID: 6593762384013803213}
   - component: {fileID: 6593762384013803211}
   - component: {fileID: 6593762384013803212}
+  - component: {fileID: 2466403421192607038}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -2566,6 +2791,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &2466403421192607038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762384013803210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6593762384023535516
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,6 +2818,7 @@ GameObject:
   - component: {fileID: 6593762384023535519}
   - component: {fileID: 6593762384023535517}
   - component: {fileID: 6593762384023535518}
+  - component: {fileID: 1663493860987528262}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -2725,6 +2964,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &1663493860987528262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593762384023535516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8059886163110114835
 GameObject:
   m_ObjectHideFlags: 0
@@ -2736,6 +2988,7 @@ GameObject:
   - component: {fileID: 8059886163110114834}
   - component: {fileID: 8059886163110114845}
   - component: {fileID: 3854949552552158053}
+  - component: {fileID: 3159382388131918162}
   m_Layer: 0
   m_Name: glow
   m_TagString: Untagged
@@ -2964,6 +3217,19 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &3159382388131918162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8059886163110114835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8059886164086818277
 GameObject:
   m_ObjectHideFlags: 0
@@ -2978,6 +3244,7 @@ GameObject:
   - component: {fileID: 8059886164086818278}
   - component: {fileID: 8059886164086818276}
   - component: {fileID: 8059886164086818279}
+  - component: {fileID: 5600256805152736511}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -3123,6 +3390,19 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &5600256805152736511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8059886164086818277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8059886164376875505
 GameObject:
   m_ObjectHideFlags: 0
@@ -3178,6 +3458,7 @@ GameObject:
   - component: {fileID: 7115349056999080291}
   - component: {fileID: 5499366924435310059}
   - component: {fileID: 9030900879420384628}
+  - component: {fileID: 8812558778244122917}
   m_Layer: 0
   m_Name: Stool
   m_TagString: Untagged
@@ -3280,6 +3561,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8089699231438940418, guid: 700f9ae30218c6a4686462db5b594800, type: 3}
+--- !u!114 &8812558778244122917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9030900879420384631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &9147365314582285596
 GameObject:
   m_ObjectHideFlags: 0
@@ -3292,6 +3586,7 @@ GameObject:
   - component: {fileID: 6997187054503340296}
   - component: {fileID: 5761337428846226816}
   - component: {fileID: 6579638752631161369}
+  - component: {fileID: 994791924041195715}
   m_Layer: 0
   m_Name: House
   m_TagString: Untagged
@@ -3412,3 +3707,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8089699231438940418, guid: 22f4c99a3ca59f14a9c34501b9752391, type: 3}
+--- !u!114 &994791924041195715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9147365314582285596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

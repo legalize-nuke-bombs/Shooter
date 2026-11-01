@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3372826}
   - component: {fileID: 2399190}
   - component: {fileID: 6402850}
+  - component: {fileID: 3937677384056692565}
   m_Layer: 0
   m_Name: Villa2_Deco_Handrail1_Cor_B
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 415ea436dd055ab42bd74d612bd80d0c, type: 3}
+--- !u!114 &3937677384056692565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

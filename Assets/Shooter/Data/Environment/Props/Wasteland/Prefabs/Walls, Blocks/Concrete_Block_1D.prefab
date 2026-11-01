@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3354604}
   - component: {fileID: 2355116}
   - component: {fileID: 6548940}
+  - component: {fileID: 3114212253258311118}
   m_Layer: 0
   m_Name: Concrete_Block_1D
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 4, z: 4.0000005}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3114212253258311118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

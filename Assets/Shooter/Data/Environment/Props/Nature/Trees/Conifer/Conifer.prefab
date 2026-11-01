@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8282257052073066869}
   - component: {fileID: 6841421587738305859}
   - component: {fileID: 8022771579586352426}
+  - component: {fileID: 8119686891599060060}
   m_Layer: 0
   m_Name: Conifer_LOD2
   m_TagString: Untagged
@@ -132,6 +133,19 @@ Tree:
   m_GameObject: {fileID: 1318108979425647336}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: c7068782d88ce434ba35d8cf4f84f657, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &8119686891599060060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318108979425647336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1438723800336185832
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,6 +156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4148100411095941087}
   - component: {fileID: 118605749384583657}
+  - component: {fileID: 5528331213192690821}
   m_Layer: 0
   m_Name: Collider_Trunk_0
   m_TagString: Untagged
@@ -187,6 +202,19 @@ CapsuleCollider:
   m_Height: 4.0831604
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5528331213192690821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438723800336185832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2030601878447967979
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,6 +227,7 @@ GameObject:
   - component: {fileID: 1706627489586142495}
   - component: {fileID: 687928956863574600}
   - component: {fileID: 2511832911224205673}
+  - component: {fileID: 2792742128460184841}
   m_Layer: 0
   m_Name: Conifer_LOD0
   m_TagString: Untagged
@@ -289,6 +318,19 @@ Tree:
   m_GameObject: {fileID: 2030601878447967979}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: c7068782d88ce434ba35d8cf4f84f657, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &2792742128460184841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030601878447967979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &4012337630082778474
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,6 +455,7 @@ GameObject:
   - component: {fileID: 8047741024393290668}
   - component: {fileID: 4793922944099726314}
   - component: {fileID: 6527774816124042769}
+  - component: {fileID: 8173416696712146830}
   m_Layer: 0
   m_Name: Conifer_LOD1
   m_TagString: Untagged
@@ -503,6 +546,19 @@ Tree:
   m_GameObject: {fileID: 6995092061016009708}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: c7068782d88ce434ba35d8cf4f84f657, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &8173416696712146830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6995092061016009708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8274503946972659281
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +571,7 @@ GameObject:
   - component: {fileID: 2631920329066186502}
   - component: {fileID: 908614307137176814}
   - component: {fileID: 6204508305717342976}
+  - component: {fileID: 2496102951373767149}
   m_Layer: 0
   m_Name: Conifer_LOD3
   m_TagString: Untagged
@@ -603,3 +660,16 @@ Tree:
   m_GameObject: {fileID: 8274503946972659281}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: c7068782d88ce434ba35d8cf4f84f657, type: 3}
   m_TreeData: {fileID: 0}
+--- !u!114 &2496102951373767149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8274503946972659281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

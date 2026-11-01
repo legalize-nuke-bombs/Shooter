@@ -109,6 +109,7 @@ GameObject:
   m_Component:
   - component: {fileID: 92179984883235959}
   - component: {fileID: 1348612578185417354}
+  - component: {fileID: 7038161726371477397}
   m_Layer: 0
   m_Name: skinless-zombie_LOD3
   m_TagString: Untagged
@@ -250,6 +251,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00092440844, y: -0.014591664, z: 0.11248347}
     m_Extent: {x: 0.9085021, y: 0.9224199, z: 0.36878666}
   m_DirtyAABB: 0
+--- !u!114 &7038161726371477397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664817216353248548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &938332485700110606
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2949268045075534284}
   - component: {fileID: 6866617128736291975}
+  - component: {fileID: 1921414158748336482}
   m_Layer: 0
   m_Name: pants_LOD2
   m_TagString: Untagged
@@ -401,6 +416,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.009948716, y: -0.18110043, z: 0.06753907}
     m_Extent: {x: 0.32147247, y: 0.48123664, z: 0.30565462}
   m_DirtyAABB: 0
+--- !u!114 &1921414158748336482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938332485700110606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &968247102711422076
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,6 +439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1222156550869358629}
   - component: {fileID: 2147571100911051869}
+  - component: {fileID: 5373902403435363196}
   m_Layer: 0
   m_Name: pants_LOD1
   m_TagString: Untagged
@@ -552,6 +581,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.010868907, y: -0.17780702, z: 0.065131456}
     m_Extent: {x: 0.3200321, y: 0.4845447, z: 0.30851024}
   m_DirtyAABB: 0
+--- !u!114 &5373902403435363196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968247102711422076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1005484750082130304
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +673,7 @@ GameObject:
   - component: {fileID: 363264237667080991}
   - component: {fileID: 6046854574889894245}
   - component: {fileID: 4850532169630706798}
+  - component: {fileID: 5642781466344575950}
   m_Layer: 0
   m_Name: SkinlessZombie
   m_TagString: Untagged
@@ -720,6 +763,19 @@ LODGroup:
     - renderer: {fileID: 681558319412702924}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &5642781466344575950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027175079354532261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1162833647545388874
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,6 +818,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3726068598246256837}
   - component: {fileID: 812553003524583414}
+  - component: {fileID: 5484900796389197811}
   m_Layer: 0
   m_Name: skinless-zombie_LOD1
   m_TagString: Untagged
@@ -903,6 +960,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0012311935, y: -0.012448311, z: 0.10406305}
     m_Extent: {x: 0.90793294, y: 0.920457, z: 0.37723184}
   m_DirtyAABB: 0
+--- !u!114 &5484900796389197811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343149642104962638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1360242103224942518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,6 +1273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7632868873864558506}
   - component: {fileID: 7271144555557408967}
+  - component: {fileID: 5938497249718120022}
   m_Layer: 0
   m_Name: pants_LOD0
   m_TagString: Untagged
@@ -1344,6 +1415,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.009768099, y: -0.17780696, z: 0.06544171}
     m_Extent: {x: 0.32101992, y: 0.48454463, z: 0.30820167}
   m_DirtyAABB: 0
+--- !u!114 &5938497249718120022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2789490888886169631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &2806829214583993668
 GameObject:
   m_ObjectHideFlags: 0
@@ -1832,6 +1916,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8690072827845945302}
   - component: {fileID: 681558319412702924}
+  - component: {fileID: 1991103979258536086}
   m_Layer: 0
   m_Name: pants_LOD3
   m_TagString: Untagged
@@ -1973,6 +2058,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0077498853, y: -0.18089657, z: 0.070305504}
     m_Extent: {x: 0.31533816, y: 0.48198467, z: 0.30409843}
   m_DirtyAABB: 0
+--- !u!114 &1991103979258536086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4891293289312505129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &4937686725555356759
 GameObject:
   m_ObjectHideFlags: 0
@@ -2457,6 +2555,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5060495242586246540}
   - component: {fileID: 9037096139816757062}
+  - component: {fileID: 6461773730639944830}
   m_Layer: 0
   m_Name: skinless-zombie_LOD0
   m_TagString: Untagged
@@ -2598,6 +2697,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0015302002, y: -0.012416631, z: 0.10459994}
     m_Extent: {x: 0.9082663, y: 0.9204953, z: 0.37676865}
   m_DirtyAABB: 0
+--- !u!114 &6461773730639944830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6998973850620090060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7092595213475024925
 GameObject:
   m_ObjectHideFlags: 0
@@ -2767,6 +2879,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1233986001908225096}
   - component: {fileID: 5460493292086466763}
+  - component: {fileID: 8231737613204926187}
   m_Layer: 0
   m_Name: skinless-zombie_LOD2
   m_TagString: Untagged
@@ -2908,6 +3021,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0011283457, y: -0.013241231, z: 0.10495585}
     m_Extent: {x: 0.90782285, y: 0.9212416, z: 0.37640154}
   m_DirtyAABB: 0
+--- !u!114 &8231737613204926187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441469053303734636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7533637809971133654
 GameObject:
   m_ObjectHideFlags: 0

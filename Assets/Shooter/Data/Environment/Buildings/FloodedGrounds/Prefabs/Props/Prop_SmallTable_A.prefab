@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 457142}
   - component: {fileID: 3393338}
   - component: {fileID: 2325728}
+  - component: {fileID: 1479661809946245149}
   m_Layer: 0
   m_Name: lo_Prop_SmallTable_A_LOD1
   m_TagString: Untagged
@@ -90,6 +91,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1479661809946245149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &142902
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +116,7 @@ GameObject:
   - component: {fileID: 3371150}
   - component: {fileID: 2313160}
   - component: {fileID: 6555428}
+  - component: {fileID: 4706968875920468436}
   m_Layer: 0
   m_Name: lo_Prop_SmallTable_A_LOD0
   m_TagString: Untagged
@@ -202,6 +217,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5881537, y: 1.2126795, z: 0.5174784}
   m_Center: {x: 0.00082470477, y: 0.6010242, z: 0.24138345}
+--- !u!114 &4706968875920468436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &148580
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 436586}
   - component: {fileID: 20568700}
+  - component: {fileID: 2942778992911974766}
   m_Layer: 0
   m_Name: Prop_SmallTable_A
   m_TagString: Untagged
@@ -260,3 +289,16 @@ LODGroup:
     - renderer: {fileID: 2325728}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &2942778992911974766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 4887294786625086388}
   - component: {fileID: 6864156733997596845}
   - component: {fileID: 6792657571440604141}
+  - component: {fileID: 3621620336528049587}
   m_Layer: 0
   m_Name: Light
   m_TagString: Untagged
@@ -370,6 +371,19 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &3621620336528049587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7420697962194907331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1001 &3894203568781086407
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 464912}
   - component: {fileID: 20579144}
+  - component: {fileID: 4266258757246950809}
   m_Layer: 0
   m_Name: Prop_Pulpit_A
   m_TagString: Untagged
@@ -58,6 +59,19 @@ LODGroup:
     - renderer: {fileID: 2396590}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &4266258757246950809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &186420
 GameObject:
   m_ObjectHideFlags: 0
@@ -69,6 +83,7 @@ GameObject:
   - component: {fileID: 463672}
   - component: {fileID: 3314274}
   - component: {fileID: 2396590}
+  - component: {fileID: 2469853082932320719}
   m_Layer: 0
   m_Name: lo_Prop_Pulpit_A_LOD1
   m_TagString: Untagged
@@ -148,6 +163,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2469853082932320719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &189966
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,6 +188,7 @@ GameObject:
   - component: {fileID: 3346806}
   - component: {fileID: 2367802}
   - component: {fileID: 6519386}
+  - component: {fileID: 6033961334305123114}
   m_Layer: 0
   m_Name: lo_Prop_Pulpit_A_LOD0
   m_TagString: Untagged
@@ -260,3 +289,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.15718, y: 2.1379793, z: 1.6449585}
   m_Center: {x: -0.0030561686, y: 1.0682381, z: 0.1708428}
+--- !u!114 &6033961334305123114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

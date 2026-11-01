@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 493632}
   - component: {fileID: 20535308}
   - component: {fileID: 9549256}
+  - component: {fileID: 4487694150322705885}
   m_Layer: 0
   m_Name: Prop_Boat_A
   m_TagString: Untagged
@@ -86,6 +87,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4487694150322705885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &136470
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,6 +112,7 @@ GameObject:
   - component: {fileID: 3315098}
   - component: {fileID: 2386456}
   - component: {fileID: 6523588}
+  - component: {fileID: 837607460032402766}
   m_Layer: 0
   m_Name: lo_Prop_Boat_A_LOD0
   m_TagString: Untagged
@@ -198,6 +213,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 11.097536, y: 2.8171902, z: 2.5999212}
   m_Center: {x: -4.9592543, y: 1.0689754, z: 0.007919908}
+--- !u!114 &837607460032402766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &149302
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +237,7 @@ GameObject:
   - component: {fileID: 417230}
   - component: {fileID: 3396190}
   - component: {fileID: 2383096}
+  - component: {fileID: 6669254437079324137}
   m_Layer: 0
   m_Name: lo_Prop_Boat_A_LOD2
   m_TagString: Untagged
@@ -288,6 +317,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6669254437079324137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &160238
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +373,7 @@ GameObject:
   - component: {fileID: 495676}
   - component: {fileID: 3331662}
   - component: {fileID: 2312496}
+  - component: {fileID: 666662331150492307}
   m_Layer: 0
   m_Name: lo_Prop_Boat_A_LOD1
   m_TagString: Untagged
@@ -410,3 +453,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &666662331150492307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3360610}
   - component: {fileID: 2396378}
   - component: {fileID: 6586708}
+  - component: {fileID: 7823034111190953405}
   m_Layer: 0
   m_Name: Villa2_Roof_Mid_A
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 0.6988442, z: 4}
   m_Center: {x: 2, y: -0.15057813, z: -2}
+--- !u!114 &7823034111190953405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 0dd5fb19180349579f8a8fd91bd41b69, type: 2}
     - target: {fileID: 919132149155446097, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
       propertyPath: m_Name
-      value: Scavenger
+      value: ScavengerGray
       objectReference: {fileID: 0}
     - target: {fileID: 1131371603700459478, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -79,5 +79,110 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5417297695864718847}
+    - targetCorrespondingSourceObject: {fileID: 3551255863337285566, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5168428503524986501}
+    - targetCorrespondingSourceObject: {fileID: -4523586478713198439, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2077790590231741712}
+    - targetCorrespondingSourceObject: {fileID: 2089275667189442638, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 633586981890653178}
+    - targetCorrespondingSourceObject: {fileID: 7029569923008187145, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9177315991012588475}
   m_SourcePrefab: {fileID: 100100000, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+--- !u!1 &1364635426176846687 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -4523586478713198439, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+  m_PrefabInstance: {fileID: 6037311283855188934}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2077790590231741712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364635426176846687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
+--- !u!1 &3622822892372830415 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7029569923008187145, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+  m_PrefabInstance: {fileID: 6037311283855188934}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9177315991012588475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622822892372830415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
+--- !u!1 &5707837016630414216 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2089275667189442638, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+  m_PrefabInstance: {fileID: 6037311283855188934}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &633586981890653178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707837016630414216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
+--- !u!1 &6848215203879345815 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+  m_PrefabInstance: {fileID: 6037311283855188934}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5417297695864718847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6848215203879345815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
+--- !u!1 &7097759617934464120 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3551255863337285566, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+  m_PrefabInstance: {fileID: 6037311283855188934}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5168428503524986501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7097759617934464120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

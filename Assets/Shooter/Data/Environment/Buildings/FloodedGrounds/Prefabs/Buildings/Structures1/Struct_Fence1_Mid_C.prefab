@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 425724}
   - component: {fileID: 20563814}
+  - component: {fileID: 8891243150859469709}
   m_Layer: 0
   m_Name: Struct_Fence1_Mid_C
   m_TagString: Untagged
@@ -63,6 +64,19 @@ LODGroup:
     - renderer: {fileID: 2387016}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &8891243150859469709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &116810
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,6 +89,7 @@ GameObject:
   - component: {fileID: 3364804}
   - component: {fileID: 2369676}
   - component: {fileID: 6556950}
+  - component: {fileID: 2740995601455555349}
   m_Layer: 0
   m_Name: Struct_Fence1_Mid_C_LOD0
   m_TagString: Untagged
@@ -175,6 +190,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.5888634, y: 3.3728032, z: 0.5999998}
   m_Center: {x: -3.2798214, y: 1.6340187, z: 0.0019037277}
+--- !u!114 &2740995601455555349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122750
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,6 +214,7 @@ GameObject:
   - component: {fileID: 421598}
   - component: {fileID: 3315170}
   - component: {fileID: 2343756}
+  - component: {fileID: 8665442091115063237}
   m_Layer: 0
   m_Name: Struct_Fence1_Mid_C_LOD1
   m_TagString: Untagged
@@ -265,6 +294,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8665442091115063237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &133144
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,6 +318,7 @@ GameObject:
   - component: {fileID: 491808}
   - component: {fileID: 3358236}
   - component: {fileID: 2387016}
+  - component: {fileID: 8612662334885913901}
   m_Layer: 0
   m_Name: Struct_Fence1_Mid_C_LOD2
   m_TagString: Untagged
@@ -355,3 +398,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8612662334885913901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

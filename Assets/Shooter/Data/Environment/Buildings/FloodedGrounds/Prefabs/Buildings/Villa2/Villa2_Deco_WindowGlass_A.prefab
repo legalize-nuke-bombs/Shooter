@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3305400}
   - component: {fileID: 2378204}
   - component: {fileID: 4328878813244416755}
+  - component: {fileID: 1324010543717068000}
   m_Layer: 0
   m_Name: Villa2_Deco_WindowGlass_A
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: b4107ce16c2641447bb94ba8e62edb98, type: 3}
+--- !u!114 &1324010543717068000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 405850}
   - component: {fileID: 20567504}
+  - component: {fileID: 5241675393228197604}
   m_Layer: 0
   m_Name: Struct_Pole_A
   m_TagString: Untagged
@@ -58,6 +59,19 @@ LODGroup:
     - renderer: {fileID: 2346454}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &5241675393228197604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &148484
 GameObject:
   m_ObjectHideFlags: 0
@@ -69,6 +83,7 @@ GameObject:
   - component: {fileID: 411878}
   - component: {fileID: 3367440}
   - component: {fileID: 2346454}
+  - component: {fileID: 2313744173584472600}
   m_Layer: 0
   m_Name: Struct_Pole_A_LOD1
   m_TagString: Untagged
@@ -148,6 +163,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2313744173584472600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &172958
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,6 +188,7 @@ GameObject:
   - component: {fileID: 3357642}
   - component: {fileID: 2328904}
   - component: {fileID: 6452310}
+  - component: {fileID: 5909987637393109765}
   m_Layer: 0
   m_Name: Struct_Pole_A_LOD0
   m_TagString: Untagged
@@ -261,3 +290,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: f5592db6982749f4e8ed03db7ebc685a, type: 3}
+--- !u!114 &5909987637393109765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

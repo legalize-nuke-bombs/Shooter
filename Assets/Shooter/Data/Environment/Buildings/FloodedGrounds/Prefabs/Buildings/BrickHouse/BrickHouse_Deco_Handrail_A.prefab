@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3362488}
   - component: {fileID: 2356688}
   - component: {fileID: 6502936}
+  - component: {fileID: 5390034760565473357}
   m_Layer: 0
   m_Name: BrickHouse_Deco_Handrail_A
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.20999998, y: 1.0308168, z: 1.9826257}
   m_Center: {x: -0.004999999, y: -0.48540843, z: -0.99131334}
+--- !u!114 &5390034760565473357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

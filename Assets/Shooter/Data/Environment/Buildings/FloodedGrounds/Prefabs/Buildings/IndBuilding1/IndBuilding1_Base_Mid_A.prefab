@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3364104}
   - component: {fileID: 2375754}
   - component: {fileID: 6526358}
+  - component: {fileID: 390881531063527823}
   m_Layer: 0
   m_Name: IndBuilding1_Base_Mid_A
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 1, z: 0.55}
   m_Center: {x: 1.5, y: 0.5, z: 0.07499996}
+--- !u!114 &390881531063527823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 3309432}
   - component: {fileID: 2309432}
   - component: {fileID: 8081476439731333309}
+  - component: {fileID: 8028884537245891}
   m_Layer: 0
   m_Name: cabinBase_01_LOD0
   m_TagString: Untagged
@@ -145,3 +146,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 1d458155329360c4d953fc4dc955df26, type: 3}
+--- !u!114 &8028884537245891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

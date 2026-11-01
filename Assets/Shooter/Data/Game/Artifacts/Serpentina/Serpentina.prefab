@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 8809961345648682789}
   - component: {fileID: 7481119780141524986}
   - component: {fileID: 5328195872907083070}
+  - component: {fileID: 8637978756031357481}
   m_Layer: 12
   m_Name: Point Light
   m_TagString: Untagged
@@ -272,6 +273,19 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &8637978756031357481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666165840921489927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &6916792606405244572
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,6 +298,7 @@ GameObject:
   - component: {fileID: 4030499080080098360}
   - component: {fileID: 2635230646540579807}
   - component: {fileID: 5929884553616811936}
+  - component: {fileID: 8537397083424725107}
   m_Layer: 0
   m_Name: Stone
   m_TagString: Untagged
@@ -384,3 +399,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.78300965, y: 0.38075042, z: 0.8541522}
   m_Center: {x: 0.011845395, y: 0.18421966, z: 0.04162872}
+--- !u!114 &8537397083424725107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6916792606405244572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3322068}
   - component: {fileID: 2322068}
   - component: {fileID: 687056199696623261}
+  - component: {fileID: 9114503695081360615}
   m_Layer: 0
   m_Name: porchPole_01_LOD0
   m_TagString: Untagged
@@ -113,6 +114,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 7349bd44562262247a6401fc939d654b, type: 3}
+--- !u!114 &9114503695081360615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122010
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +139,7 @@ GameObject:
   - component: {fileID: 3322074}
   - component: {fileID: 2322074}
   - component: {fileID: 2500201669672045007}
+  - component: {fileID: 3662888436904198854}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
   m_TagString: Untagged
@@ -226,6 +241,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 57384fc0379c4974a8e6294115620a8a, type: 3}
+--- !u!114 &3662888436904198854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122014
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +330,7 @@ GameObject:
   - component: {fileID: 3322084}
   - component: {fileID: 2322084}
   - component: {fileID: 1210888720218571279}
+  - component: {fileID: 2108082561691347436}
   m_Layer: 0
   m_Name: porchTimbersSupport_01_LOD0
   m_TagString: Untagged
@@ -403,6 +432,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: f541d57e2ab5a2742b8c6951d261b701, type: 3}
+--- !u!114 &2108082561691347436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122032
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,6 +457,7 @@ GameObject:
   - component: {fileID: 3322088}
   - component: {fileID: 2322088}
   - component: {fileID: 4350868236825451882}
+  - component: {fileID: 5224931386865064546}
   m_Layer: 0
   m_Name: cabinFloor_01_LOD0
   m_TagString: Untagged
@@ -516,6 +559,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 812133daa1e44c44a99dabe2f0f760ee, type: 3}
+--- !u!114 &5224931386865064546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122034
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,6 +584,7 @@ GameObject:
   - component: {fileID: 3322090}
   - component: {fileID: 2322090}
   - component: {fileID: 3271736772256734294}
+  - component: {fileID: 6512851340450303847}
   m_Layer: 0
   m_Name: cabinWallsInterior_01_LOD0
   m_TagString: Untagged
@@ -629,6 +686,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 581f30760eaca0640956c739709d7cf7, type: 3}
+--- !u!114 &6512851340450303847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122036
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,6 +711,7 @@ GameObject:
   - component: {fileID: 3322092}
   - component: {fileID: 2322092}
   - component: {fileID: 1583266563456172757}
+  - component: {fileID: 6036060858270200831}
   m_Layer: 0
   m_Name: wallTimberJoint_01_LOD0
   m_TagString: Untagged
@@ -742,6 +813,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 75767e58aeb6f8240b888d7ef7784b39, type: 3}
+--- !u!114 &6036060858270200831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122038
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +838,7 @@ GameObject:
   - component: {fileID: 3322094}
   - component: {fileID: 2322094}
   - component: {fileID: 3156786618306428041}
+  - component: {fileID: 1290865065585049043}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
   m_TagString: Untagged
@@ -855,6 +940,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 9574cebe04462aa4eaffc021e31e2fca, type: 3}
+--- !u!114 &1290865065585049043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122050
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,6 +964,7 @@ GameObject:
   - component: {fileID: 422050}
   - component: {fileID: 3322104}
   - component: {fileID: 2322104}
+  - component: {fileID: 1431886982324161514}
   m_Layer: 0
   m_Name: window_01_LOD1
   m_TagString: Untagged
@@ -945,6 +1044,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1431886982324161514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122054
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,6 +1132,7 @@ GameObject:
   - component: {fileID: 3322122}
   - component: {fileID: 2322122}
   - component: {fileID: 6112291482201173663}
+  - component: {fileID: 3297759511400955617}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
   m_TagString: Untagged
@@ -1121,6 +1234,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 9574cebe04462aa4eaffc021e31e2fca, type: 3}
+--- !u!114 &3297759511400955617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122074
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,6 +1259,7 @@ GameObject:
   - component: {fileID: 3322124}
   - component: {fileID: 2322124}
   - component: {fileID: 2764578634382185170}
+  - component: {fileID: 2046219381513755030}
   m_Layer: 0
   m_Name: cabinUpperWalls_01_LOD0
   m_TagString: Untagged
@@ -1234,6 +1361,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 82b0d188c9d363240bc402cbf012a1dc, type: 3}
+--- !u!114 &2046219381513755030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122076
 GameObject:
   m_ObjectHideFlags: 0
@@ -1246,6 +1386,7 @@ GameObject:
   - component: {fileID: 3322126}
   - component: {fileID: 2322126}
   - component: {fileID: 1775833013658864816}
+  - component: {fileID: 6186238543720677671}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
   m_TagString: Untagged
@@ -1347,6 +1488,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 9574cebe04462aa4eaffc021e31e2fca, type: 3}
+--- !u!114 &6186238543720677671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1359,6 +1513,7 @@ GameObject:
   - component: {fileID: 3322128}
   - component: {fileID: 2322128}
   - component: {fileID: 3555375001829922922}
+  - component: {fileID: 8270475398327309318}
   m_Layer: 0
   m_Name: doorAttach_01_LOD0
   m_TagString: Untagged
@@ -1460,6 +1615,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 5cc7532acbb33984c801c81972a3eee7, type: 3}
+--- !u!114 &8270475398327309318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122082
 GameObject:
   m_ObjectHideFlags: 0
@@ -1472,6 +1640,7 @@ GameObject:
   - component: {fileID: 3322130}
   - component: {fileID: 2322130}
   - component: {fileID: 3371794272273987416}
+  - component: {fileID: 9007012656799848622}
   m_Layer: 0
   m_Name: window_01_LOD0
   m_TagString: Untagged
@@ -1573,6 +1742,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 3ed582b968aa1994ba25d84d78f1de92, type: 3}
+--- !u!114 &9007012656799848622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122086
 GameObject:
   m_ObjectHideFlags: 0
@@ -1618,6 +1800,7 @@ GameObject:
   - component: {fileID: 3322134}
   - component: {fileID: 2322134}
   - component: {fileID: 7498194835693925533}
+  - component: {fileID: 7027068478786331907}
   m_Layer: 0
   m_Name: doorThreshold_01_LOD0
   m_TagString: Untagged
@@ -1719,6 +1902,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 2a1aef5fad94fdb44848d83f4902d68e, type: 3}
+--- !u!114 &7027068478786331907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122092
 GameObject:
   m_ObjectHideFlags: 0
@@ -1731,6 +1927,7 @@ GameObject:
   - component: {fileID: 3322136}
   - component: {fileID: 2322136}
   - component: {fileID: 841015074170064404}
+  - component: {fileID: 2464897588116946308}
   m_Layer: 0
   m_Name: cabinWoodWork_01_LOD0
   m_TagString: Untagged
@@ -1833,6 +2030,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 7a3b285e3bc16544592ac68150d9e0e3, type: 3}
+--- !u!114 &2464897588116946308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122094
 GameObject:
   m_ObjectHideFlags: 0
@@ -1844,6 +2054,7 @@ GameObject:
   - component: {fileID: 422094}
   - component: {fileID: 3322138}
   - component: {fileID: 2322138}
+  - component: {fileID: 36329426763326213}
   m_Layer: 0
   m_Name: window_01_LOD1
   m_TagString: Untagged
@@ -1923,6 +2134,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &36329426763326213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122106
 GameObject:
   m_ObjectHideFlags: 0
@@ -1967,6 +2191,7 @@ GameObject:
   - component: {fileID: 3322142}
   - component: {fileID: 2322142}
   - component: {fileID: 4389197797222358017}
+  - component: {fileID: 5003211607667834620}
   m_Layer: 0
   m_Name: cabinSteps_01_LOD0
   m_TagString: Untagged
@@ -2068,6 +2293,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5180fea0c7c8c87438fd5199003566c8, type: 3}
+--- !u!114 &5003211607667834620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122114
 GameObject:
   m_ObjectHideFlags: 0
@@ -2113,6 +2351,7 @@ GameObject:
   - component: {fileID: 3322146}
   - component: {fileID: 2322146}
   - component: {fileID: 2204157936794617486}
+  - component: {fileID: 510282104809816540}
   m_Layer: 0
   m_Name: porchFloorSupportTimber_01_LOD0
   m_TagString: Untagged
@@ -2214,6 +2453,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 7ebfa9f749d03d943817337bd6ea4a41, type: 3}
+--- !u!114 &510282104809816540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122120
 GameObject:
   m_ObjectHideFlags: 0
@@ -2226,6 +2478,7 @@ GameObject:
   - component: {fileID: 3322148}
   - component: {fileID: 2322148}
   - component: {fileID: 4064549554545801906}
+  - component: {fileID: 6292780381550495174}
   m_Layer: 0
   m_Name: window_01_LOD0
   m_TagString: Untagged
@@ -2327,6 +2580,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 3ed582b968aa1994ba25d84d78f1de92, type: 3}
+--- !u!114 &6292780381550495174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122126
 GameObject:
   m_ObjectHideFlags: 0
@@ -2372,6 +2638,7 @@ GameObject:
   - component: {fileID: 3322152}
   - component: {fileID: 2322152}
   - component: {fileID: 6725180923658510984}
+  - component: {fileID: 7351217594631121538}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
   m_TagString: Untagged
@@ -2473,6 +2740,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 9574cebe04462aa4eaffc021e31e2fca, type: 3}
+--- !u!114 &7351217594631121538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2485,6 +2765,7 @@ GameObject:
   - component: {fileID: 3322154}
   - component: {fileID: 2322154}
   - component: {fileID: 7698672485206648572}
+  - component: {fileID: 5711683478924387975}
   m_Layer: 0
   m_Name: cabinWallsExterior_01_LOD0
   m_TagString: Untagged
@@ -2586,6 +2867,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: c1abaa4d6fb63ff419a79e3da0414f3e, type: 3}
+--- !u!114 &5711683478924387975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122132
 GameObject:
   m_ObjectHideFlags: 0
@@ -2629,6 +2923,7 @@ GameObject:
   - component: {fileID: 3322156}
   - component: {fileID: 2322156}
   - component: {fileID: 7735856122130879997}
+  - component: {fileID: 3140681592671668244}
   m_Layer: 0
   m_Name: cabinExteriorFireplace_01_LOD0
   m_TagString: Untagged
@@ -2731,6 +3026,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 22e49f51b3728fa4ca325078e42e0274, type: 3}
+--- !u!114 &3140681592671668244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122136
 GameObject:
   m_ObjectHideFlags: 0
@@ -2743,6 +3051,7 @@ GameObject:
   - component: {fileID: 3322158}
   - component: {fileID: 2322158}
   - component: {fileID: 6556641369490131947}
+  - component: {fileID: 5108863198043983237}
   m_Layer: 0
   m_Name: wallTimberJoint_01_LOD0
   m_TagString: Untagged
@@ -2844,6 +3153,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 75767e58aeb6f8240b888d7ef7784b39, type: 3}
+--- !u!114 &5108863198043983237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122138
 GameObject:
   m_ObjectHideFlags: 0
@@ -2855,6 +3177,7 @@ GameObject:
   - component: {fileID: 422138}
   - component: {fileID: 3322160}
   - component: {fileID: 2322160}
+  - component: {fileID: 1410780147078162133}
   m_Layer: 0
   m_Name: window_02_LOD1
   m_TagString: Untagged
@@ -2934,6 +3257,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1410780147078162133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122142
 GameObject:
   m_ObjectHideFlags: 0
@@ -2946,6 +3282,7 @@ GameObject:
   - component: {fileID: 3322164}
   - component: {fileID: 2322164}
   - component: {fileID: 7248807129885257466}
+  - component: {fileID: 7057578504954381827}
   m_Layer: 0
   m_Name: doorAttachFrame_01_LOD0
   m_TagString: Untagged
@@ -3048,6 +3385,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 8508e8a1edb100d4fb48dbcd5a59d3bb, type: 3}
+--- !u!114 &7057578504954381827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122144
 GameObject:
   m_ObjectHideFlags: 0
@@ -3060,6 +3410,7 @@ GameObject:
   - component: {fileID: 3322166}
   - component: {fileID: 2322166}
   - component: {fileID: 6579990035193113301}
+  - component: {fileID: 2987895103233391458}
   m_Layer: 0
   m_Name: window_02_LOD0
   m_TagString: Untagged
@@ -3161,6 +3512,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 34aa7a17445a9f34daaf0294bee96289, type: 3}
+--- !u!114 &2987895103233391458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122146
 GameObject:
   m_ObjectHideFlags: 0
@@ -3173,6 +3537,7 @@ GameObject:
   - component: {fileID: 3322168}
   - component: {fileID: 2322168}
   - component: {fileID: 3848235009751883402}
+  - component: {fileID: 4472224150581158960}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
   m_TagString: Untagged
@@ -3274,6 +3639,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 9574cebe04462aa4eaffc021e31e2fca, type: 3}
+--- !u!114 &4472224150581158960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122150
 GameObject:
   m_ObjectHideFlags: 0
@@ -3286,6 +3664,7 @@ GameObject:
   - component: {fileID: 3322172}
   - component: {fileID: 2322172}
   - component: {fileID: 7755872220844970685}
+  - component: {fileID: 5389551622686544609}
   m_Layer: 0
   m_Name: cabinTopRoof_01_LOD0
   m_TagString: Untagged
@@ -3387,6 +3766,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 2346eb1eb3892e347b73168ffbdab00d, type: 3}
+--- !u!114 &5389551622686544609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122156
 GameObject:
   m_ObjectHideFlags: 0
@@ -3399,6 +3791,7 @@ GameObject:
   - component: {fileID: 3322176}
   - component: {fileID: 2322176}
   - component: {fileID: 3825743025702720331}
+  - component: {fileID: 4872536885569118}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
   m_TagString: Untagged
@@ -3500,6 +3893,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 9574cebe04462aa4eaffc021e31e2fca, type: 3}
+--- !u!114 &4872536885569118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122164
 GameObject:
   m_ObjectHideFlags: 0
@@ -3512,6 +3918,7 @@ GameObject:
   - component: {fileID: 3322182}
   - component: {fileID: 2322182}
   - component: {fileID: 1353519442002349028}
+  - component: {fileID: 2193733553623539245}
   m_Layer: 0
   m_Name: cabinRoof_01_LOD0
   m_TagString: Untagged
@@ -3614,6 +4021,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 5462d08ba98cc5a4183a094125dfb307, type: 3}
+--- !u!114 &2193733553623539245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122170
 GameObject:
   m_ObjectHideFlags: 0
@@ -3626,6 +4046,7 @@ GameObject:
   - component: {fileID: 3322188}
   - component: {fileID: 2322188}
   - component: {fileID: 7502107893288298658}
+  - component: {fileID: 4253769232391367233}
   m_Layer: 0
   m_Name: cabinBase_01_LOD0
   m_TagString: Untagged
@@ -3727,6 +4148,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 1d458155329360c4d953fc4dc955df26, type: 3}
+--- !u!114 &4253769232391367233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122174
 GameObject:
   m_ObjectHideFlags: 0
@@ -3739,6 +4173,7 @@ GameObject:
   - component: {fileID: 3322192}
   - component: {fileID: 2322192}
   - component: {fileID: 1205231769091406085}
+  - component: {fileID: 4491650569776306450}
   m_Layer: 0
   m_Name: door_01_LOD0
   m_TagString: Untagged
@@ -3840,6 +4275,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5cc7532acbb33984c801c81972a3eee7, type: 3}
+--- !u!114 &4491650569776306450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122176
 GameObject:
   m_ObjectHideFlags: 0
@@ -3852,6 +4300,7 @@ GameObject:
   - component: {fileID: 3322194}
   - component: {fileID: 2322194}
   - component: {fileID: 7438517501793829350}
+  - component: {fileID: 2762800626421226554}
   m_Layer: 0
   m_Name: porchFloor_01_LOD0
   m_TagString: Untagged
@@ -3953,6 +4402,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: c899a2d16dacae9428bce8c4f7b35cce, type: 3}
+--- !u!114 &2762800626421226554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122178
 GameObject:
   m_ObjectHideFlags: 0
@@ -3997,6 +4459,7 @@ GameObject:
   - component: {fileID: 3322196}
   - component: {fileID: 2322196}
   - component: {fileID: 8122888133807832475}
+  - component: {fileID: 4813376973644035992}
   m_Layer: 0
   m_Name: cabinInteriorFireplace_01_LOD0
   m_TagString: Untagged
@@ -4099,6 +4562,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: d503af6a9d8b72948b41985d101b6ed6, type: 3}
+--- !u!114 &4813376973644035992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122200
 GameObject:
   m_ObjectHideFlags: 0
@@ -4143,6 +4619,7 @@ GameObject:
   - component: {fileID: 3322210}
   - component: {fileID: 2322210}
   - component: {fileID: 1248968594228556741}
+  - component: {fileID: 8293292596258121642}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
   m_TagString: Untagged
@@ -4244,6 +4721,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 57384fc0379c4974a8e6294115620a8a, type: 3}
+--- !u!114 &8293292596258121642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122206
 GameObject:
   m_ObjectHideFlags: 0
@@ -4256,6 +4746,7 @@ GameObject:
   - component: {fileID: 3322212}
   - component: {fileID: 2322212}
   - component: {fileID: 1497443434818074392}
+  - component: {fileID: 2960211243561182759}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
   m_TagString: Untagged
@@ -4357,6 +4848,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 57384fc0379c4974a8e6294115620a8a, type: 3}
+--- !u!114 &2960211243561182759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122210
 GameObject:
   m_ObjectHideFlags: 0
@@ -4433,6 +4937,7 @@ GameObject:
   - component: {fileID: 3322218}
   - component: {fileID: 2322218}
   - component: {fileID: 3720450786872469916}
+  - component: {fileID: 9097450750910738900}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
   m_TagString: Untagged
@@ -4534,6 +5039,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 57384fc0379c4974a8e6294115620a8a, type: 3}
+--- !u!114 &9097450750910738900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &122218
 GameObject:
   m_ObjectHideFlags: 0
@@ -4656,6 +5174,7 @@ GameObject:
   - component: {fileID: 3332814}
   - component: {fileID: 2332814}
   - component: {fileID: 7193960323279865701}
+  - component: {fileID: 1328175017851947052}
   m_Layer: 0
   m_Name: porchPole_01_LOD0
   m_TagString: Untagged
@@ -4757,6 +5276,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 7349bd44562262247a6401fc939d654b, type: 3}
+--- !u!114 &1328175017851947052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &132814
 GameObject:
   m_ObjectHideFlags: 0

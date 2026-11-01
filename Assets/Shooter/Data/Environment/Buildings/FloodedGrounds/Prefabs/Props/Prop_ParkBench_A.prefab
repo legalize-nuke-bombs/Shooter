@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 440592}
   - component: {fileID: 3352258}
   - component: {fileID: 2318122}
+  - component: {fileID: 1080575352406266738}
   m_Layer: 0
   m_Name: lo_Prop_ParkBench_A_LOD1
   m_TagString: Untagged
@@ -90,6 +91,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1080575352406266738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &175182
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,6 +115,7 @@ GameObject:
   - component: {fileID: 473370}
   - component: {fileID: 3348780}
   - component: {fileID: 2341038}
+  - component: {fileID: 8733142169051220372}
   m_Layer: 0
   m_Name: lo_Prop_ParkBench_A_LOD2
   m_TagString: Untagged
@@ -180,6 +195,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8733142169051220372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &191750
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,6 +220,7 @@ GameObject:
   - component: {fileID: 3329606}
   - component: {fileID: 2347452}
   - component: {fileID: 6528718}
+  - component: {fileID: 6728006630083119330}
   m_Layer: 0
   m_Name: lo_Prop_ParkBench_A_LOD0
   m_TagString: Untagged
@@ -292,6 +321,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.616446, y: 1.1726127, z: 0.9862871}
   m_Center: {x: -0.0022388697, y: 0.6023555, z: 0.050181404}
+--- !u!114 &6728006630083119330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &194530
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +344,7 @@ GameObject:
   m_Component:
   - component: {fileID: 413904}
   - component: {fileID: 20503288}
+  - component: {fileID: 537956518830202254}
   m_Layer: 0
   m_Name: Prop_ParkBench_A
   m_TagString: Untagged
@@ -355,3 +398,16 @@ LODGroup:
     - renderer: {fileID: 2341038}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &537956518830202254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

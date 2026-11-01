@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2369490}
   - component: {fileID: 6472002}
   - component: {fileID: 20503144}
+  - component: {fileID: 2074196105307740311}
   m_Layer: 0
   m_Name: Awning_2A
   m_TagString: Untagged
@@ -134,3 +135,16 @@ LODGroup:
     - renderer: {fileID: 2369490}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &2074196105307740311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

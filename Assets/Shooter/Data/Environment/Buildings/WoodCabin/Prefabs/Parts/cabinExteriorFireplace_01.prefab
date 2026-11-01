@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3336372}
   - component: {fileID: 2336372}
   - component: {fileID: 87576767524372823}
+  - component: {fileID: 4778906837574566249}
   m_Layer: 0
   m_Name: cabinExteriorFireplace_01_LOD0
   m_TagString: Untagged
@@ -114,6 +115,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 22e49f51b3728fa4ca325078e42e0274, type: 3}
+--- !u!114 &4778906837574566249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &136376
 GameObject:
   m_ObjectHideFlags: 0

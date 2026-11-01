@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3319606}
   - component: {fileID: 2383394}
   - component: {fileID: 6426770}
+  - component: {fileID: 5455595880317343887}
   m_Layer: 0
   m_Name: birdhouse
   m_TagString: Untagged
@@ -113,6 +114,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: c9a5915c96858b348a2e30a27cba2e12, type: 3}
+--- !u!114 &5455595880317343887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &195872
 GameObject:
   m_ObjectHideFlags: 0

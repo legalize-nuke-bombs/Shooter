@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 463258}
   - component: {fileID: 3388182}
   - component: {fileID: 2345406}
+  - component: {fileID: 1092346555233449628}
   m_Layer: 0
   m_Name: lo_Prop_Cabinet_B_LOD1
   m_TagString: Untagged
@@ -90,6 +91,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1092346555233449628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &107590
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +116,7 @@ GameObject:
   - component: {fileID: 3391466}
   - component: {fileID: 2344978}
   - component: {fileID: 6511708}
+  - component: {fileID: 33646051331346326}
   m_Layer: 0
   m_Name: lo_Prop_Cabinet_B_LOD0
   m_TagString: Untagged
@@ -202,6 +217,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.156927, y: 3.438511, z: 1.0522707}
   m_Center: {x: 0.00071692467, y: 1.7208741, z: 0.46400052}
+--- !u!114 &33646051331346326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &126718
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 408488}
   - component: {fileID: 20548814}
+  - component: {fileID: 2241447667544930326}
   m_Layer: 0
   m_Name: Prop_Cabinet_B
   m_TagString: Untagged
@@ -260,3 +289,16 @@ LODGroup:
     - renderer: {fileID: 2345406}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &2241447667544930326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

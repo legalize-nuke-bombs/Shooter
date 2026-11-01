@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3379198}
   - component: {fileID: 2309132}
   - component: {fileID: 6469972}
+  - component: {fileID: 2037726270054215554}
   m_Layer: 0
   m_Name: Fortified_Wall_2A
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300006, guid: 47987d36ba73d0e4fbd1d4f6512652d8, type: 3}
+--- !u!114 &2037726270054215554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7431905612370003}
   - component: {fileID: 7431905612370004}
   - component: {fileID: 7431905612370011}
+  - component: {fileID: 3395426589012428280}
   m_Layer: 0
   m_Name: Screen
   m_TagString: Untagged
@@ -234,6 +235,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3395426589012428280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7431905612370001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7431905612370005
 GameObject:
   m_ObjectHideFlags: 0

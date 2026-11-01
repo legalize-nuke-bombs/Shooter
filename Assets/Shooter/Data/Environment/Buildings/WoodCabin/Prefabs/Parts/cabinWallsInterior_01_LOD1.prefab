@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3348244}
   - component: {fileID: 2348244}
   - component: {fileID: 8261422928619176256}
+  - component: {fileID: 2608603624406339064}
   m_Layer: 0
   m_Name: cabinWallsInterior_01_LOD1
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5ae5d96b4c2fd874f9845f6179d05745, type: 3}
+--- !u!114 &2608603624406339064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

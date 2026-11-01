@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 65951745534300496}
   - component: {fileID: 65152465880986800}
   - component: {fileID: 65884649604435236}
+  - component: {fileID: 254050434904072946}
   m_Layer: 0
   m_Name: rus_build_4et_01
   m_TagString: Untagged
@@ -166,6 +167,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 8, y: 16, z: 38}
   m_Center: {x: 12, y: 28, z: 0}
+--- !u!114 &254050434904072946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372719032071574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1867896303410342
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,6 +191,7 @@ GameObject:
   - component: {fileID: 4069001297436522}
   - component: {fileID: 33332339819614764}
   - component: {fileID: 23890709015862612}
+  - component: {fileID: 8784946181314827843}
   m_Layer: 0
   m_Name: Regroup13
   m_TagString: Untagged
@@ -256,6 +271,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8784946181314827843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867896303410342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1920702879536118
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,6 +295,7 @@ GameObject:
   - component: {fileID: 4546748078426530}
   - component: {fileID: 33415419503442506}
   - component: {fileID: 23449219787300162}
+  - component: {fileID: 7749682182889419603}
   m_Layer: 0
   m_Name: rus_build_dec_01
   m_TagString: Untagged
@@ -346,3 +375,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7749682182889419603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920702879536118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

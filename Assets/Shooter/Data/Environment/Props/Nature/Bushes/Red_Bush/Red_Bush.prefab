@@ -23,19 +23,20 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8230193977984253130}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.686, z: -0.468}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8807064048693926011}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8807064048694051581
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -7286387890281315533, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
@@ -47,12 +48,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7286387890281315533, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 1d2ed9cc10dda1245b29dcdf4fa052bf, type: 2}
     - target: {fileID: 100006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
       propertyPath: m_Name
-      value: Red_Bush_A
+      value: Red_Bush
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
       propertyPath: m_RootOrder
@@ -91,7 +92,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2145386795432356804, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 1d2ed9cc10dda1245b29dcdf4fa052bf, type: 2}
     - target: {fileID: 6568135339202448505, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
@@ -103,13 +104,103 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6568135339202448505, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 1d2ed9cc10dda1245b29dcdf4fa052bf, type: 2}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 400006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4075589374702726312}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 100006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5115017511638499165}
+    - targetCorrespondingSourceObject: {fileID: 1303839410134742666, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5577096062676920231}
+    - targetCorrespondingSourceObject: {fileID: -5051306292187163037, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6433294897213787261}
+    - targetCorrespondingSourceObject: {fileID: -3435473156833451138, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6367666628053176572}
   m_SourcePrefab: {fileID: 100100000, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+--- !u!1 &3056331483586797955 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -3435473156833451138, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+  m_PrefabInstance: {fileID: 8807064048694051581}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6367666628053176572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3056331483586797955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
+--- !u!1 &4890589957300212894 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -5051306292187163037, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+  m_PrefabInstance: {fileID: 8807064048694051581}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6433294897213787261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4890589957300212894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
+--- !u!1 &7503226907014050935 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1303839410134742666, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+  m_PrefabInstance: {fileID: 8807064048694051581}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5577096062676920231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7503226907014050935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!4 &8807064048693926011 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
   m_PrefabInstance: {fileID: 8807064048694051581}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8807064048693953627 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+  m_PrefabInstance: {fileID: 8807064048694051581}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5115017511638499165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8807064048693953627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

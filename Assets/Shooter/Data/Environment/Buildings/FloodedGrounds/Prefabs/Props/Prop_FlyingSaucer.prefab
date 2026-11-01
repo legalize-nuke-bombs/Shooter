@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3390462}
   - component: {fileID: 2335530}
   - component: {fileID: 6741733209262177071}
+  - component: {fileID: 2558090486982182250}
   m_Layer: 0
   m_Name: Prop_FlyingSaucer
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9e0f549b4811e8d40b442f55a29bb169, type: 3}
+--- !u!114 &2558090486982182250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

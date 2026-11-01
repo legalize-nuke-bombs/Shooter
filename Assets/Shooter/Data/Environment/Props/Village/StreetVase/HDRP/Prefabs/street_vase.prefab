@@ -91,7 +91,31 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 82617008f5322084096723ff6147234b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3362132801974984378}
+    - targetCorrespondingSourceObject: {fileID: 8134837689134937748, guid: 82617008f5322084096723ff6147234b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2817896925993885064}
+    - targetCorrespondingSourceObject: {fileID: -6542453046031023222, guid: 82617008f5322084096723ff6147234b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7987036821333136671}
   m_SourcePrefab: {fileID: 100100000, guid: 82617008f5322084096723ff6147234b, type: 3}
+--- !u!1 &3324369889829080573 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8134837689134937748, guid: 82617008f5322084096723ff6147234b, type: 3}
+  m_PrefabInstance: {fileID: 6829206401565113193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2817896925993885064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3324369889829080573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5910797334850143800 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 82617008f5322084096723ff6147234b, type: 3}
@@ -135,4 +159,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
+  mobility: 0
+--- !u!1 &8931410554576877795 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6542453046031023222, guid: 82617008f5322084096723ff6147234b, type: 3}
+  m_PrefabInstance: {fileID: 6829206401565113193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7987036821333136671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8931410554576877795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
   mobility: 0

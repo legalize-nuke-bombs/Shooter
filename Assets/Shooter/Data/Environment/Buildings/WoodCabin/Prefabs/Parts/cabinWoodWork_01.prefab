@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 3358852}
   - component: {fileID: 2358852}
   - component: {fileID: 5803115176997969983}
+  - component: {fileID: 110007631416329495}
   m_Layer: 0
   m_Name: cabinWoodWork_01_LOD0
   m_TagString: Untagged
@@ -146,3 +147,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 7a3b285e3bc16544592ac68150d9e0e3, type: 3}
+--- !u!114 &110007631416329495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

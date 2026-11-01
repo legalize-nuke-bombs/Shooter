@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 401466}
   - component: {fileID: 20579020}
+  - component: {fileID: 812843312120594837}
   m_Layer: 0
   m_Name: Struct_Pavilion_A
   m_TagString: Untagged
@@ -63,6 +64,19 @@ LODGroup:
     - renderer: {fileID: 2332886}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!114 &812843312120594837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &117012
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,6 +88,7 @@ GameObject:
   - component: {fileID: 417344}
   - component: {fileID: 3317118}
   - component: {fileID: 2347858}
+  - component: {fileID: 5075420523482986978}
   m_Layer: 0
   m_Name: Struct_Pavilion_A_LOD1
   m_TagString: Untagged
@@ -153,6 +168,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5075420523482986978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &188630
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,6 +193,7 @@ GameObject:
   - component: {fileID: 3367966}
   - component: {fileID: 2386348}
   - component: {fileID: 6465762}
+  - component: {fileID: 4139730034358754423}
   m_Layer: 0
   m_Name: Struct_Pavilion_A_LOD0
   m_TagString: Untagged
@@ -266,6 +295,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: 96bc21f18d784134caccf6246836dcc0, type: 3}
+--- !u!114 &4139730034358754423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &192616
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,6 +319,7 @@ GameObject:
   - component: {fileID: 492738}
   - component: {fileID: 3323320}
   - component: {fileID: 2332886}
+  - component: {fileID: 7532957648235447251}
   m_Layer: 0
   m_Name: Struct_Pavilion_A_LOD2
   m_TagString: Untagged
@@ -356,3 +399,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7532957648235447251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

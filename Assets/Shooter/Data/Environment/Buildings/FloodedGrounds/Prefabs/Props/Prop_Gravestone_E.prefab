@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3339486}
   - component: {fileID: 2338116}
   - component: {fileID: 6504890}
+  - component: {fileID: 3715247744785801302}
   m_Layer: 0
   m_Name: Prop_Gravestone_E
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7578423, y: 2.3118448, z: 0.7578423}
   m_Center: {x: 0, y: 1.14642, z: -0.0031974912}
+--- !u!114 &3715247744785801302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

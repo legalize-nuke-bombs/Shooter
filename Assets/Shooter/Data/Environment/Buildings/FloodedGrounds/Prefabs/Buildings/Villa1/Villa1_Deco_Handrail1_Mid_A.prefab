@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3330804}
   - component: {fileID: 2321930}
   - component: {fileID: 6580454}
+  - component: {fileID: 7662620781888925109}
   m_Layer: 0
   m_Name: Villa1_Deco_Handrail1_Mid_A
   m_TagString: Untagged
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 1.0999999, z: 0.20000008}
   m_Center: {x: -2, y: 0.5500001, z: -0.000000070780516}
+--- !u!114 &7662620781888925109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

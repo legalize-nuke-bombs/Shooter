@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7221281444455114813}
   - component: {fileID: 7425445493791635717}
   - component: {fileID: 7005953031472588083}
+  - component: {fileID: 7691902833346041546}
   m_Layer: 0
   m_Name: zabor01
   m_TagString: Untagged
@@ -113,6 +114,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 305202c0ba184614f8ed372b12fd7cb7, type: 3}
+--- !u!114 &7691902833346041546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265537571264544997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &820542597485904354
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +139,7 @@ GameObject:
   - component: {fileID: 7476971715921310050}
   - component: {fileID: 2378670197137438770}
   - component: {fileID: 8162257128100232247}
+  - component: {fileID: 6787572496460190489}
   m_Layer: 0
   m_Name: polySurface1
   m_TagString: Untagged
@@ -226,6 +241,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300008, guid: 305202c0ba184614f8ed372b12fd7cb7, type: 3}
+--- !u!114 &6787572496460190489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820542597485904354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3243991406484071137
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +364,7 @@ GameObject:
   - component: {fileID: 8222207429191866981}
   - component: {fileID: 1307583965095734402}
   - component: {fileID: 1335209793268085308}
+  - component: {fileID: 4929001596255489970}
   m_Layer: 0
   m_Name: BlokBitonOpora01
   m_TagString: Untagged
@@ -437,6 +466,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300006, guid: 305202c0ba184614f8ed372b12fd7cb7, type: 3}
+--- !u!114 &4929001596255489970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5323961309246317195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5460506164240561896
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,6 +644,7 @@ GameObject:
   - component: {fileID: 6427298482215165609}
   - component: {fileID: 5346836536362020703}
   - component: {fileID: 1028741571036128949}
+  - component: {fileID: 8338554395436026693}
   m_Layer: 0
   m_Name: polySurface3
   m_TagString: Untagged
@@ -703,6 +746,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 305202c0ba184614f8ed372b12fd7cb7, type: 3}
+--- !u!114 &8338554395436026693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8268896469921419540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8580178194544245233
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,6 +771,7 @@ GameObject:
   - component: {fileID: 74935614441495402}
   - component: {fileID: 700823912088215403}
   - component: {fileID: 6523650714990243122}
+  - component: {fileID: 8539862215854008269}
   m_Layer: 0
   m_Name: polySurface4
   m_TagString: Untagged
@@ -816,6 +873,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: 305202c0ba184614f8ed372b12fd7cb7, type: 3}
+--- !u!114 &8539862215854008269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8580178194544245233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8771194920836170402
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,6 +898,7 @@ GameObject:
   - component: {fileID: 3730577476532439867}
   - component: {fileID: 2705319677250476545}
   - component: {fileID: 2367520710958992249}
+  - component: {fileID: 6425301934804630198}
   m_Layer: 0
   m_Name: polySurface2
   m_TagString: Untagged
@@ -929,3 +1000,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300010, guid: 305202c0ba184614f8ed372b12fd7cb7, type: 3}
+--- !u!114 &6425301934804630198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8771194920836170402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

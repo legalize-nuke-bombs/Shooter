@@ -1019,6 +1019,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290884568573959264}
   - component: {fileID: 290884568580928384}
+  - component: {fileID: 3041380844903710905}
   m_Layer: 0
   m_Name: AngelWhite
   m_TagString: Untagged
@@ -1066,6 +1067,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3041380844903710905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290884568573657152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &290884568573657154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,6 +1090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290884568573959266}
   - component: {fileID: 290884568576773440}
+  - component: {fileID: 930817836104871584}
   m_Layer: 0
   m_Name: body1
   m_TagString: Untagged
@@ -1247,6 +1262,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000000029802322, y: 0.004255414, z: 0.20782152}
     m_Extent: {x: 0.67342067, y: 1.0321854, z: 0.54358184}
   m_DirtyAABB: 0
+--- !u!114 &930817836104871584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290884568573657154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &290884568573657156
 GameObject:
   m_ObjectHideFlags: 0
@@ -2121,6 +2149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290884568573959482}
   - component: {fileID: 290884568576773444}
+  - component: {fileID: 5090067265426472623}
   m_Layer: 0
   m_Name: nails1
   m_TagString: Untagged
@@ -2292,6 +2321,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00000011920929, y: -0.2093297, z: 0.022995632}
     m_Extent: {x: 0.4467486, y: 0.07023919, z: 0.06903893}
   m_DirtyAABB: 0
+--- !u!114 &5090067265426472623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290884568573657370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &290884568573657372
 GameObject:
   m_ObjectHideFlags: 0
@@ -2751,6 +2793,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290884568573959512}
   - component: {fileID: 290884568576773442}
+  - component: {fileID: 7217236830368689820}
   m_Layer: 0
   m_Name: eyes1
   m_TagString: Untagged
@@ -2922,6 +2965,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0000000037252903, y: 0.6892979, z: 0.3391369}
     m_Extent: {x: 0.046388794, y: 0.010922998, z: 0.010903105}
   m_DirtyAABB: 0
+--- !u!114 &7217236830368689820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290884568573657400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &290884568573657402
 GameObject:
   m_ObjectHideFlags: 0
@@ -6437,6 +6493,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290884568573959444}
   - component: {fileID: 290884568576773446}
+  - component: {fileID: 335853883900470868}
   m_Layer: 0
   m_Name: spike1
   m_TagString: Untagged
@@ -6537,6 +6594,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.06999999, y: -0.2910018, z: -0.03542144}
     m_Extent: {x: 0.45405412, y: 0.11324859, z: 0.020226628}
   m_DirtyAABB: 0
+--- !u!114 &335853883900470868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290884568573660916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &290884568573660918
 GameObject:
   m_ObjectHideFlags: 0
@@ -6547,6 +6617,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290884568573959446}
   - component: {fileID: 290884568576773448}
+  - component: {fileID: 3225236553763841919}
   m_Layer: 0
   m_Name: teeth1
   m_TagString: Untagged
@@ -6635,6 +6706,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000058077276, y: -0.10697611, z: 0.18257222}
     m_Extent: {x: 0.048983563, y: 0.055044144, z: 0.05088888}
   m_DirtyAABB: 0
+--- !u!114 &3225236553763841919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290884568573660918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &290884568573660920
 GameObject:
   m_ObjectHideFlags: 0
@@ -6645,6 +6729,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290884568573959448}
   - component: {fileID: 290884568576773450}
+  - component: {fileID: 8240596052812436074}
   m_Layer: 0
   m_Name: teeth2
   m_TagString: Untagged
@@ -6736,3 +6821,16 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0007941574, y: 0.028156899, z: 0.20911956}
     m_Extent: {x: 0.062277876, y: 0.03603012, z: 0.066886716}
   m_DirtyAABB: 0
+--- !u!114 &8240596052812436074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290884568573660920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

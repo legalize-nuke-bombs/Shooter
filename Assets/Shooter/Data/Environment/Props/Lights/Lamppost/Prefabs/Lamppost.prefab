@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7088422016137448204}
   - component: {fileID: 1849771926967792289}
   - component: {fileID: 5022065724960830394}
+  - component: {fileID: 8011288313154453734}
   m_Layer: 0
   m_Name: Hpoli.004
   m_TagString: Untagged
@@ -90,6 +91,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8011288313154453734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54891773359912927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &75633779603590878
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,6 +115,7 @@ GameObject:
   - component: {fileID: 8267845764750162126}
   - component: {fileID: 7884270106674889390}
   - component: {fileID: 3890112709494102623}
+  - component: {fileID: 7467282890687879804}
   m_Layer: 0
   m_Name: "B\xE9zierCurve.008"
   m_TagString: Untagged
@@ -180,6 +195,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7467282890687879804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75633779603590878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &671498223490815209
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +334,7 @@ GameObject:
   - component: {fileID: 7574115771554131452}
   - component: {fileID: 3072431218320059678}
   - component: {fileID: 2884588923767047079}
+  - component: {fileID: 4315269581496276280}
   m_Layer: 0
   m_Name: Cube.008
   m_TagString: Untagged
@@ -407,6 +436,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8552134717624371188, guid: ff56c9f3dcad5944baf01aba0eb149f2, type: 3}
+--- !u!114 &4315269581496276280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072209304768659155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1428492134609606758
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,6 +461,7 @@ GameObject:
   - component: {fileID: 6860139632668603470}
   - component: {fileID: 3054952408474137908}
   - component: {fileID: 7457358057807063809}
+  - component: {fileID: 6963483793567822381}
   m_Layer: 0
   m_Name: "B\xE9zierCurve.010"
   m_TagString: Untagged
@@ -520,6 +563,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 9081162584789149596, guid: ff56c9f3dcad5944baf01aba0eb149f2, type: 3}
+--- !u!114 &6963483793567822381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428492134609606758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &1743867087054303708
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,6 +588,7 @@ GameObject:
   - component: {fileID: 3924273777715320374}
   - component: {fileID: 8064523408845351909}
   - component: {fileID: 1400677533975915317}
+  - component: {fileID: 4214548762608471079}
   m_Layer: 0
   m_Name: Hpoli.003
   m_TagString: Untagged
@@ -633,6 +690,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 7743002041519558940, guid: ff56c9f3dcad5944baf01aba0eb149f2, type: 3}
+--- !u!114 &4214548762608471079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743867087054303708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3435362675771951516
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,6 +714,7 @@ GameObject:
   - component: {fileID: 5985197623847667802}
   - component: {fileID: 7959951186636574741}
   - component: {fileID: 1351393825285318300}
+  - component: {fileID: 7353351723557735095}
   m_Layer: 0
   m_Name: Cube.007
   m_TagString: Untagged
@@ -723,6 +794,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7353351723557735095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3435362675771951516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &3502757198801812562
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +818,7 @@ GameObject:
   - component: {fileID: 9190482143417362780}
   - component: {fileID: 2513027267565476958}
   - component: {fileID: 2019653789962233406}
+  - component: {fileID: 2793717847359887532}
   m_Layer: 0
   m_Name: Cube.006
   m_TagString: Untagged
@@ -813,6 +898,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2793717847359887532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3502757198801812562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &5258434112104899537
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,6 +957,7 @@ GameObject:
   - component: {fileID: 7988975735422157627}
   - component: {fileID: 5734287885003084469}
   - component: {fileID: 3707459583985767383}
+  - component: {fileID: 4788317060654914932}
   m_Layer: 0
   m_Name: "B\xE9zierCurve.012"
   m_TagString: Untagged
@@ -938,6 +1037,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4788317060654914932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5787199713046978234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &7075771483091673609
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,6 +1061,7 @@ GameObject:
   - component: {fileID: 4974484202592408752}
   - component: {fileID: 5734459765340537815}
   - component: {fileID: 2969575807271270772}
+  - component: {fileID: 5872379935738547083}
   m_Layer: 0
   m_Name: LoPoli
   m_TagString: Untagged
@@ -1028,6 +1141,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5872379935738547083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7075771483091673609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &8265764707192054648
 GameObject:
   m_ObjectHideFlags: 0
@@ -1075,6 +1201,7 @@ GameObject:
   - component: {fileID: 2646288749458471905}
   - component: {fileID: 6819277749844271768}
   - component: {fileID: 2912859495960900120}
+  - component: {fileID: 5289274808346204593}
   m_Layer: 0
   m_Name: Cylinder.010
   m_TagString: Untagged
@@ -1176,6 +1303,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5731547941117289742, guid: ff56c9f3dcad5944baf01aba0eb149f2, type: 3}
+--- !u!114 &5289274808346204593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9008432836269343244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &9017629058612122513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,6 +1362,7 @@ GameObject:
   - component: {fileID: 232427174427947143}
   - component: {fileID: 942811659209726968}
   - component: {fileID: 4307668745932197585}
+  - component: {fileID: 8732915714858149810}
   m_Layer: 0
   m_Name: Cylinder.007
   m_TagString: Untagged
@@ -1301,6 +1442,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8732915714858149810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9060656192159459208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
 --- !u!1 &9115464411508668907
 GameObject:
   m_ObjectHideFlags: 0
@@ -1312,6 +1466,7 @@ GameObject:
   - component: {fileID: 4037333128138510796}
   - component: {fileID: 2698584830407149311}
   - component: {fileID: 558768174618351412}
+  - component: {fileID: 1234122439436679292}
   m_Layer: 0
   m_Name: Cylinder.009
   m_TagString: Untagged
@@ -1391,3 +1546,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1234122439436679292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9115464411508668907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0

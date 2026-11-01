@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3329550}
   - component: {fileID: 2308440}
   - component: {fileID: 6427994}
+  - component: {fileID: 7632673079199447028}
   m_Layer: 0
   m_Name: Villa1_Top_Mid_B
   m_TagString: Untagged
@@ -113,3 +114,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: a4da64e6469ddb849af32c4433af3855, type: 3}
+--- !u!114 &7632673079199447028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  mobility: 0
