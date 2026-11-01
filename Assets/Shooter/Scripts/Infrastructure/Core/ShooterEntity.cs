@@ -121,7 +121,7 @@ namespace Shooter.Infrastructure
 
             entry = new Entry { Component = component, WantsEnabled = componentEnabled.Value };
             components.Add(entry);
-            if (IsOptimized) WriteUnityEnabled(component, false);
+            if (IsOptimized && IsOptimizable(component)) WriteUnityEnabled(component, false);
             if (component is not Behaviour behaviour) return entry;
 
             Registers.Instance.RegisterComponent(behaviour);
@@ -132,7 +132,7 @@ namespace Shooter.Infrastructure
 
         private void UpdateUnityEnabled(Entry entry)
         {
-            WriteUnityEnabled(entry.Component, entry.WantsEnabled && !IsOptimized);
+            WriteUnityEnabled(entry.Component, entry.WantsEnabled && !(IsOptimized && IsOptimizable(entry.Component)));
             if (entry.Component is not Behaviour behaviour) return;
 
             if (IsEnabledAndActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
@@ -143,6 +143,17 @@ namespace Shooter.Infrastructure
         private static bool IsEnabledAndActive(Behaviour behaviour)
         {
             return behaviour.enabled && behaviour.gameObject.activeInHierarchy;
+        }
+
+        // No Collider: switching colliders on and off leaks PhysX memory, about 15 MB per 214 colliders a cycle in the
+        // editor and in a build (measured 1.11), so optimization leaves them as they are
+        private static bool IsOptimizable(Component component)
+        {
+            return component switch
+            {
+                Behaviour or Renderer or LODGroup => true,
+                _ => false
+            };
         }
 
         private static bool? ReadUnityEnabled(Component component)
