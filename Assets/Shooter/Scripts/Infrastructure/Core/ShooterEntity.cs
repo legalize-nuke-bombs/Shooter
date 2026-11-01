@@ -21,7 +21,7 @@ namespace Shooter.Infrastructure
         {
             foreach (Component attached in GetComponents<Component>())
             {
-                if (attached is not Behaviour component || ReportsItself(component)) continue;
+                if (attached is not Behaviour component || component is IShooterComponent) continue;
 
                 NotifyComponentAttached(component);
             }
@@ -35,7 +35,7 @@ namespace Shooter.Infrastructure
         {
             foreach (Entry entry in components)
             {
-                if (!ReportsItself(entry.Component) && entry.Component.enabled) NotifyComponentEnabled(entry.Component);
+                if (entry.Component is not IShooterComponent && entry.Component.enabled) NotifyComponentEnabled(entry.Component);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Shooter.Infrastructure
         {
             foreach (Entry entry in components)
             {
-                if (!ReportsItself(entry.Component)) NotifyComponentDisabled(entry.Component);
+                if (entry.Component is not IShooterComponent) NotifyComponentDisabled(entry.Component);
             }
         }
 
@@ -51,7 +51,7 @@ namespace Shooter.Infrastructure
         {
             for (int i = components.Count - 1; i >= 0; i--)
             {
-                if (!ReportsItself(components[i].Component)) NotifyComponentDetached(components[i].Component);
+                if (components[i].Component is not IShooterComponent) NotifyComponentDetached(components[i].Component);
             }
         }
 
@@ -84,11 +84,11 @@ namespace Shooter.Infrastructure
         }
 
         // The entity learns about its object only through Notify calls, direct rather than events: they come on every
-        // enable, disable and move, and no delegates are kept per entity. ShooterComponent and ShooterNetworkComponent
-        // send the component ones from their closed Unity messages, every other component, the entity included, is
-        // reported by the entity itself together with its object and whenever the entity switches it. A call may come
-        // before this entity's Awake, as Unity doesn't order Awake between the components of one object, so the calls
-        // rely only on fields set where they are declared
+        // enable, disable and move, and no delegates are kept per entity. An IShooterComponent, as ShooterComponent and
+        // ShooterNetworkComponent, sends the component ones from its closed Unity messages, every other component, the
+        // entity included, is reported by the entity itself together with its object and whenever the entity switches
+        // it. A call may come before this entity's Awake, as Unity doesn't order Awake between the components of one
+        // object, so the calls rely only on fields set where they are declared
         public void NotifyComponentAttached(Behaviour component)
         {
             components.Add(new Entry { Component = component, Enabled = component.enabled });
@@ -132,15 +132,10 @@ namespace Shooter.Infrastructure
         private void Apply(Entry entry)
         {
             entry.Component.enabled = entry.Enabled && !IsOptimized;
-            if (ReportsItself(entry.Component)) return;
+            if (entry.Component is IShooterComponent) return;
 
             if (entry.Component.isActiveAndEnabled) NotifyComponentEnabled(entry.Component);
             else NotifyComponentDisabled(entry.Component);
-        }
-
-        private static bool ReportsItself(Behaviour component)
-        {
-            return component is ShooterComponent or ShooterNetworkComponent;
         }
 
         private sealed class Entry

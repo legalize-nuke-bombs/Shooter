@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(ShooterEntity))]
-    public abstract class ShooterComponent : MonoBehaviour
+    public abstract class ShooterComponent : MonoBehaviour, IShooterComponent
     {
         protected ShooterEntity Entity { get; private set; }
 

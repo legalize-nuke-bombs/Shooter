@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [RequireComponent(typeof(ShooterEntity))]
-    public abstract class ShooterNetworkComponent : NetworkBehaviour
+    public abstract class ShooterNetworkComponent : NetworkBehaviour, IShooterComponent
     {
         protected ShooterEntity Entity { get; private set; }
 
