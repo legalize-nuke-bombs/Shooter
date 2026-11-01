@@ -10,7 +10,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Nameable))]
-    public class Relations : ShooterComponent, IDigestible, ISaveableComponent
+    public class Relations : MonoBehaviour, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -70,18 +70,18 @@ namespace Shooter.Game
 
         public event Action<RelationWorsenedByDamageData> RelationWorsenedByDamage;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             ownCharacter = GetComponent<Character>();
             health = GetComponent<Health>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             health.Damaged += HandleDamaged;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             health.Damaged -= HandleDamaged;
         }

@@ -10,7 +10,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
-    public class PlayerConversations : ShooterNetworkComponent, IShooterUpdateable
+    public class PlayerConversations : NetworkBehaviour, IShooterUpdateable
     {
         private const int MaxBatchBytes = 16 * 1024;
         private const int LineOverheadBytes = 32;
@@ -34,7 +34,7 @@ namespace Shooter.Game
 
         public event Action ContactsCleared;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             character = GetComponent<Character>();
         }

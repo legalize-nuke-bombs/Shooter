@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
-    public class Stamina : ShooterNetworkComponent, IDigestible, ISaveableComponent, ITimePassedHandler
+    public class Stamina : NetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
     {
         [SerializeField] private float maxAmount = 100f;
         [SerializeField] private float sprintCost = 25f;
@@ -45,19 +45,19 @@ namespace Shooter.Game
 
         public float MaxAmount => Mathf.Max(maxAmount, 1f);
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             hands = GetComponent<Hands>();
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             hands.Checking += CanAfford;
             hands.Performed += SpendOn;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             hands.Checking -= CanAfford;
             hands.Performed -= SpendOn;
@@ -83,18 +83,18 @@ namespace Shooter.Game
         {
             if (!IsServer)
             {
-                Entity.SetComponentEnabled(this, false);
+                ShooterEntity.SetEnabled(this, false);
                 return;
             }
 
-            Entity.SetComponentEnabled(this, true);
+            ShooterEntity.SetEnabled(this, true);
             amount.SetUpdateTraits(new NetworkVariableUpdateTraits { MinSecondsBetweenUpdates = 0.1f });
             amount.Value = MaxAmount;
         }
 
         public override void OnNetworkDespawn()
         {
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
         private bool CanAfford(ActionType type, float duration)

@@ -9,7 +9,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(InventoryHolder))]
-    public class LocalWeaponView : ShooterNetworkComponent, IShooterLateUpdateable
+    public class LocalWeaponView : NetworkBehaviour, IShooterLateUpdateable
     {
         private const string FirstPersonLayerName = "FirstPerson";
 
@@ -32,7 +32,7 @@ namespace Shooter.Game
 
         public Transform WeaponHold => shownWeapon == null ? null : weaponHold;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             player = GetComponent<Player>();
             inventory = GetComponent<Inventory>();
@@ -63,13 +63,13 @@ namespace Shooter.Game
         {
             if (player.IsControlledLocally)
             {
-                Entity.SetComponentEnabled(this, true);
+                ShooterEntity.SetEnabled(this, true);
                 StartShowingHeldWeapon();
             }
             else
             {
                 StopShowingHeldWeapon();
-                Entity.SetComponentEnabled(this, false);
+                ShooterEntity.SetEnabled(this, false);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Shooter.Game
 
             view.cullingMask &= ~(1 << firstPersonLayer);
 
-            customPassVolume = gameObject.AddComponent<CustomPassVolume>();
+            customPassVolume = GetComponent<ShooterEntity>().AddComponent<CustomPassVolume>();
             customPassVolume.targetCamera = view;
             customPassVolume.injectionPoint = CustomPassInjectionPoint.BeforePostProcess;
 

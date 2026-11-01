@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
-    [DefaultExecutionOrder(ExecutionOrder.Infrastructure)]
+    [DefaultExecutionOrder(ExecutionOrder.Infrastructure1)]
     public class Registers : MonoBehaviour
     {
         private const float CollectIntervalSeconds = 2f;

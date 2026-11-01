@@ -6,23 +6,23 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(InventoryExchanger))]
-    public class LlmInventoryObserver : ShooterComponent
+    public class LlmInventoryObserver : MonoBehaviour
     {
         private InventoryExchanger inventoryExchanger;
         private Llm llm;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             inventoryExchanger = GetComponent<InventoryExchanger>();
             llm = GetComponent<Llm>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             inventoryExchanger.ReceivedFromCharacter += HandleReceivedFromCharacter;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             inventoryExchanger.ReceivedFromCharacter -= HandleReceivedFromCharacter;
         }

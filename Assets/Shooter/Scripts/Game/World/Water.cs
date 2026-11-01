@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(WaterSurface))]
-    public class Water : ShooterComponent
+    public class Water : MonoBehaviour
     {
         public float GetDepthAt(Vector3 point)
         {

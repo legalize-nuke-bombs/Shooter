@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
-    public class Ambience : ShooterComponent, IShooterUpdateable
+    public class Ambience : MonoBehaviour, IShooterUpdateable
     {
         [SerializeField] private AudioClip[] tracks;
         [SerializeField] [Range(0f, 1f)] private float volume = 0.2f;
@@ -14,7 +14,7 @@ namespace Shooter.Game
         private readonly List<int> shuffledTrackIndices = new();
         private AudioSource audioSource;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             audioSource = GetComponent<AudioSource>();
             audioSource.loop = false;

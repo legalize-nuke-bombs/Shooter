@@ -7,17 +7,17 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Skin))]
-    public class SkinHiderWhileDead : ShooterNetworkComponent, IShooterLateUpdateable
+    public class SkinHiderWhileDead : NetworkBehaviour, IShooterLateUpdateable
     {
         private Health health;
         private Skin skin;
         private bool modelVisible;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             health = GetComponent<Health>();
             skin = GetComponent<Skin>();
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
         // Applied after the rest of the frame: on death the corpse takes the held weapon in the same frame, and the
@@ -25,7 +25,7 @@ namespace Shooter.Game
         public void ShooterLateUpdate()
         {
             skin.SetModelVisible(modelVisible);
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
         public override void OnNetworkSpawn()
@@ -42,7 +42,7 @@ namespace Shooter.Game
         private void ShowModelWhileAlive(bool alive)
         {
             modelVisible = alive;
-            Entity.SetComponentEnabled(this, true);
+            ShooterEntity.SetEnabled(this, true);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Inventory))]
     [RequireComponent(typeof(Character))]
-    public class InventoryExchanger : ShooterNetworkComponent
+    public class InventoryExchanger : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -24,7 +24,7 @@ namespace Shooter.Game
 
         public event Action<ulong> LootOpened;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             character = GetComponent<Character>();
             inventory = GetComponent<Inventory>();

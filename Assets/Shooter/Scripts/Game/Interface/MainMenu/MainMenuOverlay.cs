@@ -41,7 +41,7 @@ namespace Shooter.Game
 
         private static bool IsWorldStarting => NetworkManager.Singleton.IsListening;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             networkStarter = NetworkManager.Singleton.GetComponent<NetworkStarter>();
         }
@@ -54,7 +54,7 @@ namespace Shooter.Game
             networkStarter.JoinFailed += HandleJoinFailed;
         }
 
-        protected override void ShooterOnDestroy()
+        private void OnDestroy()
         {
             networkStarter.JoinFailed -= HandleJoinFailed;
         }

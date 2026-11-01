@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
-    public class NotificationRecipient : ShooterComponent
+    public class NotificationRecipient : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 

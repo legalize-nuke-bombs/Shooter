@@ -7,7 +7,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerConversations))]
     [RequireComponent(typeof(PlayerController))]
-    public class PlayerConversationObserver : ShooterComponent, IToastSource
+    public class PlayerConversationObserver : MonoBehaviour, IToastSource
     {
         [SerializeField] private IconAsset icon;
         [SerializeField] private EarSoundAsset sound;
@@ -17,18 +17,18 @@ namespace Shooter.Game
 
         public event Action<Toast> ToastRaised;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             playerConversations = GetComponent<PlayerConversations>();
             playerController = GetComponent<PlayerController>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             playerConversations.LiveLineArrived += HandleLiveLineArrived;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             playerConversations.LiveLineArrived -= HandleLiveLineArrived;
         }

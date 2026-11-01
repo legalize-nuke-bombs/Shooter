@@ -8,7 +8,7 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
-    public class ScreenshotOnKey : ShooterComponent, IShooterUpdateable
+    public class ScreenshotOnKey : MonoBehaviour, IShooterUpdateable
     {
         private const string FolderName = "Screenshots";
         private const string FileNamePrefix = "Screenshot";
@@ -17,7 +17,7 @@ namespace Shooter.Infrastructure
 
         private AudioSource click;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             click = GetComponent<AudioSource>();
             DontDestroyOnLoad(gameObject);

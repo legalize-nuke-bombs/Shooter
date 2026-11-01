@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
-    public abstract class Hunger : ShooterNetworkComponent, IDigestible, ITimePassedHandler
+    public abstract class Hunger : NetworkBehaviour, IDigestible, ITimePassedHandler
     {
         [SerializeField] private float sprintCost = 0.5f;
         [SerializeField] private float walkCost = 0.25f;
@@ -18,19 +18,19 @@ namespace Shooter.Game
         public abstract float Amount { get; }
         public abstract float MaxAmount { get; }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             hands = GetComponent<Hands>();
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             hands.Checking += CanAfford;
             hands.Performed += SpendOn;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             hands.Checking -= CanAfford;
             hands.Performed -= SpendOn;
@@ -54,12 +54,12 @@ namespace Shooter.Game
 
         public override void OnNetworkSpawn()
         {
-            Entity.SetComponentEnabled(this, IsServer);
+            ShooterEntity.SetEnabled(this, IsServer);
         }
 
         public override void OnNetworkDespawn()
         {
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
         private bool CanAfford(ActionType type, float duration)

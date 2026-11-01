@@ -5,26 +5,26 @@ using UnityEngine.UIElements;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class ScreenResolution : ShooterComponent
+    public class ScreenResolution : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private ClientConfig clientConfig;
         private string followedResolution;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             DontDestroyOnLoad(gameObject);
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             clientConfig = Config.GetGameConfig().Client;
             clientConfig.propertyChanged += HandleClientConfigChanged;
             FollowClientConfig();
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             clientConfig.propertyChanged -= HandleClientConfigChanged;
         }

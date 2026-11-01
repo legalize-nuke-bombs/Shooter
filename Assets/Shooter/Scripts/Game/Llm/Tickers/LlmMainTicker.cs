@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Llm))]
-    public class LlmMainTicker : ShooterComponent, IShooterUpdateable
+    public class LlmMainTicker : MonoBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
         private string entityName;
@@ -15,9 +15,9 @@ namespace Shooter.Game
         private Llm llm;
         [SerializeReference, SubclassSelector] private LlmChildTicker[] tickers;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
-            Entity.SetComponentEnabled(this, NetworkManager.Singleton.IsServer);
+            ShooterEntity.SetEnabled(this, NetworkManager.Singleton.IsServer);
             entityName = name;
 
             llm = GetComponent<Llm>();

@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Volume))]
-    public class FogQuality : ShooterComponent
+    public class FogQuality : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -17,7 +17,7 @@ namespace Shooter.Game
         private string followedFog;
         private VolumeProfile profile;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             DontDestroyOnLoad(gameObject);
             profile = ScriptableObject.CreateInstance<VolumeProfile>();
@@ -25,19 +25,19 @@ namespace Shooter.Game
             GetComponent<Volume>().sharedProfile = profile;
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             clientConfig = Config.GetGameConfig().Client;
             clientConfig.propertyChanged += HandleClientConfigChanged;
             FollowClientConfig();
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             clientConfig.propertyChanged -= HandleClientConfigChanged;
         }
 
-        protected override void ShooterOnDestroy()
+        private void OnDestroy()
         {
             Destroy(fog);
             Destroy(profile);

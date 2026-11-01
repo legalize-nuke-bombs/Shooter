@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
-    public class Ragdoll : ShooterComponent
+    public class Ragdoll : MonoBehaviour
     {
         private const float LinearDamping = 0.5f;
         private const float AngularDamping = 1f;
@@ -22,7 +22,7 @@ namespace Shooter.Game
             }
 
             Animator animator = GetComponent<Animator>();
-            Entity.SetComponentEnabled(animator, false);
+            ShooterEntity.SetEnabled(animator, false);
 
             Transform hips = animator.GetBoneTransform(HumanBodyBones.Hips);
             Transform head = animator.GetBoneTransform(HumanBodyBones.Head);

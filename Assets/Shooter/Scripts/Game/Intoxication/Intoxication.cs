@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class Intoxication : ShooterNetworkComponent, IDigestible, ISaveableComponent, ITimePassedHandler
+    public class Intoxication : NetworkBehaviour, IDigestible, ISaveableComponent, ITimePassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -67,7 +67,7 @@ namespace Shooter.Game
             }
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             toxinCatalog = Catalogs.GetCatalog<ToxinCatalog>();
             for (int i = 0; i < toxinCatalog.Count; i++)
@@ -76,12 +76,12 @@ namespace Shooter.Game
             }
 
             Log.Info($"Entity {name} indexed {levelIndexByToxinId.Count} toxins");
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
         public override void OnNetworkSpawn()
         {
-            Entity.SetComponentEnabled(this, IsServer);
+            ShooterEntity.SetEnabled(this, IsServer);
             if (!IsServer || levels.Count > 0) return;
 
             for (int i = 0; i < levelIndexByToxinId.Count; i++)

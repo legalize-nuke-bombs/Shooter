@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
-    public class LocomotionAnimator : ShooterComponent, IShooterUpdateable
+    public class LocomotionAnimator : MonoBehaviour, IShooterUpdateable
     {
         private static readonly int SpeedXParameter = Animator.StringToHash("SpeedX");
         private static readonly int SpeedZParameter = Animator.StringToHash("SpeedZ");
@@ -15,7 +15,7 @@ namespace Shooter.Game
         private Animator animator;
         private Vector3 previousPosition;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             animator = GetComponent<Animator>();
             previousPosition = transform.position;

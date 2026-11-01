@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public abstract class Nameable : ShooterNetworkComponent, IDigestible
+    public abstract class Nameable : NetworkBehaviour, IDigestible
     {
         public DigestionPriority Priority => DigestionPriority.High;
 

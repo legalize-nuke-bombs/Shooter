@@ -10,7 +10,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(InventoryHolder))]
     [RequireComponent(typeof(Skin))]
-    public class WeaponView : ShooterNetworkComponent, IShooterUpdateable
+    public class WeaponView : NetworkBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -37,7 +37,7 @@ namespace Shooter.Game
 
         public event Action ShownWeaponChanged;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             inventory = GetComponent<Inventory>();
             inventoryHolder = GetComponent<InventoryHolder>();
@@ -170,7 +170,7 @@ namespace Shooter.Game
             Animator animator = GetSkinAnimator();
             if (animator == null) return;
 
-            if (!animator.TryGetComponent(out RigBuilder rigBuilder)) rigBuilder = animator.gameObject.AddComponent<RigBuilder>();
+            if (!animator.TryGetComponent(out RigBuilder rigBuilder)) rigBuilder = animator.GetComponent<ShooterEntity>().AddComponent<RigBuilder>();
 
             GameObject weaponHoldObject = new("WeaponHold");
             weaponHoldObject.transform.SetParent(animator.transform, false);

@@ -6,23 +6,23 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(RespawnPosition))]
-    public class RespawnPositionOnFallAsleep : ShooterComponent
+    public class RespawnPositionOnFallAsleep : MonoBehaviour
     {
         private Sleeper sleeper;
         private RespawnPosition respawnPosition;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             sleeper = GetComponent<Sleeper>();
             respawnPosition = GetComponent<RespawnPosition>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             sleeper.FellAsleep += RememberSleepingPlace;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             sleeper.FellAsleep -= RememberSleepingPlace;
         }

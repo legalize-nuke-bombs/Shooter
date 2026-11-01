@@ -13,7 +13,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Sleeper))]
     [RequireComponent(typeof(Respawner))]
-    public class PlayerController : ShooterNetworkComponent, IShooterUpdateable, IShooterLateUpdateable
+    public class PlayerController : NetworkBehaviour, IShooterUpdateable, IShooterLateUpdateable
     {
         private const float LookSensitivity = 0.1f;
         private const float MaxPitch = 89f;
@@ -84,7 +84,7 @@ namespace Shooter.Game
             }
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             player = GetComponent<Player>();
             movement = GetComponent<RpcMovement>();
@@ -134,14 +134,14 @@ namespace Shooter.Game
             if (player.IsControlledLocally)
             {
                 view.gameObject.SetActive(true);
-                Entity.SetComponentEnabled(this, true);
+                ShooterEntity.SetEnabled(this, true);
                 StartLocalControl();
             }
             else
             {
                 StopLocalControl();
                 view.gameObject.SetActive(false);
-                Entity.SetComponentEnabled(this, false);
+                ShooterEntity.SetEnabled(this, false);
             }
         }
 

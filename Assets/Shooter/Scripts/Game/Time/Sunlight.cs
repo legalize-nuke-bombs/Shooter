@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Light))]
-    public class Sunlight : ShooterComponent, IShooterUpdateable
+    public class Sunlight : MonoBehaviour, IShooterUpdateable
     {
         public const float ShadowHandoverElevation = -6f;
 
@@ -14,7 +14,7 @@ namespace Shooter.Game
         private Clock clock;
         private Light sunLight;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             sunLight = GetComponent<Light>();
         }
@@ -22,7 +22,7 @@ namespace Shooter.Game
         private void Start()
         {
             clock = Registers.Instance.Get<Clock>();
-            Entity.SetComponentEnabled(this, clock);
+            ShooterEntity.SetEnabled(this, clock);
         }
 
         public void ShooterUpdate()

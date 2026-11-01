@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkTransform))]
-    public class SaveableTransform : ShooterNetworkComponent, ISaveableComponent
+    public class SaveableTransform : NetworkBehaviour, ISaveableComponent
     {
         private struct SaveData
         {

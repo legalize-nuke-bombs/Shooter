@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class Speaker : ShooterNetworkComponent
+    public class Speaker : NetworkBehaviour
     {
         private const int MaxVoices = 8;
         private static readonly Journal Log = Logs.Here();
@@ -63,7 +63,7 @@ namespace Shooter.Game
 
         private AudioSource AddAudioSource()
         {
-            AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+            AudioSource audioSource = GetComponent<ShooterEntity>().AddComponent<AudioSource>();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 1f;
             audioSources.Add(audioSource);

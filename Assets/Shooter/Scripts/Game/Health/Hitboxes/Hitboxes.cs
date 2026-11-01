@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
-    public class Hitboxes : ShooterComponent
+    public class Hitboxes : MonoBehaviour
     {
         public const string LayerName = "Hitbox";
 

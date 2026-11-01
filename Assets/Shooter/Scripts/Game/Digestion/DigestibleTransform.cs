@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class DigestibleTransform : ShooterComponent, IDigestible
+    public class DigestibleTransform : MonoBehaviour, IDigestible
     {
         public DigestionPriority Priority => DigestionPriority.Place;
 

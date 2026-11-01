@@ -6,25 +6,25 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(EarSpeaker))]
-    public class SoundOnDamage : ShooterComponent
+    public class SoundOnDamage : MonoBehaviour
     {
         [SerializeField] private EarSoundAsset sound;
 
         private Health health;
         private EarSpeaker earSpeaker;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             health = GetComponent<Health>();
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             health.Damaged += Play;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             health.Damaged -= Play;
         }

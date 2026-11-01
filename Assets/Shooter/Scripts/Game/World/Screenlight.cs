@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Light))]
-    public class Screenlight : ShooterComponent, IShooterUpdateable
+    public class Screenlight : MonoBehaviour, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -23,7 +23,7 @@ namespace Shooter.Game
         private float noiseOffset;
         private Material screenMaterial;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             screenLight = GetComponent<Light>();
             screenMaterial = screen == null ? null : screen.material;

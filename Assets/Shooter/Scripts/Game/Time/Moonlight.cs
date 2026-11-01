@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Light))]
-    public class Moonlight : ShooterComponent, IShooterUpdateable
+    public class Moonlight : MonoBehaviour, IShooterUpdateable
     {
         [SerializeField] private float brightest = 1.2f;
 
@@ -14,7 +14,7 @@ namespace Shooter.Game
         private Clock clock;
         private Light moonLight;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             moonLight = GetComponent<Light>();
         }
@@ -22,7 +22,7 @@ namespace Shooter.Game
         private void Start()
         {
             clock = Registers.Instance.GetAll<Clock>(RegisterInactivePolicy.Include).TryGetFirst(out Clock first) ? first : null;
-            Entity.SetComponentEnabled(this, clock);
+            ShooterEntity.SetEnabled(this, clock);
         }
 
         public void ShooterUpdate()

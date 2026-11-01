@@ -10,7 +10,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Skin))]
     [RequireComponent(typeof(WeaponView))]
-    public class LocalBodyHider : ShooterNetworkComponent, IShooterLateUpdateable
+    public class LocalBodyHider : NetworkBehaviour, IShooterLateUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -21,12 +21,12 @@ namespace Shooter.Game
         private bool hiding;
         private bool needsHiding;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             player = GetComponent<Player>();
             skin = GetComponent<Skin>();
             weaponView = GetComponent<WeaponView>();
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
         public void ShooterLateUpdate()
@@ -63,7 +63,7 @@ namespace Shooter.Game
             if (hiding) return;
             hiding = true;
             needsHiding = true;
-            Entity.SetComponentEnabled(this, true);
+            ShooterEntity.SetEnabled(this, true);
 
             weaponView.ShownWeaponChanged += MarkHidingNeeded;
 
@@ -74,7 +74,7 @@ namespace Shooter.Game
         {
             if (!hiding) return;
             hiding = false;
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
 
             weaponView.ShownWeaponChanged -= MarkHidingNeeded;
 

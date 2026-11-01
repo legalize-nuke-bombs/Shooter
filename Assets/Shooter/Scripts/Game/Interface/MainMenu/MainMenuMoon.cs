@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Light))]
-    public class MainMenuMoon : ShooterComponent, IShooterUpdateable
+    public class MainMenuMoon : MonoBehaviour, IShooterUpdateable
     {
         private const float HalfTurnDegrees = 180f;
 

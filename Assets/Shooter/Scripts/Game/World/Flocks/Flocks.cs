@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class Flocks : ShooterNetworkComponent, IShooterLateUpdateable
+    public class Flocks : NetworkBehaviour, IShooterLateUpdateable
     {
         private const float FullEscapeFear = 0.5f;
         private const float NewEscapeFearMargin = 0.25f;
@@ -97,7 +97,7 @@ namespace Shooter.Game
         private float waveTime;
         private float nextRetargetTime;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             CreateFlocks();
             CreateBoids();
@@ -109,9 +109,11 @@ namespace Shooter.Game
             nextRetargetTime = Time.time + Random.Range(retargetInterval.x, retargetInterval.y);
         }
 
-        protected override void ShooterOnDestroy()
+        public override void OnDestroy()
         {
             Destroy(scaredMaterial);
+
+            base.OnDestroy();
         }
 
         public void ShooterLateUpdate()
@@ -277,7 +279,7 @@ namespace Shooter.Game
 
                 if (boidVoices == null) continue;
 
-                boidVoices[boid] = boids[boid].gameObject.AddComponent<AudioSource>();
+                boidVoices[boid] = boids[boid].GetComponent<ShooterEntity>().AddComponent<AudioSource>();
                 boidVoices[boid].playOnAwake = false;
                 boidVoices[boid].spatialBlend = 1f;
             }

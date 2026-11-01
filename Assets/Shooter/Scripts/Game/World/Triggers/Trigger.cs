@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public abstract class Trigger : ShooterNetworkComponent
+    public abstract class Trigger : NetworkBehaviour
     {
         public event Action<Character> Fired;
 

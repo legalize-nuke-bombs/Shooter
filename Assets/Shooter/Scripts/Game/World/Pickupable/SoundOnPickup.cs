@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Pickupable))]
-    public class SoundOnPickup : ShooterComponent
+    public class SoundOnPickup : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -14,17 +14,17 @@ namespace Shooter.Game
 
         private Pickupable pickupable;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             pickupable = GetComponent<Pickupable>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             pickupable.PickedUp += PlayAtUser;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             pickupable.PickedUp -= PlayAtUser;
         }

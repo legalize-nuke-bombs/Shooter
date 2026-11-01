@@ -8,13 +8,13 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NotificationRecipient))]
-    public class PlayerNotificationObserver : ShooterNetworkComponent, IToastSource
+    public class PlayerNotificationObserver : NetworkBehaviour, IToastSource
     {
         private NotificationRecipient notificationRecipient;
 
         public event Action<Toast> ToastRaised;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             notificationRecipient = GetComponent<NotificationRecipient>();
         }

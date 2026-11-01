@@ -5,23 +5,23 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Gunner))]
-    public class SoundOnShotImpact : ShooterComponent
+    public class SoundOnShotImpact : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private Gunner gunner;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             gunner = GetComponent<Gunner>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             gunner.ShotTraced += Play;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             gunner.ShotTraced -= Play;
         }

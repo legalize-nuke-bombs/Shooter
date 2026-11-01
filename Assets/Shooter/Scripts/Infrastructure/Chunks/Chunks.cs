@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
-    [DefaultExecutionOrder(ExecutionOrder.Infrastructure)]
+    [DefaultExecutionOrder(ExecutionOrder.Infrastructure1)]
     public class Chunks : MonoBehaviour
     {
         public const float ChunkSize = 50f;

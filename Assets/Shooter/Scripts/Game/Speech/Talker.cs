@@ -8,7 +8,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
-    public abstract class Talker : ShooterNetworkComponent, IUsable, IShooterUpdateable
+    public abstract class Talker : NetworkBehaviour, IUsable, IShooterUpdateable
     {
         private readonly NetworkVariable<bool> thinking = new();
 
@@ -28,19 +28,19 @@ namespace Shooter.Game
 
         public event Action<bool> ThinkingChanged;
 
-        protected override void ShooterAwake()
+        protected virtual void Awake()
         {
             character = GetComponent<Character>();
             health = GetComponent<Health>();
             sleeper = GetComponent<Sleeper>();
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
         public override void OnNetworkSpawn()
         {
             if (IsServer)
             {
-                Entity.SetComponentEnabled(this, true);
+                ShooterEntity.SetEnabled(this, true);
             }
             else
             {
@@ -51,7 +51,7 @@ namespace Shooter.Game
         public override void OnNetworkDespawn()
         {
             if (!IsServer) thinking.OnValueChanged -= HandleThinkingReplicated;
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
         }
 
         public void Use(NetworkObject user, out string promptResult)

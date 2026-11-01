@@ -5,25 +5,25 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Gunner))]
-    public class LeaveBulletHoleOnShot : ShooterComponent
+    public class LeaveBulletHoleOnShot : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
         private Gunner gunner;
         private BulletHoles bulletHoles;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             gunner = GetComponent<Gunner>();
             bulletHoles = Registers.Instance.Get<BulletHoles>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             gunner.Shot += LeaveBulletHole;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             gunner.Shot -= LeaveBulletHole;
         }

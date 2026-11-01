@@ -7,16 +7,16 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(BehaviorReporter))]
-    public class CustomOrderSlot : ShooterComponent, IDigestible, ISaveableComponent, IShooterUpdateable
+    public class CustomOrderSlot : MonoBehaviour, IDigestible, ISaveableComponent, IShooterUpdateable
     {
         private static readonly Journal Log = Logs.Here();
 
         private CustomOrder order;
         private BehaviorReporter behaviorReporter;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
-            Entity.SetComponentEnabled(this, NetworkManager.Singleton.IsServer);
+            ShooterEntity.SetEnabled(this, NetworkManager.Singleton.IsServer);
             behaviorReporter = GetComponent<BehaviorReporter>();
         }
 

@@ -8,7 +8,7 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkObject))]
-    public class SaveableEntity : ShooterNetworkComponent, ISaveableObject
+    public class SaveableEntity : NetworkBehaviour, ISaveableObject
     {
         public const string IdField = nameof(id);
         private static readonly Journal Log = Logs.Here();
@@ -49,7 +49,7 @@ namespace Shooter.Infrastructure
             return prefabId.ToString();
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             networkObject = GetComponent<NetworkObject>();
         }

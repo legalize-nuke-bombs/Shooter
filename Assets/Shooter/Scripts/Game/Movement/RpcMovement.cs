@@ -23,9 +23,9 @@ namespace Shooter.Game
         private int lastSteerTick;
         private Vector2 steeringInput;
 
-        protected override void ShooterAwake()
+        protected override void Awake()
         {
-            base.ShooterAwake();
+            base.Awake();
 
             characterController = GetComponent<CharacterController>();
         }
@@ -107,9 +107,9 @@ namespace Shooter.Game
 
         protected override void TeleportLocally(Vector3 position, Quaternion rotation)
         {
-            Entity.SetComponentEnabled(characterController, false);
+            ShooterEntity.SetEnabled(characterController, false);
             transform.SetPositionAndRotation(position, rotation);
-            Entity.SetComponentEnabled(characterController, true);
+            ShooterEntity.SetEnabled(characterController, true);
             verticalSpeed = 0f;
             airborne = false;
         }

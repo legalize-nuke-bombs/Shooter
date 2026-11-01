@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    public class CameraUpscaling : ShooterComponent
+    public class CameraUpscaling : MonoBehaviour
     {
         // DLSS quality codes as the NVIDIA module numbers them; the camera keeps them as a plain number
         private const uint DlssPerformance = 0;
@@ -29,13 +29,13 @@ namespace Shooter.Game
         private float renderPercentage = FullRenderPercentage;
         private HDAdditionalCameraData.AntialiasingMode antialiasing;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             DontDestroyOnLoad(gameObject);
             DynamicResolutionHandler.SetDynamicResScaler(() => renderPercentage, DynamicResScalePolicyType.ReturnsPercentage);
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             clientConfig = Config.GetGameConfig().Client;
             clientConfig.propertyChanged += HandleClientConfigChanged;
@@ -43,7 +43,7 @@ namespace Shooter.Game
             FollowClientConfig();
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             clientConfig.propertyChanged -= HandleClientConfigChanged;
             RenderPipelineManager.beginContextRendering -= ApplyToGameCameras;

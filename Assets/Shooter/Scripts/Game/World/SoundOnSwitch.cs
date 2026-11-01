@@ -6,25 +6,25 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Switch))]
     [RequireComponent(typeof(Speaker))]
-    public class SoundOnSwitch : ShooterComponent
+    public class SoundOnSwitch : MonoBehaviour
     {
         [SerializeField] private SoundAsset sound;
 
         private Switch lightSwitch;
         private Speaker speaker;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             lightSwitch = GetComponent<Switch>();
             speaker = GetComponent<Speaker>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             lightSwitch.Switched += Play;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             lightSwitch.Switched -= Play;
         }

@@ -33,9 +33,9 @@ namespace Shooter.Game
 
         public Vector3 FeetPosition => navMeshAgent.nextPosition - Vector3.up * navMeshAgent.baseOffset;
 
-        protected override void ShooterAwake()
+        protected override void Awake()
         {
-            base.ShooterAwake();
+            base.Awake();
 
             navMeshAgent = GetComponent<NavMeshAgent>();
             navMeshAgent.updatePosition = false;
@@ -47,7 +47,7 @@ namespace Shooter.Game
         {
             base.OnNetworkSpawn();
 
-            Entity.SetComponentEnabled(navMeshAgent, IsServer);
+            ShooterEntity.SetEnabled(navMeshAgent, IsServer);
         }
 
         public void WalkTo(Vector3 target, bool sprint)

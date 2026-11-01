@@ -5,23 +5,23 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Teleporter))]
-    public class SoundOnTeleport : ShooterComponent
+    public class SoundOnTeleport : MonoBehaviour
     {
         [SerializeField] private EarSoundAsset sound;
 
         private Teleporter teleporter;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             teleporter = GetComponent<Teleporter>();
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             teleporter.Teleported += PlayForTeleported;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             teleporter.Teleported -= PlayForTeleported;
         }

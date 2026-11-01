@@ -8,7 +8,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class ConversationManager : ShooterComponent, ISaveableComponent
+    public class ConversationManager : MonoBehaviour, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 

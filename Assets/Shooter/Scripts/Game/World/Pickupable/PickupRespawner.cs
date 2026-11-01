@@ -6,7 +6,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkObject))]
-    public class PickupRespawner : ShooterComponent, ISaveableComponent, IHourPassedHandler
+    public class PickupRespawner : MonoBehaviour, ISaveableComponent, IHourPassedHandler
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -41,10 +41,10 @@ namespace Shooter.Game
             rolledUntil = saveData.Alive ? null : saveData.RolledUntil;
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             clock = Registers.Instance.Get<Clock>();
-            Entity.SetComponentEnabled(this, NetworkManager.Singleton.IsServer);
+            ShooterEntity.SetEnabled(this, NetworkManager.Singleton.IsServer);
             if (item == null)
             {
                 Log.Error($"Entity {name} is missing its item");
@@ -54,7 +54,7 @@ namespace Shooter.Game
         private void Start()
         {
             if (rolledUntil == null) SpawnBody();
-            else Entity.SetComponentEnabled(this, growsBack);
+            else ShooterEntity.SetEnabled(this, growsBack);
         }
 
         public void HandleHourPassed()
@@ -84,7 +84,7 @@ namespace Shooter.Game
             alive = true;
             rolledUntil = null;
             // A grown body needs no hourly calls until it is picked up
-            Entity.SetComponentEnabled(this, false);
+            ShooterEntity.SetEnabled(this, false);
             Pickupable pickupable = body.GetComponent<Pickupable>();
             pickupable.AssignItem(item);
             pickupable.PickedUp += HandleBodyPickedUp;
@@ -95,7 +95,7 @@ namespace Shooter.Game
             Log.Info($"Entity {name} (pickable {pickupable.name}) became dead via callback, {(growsBack ? $"grows back in about {averageHoursToGrow} h of world time" : "does not grow back")}");
             alive = false;
             rolledUntil = clock.Timestamp;
-            Entity.SetComponentEnabled(this, growsBack);
+            ShooterEntity.SetEnabled(this, growsBack);
             pickupable.PickedUp -= HandleBodyPickedUp;
         }
 

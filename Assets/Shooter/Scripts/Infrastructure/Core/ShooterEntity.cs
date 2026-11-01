@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
+    [DefaultExecutionOrder(ExecutionOrder.Infrastructure2)]
     [DisallowMultipleComponent]
     public sealed class ShooterEntity : MonoBehaviour
     {
@@ -18,26 +19,26 @@ namespace Shooter.Infrastructure
 
         public bool IsOptimized { get; private set; }
 
+        public static void SetEnabled(Component component, bool componentEnabled)
+        {
+            component.GetComponent<ShooterEntity>().SetComponentEnabled(component, componentEnabled);
+        }
+
         private void Awake()
         {
             foreach (Component component in GetComponents<Component>())
             {
-                if (component is IShooterComponent) continue;
-
-                if (component is Behaviour behaviour) NotifyComponentAttached(behaviour);
-                else AddEntry(component);
+                Attach(component);
             }
 
-            // Not a RequireComponent: Unity creates a required component before the one requiring it, and the
-            // observer would wake up with no entity to report to
-            gameObject.AddComponent<ShooterTransformObserver>();
+            AddComponent<ShooterTransformObserver>();
         }
 
         private void OnEnable()
         {
             foreach (Entry entry in components)
             {
-                if (entry.Component is Behaviour { enabled: true } behaviour and not IShooterComponent) NotifyComponentEnabled(behaviour);
+                if (entry.Component is Behaviour { enabled: true } behaviour) Registers.Instance.ActivateComponent(behaviour);
             }
         }
 
@@ -45,31 +46,26 @@ namespace Shooter.Infrastructure
         {
             foreach (Entry entry in components)
             {
-                if (entry.Component is Behaviour behaviour and not IShooterComponent) NotifyComponentDisabled(behaviour);
+                if (entry.Component is Behaviour behaviour) Registers.Instance.DeactivateComponent(behaviour);
             }
         }
 
         private void OnDestroy()
         {
-            for (int i = components.Count - 1; i >= 0; i--)
+            foreach (Entry entry in components)
             {
-                if (components[i].Component is Behaviour behaviour and not IShooterComponent) NotifyComponentDetached(behaviour);
+                if (entry.Component is not Behaviour behaviour) continue;
+
+                Registers.Instance.UnregisterComponent(behaviour);
+                if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, behaviour);
             }
         }
 
-        // Our code never writes enabled of a component on an entity's object, it asks the entity: the entity keeps what
-        // the component's code wants, and enabled is that unless the entity is optimized
-        public void SetComponentEnabled(Component component, bool componentEnabled)
+        public T AddComponent<T>() where T : Component
         {
-            Entry entry = components.Find(candidate => candidate.Component == component);
-            if (entry == null)
-            {
-                Log.Error($"Entity {name} was asked to switch {component.GetType().Name} {component.name}, which is not on its object or can't be switched");
-                return;
-            }
-
-            entry.Enabled = componentEnabled;
-            Apply(entry);
+            T component = gameObject.AddComponent<T>();
+            Attach(component);
+            return component;
         }
 
         public void SetOptimized(bool optimized)
@@ -85,36 +81,9 @@ namespace Shooter.Infrastructure
             Log.Debug($"Entity {name} {(optimized ? "optimized" : "no longer optimized")}");
         }
 
-        // The entity learns about its object only through Notify calls, direct rather than events: they come on every
-        // enable, disable and move, and no delegates are kept per entity. An IShooterComponent, as ShooterComponent and
-        // ShooterNetworkComponent, sends the component ones from its closed Unity messages, every other behaviour, the
-        // entity included, is reported by the entity itself together with its object and whenever the entity switches
-        // it. A call may come before this entity's Awake, as Unity doesn't order Awake between the components of one
-        // object, so the calls rely only on fields set where they are declared
-        public void NotifyComponentAttached(Behaviour component)
-        {
-            AddEntry(component);
-            Registers.Instance.RegisterComponent(component);
-            if (chunk != null) Chunks.Instance.AddComponent(chunk.Value, component);
-        }
-
-        public void NotifyComponentEnabled(Behaviour component)
-        {
-            Registers.Instance.ActivateComponent(component);
-        }
-
-        public void NotifyComponentDisabled(Behaviour component)
-        {
-            Registers.Instance.DeactivateComponent(component);
-        }
-
-        public void NotifyComponentDetached(Behaviour component)
-        {
-            components.RemoveAll(entry => entry.Component == component);
-            Registers.Instance.UnregisterComponent(component);
-            if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, component);
-        }
-
+        // An inverted delegate: by its meaning this is the observer's Moved event with the entity subscribed to it, but
+        // it fires on every move of every dynamic entity, so the one subscriber is called directly and no delegate is
+        // kept per entity
         public void NotifyMoved()
         {
             Vector2Int movedTo = Chunks.ChunkOf(transform.position);
@@ -132,22 +101,53 @@ namespace Shooter.Infrastructure
             chunk = movedTo;
         }
 
-        private void AddEntry(Component component)
+        // A component may ask to be switched from its own Awake, before this entity's Awake has found it, as Unity
+        // doesn't order Awake between the components of one object: it is taken then, and found again later is skipped
+        private void SetComponentEnabled(Component component, bool componentEnabled)
         {
-            bool? componentEnabled = GetEnabled(component);
-            if (componentEnabled == null) return;
+            Entry entry = Attach(component);
+            if (entry == null)
+            {
+                Log.Error($"Entity {name} was asked to switch {component.GetType().Name} {component.name}, which can't be switched");
+                return;
+            }
 
-            components.Add(new Entry { Component = component, Enabled = componentEnabled.Value });
-            if (IsOptimized) SetEnabled(component, false);
+            entry.Enabled = componentEnabled;
+            Apply(entry);
+        }
+
+        private Entry Attach(Component component)
+        {
+            Entry entry = components.Find(candidate => candidate.Component == component);
+            if (entry != null) return entry;
+
+            bool? componentEnabled = GetEnabled(component);
+            if (componentEnabled == null) return null;
+
+            entry = new Entry { Component = component, Enabled = componentEnabled.Value };
+            components.Add(entry);
+            if (IsOptimized) Switch(component, false);
+            if (component is not Behaviour behaviour) return entry;
+
+            Registers.Instance.RegisterComponent(behaviour);
+            if (chunk != null) Chunks.Instance.AddComponent(chunk.Value, behaviour);
+            if (IsActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
+            return entry;
         }
 
         private void Apply(Entry entry)
         {
-            SetEnabled(entry.Component, entry.Enabled && !IsOptimized);
-            if (entry.Component is not Behaviour behaviour || behaviour is IShooterComponent) return;
+            Switch(entry.Component, entry.Enabled && !IsOptimized);
+            if (entry.Component is not Behaviour behaviour) return;
 
-            if (behaviour.isActiveAndEnabled) NotifyComponentEnabled(behaviour);
-            else NotifyComponentDisabled(behaviour);
+            if (IsActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
+            else Registers.Instance.DeactivateComponent(behaviour);
+        }
+
+        // Not isActiveAndEnabled: it stays false in a component's Awake, before Unity calls its OnEnable
+        private static bool IsActive(Behaviour behaviour)
+        {
+            return behaviour.enabled && behaviour.gameObject.activeInHierarchy;
         }
 
         // Unity has no common enabled: each family of components declares its own, and the rest can't be switched
@@ -163,7 +163,7 @@ namespace Shooter.Infrastructure
             };
         }
 
-        private static void SetEnabled(Component component, bool componentEnabled)
+        private static void Switch(Component component, bool componentEnabled)
         {
             switch (component)
             {

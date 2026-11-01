@@ -7,7 +7,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(IncrementalId))]
-    public class Switch : ShooterNetworkComponent, IUsable, IDigestible, ISaveableComponent
+    public class Switch : NetworkBehaviour, IUsable, IDigestible, ISaveableComponent
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -43,7 +43,7 @@ namespace Shooter.Game
             SwitchPoweredAndGlowing(shining.Value);
         }
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             litEmissiveColors = new Color[glowing.Length];
 

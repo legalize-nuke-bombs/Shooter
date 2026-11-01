@@ -8,7 +8,7 @@ namespace Shooter.Game
     [RequireComponent(typeof(Llm))]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Health))]
-    public class LlmConversationObserver : ShooterComponent
+    public class LlmConversationObserver : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
@@ -17,21 +17,21 @@ namespace Shooter.Game
         private Health health;
         private Llm llm;
 
-        protected override void ShooterAwake()
+        private void Awake()
         {
             character = GetComponent<Character>();
             conversationManager = Registers.Instance.Get<ConversationManager>();
             health = GetComponent<Health>();
             llm = GetComponent<Llm>();
-            Entity.SetComponentEnabled(this, NetworkManager.Singleton.IsServer);
+            ShooterEntity.SetEnabled(this, NetworkManager.Singleton.IsServer);
         }
 
-        protected override void ShooterOnEnable()
+        private void OnEnable()
         {
             conversationManager.Said += Hear;
         }
 
-        protected override void ShooterOnDisable()
+        private void OnDisable()
         {
             conversationManager.Said -= Hear;
         }
