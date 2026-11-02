@@ -11,7 +11,6 @@ namespace Shooter.Game
     [RequireComponent(typeof(Sleeper))]
     public class PlayerMouth : NetworkBehaviour, IShooterUpdateable
     {
-        public const float TalkReach = 8f;
         public const int MaxSpeechLength = 300;
         private static readonly Journal Log = Logs.Here();
 
@@ -141,7 +140,7 @@ namespace Shooter.Game
 
         private bool IsWithinTalkReach(Talker talker)
         {
-            return Vector3.Distance(talker.transform.position, transform.position) <= TalkReach;
+            return Vector3.Distance(talker.transform.position, transform.position) <= ConversationManager.TalkReach;
         }
 
         [Rpc(SendTo.Owner)]

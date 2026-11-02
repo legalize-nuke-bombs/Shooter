@@ -281,7 +281,7 @@ MonoBehaviour:
       type: {class: ReadNotesTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258853
-      type: {class: SayToWandererTool, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: SayTool, ns: Shooter.Game, asm: Shooter.Game}
       data: 
     - rid: 2635107260138258854
       type: {class: SearchNotesTool, ns: Shooter.Game, asm: Shooter.Game}

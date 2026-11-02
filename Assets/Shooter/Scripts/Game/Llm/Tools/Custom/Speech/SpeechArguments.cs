@@ -1,6 +1,6 @@
 namespace Shooter.Game
 {
-    public class SendMessageArguments
+    public class SpeechArguments
     {
         public long[] TargetIds { get; set; }
         public bool Urgent { get; set; }

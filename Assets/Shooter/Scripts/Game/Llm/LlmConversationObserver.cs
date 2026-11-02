@@ -41,21 +41,19 @@ namespace Shooter.Game
             if (message.AuthorId == character.Id || conversation.GetPartnerId(message.AuthorId) != character.Id) return;
             if (!health.IsAlive) return;
 
-            Character author = Character.FindById(message.AuthorId, RegisterInactivePolicy.Include);
+            string verb = message.Spoken ? "says" : "says over the radio";
+            llm.AppendEvent($"[{Llm.FormatCurrentWorldTime()}] {DescribeAuthor(message.AuthorId)} {verb}: {message.Content}", message.Urgent);
+            Log.Info($"Entity {name} heard {message.AuthorId}, spoken {message.Spoken}, urgent {message.Urgent}");
+        }
 
-            if (author != null && author.TryGetComponent(out Player _))
-            {
-                llm.AppendEvent(message.Spoken
-                    ? $"Wanderer [ID {message.AuthorId}] says: {message.Content}"
-                    : $"Wanderer [ID {message.AuthorId}] says over the radio: {message.Content}", message.Urgent);
-                return;
-            }
+        private static string DescribeAuthor(long authorId)
+        {
+            Character author = Character.FindById(authorId, RegisterInactivePolicy.Include);
+            if (author != null && author.TryGetComponent(out Player _)) return $"Wanderer [ID {authorId}]";
 
             Nameable nameable = author == null ? null : author.GetComponent<Nameable>();
             string authorName = nameable == null ? string.Empty : nameable.GetPromptName();
-
-            llm.AppendEvent($"[{Llm.FormatCurrentWorldTime()}] Mail from Character {message.AuthorId} ({authorName}): {message.Content}", message.Urgent);
-            Log.Info($"Entity {name} got mail from {message.AuthorId}, urgent {message.Urgent}");
+            return $"Character {authorId} ({authorName})";
         }
     }
 }

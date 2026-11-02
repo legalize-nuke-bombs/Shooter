@@ -10,6 +10,7 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class ConversationManager : MonoBehaviour, ISaveableComponent
     {
+        public const float TalkReach = 8f;
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<(long, long), Conversation> conversationsByKey = new();
