@@ -15,7 +15,7 @@ namespace Shooter.Infrastructure
         public static FrozenWorld FreezeAllSaveableEntities()
         {
             FrozenWorld frozenWorld = new();
-            foreach (SaveableEntity saveable in Object.FindObjectsByType<SaveableEntity>(FindObjectsInactive.Include))
+            foreach (SaveableEntity saveable in Registers.Instance.GetAll<SaveableEntity>(RegisterInactivePolicy.Include))
             {
                 frozenWorld.FreezeSaveableEntity(saveable);
             }

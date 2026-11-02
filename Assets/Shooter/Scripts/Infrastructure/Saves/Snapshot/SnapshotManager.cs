@@ -19,7 +19,7 @@ namespace Shooter.Infrastructure
                 GameObjects = new Dictionary<string, object>()
             };
 
-            SaveableEntity[] saveables = UnityEngine.Object.FindObjectsByType<SaveableEntity>(FindObjectsInactive.Include);
+            TArray.View<SaveableEntity> saveables = Registers.Instance.GetAll<SaveableEntity>(RegisterInactivePolicy.Include);
             foreach (SaveableEntity saveable in saveables)
             {
                 if (string.IsNullOrEmpty(saveable.Id))

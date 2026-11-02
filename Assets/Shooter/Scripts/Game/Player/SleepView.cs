@@ -93,7 +93,7 @@ namespace Shooter.Game
             Bed closestBed = null;
             float closestSquaredDistance = BedReach * BedReach;
 
-            foreach (Bed bed in FindObjectsByType<Bed>())
+            foreach (Bed bed in Registers.Instance.GetAll<Bed>(RegisterInactivePolicy.Include))
             {
                 float squaredDistance = (bed.transform.position - bedPosition).sqrMagnitude;
                 if (squaredDistance > closestSquaredDistance) continue;
