@@ -11,6 +11,7 @@ namespace Shooter.Infrastructure
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private OptimizationLevelAsset optimizationLevel;
+        public OptimizationLevelAsset OptimizationLevel => optimizationLevel;
 
         private readonly List<Entry> components = new();
         private ShooterTransformObserver observer;
@@ -51,6 +52,8 @@ namespace Shooter.Infrastructure
             {
                 FindOrRegister(component);
             }
+
+            SetOptimized(optimizationLevel && optimizationLevel.Optimizable);
 
             observer = GetComponent<ShooterTransformObserver>();
             observer.Moved += HandleMoved;

@@ -764,6 +764,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreetLamp1_Short (Concrete)
       objectReference: {fileID: 0}
+    - target: {fileID: 3529101084312199460, guid: e55f449d142443c4c96764e849da910a, type: 3}
+      propertyPath: optimizationLevel
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4461102207932718179, guid: e55f449d142443c4c96764e849da910a, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -9860,6 +9864,10 @@ PrefabInstance:
     - target: {fileID: 2594713235057194443, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
       propertyPath: m_Name
       value: House_Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359892862400516514, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
+      propertyPath: optimizationLevel
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

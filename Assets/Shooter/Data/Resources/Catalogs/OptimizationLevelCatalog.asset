@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f2ab98e92fc4232a24a670f8e2c7ba5, type: 3}
   m_Name: OptimizationLevelCatalog
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.OptimizationLevelCatalog
-  assets: []
+  assets:
+  - {fileID: 11400000, guid: 2d4dec15274a93247b8c1aeafc5f0f4b, type: 2}
+  - {fileID: 11400000, guid: 973ad8eaa944ffc4396290d02c32f129, type: 2}
+  - {fileID: 11400000, guid: 6d85a5469c5197c4bb6833571b3285fa, type: 2}
