@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3328434}
   - component: {fileID: 2384828}
   - component: {fileID: 8469109392191843948}
+  - component: {fileID: 4861255404127331316}
   m_Layer: 0
   m_Name: Struct_Kiosk_A_LOD1
   m_TagString: Untagged
@@ -103,6 +104,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &4861255404127331316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &187680
 GameObject:
@@ -117,6 +131,7 @@ GameObject:
   - component: {fileID: 2320948}
   - component: {fileID: 6434484}
   - component: {fileID: 8339408901115108224}
+  - component: {fileID: 7203945788082067553}
   m_Layer: 0
   m_Name: Struct_Kiosk_A_LOD0
   m_TagString: Untagged
@@ -230,6 +245,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &7203945788082067553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &193804
 GameObject:
@@ -243,6 +271,7 @@ GameObject:
   - component: {fileID: 3368428}
   - component: {fileID: 2393946}
   - component: {fileID: 6544067615014128723}
+  - component: {fileID: 4417835350701242653}
   m_Layer: 0
   m_Name: Struct_Kiosk_A_LOD2
   m_TagString: Untagged
@@ -334,6 +363,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &4417835350701242653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &196546
 GameObject:
@@ -346,6 +388,7 @@ GameObject:
   - component: {fileID: 443842}
   - component: {fileID: 20560310}
   - component: {fileID: 6278063550522709757}
+  - component: {fileID: 1868587971016474728}
   m_Layer: 0
   m_Name: Struct_Kiosk_A
   m_TagString: Untagged
@@ -411,4 +454,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &1868587971016474728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0

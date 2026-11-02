@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 2333246135476635896}
   - component: {fileID: 2333246135476635897}
   - component: {fileID: 8779246625535688817}
+  - component: {fileID: 3224473974673295247}
   m_Layer: 0
   m_Name: SurvivalistOlive
   m_TagString: Untagged
@@ -110,6 +111,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &3224473974673295247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246135476635899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246135483036881
 GameObject:
@@ -122,6 +136,7 @@ GameObject:
   - component: {fileID: 2333246135483036886}
   - component: {fileID: 2333246135483036887}
   - component: {fileID: 2892003709815054844}
+  - component: {fileID: 2927849073763904076}
   m_Layer: 0
   m_Name: SK_Military_Head1
   m_TagString: Untagged
@@ -224,6 +239,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &2927849073763904076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246135483036881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246135489385313
 GameObject:
@@ -365,6 +393,7 @@ GameObject:
   - component: {fileID: 2333246135545426016}
   - component: {fileID: 2333246135545426017}
   - component: {fileID: 2128175467152870540}
+  - component: {fileID: 8184493477781913437}
   m_Layer: 0
   m_Name: SK_Military_Pants2
   m_TagString: Untagged
@@ -520,6 +549,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &8184493477781913437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246135545426019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246135580843775
 GameObject:
@@ -1008,6 +1050,7 @@ GameObject:
   - component: {fileID: 2333246136091927463}
   - component: {fileID: 2333246136091927460}
   - component: {fileID: 7651027008040190548}
+  - component: {fileID: 7696506282351324889}
   m_Layer: 0
   m_Name: SK_Military_Shirt3
   m_TagString: Untagged
@@ -1163,6 +1206,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &7696506282351324889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246136091927462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246136109752983
 GameObject:
@@ -1301,6 +1357,7 @@ GameObject:
   - component: {fileID: 2333246136218994764}
   - component: {fileID: 2333246136218994765}
   - component: {fileID: 2331848460593148140}
+  - component: {fileID: 5815003969769215742}
   m_Layer: 0
   m_Name: SK_Military_Vest1_4
   m_TagString: Untagged
@@ -1457,6 +1514,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &5815003969769215742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246136218994767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246136229588207
 GameObject:
@@ -1628,6 +1698,7 @@ GameObject:
   - component: {fileID: 2333246136450274276}
   - component: {fileID: 2333246136450274277}
   - component: {fileID: 4509932864370951737}
+  - component: {fileID: 3240122344559337292}
   m_Layer: 0
   m_Name: SK_Military_Vest1
   m_TagString: Untagged
@@ -1783,6 +1854,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &3240122344559337292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246136450274279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246136483906687
 GameObject:
@@ -1991,6 +2075,7 @@ GameObject:
   - component: {fileID: 2333246136668176085}
   - component: {fileID: 2333246136668176074}
   - component: {fileID: 2329244819543562917}
+  - component: {fileID: 1520826806530527724}
   m_Layer: 0
   m_Name: SK_Military_Male_Arms1_Gloves1
   m_TagString: Untagged
@@ -2147,6 +2232,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &1520826806530527724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246136668176084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246136697216492
 GameObject:
@@ -2286,6 +2384,7 @@ GameObject:
   - component: {fileID: 2333246136835122207}
   - component: {fileID: 2333246136835122204}
   - component: {fileID: 3720054688163094352}
+  - component: {fileID: 221428945290324791}
   m_Layer: 0
   m_Name: SK_Military_Cap1
   m_TagString: Untagged
@@ -2441,6 +2540,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &221428945290324791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246136835122206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246136837848120
 GameObject:
@@ -2746,6 +2858,7 @@ GameObject:
   - component: {fileID: 2333246137017858432}
   - component: {fileID: 2333246137017858433}
   - component: {fileID: 2290635571789451242}
+  - component: {fileID: 7563924843419396963}
   m_Layer: 0
   m_Name: SK_Military_Boots3
   m_TagString: Untagged
@@ -2901,6 +3014,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &7563924843419396963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246137017858435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246137057232455
 GameObject:
@@ -3138,6 +3264,7 @@ GameObject:
   - component: {fileID: 2333246137215516622}
   - component: {fileID: 2333246137215516623}
   - component: {fileID: 424153228104084654}
+  - component: {fileID: 4786022973862699659}
   m_Layer: 0
   m_Name: SK_Military_Male_Arms1
   m_TagString: Untagged
@@ -3293,6 +3420,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &4786022973862699659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246137215516617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246137237583066
 GameObject:
@@ -3305,6 +3445,7 @@ GameObject:
   - component: {fileID: 2333246137237583067}
   - component: {fileID: 2333246137237583064}
   - component: {fileID: 8390968644897416935}
+  - component: {fileID: 6419828686734548615}
   m_Layer: 0
   m_Name: SK_Military_Backpack1
   m_TagString: Untagged
@@ -3460,6 +3601,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &6419828686734548615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246137237583066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246137291629449
 GameObject:
@@ -3472,6 +3626,7 @@ GameObject:
   - component: {fileID: 2333246137291629454}
   - component: {fileID: 2333246137291629455}
   - component: {fileID: 3468259666439875639}
+  - component: {fileID: 7320964554506931449}
   m_Layer: 0
   m_Name: SK_Military_Backpack1_vest
   m_TagString: Untagged
@@ -3627,6 +3782,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &7320964554506931449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333246137291629449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &2333246137319583232
 GameObject:

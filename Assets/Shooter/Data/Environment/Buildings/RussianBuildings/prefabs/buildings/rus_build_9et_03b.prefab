@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 65211483118960272}
   - component: {fileID: 65395163281738362}
   - component: {fileID: 571493276972838517}
+  - component: {fileID: 86394934612859206}
   m_Layer: 0
   m_Name: rus_build_9et_03b
   m_TagString: Untagged
@@ -376,6 +377,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &86394934612859206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291088702013892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &1384063020062752
 GameObject:
@@ -389,6 +403,7 @@ GameObject:
   - component: {fileID: 33168932025091142}
   - component: {fileID: 23026404375793002}
   - component: {fileID: 3034222300514011186}
+  - component: {fileID: 4200783814605859588}
   m_Layer: 0
   m_Name: Regroup13
   m_TagString: Untagged
@@ -480,6 +495,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &4200783814605859588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384063020062752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &1547890067811340
 GameObject:
@@ -493,6 +521,7 @@ GameObject:
   - component: {fileID: 33900101922218372}
   - component: {fileID: 23307269929266054}
   - component: {fileID: 4827703070070649521}
+  - component: {fileID: 7477662365126214159}
   m_Layer: 0
   m_Name: rus_build_dec_01
   m_TagString: Untagged
@@ -584,4 +613,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &7477662365126214159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1547890067811340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0

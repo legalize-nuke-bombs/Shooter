@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2187844370622425862}
   - component: {fileID: 8649890120759960260}
   - component: {fileID: 2516618808055483832}
+  - component: {fileID: 3051006777406213159}
   m_Layer: 0
   m_Name: ConcreteFenceBlock
   m_TagString: Untagged
@@ -48,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  mobility: 0
+  optimizationLevel: {fileID: 0}
 --- !u!114 &2187844370622425862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,6 +97,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2617595, y: 0.93330824, z: 1.2873017}
   m_Center: {x: -0.09582615, y: 0.36182147, z: -0.00000011920929}
+--- !u!114 &3051006777406213159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111581414879879865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0
 --- !u!1 &4988025584522941558
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,6 +155,7 @@ GameObject:
   - component: {fileID: 6393307430302189694}
   - component: {fileID: 5415609431650454057}
   - component: {fileID: 3657942707589192151}
+  - component: {fileID: 3372376129167345428}
   m_Layer: 0
   m_Name: BlokBitonOpora04
   m_TagString: Untagged
@@ -254,4 +269,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &3372376129167345428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9095390122221278709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0

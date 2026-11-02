@@ -5,18 +5,16 @@ namespace Shooter.Infrastructure
 {
     [DefaultExecutionOrder(ExecutionOrder.Infrastructure2)]
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(ShooterTransformObserver))]
     public sealed class ShooterEntity : MonoBehaviour
     {
-        public const string MobilityField = nameof(mobility);
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private ShooterTransformObserver.TransformMobility mobility;
         [SerializeField] private OptimizationLevelAsset optimizationLevel;
 
         private readonly List<Entry> components = new();
+        private ShooterTransformObserver observer;
         private Vector2Int? chunk;
-
-        public ShooterTransformObserver.TransformMobility Mobility => mobility;
 
         public bool IsOptimized { get; private set; }
 
@@ -41,7 +39,8 @@ namespace Shooter.Infrastructure
                 FindOrRegister(component);
             }
 
-            AddComponent<ShooterTransformObserver>();
+            observer = GetComponent<ShooterTransformObserver>();
+            observer.Moved += HandleMoved;
         }
 
         private void OnEnable()
@@ -62,6 +61,7 @@ namespace Shooter.Infrastructure
 
         private void OnDestroy()
         {
+            observer.Moved -= HandleMoved;
             foreach (Entry entry in components)
             {
                 if (entry.Component is not Behaviour behaviour) continue;
@@ -91,10 +91,7 @@ namespace Shooter.Infrastructure
             Log.Debug($"Entity {name} {(optimized ? "optimized" : "no longer optimized")}");
         }
 
-        // An inverted delegate: by its meaning this is the observer's Moved event with the entity subscribed to it, but
-        // it fires on every move of every dynamic entity, so the one subscriber is called directly and no delegate is
-        // kept per entity
-        public void NotifyMoved()
+        private void HandleMoved()
         {
             Vector2Int movedTo = Chunks.ChunkOf(transform.position);
             if (chunk != null && chunk.Value == movedTo) return;

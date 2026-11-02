@@ -163,10 +163,10 @@ namespace Shooter.Editor
             if (gameObject.GetComponent<ShooterEntity>() != null) return;
 
             ShooterEntity entity = undoable ? Undo.AddComponent<ShooterEntity>(gameObject) : gameObject.AddComponent<ShooterEntity>();
-            var serializedEntity = new SerializedObject(entity);
-            serializedEntity.FindProperty(ShooterEntity.MobilityField).enumValueIndex = (int)mobility;
-            if (undoable) serializedEntity.ApplyModifiedProperties();
-            else serializedEntity.ApplyModifiedPropertiesWithoutUndo();
+            var serializedObserver = new SerializedObject(entity.GetComponent<ShooterTransformObserver>());
+            serializedObserver.FindProperty(ShooterTransformObserver.MobilityField).enumValueIndex = (int)mobility;
+            if (undoable) serializedObserver.ApplyModifiedProperties();
+            else serializedObserver.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static int[] GetSiblingPath(Transform root, Transform part)

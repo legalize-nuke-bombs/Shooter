@@ -83,18 +83,33 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5417297695864718847}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4429093445310009060}
     - targetCorrespondingSourceObject: {fileID: 3551255863337285566, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5168428503524986501}
+    - targetCorrespondingSourceObject: {fileID: 3551255863337285566, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5897728727796722786}
     - targetCorrespondingSourceObject: {fileID: -4523586478713198439, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2077790590231741712}
+    - targetCorrespondingSourceObject: {fileID: -4523586478713198439, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6625445365105562035}
     - targetCorrespondingSourceObject: {fileID: 2089275667189442638, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 633586981890653178}
+    - targetCorrespondingSourceObject: {fileID: 2089275667189442638, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4896933350626189835}
     - targetCorrespondingSourceObject: {fileID: 7029569923008187145, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9177315991012588475}
+    - targetCorrespondingSourceObject: {fileID: 7029569923008187145, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4055224507333974515}
   m_SourcePrefab: {fileID: 100100000, guid: 418d9ceeee544aa8b49690d5b0c54aee, type: 3}
 --- !u!1 &1364635426176846687 stripped
 GameObject:
@@ -113,6 +128,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &6625445365105562035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364635426176846687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &3622822892372830415 stripped
 GameObject:
@@ -131,6 +159,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &4055224507333974515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622822892372830415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &5707837016630414216 stripped
 GameObject:
@@ -149,6 +190,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &4896933350626189835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707837016630414216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &6848215203879345815 stripped
 GameObject:
@@ -167,6 +221,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &4429093445310009060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6848215203879345815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &7097759617934464120 stripped
 GameObject:
@@ -185,4 +252,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &5897728727796722786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7097759617934464120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0

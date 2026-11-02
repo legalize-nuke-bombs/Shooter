@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7811388535678418842}
   - component: {fileID: 1152914786404146669}
   - component: {fileID: 2903144267675773603}
+  - component: {fileID: 9079928105174676066}
   m_Layer: 0
   m_Name: polySurface11
   m_TagString: Untagged
@@ -126,6 +127,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &9079928105174676066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994220393522081269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &1151885493387808332
 GameObject:
@@ -173,6 +187,7 @@ GameObject:
   - component: {fileID: 1217118457663301117}
   - component: {fileID: 8150182338683310871}
   - component: {fileID: 5830244315237534556}
+  - component: {fileID: 5284657075650497029}
   m_Layer: 0
   m_Name: zabor01
   m_TagString: Untagged
@@ -286,6 +301,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &5284657075650497029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702242725961670621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &1900273494382484242
 GameObject:
@@ -300,6 +328,7 @@ GameObject:
   - component: {fileID: 3371984551171435512}
   - component: {fileID: 411403386978031924}
   - component: {fileID: 6165872226383529903}
+  - component: {fileID: 4284727246798557059}
   m_Layer: 0
   m_Name: polySurface12
   m_TagString: Untagged
@@ -413,6 +442,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &4284727246798557059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900273494382484242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &3569326520909989903
 GameObject:
@@ -495,6 +537,7 @@ GameObject:
   - component: {fileID: 3712132222863940147}
   - component: {fileID: 6777447806584683498}
   - component: {fileID: 3001011294744955534}
+  - component: {fileID: 5727616893163450328}
   m_Layer: 0
   m_Name: BlokBitonOpora01
   m_TagString: Untagged
@@ -608,6 +651,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &5727616893163450328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4433536432407424466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &6098951906691076135
 GameObject:
@@ -622,6 +678,7 @@ GameObject:
   - component: {fileID: 6980044545082678423}
   - component: {fileID: 8675076312668178926}
   - component: {fileID: 1807988990717070590}
+  - component: {fileID: 2208095942133817828}
   m_Layer: 0
   m_Name: polySurface10
   m_TagString: Untagged
@@ -735,6 +792,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &2208095942133817828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6098951906691076135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &7570185130106693274
 GameObject:
@@ -749,6 +819,7 @@ GameObject:
   - component: {fileID: 4172728002847530663}
   - component: {fileID: 7284463700938243030}
   - component: {fileID: 3043841933746663257}
+  - component: {fileID: 8443450237989052062}
   m_Layer: 0
   m_Name: polySurface9
   m_TagString: Untagged
@@ -862,6 +933,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
+  optimizationLevel: {fileID: 0}
+--- !u!114 &8443450237989052062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7570185130106693274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
 --- !u!1 &8859065046725514820
 GameObject:
@@ -909,6 +993,7 @@ GameObject:
   - component: {fileID: 7210545461505674224}
   - component: {fileID: 3979252194741792126}
   - component: {fileID: 3403881096064064398}
+  - component: {fileID: 1448928110015088785}
   m_Layer: 0
   m_Name: ConcreteFence03
   m_TagString: Untagged
@@ -944,7 +1029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  mobility: 0
+  optimizationLevel: {fileID: 0}
 --- !u!114 &3493766106963787077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1013,3 +1098,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.5222216, y: 3.2352622, z: 0.2786704}
   m_Center: {x: 2.6992645, y: 2.0348597, z: -0.0000019520521}
+--- !u!114 &1448928110015088785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9091446183316298064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
+  mobility: 0
