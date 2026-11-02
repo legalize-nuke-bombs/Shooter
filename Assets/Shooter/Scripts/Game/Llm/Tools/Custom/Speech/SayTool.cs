@@ -1,11 +1,19 @@
 using System;
+using System.Linq;
+using System.Text;
+using Shooter.Infrastructure;
 using UnityEngine;
 
 namespace Shooter.Game
 {
     [Serializable]
-    public sealed class SayTool : SpeechTool
+    public sealed class SayTool : LlmTool<SayArguments>
     {
+        private static readonly Journal Log = Logs.Here();
+
+        private ConversationManager conversationManager;
+        private Character ownCharacter;
+
         public override string Name => "say";
 
         public override string Description =>
@@ -14,31 +22,56 @@ Say something aloud to characters by their ids, residents and wanderers alike: o
 This is how you talk face to face. Answer with this tool whoever talks to you face to face.
 Reach characters who are farther away over the radio with `send_message`.
 Speak to residents in English, and to a wanderer in the language he speaks.
-
-If you mark your words as urgent, residents who hear them react almost immediately.
-If you don't mark them as urgent, residents still hear them, but react only on their next LLM tick.
-Mark your words as urgent only when the listener has to react right away.
-Wanderers hear you immediately, regardless of the value of the `urgent` field.
 ";
 
-        protected override bool Spoken => true;
-
-        protected override bool CanHear(Character listener, out string refusal)
+        protected override void Start()
         {
-            float distance = Vector3.Distance(OwnCharacter.transform.position, listener.transform.position);
+            conversationManager = Registers.Instance.Get<ConversationManager>();
+            ownCharacter = Self.GetComponent<Character>();
+            if (ownCharacter == null)
+            {
+                Log.Error($"Entity {Self.name} does not have Character component required by tool {Name}");
+            }
+        }
+
+        protected override string Execute(SayArguments arguments, LlmCallContext context)
+        {
+            if (arguments.TargetIds == null || arguments.TargetIds.Length == 0 || string.IsNullOrEmpty(arguments.Content)) return "Nothing to say";
+
+            StringBuilder result = new();
+            foreach (long targetId in arguments.TargetIds.Distinct())
+            {
+                if (result.Length > 0) result.Append('\n');
+
+                string refusal = FindRefusal(targetId);
+                if (refusal != null)
+                {
+                    result.Append($"Not said to {targetId}: {refusal}");
+                    continue;
+                }
+
+                conversationManager.Say(ownCharacter.Id, targetId, arguments.Content, true, arguments.Urgent);
+                result.Append($"Said to {targetId}");
+            }
+
+            return result.ToString();
+        }
+
+        private string FindRefusal(long targetId)
+        {
+            Character target = Character.FindById(targetId, RegisterInactivePolicy.Exclude);
+            if (target == null) return "character does not exist";
+            if (targetId == ownCharacter.Id) return "it's you";
+            if (!target.TryGetComponent(out Health health) || !health.IsAlive) return "character is dead";
+
+            float distance = Vector3.Distance(ownCharacter.transform.position, target.transform.position);
             if (distance > ConversationManager.TalkReach)
             {
-                refusal = $"{distance:F0} m away, too far to hear you, come within {ConversationManager.TalkReach} m or use send_message to reach them over the radio";
-                return false;
-            }
-            if (listener.TryGetComponent(out Sleeper sleeper) && sleeper.IsSleeping)
-            {
-                refusal = "character is asleep and does not hear you";
-                return false;
+                return $"{distance:F0} m away, too far to hear you, come within {ConversationManager.TalkReach} m or use send_message to reach them over the radio";
             }
 
-            refusal = null;
-            return true;
+            if (target.TryGetComponent(out Sleeper sleeper) && sleeper.IsSleeping) return "character is asleep and does not hear you";
+            return null;
         }
     }
 }
