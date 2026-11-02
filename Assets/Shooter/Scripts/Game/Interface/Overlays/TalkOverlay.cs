@@ -13,6 +13,7 @@ namespace Shooter.Game
         private const string PartnerNameLabelName = "talk-name";
         private const string LinesScrollViewName = "talk-log";
         private const string WaitingLabelName = "talk-waiting";
+        private const string OutOfReachLabelName = "talk-out-of-reach";
         private const string InputFieldName = "talk-input";
         private const string GiveButtonName = "talk-give";
         private const string RadioTitleSuffix = "рация";
@@ -25,6 +26,7 @@ namespace Shooter.Game
         private ScrollView linesScrollView;
         private Label partnerNameLabel;
         private Label waitingLabel;
+        private Label outOfReachLabel;
         private VisualElement windowElement;
 
         private PlayerMouth playerMouth;
@@ -77,6 +79,7 @@ namespace Shooter.Game
             playerMouth.TalkClosed += CloseTalk;
 
             playerRadio = playerMouth.GetComponent<PlayerRadio>();
+            if (playerRadio != null) playerRadio.PartnerOutOfReach += ShowPartnerOutOfReach;
             playerConversations = playerMouth.GetComponent<PlayerConversations>();
             if (playerConversations == null)
             {
@@ -94,10 +97,11 @@ namespace Shooter.Game
             partnerNameLabel = root.Q<Label>(PartnerNameLabelName);
             linesScrollView = root.Q<ScrollView>(LinesScrollViewName);
             waitingLabel = root.Q<Label>(WaitingLabelName);
+            outOfReachLabel = root.Q<Label>(OutOfReachLabelName);
             inputField = root.Q<TextField>(InputFieldName);
             giveButton = root.Q<Button>(GiveButtonName);
 
-            if (windowElement == null || partnerNameLabel == null || linesScrollView == null || waitingLabel == null || inputField == null || giveButton == null)
+            if (windowElement == null || partnerNameLabel == null || linesScrollView == null || waitingLabel == null || outOfReachLabel == null || inputField == null || giveButton == null)
             {
                 Log.Error($"Overlay document has no {WindowElementName} window, talks stay invisible");
                 return false;
@@ -149,6 +153,7 @@ namespace Shooter.Game
             shownContact = contact;
             partnerNameLabel.text = title;
             giveButton.style.display = talkingOverRadio ? DisplayStyle.None : DisplayStyle.Flex;
+            outOfReachLabel.style.display = DisplayStyle.None;
             inputField.value = string.Empty;
             windowElement.style.display = DisplayStyle.Flex;
 
@@ -282,6 +287,8 @@ namespace Shooter.Game
 
             if (speech.Length == 0 || shownContact == null) return;
 
+            outOfReachLabel.style.display = DisplayStyle.None;
+
             if (talkingOverRadio && playerRadio != null)
             {
                 playerRadio.SayRpc(shownContact.PartnerId, speech);
@@ -290,6 +297,13 @@ namespace Shooter.Game
             {
                 playerMouth.SayRpc(speech);
             }
+        }
+
+        private void ShowPartnerOutOfReach(long partnerId)
+        {
+            if (!talkingOverRadio || shownContact == null || shownContact.PartnerId != partnerId) return;
+
+            outOfReachLabel.style.display = DisplayStyle.Flex;
         }
 
         private void OpenInventoryFromTalk()
@@ -323,6 +337,7 @@ namespace Shooter.Game
 
             playerMouth.TalkOpened -= OpenTalk;
             playerMouth.TalkClosed -= CloseTalk;
+            if (playerRadio != null) playerRadio.PartnerOutOfReach -= ShowPartnerOutOfReach;
             playerMouth = null;
             playerRadio = null;
         }

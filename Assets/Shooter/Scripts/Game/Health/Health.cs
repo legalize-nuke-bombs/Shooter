@@ -41,6 +41,15 @@ namespace Shooter.Game
                 };
             }
 
+            if (ShooterEntity.GetComponentStatus(this) == ShooterEntity.ComponentStatus.Optimized)
+            {
+                Log.Info($"Entity {name} is optimized, {amount} damage{(attacker == null ? "" : $" from {attacker.name}")} does not reach it");
+                return new DamageResult
+                {
+                    IsLethal = false
+                };
+            }
+
             Log.Info($"Entity {name} got {amount} damage of {(damageType == null ? "no type" : damageType.name)}{(attacker == null ? "" : $" from {attacker.name}")}");
 
             ReduceHp(amount);

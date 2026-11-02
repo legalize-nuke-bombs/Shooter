@@ -42,8 +42,11 @@ If the target is reachable and still exists, your character will never stop foll
 
         protected override string Execute(FollowArguments arguments, LlmCallContext context)
         {
-            Character target = Character.FindById(arguments.TargetId, RegisterInactivePolicy.Exclude);
+            Character target = Character.FindById(arguments.TargetId, RegisterInactivePolicy.Include);
             if (target == null) return $"Character with ID {arguments.TargetId} does not exist";
+            ShooterEntity.ComponentStatus status = ShooterEntity.GetComponentStatus(target);
+            if (status == ShooterEntity.ComponentStatus.Optimized) return $"Character with ID {arguments.TargetId} is too far";
+            if (status != ShooterEntity.ComponentStatus.Enabled) return $"Character with ID {arguments.TargetId} does not exist";
             if (target.gameObject == Self) return "You cannot follow yourself";
             if (arguments.Distance < 0) return "distance cannot be negative";
 

@@ -36,8 +36,18 @@ The detailed mode is available only for objects within a distance of {detailedMo
             foreach (long targetId in targetIds)
             {
                 IncrementalId target = IncrementalId.FindByValue(targetId, RegisterInactivePolicy.Include);
-
                 if (target == null)
+                {
+                    result.AppendLine($"Entity with ID {targetId} does not exist");
+                    continue;
+                }
+                ShooterEntity.ComponentStatus status = ShooterEntity.GetComponentStatus(target);
+                if (status == ShooterEntity.ComponentStatus.Optimized)
+                {
+                    result.AppendLine($"Entity with ID {targetId} is too far");
+                    continue;
+                }
+                if (status != ShooterEntity.ComponentStatus.Enabled)
                 {
                     result.AppendLine($"Entity with ID {targetId} does not exist");
                     continue;

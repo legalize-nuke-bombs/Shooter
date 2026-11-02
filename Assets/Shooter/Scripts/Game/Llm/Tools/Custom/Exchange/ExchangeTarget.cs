@@ -10,8 +10,19 @@ namespace Shooter.Game
             target = null;
             refusal = null;
 
-            IncrementalId found = IncrementalId.FindByValue(targetId, RegisterInactivePolicy.Exclude);
+            IncrementalId found = IncrementalId.FindByValue(targetId, RegisterInactivePolicy.Include);
             if (found == null)
+            {
+                refusal = $"Entity with ID {targetId} does not exist";
+                return false;
+            }
+            ShooterEntity.ComponentStatus status = ShooterEntity.GetComponentStatus(found);
+            if (status == ShooterEntity.ComponentStatus.Optimized)
+            {
+                refusal = $"Entity with ID {targetId} is too far";
+                return false;
+            }
+            if (status != ShooterEntity.ComponentStatus.Enabled)
             {
                 refusal = $"Entity with ID {targetId} does not exist";
                 return false;

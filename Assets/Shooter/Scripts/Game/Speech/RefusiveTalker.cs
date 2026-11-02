@@ -35,7 +35,7 @@ namespace Shooter.Game
             Character author = Character.FindById(message.AuthorId, RegisterInactivePolicy.Include);
             if (author == null || !author.TryGetComponent(out Player _)) return;
 
-            conversationManager.Say(CharacterId, message.AuthorId, "Not now.", false, true);
+            conversationManager.TrySay(CharacterId, message.AuthorId, "Not now.", false, true);
         }
     }
 }

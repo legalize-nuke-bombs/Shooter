@@ -44,13 +44,13 @@ Speak to residents in English, and to a wanderer in the language he speaks.
                 if (result.Length > 0) result.Append('\n');
 
                 string refusal = FindRefusal(targetId);
+                if (refusal == null && !conversationManager.TrySay(ownCharacter.Id, targetId, arguments.Content, true, arguments.Urgent)) refusal = "too far to hear you";
                 if (refusal != null)
                 {
                     result.Append($"Not said to {targetId}: {refusal}");
                     continue;
                 }
 
-                conversationManager.Say(ownCharacter.Id, targetId, arguments.Content, true, arguments.Urgent);
                 result.Append($"Said to {targetId}");
             }
 
@@ -59,10 +59,11 @@ Speak to residents in English, and to a wanderer in the language he speaks.
 
         private string FindRefusal(long targetId)
         {
-            Character target = Character.FindById(targetId, RegisterInactivePolicy.Exclude);
+            Character target = Character.FindById(targetId, RegisterInactivePolicy.Include);
             if (target == null) return "character does not exist";
             if (targetId == ownCharacter.Id) return "it's you";
             if (!target.TryGetComponent(out Health health) || !health.IsAlive) return "character is dead";
+            if (ShooterEntity.GetComponentStatus(target) == ShooterEntity.ComponentStatus.Disabled) return "character does not exist";
 
             float distance = Vector3.Distance(ownCharacter.transform.position, target.transform.position);
             if (distance > ConversationManager.TalkReach)

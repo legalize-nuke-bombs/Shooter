@@ -48,8 +48,19 @@ You must provide the IDs of the objects. The objects must be within a {radius}-m
 
         private void UseObjectById(long id, StringBuilder result)
         {
-            IncrementalId target = IncrementalId.FindByValue(id, RegisterInactivePolicy.Exclude);
+            IncrementalId target = IncrementalId.FindByValue(id, RegisterInactivePolicy.Include);
             if (target == null)
+            {
+                result.AppendLine($"Object with ID {id} does not exist");
+                return;
+            }
+            ShooterEntity.ComponentStatus status = ShooterEntity.GetComponentStatus(target);
+            if (status == ShooterEntity.ComponentStatus.Optimized)
+            {
+                result.AppendLine($"Object with ID {id} is too far");
+                return;
+            }
+            if (status != ShooterEntity.ComponentStatus.Enabled)
             {
                 result.AppendLine($"Object with ID {id} does not exist");
                 return;

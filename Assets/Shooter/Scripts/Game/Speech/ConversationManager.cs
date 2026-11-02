@@ -84,8 +84,15 @@ namespace Shooter.Game
             conversationsByParticipantId[conversation.Second].Add(conversation);
         }
 
-        public Message Say(long authorId, long listenerId, string content, bool spoken, bool urgent)
+        public bool TrySay(long authorId, long listenerId, string content, bool spoken, bool urgent)
         {
+            Character listener = Character.FindById(listenerId, RegisterInactivePolicy.Include);
+            if (listener != null && ShooterEntity.GetComponentStatus(listener) == ShooterEntity.ComponentStatus.Optimized)
+            {
+                Log.Info($"Character {authorId} said nothing to {listenerId}: the listener is optimized, too far to hear");
+                return false;
+            }
+
             Conversation conversation = GetOrCreate(authorId, listenerId);
             Message message = new()
             {
@@ -98,7 +105,7 @@ namespace Shooter.Game
 
             conversation.AddMessage(message);
             Said?.Invoke(conversation, message);
-            return message;
+            return true;
         }
     }
 }

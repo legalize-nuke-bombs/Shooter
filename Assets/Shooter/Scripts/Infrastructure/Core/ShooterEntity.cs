@@ -15,8 +15,21 @@ namespace Shooter.Infrastructure
         private readonly List<Entry> components = new();
         private ShooterTransformObserver observer;
         private Vector2Int? chunk;
+        private bool isOptimized;
 
-        public bool IsOptimized { get; private set; }
+        public static ComponentStatus GetComponentStatus(Component component)
+        {
+            ShooterEntity entity = component.GetComponent<ShooterEntity>();
+            Entry entry = entity.FindOrRegister(component);
+            if (entry == null)
+            {
+                Log.Error($"Entity {entity.name} was asked the status of {component.GetType().Name} {component.name}, which can't be switched");
+                return ComponentStatus.Enabled;
+            }
+
+            if (!entry.WantsEnabled || !component.gameObject.activeInHierarchy) return ComponentStatus.Disabled;
+            return entity.isOptimized && IsOptimizable(component) ? ComponentStatus.Optimized : ComponentStatus.Enabled;
+        }
 
         public static void SetEnabled(Component component, bool componentEnabled)
         {
@@ -80,9 +93,9 @@ namespace Shooter.Infrastructure
 
         public void SetOptimized(bool optimized)
         {
-            if (IsOptimized == optimized) return;
+            if (isOptimized == optimized) return;
 
-            IsOptimized = optimized;
+            isOptimized = optimized;
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i].Component != null) UpdateUnityEnabled(components[i]);
@@ -119,7 +132,7 @@ namespace Shooter.Infrastructure
 
             entry = new Entry { Component = component, WantsEnabled = componentEnabled.Value };
             components.Add(entry);
-            if (IsOptimized && IsOptimizable(component)) WriteUnityEnabled(component, false);
+            if (isOptimized && IsOptimizable(component)) WriteUnityEnabled(component, false);
             if (component is not Behaviour behaviour) return entry;
 
             Registers.Instance.RegisterComponent(behaviour);
@@ -130,7 +143,7 @@ namespace Shooter.Infrastructure
 
         private void UpdateUnityEnabled(Entry entry)
         {
-            WriteUnityEnabled(entry.Component, entry.WantsEnabled && !(IsOptimized && IsOptimizable(entry.Component)));
+            WriteUnityEnabled(entry.Component, entry.WantsEnabled && !(isOptimized && IsOptimizable(entry.Component)));
             if (entry.Component is not Behaviour behaviour) return;
 
             if (IsEnabledAndActive(behaviour)) ActivateComponent(behaviour);
@@ -201,6 +214,13 @@ namespace Shooter.Infrastructure
         {
             public Component Component;
             public bool WantsEnabled;
+        }
+
+        public enum ComponentStatus
+        {
+            Enabled,
+            Disabled,
+            Optimized
         }
     }
 }

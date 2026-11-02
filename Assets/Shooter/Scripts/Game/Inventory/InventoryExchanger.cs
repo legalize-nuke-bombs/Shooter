@@ -118,10 +118,10 @@ namespace Shooter.Game
                 return;
             }
 
-            IncrementalId receiver = IncrementalId.FindByValue(receiverId, RegisterInactivePolicy.Exclude);
-            if (receiver == null)
+            IncrementalId receiver = IncrementalId.FindByValue(receiverId, RegisterInactivePolicy.Include);
+            if (receiver == null || ShooterEntity.GetComponentStatus(receiver) != ShooterEntity.ComponentStatus.Enabled)
             {
-                Log.Info($"Entity {name} failed to rpc give {stackableId} x {amount} to {receiverId} : target does not exist");
+                Log.Info($"Entity {name} failed to rpc give {stackableId} x {amount} to {receiverId} : target does not exist or is too far");
                 return;
             }
             Inventory receivedInventory = receiver.GetComponent<Inventory>();
@@ -140,10 +140,10 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void GiveUniqueRpc(long receiverId, int slot)
         {
-            IncrementalId receiver = IncrementalId.FindByValue(receiverId, RegisterInactivePolicy.Exclude);
-            if (receiver == null)
+            IncrementalId receiver = IncrementalId.FindByValue(receiverId, RegisterInactivePolicy.Include);
+            if (receiver == null || ShooterEntity.GetComponentStatus(receiver) != ShooterEntity.ComponentStatus.Enabled)
             {
-                Log.Info($"Entity {name} failed to rpc give slot {slot} to {receiverId} : target does not exist");
+                Log.Info($"Entity {name} failed to rpc give slot {slot} to {receiverId} : target does not exist or is too far");
                 return;
             }
             Inventory receiverInventory = receiver.GetComponent<Inventory>();
@@ -177,11 +177,11 @@ namespace Shooter.Game
                 return;
             }
 
-            IncrementalId source = IncrementalId.FindByValue(sourceId, RegisterInactivePolicy.Exclude);
-            Inventory sourceInventory = source == null ? null : source.GetComponent<Inventory>();
+            IncrementalId source = IncrementalId.FindByValue(sourceId, RegisterInactivePolicy.Include);
+            Inventory sourceInventory = source == null || ShooterEntity.GetComponentStatus(source) != ShooterEntity.ComponentStatus.Enabled ? null : source.GetComponent<Inventory>();
             if (sourceInventory == null)
             {
-                Log.Info($"Entity {name} failed to rpc take {stackableId} x {amount} from {sourceId}: nothing there holds items");
+                Log.Info($"Entity {name} failed to rpc take {stackableId} x {amount} from {sourceId}: nothing reachable there holds items");
                 return;
             }
 
@@ -194,11 +194,11 @@ namespace Shooter.Game
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void TakeUniqueRpc(long sourceId, int slot)
         {
-            IncrementalId source = IncrementalId.FindByValue(sourceId, RegisterInactivePolicy.Exclude);
-            Inventory sourceInventory = source == null ? null : source.GetComponent<Inventory>();
+            IncrementalId source = IncrementalId.FindByValue(sourceId, RegisterInactivePolicy.Include);
+            Inventory sourceInventory = source == null || ShooterEntity.GetComponentStatus(source) != ShooterEntity.ComponentStatus.Enabled ? null : source.GetComponent<Inventory>();
             if (sourceInventory == null)
             {
-                Log.Info($"Entity {name} failed to rpc take slot {slot} from {sourceId}: nothing there holds items");
+                Log.Info($"Entity {name} failed to rpc take slot {slot} from {sourceId}: nothing reachable there holds items");
                 return;
             }
 

@@ -108,7 +108,7 @@ namespace Shooter.Game
                 return;
             }
 
-            conversationManager.Say(CharacterId, talker.CharacterId, speech, true, true);
+            if (!conversationManager.TrySay(CharacterId, talker.CharacterId, speech, true, true)) CloseTalk();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

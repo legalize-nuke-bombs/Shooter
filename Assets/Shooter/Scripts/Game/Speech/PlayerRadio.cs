@@ -1,3 +1,4 @@
+using System;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace Shooter.Game
 
         private Character character;
         private ConversationManager conversationManager;
+
+        public event Action<long> PartnerOutOfReach;
 
         private void Awake()
         {
@@ -34,7 +37,13 @@ namespace Shooter.Game
                 return;
             }
 
-            conversationManager.Say(character.Id, partnerId, speech, false, true);
+            if (!conversationManager.TrySay(character.Id, partnerId, speech, false, true)) RaisePartnerOutOfReachRpc(partnerId);
+        }
+
+        [Rpc(SendTo.Owner)]
+        private void RaisePartnerOutOfReachRpc(long partnerId)
+        {
+            PartnerOutOfReach?.Invoke(partnerId);
         }
     }
 }

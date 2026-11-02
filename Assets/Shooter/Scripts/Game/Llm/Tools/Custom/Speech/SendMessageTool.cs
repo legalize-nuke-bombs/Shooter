@@ -43,13 +43,13 @@ Write to introduce yourself or share new information.
                 if (result.Length > 0) result.Append('\n');
 
                 string refusal = FindRefusal(targetId);
+                if (refusal == null && !conversationManager.TrySay(ownCharacter.Id, targetId, arguments.Content, false, arguments.Urgent)) refusal = "too far to hear you";
                 if (refusal != null)
                 {
                     result.Append($"Not said to {targetId}: {refusal}");
                     continue;
                 }
 
-                conversationManager.Say(ownCharacter.Id, targetId, arguments.Content, false, arguments.Urgent);
                 result.Append($"Said to {targetId}");
             }
 
@@ -58,10 +58,11 @@ Write to introduce yourself or share new information.
 
         private string FindRefusal(long targetId)
         {
-            Character target = Character.FindById(targetId, RegisterInactivePolicy.Exclude);
+            Character target = Character.FindById(targetId, RegisterInactivePolicy.Include);
             if (target == null) return "character does not exist";
             if (targetId == ownCharacter.Id) return "it's you";
             if (!target.TryGetComponent(out Health health) || !health.IsAlive) return "character is dead";
+            if (ShooterEntity.GetComponentStatus(target) == ShooterEntity.ComponentStatus.Disabled) return "character does not exist";
             return null;
         }
     }

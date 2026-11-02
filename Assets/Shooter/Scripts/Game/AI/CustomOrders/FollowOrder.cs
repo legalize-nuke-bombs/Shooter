@@ -39,9 +39,9 @@ namespace Shooter.Game
         {
             get
             {
-                if (target == null) target = Character.FindById(TargetId, RegisterInactivePolicy.Exclude);
+                if (target == null) target = Character.FindById(TargetId, RegisterInactivePolicy.Include);
 
-                return target != null && target.gameObject.activeInHierarchy ? target : null;
+                return target != null && ShooterEntity.GetComponentStatus(target) == ShooterEntity.ComponentStatus.Enabled ? target : null;
             }
         }
 
