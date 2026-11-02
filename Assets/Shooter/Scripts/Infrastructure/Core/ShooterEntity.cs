@@ -16,7 +16,8 @@ namespace Shooter.Infrastructure
         private readonly List<Entry> components = new();
         private ShooterTransformObserver observer;
         private Vector2Int? chunk;
-        private bool isOptimized;
+        private bool isOptimizedSelf;
+        private bool isOptimizedInHierarchy;
 
         public static ComponentStatus GetComponentStatus(Component component)
         {
@@ -29,7 +30,7 @@ namespace Shooter.Infrastructure
             }
 
             if (!entry.WantsEnabled || !component.gameObject.activeInHierarchy) return ComponentStatus.Disabled;
-            return entity.isOptimized && IsOptimizable(component) ? ComponentStatus.Optimized : ComponentStatus.Enabled;
+            return entity.isOptimizedInHierarchy && IsOptimizable(component) ? ComponentStatus.Optimized : ComponentStatus.Enabled;
         }
 
         public static void SetEnabled(Component component, bool componentEnabled)
@@ -53,10 +54,17 @@ namespace Shooter.Infrastructure
                 FindOrRegister(component);
             }
 
-            SetOptimized(optimizationLevel && optimizationLevel.Optimizable);
-
             observer = GetComponent<ShooterTransformObserver>();
             observer.Moved += HandleMoved;
+            observer.ParentChanged += UpdateOptimizedInHierarchy;
+        }
+
+        // Not in Awake: a component switched off before its Start never gets one, and the observer starts earlier to
+        // place the entity in its chunk and under its parent before the entity may switch the observer off
+        private void Start()
+        {
+            isOptimizedSelf = optimizationLevel && optimizationLevel.Optimizable;
+            UpdateOptimizedInHierarchy();
         }
 
         private void OnEnable()
@@ -78,6 +86,7 @@ namespace Shooter.Infrastructure
         private void OnDestroy()
         {
             observer.Moved -= HandleMoved;
+            observer.ParentChanged -= UpdateOptimizedInHierarchy;
             foreach (Entry entry in components)
             {
                 if (entry.Component is not Behaviour behaviour) continue;
@@ -96,15 +105,28 @@ namespace Shooter.Infrastructure
 
         public void SetOptimized(bool optimized)
         {
-            if (isOptimized == optimized) return;
+            if (isOptimizedSelf == optimized) return;
 
-            isOptimized = optimized;
+            isOptimizedSelf = optimized;
+            UpdateOptimizedInHierarchy();
+        }
+
+        private void UpdateOptimizedInHierarchy()
+        {
+            bool optimized = isOptimizedSelf || (observer.Parent != null && observer.Parent.GetComponent<ShooterEntity>().isOptimizedInHierarchy);
+            if (isOptimizedInHierarchy == optimized) return;
+
+            isOptimizedInHierarchy = optimized;
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i].Component != null) UpdateUnityEnabled(components[i]);
             }
 
             Log.Debug($"Entity {name} {(optimized ? "optimized" : "no longer optimized")}");
+            for (int i = 0; i < observer.Children.Count; i++)
+            {
+                observer.Children[i].GetComponent<ShooterEntity>().UpdateOptimizedInHierarchy();
+            }
         }
 
         private void HandleMoved()
@@ -135,7 +157,7 @@ namespace Shooter.Infrastructure
 
             entry = new Entry { Component = component, WantsEnabled = componentEnabled.Value };
             components.Add(entry);
-            if (isOptimized && IsOptimizable(component)) WriteUnityEnabled(component, false);
+            if (isOptimizedInHierarchy && IsOptimizable(component)) WriteUnityEnabled(component, false);
             if (component is not Behaviour behaviour) return entry;
 
             Registers.Instance.RegisterComponent(behaviour);
@@ -146,7 +168,7 @@ namespace Shooter.Infrastructure
 
         private void UpdateUnityEnabled(Entry entry)
         {
-            WriteUnityEnabled(entry.Component, entry.WantsEnabled && !(isOptimized && IsOptimizable(entry.Component)));
+            WriteUnityEnabled(entry.Component, entry.WantsEnabled && !(isOptimizedInHierarchy && IsOptimizable(entry.Component)));
             if (entry.Component is not Behaviour behaviour) return;
 
             if (IsEnabledAndActive(behaviour)) ActivateComponent(behaviour);
