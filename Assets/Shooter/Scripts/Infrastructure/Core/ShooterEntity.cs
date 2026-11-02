@@ -47,7 +47,7 @@ namespace Shooter.Infrastructure
         {
             foreach (Entry entry in components)
             {
-                if (entry.Component is Behaviour { enabled: true } behaviour) Registers.Instance.ActivateComponent(behaviour);
+                if (entry.Component is Behaviour { enabled: true } behaviour) ActivateComponent(behaviour);
             }
         }
 
@@ -55,7 +55,7 @@ namespace Shooter.Infrastructure
         {
             foreach (Entry entry in components)
             {
-                if (entry.Component is Behaviour behaviour) Registers.Instance.DeactivateComponent(behaviour);
+                if (entry.Component is Behaviour behaviour) DeactivateComponent(behaviour);
             }
         }
 
@@ -102,6 +102,7 @@ namespace Shooter.Infrastructure
 
                 if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, behaviour);
                 Chunks.Instance.AddComponent(movedTo, behaviour);
+                if (IsEnabledAndActive(behaviour)) Chunks.Instance.ActivateComponent(movedTo, behaviour);
             }
 
             Log.Debug($"Entity {name} moved to chunk {movedTo}");
@@ -123,7 +124,7 @@ namespace Shooter.Infrastructure
 
             Registers.Instance.RegisterComponent(behaviour);
             if (chunk != null) Chunks.Instance.AddComponent(chunk.Value, behaviour);
-            if (IsEnabledAndActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
+            if (IsEnabledAndActive(behaviour)) ActivateComponent(behaviour);
             return entry;
         }
 
@@ -132,8 +133,20 @@ namespace Shooter.Infrastructure
             WriteUnityEnabled(entry.Component, entry.WantsEnabled && !(IsOptimized && IsOptimizable(entry.Component)));
             if (entry.Component is not Behaviour behaviour) return;
 
-            if (IsEnabledAndActive(behaviour)) Registers.Instance.ActivateComponent(behaviour);
-            else Registers.Instance.DeactivateComponent(behaviour);
+            if (IsEnabledAndActive(behaviour)) ActivateComponent(behaviour);
+            else DeactivateComponent(behaviour);
+        }
+
+        private void ActivateComponent(Behaviour component)
+        {
+            Registers.Instance.ActivateComponent(component);
+            if (chunk != null) Chunks.Instance.ActivateComponent(chunk.Value, component);
+        }
+
+        private void DeactivateComponent(Behaviour component)
+        {
+            Registers.Instance.DeactivateComponent(component);
+            if (chunk != null) Chunks.Instance.TryDeactivateComponent(chunk.Value, component);
         }
 
         // Not isActiveAndEnabled: it stays false in a component's Awake, before Unity calls its OnEnable

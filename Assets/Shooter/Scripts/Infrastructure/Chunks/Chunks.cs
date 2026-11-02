@@ -13,9 +13,10 @@ namespace Shooter.Infrastructure
 
         public static Chunks Instance { get; private set; }
 
-        public int ChunkCount => chunks.Count;
+        public int ChunkCount => components.Count;
 
-        private readonly Dictionary<Vector2Int, TMap> chunks = new();
+        private readonly Dictionary<Vector2Int, TMap> components = new();
+        private readonly Dictionary<Vector2Int, TMap> activeComponents = new();
         private float nextCollectTime;
 
         private void Awake()
@@ -29,7 +30,12 @@ namespace Shooter.Infrastructure
             if (Time.unscaledTime < nextCollectTime) return;
 
             nextCollectTime = Time.unscaledTime + CollectIntervalSeconds;
-            foreach (TMap chunk in chunks.Values)
+            foreach (TMap chunk in components.Values)
+            {
+                chunk.CollectGarbage();
+            }
+
+            foreach (TMap chunk in activeComponents.Values)
             {
                 chunk.CollectGarbage();
             }
@@ -42,23 +48,37 @@ namespace Shooter.Infrastructure
 
         public void AddComponent(Vector2Int chunk, Behaviour component)
         {
-            if (!chunks.TryGetValue(chunk, out TMap members))
-            {
-                members = new TMap();
-                chunks[chunk] = members;
-            }
-
-            members.Add(component);
+            FindOrCreate(components, chunk).Add(component);
         }
 
         public void TryRemoveComponent(Vector2Int chunk, Behaviour component)
         {
-            if (chunks.TryGetValue(chunk, out TMap members)) members.Remove(component);
+            if (components.TryGetValue(chunk, out TMap members)) members.Remove(component);
+            TryDeactivateComponent(chunk, component);
+        }
+
+        public void ActivateComponent(Vector2Int chunk, Behaviour component)
+        {
+            FindOrCreate(activeComponents, chunk).Add(component);
+        }
+
+        public void TryDeactivateComponent(Vector2Int chunk, Behaviour component)
+        {
+            if (activeComponents.TryGetValue(chunk, out TMap members)) members.Remove(component);
         }
 
         public View<T> FindInRadius<T>(Vector3 center, float radius, ChunkInactivePolicy inactivePolicy) where T : class
         {
-            return new View<T>(chunks, center, radius, inactivePolicy);
+            return new View<T>(inactivePolicy == ChunkInactivePolicy.Include ? components : activeComponents, center, radius);
+        }
+
+        private static TMap FindOrCreate(Dictionary<Vector2Int, TMap> chunks, Vector2Int chunk)
+        {
+            if (chunks.TryGetValue(chunk, out TMap members)) return members;
+
+            members = new TMap();
+            chunks[chunk] = members;
+            return members;
         }
 
         public readonly struct View<T> where T : class
@@ -66,19 +86,17 @@ namespace Shooter.Infrastructure
             private readonly Dictionary<Vector2Int, TMap> chunks;
             private readonly Vector3 center;
             private readonly float radius;
-            private readonly ChunkInactivePolicy inactivePolicy;
 
-            public View(Dictionary<Vector2Int, TMap> chunks, Vector3 center, float radius, ChunkInactivePolicy inactivePolicy)
+            public View(Dictionary<Vector2Int, TMap> chunks, Vector3 center, float radius)
             {
                 this.chunks = chunks;
                 this.center = center;
                 this.radius = radius;
-                this.inactivePolicy = inactivePolicy;
             }
 
             public Enumerator GetEnumerator()
             {
-                return new Enumerator(chunks, center, radius, inactivePolicy);
+                return new Enumerator(chunks, center, radius);
             }
 
             public ref struct Enumerator
@@ -86,17 +104,15 @@ namespace Shooter.Infrastructure
                 private readonly Dictionary<Vector2Int, TMap> chunks;
                 private readonly Vector3 center;
                 private readonly float radiusSquared;
-                private readonly ChunkInactivePolicy inactivePolicy;
                 private readonly Vector2Int first;
                 private readonly Vector2Int last;
                 private Vector2Int chunk;
                 private TArray.View<T>.Enumerator members;
 
-                public Enumerator(Dictionary<Vector2Int, TMap> chunks, Vector3 center, float radius, ChunkInactivePolicy inactivePolicy)
+                public Enumerator(Dictionary<Vector2Int, TMap> chunks, Vector3 center, float radius)
                 {
                     this.chunks = chunks;
                     this.center = center;
-                    this.inactivePolicy = inactivePolicy;
                     radiusSquared = radius * radius;
                     first = ChunkOf(center - new Vector3(radius, 0f, radius));
                     last = ChunkOf(center + new Vector3(radius, 0f, radius));
@@ -113,7 +129,6 @@ namespace Shooter.Infrastructure
                         while (members.MoveNext())
                         {
                             var component = (Behaviour)(object)members.Current;
-                            if (inactivePolicy == ChunkInactivePolicy.Exclude && !component.isActiveAndEnabled) continue;
                             if ((component.transform.position - center).sqrMagnitude <= radiusSquared) return true;
                         }
 
