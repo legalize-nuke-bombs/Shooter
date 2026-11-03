@@ -25,15 +25,19 @@ namespace Shooter.Infrastructure
 
         public int Capacity => entries.Length;
 
-        public void Add(Behaviour component)
+        public bool TryAdd(Behaviour component)
         {
             int hash = RuntimeHelpers.GetHashCode(component);
-            if (FindSlot(component, hash) != None) return;
+            if (FindSlot(component, hash) != None)
+            {
+                return false;
+            }
 
             int position = TakePosition();
             entries[position] = new Entry { Component = component, Hash = hash, NextFree = None };
             Place(position);
             count++;
+            return true;
         }
 
         public void Remove(Behaviour component)

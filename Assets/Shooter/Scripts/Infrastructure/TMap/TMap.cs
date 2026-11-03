@@ -40,8 +40,9 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void Add(Behaviour component)
+        public bool TryAdd(Behaviour component)
         {
+            bool any = false;
             foreach (Type key in GetKeys(component.GetType()))
             {
                 if (!arraysByKey.TryGetValue(key, out TArray array))
@@ -50,8 +51,12 @@ namespace Shooter.Infrastructure
                     arraysByKey[key] = array;
                 }
 
-                array.Add(component);
+                if (array.TryAdd(component))
+                {
+                    any = true;
+                }
             }
+            return any;
         }
 
         public void Remove(Behaviour component)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,15 @@ namespace Shooter.Infrastructure
         private readonly Dictionary<Vector2Int, TMap> components = new();
         private readonly Dictionary<Vector2Int, TMap> activeComponents = new();
         private float nextCollectTime;
+
+        public struct OnComponentSwitchedCallbackData
+        {
+            public Vector2Int Chunk;
+            public Behaviour Component;
+        }
+        public Action<OnComponentSwitchedCallbackData> OnComponentEnabled;
+        public Action<OnComponentSwitchedCallbackData> OnComponentDisabled;
+
 
         private void Awake()
         {
@@ -48,7 +58,7 @@ namespace Shooter.Infrastructure
 
         public void AddComponent(Vector2Int chunk, Behaviour component)
         {
-            FindOrCreate(components, chunk).Add(component);
+            FindOrCreate(components, chunk).TryAdd(component);
         }
 
         public void TryRemoveComponent(Vector2Int chunk, Behaviour component)
@@ -59,7 +69,14 @@ namespace Shooter.Infrastructure
 
         public void ActivateComponent(Vector2Int chunk, Behaviour component)
         {
-            FindOrCreate(activeComponents, chunk).Add(component);
+            if (FindOrCreate(activeComponents, chunk).TryAdd(component))
+            {
+                OnComponentEnabled?.Invoke(new OnComponentSwitchedCallbackData()
+                {
+                    Chunk = chunk,
+                    Component = component
+                });
+            }
         }
 
         public void TryDeactivateComponent(Vector2Int chunk, Behaviour component)

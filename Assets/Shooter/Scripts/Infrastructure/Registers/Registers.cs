@@ -39,8 +39,10 @@ namespace Shooter.Infrastructure
 
         public void RegisterComponent(Behaviour component)
         {
-            components.Add(component);
-            Log.Debug($"{component.GetType().Name} {component.name} registered");
+            if (components.TryAdd(component))
+            {
+                Log.Debug($"{component.GetType().Name} {component.name} registered");
+            }
         }
 
         public void UnregisterComponent(Behaviour component)
@@ -51,8 +53,10 @@ namespace Shooter.Infrastructure
 
         public void ActivateComponent(Behaviour component)
         {
-            activeComponents.Add(component);
-            Log.Debug($"{component.GetType().Name} {component.name} activated");
+            if (activeComponents.TryAdd(component))
+            {
+                Log.Debug($"{component.GetType().Name} {component.name} activated");
+            }
         }
 
         public void DeactivateComponent(Behaviour component)
