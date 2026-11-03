@@ -47,8 +47,10 @@ namespace Shooter.Infrastructure
 
         public void UnregisterComponent(Behaviour component)
         {
-            components.Remove(component);
-            Log.Debug($"{component.GetType().Name} {component.name} unregistered");
+            if (components.TryRemove(component))
+            {
+                Log.Debug($"{component.GetType().Name} {component.name} unregistered");
+            }
         }
 
         public void ActivateComponent(Behaviour component)
@@ -61,8 +63,10 @@ namespace Shooter.Infrastructure
 
         public void DeactivateComponent(Behaviour component)
         {
-            activeComponents.Remove(component);
-            Log.Debug($"{component.GetType().Name} {component.name} deactivated");
+            if (activeComponents.TryRemove(component))
+            {
+                Log.Debug($"{component.GetType().Name} {component.name} deactivated");
+            }
         }
 
         public TArray.View<T> GetAll<T>(RegisterInactivePolicy inactivePolicy) where T : class

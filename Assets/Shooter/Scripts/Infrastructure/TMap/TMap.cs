@@ -59,12 +59,20 @@ namespace Shooter.Infrastructure
             return any;
         }
 
-        public void Remove(Behaviour component)
+        public bool TryRemove(Behaviour component)
         {
+            bool any = false;
             foreach (Type key in GetKeys(component.GetType()))
             {
-                if (arraysByKey.TryGetValue(key, out TArray array)) array.Remove(component);
+                if (arraysByKey.TryGetValue(key, out TArray array))
+                {
+                    if (array.TryRemove(component))
+                    {
+                        any = true;
+                    }
+                }
             }
+            return any;
         }
 
         public int CountOf(Type key)

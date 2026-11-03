@@ -61,9 +61,9 @@ namespace Shooter.Infrastructure
             FindOrCreate(components, chunk).TryAdd(component);
         }
 
-        public void TryRemoveComponent(Vector2Int chunk, Behaviour component)
+        public void RemoveComponent(Vector2Int chunk, Behaviour component)
         {
-            if (components.TryGetValue(chunk, out TMap members)) members.Remove(component);
+            if (components.TryGetValue(chunk, out TMap members)) members.TryRemove(component);
             TryDeactivateComponent(chunk, component);
         }
 
@@ -81,7 +81,17 @@ namespace Shooter.Infrastructure
 
         public void TryDeactivateComponent(Vector2Int chunk, Behaviour component)
         {
-            if (activeComponents.TryGetValue(chunk, out TMap members)) members.Remove(component);
+            if (activeComponents.TryGetValue(chunk, out TMap members))
+            {
+                if (members.TryRemove(component))
+                {
+                    OnComponentDisabled?.Invoke(new OnComponentSwitchedCallbackData()
+                    {
+                        Chunk = chunk,
+                        Component = component
+                    });
+                }
+            }
         }
 
         public View<T> FindInRadius<T>(Vector3 center, float radius, ChunkInactivePolicy inactivePolicy) where T : class

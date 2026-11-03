@@ -92,7 +92,7 @@ namespace Shooter.Infrastructure
                 if (entry.Component is not Behaviour behaviour) continue;
 
                 Registers.Instance.UnregisterComponent(behaviour);
-                if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, behaviour);
+                if (chunk != null) Chunks.Instance.RemoveComponent(chunk.Value, behaviour);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Shooter.Infrastructure
             {
                 if (entry.Component is not Behaviour behaviour) continue;
 
-                if (chunk != null) Chunks.Instance.TryRemoveComponent(chunk.Value, behaviour);
+                if (chunk != null) Chunks.Instance.RemoveComponent(chunk.Value, behaviour);
                 Chunks.Instance.AddComponent(movedTo, behaviour);
                 if (IsEnabledAndActive(behaviour)) Chunks.Instance.ActivateComponent(movedTo, behaviour);
             }

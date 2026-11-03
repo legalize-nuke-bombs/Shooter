@@ -40,10 +40,13 @@ namespace Shooter.Infrastructure
             return true;
         }
 
-        public void Remove(Behaviour component)
+        public bool TryRemove(Behaviour component)
         {
             int hole = FindSlot(component, RuntimeHelpers.GetHashCode(component));
-            if (hole == None) return;
+            if (hole == None)
+            {
+                return false;
+            }
 
             int position = index[hole];
             entries[position] = new Entry { NextFree = freeHead };
@@ -67,6 +70,8 @@ namespace Shooter.Infrastructure
                 used = 0;
                 freeHead = None;
             }
+
+            return true;
         }
 
         public void CollectGarbage()

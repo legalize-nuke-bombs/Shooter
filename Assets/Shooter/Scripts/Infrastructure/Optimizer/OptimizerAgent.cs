@@ -2,7 +2,7 @@
 
 namespace Shooter.Infrastructure
 {
-    public class OptimizerAgent : MonoBehaviour
+    public sealed class OptimizerAgent : MonoBehaviour
     {
 
     }
