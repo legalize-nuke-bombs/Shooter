@@ -7,19 +7,18 @@ namespace Shooter.Infrastructure
     [DefaultExecutionOrder(ExecutionOrder.InfrastructureSystemExtension)]
     public class Optimizer : MonoBehaviour
     {
-        // An entity wakes within its level's chunks and falls asleep only a chunk farther, so a player stepping back
-        // and forth across a chunk border doesn't switch a whole strip of chunks on every step
+        // An entity wakes within its level's chunks and falls asleep only beyond them plus the margin, so a player
+        // stepping back and forth across a chunk border doesn't switch a strip of chunks on every step
         private const int SleepMargin = 1;
 
         private static readonly Journal Log = Logs.Here();
 
         private Chunks chunks;
         private int updateRadius;
-        private HashSet<Vector2Int> chunksSet = new();
-        private HashSet<Vector2Int> updatingChunksSet = new();
-        private Dictionary<ShooterEntity, Vector2Int> entitiesSet = new();
-        private Dictionary<ShooterEntity, Vector2Int> updatingEntitiesSet = new();
-        private readonly HashSet<Vector2Int> chunksAround = new();
+        private readonly HashSet<Vector2Int> switchedChunks = new();
+        private readonly Dictionary<ShooterEntity, Vector2Int> placedEntities = new();
+        private readonly HashSet<Vector2Int> chunksToUpdate = new();
+        private readonly List<KeyValuePair<ShooterEntity, Vector2Int>> entitiesToUpdate = new();
         private readonly Dictionary<Vector2Int, int> distancesToAgent = new();
 
         private void Awake()
@@ -47,12 +46,12 @@ namespace Shooter.Infrastructure
 
         private void HandleComponentAdded(Chunks.OnComponentCallbackData data)
         {
-            if (data.Component is ShooterEntity entity) entitiesSet[entity] = data.Chunk;
+            if (data.Component is ShooterEntity entity) placedEntities[entity] = data.Chunk;
         }
 
         private void HandleComponentRemoved(Chunks.OnComponentCallbackData data)
         {
-            if (data.Component is ShooterEntity entity) entitiesSet.Remove(entity);
+            if (data.Component is ShooterEntity entity) placedEntities.Remove(entity);
         }
 
         private void HandleComponentSwitched(Chunks.OnComponentCallbackData data)
@@ -62,28 +61,29 @@ namespace Shooter.Infrastructure
                 return;
             }
             Log.Debug($"Optimizer agent is switched at {data.Chunk}");
-            chunksSet.Add(data.Chunk);
+            switchedChunks.Add(data.Chunk);
         }
 
-        // The sets are swapped before the pass: an entity woken by it may place or move others, and they wait for the
-        // next frame instead of changing a set under its enumeration
+        // The pass takes what was collected before it starts: an entity it wakes may place or move others, and they
+        // wait for the next frame instead of changing a collection under its enumeration
         private void LateUpdate()
         {
-            (chunksSet, updatingChunksSet) = (updatingChunksSet, chunksSet);
-            (entitiesSet, updatingEntitiesSet) = (updatingEntitiesSet, entitiesSet);
-
-            foreach (Vector2Int chunk in updatingChunksSet)
+            foreach (Vector2Int switchedChunk in switchedChunks)
             {
                 for (int x = -updateRadius; x <= updateRadius; x++)
                 {
                     for (int z = -updateRadius; z <= updateRadius; z++)
                     {
-                        chunksAround.Add(chunk + new Vector2Int(x, z));
+                        chunksToUpdate.Add(switchedChunk + new Vector2Int(x, z));
                     }
                 }
             }
+            entitiesToUpdate.AddRange(placedEntities);
+            if (switchedChunks.Count > 0) Log.Info($"Optimizer goes over {chunksToUpdate.Count} chunks around {switchedChunks.Count} where agents came or left");
+            switchedChunks.Clear();
+            placedEntities.Clear();
 
-            foreach (Vector2Int chunk in chunksAround)
+            foreach (Vector2Int chunk in chunksToUpdate)
             {
                 int distance = FindDistanceToAgent(chunk);
                 foreach (ShooterEntity entity in chunks.GetAll<ShooterEntity>(chunk, ChunkInactivePolicy.Include))
@@ -92,15 +92,13 @@ namespace Shooter.Infrastructure
                 }
             }
 
-            foreach (KeyValuePair<ShooterEntity, Vector2Int> placed in updatingEntitiesSet)
+            foreach (KeyValuePair<ShooterEntity, Vector2Int> placed in entitiesToUpdate)
             {
                 UpdateOptimized(placed.Key, FindDistanceToAgent(placed.Value));
             }
 
-            if (updatingChunksSet.Count > 0) Log.Info($"Optimizer went over {chunksAround.Count} chunks around {updatingChunksSet.Count} where agents came or left");
-            updatingChunksSet.Clear();
-            updatingEntitiesSet.Clear();
-            chunksAround.Clear();
+            chunksToUpdate.Clear();
+            entitiesToUpdate.Clear();
             distancesToAgent.Clear();
         }
 
@@ -117,32 +115,19 @@ namespace Shooter.Infrastructure
         {
             if (distancesToAgent.TryGetValue(chunk, out int known)) return known;
 
-            int distance = updateRadius + 1;
-            for (int ring = 0; ring <= updateRadius; ring++)
+            int distance = int.MaxValue;
+            for (int x = -updateRadius; x <= updateRadius; x++)
             {
-                if (!HasAgentOnRing(chunk, ring)) continue;
+                for (int z = -updateRadius; z <= updateRadius; z++)
+                {
+                    if (chunks.CountEnabled(chunk + new Vector2Int(x, z), typeof(OptimizerAgent)) == 0) continue;
 
-                distance = ring;
-                break;
+                    distance = Mathf.Min(distance, Mathf.Max(Mathf.Abs(x), Mathf.Abs(z)));
+                }
             }
 
             distancesToAgent[chunk] = distance;
             return distance;
-        }
-
-        private bool HasAgentOnRing(Vector2Int center, int ring)
-        {
-            for (int x = -ring; x <= ring; x++)
-            {
-                for (int z = -ring; z <= ring; z++)
-                {
-                    if (Mathf.Max(Mathf.Abs(x), Mathf.Abs(z)) != ring) continue;
-
-                    if (chunks.CountEnabled(center + new Vector2Int(x, z), typeof(OptimizerAgent)) > 0) return true;
-                }
-            }
-
-            return false;
         }
     }
 }
