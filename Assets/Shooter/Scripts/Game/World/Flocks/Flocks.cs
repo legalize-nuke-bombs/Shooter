@@ -12,6 +12,7 @@ namespace Shooter.Game
         private const float FullEscapeFear = 0.5f;
         private const float NewEscapeFearMargin = 0.25f;
         private const float ScaredFlappingPanic = 0.2f;
+        private const int MaxCawingBoids = 20;
         private static readonly Journal Log = Logs.Here();
         private static readonly int FlapSpeedId = Shader.PropertyToID("_Flap_Speed");
 
@@ -71,8 +72,6 @@ namespace Shooter.Game
 
         [SerializeField] private SoundAsset cawSound;
 
-        [SerializeField] [Min(1)] private int maxCawingBoids = 8;
-
         [SerializeField] private float maxCawDelay = 0.6f;
 
         private Vector3[] flockPoints;
@@ -127,6 +126,12 @@ namespace Shooter.Game
         [Rpc(SendTo.Everyone)]
         public void ScareRpc(Vector3 shotOrigin, Vector3 shotEnd, float radius)
         {
+            if (ShooterEntity.GetComponentStatus(this) == ShooterEntity.ComponentStatus.Optimized)
+            {
+                Log.Info($"Entity {name} let a shot pass: it is optimized on this machine");
+                return;
+            }
+
             if (!PassesNearAnyBoid(shotOrigin, shotEnd, radius))
             {
                 Log.Info($"Entity {name} let a shot pass: it came within {radius} m of no bird");
@@ -165,7 +170,7 @@ namespace Shooter.Game
                 if (boidFears[boid] <= 0f || fear > boidFears[boid] + NewEscapeFearMargin) boidEscapes[boid] = PickEscape(away);
                 boidFears[boid] = Mathf.Max(boidFears[boid], fear);
                 scaredBoids++;
-                if (distance > radius || cawingBoids >= maxCawingBoids || !TryCaw(boid)) continue;
+                if (distance > radius || cawingBoids >= MaxCawingBoids || !TryCaw(boid)) continue;
 
                 cawingBoids++;
                 startedCawing++;
@@ -174,14 +179,17 @@ namespace Shooter.Game
             Log.Info($"Entity {name} took fright at a shot: {scaredBoids} birds scared, {startedCawing} started cawing");
         }
 
-        private int CountCawingBoids()
+        private static int CountCawingBoids()
         {
-            if (boidVoices == null) return 0;
-
             int cawing = 0;
-            foreach (AudioSource voice in boidVoices)
+            foreach (Flocks flocks in Registers.Instance.GetAll<Flocks>(RegisterInactivePolicy.Exclude))
             {
-                if (voice.isPlaying) cawing++;
+                if (flocks.boidVoices == null) continue;
+
+                foreach (AudioSource voice in flocks.boidVoices)
+                {
+                    if (voice.isPlaying) cawing++;
+                }
             }
 
             return cawing;

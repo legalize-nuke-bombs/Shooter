@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7252760882524261135}
   - component: {fileID: 3628269700606600761}
   m_Layer: 0
-  m_Name: Bird Flocks
+  m_Name: Bird Flock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,12 +79,12 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   boidPrefab: {fileID: 7623336724680058607, guid: 2f5f5731eb36efb4ead612880acc102e, type: 3}
   flockCount: 1
-  boidCount: 500
-  flockSpread: 50
+  boidCount: 14
+  flockSpread: 15
   flockSpreadVertical: 0.05
   flockSmoothTime: 4
   flockMaxSpeed: 4
-  boidSpread: 160
+  boidSpread: 25
   boidSpreadVertical: 0.06
   speedRange: {x: 8, y: 12}
   turnSpeed: 0.6
@@ -105,7 +105,6 @@ MonoBehaviour:
   calmDownTime: 6
   panicSpread: 40
   cawSound: {fileID: 11400000, guid: 015e83b8f6346734e874c156f9af5cd9, type: 2}
-  maxCawingBoids: 20
   maxCawDelay: 1.5
 --- !u!114 &-3873601585301477384
 MonoBehaviour:
@@ -132,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.MainDigestible
   content: Birds are flying around
-  size: 3
+  size: 1
 --- !u!114 &1293473591878619145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  optimizationLevel: {fileID: 0}
+  optimizationLevel: {fileID: 11400000, guid: 6d85a5469c5197c4bb6833571b3285fa, type: 2}
 --- !u!114 &3628269700606600761
 MonoBehaviour:
   m_ObjectHideFlags: 0
