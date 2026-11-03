@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
-    [DefaultExecutionOrder(ExecutionOrder.Infrastructure2)]
+    [DefaultExecutionOrder(ExecutionOrder.InfrastructureEntity)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ShooterTransformObserver))]
     public sealed class ShooterEntity : MonoBehaviour

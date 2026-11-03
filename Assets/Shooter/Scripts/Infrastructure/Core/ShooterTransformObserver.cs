@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shooter.Infrastructure
 {
     [AddComponentMenu("")]
-    [DefaultExecutionOrder(ExecutionOrder.Infrastructure1)]
+    [DefaultExecutionOrder(ExecutionOrder.InfrastructureSystemCore)]
     [DisallowMultipleComponent]
     public class ShooterTransformObserver : MonoBehaviour, IShooterLateUpdateable
     {
