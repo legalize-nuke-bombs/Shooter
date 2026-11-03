@@ -15,6 +15,7 @@ namespace Shooter.Infrastructure
 
         private readonly List<Entry> components = new();
         private ShooterTransformObserver observer;
+        private Chunks chunks;
         private Vector2Int? chunk;
         private bool isOptimizedSelf;
         private bool isOptimizedInHierarchy;
@@ -92,7 +93,7 @@ namespace Shooter.Infrastructure
                 if (entry.Component is not Behaviour behaviour) continue;
 
                 Registers.Instance.UnregisterComponent(behaviour);
-                if (chunk != null)  Registers.Instance.Get<Chunks>().RemoveComponent(chunk.Value, behaviour);
+                if (chunk != null) chunks.RemoveComponent(chunk.Value, behaviour);
             }
         }
 
@@ -134,13 +135,15 @@ namespace Shooter.Infrastructure
             Vector2Int movedTo = Chunks.ChunkOf(transform.position);
             if (chunk != null && chunk.Value == movedTo) return;
 
+            // Not in Awake: in Boot an entity may wake before the one that registers Chunks, both have the same order
+            if (chunk == null) chunks = Registers.Instance.Get<Chunks>();
             foreach (Entry entry in components)
             {
                 if (entry.Component is not Behaviour behaviour) continue;
 
-                if (chunk != null)  Registers.Instance.Get<Chunks>().RemoveComponent(chunk.Value, behaviour);
-                Registers.Instance.Get<Chunks>().AddComponent(movedTo, behaviour);
-                if (IsEnabledAndActive(behaviour))  Registers.Instance.Get<Chunks>().ActivateComponent(movedTo, behaviour);
+                if (chunk != null) chunks.RemoveComponent(chunk.Value, behaviour);
+                chunks.AddComponent(movedTo, behaviour);
+                if (IsEnabledAndActive(behaviour)) chunks.ActivateComponent(movedTo, behaviour);
             }
 
             Log.Debug($"Entity {name} moved to chunk {movedTo}");
@@ -161,7 +164,7 @@ namespace Shooter.Infrastructure
             if (component is not Behaviour behaviour) return entry;
 
             Registers.Instance.RegisterComponent(behaviour);
-            if (chunk != null)  Registers.Instance.Get<Chunks>().AddComponent(chunk.Value, behaviour);
+            if (chunk != null) chunks.AddComponent(chunk.Value, behaviour);
             if (IsEnabledAndActive(behaviour)) ActivateComponent(behaviour);
             return entry;
         }
@@ -178,13 +181,13 @@ namespace Shooter.Infrastructure
         private void ActivateComponent(Behaviour component)
         {
             Registers.Instance.ActivateComponent(component);
-            if (chunk != null) Registers.Instance.Get<Chunks>().ActivateComponent(chunk.Value, component);
+            if (chunk != null) chunks.ActivateComponent(chunk.Value, component);
         }
 
         private void DeactivateComponent(Behaviour component)
         {
             Registers.Instance.DeactivateComponent(component);
-            if (chunk != null)  Registers.Instance.Get<Chunks>().TryDeactivateComponent(chunk.Value, component);
+            if (chunk != null) chunks.TryDeactivateComponent(chunk.Value, component);
         }
 
         // Not isActiveAndEnabled: it stays false in a component's Awake, before Unity calls its OnEnable
