@@ -12,8 +12,6 @@ namespace Shooter.Infrastructure
 
         private const float CollectIntervalSeconds = 2f;
 
-        public static Chunks Instance { get; private set; }
-
         public int ChunkCount => components.Count;
 
         private readonly Dictionary<Vector2Int, TMap> components = new();
@@ -31,7 +29,6 @@ namespace Shooter.Infrastructure
 
         private void Awake()
         {
-            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
 
