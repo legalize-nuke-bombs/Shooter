@@ -50,6 +50,7 @@ namespace Shooter.Infrastructure
 
         private void Awake()
         {
+            isOptimizedSelf = optimizationLevel && optimizationLevel.Optimizable;
             foreach (Component component in GetComponents<Component>())
             {
                 FindOrRegister(component);
@@ -60,11 +61,12 @@ namespace Shooter.Infrastructure
             observer.ParentChanged += UpdateOptimizedInHierarchy;
         }
 
-        // Not in Awake: a component switched off before its Start never gets one, and the observer starts earlier to
-        // place the entity in its chunk and under its parent before the entity may switch the observer off
+        // The level is read in Awake: under a sleeping parent Start waits for the parent to wake, and by then the
+        // optimizer may have decided otherwise. Applied here, not in Awake: a component switched off before its Start
+        // never gets one, and the observer starts earlier to place the entity in its chunk and under its parent before
+        // the entity may switch the observer off
         private void Start()
         {
-            isOptimizedSelf = optimizationLevel && optimizationLevel.Optimizable;
             UpdateOptimizedInHierarchy();
         }
 
