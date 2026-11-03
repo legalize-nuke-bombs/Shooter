@@ -105,6 +105,26 @@ namespace Shooter.Infrastructure
             return members;
         }
 
+        public int CountAll(Vector2Int chunk, Type type)
+        {
+            if (!components.TryGetValue(chunk, out TMap members))
+            {
+                return 0;
+            }
+            return members.CountOf(type);
+        }
+
+        public int CountEnabled(Vector2Int chunk, Type type)
+        {
+            if (!activeComponents.TryGetValue(chunk, out TMap members))
+            {
+                return 0;
+            }
+            return members.CountOf(type);
+        }
+
+
+
         public readonly struct View<T> where T : class
         {
             private readonly Dictionary<Vector2Int, TMap> chunks;

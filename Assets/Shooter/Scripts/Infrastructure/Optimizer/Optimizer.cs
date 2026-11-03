@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Shooter.Infrastructure
@@ -10,6 +11,7 @@ namespace Shooter.Infrastructure
         private static readonly Journal Log = Logs.Here();
 
         private Chunks chunks;
+        private readonly HashSet<Vector2Int> chunksSet = new();
 
         private void Awake()
         {
@@ -19,30 +21,38 @@ namespace Shooter.Infrastructure
         private void OnEnable()
         {
             chunks = Registers.Instance.Get<Chunks>();
-            chunks.OnComponentEnabled += HandleComponentEnabled;
-            chunks.OnComponentDisabled += HandleComponentDisabled;
+            chunks.OnComponentEnabled += HandleComponentSwitched;
+            chunks.OnComponentDisabled += HandleComponentSwitched;
         }
 
         private void OnDisable()
         {
-            chunks.OnComponentDisabled -= HandleComponentDisabled;
-            chunks.OnComponentEnabled -= HandleComponentEnabled;
+            chunks.OnComponentDisabled -= HandleComponentSwitched;
+            chunks.OnComponentEnabled -= HandleComponentSwitched;
         }
 
-        private void HandleComponentEnabled(Chunks.OnComponentSwitchedCallbackData data)
+        private void HandleComponentSwitched(Chunks.OnComponentSwitchedCallbackData data)
         {
-            if (data.Component is OptimizerAgent)
+            if (data.Component is not OptimizerAgent)
             {
-                Log.Warn($"Optimizer agent is enabled at {data.Chunk}");
+                return;
             }
+            Log.Debug($"Optimizer agent is switched at {data.Chunk}");
+            chunksSet.Add(data.Chunk);
         }
 
-        private void HandleComponentDisabled(Chunks.OnComponentSwitchedCallbackData data)
+        private void LateUpdate()
         {
-            if (data.Component is OptimizerAgent)
+            foreach (Vector2Int chunk in chunksSet)
             {
-                Log.Warn($"Optimizer agent is disabled at {data.Chunk}");
+                SetChunkOptimized(chunk, chunks.CountEnabled(chunk, typeof(OptimizerAgent)) > 0);
             }
+            chunksSet.Clear();
+        }
+
+        private void SetChunkOptimized(Vector2Int chunk, bool value)
+        {
+            Log.Info($"Entity {name} is {(value ? "optimizing" : "deoptimizing")} chunk {chunk}");
         }
     }
 }
