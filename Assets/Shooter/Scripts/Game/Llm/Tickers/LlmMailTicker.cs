@@ -9,11 +9,11 @@ namespace Shooter.Game
         {
         }
 
-        public override void RegisterTick()
+        public override void RegisterTick(float awakeSeconds)
         {
         }
 
-        public override bool IsTickRequired(LlmStatus status)
+        public override bool IsTickRequired(LlmStatus status, float awakeSeconds)
         {
             return status.HasUnseenUrgentEvent;
         }

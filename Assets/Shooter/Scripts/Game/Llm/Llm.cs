@@ -42,6 +42,8 @@ namespace Shooter.Game
 
         public bool IsThinking { get; private set; }
 
+        public event Action ThinkingChanged;
+
         private void Awake()
         {
             health = GetComponent<Health>();
@@ -171,12 +173,13 @@ namespace Shooter.Game
         public async Task<bool> TryTick()
         {
             if (lifetimeCancellation.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil) return false;
+            if (String.IsNullOrEmpty(Config.GetGameConfig().Server.Llm.Provider)) return false;
 
             bool entered = await tickSemaphore.WaitAsync(0, lifetimeCancellation.Token);
 
             if (!entered) return false;
 
-            IsThinking = true;
+            SetThinking(true);
             bool ticked = false;
 
             try
@@ -193,16 +196,20 @@ namespace Shooter.Game
                 Log.Warn($"Entity {entityName} failed to respond, next attempt in {failureCooldown} s: {e}");
             }
 
-            IsThinking = false;
+            SetThinking(false);
             tickSemaphore.Release();
 
             return ticked;
         }
 
+        private void SetThinking(bool thinking)
+        {
+            IsThinking = thinking;
+            ThinkingChanged?.Invoke();
+        }
+
         private async Task<bool> ThinkInToolRounds()
         {
-            if (String.IsNullOrEmpty(Config.GetGameConfig().Server.Llm.Provider)) return false;
-
             if (llmHistory.IsBursting)
             {
                 Log.Warn($"Entity {entityName} has not cleared its head at {llmHistory.Size} chars, the story is cut by force");

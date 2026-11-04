@@ -15,6 +15,10 @@ namespace Shooter.Game
         private Llm llm;
         [SerializeReference, SubclassSelector] private LlmChildTicker[] tickers;
 
+        // Counts only while the resident is awake: one woken for a moment by someone else's tick isn't overdue, so it
+        // doesn't tick in turn and wake its own neighbours across the whole map
+        private float awakeSeconds;
+
         private void Awake()
         {
             ShooterEntity.SetEnabled(this, NetworkManager.Singleton.IsServer);
@@ -30,6 +34,7 @@ namespace Shooter.Game
 
         public void ShooterUpdate()
         {
+            awakeSeconds += Time.deltaTime;
             Type tickReason = FindTickReason();
             if (tickReason != null)
             {
@@ -42,7 +47,7 @@ namespace Shooter.Game
             LlmStatus llmStatus = llm.GetStatus();
             foreach (LlmChildTicker ticker in tickers)
             {
-                if (ticker.IsTickRequired(llmStatus))
+                if (ticker.IsTickRequired(llmStatus, awakeSeconds))
                 {
                     return ticker.GetType();
                 }
@@ -56,7 +61,7 @@ namespace Shooter.Game
             Log.Info($"Entity {entityName} ticked, reason {tickReason}");
             foreach (LlmChildTicker ticker in tickers)
             {
-                ticker.RegisterTick();
+                ticker.RegisterTick(awakeSeconds);
             }
         }
 

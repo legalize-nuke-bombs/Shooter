@@ -11,24 +11,24 @@ namespace Shooter.Game
         [SerializeField] private float tickMinDelay = 180f;
         [SerializeField] private float tickMaxDelay = 300f;
 
-        private float lastTickTime;
+        private float lastTickAwakeSeconds;
         private float currentDelay;
 
         public override void Start()
         {
-            lastTickTime = Time.time;
+            lastTickAwakeSeconds = 0f;
             currentDelay = UnityEngine.Random.Range(firstTickMinDelay, firstTickMaxDelay);
         }
 
-        public override void RegisterTick()
+        public override void RegisterTick(float awakeSeconds)
         {
-            lastTickTime = Time.time;
+            lastTickAwakeSeconds = awakeSeconds;
             currentDelay = UnityEngine.Random.Range(tickMinDelay, tickMaxDelay);
         }
 
-        public override bool IsTickRequired(LlmStatus status)
+        public override bool IsTickRequired(LlmStatus status, float awakeSeconds)
         {
-            return Time.time - lastTickTime >= currentDelay;
+            return awakeSeconds - lastTickAwakeSeconds >= currentDelay;
         }
     }
 }
