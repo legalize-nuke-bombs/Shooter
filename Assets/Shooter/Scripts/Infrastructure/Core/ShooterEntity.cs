@@ -10,8 +10,8 @@ namespace Shooter.Infrastructure
     {
         private static readonly Journal Log = Logs.Here();
 
-        [SerializeField] private OptimizationLevelAsset optimizationLevel;
-        public OptimizationLevelAsset OptimizationLevel => optimizationLevel;
+        [SerializeField] private bool optimizable;
+        public bool Optimizable => optimizable;
 
         private readonly List<Entry> components = new();
         private ShooterTransformObserver observer;
@@ -50,7 +50,7 @@ namespace Shooter.Infrastructure
 
         private void Awake()
         {
-            isOptimizedSelf = optimizationLevel && optimizationLevel.Optimizable;
+            isOptimizedSelf = optimizable;
             foreach (Component component in GetComponents<Component>())
             {
                 FindOrRegister(component);
@@ -61,10 +61,10 @@ namespace Shooter.Infrastructure
             observer.ParentChanged += UpdateOptimizedInHierarchy;
         }
 
-        // The level is read in Awake: under a sleeping parent Start waits for the parent to wake, and by then the
-        // optimizer may have decided otherwise. Applied here, not in Awake: a component switched off before its Start
-        // never gets one, and the observer starts earlier to place the entity in its chunk and under its parent before
-        // the entity may switch the observer off
+        // Whether it starts asleep is read in Awake: under a sleeping parent Start waits for the parent to wake, and by
+        // then the optimizer may have decided otherwise. Applied here, not in Awake: a component switched off before its
+        // Start never gets one, and the observer starts earlier to place the entity in its chunk and under its parent
+        // before the entity may switch the observer off
         private void Start()
         {
             UpdateOptimizedInHierarchy();
@@ -139,17 +139,22 @@ namespace Shooter.Infrastructure
 
             // Not in Awake: in Boot an entity may wake before the one that registers Chunks, both have the same order
             if (chunk == null) chunks = Registers.Instance.Get<Chunks>();
-            foreach (Entry entry in components)
-            {
-                if (entry.Component is not Behaviour behaviour) continue;
 
-                if (chunk != null) chunks.RemoveComponent(chunk.Value, behaviour);
+            // The optimizer wakes entities right in the chunks' callbacks, maybe this very one in the middle of its move:
+            // the new chunk is written first, so whatever it switches lands there, and each component enters the new
+            // chunk before it leaves the old one, so an agent is never out of both
+            Vector2Int? movedFrom = chunk;
+            chunk = movedTo;
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].Component is not Behaviour behaviour) continue;
+
                 chunks.AddComponent(movedTo, behaviour);
                 if (IsEnabledAndActive(behaviour)) chunks.ActivateComponent(movedTo, behaviour);
+                if (movedFrom != null) chunks.RemoveComponent(movedFrom.Value, behaviour);
             }
 
             Log.Debug($"Entity {name} moved to chunk {movedTo}");
-            chunk = movedTo;
         }
 
         private Entry FindOrRegister(Component component)
