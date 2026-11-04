@@ -94,9 +94,6 @@ PrefabInstance:
       addedObject: {fileID: 3131132399333746512}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7426902805887786745}
-    - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1836113554761253754}
     - targetCorrespondingSourceObject: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       insertIndex: -1
@@ -334,38 +331,6 @@ MonoBehaviour:
       data: 
     - rid: 8204019759183560847
       type: {class: HoldArtifactsTool, ns: Shooter.Game, asm: Shooter.Game}
-      data: 
---- !u!114 &7426902805887786745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781692597535222973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6747aaee1fd43ceb16bddd15e894aaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.Ticker.LlmMainTicker
-  tickers:
-  - rid: 2635107260138258859
-  - rid: 2635107260138258860
-  - rid: 2635107260138258861
-  references:
-    version: 2
-    RefIds:
-    - rid: 2635107260138258859
-      type: {class: LlmCompactTicker, ns: Shooter.Game, asm: Shooter.Game}
-      data: 
-    - rid: 2635107260138258860
-      type: {class: LlmIntervalTicker, ns: Shooter.Game, asm: Shooter.Game}
-      data:
-        firstTickMinDelay: 20
-        firstTickMaxDelay: 120
-        tickMinDelay: 180
-        tickMaxDelay: 300
-    - rid: 2635107260138258861
-      type: {class: LlmMailTicker, ns: Shooter.Game, asm: Shooter.Game}
       data: 
 --- !u!114 &1836113554761253754
 MonoBehaviour:

@@ -161,15 +161,6 @@ namespace Shooter.Game
             llmHistory.AppendEvent(new LlmMessage(LlmRole.User, eventText), isUrgent);
         }
 
-        public LlmStatus GetStatus()
-        {
-            return new LlmStatus
-            {
-                IsOverflowing = llmHistory.IsOverflowing,
-                HasUnseenUrgentEvent = llmHistory.HasUnseenUrgentEvent
-            };
-        }
-
         public async Task<bool> TryTick()
         {
             if (lifetimeCancellation.IsCancellationRequested || UnityEngine.Time.time < retryBlockedUntil) return false;
