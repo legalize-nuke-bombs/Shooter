@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2376890}
   - component: {fileID: 6458118}
   - component: {fileID: 5386419303477825983}
+  - component: {fileID: 6109755646580986879}
   - component: {fileID: 296985006399236694}
   m_Layer: 0
   m_Name: floor_corner
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6109755646580986879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &296985006399236694
 MonoBehaviour:
   m_ObjectHideFlags: 0

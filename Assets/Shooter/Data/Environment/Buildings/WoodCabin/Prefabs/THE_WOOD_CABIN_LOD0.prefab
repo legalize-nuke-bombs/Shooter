@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 2320674}
   - component: {fileID: 8070718717288096290}
   - component: {fileID: 901605691244773668}
+  - component: {fileID: 2158440563220001874}
   - component: {fileID: 5811209549616310220}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
@@ -193,7 +194,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2158440563220001874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5811209549616310220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,6 +232,7 @@ GameObject:
   - component: {fileID: 2320676}
   - component: {fileID: 7578557097504584689}
   - component: {fileID: 5318576859906756712}
+  - component: {fileID: 1105127971163319913}
   - component: {fileID: 1824039106553562005}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
@@ -334,7 +347,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1105127971163319913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1824039106553562005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,6 +385,7 @@ GameObject:
   - component: {fileID: 2320678}
   - component: {fileID: 4473916471265544283}
   - component: {fileID: 5601227191910649312}
+  - component: {fileID: 1288149601402996216}
   - component: {fileID: 5490688323047407202}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
@@ -475,7 +500,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1288149601402996216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5490688323047407202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,6 +538,7 @@ GameObject:
   - component: {fileID: 2320680}
   - component: {fileID: 2615288386269463533}
   - component: {fileID: 4766047416976466828}
+  - component: {fileID: 4831905459239428511}
   - component: {fileID: 4138731357622267624}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
@@ -616,7 +653,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4831905459239428511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4138731357622267624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -643,6 +691,7 @@ GameObject:
   - component: {fileID: 2320682}
   - component: {fileID: 5152342275288368756}
   - component: {fileID: 4862276216289976641}
+  - component: {fileID: 8471302627200530933}
   - component: {fileID: 4418490630279482733}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
@@ -757,7 +806,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8471302627200530933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4418490630279482733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,6 +844,7 @@ GameObject:
   - component: {fileID: 2320684}
   - component: {fileID: 5415104107151479043}
   - component: {fileID: 8383130269814842176}
+  - component: {fileID: 5873951895124398482}
   - component: {fileID: 8335973177714230011}
   m_Layer: 0
   m_Name: porchPole_01_LOD0
@@ -898,7 +959,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5873951895124398482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8335973177714230011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,6 +997,7 @@ GameObject:
   - component: {fileID: 2320686}
   - component: {fileID: 7258043300897344572}
   - component: {fileID: 5989278612840134726}
+  - component: {fileID: 4581500205851414098}
   - component: {fileID: 5478390111608826375}
   m_Layer: 0
   m_Name: doorAttach_01_LOD0
@@ -1039,7 +1112,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4581500205851414098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5478390111608826375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1066,6 +1150,7 @@ GameObject:
   - component: {fileID: 2320688}
   - component: {fileID: 4353891718009663074}
   - component: {fileID: 2083463686679018294}
+  - component: {fileID: 2832036195197766143}
   - component: {fileID: 8277045161360655878}
   m_Layer: 0
   m_Name: door_01_LOD0
@@ -1180,7 +1265,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2832036195197766143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8277045161360655878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1240,6 +1336,7 @@ GameObject:
   - component: {fileID: 2320692}
   - component: {fileID: 57067498557735466}
   - component: {fileID: 8800532098986024548}
+  - component: {fileID: 8253458494933038762}
   - component: {fileID: 6583983901679414720}
   m_Layer: 0
   m_Name: window_01_LOD0
@@ -1354,7 +1451,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8253458494933038762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6583983901679414720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1381,6 +1489,7 @@ GameObject:
   - component: {fileID: 2320694}
   - component: {fileID: 742727516964294214}
   - component: {fileID: 7043877774166122108}
+  - component: {fileID: 3594259248417499797}
   - component: {fileID: 4430974892682092288}
   m_Layer: 0
   m_Name: cabinWallsExterior_01_LOD0
@@ -1495,7 +1604,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &3594259248417499797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4430974892682092288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1522,6 +1642,7 @@ GameObject:
   - component: {fileID: 2320696}
   - component: {fileID: 6440602422082737273}
   - component: {fileID: 7204745340160911768}
+  - component: {fileID: 6953885105692568056}
   - component: {fileID: 3862938467856376724}
   m_Layer: 0
   m_Name: window_01_LOD0
@@ -1636,7 +1757,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6953885105692568056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3862938467856376724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1663,6 +1795,7 @@ GameObject:
   - component: {fileID: 2320698}
   - component: {fileID: 7139151955571854478}
   - component: {fileID: 8151274369087037663}
+  - component: {fileID: 1202147708343942337}
   - component: {fileID: 8889375173504686754}
   m_Layer: 0
   m_Name: window_02_LOD0
@@ -1777,7 +1910,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1202147708343942337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8889375173504686754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1804,6 +1948,7 @@ GameObject:
   - component: {fileID: 2320700}
   - component: {fileID: 3139280530065381896}
   - component: {fileID: 7921643940485265174}
+  - component: {fileID: 2281049306361977411}
   - component: {fileID: 9208806802406881795}
   m_Layer: 0
   m_Name: cabinBase_01_LOD0
@@ -1918,7 +2063,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2281049306361977411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &9208806802406881795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1945,6 +2101,7 @@ GameObject:
   - component: {fileID: 2320702}
   - component: {fileID: 5060128141046148192}
   - component: {fileID: 7434441335741726040}
+  - component: {fileID: 5569946013252889176}
   - component: {fileID: 1238063372299623524}
   m_Layer: 0
   m_Name: cabinWallsInterior_01_LOD0
@@ -2059,7 +2216,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5569946013252889176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1238063372299623524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2086,6 +2254,7 @@ GameObject:
   - component: {fileID: 2320704}
   - component: {fileID: 5768767444914130895}
   - component: {fileID: 1703014525507674093}
+  - component: {fileID: 5435941982407053903}
   - component: {fileID: 4007271522692661020}
   m_Layer: 0
   m_Name: cabinFloor_01_LOD0
@@ -2200,7 +2369,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5435941982407053903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4007271522692661020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2227,6 +2407,7 @@ GameObject:
   - component: {fileID: 2320706}
   - component: {fileID: 3347360223128990241}
   - component: {fileID: 1291080485624000002}
+  - component: {fileID: 2872035805888574771}
   - component: {fileID: 3405667547372723868}
   m_Layer: 0
   m_Name: porchTimbersSupport_01_LOD0
@@ -2341,7 +2522,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2872035805888574771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3405667547372723868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2368,6 +2560,7 @@ GameObject:
   - component: {fileID: 2320708}
   - component: {fileID: 1742972876132240599}
   - component: {fileID: 8112032145679900116}
+  - component: {fileID: 6910295654065241534}
   - component: {fileID: 8325586904489382547}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
@@ -2482,7 +2675,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6910295654065241534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8325586904489382547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2509,6 +2713,7 @@ GameObject:
   - component: {fileID: 2320712}
   - component: {fileID: 3496642393589217401}
   - component: {fileID: 493363813784438038}
+  - component: {fileID: 789036486029621988}
   - component: {fileID: 9039762871958958397}
   m_Layer: 0
   m_Name: cabinSteps_01_LOD0
@@ -2623,7 +2828,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &789036486029621988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &9039762871958958397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2650,6 +2866,7 @@ GameObject:
   - component: {fileID: 2320714}
   - component: {fileID: 3942510372446263827}
   - component: {fileID: 3373750839838906128}
+  - component: {fileID: 4872398549051973764}
   - component: {fileID: 723620671745282600}
   m_Layer: 0
   m_Name: doorThreshold_01_LOD0
@@ -2764,7 +2981,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4872398549051973764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &723620671745282600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2791,6 +3019,7 @@ GameObject:
   - component: {fileID: 2320716}
   - component: {fileID: 8727322861661516643}
   - component: {fileID: 7272200085649714165}
+  - component: {fileID: 1344731802838964590}
   - component: {fileID: 709488527410118404}
   m_Layer: 0
   m_Name: porchFloorSupportTimber_01_LOD0
@@ -2905,7 +3134,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1344731802838964590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &709488527410118404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2932,6 +3172,7 @@ GameObject:
   - component: {fileID: 2320718}
   - component: {fileID: 3365911428478935707}
   - component: {fileID: 3062449114918788195}
+  - component: {fileID: 7524977979070066902}
   - component: {fileID: 3520629350358177768}
   m_Layer: 0
   m_Name: doorFrame_01_LOD0
@@ -3046,7 +3287,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7524977979070066902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3520629350358177768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3073,6 +3325,7 @@ GameObject:
   - component: {fileID: 2320720}
   - component: {fileID: 7717313789471441194}
   - component: {fileID: 4633570922457391071}
+  - component: {fileID: 4155477564903189283}
   - component: {fileID: 8721786560306994317}
   m_Layer: 0
   m_Name: wallTimberJoint_01_LOD0
@@ -3187,7 +3440,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4155477564903189283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8721786560306994317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3214,6 +3478,7 @@ GameObject:
   - component: {fileID: 2320722}
   - component: {fileID: 4874981879487886885}
   - component: {fileID: 4074334485108355158}
+  - component: {fileID: 8480684079333972161}
   - component: {fileID: 1463738487544177696}
   m_Layer: 0
   m_Name: porchFloor_01_LOD0
@@ -3328,7 +3593,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8480684079333972161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1463738487544177696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3355,6 +3631,7 @@ GameObject:
   - component: {fileID: 2320724}
   - component: {fileID: 6955385169558753325}
   - component: {fileID: 2690396999097289243}
+  - component: {fileID: 3063276863052172884}
   - component: {fileID: 7614277863933260954}
   m_Layer: 0
   m_Name: cabinUpperWalls_01_LOD0
@@ -3469,7 +3746,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &3063276863052172884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7614277863933260954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3496,6 +3784,7 @@ GameObject:
   - component: {fileID: 2320726}
   - component: {fileID: 1990538831800003469}
   - component: {fileID: 1445764562794947233}
+  - component: {fileID: 1193313448352835679}
   - component: {fileID: 8706218109938592581}
   m_Layer: 0
   m_Name: cabinWoodWork_01_LOD0
@@ -3611,7 +3900,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1193313448352835679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8706218109938592581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3638,6 +3938,7 @@ GameObject:
   - component: {fileID: 2320730}
   - component: {fileID: 1469737762618265793}
   - component: {fileID: 8995421634079333001}
+  - component: {fileID: 521649076169653009}
   - component: {fileID: 7347112892985020513}
   m_Layer: 0
   m_Name: doorAttachFrame_01_LOD0
@@ -3753,7 +4054,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &521649076169653009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7347112892985020513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3780,6 +4092,7 @@ GameObject:
   - component: {fileID: 2320732}
   - component: {fileID: 6706493675546745311}
   - component: {fileID: 554076827368143335}
+  - component: {fileID: 6433584227210968216}
   - component: {fileID: 1956873350372610326}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
@@ -3894,7 +4207,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6433584227210968216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1956873350372610326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3921,6 +4245,7 @@ GameObject:
   - component: {fileID: 2320734}
   - component: {fileID: 2530551473677944489}
   - component: {fileID: 3027049226373460833}
+  - component: {fileID: 849661443528086741}
   - component: {fileID: 2264654153511610781}
   m_Layer: 0
   m_Name: cabinRoof_01_LOD0
@@ -4036,7 +4361,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &849661443528086741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &2264654153511610781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4063,6 +4399,7 @@ GameObject:
   - component: {fileID: 2320736}
   - component: {fileID: 222710516752178341}
   - component: {fileID: 2082720869837002444}
+  - component: {fileID: 4764383136818246972}
   - component: {fileID: 4808717709351141670}
   m_Layer: 0
   m_Name: cabinExteriorFireplace_01_LOD0
@@ -4178,7 +4515,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4764383136818246972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4808717709351141670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4205,6 +4553,7 @@ GameObject:
   - component: {fileID: 2320738}
   - component: {fileID: 6255617866039512158}
   - component: {fileID: 1266355361230196826}
+  - component: {fileID: 2790353900115497544}
   - component: {fileID: 8165958029042910261}
   m_Layer: 0
   m_Name: cabinTopRoof_01_LOD0
@@ -4319,7 +4668,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2790353900115497544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8165958029042910261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4346,6 +4706,7 @@ GameObject:
   - component: {fileID: 2320740}
   - component: {fileID: 6772746048009639178}
   - component: {fileID: 6724735285281550584}
+  - component: {fileID: 7279719222786170514}
   - component: {fileID: 845684983244815001}
   m_Layer: 0
   m_Name: porchPole_01_LOD0
@@ -4460,7 +4821,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7279719222786170514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &845684983244815001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4487,6 +4859,7 @@ GameObject:
   - component: {fileID: 2320742}
   - component: {fileID: 4024282627703979805}
   - component: {fileID: 2345756964927497899}
+  - component: {fileID: 714233682012041564}
   - component: {fileID: 2836106402901102436}
   m_Layer: 0
   m_Name: cabinInteriorFireplace_01_LOD0
@@ -4602,7 +4975,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &714233682012041564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &2836106402901102436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4629,6 +5013,7 @@ GameObject:
   - component: {fileID: 2359822}
   - component: {fileID: 25063154410763349}
   - component: {fileID: 487483089511077396}
+  - component: {fileID: 2518447532762681780}
   - component: {fileID: 4623220044142846752}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
@@ -4743,7 +5128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2518447532762681780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4623220044142846752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4770,6 +5166,7 @@ GameObject:
   - component: {fileID: 2359824}
   - component: {fileID: 4046296957234262122}
   - component: {fileID: 6371434276423578434}
+  - component: {fileID: 8515773110059295463}
   - component: {fileID: 5172100677593565573}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
@@ -4884,7 +5281,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8515773110059295463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5172100677593565573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4911,6 +5319,7 @@ GameObject:
   - component: {fileID: 2359826}
   - component: {fileID: 5407923839428189693}
   - component: {fileID: 1243734722923301690}
+  - component: {fileID: 960346273670632409}
   - component: {fileID: 6040721522375769659}
   m_Layer: 0
   m_Name: wallTimberJoint_01_LOD0
@@ -5025,7 +5434,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &960346273670632409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6040721522375769659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5052,6 +5472,7 @@ GameObject:
   - component: {fileID: 2359828}
   - component: {fileID: 5771352572288515269}
   - component: {fileID: 1846881042476834379}
+  - component: {fileID: 2569927960223037860}
   - component: {fileID: 6032213250841745255}
   m_Layer: 0
   m_Name: woodPillar_01_LOD0
@@ -5166,7 +5587,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2569927960223037860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6032213250841745255
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -245,7 +245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &8588228638096441525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,7 +275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &7096665575404867035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,7 +305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &6480448560435614443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,7 +340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &8170647639868143152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,7 +375,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &4887895807261271806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,7 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &4231345023546321871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,7 +461,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  optimizable: 0
 --- !u!114 &7931311761540251173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,7 +491,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &7076779315762618716
 MonoBehaviour:
   m_ObjectHideFlags: 0

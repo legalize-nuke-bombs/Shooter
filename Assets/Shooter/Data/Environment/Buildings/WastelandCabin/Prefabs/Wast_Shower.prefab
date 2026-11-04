@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23445507328183070}
   - component: {fileID: 64795795154912292}
   - component: {fileID: 8571135277549792260}
+  - component: {fileID: 7131213214665437871}
   - component: {fileID: 128931975690999206}
   m_Layer: 0
   m_Name: Wast_Shower
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7131213214665437871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1447746371394704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &128931975690999206
 MonoBehaviour:
   m_ObjectHideFlags: 0

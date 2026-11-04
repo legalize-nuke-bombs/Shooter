@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4670150317084929850}
   - component: {fileID: 4670150317084929851}
   - component: {fileID: 1603110331076218710}
+  - component: {fileID: 7267756097888578889}
   - component: {fileID: 8370800387616071848}
   m_Layer: 0
   m_Name: photo_3
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7267756097888578889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4273206861078308040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8370800387616071848
 MonoBehaviour:
   m_ObjectHideFlags: 0

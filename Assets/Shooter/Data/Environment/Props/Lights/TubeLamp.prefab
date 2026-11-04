@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2176922096568345579}
   - component: {fileID: 4068015368134210253}
   - component: {fileID: 5467741329896627013}
+  - component: {fileID: 4840006796626562086}
   - component: {fileID: 4446541462131105923}
   m_Layer: 0
   m_Name: TubeLamp
@@ -131,7 +132,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  optimizable: 1
+--- !u!114 &4840006796626562086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2461312555955314122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4446541462131105923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,7 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &7695858810194482547
 MonoBehaviour:
   m_ObjectHideFlags: 0

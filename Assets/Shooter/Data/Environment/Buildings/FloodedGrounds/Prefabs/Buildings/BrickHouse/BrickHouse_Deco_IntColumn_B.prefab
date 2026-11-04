@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2318494}
   - component: {fileID: 6585396}
   - component: {fileID: 1573923352830622470}
+  - component: {fileID: 1660349394359743671}
   - component: {fileID: 5554171719621861205}
   m_Layer: 0
   m_Name: BrickHouse_Deco_IntColumn_B
@@ -126,7 +127,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1660349394359743671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5554171719621861205
 MonoBehaviour:
   m_ObjectHideFlags: 0

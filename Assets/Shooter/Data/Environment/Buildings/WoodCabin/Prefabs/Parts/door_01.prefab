@@ -77,6 +77,7 @@ GameObject:
   - component: {fileID: 2377342}
   - component: {fileID: 406591909282725324}
   - component: {fileID: 4837492836235018325}
+  - component: {fileID: 7814749124358908547}
   - component: {fileID: 8040034654974221826}
   m_Layer: 0
   m_Name: doorAttach_01_LOD0
@@ -191,7 +192,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7814749124358908547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8040034654974221826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +230,7 @@ GameObject:
   - component: {fileID: 2377344}
   - component: {fileID: 234868101560076696}
   - component: {fileID: 9099679452301964348}
+  - component: {fileID: 6452471992857116906}
   - component: {fileID: 1660088152366228440}
   m_Layer: 0
   m_Name: door_01_LOD0
@@ -332,7 +345,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6452471992857116906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1660088152366228440
 MonoBehaviour:
   m_ObjectHideFlags: 0

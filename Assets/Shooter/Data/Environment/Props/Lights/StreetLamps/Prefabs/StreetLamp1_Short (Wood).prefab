@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1842969807233920127}
   - component: {fileID: 4959029429342654313}
   - component: {fileID: 6674424851709544415}
+  - component: {fileID: 8218358177489360012}
   - component: {fileID: 2899660974072744204}
   m_Layer: 0
   m_Name: StreetLamp1_Short (Wood)
@@ -130,7 +131,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8218358177489360012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121418290699475107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &2899660974072744204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,7 +409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &2781766786088999071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,7 +675,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &6869996922685207317
 MonoBehaviour:
   m_ObjectHideFlags: 0

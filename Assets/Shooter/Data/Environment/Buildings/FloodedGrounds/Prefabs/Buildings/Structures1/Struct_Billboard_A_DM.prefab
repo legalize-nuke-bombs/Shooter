@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2321226}
   - component: {fileID: 6406270}
   - component: {fileID: 2752022785517437695}
+  - component: {fileID: 1455636902410357145}
   - component: {fileID: 2398391998690455121}
   m_Layer: 0
   m_Name: Struct_Billboard_A_DM
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1455636902410357145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &2398391998690455121
 MonoBehaviour:
   m_ObjectHideFlags: 0

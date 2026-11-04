@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2370354}
   - component: {fileID: 6495736}
   - component: {fileID: 1137708998743884000}
+  - component: {fileID: 2998512538135728768}
   - component: {fileID: 6157980483262743972}
   m_Layer: 0
   m_Name: Wall_1A_Door
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2998512538135728768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6157980483262743972
 MonoBehaviour:
   m_ObjectHideFlags: 0

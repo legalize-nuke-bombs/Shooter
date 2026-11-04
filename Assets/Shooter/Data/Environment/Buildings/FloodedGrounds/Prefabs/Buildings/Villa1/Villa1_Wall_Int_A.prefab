@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2358918}
   - component: {fileID: 6576934}
   - component: {fileID: 1683223285773473544}
+  - component: {fileID: 8635402474077557891}
   - component: {fileID: 432274159190108311}
   m_Layer: 0
   m_Name: Villa1_Wall_Int_A
@@ -126,7 +127,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8635402474077557891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &432274159190108311
 MonoBehaviour:
   m_ObjectHideFlags: 0

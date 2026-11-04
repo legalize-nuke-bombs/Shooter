@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 8888093352159658044}
   - component: {fileID: 2161262339511438996}
   - component: {fileID: 7500089725610269123}
+  - component: {fileID: 7430669668477785086}
   - component: {fileID: 5461596643560849293}
   m_Layer: 0
   m_Name: tv
@@ -258,7 +259,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  optimizable: 1
+--- !u!114 &7430669668477785086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622243103439998288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5461596643560849293
 MonoBehaviour:
   m_ObjectHideFlags: 0

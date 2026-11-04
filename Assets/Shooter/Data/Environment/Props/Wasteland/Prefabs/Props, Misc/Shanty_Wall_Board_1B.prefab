@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6436766}
   - component: {fileID: 20525020}
   - component: {fileID: 2699097891705031619}
+  - component: {fileID: 2113824645113779207}
   - component: {fileID: 4453551827029280788}
   m_Layer: 0
   m_Name: Shanty_Wall_Board_1B
@@ -148,7 +149,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2113824645113779207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4453551827029280788
 MonoBehaviour:
   m_ObjectHideFlags: 0

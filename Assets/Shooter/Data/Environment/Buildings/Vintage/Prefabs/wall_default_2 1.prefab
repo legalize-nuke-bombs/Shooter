@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 514574827549979957}
   - component: {fileID: 7939963146505125750}
   - component: {fileID: 3650451320001097118}
+  - component: {fileID: 7011448139807200689}
   - component: {fileID: 6398996213063842579}
   m_Layer: 0
   m_Name: wall_default_2 1
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7011448139807200689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835115828256757967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6398996213063842579
 MonoBehaviour:
   m_ObjectHideFlags: 0

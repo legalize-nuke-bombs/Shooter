@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2310164}
   - component: {fileID: 6484316}
   - component: {fileID: 3632853565166120589}
+  - component: {fileID: 6724411290653264049}
   - component: {fileID: 4196482607952797742}
   m_Layer: 0
   m_Name: glass
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6724411290653264049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4196482607952797742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +166,7 @@ GameObject:
   - component: {fileID: 2324144}
   - component: {fileID: 6406194}
   - component: {fileID: 7931030096915507293}
+  - component: {fileID: 520073663125005404}
   - component: {fileID: 4742444300323685988}
   m_Layer: 0
   m_Name: body
@@ -268,7 +281,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &520073663125005404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4742444300323685988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +353,7 @@ GameObject:
   - component: {fileID: 2387884}
   - component: {fileID: 6471804}
   - component: {fileID: 840468051447477845}
+  - component: {fileID: 6268994128797903458}
   - component: {fileID: 5313000717079571871}
   m_Layer: 0
   m_Name: lamps
@@ -443,7 +468,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6268994128797903458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5313000717079571871
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2396378}
   - component: {fileID: 6586708}
   - component: {fileID: 7823034111190953405}
+  - component: {fileID: 8014909467586801640}
   - component: {fileID: 2696763206115920967}
   m_Layer: 0
   m_Name: Villa2_Roof_Mid_A
@@ -126,7 +127,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8014909467586801640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &2696763206115920967
 MonoBehaviour:
   m_ObjectHideFlags: 0

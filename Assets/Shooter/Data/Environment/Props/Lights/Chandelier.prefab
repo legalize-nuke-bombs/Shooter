@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3915614787706550354}
   - component: {fileID: 5065709890640967436}
   - component: {fileID: 3547188467538562452}
+  - component: {fileID: 6147529334614804243}
   - component: {fileID: 3855469325671663336}
   m_Layer: 0
   m_Name: Chandelier
@@ -131,7 +132,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  optimizable: 1
+--- !u!114 &6147529334614804243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034824637827778056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3855469325671663336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,7 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &6618448325051312827
 MonoBehaviour:
   m_ObjectHideFlags: 0

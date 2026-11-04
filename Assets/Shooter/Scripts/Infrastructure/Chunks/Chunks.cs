@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,17 +16,6 @@ namespace Shooter.Infrastructure
         private readonly Dictionary<Vector2Int, TMap> components = new();
         private readonly Dictionary<Vector2Int, TMap> activeComponents = new();
         private float nextCollectTime;
-
-        public struct OnComponentCallbackData
-        {
-            public Vector2Int Chunk;
-            public Behaviour Component;
-        }
-        public Action<OnComponentCallbackData> OnComponentAdded;
-        public Action<OnComponentCallbackData> OnComponentRemoved;
-        public Action<OnComponentCallbackData> OnComponentEnabled;
-        public Action<OnComponentCallbackData> OnComponentDisabled;
-
 
         private void Awake()
         {
@@ -57,57 +45,23 @@ namespace Shooter.Infrastructure
 
         public void AddComponent(Vector2Int chunk, Behaviour component)
         {
-            if (FindOrCreate(components, chunk).TryAdd(component))
-            {
-                OnComponentAdded?.Invoke(new OnComponentCallbackData()
-                {
-                    Chunk = chunk,
-                    Component = component
-                });
-            }
+            FindOrCreate(components, chunk).TryAdd(component);
         }
 
         public void RemoveComponent(Vector2Int chunk, Behaviour component)
         {
             TryDeactivateComponent(chunk, component);
-            if (components.TryGetValue(chunk, out TMap members))
-            {
-                if (members.TryRemove(component))
-                {
-                    OnComponentRemoved?.Invoke(new OnComponentCallbackData()
-                    {
-                        Chunk = chunk,
-                        Component = component
-                    });
-                }
-            }
+            if (components.TryGetValue(chunk, out TMap members)) members.TryRemove(component);
         }
 
         public void ActivateComponent(Vector2Int chunk, Behaviour component)
         {
-            if (FindOrCreate(activeComponents, chunk).TryAdd(component))
-            {
-                OnComponentEnabled?.Invoke(new OnComponentCallbackData()
-                {
-                    Chunk = chunk,
-                    Component = component
-                });
-            }
+            FindOrCreate(activeComponents, chunk).TryAdd(component);
         }
 
         public void TryDeactivateComponent(Vector2Int chunk, Behaviour component)
         {
-            if (activeComponents.TryGetValue(chunk, out TMap members))
-            {
-                if (members.TryRemove(component))
-                {
-                    OnComponentDisabled?.Invoke(new OnComponentCallbackData()
-                    {
-                        Chunk = chunk,
-                        Component = component
-                    });
-                }
-            }
+            if (activeComponents.TryGetValue(chunk, out TMap members)) members.TryRemove(component);
         }
 
         public TArray.View<T> GetAll<T>(Vector2Int chunk, ChunkInactivePolicy inactivePolicy) where T : class
@@ -129,26 +83,6 @@ namespace Shooter.Infrastructure
             chunks[chunk] = members;
             return members;
         }
-
-        public int CountAll(Vector2Int chunk, Type type)
-        {
-            if (!components.TryGetValue(chunk, out TMap members))
-            {
-                return 0;
-            }
-            return members.CountOf(type);
-        }
-
-        public int CountEnabled(Vector2Int chunk, Type type)
-        {
-            if (!activeComponents.TryGetValue(chunk, out TMap members))
-            {
-                return 0;
-            }
-            return members.CountOf(type);
-        }
-
-
 
         public readonly struct View<T> where T : class
         {

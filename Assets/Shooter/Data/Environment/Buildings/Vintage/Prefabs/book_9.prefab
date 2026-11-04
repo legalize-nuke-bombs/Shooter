@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4316820687311040171}
   - component: {fileID: 4316820687311040172}
   - component: {fileID: 7388884524622608247}
+  - component: {fileID: 841414241189949607}
   - component: {fileID: 3149490412064131428}
   m_Layer: 0
   m_Name: book_9
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &841414241189949607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3680828822987113535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3149490412064131428
 MonoBehaviour:
   m_ObjectHideFlags: 0

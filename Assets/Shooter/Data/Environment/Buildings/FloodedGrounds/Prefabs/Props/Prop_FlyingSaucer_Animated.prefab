@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 9521874}
   - component: {fileID: 593466598049742389}
   - component: {fileID: 1852445260498250804}
+  - component: {fileID: 5696441791418604684}
   - component: {fileID: 7384567100490931415}
   m_Layer: 0
   m_Name: FlyingSaucer_Body
@@ -183,7 +184,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5696441791418604684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7384567100490931415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5053,7 +5065,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &1386766715284061398
 MonoBehaviour:
   m_ObjectHideFlags: 0

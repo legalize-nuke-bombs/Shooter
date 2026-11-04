@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3655028092168642955}
   - component: {fileID: 8364043966977720213}
   - component: {fileID: 7417647687655454508}
+  - component: {fileID: 5742010526366072624}
   - component: {fileID: 5976899910144665820}
   m_Layer: 0
   m_Name: Heather_A
@@ -136,7 +137,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5742010526366072624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8267427934229748759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5976899910144665820
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2840140917649415330}
   - component: {fileID: 9059257865463127790}
   - component: {fileID: 2285014545451663143}
+  - component: {fileID: 1718037526027142285}
   - component: {fileID: 5589132992411001847}
   m_Layer: 0
   m_Name: wall.002
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1718037526027142285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927999958042579405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5589132992411001847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,6 +201,7 @@ GameObject:
   - component: {fileID: 2900981088874686323}
   - component: {fileID: 9059257865463127791}
   - component: {fileID: 4719439389936130065}
+  - component: {fileID: 7139744246336610794}
   - component: {fileID: 8760796999268394272}
   m_Layer: 0
   m_Name: window_small_frame
@@ -303,7 +316,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7139744246336610794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5799758390958411673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8760796999268394272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +354,7 @@ GameObject:
   - component: {fileID: 1917018277573111919}
   - component: {fileID: 9059257865463127792}
   - component: {fileID: 9048257814650390197}
+  - component: {fileID: 147744778924789952}
   - component: {fileID: 6073041843930724804}
   m_Layer: 0
   m_Name: window_small
@@ -444,7 +469,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &147744778924789952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6869880302023066712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6073041843930724804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,6 +507,7 @@ GameObject:
   - component: {fileID: 8581115719214740267}
   - component: {fileID: 9059257865463127793}
   - component: {fileID: 4198761077415407291}
+  - component: {fileID: 6958626952502644185}
   - component: {fileID: 3321774626472073457}
   m_Layer: 0
   m_Name: glass
@@ -585,7 +622,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6958626952502644185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9059257865463127789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3321774626472073457
 MonoBehaviour:
   m_ObjectHideFlags: 0

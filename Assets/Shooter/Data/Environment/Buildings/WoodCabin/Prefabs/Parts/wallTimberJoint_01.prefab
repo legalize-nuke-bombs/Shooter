@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2334258}
   - component: {fileID: 2424794617089255153}
   - component: {fileID: 5607110691141488861}
+  - component: {fileID: 345278026951355908}
   - component: {fileID: 3461114744667495848}
   m_Layer: 0
   m_Name: wallTimberJoint_01_LOD0
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &345278026951355908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3461114744667495848
 MonoBehaviour:
   m_ObjectHideFlags: 0

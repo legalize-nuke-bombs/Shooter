@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5154780190008440942}
   - component: {fileID: 1504879477180547959}
   - component: {fileID: 3402472883782967169}
+  - component: {fileID: 4664259594903209449}
   - component: {fileID: 1017088335897062358}
   m_Layer: 0
   m_Name: FirstAidKit_Biohazard
@@ -126,7 +127,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4664259594903209449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896597939343215794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1017088335897062358
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 763564033677675604}
   - component: {fileID: 1530205148688533478}
   - component: {fileID: 975174223122597963}
+  - component: {fileID: 4409529143721212718}
   - component: {fileID: 651920074942195700}
   m_Layer: 12
   m_Name: Point Light
@@ -253,7 +254,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4409529143721212718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048919483453050737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &651920074942195700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,6 +292,7 @@ GameObject:
   - component: {fileID: 8245506135859937000}
   - component: {fileID: 8415449355191777709}
   - component: {fileID: 500356614170331810}
+  - component: {fileID: 6501309736424845943}
   - component: {fileID: 7209936936678532756}
   m_Layer: 0
   m_Name: Model
@@ -393,7 +406,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6501309736424845943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2583761828372146466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7209936936678532756
 MonoBehaviour:
   m_ObjectHideFlags: 0

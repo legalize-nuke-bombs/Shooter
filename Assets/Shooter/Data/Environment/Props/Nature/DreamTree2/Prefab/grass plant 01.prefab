@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2755773098453887015}
   - component: {fileID: 6140128183545688176}
   - component: {fileID: 8016389097609412767}
+  - component: {fileID: 4021354301431129447}
   - component: {fileID: 1233099470131762330}
   m_Layer: 0
   m_Name: grass plant 01
@@ -67,7 +68,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4021354301431129447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6019070555036615377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1233099470131762330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &1262965545705174784
 MonoBehaviour:
   m_ObjectHideFlags: 0

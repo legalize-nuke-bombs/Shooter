@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 7223081229401795348}
   - component: {fileID: 8354912638294548967}
   - component: {fileID: 7493124100785588323}
+  - component: {fileID: 540502491979223882}
   - component: {fileID: 8352883249188277515}
   m_Layer: 0
   m_Name: sofa_small_fabric
@@ -161,7 +162,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &540502491979223882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6289801478594699798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8352883249188277515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +200,7 @@ GameObject:
   - component: {fileID: 7445323260853470783}
   - component: {fileID: 8354912638294548968}
   - component: {fileID: 702392132061523927}
+  - component: {fileID: 8313464889692911442}
   - component: {fileID: 1758795002183652561}
   m_Layer: 0
   m_Name: sofa_small_pillow
@@ -302,7 +315,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8313464889692911442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7147626649396315976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1758795002183652561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +353,7 @@ GameObject:
   - component: {fileID: 1091236125919721279}
   - component: {fileID: 8354912638294548969}
   - component: {fileID: 2958771888608792475}
+  - component: {fileID: 410251139837057933}
   - component: {fileID: 8387554035560271402}
   m_Layer: 0
   m_Name: sofa_small
@@ -443,7 +468,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &410251139837057933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7836013369675805192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8387554035560271402
 MonoBehaviour:
   m_ObjectHideFlags: 0

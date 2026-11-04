@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2306290}
   - component: {fileID: 2450649347717249539}
   - component: {fileID: 386440239326755674}
+  - component: {fileID: 7684896333416751148}
   - component: {fileID: 967858128617765204}
   m_Layer: 0
   m_Name: supportStones_01_LOD0
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7684896333416751148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &967858128617765204
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23583049347215312}
   - component: {fileID: 64738922726377718}
   - component: {fileID: 7671813252299536058}
+  - component: {fileID: 6132144199189408761}
   - component: {fileID: 8539747024680295532}
   m_Layer: 0
   m_Name: Door_Front
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6132144199189408761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024128839771344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8539747024680295532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +166,7 @@ GameObject:
   - component: {fileID: 23829377675466122}
   - component: {fileID: 64300903320195798}
   - component: {fileID: 885892515151504228}
+  - component: {fileID: 4618436402096471721}
   - component: {fileID: 7513748078308501438}
   m_Layer: 0
   m_Name: Door_Window
@@ -268,7 +281,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4618436402096471721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036387157803444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7513748078308501438
 MonoBehaviour:
   m_ObjectHideFlags: 0

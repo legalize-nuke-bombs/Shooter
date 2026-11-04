@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33469269604691328}
   - component: {fileID: 23594194677629310}
   - component: {fileID: 8503761849631214174}
+  - component: {fileID: 794639191148350126}
   - component: {fileID: 5344057411029133118}
   m_Layer: 0
   m_Name: Wast_Painting
@@ -104,7 +105,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &794639191148350126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247109293859550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5344057411029133118
 MonoBehaviour:
   m_ObjectHideFlags: 0

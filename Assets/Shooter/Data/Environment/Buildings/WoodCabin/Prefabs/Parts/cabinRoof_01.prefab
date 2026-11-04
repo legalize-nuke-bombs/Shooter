@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 2320680}
   - component: {fileID: 367491593191180316}
   - component: {fileID: 9023159628406030293}
+  - component: {fileID: 5052130451695837042}
   - component: {fileID: 4138731357622267624}
   m_Layer: 0
   m_Name: cabinRoof_01_LOD0
@@ -160,7 +161,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5052130451695837042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4138731357622267624
 MonoBehaviour:
   m_ObjectHideFlags: 0

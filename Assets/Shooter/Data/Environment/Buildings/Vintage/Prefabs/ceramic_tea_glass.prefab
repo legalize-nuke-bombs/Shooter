@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7833135264971222052}
   - component: {fileID: 7833135264971222053}
   - component: {fileID: 1594186535241725269}
+  - component: {fileID: 8473874914803215071}
   - component: {fileID: 2097771944625971531}
   m_Layer: 0
   m_Name: ceramic_tea_glass
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8473874914803215071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2583848074981961899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &2097771944625971531
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2338772}
   - component: {fileID: 8000000000492545184}
   - component: {fileID: 4198930039483991631}
+  - component: {fileID: 2954346486608975866}
   - component: {fileID: 7708627201313826223}
   m_Layer: 0
   m_Name: Magazin
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2954346486608975866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7708627201313826223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +166,7 @@ GameObject:
   - component: {fileID: 2397096}
   - component: {fileID: 8000000000492545185}
   - component: {fileID: 3681394697178183450}
+  - component: {fileID: 581814168869924508}
   - component: {fileID: 7021534188171479683}
   m_Layer: 0
   m_Name: Kolonna_beton
@@ -269,7 +282,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &581814168869924508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7021534188171479683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +320,7 @@ GameObject:
   - component: {fileID: 2354244}
   - component: {fileID: 8000000000492545186}
   - component: {fileID: 1230405499169394015}
+  - component: {fileID: 2733805523180328815}
   - component: {fileID: 6553852364543614032}
   m_Layer: 0
   m_Name: Windows
@@ -411,7 +436,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2733805523180328815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6553852364543614032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +474,7 @@ GameObject:
   - component: {fileID: 2358110}
   - component: {fileID: 8000000000492545187}
   - component: {fileID: 1430155815329388654}
+  - component: {fileID: 7394680511155064819}
   - component: {fileID: 8750156881559083445}
   m_Layer: 0
   m_Name: Metall_List
@@ -552,7 +589,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7394680511155064819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &8750156881559083445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,6 +627,7 @@ GameObject:
   - component: {fileID: 2338930}
   - component: {fileID: 8000000000492545188}
   - component: {fileID: 7019064799260292526}
+  - component: {fileID: 3390385443243400341}
   - component: {fileID: 1273513610247314249}
   m_Layer: 0
   m_Name: Prilavok_wood
@@ -694,7 +743,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &3390385443243400341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1273513610247314249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,6 +781,7 @@ GameObject:
   - component: {fileID: 2318726}
   - component: {fileID: 8000000000492545189}
   - component: {fileID: 5213790831234143214}
+  - component: {fileID: 5762698540526090978}
   - component: {fileID: 1447484660044357202}
   m_Layer: 0
   m_Name: PlitkaFasad
@@ -835,7 +896,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5762698540526090978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1447484660044357202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,6 +934,7 @@ GameObject:
   - component: {fileID: 2399230}
   - component: {fileID: 8000000000492545190}
   - component: {fileID: 1514213465397895380}
+  - component: {fileID: 8087500911499301590}
   - component: {fileID: 1757726039663952162}
   m_Layer: 0
   m_Name: Wall_interior
@@ -976,7 +1049,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8087500911499301590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1757726039663952162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1003,6 +1087,7 @@ GameObject:
   - component: {fileID: 2306322}
   - component: {fileID: 8000000000492545191}
   - component: {fileID: 3116213567638263520}
+  - component: {fileID: 2811891066747385484}
   - component: {fileID: 2501648889726970444}
   m_Layer: 0
   m_Name: Krisha
@@ -1120,7 +1205,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2811891066747385484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &2501648889726970444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1147,6 +1243,7 @@ GameObject:
   - component: {fileID: 2387548}
   - component: {fileID: 8000000000492545192}
   - component: {fileID: 1494414236673007218}
+  - component: {fileID: 3163367476273754249}
   - component: {fileID: 7675254261455556783}
   m_Layer: 0
   m_Name: Plitka_decal
@@ -1261,7 +1358,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &3163367476273754249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7675254261455556783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1331,6 +1439,7 @@ GameObject:
   - component: {fileID: 2354762}
   - component: {fileID: 8000000000492545193}
   - component: {fileID: 9222893000616228759}
+  - component: {fileID: 677098217589963031}
   - component: {fileID: 1950300362809696582}
   m_Layer: 0
   m_Name: Krilzho
@@ -1448,7 +1557,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &677098217589963031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1950300362809696582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1475,6 +1595,7 @@ GameObject:
   - component: {fileID: 2361924}
   - component: {fileID: 8000000000492545194}
   - component: {fileID: 6519183286839982281}
+  - component: {fileID: 8997659087213468419}
   - component: {fileID: 1142846805865003782}
   m_Layer: 0
   m_Name: Fundament
@@ -1592,7 +1713,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8997659087213468419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1142846805865003782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1619,6 +1751,7 @@ GameObject:
   - component: {fileID: 2302744}
   - component: {fileID: 8000000000492545195}
   - component: {fileID: 2254391799355178049}
+  - component: {fileID: 8991910474789673152}
   - component: {fileID: 6491220059633956180}
   m_Layer: 0
   m_Name: Wall
@@ -1735,7 +1868,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8991910474789673152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6491220059633956180
 MonoBehaviour:
   m_ObjectHideFlags: 0

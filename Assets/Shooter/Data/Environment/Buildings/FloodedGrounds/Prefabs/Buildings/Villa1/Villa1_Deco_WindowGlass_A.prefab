@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2346398}
   - component: {fileID: 1726690199609220471}
   - component: {fileID: 4416185381674006851}
+  - component: {fileID: 2388518927108565502}
   - component: {fileID: 735365225196291708}
   m_Layer: 0
   m_Name: Villa1_Deco_WindowGlass_A
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2388518927108565502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &735365225196291708
 MonoBehaviour:
   m_ObjectHideFlags: 0

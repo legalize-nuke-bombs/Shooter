@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2312804}
   - component: {fileID: 6585374}
   - component: {fileID: 3877409816825793324}
+  - component: {fileID: 477816753991500954}
   - component: {fileID: 9204261530388917312}
   m_Layer: 0
   m_Name: Villa2_Deco_Beam_A
@@ -126,7 +127,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &477816753991500954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &9204261530388917312
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2357914}
   - component: {fileID: -6275780090489987539}
   - component: {fileID: 716491499071842860}
+  - component: {fileID: 8383891293063553254}
   - component: {fileID: 4386205788872953795}
   m_Layer: 12
   m_Name: WhiteMushroom
@@ -128,7 +129,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &8383891293063553254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4386205788872953795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,7 +407,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &6027117141313651963
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 2360264}
   - component: {fileID: 6478324}
   - component: {fileID: 3810979288708136303}
+  - component: {fileID: 3369229736115456537}
   - component: {fileID: 4767538369247404018}
   m_Layer: 0
   m_Name: house_enter
@@ -160,7 +161,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &3369229736115456537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4767538369247404018
 MonoBehaviour:
   m_ObjectHideFlags: 0

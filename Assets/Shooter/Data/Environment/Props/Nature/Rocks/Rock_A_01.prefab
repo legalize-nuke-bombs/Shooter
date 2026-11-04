@@ -215,6 +215,9 @@ PrefabInstance:
       addedObject: {fileID: 7202061001953784622}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 3bb55b9dc42e34c47b35dea94575a162, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4275373117356787985}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 3bb55b9dc42e34c47b35dea94575a162, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 3367378555229991799}
     - targetCorrespondingSourceObject: {fileID: 100002, guid: 3bb55b9dc42e34c47b35dea94575a162, type: 3}
       insertIndex: -1
@@ -267,7 +270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &531554777357807116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,7 +300,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &2536021838205034863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,7 +352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &699769822710936716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,7 +382,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &4275373117356787985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338854965163658714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3367378555229991799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,7 +424,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &6442072117279232508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,7 +454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 0
 --- !u!114 &143005172414285278
 MonoBehaviour:
   m_ObjectHideFlags: 0

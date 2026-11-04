@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3355706}
   - component: {fileID: 2366896}
   - component: {fileID: 2551334729905127804}
+  - component: {fileID: 3695479909686647798}
   - component: {fileID: 5212363187565373543}
   m_Layer: 0
   m_Name: Grass_Med_C
@@ -104,7 +105,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &3695479909686647798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5212363187565373543
 MonoBehaviour:
   m_ObjectHideFlags: 0

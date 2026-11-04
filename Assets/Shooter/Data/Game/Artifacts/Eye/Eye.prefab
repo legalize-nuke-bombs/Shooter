@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 6548714661741479487}
   - component: {fileID: 3090847862524787056}
   - component: {fileID: 6818999625076144241}
+  - component: {fileID: 6316922973623700721}
   - component: {fileID: 6910691383879750740}
   m_Layer: 12
   m_Name: Point Light
@@ -286,7 +287,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &6316922973623700721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3338407507218868699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6910691383879750740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +325,7 @@ GameObject:
   - component: {fileID: 5419907290425657768}
   - component: {fileID: 7222892038513265668}
   - component: {fileID: 1257660680111136239}
+  - component: {fileID: 3480665520545597663}
   - component: {fileID: 3741255065092141746}
   m_Layer: 0
   m_Name: Model
@@ -427,7 +440,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &3480665520545597663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372044014708758396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3741255065092141746
 MonoBehaviour:
   m_ObjectHideFlags: 0

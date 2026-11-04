@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2724745167176534850}
   - component: {fileID: 1293473591878619145}
   - component: {fileID: 7252760882524261135}
+  - component: {fileID: 5829342442884992367}
   - component: {fileID: 3628269700606600761}
   m_Layer: 0
   m_Name: Bird Flock
@@ -159,7 +160,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
-  optimizable: 1
+--- !u!114 &5829342442884992367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418150528903127082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &3628269700606600761
 MonoBehaviour:
   m_ObjectHideFlags: 0

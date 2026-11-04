@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23895401668549786}
   - component: {fileID: 64468795435875062}
   - component: {fileID: 5720555241395773406}
+  - component: {fileID: 5891833087416451992}
   - component: {fileID: 2804220666111156315}
   m_Layer: 0
   m_Name: Wardrobe_Main
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5891833087416451992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289775252589352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &2804220666111156315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +200,7 @@ GameObject:
   - component: {fileID: 23833644268777120}
   - component: {fileID: 64158682175659240}
   - component: {fileID: 8304873651726819733}
+  - component: {fileID: 2014049857252271788}
   - component: {fileID: 628301086230815812}
   m_Layer: 0
   m_Name: Wardrobe_DoorL
@@ -302,7 +315,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &2014049857252271788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702074361043568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &628301086230815812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +353,7 @@ GameObject:
   - component: {fileID: 23094899187315658}
   - component: {fileID: 64612922912498066}
   - component: {fileID: 2127315025870906121}
+  - component: {fileID: 5789508460043579137}
   - component: {fileID: 5895175191946946552}
   m_Layer: 0
   m_Name: Wardrobe_DoorR
@@ -443,7 +468,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &5789508460043579137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758204064061132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &5895175191946946552
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23547353901872224}
   - component: {fileID: 95691109808284178}
   - component: {fileID: 7582997767660072420}
+  - component: {fileID: 7414005509372670404}
   - component: {fileID: 1650178283295534546}
   m_Layer: 0
   m_Name: waterbottle
@@ -128,7 +129,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &7414005509372670404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216505430168376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1650178283295534546
 MonoBehaviour:
   m_ObjectHideFlags: 0

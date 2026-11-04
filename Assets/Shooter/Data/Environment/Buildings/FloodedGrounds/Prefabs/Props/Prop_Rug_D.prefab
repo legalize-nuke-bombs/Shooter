@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2313316}
   - component: {fileID: 5208196917700382288}
   - component: {fileID: 9133510183485881102}
+  - component: {fileID: 1692336206365560986}
   - component: {fileID: 133354217185991419}
   m_Layer: 0
   m_Name: Prop_Rug_D
@@ -127,7 +128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
-  optimizable: 1
+--- !u!114 &1692336206365560986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &133354217185991419
 MonoBehaviour:
   m_ObjectHideFlags: 0
