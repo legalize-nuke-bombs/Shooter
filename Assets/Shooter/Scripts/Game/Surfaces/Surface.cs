@@ -5,13 +5,17 @@ namespace Shooter.Game
 {
     public static class Surface
     {
-        private const float RayStartAboveFeet = 2f;
+        private const float RayStartAboveFeet = 0.5f;
         private const float RayReachBelowFeet = 1f;
+        private const float PointProbeRadius = 0.05f;
         private const float TreeHitAboveGround = 0.05f;
 
+        private static readonly Collider[] mediumHits = new Collider[1];
         private static int groundMask;
+        private static int mediumMask;
 
         private static int GroundMask => groundMask != 0 ? groundMask : groundMask = LayerMask.GetMask("Default", "Water");
+        private static int MediumMask => mediumMask != 0 ? mediumMask : mediumMask = LayerMask.GetMask("Water");
 
         public static PhysicsMaterial FindUnder(CharacterController characterController)
         {
@@ -20,10 +24,20 @@ namespace Shooter.Game
 
         public static PhysicsMaterial FindUnder(Vector3 feetPosition)
         {
+            PhysicsMaterial medium = FindMediumAt(feetPosition);
+            if (medium != null) return medium;
+
             Vector3 rayStart = feetPosition + Vector3.up * RayStartAboveFeet;
             if (!Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, RayStartAboveFeet + RayReachBelowFeet, GroundMask, QueryTriggerInteraction.Ignore)) return null;
 
             return FindAt(hit);
+        }
+
+        private static PhysicsMaterial FindMediumAt(Vector3 point)
+        {
+            if (Physics.OverlapSphereNonAlloc(point, PointProbeRadius, mediumHits, MediumMask, QueryTriggerInteraction.Ignore) == 0) return null;
+
+            return mediumHits[0].sharedMaterial;
         }
 
         public static PhysicsMaterial FindAt(RaycastHit hit)
