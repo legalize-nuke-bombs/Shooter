@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
   m_Name: World
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
+  id: 
   content: 'The world consists of remote places: forests, abandoned villages and
     hamlets, broken roads. Dense fog everywhere, visibility is poor. Among the old
     ruins one comes across things of unclear origin - too new, too strange for these
@@ -42,5 +43,9 @@ MonoBehaviour:
 
     The main mysteries of the world have no known
     answer for residents and wanderers.
+
+
+    There are bodies of water in the world
+    where the water is so cold that a person could perish within a matter of minutes.
 
 '

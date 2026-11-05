@@ -19,6 +19,7 @@ namespace Shooter.Game
             @"
 Walk to a point of the world by starting a second-level behavior tree action.
 Your character automatically finds the path to the point and travels any distance, no matter how far.
+Your character automatically avoids dangerous areas (cold bodies of water, etc.)
 task_name: arbitrary name of the walk, it comes back in the reports.
 x, y, z: whole meters, the world coordinates shown next to everything you see and next to yourself in look_at_yourself; y is height. To reach a thing, pass its coordinates.
 sprint: true to run.
