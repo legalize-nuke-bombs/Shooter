@@ -10,7 +10,7 @@ namespace Shooter.Game
         name: "Unseen Urgent Event",
         category: "Conditions",
         story: "[Agent] has an unseen urgent event",
-        id: "c373886665cf4d8c87a0e3b5a9aa3550")]
+        id: "7a09fa604f6f4e598d1322aaf84ace77")]
     public partial class UnseenUrgentEventCondition : Condition
     {
         [SerializeReference] public BlackboardVariable<GameObject> Agent;

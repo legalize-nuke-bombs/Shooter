@@ -11,10 +11,9 @@ namespace Shooter.Game
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Think",
-        description: "Lets the resident's LLM think one turn: runs while the request is in flight, fails when the resident could not think now.",
         story: "[Agent] thinks",
         category: "Action",
-        id: "9658fa10ff09452bb07bef1351bac27c")]
+        id: "fc1cad496aea4e96ac03364ed4ff132d")]
     public partial class ThinkAction : Action
     {
         private static readonly Journal Log = Logs.Here();

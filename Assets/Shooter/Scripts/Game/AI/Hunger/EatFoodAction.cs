@@ -10,10 +10,9 @@ namespace Shooter.Game
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Eat Food",
-        description: "Eats the first available food item from the inventory.",
         story: "[Agent] eats food from inventory",
         category: "Action",
-        id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a03")]
+        id: "323decc7409441e1a70dc74fea2b63a1")]
     public partial class EatFoodAction : Action
     {
         private static readonly Journal Log = Logs.Here();

@@ -10,10 +10,9 @@ namespace Shooter.Game
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Use Healing Item",
-        description: "Uses the healing item that fits the missing health best.",
         story: "[Agent] uses healing item",
         category: "Action",
-        id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a04")]
+        id: "74a40772693e4058adda2ffaa507ea0a")]
     public partial class UseHealingItemAction : Action
     {
         private static readonly Journal Log = Logs.Here();

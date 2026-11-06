@@ -10,7 +10,7 @@ namespace Shooter.Game
         name: "Hunger Below",
         category: "Conditions",
         story: "[Agent] hunger is below [Threshold]",
-        id: "9c2e6f0a4b1d4e28a5b7c3d9e1f20a01")]
+        id: "49e196ccde4c4e1186f062d3463d9c63")]
     public partial class HungerBelowCondition : Condition
     {
         [SerializeReference] public BlackboardVariable<GameObject> Agent;

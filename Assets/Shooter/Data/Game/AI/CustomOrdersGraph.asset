@@ -186,8 +186,8 @@ MonoBehaviour:
     RuntimeTypeString: Shooter.Game.WalkToPointAction, Shooter.Game, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
-      m_Value0: 2904291017835359900
-      m_Value1: 579542553905575845
+      m_Value0: 454122283475979612
+      m_Value1: 4540737448644239035
     Variables:
     - Name: Agent
       Type:
@@ -211,8 +211,8 @@ MonoBehaviour:
     RuntimeTypeString: Shooter.Game.WalkTowardTargetAction, Shooter.Game, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
-      m_Value0: 7010483506657393231
-      m_Value1: 2466743276432188856
+      m_Value0: 15512439265292990191
+      m_Value1: 14803058803379361691
     Variables:
     - Name: Agent
       Type:
@@ -376,8 +376,8 @@ MonoBehaviour:
           m_SerializableType: Shooter.Game.WalkToPointAction, Shooter.Game, Version=0.0.0.0,
             Culture=neutral, PublicKeyToken=null
         NodeTypeID:
-          m_Value0: 2904291017835359900
-          m_Value1: 579542553905575845
+          m_Value0: 454122283475979612
+          m_Value1: 4540737448644239035
         m_FieldValues:
         - rid: 4310556271399928383
         - rid: 4310556271399928384
@@ -433,8 +433,8 @@ MonoBehaviour:
           m_SerializableType: Shooter.Game.WalkTowardTargetAction, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
-          m_Value0: 7010483506657393231
-          m_Value1: 2466743276432188856
+          m_Value0: 15512439265292990191
+          m_Value1: 14803058803379361691
         m_FieldValues:
         - rid: 4310556271399928398
         - rid: 4310556271399928399

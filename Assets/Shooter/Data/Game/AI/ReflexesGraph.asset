@@ -353,8 +353,8 @@ MonoBehaviour:
     RuntimeTypeString: Shooter.Game.EatFoodAction, Shooter.Game, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
-      m_Value0: 2904291017835359900
-      m_Value1: 219254583715936165
+      m_Value0: 16231417537972944178
+      m_Value1: 11629186948161539495
     Variables:
     - Name: Agent
       Type:
@@ -368,8 +368,8 @@ MonoBehaviour:
     RuntimeTypeString: Shooter.Game.UseHealingItemAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
-      m_Value0: 2904291017835359900
-      m_Value1: 291312177753864101
+      m_Value0: 6359151296452732020
+      m_Value1: 786449494378011309
     Variables:
     - Name: Agent
       Type:
@@ -576,8 +576,8 @@ MonoBehaviour:
           m_SerializableType: Shooter.Game.HealthBelowCondition, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
-          m_Value0: 2904291017835359900
-          m_Value1: 147196989678008229
+          m_Value0: 15224934311183381884
+          m_Value1: 7793603005364966821
         NodeModel:
           rid: 5215485742385201339
         m_FieldValues:
@@ -712,8 +712,8 @@ MonoBehaviour:
           m_SerializableType: Shooter.Game.HungerBelowCondition, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
-          m_Value0: 2904291017835359900
-          m_Value1: 75139395640080293
+          m_Value0: 1247018666627096905
+          m_Value1: 7177679280525209734
         NodeModel:
           rid: 5215485742385201408
         m_FieldValues:
@@ -774,8 +774,8 @@ MonoBehaviour:
           m_SerializableType: Shooter.Game.EatFoodAction, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
-          m_Value0: 2904291017835359900
-          m_Value1: 219254583715936165
+          m_Value0: 16231417537972944178
+          m_Value1: 11629186948161539495
         m_FieldValues:
         - rid: 5215485742385201472
     - rid: 5215485742385201470
@@ -831,8 +831,8 @@ MonoBehaviour:
           m_SerializableType: Shooter.Game.UseHealingItemAction, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
-          m_Value0: 2904291017835359900
-          m_Value1: 291312177753864101
+          m_Value0: 6359151296452732020
+          m_Value1: 786449494378011309
         m_FieldValues:
         - rid: 5215485742385201497
         - rid: 5215485742385201498
