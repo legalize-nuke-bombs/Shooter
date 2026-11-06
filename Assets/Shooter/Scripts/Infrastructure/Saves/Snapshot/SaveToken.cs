@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -16,12 +17,17 @@ namespace Shooter.Infrastructure
 
         public static SaveToken FromObject(object value)
         {
-            return new SaveToken(JToken.FromObject(value, SaveJson.Serializer));
+            return new SaveToken(value == null ? JValue.CreateNull() : JToken.FromObject(value, SaveJson.Serializer));
         }
 
         public T ToObject<T>()
         {
             return jsonToken.ToObject<T>(SaveJson.Serializer);
+        }
+
+        public object ToObject(Type type)
+        {
+            return jsonToken.ToObject(type, SaveJson.Serializer);
         }
 
         internal static SaveToken ReadFromJson(JsonReader reader)
