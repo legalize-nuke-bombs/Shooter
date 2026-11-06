@@ -10,11 +10,11 @@ namespace Shooter.Game
 {
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
-        name: "Think",
-        story: "[Agent] thinks",
+        name: "Llm Think",
+        story: "[Agent] llm thinks",
         category: "Action",
         id: "fc1cad496aea4e96ac03364ed4ff132d")]
-    public partial class ThinkAction : Action
+    public partial class LlmThinkAction : Action
     {
         private static readonly Journal Log = Logs.Here();
 

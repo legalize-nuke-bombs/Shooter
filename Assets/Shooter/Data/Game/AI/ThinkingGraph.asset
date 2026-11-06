@@ -218,14 +218,14 @@ MonoBehaviour:
         Max:
           rid: 4310556271399928269
     - rid: 4310556271399928340
-      type: {class: UnseenUrgentEventCondition, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: LlmUnseenUrgentEventCondition, ns: Shooter.Game, asm: Shooter.Game}
       data:
         Graph:
           rid: 4310556271399928249
         Agent:
           rid: 4310556271399928253
     - rid: 4310556271399928341
-      type: {class: HistoryOverflowingCondition, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: LlmHistoryOverflowingCondition, ns: Shooter.Game, asm: Shooter.Game}
       data:
         Graph:
           rid: 4310556271399928249
@@ -256,7 +256,7 @@ MonoBehaviour:
         m_Child:
           rid: 4310556271399928345
     - rid: 4310556271399928344
-      type: {class: ThinkAction, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: LlmThinkAction, ns: Shooter.Game, asm: Shooter.Game}
       data:
         ID:
           m_Value0: 11544835354849264415
@@ -299,14 +299,14 @@ MonoBehaviour:
         Max:
           rid: 4310556271399928276
     - rid: 4310556271399928347
-      type: {class: UnseenUrgentEventCondition, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: LlmUnseenUrgentEventCondition, ns: Shooter.Game, asm: Shooter.Game}
       data:
         Graph:
           rid: 4310556271399928249
         Agent:
           rid: 4310556271399928253
     - rid: 4310556271399928348
-      type: {class: HistoryOverflowingCondition, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: LlmHistoryOverflowingCondition, ns: Shooter.Game, asm: Shooter.Game}
       data:
         Graph:
           rid: 4310556271399928249
@@ -423,7 +423,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Think
     Story: '[Agent] thinks'
-    RuntimeTypeString: Shooter.Game.ThinkAction, Shooter.Game, Version=0.0.0.0, Culture=neutral,
+    RuntimeTypeString: Shooter.Game.LlmThinkAction, Shooter.Game, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 10830851896096136444
@@ -634,7 +634,7 @@ MonoBehaviour:
         - rid: 4310556271399928306
         - rid: 4310556271399928307
         NodeType:
-          m_SerializableType: Shooter.Game.ThinkAction, Shooter.Game, Version=0.0.0.0,
+          m_SerializableType: Shooter.Game.LlmThinkAction, Shooter.Game, Version=0.0.0.0,
             Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 10830851896096136444
@@ -769,7 +769,7 @@ MonoBehaviour:
       type: {class: ConditionModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
         ConditionType:
-          m_SerializableType: Shooter.Game.UnseenUrgentEventCondition, Shooter.Game,
+          m_SerializableType: Shooter.Game.LlmUnseenUrgentEventCondition, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
           m_Value0: 6435203304279116154
@@ -784,7 +784,7 @@ MonoBehaviour:
       type: {class: ConditionModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
         ConditionType:
-          m_SerializableType: Shooter.Game.HistoryOverflowingCondition, Shooter.Game,
+          m_SerializableType: Shooter.Game.LlmHistoryOverflowingCondition, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
           m_Value0: 13709213954717707535
@@ -971,7 +971,7 @@ MonoBehaviour:
       type: {class: ConditionModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
         ConditionType:
-          m_SerializableType: Shooter.Game.UnseenUrgentEventCondition, Shooter.Game,
+          m_SerializableType: Shooter.Game.LlmUnseenUrgentEventCondition, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
           m_Value0: 6435203304279116154
@@ -986,7 +986,7 @@ MonoBehaviour:
       type: {class: ConditionModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
         ConditionType:
-          m_SerializableType: Shooter.Game.HistoryOverflowingCondition, Shooter.Game,
+          m_SerializableType: Shooter.Game.LlmHistoryOverflowingCondition, Shooter.Game,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
           m_Value0: 13709213954717707535

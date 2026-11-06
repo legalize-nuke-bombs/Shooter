@@ -7,17 +7,17 @@ namespace Shooter.Game
 {
     [Serializable, GeneratePropertyBag]
     [Condition(
-        name: "Unseen Urgent Event",
+        name: "Llm History Overflowing",
         category: "Conditions",
-        story: "[Agent] has an unseen urgent event",
-        id: "7a09fa604f6f4e598d1322aaf84ace77")]
-    public partial class UnseenUrgentEventCondition : Condition
+        story: "[Agent] llm history is overflowing",
+        id: "0fedc61075e940be9c725f0f2bb4d49c")]
+    public partial class LlmHistoryOverflowingCondition : Condition
     {
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
         public override bool IsTrue()
         {
-            return Agent.Value.GetComponent<LlmHistory>().HasUnseenUrgentEvent;
+            return Agent.Value.GetComponent<LlmHistory>().IsOverflowing;
         }
     }
 }

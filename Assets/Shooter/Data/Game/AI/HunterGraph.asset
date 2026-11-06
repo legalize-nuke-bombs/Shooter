@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db920e62f70f420bb33c771449926fa4, type: 3}
-  m_Name: SimpleChaserGraph
+  m_Name: HunterGraph
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraph
   Graphs:
   - rid: 2635107353297158283
@@ -159,6 +159,8 @@ MonoBehaviour:
           rid: 2635107353297158484
         Target:
           rid: 2635107353297158483
+        OnlyEnemies:
+          rid: 4310556319773622623
     - rid: 2635107353297158490
       type: {class: WalkTowardTargetAction, ns: Shooter.Game, asm: Shooter.Game}
       data:
@@ -185,6 +187,14 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 0.25
+    - rid: 4310556319773622623
+      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 1
 --- !u!114 &-397783961917353036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,7 +205,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
-  m_Name: SimpleChaserGraph Blackboard
+  m_Name: HunterGraph Blackboard
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.RuntimeBlackboardAsset
   VersionTimestamp: 639244848710242461
   AssetID:
@@ -262,7 +272,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bad8f2220607dac4db5082ff333fafb8, type: 3}
-  m_Name: SimpleChaserGraph
+  m_Name: HunterGraph
   m_EditorClassIdentifier: Unity.Behavior.Authoring::Unity.Behavior.BehaviorAuthoringGraph
   Blackboard: {fileID: 219369856961588167}
   m_Description: 
@@ -317,8 +327,8 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Spot Nearest Character
     Story: '[Agent] spots the nearest character within [Radius] into [Target]'
-    RuntimeTypeString: Shooter.Game.SpotNearestCharacterAction, Shooter.Game,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    RuntimeTypeString: Shooter.Game.SpotNearestCharacterAction, Shooter.Game, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 11190965325235130470
       m_Value1: 6776327089499669439
@@ -342,8 +352,8 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Walk Toward Target
     Story: '[Agent] walks toward [Target] keeping [Reach], running if [Sprint]'
-    RuntimeTypeString: Shooter.Game.WalkTowardTargetAction, Shooter.Game,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    RuntimeTypeString: Shooter.Game.WalkTowardTargetAction, Shooter.Game, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 15512439265292990191
       m_Value1: 14803058803379361691
@@ -519,8 +529,8 @@ MonoBehaviour:
         - rid: 2635107353297158351
         - rid: 2635107353297158352
         NodeType:
-          m_SerializableType: Shooter.Game.SpotNearestCharacterAction,
-            Shooter.Game, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_SerializableType: Shooter.Game.SpotNearestCharacterAction, Shooter.Game,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 11190965325235130470
           m_Value1: 6776327089499669439
@@ -528,6 +538,7 @@ MonoBehaviour:
         - rid: 2635107353297158353
         - rid: 2635107353297158354
         - rid: 2635107353297158355
+        - rid: 4310556319773622621
     - rid: 2635107353297158351
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -828,6 +839,25 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 0.25
+    - rid: 4310556319773622621
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: OnlyEnemies
+        Type:
+          m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556319773622622
+        LinkedVariable:
+          rid: -2
+    - rid: 4310556319773622622
+      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 1
 --- !u!114 &219369856961588167
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -838,7 +868,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
-  m_Name: SimpleChaserGraph Blackboard
+  m_Name: HunterGraph Blackboard
   m_EditorClassIdentifier: Unity.Behavior.Authoring::Unity.Behavior.BehaviorBlackboardAuthoringAsset
   AssetID:
     m_Value0: 1499066117321053602
@@ -916,6 +946,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b27bb6d9a2c8d540a10dff10acc543e, type: 3}
-  m_Name: SimpleChaserGraph Debug Info
+  m_Name: HunterGraph Debug Info
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphDebugInfo
   m_CodeBreakPointsList: []
