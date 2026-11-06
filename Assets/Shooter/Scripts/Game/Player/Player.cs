@@ -21,6 +21,8 @@ namespace Shooter.Game
         // to a client are both owned by the host without being its own
         public bool IsControlledLocally => IsSpawned && controllingClientId.Value == NetworkManager.LocalClientId;
 
+        public bool IsControlled => controllingClientId.Value != NoClient;
+
         public event Action ControlChanged;
 
         private struct SaveData

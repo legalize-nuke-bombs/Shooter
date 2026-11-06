@@ -8,7 +8,6 @@ namespace Shooter.Infrastructure
     {
         private ShooterEntity entity;
         private ShooterTransformObserver observer;
-        private OptimizerAgent agent;
         private Vector2Int? chunk;
         private int agentCount;
 
@@ -16,7 +15,6 @@ namespace Shooter.Infrastructure
         {
             entity = GetComponent<ShooterEntity>();
             observer = GetComponent<ShooterTransformObserver>();
-            agent = GetComponent<OptimizerAgent>();
             observer.Moved += HandleMoved;
         }
 
@@ -46,12 +44,9 @@ namespace Shooter.Infrastructure
             UpdateEntityOptimized();
         }
 
-        // An enabled agent on the entity itself keeps it awake whatever the count: after a teleport the entity may count
-        // its agents before its own agent has moved its count, and finding none would put the agent to sleep with it
         private void UpdateEntityOptimized()
         {
-            bool hasEnabledAgent = agent != null && agent.isActiveAndEnabled;
-            entity.SetOptimized(agentCount == 0 && !hasEnabledAgent);
+            entity.SetOptimized(agentCount == 0);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Shooter.Game
 
         private void HandleControlChanged()
         {
-            bool keepsWorldAwake = IsServer || player.IsControlledLocally;
+            bool keepsWorldAwake = IsServer ? player.IsControlled : player.IsControlledLocally;
             ShooterEntity.SetEnabled(agent, keepsWorldAwake);
             Log.Info($"Player {name} {(keepsWorldAwake ? "keeps" : "does not keep")} the world around it awake on this machine");
         }
