@@ -85,7 +85,7 @@ namespace Shooter.Game
             long id = saved.ToObject<long>();
             if (id == IncrementalId.None) return null;
 
-            IncrementalId target = IncrementalId.FindLoadedFromSave(id);
+            IncrementalId target = IncrementalId.FindByValue(id, RegisterInactivePolicy.Include);
             if (target == null)
             {
                 Log.Warn($"Entity {name} found no entity with id {id} for variable {variable.Name}");

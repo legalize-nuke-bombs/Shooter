@@ -26,7 +26,7 @@ namespace Shooter.Game
         [SerializeField] private SystemPromptAsset[] systemPrompts;
         [SerializeField] [TextArea(5, 20)] private string character;
         [SerializeField] private KnowledgeAsset[] knowledges;
-        private string lifeStoryConflictPrompt = null; // The order in which component states are loaded from the save is not defined, so a conflict is registered during state loading and resolved in PostLoad, once all of them are loaded.
+        private string lifeStoryConflictPrompt = null; // LlmHistory, which the conflict is written into, loads its own state from the save and may do it after this component, so a conflict is registered during state loading and resolved in PostLoad, once all of them are loaded.
         [SerializeField] private float failureCooldown = 2.5f;
         [SerializeField] private int maxToolRounds = 10;
 

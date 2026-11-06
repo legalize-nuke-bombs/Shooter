@@ -67,17 +67,5 @@ namespace Shooter.Infrastructure
             }
             return null;
         }
-
-        public static IncrementalId FindLoadedFromSave(long id)
-        {
-            foreach (IncrementalId target in Registers.Instance.GetAll<IncrementalId>(RegisterInactivePolicy.Include))
-            {
-                if (target.IsLoadedFromSave && target.Value == id)
-                {
-                    return target;
-                }
-            }
-            return null;
-        }
     }
 }
