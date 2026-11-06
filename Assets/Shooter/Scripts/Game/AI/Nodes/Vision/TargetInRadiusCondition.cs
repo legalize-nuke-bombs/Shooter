@@ -9,7 +9,7 @@ namespace Shooter.Game
     [Condition(
         name: "Target In Radius",
         category: "Conditions",
-        story: "[Agent] sees [Target] in radius [Radius]",
+        story: "[Agent] has [Target] within [Radius]",
         id: "fcbec3c282ef42038614fcb6c455f483")]
     public partial class TargetInRadiusCondition : Condition
     {

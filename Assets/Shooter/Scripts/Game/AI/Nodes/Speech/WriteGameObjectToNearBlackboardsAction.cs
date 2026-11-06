@@ -13,10 +13,8 @@ namespace Shooter.Game
         story: "[Agent] writes game object [Variable] to near blackboards in radius [Radius], force if [Force]; include friends if [IncludeFriends], include neutrals if [IncludeNeutrals], include enemies if [IncludeEnemies]",
         category: "Action",
         id: "594cb4ba9a08476cbb726f54084f7d33")]
-    public partial class WriteVariableToFriendsBlackboardAction : Action
+    public partial class WriteGameObjectToNearBlackboardsAction : Action
     {
-        private static readonly Journal Log = Logs.Here();
-
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<GameObject> Variable;
         [SerializeReference] public BlackboardVariable<float> Radius;

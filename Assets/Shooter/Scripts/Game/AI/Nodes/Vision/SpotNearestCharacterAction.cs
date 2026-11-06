@@ -42,7 +42,11 @@ namespace Shooter.Game
                 result = target;
             }
 
-            if (result == null) return Status.Failure;
+            if (result == null)
+            {
+                Target.Value = null;
+                return Status.Failure;
+            }
 
             Target.Value = result.gameObject;
             return Status.Success;

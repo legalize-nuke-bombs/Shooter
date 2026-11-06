@@ -73,7 +73,7 @@ MonoBehaviour:
         GUID:
           m_Value0: 13759625495696635916
           m_Value1: 15915018932746325879
-        Name: HuntAgressionRadius
+        Name: HuntAggressionRadius
         m_Value: 30
     - rid: 4310556321406779959
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
@@ -223,7 +223,7 @@ MonoBehaviour:
         Target:
           rid: 4310556321406779957
     - rid: 4310556321406780049
-      type: {class: TargetIsEnemyCondition, ns: , asm: Shooter.Game}
+      type: {class: TargetIsEnemyCondition, ns: Shooter.Game, asm: Shooter.Game}
       data:
         Graph:
           rid: 2635107353297158283
@@ -262,7 +262,7 @@ MonoBehaviour:
         Name: 
         m_Value: 1
     - rid: 4310556321406780053
-      type: {class: WriteVariableToFriendsBlackboardAction, ns: Shooter.Game, asm: Shooter.Game}
+      type: {class: WriteGameObjectToNearBlackboardsAction, ns: Shooter.Game, asm: Shooter.Game}
       data:
         ID:
           m_Value0: 16102407315182437415
@@ -378,7 +378,7 @@ MonoBehaviour:
         GUID:
           m_Value0: 13759625495696635916
           m_Value1: 15915018932746325879
-        Name: HuntAgressionRadius
+        Name: HuntAggressionRadius
         m_Value: 30
     - rid: 2635107353297158316
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
@@ -579,7 +579,7 @@ MonoBehaviour:
     Story: '[Agent] writes game object [Variable] to near blackboards in radius [Radius],
       force if [Force]; include friends if [IncludeFriends], include neutrals if
       [IncludeNeutrals], include enemies if [IncludeEnemies]'
-    RuntimeTypeString: Shooter.Game.WriteVariableToFriendsBlackboardAction, Shooter.Game,
+    RuntimeTypeString: Shooter.Game.WriteGameObjectToNearBlackboardsAction, Shooter.Game,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 7802214340093037657
@@ -983,7 +983,7 @@ MonoBehaviour:
         ID:
           m_Value0: 13759625495696635916
           m_Value1: 15915018932746325879
-        Name: HuntAgressionRadius
+        Name: HuntAggressionRadius
         IsExposed: 1
         m_IsShared: 0
         m_Value: 30
@@ -1086,7 +1086,7 @@ MonoBehaviour:
           OperatorFieldModel:
             rid: -2
         - ConditionType:
-            m_SerializableType: TargetIsEnemyCondition, Shooter.Game, Version=0.0.0.0,
+            m_SerializableType: Shooter.Game.TargetIsEnemyCondition, Shooter.Game, Version=0.0.0.0,
               Culture=neutral, PublicKeyToken=null
           ConditionTypeID:
             m_Value0: 13925976365196671842
@@ -1424,7 +1424,7 @@ MonoBehaviour:
         - rid: 4310556321406779800
         - rid: 4310556321406779801
         NodeType:
-          m_SerializableType: Shooter.Game.WriteVariableToFriendsBlackboardAction,
+          m_SerializableType: Shooter.Game.WriteGameObjectToNearBlackboardsAction,
             Shooter.Game, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 7802214340093037657
@@ -1666,7 +1666,7 @@ MonoBehaviour:
         ID:
           m_Value0: 13759625495696635916
           m_Value1: 15915018932746325879
-        Name: HuntAgressionRadius
+        Name: HuntAggressionRadius
         IsExposed: 1
         m_IsShared: 0
         m_Value: 30
