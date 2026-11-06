@@ -17,7 +17,7 @@ namespace Shooter.Game
         private const float MaxTargetDrift = 2f;
 
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
-        [SerializeReference] public BlackboardVariable<Transform> Target = new();
+        [SerializeReference] public BlackboardVariable<GameObject> Target = new();
         [SerializeReference] public BlackboardVariable<float> Reach = new();
         [SerializeReference] public BlackboardVariable<bool> Sprint = new();
 
@@ -36,7 +36,7 @@ namespace Shooter.Game
                 if (movement == null) return Status.Failure;
             }
 
-            Vector3 targetPosition = Target.Value.position;
+            Vector3 targetPosition = Target.Value.transform.position;
             Vector3 feetPosition = movement.FeetPosition;
             Vector3 offsetFromTarget = new(feetPosition.x - targetPosition.x, 0f, feetPosition.z - targetPosition.z);
 

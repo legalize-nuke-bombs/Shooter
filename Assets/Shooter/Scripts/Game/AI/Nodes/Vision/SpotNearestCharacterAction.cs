@@ -17,39 +17,34 @@ namespace Shooter.Game
     {
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<float> Radius = new(30f);
-        [SerializeReference] public BlackboardVariable<Transform> Target = new();
+        [SerializeReference] public BlackboardVariable<GameObject> Target = new();
         [SerializeReference] public BlackboardVariable<bool> OnlyEnemies = new(true);
-
-        private Character ownCharacter;
-        private Relations relations;
 
         protected override Status OnStart()
         {
-            if (Agent.Value == null) return Status.Failure;
-            if (ownCharacter == null) ownCharacter = Agent.Value.GetComponent<Character>();
-            if (relations == null) relations = Agent.Value.GetComponent<Relations>();
-
-            Vector3 agentPosition = Agent.Value.transform.position;
+            Character character = Agent.Value.GetComponent<Character>();
+            Relations relations = Agent.Value.GetComponent<Relations>();
+            Vector3 position = Agent.Value.transform.position;
 
             float nearestSqrDistance = Radius.Value * Radius.Value;
-            Character spottedCharacter = null;
+            Character result = null;
 
-            foreach (Character character in  Registers.Instance.Get<Chunks>().FindInRadius<Character>(agentPosition, Radius.Value, ChunkInactivePolicy.Exclude))
+            foreach (Character target in  Registers.Instance.Get<Chunks>().FindInRadius<Character>(position, Radius.Value, ChunkInactivePolicy.Exclude))
             {
-                if (character == ownCharacter) continue;
-                if (character.TryGetComponent(out Health health) && !health.IsAlive) continue;
+                if (target == character) continue;
+                if (target.TryGetComponent(out Health targetHealth) && !targetHealth.IsAlive) continue;
 
-                float sqrDistance = (character.transform.position - agentPosition).sqrMagnitude;
+                float sqrDistance = (target.transform.position - position).sqrMagnitude;
                 if (sqrDistance >= nearestSqrDistance) continue;
-                if (OnlyEnemies.Value && relations.GetStatus(character) != RelationStatus.Enemy) continue;
+                if (OnlyEnemies.Value && relations.GetStatus(target) != RelationStatus.Enemy) continue;
 
                 nearestSqrDistance = sqrDistance;
-                spottedCharacter = character;
+                result = target;
             }
 
-            if (spottedCharacter == null) return Status.Failure;
+            if (result == null) return Status.Failure;
 
-            Target.Value = spottedCharacter.transform;
+            Target.Value = result.gameObject;
             return Status.Success;
         }
     }
