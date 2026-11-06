@@ -66,7 +66,7 @@ If the target is reachable and still exists, your character will never stop foll
 
             btAgent.SetVariableValue("CustomOrderCurrent", CustomOrder.Follow);
             btAgent.SetVariableValue("CustomOrderFollowTarget", targetCharacter.gameObject);
-            btAgent.SetVariableValue("CustomOrderFollowReach", arguments.Reach);
+            btAgent.SetVariableValue("CustomOrderFollowReach", (float)arguments.Reach);
             btAgent.SetVariableValue("CustomOrderFollowSprint", arguments.Sprint);
 
             return $"You are now following character ID {arguments.TargetId}. Remember to use the `halt_bt` tool as soon as you need to stop following them.";

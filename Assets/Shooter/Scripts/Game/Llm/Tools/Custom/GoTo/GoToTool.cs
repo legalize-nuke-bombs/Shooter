@@ -68,7 +68,7 @@ To stop going, call `halt_bt` tool.
             }
 
             btAgent.SetVariableValue("CustomOrderCurrent", CustomOrder.GoTo);
-            btAgent.SetVariableValue("CustomOrderGoToTarget", target);
+            btAgent.SetVariableValue("CustomOrderGoToDestination", groundPoint);
             btAgent.SetVariableValue("CustomOrderGoToSprint", arguments.Sprint);
 
             return $"You are now going to {targetFormatted}. You will be notified when you will arrive.";
