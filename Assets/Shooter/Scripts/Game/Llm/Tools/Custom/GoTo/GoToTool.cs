@@ -23,7 +23,7 @@ Your character automatically finds the path to the point and travels any distanc
 Your character automatically avoids dangerous areas (cold bodies of water, etc.)
 x, y, z: whole meters, the world coordinates shown next to everything you see and next to yourself in look_at_yourself; y is height. To reach a thing, pass its coordinates.
 sprint: true to run.
-The result comes at once, the walk itself takes time: you will be notified when you arrive or when your character failed to find path.
+The result comes at once, the walk itself takes time: you will be notified when your character arrives, when there is no way further, or when it is suddenly moved somewhere else.
 To stop going, call `halt_bt` tool.
 ";
 
@@ -71,7 +71,7 @@ To stop going, call `halt_bt` tool.
             btAgent.SetVariableValue("CustomOrderGoToDestination", groundPoint);
             btAgent.SetVariableValue("CustomOrderGoToSprint", arguments.Sprint);
 
-            return $"You are now going to {targetFormatted}. You will be notified when you will arrive.";
+            return $"You are now going to {targetFormatted}. You will be notified when the walk ends.";
         }
     }
 }

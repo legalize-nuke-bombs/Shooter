@@ -20,6 +20,9 @@ namespace Shooter.Game
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<float> UnderHealPenalty = new(1f);
         [SerializeReference] public BlackboardVariable<float> OverHealBasePenalty = new(1f);
+        [SerializeReference] public BlackboardVariable<string> HealingItem = new();
+        [SerializeReference] public BlackboardVariable<float> HpBefore = new();
+        [SerializeReference] public BlackboardVariable<float> HpAfter = new();
 
         protected override Status OnStart()
         {
@@ -60,7 +63,7 @@ namespace Shooter.Game
                 return Status.Failure;
             }
 
-            int hpBefore = (int)health.Hp;
+            double hpBefore = health.Hp;
             if (!inventoryUser.TryUseItem(bestItem))
             {
                 Log.Error($"Entity {Agent.Value.name} could not use heal {bestItem.Id} it has in the bag");
@@ -68,14 +71,9 @@ namespace Shooter.Game
             }
 
             Log.Info($"Entity {Agent.Value.name} used heal {bestItem.Id} by behavior graph, missing {missingHp}");
-            BehaviorReporter behaviorReporter = Agent.Value.GetComponent<BehaviorReporter>();
-            if (behaviorReporter != null)
-            {
-                behaviorReporter.Report(new BehaviorReport
-                {
-                    Prompt = $"Your character automatically healed using {bestItem.Id} ({hpBefore}hp -> {(int)health.Hp}hp)"
-                });
-            }
+            HealingItem.Value = bestItem.Id;
+            HpBefore.Value = (float)hpBefore;
+            HpAfter.Value = (float)health.Hp;
             return Status.Success;
         }
     }

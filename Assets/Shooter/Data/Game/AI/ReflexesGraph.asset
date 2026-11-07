@@ -21,7 +21,7 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 4310556321406780113
+    - rid: 4310556342156788379
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -29,7 +29,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 0}
-    - rid: 4310556321406780114
+    - rid: 4310556342156788380
       type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -37,7 +37,7 @@ MonoBehaviour:
           m_Value1: 17730836862271504175
         Name: ReflexesHealEnabled
         m_Value: 1
-    - rid: 4310556321406780115
+    - rid: 4310556342156788381
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -45,7 +45,7 @@ MonoBehaviour:
           m_Value1: 11335960023169065206
         Name: ReflexesHealThreshold
         m_Value: 90
-    - rid: 4310556321406780116
+    - rid: 4310556342156788382
       type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -53,7 +53,7 @@ MonoBehaviour:
           m_Value1: 12853748281032907500
         Name: ReflexesEatEnabled
         m_Value: 1
-    - rid: 4310556321406780117
+    - rid: 4310556342156788383
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -61,7 +61,55 @@ MonoBehaviour:
           m_Value1: 14541110908225715925
         Name: ReflexesEatThreshold
         m_Value: 20
-    - rid: 4310556321406780123
+    - rid: 4310556342156788384
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1147961392092376416
+          m_Value1: 14327230524029124304
+        Name: ReflexesHealingItem
+        m_Value: 
+    - rid: 4310556342156788385
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8567124419655169179
+          m_Value1: 5852106526600605806
+        Name: ReflexesHpBefore
+        m_Value: 0
+    - rid: 4310556342156788386
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17448803307755733962
+          m_Value1: 12918207935547654565
+        Name: ReflexesHpAfter
+        m_Value: 0
+    - rid: 4310556342156788387
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 6717296509011556774
+          m_Value1: 10277236809750902886
+        Name: ReflexesEatenItem
+        m_Value: 
+    - rid: 4310556342156788388
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3241366180304982282
+          m_Value1: 5498960736127015448
+        Name: ReflexesSaturationBefore
+        m_Value: 0
+    - rid: 4310556342156788389
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 13782109694948725439
+          m_Value1: 10685921671781282564
+        Name: ReflexesSaturationAfter
+        m_Value: 0
+    - rid: 4310556342156788395
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -69,23 +117,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1.5
-    - rid: 4310556321406780130
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 4310556321406780131
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 4310556321406780132
+    - rid: 4310556342156788404
       type: {class: 'BlackboardVariable`1[[Unity.Behavior.ConditionOperator, Unity.Behavior]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -93,7 +125,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 0
-    - rid: 4310556321406780133
+    - rid: 4310556342156788405
       type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -101,7 +133,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 4310556321406780134
+    - rid: 4310556342156788408
       type: {class: 'BlackboardVariable`1[[Unity.Behavior.ConditionOperator, Unity.Behavior]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -109,7 +141,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 0
-    - rid: 4310556321406780135
+    - rid: 4310556342156788409
       type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -117,7 +149,57 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 4310556321406780209
+    - rid: 4310556342156788410
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 1
+    - rid: 4310556342156788411
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 1
+    - rid: 4310556342156788412
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: Your character automatically healed using {ReflexesHealingItem}
+          ({ReflexesHpBefore}hp -> {ReflexesHpAfter}hp)
+    - rid: 4310556342156788413
+      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 0
+    - rid: 4310556342156788414
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: Your character automatically ate {ReflexesEatenItem} ({ReflexesSaturationBefore}
+          saturation -> {ReflexesSaturationAfter} saturation)
+    - rid: 4310556342156788415
+      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 0
+    - rid: 4310556342156788564
       type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -128,10 +210,10 @@ MonoBehaviour:
         m_Parent:
           rid: -2
         m_Child:
-          rid: 4310556321406780210
+          rid: 4310556342156788565
         Repeat: 1
         AllowMultipleRepeatsPerTick: 0
-    - rid: 4310556321406780210
+    - rid: 4310556342156788565
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -140,13 +222,13 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201288
         m_Parent:
-          rid: 4310556321406780209
+          rid: 4310556342156788564
         m_Children:
-        - rid: 4310556321406780211
-        - rid: 4310556321406780212
-        - rid: 4310556321406780213
+        - rid: 4310556342156788566
+        - rid: 4310556342156788567
+        - rid: 4310556342156788568
         m_RegisteredObservers: []
-    - rid: 4310556321406780211
+    - rid: 4310556342156788566
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -155,11 +237,11 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201288
         m_Parent:
-          rid: 4310556321406780210
+          rid: 4310556342156788565
         m_Children:
-        - rid: 4310556321406780214
+        - rid: 4310556342156788569
         m_RegisteredObservers: []
-    - rid: 4310556321406780212
+    - rid: 4310556342156788567
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -168,11 +250,11 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201288
         m_Parent:
-          rid: 4310556321406780210
+          rid: 4310556342156788565
         m_Children:
-        - rid: 4310556321406780215
+        - rid: 4310556342156788570
         m_RegisteredObservers: []
-    - rid: 4310556321406780213
+    - rid: 4310556342156788568
       type: {class: WaitAction, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -181,10 +263,10 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201288
         m_Parent:
-          rid: 4310556321406780210
+          rid: 4310556342156788565
         SecondsToWait:
-          rid: 4310556321406780123
-    - rid: 4310556321406780214
+          rid: 4310556342156788395
+    - rid: 4310556342156788569
       type: {class: ConditionalGuardModifier, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -193,15 +275,15 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201288
         m_Parent:
-          rid: 4310556321406780211
+          rid: 4310556342156788566
         m_Child:
-          rid: 4310556321406780216
+          rid: 4310556342156788571
         m_Conditions:
-        - rid: 4310556321406780217
-        - rid: 4310556321406780218
+        - rid: 4310556342156788572
+        - rid: 4310556342156788573
         m_RequiresAllConditions: 1
         m_ObserverType: 0
-    - rid: 4310556321406780215
+    - rid: 4310556342156788570
       type: {class: ConditionalGuardModifier, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -210,15 +292,83 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201288
         m_Parent:
-          rid: 4310556321406780212
+          rid: 4310556342156788567
         m_Child:
-          rid: 4310556321406780219
+          rid: 4310556342156788574
         m_Conditions:
-        - rid: 4310556321406780220
-        - rid: 4310556321406780221
+        - rid: 4310556342156788575
+        - rid: 4310556342156788576
         m_RequiresAllConditions: 1
         m_ObserverType: 0
-    - rid: 4310556321406780216
+    - rid: 4310556342156788571
+      type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 15600160945308863471
+          m_Value1: 1778899325097156570
+        Graph:
+          rid: 5215485742385201288
+        m_Parent:
+          rid: 4310556342156788569
+        m_Children:
+        - rid: 4310556342156788577
+        - rid: 4310556342156788578
+        m_RegisteredObservers: []
+    - rid: 4310556342156788572
+      type: {class: VariableComparisonCondition, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        Graph:
+          rid: 5215485742385201288
+        Variable:
+          rid: 4310556342156788380
+        Operator:
+          rid: 4310556342156788404
+        ComparisonValue:
+          rid: 4310556342156788405
+    - rid: 4310556342156788573
+      type: {class: HealthBelowCondition, ns: Shooter.Game, asm: Shooter.Game}
+      data:
+        Graph:
+          rid: 5215485742385201288
+        Agent:
+          rid: 4310556342156788379
+        Threshold:
+          rid: 4310556342156788381
+    - rid: 4310556342156788574
+      type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 9567056074142461034
+          m_Value1: 9311503306427509133
+        Graph:
+          rid: 5215485742385201288
+        m_Parent:
+          rid: 4310556342156788570
+        m_Children:
+        - rid: 4310556342156788579
+        - rid: 4310556342156788580
+        m_RegisteredObservers: []
+    - rid: 4310556342156788575
+      type: {class: VariableComparisonCondition, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        Graph:
+          rid: 5215485742385201288
+        Variable:
+          rid: 4310556342156788382
+        Operator:
+          rid: 4310556342156788408
+        ComparisonValue:
+          rid: 4310556342156788409
+    - rid: 4310556342156788576
+      type: {class: HungerBelowCondition, ns: Shooter.Game, asm: Shooter.Game}
+      data:
+        Graph:
+          rid: 5215485742385201288
+        Agent:
+          rid: 4310556342156788379
+        Threshold:
+          rid: 4310556342156788383
+    - rid: 4310556342156788577
       type: {class: UseHealingItemAction, ns: Shooter.Game, asm: Shooter.Game}
       data:
         ID:
@@ -227,34 +377,36 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201288
         m_Parent:
-          rid: 4310556321406780214
+          rid: 4310556342156788571
         Agent:
-          rid: 4310556321406780113
+          rid: 4310556342156788379
         UnderHealPenalty:
-          rid: 4310556321406780130
+          rid: 4310556342156788410
         OverHealBasePenalty:
-          rid: 4310556321406780131
-    - rid: 4310556321406780217
-      type: {class: VariableComparisonCondition, ns: Unity.Behavior, asm: Unity.Behavior}
+          rid: 4310556342156788411
+        HealingItem:
+          rid: 4310556342156788384
+        HpBefore:
+          rid: 4310556342156788385
+        HpAfter:
+          rid: 4310556342156788386
+    - rid: 4310556342156788578
+      type: {class: ReportAction, ns: Shooter.Game, asm: Shooter.Game}
       data:
+        ID:
+          m_Value0: 14890439887438562062
+          m_Value1: 6659378095941132045
         Graph:
           rid: 5215485742385201288
-        Variable:
-          rid: 4310556321406780114
-        Operator:
-          rid: 4310556321406780132
-        ComparisonValue:
-          rid: 4310556321406780133
-    - rid: 4310556321406780218
-      type: {class: HealthBelowCondition, ns: Shooter.Game, asm: Shooter.Game}
-      data:
-        Graph:
-          rid: 5215485742385201288
+        m_Parent:
+          rid: 4310556342156788571
         Agent:
-          rid: 4310556321406780113
-        Threshold:
-          rid: 4310556321406780115
-    - rid: 4310556321406780219
+          rid: 4310556342156788379
+        Message:
+          rid: 4310556342156788412
+        Urgent:
+          rid: 4310556342156788413
+    - rid: 4310556342156788579
       type: {class: EatFoodAction, ns: Shooter.Game, asm: Shooter.Game}
       data:
         ID:
@@ -263,29 +415,31 @@ MonoBehaviour:
         Graph:
           rid: 5215485742385201288
         m_Parent:
-          rid: 4310556321406780215
+          rid: 4310556342156788574
         Agent:
-          rid: 4310556321406780113
-    - rid: 4310556321406780220
-      type: {class: VariableComparisonCondition, ns: Unity.Behavior, asm: Unity.Behavior}
+          rid: 4310556342156788379
+        EatenItem:
+          rid: 4310556342156788387
+        SaturationBefore:
+          rid: 4310556342156788388
+        SaturationAfter:
+          rid: 4310556342156788389
+    - rid: 4310556342156788580
+      type: {class: ReportAction, ns: Shooter.Game, asm: Shooter.Game}
       data:
+        ID:
+          m_Value0: 1469691027282533830
+          m_Value1: 12650639524270092636
         Graph:
           rid: 5215485742385201288
-        Variable:
-          rid: 4310556321406780116
-        Operator:
-          rid: 4310556321406780134
-        ComparisonValue:
-          rid: 4310556321406780135
-    - rid: 4310556321406780221
-      type: {class: HungerBelowCondition, ns: Shooter.Game, asm: Shooter.Game}
-      data:
-        Graph:
-          rid: 5215485742385201288
+        m_Parent:
+          rid: 4310556342156788574
         Agent:
-          rid: 4310556321406780113
-        Threshold:
-          rid: 4310556321406780117
+          rid: 4310556342156788379
+        Message:
+          rid: 4310556342156788414
+        Urgent:
+          rid: 4310556342156788415
     - rid: 5215485742385201288
       type: {class: BehaviorGraphModule, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -297,8 +451,8 @@ MonoBehaviour:
           rid: 5215485742385201289
         BlackboardGroupReferences: []
         Root:
-          rid: 4310556321406780209
-        m_VersionTimestamp: 639295796141908828
+          rid: 4310556342156788564
+        m_VersionTimestamp: 639296564867864368
     - rid: 5215485742385201289
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -309,11 +463,17 @@ MonoBehaviour:
       type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         m_Variables:
-        - rid: 4310556321406780113
-        - rid: 4310556321406780114
-        - rid: 4310556321406780115
-        - rid: 4310556321406780116
-        - rid: 4310556321406780117
+        - rid: 4310556342156788379
+        - rid: 4310556342156788380
+        - rid: 4310556342156788381
+        - rid: 4310556342156788382
+        - rid: 4310556342156788383
+        - rid: 4310556342156788384
+        - rid: 4310556342156788385
+        - rid: 4310556342156788386
+        - rid: 4310556342156788387
+        - rid: 4310556342156788388
+        - rid: 4310556342156788389
 --- !u!114 &-4986849513362280722
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -335,7 +495,13 @@ MonoBehaviour:
   - rid: 4310556321004126436
   - rid: 4310556321004126580
   - rid: 4310556321004126728
-  m_VersionTimestamp: 639295796137609635
+  - rid: 4310556342156788416
+  - rid: 4310556342156788417
+  - rid: 4310556342156788418
+  - rid: 4310556342156788419
+  - rid: 4310556342156788420
+  - rid: 4310556342156788421
+  m_VersionTimestamp: 639296564861947569
   m_CommandBuffer:
     m_Commands: []
   m_RuntimeBlackboardAsset: {fileID: 9191940050830697230}
@@ -382,6 +548,66 @@ MonoBehaviour:
         IsExposed: 1
         m_IsShared: 0
         m_Value: 20
+    - rid: 4310556342156788416
+      type: {class: 'TypedVariableModel`1[[System.String, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 1147961392092376416
+          m_Value1: 14327230524029124304
+        Name: ReflexesHealingItem
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 
+    - rid: 4310556342156788417
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 8567124419655169179
+          m_Value1: 5852106526600605806
+        Name: ReflexesHpBefore
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 4310556342156788418
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 17448803307755733962
+          m_Value1: 12918207935547654565
+        Name: ReflexesHpAfter
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 4310556342156788419
+      type: {class: 'TypedVariableModel`1[[System.String, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 6717296509011556774
+          m_Value1: 10277236809750902886
+        Name: ReflexesEatenItem
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 
+    - rid: 4310556342156788420
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 3241366180304982282
+          m_Value1: 5498960736127015448
+        Name: ReflexesSaturationBefore
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 4310556342156788421
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 13782109694948725439
+          m_Value1: 10685921671781282564
+        Name: ReflexesSaturationAfter
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 0
     - rid: 5215485742385201293
       type: {class: 'TypedVariableModel`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -416,7 +642,11 @@ MonoBehaviour:
   - rid: 5215485742385201469
   - rid: 5215485742385201494
   - rid: 5215485744409739440
-  m_VersionTimestamp: 639295796141908828
+  - rid: 4310556342156788422
+  - rid: 4310556342156788423
+  - rid: 4310556342156788424
+  - rid: 4310556342156788425
+  m_VersionTimestamp: 639296564867864368
   m_SerializedVersion: 3
   m_DebugInfo: {fileID: 6253051722078241420}
   m_RuntimeGraph: {fileID: -8636814689385582631}
@@ -481,6 +711,21 @@ MonoBehaviour:
         m_SerializableType: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
       Tooltip: 
+    - Name: EatenItem
+      Type:
+        m_SerializableType: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
+    - Name: SaturationBefore
+      Type:
+        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
+    - Name: SaturationAfter
+      Type:
+        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
     NamedChildren: []
     IsPlaceholder: 0
   - Name: Use Healing Item
@@ -506,6 +751,21 @@ MonoBehaviour:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
       Tooltip: 
+    - Name: HealingItem
+      Type:
+        m_SerializableType: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
+    - Name: HpBefore
+      Type:
+        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
+    - Name: HpAfter
+      Type:
+        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
     NamedChildren: []
     IsPlaceholder: 0
   - Name: Wait (Seconds)
@@ -519,6 +779,31 @@ MonoBehaviour:
     - Name: SecondsToWait
       Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: Report
+    Story: '[Agent] reports [Message], urgent [Urgent]'
+    RuntimeTypeString: Shooter.Game.ReportAction, Shooter.Game, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 14071418044931473969
+      m_Value1: 14878072567239933862
+    Variables:
+    - Name: Agent
+      Type:
+        m_SerializableType: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    - Name: Message
+      Type:
+        m_SerializableType: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
+    - Name: Urgent
+      Type:
+        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
       Tooltip: 
     NamedChildren: []
@@ -844,6 +1129,464 @@ MonoBehaviour:
         IsExposed: 1
         m_IsShared: 0
         m_Value: 20
+    - rid: 4310556342156788422
+      type: {class: CompositeNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -75.95895, y: 395.86432}
+        ID:
+          m_Value0: 15600160945308863471
+          m_Value1: 1778899325097156570
+        Parents: []
+        PortModels:
+        - rid: 4310556342156788432
+        - rid: 4310556342156788433
+        NodeType:
+          m_SerializableType: Unity.Behavior.SequenceComposite, Unity.Behavior, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 10181448252506100447
+          m_Value1: 8737116843063128493
+        m_FieldValues: []
+    - rid: 4310556342156788423
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 54.041054, y: 505.86432}
+        ID:
+          m_Value0: 14890439887438562062
+          m_Value1: 6659378095941132045
+        Parents: []
+        PortModels:
+        - rid: 4310556342156788434
+        - rid: 4310556342156788435
+        NodeType:
+          m_SerializableType: Shooter.Game.ReportAction, Shooter.Game, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 14071418044931473969
+          m_Value1: 14878072567239933862
+        m_FieldValues:
+        - rid: 4310556342156788436
+        - rid: 4310556342156788437
+        - rid: 4310556342156788438
+    - rid: 4310556342156788424
+      type: {class: CompositeNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 259.1062, y: 406.75156}
+        ID:
+          m_Value0: 9567056074142461034
+          m_Value1: 9311503306427509133
+        Parents: []
+        PortModels:
+        - rid: 4310556342156788439
+        - rid: 4310556342156788440
+        NodeType:
+          m_SerializableType: Unity.Behavior.SequenceComposite, Unity.Behavior, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 10181448252506100447
+          m_Value1: 8737116843063128493
+        m_FieldValues: []
+    - rid: 4310556342156788425
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 389.1062, y: 516.7516}
+        ID:
+          m_Value0: 1469691027282533830
+          m_Value1: 12650639524270092636
+        Parents: []
+        PortModels:
+        - rid: 4310556342156788441
+        - rid: 4310556342156788442
+        NodeType:
+          m_SerializableType: Shooter.Game.ReportAction, Shooter.Game, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 14071418044931473969
+          m_Value1: 14878072567239933862
+        m_FieldValues:
+        - rid: 4310556342156788443
+        - rid: 4310556342156788444
+        - rid: 4310556342156788445
+    - rid: 4310556342156788426
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: EatenItem
+        Type:
+          m_SerializableType: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788446
+        LinkedVariable:
+          rid: 4310556342156788447
+    - rid: 4310556342156788427
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: SaturationBefore
+        Type:
+          m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788448
+        LinkedVariable:
+          rid: 4310556342156788449
+    - rid: 4310556342156788428
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: SaturationAfter
+        Type:
+          m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788450
+        LinkedVariable:
+          rid: 4310556342156788451
+    - rid: 4310556342156788429
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: HealingItem
+        Type:
+          m_SerializableType: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788452
+        LinkedVariable:
+          rid: 4310556342156788453
+    - rid: 4310556342156788430
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: HpBefore
+        Type:
+          m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788454
+        LinkedVariable:
+          rid: 4310556342156788455
+    - rid: 4310556342156788431
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: HpAfter
+        Type:
+          m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788456
+        LinkedVariable:
+          rid: 4310556342156788457
+    - rid: 4310556342156788432
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 4310556342156788422
+        m_Connections:
+        - rid: 5215485742385201341
+    - rid: 4310556342156788433
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 4310556342156788422
+        m_Connections:
+        - rid: 5215485742385201495
+        - rid: 4310556342156788434
+    - rid: 4310556342156788434
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 4310556342156788423
+        m_Connections:
+        - rid: 4310556342156788433
+    - rid: 4310556342156788435
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 4310556342156788423
+        m_Connections: []
+    - rid: 4310556342156788436
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Agent
+        Type:
+          m_SerializableType: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 4310556342156788458
+        LinkedVariable:
+          rid: 4310556342156788459
+    - rid: 4310556342156788437
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Message
+        Type:
+          m_SerializableType: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788460
+        LinkedVariable:
+          rid: -2
+    - rid: 4310556342156788438
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Urgent
+        Type:
+          m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788461
+        LinkedVariable:
+          rid: -2
+    - rid: 4310556342156788439
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 4310556342156788424
+        m_Connections:
+        - rid: 5215485742385201410
+    - rid: 4310556342156788440
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 4310556342156788424
+        m_Connections:
+        - rid: 5215485742385201470
+        - rid: 4310556342156788441
+    - rid: 4310556342156788441
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 4310556342156788425
+        m_Connections:
+        - rid: 4310556342156788440
+    - rid: 4310556342156788442
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 4310556342156788425
+        m_Connections: []
+    - rid: 4310556342156788443
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Agent
+        Type:
+          m_SerializableType: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 4310556342156788462
+        LinkedVariable:
+          rid: 4310556342156788459
+    - rid: 4310556342156788444
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Message
+        Type:
+          m_SerializableType: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788463
+        LinkedVariable:
+          rid: -2
+    - rid: 4310556342156788445
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Urgent
+        Type:
+          m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 4310556342156788464
+        LinkedVariable:
+          rid: -2
+    - rid: 4310556342156788446
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 
+    - rid: 4310556342156788447
+      type: {class: 'TypedVariableModel`1[[System.String, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 6717296509011556774
+          m_Value1: 10277236809750902886
+        Name: ReflexesEatenItem
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 
+    - rid: 4310556342156788448
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 0
+    - rid: 4310556342156788449
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 3241366180304982282
+          m_Value1: 5498960736127015448
+        Name: ReflexesSaturationBefore
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 4310556342156788450
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 0
+    - rid: 4310556342156788451
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 13782109694948725439
+          m_Value1: 10685921671781282564
+        Name: ReflexesSaturationAfter
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 4310556342156788452
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 
+    - rid: 4310556342156788453
+      type: {class: 'TypedVariableModel`1[[System.String, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 1147961392092376416
+          m_Value1: 14327230524029124304
+        Name: ReflexesHealingItem
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 
+    - rid: 4310556342156788454
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 0
+    - rid: 4310556342156788455
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 8567124419655169179
+          m_Value1: 5852106526600605806
+        Name: ReflexesHpBefore
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 4310556342156788456
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 0
+    - rid: 4310556342156788457
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 17448803307755733962
+          m_Value1: 12918207935547654565
+        Name: ReflexesHpAfter
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 4310556342156788458
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 4310556342156788459
+      type: {class: 'TypedVariableModel`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 4310556342156788460
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: Your character automatically healed using {ReflexesHealingItem}
+          ({ReflexesHpBefore}hp -> {ReflexesHpAfter}hp)
+    - rid: 4310556342156788461
+      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 0
+    - rid: 4310556342156788462
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 4310556342156788463
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: Your character automatically ate {ReflexesEatenItem} ({ReflexesSaturationBefore}
+          saturation -> {ReflexesSaturationAfter} saturation)
+    - rid: 4310556342156788464
+      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 0
     - rid: 5215485742385201294
       type: {class: StartNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
@@ -995,7 +1738,7 @@ MonoBehaviour:
         m_NodeModel:
           rid: 5215485742385201339
         m_Connections:
-        - rid: 5215485742385201495
+        - rid: 4310556342156788432
     - rid: 5215485742385201382
       type: {class: CompositeNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
@@ -1078,11 +1821,11 @@ MonoBehaviour:
         m_NodeModel:
           rid: 5215485742385201408
         m_Connections:
-        - rid: 5215485742385201470
+        - rid: 4310556342156788439
     - rid: 5215485742385201469
       type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: 259.1062, y: 406.75156}
+        Position: {x: 129.1062, y: 516.7516}
         ID:
           m_Value0: 16412162397222012813
           m_Value1: 5639656313108456666
@@ -1098,6 +1841,9 @@ MonoBehaviour:
           m_Value1: 11629186948161539495
         m_FieldValues:
         - rid: 5215485742385201472
+        - rid: 4310556342156788426
+        - rid: 4310556342156788427
+        - rid: 4310556342156788428
     - rid: 5215485742385201470
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1107,7 +1853,7 @@ MonoBehaviour:
         m_NodeModel:
           rid: 5215485742385201469
         m_Connections:
-        - rid: 5215485742385201410
+        - rid: 4310556342156788440
     - rid: 5215485742385201471
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1139,7 +1885,7 @@ MonoBehaviour:
     - rid: 5215485742385201494
       type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -75.95895, y: 395.86432}
+        Position: {x: -205.95895, y: 505.86432}
         ID:
           m_Value0: 6613795897804068779
           m_Value1: 5086354491198774263
@@ -1157,6 +1903,9 @@ MonoBehaviour:
         - rid: 5215485742385201497
         - rid: 5215485742385201498
         - rid: 5215485742385201499
+        - rid: 4310556342156788429
+        - rid: 4310556342156788430
+        - rid: 4310556342156788431
     - rid: 5215485742385201495
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1166,7 +1915,7 @@ MonoBehaviour:
         m_NodeModel:
           rid: 5215485742385201494
         m_Connections:
-        - rid: 5215485742385201341
+        - rid: 4310556342156788433
     - rid: 5215485742385201496
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1325,7 +2074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
   m_Name: ReflexesGraph Blackboard
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.RuntimeBlackboardAsset
-  VersionTimestamp: 639295796137609635
+  VersionTimestamp: 639296564861947569
   AssetID:
     m_Value0: 17612285870590414087
     m_Value1: 10942761802067381242
@@ -1336,6 +2085,12 @@ MonoBehaviour:
     - rid: 4310556321004126508
     - rid: 4310556321004126654
     - rid: 4310556321004126804
+    - rid: 4310556342156788465
+    - rid: 4310556342156788466
+    - rid: 4310556342156788467
+    - rid: 4310556342156788468
+    - rid: 4310556342156788469
+    - rid: 4310556342156788470
   m_SharedBlackboardVariableGuids: []
   references:
     version: 2
@@ -1372,6 +2127,54 @@ MonoBehaviour:
           m_Value1: 14541110908225715925
         Name: ReflexesEatThreshold
         m_Value: 20
+    - rid: 4310556342156788465
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1147961392092376416
+          m_Value1: 14327230524029124304
+        Name: ReflexesHealingItem
+        m_Value: 
+    - rid: 4310556342156788466
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8567124419655169179
+          m_Value1: 5852106526600605806
+        Name: ReflexesHpBefore
+        m_Value: 0
+    - rid: 4310556342156788467
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17448803307755733962
+          m_Value1: 12918207935547654565
+        Name: ReflexesHpAfter
+        m_Value: 0
+    - rid: 4310556342156788468
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 6717296509011556774
+          m_Value1: 10277236809750902886
+        Name: ReflexesEatenItem
+        m_Value: 
+    - rid: 4310556342156788469
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3241366180304982282
+          m_Value1: 5498960736127015448
+        Name: ReflexesSaturationBefore
+        m_Value: 0
+    - rid: 4310556342156788470
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 13782109694948725439
+          m_Value1: 10685921671781282564
+        Name: ReflexesSaturationAfter
+        m_Value: 0
     - rid: 5215485742385201296
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:

@@ -18,12 +18,12 @@ namespace Shooter.Game
         public override string Description =>
             @"
 Follow a character by starting a second-level behavior tree action.
-Your character walks after the target wherever it goes, finds the path itself and keeps following until the target is gone, there is no way toward it, or you stop.
+Your character walks after the target wherever it goes, finds the path itself and keeps following until the target is gone, there is no way toward it, your character is suddenly moved somewhere else, or you stop.
 Your character automatically avoids dangerous areas (cold bodies of water, etc.)
 target_id: the ID of the character to follow, shown next to it in what you see.
 reach: whole meters to keep from the target; your character stops when it is that close and walks again when the target moves away.
 sprint: true to run.
-The result comes at once, the following itself goes on: you will be notified when the target is gone or when there is no way toward it.
+The result comes at once, the following itself goes on: you will be notified when it ends by itself.
 If the target is reachable and still exists, your character will never stop following it automatically. You must always call halt_bt tool manually to stop following.
 ";
 

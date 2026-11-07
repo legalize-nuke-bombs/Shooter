@@ -18,6 +18,9 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
+        [SerializeReference] public BlackboardVariable<string> EatenItem = new();
+        [SerializeReference] public BlackboardVariable<float> SaturationBefore = new();
+        [SerializeReference] public BlackboardVariable<float> SaturationAfter = new();
 
         protected override Status OnStart()
         {
@@ -28,18 +31,13 @@ namespace Shooter.Game
 
             foreach (ItemAsset item in Catalogs.GetCatalog<ItemCatalog>().FindAll(candidate => candidate is StackableItemAsset stackableItem && stackableItem.Stats.Food > 0))
             {
-                int saturationBefore = (int)hunger.Amount;
+                float saturationBefore = hunger.Amount;
                 if (inventoryUser.TryUseItem((StackableItemAsset)item))
                 {
                     Log.Info($"Entity {Agent.Value.name} ate {item.Id} by behavior graph");
-                    BehaviorReporter behaviorReporter = Agent.Value.GetComponent<BehaviorReporter>();
-                    if (behaviorReporter != null)
-                    {
-                        behaviorReporter.Report(new BehaviorReport
-                        {
-                            Prompt = $"Your character automatically ate {item.Id} ({saturationBefore} saturation -> {(int)hunger.Amount} saturation)"
-                        });
-                    }
+                    EatenItem.Value = item.Id;
+                    SaturationBefore.Value = saturationBefore;
+                    SaturationAfter.Value = hunger.Amount;
                     return Status.Success;
                 }
             }

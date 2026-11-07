@@ -49,7 +49,7 @@ namespace Shooter.Game
             if (movement.Status == AgentMovementStatus.Displaced)
             {
                 hasAimPoint = false;
-                return Status.Success;
+                return Status.Failure;
             }
 
             if (!hasAimPoint || Vector3.Distance(targetPosition, targetPositionAtAim) > MaxTargetDrift)
