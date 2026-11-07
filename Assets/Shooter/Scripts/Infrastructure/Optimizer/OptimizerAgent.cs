@@ -4,7 +4,7 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ShooterEntity))]
-    public sealed class OptimizerAgent : MonoBehaviour
+    public sealed class OptimizerAgent : MonoBehaviour, IWantsEnabledHandler
     {
         private const int Radius = 2;
 
@@ -12,6 +12,7 @@ namespace Shooter.Infrastructure
         private Chunks chunks;
         private Vector2Int? chunk;
         private Vector2Int? countedAt;
+        private bool wantsEnabled;
 
         public bool KeepsAwake(Vector2Int optimizableChunk)
         {
@@ -22,28 +23,32 @@ namespace Shooter.Infrastructure
         {
             observer = GetComponent<ShooterTransformObserver>();
             chunks = Registers.Instance.Get<Chunks>();
+            wantsEnabled = enabled;
             observer.Moved += HandleMoved;
         }
 
         private void OnDestroy()
         {
             observer.Moved -= HandleMoved;
+            CountAt(null);
         }
 
-        private void OnEnable()
+        public void OnWantsEnabled()
         {
+            wantsEnabled = true;
             CountAt(chunk);
         }
 
-        private void OnDisable()
+        public void OnWantsDisabled()
         {
+            wantsEnabled = false;
             CountAt(null);
         }
 
         private void HandleMoved()
         {
             chunk = Chunks.ChunkOf(transform.position);
-            if (isActiveAndEnabled) CountAt(chunk);
+            if (wantsEnabled) CountAt(chunk);
         }
 
         // The new square is counted before the old one is let go, so whatever stands in both never drops to no agents

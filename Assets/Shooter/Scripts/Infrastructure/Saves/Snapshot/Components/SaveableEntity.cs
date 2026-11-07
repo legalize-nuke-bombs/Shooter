@@ -8,7 +8,7 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkObject))]
-    public class SaveableEntity : NetworkBehaviour, ISaveableObject
+    public class SaveableEntity : NetworkBehaviour
     {
         public const string IdField = nameof(id);
         private static readonly Journal Log = Logs.Here();
@@ -120,12 +120,12 @@ namespace Shooter.Infrastructure
             return data;
         }
 
-        public void LoadObject(SaveToken content)
+        public void LoadEntity(SaveToken content, List<ComponentSave> componentSaves)
         {
-            LoadObject(content.ToObject<SaveData>());
+            LoadEntity(content.ToObject<SaveData>(), componentSaves);
         }
 
-        private void LoadObject(SaveData data)
+        private void LoadEntity(SaveData data, List<ComponentSave> componentSaves)
         {
             Log.Info($"Entity {name} is loading...");
 
@@ -162,14 +162,7 @@ namespace Shooter.Infrastructure
                     continue;
                 }
 
-                try
-                {
-                    saveable.LoadObject(componentData);
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Entity {name} failed to load component {saveableKey}: {e.Message}");
-                }
+                componentSaves.Add(new ComponentSave(this, saveable, componentData));
             }
 
             foreach (string key in data.Components.Keys)
@@ -179,26 +172,9 @@ namespace Shooter.Infrastructure
                     Log.Warn($"Entity {name} found unknown saved property {key}");
                 }
             }
-
-            Log.Info($"Entity {name} loaded {knownKeys.Count} / {saveables.Length} components (provided {data.Components.Count})");
         }
 
-        public void PostLoad()
-        {
-            foreach (ISaveableComponent saveable in GetComponents<ISaveableComponent>())
-            {
-                try
-                {
-                    saveable.PostLoad();
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Entity {name} failed to post-load component {saveable.GetType().Name}: {e.Message}");
-                }
-            }
-        }
-
-        public static bool TrySpawnFromSave(FrozenWorld frozenWorld, string id, SaveToken content, out SaveableEntity spawned)
+        public static bool TrySpawnFromSave(FrozenWorld frozenWorld, string id, SaveToken content, List<ComponentSave> componentSaves, out SaveableEntity spawned)
         {
             spawned = null;
             SaveData data = content.ToObject<SaveData>();
@@ -234,7 +210,7 @@ namespace Shooter.Infrastructure
             }
 
             frozenWorld.FreezeSaveableEntity(saveableEntity);
-            saveableEntity.LoadObject(data);
+            saveableEntity.LoadEntity(data, componentSaves);
             spawned = saveableEntity;
             return true;
         }

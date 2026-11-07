@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dba48b4d30647378edde322a63d13ee, type: 3}
   m_Name: BehaviourTree
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.SystemPromptSpec
-  content: Your character is controlled by a behavior tree. The highest priority
-    in this tree is assigned to actions triggered automatically when danger arises
-    (reflexes). The second level of priority is assigned to actions you can perform
-    using your tools (higher-order cognitive functions). Use the look_at_yourself
-    tool to check if you currently have an active second-level action.
+  id: 
+  content: 'Your character is controlled by a behavior tree. Its first level is reflexes:
+    actions your character performs automatically, without you, such as healing when
+    hurt or eating when hungry; you are told what it did. Its second level is actions
+    you start with your tools (higher-order cognitive functions), such as go_to and
+    follow: there is only one at a time, a new one replaces the current one, and
+    halt_bt stops it. When a second-level action ends by itself, you get an urgent
+    event saying how it ended.'

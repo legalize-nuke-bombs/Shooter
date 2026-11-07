@@ -1,5 +1,6 @@
 ﻿using System;
 using Shooter.Infrastructure;
+using Unity.Behavior;
 
 namespace Shooter.Game
 {
@@ -8,7 +9,7 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
-        private CustomOrderSlot customOrderSlot;
+        private BehaviorGraphAgent btAgent;
 
         public override string Name => "halt_bt";
 
@@ -17,21 +18,21 @@ namespace Shooter.Game
 
         protected override void Start()
         {
-            customOrderSlot = Self.GetComponent<CustomOrderSlot>();
-            if (customOrderSlot == null)
+            btAgent = Self.GetComponent<BehaviorGraphAgent>();
+            if (btAgent == null)
             {
-                Log.Error($"Entity {Self.name} does not have CustomOrderSlot component required by tool {Name}");
+                Log.Error($"Entity {Self.name} does not have BehaviourGraphAgent component required by tool {Name}");
             }
         }
 
         protected override string Execute(HaltBtArguments arguments, LlmCallContext context)
         {
-            CustomOrder currentOrder = customOrderSlot.CurrentOrder;
-            if (currentOrder == null) return "There is no active second-level action to stop";
+            btAgent.GetVariable("CustomOrderCurrent", out BlackboardVariable<CustomOrder> customOrderCurrent);
+            if (customOrderCurrent.Value == CustomOrder.None) return "There is no active second-level action to stop";
 
-            string stoppedOrderDescription = currentOrder.GetPromptDescription(Self);
-            customOrderSlot.ClearOrder();
-            return $"Stopped: {stoppedOrderDescription}";
+            string output = $"{customOrderCurrent.Value} was stopped";
+            btAgent.SetVariableValue("CustomOrderCurrent", CustomOrder.None);
+            return output;
         }
     }
 }

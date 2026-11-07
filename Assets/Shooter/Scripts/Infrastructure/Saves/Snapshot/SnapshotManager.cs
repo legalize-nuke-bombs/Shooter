@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -90,6 +92,7 @@ namespace Shooter.Infrastructure
             int nonSceneOk = 0;
             int nonSceneFailed = 0;
             var loadedEntities = new List<SaveableEntity>();
+            var componentSaves = new List<ComponentSave>();
             foreach (KeyValuePair<string, object> record in snapshot.GameObjects)
             {
                 string targetId = record.Key;
@@ -100,7 +103,7 @@ namespace Shooter.Infrastructure
                     Log.Info($"Loading {target.name} {targetId}...");
                     try
                     {
-                        target.LoadObject(targetValue);
+                        target.LoadEntity(targetValue, componentSaves);
                         loadedEntities.Add(target);
                         inSceneOk++;
                     }
@@ -115,7 +118,7 @@ namespace Shooter.Infrastructure
                     Log.Info($"Spawning non-scene object {targetId}...");
                     try
                     {
-                        if (SaveableEntity.TrySpawnFromSave(frozenWorld, targetId, targetValue, out SaveableEntity spawned))
+                        if (SaveableEntity.TrySpawnFromSave(frozenWorld, targetId, targetValue, componentSaves, out SaveableEntity spawned))
                         {
                             loadedEntities.Add(spawned);
                             nonSceneOk++;
@@ -133,17 +136,53 @@ namespace Shooter.Infrastructure
                 }
             }
 
-            int postLoaded = 0;
+            int componentsLoaded = 0;
+            foreach (ComponentSave componentSave in componentSaves.OrderBy(save => ExecutionOrderOf(save.Component)))
+            {
+                try
+                {
+                    componentSave.Component.LoadObject(componentSave.Content);
+                    componentsLoaded++;
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Entity {componentSave.Entity.name} failed to load component {componentSave.Component.GetType().Name}: {e.Message}");
+                }
+            }
+
+            var postLoadables = new List<(SaveableEntity Entity, ISaveableComponent Component)>();
             foreach (SaveableEntity loadedEntity in loadedEntities)
             {
                 if (!loadedEntity.IsSpawned) continue;
 
-                loadedEntity.PostLoad();
-                postLoaded++;
+                foreach (ISaveableComponent component in loadedEntity.GetComponents<ISaveableComponent>())
+                {
+                    postLoadables.Add((loadedEntity, component));
+                }
             }
 
-            Log.Info($"Loaded from snapshot, inSceneOk {inSceneOk} inSceneFailed {inSceneFailed} nonSceneOk {nonSceneOk} nonSceneFailed {nonSceneFailed} postLoaded {postLoaded}");
+            int postLoaded = 0;
+            foreach ((SaveableEntity entity, ISaveableComponent component) in postLoadables.OrderBy(postLoadable => ExecutionOrderOf(postLoadable.Component)))
+            {
+                try
+                {
+                    component.PostLoad();
+                    postLoaded++;
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Entity {entity.name} failed to post-load component {component.GetType().Name}: {e.Message}");
+                }
+            }
+
+            Log.Info($"Loaded from snapshot, inSceneOk {inSceneOk} inSceneFailed {inSceneFailed} nonSceneOk {nonSceneOk} nonSceneFailed {nonSceneFailed} componentsLoaded {componentsLoaded} postLoaded {postLoaded}");
             return true;
+        }
+
+        private static int ExecutionOrderOf(ISaveableComponent component)
+        {
+            DefaultExecutionOrder attribute = component.GetType().GetCustomAttribute<DefaultExecutionOrder>(true);
+            return attribute == null ? 0 : attribute.order;
         }
     }
 }

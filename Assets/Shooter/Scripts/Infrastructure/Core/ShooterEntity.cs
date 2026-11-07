@@ -41,8 +41,13 @@ namespace Shooter.Infrastructure
                 return;
             }
 
+            bool changed = entry.WantsEnabled != componentEnabled;
             entry.WantsEnabled = componentEnabled;
             entity.UpdateUnityEnabled(entry);
+            if (!changed || component is not IWantsEnabledHandler handler) return;
+
+            if (componentEnabled) handler.OnWantsEnabled();
+            else handler.OnWantsDisabled();
         }
 
         private void Awake()
