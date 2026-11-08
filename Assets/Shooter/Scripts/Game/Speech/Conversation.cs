@@ -63,17 +63,6 @@ namespace Shooter.Game
             messages.Add(message);
         }
 
-        // A listener may answer inside the Said event, so the newest line is not always the one being heard
-        public int IndexOf(Message message)
-        {
-            for (int i = messages.Count - 1; i >= 0; i--)
-            {
-                if (ReferenceEquals(messages[i], message)) return i;
-            }
-
-            return -1;
-        }
-
         public static (long, long) CreateKey(long firstId, long secondId)
         {
             return firstId <= secondId ? (firstId, secondId) : (secondId, firstId);

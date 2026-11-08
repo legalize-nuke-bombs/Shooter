@@ -17,6 +17,10 @@ namespace Shooter.Game
 
         private readonly Dictionary<long, List<Conversation>> conversationsByParticipantId = new();
 
+        private readonly Queue<(Conversation Conversation, Message Message)> pendingSaid = new();
+
+        private bool raisingSaid;
+
         private Clock clock;
 
         private struct SaveData
@@ -104,8 +108,28 @@ namespace Shooter.Game
             };
 
             conversation.AddMessage(message);
-            Said?.Invoke(conversation, message);
+            RaiseSaidInOrder(conversation, message);
             return true;
+        }
+
+        // A listener may answer inside Said: its line waits until every listener has heard the line it answers
+        private void RaiseSaidInOrder(Conversation conversation, Message message)
+        {
+            pendingSaid.Enqueue((conversation, message));
+            if (raisingSaid) return;
+
+            raisingSaid = true;
+            try
+            {
+                while (pendingSaid.TryDequeue(out (Conversation Conversation, Message Message) said))
+                {
+                    Said?.Invoke(said.Conversation, said.Message);
+                }
+            }
+            finally
+            {
+                raisingSaid = false;
+            }
         }
     }
 }
