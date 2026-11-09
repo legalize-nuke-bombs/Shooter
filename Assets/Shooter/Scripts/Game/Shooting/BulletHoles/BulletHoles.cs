@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Shooter.Infrastructure;
 using Unity.Netcode;
@@ -8,12 +9,15 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class BulletHoles : NetworkBehaviour, ISaveableComponent
+    public class BulletHoles : NetworkBehaviour, ISaveableComponent, IShooterLateUpdateable
     {
+        private const int NoProjector = -1;
+        private const int NoHole = -1;
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Material material;
-        [SerializeField] private int capacity = 1024;
+        [SerializeField] private int capacity = 25000;
+        [SerializeField] private int projectorCount = 512;
         [SerializeField] private float diameter = 0.08f;
         [SerializeField] private float depth = 0.2f;
 
@@ -45,12 +49,30 @@ namespace Shooter.Game
             {
                 holes.Add(hole);
             }
-            RedrawAllHoles();
+            FreeAllProjectors();
         }
 
         private readonly List<DecalProjector> projectors = new();
 
+        private int[] holeOfProjector;
+        private int[] projectorOfHole;
+        private int[] projectorHeap;
+        private float[] projectorDistance;
         private int nextHoleToOverwrite;
+
+        private void Awake()
+        {
+            projectorOfHole = new int[capacity];
+            holeOfProjector = new int[projectorCount];
+            projectorHeap = new int[projectorCount];
+            projectorDistance = new float[projectorCount];
+            for (int projector = 0; projector < projectorCount; projector++)
+            {
+                projectors.Add(CreateProjector(projector));
+            }
+
+            FreeAllProjectors();
+        }
 
         public void AddHole(Vector3 position, Vector3 normal)
         {
@@ -61,12 +83,11 @@ namespace Shooter.Game
             if (holes.Count < capacity)
             {
                 holes.Add(hole);
-                PlaceHole(holes.Count - 1);
                 return;
             }
 
             holes[nextHoleToOverwrite] = hole;
-            PlaceHole(nextHoleToOverwrite);
+            RedrawIfShown(nextHoleToOverwrite);
             nextHoleToOverwrite = (nextHoleToOverwrite + 1) % capacity;
         }
 
@@ -75,18 +96,66 @@ namespace Shooter.Game
             if (material == null) Log.Error("Bullet holes have no material, nothing will be drawn");
 
             if (!IsServer) holes.OnListChanged += HandleHolesReplicated;
-            RedrawAllHoles();
 
-            Log.Info($"Bullet holes are up: {holes.Count} in the world, capacity {capacity}");
+            Log.Info($"Bullet holes are up: {holes.Count} in the world, capacity {capacity}, {projectorCount} drawn around the camera");
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) holes.OnListChanged -= HandleHolesReplicated;
 
-            foreach (DecalProjector projector in projectors)
+            FreeAllProjectors();
+        }
+
+        public void ShooterLateUpdate()
+        {
+            Camera eye = Camera.main;
+            if (eye == null || material == null) return;
+
+            Vector3 eyePosition = eye.transform.position;
+            BuildProjectorHeap(eyePosition);
+            for (int hole = 0; hole < holes.Count; hole++)
             {
-                projector.gameObject.SetActive(false);
+                if (projectorOfHole[hole] != NoProjector) continue;
+
+                float distance = (holes[hole].Position - eyePosition).sqrMagnitude;
+                int farthestProjector = projectorHeap[0];
+                if (distance >= projectorDistance[farthestProjector]) continue;
+
+                ShowHole(farthestProjector, hole);
+                projectorDistance[farthestProjector] = distance;
+                SiftDown(0);
+            }
+        }
+
+        private void BuildProjectorHeap(Vector3 eyePosition)
+        {
+            for (int projector = 0; projector < projectorHeap.Length; projector++)
+            {
+                int hole = holeOfProjector[projector];
+                projectorDistance[projector] = hole == NoHole ? float.PositiveInfinity : (holes[hole].Position - eyePosition).sqrMagnitude;
+                projectorHeap[projector] = projector;
+            }
+
+            for (int node = projectorHeap.Length / 2 - 1; node >= 0; node--)
+            {
+                SiftDown(node);
+            }
+        }
+
+        private void SiftDown(int node)
+        {
+            while (true)
+            {
+                int farthest = node;
+                int left = 2 * node + 1;
+                int right = left + 1;
+                if (left < projectorHeap.Length && projectorDistance[projectorHeap[left]] > projectorDistance[projectorHeap[farthest]]) farthest = left;
+                if (right < projectorHeap.Length && projectorDistance[projectorHeap[right]] > projectorDistance[projectorHeap[farthest]]) farthest = right;
+                if (farthest == node) return;
+
+                (projectorHeap[node], projectorHeap[farthest]) = (projectorHeap[farthest], projectorHeap[node]);
+                node = farthest;
             }
         }
 
@@ -95,35 +164,57 @@ namespace Shooter.Game
             switch (change.Type)
             {
                 case NetworkListEvent<BulletHole>.EventType.Add:
-                case NetworkListEvent<BulletHole>.EventType.Insert:
+                    break;
                 case NetworkListEvent<BulletHole>.EventType.Value:
-                    PlaceHole(change.Index);
+                    RedrawIfShown(change.Index);
                     break;
                 default:
-                    RedrawAllHoles();
+                    FreeAllProjectors();
                     break;
             }
         }
 
-        private void RedrawAllHoles()
+        private void ShowHole(int projector, int hole)
         {
-            for (int i = 0; i < holes.Count; i++)
-            {
-                PlaceHole(i);
-            }
+            int shownHole = holeOfProjector[projector];
+            if (shownHole != NoHole) projectorOfHole[shownHole] = NoProjector;
 
-            for (int i = holes.Count; i < projectors.Count; i++)
+            holeOfProjector[projector] = hole;
+            projectorOfHole[hole] = projector;
+            PlaceProjector(projectors[projector], holes[hole]);
+        }
+
+        private void RedrawIfShown(int hole)
+        {
+            int projector = projectorOfHole[hole];
+            if (projector != NoProjector) PlaceProjector(projectors[projector], holes[hole]);
+        }
+
+        private void FreeAllProjectors()
+        {
+            Array.Fill(projectorOfHole, NoProjector);
+            for (int projector = 0; projector < projectors.Count; projector++)
             {
-                projectors[i].gameObject.SetActive(false);
+                holeOfProjector[projector] = NoHole;
+                projectors[projector].gameObject.SetActive(false);
             }
         }
 
-        private void PlaceHole(int index)
+        private DecalProjector CreateProjector(int index)
         {
-            if (material == null) return;
+            GameObject projectorObject = new($"BulletHole{index}");
+            projectorObject.transform.SetParent(transform, false);
+            projectorObject.SetActive(false);
 
-            BulletHole hole = holes[index];
-            DecalProjector projector = GetOrCreateProjector(index);
+            DecalProjector projector = projectorObject.AddComponent<DecalProjector>();
+            projector.material = material;
+            projector.pivot = Vector3.zero;
+            projector.uvScale = new Vector2(0.5f, 0.5f);
+            return projector;
+        }
+
+        private void PlaceProjector(DecalProjector projector, BulletHole hole)
+        {
             int seed = HashPosition(hole.Position);
 
             Vector3 upAxis = Mathf.Abs(hole.Normal.y) > 0.99f ? Vector3.forward : Vector3.up;
@@ -132,28 +223,9 @@ namespace Shooter.Game
 
             float scale = 0.8f + ((seed >> 2) & 15) / 30f;
             projector.size = new Vector3(diameter * scale, diameter * scale, depth);
-            projector.uvScale = new Vector2(0.5f, 0.5f);
             projector.uvBias = new Vector2((seed & 1) * 0.5f, ((seed >> 1) & 1) * 0.5f);
 
             projector.gameObject.SetActive(true);
-        }
-
-        private DecalProjector GetOrCreateProjector(int index)
-        {
-            while (projectors.Count <= index)
-            {
-                GameObject projectorObject = new($"BulletHole{projectors.Count}");
-                projectorObject.transform.SetParent(transform, false);
-                projectorObject.SetActive(false);
-
-                DecalProjector projector = projectorObject.AddComponent<DecalProjector>();
-                projector.material = material;
-                projector.pivot = Vector3.zero;
-
-                projectors.Add(projector);
-            }
-
-            return projectors[index];
         }
 
         private static int HashPosition(Vector3 position)
