@@ -1,6 +1,5 @@
 using System;
 using Shooter.Infrastructure;
-using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -28,8 +27,6 @@ namespace Shooter.Game
         private bool triggerHeld;
 
         public event Action<FirearmAsset, ShotHit> Shot;
-
-        public event Action<ShotTrace> ShotTraced;
 
         public event Action<FirearmAsset> Misfired;
 
@@ -89,25 +86,7 @@ namespace Shooter.Game
             int shotIndex = cadence.Fire(asset, Time.time);
             ShotHit hit = TraceShot(asset, shotIndex);
             Shot?.Invoke(asset, hit);
-            SendTrace(asset, hit);
             return true;
-        }
-
-        private void SendTrace(FirearmAsset asset, ShotHit hit)
-        {
-            Vector3 end = hit.IsMiss ? hit.Origin + hit.Direction * asset.Distance : hit.Point;
-            SoundAsset impactSound = hit.IsMiss || asset.ImpactSounds == null ? null : asset.ImpactSounds.GetSoundOn(hit.Surface);
-
-            ShotTracedRpc(hit.Origin, end, impactSound == null ? default : impactSound.NetworkId, impactSound == null ? (byte)0 : impactSound.PickRandomVariant());
-        }
-
-        [Rpc(SendTo.Everyone)]
-        private void ShotTracedRpc(Vector3 origin, Vector3 end, FixedString32Bytes impactSoundId, byte impactSoundVariant)
-        {
-            SoundCatalog soundCatalog = Catalogs.GetCatalog<SoundCatalog>();
-            SoundAsset impactSound = impactSoundId.IsEmpty || soundCatalog == null ? null : soundCatalog.GetAssetById(impactSoundId);
-
-            ShotTraced?.Invoke(new ShotTrace(origin, end, impactSound, impactSoundVariant));
         }
 
         public bool TryReload()
@@ -152,47 +131,15 @@ namespace Shooter.Game
         {
             Vector2 sprayOffset = asset.Spray.GetOffsetForShot(shotIndex);
             Vector3 shotDirection = Quaternion.LookRotation(interactor.LookDirection) * Quaternion.Euler(-sprayOffset.y, sprayOffset.x, 0f) * Vector3.forward;
+            Ray ray = new(interactor.EyePosition, shotDirection);
 
-            Vector3 eyePosition = interactor.EyePosition;
-            int hitCount = Interactor.CollectHits(eyePosition, shotDirection, asset.Distance, ShotMask, transform, ShotHits);
-            if (!Interactor.TryFindNearestHit(ShotHits, hitCount, out RaycastHit hit))
-            {
-                Log.Info($"Entity {name} shot and missed");
-                return new ShotHit(eyePosition, shotDirection);
-            }
+            int hitCount = Interactor.CollectHits(ray.origin, ray.direction, asset.Distance, ShotMask, transform, ShotHits);
+            RaycastHit[] hits = new RaycastHit[hitCount];
+            Array.Copy(ShotHits, hits, hitCount);
 
-            PhysicsMaterial surface = Surface.FindAt(hit);
-            Health victim = hit.collider.GetComponentInParent<Health>();
-            if (victim == null)
-            {
-                Log.Info($"Entity {name} shot {hit.collider.name} at {hit.distance:0.0} m, surface {(surface == null ? "none" : surface.name)}");
-                return new ShotHit(eyePosition, shotDirection, hit.collider, hit.point, hit.normal, surface, null, BodyPart.Torso);
-            }
-
-            BodyPart hitPart = FindWeakestHitBodyPart(hitCount, victim);
-            Log.Info($"Entity {name} shot {victim.name} in {hitPart} at {hit.distance:0.0} m");
-            return new ShotHit(eyePosition, shotDirection, hit.collider, hit.point, hit.normal, surface, victim, hitPart);
-        }
-
-        private BodyPart FindWeakestHitBodyPart(int hitCount, Health victim)
-        {
-            BodyPart weakestPart = BodyPart.Torso;
-            float highestMultiplier = 0f;
-
-            for (int i = 0; i < hitCount; i++)
-            {
-                Collider hitCollider = ShotHits[i].collider;
-                if (hitCollider.GetComponentInParent<Health>() != victim) continue;
-
-                Hitbox hitbox = hitCollider.GetComponent<Hitbox>();
-                BodyPart part = hitbox == null ? BodyPart.Torso : hitbox.Part;
-                if (part.GetDamageMultiplier() <= highestMultiplier) continue;
-
-                weakestPart = part;
-                highestMultiplier = part.GetDamageMultiplier();
-            }
-
-            return weakestPart;
+            bool hitSomething = Interactor.TryFindNearestHit(hits, hitCount, out RaycastHit nearest);
+            Log.Info(hitSomething ? $"Entity {name} shot {nearest.collider.name} at {nearest.distance:0.0} m" : $"Entity {name} shot and missed");
+            return new ShotHit(ray, hits, nearest);
         }
     }
 }

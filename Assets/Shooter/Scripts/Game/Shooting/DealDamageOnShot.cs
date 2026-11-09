@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -12,6 +14,8 @@ namespace Shooter.Game
 
         private Gunner gunner;
         private Character character;
+
+        public event Action<FirearmAsset, Health, BodyPart, int> DamageDealt;
 
         private void Awake()
         {
@@ -31,15 +35,39 @@ namespace Shooter.Game
 
         private void DealDamage(FirearmAsset asset, ShotHit hit)
         {
-            if (hit.Victim == null)
+            Health victim = hit.IsMiss ? null : hit.Nearest.collider.GetComponentInParent<Health>();
+            if (victim == null)
             {
                 Log.Info($"Entity {name} dealt no damage: the shot hit no one");
                 return;
             }
 
-            int damage = Mathf.RoundToInt(asset.Damage * hit.Part.GetDamageMultiplier());
-            hit.Victim.TakeDamage(damage, character, asset.DamageType);
-            Log.Info($"Entity {name} dealt {damage} damage to {hit.Victim.name} in {hit.Part}");
+            BodyPart part = FindWeakestHitBodyPart(hit.Hits, victim);
+            int damage = Mathf.RoundToInt(asset.Damage * part.GetDamageMultiplier());
+            victim.TakeDamage(damage, character, asset.DamageType);
+            Log.Info($"Entity {name} dealt {damage} damage to {victim.name} in {part}");
+            DamageDealt?.Invoke(asset, victim, part, damage);
+        }
+
+        private static BodyPart FindWeakestHitBodyPart(IReadOnlyList<RaycastHit> hits, Health victim)
+        {
+            BodyPart weakestPart = BodyPart.Torso;
+            float highestMultiplier = 0f;
+
+            for (int i = 0; i < hits.Count; i++)
+            {
+                Collider hitCollider = hits[i].collider;
+                if (hitCollider.GetComponentInParent<Health>() != victim) continue;
+
+                Hitbox hitbox = hitCollider.GetComponent<Hitbox>();
+                BodyPart part = hitbox == null ? BodyPart.Torso : hitbox.Part;
+                if (part.GetDamageMultiplier() <= highestMultiplier) continue;
+
+                weakestPart = part;
+                highestMultiplier = part.GetDamageMultiplier();
+            }
+
+            return weakestPart;
         }
     }
 }
