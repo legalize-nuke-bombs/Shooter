@@ -87,7 +87,7 @@ namespace Shooter.Infrastructure
                 if (entry.Component is not Behaviour behaviour) continue;
 
                 Registers.Instance.UnregisterComponent(behaviour);
-                if (chunk != null) chunks.RemoveComponent(chunk.Value, behaviour);
+                if (chunk != null) chunks.Remove(chunk.Value, behaviour);
             }
         }
 
@@ -138,9 +138,9 @@ namespace Shooter.Infrastructure
             {
                 if (components[i].Component is not Behaviour behaviour) continue;
 
-                chunks.AddComponent(movedTo, behaviour);
+                chunks.Add(movedTo, behaviour);
                 if (IsEnabledAndActive(behaviour)) chunks.ActivateComponent(movedTo, behaviour);
-                if (movedFrom != null) chunks.RemoveComponent(movedFrom.Value, behaviour);
+                if (movedFrom != null) chunks.Remove(movedFrom.Value, behaviour);
             }
 
             Log.Debug($"Entity {name} moved to chunk {movedTo}");
@@ -160,7 +160,7 @@ namespace Shooter.Infrastructure
             if (component is not Behaviour behaviour) return entry;
 
             Registers.Instance.RegisterComponent(behaviour);
-            if (chunk != null) chunks.AddComponent(chunk.Value, behaviour);
+            if (chunk != null) chunks.Add(chunk.Value, behaviour);
             if (IsEnabledAndActive(behaviour)) ActivateComponent(behaviour);
             return entry;
         }

@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
 {
     public sealed class TMap
     {
-        private static readonly Dictionary<Type, Type[]> KeysByComponentType = new();
+        private static readonly Dictionary<Type, Type[]> KeysByMemberType = new();
 
         private Dictionary<Type, TArray> arraysByKey = new();
 
@@ -40,10 +40,10 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public bool TryAdd(Behaviour component)
+        public bool TryAdd(object member)
         {
             bool any = false;
-            foreach (Type key in GetKeys(component.GetType()))
+            foreach (Type key in GetKeys(member.GetType()))
             {
                 if (!arraysByKey.TryGetValue(key, out TArray array))
                 {
@@ -51,7 +51,7 @@ namespace Shooter.Infrastructure
                     arraysByKey[key] = array;
                 }
 
-                if (array.TryAdd(component))
+                if (array.TryAdd(member))
                 {
                     any = true;
                 }
@@ -59,14 +59,14 @@ namespace Shooter.Infrastructure
             return any;
         }
 
-        public bool TryRemove(Behaviour component)
+        public bool TryRemove(object member)
         {
             bool any = false;
-            foreach (Type key in GetKeys(component.GetType()))
+            foreach (Type key in GetKeys(member.GetType()))
             {
                 if (arraysByKey.TryGetValue(key, out TArray array))
                 {
-                    if (array.TryRemove(component))
+                    if (array.TryRemove(member))
                     {
                         any = true;
                     }
@@ -130,21 +130,21 @@ namespace Shooter.Infrastructure
             arraysByKey = keptArrays;
         }
 
-        // GetInterfaces builds a new array on every call, so the keys a component goes under are found once per type
-        private static Type[] GetKeys(Type componentType)
+        // GetInterfaces builds a new array on every call, so the keys a member goes under are found once per type
+        private static Type[] GetKeys(Type memberType)
         {
-            if (KeysByComponentType.TryGetValue(componentType, out Type[] keys)) return keys;
+            if (KeysByMemberType.TryGetValue(memberType, out Type[] keys)) return keys;
 
             var types = new List<Type>();
-            for (Type type = componentType; type != typeof(Behaviour); type = type.BaseType)
+            for (Type type = memberType; type != typeof(Behaviour) && type != typeof(object); type = type.BaseType)
             {
                 types.Add(type);
             }
 
-            types.AddRange(componentType.GetInterfaces());
+            types.AddRange(memberType.GetInterfaces());
 
             keys = types.ToArray();
-            KeysByComponentType[componentType] = keys;
+            KeysByMemberType[memberType] = keys;
             return keys;
         }
     }

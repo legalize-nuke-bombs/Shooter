@@ -11,84 +11,87 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class BulletHoles : NetworkBehaviour, ISaveableComponent, IShooterLateUpdateable
     {
-        private const int NoProjector = -1;
-        private const int NoHole = -1;
+        // A NetworkList writes its length as ushort
+        private const int MaxHoles = ushort.MaxValue;
+        private const int InitialNearbyCapacity = 1024;
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private Material material;
-        [SerializeField] private int capacity = 25000;
         [SerializeField] private int projectorCount = 512;
         [SerializeField] private float diameter = 0.08f;
         [SerializeField] private float depth = 0.2f;
 
-        private readonly NetworkList<BulletHole> holes = new();
+        private readonly NetworkList<BulletHoleData> holes = new();
 
         private struct SaveData
         {
-            public List<BulletHole> Holes { get; set; }
+            public List<BulletHoleData> Holes { get; set; }
         }
         public object SaveObject()
         {
             SaveData saveData = new()
             {
-                Holes = new List<BulletHole>(holes.Count)
+                Holes = new List<BulletHoleData>(holes.Count)
             };
-            // Oldest first, so that after loading the next hole to overwrite is the first one
-            for (int age = 0; age < holes.Count; age++)
+            for (int hole = 0; hole < holes.Count; hole++)
             {
-                saveData.Holes.Add(holes[(nextHoleToOverwrite + age) % holes.Count]);
+                saveData.Holes.Add(holes[hole]);
             }
             return saveData;
         }
         public void LoadObject(SaveToken token)
         {
             SaveData saveData = token.ToObject<SaveData>();
+            RemoveAllFromChunks();
             holes.Clear();
-            nextHoleToOverwrite = 0;
-            foreach (BulletHole hole in saveData.Holes)
+            foreach (BulletHoleData hole in saveData.Holes)
             {
                 holes.Add(hole);
+                PutInChunk(hole);
             }
-            FreeAllProjectors();
         }
 
+        private readonly List<BulletHole> holesInChunks = new();
         private readonly List<DecalProjector> projectors = new();
+        private readonly Stack<int> freeProjectors = new();
 
-        private int[] holeOfProjector;
-        private int[] projectorOfHole;
-        private int[] projectorHeap;
-        private float[] projectorDistance;
-        private int nextHoleToOverwrite;
+        private Chunks chunks;
+        private BulletHole[] holeOfProjector;
+        private bool[] keptProjectors;
+        private BulletHole[] nearbyHoles = new BulletHole[InitialNearbyCapacity];
+        private float[] nearbyDistances = new float[InitialNearbyCapacity];
 
         private void Awake()
         {
-            projectorOfHole = new int[capacity];
-            holeOfProjector = new int[projectorCount];
-            projectorHeap = new int[projectorCount];
-            projectorDistance = new float[projectorCount];
+            chunks = Registers.Instance.Get<Chunks>();
+            holeOfProjector = new BulletHole[projectorCount];
+            keptProjectors = new bool[projectorCount];
             for (int projector = 0; projector < projectorCount; projector++)
             {
                 projectors.Add(CreateProjector(projector));
             }
+        }
 
-            FreeAllProjectors();
+        public override void OnDestroy()
+        {
+            RemoveAllFromChunks();
+
+            base.OnDestroy();
         }
 
         public void AddHole(Vector3 position, Vector3 normal)
         {
             if (!IsServer) return;
 
-            BulletHole hole = new() { Position = position, Normal = normal };
-
-            if (holes.Count < capacity)
+            if (holes.Count == MaxHoles)
             {
-                holes.Add(hole);
+                Log.Info($"Bullet hole at {position} is not kept: the world already has {MaxHoles}, as many as a NetworkList carries");
                 return;
             }
 
-            holes[nextHoleToOverwrite] = hole;
-            RedrawIfShown(nextHoleToOverwrite);
-            nextHoleToOverwrite = (nextHoleToOverwrite + 1) % capacity;
+            BulletHoleData hole = new() { Position = position, Normal = normal };
+            holes.Add(hole);
+            PutInChunk(hole);
         }
 
         public override void OnNetworkSpawn()
@@ -96,15 +99,14 @@ namespace Shooter.Game
             if (material == null) Log.Error("Bullet holes have no material, nothing will be drawn");
 
             if (!IsServer) holes.OnListChanged += HandleHolesReplicated;
+            PutAllInChunks();
 
-            Log.Info($"Bullet holes are up: {holes.Count} in the world, capacity {capacity}, {projectorCount} drawn around the camera");
+            Log.Info($"Bullet holes are up: {holes.Count} in the world, the {projectorCount} nearest to the camera are drawn");
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsServer) holes.OnListChanged -= HandleHolesReplicated;
-
-            FreeAllProjectors();
         }
 
         public void ShooterLateUpdate()
@@ -113,91 +115,120 @@ namespace Shooter.Game
             if (eye == null || material == null) return;
 
             Vector3 eyePosition = eye.transform.position;
-            BuildProjectorHeap(eyePosition);
+            int nearbyCount = GatherNearbyHoles(eyePosition);
+            Array.Sort(nearbyDistances, nearbyHoles, 0, nearbyCount);
+            ShowNearest(Math.Min(nearbyCount, projectors.Count));
+        }
+
+        private void HandleHolesReplicated(NetworkListEvent<BulletHoleData> change)
+        {
+            if (change.Type == NetworkListEvent<BulletHoleData>.EventType.Add)
+            {
+                PutInChunk(change.Value);
+                return;
+            }
+
+            RemoveAllFromChunks();
+            PutAllInChunks();
+        }
+
+        private void PutAllInChunks()
+        {
             for (int hole = 0; hole < holes.Count; hole++)
             {
-                if (projectorOfHole[hole] != NoProjector) continue;
-
-                float distance = (holes[hole].Position - eyePosition).sqrMagnitude;
-                int farthestProjector = projectorHeap[0];
-                if (distance >= projectorDistance[farthestProjector]) continue;
-
-                ShowHole(farthestProjector, hole);
-                projectorDistance[farthestProjector] = distance;
-                SiftDown(0);
+                PutInChunk(holes[hole]);
             }
         }
 
-        private void BuildProjectorHeap(Vector3 eyePosition)
+        private void PutInChunk(BulletHoleData data)
         {
-            for (int projector = 0; projector < projectorHeap.Length; projector++)
+            BulletHole hole = new(data);
+            holesInChunks.Add(hole);
+            chunks.Add(Chunks.ChunkOf(data.Position), hole);
+        }
+
+        private void RemoveAllFromChunks()
+        {
+            foreach (BulletHole hole in holesInChunks)
             {
-                int hole = holeOfProjector[projector];
-                projectorDistance[projector] = hole == NoHole ? float.PositiveInfinity : (holes[hole].Position - eyePosition).sqrMagnitude;
-                projectorHeap[projector] = projector;
+                chunks.Remove(Chunks.ChunkOf(hole.Data.Position), hole);
             }
 
-            for (int node = projectorHeap.Length / 2 - 1; node >= 0; node--)
+            holesInChunks.Clear();
+        }
+
+        // The camera's chunk and its eight neighbours: a hole farther than a chunk away is too small to see
+        private int GatherNearbyHoles(Vector3 eyePosition)
+        {
+            Vector2Int eyeChunk = Chunks.ChunkOf(eyePosition);
+            int count = 0;
+            for (int x = eyeChunk.x - 1; x <= eyeChunk.x + 1; x++)
             {
-                SiftDown(node);
+                for (int y = eyeChunk.y - 1; y <= eyeChunk.y + 1; y++)
+                {
+                    foreach (BulletHole hole in chunks.GetAll<BulletHole>(new Vector2Int(x, y), ChunkInactivePolicy.Include))
+                    {
+                        if (count == nearbyHoles.Length)
+                        {
+                            Array.Resize(ref nearbyHoles, count * 2);
+                            Array.Resize(ref nearbyDistances, count * 2);
+                        }
+
+                        nearbyHoles[count] = hole;
+                        nearbyDistances[count] = (hole.Data.Position - eyePosition).sqrMagnitude;
+                        count++;
+                    }
+                }
             }
+
+            return count;
         }
 
-        private void SiftDown(int node)
+        private void ShowNearest(int shownCount)
         {
-            while (true)
+            Array.Clear(keptProjectors, 0, keptProjectors.Length);
+            for (int rank = 0; rank < shownCount; rank++)
             {
-                int farthest = node;
-                int left = 2 * node + 1;
-                int right = left + 1;
-                if (left < projectorHeap.Length && projectorDistance[projectorHeap[left]] > projectorDistance[projectorHeap[farthest]]) farthest = left;
-                if (right < projectorHeap.Length && projectorDistance[projectorHeap[right]] > projectorDistance[projectorHeap[farthest]]) farthest = right;
-                if (farthest == node) return;
-
-                (projectorHeap[node], projectorHeap[farthest]) = (projectorHeap[farthest], projectorHeap[node]);
-                node = farthest;
+                int projector = nearbyHoles[rank].Projector;
+                if (projector != BulletHole.NoProjector) keptProjectors[projector] = true;
             }
-        }
 
-        private void HandleHolesReplicated(NetworkListEvent<BulletHole> change)
-        {
-            switch (change.Type)
-            {
-                case NetworkListEvent<BulletHole>.EventType.Add:
-                    break;
-                case NetworkListEvent<BulletHole>.EventType.Value:
-                    RedrawIfShown(change.Index);
-                    break;
-                default:
-                    FreeAllProjectors();
-                    break;
-            }
-        }
-
-        private void ShowHole(int projector, int hole)
-        {
-            int shownHole = holeOfProjector[projector];
-            if (shownHole != NoHole) projectorOfHole[shownHole] = NoProjector;
-
-            holeOfProjector[projector] = hole;
-            projectorOfHole[hole] = projector;
-            PlaceProjector(projectors[projector], holes[hole]);
-        }
-
-        private void RedrawIfShown(int hole)
-        {
-            int projector = projectorOfHole[hole];
-            if (projector != NoProjector) PlaceProjector(projectors[projector], holes[hole]);
-        }
-
-        private void FreeAllProjectors()
-        {
-            Array.Fill(projectorOfHole, NoProjector);
+            freeProjectors.Clear();
             for (int projector = 0; projector < projectors.Count; projector++)
             {
-                holeOfProjector[projector] = NoHole;
-                projectors[projector].gameObject.SetActive(false);
+                if (!keptProjectors[projector]) freeProjectors.Push(projector);
             }
+
+            for (int rank = 0; rank < shownCount; rank++)
+            {
+                BulletHole hole = nearbyHoles[rank];
+                if (hole.Projector == BulletHole.NoProjector) ShowHole(freeProjectors.Pop(), hole);
+            }
+
+            foreach (int projector in freeProjectors)
+            {
+                HideProjector(projector);
+            }
+        }
+
+        private void ShowHole(int projector, BulletHole hole)
+        {
+            BulletHole shown = holeOfProjector[projector];
+            if (shown != null) shown.Projector = BulletHole.NoProjector;
+
+            holeOfProjector[projector] = hole;
+            hole.Projector = projector;
+            PlaceProjector(projectors[projector], hole.Data);
+        }
+
+        private void HideProjector(int projector)
+        {
+            BulletHole shown = holeOfProjector[projector];
+            if (shown == null) return;
+
+            shown.Projector = BulletHole.NoProjector;
+            holeOfProjector[projector] = null;
+            projectors[projector].gameObject.SetActive(false);
         }
 
         private DecalProjector CreateProjector(int index)
@@ -213,7 +244,7 @@ namespace Shooter.Game
             return projector;
         }
 
-        private void PlaceProjector(DecalProjector projector, BulletHole hole)
+        private void PlaceProjector(DecalProjector projector, BulletHoleData hole)
         {
             int seed = HashPosition(hole.Position);
 
