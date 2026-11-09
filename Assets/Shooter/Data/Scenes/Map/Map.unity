@@ -5590,7 +5590,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Combat.BulletHoles
   ShowTopMostFoldoutHeaderGroup: 1
   material: {fileID: 2100000, guid: fe92059f79154bc1a2853ba6192f5d9b, type: 2}
-  capacity: 25000
   projectorCount: 512
   diameter: 0.08
   depth: 0.2

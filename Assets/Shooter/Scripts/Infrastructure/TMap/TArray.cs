@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
@@ -25,24 +24,24 @@ namespace Shooter.Infrastructure
 
         public int Capacity => entries.Length;
 
-        public bool TryAdd(Behaviour component)
+        public bool TryAdd(object member)
         {
-            int hash = RuntimeHelpers.GetHashCode(component);
-            if (FindSlot(component, hash) != None)
+            int hash = RuntimeHelpers.GetHashCode(member);
+            if (FindSlot(member, hash) != None)
             {
                 return false;
             }
 
             int position = TakePosition();
-            entries[position] = new Entry { Component = component, Hash = hash, NextFree = None };
+            entries[position] = new Entry { Member = member, Hash = hash, NextFree = None };
             Place(position);
             count++;
             return true;
         }
 
-        public bool TryRemove(Behaviour component)
+        public bool TryRemove(object member)
         {
-            int hole = FindSlot(component, RuntimeHelpers.GetHashCode(component));
+            int hole = FindSlot(member, RuntimeHelpers.GetHashCode(member));
             if (hole == None)
             {
                 return false;
@@ -79,12 +78,12 @@ namespace Shooter.Infrastructure
             if (entries.Length > MinCapacity && count <= entries.Length / 4) ShrinkToFit();
         }
 
-        private int FindSlot(Behaviour component, int hash)
+        private int FindSlot(object member, int hash)
         {
             int mask = index.Length - 1;
             for (int i = hash & mask; index[i] != None; i = (i + 1) & mask)
             {
-                if (ReferenceEquals(entries[index[i]].Component, component)) return i;
+                if (ReferenceEquals(entries[index[i]].Member, member)) return i;
             }
 
             return None;
@@ -133,7 +132,7 @@ namespace Shooter.Infrastructure
             int packedUsed = 0;
             for (int position = 0; position < used; position++)
             {
-                if (entries[position].Component is null) continue;
+                if (entries[position].Member is null) continue;
 
                 packed[packedUsed] = entries[position];
                 packedUsed++;
@@ -151,13 +150,13 @@ namespace Shooter.Infrastructure
             Array.Fill(index, None);
             for (int position = 0; position < used; position++)
             {
-                if (entries[position].Component is not null) Place(position);
+                if (entries[position].Member is not null) Place(position);
             }
         }
 
         private struct Entry
         {
-            public Behaviour Component;
+            public object Member;
             public int Hash;
             public int NextFree;
         }
@@ -209,11 +208,11 @@ namespace Shooter.Infrastructure
                 {
                     while (array != null && position < array.used)
                     {
-                        Behaviour component = array.entries[position].Component;
+                        object member = array.entries[position].Member;
                         position++;
-                        if (component is null) continue;
+                        if (member is null) continue;
 
-                        current = (T)(object)component;
+                        current = (T)member;
                         return true;
                     }
 
