@@ -37,16 +37,16 @@ namespace Shooter.Game
                 return;
             }
 
-            bulletHoles.AddHole(hit.Point, hit.Normal);
-            Log.Info($"Entity {name} left a bullet hole on {hit.Collider.name}");
+            bulletHoles.AddHole(hit.Nearest.point, hit.Nearest.normal);
+            Log.Info($"Entity {name} left a bullet hole on {hit.Nearest.collider.name}");
         }
 
         private static string FindMissingHoleReason(ShotHit hit)
         {
             if (hit.IsMiss) return "the shot missed";
-            if (hit.Victim != null) return $"it hit {hit.Victim.name}";
+            if (hit.Nearest.collider.GetComponent<Hitbox>() != null) return $"it hit a body at {hit.Nearest.collider.name}";
 
-            return Surface.IsWater(hit.Surface) ? "it hit water" : null;
+            return Surface.IsWater(Surface.FindAt(hit.Nearest)) ? "it hit water" : null;
         }
     }
 }
