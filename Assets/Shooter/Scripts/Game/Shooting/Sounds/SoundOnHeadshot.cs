@@ -4,41 +4,41 @@ using UnityEngine;
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Gunner))]
+    [RequireComponent(typeof(DealDamageOnShot))]
     [RequireComponent(typeof(EarSpeaker))]
     public class SoundOnHeadshot : MonoBehaviour
     {
         private static readonly Journal Log = Logs.Here();
 
-        private Gunner gunner;
+        private DealDamageOnShot dealDamageOnShot;
         private EarSpeaker earSpeaker;
 
         private void Awake()
         {
-            gunner = GetComponent<Gunner>();
+            dealDamageOnShot = GetComponent<DealDamageOnShot>();
             earSpeaker = GetComponent<EarSpeaker>();
         }
 
         private void OnEnable()
         {
-            gunner.Shot += PlayOnHeadshot;
+            dealDamageOnShot.DamageDealt += PlayOnHeadshot;
         }
 
         private void OnDisable()
         {
-            gunner.Shot -= PlayOnHeadshot;
+            dealDamageOnShot.DamageDealt -= PlayOnHeadshot;
         }
 
-        private void PlayOnHeadshot(FirearmAsset asset, ShotHit hit)
+        private void PlayOnHeadshot(FirearmAsset asset, Health victim, BodyPart part, int damage)
         {
-            if (hit.Victim == null || hit.Part != BodyPart.Head)
+            if (part != BodyPart.Head)
             {
-                Log.Info($"Entity {name} played no headshot sound: {(hit.Victim == null ? "the shot hit no one" : $"it hit {hit.Victim.name} in {hit.Part}")}");
+                Log.Info($"Entity {name} played no headshot sound: it hit {victim.name} in {part}");
                 return;
             }
 
             earSpeaker.PlayForOwner(asset.HeadshotSound);
-            Log.Info($"Entity {name} played the headshot sound of {asset.name} to its owner for {hit.Victim.name}");
+            Log.Info($"Entity {name} played the headshot sound of {asset.name} to its owner for {victim.name}");
         }
     }
 }

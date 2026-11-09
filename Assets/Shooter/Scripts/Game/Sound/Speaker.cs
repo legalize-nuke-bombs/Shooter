@@ -29,21 +29,45 @@ namespace Shooter.Game
             PlayRpc(sound.NetworkId, sound.PickRandomVariant(), gain);
         }
 
+        public void PlayAt(SoundAsset sound, Vector3 position, float gain = 1f)
+        {
+            if (!IsServer) return;
+
+            if (sound == null)
+            {
+                Log.Warn($"Entity {name} was asked to play a sound at {position} without an asset set");
+                return;
+            }
+
+            PlayAtRpc(sound.NetworkId, sound.PickRandomVariant(), position, gain);
+        }
+
         [Rpc(SendTo.Everyone)]
         private void PlayRpc(FixedString32Bytes id, byte variant, float gain)
+        {
+            SoundAsset sound = FindSound(id);
+            if (sound == null || sound.GetClip(variant) == null) return;
+
+            AudioSource audioSource = TakeAudioSource();
+            if (sound.TryConfigure(audioSource, variant, gain)) audioSource.Play();
+        }
+
+        [Rpc(SendTo.Everyone)]
+        private void PlayAtRpc(FixedString32Bytes id, byte variant, Vector3 position, float gain)
+        {
+            WorldSpeaker.PlayLocallyAt(FindSound(id), variant, position, gain);
+        }
+
+        private SoundAsset FindSound(FixedString32Bytes id)
         {
             SoundCatalog soundCatalog = Catalogs.GetCatalog<SoundCatalog>();
             if (soundCatalog == null)
             {
                 Log.Warn($"Entity {name} cannot play {id}: the world has no sound catalog");
-                return;
+                return null;
             }
 
-            SoundAsset sound = soundCatalog.GetAssetById(id);
-            if (sound == null || sound.GetClip(variant) == null) return;
-
-            AudioSource audioSource = TakeAudioSource();
-            if (sound.TryConfigure(audioSource, variant, gain)) audioSource.Play();
+            return soundCatalog.GetAssetById(id);
         }
 
         private AudioSource TakeAudioSource()
