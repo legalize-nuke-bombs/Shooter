@@ -31,6 +31,14 @@ namespace Shooter.Infrastructure
             Send(clientId, message);
         }
 
+        public void SendToClients(T message)
+        {
+            foreach (ulong clientId in owner.NetworkManager.ConnectedClientsIds)
+            {
+                Send(clientId, message);
+            }
+        }
+
         public void Receive(FastBufferReader reader)
         {
             reader.ReadNetworkSerializable(out T message);

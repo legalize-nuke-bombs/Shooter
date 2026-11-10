@@ -1,11 +1,10 @@
-using System;
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Shooter.Game
 {
-    public struct BulletHoleData : INetworkSerializeByMemcpy, IEquatable<BulletHoleData>, ISaveableObject
+    public struct BulletHoleData : INetworkSerializeByMemcpy, ISaveableObject
     {
         public Vector3 Position;
         public Vector3 Normal;
@@ -28,11 +27,6 @@ namespace Shooter.Game
             SaveData saveData = content.ToObject<SaveData>();
             Position = saveData.Position;
             Normal = saveData.Normal;
-        }
-
-        public bool Equals(BulletHoleData other)
-        {
-            return Position.Equals(other.Position) && Normal.Equals(other.Normal);
         }
     }
 }
