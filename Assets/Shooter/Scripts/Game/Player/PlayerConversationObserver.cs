@@ -7,6 +7,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerConversations))]
     [RequireComponent(typeof(PlayerController))]
+    [RequireComponent(typeof(EarSpeaker))]
     public class PlayerConversationObserver : MonoBehaviour, IToastSource
     {
         [SerializeField] private IconAsset icon;
@@ -14,6 +15,7 @@ namespace Shooter.Game
 
         private PlayerConversations playerConversations;
         private PlayerController playerController;
+        private EarSpeaker earSpeaker;
 
         public event Action<Toast> ToastRaised;
 
@@ -21,6 +23,7 @@ namespace Shooter.Game
         {
             playerConversations = GetComponent<PlayerConversations>();
             playerController = GetComponent<PlayerController>();
+            earSpeaker = GetComponent<EarSpeaker>();
         }
 
         private void OnEnable()
@@ -36,7 +39,12 @@ namespace Shooter.Game
         private void HandleLiveLineArrived(long partnerId, ConversationLine line)
         {
             if (line.Spoken || line.AuthorId == playerConversations.CharacterId) return;
-            if (playerController.TalkPartnerId == partnerId) return;
+
+            if (playerController.TalkPartnerId == partnerId)
+            {
+                earSpeaker.PlayLocally(sound);
+                return;
+            }
 
             ToastRaised?.Invoke(new Toast(icon, sound, line.Content, "от " + NameMapper.GetShownNameById(partnerId)));
         }

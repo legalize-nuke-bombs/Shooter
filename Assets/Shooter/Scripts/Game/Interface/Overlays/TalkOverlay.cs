@@ -38,6 +38,7 @@ namespace Shooter.Game
         private int drawnLineCount;
 
         private bool talkingOverRadio;
+        private bool partnerOutOfReach;
         private long? shownRadioPartnerId;
 
         public void ShooterUpdate()
@@ -135,6 +136,7 @@ namespace Shooter.Game
             }
 
             talkingOverRadio = false;
+            partnerOutOfReach = false;
             ShowTalk(playerConversations.GetOrCreateContact(foundTalker.CharacterId), foundTalker, NameMapper.GetShownName(foundTalker));
         }
 
@@ -144,6 +146,7 @@ namespace Shooter.Game
 
             Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Include);
             talkingOverRadio = true;
+            partnerOutOfReach = playerRadio != null && playerRadio.IsOutOfReach(partnerId);
             ShowTalk(playerConversations.GetOrCreateContact(partnerId), partner == null ? null : partner.GetComponent<Talker>(), $"{NameMapper.GetShownName(partner)} ({RadioTitleSuffix})");
         }
 
@@ -154,7 +157,7 @@ namespace Shooter.Game
             shownContact = contact;
             partnerNameLabel.text = title;
             giveButton.style.display = talkingOverRadio ? DisplayStyle.None : DisplayStyle.Flex;
-            outOfReachLabel.style.display = DisplayStyle.None;
+            outOfReachLabel.style.display = partnerOutOfReach ? DisplayStyle.Flex : DisplayStyle.None;
             inputField.value = string.Empty;
             windowElement.style.display = DisplayStyle.Flex;
 
@@ -173,6 +176,7 @@ namespace Shooter.Game
             StopAllCoroutines();
             shownContact = null;
             talkingOverRadio = false;
+            partnerOutOfReach = false;
             drawnLineCount = 0;
             linesScrollView.Clear();
             windowElement.style.display = DisplayStyle.None;
@@ -280,8 +284,9 @@ namespace Shooter.Game
         private void ShowPartnerThinking(bool thinking)
         {
             waitingLabel.style.display = thinking ? DisplayStyle.Flex : DisplayStyle.None;
-            inputField.SetEnabled(!thinking);
-            if (!thinking && windowElement.style.display == DisplayStyle.Flex) inputField.Focus();
+            bool inputOpen = !thinking && !partnerOutOfReach;
+            inputField.SetEnabled(inputOpen);
+            if (inputOpen && windowElement.style.display == DisplayStyle.Flex) inputField.Focus();
         }
 
         private void HandleInputKeyDown(KeyDownEvent keyDown)
@@ -293,8 +298,6 @@ namespace Shooter.Game
             keyDown.StopPropagation();
 
             if (speech.Length == 0 || shownContact == null) return;
-
-            outOfReachLabel.style.display = DisplayStyle.None;
 
             if (talkingOverRadio && playerRadio != null)
             {
@@ -310,7 +313,9 @@ namespace Shooter.Game
         {
             if (!talkingOverRadio || shownContact == null || shownContact.PartnerId != partnerId) return;
 
+            partnerOutOfReach = true;
             outOfReachLabel.style.display = DisplayStyle.Flex;
+            inputField.SetEnabled(false);
         }
 
         private void OpenInventoryFromTalk()

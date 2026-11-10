@@ -91,7 +91,7 @@ namespace Shooter.Game
         public bool TrySay(long authorId, long listenerId, string content, bool spoken, bool urgent)
         {
             Character listener = Character.FindById(listenerId, RegisterInactivePolicy.Include);
-            if (listener != null && ShooterEntity.GetComponentStatus(listener) == ShooterEntity.ComponentStatus.Optimized)
+            if (listener != null && !CanHear(listener))
             {
                 Log.Info($"Character {authorId} said nothing to {listenerId}: the listener is optimized, too far to hear");
                 return false;
@@ -110,6 +110,11 @@ namespace Shooter.Game
             conversation.AddMessage(message);
             RaiseSaidInOrder(conversation, message);
             return true;
+        }
+
+        public static bool CanHear(Character listener)
+        {
+            return ShooterEntity.GetComponentStatus(listener) != ShooterEntity.ComponentStatus.Optimized;
         }
 
         // A listener may answer inside Said: its line waits until every listener has heard the line it answers

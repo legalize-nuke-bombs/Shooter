@@ -92,7 +92,7 @@
             <ui:Label name="talk-name" class="line talk__name" picking-mode="Ignore"/>
             <ui:ScrollView name="talk-log" class="talk__log"/>
             <ui:Label name="talk-waiting" text="Думает..." class="line talk__waiting" picking-mode="Ignore"/>
-            <ui:Label name="talk-out-of-reach" text="Слишком далеко, не слышит" class="line talk__waiting" picking-mode="Ignore"/>
+            <ui:Label name="talk-out-of-reach" text="Вне досягаемости" class="line talk__waiting" picking-mode="Ignore"/>
             <ui:TextField name="talk-input" class="talk__input"/>
             <ui:VisualElement class="talk__footer">
                 <ui:Button name="talk-give" text="Передать" class="talk__give"/>
