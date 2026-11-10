@@ -10,7 +10,7 @@ namespace Shooter.Game
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(Player))]
-    public class PlayerConversations : NetworkBehaviour
+    public class PlayerConversations : NetworkBehaviour, IConversationListener
     {
         private static readonly Journal Log = Logs.Here();
 
