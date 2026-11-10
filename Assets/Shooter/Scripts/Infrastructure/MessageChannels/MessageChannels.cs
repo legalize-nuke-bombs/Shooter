@@ -11,60 +11,26 @@ namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkManager))]
-    public class MessageChannels : MonoBehaviour, IShooterLateUpdateable
+    public class MessageChannels : MonoBehaviour
     {
         private const string MessageName = "Shooter.MessageChannels";
-        private const int BytesPerClientPerFrame = 64 * 1024;
         private const int InitialMessageBytes = 1024;
         private static readonly Journal Log = Logs.Here();
         private static readonly Dictionary<Type, Dictionary<uint, FieldInfo>> ChannelFieldsByType = new();
 
-        private readonly Dictionary<ulong, Queue<OutgoingMessage>> outgoingByClient = new();
-        private readonly Dictionary<ulong, IncomingMessage> incomingByClient = new();
-
         private NetworkManager network;
-
-        private sealed class OutgoingMessage
-        {
-            public OutgoingMessage(byte[] bytes)
-            {
-                Bytes = bytes;
-            }
-
-            public byte[] Bytes { get; }
-
-            public int SentBytes { get; set; }
-        }
-
-        private sealed class IncomingMessage
-        {
-            public IncomingMessage(int length)
-            {
-                Bytes = new byte[length];
-            }
-
-            public byte[] Bytes { get; }
-
-            public int ReceivedBytes { get; set; }
-        }
 
         private void Awake()
         {
             network = GetComponent<NetworkManager>();
             network.OnServerStarted += ListenForMessages;
             network.OnClientStarted += ListenForMessages;
-            network.OnClientDisconnectCallback += ForgetDisconnectedClient;
-            network.OnServerStopped += ForgetAllClients;
-            network.OnClientStopped += ForgetAllClients;
         }
 
         private void OnDestroy()
         {
             network.OnServerStarted -= ListenForMessages;
             network.OnClientStarted -= ListenForMessages;
-            network.OnClientDisconnectCallback -= ForgetDisconnectedClient;
-            network.OnServerStopped -= ForgetAllClients;
-            network.OnClientStopped -= ForgetAllClients;
         }
 
         public void Send<T>(NetworkBehaviour owner, IMessageChannel channel, ulong clientId, in T message) where T : INetworkSerializable
@@ -86,73 +52,16 @@ namespace Shooter.Infrastructure
             writer.WriteValueSafe(owner.NetworkBehaviourId);
             writer.WriteValueSafe(channelId);
             writer.WriteNetworkSerializable(message);
-            GetOutgoing(clientId).Enqueue(new OutgoingMessage(writer.ToArray()));
-        }
-
-        public void ShooterLateUpdate()
-        {
-            foreach (KeyValuePair<ulong, Queue<OutgoingMessage>> entry in outgoingByClient)
-            {
-                SendPortions(entry.Key, entry.Value);
-            }
-        }
-
-        private void SendPortions(ulong clientId, Queue<OutgoingMessage> outgoing)
-        {
-            int budget = BytesPerClientPerFrame;
-            while (budget > 0 && outgoing.Count > 0)
-            {
-                OutgoingMessage message = outgoing.Peek();
-                int count = Math.Min(message.Bytes.Length - message.SentBytes, budget);
-
-                using FastBufferWriter portion = new(sizeof(int) + count, Allocator.Temp);
-                if (message.SentBytes == 0) portion.WriteValueSafe(message.Bytes.Length);
-                portion.WriteBytesSafe(message.Bytes, count, message.SentBytes);
-                network.CustomMessagingManager.SendNamedMessage(MessageName, clientId, portion, NetworkDelivery.ReliableFragmentedSequenced);
-
-                message.SentBytes += count;
-                budget -= count;
-                if (message.SentBytes == message.Bytes.Length) outgoing.Dequeue();
-            }
-        }
-
-        private Queue<OutgoingMessage> GetOutgoing(ulong clientId)
-        {
-            if (outgoingByClient.TryGetValue(clientId, out Queue<OutgoingMessage> outgoing)) return outgoing;
-
-            outgoing = new Queue<OutgoingMessage>();
-            outgoingByClient.Add(clientId, outgoing);
-            return outgoing;
+            network.CustomMessagingManager.SendNamedMessage(MessageName, clientId, writer, NetworkDelivery.ReliableFragmentedSequenced);
         }
 
         private void ListenForMessages()
         {
-            network.CustomMessagingManager.RegisterNamedMessageHandler(MessageName, HandlePortionReceived);
+            network.CustomMessagingManager.RegisterNamedMessageHandler(MessageName, HandleMessageReceived);
         }
 
-        // The portions of one sender come in order, so only the first portion of a message carries its length
-        private void HandlePortionReceived(ulong senderClientId, FastBufferReader portion)
+        private void HandleMessageReceived(ulong senderClientId, FastBufferReader reader)
         {
-            if (!incomingByClient.TryGetValue(senderClientId, out IncomingMessage message))
-            {
-                portion.ReadValueSafe(out int length);
-                message = new IncomingMessage(length);
-                incomingByClient.Add(senderClientId, message);
-            }
-
-            byte[] bytes = message.Bytes;
-            int count = Math.Min(portion.Length - portion.Position, bytes.Length - message.ReceivedBytes);
-            portion.ReadBytesSafe(ref bytes, count, message.ReceivedBytes);
-            message.ReceivedBytes += count;
-            if (message.ReceivedBytes < bytes.Length) return;
-
-            incomingByClient.Remove(senderClientId);
-            Deliver(senderClientId, bytes);
-        }
-
-        private void Deliver(ulong senderClientId, byte[] bytes)
-        {
-            using FastBufferReader reader = new(bytes, Allocator.Persistent);
             reader.ReadValueSafe(out ulong networkObjectId);
             reader.ReadValueSafe(out ushort networkBehaviourId);
             reader.ReadValueSafe(out uint channelId);
@@ -179,18 +88,6 @@ namespace Shooter.Infrastructure
             }
 
             ((IMessageChannel)field.GetValue(owner)).Receive(reader);
-        }
-
-        private void ForgetDisconnectedClient(ulong clientId)
-        {
-            outgoingByClient.Remove(clientId);
-            incomingByClient.Remove(clientId);
-        }
-
-        private void ForgetAllClients(bool wasHost)
-        {
-            outgoingByClient.Clear();
-            incomingByClient.Clear();
         }
 
         private static bool TryFindChannelId(NetworkBehaviour owner, IMessageChannel channel, out uint channelId)
