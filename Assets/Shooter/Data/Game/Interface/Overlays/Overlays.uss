@@ -612,6 +612,10 @@
     opacity: 0.45;
 }
 
+.radio__group-title {
+    margin-top: 8px;
+}
+
 .radio__empty {
     font-size: 13px;
     color: var(--color-text-dim);

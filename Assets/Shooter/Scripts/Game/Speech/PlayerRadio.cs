@@ -14,8 +14,11 @@ namespace Shooter.Game
 
         private Character character;
         private ConversationManager conversationManager;
+        private RadioPartner[] partners = Array.Empty<RadioPartner>();
 
-        public event Action<IReadOnlyList<RadioPartner>> PartnersArrived;
+        public IReadOnlyList<RadioPartner> Partners => partners;
+
+        public event Action PartnersArrived;
 
         public event Action<long> PartnerOutOfReach;
 
@@ -25,10 +28,20 @@ namespace Shooter.Game
             conversationManager = Registers.Instance.Get<ConversationManager>();
         }
 
+        public bool IsOutOfReach(long partnerId)
+        {
+            foreach (RadioPartner partner in partners)
+            {
+                if (partner.CharacterId == partnerId) return partner.OutOfReach;
+            }
+
+            return false;
+        }
+
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         public void RequestPartnersRpc()
         {
-            List<RadioPartner> partners = new();
+            List<RadioPartner> found = new();
             foreach (IConversationListener listener in Registers.Instance.GetAll<IConversationListener>(RegisterInactivePolicy.Include))
             {
                 if (listener.CharacterId == character.Id) continue;
@@ -36,11 +49,11 @@ namespace Shooter.Game
                 Character partner = Character.FindById(listener.CharacterId, RegisterInactivePolicy.Include);
                 if (ShooterEntity.GetComponentStatus(partner) == ShooterEntity.ComponentStatus.Disabled) continue;
 
-                partners.Add(new RadioPartner { CharacterId = partner.Id, OutOfReach = !ConversationManager.CanHear(partner) });
+                found.Add(new RadioPartner { CharacterId = partner.Id, OutOfReach = !ConversationManager.CanHear(partner) });
             }
 
-            Log.Info($"Player {OwnerClientId} is sent {partners.Count} radio partners");
-            RaisePartnersArrivedRpc(partners.ToArray());
+            Log.Info($"Player {OwnerClientId} is sent {found.Count} radio partners");
+            RaisePartnersArrivedRpc(found.ToArray());
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -63,9 +76,10 @@ namespace Shooter.Game
         }
 
         [Rpc(SendTo.Owner)]
-        private void RaisePartnersArrivedRpc(RadioPartner[] partners)
+        private void RaisePartnersArrivedRpc(RadioPartner[] arrived)
         {
-            PartnersArrived?.Invoke(partners);
+            partners = arrived;
+            PartnersArrived?.Invoke();
         }
 
         [Rpc(SendTo.Owner)]

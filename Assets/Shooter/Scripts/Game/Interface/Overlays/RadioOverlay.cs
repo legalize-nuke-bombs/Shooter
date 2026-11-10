@@ -13,11 +13,12 @@ namespace Shooter.Game
         private const string WindowElementName = "radio";
         private const string ContactScrollViewName = "radio-list";
         private const string EmptyLabelName = "radio-empty";
+        private const string OutOfReachTitle = "Вне досягаемости";
         private static readonly Journal Log = Logs.Here();
 
         private PlayerConversations playerConversations;
         private PlayerRadio playerRadio;
-        private IReadOnlyList<RadioPartner> partners;
+        private bool partnersArrived;
         private Label emptyLabel;
         private ScrollView contactScrollView;
         private bool open;
@@ -82,7 +83,7 @@ namespace Shooter.Game
                 playerConversations.LiveLineArrived += HandleLiveLineArrived;
             }
 
-            partners = null;
+            partnersArrived = false;
             playerRadio = playerController.GetComponent<PlayerRadio>();
             if (playerRadio != null)
             {
@@ -106,16 +107,16 @@ namespace Shooter.Game
 
             if (playerRadio != null) playerRadio.PartnersArrived -= HandlePartnersArrived;
             playerRadio = null;
-            partners = null;
+            partnersArrived = false;
 
             if (windowElement != null) windowElement.style.display = DisplayStyle.None;
             contactScrollView?.Clear();
             Log.Info("The radio is closed");
         }
 
-        private void HandlePartnersArrived(IReadOnlyList<RadioPartner> arrived)
+        private void HandlePartnersArrived()
         {
-            partners = arrived;
+            partnersArrived = true;
             stale = true;
         }
 
@@ -133,10 +134,10 @@ namespace Shooter.Game
         {
             stale = false;
             contactScrollView.Clear();
-            emptyLabel.style.display = partners != null && partners.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            if (partners == null) return;
+            emptyLabel.style.display = partnersArrived && playerRadio.Partners.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!partnersArrived) return;
 
-            List<(RadioPartner Partner, string Name, Contact Contact)> entries = partners
+            List<(RadioPartner Partner, string Name, Contact Contact)> entries = playerRadio.Partners
                 .Select(partner => (Partner: partner, Name: NameMapper.GetShownNameById(partner.CharacterId), Contact: FindContact(partner.CharacterId)))
                 .OrderBy(entry => entry.Partner.OutOfReach)
                 .ThenByDescending(entry => entry.Contact?.LastLineTime ?? DateTime.MinValue)
@@ -154,6 +155,14 @@ namespace Shooter.Game
 
                 contactScrollView.Add(contactButton);
             }
+
+            int firstOutOfReach = entries.FindIndex(entry => entry.Partner.OutOfReach);
+            if (firstOutOfReach < 0) return;
+
+            Label outOfReachTitle = new(OutOfReachTitle) { pickingMode = PickingMode.Ignore };
+            outOfReachTitle.AddToClassList("section__title");
+            outOfReachTitle.AddToClassList("radio__group-title");
+            contactScrollView.Insert(firstOutOfReach, outOfReachTitle);
         }
 
         private Contact FindContact(long partnerId)
