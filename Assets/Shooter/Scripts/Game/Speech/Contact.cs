@@ -28,11 +28,6 @@ namespace Shooter.Game
             lines.AddRange(history);
         }
 
-        public void AddLines(IEnumerable<ConversationLine> more)
-        {
-            lines.AddRange(more);
-        }
-
         public void AddLine(ConversationLine line)
         {
             lines.Add(line);

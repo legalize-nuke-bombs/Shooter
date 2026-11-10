@@ -10,8 +10,6 @@ namespace Shooter.Game
         public DateTime Time;
         public bool Spoken;
 
-        public int SerializedSize => sizeof(long) + FastBufferWriter.GetWriteSize(Content) + sizeof(long) + sizeof(bool);
-
         public static ConversationLine FromMessage(Message message)
         {
             return new ConversationLine

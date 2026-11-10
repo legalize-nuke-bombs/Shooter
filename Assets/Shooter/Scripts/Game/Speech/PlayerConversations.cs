@@ -12,7 +12,6 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     public class PlayerConversations : NetworkBehaviour
     {
-        private const int MaxHistoryPageBytes = 60 * 1024;
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<long, Contact> contacts = new();
@@ -20,6 +19,32 @@ namespace Shooter.Game
         private Character character;
         private Player player;
         private ConversationManager conversationManager;
+        private MessageChannel<History> histories;
+        private MessageChannel<LiveLine> liveLines;
+
+        private struct History : INetworkSerializable
+        {
+            public long PartnerId;
+            public ConversationLine[] Lines;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref PartnerId);
+                serializer.SerializeValue(ref Lines);
+            }
+        }
+
+        private struct LiveLine : INetworkSerializable
+        {
+            public long PartnerId;
+            public ConversationLine Line;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref PartnerId);
+                serializer.SerializeValue(ref Line);
+            }
+        }
 
         public long CharacterId => character.Id;
 
@@ -35,6 +60,10 @@ namespace Shooter.Game
         {
             character = GetComponent<Character>();
             player = GetComponent<Player>();
+            histories = new MessageChannel<History>(this);
+            liveLines = new MessageChannel<LiveLine>(this);
+            histories.Received += HandleHistoryReceived;
+            liveLines.Received += HandleLiveLineReceived;
         }
 
         public override void OnNetworkSpawn()
@@ -96,7 +125,11 @@ namespace Shooter.Game
             if (conversation.First != CharacterId && conversation.Second != CharacterId) return;
             if (!player.IsControlled) return;
 
-            ReceiveLiveLineRpc(conversation.GetPartnerId(CharacterId), ConversationLine.FromMessage(message));
+            liveLines.SendToOwner(new LiveLine
+            {
+                PartnerId = conversation.GetPartnerId(CharacterId),
+                Line = ConversationLine.FromMessage(message)
+            });
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -105,57 +138,28 @@ namespace Shooter.Game
             List<Conversation> conversations = conversationManager.GetConversationsOf(CharacterId);
             foreach (Conversation conversation in conversations)
             {
-                SendHistory(conversation);
-            }
-
-            Log.Info($"Player {OwnerClientId} received the history of its {conversations.Count} conversations");
-        }
-
-        // Netcode refuses an RPC over 64 KB, so a long history goes in pages, all in this frame and in order
-        private void SendHistory(Conversation conversation)
-        {
-            long partnerId = conversation.GetPartnerId(CharacterId);
-            var page = new List<ConversationLine>();
-            int pageBytes = 0;
-            bool isFirstPage = true;
-            foreach (ConversationLine line in conversation.Messages.Select(ConversationLine.FromMessage))
-            {
-                if (page.Count > 0 && pageBytes + line.SerializedSize > MaxHistoryPageBytes)
+                histories.SendToOwner(new History
                 {
-                    ReceiveHistoryRpc(partnerId, isFirstPage, page.ToArray());
-                    isFirstPage = false;
-                    page.Clear();
-                    pageBytes = 0;
-                }
-
-                page.Add(line);
-                pageBytes += line.SerializedSize;
+                    PartnerId = conversation.GetPartnerId(CharacterId),
+                    Lines = conversation.Messages.Select(ConversationLine.FromMessage).ToArray()
+                });
             }
 
-            ReceiveHistoryRpc(partnerId, isFirstPage, page.ToArray());
+            Log.Info($"Player {OwnerClientId} is sent the history of its {conversations.Count} conversations");
         }
 
-        [Rpc(SendTo.Owner)]
-        private void ReceiveHistoryRpc(long partnerId, bool isFirstPage, ConversationLine[] lines)
+        private void HandleHistoryReceived(History history)
         {
-            Contact contact = GetOrCreateContact(partnerId);
-            if (isFirstPage)
-            {
-                contact.ReplaceLines(lines);
-            }
-            else
-            {
-                contact.AddLines(lines);
-            }
-
-            HistoryArrived?.Invoke(partnerId);
+            GetOrCreateContact(history.PartnerId).ReplaceLines(history.Lines);
+            HistoryArrived?.Invoke(history.PartnerId);
+            Log.Info($"History with {history.PartnerId} arrived, {history.Lines.Length} lines");
         }
 
-        [Rpc(SendTo.Owner)]
-        private void ReceiveLiveLineRpc(long partnerId, ConversationLine line)
+        private void HandleLiveLineReceived(LiveLine liveLine)
         {
-            GetOrCreateContact(partnerId).AddLine(line);
-            LiveLineArrived?.Invoke(partnerId, line);
+            GetOrCreateContact(liveLine.PartnerId).AddLine(liveLine.Line);
+            LiveLineArrived?.Invoke(liveLine.PartnerId, liveLine.Line);
+            Log.Info($"A line with {liveLine.PartnerId} arrived");
         }
     }
 }
