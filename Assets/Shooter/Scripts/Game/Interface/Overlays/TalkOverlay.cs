@@ -87,7 +87,8 @@ namespace Shooter.Game
                 return;
             }
 
-            playerConversations.LinesArrived += HandleLinesArrived;
+            playerConversations.HistoryArrived += HandleHistoryArrived;
+            playerConversations.LiveLineArrived += HandleLiveLineArrived;
             playerConversations.ContactsCleared += HandleContactsCleared;
         }
 
@@ -189,7 +190,14 @@ namespace Shooter.Game
             DrawNewLines(false);
         }
 
-        private void HandleLinesArrived(long partnerId)
+        private void HandleHistoryArrived(long partnerId)
+        {
+            if (shownContact == null || partnerId != shownContact.PartnerId) return;
+
+            RedrawAllLines();
+        }
+
+        private void HandleLiveLineArrived(long partnerId, ConversationLine line)
         {
             if (shownContact == null || partnerId != shownContact.PartnerId) return;
 
@@ -201,16 +209,15 @@ namespace Shooter.Game
             CloseTalk();
         }
 
-        // Stops at the first gap, so a later line never shows above one that is still on its way
         private void DrawNewLines(bool typeOut)
         {
-            while (drawnLineCount < shownContact.LineCount && shownContact.TryGetLine(drawnLineCount, out ConversationLine line))
+            while (drawnLineCount < shownContact.Lines.Count)
             {
-                AddLine(line, typeOut);
+                AddLine(shownContact.Lines[drawnLineCount], typeOut);
                 drawnLineCount++;
             }
 
-            shownContact.SeenLineCount = shownContact.LineCount;
+            shownContact.SeenLineCount = shownContact.Lines.Count;
         }
 
         private void AddLine(ConversationLine line, bool typeOut)
@@ -328,7 +335,8 @@ namespace Shooter.Game
 
             if (playerConversations != null)
             {
-                playerConversations.LinesArrived -= HandleLinesArrived;
+                playerConversations.HistoryArrived -= HandleHistoryArrived;
+                playerConversations.LiveLineArrived -= HandleLiveLineArrived;
                 playerConversations.ContactsCleared -= HandleContactsCleared;
                 playerConversations = null;
             }

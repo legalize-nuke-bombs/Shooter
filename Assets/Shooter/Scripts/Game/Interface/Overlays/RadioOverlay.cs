@@ -73,7 +73,11 @@ namespace Shooter.Game
         private void OpenWindow(PlayerController playerController)
         {
             playerConversations = playerController.GetComponent<PlayerConversations>();
-            if (playerConversations != null) playerConversations.LinesArrived += HandleLinesArrived;
+            if (playerConversations != null)
+            {
+                playerConversations.HistoryArrived += HandleHistoryArrived;
+                playerConversations.LiveLineArrived += HandleLiveLineArrived;
+            }
 
             windowElement.style.display = DisplayStyle.Flex;
             stale = true;
@@ -82,7 +86,11 @@ namespace Shooter.Game
 
         private void CloseWindow()
         {
-            if (playerConversations != null) playerConversations.LinesArrived -= HandleLinesArrived;
+            if (playerConversations != null)
+            {
+                playerConversations.HistoryArrived -= HandleHistoryArrived;
+                playerConversations.LiveLineArrived -= HandleLiveLineArrived;
+            }
             playerConversations = null;
 
             if (windowElement != null) windowElement.style.display = DisplayStyle.None;
@@ -90,7 +98,12 @@ namespace Shooter.Game
             Log.Info("The radio is closed");
         }
 
-        private void HandleLinesArrived(long partnerId)
+        private void HandleHistoryArrived(long partnerId)
+        {
+            stale = true;
+        }
+
+        private void HandleLiveLineArrived(long partnerId, ConversationLine line)
         {
             stale = true;
         }

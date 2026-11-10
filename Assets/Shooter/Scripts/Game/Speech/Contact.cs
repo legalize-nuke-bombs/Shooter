@@ -5,7 +5,7 @@ namespace Shooter.Game
 {
     public sealed class Contact
     {
-        private readonly Dictionary<int, ConversationLine> lines = new();
+        private readonly List<ConversationLine> lines = new();
 
         public Contact(long partnerId)
         {
@@ -14,25 +14,23 @@ namespace Shooter.Game
 
         public long PartnerId { get; }
 
-        // One past the highest index known so far
-        public int LineCount { get; private set; }
+        public IReadOnlyList<ConversationLine> Lines => lines;
 
-        public DateTime LastLineTime { get; private set; }
+        public DateTime LastLineTime => lines.Count == 0 ? DateTime.MinValue : lines[lines.Count - 1].Time;
 
         public int SeenLineCount { get; set; }
 
-        public int UnreadLineCount => Math.Max(0, LineCount - SeenLineCount);
+        public int UnreadLineCount => Math.Max(0, lines.Count - SeenLineCount);
 
-        public bool TryGetLine(int index, out ConversationLine line)
+        public void ReplaceLines(IEnumerable<ConversationLine> history)
         {
-            return lines.TryGetValue(index, out line);
+            lines.Clear();
+            lines.AddRange(history);
         }
 
-        public void PutLine(int index, ConversationLine line)
+        public void AddLine(ConversationLine line)
         {
-            lines[index] = line;
-            if (index >= LineCount) LineCount = index + 1;
-            if (line.Time > LastLineTime) LastLineTime = line.Time;
+            lines.Add(line);
         }
     }
 }

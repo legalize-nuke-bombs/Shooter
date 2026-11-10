@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Shooter.Infrastructure;
@@ -10,25 +9,48 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Character))]
-    public class PlayerConversations : NetworkBehaviour, IShooterUpdateable
+    [RequireComponent(typeof(Player))]
+    public class PlayerConversations : NetworkBehaviour
     {
-        private const int MaxBatchBytes = 16 * 1024;
-        private const int LineOverheadBytes = 32;
-        private const int BytesPerCharacter = 2;
         private static readonly Journal Log = Logs.Here();
 
         private readonly Dictionary<long, Contact> contacts = new();
 
         private Character character;
+        private Player player;
         private ConversationManager conversationManager;
-        private Coroutine sendConversationsCoroutine;
-        private bool conversationsRequested;
+        private MessageChannel<History> histories;
+        private MessageChannel<LiveLine> liveLines;
+
+        private struct History : INetworkSerializable
+        {
+            public long PartnerId;
+            public ConversationLine[] Lines;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref PartnerId);
+                serializer.SerializeValue(ref Lines);
+            }
+        }
+
+        private struct LiveLine : INetworkSerializable
+        {
+            public long PartnerId;
+            public ConversationLine Line;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref PartnerId);
+                serializer.SerializeValue(ref Line);
+            }
+        }
 
         public long CharacterId => character.Id;
 
         public IReadOnlyDictionary<long, Contact> Contacts => contacts;
 
-        public event Action<long> LinesArrived;
+        public event Action<long> HistoryArrived;
 
         public event Action<long, ConversationLine> LiveLineArrived;
 
@@ -37,51 +59,36 @@ namespace Shooter.Game
         private void Awake()
         {
             character = GetComponent<Character>();
+            player = GetComponent<Player>();
+            histories = new MessageChannel<History>(this);
+            liveLines = new MessageChannel<LiveLine>(this);
+            histories.Received += HandleHistoryReceived;
+            liveLines.Received += HandleLiveLineReceived;
         }
 
         public override void OnNetworkSpawn()
         {
-            if (!IsServer) return;
+            if (IsServer)
+            {
+                conversationManager = Registers.Instance.Get<ConversationManager>();
+                conversationManager.Said += HandleSaid;
+            }
 
-            conversationManager = Registers.Instance.Get<ConversationManager>();
-            conversationManager.Said += HandleSaid;
+            player.ControlChanged += HandleControlChanged;
+            HandleControlChanged();
         }
 
         public override void OnNetworkDespawn()
         {
+            player.ControlChanged -= HandleControlChanged;
+
             if (conversationManager != null)
             {
                 conversationManager.Said -= HandleSaid;
                 conversationManager = null;
             }
 
-            if (sendConversationsCoroutine != null)
-            {
-                StopCoroutine(sendConversationsCoroutine);
-                sendConversationsCoroutine = null;
-            }
-
             ClearContacts();
-        }
-
-        public override void OnGainedOwnership()
-        {
-            ClearContacts();
-        }
-
-        public override void OnLostOwnership()
-        {
-            ClearContacts();
-        }
-
-        public void ShooterUpdate()
-        {
-            // The owner pulls its history itself: one path for a fresh body, a reclaimed one and the host,
-            // whose own body never changes owner and so never raises an ownership event
-            if (!IsOwner || conversationsRequested) return;
-
-            conversationsRequested = true;
-            RequestConversationsRpc();
         }
 
         public Contact GetOrCreateContact(long partnerId)
@@ -95,85 +102,64 @@ namespace Shooter.Game
             return contact;
         }
 
+        private void HandleControlChanged()
+        {
+            if (player.IsControlledLocally)
+            {
+                RequestHistoryRpc();
+            }
+            else
+            {
+                ClearContacts();
+            }
+        }
+
         private void ClearContacts()
         {
             contacts.Clear();
-            conversationsRequested = false;
             ContactsCleared?.Invoke();
         }
 
         private void HandleSaid(Conversation conversation, Message message)
         {
             if (conversation.First != CharacterId && conversation.Second != CharacterId) return;
+            if (!player.IsControlled) return;
 
-            // An offline body is owned by the host; the line comes with the rest of its conversations when its owner returns
-            if (!gameObject.activeInHierarchy) return;
-
-            ReceiveLiveLineRpc(conversation.GetPartnerId(CharacterId), conversation.IndexOf(message), ConversationLine.FromMessage(message));
+            liveLines.SendToOwner(new LiveLine
+            {
+                PartnerId = conversation.GetPartnerId(CharacterId),
+                Line = ConversationLine.FromMessage(message)
+            });
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        private void RequestConversationsRpc()
+        private void RequestHistoryRpc()
         {
-            Log.Info($"Player {OwnerClientId} asks for its conversations");
-
-            if (sendConversationsCoroutine != null) StopCoroutine(sendConversationsCoroutine);
-            sendConversationsCoroutine = StartCoroutine(SendConversationsInBatches());
-        }
-
-        // One batch per frame: an overflowing reliable queue drops the connection
-        private IEnumerator SendConversationsInBatches()
-        {
-            int sentLineCount = 0;
-            foreach (Conversation conversation in conversationManager.GetConversationsOf(CharacterId))
+            List<Conversation> conversations = conversationManager.GetConversationsOf(CharacterId);
+            foreach (Conversation conversation in conversations)
             {
-                long partnerId = conversation.GetPartnerId(CharacterId);
-                IReadOnlyList<Message> messages = conversation.Messages;
-                int messageCount = messages.Count;
-
-                var batch = new List<ConversationLine>();
-                int firstIndex = 0;
-                int batchBytes = 0;
-                for (int i = 0; i < messageCount; i++)
+                histories.SendToOwner(new History
                 {
-                    ConversationLine line = ConversationLine.FromMessage(messages[i]);
-                    batch.Add(line);
-                    batchBytes += LineOverheadBytes + BytesPerCharacter * (line.Content?.Length ?? 0);
-
-                    if (batchBytes < MaxBatchBytes && i < messageCount - 1) continue;
-
-                    ReceiveLinesRpc(partnerId, firstIndex, batch.ToArray());
-                    sentLineCount += batch.Count;
-                    firstIndex = i + 1;
-                    batch.Clear();
-                    batchBytes = 0;
-                    yield return null;
-                }
+                    PartnerId = conversation.GetPartnerId(CharacterId),
+                    Lines = conversation.Messages.Select(ConversationLine.FromMessage).ToArray()
+                });
             }
 
-            Log.Info($"Player {OwnerClientId} received its conversations: {sentLineCount} lines");
-            sendConversationsCoroutine = null;
+            Log.Info($"Player {OwnerClientId} is sent the history of its {conversations.Count} conversations");
         }
 
-        [Rpc(SendTo.Owner)]
-        private void ReceiveLinesRpc(long partnerId, int firstIndex, ConversationLine[] lines)
+        private void HandleHistoryReceived(History history)
         {
-            Contact contact = GetOrCreateContact(partnerId);
-            for (int i = 0; i < lines.Length; i++)
-            {
-                contact.PutLine(firstIndex + i, lines[i]);
-            }
-
-            LinesArrived?.Invoke(partnerId);
+            GetOrCreateContact(history.PartnerId).ReplaceLines(history.Lines);
+            HistoryArrived?.Invoke(history.PartnerId);
+            Log.Info($"History with {history.PartnerId} arrived, {history.Lines.Length} lines");
         }
 
-        [Rpc(SendTo.Owner)]
-        private void ReceiveLiveLineRpc(long partnerId, int index, ConversationLine line)
+        private void HandleLiveLineReceived(LiveLine liveLine)
         {
-            GetOrCreateContact(partnerId).PutLine(index, line);
-
-            LinesArrived?.Invoke(partnerId);
-            LiveLineArrived?.Invoke(partnerId, line);
+            GetOrCreateContact(liveLine.PartnerId).AddLine(liveLine.Line);
+            LiveLineArrived?.Invoke(liveLine.PartnerId, liveLine.Line);
+            Log.Info($"A line with {liveLine.PartnerId} arrived");
         }
     }
 }

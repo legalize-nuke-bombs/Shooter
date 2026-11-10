@@ -11,8 +11,6 @@ namespace Shooter.Game
     [DefaultExecutionOrder(ExecutionOrder.Service)]
     public class BulletHoles : NetworkBehaviour, ISaveableComponent, IShooterLateUpdateable
     {
-        // A NetworkList writes its length as ushort
-        private const int MaxHoles = ushort.MaxValue;
         private const int InitialNearbyCapacity = 1024;
         private static readonly Journal Log = Logs.Here();
 
@@ -21,7 +19,7 @@ namespace Shooter.Game
         [SerializeField] private float diameter = 0.08f;
         [SerializeField] private float depth = 0.2f;
 
-        private readonly NetworkList<BulletHoleData> holes = new();
+        private readonly List<BulletHoleData> holes = new();
 
         private struct SaveData
         {
@@ -29,25 +27,26 @@ namespace Shooter.Game
         }
         public object SaveObject()
         {
-            SaveData saveData = new()
+            return new SaveData
             {
-                Holes = new List<BulletHoleData>(holes.Count)
+                Holes = new List<BulletHoleData>(holes)
             };
-            for (int hole = 0; hole < holes.Count; hole++)
-            {
-                saveData.Holes.Add(holes[hole]);
-            }
-            return saveData;
         }
         public void LoadObject(SaveToken token)
         {
             SaveData saveData = token.ToObject<SaveData>();
-            RemoveAllFromChunks();
             holes.Clear();
-            foreach (BulletHoleData hole in saveData.Holes)
+            holes.AddRange(saveData.Holes);
+            allHoles.SendToClients(new HoleList { Holes = holes.ToArray() });
+        }
+
+        private struct HoleList : INetworkSerializable
+        {
+            public BulletHoleData[] Holes;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
             {
-                holes.Add(hole);
-                PutInChunk(hole);
+                serializer.SerializeValue(ref Holes);
             }
         }
 
@@ -56,6 +55,8 @@ namespace Shooter.Game
         private readonly Stack<int> freeProjectors = new();
 
         private Chunks chunks;
+        private MessageChannel<HoleList> allHoles;
+        private MessageChannel<HoleList> newHoles;
         private BulletHole[] holeOfProjector;
         private bool[] keptProjectors;
         private BulletHole[] nearbyHoles = new BulletHole[InitialNearbyCapacity];
@@ -64,6 +65,10 @@ namespace Shooter.Game
         private void Awake()
         {
             chunks = Registers.Instance.Get<Chunks>();
+            allHoles = new MessageChannel<HoleList>(this);
+            newHoles = new MessageChannel<HoleList>(this);
+            allHoles.Received += HandleAllHolesReceived;
+            newHoles.Received += HandleNewHolesReceived;
             holeOfProjector = new BulletHole[projectorCount];
             keptProjectors = new bool[projectorCount];
             for (int projector = 0; projector < projectorCount; projector++)
@@ -83,30 +88,17 @@ namespace Shooter.Game
         {
             if (!IsServer) return;
 
-            if (holes.Count == MaxHoles)
-            {
-                Log.Info($"Bullet hole at {position} is not kept: the world already has {MaxHoles}, as many as a NetworkList carries");
-                return;
-            }
-
             BulletHoleData hole = new() { Position = position, Normal = normal };
             holes.Add(hole);
-            PutInChunk(hole);
+            newHoles.SendToClients(new HoleList { Holes = new[] { hole } });
         }
 
         public override void OnNetworkSpawn()
         {
             if (material == null) Log.Error("Bullet holes have no material, nothing will be drawn");
 
-            if (!IsServer) holes.OnListChanged += HandleHolesReplicated;
-            PutAllInChunks();
-
-            Log.Info($"Bullet holes are up: {holes.Count} in the world, the {projectorCount} nearest to the camera are drawn");
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            if (!IsServer) holes.OnListChanged -= HandleHolesReplicated;
+            RequestAllHolesRpc();
+            Log.Info($"Bullet holes are up, the {projectorCount} nearest to the camera are drawn");
         }
 
         public void ShooterLateUpdate()
@@ -120,24 +112,31 @@ namespace Shooter.Game
             ShowNearest(Math.Min(nearbyCount, projectors.Count));
         }
 
-        private void HandleHolesReplicated(NetworkListEvent<BulletHoleData> change)
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void RequestAllHolesRpc(RpcParams rpcParams = default)
         {
-            if (change.Type == NetworkListEvent<BulletHoleData>.EventType.Add)
-            {
-                PutInChunk(change.Value);
-                return;
-            }
-
-            RemoveAllFromChunks();
-            PutAllInChunks();
+            allHoles.SendToClient(rpcParams.Receive.SenderClientId, new HoleList { Holes = holes.ToArray() });
         }
 
-        private void PutAllInChunks()
+        private void HandleAllHolesReceived(HoleList list)
         {
-            for (int hole = 0; hole < holes.Count; hole++)
+            RemoveAllFromChunks();
+            foreach (BulletHoleData hole in list.Holes)
             {
-                PutInChunk(holes[hole]);
+                PutInChunk(hole);
             }
+
+            Log.Info($"All {list.Holes.Length} bullet holes of the world arrived");
+        }
+
+        private void HandleNewHolesReceived(HoleList list)
+        {
+            foreach (BulletHoleData hole in list.Holes)
+            {
+                PutInChunk(hole);
+            }
+
+            Log.Debug($"{list.Holes.Length} new bullet holes arrived");
         }
 
         private void PutInChunk(BulletHoleData data)
