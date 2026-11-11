@@ -1,11 +1,10 @@
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Shooter.Infrastructure
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(NetworkTransform))]
+    [RequireComponent(typeof(ShooterNetworkTransform))]
     public class SaveableTransform : NetworkBehaviour, ISaveableComponent
     {
         private struct SaveData
@@ -28,7 +27,7 @@ namespace Shooter.Infrastructure
         public void LoadObject(SaveToken content)
         {
             SaveData data = content.ToObject<SaveData>();
-            GetComponent<NetworkTransform>().Teleport(data.Position, data.Rotation, data.Scale);
+            GetComponent<ShooterNetworkTransform>().Teleport(data.Position, data.Rotation, data.Scale);
         }
     }
 }
