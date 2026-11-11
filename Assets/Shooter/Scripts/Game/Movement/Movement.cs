@@ -1,6 +1,5 @@
 using System;
 using Shooter.Infrastructure;
-using Unity.Netcode.Components;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Hands))]
-    [RequireComponent(typeof(NetworkTransform))]
+    [RequireComponent(typeof(ShooterNetworkTransform))]
     public abstract class Movement : NetworkBehaviour
     {
         private const float PitchLimit = 89f;
@@ -17,7 +16,7 @@ namespace Shooter.Game
         [SerializeField] private float sprintSpeed = 8f;
 
         private readonly NetworkVariable<float> pitch = new();
-        private NetworkTransform networkTransform;
+        private ShooterNetworkTransform networkTransform;
 
         protected Hands Hands { get; private set; }
 
@@ -36,7 +35,7 @@ namespace Shooter.Game
         protected virtual void Awake()
         {
             Hands = GetComponent<Hands>();
-            networkTransform = GetComponent<NetworkTransform>();
+            networkTransform = GetComponent<ShooterNetworkTransform>();
         }
 
         public event Action<float> Turned;

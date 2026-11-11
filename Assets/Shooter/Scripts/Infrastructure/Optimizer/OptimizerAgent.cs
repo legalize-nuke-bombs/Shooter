@@ -6,7 +6,7 @@ namespace Shooter.Infrastructure
     [RequireComponent(typeof(ShooterEntity))]
     public sealed class OptimizerAgent : MonoBehaviour, IWantsEnabledHandler
     {
-        private const int Radius = 2;
+        private const int Radius = 4;
 
         private ShooterTransformObserver observer;
         private Chunks chunks;

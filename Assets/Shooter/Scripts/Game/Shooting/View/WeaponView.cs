@@ -32,6 +32,7 @@ namespace Shooter.Game
         private Rig weaponHoldRig;
         private GameObject shownWeapon;
         private GameObject shownWeaponModel;
+        private bool shownWeaponStale;
 
         public GameObject ShownWeapon => shownWeapon;
 
@@ -46,6 +47,7 @@ namespace Shooter.Game
 
         public void ShooterUpdate()
         {
+            if (shownWeaponStale) UpdateShownWeapon();
             if (shownWeapon == null || weaponAnchor == null) return;
             if (rightShoulder == null || leftShoulder == null) return;
 
@@ -69,8 +71,17 @@ namespace Shooter.Game
             inventoryHolder.Changed -= UpdateShownWeapon;
         }
 
+        // Only while the view is on: on an optimized character the animator is off, the handles of a WeaponHold torn
+        // down then stayed bound and warned once it woke, so the view catches up in its first update instead
         private void UpdateShownWeapon()
         {
+            if (!isActiveAndEnabled)
+            {
+                shownWeaponStale = true;
+                return;
+            }
+
+            shownWeaponStale = false;
             GameObject heldWeaponModel = GetHeldWeaponModel();
             Log.Debug($"Entity {name} refresh: wanted {(heldWeaponModel == null ? "nothing" : heldWeaponModel.name)}, shown {(shownWeaponModel == null ? "nothing" : shownWeaponModel.name)}");
             if (heldWeaponModel == shownWeaponModel) return;
