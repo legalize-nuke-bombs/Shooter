@@ -45,6 +45,8 @@ namespace Shooter.Game
         [Rpc(SendTo.Everyone)]
         private void PlayRpc(FixedString32Bytes id, byte variant, float gain)
         {
+            if (!isActiveAndEnabled) return;
+
             SoundAsset sound = FindSound(id);
             if (sound == null || sound.GetClip(variant) == null) return;
 
