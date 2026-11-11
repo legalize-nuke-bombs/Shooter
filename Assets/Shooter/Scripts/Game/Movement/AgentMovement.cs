@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Shooter.Infrastructure;
 using Unity.AI.Navigation.LowLevel;
 using UnityEngine;
@@ -13,13 +14,18 @@ namespace Shooter.Game
         private const float LevelSlack = 1.5f;
         private const float BelowReach = 30f;
         private const int WalkRequestLagFrames = 1;
+        private const float CornerReach = 0.1f;
 
         private static readonly Journal Log = Logs.Here();
+        private static readonly Vector3 LocationExtents = new(SampleReach, LevelSlack, SampleReach);
 
         [SerializeField] private float shortfallLimit = 50f;
+        [SerializeField] private int maxPathSearchNodes = 4096;
 
+        private readonly List<Vector3> corners = new();
+        private readonly List<Vector3> plannedCorners = new();
         private NavMeshAgent navMeshAgent;
-        private NavMeshPath plannedPath;
+        private int nextCorner;
         private Vector3 lastWrittenPosition;
         private bool stranded;
         private int lastWalkRequestFrame = int.MinValue;
@@ -40,7 +46,6 @@ namespace Shooter.Game
             navMeshAgent = GetComponent<NavMeshAgent>();
             navMeshAgent.updatePosition = false;
             navMeshAgent.updateRotation = false;
-            plannedPath = new NavMeshPath();
         }
 
         public override void OnNetworkSpawn()
@@ -63,14 +68,12 @@ namespace Shooter.Game
             {
                 Log.Info($"Entity {name} found no navmesh near {target}");
                 Status = AgentMovementStatus.Unreachable;
-                navMeshAgent.ResetPath();
+                corners.Clear();
                 return;
             }
 
             Destination = ground;
-            Status = AgentMovementStatus.Walking;
-            navMeshAgent.SetDestination(Destination);
-            Log.Info($"Entity {name} starts a walk to {Destination}");
+            PlanWalk();
         }
 
         public bool TryPlanPathEnd(Vector3 target, out Vector3 pathEnd)
@@ -78,12 +81,9 @@ namespace Shooter.Game
             pathEnd = target;
 
             if (!TryFindNearestGround(target, SampleReach, out Vector3 ground)) return false;
-            if (!navMeshAgent.CalculatePath(ground, plannedPath) || plannedPath.status == NavMeshPathStatus.PathInvalid) return false;
+            if (FindPath(ground, plannedCorners) == NavMeshPathStatus.PathInvalid) return false;
 
-            Vector3[] corners = plannedPath.corners;
-            if (corners.Length == 0) return false;
-
-            pathEnd = corners[corners.Length - 1];
+            pathEnd = plannedCorners[^1];
             return true;
         }
 
@@ -112,34 +112,30 @@ namespace Shooter.Game
                     {
                         Log.Info($"Entity {name} can not walk to {Destination}: it stands off the navmesh");
                         Status = AgentMovementStatus.Unreachable;
+                        corners.Clear();
                     }
                     return 0f;
                 }
 
-                // Warp drops the path: the walk goes on from where the body has been moved
                 if (Status == AgentMovementStatus.Walking)
                 {
-                    Log.Info($"Entity {name} was moved during the walk, asks for the path to {Destination} from {position}");
-                    navMeshAgent.SetDestination(Destination);
+                    Log.Info($"Entity {name} was moved during the walk, plans the path to {Destination} from {position}");
+                    PlanWalk();
                 }
             }
 
             if (Status != AgentMovementStatus.Idle && Time.frameCount - lastWalkRequestFrame > WalkRequestLagFrames) StopWalking();
-            if (Status == AgentMovementStatus.Walking && !navMeshAgent.pathPending) UpdateWalkStatusFromPath();
 
-            bool walking = Status == AgentMovementStatus.Walking && !navMeshAgent.pathPending;
-            navMeshAgent.speed = AffordSpeed(walking, IsSprinting, dt);
-
-            Vector3 velocity = navMeshAgent.velocity;
-            if (velocity.x != 0f || velocity.z != 0f)
-            {
-                transform.rotation = Quaternion.LookRotation(new Vector3(velocity.x, 0f, velocity.z));
-            }
+            float speed = AffordSpeed(Status == AgentMovementStatus.Walking, IsSprinting, dt);
+            if (Status == AgentMovementStatus.Walking) WalkAlongPath(speed * dt);
 
             Vector3 nextPosition = navMeshAgent.nextPosition;
+            Vector3 step = new(nextPosition.x - position.x, 0f, nextPosition.z - position.z);
+            if (step != Vector3.zero) transform.rotation = Quaternion.LookRotation(step);
+
             transform.position = nextPosition;
             lastWrittenPosition = nextPosition;
-            return Vector2.Distance(new Vector2(position.x, position.z), new Vector2(nextPosition.x, nextPosition.z));
+            return step.magnitude;
         }
 
         protected override void TeleportLocally(Vector3 position, Quaternion rotation)
@@ -151,7 +147,80 @@ namespace Shooter.Game
 
             Log.Info($"Entity {name} displaced, the walk to {Destination} is over");
             Status = AgentMovementStatus.Displaced;
-            navMeshAgent.ResetPath();
+            corners.Clear();
+        }
+
+        private NavMeshPathStatus FindPath(Vector3 to, List<Vector3> path)
+        {
+            return NavMeshPathfinder.FindPath(FeetPosition, to, navMeshAgent.agentTypeID, maxPathSearchNodes, LocationExtents, path);
+        }
+
+        private void PlanWalk()
+        {
+            nextCorner = 0;
+
+            NavMeshPathStatus pathStatus = FindPath(Destination, corners);
+            if (pathStatus == NavMeshPathStatus.PathInvalid)
+            {
+                Log.Info($"Entity {name} found no path to {Destination}");
+                Status = AgentMovementStatus.Unreachable;
+                corners.Clear();
+                return;
+            }
+
+            float shortfall = Vector3.Distance(corners[^1], Destination);
+            if (pathStatus == NavMeshPathStatus.PathPartial && shortfall > shortfallLimit)
+            {
+                Log.Info($"Entity {name} found no way to {Destination}: the nearest walkable ground is {shortfall:F0} m short of it");
+                Status = AgentMovementStatus.Unreachable;
+                corners.Clear();
+                return;
+            }
+
+            Status = AgentMovementStatus.Walking;
+            Log.Info($"Entity {name} starts a walk to {Destination}: {corners.Count} corners, {PathLength():F0} m");
+        }
+
+        private float PathLength()
+        {
+            float length = 0f;
+            Vector3 from = FeetPosition;
+            foreach (Vector3 corner in corners)
+            {
+                length += Vector3.Distance(from, corner);
+                from = corner;
+            }
+            return length;
+        }
+
+        private void WalkAlongPath(float distance)
+        {
+            while (nextCorner < corners.Count)
+            {
+                Vector3 toCorner = corners[nextCorner] - FeetPosition;
+                toCorner.y = 0f;
+                float cornerDistance = toCorner.magnitude;
+                if (cornerDistance > distance)
+                {
+                    navMeshAgent.Move(toCorner * (distance / cornerDistance));
+                    return;
+                }
+
+                navMeshAgent.Move(toCorner);
+                if (FlatDistance(FeetPosition, corners[nextCorner]) > CornerReach) return;
+
+                distance -= cornerDistance;
+                nextCorner++;
+            }
+
+            Log.Info($"Entity {name} finished the walk {Vector3.Distance(FeetPosition, Destination):F1} m from {Destination}");
+            Status = AgentMovementStatus.Arrived;
+            corners.Clear();
+        }
+
+        private static float FlatDistance(Vector3 a, Vector3 b)
+        {
+            return Vector2.Distance(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
         }
 
         private bool TryWarpAgent(Vector3 position)
@@ -174,47 +243,7 @@ namespace Shooter.Game
             if (Status == AgentMovementStatus.Walking) Log.Info($"Entity {name} stops the walk to {Destination}: nobody asks for it");
 
             Status = AgentMovementStatus.Idle;
-            navMeshAgent.ResetPath();
-        }
-
-        private void UpdateWalkStatusFromPath()
-        {
-            if (navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
-            {
-                Log.Info($"Entity {name} found no path to {Destination}");
-                Status = AgentMovementStatus.Unreachable;
-                navMeshAgent.ResetPath();
-                return;
-            }
-
-            if (navMeshAgent.hasPath)
-            {
-                if (navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial)
-                {
-                    float shortfall = Vector3.Distance(navMeshAgent.pathEndPosition, Destination);
-                    if (shortfall > shortfallLimit)
-                    {
-                        Log.Info($"Entity {name} found no way to {Destination}: the nearest walkable ground is {shortfall:F0} m short of it");
-                        Status = AgentMovementStatus.Unreachable;
-                        navMeshAgent.ResetPath();
-                        return;
-                    }
-                }
-
-                if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance) return;
-            }
-            else if (Vector3.Distance(FeetPosition, Destination) > navMeshAgent.stoppingDistance)
-            {
-                // No path and none on the way: the walk ends here, so whoever asked for it hears at once instead of waiting forever
-                Log.Info($"Entity {name} has no path to {Destination}");
-                Status = AgentMovementStatus.Unreachable;
-                navMeshAgent.ResetPath();
-                return;
-            }
-
-            Log.Info($"Entity {name} finished the walk {Vector3.Distance(FeetPosition, Destination):F1} m from {Destination}");
-            Status = AgentMovementStatus.Arrived;
-            navMeshAgent.ResetPath();
+            corners.Clear();
         }
     }
 }

@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 1544740508
       objectReference: {fileID: 0}
+    - target: {fileID: 6288953573548155638, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
+      propertyPath: maxPathSearchNodes
+      value: 65535
+      objectReference: {fileID: 0}
     - target: {fileID: 7684853543061305745, guid: 22011106676479f4c989dfd49fd6e367, type: 3}
       propertyPath: m_Name
       value: Conscious
