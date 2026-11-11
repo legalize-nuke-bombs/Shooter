@@ -49,7 +49,12 @@ namespace Shooter.Infrastructure
 
         public void ShooterLateUpdate()
         {
-            if (transform.position != lastPosition) Move();
+            CheckMoved();
+        }
+
+        public void CheckMoved()
+        {
+            if (isStarted && transform.position != lastPosition) Move();
         }
 
         private void Move()
