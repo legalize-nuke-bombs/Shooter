@@ -5,9 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Shooter.Game
 {
-    public static class Mixer
+    [DisallowMultipleComponent]
+    public class Mixer : MonoBehaviour
     {
-        private const string MixerResourcePath = "Mixer";
         private const string MasterVolume = "MasterVolume";
         private const string MusicVolume = "MusicVolume";
         private const string AmbienceVolume = "AmbienceVolume";
@@ -16,32 +16,38 @@ namespace Shooter.Game
         private const float DecibelsPerDecade = 20f;
         private static readonly Journal Log = Logs.Here();
 
-        private static AudioMixer mixer;
-        private static ClientConfig clientConfig;
+        [SerializeField] private AudioMixer mixer;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void LoadMixerAndFollowVolumeSettings()
+        private ClientConfig clientConfig;
+
+        private void Awake()
         {
-            if (mixer != null) return;
+            DontDestroyOnLoad(gameObject);
+        }
 
-            mixer = Resources.Load<AudioMixer>(MixerResourcePath);
-            if (mixer == null)
-            {
-                Log.Error($"No {MixerResourcePath} mixer in Resources, the volume settings stay unheard");
-                return;
-            }
-
+        private void OnEnable()
+        {
             clientConfig = Config.GetGameConfig().Client;
             clientConfig.propertyChanged += HandleClientConfigChanged;
-            ApplyVolumeSettings();
         }
 
-        private static void HandleClientConfigChanged(object sender, BindablePropertyChangedEventArgs args)
+        private void OnDisable()
+        {
+            clientConfig.propertyChanged -= HandleClientConfigChanged;
+        }
+
+        // The mixer puts its start snapshot over exposed parameters set before the first frame, so volumes go in from Start on
+        private void Start()
         {
             ApplyVolumeSettings();
         }
 
-        private static void ApplyVolumeSettings()
+        private void HandleClientConfigChanged(object sender, BindablePropertyChangedEventArgs args)
+        {
+            ApplyVolumeSettings();
+        }
+
+        private void ApplyVolumeSettings()
         {
             SetMixerVolume(MasterVolume, clientConfig.Master);
             SetMixerVolume(MusicVolume, clientConfig.Music);
@@ -49,7 +55,7 @@ namespace Shooter.Game
             SetMixerVolume(SoundsVolume, clientConfig.Sounds);
         }
 
-        private static void SetMixerVolume(string parameter, float volume)
+        private void SetMixerVolume(string parameter, float volume)
         {
             float decibels = volume <= 0f ? SilenceDecibels : Mathf.Max(SilenceDecibels, DecibelsPerDecade * Mathf.Log10(volume));
             if (!mixer.SetFloat(parameter, decibels)) Log.Error($"Mixer {mixer.name} exposes no {parameter}, that volume stays as is");
