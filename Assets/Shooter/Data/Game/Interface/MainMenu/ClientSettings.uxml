@@ -60,27 +60,27 @@
                 <ui:DataBinding property="value" data-source-path="Client.RayTracedReflections" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="ray-traced-ambient-occlusion" label="Затенение" class="field">
+        <ui:DropdownField name="ray-traced-ambient-occlusion" label="Фоновое затенение" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.RayTracedAmbientOcclusion" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="ray-traced-sun-shadows" label="Тени солнца" class="field">
+        <ui:DropdownField name="ray-traced-sun-shadows" label="Тени от солнца" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.RayTracedSunShadows" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="ray-traced-lamp-shadows" label="Тени ламп" class="field">
+        <ui:DropdownField name="ray-traced-lamp-shadows" label="Локальные тени" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.RayTracedLampShadows" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="ray-traced-subsurface-scattering" label="Рассеяние в коже" class="field">
+        <ui:DropdownField name="ray-traced-subsurface-scattering" label="Подповерхностное рассеивание" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.RayTracedSubsurfaceScattering" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="recursive-rendering" label="Стекло и прозрачное" class="field">
+        <ui:DropdownField name="recursive-rendering" label="Преломления" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.RecursiveRendering" binding-mode="TwoWay"/>
             </Bindings>

@@ -51,7 +51,7 @@ namespace Shooter.Game
         {
             [RayTracingModes.Off] = "Выкл",
             [RayTracingModes.Mixed] = "Гибрид",
-            [RayTracingModes.Full] = "Трассировка"
+            [RayTracingModes.Full] = "Полная трассировка"
         };
 
         private static readonly Dictionary<string, string> ToggleTitles = new()
