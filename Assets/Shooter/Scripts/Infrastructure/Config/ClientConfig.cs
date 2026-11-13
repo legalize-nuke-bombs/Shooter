@@ -20,6 +20,14 @@ namespace Shooter.Infrastructure
         private string renderScale = RenderScales.Default;
         private string antialiasing = Antialiasings.Default;
         private string fog = FogQualities.Default;
+        private string rayTracedGlobalIllumination = RayTracingModes.Default;
+        private string rayTracedReflections = RayTracingModes.Default;
+        private string rayTracedAmbientOcclusion = Toggles.Default;
+        private string rayTracedSunShadows = Toggles.Default;
+        private string rayTracedLampShadows = Toggles.Default;
+        private string rayTracedSubsurfaceScattering = Toggles.Default;
+        private string recursiveRendering = Toggles.Default;
+        private string pathTracing = Toggles.Default;
 
         public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
@@ -98,6 +106,62 @@ namespace Shooter.Infrastructure
         {
             get => fog;
             set => SetProperty(ref fog, FogQualities.Keys.Contains(value) ? value : FogQualities.Default);
+        }
+
+        [CreateProperty]
+        public string RayTracedGlobalIllumination
+        {
+            get => rayTracedGlobalIllumination;
+            set => SetProperty(ref rayTracedGlobalIllumination, RayTracingModes.Keys.Contains(value) ? value : RayTracingModes.Default);
+        }
+
+        [CreateProperty]
+        public string RayTracedReflections
+        {
+            get => rayTracedReflections;
+            set => SetProperty(ref rayTracedReflections, RayTracingModes.Keys.Contains(value) ? value : RayTracingModes.Default);
+        }
+
+        [CreateProperty]
+        public string RayTracedAmbientOcclusion
+        {
+            get => rayTracedAmbientOcclusion;
+            set => SetProperty(ref rayTracedAmbientOcclusion, Toggles.Keys.Contains(value) ? value : Toggles.Default);
+        }
+
+        [CreateProperty]
+        public string RayTracedSunShadows
+        {
+            get => rayTracedSunShadows;
+            set => SetProperty(ref rayTracedSunShadows, Toggles.Keys.Contains(value) ? value : Toggles.Default);
+        }
+
+        [CreateProperty]
+        public string RayTracedLampShadows
+        {
+            get => rayTracedLampShadows;
+            set => SetProperty(ref rayTracedLampShadows, Toggles.Keys.Contains(value) ? value : Toggles.Default);
+        }
+
+        [CreateProperty]
+        public string RayTracedSubsurfaceScattering
+        {
+            get => rayTracedSubsurfaceScattering;
+            set => SetProperty(ref rayTracedSubsurfaceScattering, Toggles.Keys.Contains(value) ? value : Toggles.Default);
+        }
+
+        [CreateProperty]
+        public string RecursiveRendering
+        {
+            get => recursiveRendering;
+            set => SetProperty(ref recursiveRendering, Toggles.Keys.Contains(value) ? value : Toggles.Default);
+        }
+
+        [CreateProperty]
+        public string PathTracing
+        {
+            get => pathTracing;
+            set => SetProperty(ref pathTracing, Toggles.Keys.Contains(value) ? value : Toggles.Default);
         }
 
         private void SetProperty<T>(ref T field, T value, [CallerMemberName] string property = "")

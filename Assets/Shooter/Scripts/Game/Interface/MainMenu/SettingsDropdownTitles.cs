@@ -47,6 +47,19 @@ namespace Shooter.Game
             [FogQualities.Max] = "Максимальный"
         };
 
+        private static readonly Dictionary<string, string> RayTracingModeTitles = new()
+        {
+            [RayTracingModes.Off] = "Выкл",
+            [RayTracingModes.Mixed] = "Гибрид",
+            [RayTracingModes.Full] = "Трассировка"
+        };
+
+        private static readonly Dictionary<string, string> ToggleTitles = new()
+        {
+            [Toggles.Off] = "Выкл",
+            [Toggles.On] = "Вкл"
+        };
+
         public static string GetScreenResolutionTitle(string key)
         {
             return (key ?? "").Replace("x", " × ");
@@ -70,6 +83,16 @@ namespace Shooter.Game
         public static string GetFogTitle(string key)
         {
             return GetTitleOrKey(FogTitles, key);
+        }
+
+        public static string GetRayTracingModeTitle(string key)
+        {
+            return GetTitleOrKey(RayTracingModeTitles, key);
+        }
+
+        public static string GetToggleTitle(string key)
+        {
+            return GetTitleOrKey(ToggleTitles, key);
         }
 
         public static string GetEffortTitle(string key)

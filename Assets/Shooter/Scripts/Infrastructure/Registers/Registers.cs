@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Shooter.Infrastructure
@@ -20,6 +21,7 @@ namespace Shooter.Infrastructure
 
         private readonly TMap components = new();
         private readonly TMap activeComponents = new();
+        private readonly Dictionary<Type, Subscribers> subscribersByKey = new();
         private float nextCollectTime;
 
         private void Awake()
@@ -42,6 +44,36 @@ namespace Shooter.Infrastructure
             if (components.TryAdd(component))
             {
                 Log.Debug($"{component.GetType().Name} {component.name} registered");
+                RaiseRegistered(component);
+            }
+        }
+
+        public void SubscribeRegistered<T>(Action<T> onRegistered) where T : class
+        {
+            if (!subscribersByKey.TryGetValue(typeof(T), out Subscribers subscribers))
+            {
+                subscribers = new Subscribers<T>();
+                subscribersByKey[typeof(T)] = subscribers;
+            }
+
+            ((Subscribers<T>)subscribers).Registered += onRegistered;
+        }
+
+        public void UnsubscribeRegistered<T>(Action<T> onRegistered) where T : class
+        {
+            if (subscribersByKey.TryGetValue(typeof(T), out Subscribers subscribers))
+            {
+                ((Subscribers<T>)subscribers).Registered -= onRegistered;
+            }
+        }
+
+        private void RaiseRegistered(Behaviour component)
+        {
+            if (subscribersByKey.Count == 0) return;
+
+            foreach (Type key in TMap.GetKeys(component.GetType()))
+            {
+                if (subscribersByKey.TryGetValue(key, out Subscribers subscribers)) subscribers.RaiseRegistered(component);
             }
         }
 
@@ -91,6 +123,21 @@ namespace Shooter.Infrastructure
             TArray.View<T> members = GetAll<T>(RegisterInactivePolicy.Include);
             if (members.Count != 1 || !members.TryGetFirst(out T member)) throw new InvalidOperationException($"{members.Count} {typeof(T).Name} registered instead of one");
             return member;
+        }
+
+        private abstract class Subscribers
+        {
+            public abstract void RaiseRegistered(object member);
+        }
+
+        private sealed class Subscribers<T> : Subscribers where T : class
+        {
+            public event Action<T> Registered;
+
+            public override void RaiseRegistered(object member)
+            {
+                Registered?.Invoke((T)member);
+            }
         }
     }
 }

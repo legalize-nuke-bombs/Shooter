@@ -49,6 +49,47 @@
                 <ui:DataBinding property="value" data-source-path="Client.Fog" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
+        <ui:Label text="Трассировка лучей (экспериментально)" class="screen__section"/>
+        <ui:DropdownField name="ray-traced-global-illumination" label="Глобальное освещение" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.RayTracedGlobalIllumination" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="ray-traced-reflections" label="Отражения" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.RayTracedReflections" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="ray-traced-ambient-occlusion" label="Затенение" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.RayTracedAmbientOcclusion" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="ray-traced-sun-shadows" label="Тени солнца" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.RayTracedSunShadows" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="ray-traced-lamp-shadows" label="Тени ламп" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.RayTracedLampShadows" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="ray-traced-subsurface-scattering" label="Подповерхностное рассеяние" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.RayTracedSubsurfaceScattering" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="recursive-rendering" label="Рекурсивный рендеринг" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.RecursiveRendering" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
+        <ui:DropdownField name="path-tracing" label="Трассировка пути" class="field">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="Client.PathTracing" binding-mode="TwoWay"/>
+            </Bindings>
+        </ui:DropdownField>
     </ui:VisualElement>
     <ui:VisualElement class="screen__footer">
         <ui:Button name="back" text="Назад" class="action"/>

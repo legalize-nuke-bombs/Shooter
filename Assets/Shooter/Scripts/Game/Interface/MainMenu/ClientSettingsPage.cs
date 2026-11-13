@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Shooter.Infrastructure;
+using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UIElements;
 
@@ -15,10 +16,28 @@ namespace Shooter.Game
         private const string RenderScaleDropdownName = "render-scale";
         private const string AntialiasingDropdownName = "antialiasing";
         private const string FogDropdownName = "fog";
+        private const string PathTracingDropdownName = "path-tracing";
         private static readonly Journal Log = Logs.Here();
+
+        private static readonly string[] RayTracingModeDropdownNames =
+        {
+            "ray-traced-global-illumination",
+            "ray-traced-reflections"
+        };
+
+        private static readonly string[] RayTracingToggleDropdownNames =
+        {
+            "ray-traced-ambient-occlusion",
+            "ray-traced-sun-shadows",
+            "ray-traced-lamp-shadows",
+            "ray-traced-subsurface-scattering",
+            "recursive-rendering"
+        };
 
         private readonly DropdownField antialiasingDropdown;
         private readonly DropdownField renderScaleDropdown;
+        private readonly DropdownField pathTracingDropdown;
+        private readonly List<DropdownField> rayTracingEffectDropdowns = new();
         private ClientConfig clientConfig;
 
         public ClientSettingsPage(VisualElement root) : base(root)
@@ -31,6 +50,23 @@ namespace Shooter.Game
             antialiasingDropdown = RequireElement<DropdownField>(AntialiasingDropdownName);
             SetDropdownChoices(antialiasingDropdown, Antialiasings.Keys, SettingsDropdownTitles.GetAntialiasingTitle);
             SetDropdownChoices(RequireElement<DropdownField>(FogDropdownName), FogQualities.Keys, SettingsDropdownTitles.GetFogTitle);
+
+            foreach (string name in RayTracingModeDropdownNames)
+            {
+                DropdownField dropdown = RequireElement<DropdownField>(name);
+                SetDropdownChoices(dropdown, RayTracingModes.Keys, SettingsDropdownTitles.GetRayTracingModeTitle);
+                rayTracingEffectDropdowns.Add(dropdown);
+            }
+
+            foreach (string name in RayTracingToggleDropdownNames)
+            {
+                DropdownField dropdown = RequireElement<DropdownField>(name);
+                SetDropdownChoices(dropdown, Toggles.Keys, SettingsDropdownTitles.GetToggleTitle);
+                rayTracingEffectDropdowns.Add(dropdown);
+            }
+
+            pathTracingDropdown = RequireElement<DropdownField>(PathTracingDropdownName);
+            SetDropdownChoices(pathTracingDropdown, Toggles.Keys, SettingsDropdownTitles.GetToggleTitle);
         }
 
         public event Action BackClicked;
@@ -52,6 +88,13 @@ namespace Shooter.Game
             bool upscaling = clientConfig.Upscaler != Upscalers.Off;
             renderScaleDropdown.SetEnabled(upscaling);
             antialiasingDropdown.SetEnabled(!upscaling);
+
+            bool rayTracing = SystemInfo.supportsRayTracing;
+            pathTracingDropdown.SetEnabled(rayTracing);
+            foreach (DropdownField dropdown in rayTracingEffectDropdowns)
+            {
+                dropdown.SetEnabled(rayTracing && clientConfig.PathTracing != Toggles.On);
+            }
         }
 
         private static IEnumerable<string> GetUpscalersOfThisCard()
