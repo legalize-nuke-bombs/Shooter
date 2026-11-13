@@ -14,13 +14,13 @@ namespace Shooter.Game
 
         private readonly List<ItemStack> piles = new();
         private readonly VisualElement windowElement;
-        private readonly Action markStale;
+        private readonly Action onStale;
         private VisualElement promptElement;
 
-        public StackSplitPrompt(VisualElement windowElement, Action markStale)
+        public StackSplitPrompt(VisualElement windowElement, Action onStale)
         {
             this.windowElement = windowElement;
-            this.markStale = markStale;
+            this.onStale = onStale;
         }
 
         public IReadOnlyList<ItemStack> Piles => piles;
@@ -152,7 +152,7 @@ namespace Shooter.Game
 
             piles.Add(new ItemStack { Asset = asset, Count = count });
             Close();
-            markStale();
+            onStale();
             Log.Info($"Split {count} of {freeCount} {asset.Id} off in the bag");
         }
 

@@ -30,7 +30,7 @@ namespace Shooter.Game
         [SerializeField] private LoadingScreenTipCatalog tipCatalog;
 
         private Button cancelButton;
-        private Action cancelCallback;
+        private Action onCancel;
         private NetworkManager network;
         private VisualElement screenElement;
         private bool shown;
@@ -56,10 +56,10 @@ namespace Shooter.Game
             network.OnClientConnectedCallback -= HandleClientConnected;
         }
 
-        public void ShowStage(LoadingScreenStage stage, Action cancelCallback = null)
+        public void ShowStage(LoadingScreenStage stage, Action onCancel = null)
         {
             stageTitle = StageTitles[stage];
-            this.cancelCallback = cancelCallback;
+            this.onCancel = onCancel;
             shown = true;
             Log.Info($"Loading screen shows {stageTitle}");
             UpdateElementsIfBound();
@@ -68,7 +68,7 @@ namespace Shooter.Game
         public void HideScreen()
         {
             shown = false;
-            cancelCallback = null;
+            onCancel = null;
             Log.Info("Loading screen is down");
             UpdateElementsIfBound();
         }
@@ -110,13 +110,13 @@ namespace Shooter.Game
         {
             screenElement.style.display = shown ? DisplayStyle.Flex : DisplayStyle.None;
             stageLabel.text = stageTitle;
-            cancelButton.style.display = cancelCallback != null ? DisplayStyle.Flex : DisplayStyle.None;
+            cancelButton.style.display = onCancel != null ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private void HandleCancelClicked()
         {
             Log.Info($"The player gives up {stageTitle}");
-            cancelCallback();
+            onCancel();
         }
 
         // Every start brings a scene manager of its own

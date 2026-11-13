@@ -17,20 +17,20 @@ namespace Shooter.Game
         private readonly VisualElement gridElement;
         private readonly Button takeAllButton;
         private readonly ItemDragging dragging;
-        private readonly Action markStale;
+        private readonly Action onStale;
         private Lootable loot;
         private Inventory lootInventory;
         private InventoryExchanger inventoryExchanger;
         private int shownRows = GridRows;
 
-        public LootPanel(VisualElement panelElement, Label titleLabel, VisualElement gridElement, Button takeAllButton, ItemDragging dragging, Action markStale)
+        public LootPanel(VisualElement panelElement, Label titleLabel, VisualElement gridElement, Button takeAllButton, ItemDragging dragging, Action onStale)
         {
             this.panelElement = panelElement;
             this.titleLabel = titleLabel;
             this.gridElement = gridElement;
             this.takeAllButton = takeAllButton;
             this.dragging = dragging;
-            this.markStale = markStale;
+            this.onStale = onStale;
 
             panelElement.style.display = DisplayStyle.None;
             takeAllButton.clicked += TakeAll;
@@ -56,13 +56,13 @@ namespace Shooter.Game
             loot = openedLoot;
             lootInventory = openedLoot.GetComponent<Inventory>();
             inventoryExchanger = openedExchanger;
-            lootInventory.Changed += markStale;
+            lootInventory.Changed += onStale;
             Log.Info($"The bag searches {loot.name}");
         }
 
         public void Close()
         {
-            if (lootInventory != null) lootInventory.Changed -= markStale;
+            if (lootInventory != null) lootInventory.Changed -= onStale;
 
             loot = null;
             lootInventory = null;
@@ -142,7 +142,7 @@ namespace Shooter.Game
             if (rows == shownRows) return;
 
             shownRows = rows;
-            markStale();
+            onStale();
         }
 
         private VisualElement CreateItemElement(ItemAsset asset, string fallbackTitle, GridPlacement placement, DraggedItem item, int amount)

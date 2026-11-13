@@ -20,7 +20,7 @@ namespace Shooter.Game
         private readonly VisualElement windowElement;
         private readonly Label textLabel;
         private readonly Label titleLabel;
-        private Action confirmCallback;
+        private Action onConfirm;
         private bool busy;
 
         public MainMenuDialog(VisualElement document)
@@ -38,14 +38,14 @@ namespace Shooter.Game
 
         public bool IsOpen { get; private set; }
 
-        public void ShowQuestion(string title, string details, string confirmLabel, Action confirmCallback)
+        public void ShowQuestion(string title, string details, string confirmLabel, Action onConfirm)
         {
-            ShowDialog(title, details, confirmLabel, confirmCallback, false, false);
+            ShowDialog(title, details, confirmLabel, onConfirm, false, false);
         }
 
-        public void ShowDangerousQuestion(string title, string details, string confirmLabel, Action confirmCallback)
+        public void ShowDangerousQuestion(string title, string details, string confirmLabel, Action onConfirm)
         {
-            ShowDialog(title, details, confirmLabel, confirmCallback, true, false);
+            ShowDialog(title, details, confirmLabel, onConfirm, true, false);
         }
 
         public void ShowNotice(string title, string details, string confirmLabel)
@@ -62,7 +62,7 @@ namespace Shooter.Game
             textLabel.style.display = DisplayStyle.Flex;
             confirmButton.style.display = DisplayStyle.None;
             cancelButton.style.display = DisplayStyle.None;
-            confirmCallback = null;
+            onConfirm = null;
 
             busy = true;
             IsOpen = true;
@@ -82,7 +82,7 @@ namespace Shooter.Game
             CloseDialog();
         }
 
-        private void ShowDialog(string title, string details, string confirmLabel, Action confirmCallback, bool dangerous, bool notice)
+        private void ShowDialog(string title, string details, string confirmLabel, Action onConfirm, bool dangerous, bool notice)
         {
             windowElement.RemoveFromClassList(BusyClass);
             busy = false;
@@ -93,7 +93,7 @@ namespace Shooter.Game
             confirmButton.text = confirmLabel;
             confirmButton.style.display = DisplayStyle.Flex;
             cancelButton.style.display = notice ? DisplayStyle.None : DisplayStyle.Flex;
-            this.confirmCallback = confirmCallback;
+            this.onConfirm = onConfirm;
 
             IsOpen = true;
             dialogElement.style.display = DisplayStyle.Flex;
@@ -101,14 +101,14 @@ namespace Shooter.Game
 
         private void HandleConfirmClicked()
         {
-            Action callback = confirmCallback;
+            Action callback = onConfirm;
             CloseDialog();
             callback?.Invoke();
         }
 
         private void CloseDialog()
         {
-            confirmCallback = null;
+            onConfirm = null;
             IsOpen = false;
             dialogElement.style.display = DisplayStyle.None;
         }
