@@ -12,18 +12,18 @@ namespace Shooter.Game
         private readonly VisualElement gridElement;
         private readonly VisualElement outputElement;
         private readonly ItemDragging dragging;
-        private readonly Action markStale;
+        private readonly Action onStale;
         private Inventory inventory;
         private Crafter crafter;
         private CraftAsset pendingCraft;
         private int outputCountBeforeCraft;
 
-        public CraftPanel(VisualElement gridElement, VisualElement outputElement, ItemDragging dragging, Action markStale)
+        public CraftPanel(VisualElement gridElement, VisualElement outputElement, ItemDragging dragging, Action onStale)
         {
             this.gridElement = gridElement;
             this.outputElement = outputElement;
             this.dragging = dragging;
-            this.markStale = markStale;
+            this.onStale = onStale;
         }
 
         public void Open(Inventory openedInventory, Crafter openedCrafter)
@@ -105,7 +105,7 @@ namespace Shooter.Game
                     if (pointerDown.button != 1 || dragging.IsDragging) return;
 
                     stacks[clickedCell] = default;
-                    markStale();
+                    onStale();
                     pointerDown.StopPropagation();
                 });
                 gridElement.Add(itemElement);

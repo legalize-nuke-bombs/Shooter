@@ -9,9 +9,9 @@ namespace Shooter.Infrastructure
     {
         private static readonly Journal Log = Logs.Here();
 
-        public static GameObject InstantiateAndSpawn(GameObject prefab, Action<GameObject> beforeNetworkSpawn)
+        public static GameObject InstantiateAndSpawn(GameObject prefab, Action<GameObject> onBeforeNetworkSpawn)
         {
-            return InstantiateAndSpawn(prefab, Vector3.zero, Quaternion.identity, null, beforeNetworkSpawn);
+            return InstantiateAndSpawn(prefab, Vector3.zero, Quaternion.identity, null, onBeforeNetworkSpawn);
         }
 
         public static GameObject InstantiateAndSpawn(GameObject prefab, Vector3 position, Quaternion rotation)
@@ -24,7 +24,7 @@ namespace Shooter.Infrastructure
             return InstantiateAndSpawn(prefab, Vector3.zero, Quaternion.identity, parent, null);
         }
 
-        private static GameObject InstantiateAndSpawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent, Action<GameObject> beforeNetworkSpawn)
+        private static GameObject InstantiateAndSpawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent, Action<GameObject> onBeforeNetworkSpawn)
         {
             Log.Info($"Spawning {prefab.name} at {position} with parent {(parent != null ? parent.name : "None")}...");
 
@@ -49,7 +49,7 @@ namespace Shooter.Infrastructure
                 return null;
             }
 
-            beforeNetworkSpawn?.Invoke(instance);
+            onBeforeNetworkSpawn?.Invoke(instance);
             networkObject.Spawn(true);
 
             if (parentNetworkObject != null && !networkObject.TrySetParent(parentNetworkObject, false))

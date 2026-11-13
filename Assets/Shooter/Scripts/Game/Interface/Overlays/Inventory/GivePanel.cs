@@ -39,21 +39,21 @@ namespace Shooter.Game
         private readonly VisualElement gridElement;
         private readonly Button giveButton;
         private readonly ItemDragging dragging;
-        private readonly Action markStale;
+        private readonly Action onStale;
         private Inventory inventory;
         private InventoryExchanger inventoryExchanger;
         private Character giverCharacter;
         private Character chosenTaker;
         private float nextTakerSearchTime;
 
-        public GivePanel(VisualElement panelElement, Label titleLabel, VisualElement gridElement, Button giveButton, ItemDragging dragging, Action markStale)
+        public GivePanel(VisualElement panelElement, Label titleLabel, VisualElement gridElement, Button giveButton, ItemDragging dragging, Action onStale)
         {
             this.panelElement = panelElement;
             this.titleLabel = titleLabel;
             this.gridElement = gridElement;
             this.giveButton = giveButton;
             this.dragging = dragging;
-            this.markStale = markStale;
+            this.onStale = onStale;
 
             panelElement.style.display = DisplayStyle.None;
             giveButton.clicked += Give;
@@ -144,7 +144,7 @@ namespace Shooter.Game
                 Log.Info($"The bag never let {offer.AssetId} x {offer.Count} go, it is back in the offer");
                 offer.SentTime = 0f;
                 offers[i] = offer;
-                markStale();
+                onStale();
             }
 
             bool isTakerNear = giverCharacter != null && inventoryExchanger != null && Vector3.Distance(giverCharacter.transform.position, chosenTaker.transform.position) <= inventoryExchanger.Radius;
@@ -227,7 +227,7 @@ namespace Shooter.Game
                     if (pointerDown.button != 1 || dragging.IsDragging) return;
 
                     RemoveOffer(offerIndex);
-                    markStale();
+                    onStale();
                     pointerDown.StopPropagation();
                 });
                 gridElement.Add(itemElement);
@@ -313,7 +313,7 @@ namespace Shooter.Game
                 sentCount++;
             }
 
-            markStale();
+            onStale();
             Log.Info($"Handed {sentCount} things over to {chosenTaker.name}");
         }
 
@@ -328,7 +328,7 @@ namespace Shooter.Game
 
             chosenTaker = foundTaker;
             offers.RemoveAll(offer => offer.SentTime <= 0f);
-            markStale();
+            onStale();
         }
 
         // The one already chosen keeps a margin, so the panel does not blink at the edge of the cone or the radius

@@ -102,14 +102,14 @@ namespace Shooter.Game
             return true;
         }
 
-        public bool TryStartAction(ActionType action, float duration, bool interruptible, Action completionCallback)
+        public bool TryStartAction(ActionType action, float duration, bool interruptible, Action onComplete)
         {
-            return TryHoldAction(action, duration, interruptible, completionCallback, false);
+            return TryHoldAction(action, duration, interruptible, onComplete, false);
         }
 
-        public bool TryPreemptWithAction(ActionType action, float duration, bool interruptible, Action completionCallback)
+        public bool TryPreemptWithAction(ActionType action, float duration, bool interruptible, Action onComplete)
         {
-            return TryHoldAction(action, duration, interruptible, completionCallback, true);
+            return TryHoldAction(action, duration, interruptible, onComplete, true);
         }
 
         public void InterruptAction()
@@ -126,7 +126,7 @@ namespace Shooter.Game
             FinishActionIfDue();
         }
 
-        private bool TryHoldAction(ActionType action, float duration, bool interruptible, Action completionCallback, bool preempting)
+        private bool TryHoldAction(ActionType action, float duration, bool interruptible, Action onComplete, bool preempting)
         {
             string refusal = FindRefusal(action, duration, preempting);
             if (refusal != null)
@@ -137,7 +137,7 @@ namespace Shooter.Game
 
             if (!AreFree) Log.Info($"Hands action {CurrentAction} of entity {name} preempted by {action}");
 
-            StartAction(action, duration, interruptible, completionCallback);
+            StartAction(action, duration, interruptible, onComplete);
             Performed?.Invoke(action, duration);
             return true;
         }
@@ -185,13 +185,13 @@ namespace Shooter.Game
             finishedActionCallback?.Invoke();
         }
 
-        private void StartAction(ActionType action, float duration, bool interruptible, Action completionCallback)
+        private void StartAction(ActionType action, float duration, bool interruptible, Action onComplete)
         {
             work.Value = new Work { Action = action, SequenceNumber = work.Value.SequenceNumber + 1, Duration = duration };
             actionStartedAt = Time.time;
             actionDuration = duration;
             actionInterruptible = interruptible;
-            actionCompletionCallback = completionCallback;
+            actionCompletionCallback = onComplete;
             ActionStarted?.Invoke(action, duration);
         }
 

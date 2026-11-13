@@ -22,8 +22,8 @@ namespace Shooter.Game
         private readonly Label stampLabel;
         private readonly Label versionLabel;
         private SaveEntry shownSaveEntry;
-        private Action<SaveEntry> deleteCallback;
-        private Action<SaveEntry> loadCallback;
+        private Action<SaveEntry> onDelete;
+        private Action<SaveEntry> onLoad;
         private Texture2D previewTexture;
 
         public SaveCard()
@@ -50,22 +50,22 @@ namespace Shooter.Game
             actionsElement.AddToClassList(ActionsClass);
             Add(actionsElement);
 
-            Button deleteButton = new(() => deleteCallback?.Invoke(shownSaveEntry)) { text = DeleteButtonText };
+            Button deleteButton = new(() => onDelete?.Invoke(shownSaveEntry)) { text = DeleteButtonText };
             deleteButton.AddToClassList(ActionClass);
             actionsElement.Add(deleteButton);
 
-            Button loadButton = new(() => loadCallback?.Invoke(shownSaveEntry)) { text = LoadButtonText };
+            Button loadButton = new(() => onLoad?.Invoke(shownSaveEntry)) { text = LoadButtonText };
             loadButton.AddToClassList(ActionClass);
             actionsElement.Add(loadButton);
         }
 
-        public void ShowSaveEntry(SaveEntry saveEntry, Action<SaveEntry> loadCallback, Action<SaveEntry> deleteCallback)
+        public void ShowSaveEntry(SaveEntry saveEntry, Action<SaveEntry> onLoad, Action<SaveEntry> onDelete)
         {
             ClearSaveEntry();
 
             shownSaveEntry = saveEntry;
-            this.loadCallback = loadCallback;
-            this.deleteCallback = deleteCallback;
+            this.onLoad = onLoad;
+            this.onDelete = onDelete;
 
             stampLabel.text = RussianDate.FormatDateAndTime(saveEntry.Meta.Stamp);
             versionLabel.text = saveEntry.Meta.Version;
@@ -81,8 +81,8 @@ namespace Shooter.Game
         public void ClearSaveEntry()
         {
             shownSaveEntry = null;
-            loadCallback = null;
-            deleteCallback = null;
+            onLoad = null;
+            onDelete = null;
             previewElement.style.backgroundImage = new StyleBackground(StyleKeyword.Null);
 
             if (previewTexture == null) return;
