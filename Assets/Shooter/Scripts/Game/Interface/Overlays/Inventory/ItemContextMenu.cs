@@ -34,11 +34,11 @@ namespace Shooter.Game
             menuElement.style.left = localPosition.x;
             menuElement.style.top = localPosition.y;
 
-            foreach ((string text, Action action) in items)
+            foreach ((string text, Action onClick) in items)
             {
                 Button itemButton = new(() =>
                 {
-                    action();
+                    onClick();
                     Close();
                 }) { text = text };
                 itemButton.AddToClassList("context-menu__item");
