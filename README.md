@@ -25,6 +25,7 @@
 * Upscalers (STP, DLSS)
 * Settings
 * Texture streaming
+* Experimental partial RTX support
 ## Multiplayer
 * Decentralized account model based on asymmetric encryption
 ## LLM NPСs capabilities
