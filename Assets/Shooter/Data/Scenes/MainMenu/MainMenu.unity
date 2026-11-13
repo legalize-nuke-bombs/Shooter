@@ -978,10 +978,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5738104920184771056, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1546766984}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
 --- !u!1 &850104243
 GameObject:
@@ -1184,26 +1181,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd0dec594d983fb4e818009695f46b1c, type: 3}
---- !u!1 &1546766979 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5738104920184771056, guid: 8d47b0e13c2a4f6ab95e7c08d1f36a52, type: 3}
-  m_PrefabInstance: {fileID: 784380615}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1546766984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1546766979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 535b66c82e41cfc4f921377bd9076f8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Interface.MenuMoon
-  view: {fileID: 21126643}
-  elevation: 23.1
-  sideways: 31
 --- !u!1 &2039705937
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using Shooter.Infrastructure;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 namespace Shooter.Game
 {
@@ -7,16 +8,16 @@ namespace Shooter.Game
     [RequireComponent(typeof(Light))]
     public class Sunlight : MonoBehaviour, IShooterUpdateable
     {
-        public const float ShadowHandoverElevation = -6f;
-
-        [SerializeField] private float brightest = 120000f;
+        public const float ShadowHandoverElevation = -4f;
 
         private Clock clock;
         private Light sunLight;
+        private HDAdditionalLightData sunData;
 
         private void Awake()
         {
             sunLight = GetComponent<Light>();
+            sunData = GetComponent<HDAdditionalLightData>();
         }
 
         private void Start()
@@ -31,13 +32,15 @@ namespace Shooter.Game
             float elevation = Celestial.GetElevation(hourAngle, clock.Declination, clock.Latitude);
 
             transform.rotation = Celestial.GetLightRotation(hourAngle, clock.Declination, clock.Latitude);
-            sunLight.intensity = brightest * GetHorizonFade(elevation);
+            float fade = GetHorizonFade(elevation);
+            sunData.lightDimmer = fade;
+            sunData.volumetricDimmer = fade;
             sunLight.shadows = elevation > ShadowHandoverElevation ? LightShadows.Soft : LightShadows.None;
         }
 
         public static float GetHorizonFade(float elevation)
         {
-            return Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-12f, 8f, elevation));
+            return Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(ShadowHandoverElevation, 0f, elevation));
         }
     }
 }

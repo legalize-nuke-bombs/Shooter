@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d877ec3e844f2ca46830012e8e79319b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   rotation:
     m_OverrideState: 0
     m_Value: 0
@@ -35,10 +35,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 20000
   updateMode:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 2
   updatePeriod:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   includeSunInBaking:
     m_OverrideState: 0
@@ -81,8 +81,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 55261.973
   aerosolDensity:
-    m_OverrideState: 0
-    m_Value: 0.01192826
+    m_OverrideState: 1
+    m_Value: 0.025
   aerosolTint:
     m_OverrideState: 0
     m_Value: {r: 0.9, g: 0.9, b: 0.9, a: 1}
@@ -121,7 +121,7 @@ MonoBehaviour:
     m_Value: {fileID: 8900000, guid: 79af97b92221347c8a27cd67fc6a4f65, type: 3}
   spaceEmissionMultiplier:
     m_OverrideState: 1
-    m_Value: 60000
+    m_Value: 15000
   spaceRotation:
     m_OverrideState: 0
     m_Value: {x: 0, y: 0, z: 0}
@@ -318,16 +318,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d7593b3a9277ac4696b20006c21dde2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   m_Version: 1
   skyType:
     m_OverrideState: 1
     m_Value: 4
   cloudType:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   skyAmbientMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   planetRadius:
     m_OverrideState: 0
@@ -348,7 +348,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   fogType:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
 --- !u!114 &7642060734654139733
 MonoBehaviour:
@@ -362,10 +362,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d08ce26990eb1a4a9177b860541e702, type: 3}
   m_Name: Exposure
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   mode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 4
   meteringMode:
     m_OverrideState: 1
     m_Value: 2
@@ -373,14 +373,14 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   fixedExposure:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 15
   compensation:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   limitMin:
     m_OverrideState: 1
-    m_Value: 0.25
+    m_Value: -0.5
   limitMax:
     m_OverrideState: 1
     m_Value: 15
@@ -464,10 +464,10 @@ MonoBehaviour:
       m_RotationOrder: 4
   adaptationMode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   adaptationSpeedDarkToLight:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 3
   adaptationSpeedLightToDark:
     m_OverrideState: 1
     m_Value: 1
@@ -476,7 +476,7 @@ MonoBehaviour:
     m_Value: {fileID: 0}
   histogramPercentages:
     m_OverrideState: 1
-    m_Value: {x: 90, y: 100}
+    m_Value: {x: 0, y: 100}
   histogramUseCurveRemapping:
     m_OverrideState: 0
     m_Value: 0
@@ -484,8 +484,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   centerAroundExposureTarget:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   proceduralCenter:
     m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.5}

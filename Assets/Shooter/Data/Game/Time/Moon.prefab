@@ -47,7 +47,7 @@ Light:
   serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 4
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -90,7 +90,7 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 10000
+  m_ColorTemperature: 8000
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
@@ -156,19 +156,19 @@ MonoBehaviour:
   diameterMultiplerMode: 0
   diameterMultiplier: 1
   diameterOverride: 1.5
-  celestialBodyShadingSource: 1
+  celestialBodyShadingSource: 0
   sunLightOverride: {fileID: 0}
   sunColor: {r: 1, g: 1, b: 1, a: 1}
   sunIntensity: 130000
   moonPhase: 0.2
   moonPhaseRotation: 0
-  earthshine: 1
-  flareSize: 0.3
+  earthshine: 3.5
+  flareSize: 0
   flareTint: {r: 1, g: 1, b: 1, a: 1}
   flareFalloff: 4
   flareMultiplier: 0
-  surfaceTexture: {fileID: 0}
-  surfaceTint: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  surfaceTexture: {fileID: 2800000, guid: cce9f0cf7e606e547a7317aedb4ad6d9, type: 3}
+  surfaceTint: {r: 0.01, g: 0.01, b: 0.01, a: 1}
   m_Distance: 384400000
   m_UseRayTracedShadows: 0
   m_NumRayTracingSamples: 4
@@ -254,8 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1c8a52d9b74e0d8a6c5b1e7f204c93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brightest: 4
-  lagBehindSun: 144
+  lagBehindSun: 175
 --- !u!114 &2235916564485049277
 MonoBehaviour:
   m_ObjectHideFlags: 0
