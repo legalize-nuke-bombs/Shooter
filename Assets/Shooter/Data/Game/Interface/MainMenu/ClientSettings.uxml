@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:Label text="Настройки клиента" class="screen__title"/>
-    <ui:VisualElement class="screen__body">
+    <ui:ScrollView mode="Vertical" horizontal-scroller-visibility="Hidden" class="screen__body">
         <ui:Label text="Звук" class="screen__section screen__section--first"/>
         <ui:Slider label="Общая громкость" low-value="0" high-value="1" fill="true" class="field">
             <Bindings>
@@ -75,12 +75,12 @@
                 <ui:DataBinding property="value" data-source-path="Client.RayTracedLampShadows" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="ray-traced-subsurface-scattering" label="Подповерхностное рассеяние" class="field">
+        <ui:DropdownField name="ray-traced-subsurface-scattering" label="Рассеяние в коже" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.RayTracedSubsurfaceScattering" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="recursive-rendering" label="Рекурсивный рендеринг" class="field">
+        <ui:DropdownField name="recursive-rendering" label="Стекло и прозрачное" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.RecursiveRendering" binding-mode="TwoWay"/>
             </Bindings>
@@ -90,7 +90,7 @@
                 <ui:DataBinding property="value" data-source-path="Client.PathTracing" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-    </ui:VisualElement>
+    </ui:ScrollView>
     <ui:VisualElement class="screen__footer">
         <ui:Button name="back" text="Назад" class="action"/>
     </ui:VisualElement>
