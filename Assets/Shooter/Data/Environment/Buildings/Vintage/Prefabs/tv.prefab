@@ -345,8 +345,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7431905612370007, guid: 6f3a91d47c8b4e25ab60d3f918c7e520, type: 3}
+      propertyPath: m_AreaSize.x
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431905612370007, guid: 6f3a91d47c8b4e25ab60d3f918c7e520, type: 3}
+      propertyPath: m_AreaSize.y
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431905612370007, guid: 6f3a91d47c8b4e25ab60d3f918c7e520, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431905612370007, guid: 6f3a91d47c8b4e25ab60d3f918c7e520, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 10.388908
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

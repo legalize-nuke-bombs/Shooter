@@ -321,7 +321,7 @@ Light:
   serializedVersion: 13
   m_Type: 3
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 250
+  m_Intensity: 38
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 0
@@ -364,7 +364,7 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.36, y: 0.27}
   m_BounceIntensity: 1
-  m_ColorTemperature: 9500
+  m_ColorTemperature: 9300
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 10.225}
   m_UseBoundingSphereOverride: 1
@@ -529,7 +529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Screenlight
   screen: {fileID: 7431905612370004}
-  brightest: 250
+  brightest: 38
   unrest: 0.35
   pace: 12
 --- !u!114 &2152389406281814716

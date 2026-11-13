@@ -46,8 +46,8 @@ Light:
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 63.661976
-  m_Range: 20
+  m_Intensity: 270.5634
+  m_Range: 23
   m_SpotAngle: 30
   m_InnerSpotAngle: 27.116499
   m_CookieSize2D: {x: 0.5, y: 0.5}
@@ -89,7 +89,7 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.9, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 7500
+  m_ColorTemperature: 6500
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 10.45}
   m_UseBoundingSphereOverride: 0
