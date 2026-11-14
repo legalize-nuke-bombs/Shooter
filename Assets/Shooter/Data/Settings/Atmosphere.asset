@@ -508,14 +508,23 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 15
   curveMap:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: -10
-        value: -10
-        inSlope: 0
+        value: -5.4
+        inSlope: 0.7696
+        outSlope: 0.7696
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 13
+        value: 12.3
+        inSlope: 0.7696
         outSlope: 1
         tangentMode: 0
         weightedMode: 0
@@ -523,9 +532,9 @@ MonoBehaviour:
         outWeight: 0
       - serializedVersion: 3
         time: 20
-        value: 20
+        value: 19.3
         inSlope: 1
-        outSlope: 0
+        outSlope: 1
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -534,23 +543,23 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   limitMinCurveMap:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: -10
-        value: -12
+        value: -1.5
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
         time: 20
-        value: 18
-        inSlope: 1
+        value: -1.5
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -560,23 +569,23 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   limitMaxCurveMap:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: -10
-        value: -8
+        value: 15
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
         time: 20
-        value: 22
-        inSlope: 1
+        value: 15
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -599,10 +608,10 @@ MonoBehaviour:
     m_Value: {fileID: 0}
   histogramPercentages:
     m_OverrideState: 1
-    m_Value: {x: 0, y: 100}
+    m_Value: {x: 40, y: 90}
   histogramUseCurveRemapping:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   targetMidGray:
     m_OverrideState: 0
     m_Value: 0
