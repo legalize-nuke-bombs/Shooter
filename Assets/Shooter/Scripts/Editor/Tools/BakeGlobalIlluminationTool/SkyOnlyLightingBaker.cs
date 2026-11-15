@@ -4,9 +4,8 @@ using UnityEngine.Rendering;
 
 namespace Shooter.Editor
 {
-    // The sky reaches the probes through sky occlusion and every lamp of ours is live, so the lighting step has nothing to bake;
-    // Unity's own step would still hand the whole map to the lightmapper, which runs out of video memory on it.
-    // Validity comes from StuckProbes, which the sky step runs before this one.
+    // The sky reaches the probes through sky occlusion and every lamp of ours is live, so the lighting step has nothing to bake
+    // but validity; Unity's own step would still hand the whole map to the lightmapper, which runs out of video memory on it
     public class SkyOnlyLightingBaker : AdaptiveProbeVolumes.LightingBaker
     {
         private NativeArray<SphericalHarmonicsL2> irradianceResults;
@@ -22,12 +21,12 @@ namespace Shooter.Editor
 
         public override void Initialize(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions)
         {
-            Allocate(probePositions.Length);
+            Allocate(probePositions);
         }
 
         public override void Initialize(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions, NativeArray<uint> bakedRenderingLayerMasks)
         {
-            Allocate(probePositions.Length);
+            Allocate(probePositions);
         }
 
         public override bool Step()
@@ -43,22 +42,13 @@ namespace Shooter.Editor
             if (occlusionResults.IsCreated) occlusionResults.Dispose();
         }
 
-        private void Allocate(int probeCount)
+        private void Allocate(NativeArray<Vector3> probePositions)
         {
             Dispose();
+            int probeCount = probePositions.Length;
             irradianceResults = new NativeArray<SphericalHarmonicsL2>(probeCount, Allocator.Persistent);
-            validityResults = new NativeArray<float>(probeCount, Allocator.Persistent);
+            validityResults = new NativeArray<float>(StuckProbes.FindValidity(probePositions), Allocator.Persistent);
             occlusionResults = new NativeArray<Vector4>(probeCount, Allocator.Persistent);
-
-            float[] stuckValidity = StuckProbes.TakeLastValidity();
-            if (stuckValidity != null)
-            {
-                for (int i = 0; i < probeCount && i < stuckValidity.Length; i++)
-                {
-                    validityResults[i] = stuckValidity[i];
-                }
-            }
-
             done = false;
         }
     }

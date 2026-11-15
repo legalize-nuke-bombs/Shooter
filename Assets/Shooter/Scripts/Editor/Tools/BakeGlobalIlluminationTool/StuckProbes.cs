@@ -4,38 +4,19 @@ using UnityEngine;
 namespace Shooter.Editor
 {
     // What Unity's lightmapper does for probe volumes before it lights them, done by physics instead:
-    // a probe buried in a wall, a floor or the ground is moved to the nearest clean spot within the shift limit,
-    // and the ones that cannot get out are marked invalid so the probe volume ignores them.
+    // a probe buried in a wall, a floor or the ground is marked invalid so the probe volume ignores it
     public static class StuckProbes
     {
-        private const int RayCount = 32;
-        private const int CheckRayCount = 16;
+        private const int RayCount = 16;
         private const float RayLength = 2f;
         private const float InsideColliderRadius = 0.02f;
         private const float StuckBackfaceShare = 0.25f;
-        private const float ClearanceBeyondSurface = 0.05f;
-        private const int ExitsToTry = 4;
 
-        // The sky step runs before the lighting step in a bake and leaves the validity it found here for it
-        private static float[] lastValidity;
-
-        public static float[] TakeLastValidity()
+        public static float[] FindValidity(NativeArray<Vector3> positions)
         {
-            float[] validity = lastValidity;
-            lastValidity = null;
-            return validity;
-        }
-
-        public static Vector3[] PushOut(NativeArray<Vector3> positions, float maxShift, out int pushed, out int stuck)
-        {
-            var result = new Vector3[positions.Length];
             var validity = new float[positions.Length];
-            pushed = 0;
-            stuck = 0;
-
             Terrain[] terrains = Terrain.activeTerrains;
             Vector3[] directions = SpreadOverSphere(RayCount);
-            Vector3[] checkDirections = SpreadOverSphere(CheckRayCount);
             int solidLayers = LayerMask.GetMask("Default");
             bool hitBackfaces = Physics.queriesHitBackfaces;
             Physics.queriesHitBackfaces = true;
@@ -44,20 +25,7 @@ namespace Shooter.Editor
             {
                 for (int i = 0; i < positions.Length; i++)
                 {
-                    Vector3 position = positions[i];
-                    result[i] = position;
-                    if (IsClean(position, terrains, checkDirections, solidLayers)) continue;
-
-                    if (TryFindExit(position, maxShift, terrains, directions, checkDirections, solidLayers, out Vector3 exit))
-                    {
-                        result[i] = exit;
-                        pushed++;
-                    }
-                    else
-                    {
-                        validity[i] = 1f;
-                        stuck++;
-                    }
+                    if (!IsClean(positions[i], terrains, directions, solidLayers)) validity[i] = 1f;
                 }
             }
             finally
@@ -65,55 +33,7 @@ namespace Shooter.Editor
                 Physics.queriesHitBackfaces = hitBackfaces;
             }
 
-            lastValidity = validity;
-            return result;
-        }
-
-        private static bool TryFindExit(Vector3 position, float maxShift, Terrain[] terrains, Vector3[] directions, Vector3[] checkDirections, int solidLayers, out Vector3 exit)
-        {
-            if (TryGetTerrainHeight(position, terrains, out float ground) && position.y < ground)
-            {
-                exit = new Vector3(position.x, ground + ClearanceBeyondSurface, position.z);
-                return ground - position.y <= maxShift && IsClean(exit, terrains, checkDirections, solidLayers);
-            }
-
-            var exits = new (float distance, Vector3 direction)[directions.Length];
-            int exitCount = 0;
-            foreach (Vector3 direction in directions)
-            {
-                if (Physics.Raycast(position, direction, out RaycastHit hit, maxShift, solidLayers, QueryTriggerInteraction.Ignore)
-                    && Vector3.Dot(hit.normal, direction) > 0f)
-                {
-                    exits[exitCount++] = (hit.distance, direction);
-                }
-            }
-
-            System.Array.Sort(exits, 0, exitCount, Comparer.Instance);
-            for (int i = 0; i < exitCount && i < ExitsToTry; i++)
-            {
-                Vector3 candidate = position + exits[i].direction * (exits[i].distance + ClearanceBeyondSurface);
-                if (IsClean(candidate, terrains, checkDirections, solidLayers))
-                {
-                    exit = candidate;
-                    return true;
-                }
-            }
-
-            for (float shift = maxShift * 0.25f; shift <= maxShift + 0.001f; shift += maxShift * 0.25f)
-            {
-                foreach (Vector3 direction in directions)
-                {
-                    Vector3 candidate = position + direction * shift;
-                    if (IsClean(candidate, terrains, checkDirections, solidLayers))
-                    {
-                        exit = candidate;
-                        return true;
-                    }
-                }
-            }
-
-            exit = position;
-            return false;
+            return validity;
         }
 
         private static bool IsClean(Vector3 position, Terrain[] terrains, Vector3[] directions, int solidLayers)
@@ -163,16 +83,6 @@ namespace Shooter.Editor
             }
 
             return directions;
-        }
-
-        private class Comparer : System.Collections.Generic.IComparer<(float distance, Vector3 direction)>
-        {
-            public static readonly Comparer Instance = new();
-
-            public int Compare((float distance, Vector3 direction) a, (float distance, Vector3 direction) b)
-            {
-                return a.distance.CompareTo(b.distance);
-            }
         }
     }
 }

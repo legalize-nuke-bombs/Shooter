@@ -1485,7 +1485,7 @@ Transform:
   m_GameObject: {fileID: 8649071244698231701}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.44, y: 3.4, z: -0.06}
+  m_LocalPosition: {x: -0.43702555, y: 4.4012184, z: -0.060830116}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1506,7 +1506,7 @@ MonoBehaviour:
   version: 2
   globalVolume: 0
   mode: 2
-  size: {x: 16.83, y: 10.35, z: 15.63}
+  size: {x: 23.152405, y: 11.261492, z: 22.109406}
   overrideRendererFilters: 0
   minRendererVolumeSize: 0.1
   objectLayerMask:
