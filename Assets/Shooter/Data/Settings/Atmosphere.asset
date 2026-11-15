@@ -599,10 +599,10 @@ MonoBehaviour:
     m_Value: 1
   adaptationSpeedDarkToLight:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 10
   adaptationSpeedLightToDark:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 10
   weightTextureMask:
     m_OverrideState: 0
     m_Value: {fileID: 0}
