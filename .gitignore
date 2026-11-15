@@ -40,7 +40,7 @@ shooter-logs/
 *.unitypackage
 *.app
 
-# Локальные настройки запуска, создаются с дефолтами при первом старте
+# Р›РѕРєР°Р»СЊРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё Р·Р°РїСѓСЃРєР°, СЃРѕР·РґР°СЋС‚СЃСЏ СЃ РґРµС„РѕР»С‚Р°РјРё РїСЂРё РїРµСЂРІРѕРј СЃС‚Р°СЂС‚Рµ
 /config.json
 
 /Assets/Resources/PerformanceTestRun*
@@ -51,3 +51,9 @@ shooter-logs/
 # Packs wait on disk until what the game uses moves into Shooter/Data
 /Assets/ThirdParty/
 /Assets/ThirdParty.meta
+
+# Baked from the scenes: Tools/Shooter/World/Bake GI and Bake NavMesh
+/Assets/Shooter/Data/Scenes/**/*.bytes
+/Assets/Shooter/Data/Scenes/**/*.bytes.meta
+/Assets/Shooter/Data/Scenes/**/NavMesh-*.asset
+/Assets/Shooter/Data/Scenes/**/NavMesh-*.asset.meta
