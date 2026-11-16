@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 namespace Shooter.Editor
 {
-    public class InteriorLayersTool : EditorWindow
+    public class AssignInteriorLayersTool : EditorWindow
     {
         public const string InteriorLayerName = "Interior";
         public const string ExteriorLayerName = "Exterior";
@@ -24,10 +24,10 @@ namespace Shooter.Editor
         private static readonly Journal Log = Logs.Here();
         private static readonly Vector3[] HemisphereRays = BuildHemisphereRays();
 
-        [MenuItem("Tools/Shooter/Prefabs/Interior Layers")]
+        [MenuItem("Tools/Shooter/Prefabs/Assign Interior Layers")]
         private static void OpenWindow()
         {
-            GetWindow<InteriorLayersTool>("Interior Layers");
+            GetWindow<AssignInteriorLayersTool>("Assign Interior Layers");
         }
 
         private void OnGUI()
