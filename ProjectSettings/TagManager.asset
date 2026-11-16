@@ -43,4 +43,6 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  - Interior
+  - Exterior
   m_MigratedRenderPipelines: []
