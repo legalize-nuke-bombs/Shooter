@@ -47,7 +47,7 @@ Light:
   serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.3
+  m_Intensity: 2.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_ObsoleteContactShadows: 0
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 1
+  m_VolumetricDimmer: 16
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
   m_AffectDiffuse: 1
@@ -156,7 +156,7 @@ MonoBehaviour:
   diameterMultiplerMode: 0
   diameterMultiplier: 1
   diameterOverride: 1.5
-  celestialBodyShadingSource: 0
+  celestialBodyShadingSource: 1
   sunLightOverride: {fileID: 0}
   sunColor: {r: 1, g: 1, b: 1, a: 1}
   sunIntensity: 130000
@@ -168,7 +168,7 @@ MonoBehaviour:
   flareFalloff: 4
   flareMultiplier: 0
   surfaceTexture: {fileID: 2800000, guid: cce9f0cf7e606e547a7317aedb4ad6d9, type: 3}
-  surfaceTint: {r: 0.01, g: 0.01, b: 0.01, a: 1}
+  surfaceTint: {r: 1, g: 1, b: 1, a: 1}
   m_Distance: 384400000
   m_UseRayTracedShadows: 0
   m_NumRayTracingSamples: 4
