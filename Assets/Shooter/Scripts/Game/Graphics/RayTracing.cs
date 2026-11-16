@@ -34,6 +34,8 @@ namespace Shooter.Game
         private SubSurfaceScattering subsurfaceScattering;
         private RecursiveRendering recursiveRendering;
         private PathTracing pathTracing;
+        private readonly Dictionary<Camera, AccelerationStructureBuilder> builders = new();
+        private readonly List<Camera> forgottenCameras = new();
 
         private void Awake()
         {
@@ -41,6 +43,7 @@ namespace Shooter.Game
             profile = ScriptableObject.CreateInstance<VolumeProfile>();
 
             rayTracingSettings = profile.Add<RayTracingSettings>();
+            rayTracingSettings.buildMode.Override(RTASBuildMode.Manual);
             rayTracingSettings.cullingMode.Override(RTASCullingMode.ExtendedFrustum);
             rayTracingSettings.extendShadowCulling.Override(true);
             rayTracingSettings.extendCameraCulling.Override(true);
@@ -75,6 +78,7 @@ namespace Shooter.Game
             clientConfig.propertyChanged += HandleClientConfigChanged;
             Registers.Instance.SubscribeRegistered<HDAdditionalLightData>(HandleLightRegistered);
             Registers.Instance.SubscribeRegistered<WindZone>(HandleWindRegistered);
+            RenderPipelineManager.beginCameraRendering += BuildAccelerationStructure;
             FollowClientConfig();
         }
 
@@ -83,10 +87,18 @@ namespace Shooter.Game
             clientConfig.propertyChanged -= HandleClientConfigChanged;
             Registers.Instance.UnsubscribeRegistered<HDAdditionalLightData>(HandleLightRegistered);
             Registers.Instance.UnsubscribeRegistered<WindZone>(HandleWindRegistered);
+            RenderPipelineManager.beginCameraRendering -= BuildAccelerationStructure;
         }
 
         private void OnDestroy()
         {
+            foreach (AccelerationStructureBuilder builder in builders.Values)
+            {
+                builder.Dispose();
+            }
+
+            builders.Clear();
+
             foreach (VolumeComponent component in profile.components)
             {
                 Destroy(component);
@@ -140,6 +152,49 @@ namespace Shooter.Game
                      $"ambient occlusion {clientConfig.RayTracedAmbientOcclusion}, sun shadows {clientConfig.RayTracedSunShadows}, lamp shadows {clientConfig.RayTracedLampShadows}, " +
                      $"subsurface scattering {clientConfig.RayTracedSubsurfaceScattering}, recursive rendering {clientConfig.RecursiveRendering}, path tracing {clientConfig.PathTracing}; " +
                      $"{rayTracedShadows} lights with ray traced shadows, wind {(blowing ? "blowing" : "calmed")}");
+        }
+
+        // Manual build: HDRP's own one has no place for instances that are not renderers, like terrain trees
+        private void BuildAccelerationStructure(ScriptableRenderContext context, Camera camera)
+        {
+            HDCamera hdCamera = HDCamera.GetOrCreate(camera);
+            if (!hdCamera.frameSettings.IsEnabled(FrameSettingsField.RayTracing)) return;
+
+            if (!builders.TryGetValue(camera, out AccelerationStructureBuilder builder))
+            {
+                ForgetDestroyedCameras();
+                builder = new AccelerationStructureBuilder();
+                builders[camera] = builder;
+            }
+
+            bool rayTracedShadows = clientConfig.RayTracedSunShadows == Toggles.On || clientConfig.RayTracedLampShadows == Toggles.On;
+            if (!builder.TryCull(hdCamera, rayTracedShadows))
+            {
+                hdCamera.rayTracingAccelerationStructure = null;
+                return;
+            }
+
+            foreach (IRayTracedInstances instances in Registers.Instance.GetAll<IRayTracedInstances>(RegisterInactivePolicy.Exclude))
+            {
+                instances.AddInstancesTo(builder);
+            }
+
+            hdCamera.rayTracingAccelerationStructure = builder.Build(hdCamera);
+        }
+
+        private void ForgetDestroyedCameras()
+        {
+            forgottenCameras.Clear();
+            foreach (KeyValuePair<Camera, AccelerationStructureBuilder> pair in builders)
+            {
+                if (pair.Key == null) forgottenCameras.Add(pair.Key);
+            }
+
+            foreach (Camera camera in forgottenCameras)
+            {
+                builders[camera].Dispose();
+                builders.Remove(camera);
+            }
         }
 
         private bool IsTracingAnything()
