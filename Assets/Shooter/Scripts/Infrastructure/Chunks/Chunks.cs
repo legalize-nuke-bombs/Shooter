@@ -54,12 +54,12 @@ namespace Shooter.Infrastructure
             if (members.TryGetValue(chunk, out TMap inChunk)) inChunk.TryRemove(member);
         }
 
-        public void ActivateComponent(Vector2Int chunk, Behaviour component)
+        public void ActivateComponent(Vector2Int chunk, Component component)
         {
             FindOrCreate(activeComponents, chunk).TryAdd(component);
         }
 
-        public void TryDeactivateComponent(Vector2Int chunk, Behaviour component)
+        public void TryDeactivateComponent(Vector2Int chunk, Component component)
         {
             if (activeComponents.TryGetValue(chunk, out TMap activeInChunk)) activeInChunk.TryRemove(component);
         }

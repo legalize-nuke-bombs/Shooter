@@ -66,7 +66,7 @@ namespace Shooter.Infrastructure
         {
             foreach (Entry entry in components)
             {
-                if (entry.Component is Behaviour { enabled: true } behaviour) ActivateComponent(behaviour);
+                if (IsRegistrable(entry.Component) && ComponentSwitcher.IsEnabled(entry.Component)) ActivateComponent(entry.Component);
             }
         }
 
@@ -74,7 +74,7 @@ namespace Shooter.Infrastructure
         {
             foreach (Entry entry in components)
             {
-                if (entry.Component is Behaviour behaviour) DeactivateComponent(behaviour);
+                if (IsRegistrable(entry.Component)) DeactivateComponent(entry.Component);
             }
         }
 
@@ -84,10 +84,10 @@ namespace Shooter.Infrastructure
             observer.ParentChanged -= UpdateOptimizedInHierarchy;
             foreach (Entry entry in components)
             {
-                if (entry.Component is not Behaviour behaviour) continue;
+                if (!IsRegistrable(entry.Component)) continue;
 
-                Registers.Instance.UnregisterComponent(behaviour);
-                if (chunk != null) chunks.Remove(chunk.Value, behaviour);
+                Registers.Instance.UnregisterComponent(entry.Component);
+                if (chunk != null) chunks.Remove(chunk.Value, entry.Component);
             }
         }
 
@@ -136,11 +136,12 @@ namespace Shooter.Infrastructure
             chunk = movedTo;
             for (int i = 0; i < components.Count; i++)
             {
-                if (components[i].Component is not Behaviour behaviour) continue;
+                Component component = components[i].Component;
+                if (!IsRegistrable(component)) continue;
 
-                chunks.Add(movedTo, behaviour);
-                if (IsEnabledAndActive(behaviour)) chunks.ActivateComponent(movedTo, behaviour);
-                if (movedFrom != null) chunks.Remove(movedFrom.Value, behaviour);
+                chunks.Add(movedTo, component);
+                if (IsEnabledAndActive(component)) chunks.ActivateComponent(movedTo, component);
+                if (movedFrom != null) chunks.Remove(movedFrom.Value, component);
             }
 
             Log.Debug($"Entity {name} moved to chunk {movedTo}");
@@ -150,46 +151,49 @@ namespace Shooter.Infrastructure
         {
             Entry entry = components.Find(candidate => candidate.Component == component);
             if (entry != null) return entry;
+            if (!ComponentSwitcher.CanSwitch(component)) return null;
 
-            bool? componentEnabled = ReadUnityEnabled(component);
-            if (componentEnabled == null) return null;
-
-            entry = new Entry { Component = component, WantsEnabled = componentEnabled.Value };
+            entry = new Entry { Component = component, WantsEnabled = ComponentSwitcher.IsEnabled(component) };
             components.Add(entry);
-            if (isOptimizedInHierarchy && IsOptimizable(component)) WriteUnityEnabled(component, false);
-            if (component is not Behaviour behaviour) return entry;
+            if (isOptimizedInHierarchy && IsOptimizable(component)) ComponentSwitcher.SetEnabled(component, false);
+            if (!IsRegistrable(component)) return entry;
 
-            Registers.Instance.RegisterComponent(behaviour);
-            if (chunk != null) chunks.Add(chunk.Value, behaviour);
-            if (IsEnabledAndActive(behaviour)) ActivateComponent(behaviour);
+            Registers.Instance.RegisterComponent(component);
+            if (chunk != null) chunks.Add(chunk.Value, component);
+            if (IsEnabledAndActive(component)) ActivateComponent(component);
             return entry;
         }
 
         private void UpdateUnityEnabled(Entry entry)
         {
-            WriteUnityEnabled(entry.Component, entry.WantsEnabled && !(isOptimizedInHierarchy && IsOptimizable(entry.Component)));
-            if (entry.Component is not Behaviour behaviour) return;
+            ComponentSwitcher.SetEnabled(entry.Component, entry.WantsEnabled && !(isOptimizedInHierarchy && IsOptimizable(entry.Component)));
+            if (!IsRegistrable(entry.Component)) return;
 
-            if (IsEnabledAndActive(behaviour)) ActivateComponent(behaviour);
-            else DeactivateComponent(behaviour);
+            if (IsEnabledAndActive(entry.Component)) ActivateComponent(entry.Component);
+            else DeactivateComponent(entry.Component);
         }
 
-        private void ActivateComponent(Behaviour component)
+        private void ActivateComponent(Component component)
         {
             Registers.Instance.ActivateComponent(component);
             if (chunk != null) chunks.ActivateComponent(chunk.Value, component);
         }
 
-        private void DeactivateComponent(Behaviour component)
+        private void DeactivateComponent(Component component)
         {
             Registers.Instance.DeactivateComponent(component);
             if (chunk != null) chunks.TryDeactivateComponent(chunk.Value, component);
         }
 
         // Not isActiveAndEnabled: it stays false in a component's Awake, before Unity calls its OnEnable
-        private static bool IsEnabledAndActive(Behaviour behaviour)
+        private static bool IsEnabledAndActive(Component component)
         {
-            return behaviour.enabled && behaviour.gameObject.activeInHierarchy;
+            return ComponentSwitcher.IsEnabled(component) && component.gameObject.activeInHierarchy;
+        }
+
+        private static bool IsRegistrable(Component component)
+        {
+            return component is Behaviour or WindZone;
         }
 
         // No Collider: switching colliders on and off leaks PhysX memory, about 15 MB per 214 colliders a cycle in the
@@ -201,37 +205,6 @@ namespace Shooter.Infrastructure
                 Behaviour or Renderer or LODGroup => true,
                 _ => false
             };
-        }
-
-        private static bool? ReadUnityEnabled(Component component)
-        {
-            return component switch
-            {
-                Behaviour behaviour => behaviour.enabled,
-                Renderer renderer => renderer.enabled,
-                Collider collider => collider.enabled,
-                LODGroup lodGroup => lodGroup.enabled,
-                _ => null
-            };
-        }
-
-        private static void WriteUnityEnabled(Component component, bool componentEnabled)
-        {
-            switch (component)
-            {
-                case Behaviour behaviour:
-                    behaviour.enabled = componentEnabled;
-                    break;
-                case Renderer renderer:
-                    renderer.enabled = componentEnabled;
-                    break;
-                case Collider collider:
-                    collider.enabled = componentEnabled;
-                    break;
-                case LODGroup lodGroup:
-                    lodGroup.enabled = componentEnabled;
-                    break;
-            }
         }
 
         private sealed class Entry

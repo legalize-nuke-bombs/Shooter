@@ -39,7 +39,7 @@ namespace Shooter.Infrastructure
             activeComponents.CollectGarbage();
         }
 
-        public void RegisterComponent(Behaviour component)
+        public void RegisterComponent(Component component)
         {
             if (components.TryAdd(component))
             {
@@ -67,7 +67,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        private void RaiseRegistered(Behaviour component)
+        private void RaiseRegistered(Component component)
         {
             if (subscribersByKey.Count == 0) return;
 
@@ -77,7 +77,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void UnregisterComponent(Behaviour component)
+        public void UnregisterComponent(Component component)
         {
             if (components.TryRemove(component))
             {
@@ -85,7 +85,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void ActivateComponent(Behaviour component)
+        public void ActivateComponent(Component component)
         {
             if (activeComponents.TryAdd(component))
             {
@@ -93,7 +93,7 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public void DeactivateComponent(Behaviour component)
+        public void DeactivateComponent(Component component)
         {
             if (activeComponents.TryRemove(component))
             {
