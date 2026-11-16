@@ -74,6 +74,7 @@ namespace Shooter.Game
             clientConfig = Config.GetGameConfig().Client;
             clientConfig.propertyChanged += HandleClientConfigChanged;
             Registers.Instance.SubscribeRegistered<HDAdditionalLightData>(HandleLightRegistered);
+            Registers.Instance.SubscribeRegistered<WindZone>(HandleWindRegistered);
             FollowClientConfig();
         }
 
@@ -81,6 +82,7 @@ namespace Shooter.Game
         {
             clientConfig.propertyChanged -= HandleClientConfigChanged;
             Registers.Instance.UnsubscribeRegistered<HDAdditionalLightData>(HandleLightRegistered);
+            Registers.Instance.UnsubscribeRegistered<WindZone>(HandleWindRegistered);
         }
 
         private void OnDestroy()
@@ -105,6 +107,14 @@ namespace Shooter.Game
             Log.Info($"{light.name} registered: {UpdateShadowTracing(light)}");
         }
 
+        // Traced trees stand still: their wind lives in the vertex shader, which the acceleration structure does not see
+        private void HandleWindRegistered(WindZone wind)
+        {
+            bool blowing = !IsTracingAnything();
+            ShooterEntity.SetEnabled(wind, blowing);
+            Log.Info($"{wind.name} registered: {(blowing ? "blowing" : "calmed")}");
+        }
+
         private void FollowClientConfig()
         {
             FollowMode(globalIllumination, globalIllumination.tracing, clientConfig.RayTracedGlobalIllumination);
@@ -120,10 +130,28 @@ namespace Shooter.Game
                 if (UpdateShadowTracing(light) == ShadowTracing.RayTraced) rayTracedShadows++;
             }
 
+            bool blowing = !IsTracingAnything();
+            foreach (WindZone wind in Registers.Instance.GetAll<WindZone>(RegisterInactivePolicy.Include))
+            {
+                ShooterEntity.SetEnabled(wind, blowing);
+            }
+
             Log.Info($"Ray tracing: global illumination {clientConfig.RayTracedGlobalIllumination}, reflections {clientConfig.RayTracedReflections}, " +
                      $"ambient occlusion {clientConfig.RayTracedAmbientOcclusion}, sun shadows {clientConfig.RayTracedSunShadows}, lamp shadows {clientConfig.RayTracedLampShadows}, " +
                      $"subsurface scattering {clientConfig.RayTracedSubsurfaceScattering}, recursive rendering {clientConfig.RecursiveRendering}, path tracing {clientConfig.PathTracing}; " +
-                     $"{rayTracedShadows} lights with ray traced shadows");
+                     $"{rayTracedShadows} lights with ray traced shadows, wind {(blowing ? "blowing" : "calmed")}");
+        }
+
+        private bool IsTracingAnything()
+        {
+            return clientConfig.RayTracedGlobalIllumination != RayTracingModes.Off
+                   || clientConfig.RayTracedReflections != RayTracingModes.Off
+                   || clientConfig.RayTracedAmbientOcclusion == Toggles.On
+                   || clientConfig.RayTracedSunShadows == Toggles.On
+                   || clientConfig.RayTracedLampShadows == Toggles.On
+                   || clientConfig.RayTracedSubsurfaceScattering == Toggles.On
+                   || clientConfig.RecursiveRendering == Toggles.On
+                   || clientConfig.PathTracing == Toggles.On;
         }
 
         private static void FollowMode(VolumeComponent component, RayCastingModeParameter tracing, string mode)
