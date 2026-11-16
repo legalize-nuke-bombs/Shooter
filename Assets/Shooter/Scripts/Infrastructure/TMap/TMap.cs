@@ -136,7 +136,7 @@ namespace Shooter.Infrastructure
             if (KeysByMemberType.TryGetValue(memberType, out Type[] keys)) return keys;
 
             var types = new List<Type>();
-            for (Type type = memberType; type != typeof(Behaviour) && type != typeof(object); type = type.BaseType)
+            for (Type type = memberType; type != typeof(Behaviour) && type != typeof(Component) && type != typeof(object); type = type.BaseType)
             {
                 types.Add(type);
             }
