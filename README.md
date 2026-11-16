@@ -43,6 +43,11 @@
 * NGO
 * Bouncy Castle
 
+# Development
+The navmesh and the baked lighting are not stored in the repository. After cloning, open the Map scene and bake both locally:
+* Tools → Shooter → World → Bake NavMesh
+* Tools → Shooter → World → Bake GI
+
 # Supported LLM providers
 * Polza
 * Claude
