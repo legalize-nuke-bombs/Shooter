@@ -91,22 +91,27 @@ namespace Shooter.Game
             NetworkManager.NetworkTickSystem.Tick -= AdvanceTime;
         }
 
+        [ContextMenu("Stop")]
+        private void SetScaleStop() {
+            Scale = 0f;
+        }
+
+        [ContextMenu("Normal speed")]
+        private void SetScaleNormalSpeed()
+        {
+            Scale = 1f;
+        }
+
         [ContextMenu("Fast forward x10")]
-        private void FastForwardTenTimes()
+        private void SetScale10()
         {
             Scale = 10f;
         }
 
-        [ContextMenu("Fast forward x60")]
-        private void FastForwardSixtyTimes()
+        [ContextMenu("Fast forward x100")]
+        private void SetScale100()
         {
-            Scale = 60f;
-        }
-
-        [ContextMenu("Normal speed")]
-        private void SetNormalSpeed()
-        {
-            Scale = 1f;
+            Scale = 100f;
         }
 
         private void AdvanceTime()
