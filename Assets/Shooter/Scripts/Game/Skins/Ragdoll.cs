@@ -94,7 +94,7 @@ namespace Shooter.Game
         private Rigidbody MakeRagdollPart(GameObject boneObject, BodyPart part, float mass, int layer, Collider shape)
         {
             boneObject.layer = layer;
-            shape.excludeLayers = ~LayerMask.GetMask("Default", Hitboxes.LayerName);
+            shape.excludeLayers = ~LayerMask.GetMask("Default", "Terrain", Hitboxes.LayerName);
 
             boneObject.AddComponent<Hitbox>().Part = part;
 

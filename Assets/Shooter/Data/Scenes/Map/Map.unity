@@ -957,6 +957,7 @@ Transform:
   - {fileID: 445378030}
   - {fileID: 2048266868}
   - {fileID: 1518500432}
+  - {fileID: 1826836176}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &73449703
@@ -2110,7 +2111,7 @@ GameObject:
   - component: {fileID: 193115862}
   - component: {fileID: 193115864}
   - component: {fileID: 193115865}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_-1_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8797,7 +8798,7 @@ GameObject:
   - component: {fileID: 754976829}
   - component: {fileID: 754976831}
   - component: {fileID: 754976832}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_-1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9924,7 +9925,7 @@ GameObject:
   - component: {fileID: 870834239}
   - component: {fileID: 870834241}
   - component: {fileID: 870834242}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_0_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17068,7 +17069,7 @@ GameObject:
   - component: {fileID: 1354511867}
   - component: {fileID: 1354511869}
   - component: {fileID: 1354511870}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_-2_-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18113,7 +18114,7 @@ GameObject:
   - component: {fileID: 1461296878}
   - component: {fileID: 1461296880}
   - component: {fileID: 1461296881}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_-1_-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18976,7 +18977,7 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  cachedHashCode: -1856326720
+  cachedHashCode: -1856339416
   fillEmptySpaces: 0
 --- !u!1001 &1532558161
 PrefabInstance:
@@ -21834,7 +21835,7 @@ GameObject:
   - component: {fileID: 1821241801}
   - component: {fileID: 1821241803}
   - component: {fileID: 1821241804}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_0_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22020,6 +22021,82 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1766490383188478063, guid: a93f80d252523a14d9206681c7713ce8, type: 3}
   m_PrefabInstance: {fileID: 1826062606}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1826836175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1826836176}
+  - component: {fileID: 1826836177}
+  m_Layer: 0
+  m_Name: GI Buildings Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1826836176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826836175}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -500, y: 349, z: 500}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 73449702}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1826836177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826836175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cded085d155cde949b60f67a11dbc3bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeVolume
+  version: 2
+  globalVolume: 0
+  mode: 2
+  size: {x: 3000, y: 702, z: 3000}
+  overrideRendererFilters: 1
+  minRendererVolumeSize: 0.1
+  objectLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294965247
+  lowestSubdivLevelOverride: 0
+  highestSubdivLevelOverride: 1
+  overridesSubdivLevels: 1
+  mightNeedRebaking: 0
+  cachedTransform:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 500
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: -349
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: -500
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  cachedHashCode: 265215868
+  fillEmptySpaces: 0
 --- !u!1 &1829915820
 GameObject:
   m_ObjectHideFlags: 1
@@ -22269,6 +22346,10 @@ PrefabInstance:
     - target: {fileID: 2680711642121456672, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
       propertyPath: m_RenderingLayerMask
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4402097373001482622, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7723478074634143434, guid: 1ff6758255eaad8459869aa634300e74, type: 3}
       propertyPath: m_InScenePlaced
@@ -23004,7 +23085,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 39
+    m_Bits: 2087
   m_UseGeometry: 1
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -23172,7 +23253,7 @@ GameObject:
   - component: {fileID: 1918537666}
   - component: {fileID: 1918537668}
   - component: {fileID: 1918537669}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_-2_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26134,7 +26215,7 @@ GameObject:
   - component: {fileID: 2108734349}
   - component: {fileID: 2108734351}
   - component: {fileID: 2108734352}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_0_-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26255,7 +26336,7 @@ GameObject:
   - component: {fileID: 2117107253}
   - component: {fileID: 2117107255}
   - component: {fileID: 2117107256}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_-2_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

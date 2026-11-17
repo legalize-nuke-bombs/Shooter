@@ -21,7 +21,7 @@ namespace Shooter.Editor
             var validity = new float[positions.Length];
             Terrain[] terrains = Terrain.activeTerrains;
             Vector3[] directions = SpreadOverSphere(RayCount);
-            var query = new SolidQuery(LayerMask.GetMask("Default"));
+            var query = new SolidQuery(LayerMask.GetMask("Default", "Terrain"));
             bool hitBackfaces = Physics.queriesHitBackfaces;
             Physics.queriesHitBackfaces = true;
             Physics.SyncTransforms();

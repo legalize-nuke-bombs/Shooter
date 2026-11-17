@@ -14,7 +14,7 @@ namespace Shooter.Game
         private static int groundMask;
         private static int mediumMask;
 
-        private static int GroundMask => groundMask != 0 ? groundMask : groundMask = LayerMask.GetMask("Default", "Water");
+        private static int GroundMask => groundMask != 0 ? groundMask : groundMask = LayerMask.GetMask("Default", "Terrain", "Water");
         private static int MediumMask => mediumMask != 0 ? mediumMask : mediumMask = LayerMask.GetMask("Water");
 
         public static PhysicsMaterial FindUnder(CharacterController characterController)
