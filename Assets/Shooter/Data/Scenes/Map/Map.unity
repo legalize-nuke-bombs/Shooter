@@ -18955,8 +18955,8 @@ MonoBehaviour:
   objectLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  lowestSubdivLevelOverride: 3
-  highestSubdivLevelOverride: 3
+  lowestSubdivLevelOverride: 2
+  highestSubdivLevelOverride: 2
   overridesSubdivLevels: 1
   mightNeedRebaking: 0
   cachedTransform:
