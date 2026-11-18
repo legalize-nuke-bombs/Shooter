@@ -34,7 +34,6 @@ namespace Shooter.Game
             transform.rotation = Celestial.GetLightRotation(hourAngle, clock.Declination, clock.Latitude);
             float fade = GetHorizonFade(elevation);
             sunData.lightDimmer = fade;
-            sunData.volumetricDimmer = fade;
             sunLight.shadows = elevation > ShadowHandoverElevation ? LightShadows.Soft : LightShadows.None;
         }
 

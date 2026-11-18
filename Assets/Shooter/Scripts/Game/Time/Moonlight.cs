@@ -37,7 +37,6 @@ namespace Shooter.Game
             transform.rotation = Celestial.GetLightRotation(hourAngle, declination, clock.Latitude);
             float fade = GetIlluminatedFraction(lagBehindSun) * Sunlight.GetHorizonFade(elevation);
             moonData.lightDimmer = fade;
-            moonData.volumetricDimmer = fade;
 
             float sunElevation = Celestial.GetElevation((float)clock.HourAngle, clock.Declination, clock.Latitude);
             bool isMoonCastingShadows = sunElevation <= Sunlight.ShadowHandoverElevation && elevation > Sunlight.ShadowHandoverElevation;

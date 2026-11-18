@@ -19,7 +19,6 @@ namespace Shooter.Infrastructure
         private string upscaler = Upscalers.Default;
         private string renderScale = RenderScales.Default;
         private string antialiasing = Antialiasings.Default;
-        private string fog = FogQualities.Default;
         private string globalIllumination = Toggles.Default;
         private string rayTracedGlobalIllumination = RayTracingModes.Default;
         private string rayTracedReflections = RayTracingModes.Default;
@@ -100,13 +99,6 @@ namespace Shooter.Infrastructure
         {
             get => antialiasing;
             set => SetProperty(ref antialiasing, Antialiasings.Keys.Contains(value) ? value : Antialiasings.Default);
-        }
-
-        [CreateProperty]
-        public string Fog
-        {
-            get => fog;
-            set => SetProperty(ref fog, FogQualities.Keys.Contains(value) ? value : FogQualities.Default);
         }
 
         [CreateProperty]

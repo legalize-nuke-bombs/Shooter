@@ -44,11 +44,6 @@
                 <ui:DataBinding property="value" data-source-path="Client.Antialiasing" binding-mode="TwoWay"/>
             </Bindings>
         </ui:DropdownField>
-        <ui:DropdownField name="fog" label="Туман" class="field">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="Client.Fog" binding-mode="TwoWay"/>
-            </Bindings>
-        </ui:DropdownField>
         <ui:DropdownField name="global-illumination" label="Глобальное освещение" class="field">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="Client.GlobalIllumination" binding-mode="TwoWay"/>

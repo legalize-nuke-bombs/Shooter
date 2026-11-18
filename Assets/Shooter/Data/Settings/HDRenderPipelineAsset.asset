@@ -225,7 +225,7 @@ MonoBehaviour:
       m_Values: 000000000000000000000000i
       m_SchemaId:
         m_Id: With3Levels
-    supportVolumetrics: 1
+    supportVolumetrics: 0
     supportVolumetricClouds: 1
     supportLightLayers: 1
     renderingLayerMaskBuffer: 0

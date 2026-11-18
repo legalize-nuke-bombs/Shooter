@@ -15,7 +15,6 @@ namespace Shooter.Game
         private const string UpscalerDropdownName = "upscaler";
         private const string RenderScaleDropdownName = "render-scale";
         private const string AntialiasingDropdownName = "antialiasing";
-        private const string FogDropdownName = "fog";
         private const string GlobalIlluminationDropdownName = "global-illumination";
         private const string PathTracingDropdownName = "path-tracing";
         private static readonly Journal Log = Logs.Here();
@@ -50,7 +49,6 @@ namespace Shooter.Game
             SetDropdownChoices(renderScaleDropdown, RenderScales.Keys, SettingsDropdownTitles.GetRenderScaleTitle);
             antialiasingDropdown = RequireElement<DropdownField>(AntialiasingDropdownName);
             SetDropdownChoices(antialiasingDropdown, Antialiasings.Keys, SettingsDropdownTitles.GetAntialiasingTitle);
-            SetDropdownChoices(RequireElement<DropdownField>(FogDropdownName), FogQualities.Keys, SettingsDropdownTitles.GetFogTitle);
             SetDropdownChoices(RequireElement<DropdownField>(GlobalIlluminationDropdownName), Toggles.Keys, SettingsDropdownTitles.GetToggleTitle);
 
             foreach (string name in RayTracingModeDropdownNames)
@@ -110,7 +108,7 @@ namespace Shooter.Game
             Config.SaveGameConfig();
 
             ClientConfig savedClientConfig = Config.GetGameConfig().Client;
-            Log.Info($"Client settings: master {savedClientConfig.Master:0.00}, music {savedClientConfig.Music:0.00}, ambience {savedClientConfig.Ambience:0.00}, sounds {savedClientConfig.Sounds:0.00}, screen {savedClientConfig.ScreenResolution}, upscaler {savedClientConfig.Upscaler}, render scale {savedClientConfig.RenderScale}%, antialiasing {savedClientConfig.Antialiasing}, fog {savedClientConfig.Fog}, global illumination {savedClientConfig.GlobalIllumination}");
+            Log.Info($"Client settings: master {savedClientConfig.Master:0.00}, music {savedClientConfig.Music:0.00}, ambience {savedClientConfig.Ambience:0.00}, sounds {savedClientConfig.Sounds:0.00}, screen {savedClientConfig.ScreenResolution}, upscaler {savedClientConfig.Upscaler}, render scale {savedClientConfig.RenderScale}%, antialiasing {savedClientConfig.Antialiasing}, global illumination {savedClientConfig.GlobalIllumination}");
         }
     }
 }

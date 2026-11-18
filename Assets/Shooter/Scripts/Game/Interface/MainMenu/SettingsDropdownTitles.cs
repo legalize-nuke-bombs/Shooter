@@ -39,14 +39,6 @@ namespace Shooter.Game
             [Antialiasings.Smaa] = "SMAA"
         };
 
-        private static readonly Dictionary<string, string> FogTitles = new()
-        {
-            [FogQualities.Low] = "Низкий",
-            [FogQualities.Medium] = "Средний",
-            [FogQualities.High] = "Высокий",
-            [FogQualities.Max] = "Максимальный"
-        };
-
         private static readonly Dictionary<string, string> RayTracingModeTitles = new()
         {
             [RayTracingModes.Off] = "Выкл",
@@ -78,11 +70,6 @@ namespace Shooter.Game
         public static string GetAntialiasingTitle(string key)
         {
             return GetTitleOrKey(AntialiasingTitles, key);
-        }
-
-        public static string GetFogTitle(string key)
-        {
-            return GetTitleOrKey(FogTitles, key);
         }
 
         public static string GetRayTracingModeTitle(string key)
