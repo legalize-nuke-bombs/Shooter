@@ -33,7 +33,7 @@ namespace Shooter.Game
         {
             clientConfig.propertyChanged -= HandleClientConfigChanged;
             RenderPipelineManager.beginContextRendering -= ApplyToGameCameras;
-            SetProbeVolumesInitialized(true);
+            if (RenderPipelineManager.currentPipeline is { disposed: false }) SetProbeVolumesInitialized(true);
         }
 
         private void HandleClientConfigChanged(object sender, BindablePropertyChangedEventArgs args)
