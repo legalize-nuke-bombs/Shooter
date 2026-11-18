@@ -20,6 +20,7 @@ namespace Shooter.Infrastructure
         private string renderScale = RenderScales.Default;
         private string antialiasing = Antialiasings.Default;
         private string globalIllumination = Toggles.Default;
+        private string reflections = ReflectionModes.Default;
         private string rayTracedGlobalIllumination = RayTracingModes.Default;
         private string rayTracedReflections = RayTracingModes.Default;
         private string rayTracedAmbientOcclusion = Toggles.Default;
@@ -106,6 +107,13 @@ namespace Shooter.Infrastructure
         {
             get => globalIllumination;
             set => SetProperty(ref globalIllumination, Toggles.Keys.Contains(value) ? value : Toggles.Default);
+        }
+
+        [CreateProperty]
+        public string Reflections
+        {
+            get => reflections;
+            set => SetProperty(ref reflections, ReflectionModes.Keys.Contains(value) ? value : ReflectionModes.Default);
         }
 
         [CreateProperty]

@@ -39,6 +39,13 @@ namespace Shooter.Game
             [Antialiasings.Smaa] = "SMAA"
         };
 
+        private static readonly Dictionary<string, string> ReflectionModeTitles = new()
+        {
+            [ReflectionModes.Off] = "Выкл",
+            [ReflectionModes.ScreenSpace] = "Экранные",
+            [ReflectionModes.Planar] = "Планарные"
+        };
+
         private static readonly Dictionary<string, string> RayTracingModeTitles = new()
         {
             [RayTracingModes.Off] = "Выкл",
@@ -70,6 +77,11 @@ namespace Shooter.Game
         public static string GetAntialiasingTitle(string key)
         {
             return GetTitleOrKey(AntialiasingTitles, key);
+        }
+
+        public static string GetReflectionModeTitle(string key)
+        {
+            return GetTitleOrKey(ReflectionModeTitles, key);
         }
 
         public static string GetRayTracingModeTitle(string key)
