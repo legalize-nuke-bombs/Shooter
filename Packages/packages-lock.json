@@ -222,9 +222,9 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "17.6.0",
-      "depth": 1,
-      "source": "builtin",
+      "version": "file:com.unity.render-pipelines.core",
+      "depth": 0,
+      "source": "embedded",
       "dependencies": {
         "com.unity.burst": "1.8.14",
         "com.unity.collections": "2.4.3",
