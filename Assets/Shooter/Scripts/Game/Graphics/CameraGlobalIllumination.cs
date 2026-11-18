@@ -33,6 +33,7 @@ namespace Shooter.Game
         {
             clientConfig.propertyChanged -= HandleClientConfigChanged;
             RenderPipelineManager.beginContextRendering -= ApplyToGameCameras;
+            SetProbeVolumesInitialized(true);
         }
 
         private void HandleClientConfigChanged(object sender, BindablePropertyChangedEventArgs args)
@@ -52,6 +53,8 @@ namespace Shooter.Game
 
         private void ApplyToGameCameras(ScriptableRenderContext context, List<Camera> cameras)
         {
+            SetProbeVolumesInitialized(probeVolumes);
+
             foreach (Camera view in cameras)
             {
                 if (view.cameraType != CameraType.Game || !view.TryGetComponent(out HDAdditionalCameraData cameraData)) continue;
@@ -60,6 +63,39 @@ namespace Shooter.Game
                 cameraData.renderingPathCustomFrameSettingsOverrideMask.mask[(uint)FrameSettingsField.AdaptiveProbeVolume] = true;
                 cameraData.renderingPathCustomFrameSettings.SetEnabled(FrameSettingsField.AdaptiveProbeVolume, probeVolumes);
             }
+        }
+
+        // The pool and the index stay in video memory while the system is initialized, whatever the cameras render;
+        // HDRP initializes it again whenever it recreates the pipeline, so this runs every frame
+        private static void SetProbeVolumesInitialized(bool initialized)
+        {
+            if (GraphicsSettings.currentRenderPipeline is not HDRenderPipelineAsset asset) return;
+
+            RenderPipelineSettings settings = asset.currentPlatformRenderPipelineSettings;
+            if (settings.lightProbeSystem != RenderPipelineSettings.LightProbeSystem.AdaptiveProbeVolumes) return;
+
+            ProbeReferenceVolume system = ProbeReferenceVolume.instance;
+            if (system.isInitialized == initialized) return;
+
+            if (initialized)
+            {
+                system.Initialize(new ProbeVolumeSystemParameters
+                {
+                    memoryBudget = settings.probeVolumeMemoryBudget,
+                    blendingMemoryBudget = settings.probeVolumeBlendingMemoryBudget,
+                    shBands = settings.probeVolumeSHBands,
+                    supportScenarios = settings.supportProbeVolumeScenarios,
+                    supportScenarioBlending = settings.supportProbeVolumeScenarioBlending,
+                    supportDiskStreaming = settings.supportProbeVolumeDiskStreaming,
+                    supportGPUStreaming = settings.supportProbeVolumeGPUStreaming
+                });
+            }
+            else
+            {
+                system.Cleanup();
+            }
+
+            Log.Info($"Adaptive probe volumes {(initialized ? "initialized" : "cleaned up")}");
         }
     }
 }
