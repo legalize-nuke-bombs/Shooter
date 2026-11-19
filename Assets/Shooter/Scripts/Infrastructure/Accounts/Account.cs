@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -71,6 +73,15 @@ namespace Shooter.Infrastructure
             verifier.Init(false, verifyingKey);
             verifier.BlockUpdate(message, 0, message.Length);
             return verifier.VerifySignature(signature);
+        }
+
+        public byte[] Fingerprint()
+        {
+            byte[] publicKeyBytes = SubjectPublicKeyInfoFactory
+                .CreateSubjectPublicKeyInfo(keyPair.Public)
+                .GetDerEncoded();
+            using SHA256 sha256 = SHA256.Create();
+            return sha256.ComputeHash(publicKeyBytes);
         }
 
         private static byte[] BindToContext(string context, byte[] data)
