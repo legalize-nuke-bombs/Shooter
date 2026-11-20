@@ -22,9 +22,17 @@
 .menu__version {
     position: absolute;
     right: 28px;
-    bottom: 20px;
+    top: 20px;
     font-size: var(--text-small);
     color: var(--color-text-faint);
+}
+
+.menu__fingerprint {
+    position: absolute;
+    right: 28px;
+    bottom: 20px;
+    font-size: var(--text-small);
+    color: var(--color-text-dim);
 }
 
 .screen {
@@ -94,12 +102,6 @@
 
 .menu__note {
     margin: -4px 0 12px 18px;
-    font-size: var(--text-small);
-    color: var(--color-text-faint);
-}
-
-.menu__fingerprint {
-    padding-left: 18px;
     font-size: var(--text-small);
     color: var(--color-text-faint);
 }

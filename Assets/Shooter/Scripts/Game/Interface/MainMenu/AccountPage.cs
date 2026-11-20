@@ -38,6 +38,8 @@ namespace Shooter.Game
 
         public event Action BackClicked;
 
+        public event Action AccountRestored;
+
         protected override void HandlePageShown()
         {
             privateKeyFoldout.value = false;
@@ -81,6 +83,7 @@ namespace Shooter.Game
             Config.SaveGameConfig();
             Log.Info("Account restored from a recovery phrase");
             ShowCurrentAccount();
+            AccountRestored?.Invoke();
         }
     }
 }

@@ -12,7 +12,6 @@
         </ui:VisualElement>
         <ui:VisualElement class="menu__group">
             <ui:Button name="account" text="Аккаунт" class="menu__item"/>
-            <ui:Label name="fingerprint" class="menu__fingerprint" picking-mode="Ignore"/>
         </ui:VisualElement>
         <ui:VisualElement class="menu__group menu__group--last">
             <ui:Button name="quit" text="Выйти" class="menu__item"/>

@@ -4,6 +4,7 @@
     <ui:VisualElement name="menu" class="menu" picking-mode="Ignore">
         <ui:VisualElement name="panel" class="menu__panel"/>
         <ui:Label name="version" class="menu__version" picking-mode="Ignore"/>
+        <ui:Label name="fingerprint" class="menu__fingerprint" picking-mode="Ignore"/>
         <ui:VisualElement name="dialog" class="dialog">
             <ui:VisualElement name="dialog-window" class="dialog__window">
                 <ui:Label name="dialog-title" class="dialog__title"/>
