@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.Text;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -18,6 +17,8 @@ namespace Shooter.Infrastructure
 {
     public class Account
     {
+        private static readonly Journal Log = Logs.Here();
+
         public const string CommonName = "shooter-host";
         private const int KeyBits = 4096;
         private const string SignatureAlgorithm = "SHA256withRSA";
@@ -32,6 +33,7 @@ namespace Shooter.Infrastructure
         private Account(AsymmetricCipherKeyPair keyPair)
         {
             this.keyPair = keyPair;
+            Log.Info($"Account fingerprint {ReadableIdentityBuilder.Instance.Build(Fingerprint())}");
         }
 
         public static Account CreateWithGeneratedKeys()
