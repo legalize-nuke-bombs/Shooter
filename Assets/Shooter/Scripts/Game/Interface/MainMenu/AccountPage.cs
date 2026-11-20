@@ -8,6 +8,7 @@ namespace Shooter.Game
     {
         private const string BackButtonName = "back";
         private const string PrivateKeyFoldoutName = "secret";
+        private const string FingerprintLabelName = "fingerprint";
         private const string PublicKeyLabelName = "identity";
         private const string PrivateKeyFieldName = "phrase";
         private const string StatusLabelName = "status";
@@ -15,6 +16,7 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         private readonly Foldout privateKeyFoldout;
+        private readonly Label fingerprintLabel;
         private readonly Label publicKeyLabel;
         private readonly TextField privateKeyField;
         private readonly Label statusLabel;
@@ -25,6 +27,7 @@ namespace Shooter.Game
             RequireElement<Button>(BackButtonName).clicked += () => BackClicked?.Invoke();
 
             privateKeyFoldout = RequireElement<Foldout>(PrivateKeyFoldoutName);
+            fingerprintLabel = RequireElement<Label>(FingerprintLabelName);
             publicKeyLabel = RequireElement<Label>(PublicKeyLabelName);
             privateKeyField = RequireElement<TextField>(PrivateKeyFieldName);
             statusLabel = RequireElement<Label>(StatusLabelName);
@@ -34,6 +37,8 @@ namespace Shooter.Game
         }
 
         public event Action BackClicked;
+
+        public event Action AccountRestored;
 
         protected override void HandlePageShown()
         {
@@ -47,6 +52,7 @@ namespace Shooter.Game
             if (account == null)
             {
                 shownPrivateKey = "";
+                fingerprintLabel.text = "";
                 publicKeyLabel.text = "";
                 privateKeyField.SetValueWithoutNotify("");
                 statusLabel.text = "";
@@ -54,6 +60,7 @@ namespace Shooter.Game
             }
 
             shownPrivateKey = account.PrivateKey;
+            fingerprintLabel.text = ReadableIdentityBuilder.Instance.Build(account.Fingerprint());
             publicKeyLabel.text = account.PublicKey;
             privateKeyField.SetValueWithoutNotify(shownPrivateKey);
             statusLabel.text = "";
@@ -76,6 +83,7 @@ namespace Shooter.Game
             Config.SaveGameConfig();
             Log.Info("Account restored from a recovery phrase");
             ShowCurrentAccount();
+            AccountRestored?.Invoke();
         }
     }
 }

@@ -22,9 +22,17 @@
 .menu__version {
     position: absolute;
     right: 28px;
-    bottom: 20px;
+    top: 20px;
     font-size: var(--text-small);
     color: var(--color-text-faint);
+}
+
+.menu__fingerprint {
+    position: absolute;
+    right: 28px;
+    bottom: 20px;
+    font-size: var(--text-small);
+    color: var(--color-text-dim);
 }
 
 .screen {
@@ -268,6 +276,12 @@
 
 .secret > .unity-foldout__content {
     margin-left: 0;
+}
+
+.account__fingerprint {
+    margin-bottom: var(--space-1);
+    font-size: var(--text-base);
+    color: var(--color-text);
 }
 
 .secret__warning {

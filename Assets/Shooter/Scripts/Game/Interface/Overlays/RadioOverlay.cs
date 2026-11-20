@@ -138,7 +138,7 @@ namespace Shooter.Game
             if (!partnersArrived) return;
 
             List<(RadioPartner Partner, string Name, Contact Contact)> entries = playerRadio.Partners
-                .Select(partner => (Partner: partner, Name: NameMapper.GetShownNameById(partner.CharacterId), Contact: FindContact(partner.CharacterId)))
+                .Select(partner => (Partner: partner, Name: NameMapper.GetShownNameWithIdentityById(partner.CharacterId), Contact: FindContact(partner.CharacterId)))
                 .OrderBy(entry => entry.Partner.OutOfReach)
                 .ThenByDescending(entry => entry.Contact?.LastLineTime ?? DateTime.MinValue)
                 .ThenBy(entry => entry.Name)

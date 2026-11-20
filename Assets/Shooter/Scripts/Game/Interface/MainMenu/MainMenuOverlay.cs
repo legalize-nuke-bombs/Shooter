@@ -13,6 +13,7 @@ namespace Shooter.Game
     {
         private const string PanelElementName = "panel";
         private const string VersionLabelName = "version";
+        private const string FingerprintLabelName = "fingerprint";
         private const string PageClass = "screen";
         private static readonly Journal Log = Logs.Here();
 
@@ -29,6 +30,7 @@ namespace Shooter.Game
         private ClientPage clientPageController;
         private ClientSettingsPage clientSettingsPageController;
         private MainMenuDialog dialog;
+        private Label fingerprintLabel;
         private LoadingScreenOverlay loadingScreenOverlay;
         private MainPage mainPageController;
         private NewGamePage newGamePageController;
@@ -90,8 +92,9 @@ namespace Shooter.Game
 
             panelElement = root.Q<VisualElement>(PanelElementName);
             Label versionLabel = root.Q<Label>(VersionLabelName);
+            fingerprintLabel = root.Q<Label>(FingerprintLabelName);
 
-            if (panelElement == null || versionLabel == null)
+            if (panelElement == null || versionLabel == null || fingerprintLabel == null)
             {
                 Log.Error("Menu document is incomplete, the menu stays dead");
                 return false;
@@ -121,6 +124,7 @@ namespace Shooter.Game
             }
 
             versionLabel.text = Application.version;
+            ShowCurrentAccount();
 
             mainPageController.NewGameClicked += OpenNewGamePage;
             mainPageController.LoadGameClicked += OpenSavesPage;
@@ -138,6 +142,7 @@ namespace Shooter.Game
             serverSettingsPageController.BackClicked += ReturnToPreviousPage;
             clientSettingsPageController.BackClicked += ReturnToPreviousPage;
             accountPageController.BackClicked += ReturnToPreviousPage;
+            accountPageController.AccountRestored += ShowCurrentAccount;
 
             pageStack.PushPage(mainPageController);
 
@@ -173,6 +178,7 @@ namespace Shooter.Game
                 Account account = await Task.Run(() => Account.CreateWithGeneratedKeys());
                 Config.GetGameConfig().Account = account;
                 Config.SaveGameConfig();
+                if (fingerprintLabel != null) ShowCurrentAccount();
                 Log.Info("Account key generated");
             }
             catch (Exception e)
@@ -189,6 +195,7 @@ namespace Shooter.Game
             panelElement?.Clear();
 
             dialog = null;
+            fingerprintLabel = null;
             mainPageController = null;
             newGamePageController = null;
             savesPageController = null;
@@ -197,6 +204,12 @@ namespace Shooter.Game
             clientSettingsPageController = null;
             accountPageController = null;
             panelElement = null;
+        }
+
+        private void ShowCurrentAccount()
+        {
+            Account account = Config.Account;
+            fingerprintLabel.text = account == null ? "" : ReadableIdentityBuilder.Instance.Build(account.Fingerprint());
         }
 
         private VisualElement MountPage(VisualTreeAsset template)

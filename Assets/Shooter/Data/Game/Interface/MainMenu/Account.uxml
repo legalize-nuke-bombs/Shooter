@@ -4,6 +4,8 @@
     <ui:VisualElement class="screen__body">
         <ui:Label text="Аккаунт — криптографическая пара ключей, единая во всех мирах. По публичному ключу игрока узнают, приватным подтверждают владение." class="screen__hint"/>
         <ui:Label text="Публичный ключ" class="screen__caption"/>
+        <ui:Label name="fingerprint" class="account__fingerprint"/>
+        <ui:Label text="Отпечаток публичного ключа. Может совпадать у разных игроков." class="screen__hint"/>
         <ui:Label name="identity" class="screen__hint"/>
         <ui:Foldout name="secret" text="Приватный ключ" value="false" class="secret">
             <ui:Label text="Приватным ключом аккаунт переносят и восстанавливают. Кто знает ключ — владеет аккаунтом. Потеряется — не вернуть." class="screen__hint secret__warning"/>
