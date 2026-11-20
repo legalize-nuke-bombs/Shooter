@@ -9,11 +9,11 @@ namespace Shooter.Game
     [RequireComponent(typeof(Player))]
     public class PlayerPresenceObserver : NetworkBehaviour, IToastSource
     {
-        private const string EnteredTitleFormat = "{0} подключился";
-        private const string LeftTitleFormat = "{0} отключился";
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private EarSoundAsset sound;
+        [SerializeField] private string enteredTitleFormat;
+        [SerializeField] private string leftTitleFormat;
 
         private Player player;
 
@@ -54,7 +54,7 @@ namespace Shooter.Game
         [Rpc(SendTo.Owner)]
         private void RaisePresenceToastRpc(string shownName, string publicKey, bool entered)
         {
-            string title = string.Format(entered ? EnteredTitleFormat : LeftTitleFormat, NameMapper.GetShownNameWithIdentity(shownName, publicKey));
+            string title = string.Format(entered ? enteredTitleFormat : leftTitleFormat,NameMapper.GetShownNameWithIdentity(shownName, publicKey));
             ToastRaised?.Invoke(new Toast(null, sound, title, null));
         }
     }

@@ -854,6 +854,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.PlayerPresenceObserver
   ShowTopMostFoldoutHeaderGroup: 1
   sound: {fileID: 11400000, guid: 24d961bc48e84441a1434668c0a9f675, type: 2}
+  enteredTitleFormat: "{0} \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u043B\u0441\u044F"
+  leftTitleFormat: "{0} \u043E\u0442\u043A\u043B\u044E\u0447\u0438\u043B\u0441\u044F"
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
