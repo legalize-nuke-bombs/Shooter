@@ -98,6 +98,12 @@
     color: var(--color-text-faint);
 }
 
+.menu__fingerprint {
+    padding-left: 18px;
+    font-size: var(--text-small);
+    color: var(--color-text-faint);
+}
+
 .menu__group {
     margin-bottom: var(--space-6);
 }

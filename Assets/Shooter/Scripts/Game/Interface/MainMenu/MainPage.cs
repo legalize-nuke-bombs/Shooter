@@ -1,4 +1,5 @@
 using System;
+using Shooter.Infrastructure;
 using UnityEngine.UIElements;
 
 namespace Shooter.Game
@@ -12,9 +13,13 @@ namespace Shooter.Game
         private const string JoinButtonName = "join";
         private const string AccountButtonName = "account";
         private const string QuitButtonName = "quit";
+        private const string FingerprintLabelName = "fingerprint";
+
+        private readonly Label fingerprintLabel;
 
         public MainPage(VisualElement root) : base(root)
         {
+            fingerprintLabel = RequireElement<Label>(FingerprintLabelName);
             RequireElement<Button>(NewGameButtonName).clicked += () => NewGameClicked?.Invoke();
             RequireElement<Button>(LoadGameButtonName).clicked += () => LoadGameClicked?.Invoke();
             RequireElement<Button>(ServerSettingsButtonName).clicked += () => ServerSettingsClicked?.Invoke();
@@ -37,5 +42,16 @@ namespace Shooter.Game
         public event Action AccountClicked;
 
         public event Action QuitClicked;
+
+        public void ShowCurrentAccount()
+        {
+            Account account = Config.Account;
+            fingerprintLabel.text = account == null ? "" : ReadableIdentityBuilder.Instance.Build(account.Fingerprint());
+        }
+
+        protected override void HandlePageShown()
+        {
+            ShowCurrentAccount();
+        }
     }
 }

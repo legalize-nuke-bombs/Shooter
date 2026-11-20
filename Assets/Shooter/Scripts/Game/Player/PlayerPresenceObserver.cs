@@ -12,6 +12,8 @@ namespace Shooter.Game
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private EarSoundAsset sound;
+        [SerializeField] private IconAsset enteredIcon;
+        [SerializeField] private IconAsset leftIcon;
         [SerializeField] private string enteredTitleFormat;
         [SerializeField] private string leftTitleFormat;
 
@@ -55,7 +57,7 @@ namespace Shooter.Game
         private void RaisePresenceToastRpc(string shownName, string publicKey, bool entered)
         {
             string title = string.Format(entered ? enteredTitleFormat : leftTitleFormat,NameMapper.GetShownNameWithIdentity(shownName, publicKey));
-            ToastRaised?.Invoke(new Toast(null, sound, title, null));
+            ToastRaised?.Invoke(new Toast(entered ? enteredIcon : leftIcon, sound, title, null));
         }
     }
 }

@@ -173,6 +173,7 @@ namespace Shooter.Game
                 Account account = await Task.Run(() => Account.CreateWithGeneratedKeys());
                 Config.GetGameConfig().Account = account;
                 Config.SaveGameConfig();
+                mainPageController?.ShowCurrentAccount();
                 Log.Info("Account key generated");
             }
             catch (Exception e)

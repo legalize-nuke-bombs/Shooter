@@ -94,10 +94,6 @@ namespace Shooter.Game
                 iconElement.style.backgroundImage = Background.FromSprite(iconSprite);
                 toastElement.Add(iconElement);
             }
-            else
-            {
-                toastElement.AddToClassList("toast--no-icon");
-            }
 
             VisualElement bodyElement = new();
             bodyElement.AddToClassList("toast__body");
