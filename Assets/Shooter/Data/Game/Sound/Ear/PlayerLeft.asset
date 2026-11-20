@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5282e42563459281557c6a6f6a63aa, type: 3}
+  m_Name: PlayerLeft
+  m_EditorClassIdentifier:
+  id: playerleft
+  clips:
+  - {fileID: 8300000, guid: 6e9db6cbabe141e1a252df5431ea1e17, type: 3}
+  - {fileID: 8300000, guid: 25d49a3a61434368a3164562789611a3, type: 3}
+  output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
+  volume: 1
+  pitchVariation: 0
+  promptDescription: Player left sound

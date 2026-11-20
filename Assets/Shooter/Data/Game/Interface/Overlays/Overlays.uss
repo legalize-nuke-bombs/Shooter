@@ -493,6 +493,12 @@
     display: none;
 }
 
+.talk__channel {
+    font-size: 11px;
+    margin-bottom: 2px;
+    color: var(--color-text-dim);
+}
+
 .talk__name {
     font-size: 14px;
     margin-bottom: 8px;
@@ -565,7 +571,8 @@
 }
 
 .radio__panel {
-    width: 360px;
+    width: 640px;
+    max-width: 90%;
     padding: 20px;
     background-color: var(--color-panel-solid);
     border-width: 1px;
@@ -591,6 +598,8 @@
     font-size: 15px;
     color: var(--color-text-dim);
     -unity-text-align: middle-left;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .radio__item:hover {

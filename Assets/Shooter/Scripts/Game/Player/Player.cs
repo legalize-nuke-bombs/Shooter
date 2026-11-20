@@ -1,5 +1,6 @@
 using System;
 using Shooter.Infrastructure;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,10 +13,15 @@ namespace Shooter.Game
         private const ulong NoClient = ulong.MaxValue;
 
         private readonly NetworkVariable<ulong> controllingClientId = new(NoClient);
+        private readonly NetworkVariable<FixedString4096Bytes> publicKey = new();
 
         private IncrementalId incrementalId;
 
-        public string PublicKey { get; set; }
+        public string PublicKey
+        {
+            get => publicKey.Value.ToString();
+            set => publicKey.Value = new FixedString4096Bytes(value);
+        }
 
         // Who plays this body, apart from who owns it in Netcode: on the host an offline body and a body being handed
         // to a client are both owned by the host without being its own

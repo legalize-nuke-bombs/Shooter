@@ -485,6 +485,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6347065536133873517}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7812249645531332396}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
 --- !u!1 &924064630755534763 stripped
 GameObject:
@@ -837,6 +840,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.OptimizerAgentSwitcherOnControl
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &7812249645531332396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd926e9a5d06b2f4e9f624b58d0b1115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.PlayerPresenceObserver
+  ShowTopMostFoldoutHeaderGroup: 1
+  enteredSound: {fileID: 11400000, guid: d7c6acefa1d94ec1b7a626f503b46ff0, type: 2}
+  leftSound: {fileID: 11400000, guid: 40c8e730b0fd4146af82f8190329de5f, type: 2}
+  enteredIcon: {fileID: 11400000, guid: 0ed1d78f9f64c9a4ba38f673751f3715, type: 2}
+  leftIcon: {fileID: 11400000, guid: f92cf67624d84454d826cd38ce3a6904, type: 2}
+  enteredTitleFormat: "{0} \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u043B\u0441\u044F"
+  leftTitleFormat: "{0} \u043E\u0442\u043A\u043B\u044E\u0447\u0438\u043B\u0441\u044F"
 --- !u!4 &8027223328707039298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4382549096591416433, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}

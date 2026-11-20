@@ -88,9 +88,9 @@ namespace Shooter.Game
             body.ChangeOwnership(clientId);
             body.DontDestroyWithOwner = true;
             bodiesByClientId[clientId] = body;
-            body.GetComponent<Player>().GiveControlTo(clientId);
             body.GetComponent<TextNameable>()?.RenameTo(playerName);
             body.name = playerName;
+            body.GetComponent<Player>().GiveControlTo(clientId);
 
             Log.Info($"Client {clientId} entered the world as {playerName}, players online {network.ConnectedClients.Count}");
         }
