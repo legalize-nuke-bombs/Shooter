@@ -79,11 +79,13 @@ namespace Shooter.Infrastructure
 
         public byte[] Fingerprint()
         {
-            byte[] publicKeyBytes = SubjectPublicKeyInfoFactory
-                .CreateSubjectPublicKeyInfo(keyPair.Public)
-                .GetDerEncoded();
+            return Fingerprint(PublicKey);
+        }
+
+        public static byte[] Fingerprint(string publicKey)
+        {
             using SHA256 sha256 = SHA256.Create();
-            return sha256.ComputeHash(publicKeyBytes);
+            return sha256.ComputeHash(Convert.FromBase64String(publicKey));
         }
 
         private static byte[] BindToContext(string context, byte[] data)

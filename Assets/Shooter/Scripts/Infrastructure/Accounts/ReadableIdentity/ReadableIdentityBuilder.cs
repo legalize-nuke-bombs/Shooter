@@ -20,8 +20,11 @@ public sealed class ReadableIdentityBuilder
             {
                 throw new ArgumentException("Byte stream is too short");
             }
+            if (sb.Length > 0)
+            {
+                sb.Append(' ');
+            }
             sb.Append(word);
-            sb.Append(' ');
         }
         return sb.ToString();
     }
@@ -30,8 +33,7 @@ public sealed class ReadableIdentityBuilder
     {
         new ReadableIdentityMemoryColorsDict(),
         new ReadableIdentityMemoryAdjectivesDict(),
-        new ReadableIdentityMemoryAnimalsDict(),
-        new ReadableIdentityVirtualBase32Dict(6)
+        new ReadableIdentityMemoryAnimalsDict()
     };
 
     private ReadableIdentityBuilder()

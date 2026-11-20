@@ -19,5 +19,19 @@ namespace Shooter.Game
 
             return string.IsNullOrEmpty(shownName) ? Stranger : shownName;
         }
+
+        public static string GetShownNameWithIdentityById(long characterId)
+        {
+            Character character = Character.FindById(characterId, RegisterInactivePolicy.Include);
+            Player player = character == null ? null : character.GetComponent<Player>();
+            string shownName = GetShownName(character);
+
+            return player == null ? shownName : GetShownNameWithIdentity(shownName, player.PublicKey);
+        }
+
+        public static string GetShownNameWithIdentity(string shownName, string publicKey)
+        {
+            return $"{shownName} ({ReadableIdentityBuilder.Instance.Build(Account.Fingerprint(publicKey))})";
+        }
     }
 }

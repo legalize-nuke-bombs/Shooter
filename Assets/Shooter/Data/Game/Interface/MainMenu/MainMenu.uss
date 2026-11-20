@@ -270,6 +270,12 @@
     margin-left: 0;
 }
 
+.account__fingerprint {
+    margin-bottom: var(--space-1);
+    font-size: var(--text-base);
+    color: var(--color-text);
+}
+
 .secret__warning {
     color: var(--color-accent);
 }

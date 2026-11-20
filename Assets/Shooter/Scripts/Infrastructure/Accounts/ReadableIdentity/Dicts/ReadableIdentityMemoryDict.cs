@@ -27,7 +27,8 @@ namespace Shooter.Infrastructure
                 value = (value << 8) | b;
             }
 
-            word = words[(int)(value % (ulong)words.Length)].ToUpperInvariant();
+            string chosen = words[(int)(value % (ulong)words.Length)];
+            word = char.ToUpperInvariant(chosen[0]) + chosen.Substring(1);
             next = begin + slice.Length;
         }
     }

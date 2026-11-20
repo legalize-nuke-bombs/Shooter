@@ -651,6 +651,10 @@
     border-color: rgba(255, 255, 255, 0.06);
 }
 
+.toast--no-icon {
+    padding-left: 10px;
+}
+
 .toast__icon {
     width: 48px;
     height: 48px;
