@@ -89,6 +89,7 @@
           </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="talk" class="talk">
+            <ui:Label name="talk-channel" text="Рация" class="line talk__channel" picking-mode="Ignore"/>
             <ui:Label name="talk-name" class="line talk__name" picking-mode="Ignore"/>
             <ui:ScrollView name="talk-log" class="talk__log"/>
             <ui:Label name="talk-waiting" text="Думает..." class="line talk__waiting" picking-mode="Ignore"/>

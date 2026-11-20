@@ -16,12 +16,13 @@ namespace Shooter.Game
         private const string OutOfReachLabelName = "talk-out-of-reach";
         private const string InputFieldName = "talk-input";
         private const string GiveButtonName = "talk-give";
-        private const string RadioTitleSuffix = "рация";
+        private const string ChannelLabelName = "talk-channel";
         private static readonly Journal Log = Logs.Here();
 
         [SerializeField] private float charInterval = 0.01f;
 
         private Button giveButton;
+        private Label channelLabel;
         private TextField inputField;
         private ScrollView linesScrollView;
         private Label partnerNameLabel;
@@ -102,8 +103,9 @@ namespace Shooter.Game
             outOfReachLabel = root.Q<Label>(OutOfReachLabelName);
             inputField = root.Q<TextField>(InputFieldName);
             giveButton = root.Q<Button>(GiveButtonName);
+            channelLabel = root.Q<Label>(ChannelLabelName);
 
-            if (windowElement == null || partnerNameLabel == null || linesScrollView == null || waitingLabel == null || outOfReachLabel == null || inputField == null || giveButton == null)
+            if (windowElement == null || partnerNameLabel == null || linesScrollView == null || waitingLabel == null || outOfReachLabel == null || inputField == null || giveButton == null || channelLabel == null)
             {
                 Log.Error($"Overlay document has no {WindowElementName} window, talks stay invisible");
                 return false;
@@ -137,7 +139,7 @@ namespace Shooter.Game
 
             talkingOverRadio = false;
             partnerOutOfReach = false;
-            ShowTalk(playerConversations.GetOrCreateContact(foundTalker.CharacterId), foundTalker, NameMapper.GetShownName(foundTalker));
+            ShowTalk(playerConversations.GetOrCreateContact(foundTalker.CharacterId), foundTalker, NameMapper.GetShownNameWithIdentityById(foundTalker.CharacterId));
         }
 
         private void OpenRadioTalk(long partnerId)
@@ -147,7 +149,7 @@ namespace Shooter.Game
             Character partner = Character.FindById(partnerId, RegisterInactivePolicy.Include);
             talkingOverRadio = true;
             partnerOutOfReach = playerRadio != null && playerRadio.IsOutOfReach(partnerId);
-            ShowTalk(playerConversations.GetOrCreateContact(partnerId), partner == null ? null : partner.GetComponent<Talker>(), $"{NameMapper.GetShownName(partner)} ({RadioTitleSuffix})");
+            ShowTalk(playerConversations.GetOrCreateContact(partnerId), partner == null ? null : partner.GetComponent<Talker>(), NameMapper.GetShownNameWithIdentityById(partnerId));
         }
 
         private void ShowTalk(Contact contact, Talker talker, string title)
@@ -156,6 +158,7 @@ namespace Shooter.Game
 
             shownContact = contact;
             partnerNameLabel.text = title;
+            channelLabel.style.display = talkingOverRadio ? DisplayStyle.Flex : DisplayStyle.None;
             giveButton.style.display = talkingOverRadio ? DisplayStyle.None : DisplayStyle.Flex;
             outOfReachLabel.style.display = partnerOutOfReach ? DisplayStyle.Flex : DisplayStyle.None;
             inputField.value = string.Empty;
