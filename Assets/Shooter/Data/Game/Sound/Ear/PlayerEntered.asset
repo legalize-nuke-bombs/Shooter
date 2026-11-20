@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   id: playerentered
   clips:
-  - {fileID: 8300000, guid: f8d6a5702f6c45aa992fc2689fcfbbc5, type: 3}
+  - {fileID: 8300000, guid: 52d393d2ef774658a2e4ab6ca968fa52, type: 3}
+  - {fileID: 8300000, guid: 8541f4fbfd884693a42976f1bc3641ae, type: 3}
   output: {fileID: -8671932055591521994, guid: a5d86486ae971ed40a30698f29f900a9, type: 2}
   volume: 1
   pitchVariation: 0
