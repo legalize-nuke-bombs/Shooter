@@ -383,7 +383,6 @@ GameObject:
   - component: {fileID: 7012224470223036609}
   - component: {fileID: 6512336757349361175}
   - component: {fileID: 7810998794774609615}
-  - component: {fileID: 4087881173302269181}
   - component: {fileID: 4985237180645967896}
   m_Layer: 0
   m_Name: Conifer
@@ -424,7 +423,7 @@ LODGroup:
   m_LocalReferencePoint: {x: -1.0320659, y: 14.69436, z: -0.6052518}
   m_Size: 29.416601
   m_FadeMode: 2
-  m_AnimateCrossFading: 1
+  m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 1
   m_LODs:
   - screenRelativeHeight: 0.31844404
@@ -483,18 +482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
---- !u!114 &4087881173302269181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4012337630082778474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4985237180645967896
 MonoBehaviour:
   m_ObjectHideFlags: 0

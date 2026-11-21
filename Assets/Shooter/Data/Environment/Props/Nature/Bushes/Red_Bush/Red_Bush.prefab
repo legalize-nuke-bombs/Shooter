@@ -119,10 +119,13 @@ PrefabInstance:
       addedObject: {fileID: 5115017511638499165}
     - targetCorrespondingSourceObject: {fileID: 100006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3754891285304466478}
+      addedObject: {fileID: 1931288314280927114}
     - targetCorrespondingSourceObject: {fileID: 100006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1931288314280927114}
+      addedObject: {fileID: 3361079076440448213}
+    - targetCorrespondingSourceObject: {fileID: 100006, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6204973766714012251}
     - targetCorrespondingSourceObject: {fileID: 1303839410134742666, guid: 5e76989194570e246acc05a8d2697af2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5577096062676920231}
@@ -254,18 +257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
---- !u!114 &3754891285304466478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8807064048693953627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &1931288314280927114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,3 +270,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
+--- !u!114 &3361079076440448213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8807064048693953627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DigestibleTransform
+--- !u!114 &6204973766714012251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8807064048693953627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
+  content: A red bush
+  size: 0

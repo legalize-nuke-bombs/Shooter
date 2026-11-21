@@ -428,7 +428,6 @@ GameObject:
   - component: {fileID: 1030110593025508114}
   - component: {fileID: 6525472243262678585}
   - component: {fileID: 5473665645487677620}
-  - component: {fileID: 3728251781768049634}
   - component: {fileID: 6079938374971866268}
   m_Layer: 0
   m_Name: Cypress
@@ -469,7 +468,7 @@ LODGroup:
   m_LocalReferencePoint: {x: -0.13364053, y: 3.5692868, z: 0.20043993}
   m_Size: 7.267743
   m_FadeMode: 2
-  m_AnimateCrossFading: 1
+  m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 1
   m_LODs:
   - screenRelativeHeight: 0.07867563
@@ -528,18 +527,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
---- !u!114 &3728251781768049634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6060788920606015911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &6079938374971866268
 MonoBehaviour:
   m_ObjectHideFlags: 0

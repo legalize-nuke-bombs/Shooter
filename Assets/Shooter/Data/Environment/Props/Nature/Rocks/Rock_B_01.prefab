@@ -169,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20500000, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}
       propertyPath: m_AnimateCrossFading
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20500000, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}
       propertyPath: m_LODs.Array.data[0].fadeTransitionWidth
@@ -219,10 +219,13 @@ PrefabInstance:
       addedObject: {fileID: 6360973639422730784}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8228321393898494472}
+      addedObject: {fileID: 7754430400474054674}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7754430400474054674}
+      addedObject: {fileID: 21727085452385087}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8686749375145847245}
     - targetCorrespondingSourceObject: {fileID: 100002, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2308122512087465100}
@@ -390,18 +393,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
---- !u!114 &8228321393898494472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 185186776739890662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &7754430400474054674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,6 +406,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
   mobility: 0
+--- !u!114 &21727085452385087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185186776739890662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55a621545e0ce44ae893b7cd80b230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.DigestibleTransform
+--- !u!114 &8686749375145847245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185186776739890662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4651ac12bb7e491582310afa064eb08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
+  content: A stone
+  size: 0
 --- !u!1 &185186776739890668 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100010, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}

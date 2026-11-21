@@ -801,7 +801,6 @@ GameObject:
   - component: {fileID: 1216325129559280814}
   - component: {fileID: 4157491588088886716}
   - component: {fileID: 1367695776664386292}
-  - component: {fileID: 4517849585084559798}
   - component: {fileID: 4853415155464477218}
   m_Layer: 0
   m_Name: Pine_D
@@ -844,7 +843,7 @@ LODGroup:
   m_LocalReferencePoint: {x: 0.101793766, y: 9.158331, z: -0.2564478}
   m_Size: 19.609688
   m_FadeMode: 2
-  m_AnimateCrossFading: 1
+  m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 1
   m_LODs:
   - screenRelativeHeight: 0.21228111
@@ -903,18 +902,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
---- !u!114 &4517849585084559798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8316334779356437779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &4853415155464477218
 MonoBehaviour:
   m_ObjectHideFlags: 0
