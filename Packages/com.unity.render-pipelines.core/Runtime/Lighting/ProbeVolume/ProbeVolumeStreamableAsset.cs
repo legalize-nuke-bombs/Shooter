@@ -68,7 +68,8 @@ namespace UnityEngine.Rendering
 
         internal bool HasValidAssetReference()
         {
-            return m_Asset != null && m_Asset.bytes != null;
+            // Shooter patch: bytes copies the whole file, and the editor asks this for every cell request
+            return m_Asset != null && m_Asset.dataSize > 0;
         }
 
         unsafe public bool FileExists()

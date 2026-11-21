@@ -49,7 +49,6 @@ The navmesh and the baked lighting are not stored in the repository. After cloni
 * Tools → Shooter → World → Bake GI
 
 Baking is heavy: the GI bake peaks at about 26 GB of RAM in the editor.
-In the editor, play mode with GI on stutters because of APV disk streaming; builds are not affected.
 
 # Supported LLM providers
 * Polza
