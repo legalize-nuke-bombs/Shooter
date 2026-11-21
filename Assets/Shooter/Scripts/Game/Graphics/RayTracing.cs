@@ -192,7 +192,7 @@ namespace Shooter.Game
 
             foreach (IRayTracedInstances instances in Registers.Instance.GetAll<IRayTracedInstances>(RegisterInactivePolicy.Exclude))
             {
-                instances.AddInstancesTo(builder);
+                instances.AddInstancesTo(builder, hdCamera);
             }
 
             hdCamera.rayTracingAccelerationStructure = builder.Build(hdCamera);

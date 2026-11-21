@@ -777,6 +777,7 @@ GameObject:
   - component: {fileID: 1199387128}
   - component: {fileID: 1199387127}
   - component: {fileID: 1199387132}
+  - component: {fileID: 1199387133}
   m_Layer: 0
   m_Name: RayTracing
   m_TagString: Untagged
@@ -865,6 +866,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632ad4744e009b14c9e3b221c00e3dad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.TracedTerrainTrees
+--- !u!114 &1199387133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1199387126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6ad43e946905a44d92b9bd4e7759222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.TracedTerrainDetails
 --- !u!1 &1714957778
 GameObject:
   m_ObjectHideFlags: 0

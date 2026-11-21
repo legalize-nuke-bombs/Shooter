@@ -4,6 +4,6 @@ namespace Shooter.Game
 {
     public interface IRayTracedInstances
     {
-        void AddInstancesTo(AccelerationStructureBuilder builder);
+        void AddInstancesTo(AccelerationStructureBuilder builder, HDCamera hdCamera);
     }
 }

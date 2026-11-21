@@ -24,7 +24,7 @@ namespace Shooter.Game
             meshesByTerrain.Clear();
         }
 
-        public void AddInstancesTo(AccelerationStructureBuilder builder)
+        public void AddInstancesTo(AccelerationStructureBuilder builder, HDCamera hdCamera)
         {
             foreach (Terrain terrain in Registers.Instance.GetAll<Terrain>(RegisterInactivePolicy.Exclude))
             {
