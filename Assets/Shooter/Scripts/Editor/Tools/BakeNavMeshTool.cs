@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Shooter.Game;
 using Shooter.Infrastructure;
 using Unity.AI.Navigation;
 using UnityEditor;
@@ -27,7 +29,7 @@ namespace Shooter.Editor
         {
             agentBody = (GameObject)EditorGUILayout.ObjectField("Agent body", agentBody, typeof(GameObject), false);
             EditorGUILayout.LabelField("With a body set, the navmesh agent takes the radius, height, step and slope of its CharacterController. " +
-                                       "Trees of the terrains are baked through temporary copies of their colliders, the data lies next to the scene", EditorStyles.wordWrappedMiniLabel);
+                                       "Trees of the terrains are baked as the objects the game places for them, the data lies next to the scene", EditorStyles.wordWrappedMiniLabel);
 
             if (GUILayout.Button("Bake"))
             {
@@ -53,7 +55,12 @@ namespace Shooter.Editor
             if (agentBody != null && !TrySyncAgentToBody(agentBody)) return;
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            GameObject treeProxiesRoot = BuildTreeProxies();
+            var placedTrees = new List<Transform>();
+            foreach (Terrain terrain in Terrain.activeTerrains)
+            {
+                placedTrees.Add(PlaceTerrainTreesOnStart.PlaceTrees(terrain));
+            }
+
             try
             {
                 foreach (NavMeshSurface surface in surfaces)
@@ -63,7 +70,10 @@ namespace Shooter.Editor
             }
             finally
             {
-                Object.DestroyImmediate(treeProxiesRoot);
+                foreach (Transform trees in placedTrees)
+                {
+                    Object.DestroyImmediate(trees.gameObject);
+                }
             }
 
             foreach (NavMeshSurface surface in surfaces)
@@ -72,7 +82,7 @@ namespace Shooter.Editor
                 EditorUtility.SetDirty(surface);
             }
 
-            Log.Info($"Baked {surfaces.Length} navmesh surfaces with tree proxies in {stopwatch.ElapsedMilliseconds} ms");
+            Log.Info($"Baked {surfaces.Length} navmesh surfaces with the trees of the terrains in {stopwatch.ElapsedMilliseconds} ms");
         }
 
         private static bool TrySyncAgentToBody(GameObject body)
@@ -107,58 +117,6 @@ namespace Shooter.Editor
             EditorSceneManager.MarkSceneDirty(surface.gameObject.scene);
 
             Log.Info($"Navmesh data of {surface.name} saved to {path}");
-        }
-
-        private static GameObject BuildTreeProxies()
-        {
-            GameObject treeProxiesRoot = new("TreeBakeProxies");
-            int builtProxies = 0;
-            int copiedColliders = 0;
-
-            foreach (Terrain terrain in Terrain.activeTerrains)
-            {
-                TerrainData terrainData = terrain.terrainData;
-                TreePrototype[] prototypes = terrainData.treePrototypes;
-                Collider[][] collidersOfPrototype = new Collider[prototypes.Length][];
-                for (int i = 0; i < prototypes.Length; i++)
-                {
-                    collidersOfPrototype[i] = prototypes[i].prefab == null ? new Collider[0] : prototypes[i].prefab.GetComponentsInChildren<Collider>(true);
-                }
-
-                foreach (TreeInstance tree in terrainData.treeInstances)
-                {
-                    if (collidersOfPrototype[tree.prototypeIndex].Length == 0) continue;
-
-                    Transform proxy = new GameObject("TreeProxy").transform;
-                    proxy.SetParent(treeProxiesRoot.transform, false);
-                    proxy.SetPositionAndRotation(terrain.transform.position + Vector3.Scale(tree.position, terrainData.size), Quaternion.Euler(0f, tree.rotation * Mathf.Rad2Deg, 0f));
-                    proxy.localScale = new Vector3(tree.widthScale, tree.heightScale, tree.widthScale);
-
-                    Transform prefabRoot = prototypes[tree.prototypeIndex].prefab.transform;
-                    foreach (Collider collider in collidersOfPrototype[tree.prototypeIndex])
-                    {
-                        if (!collider.enabled) continue;
-
-                        Transform part = new GameObject(collider.name).transform;
-                        part.SetParent(proxy, false);
-                        part.localPosition = prefabRoot.InverseTransformPoint(collider.transform.position);
-                        part.localRotation = Quaternion.Inverse(prefabRoot.rotation) * collider.transform.rotation;
-                        part.localScale = GetScaleRelativeTo(collider.transform.lossyScale, prefabRoot.lossyScale);
-                        EditorUtility.CopySerialized(collider, part.gameObject.AddComponent(collider.GetType()));
-                        copiedColliders++;
-                    }
-
-                    builtProxies++;
-                }
-            }
-
-            Log.Info($"Built {builtProxies} tree proxies carrying {copiedColliders} colliders for the bake");
-            return treeProxiesRoot;
-        }
-
-        private static Vector3 GetScaleRelativeTo(Vector3 scale, Vector3 rootScale)
-        {
-            return new Vector3(scale.x / rootScale.x, scale.y / rootScale.y, scale.z / rootScale.z);
         }
     }
 }

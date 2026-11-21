@@ -170,7 +170,7 @@ namespace Shooter.Game
                      $"{rayTracedShadows} lights with ray traced shadows, wind {(blowing ? "blowing" : "calmed")}");
         }
 
-        // Manual build: HDRP's own one has no place for instances that are not renderers, like terrain trees
+        // Manual build: HDRP's own one has no place for instances that are not renderers, like terrain grass
         private void BuildAccelerationStructure(ScriptableRenderContext context, Camera camera)
         {
             HDCamera hdCamera = HDCamera.GetOrCreate(camera);
