@@ -31,8 +31,9 @@ namespace Shooter.Game
             {
                 Vector3 position = origin + Vector3.Scale(tree.position, terrainData.size);
                 Quaternion rotation = Quaternion.Euler(0f, tree.rotation * Mathf.Rad2Deg, 0f);
-                Transform placed = Instantiate(prototypes[tree.prototypeIndex].prefab, position, rotation, trees).transform;
-                placed.localScale = new Vector3(tree.widthScale, tree.heightScale, tree.widthScale);
+                GameObject prefab = prototypes[tree.prototypeIndex].prefab;
+                Transform placed = Instantiate(prefab, position, rotation, trees).transform;
+                placed.localScale = Vector3.Scale(prefab.transform.localScale, new Vector3(tree.widthScale, tree.heightScale, tree.widthScale));
             }
 
             return trees;
