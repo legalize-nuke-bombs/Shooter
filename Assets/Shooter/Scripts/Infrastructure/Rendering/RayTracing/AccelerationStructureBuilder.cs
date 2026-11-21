@@ -11,7 +11,6 @@ namespace UnityEngine.Rendering.HighDefinition
         private const string TransparentKeyword = "_SURFACE_TYPE_TRANSPARENT";
 
         private readonly HDRTASManager manager = new();
-        private readonly Dictionary<EntityId, int> materialCrcs = new();
         private readonly List<Material> materials = new();
 
         public AccelerationStructureBuilder()
@@ -26,8 +25,7 @@ namespace UnityEngine.Rendering.HighDefinition
             HDEffectsParameters parameters = HDRenderPipeline.EvaluateEffectsParameters(hdCamera, rayTracedShadows, false);
             if (!parameters.rayTracingRequired) return false;
 
-            RayTracingInstanceCullingResults results = manager.Cull(hdCamera, parameters);
-            if (parameters.pathTracing) TrackPathTracingChanges(hdCamera, results);
+            manager.Cull(hdCamera, parameters);
             return true;
         }
 
@@ -68,18 +66,6 @@ namespace UnityEngine.Rendering.HighDefinition
         public void Dispose()
         {
             manager.ReleaseResources();
-        }
-
-        private void TrackPathTracingChanges(HDCamera hdCamera, RayTracingInstanceCullingResults results)
-        {
-            hdCamera.transformsDirty |= results.transformsChanged;
-            foreach (RayTracingInstanceMaterialCRC material in results.materialsCRC)
-            {
-                if (materialCrcs.TryGetValue(material.entityId, out int crc) && crc == material.crc) continue;
-
-                materialCrcs[material.entityId] = material.crc;
-                hdCamera.materialsDirty = true;
-            }
         }
 
         private static uint MaskOf(ShadowCastingMode shadowCasting)

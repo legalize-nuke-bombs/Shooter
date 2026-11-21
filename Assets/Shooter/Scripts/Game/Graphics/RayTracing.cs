@@ -68,6 +68,7 @@ namespace Shooter.Game
 
             pathTracing = profile.Add<PathTracing>();
             pathTracing.enable.Override(true);
+            pathTracing.maximumSamples.Override(1);
 
             GetComponent<Volume>().sharedProfile = profile;
         }
@@ -78,6 +79,7 @@ namespace Shooter.Game
             clientConfig.propertyChanged += HandleClientConfigChanged;
             Registers.Instance.SubscribeRegistered<HDAdditionalLightData>(HandleLightRegistered);
             Registers.Instance.SubscribeRegistered<WindZone>(HandleWindRegistered);
+            Registers.Instance.SubscribeRegistered<PathTracingOnly>(HandlePathTracingOnlyRegistered);
             RenderPipelineManager.beginCameraRendering += BuildAccelerationStructure;
             FollowClientConfig();
         }
@@ -87,6 +89,7 @@ namespace Shooter.Game
             clientConfig.propertyChanged -= HandleClientConfigChanged;
             Registers.Instance.UnsubscribeRegistered<HDAdditionalLightData>(HandleLightRegistered);
             Registers.Instance.UnsubscribeRegistered<WindZone>(HandleWindRegistered);
+            Registers.Instance.UnsubscribeRegistered<PathTracingOnly>(HandlePathTracingOnlyRegistered);
             RenderPipelineManager.beginCameraRendering -= BuildAccelerationStructure;
         }
 
@@ -127,6 +130,13 @@ namespace Shooter.Game
             Log.Info($"{wind.name} registered: {(blowing ? "blowing" : "calmed")}");
         }
 
+        private void HandlePathTracingOnlyRegistered(PathTracingOnly stand)
+        {
+            bool shown = clientConfig.PathTracing == Toggles.On;
+            ShowPathTracingOnly(stand, shown);
+            Log.Info($"{stand.name} registered: {(shown ? "shown" : "hidden")}");
+        }
+
         private void FollowClientConfig()
         {
             FollowMode(globalIllumination, globalIllumination.tracing, clientConfig.RayTracedGlobalIllumination);
@@ -146,6 +156,12 @@ namespace Shooter.Game
             foreach (WindZone wind in Registers.Instance.GetAll<WindZone>(RegisterInactivePolicy.Include))
             {
                 ShooterEntity.SetEnabled(wind, blowing);
+            }
+
+            bool pathTraced = clientConfig.PathTracing == Toggles.On;
+            foreach (PathTracingOnly stand in Registers.Instance.GetAll<PathTracingOnly>(RegisterInactivePolicy.Include))
+            {
+                ShowPathTracingOnly(stand, pathTraced);
             }
 
             Log.Info($"Ray tracing: global illumination {clientConfig.RayTracedGlobalIllumination}, reflections {clientConfig.RayTracedReflections}, " +
@@ -180,6 +196,7 @@ namespace Shooter.Game
             }
 
             hdCamera.rayTracingAccelerationStructure = builder.Build(hdCamera);
+            if (clientConfig.PathTracing == Toggles.On) (RenderPipelineManager.currentPipeline as HDRenderPipeline)?.ResetPathTracing(hdCamera);
         }
 
         private void ForgetDestroyedCameras()
@@ -207,6 +224,11 @@ namespace Shooter.Game
                    || clientConfig.RayTracedSubsurfaceScattering == Toggles.On
                    || clientConfig.RecursiveRendering == Toggles.On
                    || clientConfig.PathTracing == Toggles.On;
+        }
+
+        private static void ShowPathTracingOnly(PathTracingOnly stand, bool shown)
+        {
+            ShooterEntity.SetEnabled(stand.GetComponent<Renderer>(), shown);
         }
 
         private static void FollowMode(VolumeComponent component, RayCastingModeParameter tracing, string mode)
