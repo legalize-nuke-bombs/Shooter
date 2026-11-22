@@ -337,7 +337,7 @@
     },
     "com.unity.visualeffectgraph": {
       "version": "17.6.0",
-      "depth": 1,
+      "depth": 0,
       "source": "builtin",
       "dependencies": {
         "com.unity.shadergraph": "17.6.0",

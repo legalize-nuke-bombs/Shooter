@@ -30,7 +30,7 @@ namespace Shooter.Game
         {
             if (hit.IsMiss || !Surface.IsWater(Surface.FindAt(hit.Nearest))) return;
 
-            Registers.Instance.Get<WaterSplashes>().LeaveSplash(hit.Nearest.point);
+            Registers.Instance.Get<WaterSplashes>().LeaveSplash(hit.Nearest.point, hit.Ray.direction);
             Log.Info($"Entity {name} left a splash on the water at {hit.Nearest.point}");
         }
     }

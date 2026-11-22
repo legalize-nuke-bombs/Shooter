@@ -1,157 +1,78 @@
 using Shooter.Infrastructure;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.VFX;
 
 namespace Shooter.Game
 {
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ExecutionOrder.Service)]
-    public class WaterSplashes : NetworkBehaviour, IShooterUpdateable
+    public class WaterSplashes : NetworkBehaviour
     {
         private static readonly Journal Log = Logs.Here();
-        private static readonly int FrameProperty = Shader.PropertyToID("_BaseColorMap_ST");
+        private static readonly int RadiusProperty = Shader.PropertyToID("Splash Radius");
+        private static readonly int VelocityProperty = Shader.PropertyToID("Velocity");
 
-        [SerializeField] private Material material;
+        [SerializeField] private VisualEffectAsset splash;
         [SerializeField] private int splashCount = 16;
-        [SerializeField] private int columns = 5;
-        [SerializeField] private int rows = 5;
-        [SerializeField] private float duration = 0.8f;
-        [SerializeField] private float size = 1f;
+        [SerializeField] private float radius = 0.25f;
+        [SerializeField] private float speed = 5f;
 
-        private Splash[] splashes;
+        private VisualEffect[] splashes;
         private Transform holder;
-        private Mesh mesh;
-        private MaterialPropertyBlock properties;
-        private int nextSplashToReuse;
-
-        private struct Splash
-        {
-            public MeshRenderer Renderer;
-            public float StartTime;
-            public bool Playing;
-        }
+        private int nextSplash;
 
         private void Awake()
         {
-            properties = new MaterialPropertyBlock();
-            mesh = CreateQuadMesh();
             holder = new GameObject("Water Splashes").transform;
-            splashes = new Splash[Mathf.Max(splashCount, 1)];
+            splashes = new VisualEffect[Mathf.Max(splashCount, 1)];
             for (int i = 0; i < splashes.Length; i++)
             {
-                splashes[i].Renderer = CreateQuad(i);
+                splashes[i] = CreateSplash(i);
             }
         }
 
         public override void OnDestroy()
         {
             if (holder != null) Destroy(holder.gameObject);
-            if (mesh != null) Destroy(mesh);
 
             base.OnDestroy();
         }
 
         public override void OnNetworkSpawn()
         {
-            if (material == null) Log.Error("Water splashes have no material, nothing will be drawn");
+            if (splash == null) Log.Error("Water splashes have no visual effect, nothing will be drawn");
         }
 
-        public void LeaveSplash(Vector3 position)
+        public void LeaveSplash(Vector3 position, Vector3 direction)
         {
             if (!IsServer) return;
 
-            LeaveSplashRpc(position);
-        }
-
-        public void ShooterUpdate()
-        {
-            Camera eye = Camera.main;
-
-            for (int i = 0; i < splashes.Length; i++)
-            {
-                if (!splashes[i].Playing) continue;
-
-                float progress = (Time.time - splashes[i].StartTime) / duration;
-                if (progress >= 1f)
-                {
-                    splashes[i].Playing = false;
-                    splashes[i].Renderer.enabled = false;
-                    continue;
-                }
-
-                ShowFrame(splashes[i].Renderer, (int)(progress * columns * rows));
-                if (eye != null) FaceAround(splashes[i].Renderer.transform, eye.transform.position);
-            }
+            LeaveSplashRpc(position, direction);
         }
 
         [Rpc(SendTo.Everyone)]
-        private void LeaveSplashRpc(Vector3 position)
+        private void LeaveSplashRpc(Vector3 position, Vector3 direction)
         {
-            if (material == null) return;
+            if (splash == null) return;
 
-            int i = TakeSplash();
-            splashes[i].StartTime = Time.time;
-            splashes[i].Playing = true;
+            VisualEffect effect = splashes[nextSplash];
+            nextSplash = (nextSplash + 1) % splashes.Length;
 
-            MeshRenderer quad = splashes[i].Renderer;
-            quad.transform.position = position;
-            ShowFrame(quad, 0);
-            Camera eye = Camera.main;
-            if (eye != null) FaceAround(quad.transform, eye.transform.position);
-            quad.enabled = true;
+            effect.transform.position = position;
+            effect.SetFloat(RadiusProperty, radius);
+            effect.SetVector3(VelocityProperty, direction.normalized * speed);
+            effect.Play();
         }
 
-        private void ShowFrame(MeshRenderer quad, int frame)
+        private VisualEffect CreateSplash(int index)
         {
-            float width = 1f / columns, height = 1f / rows;
-            properties.SetVector(FrameProperty, new Vector4(width, height, frame % columns * width, 1f - (frame / columns + 1) * height));
-            quad.SetPropertyBlock(properties);
-        }
-
-        private int TakeSplash()
-        {
-            for (int i = 0; i < splashes.Length; i++)
-            {
-                if (!splashes[i].Playing) return i;
-            }
-
-            int reused = nextSplashToReuse;
-            nextSplashToReuse = (nextSplashToReuse + 1) % splashes.Length;
-            return reused;
-        }
-
-        private static void FaceAround(Transform quad, Vector3 eyePosition)
-        {
-            Vector3 toEye = eyePosition - quad.position;
-            toEye.y = 0f;
-            if (toEye.sqrMagnitude > 0.0001f) quad.rotation = Quaternion.LookRotation(-toEye);
-        }
-
-        private MeshRenderer CreateQuad(int index)
-        {
-            GameObject quad = new($"Splash {index}");
-            quad.transform.SetParent(holder, false);
-            quad.transform.localScale = Vector3.one * size;
-            quad.AddComponent<MeshFilter>().sharedMesh = mesh;
-            MeshRenderer quadRenderer = quad.AddComponent<MeshRenderer>();
-            quadRenderer.sharedMaterial = material;
-            quadRenderer.shadowCastingMode = ShadowCastingMode.Off;
-            quadRenderer.receiveShadows = false;
-            quadRenderer.enabled = false;
-            return quadRenderer;
-        }
-
-        private static Mesh CreateQuadMesh()
-        {
-            Mesh quad = new() { name = "Water Splash Quad" };
-            quad.vertices = new[] { new Vector3(-0.5f, 0f, 0f), new Vector3(0.5f, 0f, 0f), new Vector3(0.5f, 1f, 0f), new Vector3(-0.5f, 1f, 0f) };
-            quad.uv = new[] { new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(0f, 1f) };
-            quad.normals = new[] { Vector3.back, Vector3.back, Vector3.back, Vector3.back };
-            quad.tangents = new[] { new Vector4(1f, 0f, 0f, -1f), new Vector4(1f, 0f, 0f, -1f), new Vector4(1f, 0f, 0f, -1f), new Vector4(1f, 0f, 0f, -1f) };
-            quad.triangles = new[] { 0, 2, 1, 0, 3, 2 };
-            quad.RecalculateBounds();
-            return quad;
+            GameObject splashObject = new($"Splash {index}");
+            splashObject.transform.SetParent(holder, false);
+            VisualEffect effect = splashObject.AddComponent<VisualEffect>();
+            effect.visualEffectAsset = splash;
+            effect.initialEventName = "";
+            return effect;
         }
     }
 }
