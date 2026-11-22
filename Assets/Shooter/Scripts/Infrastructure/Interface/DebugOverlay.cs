@@ -168,9 +168,9 @@ namespace Shooter.Infrastructure
             AppendCameraLine();
             AppendPanelLine($"Version {Application.version}");
 
+            AppendRegistryLines();
             AppendChunkLines();
             AppendOptimizerLines();
-            AppendRegistryLines();
 
             return panelTextBuilder.ToString().TrimEnd();
         }
@@ -208,6 +208,21 @@ namespace Shooter.Infrastructure
             AppendPanelLine($"Late updates per frame: {FormatCount(registers.CountOf(typeof(IShooterLateUpdateable), RegisterInactivePolicy.Exclude))}");
         }
 
+        private void AppendRegistryLines()
+        {
+            Registers registers = Registers.Instance;
+
+            AppendBlankLine();
+            AppendPanelLine($"Registry: {FormatCount(registers.TypeCount)} types, {FormatCount(registers.UsedSlots)} of {FormatCount(registers.Capacity)} slots used");
+
+            registers.FindLargestClasses(largestClasses, largestClassCounts);
+            for (int i = 0; i < LargestClassCount && largestClasses[i] != null; i++)
+            {
+                int enabled = registers.CountOf(largestClasses[i], RegisterInactivePolicy.Exclude);
+                AppendPanelLine($"  {largestClasses[i].Name}: {FormatCount(largestClassCounts[i])} ({FormatCount(enabled)} enabled)");
+            }
+        }
+
         private void AppendChunkLines()
         {
             Chunks chunks = Registers.Instance.Get<Chunks>();
@@ -231,21 +246,6 @@ namespace Shooter.Infrastructure
             AppendBlankLine();
             AppendPanelLine($"Optimizer agents: {FormatCount(registers.CountOf(typeof(OptimizerAgent), RegisterInactivePolicy.Include))} ({FormatCount(registers.CountOf(typeof(OptimizerAgent), RegisterInactivePolicy.Exclude))} enabled)");
             AppendPanelLine($"Optimizables: {FormatCount(optimizables)} ({FormatCount(optimized)} optimized)");
-        }
-
-        private void AppendRegistryLines()
-        {
-            Registers registers = Registers.Instance;
-
-            AppendBlankLine();
-            AppendPanelLine($"Registry: {FormatCount(registers.TypeCount)} types, {FormatCount(registers.UsedSlots)} of {FormatCount(registers.Capacity)} slots used");
-
-            registers.FindLargestClasses(largestClasses, largestClassCounts);
-            for (int i = 0; i < LargestClassCount && largestClasses[i] != null; i++)
-            {
-                int enabled = registers.CountOf(largestClasses[i], RegisterInactivePolicy.Exclude);
-                AppendPanelLine($"  {largestClasses[i].Name}: {FormatCount(largestClassCounts[i])} ({FormatCount(enabled)} enabled)");
-            }
         }
 
         private string FormatManagedMemory()
