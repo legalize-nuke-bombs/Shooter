@@ -12,6 +12,7 @@ namespace Shooter.Game
     {
         private const string BackButtonName = "back";
         private const string ScreenResolutionDropdownName = "screen-resolution";
+        private const string VerticalSyncDropdownName = "vertical-sync";
         private const string UpscalerDropdownName = "upscaler";
         private const string RenderScaleDropdownName = "render-scale";
         private const string AntialiasingDropdownName = "antialiasing";
@@ -46,6 +47,7 @@ namespace Shooter.Game
         {
             RequireElement<Button>(BackButtonName).clicked += () => BackClicked?.Invoke();
             SetDropdownChoices(RequireElement<DropdownField>(ScreenResolutionDropdownName), ScreenResolutions.GetKeysOfThisScreen(), SettingsDropdownTitles.GetScreenResolutionTitle);
+            SetDropdownChoices(RequireElement<DropdownField>(VerticalSyncDropdownName), Toggles.Keys, SettingsDropdownTitles.GetToggleTitle);
             SetDropdownChoices(RequireElement<DropdownField>(UpscalerDropdownName), GetUpscalersOfThisCard(), SettingsDropdownTitles.GetUpscalerTitle);
             renderScaleDropdown = RequireElement<DropdownField>(RenderScaleDropdownName);
             SetDropdownChoices(renderScaleDropdown, RenderScales.Keys, SettingsDropdownTitles.GetRenderScaleTitle);
@@ -113,7 +115,7 @@ namespace Shooter.Game
             Config.SaveGameConfig();
 
             ClientConfig savedClientConfig = Config.GetGameConfig().Client;
-            Log.Info($"Client settings: master {savedClientConfig.Master:0.00}, music {savedClientConfig.Music:0.00}, ambience {savedClientConfig.Ambience:0.00}, sounds {savedClientConfig.Sounds:0.00}, screen {savedClientConfig.ScreenResolution}, upscaler {savedClientConfig.Upscaler}, render scale {savedClientConfig.RenderScale}%, antialiasing {savedClientConfig.Antialiasing}, global illumination {savedClientConfig.GlobalIllumination}, reflections {savedClientConfig.Reflections}");
+            Log.Info($"Client settings: master {savedClientConfig.Master:0.00}, music {savedClientConfig.Music:0.00}, ambience {savedClientConfig.Ambience:0.00}, sounds {savedClientConfig.Sounds:0.00}, screen {savedClientConfig.ScreenResolution}, vertical sync {savedClientConfig.VerticalSync}, upscaler {savedClientConfig.Upscaler}, render scale {savedClientConfig.RenderScale}%, antialiasing {savedClientConfig.Antialiasing}, global illumination {savedClientConfig.GlobalIllumination}, reflections {savedClientConfig.Reflections}");
         }
     }
 }

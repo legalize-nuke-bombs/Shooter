@@ -16,6 +16,7 @@ namespace Shooter.Infrastructure
         private float ambience = 1f;
         private float sounds = 1f;
         private string screenResolution = "";
+        private string verticalSync = Toggles.On;
         private string upscaler = Upscalers.Default;
         private string renderScale = RenderScales.Default;
         private string antialiasing = Antialiasings.Default;
@@ -79,6 +80,13 @@ namespace Shooter.Infrastructure
         {
             get => screenResolution;
             set => SetProperty(ref screenResolution, value);
+        }
+
+        [CreateProperty]
+        public string VerticalSync
+        {
+            get => verticalSync;
+            set => SetProperty(ref verticalSync, Toggles.Keys.Contains(value) ? value : Toggles.On);
         }
 
         [CreateProperty]
