@@ -75,6 +75,17 @@ namespace UnityEngine.Rendering
             Release();
         }
 
+#if UNITY_EDITOR
+        [UnityEditor.InitializeOnLoadMethod]
+        private static void BindOnEditorLoad()
+        {
+            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += ReleaseBuffers;
+            Release();
+        }
+#endif
+
+        // Shaders that read the wind declare the buffer whether or not any source exists, and D3D12 skips or
+        // crashes their draws while it is unbound, so an empty one stays bound when there are no sources.
         private static void Release()
         {
             if (hooked)
@@ -83,11 +94,19 @@ namespace UnityEngine.Rendering
                 hooked = false;
             }
 
+            ReleaseBuffers();
+            updatedFrame = -1;
+            EnsureCapacity(0);
+            gpuBuffer.SetData(cpuBuffer);
+            Shader.SetGlobalBuffer(BufferId, gpuBuffer);
+        }
+
+        private static void ReleaseBuffers()
+        {
             if (cpuBuffer.IsCreated)
                 cpuBuffer.Dispose();
             gpuBuffer?.Release();
             gpuBuffer = null;
-            updatedFrame = -1;
         }
 
         private static void HandleBeginContextRendering(ScriptableRenderContext context, List<Camera> cameras)
