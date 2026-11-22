@@ -48,9 +48,10 @@ namespace Shooter.Infrastructure
             }
         }
 
+        // The client rebuilds the certificate's PEM from the invite, so its line breaks may differ from the host's; the DER bytes don't
         private static byte[] GetChallengeBytes(string certificate)
         {
-            return Encoding.UTF8.GetBytes(certificate);
+            return Account.DecodeCertificatePem(certificate);
         }
     }
 }

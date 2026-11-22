@@ -1,23 +1,24 @@
 using System;
-using System.Text;
-using Newtonsoft.Json;
+using System.IO;
 
 namespace Shooter.Infrastructure
 {
     public static class NetworkInvite
     {
-        private struct Payload
-        {
-            public string Address { get; set; }
-            public ushort Port { get; set; }
-            public string Certificate { get; set; }
-        }
+        private const byte FormatVersion = 1;
 
         public static string EncodeInviteCode(string address, ushort port, string certificate)
         {
-            Payload payload = new() { Address = address, Port = port, Certificate = certificate };
-            string json = JsonConvert.SerializeObject(payload);
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+            using MemoryStream stream = new();
+            using (BinaryWriter writer = new(stream))
+            {
+                writer.Write(FormatVersion);
+                writer.Write(address);
+                writer.Write(port);
+                writer.Write(Account.DecodeCertificatePem(certificate));
+            }
+
+            return Convert.ToBase64String(stream.ToArray());
         }
 
         public static bool TryDecodeInviteCode(string inviteCode, out string address, out ushort port, out string certificate)
@@ -28,13 +29,17 @@ namespace Shooter.Infrastructure
 
             try
             {
-                string json = Encoding.UTF8.GetString(Convert.FromBase64String(inviteCode.Trim()));
-                Payload payload = JsonConvert.DeserializeObject<Payload>(json);
-                if (string.IsNullOrEmpty(payload.Address) || string.IsNullOrEmpty(payload.Certificate)) return false;
+                using BinaryReader reader = new(new MemoryStream(Convert.FromBase64String(inviteCode.Trim())));
+                if (reader.ReadByte() != FormatVersion) return false;
 
-                address = payload.Address;
-                port = payload.Port;
-                certificate = payload.Certificate;
+                string decodedAddress = reader.ReadString();
+                ushort decodedPort = reader.ReadUInt16();
+                byte[] certificateDer = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
+                if (string.IsNullOrEmpty(decodedAddress) || certificateDer.Length == 0) return false;
+
+                address = decodedAddress;
+                port = decodedPort;
+                certificate = Account.EncodeCertificatePem(certificateDer);
                 return true;
             }
             catch (Exception)

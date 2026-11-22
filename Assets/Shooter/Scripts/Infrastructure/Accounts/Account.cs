@@ -112,6 +112,17 @@ namespace Shooter.Infrastructure
             return EncodeAsPem(certificateGenerator.Generate(signatureFactory));
         }
 
+        public static byte[] DecodeCertificatePem(string certificatePem)
+        {
+            using StringReader reader = new(certificatePem);
+            return ((X509Certificate)new PemReader(reader).ReadObject()).GetEncoded();
+        }
+
+        public static string EncodeCertificatePem(byte[] certificateDer)
+        {
+            return EncodeAsPem(new X509CertificateParser().ReadCertificate(certificateDer));
+        }
+
         private static string EncodeAsPem(object subject)
         {
             using StringWriter writer = new();
