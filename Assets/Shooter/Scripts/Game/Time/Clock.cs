@@ -24,7 +24,7 @@ namespace Shooter.Game
         [SerializeField] private int beginningYear = 2026;
         [SerializeField] private int beginningMonth = 9;
         [SerializeField] private int beginningDay = 1;
-        [SerializeField] private int beginningHour = 22;
+        [SerializeField] private int beginningHour = 8;
         [SerializeField] private int beginningMinutes;
         [SerializeField] private int beginningSeconds;
 
