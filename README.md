@@ -34,7 +34,7 @@ When hosting a new game or in the server settings, you can configure one of the 
 * [Polza](https://polza.ai/). Supports payment with Russian cards
 * [Claude](https://platform.claude.com)
 * [Ollama](https://ollama.com/). A very powerful graphics card is required.
-## NPСs capabilities
+## NPCs capabilities
 * Speech (including interactions between NPCs)
 * Vision
 * Persistent memory
@@ -61,6 +61,7 @@ The game supports DLSS 4. Support for DLSS 5, which at the time of writing this 
 * Unity
 * NGO
 * Bouncy Castle
+
 The navmesh and the baked lighting are not stored in the repository. After cloning, open the Map scene and bake both locally:
 * Tools → Shooter → World → Bake NavMesh
 * Tools → Shooter → World → Bake GI
