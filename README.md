@@ -1,16 +1,19 @@
 # About
 
-3D open-world cooperative survival game with LLM integration. The project is under active development.
+A simple 3D open‑world cooperative game created for research purposes to test LLM NPCs. The project is under active development.
 
-![](Docs/s1.jpg)
-![](Docs/s2.jpg)
-![](Docs/s3.jpg)
-![](Docs/s4.jpg)
-![](Docs/s5.jpg)
+![](Docs/Screenshots/Menu/1.jpg)
+![](Docs/Screenshots/Game/2.jpg)
+![](Docs/Screenshots/Game/4.jpg)
+![](Docs/Screenshots/Game/5.jpg)
+![](Docs/Screenshots/Game/6.jpg)
+![](Docs/Screenshots/Game/7.jpg)
+![](Docs/Screenshots/Game/12.jpg)
+![](Docs/Screenshots/Game/13.jpg)
 
 # Features
 ## Core
-* Multiplayer game with self-hosted servers
+* Multiplayer
 * Save system
 * LLM NPCs
 ## Gameplay
@@ -20,15 +23,18 @@
 * Crafting system
 * NPCs & mutants
 * Artifacts
-## Graphics
-* HDRP
-* Upscalers (STP, DLSS)
-* Texture streaming
-* APV
-* Experimental partial RTX support
-## Multiplayer
-* Decentralized account model based on asymmetric encryption
-## LLM NPСs capabilities
+
+# Multiplayer
+The multiplayer uses a self-hosted model with accounts based on asymmetric encryption. Upon the first entry into the game, the program will generate an RSA key that serves as your account. To play with friends, start the game as the host and click the “Invite Players” button. The system will ask you to specify your external IP address and external port. After that, an invitation code will be generated. Your friends will only need to click the “Join Game” button and copy this code. You will likely need to forward the port. The connection will be securely encrypted.
+
+# LLMs
+## Providers
+When hosting a new game or in the server settings, you can configure one of the supported LLM providers.
+### Supported providers
+* [Polza](https://polza.ai/). Supports payment with Russian cards
+* [Claude](https://platform.claude.com)
+* [Ollama](https://ollama.com/). A very powerful graphics card is required.
+## NPСs capabilities
 * Speech (including interactions between NPCs)
 * Vision
 * Persistent memory
@@ -38,19 +44,23 @@
 * An individual attitude toward each other character
 * Dynamic character development
 
-# Tech Stack
+# Graphics
+The game uses HDRP with support for texture streaming, reflections, APV, upscalers, speed tree, etc.
+## RT
+There is experimental support for almost all RT technologies, but in the author’s opinion, in this project it doesn’t justify itself — with the possible exception of the SSR + mixed RT reflections combination.
+There is also experimental path tracing, but in its current implementation it doesn’t look very good.
+![](Docs/Screenshots/PathTracing/1.jpg)
+![](Docs/Screenshots/PathTracing/2.jpg)
+## DLSS
+The game supports DLSS 4. Support for DLSS 5, which at the time of writing this file is distributed mainly unofficially, is not built into this repository. But you can easily patch the build yourself, for example, using this [utility](https://github.com/faisalkindi/DLSS5oneclick).
+![](Docs/Screenshots/DLSS5/1.jpg)
+![](Docs/Screenshots/DLSS5/2.jpg)
+
+# Development
+## Tech Stack
 * Unity
 * NGO
 * Bouncy Castle
-
-# Development
 The navmesh and the baked lighting are not stored in the repository. After cloning, open the Map scene and bake both locally:
 * Tools → Shooter → World → Bake NavMesh
 * Tools → Shooter → World → Bake GI
-
-Baking is heavy: the GI bake peaks at about 26 GB of RAM in the editor.
-
-# Supported LLM providers
-* Polza
-* Claude
-* Ollama (a very good pc is required)
