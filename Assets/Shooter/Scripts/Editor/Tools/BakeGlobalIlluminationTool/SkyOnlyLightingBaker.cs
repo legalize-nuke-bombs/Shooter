@@ -21,12 +21,12 @@ namespace Shooter.Editor
 
         public override void Initialize(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions)
         {
-            Allocate(probePositions);
+            Allocate(bakeProbeOcclusion, probePositions);
         }
 
         public override void Initialize(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions, NativeArray<uint> bakedRenderingLayerMasks)
         {
-            Allocate(probePositions);
+            Allocate(bakeProbeOcclusion, probePositions);
         }
 
         public override bool Step()
@@ -42,13 +42,13 @@ namespace Shooter.Editor
             if (occlusionResults.IsCreated) occlusionResults.Dispose();
         }
 
-        private void Allocate(NativeArray<Vector3> probePositions)
+        private void Allocate(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions)
         {
             Dispose();
             int probeCount = probePositions.Length;
             irradianceResults = new NativeArray<SphericalHarmonicsL2>(probeCount, Allocator.Persistent);
             validityResults = new NativeArray<float>(StuckProbes.FindValidity(probePositions), Allocator.Persistent);
-            occlusionResults = new NativeArray<Vector4>(probeCount, Allocator.Persistent);
+            if (bakeProbeOcclusion) occlusionResults = new NativeArray<Vector4>(probeCount, Allocator.Persistent);
             done = false;
         }
     }

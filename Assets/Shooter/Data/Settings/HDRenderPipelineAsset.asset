@@ -277,7 +277,7 @@ MonoBehaviour:
     supportTerrainHole: 0
     lightProbeSystem: 1
     oldLightProbeSystem: 0
-    probeVolumeMemoryBudget: 2048
+    probeVolumeMemoryBudget: 1024
     supportProbeVolumeGPUStreaming: 1
     supportProbeVolumeDiskStreaming: 1
     probeVolumeSHBands: 1
