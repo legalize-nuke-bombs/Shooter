@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,6 +37,24 @@ namespace Shooter.Infrastructure
             {
                 chunk.CollectGarbage();
             }
+        }
+
+        public int CountOf(Vector2Int chunk, Type type, ChunkInactivePolicy inactivePolicy)
+        {
+            Dictionary<Vector2Int, TMap> chunks = inactivePolicy == ChunkInactivePolicy.Include ? members : activeComponents;
+            return chunks.TryGetValue(chunk, out TMap inChunk) ? inChunk.CountOf(type) : 0;
+        }
+
+        public void FindLargestClasses(Vector2Int chunk, Type[] classes, int[] counts)
+        {
+            if (members.TryGetValue(chunk, out TMap inChunk))
+            {
+                inChunk.FindLargestClasses(classes, counts);
+                return;
+            }
+
+            Array.Clear(classes, 0, classes.Length);
+            Array.Clear(counts, 0, counts.Length);
         }
 
         public static Vector2Int ChunkOf(Vector3 position)

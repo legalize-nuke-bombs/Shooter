@@ -16,6 +16,7 @@ namespace Shooter.Infrastructure
         private const string PanelLabelName = "debug";
         private const int FrameSamples = 120;
         private const int LargestClassCount = 10;
+        private const int LargestChunkClassCount = 6;
         private const int LeftColumnWidth = 34;
         private const float PanelRefreshSeconds = 0.25f;
         private const float LogReportSeconds = 60f;
@@ -45,6 +46,8 @@ namespace Shooter.Infrastructure
         private readonly Dictionary<string, ProfilerRecorder> recordersByCounterName = new();
         private readonly Type[] largestClasses = new Type[LargestClassCount];
         private readonly int[] largestClassCounts = new int[LargestClassCount];
+        private readonly Type[] largestChunkClasses = new Type[LargestChunkClassCount];
+        private readonly int[] largestChunkClassCounts = new int[LargestChunkClassCount];
         private int sampledFrameCount;
         private int nextFrameIndex;
 
@@ -168,6 +171,7 @@ namespace Shooter.Infrastructure
             AppendCameraLine();
             AppendPanelLine($"Version {Application.version}");
 
+            AppendChunkLines();
             AppendRegistryLines();
 
             return panelTextBuilder.ToString().TrimEnd();
@@ -204,6 +208,38 @@ namespace Shooter.Infrastructure
 
             AppendPanelLine($"Updates per frame: {FormatCount(registers.CountOf(typeof(IShooterUpdateable), RegisterInactivePolicy.Exclude))}");
             AppendPanelLine($"Late updates per frame: {FormatCount(registers.CountOf(typeof(IShooterLateUpdateable), RegisterInactivePolicy.Exclude))}");
+        }
+
+        private void AppendChunkLines()
+        {
+            Registers registers = Registers.Instance;
+            Chunks chunks = registers.Get<Chunks>();
+
+            AppendBlankLine();
+            AppendPanelLine(Invariant($"Chunks: {FormatCount(chunks.ChunkCount)} of {Chunks.ChunkSize:F0} m"));
+
+            int optimizables = 0, optimized = 0;
+            foreach (ShooterOptimizable optimizable in registers.GetAll<ShooterOptimizable>(RegisterInactivePolicy.Include))
+            {
+                optimizables++;
+                if (optimizable.IsOptimized) optimized++;
+            }
+
+            AppendPanelLine($"  Optimizable: {FormatCount(optimizables)}, {FormatCount(optimized)} optimized", $"Agents {FormatCount(registers.CountOf(typeof(OptimizerAgent), RegisterInactivePolicy.Exclude))} of {FormatCount(registers.CountOf(typeof(OptimizerAgent), RegisterInactivePolicy.Include))} enabled");
+
+            Camera camera = Camera.main;
+            if (camera == null) return;
+
+            Vector2Int here = Chunks.ChunkOf(camera.transform.position);
+            AppendPanelLine($"  Camera chunk ({here.x}, {here.y}):");
+
+            chunks.FindLargestClasses(here, largestChunkClasses, largestChunkClassCounts);
+            for (int i = 0; i < LargestChunkClassCount && largestChunkClasses[i] != null; i++)
+            {
+                Type type = largestChunkClasses[i];
+                string enabled = typeof(Component).IsAssignableFrom(type) ? $" ({FormatCount(chunks.CountOf(here, type, ChunkInactivePolicy.Exclude))} enabled)" : "";
+                AppendPanelLine($"    {type.Name}: {FormatCount(largestChunkClassCounts[i])}{enabled}");
+            }
         }
 
         private void AppendRegistryLines()
