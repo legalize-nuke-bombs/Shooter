@@ -76,7 +76,7 @@ namespace Shooter.Game
                 if (progress >= 1f)
                 {
                     splashes[i].Playing = false;
-                    splashes[i].Renderer.gameObject.SetActive(false);
+                    splashes[i].Renderer.enabled = false;
                     continue;
                 }
 
@@ -99,7 +99,7 @@ namespace Shooter.Game
             ShowFrame(quad, 0);
             Camera eye = Camera.main;
             if (eye != null) FaceAround(quad.transform, eye.transform.position);
-            quad.gameObject.SetActive(true);
+            quad.enabled = true;
         }
 
         private void ShowFrame(MeshRenderer quad, int frame)
@@ -138,7 +138,7 @@ namespace Shooter.Game
             quadRenderer.sharedMaterial = material;
             quadRenderer.shadowCastingMode = ShadowCastingMode.Off;
             quadRenderer.receiveShadows = false;
-            quad.SetActive(false);
+            quadRenderer.enabled = false;
             return quadRenderer;
         }
 
