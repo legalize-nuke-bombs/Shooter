@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +12,8 @@ namespace Shooter.Infrastructure
         private const float CollectIntervalSeconds = 2f;
 
         public int ChunkCount => members.Count;
+
+        public int MemberCount { get; private set; }
 
         private readonly Dictionary<Vector2Int, TMap> members = new();
         private readonly Dictionary<Vector2Int, TMap> activeComponents = new();
@@ -39,24 +40,6 @@ namespace Shooter.Infrastructure
             }
         }
 
-        public int CountOf(Vector2Int chunk, Type type, ChunkInactivePolicy inactivePolicy)
-        {
-            Dictionary<Vector2Int, TMap> chunks = inactivePolicy == ChunkInactivePolicy.Include ? members : activeComponents;
-            return chunks.TryGetValue(chunk, out TMap inChunk) ? inChunk.CountOf(type) : 0;
-        }
-
-        public void FindLargestClasses(Vector2Int chunk, Type[] classes, int[] counts)
-        {
-            if (members.TryGetValue(chunk, out TMap inChunk))
-            {
-                inChunk.FindLargestClasses(classes, counts);
-                return;
-            }
-
-            Array.Clear(classes, 0, classes.Length);
-            Array.Clear(counts, 0, counts.Length);
-        }
-
         public static Vector2Int ChunkOf(Vector3 position)
         {
             return new Vector2Int(Mathf.FloorToInt(position.x / ChunkSize), Mathf.FloorToInt(position.z / ChunkSize));
@@ -64,13 +47,13 @@ namespace Shooter.Infrastructure
 
         public void Add(Vector2Int chunk, object member)
         {
-            FindOrCreate(members, chunk).TryAdd(member);
+            if (FindOrCreate(members, chunk).TryAdd(member)) MemberCount++;
         }
 
         public void Remove(Vector2Int chunk, object member)
         {
             if (activeComponents.TryGetValue(chunk, out TMap activeInChunk)) activeInChunk.TryRemove(member);
-            if (members.TryGetValue(chunk, out TMap inChunk)) inChunk.TryRemove(member);
+            if (members.TryGetValue(chunk, out TMap inChunk) && inChunk.TryRemove(member)) MemberCount--;
         }
 
         public void ActivateComponent(Vector2Int chunk, Component component)
