@@ -688,8 +688,22 @@ namespace UnityEngine.Rendering
 
         private void OnPostCullBeginCameraRendering(RenderRequestBatcherContext context) {}
 
+        private bool m_InstanceProbesSkippedForProbeVolumes;
+
         private void UpdateAmbientProbeAndGPUBuffer(bool forceUpdate)
         {
+            // Shooter patch: shaders compiled with probe volumes read neither the legacy probes nor the per-instance
+            // ambient probe, and a dynamic sky changes the ambient probe every frame, which reuploaded every instance
+            bool probeVolumes = Shader.IsKeywordEnabled("PROBE_VOLUMES_L1") || Shader.IsKeywordEnabled("PROBE_VOLUMES_L2");
+            if (probeVolumes && !forceUpdate)
+            {
+                m_InstanceProbesSkippedForProbeVolumes = true;
+                return;
+            }
+
+            forceUpdate |= m_InstanceProbesSkippedForProbeVolumes;
+            m_InstanceProbesSkippedForProbeVolumes = false;
+
             if (forceUpdate || m_GRDContext.cachedAmbientProbe != RenderSettings.ambientProbe)
             {
                 m_GRDContext.cachedAmbientProbe = RenderSettings.ambientProbe;
