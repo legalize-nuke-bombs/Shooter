@@ -3,13 +3,13 @@
 A simple 3D open‑world cooperative game created for research purposes to test LLM NPCs. The project is under active development.
 
 ![](Docs/Screenshots/Menu/1.jpg)
+![](Docs/Screenshots/Game/1.jpg)
 ![](Docs/Screenshots/Game/2.jpg)
+![](Docs/Screenshots/Game/3.jpg)
 ![](Docs/Screenshots/Game/4.jpg)
 ![](Docs/Screenshots/Game/5.jpg)
 ![](Docs/Screenshots/Game/6.jpg)
 ![](Docs/Screenshots/Game/7.jpg)
-![](Docs/Screenshots/Game/12.jpg)
-![](Docs/Screenshots/Game/13.jpg)
 
 # Features
 ## Core
