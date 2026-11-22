@@ -11,6 +11,8 @@ namespace Shooter.Infrastructure
         private Vector2Int? chunk;
         private int agentCount;
 
+        public bool IsOptimized => agentCount == 0;
+
         private void Awake()
         {
             entity = GetComponent<ShooterEntity>();

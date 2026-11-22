@@ -197,28 +197,7 @@ MonoBehaviour:
       - rid: 575452007052869739
       - rid: 575452007052869740
     m_RuntimeSettings:
-      m_List:
-      - rid: 575452007052869706
-      - rid: 575452007052869707
-      - rid: 575452007052869709
-      - rid: 575452007052869710
-      - rid: 575452007052869711
-      - rid: 575452007052869712
-      - rid: 575452007052869713
-      - rid: 575452007052869714
-      - rid: 575452007052869716
-      - rid: 575452007052869717
-      - rid: 575452007052869718
-      - rid: 575452007052869719
-      - rid: 575452007052869720
-      - rid: 575452007052869724
-      - rid: 575452007052869728
-      - rid: 575452007052869730
-      - rid: 575452007052869732
-      - rid: 575452007052869734
-      - rid: 575452007052869736
-      - rid: 575452007052869738
-      - rid: 575452007052869739
+      m_List: []
   renderingLayerNames:
   - Default
   lightLayerName0: 
@@ -913,3 +892,4 @@ MonoBehaviour:
         _skyBoxMesh: {fileID: 4300000, guid: 0529e6c5f6dea8c4a8c2835ed7de57cb, type: 2}
         _sixFaceSkyBoxMesh: {fileID: 4300000, guid: a80925ceebd011741b42509226cefc74, type: 2}
         _buildLightGridShader: {fileID: 7200000, guid: 16e47c1641bd0104e92b624601457bb0, type: 3}
+        _solidColorShader: {fileID: 4800000, guid: 3765a7ac691541038de4d587b94ae768, type: 3}

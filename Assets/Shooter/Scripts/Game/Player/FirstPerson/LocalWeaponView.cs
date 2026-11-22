@@ -113,14 +113,19 @@ namespace Shooter.Game
 
             view.cullingMask &= ~(1 << firstPersonLayer);
 
-            customPassVolume = GetComponent<ShooterEntity>().AddComponent<CustomPassVolume>();
-            customPassVolume.targetCamera = view;
-            customPassVolume.injectionPoint = CustomPassInjectionPoint.BeforePostProcess;
-
-            FirstPersonPass firstPersonPass = customPassVolume.AddPassOfType(typeof(FirstPersonPass)) as FirstPersonPass;
-            firstPersonPass.layer = 1 << firstPersonLayer;
+            customPassVolume = AddFirstPersonVolume(CustomPassInjectionPoint.BeforePostProcess);
+            customPassVolume.AddPassOfType<FirstPersonPass>().layer = 1 << firstPersonLayer;
+            AddFirstPersonVolume(CustomPassInjectionPoint.AfterOpaqueDepthAndNormal).AddPassOfType<FirstPersonPrepass>().layer = 1 << firstPersonLayer;
 
             Log.Info($"Local player {name} draws first person weapon over the world, layer {firstPersonLayer}");
+        }
+
+        private CustomPassVolume AddFirstPersonVolume(CustomPassInjectionPoint injectionPoint)
+        {
+            CustomPassVolume volume = GetComponent<ShooterEntity>().AddComponent<CustomPassVolume>();
+            volume.targetCamera = view;
+            volume.injectionPoint = injectionPoint;
+            return volume;
         }
 
         private void UpdateShownWeapon()

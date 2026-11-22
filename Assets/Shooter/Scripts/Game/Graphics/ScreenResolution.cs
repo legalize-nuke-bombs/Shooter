@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Shooter.Infrastructure;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -39,10 +40,11 @@ namespace Shooter.Game
             if (clientConfig.ScreenResolution == followedResolution) return;
 
             followedResolution = clientConfig.ScreenResolution;
-            if (!ScreenResolutions.GetKeysOfThisScreen().Contains(followedResolution))
+            List<string> resolutions = ScreenResolutions.GetKeysOfThisScreen();
+            if (!resolutions.Contains(followedResolution))
             {
-                followedResolution = ScreenResolutions.ToKey(ScreenResolutions.GetNative());
-                Log.Info($"This screen has no resolution '{clientConfig.ScreenResolution}', the native {followedResolution} takes its place");
+                followedResolution = resolutions[0];
+                Log.Info($"This screen has no resolution '{clientConfig.ScreenResolution}', the lowest {followedResolution} takes its place");
                 clientConfig.ScreenResolution = followedResolution;
             }
 

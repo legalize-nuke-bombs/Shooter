@@ -39,12 +39,24 @@ namespace Shooter.Game
             [Antialiasings.Smaa] = "SMAA"
         };
 
-        private static readonly Dictionary<string, string> FogTitles = new()
+        private static readonly Dictionary<string, string> ReflectionModeTitles = new()
         {
-            [FogQualities.Low] = "Низкий",
-            [FogQualities.Medium] = "Средний",
-            [FogQualities.High] = "Высокий",
-            [FogQualities.Max] = "Максимальный"
+            [ReflectionModes.Off] = "Выкл",
+            [ReflectionModes.ScreenSpace] = "Экранные",
+            [ReflectionModes.Planar] = "Планарные"
+        };
+
+        private static readonly Dictionary<string, string> RayTracingModeTitles = new()
+        {
+            [RayTracingModes.Off] = "Выкл",
+            [RayTracingModes.Mixed] = "Гибрид",
+            [RayTracingModes.Full] = "Полная трассировка"
+        };
+
+        private static readonly Dictionary<string, string> ToggleTitles = new()
+        {
+            [Toggles.Off] = "Выкл",
+            [Toggles.On] = "Вкл"
         };
 
         public static string GetScreenResolutionTitle(string key)
@@ -67,9 +79,19 @@ namespace Shooter.Game
             return GetTitleOrKey(AntialiasingTitles, key);
         }
 
-        public static string GetFogTitle(string key)
+        public static string GetReflectionModeTitle(string key)
         {
-            return GetTitleOrKey(FogTitles, key);
+            return GetTitleOrKey(ReflectionModeTitles, key);
+        }
+
+        public static string GetRayTracingModeTitle(string key)
+        {
+            return GetTitleOrKey(RayTracingModeTitles, key);
+        }
+
+        public static string GetToggleTitle(string key)
+        {
+            return GetTitleOrKey(ToggleTitles, key);
         }
 
         public static string GetEffortTitle(string key)

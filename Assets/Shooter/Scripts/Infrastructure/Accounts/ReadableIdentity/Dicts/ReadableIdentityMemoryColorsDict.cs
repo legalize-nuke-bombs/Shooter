@@ -19,7 +19,7 @@ public class ReadableIdentityMemoryColorsDict : ReadableIdentityMemoryDict
         "blush",
         "bronze",
         "brown",
-        "chocolate",
+        "ruby",
         "coffee",
         "copper",
         "coral",

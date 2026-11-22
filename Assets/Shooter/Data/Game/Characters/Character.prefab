@@ -61,6 +61,7 @@ GameObject:
   - component: {fileID: 5835809527488133981}
   - component: {fileID: 4951983394597069869}
   - component: {fileID: 2701417176002346860}
+  - component: {fileID: 5501571708409148595}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -97,6 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
   GlobalObjectIdHash: 1008475832
   InScenePlacedSourceGlobalObjectIdHash: 0
+  m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -838,3 +840,15 @@ MonoBehaviour:
   damagePerGameSecond: 0.5
   damageType: {fileID: 11400000, guid: b9c2518cf85fad44e863697cdab39406, type: 2}
   hitsRealSecondInterval: 0.75
+--- !u!114 &5501571708409148595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6874027793385663384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e287b8dd17c1a4b498387e17597b8fca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.LeaveSplashOnShot

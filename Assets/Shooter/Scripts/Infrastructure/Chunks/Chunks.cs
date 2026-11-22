@@ -13,6 +13,8 @@ namespace Shooter.Infrastructure
 
         public int ChunkCount => members.Count;
 
+        public int MemberCount { get; private set; }
+
         private readonly Dictionary<Vector2Int, TMap> members = new();
         private readonly Dictionary<Vector2Int, TMap> activeComponents = new();
         private float nextCollectTime;
@@ -45,21 +47,21 @@ namespace Shooter.Infrastructure
 
         public void Add(Vector2Int chunk, object member)
         {
-            FindOrCreate(members, chunk).TryAdd(member);
+            if (FindOrCreate(members, chunk).TryAdd(member)) MemberCount++;
         }
 
         public void Remove(Vector2Int chunk, object member)
         {
             if (activeComponents.TryGetValue(chunk, out TMap activeInChunk)) activeInChunk.TryRemove(member);
-            if (members.TryGetValue(chunk, out TMap inChunk)) inChunk.TryRemove(member);
+            if (members.TryGetValue(chunk, out TMap inChunk) && inChunk.TryRemove(member)) MemberCount--;
         }
 
-        public void ActivateComponent(Vector2Int chunk, Behaviour component)
+        public void ActivateComponent(Vector2Int chunk, Component component)
         {
             FindOrCreate(activeComponents, chunk).TryAdd(component);
         }
 
-        public void TryDeactivateComponent(Vector2Int chunk, Behaviour component)
+        public void TryDeactivateComponent(Vector2Int chunk, Component component)
         {
             if (activeComponents.TryGetValue(chunk, out TMap activeInChunk)) activeInChunk.TryRemove(component);
         }

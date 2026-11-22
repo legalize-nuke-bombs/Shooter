@@ -168,6 +168,8 @@ namespace Shooter.Infrastructure
             AppendCameraLine();
             AppendPanelLine($"Version {Application.version}");
 
+            AppendChunkLines();
+            AppendOptimizerLines();
             AppendRegistryLines();
 
             return panelTextBuilder.ToString().TrimEnd();
@@ -204,6 +206,31 @@ namespace Shooter.Infrastructure
 
             AppendPanelLine($"Updates per frame: {FormatCount(registers.CountOf(typeof(IShooterUpdateable), RegisterInactivePolicy.Exclude))}");
             AppendPanelLine($"Late updates per frame: {FormatCount(registers.CountOf(typeof(IShooterLateUpdateable), RegisterInactivePolicy.Exclude))}");
+        }
+
+        private void AppendChunkLines()
+        {
+            Chunks chunks = Registers.Instance.Get<Chunks>();
+            float membersPerChunk = chunks.ChunkCount == 0 ? 0 : (float)chunks.MemberCount / chunks.ChunkCount;
+
+            AppendBlankLine();
+            AppendPanelLine(Invariant($"Chunks: {FormatCount(chunks.ChunkCount)} of {Chunks.ChunkSize:F0} m"), Invariant($"Members {FormatCount(chunks.MemberCount)}, {membersPerChunk:F1} per chunk"));
+        }
+
+        private void AppendOptimizerLines()
+        {
+            Registers registers = Registers.Instance;
+
+            int optimizables = 0, optimized = 0;
+            foreach (ShooterOptimizable optimizable in registers.GetAll<ShooterOptimizable>(RegisterInactivePolicy.Include))
+            {
+                optimizables++;
+                if (optimizable.IsOptimized) optimized++;
+            }
+
+            AppendBlankLine();
+            AppendPanelLine($"Optimizer agents: {FormatCount(registers.CountOf(typeof(OptimizerAgent), RegisterInactivePolicy.Include))} ({FormatCount(registers.CountOf(typeof(OptimizerAgent), RegisterInactivePolicy.Exclude))} enabled)");
+            AppendPanelLine($"Optimizables: {FormatCount(optimizables)} ({FormatCount(optimized)} optimized)");
         }
 
         private void AppendRegistryLines()

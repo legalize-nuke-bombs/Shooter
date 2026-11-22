@@ -370,7 +370,7 @@ Material:
     m_Floats:
     - Animation_Cutoff: 100
     - Boolean_f7b755fc9b2a45c79aacd7caf2b759f0: 0
-    - Distance_Fade_End: 150
+    - Distance_Fade_End: 55
     - Distance_Fade_Start: 40
     - Vector1_593c5cea6c4a42e993ed03ced4685732: 1
     - Vector1_8651797e3e304e108dbd25f9d5a426ba: 0.5

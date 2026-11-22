@@ -15,6 +15,7 @@ namespace Shooter.Infrastructure
 
         private readonly List<ShooterTransformObserver> children = new();
         private ShooterTransformObserver parent;
+        private int indexInParent;
         private Vector3 lastPosition;
         private bool isStarted;
 
@@ -44,7 +45,7 @@ namespace Shooter.Infrastructure
 
         private void OnDestroy()
         {
-            if (parent != null) parent.children.Remove(this);
+            if (parent != null) LeaveParent();
         }
 
         public void ShooterLateUpdate()
@@ -71,10 +72,26 @@ namespace Shooter.Infrastructure
         {
             if (newParent == parent) return;
 
-            if (parent != null) parent.children.Remove(this);
+            if (parent != null) LeaveParent();
             parent = newParent;
-            if (parent != null) parent.children.Add(this);
+            if (parent != null) JoinParent();
             ParentChanged?.Invoke();
+        }
+
+        private void JoinParent()
+        {
+            indexInParent = parent.children.Count;
+            parent.children.Add(this);
+        }
+
+        // The order of children means nothing, so the last one takes the leaver's place instead of all after it moving down
+        private void LeaveParent()
+        {
+            List<ShooterTransformObserver> siblings = parent.children;
+            ShooterTransformObserver last = siblings[^1];
+            siblings[indexInParent] = last;
+            last.indexInParent = indexInParent;
+            siblings.RemoveAt(siblings.Count - 1);
         }
 
         private ShooterTransformObserver FindParent()

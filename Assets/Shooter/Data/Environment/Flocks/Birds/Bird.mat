@@ -57,7 +57,6 @@ Material:
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
     - _BlendMode: 0
-    - _Flap_Speed: 1
     - _Butterfly: 0
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2
@@ -71,6 +70,7 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
+    - _Flap_Speed: 1
     - _MaterialID: 1
     - _MaterialTypeMask: 2
     - _OpaqueCullMode: 2

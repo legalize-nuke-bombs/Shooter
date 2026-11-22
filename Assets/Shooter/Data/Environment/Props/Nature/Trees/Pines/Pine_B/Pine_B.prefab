@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: -4329957411340277084}
   - component: {fileID: 2660321299947627721}
   - component: {fileID: 8408854954103059486}
-  - component: {fileID: 6465146140421192552}
   - component: {fileID: 509380709793857840}
   m_Layer: 0
   m_Name: Pine_B
@@ -39,7 +38,6 @@ Transform:
   - {fileID: 795546801138444652}
   - {fileID: 7556311320437923684}
   - {fileID: 2132852367934904694}
-  - {fileID: 3634500029920786607}
   - {fileID: 274308925620225038}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,8 +51,8 @@ LODGroup:
   serializedVersion: 3
   m_LocalReferencePoint: {x: 0.17745447, y: 13.596928, z: -0.00020503998}
   m_Size: 28.0966
-  m_FadeMode: 2
-  m_AnimateCrossFading: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 1
   m_LODs:
   - screenRelativeHeight: 0.3041546
@@ -69,7 +67,7 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 7083495568995858227}
-  - screenRelativeHeight: 0.10138487
+  - screenRelativeHeight: 0.024332369
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 8576870544317805893}
@@ -113,18 +111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterObject
---- !u!114 &6465146140421192552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1127992084609228112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db89a682b6a4a66b62d5aee81c4bf4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterOptimizable
 --- !u!114 &509380709793857840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,8 +136,6 @@ GameObject:
   - component: {fileID: 4953395907834783452}
   - component: {fileID: 1313923135593428765}
   - component: {fileID: 1333927603498435427}
-  - component: {fileID: 6949319671582388553}
-  - component: {fileID: 4387892446053449506}
   m_Layer: 0
   m_Name: Pine_B_LOD0
   m_TagString: Untagged
@@ -213,7 +197,7 @@ MeshRenderer:
     firstSubMesh: 0
     subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 3634500029920786607}
+  m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_ReceiveGI: 1
@@ -241,62 +225,6 @@ Tree:
   m_GameObject: {fileID: 1795786543020778604}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b8aa0ccd1fb79294da6b8f03791e27f2, type: 3}
   m_TreeData: {fileID: 0}
---- !u!114 &6949319671582388553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1795786543020778604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
---- !u!114 &4387892446053449506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1795786543020778604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
-  mobility: 0
---- !u!1 &1857125951020612077
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3634500029920786607}
-  m_Layer: 0
-  m_Name: Pine_B_Anchor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3634500029920786607
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1857125951020612077}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.78, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 354867925509048298}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3706342143840998271
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,8 +235,6 @@ GameObject:
   m_Component:
   - component: {fileID: 274308925620225038}
   - component: {fileID: 8747164256893478900}
-  - component: {fileID: 219119816641616123}
-  - component: {fileID: 2812985792258348825}
   m_Layer: 0
   m_Name: Collider_Trunk_0
   m_TagString: Untagged
@@ -354,31 +280,6 @@ CapsuleCollider:
   m_Height: 3.6563377
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &219119816641616123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3706342143840998271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
---- !u!114 &2812985792258348825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3706342143840998271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
-  mobility: 0
 --- !u!1 &4646966580082072280
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,8 +292,6 @@ GameObject:
   - component: {fileID: 409530771564477478}
   - component: {fileID: 8576870544317805893}
   - component: {fileID: 7575315079589481844}
-  - component: {fileID: 534479028901324278}
-  - component: {fileID: 7541428470936298342}
   m_Layer: 0
   m_Name: Pine_B_LOD3
   m_TagString: Untagged
@@ -481,31 +380,6 @@ Tree:
   m_GameObject: {fileID: 4646966580082072280}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b8aa0ccd1fb79294da6b8f03791e27f2, type: 3}
   m_TreeData: {fileID: 0}
---- !u!114 &534479028901324278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4646966580082072280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
---- !u!114 &7541428470936298342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4646966580082072280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
-  mobility: 0
 --- !u!1 &5894628889548593103
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,8 +392,6 @@ GameObject:
   - component: {fileID: 689628239613460145}
   - component: {fileID: 7083495568995858227}
   - component: {fileID: 2753734226564856550}
-  - component: {fileID: 5211580147545192434}
-  - component: {fileID: 4169659391375111727}
   m_Layer: 0
   m_Name: Pine_B_LOD2
   m_TagString: Untagged
@@ -558,7 +430,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5894628889548593103}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -581,7 +453,7 @@ MeshRenderer:
     firstSubMesh: 0
     subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 3634500029920786607}
+  m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_ReceiveGI: 1
@@ -609,31 +481,6 @@ Tree:
   m_GameObject: {fileID: 5894628889548593103}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b8aa0ccd1fb79294da6b8f03791e27f2, type: 3}
   m_TreeData: {fileID: 0}
---- !u!114 &5211580147545192434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5894628889548593103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
---- !u!114 &4169659391375111727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5894628889548593103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
-  mobility: 0
 --- !u!1 &8061814523214358686
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,8 +493,6 @@ GameObject:
   - component: {fileID: 270543374693547343}
   - component: {fileID: 1398721972667036183}
   - component: {fileID: 1856153689319392685}
-  - component: {fileID: 7420429626759917452}
-  - component: {fileID: 1059361738867974555}
   m_Layer: 0
   m_Name: Pine_B_LOD1
   m_TagString: Untagged
@@ -686,7 +531,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8061814523214358686}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -709,7 +554,7 @@ MeshRenderer:
     firstSubMesh: 0
     subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 3634500029920786607}
+  m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_ReceiveGI: 1
@@ -737,28 +582,3 @@ Tree:
   m_GameObject: {fileID: 8061814523214358686}
   m_SpeedTreeWindAsset: {fileID: 22800000, guid: b8aa0ccd1fb79294da6b8f03791e27f2, type: 3}
   m_TreeData: {fileID: 0}
---- !u!114 &7420429626759917452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8061814523214358686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f04224792c4d7744ab0b00e36bc2d713, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterEntity
---- !u!114 &1059361738867974555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8061814523214358686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b2a4c011eae30144b5d4f942f8e887c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Infrastructure::Shooter.Infrastructure.ShooterTransformObserver
-  mobility: 0

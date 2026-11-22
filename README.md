@@ -23,8 +23,9 @@
 ## Graphics
 * HDRP
 * Upscalers (STP, DLSS)
-* Settings
 * Texture streaming
+* APV
+* Experimental partial RTX support
 ## Multiplayer
 * Decentralized account model based on asymmetric encryption
 ## LLM NPСs capabilities
@@ -41,6 +42,13 @@
 * Unity
 * NGO
 * Bouncy Castle
+
+# Development
+The navmesh and the baked lighting are not stored in the repository. After cloning, open the Map scene and bake both locally:
+* Tools → Shooter → World → Bake NavMesh
+* Tools → Shooter → World → Bake GI
+
+Baking is heavy: the GI bake peaks at about 26 GB of RAM in the editor.
 
 # Supported LLM providers
 * Polza

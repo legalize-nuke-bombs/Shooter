@@ -131,12 +131,12 @@ namespace Shooter.Infrastructure
         }
 
         // GetInterfaces builds a new array on every call, so the keys a member goes under are found once per type
-        private static Type[] GetKeys(Type memberType)
+        internal static Type[] GetKeys(Type memberType)
         {
             if (KeysByMemberType.TryGetValue(memberType, out Type[] keys)) return keys;
 
             var types = new List<Type>();
-            for (Type type = memberType; type != typeof(Behaviour) && type != typeof(object); type = type.BaseType)
+            for (Type type = memberType; type != typeof(MonoBehaviour) && type != typeof(Behaviour) && type != typeof(Component) && type != typeof(object); type = type.BaseType)
             {
                 types.Add(type);
             }
