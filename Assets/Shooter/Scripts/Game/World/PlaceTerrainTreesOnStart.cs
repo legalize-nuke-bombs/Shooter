@@ -15,8 +15,8 @@ namespace Shooter.Game
             Terrain terrain = GetComponent<Terrain>();
             // For SpeedTree trees the terrain heeds no tree distance but zero, which stops it drawing them at all
             terrain.treeDistance = 0f;
-            Transform trees = PlaceTrees(terrain);
-            Log.Info($"{name} placed {trees.childCount} trees of its terrain as objects");
+            PlaceTrees(terrain);
+            Log.Info($"{name} placed {terrain.terrainData.treeInstanceCount} trees of its terrain as objects");
         }
 
         public static Transform PlaceTrees(Terrain terrain)
@@ -26,13 +26,16 @@ namespace Shooter.Game
             Vector3 origin = terrain.transform.position;
             Transform trees = new GameObject(TreesName).transform;
             trees.SetParent(terrain.transform, false);
+            GameObject[] templates = new GameObject[prototypes.Length];
+            for (int i = 0; i < prototypes.Length; i++)
+                templates[i] = SharedTreeWindSource.CreateTemplate(prototypes[i].prefab, trees);
 
             foreach (TreeInstance tree in terrainData.treeInstances)
             {
                 Vector3 position = origin + Vector3.Scale(tree.position, terrainData.size);
                 Quaternion rotation = Quaternion.Euler(0f, tree.rotation * Mathf.Rad2Deg, 0f);
                 GameObject prefab = prototypes[tree.prototypeIndex].prefab;
-                Transform placed = Instantiate(prefab, position, rotation, trees).transform;
+                Transform placed = Instantiate(templates[tree.prototypeIndex], position, rotation, trees).transform;
                 placed.localScale = Vector3.Scale(prefab.transform.localScale, new Vector3(tree.widthScale, tree.heightScale, tree.widthScale));
             }
 

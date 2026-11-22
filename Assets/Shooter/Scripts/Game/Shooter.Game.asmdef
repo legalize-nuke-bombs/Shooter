@@ -13,6 +13,7 @@
     "Unity.InputSystem",
     "Unity.Nuget.Newtonsoft-Json",
     "Unity.RenderPipelines.Core.Runtime",
+    "Unity.RenderPipelines.GPUDriven.Runtime",
     "Unity.RenderPipelines.HighDefinition.Runtime"
   ],
   "includePlatforms": [],

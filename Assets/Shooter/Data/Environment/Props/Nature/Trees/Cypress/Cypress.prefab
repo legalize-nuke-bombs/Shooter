@@ -354,7 +354,7 @@ LODGroup:
   serializedVersion: 3
   m_LocalReferencePoint: {x: -0.13364053, y: 3.5692868, z: 0.20043993}
   m_Size: 7.267743
-  m_FadeMode: 2
+  m_FadeMode: 0
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 1
   m_LODs:

@@ -114,7 +114,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20500000, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}
       propertyPath: m_FadeMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20500000, guid: 8d8873bd1f85c3942bf7f961cec01074, type: 3}
       propertyPath: m_AnimateCrossFading
