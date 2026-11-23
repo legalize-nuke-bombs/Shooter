@@ -33,7 +33,7 @@ When hosting a new game or in the server settings, you can configure one of the 
 ### Supported providers
 * [Polza](https://polza.ai/). Supports payment with Russian cards
 * [Claude](https://platform.claude.com)
-* [Ollama](https://ollama.com/). A very powerful graphics card is required.
+* [Ollama](https://ollama.com/). Please note that when running on a single computer, rendering and LLM will compete for resources, which will result in low FPS on many personal computers and slow token generation. For a comfortable gaming experience, it is recommended to move Ollama server to a separate computer.
 
 At the time of writing this file, `anthropic/claude-haiku-5.5`, being cheaper, and `google/gemini-3.8-flash`, being more expensive, seem to be the most optimal choice among cloud models.
 ## NPCs capabilities
