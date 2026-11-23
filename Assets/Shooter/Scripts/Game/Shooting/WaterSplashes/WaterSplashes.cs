@@ -25,7 +25,6 @@ namespace Shooter.Game
         private void Awake()
         {
             holder = new GameObject("Water Splashes").transform;
-            // Splashes are made at the first shot into the water: the graph reads the main camera's buffers, and on load the player's camera is not up yet
             splashes = new VisualEffect[Mathf.Max(splashCount, 1)];
         }
 
