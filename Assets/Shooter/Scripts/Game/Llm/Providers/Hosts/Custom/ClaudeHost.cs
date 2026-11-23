@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,11 +14,13 @@ namespace Shooter.Game
         private const int TimeoutSeconds = 600;
         private const string Betas = "thinking-binding-controls-2026-08-01,server-side-fallback-2026-07-01";
 
+        public IReadOnlyCollection<string> Settings { get; } = new[] { nameof(LlmConfig.Model), nameof(LlmConfig.Effort), nameof(LlmConfig.Key) };
+
         public ILlmFormat Format { get; } = new AnthropicFormat();
 
-        public async Task<string> Send(string apiKey, string requestJson, CancellationToken cancellationToken)
+        public async Task<string> Send(LlmConfig config, string requestJson, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(apiKey))
+            if (string.IsNullOrEmpty(config.Key))
             {
                 throw new InvalidOperationException($"Claude requires a key. Set it in {GameConfig.FileName}");
             }
@@ -31,7 +34,7 @@ namespace Shooter.Game
                 webRequest.timeout = TimeoutSeconds;
 
                 webRequest.SetRequestHeader("Content-Type", "application/json");
-                webRequest.SetRequestHeader("x-api-key", apiKey);
+                webRequest.SetRequestHeader("x-api-key", config.Key);
                 webRequest.SetRequestHeader("anthropic-version", "2023-06-01");
                 webRequest.SetRequestHeader("anthropic-beta", Betas);
 

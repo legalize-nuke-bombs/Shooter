@@ -11,25 +11,35 @@
         </Bindings>
     </ui:DropdownField>
     <ui:Label text="Языковая модель" class="screen__section"/>
-    <ui:Label text="Жители думают и говорят через неё. Без ключа они молчат." class="screen__hint"/>
+    <ui:Label text="Жители думают и говорят через неё. Без неё они молчат." class="screen__hint"/>
     <ui:DropdownField name="provider" label="Провайдер" class="field">
         <Bindings>
             <ui:DataBinding property="value" data-source-path="Server.Llm.Provider" binding-mode="TwoWay"/>
         </Bindings>
     </ui:DropdownField>
-    <ui:TextField label="Модель" class="field">
+    <ui:TextField name="Model" label="Модель" class="field llm-setting">
         <Bindings>
             <ui:DataBinding property="value" data-source-path="Server.Llm.Model" binding-mode="TwoWay"/>
         </Bindings>
     </ui:TextField>
-    <ui:DropdownField name="effort" label="Глубина рассуждений" class="field">
+    <ui:DropdownField name="Effort" label="Глубина рассуждений" class="field llm-setting">
         <Bindings>
             <ui:DataBinding property="value" data-source-path="Server.Llm.Effort" binding-mode="TwoWay"/>
         </Bindings>
     </ui:DropdownField>
-    <ui:TextField label="Ключ" password="true" class="field">
+    <ui:TextField name="Key" label="Ключ" password="true" class="field llm-setting">
         <Bindings>
             <ui:DataBinding property="value" data-source-path="Server.Llm.Key" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+    <ui:TextField name="Address" label="Адрес" is-delayed="true" class="field llm-setting">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.Llm.Address" binding-mode="TwoWay"/>
+        </Bindings>
+    </ui:TextField>
+    <ui:TextField name="Port" label="Порт" is-delayed="true" class="field llm-setting">
+        <Bindings>
+            <ui:DataBinding property="value" data-source-path="Server.Llm.Port" binding-mode="TwoWay"/>
         </Bindings>
     </ui:TextField>
 </ui:UXML>

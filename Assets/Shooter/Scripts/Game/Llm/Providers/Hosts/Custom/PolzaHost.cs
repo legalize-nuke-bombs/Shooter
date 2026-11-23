@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,11 +13,13 @@ namespace Shooter.Game
         private const string Host = "api.polza.ai";
         private const int TimeoutSeconds = 600;
 
+        public IReadOnlyCollection<string> Settings { get; } = new[] { nameof(LlmConfig.Model), nameof(LlmConfig.Effort), nameof(LlmConfig.Key) };
+
         public ILlmFormat Format { get; } = new OpenAiFormat();
 
-        public async Task<string> Send(string apiKey, string requestJson, CancellationToken cancellationToken)
+        public async Task<string> Send(LlmConfig config, string requestJson, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(apiKey))
+            if (string.IsNullOrEmpty(config.Key))
             {
                 throw new InvalidOperationException($"Polza requires a key. Set it in {GameConfig.FileName}");
             }
@@ -29,7 +32,7 @@ namespace Shooter.Game
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.timeout = TimeoutSeconds;
                 webRequest.SetRequestHeader("Content-Type", "application/json");
-                webRequest.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+                webRequest.SetRequestHeader("Authorization", $"Bearer {config.Key}");
 
                 TaskCompletionSource<bool> completion = new();
                 webRequest.SendWebRequest().completed += _ => completion.TrySetResult(true);

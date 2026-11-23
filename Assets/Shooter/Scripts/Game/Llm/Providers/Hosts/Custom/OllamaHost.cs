@@ -1,21 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Shooter.Infrastructure;
 using UnityEngine.Networking;
 
 namespace Shooter.Game
 {
     public sealed class OllamaHost : ILlmHost
     {
-        private const string Host = "localhost:11434";
         private const int TimeoutSeconds = 600;
+
+        public IReadOnlyCollection<string> Settings { get; } = new[] { nameof(LlmConfig.Model), nameof(LlmConfig.Effort), nameof(LlmConfig.Address), nameof(LlmConfig.Port) };
 
         public ILlmFormat Format { get; } = new OpenAiFormat();
 
-        public async Task<string> Send(string apiKey, string requestJson, CancellationToken cancellationToken)
+        public async Task<string> Send(LlmConfig config, string requestJson, CancellationToken cancellationToken)
         {
-            Uri uri = new($"http://{Host}/v1/chat/completions");
+            Uri uri = new($"http://{config.Address}:{config.Port}/v1/chat/completions");
 
             using (UnityWebRequest webRequest = new(uri, "POST"))
             {
@@ -23,7 +26,6 @@ namespace Shooter.Game
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.timeout = TimeoutSeconds;
                 webRequest.SetRequestHeader("Content-Type", "application/json");
-                if (!string.IsNullOrEmpty(apiKey)) webRequest.SetRequestHeader("Authorization", $"Bearer {apiKey}");
 
                 TaskCompletionSource<bool> completion = new();
                 webRequest.SendWebRequest().completed += _ => completion.TrySetResult(true);

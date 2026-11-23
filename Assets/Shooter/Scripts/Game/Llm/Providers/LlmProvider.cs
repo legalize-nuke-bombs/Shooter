@@ -20,7 +20,7 @@ namespace Shooter.Game
         {
             string requestId = $"{++requestNumber:d4}-{requestName}";
 
-            ILlmHost host = LlmHosts.CreateHostFor(config);
+            ILlmHost host = LlmHosts.CreateHostFor(config.Provider);
             object body = host.Format.BuildRequestBody(config, systemPrompt, history, tools);
 
             string folderPath = Path.Combine(Application.temporaryCachePath, "LlmRequests", SessionFolderName);
@@ -33,20 +33,20 @@ namespace Shooter.Game
             await File.WriteAllTextAsync(requestPath, requestJson, cancellationToken);
 
             string responsePath = Path.Combine(folderPath, $"{requestId}-response.json");
-            string responseJson = await SendToHost(host, config.Key, config.Model, requestJson, cancellationToken);
+            string responseJson = await SendToHost(host, config, requestJson, cancellationToken);
             await File.WriteAllTextAsync(responsePath, responseJson, cancellationToken);
             Log.Info($"Response {requestId}. Output: {responseJson.Length}ch. Will be saved as {responsePath}");
 
             return host.Format.ParseReply(responseJson);
         }
 
-        private static async Task<string> SendToHost(ILlmHost host, string apiKey, string model, string requestJson, CancellationToken cancellationToken)
+        private static async Task<string> SendToHost(ILlmHost host, LlmConfig config, string requestJson, CancellationToken cancellationToken)
         {
-            Log.Info($"Sending request. Model: {model}");
+            Log.Info($"Sending request. Model: {config.Model}");
 
             try
             {
-                string responseJson = await host.Send(apiKey, requestJson, cancellationToken);
+                string responseJson = await host.Send(config, requestJson, cancellationToken);
                 Log.Info("Response received successfully");
 
                 return responseJson;

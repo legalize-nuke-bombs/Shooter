@@ -15,11 +15,11 @@ namespace Shooter.Game
 
         public static IEnumerable<string> ProviderNames => HostFactoriesByProvider.Keys;
 
-        public static ILlmHost CreateHostFor(LlmConfig config)
+        public static ILlmHost CreateHostFor(string provider)
         {
-            if (HostFactoriesByProvider.TryGetValue(config.Provider, out Func<ILlmHost> createHost)) return createHost();
+            if (HostFactoriesByProvider.TryGetValue(provider, out Func<ILlmHost> createHost)) return createHost();
 
-            throw new InvalidOperationException($"No llm host registered for '{config.Provider}'");
+            throw new InvalidOperationException($"No llm host registered for '{provider}'");
         }
     }
 }

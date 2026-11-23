@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Shooter.Infrastructure;
 
 namespace Shooter.Game
 {
@@ -7,6 +9,8 @@ namespace Shooter.Game
     {
         ILlmFormat Format { get; }
 
-        Task<string> Send(string apiKey, string requestJson, CancellationToken cancellationToken);
+        IReadOnlyCollection<string> Settings { get; }
+
+        Task<string> Send(LlmConfig config, string requestJson, CancellationToken cancellationToken);
     }
 }

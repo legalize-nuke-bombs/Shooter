@@ -22,5 +22,11 @@ namespace Shooter.Infrastructure
             get => effort;
             set => effort = LlmEfforts.Keys.Contains(value) ? value : LlmEfforts.Default;
         }
+
+        [CreateProperty]
+        public string Address { get; set; } = "localhost";
+
+        [CreateProperty]
+        public ushort Port { get; set; } = 11434;
     }
 }
