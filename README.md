@@ -34,7 +34,7 @@ When hosting a new game or in the server settings, you can configure one of the 
 * [Polza](https://polza.ai/). Supports payment with Russian cards
 * [Claude](https://platform.claude.com)
 * [Ollama](https://ollama.com/). A very powerful graphics card is required.
-<br>
+
 At the time of writing this file, `anthropic/claude-haiku-5.5`, being cheaper, and `google/gemini-3.8-flash`, being more expensive, seem to be the most optimal choice among cloud models.
 ## NPCs capabilities
 * Speech (including interactions between NPCs)
