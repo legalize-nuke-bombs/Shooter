@@ -30,12 +30,12 @@ The multiplayer uses a self-hosted model with accounts based on asymmetric encry
 # LLMs
 ## Providers
 When hosting a new game or in the server settings, you can configure one of the supported LLM providers.
-
-**A context window of 256K tokens or more is required.**
 ### Supported providers
 * [Polza](https://polza.ai/). Supports payment with Russian cards
 * [Claude](https://platform.claude.com)
 * [Ollama (local)](https://ollama.com/). Please note that when running on a single computer, rendering and LLM will compete for resources, which will result in low FPS on many personal computers and slow token generation. For a comfortable gaming experience, it is recommended to move Ollama server to a separate computer. To do this, set the `OLLAMA_HOST` environment variable to `0.0.0.0:11434` on that computer, restart Ollama, and enter its address and port in the server settings. Please also note that the connection to the remote Ollama server is not encrypted, so it is strongly recommended to use it only on trusted local networks. Set the context length to 256K in the Ollama settings.
+
+A context window of 256K tokens or more is required.
 
 At the time of writing this file, `anthropic/claude-haiku-5.5`, being cheaper, and `google/gemini-3.8-flash`, being more expensive, seem to be the most optimal choice among cloud models.
 ## NPCs capabilities
