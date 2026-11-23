@@ -50,6 +50,10 @@ namespace Shooter.Game
             {
                 Log.Warn($"Failed to find inventory of user {user.name}");
             }
+            if (item.PickupSound != null && user.TryGetComponent(out Speaker speaker))
+            {
+                speaker.Play(item.PickupSound);
+            }
             PickedUp?.Invoke(this, user);
             NetworkObject.Despawn(!NetworkObject.InScenePlaced);
             gameObject.SetActive(false);

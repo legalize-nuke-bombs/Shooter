@@ -101,7 +101,7 @@ namespace Shooter.Game
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = new Color(0, 1, 1, 0.5f);
+            Gizmos.color = new Color(1f, 0.45f, 0f, 0.8f);
 
             MeshFilter meshFilter = item == null || item.Model == null ? null : item.Model.GetComponentInChildren<MeshFilter>();
 

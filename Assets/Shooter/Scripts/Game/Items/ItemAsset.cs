@@ -9,12 +9,15 @@ namespace Shooter.Game
         [SerializeField] private string title;
         [SerializeField] [TextArea(2, 6)] private string description;
         [SerializeField] private GameObject model;
+        [SerializeField] private SoundAsset pickupSound;
         [SerializeField] private IconAsset icon;
         [SerializeField] private Vector2Int cells = Vector2Int.one;
         [SerializeField] private string promptDescription;
         [SerializeField] private int marketValue;
 
         public GameObject Model => model;
+
+        public SoundAsset PickupSound => pickupSound;
 
         public IconAsset Icon => icon;
 

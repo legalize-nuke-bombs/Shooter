@@ -14,12 +14,11 @@ GameObject:
   - component: {fileID: 4957173313098286550}
   - component: {fileID: 7216739215195687485}
   - component: {fileID: 1287119825942743281}
-  - component: {fileID: 6108442756310547413}
   - component: {fileID: 8390176359407503510}
   - component: {fileID: 6601707916144272510}
   - component: {fileID: 4007380462561358581}
   m_Layer: 0
-  m_Name: MushroomPickupable
+  m_Name: Pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
   GlobalObjectIdHash: 4212199601
   InScenePlacedSourceGlobalObjectIdHash: 0
+  m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -118,19 +118,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.MainDigestible
   content: 
   size: 1
---- !u!114 &6108442756310547413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 237781342034658580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a01e820535ed751408851b383571abe5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.SoundOnPickup
-  sound: {fileID: 11400000, guid: 709616bf9706402ea32906bcb77f2564, type: 2}
 --- !u!114 &8390176359407503510
 MonoBehaviour:
   m_ObjectHideFlags: 0
