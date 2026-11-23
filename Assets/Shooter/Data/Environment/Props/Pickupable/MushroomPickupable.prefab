@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 6601707916144272510}
   - component: {fileID: 4007380462561358581}
   m_Layer: 0
-  m_Name: Pickup
+  m_Name: MushroomPickupable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
