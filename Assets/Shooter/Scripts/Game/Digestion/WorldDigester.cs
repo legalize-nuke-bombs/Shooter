@@ -20,10 +20,12 @@ namespace Shooter.Game
 
             StringBuilder digest = new();
 
-            foreach (MainDigestible entity in FindVisibleEntities(observer, origin))
+            foreach (DigestedGroup group in GroupAlike(FindVisibleEntities(observer, origin)))
             {
-                string entityDigest = Digester.DigestEntity(entity, DigestionDetail.Brief);
-                if (entityDigest != null) digest.Append(entityDigest).Append('\n');
+                string groupDigest = group.Count == 1
+                    ? Digester.DigestEntity(group.Nearest, DigestionDetail.Brief)
+                    : Digester.DigestGroup(group.Nearest, DigestionDetail.Brief, group.Count);
+                if (groupDigest != null) digest.Append(groupDigest).Append('\n');
             }
 
             string result = digest.ToString();
@@ -46,6 +48,34 @@ namespace Shooter.Game
             }
 
             return visibleEntities.OrderBy(entity => (origin - entity.transform.position).sqrMagnitude).ToList();
+        }
+
+        private sealed class DigestedGroup
+        {
+            public MainDigestible Nearest;
+            public int Count;
+        }
+
+        private static List<DigestedGroup> GroupAlike(List<MainDigestible> entitiesByDistance)
+        {
+            var groups = new List<DigestedGroup>();
+            var groupsByText = new Dictionary<string, DigestedGroup>();
+
+            foreach (MainDigestible entity in entitiesByDistance)
+            {
+                string text = Digester.DigestWithoutPlace(entity, DigestionDetail.Brief);
+                if (text != null && groupsByText.TryGetValue(text, out DigestedGroup alike))
+                {
+                    alike.Count++;
+                    continue;
+                }
+
+                var group = new DigestedGroup { Nearest = entity, Count = 1 };
+                groups.Add(group);
+                if (text != null) groupsByText.Add(text, group);
+            }
+
+            return groups;
         }
 
         private static float GetViewingDistance(DigestibleSize size)

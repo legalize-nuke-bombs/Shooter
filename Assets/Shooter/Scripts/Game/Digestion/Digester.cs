@@ -13,6 +13,21 @@ namespace Shooter.Game
 
         public static string DigestEntity(MainDigestible mainDigestible, DigestionDetail detail)
         {
+            return Compose(mainDigestible, detail, true, null);
+        }
+
+        public static string DigestWithoutPlace(MainDigestible mainDigestible, DigestionDetail detail)
+        {
+            return Compose(mainDigestible, detail, false, null);
+        }
+
+        public static string DigestGroup(MainDigestible nearest, DigestionDetail detail, int count)
+        {
+            return Compose(nearest, detail, true, $"×{count}, nearest");
+        }
+
+        private static string Compose(MainDigestible mainDigestible, DigestionDetail detail, bool withPlace, string placeLead)
+        {
             if (mainDigestible == null) return null;
 
             StringBuilder headline = new();
@@ -23,6 +38,9 @@ namespace Shooter.Game
 
             foreach (IDigestible part in mainDigestible.Parts)
             {
+                bool isPlace = part.Priority == DigestionPriority.Place;
+                if (isPlace && !withPlace) continue;
+
                 string partDigest = part.Digest(detail);
                 if (string.IsNullOrWhiteSpace(partDigest)) continue;
 
@@ -35,6 +53,7 @@ namespace Shooter.Game
                     if (isNextLineHeadline)
                     {
                         if (headline.Length > 0) headline.Append(' ');
+                        if (isPlace && placeLead != null) headline.Append(placeLead).Append(' ');
                         headline.Append(line.Trim());
                         isNextLineHeadline = false;
                         continue;
