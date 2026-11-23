@@ -25,11 +25,8 @@ namespace Shooter.Game
         private void Awake()
         {
             holder = new GameObject("Water Splashes").transform;
+            // Splashes are made at the first shot into the water: the graph reads the main camera's buffers, and on load the player's camera is not up yet
             splashes = new VisualEffect[Mathf.Max(splashCount, 1)];
-            for (int i = 0; i < splashes.Length; i++)
-            {
-                splashes[i] = CreateSplash(i);
-            }
         }
 
         public override void OnDestroy()
@@ -56,6 +53,7 @@ namespace Shooter.Game
         {
             if (splash == null) return;
 
+            if (splashes[nextSplash] == null) splashes[nextSplash] = CreateSplash(nextSplash);
             VisualEffect effect = splashes[nextSplash];
             nextSplash = (nextSplash + 1) % splashes.Length;
 
