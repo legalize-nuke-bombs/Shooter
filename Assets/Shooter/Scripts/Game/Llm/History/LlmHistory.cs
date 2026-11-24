@@ -10,9 +10,12 @@ namespace Shooter.Game
     {
         private static readonly Journal Log = Logs.Here();
 
+        private const int MessageOverheadTokens = 32;
+        private const int PartOverheadTokens = 32;
+
         [SerializeField] private int messageLimit = 10000;
-        [SerializeField] private int maxSize = 360000;
-        [SerializeField] private int hardSize = 460000;
+        [SerializeField] private int contextWindowTokens = 262144;
+        [SerializeField] private int clearingThresholdTokens = 196608;
 
         private readonly List<LlmMessage> messages = new();
 
@@ -33,7 +36,7 @@ namespace Shooter.Game
         {
             SaveData saveData = content.ToObject<SaveData>();
             messages.Clear();
-            Size = 0;
+            messagesTokensBound = 0;
             HasUnseenUrgentEvent = saveData.Unseen;
             foreach (LlmMessage message in saveData.Messages)
             {
@@ -41,18 +44,21 @@ namespace Shooter.Game
             }
         }
 
+        private int messagesTokensBound;
+
         public int Count => messages.Count;
-        public int Size { get; private set; }
+        public int FixedPromptTokensBound { get; set; }
+        public int PromptTokensBound => FixedPromptTokensBound + messagesTokensBound;
         public bool HasUnseenUrgentEvent { get; private set; }
-        public bool IsOverflowing => Size >= maxSize;
-        public bool IsBursting => Size >= hardSize;
+        public bool IsOverflowing => PromptTokensBound >= clearingThresholdTokens;
+        public bool IsBursting => PromptTokensBound > contextWindowTokens;
         public IReadOnlyList<LlmMessage> Messages => messages;
 
         public void AppendMessage(LlmMessage message)
         {
             TruncateIfTooLong(message);
             messages.Add(message);
-            Size += MeasureSize(message);
+            messagesTokensBound += BoundTokens(message);
         }
 
         public void AppendEvent(LlmMessage message, bool isUrgent)
@@ -81,7 +87,7 @@ namespace Shooter.Game
             var keptMessages = messages.Skip(firstKeptIndex).ToList();
 
             messages.Clear();
-            Size = 0;
+            messagesTokensBound = 0;
 
             foreach (LlmMessage message in keptMessages)
             {
@@ -119,9 +125,10 @@ namespace Shooter.Game
             return text.Substring(0, messageLimit - truncationMarker.Length) + truncationMarker;
         }
 
-        private static int MeasureSize(LlmMessage message)
+        // No tokenizer turns a byte into more than one token, so bytes bound the tokens of any model
+        private static int BoundTokens(LlmMessage message)
         {
-            return message.Parts.Sum(part => part.Length + 20) + 20;
+            return MessageOverheadTokens + message.Parts.Sum(part => part.ByteCount + PartOverheadTokens);
         }
     }
 }

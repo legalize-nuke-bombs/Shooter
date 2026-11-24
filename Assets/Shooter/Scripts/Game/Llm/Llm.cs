@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Shooter.Infrastructure;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ namespace Shooter.Game
         private const string ForcedClearingNotice = "Your head overflowed and has been cleared by force: your story so far is gone, only your notes remain. Your notes are your memory now - read the ones you need before you act or speak, start with the one about who you are.";
         private const string LifeStoryHeader = "YOU MUST INTRODUCE YOURSELF TO YOUR FRIENDS NOW. YOU MUST UPDATE RELATION TO YOUR FRIENDS NOW.\nTHE STORY OF YOUR LIFE SO FAR (it will be erased by the first clearing of your head and will never return - you MUST save ALL of it into your notes at once, in full detail):\n";
         private const string LifeStoryConflictHeader = "The world has migrated to a new version, and your initial life story has changed. Two versions are shown below – the previous one and the new one.\nYou must analyze the difference and update your notes RIGHT NOW (if there are changes; this message will be ERASED after the first clear_head tool call).\nYou MUST to retain all intermediate memories, including any changes in character (if any).\n";
+
+        private const int ToolOverheadTokens = 64;
 
         private static readonly Journal Log = Logs.Here();
 
@@ -53,6 +56,7 @@ namespace Shooter.Game
             {
                 tool.AttachTo(gameObject);
             }
+            llmHistory.FixedPromptTokensBound = BoundFixedPromptTokens();
             AppendLifeStory();
         }
 
@@ -107,6 +111,12 @@ namespace Shooter.Game
 
             systemPrompt.Append("SYSTEM PROMPT END");
             return systemPrompt.ToString();
+        }
+
+        private int BoundFixedPromptTokens()
+        {
+            int toolsTokens = abilities.Sum(tool => ToolOverheadTokens + Encoding.UTF8.GetByteCount(tool.Name + tool.Description + tool.Parameters.ToString(Formatting.None)));
+            return Encoding.UTF8.GetByteCount(BuildSystemPrompt()) + toolsTokens;
         }
 
         private string JoinKnowledges()
@@ -203,7 +213,7 @@ namespace Shooter.Game
         {
             if (llmHistory.IsBursting)
             {
-                Log.Warn($"Entity {entityName} has not cleared its head at {llmHistory.Size} chars, the story is cut by force");
+                Log.Warn($"Entity {entityName} has not cleared its head at {llmHistory.PromptTokensBound} tokens at most, the story is cut by force");
                 llmHistory.ForgetMessagesBefore(llmHistory.Count);
                 llmHistory.AppendMessage(new LlmMessage(LlmRole.User, ForcedClearingNotice));
             }
@@ -216,10 +226,16 @@ namespace Shooter.Game
 
             LlmConfig config = Config.GetGameConfig().Server.Llm;
 
-            Log.Info($"Entity {entityName} is asking {config.Model}, history {llmHistory.Count} messages / {llmHistory.Size} chars");
+            Log.Info($"Entity {entityName} is asking {config.Model}, history {llmHistory.Count} messages / {llmHistory.PromptTokensBound} tokens at most");
 
             for (int round = 0; round < maxToolRounds; round++)
             {
+                if (llmHistory.IsBursting)
+                {
+                    Log.Warn($"Entity {entityName} filled its context mid-tick at {llmHistory.PromptTokensBound} tokens at most, the tick ends");
+                    break;
+                }
+
                 LlmMessage reply = await LlmProvider.RequestReply(
                     config,
                     $"{entityName}-{(isClearingTick ? "compact" : "live")}",

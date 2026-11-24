@@ -1,4 +1,6 @@
-﻿namespace Shooter.Game
+﻿using System.Text;
+
+namespace Shooter.Game
 {
     public sealed class LlmToolCallPart : LlmPart
     {
@@ -13,6 +15,6 @@
         public string Name { get; }
         public string Arguments { get; }
 
-        public override int Length => Name.Length + Arguments.Length;
+        public override int ByteCount => Encoding.UTF8.GetByteCount(Id ?? "") + Encoding.UTF8.GetByteCount(Name ?? "") + Encoding.UTF8.GetByteCount(Arguments ?? "");
     }
 }

@@ -177,8 +177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Shooter.Game::Shooter.Game.Llm.LlmHistory
   messageLimit: 10000
-  maxSize: 360000
-  hardSize: 460000
+  contextWindowTokens: 262144
+  clearingThresholdTokens: 196608
 --- !u!114 &3131132399333746512
 MonoBehaviour:
   m_ObjectHideFlags: 0

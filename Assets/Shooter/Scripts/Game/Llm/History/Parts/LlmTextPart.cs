@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Shooter.Game
 {
     public sealed class LlmTextPart : LlmPart
@@ -9,6 +11,6 @@ namespace Shooter.Game
 
         public string Text { get; set; }
 
-        public override int Length => Text.Length;
+        public override int ByteCount => Encoding.UTF8.GetByteCount(Text);
     }
 }

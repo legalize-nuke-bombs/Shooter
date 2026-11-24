@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Shooter.Game
 {
     public sealed class LlmToolResultPart : LlmPart
@@ -11,6 +13,6 @@ namespace Shooter.Game
         public string ToolCallId { get; }
         public string Text { get; set; }
 
-        public override int Length => Text.Length;
+        public override int ByteCount => Encoding.UTF8.GetByteCount(ToolCallId ?? "") + Encoding.UTF8.GetByteCount(Text ?? "");
     }
 }

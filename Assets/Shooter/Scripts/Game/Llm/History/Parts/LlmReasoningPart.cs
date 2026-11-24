@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Shooter.Game
 {
     // The model's reasoning in the provider's own record, kept as it came: only the format that read it can send it back
@@ -12,6 +14,6 @@ namespace Shooter.Game
         public string Format { get; }
         public string Json { get; }
 
-        public override int Length => Json.Length;
+        public override int ByteCount => Encoding.UTF8.GetByteCount(Json);
     }
 }
