@@ -8,13 +8,13 @@ using UnityEngine.Networking;
 
 namespace Shooter.Game
 {
-    public sealed class OllamaHost : ILlmHost
+    public sealed class OpenAiCompatibleHost : ILlmHost
     {
         private const int TimeoutSeconds = 600;
 
         public IReadOnlyCollection<string> Settings { get; } = new[] { nameof(LlmConfig.Model), nameof(LlmConfig.Effort), nameof(LlmConfig.Address), nameof(LlmConfig.Port) };
 
-        public ILlmFormat Format { get; } = new OpenAiFormat();
+        public ILlmFormat Format { get; } = new OpenAiFormat(new OpenAiReasoningText());
 
         public async Task<string> Send(LlmConfig config, string requestJson, CancellationToken cancellationToken)
         {

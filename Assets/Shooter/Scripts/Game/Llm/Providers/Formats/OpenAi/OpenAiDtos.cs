@@ -28,6 +28,12 @@ namespace Shooter.Game
 
         [JsonProperty("reasoning_details", NullValueHandling = NullValueHandling.Ignore)]
         public JArray ReasoningDetails { get; set; }
+
+        [JsonProperty("reasoning_content", NullValueHandling = NullValueHandling.Ignore)]
+        public string ReasoningContent { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Reasoning { get; set; }
     }
 
     public class OpenAiTool

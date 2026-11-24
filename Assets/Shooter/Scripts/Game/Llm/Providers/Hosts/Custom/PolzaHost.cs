@@ -15,7 +15,7 @@ namespace Shooter.Game
 
         public IReadOnlyCollection<string> Settings { get; } = new[] { nameof(LlmConfig.Model), nameof(LlmConfig.Effort), nameof(LlmConfig.Key) };
 
-        public ILlmFormat Format { get; } = new OpenAiFormat();
+        public ILlmFormat Format { get; } = new OpenAiFormat(new OpenAiReasoningDetails());
 
         public async Task<string> Send(LlmConfig config, string requestJson, CancellationToken cancellationToken)
         {

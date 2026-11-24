@@ -8,7 +8,12 @@ namespace Shooter.Game
 {
     public sealed class OpenAiFormat : ILlmFormat
     {
-        private const string FormatName = "OpenAi";
+        private readonly IOpenAiReasoning reasoning;
+
+        public OpenAiFormat(IOpenAiReasoning reasoning)
+        {
+            this.reasoning = reasoning;
+        }
 
         public object BuildRequestBody(LlmConfig config, string systemPrompt, IReadOnlyList<LlmMessage> history, IReadOnlyList<ILlmTool> tools)
         {
@@ -31,12 +36,7 @@ namespace Shooter.Game
         {
             OpenAiMessage message = ParseAnsweredMessage(responseJson);
 
-            var parts = new List<LlmPart>();
-
-            if (message.ReasoningDetails != null)
-            {
-                parts.AddRange(message.ReasoningDetails.Select(detail => new LlmReasoningPart(FormatName, detail.ToString(Formatting.None))));
-            }
+            var parts = new List<LlmPart>(reasoning.ReadFrom(message));
 
             if (!string.IsNullOrEmpty(message.Content)) parts.Add(new LlmTextPart(message.Content));
 
@@ -68,7 +68,7 @@ namespace Shooter.Game
             return answeredMessage.ToObject<OpenAiMessage>(LlmJson.Serializer);
         }
 
-        private static IEnumerable<OpenAiMessage> ConvertToOpenAiMessages(LlmMessage message)
+        private IEnumerable<OpenAiMessage> ConvertToOpenAiMessages(LlmMessage message)
         {
             switch (message.Role)
             {
@@ -83,7 +83,7 @@ namespace Shooter.Game
             }
         }
 
-        private static OpenAiMessage ConvertAssistantMessage(LlmMessage message)
+        private OpenAiMessage ConvertAssistantMessage(LlmMessage message)
         {
             OpenAiToolCall[] toolCalls = message.ToolCalls
                 .Select(toolCall => new OpenAiToolCall
@@ -94,21 +94,17 @@ namespace Shooter.Game
                 })
                 .ToArray();
 
-            JToken[] reasoningDetails = message.Parts
-                .OfType<LlmReasoningPart>()
-                .Where(reasoning => reasoning.Format == FormatName)
-                .Select(reasoning => LlmJson.Parse(reasoning.Json))
-                .ToArray();
-
             string text = message.Text;
 
-            return new OpenAiMessage
+            var assistantMessage = new OpenAiMessage
             {
                 Role = "assistant",
                 Content = string.IsNullOrEmpty(text) ? null : text,
-                ToolCalls = toolCalls.Length == 0 ? null : toolCalls,
-                ReasoningDetails = reasoningDetails.Length == 0 ? null : new JArray(reasoningDetails)
+                ToolCalls = toolCalls.Length == 0 ? null : toolCalls
             };
+            reasoning.WriteTo(assistantMessage, message.Parts.OfType<LlmReasoningPart>());
+
+            return assistantMessage;
         }
 
         private static OpenAiTool ConvertToOpenAiTool(ILlmTool tool)

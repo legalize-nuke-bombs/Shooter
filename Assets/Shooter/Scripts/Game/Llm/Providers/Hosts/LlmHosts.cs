@@ -9,7 +9,7 @@ namespace Shooter.Game
         private static readonly Dictionary<string, Func<ILlmHost>> HostFactoriesByProvider = new(StringComparer.OrdinalIgnoreCase)
         {
             ["Polza"] = () => new PolzaHost(),
-            ["Ollama"] = () => new OllamaHost(),
+            ["OpenAI-compatible"] = () => new OpenAiCompatibleHost(),
             ["Claude"] = () => new ClaudeHost()
         };
 
