@@ -29,15 +29,20 @@ The multiplayer uses a self-hosted model with accounts based on asymmetric encry
 
 # LLMs
 ## Providers
-When hosting a new game or in the server settings, you can configure one of the supported LLM providers.
-### Supported providers
+When hosting a new game or in the server settings, you can configure one of the supported LLM providers. The selected model must support a context window of 256K tokens or more.
+### Supported cloud providers
 * [Polza](https://polza.ai/). Supports payment with Russian cards
 * [Claude](https://platform.claude.com)
-* Any OpenAI-compatible local server ([llama.cpp](https://github.com/ggml-org/llama.cpp), [Ollama](https://ollama.com/), [LM Studio](https://lmstudio.ai/), ...). Please note that when running on a single computer, rendering and LLM will compete for resources, which will result in low FPS on many personal computers and slow token generation. For a comfortable gaming experience, it is recommended to move the LLM server to a separate computer. To do this, make the server listen on all interfaces on that computer (`--host 0.0.0.0` for `llama-server`, the `OLLAMA_HOST` environment variable set to `0.0.0.0:11434` for Ollama, then restart it) and enter its address and port in the server settings. Please also note that the connection to the remote server is not encrypted, so it is strongly recommended to use it only on trusted local networks. Set the context length of the LLM server to 256K (`-c 262144` for `llama-server`, the context length setting for Ollama).
-
-A context window of 256K tokens or more is required.
-
 At the time of writing this file, `anthropic/claude-haiku-5.5`, being cheaper, and `google/gemini-3.8-flash`, being more expensive, seem to be the most optimal choice among cloud models.
+### Local providers
+Any OpenAI-compatible local server ([llama.cpp](https://github.com/ggml-org/llama.cpp), [Ollama](https://ollama.com/), [LM Studio](https://lmstudio.ai/), ...) is supported.
+<br><br>
+When running on a single computer, rendering and LLM will compete for resources, which will result in low FPS on many personal computers and slow token generation. For a comfortable gaming experience, it is recommended to move the LLM server to a separate computer. To do this, make the server listen on all interfaces on that computer (`--host 0.0.0.0` for `llama-server`, the `OLLAMA_HOST` environment variable set to `0.0.0.0:11434` for Ollama, then restart it) and enter its address and port in the server settings. Set the context length of the LLM server to 256K (`-c 262144` for `llama-server`, the context length setting for Ollama).
+<br><br>
+Connection to the remote server is not encrypted, so it is strongly recommended to forward port via SSH or use it only on trusted local networks.
+<br><br>
+Local llm server will need to serve requests from completely different NPCs with different histories. This requires storing caches of many different contexts at the same time. Most standard configurations for raising a local llm server store such caches entirely in RAM, which is inefficient on home computers with a small number of RAM. Therefore, it is recommended to use a bundle of [llama.cpp](https://github.com/ggml-org/llama.cpp) + [this very simple llama proxy](https://github.com/legalize-nuke-bombs/LlamaProxy) that automatically streams caches from disk.
+
 ## NPCs capabilities
 * Speech (including interactions between NPCs)
 * Vision
