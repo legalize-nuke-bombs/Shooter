@@ -9,6 +9,7 @@ namespace Shooter.Game
         private readonly VisualElement windowElement;
         private readonly Action<DraggedItem, Vector2> dropped;
         private VisualElement ghostElement;
+        private Vector2 ghostSize;
         private DraggedItem draggedItem;
         private int pointerId;
 
@@ -16,6 +17,10 @@ namespace Shooter.Game
         {
             this.windowElement = windowElement;
             this.dropped = dropped;
+
+            windowElement.RegisterCallback<PointerMoveEvent>(HandlePointerMove);
+            windowElement.RegisterCallback<PointerUpEvent>(HandlePointerUp);
+            windowElement.RegisterCallback<PointerCaptureOutEvent>(_ => Cancel());
         }
 
         public bool IsDragging => ghostElement != null;
@@ -30,31 +35,42 @@ namespace Shooter.Game
 
                 draggedItem = item;
                 pointerId = pointerDown.pointerId;
+                ghostSize = size;
 
                 ghostElement = CreateGhost(iconSprite, size);
                 windowElement.Add(ghostElement);
-                MoveGhost(pointerDown.position, size);
+                MoveGhost(pointerDown.position);
 
-                itemElement.CapturePointer(pointerId);
+                windowElement.CapturePointer(pointerId);
                 pointerDown.StopPropagation();
             });
+        }
 
-            itemElement.RegisterCallback<PointerMoveEvent>(pointerMove =>
-            {
-                if (ghostElement == null || pointerMove.pointerId != pointerId) return;
+        public void Cancel()
+        {
+            if (ghostElement == null) return;
 
-                MoveGhost(pointerMove.position, size);
-            });
+            ghostElement.RemoveFromHierarchy();
+            ghostElement = null;
+            draggedItem = null;
 
-            itemElement.RegisterCallback<PointerUpEvent>(pointerUp =>
-            {
-                if (ghostElement == null || pointerUp.pointerId != pointerId) return;
+            if (windowElement.HasPointerCapture(pointerId)) windowElement.ReleasePointer(pointerId);
+        }
 
-                itemElement.ReleasePointer(pointerId);
-                ghostElement.RemoveFromHierarchy();
-                ghostElement = null;
-                dropped(draggedItem, pointerUp.position);
-            });
+        private void HandlePointerMove(PointerMoveEvent pointerMove)
+        {
+            if (ghostElement == null || pointerMove.pointerId != pointerId) return;
+
+            MoveGhost(pointerMove.position);
+        }
+
+        private void HandlePointerUp(PointerUpEvent pointerUp)
+        {
+            if (ghostElement == null || pointerUp.pointerId != pointerId) return;
+
+            DraggedItem item = draggedItem;
+            Cancel();
+            dropped(item, pointerUp.position);
         }
 
         private static VisualElement CreateGhost(Sprite iconSprite, Vector2 size)
@@ -69,10 +85,10 @@ namespace Shooter.Game
             return ghost;
         }
 
-        private void MoveGhost(Vector2 position, Vector2 size)
+        private void MoveGhost(Vector2 position)
         {
-            ghostElement.style.left = position.x - size.x / 2f;
-            ghostElement.style.top = position.y - size.y / 2f;
+            ghostElement.style.left = position.x - ghostSize.x / 2f;
+            ghostElement.style.top = position.y - ghostSize.y / 2f;
         }
     }
 }

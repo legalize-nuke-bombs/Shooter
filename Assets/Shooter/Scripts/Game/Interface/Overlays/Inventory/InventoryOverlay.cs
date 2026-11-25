@@ -195,6 +195,7 @@ namespace Shooter.Game
 
         private void CloseWindow()
         {
+            dragging.Cancel();
             contextMenu.Close();
             splitPrompt.Close();
 
