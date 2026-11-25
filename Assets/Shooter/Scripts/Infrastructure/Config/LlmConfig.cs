@@ -14,7 +14,7 @@ namespace Shooter.Infrastructure
         public string Provider { get; set; } = "Polza";
 
         [CreateProperty]
-        public string Model { get; set; } = "anthropic/claude-haiku-5.5";
+        public string Model { get; set; } = "xiaomi/mimo-v2.6-flash-mopd";
 
         [CreateProperty]
         public string Effort

@@ -460,6 +460,9 @@ PrefabInstance:
       addedObject: {fileID: 227574647247211924}
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 2473943137489166211}
+    - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 4767933737110017048}
     - targetCorrespondingSourceObject: {fileID: 6874027793385663384, guid: 2a0b249c5a41c9c439d9f164b620afc8, type: 3}
       insertIndex: -1
@@ -715,6 +718,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shooter.Client::Shooter.Client.Playing.PlayerConversationObserver
   icon: {fileID: 11400000, guid: cd084102a8f49e545900fdd76f4576e5, type: 2}
   sound: {fileID: 11400000, guid: 3b30bbf9a39943c5ad75c9b4004fe9a6, type: 2}
+--- !u!114 &2473943137489166211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924064630755534763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84edf2c31abcc6a43bff53b3b5317c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Shooter.Game::Shooter.Game.PlayerSpeechObserver
+  icon: {fileID: 11400000, guid: cab6ac0a5e0a0b44c82ac743935a35f1, type: 2}
 --- !u!114 &4767933737110017048
 MonoBehaviour:
   m_ObjectHideFlags: 0
