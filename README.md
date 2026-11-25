@@ -33,7 +33,7 @@ When hosting a new game or in the server settings, you can configure one of the 
 ### Supported cloud providers
 * [Polza](https://polza.ai/). Supports payment with Russian cards
 * [Claude](https://platform.claude.com)
-At the time of writing this file, `anthropic/claude-haiku-5.5`, `xiaomi/mimo-v2.6-flash-mopd`, `google/gemini-3.8-flash` seem to be the solid choice among cloud models.
+At the time of writing this file, `xiaomi/mimo-v2.6-flash-mopd` seems to be the solid choice among cloud models.
 ### Local providers
 Any OpenAI-compatible local server ([llama.cpp](https://github.com/ggml-org/llama.cpp), [Ollama](https://ollama.com/), [LM Studio](https://lmstudio.ai/), ...) is supported.
 <br><br>
